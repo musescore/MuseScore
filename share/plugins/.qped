@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Ped version="1.0">
+  <Status>
+    <geometry x="861" y="0" w="800" h="1000" />
+    <Editor1>
+      <KontextList>
+        <Kontext>
+          <path>/home/ws/mscore/share/plugins/helloqml.qml</path>
+          <column>2</column>
+          <line>1</line>
+          <xoff>0</xoff>
+          <yoff>1</yoff>
+          </Kontext>
+        <cur>1</cur>
+        </KontextList>
+      </Editor1>
+    <search></search>
+    <colorify>0</colorify>
+    <brackets>1</brackets>
+    </Status>
+  </Ped>

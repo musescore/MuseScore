@@ -1,0 +1,78 @@
+#=============================================================================
+#  Mscore
+#  Linux Music Score Editor
+#  $Id:$
+#
+#  Copyright (C) 2002-2007 by Werner Schweer and others
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#=============================================================================
+
+REVISION  = `cat mscore/mscore/revision.h`
+CPUS      = `grep -c processor /proc/cpuinfo`
+
+VERSION   = "2.0b${REVISION}"
+
+PREFIX=../applebuild
+
+ROOT=`pwd`
+
+release:
+	mkdir build.release;                               \
+    cd build.release;                                  \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          .. -G Xcode; 			       \
+    xcodebuild -project mscore.xcodeproj -target lrelease;                             \
+	xcodebuild -project mscore.xcodeproj -configuration Release -target ALL_BUILD;     \
+
+
+debug: xcode
+	mkdir build.debug;                         \
+    cd build.debug;                            \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
+          .. -G Xcode; 			       \
+    xcodebuild -project mscore.xcodeproj -target lrelease;                             \
+    xcodebuild -project mscore.xcodeproj -configuration Debug -target ALL_BUILD;       \
+
+xcode:
+	mkdir build.xcode;              \
+    cd build.xcode;                                  \
+    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+          .. -G Xcode;                         \
+    xcodebuild -project mscore.xcodeproj -target lrelease; 
+
+#
+# clean out of source build
+#
+
+clean:
+	-rm -rf build.release build.debug build.xcode
+	-rm -rf applebuild
+
+lupdate:
+	cd build.release;xcodebuild -project mscore.xcodeproj -target lupdate;
+
+lrelease:
+	cd build.release;xcodebuild -project mscore.xcodeproj -target lrelease;
+
+revision:
+	@svnversion -n | cut -c 1-4 > mscore/revision.h
+
+version: revision
+	@echo ${VERSION}
+
+install:
+	cd build.release;xcodebuild -project mscore.xcodeproj -configuration Release -target install;
+
+package:
+	build/package_mac;

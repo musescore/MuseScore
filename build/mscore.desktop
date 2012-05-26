@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=2.0
+Comment=WYSIWYG Music score typesetter
+Comment[ru]=Визуальный редактор нотных партитур
+Comment[fr]=Gravure de partitions musicales
+Exec=mscore
+GenericName=Music notation
+GenericName[de]=Notensatz
+GenericName[fr]=Notation musicale
+Icon=mscore
+Name=MuseScore
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Qt;Audio;Sequencer;Midi;AudioVideoEditing;Music;AudioVideo;
+MimeType=application/x-musescore;application/x-musescore+xml;application/vnd.recordare.musicxml;application/vnd.recordare.musicxml+xml;

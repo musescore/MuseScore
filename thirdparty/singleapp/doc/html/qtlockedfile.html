@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- qtsingleapplication-2.6-opensource/src/qtlockedfile.cpp -->
+<head>
+  <title>QtLockedFile Class Reference</title>
+  <link href="classic.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td align="left" valign="top" width="32"><img src="images/qt-logo.png" align="left" width="57" height="67" border="0" /></td>
+<td width="1">&nbsp;&nbsp;</td><td class="postheader" valign="center"><a href="index.html"><font color="#004faf">Home</font></a></td>
+</tr></table><h1 class="title">QtLockedFile Class Reference</h1>
+<p>The QtLockedFile class extends <a href="http://doc.trolltech.com/4.4/qfile.html">QFile</a> with advisory locking functions. <a href="#details">More...</a></p>
+<pre> #include &lt;QtLockedFile&gt;</pre><p>Inherits <a href="http://doc.trolltech.com/4.4/qfile.html">QFile</a>.</p>
+<ul>
+<li><a href="qtlockedfile-members.html">List of all members, including inherited members</a></li>
+</ul>
+<a name="public-types"></a>
+<h3>Public Types</h3>
+<ul>
+<li><div class="fn"/>enum <b><a href="qtlockedfile.html#LockMode-enum">LockMode</a></b> { ReadLock, WriteLock, NoLock }</li>
+</ul>
+<a name="public-functions"></a>
+<h3>Public Functions</h3>
+<ul>
+<li><div class="fn"/><b><a href="qtlockedfile.html#QtLockedFile">QtLockedFile</a></b> ()</li>
+<li><div class="fn"/><b><a href="qtlockedfile.html#QtLockedFile-2">QtLockedFile</a></b> ( const QString &amp; <i>name</i> )</li>
+<li><div class="fn"/><b><a href="qtlockedfile.html#dtor.QtLockedFile">~QtLockedFile</a></b> ()</li>
+<li><div class="fn"/>bool <b><a href="qtlockedfile.html#isLocked">isLocked</a></b> () const</li>
+<li><div class="fn"/>bool <b><a href="qtlockedfile.html#lock">lock</a></b> ( LockMode <i>mode</i>, bool <i>block</i> = true )</li>
+<li><div class="fn"/>LockMode <b><a href="qtlockedfile.html#lockMode">lockMode</a></b> () const</li>
+<li><div class="fn"/>bool <b><a href="qtlockedfile.html#open">open</a></b> ( OpenMode <i>mode</i> )</li>
+<li><div class="fn"/>bool <b><a href="qtlockedfile.html#unlock">unlock</a></b> ()</li>
+</ul>
+<ul>
+<li><div class="fn"/>23 public functions inherited from <a href="http://doc.trolltech.com/4.4/qfile.html#public-functions">QFile</a></li>
+<li><div class="fn"/>32 public functions inherited from <a href="http://doc.trolltech.com/4.4/qiodevice.html#public-functions">QIODevice</a></li>
+<li><div class="fn"/>29 public functions inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#public-functions">QObject</a></li>
+</ul>
+<h3>Additional Inherited Members</h3>
+<ul>
+<li><div class="fn"/>1 property inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#properties">QObject</a></li>
+<li><div class="fn"/>1 public slot inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#public-slots">QObject</a></li>
+<li><div class="fn"/>4 signals inherited from <a href="http://doc.trolltech.com/4.4/qiodevice.html#signals">QIODevice</a></li>
+<li><div class="fn"/>1 signal inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#signals">QObject</a></li>
+<li><div class="fn"/>1 public type inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#public-variables">QObject</a></li>
+<li><div class="fn"/>14 static public members inherited from <a href="http://doc.trolltech.com/4.4/qfile.html#static-public-members">QFile</a></li>
+<li><div class="fn"/>4 static public members inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#static-public-members">QObject</a></li>
+<li><div class="fn"/>5 protected functions inherited from <a href="http://doc.trolltech.com/4.4/qiodevice.html#protected-functions">QIODevice</a></li>
+<li><div class="fn"/>7 protected functions inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#protected-functions">QObject</a></li>
+<li><div class="fn"/>2 protected variables inherited from <a href="http://doc.trolltech.com/4.4/qobject.html#protected-variables">QObject</a></li>
+</ul>
+<a name="details"></a>
+<hr />
+<h2>Detailed Description</h2>
+<p>The QtLockedFile class extends <a href="http://doc.trolltech.com/4.4/qfile.html">QFile</a> with advisory locking functions.</p>
+<p>A file may be locked in read or write mode. Multiple instances of <i>QtLockedFile</i>, created in multiple processes running on the same machine, may have a file locked in read mode. Exactly one instance may have it locked in write mode. A read and a write lock cannot exist simultaneously on the same file.</p>
+<p>The file locks are advisory. This means that nothing prevents another process from manipulating a locked file using <a href="http://doc.trolltech.com/4.4/qfile.html">QFile</a> or file system functions offered by the OS. Serialization is only guaranteed if all processes that access the file use QLockedFile. Also, while holding a lock on a file, a process must not open the same file again (through any API), or locks can be unexpectedly lost.</p>
+<p>The lock provided by an instance of <i>QtLockedFile</i> is released whenever the program terminates. This is true even when the program crashes and no destructors are called.</p>
+<hr />
+<h2>Member Type Documentation</h2>
+<h3 class="fn"><a name="LockMode-enum"></a>enum QtLockedFile::LockMode</h3>
+<p>This enum describes the available lock modes.</p>
+<p><table border="1" cellpadding="2" cellspacing="1" width="100%">
+<tr><th width="25%">Constant</th><th width="15%">Value</th><th width="60%">Description</th></tr>
+<tr><td valign="top"><tt>QtLockedFile::ReadLock</tt></td><td align="center" valign="top"><tt>1</tt></td><td valign="top">A read lock.</td></tr>
+<tr><td valign="top"><tt>QtLockedFile::WriteLock</tt></td><td align="center" valign="top"><tt>2</tt></td><td valign="top">A write lock.</td></tr>
+<tr><td valign="top"><tt>QtLockedFile::NoLock</tt></td><td align="center" valign="top"><tt>0</tt></td><td valign="top">Neither a read lock nor a write lock.</td></tr>
+</table></p>
+<hr />
+<h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="QtLockedFile"></a>QtLockedFile::QtLockedFile ()</h3>
+<p>Constructs an unlocked <i>QtLockedFile</i> object. This constructor behaves in the same way as <i>QFile::QFile()</i>.</p>
+<p>See also <a href="http://doc.trolltech.com/4.4/qfile.html#QFile">QFile::QFile</a>().</p>
+<h3 class="fn"><a name="QtLockedFile-2"></a>QtLockedFile::QtLockedFile ( const <a href="http://doc.trolltech.com/4.4/qstring.html">QString</a> &amp; <i>name</i> )</h3>
+<p>Constructs an unlocked <a href="qtlockedfile.html">QtLockedFile</a> object with file <i>name</i>. This constructor behaves in the same way as <i>QFile::QFile(const QString&amp;)</i>.</p>
+<p>See also <a href="http://doc.trolltech.com/4.4/qfile.html#QFile">QFile::QFile</a>().</p>
+<h3 class="fn"><a name="dtor.QtLockedFile"></a>QtLockedFile::~QtLockedFile ()</h3>
+<p>Destroys the <i>QtLockedFile</i> object. If any locks were held, they are released.</p>
+<h3 class="fn"><a name="isLocked"></a>bool QtLockedFile::isLocked () const</h3>
+<p>Returns <i>true</i> if this object has a in read or write lock; otherwise returns <i>false</i>.</p>
+<p>See also <a href="qtlockedfile.html#lockMode">lockMode</a>().</p>
+<h3 class="fn"><a name="lock"></a>bool QtLockedFile::lock ( <a href="qtlockedfile.html#LockMode-enum">LockMode</a> <i>mode</i>, bool <i>block</i> = true )</h3>
+<p>Obtains a lock of type <i>mode</i>. The file must be opened before it can be locked.</p>
+<p>If <i>block</i> is true, this function will block until the lock is aquired. If <i>block</i> is false, this function returns <i>false</i> immediately if the lock cannot be aquired.</p>
+<p>If this object already has a lock of type <i>mode</i>, this function returns <i>true</i> immediately. If this object has a lock of a different type than <i>mode</i>, the lock is first released and then a new lock is obtained.</p>
+<p>This function returns <i>true</i> if, after it executes, the file is locked by this object, and <i>false</i> otherwise.</p>
+<p>See also <a href="qtlockedfile.html#unlock">unlock</a>(), <a href="qtlockedfile.html#isLocked">isLocked</a>(), and <a href="qtlockedfile.html#lockMode">lockMode</a>().</p>
+<h3 class="fn"><a name="lockMode"></a><a href="qtlockedfile.html#LockMode-enum">LockMode</a> QtLockedFile::lockMode () const</h3>
+<p>Returns the type of lock currently held by this object, or <i>QtLockedFile::NoLock</i>.</p>
+<p>See also <a href="qtlockedfile.html#isLocked">isLocked</a>().</p>
+<h3 class="fn"><a name="open"></a>bool QtLockedFile::open ( <a href="http://doc.trolltech.com/4.4/qiodevice.html#OpenMode-typedef">OpenMode</a> <i>mode</i> )</h3>
+<p>Opens the file in <a href="http://doc.trolltech.com/4.4/qiodevice.html#OpenMode-typedef">OpenMode</a> <i>mode</i>.</p>
+<p>This is identical to <a href="http://doc.trolltech.com/4.4/qfile.html#open">QFile::open</a>(), with the one exception that the Truncate mode flag is disallowed. Truncation would conflict with the advisory file locking, since the file would be modified before the write lock is obtained. If truncation is required, use resize(0) after obtaining the write lock.</p>
+<p>Returns true if successful; otherwise false.</p>
+<p>See also <a href="http://doc.trolltech.com/4.4/qfile.html#open">QFile::open</a>() and <a href="http://doc.trolltech.com/4.4/qfile.html#resize">QFile::resize</a>().</p>
+<h3 class="fn"><a name="unlock"></a>bool QtLockedFile::unlock ()</h3>
+<p>Releases a lock.</p>
+<p>If the object has no lock, this function returns immediately.</p>
+<p>This function returns <i>true</i> if, after it executes, the file is not locked by this object, and <i>false</i> otherwise.</p>
+<p>See also <a href="qtlockedfile.html#lock">lock</a>(), <a href="qtlockedfile.html#isLocked">isLocked</a>(), and <a href="qtlockedfile.html#lockMode">lockMode</a>().</p>
+<p /><address><hr /><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr class="address">
+<td width="30%" align="left">Copyright &copy; 2009 Nokia</td>
+<td width="40%" align="center"><a href="http://doc.trolltech.com/trademarks.html">Trademarks</a></td>
+<td width="30%" align="right"><div align="right">Qt Solutions</div></td>
+</tr></table></div></address></body>
+</html>

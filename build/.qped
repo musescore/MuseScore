@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Ped version="1.0">
+  <Status>
+    <geometry x="0" y="0" w="800" h="1000" />
+    <Editor1>
+      <KontextList>
+        <Kontext>
+          <path>/home/ws/mscore/build/Doxyfile.in</path>
+          <column>58</column>
+          <line>803</line>
+          <xoff>0</xoff>
+          <yoff>43</yoff>
+          </Kontext>
+        <cur>1</cur>
+        </KontextList>
+      </Editor1>
+    <search>header</search>
+    <colorify>0</colorify>
+    <brackets>1</brackets>
+    </Status>
+  </Ped>

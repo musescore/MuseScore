@@ -1,0 +1,4896 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<museScore version="1.0">
+
+  <Articulation>
+     <gateTime>100%</gateTime>
+     <velocity>100%</velocity>
+     </Articulation>
+  <Articulation name="staccato">
+     <gateTime>85%</gateTime>
+     </Articulation>
+  <Articulation name="tenuto">
+     <gateTime>100%</gateTime>
+     </Articulation>
+  <Articulation name="sforzato">
+     <velocity>120%</velocity>
+     </Articulation>
+
+  <instrument-group name="Holzblasinstrumente">
+     <instrument>
+        <name>Piccolo</name>
+        <short-name>Picc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-105</aPitchRange>
+        <pPitchRange>74-108</pPitchRange>
+        <channel>
+           <program>72</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Treble Flute</name>
+        <short-name>Tr. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>4</transposeDiatonic>
+        <transposeChromatic>7</transposeChromatic>
+        <aPitchRange>67-100</aPitchRange>
+        <pPitchRange>67-103</pPitchRange>
+        <channel>
+           <program>72</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Flöte</name>
+        <short-name>Es Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>63-96</aPitchRange>
+        <pPitchRange>63-101</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Flöte</name>
+        <short-name>Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-93</aPitchRange>
+        <pPitchRange>59-98</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Altflöte</name>
+        <short-name>A. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-91</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bassflöte</name>
+        <short-name>B. Fl.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-77</aPitchRange>
+        <pPitchRange>48-81</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kontra-altflöte</name>
+        <short-name>K-a. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-10</transposeDiatonic>
+        <transposeChromatic>-17</transposeChromatic>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>42-79</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kontrabassflöte</name>
+        <short-name>Kb. Fl.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-65</aPitchRange>
+        <pPitchRange>36-69</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Subkontra-altflöte</name>
+        <short-name>Sk-a. Fl.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>31-60</aPitchRange>
+        <pPitchRange>31-64</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Subkontrabassflöte</name>
+        <short-name>Skb. Fl.</short-name>
+        <clef>5</clef>
+        <aPitchRange>24-60</aPitchRange>
+        <pPitchRange>24-64</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Hyperbassflöte</name>
+        <short-name>Hb. Fl.</short-name>
+        <clef>6</clef>
+        <aPitchRange>12-48</aPitchRange>
+        <pPitchRange>12-45</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Querflöte</name>
+        <short-name>Qfl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-89</aPitchRange>
+        <pPitchRange>62-93</pPitchRange>
+        <channel>
+           <program>77</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Altquerflöte</name>
+        <short-name>A. Qfl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-76</aPitchRange>
+        <pPitchRange>55-80</pPitchRange>
+        <channel>
+           <program>82</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Danso</name>
+        <short-name>Da.</short-name>
+        <clef>1</clef>
+        <aPitchRange>67-91</aPitchRange>
+        <pPitchRange>67-91</pPitchRange>
+        <channel>
+           <program>76</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A Dizi</name>
+        <short-name>A Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>76-107</aPitchRange>
+        <pPitchRange>76-107</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>G Dizi</name>
+        <short-name>G Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>74-105</aPitchRange>
+        <pPitchRange>74-105</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Dizi</name>
+        <short-name>A Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>72-103</aPitchRange>
+        <pPitchRange>72-103</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>E Dizi</name>
+        <short-name>E Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>71-102</aPitchRange>
+        <pPitchRange>71-102</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Dizi</name>
+        <short-name>D Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>69-100</aPitchRange>
+        <pPitchRange>69-100</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Dizi</name>
+        <short-name>C Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-98</aPitchRange>
+        <pPitchRange>67-98</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Quena</name>
+        <short-name>C Qn.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-92</aPitchRange>
+        <pPitchRange>72-96</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>G Quena</name>
+        <short-name>G Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-87</aPitchRange>
+        <pPitchRange>67-91</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Quena</name>
+        <short-name>F Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-85</aPitchRange>
+        <pPitchRange>65-89</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Quena</name>
+        <short-name>D Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-82</aPitchRange>
+        <pPitchRange>62-86</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Panflöte</name>
+        <short-name>Pn. Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-96</aPitchRange>
+        <pPitchRange>60-96</pPitchRange>
+        <channel>
+           <program>75</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Garkleinblockflöte</name>
+        <short-name>Gk. Bfl.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-105</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sopraninoblockflöte</name>
+        <short-name>Si. Bfl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>77-100</aPitchRange>
+        <pPitchRange>77-103</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sopranblockflöte</name>
+        <short-name>S. Bfl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-98</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Altblockflöte</name>
+        <short-name>A. Bfl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-88</aPitchRange>
+        <pPitchRange>65-91</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tenorblockflöte</name>
+        <short-name>T. Bfl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bassblockflöte</name>
+        <short-name>B. Bfl.</short-name>
+        <clef>17</clef>
+        <aPitchRange>53-74</aPitchRange>
+        <pPitchRange>53-77</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Großbassblockflöte</name>
+        <short-name>Gb. Bfl.</short-name>
+        <clef>17</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Kontrabassblockflöte</name>
+        <short-name>Kb. Bfl.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-62</aPitchRange>
+        <pPitchRange>41-65</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Fanzösisches Flageolet</name>
+        <short-name>Fr. Fla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>80-105</aPitchRange>
+        <pPitchRange>80-105</pPitchRange>
+        <channel>
+           <program>78</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Englisches Flageolet</name>
+        <short-name>Eng. Fla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-98</aPitchRange>
+        <pPitchRange>74-98</pPitchRange>
+        <channel>
+           <program>78</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tonette</name>
+        <short-name>To.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-74</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>G Sopran Okarina</name>
+        <short-name>G S. Ok.</short-name>
+        <clef>1</clef>
+        <aPitchRange>79-93</aPitchRange>
+        <pPitchRange>79-95</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Sopran Okarina</name>
+        <short-name>F S. Ok.</short-name>
+        <clef>1</clef>
+        <aPitchRange>77-91</aPitchRange>
+        <pPitchRange>77-93</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Sopran Okarina</name>
+        <short-name>C S. Ok.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-86</aPitchRange>
+        <pPitchRange>72-88</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Sopran Okarina</name>
+        <short-name>B S. Ok.</short-name>
+        <clef>1</clef>
+        <aPitchRange>70-84</aPitchRange>
+        <pPitchRange>70-86</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>G Alt Okarina</name>
+        <short-name>G A. Ok.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-81</aPitchRange>
+        <pPitchRange>67-83</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Alt Okarina</name>
+        <short-name>F A. Ok.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-79</aPitchRange>
+        <pPitchRange>65-81</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Alt Okarina</name>
+        <short-name>C A. Ok.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-76</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Alt Okarina</name>
+        <short-name>B A. Ok.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-72</aPitchRange>
+        <pPitchRange>58-74</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Bass Okarina</name>
+        <short-name>C B. Ok.</short-name>
+        <clef>4</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-64</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Gemshorn</name>
+        <short-name>S. Gh.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-87</aPitchRange>
+        <pPitchRange>72-87</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Gemshorn</name>
+        <short-name>A. Gh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-80</aPitchRange>
+        <pPitchRange>65-80</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Gemshorn</name>
+        <short-name>T. Gh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-75</aPitchRange>
+        <pPitchRange>60-75</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Gemshorn</name>
+        <short-name>B. Gh.</short-name>
+        <clef>17</clef>
+        <aPitchRange>53-68</aPitchRange>
+        <pPitchRange>53-68</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Galoubet</name>
+        <short-name>B Gal.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>13</transposeDiatonic>
+        <transposeChromatic>23</transposeChromatic>
+        <aPitchRange>86-105</aPitchRange>
+        <pPitchRange>74,76,78,80,86-108,112</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kolbenflöte</name>
+        <short-name>Kb. Fl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>69-96</aPitchRange>
+        <pPitchRange>69-96</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Piccolo Oboe</name>
+        <short-name>P. Ob.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-90</aPitchRange>
+        <pPitchRange>61-94</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Oboe</name>
+        <short-name>Ob.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-87</aPitchRange>
+        <pPitchRange>58-93</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Oboe d'amore</name>
+        <short-name>Ob. d'a.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>56-84</aPitchRange>
+        <pPitchRange>56-87</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Englisch Horn</name>
+        <short-name>E. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>52-81</aPitchRange>
+        <pPitchRange>52-83</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bariton Oboe</name>
+        <short-name>Bar. Ob.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-76</aPitchRange>
+        <pPitchRange>47-78</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Heckelphon</name>
+        <short-name>Hph.</short-name>
+        <clef>3</clef>
+        <aPitchRange>45-75</aPitchRange>
+        <pPitchRange>45-78</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Barock Oboe</name>
+        <short-name>Bk. Ob.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-83</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Oboe da caccia</name>
+        <short-name>Ob. d. ca.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>53-79</aPitchRange>
+        <pPitchRange>53-81</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Schalmei</name>
+        <short-name>Sh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-76</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranino Schalmei</name>
+        <short-name>Si. Sh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-81</aPitchRange>
+        <pPitchRange>65-86</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Diskant Pommer</name>
+        <short-name>D. Po.</short-name>
+        <clef>0</clef>
+        <aPitchRange>61-95</aPitchRange>
+        <pPitchRange>61-98</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Pommer</name>
+        <short-name>A. Po.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-74</aPitchRange>
+        <pPitchRange>55-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Krummhorn</name>
+        <short-name>S. Krh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Krummhorn</name>
+        <short-name>A. Krh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-69</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Krummhorn</name>
+        <short-name>T. Krh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Krummhorn</name>
+        <short-name>B. Krh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Großbass Krummhorn</name>
+        <short-name>Gb. Krh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-50</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Cornamuse</name>
+        <short-name>S. Cm.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Cornamuse</name>
+        <short-name>A. Cm.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-67</aPitchRange>
+        <pPitchRange>55-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Cornamuse</name>
+        <short-name>T. Cm.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Cornamuse</name>
+        <short-name>B. Cm.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Kelhorn</name>
+        <short-name>S. Kh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Kelhorn</name>
+        <short-name>A. Kh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-69</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Kelhorn</name>
+        <short-name>T. Kh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Kelhorn</name>
+        <short-name>B. Kh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Großbass Kelhorn</name>
+        <short-name>Gb. Kh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-50</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranino Rauschpfeife</name>
+        <short-name>Si. Rpf.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-81</aPitchRange>
+        <pPitchRange>65-84</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Rauschpfeife</name>
+        <short-name>S. Rpf.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-76</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Duduk</name>
+        <short-name>F Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-89</aPitchRange>
+        <pPitchRange>74-89</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>E Duduk</name>
+        <short-name>E Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>73-88</aPitchRange>
+        <pPitchRange>73-88</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Duduk</name>
+        <short-name>D Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>71-86</aPitchRange>
+        <pPitchRange>71-86</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Duduk</name>
+        <short-name>C Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>69-84</aPitchRange>
+        <pPitchRange>69-84</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>H Duduk</name>
+        <short-name>H Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>68-83</aPitchRange>
+        <pPitchRange>68-83</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Duduk</name>
+        <short-name>B Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-82</aPitchRange>
+        <pPitchRange>67-82</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A Duduk</name>
+        <short-name>A Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>66-81</aPitchRange>
+        <pPitchRange>66-81</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>G Duduk</name>
+        <short-name>G Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>64-79</aPitchRange>
+        <pPitchRange>64-79</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A Bass Duduk</name>
+        <short-name>A B. Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-69</aPitchRange>
+        <pPitchRange>54-69</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Shanai</name>
+        <short-name>Sha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-84</aPitchRange>
+        <pPitchRange>62-84</pPitchRange>
+        <channel>
+           <program>111</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Piccolo Klarinette</name>
+        <short-name>P. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>5</transposeDiatonic>
+        <transposeChromatic>8</transposeChromatic>
+        <aPitchRange>60-99</aPitchRange>
+        <pPitchRange>60-104</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Klarinette</name>
+        <short-name>S. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>4</transposeDiatonic>
+        <transposeChromatic>7</transposeChromatic>
+        <aPitchRange>59-88</aPitchRange>
+        <pPitchRange>59-88</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Es Klarinette</name>
+        <short-name>Es Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>55-94</aPitchRange>
+        <pPitchRange>55-99</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>D Klarinette</name>
+        <short-name>D Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>54-93</aPitchRange>
+        <pPitchRange>54-98</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Klarinette</name>
+        <short-name>C Kl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-91</aPitchRange>
+        <pPitchRange>52-96</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Klarinette</name>
+        <short-name>B Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>50-89</aPitchRange>
+        <pPitchRange>50-94</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>A Klarinette</name>
+        <short-name>A Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>49-88</aPitchRange>
+        <pPitchRange>49-93</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Klarinette</name>
+        <short-name>Ba. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>45-88</aPitchRange>
+        <pPitchRange>45-93</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Klarinette</name>
+        <short-name>A. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>43-80</aPitchRange>
+        <pPitchRange>43-84</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Horn</name>
+        <short-name>Ba. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>41-84</aPitchRange>
+        <pPitchRange>41-86</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Klarinette</name>
+        <short-name>B. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>37-75</aPitchRange>
+        <pPitchRange>37-79</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Kontra-alt Klarinette</name>
+        <short-name>K-a. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>31-70</aPitchRange>
+        <pPitchRange>31-75</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kontrabass Klarinette</name>
+        <short-name>Kb. Kl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>26-65</aPitchRange>
+        <pPitchRange>26-70</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranino Chalumeau</name>
+        <short-name>Si. Cha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-79</aPitchRange>
+        <pPitchRange>65-82</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Chalumeau</name>
+        <short-name>S. Cha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Chalumeau</name>
+        <short-name>A. Cha.</short-name>
+        <clef>3</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Chalumeau</name>
+        <short-name>T. Cha.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tarogato</name>
+        <short-name>Tar.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-84</aPitchRange>
+        <pPitchRange>58-81</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Octavin</name>
+        <short-name>Oct.</short-name>
+        <clef>0</clef>
+        <aPitchRange>56-86</aPitchRange>
+        <pPitchRange>56-91</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Fagott</name>
+        <short-name>Fag.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-69</aPitchRange>
+        <pPitchRange>34-76</pPitchRange>
+        <channel>
+           <program>70</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Kontrafagott</name>
+        <short-name>Kfag.</short-name>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <clef>5</clef>
+        <aPitchRange>22-57</aPitchRange>
+        <pPitchRange>22-60</pPitchRange>
+        <channel>
+           <program>70</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Dulzian</name>
+        <short-name>Du.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-62</aPitchRange>
+        <pPitchRange>40-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Rankett</name>
+        <short-name>Ra.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-62</aPitchRange>
+        <pPitchRange>34-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranino Sarrusophon</name>
+        <short-name>Si. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-87</aPitchRange>
+        <pPitchRange>61-90</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Sarrusophon</name>
+        <short-name>S. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>56-87</aPitchRange>
+        <pPitchRange>56-92</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Sarrusophon</name>
+        <short-name>A. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>49-80</aPitchRange>
+        <pPitchRange>49-85</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Sarrusophon</name>
+        <short-name>T. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>44-75</aPitchRange>
+        <pPitchRange>44-80</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bariton Sarrusophon</name>
+        <short-name>Bar. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>37-68</aPitchRange>
+        <pPitchRange>36-73</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Sarrusophon</name>
+        <short-name>B. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>32-63</aPitchRange>
+        <pPitchRange>32-68</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kontrabass Sarrusophon</name>
+        <short-name>Kb. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-19</transposeDiatonic>
+        <transposeChromatic>-33</transposeChromatic>
+        <aPitchRange>25-53</aPitchRange>
+        <pPitchRange>25-56</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranissimo Saxophon</name>
+        <short-name>Sio. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>6</transposeDiatonic>
+        <transposeChromatic>10</transposeChromatic>
+        <aPitchRange>68-92</aPitchRange>
+        <pPitchRange>68-97</pPitchRange>
+        <channel>
+           <program>64</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopranino Saxophon</name>
+        <short-name>Si. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-87</aPitchRange>
+        <pPitchRange>61-90</pPitchRange>
+        <channel>
+           <program>64</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sopran Saxophon</name>
+        <short-name>S. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>56-89</aPitchRange>
+        <pPitchRange>56-94</pPitchRange>
+        <channel>
+           <program>64</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Alt Saxophon</name>
+        <short-name>A. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>49-82</aPitchRange>
+        <pPitchRange>49-87</pPitchRange>
+        <channel>
+           <program>65</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tenor Saxophon</name>
+        <short-name>T. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>44-77</aPitchRange>
+        <pPitchRange>44-82</pPitchRange>
+        <channel>
+           <program>66</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bariton Saxophon</name>
+        <short-name>Bar. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>37-70</aPitchRange>
+        <pPitchRange>36-75</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Saxophon</name>
+        <short-name>B. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>32-65</aPitchRange>
+        <pPitchRange>32-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Kontrabass Saxophon</name>
+        <short-name>Kb. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-19</transposeDiatonic>
+        <transposeChromatic>-33</transposeChromatic>
+        <aPitchRange>25-53</aPitchRange>
+        <pPitchRange>25-56</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Subkontrabass Saxophon</name>
+        <short-name>Skb. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-22</transposeDiatonic>
+        <transposeChromatic>-38</transposeChromatic>
+        <aPitchRange>20-52</aPitchRange>
+        <pPitchRange>20-60</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+      <instrument>
+        <name>Dudelsack</name>
+        <short-name>Ddls.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>67-81</aPitchRange>
+        <pPitchRange>67-81</pPitchRange>
+        <channel>
+           <program>109</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Blechblasinstrimente">
+     <instrument>
+        <name>Horn</name>
+        <short-name>Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>35-75</aPitchRange>
+        <pPitchRange>29-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>High C Horn</name>
+        <short-name>H. C Hn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>46-75</aPitchRange>
+        <pPitchRange>42-84</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>High B<symbol name="flat"/> Horn</name>
+        <short-name>H. B<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>44-77</aPitchRange>
+        <pPitchRange>40-82</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A Horn</name>
+        <short-name>A Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>39-81</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A<symbol name="flat"/> Horn</name>
+        <short-name>A<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-4</transposeChromatic>
+        <aPitchRange>42-75</aPitchRange>
+        <pPitchRange>38-80</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>G Horn</name>
+        <short-name>G Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>41-74</aPitchRange>
+        <pPitchRange>37-79</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>E Horn</name>
+        <short-name>E Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-8</transposeChromatic>
+        <aPitchRange>38-71</aPitchRange>
+        <pPitchRange>34-76</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>E<symbol name="flat"/> Horn</name>
+        <short-name>E<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>37-70</aPitchRange>
+        <pPitchRange>33-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Horn</name>
+        <short-name>D Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-6</transposeDiatonic>
+        <transposeChromatic>-10</transposeChromatic>
+        <aPitchRange>36-69</aPitchRange>
+        <pPitchRange>32-74</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Low C Horn</name>
+        <short-name>L. C Hn.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-67</aPitchRange>
+        <pPitchRange>30-72</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Low B<symbol name="flat"/> Horn</name>
+        <short-name>L. B<symbol name="flat"/> Hn.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>32-65</aPitchRange>
+        <pPitchRange>28-70</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Piccolo Trompete</name>
+        <short-name>B P. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>6</transposeDiatonic>
+        <transposeChromatic>10</transposeChromatic>
+        <aPitchRange>59-86</aPitchRange>
+        <pPitchRange>59-89</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>A Piccolo Trompete</name>
+        <short-name>A P. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>5</transposeDiatonic>
+        <transposeChromatic>9</transposeChromatic>
+        <aPitchRange>58-85</aPitchRange>
+        <pPitchRange>58-88</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Es Trompete</name>
+        <short-name>Es Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>57-84</aPitchRange>
+        <pPitchRange>57-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Trompete</name>
+        <short-name>D Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>56-83</aPitchRange>
+        <pPitchRange>56-86</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Trompete</name>
+        <short-name>C Tpt.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-82</aPitchRange>
+        <pPitchRange>54-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>B Trompete</name>
+        <short-name>B Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-80</aPitchRange>
+        <pPitchRange>52-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Es Bass Trompete</name>
+        <short-name>Es B. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>46-73</aPitchRange>
+        <pPitchRange>46-76</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Bass Trompete</name>
+        <short-name>B B. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>39-66</aPitchRange>
+        <pPitchRange>39-69</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Barock Trompete</name>
+        <short-name>F Bk. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>3</transposeDiatonic>
+        <transposeChromatic>5</transposeChromatic>
+        <aPitchRange>65-86</aPitchRange>
+        <pPitchRange>65-90</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Barock Trompete</name>
+        <short-name>Es Bk. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>63-84</aPitchRange>
+        <pPitchRange>63-88</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>D Barock Trompete</name>
+        <short-name>D Bk. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>62-83</aPitchRange>
+        <pPitchRange>62-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Barock Trompete</name>
+        <short-name>C Bk. Tpt.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Barock Trompete</name>
+        <short-name>B Bk. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>58-79</aPitchRange>
+        <pPitchRange>58-83</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Kornett</name>
+        <short-name>Es Knt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>57-84</aPitchRange>
+        <pPitchRange>57-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>B Kornett</name>
+        <short-name>B Knt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-79</aPitchRange>
+        <pPitchRange>52-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Flügelhorn</name>
+        <short-name>Flghn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-79</aPitchRange>
+        <pPitchRange>52-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Sopran Zink</name>
+        <short-name>S. Zi.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-83</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Zink</name>
+        <short-name>A. Zi.</short-name>
+        <clef>0</clef>
+        <aPitchRange>57-80</aPitchRange>
+        <pPitchRange>57-83</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Zink</name>
+        <short-name>T. Zi.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-71</aPitchRange>
+        <pPitchRange>48-75</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Serpent</name>
+        <short-name>Spt.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-65</aPitchRange>
+        <pPitchRange>36-69</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Alt Ophikleide</name>
+        <short-name>F A. Oph.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-81</aPitchRange>
+        <pPitchRange>52-84</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Alt Ophikleide</name>
+        <short-name>Es A. Oph.</short-name>
+        <clef>0</clef>
+        <aPitchRange>51-79</aPitchRange>
+        <pPitchRange>51-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>C Bass Ophikleide</name>
+        <short-name>C B. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>35-63</aPitchRange>
+        <pPitchRange>35-67</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Bass Ophikleide</name>
+        <short-name>B B. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>33-62</aPitchRange>
+        <pPitchRange>33-66</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Kontrabass Ophikleide</name>
+        <short-name>Es Kb. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-55</aPitchRange>
+        <pPitchRange>26-58</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Alt Horn</name>
+        <short-name>F A. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>E<symbol name="flat"/> Alt Horn</name>
+        <short-name>E<symbol name="flat"/> A. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bariton Horn</name>
+        <short-name>Bar. Hn.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-67</aPitchRange>
+        <pPitchRange>40-70</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>F Mellophon</name>
+        <short-name>F Mph.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Es Mellophon</name>
+        <short-name>Es Mph.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Mellophonium</name>
+        <short-name>F Mpm.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Es Mellophonium</name>
+        <short-name>E> Mp.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>B Wagner Tuba</name>
+        <short-name>B Wag. Tu.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>40-75</aPitchRange>
+        <pPitchRange>40-79</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>F Wagner Tuba</name>
+        <short-name>F Wag. Tu.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>35-74</aPitchRange>
+        <pPitchRange>35-77</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Posaune</name>
+        <short-name>Pos.</short-name>
+        <clef>4</clef>
+        <aPitchRange>35-70</aPitchRange>
+        <pPitchRange>35-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sopran Posaune</name>
+        <short-name>S. Pos.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-77</aPitchRange>
+        <pPitchRange>52-81</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Posaune</name>
+        <short-name>A. Pos.</short-name>
+        <clef>11</clef>
+        <aPitchRange>45-74</aPitchRange>
+        <pPitchRange>45-77</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Posaune</name>
+        <short-name>T. Pos.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-70</aPitchRange>
+        <pPitchRange>40-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Posaune</name>
+        <short-name>B. Pos.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-70</aPitchRange>
+        <pPitchRange>36-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Kontrabass Psoaune</name>
+        <short-name>Kb. Pos.</short-name>
+        <clef>4</clef>
+        <aPitchRange>28-55</aPitchRange>
+        <pPitchRange>28-58</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Euphonium</name>
+        <short-name>Eu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-70</aPitchRange>
+        <pPitchRange>40-74</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>F Tuba</name>
+        <short-name>F Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-64</aPitchRange>
+        <pPitchRange>24-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>C Tuba</name>
+        <short-name>C Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-60</aPitchRange>
+        <pPitchRange>24-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>B Tuba</name>
+        <short-name>B Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>28-58</aPitchRange>
+        <pPitchRange>22-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Gestimmtes Schlagwerk">
+     <instrument>
+        <name>Pauke</name>
+        <short-name>Pk.</short-name>
+        <clef>4</clef>
+        <aPitchRange>38-60</aPitchRange>
+        <pPitchRange>38-60</pPitchRange>
+        <channel>
+           <program>47</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>High Roto-toms</name>
+        <short-name>H. Rt-t.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-76</aPitchRange>
+        <pPitchRange>55-76</pPitchRange>
+        <channel>
+           <program>117</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Low Roto-toms</name>
+        <short-name>L. Rt.-t-</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-58</aPitchRange>
+        <pPitchRange>40-58</pPitchRange>
+        <channel>
+           <program>117</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Glockenspiel</name>
+        <short-name>Glk.</short-name>
+        <clef>2</clef>
+        <aPitchRange>79-108</aPitchRange>
+        <pPitchRange>79-108</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Sopran Glockenspiel</name>
+        <short-name>O. S. Glk.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-105</aPitchRange>
+        <pPitchRange>84-105</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Alt Glockenspiel</name>
+        <short-name>O. A. Glk.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Crotales</name>
+        <short-name>Cro.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-108</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>10</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tubaphon</name>
+        <short-name>Tph.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-108</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>47</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Almglocken</name>
+        <short-name>Agl.</short-name>
+        <staves>2</staves>
+        <clef staff="1">2</clef>
+        <clef staff="2">18</clef>
+        <bracket>1</bracket>
+        <aPitchRange>60-105</aPitchRange>
+        <pPitchRange>60-105</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Vibraphon</name>
+        <short-name>Vib.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-89</aPitchRange>
+        <pPitchRange>48-96</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Sopran Metallophon</name>
+        <short-name>O. S. Met.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Alt Metallophon</name>
+        <short-name>O. A. Met.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Bass Metallophon</name>
+        <short-name>O. B. Met.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-69</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Röhrenglocken</name>
+        <short-name>Tu. Be.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-79</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Steel Drums</name>
+        <short-name>B. St. Dr.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-53</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cello Steel Drums</name>
+        <short-name>Ce. St. Dr.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-67</aPitchRange>
+        <pPitchRange>47-67</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tenor Steel Drums</name>
+        <short-name>T. St. Dr.</short-name>
+        <clef>3</clef>
+        <aPitchRange>52-69</aPitchRange>
+        <pPitchRange>52-69</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Guitar Steel Drums</name>
+        <short-name>Gtr. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-81</aPitchRange>
+        <pPitchRange>54-81</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Alto Steel Drums</name>
+        <short-name>A. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>56-85</aPitchRange>
+        <pPitchRange>56-85</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Soprano Steel Drums</name>
+        <short-name>S. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-88</aPitchRange>
+        <pPitchRange>60-88</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>High Hand Bells</name>
+        <short-name>H. Ha. Be.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-97</aPitchRange>
+        <pPitchRange>60-97</pPitchRange>
+        <channel>
+           <program>112</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Low Hand Bells</name>
+        <short-name>L. Ha. Be.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-60</aPitchRange>
+        <pPitchRange>36-60</pPitchRange>
+        <channel>
+           <program>112</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tuned Gongs</name>
+        <short-name>Td. Go.</short-name>
+        <clef>4</clef>
+        <aPitchRange>45-57</aPitchRange>
+        <pPitchRange>45-57</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Flexatone</name>
+        <short-name>Flt.</short-name>
+        <clef>1</clef>
+        <aPitchRange>76-93</aPitchRange>
+        <pPitchRange>76-93</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Musical Saw</name>
+        <short-name>Mu. Sw.</short-name>
+        <clef>0</clef>
+        <aPitchRange>64-100</aPitchRange>
+        <pPitchRange>64-100</pPitchRange>
+        <channel>
+           <program>92</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Musical Glasses</name>
+        <short-name>Mu. Gla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-91</aPitchRange>
+        <pPitchRange>72-91</pPitchRange>
+        <channel>
+           <program>93</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Glass Harmonica</name>
+        <short-name>Gla. Har.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-89</aPitchRange>
+        <pPitchRange>53-89</pPitchRange>
+        <channel>
+           <program>92</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Xylophone</name>
+        <short-name>Xyl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>65-108</aPitchRange>
+        <pPitchRange>65-108</pPitchRange>
+        <channel>
+           <program>13</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Soprano Xylophone</name>
+        <short-name>O. S. Xyl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Alto Xylophone</name>
+        <short-name>O. A. Xyl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orff Bass Xylophone</name>
+        <short-name>O. B. Xyl.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-69</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Marimba</name>
+        <short-name>Mrm.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>45-96</aPitchRange>
+        <pPitchRange>45-96</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Dulcimer</name>
+        <short-name>Dlc.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>48-86</aPitchRange>
+        <pPitchRange>48-86</pPitchRange>
+        <channel>
+           <program>15</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Mallet synthesizer</name>
+        <short-name>Mal. Syn.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>0-127</aPitchRange>
+        <pPitchRange>0-127</pPitchRange>
+        <channel>
+           <program>80</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tuned Klaxon Horns</name>
+        <short-name>Tn. Klx. Hns.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>48-72</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>84</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Treble Kalimba</name>
+        <short-name>Tr. Kal.</short-name>
+        <clef>0</clef>
+        <aPitchRange>59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86</aPitchRange>
+        <pPitchRange>59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Alto Kalimba</name>
+        <short-name>A. Kal.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55, 57, 59, 60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79</aPitchRange>
+        <pPitchRange>55, 57, 59, 60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Ungestimmtes Schlagwerk">
+     <instrument>
+        <name>Drumset</name>
+        <description>Drumset 3 lines</description>
+        <short-name>Drs.</short-name>
+        <stafflines>3</stafflines>
+        <clef>19</clef>
+        <drumset>1</drumset>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Drumset</name>
+        <description>Drumset 5 lines</description>
+        <short-name>Drs.</short-name>
+        <stafflines>5</stafflines>
+        <clef>19</clef>
+        <drumset>1</drumset>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Snare Drum</name>
+        <short-name>Sn. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="38">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Snare</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Drum</name>
+        <short-name>B. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="35">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Bass Drum</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Piccolo Snare Drum</name>
+        <short-name>P. Sn. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="40">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Snare Drum 2</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Military Drum</name>
+        <short-name>Mil. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="38">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Snare</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>High Tom</name>
+        <short-name>H. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="50">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Tom 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="48">
+           <head>0</head>
+           <line>2</line>
+           <voice>0</voice>
+           <name>High Tom 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Mid Tom</name>
+        <short-name>M. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="47">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Mid Tom 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="45">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Mid Tom 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Low Tom</name>
+        <short-name>L. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="43">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Tom 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="43">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Tom 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Pedal Hi-hat</name>
+        <short-name>Ped. Hi-hat</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="44">
+           <head>1</head>
+           <line>4</line>
+           <voice>3</voice>
+           <name>Pedal Hi-hat</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="n">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ching</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Chinese Tom-toms</name>
+        <short-name>Ch. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="61">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Bongo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bongos</name>
+        <short-name>Bo.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="60">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>High Bongo</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="61">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Bongo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Congas</name>
+        <short-name>Co.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="63">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Open High Conga</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="62">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Mute High Conga</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="63">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Conga</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Timbales</name>
+        <short-name>Timb.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="65">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>High Timbale</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="66">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Timbale</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Frame Drum</name>
+        <short-name>Fr. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="45">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Mid Tom 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tablas</name>
+        <short-name>Tbs.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="62">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Mute High Conga</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="64">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Conga</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cuica</name>
+        <short-name>Cu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="79">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Cuica</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="78">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Mute Cuica</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Finger Cymbals</name>
+        <short-name>Fi. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="81">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Triangle</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Hi-hat</name>
+        <short-name>Hi-hat</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="46">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Hi-hat</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="42">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Closed Hi-hat</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tam-tam</name>
+        <short-name>Tam-tam</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bells</name>
+        <short-name>Be.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="53">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sleigh Bells</name>
+        <short-name>Sle. Be.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bell Plate</name>
+        <short-name>Be. Pla.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="58">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Vibra Slap</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bowl Gongs</name>
+        <short-name>Bw. Go.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tubo</name>
+        <short-name>Tu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="81">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Triangle</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Metal Castanets</name>
+        <short-name>Met. Cst.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="67">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Automobile Brake Drums</name>
+        <short-name>Aut. Brk. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="68">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Iron Pipes</name>
+        <short-name>Ir. Pi.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="68">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Chains</name>
+        <short-name>Chn.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Anvil</name>
+        <short-name>Anv.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="53">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Wood Blocks</name>
+        <short-name>Wd. Bl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Temple Blocks</name>
+        <short-name>Tmp. Bl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Low Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Triangle</name>
+        <short-name>Trgl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="81">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Triangle</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="80">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Mute Triangle</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cymbal</name>
+        <short-name>Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="57">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 2</name>
+           <stem>2</stem>
+           </Drum>
+         </instrument>
+     <instrument>
+        <name>Ride Cymbal</name>
+        <short-name>R. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="51">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Cymbal 1</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="53">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Chinese Cymbal</name>
+        <short-name>Ch. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Crash Cymbal</name>
+        <short-name>Cr. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="49">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 1</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Splash Cymbal</name>
+        <short-name>Sp. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="55">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Splash Cymbal</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cowbell</name>
+        <short-name>Cwb.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="56">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cowbell</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Claves</name>
+        <short-name>Clv.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="75">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Claves</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Castanets</name>
+        <short-name>Cst.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Guiro</name>
+        <short-name>Gro.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="73">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Short Guiro</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Maracas</name>
+        <short-name>Mrcs.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="70">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Maracas</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cabasa</name>
+        <short-name>Cab.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Quijada</name>
+        <short-name>Qui.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Vibra Slap</name>
+        <short-name>Vib. Slp.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="58">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Vibra Slap</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Slit Drum</name>
+        <short-name>Slt. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Whip</name>
+        <short-name>Wh.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Ratchet</name>
+        <short-name>Rat.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="73">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Short Guiro</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Thundersheet</name>
+        <short-name>Thu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="49">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 1</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sandpaper Blocks</name>
+        <short-name>Sa. Bl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="70">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Maracas</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Wooden Wind Chimes</name>
+        <short-name>Wd. Wn. Ch.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bamboo Wind Chimes</name>
+        <short-name>Bam. Wn. Ch.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Metal Wind Chimes</name>
+        <short-name>Met. Wn Ch.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Glass Wind Chimes</name>
+        <short-name>Gl. Wn Ch.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Shell Wind Chimes</name>
+        <short-name>Sh. Wn Ch.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Stones</name>
+        <short-name>Sto.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="67">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Fingerschnippen</name>
+        <short-name>Fi. Sni.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="75">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Claves</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Klatschen</name>
+        <short-name>Hd. Clp.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="39">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Hand Clap</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Slap</name>
+        <short-name>Sla.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="41">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Tom 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Stamp</name>
+        <short-name>Sta.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="35">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Bass Drum 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Percussion Synthesizer</name>
+        <short-name>Perc. Syn.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="40">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Snare Drum 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tamburin</name>
+        <short-name>Tamb.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="54">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Tamburin</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+   <instrument-group name="Gitarren">
+     <instrument>
+        <name>Sopran Gitarre</name>
+        <short-name>S. Git.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-93</aPitchRange>
+        <pPitchRange>52-93</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Gitarre</name>
+        <short-name>A. Git.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-88</aPitchRange>
+        <pPitchRange>47-88</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Gitarre</name>
+        <short-name>Git.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>11-saitige Alt Gitarre</name>
+        <short-name>11-stg. A. Git.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>34-86</aPitchRange>
+        <pPitchRange>34-86</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Stahlsaiten Gitarre</name>
+        <short-name>Stsn. Git.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>25</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>12-saitige Gitarre</name>
+        <short-name>12-s. Git.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass Gitarre</name>
+        <short-name>B. Git.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>34</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Pedal Stahl Gitarre</name>
+        <short-name>Ped. st. Git.</short-name>
+        <clef>13</clef>
+        <aPitchRange>35-84</aPitchRange>
+        <pPitchRange>35-84</pPitchRange>
+        <channel>
+           <program>25</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Elektrische Gitarre</name>
+        <short-name>El. Git.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-86</aPitchRange>
+        <pPitchRange>40-86</pPitchRange>
+        <channel>
+           <program>27</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Elektrischer Bass</name>
+        <short-name>El. B.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>33</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Stegloser Elektrischer Bass</name>
+        <short-name>Stgl. El. B.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>35</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Mandoline</name>
+        <short-name>Mdn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-85</aPitchRange>
+        <pPitchRange>55-85</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Mandola</name>
+        <short-name>Mda.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-87</aPitchRange>
+        <pPitchRange>48-87</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bouzouki (3-saitig)</name>
+        <short-name>Bou.</short-name>
+        <clef>3</clef>
+        <aPitchRange>38-89</aPitchRange>
+        <pPitchRange>38-89</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bouzouki (4-saitig)</name>
+        <short-name>Bou.</short-name>
+        <clef>3</clef>
+        <aPitchRange>36-89</aPitchRange>
+        <pPitchRange>36-89</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Ukulele</name>
+        <short-name>Uk.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bariton Ukulele</name>
+        <short-name>Bar. Uk.</short-name>
+        <clef>0</clef>
+        <aPitchRange>50-76</aPitchRange>
+        <pPitchRange>50-76</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Banjo</name>
+        <short-name>Bj.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-87</aPitchRange>
+        <pPitchRange>48-87</pPitchRange>
+        <channel>
+           <program>105</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Tenor Banjo</name>
+        <short-name>T. Bj.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-83</aPitchRange>
+        <pPitchRange>48-83</pPitchRange>
+        <channel>
+           <program>105</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Hosozao Shamisen</name>
+        <short-name>Ho. Sh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>50-83</aPitchRange>
+        <pPitchRange>50-83</pPitchRange>
+        <channel>
+           <program>106</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Hutozao Shamisen</name>
+        <short-name>Hu. Sh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>43-76</pPitchRange>
+        <channel>
+           <program>106</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Sitar</name>
+        <short-name>Si.</short-name>
+        <clef>0</clef>
+        <aPitchRange>36-84</aPitchRange>
+        <pPitchRange>36-84</pPitchRange>
+        <channel>
+           <program>104</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Gesang">
+     <instrument>
+        <name>Stimme</name>
+        <short-name>Vo.</short-name>
+        <clef>0</clef>
+        <aPitchRange>40-79</aPitchRange>
+        <pPitchRange>36-94</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Knabensopran</name>
+        <short-name>B. S.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-77</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sopran</name>
+        <short-name>S.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-79</aPitchRange>
+        <pPitchRange>60-84</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Mezzosopran</name>
+        <short-name>Mzs.</short-name>
+        <clef>0</clef>
+        <aPitchRange>57-77</aPitchRange>
+        <pPitchRange>57-77</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Alt</name>
+        <short-name>A.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-74</aPitchRange>
+        <pPitchRange>55-77</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Countertenor</name>
+        <short-name>CTen.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-74</aPitchRange>
+        <pPitchRange>48-77</pPitchRange>
+	<channel>
+           <program>52</program>
+    	   </channel>
+        </instrument>	
+     <instrument>
+        <name>Tenor</name>
+        <short-name>T.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bariton</name>
+        <short-name>Bar.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-62</aPitchRange>
+        <pPitchRange>41-65</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bass</name>
+        <short-name>B.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-59</aPitchRange>
+        <pPitchRange>40-62</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Kazoo</name>
+        <short-name>Kaz.</short-name>
+        <clef>0</clef>
+        <aPitchRange>41-81</aPitchRange>
+        <pPitchRange>41-84</pPitchRange>
+        <channel>
+           <program>85</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Tasteninstrumente">
+     <instrument>
+        <name>Piano</name>
+        <short-name>Pno.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>21-108</aPitchRange>
+        <pPitchRange>21-108</pPitchRange>
+        <Articulation>
+           <gateTime>70%</gateTime>
+           <velocity>100%</velocity>
+           </Articulation>
+        <Articulation name="staccato">
+           <gateTime>40%</gateTime>
+           </Articulation>
+        <Articulation name="tenuto">
+           <gateTime>100%</gateTime>
+           </Articulation>
+        <Articulation name="sforzato">
+           <velocity>120%</velocity>
+           </Articulation>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Clavichord</name>
+        <short-name>Cch.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>7</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cembalo</name>
+        <short-name>Cbl.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>6</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Celesta</name>
+        <short-name>Cel.</short-name>
+        <staves>2</staves>
+        <clef staff="1">2</clef>
+        <clef staff="2">18</clef>
+        <bracket>1</bracket>
+        <aPitchRange>60-108</aPitchRange>
+        <pPitchRange>60-108</pPitchRange>
+        <channel>
+           <program>8</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Elektrisches Piano</name>
+        <short-name>El. Pno.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>21-108</aPitchRange>
+        <pPitchRange>21-108</pPitchRange>
+        <channel>
+           <program>4</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Keyboard Synthesizer</name>
+        <short-name>Synth.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>0-127</aPitchRange>
+        <pPitchRange>0-127</pPitchRange>
+        <channel>
+           <program>81</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Orgel</name>
+        <short-name>Org.</short-name>
+        <staves>3</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <clef staff="3">4</clef>
+        <bracket>1</bracket>
+        <channel>
+           <program>19</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Pfeifen-Orgel</name>
+        <short-name>Org.</short-name>
+        <staves>3</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <clef staff="3">4</clef>
+        <bracket>1</bracket>
+        <channel name="I">
+            <descr>Division I</descr>
+            <synti>Aeolus</synti>
+            <MidiAction name="Reset">
+               <descr>Reset all stops</descr>
+               <controller ctrl="98" value="66"/>
+               </MidiAction>
+            <MidiAction name="prin8">
+               <descr>set stop Principal 8</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="0"/>
+               </MidiAction>
+            <MidiAction name="prin4">
+               <descr>set stop Principal 4</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="1"/>
+               </MidiAction>
+            <MidiAction name="oct2">
+               <descr>set stop Octave 2</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="2"/>
+               </MidiAction>
+            <MidiAction name="oct1">
+               <descr>set stop Octave 1</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="3"/>
+               </MidiAction>
+            <MidiAction name="qu513">
+               <descr>set stop Quint 5 1/3</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="4"/>
+               </MidiAction>
+            <MidiAction name="qu223">
+               <descr>set stop Quint 2 2/3</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="5"/>
+               </MidiAction>
+            <MidiAction name="tibia8">
+               <descr>set stop Tibia 8</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="6"/>
+               </MidiAction>
+            <MidiAction name="celes8">
+               <descr>set stop Celesta 8</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="7"/>
+               </MidiAction>
+            <MidiAction name="flute8">
+               <descr>set stop FlÃ¶te 8</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="8"/>
+               </MidiAction>
+            <MidiAction name="flute4">
+               <descr>set stop FlÃ¶te 4</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="9"/>
+               </MidiAction>
+            <MidiAction name="flute2">
+               <descr>set stop FlÃ¶te 2</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="10"/>
+               </MidiAction>
+            <MidiAction name="cymb">
+               <descr>set stop Cymbel VI</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="11"/>
+               </MidiAction>
+            <MidiAction name="mixt">
+               <descr>set stop Mixtur</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="12"/>
+               </MidiAction>
+            <MidiAction name="trum8">
+               <descr>set stop Trumpet</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="13"/>
+               </MidiAction>
+            <MidiAction name="C1+2">
+               <descr>set stop I+II</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="14"/>
+               </MidiAction>
+            <MidiAction name="C1+3">
+               <descr>set stop I+III</descr>
+               <controller ctrl="98" value="98"/>
+               <controller ctrl="98" value="15"/>
+               </MidiAction>
+            </channel>
+        <channel name="II">
+            <descr>Division II</descr>
+            <synti>Aeolus</synti>
+            <MidiAction name="Reset">
+               <descr>Reset all stops</descr>
+               <controller ctrl="98" value="65"/>
+               </MidiAction>
+            <MidiAction name="rofl8">
+               <descr>set stop RohrflÃ¶te 8</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="0"/>
+               </MidiAction>
+            <MidiAction name="half8">
+               <descr>set stop Harmonic Flute 8</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="1"/>
+               </MidiAction>
+            <MidiAction name="fldo4">
+               <descr>set stop Flauto Dolce 4</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="2"/>
+               </MidiAction>
+            <MidiAction name="nasard">
+               <descr>set stop Nasard 2 2/3</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="3"/>
+               </MidiAction>
+            <MidiAction name="otta2">
+               <descr>set stop Ottavina2</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="4"/>
+               </MidiAction>
+            <MidiAction name="tertia">
+               <descr>set stop Tertia 1 3/5</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="5"/>
+               </MidiAction>
+            <MidiAction name="sesqui">
+               <descr>set stop Sesquialtera</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="6"/>
+               </MidiAction>
+            <MidiAction name="septim">
+               <descr>set stop Septime</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="7"/>
+               </MidiAction>
+            <MidiAction name="krumh">
+               <descr>set stop Krumhorn</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="9"/>
+               </MidiAction>
+            <MidiAction name="melod">
+               <descr>set stop Melodia</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="10"/>
+               </MidiAction>
+            <MidiAction name="TR">
+               <descr>set stop Tremulant</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="11"/>
+               </MidiAction>
+            <MidiAction name="C2+3">
+               <descr>set stop II+III</descr>
+               <controller ctrl="98" value="97"/>
+               <controller ctrl="98" value="12"/>
+               </MidiAction>
+            </channel>
+        <channel name="III">
+            <descr>Division III</descr>
+            <synti>Aeolus</synti>
+            <MidiAction name="Reset">
+               <descr>Reset all stops in group III</descr>
+               <controller ctrl="98" value="64"/>
+               </MidiAction>
+            <MidiAction name="prin8">
+               <descr>set stop Princiapl 8</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="0"/>
+               </MidiAction>
+            <MidiAction name="gems8">
+               <descr>set stop Gemshorn 8</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="1"/>
+               </MidiAction>
+            <MidiAction name="quna8">
+               <descr>set stop Quintadena 8</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="2"/>
+               </MidiAction>
+            <MidiAction name="suab8">
+               <descr>set stop Suabile 8</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="3"/>
+               </MidiAction>
+            <MidiAction name="rofl4">
+               <descr>set stop RohrflÃ¶te 4</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="4"/>
+               </MidiAction>
+            <MidiAction name="dulz4">
+               <descr>set stop DulzflÃ¶te 4</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="5"/>
+               </MidiAction>
+            <MidiAction name="fl223">
+               <descr>set stop QuintflÃ¶te 2 2/3</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="6"/>
+               </MidiAction>
+            <MidiAction name="soct2">
+               <descr>set stop Superoctav2 2</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="7"/>
+               </MidiAction>
+            <MidiAction name="siff1">
+               <descr>set stop Sifflet 1</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="8"/>
+               </MidiAction>
+            <MidiAction name="cymb">
+               <descr>set stop Cymbel VI</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="9"/>
+               </MidiAction>
+            <MidiAction name="oboe">
+               <descr>set stop Oboe</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="10"/>
+               </MidiAction>
+            <MidiAction name="TR">
+               <descr>set stop Tremulant</descr>
+               <controller ctrl="98" value="96"/>
+               <controller ctrl="98" value="11"/>
+               </MidiAction>
+            </channel>
+        <channel name="P">
+            <descr>Division P (pedal)</descr>
+            <synti>Aeolus</synti>
+            <MidiAction name="Reset">
+               <descr>Reset all stops</descr>
+               <controller ctrl="98" value="67"/>
+               </MidiAction>
+            <MidiAction name="subb16">
+               <descr>set stop Subbass 16</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="0"/>
+               </MidiAction>
+            <MidiAction name="prin16">
+               <descr>set stop Principal 16</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="1"/>
+               </MidiAction>
+            <MidiAction name="prin8">
+               <descr>set stop Principal 8</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="2"/>
+               </MidiAction>
+            <MidiAction name="prin4">
+               <descr>set stop Principal 4</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="3"/>
+               </MidiAction>
+            <MidiAction name="oct2">
+               <descr>set stop Octave 2</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="4"/>
+               </MidiAction>
+            <MidiAction name="oct1">
+               <descr>set stop Octave 1</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="5"/>
+               </MidiAction>
+            <MidiAction name="qu513">
+               <descr>set stop Quint 5 1/3</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="6"/>
+               </MidiAction>
+            <MidiAction name="qu223">
+               <descr>set stop Quint 2 2/3</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="7"/>
+               </MidiAction>
+            <MidiAction name="mixt">
+               <descr>set stop Mixture</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="8"/>
+               </MidiAction>
+            <MidiAction name="bass18">
+               <descr>set stop Fagott 15</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="9"/>
+               </MidiAction>
+            <MidiAction name="trom16">
+               <descr>set stop Trombone 16</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="10"/>
+               </MidiAction>
+            <MidiAction name="bomb32">
+               <descr>set stop Bombarde 32</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="11"/>
+               </MidiAction>
+            <MidiAction name="trum8">
+               <descr>set stop Trumpet</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="12"/>
+               </MidiAction>
+            <MidiAction name="CP+1">
+               <descr>set stop P+I</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="13"/>
+               </MidiAction>
+            <MidiAction name="CP+2">
+               <descr>set stop P+II</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="14"/>
+               </MidiAction>
+            <MidiAction name="CP+3">
+               <descr>set stop P+III</descr>
+               <controller ctrl="98" value="99"/>
+               <controller ctrl="98" value="15"/>
+               </MidiAction>
+            </channel>
+        </instrument>
+
+     <instrument>
+        <name>Elektronische Orgel</name>
+        <short-name>Et. Org.</short-name>
+        <staves>3</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <clef staff="3">4</clef>
+        <bracket>1</bracket>
+        <channel>
+           <program>18</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Harmonium</name>
+        <short-name>Harm.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Akkordeon</name>
+        <short-name>Akk.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>36-93</aPitchRange>
+        <pPitchRange>36-93</pPitchRange>
+        <channel>
+           <program>21</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Bandoneon</name>
+        <short-name>Ban.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>36-93</aPitchRange>
+        <pPitchRange>36-93</pPitchRange>
+        <channel>
+           <program>23</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Melodica</name>
+        <short-name>Mel.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-84</aPitchRange>
+        <pPitchRange>53-84</pPitchRange>
+        <channel>
+           <program>22</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Sopran Sheng</name>
+        <short-name>S She.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-90</aPitchRange>
+        <pPitchRange>55-90</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Sheng</name>
+        <short-name>A She.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-83</aPitchRange>
+        <pPitchRange>48-83</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Sheng</name>
+        <short-name>T She.</short-name>
+        <clef>12</clef>
+        <aPitchRange>44-78</aPitchRange>
+        <pPitchRange>44-78</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Bass Sheng</name>
+        <short-name>B She.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-67</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Gezupfte Saiteninstrumente">
+     <instrument>
+        <name>Harfe</name>
+        <short-name>Hrf.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>23-104</aPitchRange>
+        <pPitchRange>23-104</pPitchRange>
+        <channel>
+           <program>46</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Koto</name>
+        <short-name>Ko.</short-name>
+        <clef>0</clef>
+        <aPitchRange>43-83</aPitchRange>
+        <pPitchRange>43-83</pPitchRange>
+        <channel>
+           <program>107</program>
+           </channel>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Streichinstrumente">
+     <instrument>
+        <name>Violine</name>
+        <short-name>Vln.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+           <program>40</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violinen 1</name>
+        <short-name>Vlns. 1</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+          <program value="48"/>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violinen 2</name>
+        <short-name>Vlns. 2</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Bratsche</name>
+        <short-name>Bra.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-79</aPitchRange>
+        <pPitchRange>48-93</pPitchRange>
+        <channel>
+           <program>41</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Bratschen</name>
+        <short-name>Bran.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-79</aPitchRange>
+        <pPitchRange>48-93</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Sopran Viola da gamba</name>
+        <short-name>S. Vla. d. g.</short-name>
+        <clef>9</clef>
+        <aPitchRange>50-86</aPitchRange>
+        <pPitchRange>50-93</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Alt Viola da gamba</name>
+        <short-name>A. Vla. d. g.</short-name>
+        <clef>11</clef>
+        <aPitchRange>45-81</aPitchRange>
+        <pPitchRange>45-88</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Tenor Viola da gamba</name>
+        <short-name>T. Vla. d. g.</short-name>
+        <clef>12</clef>
+        <aPitchRange>43-79</aPitchRange>
+        <pPitchRange>43-86</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Viola da gamba</name>
+        <short-name>Vla. d. g.</short-name>
+        <clef>4</clef>
+        <aPitchRange>38-74</aPitchRange>
+        <pPitchRange>38-81</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violoncello</name>
+        <short-name>Vlc.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-90</pPitchRange>
+        <channel>
+           <program>42</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violoncellos</name>
+        <short-name>Vlcs.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-90</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Kontrabass</name>
+        <short-name>Kb.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>43</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="32"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+        <name>Kontrabasse</name>
+        <short-name>Kbe.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violone</name>
+        <short-name>Vne.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>28-67</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     </instrument-group>
+
+  <instrument-group name="Group-Test" extended="1">
+     <ref>Violone</ref>
+     <ref>Piccolo</ref>
+     </instrument-group>
+  </museScore>
+

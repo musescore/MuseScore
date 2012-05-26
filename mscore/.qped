@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Ped version="1.0">
+  <Status>
+    <geometry x="788" y="0" w="889" h="1140" />
+    <Editor1>
+      <KontextList>
+        <Kontext>
+          <path>/home/ws/mscore/mscore/actions.cpp</path>
+          <column>0</column>
+          <line>2290</line>
+          <xoff>0</xoff>
+          <yoff>10</yoff>
+          </Kontext>
+        <cur>1</cur>
+        </KontextList>
+      </Editor1>
+    <search>omr</search>
+    <colorify>0</colorify>
+    <brackets>1</brackets>
+    </Status>
+  </Ped>

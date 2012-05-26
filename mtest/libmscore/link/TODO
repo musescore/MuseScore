@@ -1,0 +1,83 @@
+Linked Parts:
+========================================
+
+      1 - create
+      2 - add
+      3 - add undo
+      4 - add redo
+      5 - remove
+      6 - remove undo
+      7 - remove redo
+
+- --- --- SYMBOL
+- --- --- TEXT
+- --- --- INSTRUMENT_NAME
+- --- --- BAR_LINE
+- --- --- STEM_SLASH
+- --- --- LINE
+- --- --- BRACKET
+- --- --- ARPEGGIO
+- --- --- ACCIDENTAL
+x --- --- NOTE
+x --- --- STEM
+x --- --- CLEF
+x --- --- KEYSIG
+x --- --- TIMESIG
+x --- --- REST
+x xxx xxx BREATH
+- --- --- GLISSANDO
+- --- --- REPEAT_MEASURE
+- --- --- IMAGE
+- --- --- TIE
+- --- --- ARTICULATION
+- --- --- CHORDLINE
+- --- --- DYNAMIC
+- --- --- BEAM
+- --- --- HOOK
+- --- --- LYRICS
+- --- --- FIGURED_BASS
+- --- --- MARKER
+- --- --- JUMP
+- --- --- FINGERING
+- --- --- TUPLET
+- --- --- TEMPO_TEXT
+- --- --- STAFF_TEXT
+- --- --- REHEARSAL_MARK
+- --- --- INSTRUMENT_CHANGE
+- --- --- HARMONY
+- --- --- FRET_DIAGRAM
+- --- --- BEND
+- --- --- TREMOLOBAR
+- --- --- VOLTA
+- --- --- SLUR_SEGMENT
+- --- --- HAIRPIN_SEGMENT
+- --- --- OTTAVA_SEGMENT
+- --- --- TRILL_SEGMENT
+- --- --- TEXTLINE_SEGMENT
+- --- --- VOLTA_SEGMENT
+- --- --- LAYOUT_BREAK
+- --- --- SPACER
+- --- --- STAFF_STATE
+- --- --- LEDGER_LINE
+- --- --- NOTEHEAD
+- --- --- NOTEDOT
+- --- --- TREMOLO
+- --- --- MEASURE
+- --- --- STAFF_LINES
+- --- --- RUBBERBAND
+- --- --- TAB_DURATION_SYMBOL
+- --- --- FSYMBOL
+
+- --- --- HAIRPIN
+- --- --- OTTAVA
+- --- --- PEDAL
+- --- --- TRILL
+- --- --- TEXTLINE
+- --- --- SLUR
+
+- --- --- HBOX
+x --- --- VBOX
+- --- --- TBOX
+- --- --- FBOX
+- --- --- ACCIDENTAL_BRACKET
+

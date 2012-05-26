@@ -1,0 +1,84 @@
+VERSION=2.0
+APPNAME=mscore
+LONG_NAME=MuseScore
+
+WORKING_DIRECTORY=applebuild
+BACKGROUND=build/musescore-dmg-background.png
+APP_PATH=applebuild/${APPNAME}.app
+ 
+VOLNAME=${LONG_NAME}-${VERSION}
+DMGNAME=${VOLNAME}Uncompressed.dmg
+COMPRESSEDDMGNAME=${VOLNAME}.dmg
+ 
+ 
+function set_bundle_display_options() {
+	osascript <<-EOF
+    tell application "Finder"
+        set f to POSIX file ("${1}" as string) as alias
+        tell folder f
+            open
+            tell container window
+                set toolbar visible to false
+                set statusbar visible to false
+                set current view to icon view
+                delay 1 -- sync
+                set the bounds to {0, 0, 380, 540}
+            end tell
+            delay 1 -- sync
+            set icon size of the icon view options of container window to 128
+            set arrangement of the icon view options of container window to not arranged
+            set position of item "MuseScore.app" to {190,122}
+            close
+            open
+            set position of item "Applications" to {190, 387}
+            close
+            open
+            set background picture of the icon view options of container window to file "background.png" of folder "Pictures"
+            set the bounds of the container window to {0, 0, 380, 540}
+            update without registering applications
+            delay 5 -- sync
+            close
+        end tell
+        delay 5 -- sync
+    end tell
+EOF
+ 
+}
+  
+rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+
+#tip: increase the size if error on copy or macdeployqt
+hdiutil create -size 220m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+ 
+# Mount the disk image
+hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
+ 
+# Obtain device information
+DEVS=$(hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} | cut -f 1)
+DEV=$(echo $DEVS | cut -f 1 -d ' ')
+VOLUME=$(mount |grep ${DEV} | cut -f 3 -d ' ')
+ 
+# copy in the application bundle
+cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
+ 
+# fix the libs
+macdeployqt ${VOLUME}/${APPNAME}.app
+
+mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
+
+# copy in background image
+mkdir -p ${VOLUME}/Pictures
+# fixme: path
+cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
+# symlink applications
+ln -s /Applications/ ${VOLUME}/Applications
+set_bundle_display_options ${VOLUME}
+mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
+ 
+# Unmount the disk image
+hdiutil detach $DEV
+ 
+# Convert the disk image to read-only
+hdiutil convert ${WORKING_DIRECTORY}/${DMGNAME} -format UDBZ -o ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+
+rm ${WORKING_DIRECTORY}/${DMGNAME}

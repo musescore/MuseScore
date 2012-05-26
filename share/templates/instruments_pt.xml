@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<museScore version="1.0">
+
+   <Articulation name="staccato">
+      <gateTime>85%</gateTime>
+      </Articulation>
+   <Articulation name="staccato">
+      <gateTime>50%</gateTime>
+      </Articulation>
+   <Articulation name="tenuto">
+      <gateTime>100%</gateTime>
+      </Articulation>
+
+   <instrument-group name="Sopro Madeiras">
+      <instrument>
+         <name>Flautim</name>
+         <short-name>Pic.</short-name>
+         <transposition>12</transposition>
+         <clef>0</clef>
+         <channel>
+            <program>72</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Flauta</name>
+         <short-name>Fl.</short-name>
+         <channel>
+            <program>73</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Flauta Contralto</name>
+         <short-name>Fl. A.</short-name>
+         <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+         <channel>
+            <program>73</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Flauta Baixo</name>
+         <short-name>Fl. B.</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <channel>
+            <program>73</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Flauta de Pã</name>
+         <short-name>Fl. Pã</short-name>
+         <channel>
+            <program>75</program>
+            </channel>
+         </instrument>
+      <instrument>
+           <name>Soprano Recorder</name>
+           <short-name>S.</short-name>
+           <clef>1</clef>
+           <channel>
+             <program>74</program>
+           </channel>
+         </instrument>
+      <instrument>
+           <name>Alto Recorder</name>
+           <short-name>A.</short-name>
+           <channel>
+             <program>74</program>
+           </channel>
+         </instrument>
+      <instrument>
+           <name>Tenor Recorder</name>
+           <short-name>T.</short-name>
+           <channel>
+             <program>74</program>
+           </channel>
+         </instrument>
+      <instrument>
+           <name>Bass Recorder</name>
+           <short-name>B.</short-name>
+           <transposition>12</transposition>
+           <clef>4</clef>
+           <channel>
+             <program>74</program>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Oboé</name>
+         <short-name>Ob.</short-name>
+         <channel>
+            <program>68</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>English Horn</name>
+         <short-name>Eng. Hn.</short-name>
+         <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+         <channel>
+            <program>69</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>B<symbol name="flat"/> Clarinete</name>
+         <short-name>B<symbol name="flat"/>Cl.</short-name>
+         <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+         <channel>
+            <program>71</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>E<symbol name="flat"/> Clarinete</name>
+         <short-name>E<symbol name="flat"/>Cl.</short-name>
+         <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+         <channel>
+            <program>71</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Clarinete Contralto</name>
+         <short-name>A Cl.</short-name>
+         <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+         <channel>
+            <program>71</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Clarinete Baixo</name>
+         <short-name>Bs. Cl.</short-name>
+         <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+         <channel>
+            <program>71</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Fagote</name>
+         <short-name>Bsn.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>70</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Contra Fagote</name>
+         <short-name>Cbsn.</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <clef>4</clef>
+         <channel>
+            <program>70</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxofone</name>
+         <short-name>Sax.</short-name>
+         <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+         <channel>
+            <program>65</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxofone Soprano</name>
+         <short-name>Sop. Sax.</short-name>
+         <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+         <channel>
+            <program>64</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxofone Contralto</name>
+         <short-name>Alt. Sax.</short-name>
+         <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+         <channel>
+            <program>65</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxofone Tenor</name>
+         <short-name>Ten. Sax.</short-name>
+         <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+         <clef>0</clef>
+         <channel>
+            <program>66</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxofone Barítono</name>
+         <short-name>Bar. Sax.</short-name>
+         <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+         <channel>
+            <program>67</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Saxophone Baixo</name>
+         <short-name>Bs. Sax.</short-name>
+         <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+         <channel>
+            <program>67</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Sopro Metais">
+      <instrument>
+         <name>Trompa</name>
+         <short-name>F Hn.</short-name>
+         <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+         <channel>
+            <program>60</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>B<symbol name="flat"/>Trompete</name>
+         <short-name>B<symbol name="flat"/> Tpt.</short-name>
+         <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Trompete em Ré</name>
+         <short-name>D Tpt.</short-name>
+         <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Trompete em Dó</name>
+         <short-name>C Tpt.</short-name>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>E<symbol name="flat"/>Trompete em Mi</name>
+         <short-name>E<symbol name="flat"/> Tpt.</short-name>
+         <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Trompete Abafado</name>
+         <short-name>Tpt. Abf.</short-name>
+         <channel>
+            <program>59</program>
+            </channel>
+         <channel name="unmuted">
+           <program value="56"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>B<symbol name="flat"/> Cornet</name>
+         <short-name>B<symbol name="flat"/> Cnt.</short-name>
+         <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Fliscorne</name>
+         <short-name>Flisc.</short-name>
+         <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+         <channel>
+            <program>56</program>
+            </channel>
+         <channel name="mute">
+           <program value="59"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Trombone</name>
+         <short-name>Trb.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>57</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Trombone Tenor</name>
+         <short-name>Trb. T.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>57</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Trombone Baixo</name>
+         <short-name>Trb. B.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>57</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Tuba</name>
+         <short-name>Tba.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>58</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Eufónio</name>
+         <short-name>Euf.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>58</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Percussão">
+      <instrument>
+         <name>Bateria</name>
+         <description>Bateria 3 linhas</description>
+         <short-name>Bat.</short-name>
+         <drumset>1</drumset>
+         <clef>14</clef>
+         <stafflines>3</stafflines>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Bateria</name>
+         <description>Bateria 5 linhas</description>
+         <short-name>Bat.</short-name>
+         <drumset>1</drumset>
+         <clef>14</clef>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Triângulo</name>
+         <short-name>Trgl.</short-name>
+         <drumset>1</drumset>
+         <Drum pitch="80">
+            <head>1</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Triângulo Fechado</name>
+            <stem>2</stem>
+            </Drum>
+         <Drum pitch="81">
+            <head>0</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Triângulo Aberto</name>
+            <stem>2</stem>
+            </Drum>
+         <clef>14</clef>
+         <stafflines>1</stafflines>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Tímpano</name>
+         <short-name>Tímp.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>47</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Guitarras">
+      <instrument>
+         <name>Guitarra</name>
+         <short-name>Guit.</short-name>
+         <clef>3</clef>
+         <channel>
+            <program>24</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Guitarra Eléctrica</name>
+         <short-name>Guit. EL.</short-name>
+         <clef>3</clef>
+         <channel>
+            <program>27</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Guitarra Baixo</name>
+         <short-name>Guit. B.</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <clef>4</clef>
+         <channel>
+            <program>33</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Vocal">
+      <instrument>
+         <name>Voz</name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Soprano</name>
+         <short-name>S.</short-name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Mezzo-soprano</name>
+         <short-name>Mez.So.</short-name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Contralto</name>
+         <short-name>CAlt.</short-name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Alto</name>
+         <short-name>A.</short-name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Contratenor</name>
+         <short-name>CTen.</short-name>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Tenor</name>
+         <short-name>T.</short-name>
+         <clef>3</clef>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Baritono</name>
+         <short-name>Bar.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Baixo</name>
+         <short-name>B.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>52</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Teclados">
+      <instrument>
+         <name>Piano</name>
+         <short-name>Pno.</short-name>
+         <staves>2</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <bracket>1</bracket>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Cravo</name>
+         <short-name>Crv.</short-name>
+         <staves>2</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <bracket>1</bracket>
+         <channel>
+            <program>6</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Órgão</name>
+         <short-name>Órg.</short-name>
+         <staves>3</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <clef staff="3">4</clef>
+         <bracket>1</bracket>
+         <channel>
+            <program>19</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Órgão Rock</name>
+         <short-name>Órg. Rk.</short-name>
+         <staves>3</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <clef staff="3">4</clef>
+         <bracket>1</bracket>
+         <channel>
+            <program>18</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Acordeão</name>
+         <short-name>Acrd.</short-name>
+         <staves>2</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <channel>
+            <program>21</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Cordas Dedilhadas">
+      <instrument>
+         <name>Harpa</name>
+         <short-name>Hrp.</short-name>
+         <staves>2</staves>
+         <clef staff="1">0</clef>
+         <clef staff="2">4</clef>
+         <bracket>1</bracket>
+         <channel>
+            <program>46</program>
+            </channel>
+         </instrument>
+      </instrument-group>
+
+   <instrument-group name="Cordas">
+      <instrument>
+         <name>Violino</name>
+         <short-name>Vln.</short-name>
+         <channel>
+            <program>40</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Violinos 1</name>
+         <short-name>Vlns. 1</short-name>
+         <channel>
+           <program value="48"/>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Violinos 2</name>
+         <short-name>Vlns. 2</short-name>
+         <channel>
+            <program>48</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Viola</name>
+         <short-name>Vla.</short-name>
+         <clef>11</clef>
+         <channel>
+            <program>41</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Violas</name>
+         <short-name>Vlas.</short-name>
+         <clef>11</clef>
+         <channel>
+            <program>49</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Violoncelo</name>
+         <short-name>Vlc.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>42</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Violoncelos</name>
+         <short-name>Vlcs.</short-name>
+         <clef>4</clef>
+         <channel>
+            <program>49</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Contrabaixo</name>
+         <short-name>Cb</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <clef>4</clef>
+         <channel>
+            <program>32</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      <instrument>
+         <name>Contrabaixo</name>
+         <short-name>Cb.</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <clef>4</clef>
+         <channel>
+            <program>43</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+       <instrument>
+         <name>Contrabaixos</name>
+         <short-name>Cbs.</short-name>
+         <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+         <clef>4</clef>
+         <channel>
+            <program>49</program>
+            </channel>
+         <channel name="pizzicato">
+           <program value="45"/>
+           </channel>
+         <channel name="tremolo">
+           <program value="44"/>
+           </channel>
+         </instrument>
+      </instrument-group>
+
+   </museScore>

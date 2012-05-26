@@ -1,0 +1,20 @@
+"Notes",(T,L,0,0,Times New Roman,16,700,0,0,18,0,0,0)
+
+"Type",(Y,C,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Composer",(M,R,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Footer",(F,R,0,0,Times New Roman,10,400,0,0,18,0,0,0)
+
+TuneTempo,90
+
+
+& sharpf sharpc 4_4
+LG_1	!
+LA_2	B_4	Cr_8	Dr_16	Er_32	Fl_32	!
+HG_4 'hg	HA_4 'ha	HG_4	!!t
+
+& sharpf sharpc
+ag LG_4	bg LA_4	cg B_4	dg C_4	!
+eg D_4	fg E_4	gg F_4	tg HG_4	
+!I

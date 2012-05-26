@@ -1,0 +1,60 @@
+diff --git a/mscore/plugins.cpp b/mscore/plugins.cpp
+index 105ac58..5a221b5 100644
+--- a/mscore/plugins.cpp
++++ b/mscore/plugins.cpp
+@@ -35,6 +35,8 @@
+ Q_DECLARE_METATYPE(Score*);
+ Q_DECLARE_METATYPE(SCursor*);
+ 
++int QmlPlugin::mscoreVersion() const  { return version(); }
++
+ //---------------------------------------------------------
+ //   registerQmlPlugin
+ //---------------------------------------------------------
+@@ -432,6 +434,9 @@ printf("plugin triggered %d\n", idx);
+             view->setSource(QUrl::fromLocalFile(pp));
+ printf("show plugin <%s>\n", qPrintable(pp));
+             view->show();
++            QmlPlugin* p = (QmlPlugin*)(view->rootObject());
++            p->runPlugin();
++
+             }
+       else {
+             pluginExecuteFunction(idx, "run");
+diff --git a/mscore/plugins.h b/mscore/plugins.h
+index e91a357..920252b 100644
+--- a/mscore/plugins.h
++++ b/mscore/plugins.h
+@@ -13,17 +13,31 @@
+ #ifndef __PLUGINS_H__
+ #define __PLUGINS_H__
+ 
++//---------------------------------------------------------
++//   QmlPlugin
++//---------------------------------------------------------
++
+ class QmlPlugin : public QDeclarativeItem {
+-     Q_OBJECT
++      Q_OBJECT
+       Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
++      Q_PROPERTY(bool hasGui READ hasGui WRITE setHasGui)
++      Q_PROPERTY(int mscoreVersion READ mscoreVersion)
+ 
+       QString _menuPath;
++      bool _hasGui;
++
++   signals:
++      void run();
+ 
+    public:
+       QmlPlugin(QDeclarativeItem* parent = 0) : QDeclarativeItem(parent) {}
+ 
+       void setMenuPath(const QString& s) { _menuPath = s;    }
+       QString menuPath() const           { return _menuPath; }
++      bool hasGui() const                { return _hasGui;   }
++      void setHasGui(bool val)           { _hasGui = val;    }
++      int mscoreVersion() const;
++      void runPlugin()                   { emit run();       }
+       };
+ 
+ 

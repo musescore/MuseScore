@@ -1,0 +1,3668 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 2.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise>
+  <work>
+    <work-title>Chord List</work-title>
+    </work>
+  <identification>
+    <encoding>
+      <software>MuseScore 0.9.3</software>
+      <encoding-date>2008-05-05</encoding-date>
+      </encoding>
+    </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name></part-name>
+      <score-instrument id="P1-I3">
+        <instrument-name></instrument-name>
+        </score-instrument>
+      <midi-instrument id="P1-I3">
+        <midi-channel>1</midi-channel>
+        <midi-program>41</midi-program>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>480</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+          </key>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        </attributes>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="2">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="3">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="aug">augmented</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="4">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="6">major-sixth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="5">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj7">major-seventh</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="6">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj9">major-ninth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="7">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj9#11">major-ninth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="8">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj13#11">major-13th</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="9">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj13">major-13th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="10">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="+">augmented</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="11">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj7#5">major-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="12">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="69">maj69</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="13">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="2">major</kind>
+        <degree>
+          <degree-value>2</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="14">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m">minor</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="15">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="maug">minor</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="16">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="mMaj7">minor-major</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="17">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m7">minor-seventh</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="18">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m9">minor-ninth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="19">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m11">minor-11th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="20">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m13">minor-13th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="21">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m6">minor-sixth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="22">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m#5">minor</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="23">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m7#5">minor-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="24">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m69">minor-sixth</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="25">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj7Lyd">major-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="26">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj7b5">major-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="27">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m7b5">half-diminished</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="28">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="dim">diminished</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="29">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="m9b5">minor-ninth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="30">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="5">power</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="31">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7+">augmented-seventh</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="32">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9+">augmented-ninth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="33">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13+">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="34">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="35">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="36">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7">dominant</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="37">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13">dominant-13th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="38">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b13">dominant</kind>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="39">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#11">dominant</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="40">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#11">dominant-13th</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="41">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#11b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="42">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9">dominant-ninth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="43">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="44">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9#11">dominant-ninth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="45">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#11">dominant-13th</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="46">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9#11b13">dominanth-ninth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="47">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13b9">dominanth-13th</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="48">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b9b13">dominanth-seventh</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="49">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b9#11">dominanth-seventh</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="50">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13b9#11">dominant-13th</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="51">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b9#11b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="52">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#9">dominant</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="53">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#9">dominant-13th</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="54">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#9b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="55">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9#11">dominant-ninth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="56">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#9#11">dominant-13th</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="57">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#9#11b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="58">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5">dominant</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="59">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b9">dominant</kind>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="60">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13b5">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="61">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="62">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9b5">dominant-ninth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="63">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9b5b13">dominant-ninth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="64">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5b9">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="65">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13b5b9">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="66">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5b9b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="67">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5#9">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="68">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13b5#9">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="69">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7b5#9b13">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="70">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5">augmented-seventh</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="71">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="72">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5#11">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="73">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5#11">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="74">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9#5">dominant-ninth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="75">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9#5#11">dominant-ninth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="76">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5b9">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="77">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5b9">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="78">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5b9#11">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="79">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5b9#11">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="80">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5#9">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="81">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5#9#11">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="82">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7#5#9#11">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="83">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13#5#9#11">dominant-13th</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="84">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7alt">dominant-seventh</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="85">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="86">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="87">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9sus">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="88">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9susb13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="89">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="90">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="91">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="92">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus4">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="93">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="94">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5#9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="95">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5#9b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="96">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5b9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="97">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5b9b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="98">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb5b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="99">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="100">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5b9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="101">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5b9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="102">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5#9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="103">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5#9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="104">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#5#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="105">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="106">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="107">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="108">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb9#11b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="109">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb9b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="110">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="111">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#9b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="112">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="113">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus#11b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="114">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7susb13">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="115">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13susb9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="116">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13susb9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="117">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#9">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="118">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9sus#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="119">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="120">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13susb5">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="121">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9susb5">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="122">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9susb5b13">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="123">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13susb5b9">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="124">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13susb5#9">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>-1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="125">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#5">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="126">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#5#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="127">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9sus#5">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="128">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="9sus#5#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="129">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#5b9">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="130">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#5b9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="131">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="13sus#5#9#11">suspended-fourth</kind>
+        <degree>
+          <degree-value>5</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>alter</degree-type>
+          </degree>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>9</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>11</degree-value>
+          <degree-alter>1</degree-alter>
+          <degree-type>add</degree-type>
+          </degree>
+        <degree>
+          <degree-value>13</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="132">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="4">major</kind>
+        <degree>
+          <degree-value>4</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="133">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="sus">suspended-fourth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="134">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="dim7">diminished-seventh</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="135">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="sus2">suspended-second</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="136">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="mb3b13">neapolitan</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="137">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          <root-alter>1</root-alter>
+          </root>
+        <kind text="13">dominant-13th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="138">
+      <harmony print-frame="no">
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="139">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="add#13">german</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="140">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="6add9">maj69</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="141">
+      <print new-system="yes"/>
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="sus4">suspended-fourth</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="142">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="11">dominant-11th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="143">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Maj11">major-11th</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="144">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="Tristan">tristan</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="145">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7">dominant</kind>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="146">
+      <harmony print-frame="no">
+        <root>
+          <root-step>C</root-step>
+          </root>
+        <kind text="7sus4">suspended-fourth</kind>
+        <degree>
+          <degree-value>7</degree-value>
+          <degree-type>add</degree-type>
+          </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    </part>
+  </score-partwise>

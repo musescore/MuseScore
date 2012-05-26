@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>com.trolltech.qtsolutions.qtsingleapplication_2.6</namespace>
+    <virtualFolder>qdoc</virtualFolder>
+    <customFilter name="Qt Solutions: Single Application">
+        <filterAttribute>qt</filterAttribute>
+        <filterAttribute>solutions</filterAttribute>
+        <filterAttribute>qtsingleapplication</filterAttribute>
+    </customFilter>
+    <filterSection>
+        <filterAttribute>qt</filterAttribute>
+        <filterAttribute>solutions</filterAttribute>
+        <filterAttribute>qtsingleapplication</filterAttribute>
+        <toc>
+            <section ref="index.html" title="Qt Solutions: Single Application Documentation">
+                <section ref="qtsingleapplication-example-trivial.html" title="A Trivial Example"></section>
+                <section ref="qtsinglecoreapplication-example-console.html" title="A non-GUI example"></section>
+                <section ref="qtsingleapplication-example-loader.html" title="Loading Documents"></section>
+                <section ref="index.html" title="Single Application"></section>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="A Trivial Example" id="A Trivial Example" ref="qtsingleapplication-example-trivial.html"></keyword>
+            <keyword name="A non-GUI example" id="A non-GUI example" ref="qtsinglecoreapplication-example-console.html"></keyword>
+            <keyword name="Loading Documents" id="Loading Documents" ref="qtsingleapplication-example-loader.html"></keyword>
+            <keyword name="QtLockedFile" id="QtLockedFile" ref="qtlockedfile.html"></keyword>
+            <keyword name="QtLockedFile::LockMode" id="QtLockedFile::LockMode" ref="qtlockedfile.html#LockMode-enum"></keyword>
+            <keyword name="QtLockedFile::NoLock" id="QtLockedFile::NoLock" ref="qtlockedfile.html#LockMode-enum"></keyword>
+            <keyword name="QtLockedFile::ReadLock" id="QtLockedFile::ReadLock" ref="qtlockedfile.html#LockMode-enum"></keyword>
+            <keyword name="QtLockedFile::WriteLock" id="QtLockedFile::WriteLock" ref="qtlockedfile.html#LockMode-enum"></keyword>
+            <keyword name="isLocked" id="QtLockedFile::isLocked" ref="qtlockedfile.html#isLocked"></keyword>
+            <keyword name="lock" id="QtLockedFile::lock" ref="qtlockedfile.html#lock"></keyword>
+            <keyword name="lockMode" id="QtLockedFile::lockMode" ref="qtlockedfile.html#lockMode"></keyword>
+            <keyword name="open" id="QtLockedFile::open" ref="qtlockedfile.html#open"></keyword>
+            <keyword name="unlock" id="QtLockedFile::unlock" ref="qtlockedfile.html#unlock"></keyword>
+            <keyword name="~QtLockedFile" id="QtLockedFile::~QtLockedFile" ref="qtlockedfile.html#dtor.QtLockedFile"></keyword>
+            <keyword name="QtSingleApplication" id="QtSingleApplication" ref="qtsingleapplication.html"></keyword>
+            <keyword name="activateWindow" id="QtSingleApplication::activateWindow" ref="qtsingleapplication.html#activateWindow"></keyword>
+            <keyword name="activationWindow" id="QtSingleApplication::activationWindow" ref="qtsingleapplication.html#activationWindow"></keyword>
+            <keyword name="id" id="QtSingleApplication::id" ref="qtsingleapplication.html#id"></keyword>
+            <keyword name="initialize" id="QtSingleApplication::initialize" ref="qtsingleapplication-obsolete.html#initialize"></keyword>
+            <keyword name="isRunning" id="QtSingleApplication::isRunning" ref="qtsingleapplication.html#isRunning"></keyword>
+            <keyword name="messageReceived" id="QtSingleApplication::messageReceived" ref="qtsingleapplication.html#messageReceived"></keyword>
+            <keyword name="sendMessage" id="QtSingleApplication::sendMessage" ref="qtsingleapplication.html#sendMessage"></keyword>
+            <keyword name="setActivationWindow" id="QtSingleApplication::setActivationWindow" ref="qtsingleapplication.html#setActivationWindow"></keyword>
+            <keyword name="QtSingleCoreApplication" id="QtSingleCoreApplication" ref="qtsinglecoreapplication.html"></keyword>
+            <keyword name="id" id="QtSingleCoreApplication::id" ref="qtsinglecoreapplication.html#id"></keyword>
+            <keyword name="isRunning" id="QtSingleCoreApplication::isRunning" ref="qtsinglecoreapplication.html#isRunning"></keyword>
+            <keyword name="messageReceived" id="QtSingleCoreApplication::messageReceived" ref="qtsinglecoreapplication.html#messageReceived"></keyword>
+            <keyword name="sendMessage" id="QtSingleCoreApplication::sendMessage" ref="qtsinglecoreapplication.html#sendMessage"></keyword>
+            <keyword name="Single Application" id="Single Application" ref="index.html"></keyword>
+        </keywords>
+        <files>
+            <file>qtlockedfile.html</file>
+            <file>qtsingleapplication.html</file>
+            <file>index.html</file>
+            <file>qtsingleapplication-example-trivial.html</file>
+            <file>qtsinglecoreapplication.html</file>
+            <file>qtsingleapplication-example-loader.html</file>
+            <file>qtsinglecoreapplication-example-console.html</file>
+            <file>classic.css</file>
+            <file>images/qt-logo.png</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

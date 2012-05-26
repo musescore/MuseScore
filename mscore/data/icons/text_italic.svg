@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="128pt"
+   height="128pt"
+   viewBox="0 0 507.946 507.946"
+   id="svg49"
+   xml:space="preserve">
+  <defs
+   id="defs62">
+    <radialGradient
+   cx="218.9404"
+   cy="219.7715"
+   r="150.7063"
+   fx="218.9404"
+   fy="219.7715"
+   id="aigrd1"
+   gradientUnits="userSpaceOnUse">
+      <stop
+   style="stop-color:#73ffff;stop-opacity:1"
+   offset="0"
+   id="stop53" />
+      <stop
+   style="stop-color:#2ea6b9;stop-opacity:1"
+   offset="0.2809"
+   id="stop54" />
+      <stop
+   style="stop-color:#006b8b;stop-opacity:1"
+   offset="1"
+   id="stop55" />
+    </radialGradient>
+  </defs>
+  
+  <path
+   d="M 108.347,0.39 L 108.347,0.156 L 113.981,0.156 L 113.981,0.39 L 113.675,0.39 C 112.787,0.39 112.289,0.702 112.181,1.326 L 112.163,1.668 L 112.163,11.244 C 112.163,11.976 112.517,12.39 113.225,12.486 L 113.243,12.504 L 113.675,12.522 L 113.981,12.522 L 113.981,12.756 L 108.347,12.756 L 108.347,12.522 L 108.653,12.522 C 109.649,12.522 110.153,12.096 110.165,11.244 L 110.165,1.668 C 110.165,0.816 109.661,0.39 108.653,0.39 L 108.347,0.39 L 108.347,0.39 z "
+   transform="matrix(30.5036,0,-5.34118,30.5036,-3098.05,59.4916)"
+   style="font-size:12px;fill:#a4c9ee;fill-opacity:0.70196096;stroke:#0c6772;stroke-width:0.52037501;stroke-opacity:0.99215698"
+   id="path95" />
+</svg>

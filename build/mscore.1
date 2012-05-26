@@ -1,0 +1,68 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH MSCORE 1 "December 2, 2007"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+mscore \- Full featured WYSIWYG score editor
+.SH SYNOPSIS
+.B mscore
+.RI [ options ]  scorefile
+.SH DESCRIPTION
+This manual page documents briefly the
+.B mscore
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" respectively.
+\fBMuseScore\fP is a free WYSIWYG music score typesetter for Linux,
+licenced under GNU GPL. Features:
+  * WYSIWYG, notes are entered on a "virtual note sheet"
+  * unlimited number of staves
+  * up to four voices/staff
+  * easy and fast note entry with mouse, keyboard or midi
+  * integrated sequencer and FluidSynth software synthesizer
+  * import and export of MusicXml and standard midifiles (SMF)
+  * platform independent code for Linux, Windows and Mac
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-v
+Show version of program.
+.TP
+.B \-d
+Debug mode.
+.TP
+.B \-s
+Disable the synthesizer.
+.TP
+.B \-m
+Disable MIDI I/O support.
+.TP
+.B \-i
+Dump MIDI input.
+.TP
+.B \-L
+Layout debug mode.
+.TP
+.B \-o file
+Export to file, format dependent on extension.
+.br
+.SH AUTHOR
+mscore was written by Werner Schweer <ws@seh.de>.
+.PP
+This manual page was written by Toby Smithe <tsmithe@ubuntu.com>,
+for the Ubuntu project (but may be used by others).

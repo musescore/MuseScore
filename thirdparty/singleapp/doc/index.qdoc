@@ -1,0 +1,47 @@
+/*!
+	\page index.html
+	\title Single Application
+
+    	\section1 Description
+	
+			The QtSingleApplication component provides support
+			for applications that can be only started once per user.
+		
+
+	
+			For some applications it is useful or even critical that they are started
+			only once by any user. Future attempts to start the application should
+			activate any already running instance, and possibly perform requested
+			actions, e.g. loading a file, in that instance.
+
+			The QtSingleApplication class provides an interface to detect a running
+			instance, and to send command strings to that instance.
+	                For console (non-GUI) applications, the QtSingleCoreApplication variant is provided, which avoids dependency on QtGui.
+
+		
+
+    	
+		\section1 Classes
+	    \list
+	 \i  QtSingleApplication \i  QtSingleCoreApplication\endlist
+	
+		\section1 Examples
+	    \list
+	 \i  \link qtsingleapplication-example-trivial.html A Trivial Example \endlink  \i  \link qtsingleapplication-example-loader.html Loading Documents \endlink  \i  \link qtsinglecoreapplication-example-console.html A Non-GUI Example \endlink \endlist
+	
+	
+
+    	
+
+    	
+    		\section1 Tested platforms
+		\list
+		\i Qt 4.4, 4.5 / Windows XP / MSVC.NET 2005
+		    \i Qt 4.4, 4.5 / Linux / gcc
+		    \i Qt 4.4, 4.5 / MacOS X 10.5 / gcc
+		    \endlist
+
+    	
+
+	
+	*/

@@ -1,0 +1,29 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+   <qresource prefix="/">
+      <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
+      <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
+      <file alias="fonts/gonville-20.otf">../fonts/gonville-20.otf</file>
+      <file alias="fonts/mscore-20.otf">../fonts/mscore-20.otf</file>
+      <file alias="fonts/mscore1-20.ttf">../fonts/mscore1-20.ttf</file>
+      <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
+      <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
+      <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
+      <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
+      <file alias="fonts/mscore_tab_baroque.ttf">../fonts/mscore_tab_baroque.ttf</file>
+      <file alias="fonts/mscore_tab_modern.ttf">../fonts/mscore_tab_modern.ttf</file>
+      <file alias="fonts/mscore_tab_renaiss.ttf">../fonts/mscore_tab_renaiss.ttf</file>
+      <file alias="fonts/mscore_tab_renaiss2.ttf">../fonts/mscore_tab_renaiss2.ttf</file>
+      <file alias="fonts/FiguredBassMHGPL.otf">../fonts/FiguredBassMHGPL.otf</file>
+      <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
+      <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
+
+      <file alias="instruments.xml">../share/templates/instruments.xml</file>
+
+      <file>../mscore/data/mscore.png</file>
+      <file>../mscore/data/bg1.jpg</file>
+      <file>../mscore/data/cancel.png</file>
+      <file>../mscore/revision.h</file>
+      <file>../mscore/data/musescore_logo_full1.png</file>
+   </qresource>
+</RCC>

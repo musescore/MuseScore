@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="120"
+   height="120"
+   viewBox="0 0 507.946 507.946"
+   id="svg49"
+   xml:space="preserve">
+  <defs
+   id="defs62">
+    <radialGradient
+   cx="218.9404"
+   cy="219.7715"
+   r="150.7063"
+   fx="218.9404"
+   fy="219.7715"
+   id="aigrd1"
+   gradientUnits="userSpaceOnUse">
+      <stop
+   style="stop-color:#73ffff;stop-opacity:1"
+   offset="0"
+   id="stop53" />
+      <stop
+   style="stop-color:#2ea6b9;stop-opacity:1"
+   offset="0.2809"
+   id="stop54" />
+      <stop
+   style="stop-color:#006b8b;stop-opacity:1"
+   offset="1"
+   id="stop55" />
+    </radialGradient>
+    <linearGradient
+   x1="0.50627601"
+   y1="0.046875"
+   x2="0.50627601"
+   y2="0.984375"
+   id="linearGradient130"
+   xlink:href="#aigrd1"
+   gradientUnits="objectBoundingBox"
+   spreadMethod="pad" />
+    <linearGradient
+   x1="0"
+   y1="0"
+   x2="1"
+   y2="0"
+   id="linearGradient321"
+   xlink:href="#aigrd1" />
+    <linearGradient
+   x1="0.43077001"
+   y1="0.85156202"
+   x2="-0.123077"
+   y2="-0.078125"
+   id="linearGradient334"
+   xlink:href="#aigrd1"
+   gradientUnits="objectBoundingBox"
+   spreadMethod="pad" />
+    <linearGradient
+   x1="0.50627601"
+   y1="0.046875"
+   x2="0.50627601"
+   y2="0.984375"
+   id="linearGradient148"
+   xlink:href="#aigrd1" />
+  </defs>
+  
+  
+<rect
+   width="227.54547"
+   height="229.33717"
+   x="137.96065"
+   y="154.98177"
+   style="fill:#c3c8e1;fill-opacity:1;stroke:#000000;stroke-width:21.16441727;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   id="rect1881" /></svg>
