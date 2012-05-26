@@ -1,4 +1,4 @@
-LibMuseScore
-============
+libmscore
+=========
 
-MuseScore core library
+MuseScore score rendering library
