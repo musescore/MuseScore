@@ -1,0 +1,113 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//  $Id: accidental.h 5242 2012-01-23 17:25:56Z wschweer $
+//
+//  Copyright (C) 2004-2011 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
+#ifndef __ACCIDENTAL_H__
+#define __ACCIDENTAL_H__
+
+/**
+ \file
+ Definition of class Accidental
+*/
+
+#include "element.h"
+#include "mscore.h"
+
+class Note;
+class QPainter;
+
+//---------------------------------------------------------
+//   SymElement
+//---------------------------------------------------------
+
+struct SymElement {
+      int sym;
+      qreal x;
+      SymElement(int _sym, qreal _x) : sym(_sym), x(_x) {}
+      };
+
+//---------------------------------------------------------
+//   AccidentalRole
+//---------------------------------------------------------
+
+enum AccidentalRole {
+      ACC_AUTO,               // layout created accidental
+      ACC_USER                // user created accidental
+      };
+
+//---------------------------------------------------------
+//   Accidental
+//---------------------------------------------------------
+
+class Accidental : public Element {
+      QList<SymElement> el;
+      AccidentalType _subtype;
+      bool _hasBracket;
+      AccidentalRole _role;
+      bool _small;
+
+   public:
+      Accidental(Score* s);
+      virtual Accidental* clone() const     { return new Accidental(*this); }
+      virtual ElementType type() const      { return ACCIDENTAL; }
+
+      const char* subtypeUserName() const;
+      void setSubtype(const QString& s);
+      void setSubtype(AccidentalType t)     { _subtype = t;    }
+      AccidentalType subtype() const        { return _subtype; }
+
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual Element* drop(const DropData&);
+      virtual void layout();
+      virtual void draw(QPainter*) const;
+      virtual bool isEditable() const                    { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) { setGenerated(false); }
+
+      int symbol() const;
+      Note* note() const                  { return (Note*)parent(); }
+      bool hasBracket() const             { return _hasBracket;     }
+      void setHasBracket(bool val)        { _hasBracket = val;      }
+      AccidentalRole role() const         { return _role;           }
+      void setRole(AccidentalRole r)      { _role = r;              }
+      bool small() const                  { return _small;          }
+      void setSmall(bool val)             { _small = val;           }
+
+      virtual void read(const QDomElement&);
+      virtual void write(Xml& xml) const;
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+
+      static int subtype2value(AccidentalType);             // return effective pitch offset
+      static const char* subtype2name(AccidentalType);      // return effective pitch offset
+      static AccidentalType value2subtype(int);
+      static AccidentalType name2subtype(const QString&);
+      };
+
+//---------------------------------------------------------
+//   AccidentalBracket
+//    used as icon in palette
+//---------------------------------------------------------
+
+class AccidentalBracket : public Compound {
+      int _subtype;
+
+   public:
+      AccidentalBracket(Score*);
+      virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
+      virtual ElementType type() const         { return ACCIDENTAL_BRACKET; }
+      void setSubtype(int v);
+      int subtype() const                      { return _subtype; }
+      };
+
+#endif
+
