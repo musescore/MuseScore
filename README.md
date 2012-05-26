@@ -1,0 +1,4 @@
+LibMuseScore
+============
+
+MuseScore core library
