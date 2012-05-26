@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!DOCTYPE luau-repository SYSTEM
+	"http://luau.sourceforge.net/luau-repository-1.1.dtd">
+
+<luau-repository interface="1.1">
+
+	<program-info id="@mscore.sourceforge.net/mscore"> 
+
+		<shortname>mscore</shortname>
+		<fullname>MuseScore Score Typesetter</fullname>
+		<desc>MuseScore is a full featured WYSIWYG score editor</desc> 
+
+	</program-info>
+
+	<software version="0.3">
+		<date>2006-03-14</date>
+		<interface version="0.0" />
+		<keyword>UNSTABLE</keyword> 
+
+		<short>Short declarative statement(s) about release for language en.</short>
+		<long>
+			Paragraphs describing the release for language en.
+		</long> 
+
+		<package type="autopackage"
+		         size="9248"
+		         md5="ac213d426492d1039472fe88b8981ea1">
+			/MuseScore%20Score%20Typesetter%200.3.package
+		</package>
+	</software>
+
+</luau-repository>

@@ -1,0 +1,8 @@
+
+
+      - write presets in xml
+      - read presets
+      - save presets in score if aeolus is used
+
+      - use presets in score, switch by midi bank/instrument
+

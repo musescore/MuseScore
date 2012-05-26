@@ -1,0 +1,20 @@
+import QtQuick 1.0
+import MuseScore 1.0
+
+
+Item {
+      pluginPath: "Plugins/helloQml"
+      Rectangle {
+            id: simplebutton
+            color: "grey"
+            width: 150
+            height: 75
+
+            Text {
+                  id: buttonLabel
+                  anchors.centerIn: parent
+                  text: "Hello Qml"
+                  }
+            }
+      }
+

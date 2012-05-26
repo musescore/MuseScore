@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InspectorGroupElement</class>
+ <widget class="QWidget" name="InspectorGroupElement">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>287</width>
+    <height>92</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="elementName">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Element Group</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="setColor">
+       <property name="text">
+        <string>Set Color</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="Awl::ColorLabel" name="color"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="setVisible">
+       <property name="text">
+        <string>Set Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="setInvisible">
+       <property name="text">
+        <string>Set Invisible</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections/>
+</ui>

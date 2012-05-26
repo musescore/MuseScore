@@ -1,0 +1,35 @@
+
+
+- Qualität messen: Rauschabstand
+      - Erkennungswahrscheinlichkeit: 0 - 1.0
+      - Abstand zwischen "false positive" und nicht erkannten Elementen = Rauschabstand
+
+- Erkennen von Notenlinien:
+      - die horizontale Projektion soll Kanten berücksichtigen
+
+- Zeichenerkennung
+      - Zeichenränder sollen mit einbezogen werden, um den Rauschabstand zu verbessern
+
+- Rekursion
+      - erkannten Notenköpfe korrigieren die Position der Notenlinien
+
+- Notenköpfe:
+      - Notenlinien und Notenhals in Muster einzeichnen:
+            - ergibt 6 Varianten per Kopf:
+                  - zwischen den Notenlinien
+                  - auf den Notenlinien
+                  - Hals nach oben
+                  - Hals nach unten
+                  - Hals durchlaufend (Akkord)
+
+TODO:
+      * Taktstriche erkennen
+      - Systeme erkennen
+
+      System-Preamble erkennen:
+            - Schlüssel erkennen
+            - Tonartvorzeichen erkennen
+            - Taktart erkennen
+
+      - Seite aufbauen
+

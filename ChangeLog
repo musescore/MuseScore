@@ -1,0 +1,2018 @@
+23.5 (ws)
+      - change the order of probing audio interfaces: PulseAudio-PortAudio-ALSA-JACK
+22.5 (ws)
+      - changed audio interfaces to "interleaved" mode
+      - added PulseAudio driver
+21.5 (ws)
+      - fix a page layout bug: weird behaviour of system spacer element
+      (lv)
+      - fix #15006: Use MusicXML schema to validate files before import
+        - add testfiles testInvalid.mxl and testInvalid.xml
+19.5 (ws)
+      - remove "apply" button from inspector
+      - fix #15437: Creating rest via shortcut and undo causes crash
+      - new commands: "toggle visibility" (shortcut "V"), "set visible", "set unvisible"
+     (lv)
+      - fix #15006: Use MusicXML schema to validate files before import
+        - add dialog in case of validation error, allowing to load file anyway
+17.5 (lv)
+      - fix #15006: Use MusicXML schema to validate files before import
+        - updated MusicXML demo- and testfiles for schema compliance
+      (la)
+      - fix #15731: add marcato shortcut (patch by Igor Ponzano aka picnic)
+16.5 (ws)
+      - Rename style parameter ST_systemDistance to ST_minSystemDistance,
+        replace ST_pageFillLimit with ST_maxSystemDistance. The system distance
+        is now stretched upto maxSystemDistance to fill a page.
+     (la)
+      - fix several issues in about dialogs (#16499, #16496, #16495, #16494, #16497)
+      - fix #14736: Footer offset is acting differently on odd and even page
+      - fix #16323: Score does not redraw after transpose
+      - fix #7799: Transpose does not change first key signature
+15.5 (ws)
+      - enable layer mechanism for layout break
+      - fix #16299: Changing actual time signature causes score corruption
+      (la)
+      - fix #16473: Edit in Stave Properties causes crash
+14.5 (ws)
+      - fix #15474: Crash when opening MSCZ-file while navigator is active
+13.5 (la)
+      - fix #16238: Down note stem in Drumset dialog are up and mirrored
+      - replace H by B in drumset dialog
+      - fix #16322: use full width in New Score wizard
+10.5 (lv)
+      - initial implementation #15006: Use MusicXML schema to validate files before import
+8.5 (ws)
+      - fixed volta; subtype was not set right on read
+5.5 (ws)
+      - fix #16294: Many operations cause unrelated measure to stretch
+4.5 (ws)
+      - new layout mode "LayoutSystem"
+      - Stem: make "reset to default (Ctrl+R)" undoable
+      - fix tweaking of note stem length
+3.5 (ws)
+      fix #13036: Beam direction for three or more notes
+      fix #13035: Beam direction for two notes
+1.5 (lv)
+      - #15472: new MusicXML testfile testDrumset1.xml
+30.4 (lv)
+      - fix MusicXML export of rehearsal mark
+     (la)
+      - fix #8808: Limit scroll area of the score view while scrolling and dragging
+      - fix #16301: Extravanaeous program listing in Add/Remove Programs on windows
+29.4 (lv)
+      - fix #15472: Import drumset information from MusicXML
+28.4 (ws)
+      - misc. fixes for importing 1.2 parts
+      - misc. enhancements for split/join measure. Do not allow splitting a tuplet.
+27.4 (la)
+      - fix #16270: Click in the navigator moves box only horizontally
+26.4 (ws)
+      - reaktivated "split measure" function
+      - new implementation of "join measure" using ScoreRange() class
+24.4 (ws)
+      - added new target "mconvert" to demonstrate the use of libmscore in a command
+        line tool
+22.4  (ws)
+      - moved global variables PDPI, DPI, DPMM, debugMode into class MScore
+      (lv)
+      - #15795: MusicXML Import and export of tablature
+        -> staff tuning import implemented
+21.4 (lv)
+      - #15795: MusicXML Import and export of tablature
+        -> import partially implemented
+18.4 (ws)
+      - fix #16094: Acciaccatura stroke appears offset
+      - fix #16097: Opening MXL causes crash
+17.4 (ws)
+      - feature #15062: Part export (patch from emeraldimp)
+      - fix #15154: Style Hrd/Ftr Nums "show first" not checked, 1st page > 1:
+         1st page number still shown (patch from Miwarre)
+      - fix #15836: Image::setProperty() rounds size and scale to integers
+        (patch from Miwarre)
+      - fix #14648: Copying from within tuplet bracket to the same or another or
+        to a normal rest produces strange results (patch from jork3)
+      (lv)
+      - #16057: MusicXML support fret diagrams
+        -> import partially implemented
+      - #15795: MusicXML Import and export of tablature
+        -> export partially implemented
+      - new MusicXML regression testfiles testHarmony3.xml and testTablature1.xml
+16.4 (ws)
+      - handle triple beams
+      - updated beam inspector
+      - changed shortcut handling:
+            - more than one shortcut is now possible for an action
+            - shortcuts are saved in <local-data>/shortcuts.xml
+14.4 (lv)
+      - more work on #15899: MusicXML: support figured bass
+        now works correctly for simple, single-staff cases
+11.4 (la)
+      - Add ukulele tablature instrument with default tuning
+      - fix #15991
+      - fix #15999: Change Abort to Cancel in Layer dialog
+      - fix #15993: Typo in Continuous View
+      - Capitalize letter in instrument dialog (#11515)
+10.4 (ws)
+      - new implementation for beam layout: slant & stemLen
+9.4 (lv)
+      - more work on #15899: MusicXML: support figured bass
+8.4 (lv)
+      - more work on #15899: MusicXML: support figured bass
+7.4 (lv)
+      - more work on #15899: MusicXML: support figured bass
+6.4 (lv)
+      - more work on #15899: MusicXML: support figured bass
+5.4 (lv)
+      - partial and very preliminary fix for #15899: MusicXML: support figured bass
+3.4. (ws)
+      - style change: set fractional beam width to note head width
+2.4. (ws)
+      - extend rules for beam stem direction
+      - linked parts: implement insert/delete measures
+      - added the enhanced mscore-20 (Emmentaler) font from Gootector
+      - fix #15847: Typo in dialogue box after adding soundfont already loaded
+31.3 (mw)
+      - FiguredBass: duration input and indicator, continuation lines
+30.3 (ws)
+      - linked parts: implement add/remove Fingering, Symbol, Image
+        (including regression tests)
+29.3 (ws)
+      - linked parts: implement add/remove Breath
+28.3 (lv)
+      - fix #15042: [MusicXML] [trunk] Export/import of uneven tuplets (16th, eighth, eighth, 16th)
+     (ws)
+      - fix #14855: Properties windows of objects in palette are all
+        titled 'Chord Properties'
+      - Do linkId counting on a per score instance base. Hopefully this eases
+        regression testing.
+      - removed image property popup
+      - added image scale to inspector panel. This implementation replaces
+        the patch from Miwarre (#14900)
+24.3 (lv)
+      - fix #14143 [MusicXML] [Trunk] Title, Subtitle, Composer and Lyricist not exported
+        now also works for text created by menu Create / Text
+23.3 (ws)
+      - save page format in style
+      - new function: select section
+22.3 (lv)
+      - partial fix #14895: MusicXML import/export of doit and falloff
+21.3 (lv)
+      - update MusicXML regression test for #14895
+17.3 (lv)
+      - fix #11226 MusicXML exports treble clefs only (again ...)
+      - fix #14143 [MusicXML] [Trunk] Title, Subtitle, Composer and Lyricist not exported
+      - add MusicXML regression test file testTuplets4.xml
+     (la)
+      - fix #15168: Meta data for SVG export : title and description
+      - fix #15181: Move "Meta Data" to File menu, rename to file > info...
+      - fix #15567: Check for plugin minor version gives wrong output in case it is greater than SCRIPT_MINOR_VERSION
+      - fix various issue detected by CppCheck
+      - generate test report in build directory
+      - fix #10983: Synthesizer chorus setting increment
+      - fix #15547: curScore.version not updated after File > Save
+16.3 (mw)
+      - FiguredBass: accepted contin.line alone
+12.3 (ws)
+      - added player app for meego (tested on nokia N9)
+      (mw)
+      - Copying FiguredBass from a note/chord to another
+      - Tab/ShiftTab in FiguredBass editing
+11.3 (lv)
+      - fix #15452: [MusicXML import] [trunk] Notes are interpreted as rests, wrong lengths, strange results
+     (ws)
+      - update OMR to latest mupdf
+10.3  (ws)
+      - fix #15155: Page Seggings dlg box: first page num and page height weird
+        behaviour (patch from Miwarre)
+      - #14648: applied patch from jorgk
+      - fix import of 1.1 chord name position offsets
+      (la)
+      - fix DMG icon layout on Mac OSX 10.6 see http://openradar.appspot.com/7186342
+09.3  (mw)
+      - fix #15191: Tablature doesn't like unisons
+      - added undoChangeFret() to undo
+8.3   (ws)
+      - Dynamic: normal dynamics are now styled (new text style TEXT_STYLE_DYNAMICS2)
+07.3  (ws)
+      - updated text style implementation for styled/unstyled text
+      (mw)
+      - Changed FiguredBass to displays text which cannot be parsed
+      - FiguredBass: implemented _ticks and_onNote values
+05.3 (db)
+      - Minor spelling and javascript corrections for test plugin
+04.3 (lv)
+      - fix #14811: [MusicXML import] [trunk] import error: 41h-TooManyParts.xml causes crash
+      - fix #14812: [MusicXML import] [trunk] import error: 41g-PartNoId.xml causes crash
+      - fix #15034: [MusicXML] [trunk] Handle tuplet property "number"
+      - partial fix #15042: [MusicXML] [trunk] Export/import of uneven tuplets (16th, eighth, eighth, 16th)
+        -> all code synced from branch, but does not work correctly yet, due to tuplet baselen issue
+      - fix #15066: [MusicXML import] [trunk] import error: 31a-Directions.xml missing dashes and bracket
+      - fix #15156: [MusicXML] [trunk] empty measures are not imported
+      - support parentheses attribute for accidentals (prefered as of MusicXML 1.1)
+03.3 (lv)
+      - fix #14861: [MusicXML import] [trunk] import error: 32a-Notations.xml: missing notations
+      - fix #14863: [MusicXML] [trunk] Export notations imported by issue 14861
+      - fix #14882: [MusicXML import] [trunk] import error: 46a-Barlines.xml: unexpected multi-measure rests
+      - update MusicXML regression test
+     (mw)
+      - Figured Bass: added style param. to "Style | General" dlg box
+      - Figured Bass: added font config. file
+29.2 (ws)
+      - some fixes for TimeSig changes
+28.2  (ws)
+      - set standard width of line elements when dropped to palette
+      - resize palette after drop of element
+      - fix crash when dragging custom lines to palette
+      (mw)
+      - Tabulatures: string data can be in non-sequential order (banjo, theorbo, fix for #15208)
+      - Instruments.xml: added tuning data for banjo
+27.2 (mw)
+      - Work In Progress for figured bass
+      - Staff Type Editor - Tabulature: uncluttered layout, added tabulature preview (WIP)
+27.2 (ws)
+      - fix layout of bend symbol
+      - center string names in tablature staff
+      - setting cross note head group sets ghost note "X" in linked tablature staff
+      - new function: Shift+X change tablature string number to "X" (ghost note)
+      - fix layout of ledger lines in case of manually tweaked top note (unison)
+25.2 (ws)
+      - fix creation of linked part in "new wizard"
+      - fix bar line creation of additional staff for part created in "new wizard"
+      - fix keysig palette offset in "new wizard"
+     (db)
+      - add alt keys for menu items
+      - improve dialog text for incompatible files
+24.2 (ws)
+      - add framework for "continuous view" (scrollview)
+23.2 (ws)
+      - fix #12871: Undo doesn't undo "Make barlines invisible"
+      - fix #13767: Problem of refresh in the display menu
+      - fix #14110: Not enough space for dotted notes
+      - fix #14112: If stem is selected, direction won't flip
+      - fix text frame color
+      - fix #11782: Adding quarter grace note to note with existing set of
+        beamed grace notes causes infinite stems.
+      - fix #15083: Inventio 6 looks strange.
+        Inventio6 was created with an old MuseScore version (file version 1.10).
+        MuseScore now warns that a file cannot be read if file version is < 1.14).
+        Proposed conversion is to read/save with MuseScore version 1.x.
+      - fix #14896: Entering two or more certain grace notes have
+        infinite stem height
+      - init inspector when changing scores
+      - reset inspector when removing score (hopefully fixing #15100)
+22.2 (ws)
+      - implement playback of ogg vorbis audio file
+21.2 (ws)
+      - add "playmode" to Score()
+      - implement vorbis audio files as additional media
+20.2 (ws)
+      - linked parts: tuplets
+      - linked parts: implement add/insert measure/frame
+19.2 (ws)
+      - fix #8990: Issues with Tuplets
+      - fix #8995: Tuplet bracket should appear if beam broken
+      - fix #14917: Nested triplets not working
+      - misc bugfixes for parts + regression tests
+18.2 (mw)
+      - clef.cpp/.h: fixed clef pos. for TAB and PERC staves (and in general staves with non-standard line num. and line dist.)
+17.2 (mw)
+      - instruments.xml: restored lost data, completed TAB data, fixed viols
+      - Staff::init(): fixed init. from templates using tablatures
+      (la)
+      - MusicXML import export volume and pan for each instrument
+      - Change order of MusicXML tags to please Finale
+15.2 (ws)
+      - new image property to give size in spatium units (vs. metric mm)
+      - implement inspector panel for images
+      - fix implementation of "holes" in palette. They can be reused for new elements
+        dropped to the palette (see #14974)
+      - in palette element popup: renamed "Delete contents" to "Clear"
+15.2 (ws)
+      - palette offset and palette cell offset is now in spatium units
+14.2 (ws)
+      - do not use pixmap cache for svg's anymore as this does not work for redering
+        in a background task
+      - fix position of clefs after spatium change
+      - allow ties without second note
+13.2 (ws)
+      - fix clef drop target color
+      - patch #14940: SVG images printed twice on PDF 1st page and never on
+        following pages (patch from Miwarre)
+      - class ImagePath() replaced by ImageStore()
+      - add "name" to palette cell properties dialog
+      - fix beaming for groups of grace notes
+      - show bounding box of lost/unloadable images
+      - fix regression in ChordLine() and Tremolo() class: subtype was not saved
+      - add .gif to supported image types
+      - switch to qt internal QZipReader QZipWriter
+      - fix crash in load drumset dialog
+      - experimental corner label for top right corner
+      - added Load/Store operations for single palettes
+      - fixed moving image to palette; images are now proper saved in the profiles
+10.02 (mw)
+      - corrected wrongly scaled vert. offsets for tablature symbols.
+8.2 (la)
+      - fix #14819: import error: 01f-Pitches-ParenthesizedMicrotoneAccidentals.xml imports without microtone accidentals
+      - fix #14818: import error: 01e-Pitches-ParenthesizedAccidentals.xml imports without double flat in parentheses
+      - fix #14832: import error: 41d-StaffGroups-Nested.xml: part-group symbol=line not supported
+      - fix #14804: Bad pitch and alter exported for cross staff note
+      - fix #14418: Voltas lost when importing MusicXML
+7.2 (ws)
+      - enable user defined meta tags for scores
+4.2 (ws)
+      - wrap inspector main widget with QScrollArea
+03.02 (mw)
+      - removed hard-coded initial size for pictures in MuseScore::addImage() function (#14753)
+      - transparent background for SVG images (fix for #14754)
+2.2 (ws)
+      - enhanced compatibility with 1.x scores: Harmony, MeasureRepeat
+    (la)
+      - fix #12300: Add european language characters in MuseJazz (by Marc Sabatella and Jorgk)
+      - add two more chordnames sus#4 & Maj7b13
+1.2 (ws)
+      - fixed: changing triplet duration - strange effects after undo
+      - fixed #14733: triplet duration set incorrectly
+      - patch #10577: Applying arpeggio to note with tie before it causes crash
+        (patch from jorgk3)
+      - fixed #14734: Crash when opening score that contains tied 1/8
+        note created in 1.1 (regression from fixing #14668)
+      - fixed #14668: Crash when changing triplet duration after insertion
+      - fixed #10441: Editing fingering text without unticking "Note Input"
+        button causes crash
+31.1 (ws)
+      - inspector: added action panel for element groups
+30.1 (ws)
+      - fix #14704: Undo in slur edit mode causes crash
+28.1 (lv)
+      - fix #14590: [MusicXML import] [1.2] import errors 23a-Tuplets.xml
+28.1 (ws)
+      - fix #3482: pasting after copy/cut creates note with wrong duration
+      - implement #3107: Slurs for multi-staff selections
+      - fix #3352: Unable to paste symbol to rest
+27.1 (ws)
+      - fix #14657: embedded SVG rendered as raster images
+      - fix #14581: Unable to open ove files
+      - fix #14659: Flipping stem direction on beamed notes causes a crash
+26.1 (ws)
+      - patch #14620: Automatic Part Extraction (patch from emeraldimp)
+25.1 (ws)
+      - fix #14639: Dragging Symbol into score is broken
+      - fix #14628: Objects cut off in Master Palette
+      - fix #14573: Can't undo deletion of HBox
+      - enhanced palette layout
+      - fix palette grid drawing
+      - patch #14598: Staff text for other (non-first) staves is placed
+        relatively to first stave (patch from miwarre)
+24.1 (ws)
+      - added "Frames & Measures" palette
+      - moved several floating palettes into "Master Palette"
+      - removed "Breaks&Spacer" from Layout menu
+23.1 (ws)
+      - new iteration of property system
+20.1 (ws)
+      - new Feature: grace notes after normal notes
+      _ fix more places of #14537
+      - fix #14528: Elements from Lines appear at the top-left corner of score when dragged
+      - fix #14537: Characters from dots onward are cut off in Save As and Export boxes
+      - patch #13025: Measures long 2/1 or more not cleared to measure rest
+        (patch from Miwarre)
+19.1 (ws)
+      - fix #14529: 'Save as Copy' appears at the top of 'Export'
+      - fix #14527: Differing grace notes produce the same result
+18.1 (ws)
+      - fix #14509: Changing time signature form numerics to symbols and undo moves
+        position and has defective appearance
+      - fix #14504: Cannot delete number in second time signature box with one digit
+      - fix #14501: Change time sig to 2/2 or 2/2 alla breve and undo removes bass clef
+17.1 (ws)
+      - fix #14479: Time signature change broken
+16.1 (ws)
+      - midi import fixes
+      - fix preferences: page size, height/with was exchanged on save
+      - midi import: moved "shortest note" from separate dialog into preferences->import
+13.1 (ws)
+      - fix #14403: saved decrescendo appears as crescendo when re-opening
+31.dec (ws)
+      - omr: switch from using poppler to muPDF for reading pdfs
+      (lv)
+      - importxml.cpp cleanup
+30.dec (ws)
+      - new mtest folder; will contain regression tests
+29.dec (ws)
+      - new abstraction for element properties
+      - removed subtype from Element class
+27.dec (lv)
+      - fix #14088: [MusicXML] Problem importing triplets from XML if tuplet element is missing
+      - importxml.cpp cleanup
+23.dec (lv)
+      - partial fix #14088: [MusicXML] Problem importing triplets from XML if tuplet element is missing
+        -> works for notes but not yet for rests with missing time-modification
+      - fix #14118: [MusicXML] Import of tuplets containing chords is incorrect
+      - fix #14160: [MusicXML] Problem importing tuplets from XML in a multi-voice context
+17.dec (ws)
+      - new feature: respacing beams (inspector property)
+       (lv)
+      - remove \n from qDebug statements
+      - disabled many debug messages
+      - fix #12445: [MusicXML] Import can produce empty voice 1
+                     set (automativally) generated rests to invisible
+      - fix #12556: [Trunk] Tempo Text in MusicXML ignored
+      - fix #13949: [trunk] MuseScore aborts when saving certain file as xml or mxl
+15.dec (ws)
+      - new linetypes for upprall+trill prallprall+trill
+      - fix line drop for page > 1
+12.dec (lv)
+      - fix #12445: [MusicXML] Import can produce empty voice 1
+       (ws)
+      - fix #12670: Clef information missing from instrument selection during
+        score creation
+      - fix #14043: Common Time and Alla Breve symbols have nominal and
+        actual duration of numeral time signature in score creation step
+        (regression from #13984)
+      - fix #14036: Background Wallpaper Distortion
+      - fix #13982: Different time signatures should be listed vertically during
+        score creation
+      - fix #13983: Common time and alla breve symbols should be black colour
+        during score creation
+      - fix #13984: Selecting common time or alla breve symbol during score
+        dreation shouldn't change numeral time signature
+      - fix #13985: Selecting common time or alla breve symbol during score
+        creation should grey out numerals
+      - fix #13963: Pasting on existing grace note makes it disappear
+      - fix #14022: Creating chord name failed
+7.dec (ws)
+      - change MuseScore logo in help box
+      - center hyphen beween lyric syllables
+6.dec (ws)
+      - add cut time/common time symbols to new wizard
+      - fix #13697: default page size handling in preferences
+      (lv)
+      - copy tuplet change from importgtp.cpp rev 5087
+4.dec (lv)
+      - fix MusicXML export of metronome
+      - fix compiler warning on exportxml.cpp
+3.dec (ws)
+      - fix dynamic layout of text frame
+      - changing score metadata is now undoable and sets score dirty
+      - new commands: "next score" (F3) and "previous score" (Shift+F3)
+      (lv)
+      - fix MusicXML import of metronome
+      - fix #11221: Don't set "Break multi measure rest" when importing from MusicXML
+      - fix #13860: MusicXML: support lyrics exported by Sibelius 7
+      - updated MusicXML testfiles: added <sound dynamics="...">
+2.dec (ws)
+      - fix #13910: Lyrics of 1.1 score appear offset
+      - fix #13911: Notes do not reposition for lyrics
+1.dec (ws)
+      - fix #13873: Falls/Doits cause score elements to become enlarged
+      - fix #13878: Glissando position in palette appear offset
+      - fix #13907: opening preferences window crashes
+      - fix #13850: Instrument short and long names are not imported for 1.1 scores
+        (patch from Gai-Luron)
+      - fix #13771: Opening 1.1 score causes crash (patch from Gai-Luron)
+      - fix #13432: Selecting duration with number-pad doesnt work after deleting note
+        in NoteEntry mode (patch from Gai-Luron)
+26.nov (lv)
+      - fix #13782: MusicXML: Errors in Import and Crash after closing
+25.nov (la)
+      - fix #13823: Multi-select when opening files
+      - fix #13788: Select All for supported file types
+      - fix #13822: List MIDI file details during import
+24.nov (la)
+      - increase default size to 1024x768
+      - remove working directory, clean mydirectories, create them on startup
+22.nov (ws)
+      - fix #13710: Horizontal frames issue
+      - fix #13711: Vertical Frames moveable
+      - fix #13709: Frames and editing text
+      (la)
+      - add Score.filepath and Score.filename in plugin framework (patch by Soerboe)
+19.nov (lv)
+      - fix #4172: MusicXML: create a setting where only the explicit breaks are exported
+      - fix #13451: MusicXML: optionally ignore layout information on import
+      - fix #13452: MusicXML: optionally suppress layout information on export
+18.nov (ws)
+      - fix #13696: navigator bounding box issues
+17.nov (la)
+      - fix #13411: Courtesy clef appears in final bar after bars re-adjust
+      - fix #13478: Zoom during playback using shortcuts
+       (ws)
+      - fix #13697: Default page size
+      - fix #13703: SVG export overlaps mulipage scores
+      - fix #4645-2: do not disable script debugger when no score open
+16.nov (ws)
+      - fix #13692: Can't make plugins work
+      - fix #13602: 4/4 common time and 2/2 alla breve do not apply to score
+      - fix #13657: Plgin: new Score() causes crash when navigator is visible
+      - fix #13684: Undo doesn't restore tie direction
+      - added "styled" option to header and footer
+15.nov (ws)
+      - fix SVG export; font glyphs are now exported as outlines,
+        no external font required anymore
+      - fix #13670: Footer text in Wrong Location
+      - fix #13668: Closing a score with part via shortcut does nothing
+14.nov (ws)
+      - fix #13409: Double-clicking object in palette when hairpin/slur/tie on score
+        is in edit mode causes crash (patch from Gai-Luron)
+      - fix #13590: disable palettes during play
+      - fix #13657: Plugin: new Score() causes crash
+      - fix #4645: do not disable plugins menu if there is no score; is allows for
+        plugins like "import ABC files"
+12.nov (ws)
+      - new piano system bracket (akkolade) design
+      - switch to Qt4.8
+11.nov (la)
+      - add /close-all and /open osc messages
+10.nov (ws)
+      - removed Painter() wrapper
+5.nov (ws)
+      - fix tuplets in parts
+4.nov (ws)
+      - fix 1.x backward compatibility for modified beams
+      - playback fixes
+3.nov (ws)
+      - fix #11197: Capella import crashes
+      - fix #12476: Tie created under note if clicked in note entry
+      - fix #10471: Piano keyboard note entry
+2.nov (lv)
+      - partial implementation of #13452: MusicXML: optionally ignore layout information on export
+1.nov (lv)
+      - continued implementation of #13451: MusicXML: optionally ignore layout information on import
+      (ws)
+      - fix #13433: Typing "S", undo and "S" causes crash (patch from Gai-Luron)
+      - playback fixes for staccato/tenuto
+      - extend selection dialog: "same subtype"
+      - fix #13413: navigator issues with single page (catch case were navigator view
+        rectangle is bigger than navigator window)
+31.oct (lv)
+      - partial implementation of #13451: MusicXML: optionally ignore layout information on import
+       (ws)
+      - fix #3155: Color and position of flags/hook are not saved
+      - fix #13413: navigator issues with single page
+      - fix #12695: navigator not updating when adding/removing pages
+      - first "figured bass" support (shift+l); works similar as lyrics
+      - reduce flicker when updating navigator
+      - fix #3798: Grace notes were created with stem direction "UP", should be "AUTO"
+30.oct (ws)
+      - fix #9307: Nested tuplets causes crash
+      (la)
+      - fix #11473: Preference values overwritten on program initialisation
+      - fix #11952: Default SoundFont doesn't sound or appear in Synthesizer
+29.oct (ws)
+      - fix #4748: Right click on note should also show measure and staff properties
+      - fix #13405: Page must be clicked to hear sound change in Mixer
+      - fix #12572: Clicking page during playback shortens sound of notes
+      - fix #3573: Volta brackets do not anchor to nearest bar line
+      - implement #3704: Small note heads in chords
+      - fix #3798: Grace note stem direction in multi-voice context
+      - fix #13390: Sound doesn't change after changing it in mixer
+      - fix #13391: Sound continues after mute or solo
+      - fix #13400: If a slur is moved, new position is not saved
+      - fix #13034: Tie direction for chords
+28.oct (ws)
+      - more robust reading of corrupted file (#13357 corrupted key signature)
+      - fix #13363: Recent change to repeat bar dot
+      - fix #13364: Score tabs disappear
+      - fix #13375: Dragging rest ot ledger lines and undo doesn't produce stave rest
+      - fix: sometimes a tuplet bracket is left when deleting a whole measure
+      - fix repeat ("r") command
+      - overhaul tuplet handling
+26.oct (ws)
+      - new feature: dragging a staff/measure up/down increases/decreases staff distance
+        in a system score wide. This changes the style parameter akkoladeDistance/staffDistance
+        for a single staff.
+25.oct (ws)
+      - fix #13334: Page Break or Spacer not visible when import from musescore 1.1
+      - extend meta data dialog: score creation date, MuseScore version/revision, api level
+      - new testfile stafftest.mscx
+      - various fixes for staves with lines != 5
+      - more easy selection of barlines: clickable area is wider than actual barline
+      - fix selection of bar line in one line staff
+      - fix eps+pdf save in fotomode
+24.oct (ws)
+      - fix fotomode
+      - fix beam selection (wrong shape)
+      - fix drawing of shadow notes
+      - fix #7402: Split staff drops lower notes
+       (la)
+      - fix #13301: add score.close() to plugin framework
+      - fix #5433: Staff with one line and repeat bars are not aligned
+22.oct (ws)
+      - fix #13198: Crash on startup (patch from mokaspar)
+19.oct (lv)
+      - sync bww importer from 0.9.6 branch
+       (la)
+      - fix #13183: [MusicXML] Wrong import of right barline
+12.oct (ws)
+      - add framework for android player
+8.oct (lv)
+      - fix #12382: [MusicXML] Key Signature for 2 Staves
+      (mi)
+      - fix #12365: pitched staff -> TAB: accidentals remain (r.4850)
+      - Staff Type dlg box re-aligned to TAB properties
+      - improved vert. alignment of fret marks in TAB's
+5.oct (ws)
+      - feature #12491: Single measure repeat playback
+      - fix playback: buildin "end" marker was not found when playing D.S. etc.
+      - fix #12936: Part doesn't appear
+      - fix #12929: Extending note into next bar causes crash
+      - fix #12919: drop key signature applies to all staves; ctrl+drop only to current staff
+      - fix #12959: Two bar rests appear
+      - fix #12958: Dragging time signature, clef or key signature onto score causes crash
+2.oct (ws)
+      - added edit-tools dock widget
+29.sep (la)
+      - add dynamic and note velocity support in MusicXML export/import
+27.sep (ws)
+      - fix #12682: When reducing bar line span, other bar lines are not updated
+        (patch from miwarre)
+24.sep (lv)
+      - add MusicXML testfile for issue 12382 ("Key Signature for 2 Staves")
+23.sep (ws)
+      - implement flip command ("x") for tenuto and staccato articulation symbols.
+        Flip changes anchor position note head <-> stem
+      - fix sustain (pedal)
+      - fix capella import: text position
+      - fix audio (wav/ogg/flac) export
+21.sep (ws)
+      - fix #11157: Omitting staves when creating score causes crash
+      - fix #12651: Moving object, then undo causes crash
+      - fix #12672: removing instrument causes crash
+      - fix #12673: Removing treble stave from mutli-stave instrument causes crash
+      - fix #12674: Removing bass stave from multi-stave instrument, then undo causes crash
+20.sep (ws)
+      - fix #12644: Bar and beat count on status bar doesn't update during playback
+      - fix #12639: line dragged from palette are duplicated at the same
+        position for linked part
+      - fix #12638: Delete tie or slur in linked parts doesn't work
+       (la)
+      - fix #12648: Quitting, then cancelling to an unsaved score quits MuseScore
+18.sep (lv)
+      - fix MusicXML import of inverted fermata and marcato
+      - fix vertical placement of SLines on MusicXML import
+      - don't export system and page breaks when running the MusicXML autotest
+        (make several testcases independent of precise layout)
+      - updated MusicXML testfiles correspondingly
+15.sep (ws)
+      - fix #12012: Undo doesn't work after changing value of grace note
+      - fix #11778: Stroke on multiple acciaccatura doesn't appear after save
+      - fix #11779: Stroke of multiple acciaccatura immobile and incorrect
+14.sep (ws)
+      - fix #12547: Ottava line property menu missing
+      - fix #12522: Mid-measure bar lines in qst stave list by saving and re-loading
+      - new style parameter in editor: minimum measure width
+      - incremented file version to 1.23: add length property to measure for
+        irregular measures
+      - fix #12520: Note heads don't highlight during playback
+13.sep (ws)
+      - new function: "Save Selected"
+      - fix #12527: nudget time sig gets more and more displaced at each save and re-load
+12.sep (lv)
+      - fix #12437: R4754 MusicXML issues: keysig imports in first staff only
+       (ws)
+      - fix #12483: Score doesn't pan during playback
+11.sep (lv)
+      - fix MusicXML import/export of voltas (trunk regression in rev 4734)
+10.sep (lv)
+      - fix iotest for MusicXML _ref.xml files
+7.sep (ws)
+      - first implementation of metronome; missing: icon, volume
+      - fix 12447: Changing volta text doesn't work
+6.sep (ws)
+      - new simple plugin manager in "Preferences->Plugins":
+        plugins now have to be configured to be loaded on mscore startup
+      - fix 12218: shared noteheads aren't shared
+      - fix 12419: Ledger lines are still visible for invisible notes
+      - fix 12428: Part name appears over the staves
+      - fix 12430: edit style does not set score dirty bit
+      - fix 12429: crash loading V1 scores
+5.sep (ws)
+      - fix #12137: Extending length of note into non-existing bar in part causes crash
+      - fix #12202: Page settings (patch from lasconic)
+      - fix #12395: Several issues with property pop menu (patch from Miwarre)
+      - implemented spanners (haipins etc.) for linked parts
+4.sep (lv)
+      - fix #12276: MusicXML import: sub-optimal handling of different duration measures
+      (ws)
+      - voltas are now anchord to measures instead of segments
+      - removed UndoGroup class
+2.sep (ws)
+      - if no explicit start repeat, go back to nearest section break if it exists instead
+        to score beginning
+      - show layer selector only if score has layers
+1.sep (ws)
+      - fixes for tempo, section break pause, fermata
+31.aug (ws)
+      - patch #12331: Option to not pan the score while playing (from Sure)
+      - moved al library into libmscore
+      - fix #12344: Crash on closing the last score
+      - removed edit position from statusline; this functionality moved to the inspector panel
+      - tempo fixes
+22.aug (lv)
+      - fix #11675: Crash opening MusicXML from Finale
+17.aug (ws)
+      - fix #12096: crash on startup if no navigator window (patch from Miwarre)
+      - changed page settings to ensure that the printable area of a page
+        is equal for odd and even pages
+16.aug (ws)
+      - new option: "show page margins"
+      - optimized page layout
+15.aug (la)
+      - fix #12084: Crash when running transpose with title selected
+12.aug (ws)
+      - navigator preview is now calculated in background task
+11.aug (ws)
+      - fix #12049: Page count change causes crash
+      - fix #12051: Score must be clicked or moved to see pages in navigator
+      - fix #12048: Drag-selecting page identically selects others
+      - fix #12047: Page Settings Preview doesn't udate
+      - new: page selector for page settings preview
+10.aug (ws)
+      - new: scrollbar for navigator window
+5.aug (ws)
+      - fix #11891: Cannot drop symbols on any page except the first
+      - fix #11890: Cannot drop time signatures on any page except the first
+      - fix #11887: Texts on page after the first: weird editing
+1.aug (ws)
+      - fix #11834: Playback bar disappears on second page
+      - fix #11819: Invisible text not drawn at all
+      - fix #11815: dot for note longer than whole has wrong value
+        (patch from Miwarre)
+      - fix #11817: Headers and footers not drawn
+      - experimental: beginning "inspector" panel
+      - implement "flip" action for articulations; the right symbol is automatically
+        choosen dependent on chord stem direction
+30.jul (ws)
+      - renamed "inspector" to "debugger"
+      - fix #11804: double-clicking object in palette does not apply to note
+        correctly
+29.jul (ws)
+      - task #11784: dev-experience: explanations for global CMakeList.txt
+        (patch from mokaspar)
+      - fix #11755: switching from fullscreen to normal makes toolbar unified
+        (patch from mokaspar)
+      - experimental: selecting slur enters edit mode
+      - changed calculation of cubic bezier for slurs/ties
+28.jul (ws)
+      - fix #11709: slurs/ties across pages: slur/tie on second page is also shown
+        on first page
+27.jul (ws)
+      - fix #11731: printing problems
+      - fix #11707: Shortcuts not read back from .ini file (patch from Miwarre)
+      - fix #11709: slur/tie across page break shown on wrong page
+        (all spanner elements are affected)
+26.jul (ws)
+      - fix #11710: cannot select any element on pages other than first
+      - add screen update after dropping image element
+      - expose z-coordinate (stacking order) in image property dialog
+25.jul (ws)
+      - fix #11690: TextLineSegment property menu is missing
+      - fix #11677: score pages crammed into one in navigator
+      - fix #11654: set default style on OSX to Native
+      - fix #11682: remove menubar icons for OSX
+      - fix #11657: save preferences on OSX using the native format
+      - fix #11669: self-explaining name for "dev-build"
+24.jul (ws)
+      - fix #11642: score layout scrambled after first page
+      (lv)
+      - disabled writing MusicXML lyric extend element, as it currently doesn't work
+23.jul (lv)
+      - fix #11641 Compressed MusicXML does not open
+      - fix #11226 MusicXML exports treble clefs only
+      - fix crash when importing musicxml lyrics
+      - remove spurious "Unknown Node <staff>" or "... <voice>" messages on MusicXML import
+22.jul (lv)
+      - fix #10849: musicxml exports lyrics only with notes in voice 1
+21.jul
+      - Element->canvasPos() is now page relative; Page->canvasPos() is zero for all pages
+      (la)
+      - fix #11605: Shift-X with measure selected -> crash
+20.jul (lv)
+      - fix #11245: MusicXML doesn't save Tempo Text if there's no name
+      - fix #11441: Failure to read MusicXML file with missing parts
+      - fix MusicXML import/export of notehead color
+      - add MusicXML testfile for noteheads
+18.jul (ws)
+      - fix #11530: Creation from template partially broken
+      - fix #11554: In "Single Palette Mode" the previous palette collapses only
+        half way (patch from mokaspar)
+      - #11558: pinch gesture for zooming in and out (patch from mokaspar)
+      - fix #11524: no more recent files (patch from mokaspar)
+      - fix #11108: Clicking on Piano Keyboard with no score causes crash
+      - fix #11565: closing drumset after closing score causes crash
+      - fix #11557: slow scroll events on the scoreview get lost
+        (patch from mokaspar)
+14.jul (ws)
+      - fix #6380: Conflicting flag directions for sub-beams
+13.jul (ws)
+      - fix #11469: Selecting "Time Signatures" in palette causes crash
+      - fix non default profile: missing palette symbols
+      - fix #11473: Preference values overwritten on program initialisation
+11.jul (ws)
+      - fix #9907: Pasting multiple rests (one with overlap) causes crash
+      - fix #11446: template directory ignored
+      - fix #10362: Backw. comp.: lyrics underscores from 1.0 are sometimes corrupted
+        (patch from miwarre)
+      - fix #11448: Cancel on Style/TextStyle dlg box crashes if no edits
+        (patch from miwarre)
+      - fix #10826: Notes exceeding measure contents corrupt measure total value
+        (patch from miwarre)
+9.jul (ws)
+      - new quartertone accidentals: sori, koron
+      - moved fonts from mscore/mscore/fonts to mscore/fonts
+8.jul (ws)
+      - fix lyrics for guitar pro import
+      - fix #11430: Cancel on General Style dlg box crashes if no edits (patch from miwarre)
+7.jul (ws)
+      - fix fret diagram
+      - fix #11428: Right-click on tuplet or on a text brings up both Tuplet and Test
+        property dialog boxes
+      - squared longa and brevis (patch from miwarre)
+      - fix image offsets (patch from miwarre)
+      - fix multimeasure rest number position
+5.jul (ws)
+      - fix #11386: Quitting MuseScore causes crash
+      - fix #10709: Unable to change TAB clef
+4.jul (ws)
+      - fixes for chorus parameter handling
+      - restrict augmentation dot alignment to staff (instead of system)
+3.jul (ws)
+      - fixed subbeam logic
+2.jul (ws)
+      - fix #10585: Accidental offset in small staves corrupted by saving and reloading
+      - fix #11035: Wrong position of (some) note dots (patch from Miwarre)
+27.jun (ws)
+      - fix: do not remove clefs from template in new wizard "create from template"
+      - fix: don't allow piano shortcut in edit mode (so you can enter 'p' in text)
+25.jun (la)
+      - better handling of Tab key in text element
+      - add permanent cookie support in MuseScore Connect, prepare translation
+24.jun (ws)
+      - added experimental sampler msynth2
+      - ongoing work on libmscore
+      (la)
+      - fix #11246: change default number of measures and pickup measure timesig
+14.jun (ws)
+      - more work on libmscore: the element context menus are back
+        (there is still some functionality commented out)
+      (la)
+      - enhance plugin framework : chord.small, chord.noStem, rest.small, note.velocity, score.keysig
+12.jun (ws)
+      - work in progress: moving gui independent code into libmscore
+11.jun (ws)
+      - fix corruption of segmentList (loading of guitar pro files crashed)
+      - created "libmscore" which will contain gui independent code
+       (la)
+      - fix #11019: new files: jazz templates, demo & chord styles by Marc Sabatella
+9.jun (ws)
+      - fixed regression for "hide empty staves"
+      - fixed start repeat barline
+7.jun (ws)
+      - "x" (flip) flips the up/down position of a note augmentation dot
+        (if note y position is on a staff line)
+      - align augmentation dots vertically also for different voices
+      - fix #10988: Cannot change 4/4 to 2/2
+      (la)
+      - add support for OSC #bundle
+      - fix support for float in OSC
+      - add oscChannelVolume, pan and mute
+6.jun (ws)
+      - fix #10607: Copy n' Paste of notes 'forgets' some rests
+        (patch from Miwarre)
+      - fix #10979: invisible text has wrong colour (patch from Miwarre)
+      - fix #10970: Select All non-functional
+      (la)
+      - fix #9107: Pasting multiple multi-voice notes causes crash
+      - remove delete button in symboldialog, fix system flag
+4.jun (ws)
+      - chord layout: avoid collision between hook and augmentation dot
+      - fix regression: delete instrument name
+      - added code from mobile development: libmscore qt mxml
+3.jun (ws)
+      - fix #10937
+02.jun (la)
+      - fix #10915: Rename WRC to WRC.BAT in CMakeList.txt
+01.jun (la)
+      - fix shortcut for navigating score on windows because of
+        http://bugreports.qt.nokia.com/browse/QTBUG-15746
+31.may (ws)
+      - don't shorten stem len if chord has hooks
+      - fix for ties between notes of different voice
+      - added "Schleifer" articulation
+29.may (ws)
+      - some berlin music hackday hacks
+26.may (ws)
+      - fix #10490: Endless loop on entering (some) lyrics underscore (patch from Miwarre)
+25.may (ws)
+      - fix #10805: Extra rests in measure when entering (some) notes
+23.may (ws)
+      - selecting a chord stem and press "add tie +" ties the whole chord
+      - add tie "+" can be applied to several selected notes at once
+      - fix #4526: Adding ties to chords
+22.may (ws)
+      - add "join score" function to album
+20.may (la)
+      - Add import of Score Writer *.scw files + testsuite (patch by Rui Fan)
+19.may (ws)
+      - fix #10710: factory reset
+      - add default style preference for parts
+18.may (ws)
+      - implementation of layer feature
+17.may (ws)
+      - slightly more flexible way to enter notes/rests in voice != 0
+       (la)
+      - fix #1722: Continue last session tries to open discarded score
+      - fix #9338: chordname scrolls offscreen
+16.may (la)
+      - Add support for notehead color in MusicXML export and import
+      - Add shape notehead support in MusicXML export and import
+14.may (ws)
+      - change tuplet numbers to italic and increase size from 8pt to 10pt to distinguish
+        them better from fingering numbers
+      - fix #8698: unable to make invisible flag without making also stem invisible
+      - fix #7460: Soundfont disabled when resetting preferences
+      - more beam tweaking
+13.may (ws)
+      - fix #10659: no sound in part
+      - fix #10660: continue last session & panel enabled
+      - more flexible instrument names
+12.may (ws)
+      - better organ template in instruments.xml
+      - add icon size to preferences
+      - fix #10634: create barLineSpan and system brackets for parts
+      - fix #10631: Dots out of place in Part
+      - fix #10642: Playback position not held after changing score
+11.may (ws)
+      - fix #8998: Exporting MIDI causes crash
+      - fix #10620: Copy&Paste of notes changes flats to sharps
+9.may (ws)
+      - text editor additions: indent & lists
+5.may (ws)
+      - modified musical symbols in FreeSerif font (adjust baseline so that
+        tempo markings look better) and rename it to FreeSerifMscore so that
+        qt loads this modified font and not the system font with same name.
+      (la)
+      - set notehead shape from plugin framework
+4.may (ws)
+      - implemented "delete profile"
+      (la)
+      - fix #9342 : repeat entry doesn't scroll display
+3.may (ws)
+      - raster for vertical frames
+      - add x/y spin box to move position in edit mode
+      - fix for slurs starting at staff n+1 and ending at staff n
+2.may (ws)
+      - ottava style additions similar to volta
+      - ottava backward compatibility
+      - fix backward compatibility for voltas
+      - allow diagonal hairpins (enable in hairpin property menu)
+28.apr (ws)
+      - style additions for volta
+      - fix #8996: crash when extending note length across bar line
+27.apr (ws)
+      - fix #9920: make beams not movable
+      - fix #10416: Page settings crash for empty tab
+      - closed #10165: measure nu,. every n shows number (every n)+1
+        (patch from Miwarre)
+      - fix #10440: Another crash on time signature change (patch from Miwarre)
+      - fix #10432: "Parts is broken"
+26.apr (ws)
+      - implement #10228: Move "Save as..." formats such as .pdf to dedicated
+        "Export" menu item
+25.apr (ws)
+      - implement Album manager
+23.apr (ws)
+      - move pageOffset from PageSettings() to Score
+      - move PageSettings() to Style()
+      - fix #10370: Shortcuts cannot be cleared
+      - implement "reset to defaults" in preferences-shortcuts dialog
+      - fix #3459: Beaming of sixteenth and eight note sequences in 4/4
+      - fix #10365: Whole rests corrupt measure on re-loading scores with time
+        longer than 4/4 (patch from Miwarre)
+      - fix #10366: Oddity and possible crash with score excerpts
+22.apr (ws)
+      - multi measure rest layout fixes
+      - note hooks are not draggable anymore
+21.apr (ws)
+      - fix #9877: Corruption with tied note in multi-voice
+20.apr (ws)
+      - added new style parameter: lyrics line height
+      - fix placement of rests on one line staff
+      - add keyboard shortcut to drum palette entries
+      - fix #7883: Double click on drum palette causes crash
+      - fix: Some issues with time sigs (patch from Miwarre)
+19.apr (ws)
+      - delay update of bsp tree
+      - fix #10310: Dot of dotted note cannot be made invisible
+      - fixes for pre 2.0 score compatibility
+18.apr (ws)
+      - enable 128th note entry
+      - fix #10261: playback cursor does not follow repeat
+      - fix #10282: Undo Beam Properties change causes crash
+16.apr (ws)
+      - fix #10264: Select a flag and enter a note causes crash
+      - dont save omr information in *.mscx file type
+15.apr (ws)
+      - replace obsolete QDirModel with QFileSstemModel
+      - switch off unused synthesizers (reducing cpu load)
+      - enable edit mode for time signatures ("nudging")
+14.apr (ws)
+      - fix #10241: Inserted barline is missing
+      - fix #10048: Opening Page Settings causes crash
+      - fix #10247: Closing score after playback causes crash
+      - fix #10244: EditTextStyles dlg does not keep "Size follows space unit"
+        setting (patch from Miwarre)
+      - fix #10245: Right-click Text Properties dlg box does not keep "Size follows
+        space unit" setting (patch from Miwarre)
+13.apr (ws)
+      - fix crash when creating new score from template
+      - new section break property: "start new section with long instrument names"
+      - allow for different time signatures for every staff
+12.apr (ws)
+      - fix #2299: Bar line appears on every note of selected measure
+      - fix layout of mid measure barlines
+      - add "style" to note context menu (test for #2217)
+      - implemented "small" attribute for accidentals
+       (la)
+      - don't print blue frame around selected image
+11.apr (ws)
+      - fix #7814:  error with single-line-staff percussion notation
+      - fix #10050: Closing a score with part opened causes crash
+      - fix #10062: Part with multiple instruments messes lyric position
+      - fix #10109: Crash on loading 1.0 score with BOTH lyrics AND parts
+      - fix #8996:  Not possible to change va value beyond bar in multi-voice
+      - fix #10142: 'nudged' UserAccidental lost when loading with trunk (patch from Miwarre)
+      - fix #10148: cannot drag between staves
+      - fix #10156: Deleting from the third note onward in a beam causes crash
+      - fix #10157: MyImages Directory button inactive
+      - fix #10158: no icons for MySoundFonts/MyImagesDirectory
+      - fix #10175: patch from Miwarre
+      - another fix for #7740
+      (la)
+      - fix #7944: Instrument limit (again)
+8.apr (ws)
+      - fix #10105: Apple+Shift+Click on note causes crash
+      - allow quit in foto-mode (#10028)
+      - fix #7740: drag and delete + undo causes crash
+      - fix #10110: invisible text is not 'grayed'
+      - fix #10117: rehearsal mark text missing
+      - autoconnect feature for JACK midi input
+7.apr (ws)
+      - implemented JACK midi input
+05.apr (la)
+      - update for Jack 1.9.7 on windows, lower jack version should be ok
+        on linux and mac
+31.mar (ws)
+      - applied patches from miwarre to enhance backward compatibility (#8403/#8405)
+30.mar (ws)
+      - fix: dont jump cursor back during playback
+      - first code for chord articulation editor
+28.mar (ws)
+      - #8993: regression fix for beam layout
+25.mar (ws)
+      - new tempo text palette entries
+      - new tempo text property: "follow text", tempotext is parsed to determine
+        actual tempo.
+      - better backward compatibility for copyright text (#9886)
+      - fix #9901: changing sound in mixer doesn't update properly
+      - fix #9916: ties don't copy
+      - do not show nonexistant files in "open recent"
+      - fix #9919: error on open/read musicxml was not handled
+24.mar (ws)
+      - add previous/next button to measure properties dialog
+      - draw grips in edit mode always on top of all other elements
+      - fix initialization of split-window action
+23.mar (ws)
+      - new commands: "split measure" and "join measure"
+22.mar (ws)
+      - new display option: "show unprintable" allows to hide spacer and layout-breaks
+      - avoid recursive call of instrument dialog when pressing "i" again when
+        dialog is active
+      - instrument dialog: allow staff to move to previous or next part with up/down
+       (la)
+      - add export to MP3 option via lame_enc "a la Audacity"
+      - better handling of missing soundfont
+20.mar (ws)
+      - first implementation of "profiles"; palette changes are recorded in current
+        profile; "default" profile is read only
+      - allow creation of new text styles
+19.mar (la)
+      - fix #9830: Percussion sounds not exported correctly in MusicXML
+17.mar (ws)
+      - enhanced clef layout
+16.mar (ws)
+      - slur edit mode: dragging the first or last grip on a note
+        moves the anchor to this chord. This allows to connect notes in different
+        voices or staves. Its also possible to anchor the start and end of
+        a slur to one note.
+      - fix #9608: even lyrics style is not applied
+14.mar (ws)
+      - allow ties between notes with different voice (and same pitch)
+      - fix crash when inserting vertical frame (#9765)
+      - add preference value for audio export sample rate
+      - fix audio export
+13.mar (ws)
+      - #9731: fix backward compatibility for latest changes in clef handling
+11.mar (ws)
+      - more articulations: pralldown, prallup, lineprall
+      - palette customization: resize palette after adding/removing elements
+      - set invisible now works for all selected elements
+      - rework auto beamer
+      - fix regressions for clef
+      (db)
+      - voice shortcuts now: Ctrl+Alt+[number]
+9.mar (ws)
+      - allow changing voices for simple cases
+8.mar (ws)
+      - allow more than one clef at the same tick position. Example is a piano score
+        were the top staff starts with a G clef and switches immediately to an F clef
+        without any notes in between.
+4.mar (ws)
+      - fixes for harmony-editor
+      - chords(harmony) can have more than one name by adding more <name> tags to
+        chords.xml or stdchords.xml/jazzchords.xml.
+      - unrecognized harmony names are marked with a wavy underline during entry
+2.mar (ws)
+      - mark middle c in virtual piano
+1.mar (ws)
+      - use Ctrl+Click to enter chords with virtual piano
+      - implement "respell" command ("J")
+      - new media dialog (to add/remove pdf scans for side by side display)
+        (audio not implemented)
+      - new virtual piano for note input
+28.feb (ws)
+      - add beaming rules for 12/16 time signature as seen in bach's goldberg variation #11
+27.feb (ws)
+      - expose more bar line style parameters in edit style:
+         - ST_barWidth
+         - ST_endBarWidth
+         - ST_endBarDistance
+         - ST_doubleBarWidth
+         - ST_doubleBarDistance
+      - use raster when dragging symbols
+      - fix dragging a symbol onto a symbol creating a "compound" symbol
+        (try dragging a "acc dot" onto an "acc discant")
+      - add z-axis to element coordinates
+      - add Ctrl+L (edit element) to element context menu
+      (db)
+      - Use Ctrl+Shift+[Number] for switching voices
+      - Standardize naming for text symbols per http://musescore.org/en/node/9515
+      - fix #9544: Remove "Create > test" plugin
+      - fix #8669: Shortcut menu inconsistent capitalization (etc.)
+      - Add a few Alt-keys to menu items
+26.feb (ws)
+      - regression fix: crash if double click on palette item
+      - fix crash in harmony style editor
+25.feb (ws)
+      - instrument names are selectable again. Also "delete" works again. Edit mode
+        is not possible. Right click shows context menu with "Staff Properties".
+      (tb)
+      - adding Lithuanian (mscore_lt.ts) language
+24.feb (ws)
+      - rest property changes are applied to all selected rests.
+22.feb (ws)
+      - build system updates for Clang c++ compiler
+21.feb (ws)
+      - new drop functions:
+            - control + drop key signature drops ks to all staves
+            (this functionality should also be added to other element types).
+      - new drag functions:
+            - control+drag restricts to horizontal movement
+            - shift+drag   restricts to vertical movement
+      - more functionality for chord style editor:
+            - its now possible to drag new elements from font table to chord symbol
+            - delete selected element
+19.feb (lv)
+      - MusicXML import fixes: Jumps and Markers
+       (ws)
+      - new style element: ST_dontHideStavesInFirstSystem
+      - implementation of "repitch" mode for note entry
+      - "add soundfont" must be prepended in the synthesizer font list
+      - load soundfont list in the proper order
+      - fix #9263: down button in synthesizer causes crash
+      - move note heads in edit mode is now undoable
+      - fix #9316: double-clicking tied note removes tie
+      - fix #9253: line text properties cannot be edited until the text is created
+      (db)
+      - copy editing for demo scores (usuariomuse)
+18.feb (ws)
+      - make "use native file dialogs" a runtime option selectable in preferences
+      - implement simple raster
+17.feb (ws)
+      - allow drop of Articulations (Fermata) to (end) barlines
+      - new meta for footer/header text:
+            $f    is replaced by score name
+            $F    is replaced by absolute score file path + name
+      - add default filename for qt save file dialog
+15.feb (ws)
+      - implement ST_systemFrameDistance style parameter
+      - fix: when removing a measure, dont remove following vbox
+      (mi)
+      - improved tab<->pitched staff type conversion (to be completed) (r.4017)
+14.feb (ws)
+      - capella import: instrument names, midi instruments
+      - remove QSessionManager from script bindings as its not compatible with
+        newest qt
+      - new preference settings: MyScoresPath, MyStylesPath, MyTemplatesPath,
+        MyPluginsPath, MySoundFontsPath
+        used in qt file dialogs
+13.feb (ws)
+      - add qt file dialogs for score load/save; can be enabled/disabled
+        with cmake option NATIVE_FILEDIALOG in toplevel CMakeLists.txt
+      (db)
+      - copy editing for demo scores (usuariomuse)
+09.feb (ws)
+      - fix build with precompiled headers: build time is now 2min31sec for debug version
+06.feb (lv)
+      - MusicXML import fixes: Spanners
+03.feb (ws)
+      - fix "hide empty staves": mscore restart was needed after unchecking
+      - fix #9040: Dragging note horizontally removes accidental permanently
+02.feb (lv)
+      - MusicXML import fixes: direction placement (not complete yet)
+       (la)
+      - improve MusicXML import of clefs
+      - Changing velocity and on/off offsets for a group of selected notes (miwarre patch)
+01.feb (la)
+      - fix #9002: Reset Position doesn't affect tuplet bracket
+30.jan (lv)
+      - MusicXML import fixes: direction placement (not complete yet)
+      - MusicXML export fixes: direction placement
+      (db)
+      - fixed vocal range for bartione and bass (in all languages)
+27.jan (mi)
+      - fix crash when opening time sig. palette (#8848)
+      - corrected wrong C and Ccut time sig. bbox
+26.jan (ws)
+      - use QGlyphs() from Qt4.8 for drawing symbols which should speedup drawing
+        (unfortunately this does not work (yet) for printing)
+      - encapsulate QPainter into new Painter() class
+25.jan (lv)
+      - MusicXML import fixes: voltas
+23.jan (lv)
+      - MusicXML export fixes: dalsegno and friends
+      (db)
+      - Adding panning to templates
+22.jan (lv)
+      - MusicXML import fixes: dalsegno and friends
+       (mi)
+      - Tablature Properties dlg box: added support for presets (with 4
+        built-in presets) (r. 3941)
+21.jan (mi)
+      - Time signature layout was wrong in staves with non-standard line number or
+        spacing (mostly tablature staves) (r. 3937)
+20.jan (mi)
+      - support for 'upside down' tablatures (lowest string on top) (r. 3929)
+      - Score::putNote() (edit.cpp): do not accept a new note on a tablature
+        string already occupied (r. 3931)
+      - Note::drag(): for tablatures, dragging up did not work: corrected.
+      - Note::endDrag(): for tablatures, modified to keep same pitch on new
+        string, if possible (also for 'upside down' tablatures) (r. 3935)
+      - Added 7 (early music) symbols from mscore-20 font to internal tables (r. 3936)
+19.jan (lv)
+      - MusicXML import fixes: slurs and wedges
+18.jan (ws)
+      - fix #8654 using a patch from Miwarre
+      - fix #8763
+      - for transposing instruments, different clefs for concert pitch can be set
+        (#3128)
+       (la)
+      - fix #6547: File association on Mac. Add bww, cap, sgu, mgu, mid, ove, md, and MusicXML.
+17.jan (ws)
+      - fix #8625: second note in a tie is silent when first note is deleted
+      - #8701: implement full screen mode (toggled by Ctrl+U)
+       (la)
+      - fix #8750: Crashes with system containing only vertical box
+      - fix #6736: Preferences Menu disabled in non english. Avoid merging of menus.
+16.jan (lv)
+      - fix #8419: musicxml export: stem on whole note in triplet
+      - fix #8426: courtesy accidentals do not import/export in MusicXML anymore (0.9.6 regression)
+      - fix #8581: musicxml import: dynamics in notations element are ignored
+      - sync mscore/test/iotest updates from 0.9.6 branch
+       (ws)
+      - implement tile cache for omr scan image; this allows to show multipage scans
+        along the score
+       (la)
+      - fix #8719: Pickup measure messes up Lilypond export
+15.jan (ws)
+      - added photomode icon
+      - new style parameter: ledger line length
+      - fix spacing for displaced note heads in multi voice context
+      - fix beam layout for staff crossing beams: under some conditions
+        note stems were too short
+13.jan (ws)
+      - implement screenshot/print mode for foto mode
+      - add background and resolution to foto mode context menu
+      - foto mode: use resolution/background in preferences for output
+      - use end bar line segment for anchoring volta bracket end; this eliminates
+        empty chord/rest segments previously used for this
+12.jan (mi)
+      - note minimum spacing algorithm (in Chord::layout() ) applied to tablature staves too
+        (without any change to the algorithm itself)
+11.jan (ws)
+      - fix #8608: crash on loading 0.9.6.3 file
+      - fix repeat regression (testfiles test/repeat*.mscz)
+      - applied patch from fnbecker (#8404); needs more testing
+       (la)
+      - fix #8613: MuseScore doesn't ask to restore session if you open from file
+      - fix #8612: Cannot paste to measure with a grace note before beat 1
+08.jan (lv)
+      - fix #8499: musicxml import/export: print-object="no" fixes
+      - fix #8475: musicxml import: Audiveris ".0" not handled in alter and in backup and forward duration
+      - fix #8429: musicxml import: voices mixed up
+       (mi)
+      - Cosmetic changes to Staff Type Properties Dlg Box
+      - In non-stemless tablature staves, stems, hooks and beams moved to a running
+        strip above the staff.
+07.jan (ws)
+      - fix repeats
+      - new command line option to override config path (#6599)
+      - implement dynamics for linked parts
+      - new symbols for grace note palett
+      - fix grace note entry
+06.jan (ws)
+      - add SlurSegment into "inspector"
+      - more slur optimizations
+       (la)
+      - enable time signature deletion in timesig palette
+05.jan (ws)
+      - "reset to default" resets stem direction of chords to "auto"
+      - tuning slur layout (test file slur1.mscx, slur2.mcx)
+        (TODO: tuning of grace note slurs)
+      - "reset to default" now also works in edit mode
+04.jan (ws)
+      - fix #8450: problem while playing imported guitar pro file
+      - fixes for synthesizer parameter load/restore
+02.jan (mi)
+      - tablature duration symbols were incorrectly placed above topmost staff rather than
+        above tablature staff: corrected
+      - Note::_fretConflict was not properly initialized: corrected.
+01.jan (2011!) (mi)
+      - Measure::updateAccidentals for TAB staves uses whole chord context to avoid (or reduce)
+        fretting conflicts (multiple notes of a chord on teh same string)
+      - Added visible marks (red background) for notes with fretting conflicts
+31.dec (ws)
+      - better capella import: detect upbeat
+      - save omr images along with score in mscz container
+30.dec (lv)
+      - add MusicXML regression testfile testVoiceMapper1.xml for #8385
+29.dec (ws)
+      - make default style configurable in preferences
+25.dec (mi)
+      - 2 tablature fonts updated
+23.dec (ws)
+      - fix #8365: Create tuplet crash
+22.dec (la)
+      - fix #8347: tie in note entry does not work for voice > 1 after a barline (patch by fnbecker)
+      - fix #8308: Creating triplet in grace note leads to time corruption
+       (ws)
+      - fix #8358: new score: create one measure more when pickup measure selected
+21.dec (mi)
+      - in tablatures, changed Ctrl-Up/Dn to move same note on next string
+20.dec (ws)
+      - fix #8149: Note entry voice2 crash for 5/4 measure
+       (la)
+      - fix #8024: "Layout | Page settings" crashes the program
+19.dec (lv)
+      - fix #8327: Crash on tremolo between notes
+       (ws)
+      - fixed #8323: Layout wrong in print-outs, PDF and Page Settings
+      (mi)
+      - added FontForge source for mscore1-20.ttf (mscore1-20.sfd)
+      - removed unused MScore1-20_new.ttf (anyway practically identical
+        to current mscore1-20.ttf)
+      - set TextStyleData::sizeIsSpatiumDependent default to false (as it is only
+        written to file if it is true)
+      - changed StaffTypeTabulature defaults in constructor to better suit
+        modern guitar tabulature style.
+      - Cosmetic changes to tabulature-related dlg boxes.
+18.dec (lv)
+      - MusicXML import/export of harmony
+       (mi)
+      - string tuning data of the instrument of a staff editable
+        from Staff Properties dlg box.
+      - Staff Properties dlg box: pitch ranges use readable note
+        names instead of MIDI pitch codes
+      - Staff Properties dlg box: changes of staff type to TAB or
+        changes in TAB string data trigger note update.
+17.dec (ws)
+      - fix #6380: conflicting flag directions for sub-beams
+      - fix #8278: inverse stem of grace note causes bad hook layout
+16.dec (ws)
+      - removed copyright text item from create menu
+15.dec (ws)
+      - fix #8277: crash when entering grace note
+      - fix #8275: Crash when opening clef palette
+      - make text foreground color editable in properties
+      - fix #8145: Instrument name after a section break
+      - fixes to *.ove import from Rui Fan
+      (mi)
+      - Sizes for tablature fonts were set in a way incompatible with printing: corrected.
+14.dec (lv)
+      - (incomplete) MusicXML export of spanners
+13.dec (mi)
+      - Added extra distance above tabulature staff, if duration symbols are presents.
+      (ws)
+      - fix #8194: Edit instruments
+      - fix #8213: Note entry crash
+      - fix #8227: New drum score crash
+      - move Stem class into stem.cpp/stem.h
+12.dec (lv)
+      - MusicXML export of annotations
+10.dec (mi)
+      - Extended EditStaffType dlg box to deal with different properties
+        for each staff group.
+      - Added 4 (alpha) fonts for tabulatures, as both .sfd FontForge sources
+        and generated .ttf.
+9.dec (mi)
+      - Made StaffTypeTablature() more self-contained and more efficient.
+      - New Score wizard does not create a tablature staff if the instrument
+        does not contain a tablature string list.
+8.dec (la)
+      - fix #8184: Creating parts with cross staff barlines crash
+7.dec (lv)
+      - fix segfault when importing MusicXML file
+      (ws)
+      - Splitted header/footer into three parts: left/center/right.
+        Footer/center is preconfigured with copyright meta data.
+        This should fix #8154 (test needed).
+      - offset footer/header text position by page margins (feature request #8059)
+      - excerpts now have "multi measure rests" flag on by default
+      - fix excerpts dialog: show track names
+      - fixed track number for chord elements after creating excerpt, fixes a crash
+4.dec (la)
+      - fix #8161: Missing lyrics in MIDI import
+2.dec (mi)
+      - replaced use of Text() element for tablature duration symbols
+        with specific TAB_DURATION_SYMBOL element
+      - changed Symbol::draw() to avoid drawing note dots in tablatures
+1.dec (mi)
+      - moved tablature visual config. from Tablature() to StaffTypeTablature()
+      (ws)
+      - save StaffGroup type in xml for StaffType
+      - add method clone() to StaffType()
+      - make StaffType() a virtual base class (so it cannot be created)
+30.nov (ws)
+      - add "styled" button to text toolbar (gives a hint why most widgets are inactive)
+29.nov (ws)
+      - split StaffType() into StaffTypePitched() StaffTypeTablature() and
+        StaffTypePercussion()
+      (lv)
+      - fix MusicXML import of bracket and octave-shift
+28.nov (lv)
+      - fix MusicXML import of pedal and trill lines
+       (mi)
+      - first implementation. of configurable tablatures
+25.nov (lv)
+      - fix MusicXML import of pedal syms and hairpins
+24.nov (la)
+      - fix #8018: Lilypond: Quote marks in lyrics need to be escaped
+       (ws)
+      - fix #7892: Exchange voices adds extra rests
+22.nov (ws)
+      - fix update of note accidentals after inserting/deleting key signature
+      - fixes for exchangeVoice()
+      - fix: missing bbox calculation for hook on stem down chord
+      - enable playback cursor again after seek in play mode
+      - fix #7944: missing instrument initialization; instruments limit?
+      - better single note tremolo layout (beamed chords)
+      - added patch from Miwarre to extend frame properties
+21.nov (db)
+      - fix #8005: Dots too close on right side of "end-start repeat" barline
+      - normal five-line staff for Temple blocks
+      - copy edits to Page Settings dialog
+19.nov (ws)
+      - fix #7835: converter mode crash
+      - fixes from Miwarre:
+            #7983: any edit to text style set sizeIsSpatiumDependent true
+            #7986: text styles backward compatibility issue
+            #7709: Clutter after end-start repeat sign
+            #7017: Chord names does not support "H" name as chord
+16.nov (ws)
+      - fix crash when trying to enter lyrics on voice 2
+14.nov (ws)
+      - add tempo text template to text palette
+      - fix: tie disappeared when first note was beamed
+      - add patch from Miwarre which fixes #7338: wrong naturals in key signatures
+10.nov (ws)
+      - fix #7882: Transposing a score shouldn't transpose a drum staff
+      - added "instruments-band.xml" from ndwinton
+      - save title and copyright as meta data when creating new score
+      - do not create measure rests if nominal len of measure is different from
+        actual len
+      - when creating new scores with a pickup measure, also adjust the len
+        of the last measure so that pickup measure + last measure = normal measure
+9.nov (lv)
+      - fix MusicXML import of <harmony>
+      (ws)
+      - entering lyrics entry mode also by selecting lyrics + Ctrl+L
+      - up/down moves lyrics to next/previous verse (if slot is empty)
+      - if lyrics is selected, cursor next/previous move to next/prev lyrics
+      - fix: hide cursor after play ends
+      - fix: clef changes are not always saved
+      - fix: cursor left/right to next/prev. lyrics in lyrics editing mode
+      - fix: delete verse > 1 of lyrics
+      - fix: changing instrument name in part properties did not work
+      - fix creation of new scores with pickup measure
+      - suggest first "Title" string as filename on first save. Replace spaces
+        and newlines with underscore.
+      - If a global color is specified in appstyle.css, menus are not rendered
+        anymore by mstyle and menu titles (separators with text) disappear.
+        To avoid this i moved the color spec from appstyle.css to mscore.cpp.
+      (la)
+      - fix #7881: Exchange voices does not work on last measure
+7.nov (ws)
+      - reorganized styles, to allow for different icon sets for dark and light theme
+      (db)
+      - fix vertical alignment of breve icon
+      - minor copy edits to UI
+5.nov (ws)
+      - fix #7734: pasting lyrics with spaces is not working
+4.nov (ws)
+      - do not link clefs in linked parts
+      (db)
+      - UI copy edits
+      - increase number of frets on guitar to 19
+3.nov (ws)
+      - fix #7788: Note entry button does not toggle when switching tabs
+      - fix #7776: Page::isOdd() does not take page offset into account
+      - fix #7779: Score::print() does not take page offset into account
+      - fix #7789: Arrow too far on tablature causes crash
+      - Add lyrics verse number to text palette. Verse numbers can be dropped to
+        lyrics. Lyrics with verse numbers are always left aligned.
+      - new text style for lyrics verse numbers
+      - allow editing of instrument name in staff properties menu with text editor
+      - change alternate TAB clef to bold
+2.nov (ws)
+      - add alternate TAB clef
+      - fix #7766 space or hypen in lyrics causes crash
+      - more code for tablature editing with mouse; fixes #7769
+      (la)
+      - fix #6451: score jump to current position when record MIDI in Note Input Mode
+1.nov (ws)
+      - fix #7614: menu item crash when continuing session with no scores
+      - fix #7740: drag and delete + undo causes crash
+      - fixed lyrics text style; left align lyrics now work
+      - fixes for editing staff type
+      - fix #7636: Guitar Staff has wrong amount of lines
+      - new text element "Instrument Change"
+      - added new palette for text objects
+      (la)
+      - fix #7745: Insert measure causes crash
+      - start foto mode out of scoreview
+30.oct (lv)
+      - fix #7721: Incorrect chord duration importing MusicXML dotted notes
+29.oct (ws)
+      - fix #3092: Cannot see 8th note ledger lines
+      - fix #6317: ledger lines not long enough for whole notes
+28.oct (ws)
+      - add tempo selection to new score wizard
+      - fix tempo changes (worked only after reloading score), now also works
+        with undo/redo
+      - initial implementation of textframe object
+27.oct (ws)
+      - added stubs for "Text Frame" and "Fret Diagram Frame" elements
+      - splitted "Measures" menu into "Measures" and "Frames"
+      - fixes for frames (fixes save/restore of "schnee.mscz" example)
+      - show anchor while dragging repeats
+      - fix layout of repeats
+26.oct (lv)
+      - fix #7593: Incorrect measure duration importing MusicXML
+       (ws)
+      - add missing "windowIcon"
+      - implement "single palette mode"; enable in palette context menu
+        (right click into empty area of palette box)
+      - add missing "standardIconImplementation()" to mstyle; palette title buttons
+        are now visible
+      - cleaner synthesizer initialization
+25.oct (la)
+      - fix #7665: Change instrument, undo does not undo sound
+24.oct (lv)
+      - fix #6404: Crash editing a MusicXML file
+       (ws)
+      - fix save/restore split window settings of session
+      - fix #7653: crash when play panel is open with no score
+      (db)
+      - added lutes to instrument list
+      - renamed guitar category to "fretted instruments"
+23.oct (ws)
+      - left align palette buttons text
+      - mstyle: replaced pixmap operations with QImage as composite modes
+        are only supported on X11 for pixmaps (did not work on OS-X)
+22.oct (ws)
+      - updates for "linked parts" implementation; synchronize line elements
+20.oct (ws)
+      - fixes for save/load style file (*.mss)
+      - mark score dirty if synthesizer settings (mixer) are changed
+19.oct (ws)
+      - fix #7564: mouse note entry before a horizontal frame
+18.oct (ws)
+      - update of "styled" text implementation
+17.oct (lv)
+      - fix MusicXML import/export of clefs
+      - fix #7504: test XML files crashing during playback
+16.oct (ws)
+      - fix #7538: edit text style dlg box: only changes to title are accepted
+15.oct (ws)
+      - stronger typing for BarLineType
+      - fix #7497: adding parentheses to notes causes crash
+      (lv)
+      - #5637 support reading bww files: updated testfiles
+14.oct (la)
+      - fix #7520: Undo reorder instruments does not work as expected
+      - fix #7519: Moving instrument causes crash
+      (ws)
+      - sync bar line changes with parts
+      - sync key signature changes with parts
+13.oct (ws)
+      - replace clef number with clef name in msc[xz] files
+      - stronger typing with ClefType
+12.oct (ws)
+      - fix #7479: png resolution preference ignored; command line option
+        now overrides preference setting
+      - fix #7468: Note change in part not updated in full score if in note
+        entry mode
+      (db)
+      - Update mixer after Create > Instruments dialog (see #6505)
+11.oct (ws)
+      - fix #7461: appstyle-dark.css makes no distinction between active
+        and disabled buttons
+      - fix #7447: Lyrics deleted when changing note
+10.oct (ws)
+      - improved capella import
+      (db)
+      - fix local handbook disabled when no file is open
+      - fix #7425: Space bar for play/pause (and zero for rests)
+      - correct stem lengths for multi-flag notes (see bug #7415)
+      - update Fingering and Lines menu windows to match their palettes
+8.oct (ws)
+      - fix #7416: triplet causes crash
+      - fix #7418: crash when delete soundfont while playing
+      - fix #1395: Accidental after a tied note
+      - fix #7415: stems too short for 32th and 64th notes
+6.oct (ws)
+      - fix #7403: double note duration (W) changes pitch
+      - remove unused "system" text styles
+      - remove page number text styles
+      - replace text style number by text style name in .msc[xz] files to
+        make text styles more easily extendable
+      - new text property "styled". Styled text changes if the associated
+        style changes.
+5. oct (ws)
+      - better tuplet layout (#7375)
+      - fix copy&paste of tuplets
+      - bb import fixes
+      - capella import fixes
+      - fix: some elements were not clickable before second layout pass
+3. oct (ws)
+      - create full measure rests on midi import
+2. oct (ws)
+      - added libpoppler to build system
+      - remove libgsl dependency from omr build
+      (lv)
+      - #5637 support reading bww files: fix beam start
+1. oct (ws)
+      - fix #7345: opening bach-bc2 demo causes crash
+      - TextStyle and Style are now implicitly shared objects to reduce
+        memory resources and speedup some operations
+      - move TextStyle to Style
+29.sep (ws)
+      - fix #7303
+      - another attempt to fix #7227
+      - make it easier to parallel install musescore-0.9.6.x and trunk:
+         - changed install path from mscore-0.9 to mscore-1.0
+         - changed "organization name" from MusE to MuseScore
+         - changed "organization domain" from muse.org to musescore.org
+         - changed "application name" from MuseScore to MuseScore1; this changes the
+           shared files path
+         - mscore-0.9.6 can be started parallel to trunk version to make
+           compatibility testing easier
+28.sep (ws)
+      - linked parts: link ties
+      - fixed #7311: dragging tied notes and removing tie gives weird result
+      - fixed #7295: margin between clef and first not too narrow
+      - fixed #7174: linked parts are not closed when the main score is closed
+27.sep (ws)
+      - fixed #7294: chord text of staff != 1 shown in wrong position
+      - fixed #7292: handling of backward compatibility of mscz files
+      - moved Lyrics from Segment to ChordRest. This allows for lyrics on
+        grace notes (#6577)
+26.sep (ws)
+      - fix clef changes
+25.sep (ws)
+      - implemented #6925: Make "reset stretch" work on the selected measure only
+      - fixed #7225: [trunk] SIGABORT when loading a score with parenthesized accidental(s)
+      - fixed #7227: [trunk] Wrong X coord in symbol placement
+      - updated accidental handling
+     (db)
+      - fix #6649: Transposition when creating a score from a template
+24.sep (ws)
+      - removed drum palette, replaced by a drum tools dock widget similar
+        to text edit tools
+      (la)
+      - fix #7233: Transpose by diminished second doesn't work
+23.sep (la)
+      - Apply patch for ARM qreal bug
+22.sep (ws)
+      - add default soundfont to preferences
+      - soundfonts are now associated with Score()
+      - implement multiple soundfonts
+      - added modified mscore-20.ttf from Miwarre
+      (la)
+      - fix #7211: Copy/Paste notes over rest of diff. durations in staves
+21.sep (ws)
+      - expose staff line width in style dialog
+      (la)
+      - fix #7142: Crescendo & delete measures problems (MusicXML export)
+      - fix #7197: MuseScore fails to open MSCZ files with capitals
+      - fix #6932: Changing notehead of a breve crash
+      - add access to DPI, notehead, note bounding box and note position from plugin framework
+            (Patch by Mikhail Eliseev)
+20.sep (ws)
+      - tablature editing:
+            - "up/down"       chromatic pitch change (same as for pitched staff)
+            - "shift+up/down" change fret number
+            - "ctrl+up/down"  change string number
+      - shift+up/shift+down changes note pitch diatonic
+      - shortcut for "select staff above/below" was changed to alt+shift+up/down
+19.sep (ws)
+      - implement "add linked staff" in instrument dialog
+      - move creation/deletion of accidentals out of doLayout();
+        selectable elements cannot be created/deleted in doLayout()
+17.sep (ws)
+      - new track attribute "visible" in instrument dialog
+      - add copy&paste of breath elements
+16.sep (ws)
+      - fix crash when typing "H" for "hairpin"
+      - fix bounding box of stem slash (acciacatura etc), fixes screen update
+      - fix stem lenght of grace notes
+      - fix crash when removing score with two note tremolo
+15.sep (ws)
+      - fix broken autobeamer
+14.sep (ws)
+      - foto mode: implemented: drag&drop selected frame in MuseScore to oowriter
+        using eps format
+      - renamed appstyle.st to appstyle-dark.css (its a "cascading style sheet")
+      - add "standard" app style "appstyle.st"
+       (la)
+      - Fix #7077: Applying double-note tremolo to dotted notes fails and alter measure duration
+13.sep (ws)
+      - new feature: fotomode
+12.sep (lv)
+      - #5637 support reading bww files: irregular measures
+10.sep (ws)
+      - start port of kde oxygen style to make it available for
+        windows
+8.sep (ws)
+      - add application style file to preferences
+7.sep (ws)
+      - command line option "-i" also loads the application style
+        sheet from INSTALLPATH/styles/appstyle.st
+        (see http://doc.qt.nokia.com/4.7-snapshot/stylesheet.html)
+6.sep (ws)
+      - add preferences for osc support (enable/disable, port number)
+4.sep (ws)
+      - more code for midi remote control
+      - framework for osc support
+30.aug (db)
+      - Fix #6937: Measure Properties should be modal dialog
+29.aug (ws)
+      - implemented subbeam control (1/32 & 1/64)
+      - feathered beams
+      (la)
+      - fix #6775: Seg. fault by double clicking any element twice
+      - fix #6888: When exchanging voice, voice 1 is removed
+28.aug (ws)
+      - new element ChordLine: editable bezier line attached to
+        top note of chord (for fall, doit, "plop" and bend)
+      - implemented beams over systems
+      (la)
+      - fix get keysig from plugin when concert pitch mode is set
+      - make command line option "-i" cross platform
+27.aug (ws)
+      - make note dot position editable
+26.aug (ws)
+      - fix layout of dottet rests
+      - fix dot position of rests <= 1/32 (dots have to be raised)
+      - layout y position of rests in a multi voice context
+24.aug (ws)
+      - header/footer replacing page number and copyright
+23.aug (ws)
+      - replace dynamic generated icons by static files
+      - make icon files installable
+      - new command line option "-i" to load icons from filesystem
+        (icons can be edited and tested without compiling mscore)
+22.aug (db)
+      - fix #6735: C# for AltoSax in default soundfont is silent
+21.aug (lv)
+      - #5637 support reading bww files: fixed measure length
+17.aug (ws)
+      - playback of tremolos
+16.aug (lv)
+      - #5637 support reading bww files: iotest (mscore)
+15.aug (lv)
+      - #5637 support reading bww files: set midi instrument to 72
+      - #5637 support reading bww files: fix multiple grace notes
+      - #5637 support reading bww files: iotest (bww2mxml)
+      (la)
+      - fix #6706: Crash when inserting slurs from palette while editing text
+      - fix #6740: Autosave works only the first time
+14.aug (ws)
+      - infrastructure for new drumroll editor
+      - changed implementation of KeySig + KeySigEvent: do not pack
+        all information in subtype()
+      (lv)
+      - #5637 support reading bww files: line breaks
+12.aug (lv)
+      - #5637 support reading bww files: TuneTempo
+       (ws)
+      - new elements TremoloBar, Bend()
+11.aug (ws)
+      - updated linked parts dialog
+      - new shortcut: underscore to enter tenuto articulation
+5.aug (la)
+      - fix #6479: Crash when closing score during playback
+      - fix #6597: Close/reload crash on XP
+      - fix cursor move on repeatmeasure in plugin framework
+      - fix instrument name containing flats for plugin framework
+      - fix #6505: Mixer is not refreshed when scores are switched
+3.aug (ws)
+      - new context menu for palettes: new function: revert to
+        factory settings
+29.jul (ws)
+      - added google-diff-match-patch library to build
+      - implemented basic functionality for linked parts
+24.jul (ws)
+      - replace buildin DejaVu fonts with FSF freefont
+      - new: import of GuitarPro *.gtp *.gp3 *.gp4 *.gp5 files
+13.jul (ws)
+      - implement playback of hairpins (crescendo/decrescendo)
+12.jul (ws)
+      - fix #6453: File containing a horizontal frame directly before a bar with a line break cannot be opened
+        (la)
+      - fix ove charset preferences init (patch by Van Ferry)
+10.jul (la)
+      - fix : adding notes on voice > 0 from plugin framework
+9.jul (ws)
+      - play whole chord if note is added
+      - new image property: auto scale to fill parent frame
+      - new function: add image to frames (from context menu)
+7.jul (ws)
+      - gonville font integration
+6.jul (ws)
+      - applied patch from Miwarre: Show/hide courtesy time signature
+        and clefs for individual elements
+5.jul  (la)
+      - fix #6388: Crash on importing a MusicXML file (beam problem)
+2.jul (ws)
+      - instead of saving the _userOff value, the actual screen position
+        of movable elements is saved.
+      (la)
+      - fix #6335: Crash on creating triplet on a chord
+1.jul (ws)
+      - add patch from Miwarre: Hide/show naturals and courtesy keys
+        for individual key sigs
+      (la)
+      - fix #6318: MusicXML export of syllabic is broken
+      - Add message if unknown extension + no empty tab
+29.jun (la)
+      - fix #6264: Chordnames not transposed on copy-paste or concert pitch
+      - fix #6283: R key does not work as expected in drum staff
+28.jun (ws)
+      - applied page offset patch from Miwarre
+27.jun (ws)
+      - more refactoring of spanner & slur elements eleminating
+        element->tick
+      (la)
+      - fix #6254: Concert pitch lossy transposition (Patch by Aaron Epstein)
+      - fix #6275: Remove the last inserted vertical frame make musecore hangs
+26.jun (la)
+      - Page numbers are no more editable in the score since formatting does not stick
+      - fix #5906: Tick value shown in Object Inspector limited to 999999
+      - fix #6253: High CPU usage when idle if reverb is on
+25.jun (la)
+      - fix #6079: problem in multimeasure rests with 2 staves score
+24.jun (ws)
+      - undo should now (mostly) work for changes made in edit mode
+        for Spanner elements.
+      - Changed implementation of HairPin, Otta, TextLine, Volta
+        Trill and Pedal. They move from the global list in Score
+        to the Segment of their startElement. Position is determined
+        by startElement-endElement instead of tick positions.
+        Introduced class Spanner as base class for this elements.
+        Import/Export modules need to be adapted to this new scheme.
+      (la)
+      - fix #6163: Export MIDI in wrong preference tab
+22.jun (lv)
+      - #5637 support reading bww files: ties and triplets
+      (la)
+      - fix #6195 : breve rest & longa rest are inversed
+      - Add Hebrew and Slovenian translation files
+20.jun (lv)
+      - fix key signature and note duration on MusicXML and BWW import
+     (db)
+      - remove incompatible "temperament tuning" plugin
+     (la)
+      - fix #6172 : note properties does not keep notehead group
+18.jun (la)
+      - fix #6144 : Notes (and other signs) in small staves are smaller than they should
+17.jun (ws)
+      - enable more possible input positions when inputting notes
+        with voice > 1
+      - limit pitch range when inputting notes with mouse
+      - fix mouse note input when there are horizontal boxes in a
+        system rom
+15.jun (ws)
+      - add pictures.mscx as demo for new section break
+      - configurable playback pause for section break
+      - implement short playback pause for breath
+      - implement fermata as tempo change
+      - implement playback pause for section break
+14.jun (ws)
+      - insert/delete time signatures: handle horizontal frames
+13.jun (ws)
+      - no color and invisible properties for LAYOUT_BREAK elements
+      - insert/delete time signatures: handle slurs
+      - new style parameters for slur line thickness
+12.jun (lv)
+      - #5637 support reading bww files: error reporting
+10.jun (ws)
+      - insert/delete time signatures: split notes
+      - new: section break
+8.jun (ws)
+      - insert/delete time signatures: new implementation keeps all notes (incomplete)
+6.jun (ws)
+      - big refactoring
+3.jun (lv)
+      - support reading bww files: initial (incomplete) implementation
+        feature request http://musescore.org/en/node/5637
+      (ws)
+      - added StaffType() and EditStaffType() classes
+27.may (ws)
+      - removed PortAudio audio interface from linux version
+      - Extend ALSA interface for non dma access. This should work with
+        desktop PulseAudio.
+        (la)
+      - fix #5897: > and < are not read back from saved score
+26.may (ws)
+      - fix #5867: End Repeat disappears when creating multimeasure rests
+      - refacturing of playback architecture in progress
+      - playback of arpeggios which are spanning more than one staff
+24.may (lv)
+      - add bww files to open file dialog, actual import not implemented yet
+        feature request http://musescore.org/en/node/5637
+      - add preliminary code for bww2mxml in a separate subdirectory
+21.may (ws)
+      - new: arpeggios spanning more than one staff (shift + up/down in
+        edit mode)
+      - new: switch between tablature and normal staff
+20.may (ws)
+      - new: fret diagram editor
+19.may (ws)
+      - new: fret diagrams
+18.may (ws)
+      - new: more Pedal line types
+17.may (ws)
+      - tablature: <J> <Ctrl+J> shortcuts change string while pitch
+        remains constant
+16.may (ws)
+      - add DejaVuSerif.ttf; used as build in standard text font for
+        tablature
+15.may (ws)
+      - first code for tablature support; new test file: tab.mscx
+      - ove import update from Rui Fan:
+        - add recognition of percussion staff
+        - read title, composer, poet, add title box
+        - add full measure rest to empty bar
+        - fix **http://musescore.org/en/node/5616*<http://musescore.org/en/node/5616>
+        - add a combo box in [Preference]->[Import] to let user select import
+          string's encoding, when import binary files like ove, midi.
+          Now ove follows this setting, see Preferences.importCharset.
+14.may (ws)
+      - new preference parameter: default scale for new score views
+      - do not show ledger lines if staff lines are set invisible
+13.may (ws)
+      - integration of Aeolus organ software synthesizer
+      - extension of playback architecture: its now possible to assign
+        midi instruments to individual voices in a staff
+      - fix #5744: grace notes do not transpose
+      - fix #5732: second note in measure missing accidental
+      - fix #5742: 0.9.5 score crashes 0.9.6 RC1
+7.may (ws)
+      - fix #5683: No cautionary time signatures when changing between
+        two different time signatures of the same note value
+6.may (ws)
+      - cursor up/down moves selected rest one staff line up/down
+      - implement playback of mordent
+      - apply consistency checks after score is loaded: make sure voice 1
+        is continuous and has no gaps
+5.may (ws)
+      - some effort to support tuplets for capella import
+      - merge mreader branch
+3.may (ws)
+      - read plugins also from local data dir
+        on linux: $HOME/.local/share/data/MusE/MuseScore/plugins
+      - midi remote control
+      - fix #5641, #5644: change pitch of tied notes
+

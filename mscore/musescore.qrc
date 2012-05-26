@@ -1,0 +1,311 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+   <qresource prefix="/">
+      <file>data/shortcuts.xml</file>
+
+      <file>data/paper1.png</file>
+      <file>data/paper2.png</file>
+      <file>data/paper3.png</file>
+      <file>data/paper4.png</file>
+      <file>data/paper5.png</file>
+
+      <file>data/previous.png</file>
+      <file>data/next.png</file>
+      <file>data/reload.png</file>
+      <file>data/tab_remove.png</file>
+      <file>data/table.svg</file>
+
+      <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
+      <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
+      <file alias="fonts/gonville-20.otf">../fonts/gonville-20.otf</file>
+      <file alias="fonts/mscore-20.otf">../fonts/mscore-20.otf</file>
+      <file alias="fonts/mscore1-20.ttf">../fonts/mscore1-20.ttf</file>
+      <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
+      <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
+      <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
+      <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
+      <file alias="fonts/mscore_tab_baroque.ttf">../fonts/mscore_tab_baroque.ttf</file>
+      <file alias="fonts/mscore_tab_modern.ttf">../fonts/mscore_tab_modern.ttf</file>
+      <file alias="fonts/mscore_tab_renaiss.ttf">../fonts/mscore_tab_renaiss.ttf</file>
+      <file alias="fonts/mscore_tab_renaiss2.ttf">../fonts/mscore_tab_renaiss2.ttf</file>
+      <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
+      <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
+
+      <file alias="data/instruments.xml">../share/templates/instruments.xml</file>
+      <file>data/splash.jpg</file>
+      <file alias="data/Promenade_Example.mscz">../demos/promenade.mscz</file>
+      <file alias="data/tab_sample.mscx">../share/templates/tab_sample.mscx</file>
+      <file>data/style.qss</file>
+
+      <file>data/mscore.png</file>
+      <file>data/bg1.jpg</file>
+      <file>data/cancel.png</file>
+      <file>revision.h</file>
+      <file>data/musescore_logo_full1.png</file>
+      <file alias="data/appstyle-dark.css">../share/styles/appstyle-dark.css</file>
+      <file alias="data/appstyle-light.css">../share/styles/appstyle-light.css</file>
+      <file alias="data/appstyle.css">../share/styles/appstyle.css</file>
+
+      <file>data/greendot.svg</file>
+      <file>data/darkgreendot.svg</file>
+      <file>data/recordOn.svg</file>
+      <file>data/recordOff.svg</file>
+
+      <file>data/icons/minus.svg</file>
+      <file>data/icons/flip.svg</file>
+      <file>data/icons/undo.svg</file>
+      <file>data/icons/redo.svg</file>
+      <file>data/icons/midiin.svg</file>
+      <file>data/icons/speaker.svg</file>
+      <file>data/icons/start.svg</file>
+      <file>data/icons/play.svg</file>
+      <file>data/icons/sbeam.svg</file>
+      <file>data/icons/mbeam.svg</file>
+      <file>data/icons/nbeam.svg</file>
+      <file>data/icons/beam32.svg</file>
+      <file>data/icons/beam64.svg</file>
+      <file>data/icons/abeam.svg</file>
+      <file>data/icons/fbeam1.svg</file>
+      <file>data/icons/fbeam2.svg</file>
+      <file>data/icons/fileopen.svg</file>
+      <file>data/icons/filenew.svg</file>
+      <file>data/icons/filesave.svg</file>
+      <file>data/icons/filesaveas.svg</file>
+      <file>data/icons/exit.svg</file>
+      <file>data/icons/viewmag.svg</file>
+      <file>data/icons/repeat.svg</file>
+      <file>data/icons/pan.svg</file>
+      <file>data/icons/noteentry.svg</file>
+      <file>data/icons/grace4.svg</file>
+      <file>data/icons/grace8b.svg</file>
+      <file>data/icons/grace16.svg</file>
+      <file>data/icons/grace32.svg</file>
+      <file>data/icons/keyboard.svg</file>
+      <file>data/icons/tie.svg</file>
+      <file>data/icons/acciaccatura.svg</file>
+      <file>data/icons/appoggiatura.svg</file>
+      <file>data/icons/brevis.svg</file>
+      <file>data/icons/clef.svg</file>
+      <file>data/icons/dfermata.svg</file>
+      <file>data/icons/dlongfermata.svg</file>
+      <file>data/icons/dmarcato.svg</file>
+      <file>data/icons/dotdot.svg</file>
+      <file>data/icons/dot.svg</file>
+      <file>data/icons/downbow.svg</file>
+      <file>data/icons/downmordent.svg</file>
+      <file>data/icons/downprall.svg</file>
+      <file>data/icons/dportato.svg</file>
+      <file>data/icons/dshortfermata.svg</file>
+      <file>data/icons/dstaccatissimo.svg</file>
+      <file>data/icons/dverylongfermata.svg</file>
+      <file>data/icons/espressivo.svg</file>
+      <file>data/icons/flatflat.svg</file>
+      <file>data/icons/flat.svg</file>
+      <file>data/icons/longaUp.svg</file>
+      <file>data/icons/mordent.svg</file>
+      <file>data/icons/natural.svg</file>
+      <file>data/icons/note16.svg</file>
+      <file>data/icons/note2.svg</file>
+      <file>data/icons/note32.svg</file>
+      <file>data/icons/note4.svg</file>
+      <file>data/icons/note64.svg</file>
+      <file>data/icons/note128.svg</file>
+      <file>data/icons/note8.svg</file>
+      <file>data/icons/note.svg</file>
+      <file>data/icons/ouvert.svg</file>
+      <file>data/icons/plus.svg</file>
+      <file>data/icons/plusstop.svg</file>
+      <file>data/icons/popping.svg</file>
+      <file>data/icons/prallmordent.svg</file>
+      <file>data/icons/prall.svg</file>
+      <file>data/icons/prallprall.svg</file>
+      <file>data/icons/quartrest.svg</file>
+      <file>data/icons/reverseturn.svg</file>
+      <file>data/icons/sforzatoaccent.svg</file>
+      <file>data/icons/sforzato.svg</file>
+      <file>data/icons/sharp.svg</file>
+      <file>data/icons/sharpsharp.svg</file>
+      <file>data/icons/slapping.svg</file>
+      <file>data/icons/snappizzicato.svg</file>
+      <file>data/icons/staccato.svg</file>
+      <file>data/icons/tapping.svg</file>
+      <file>data/icons/tenuto.svg</file>
+      <file>data/icons/thumb.svg</file>
+      <file>data/icons/trill.svg</file>
+      <file>data/icons/turn.svg</file>
+      <file>data/icons/ufermata.svg</file>
+      <file>data/icons/ulongfermata.svg</file>
+      <file>data/icons/umarcato.svg</file>
+      <file>data/icons/upbow.svg</file>
+      <file>data/icons/upmordent.svg</file>
+      <file>data/icons/uportato.svg</file>
+      <file>data/icons/upprall.svg</file>
+      <file>data/icons/ushortfermata.svg</file>
+      <file>data/icons/ustaccatissimo.svg</file>
+      <file>data/icons/uverylongfermata.svg</file>
+      <file>data/icons/editcut.svg</file>
+      <file>data/icons/editcopy.svg</file>
+      <file>data/icons/editpaste.svg</file>
+      <file>data/icons/fileprint.svg</file>
+      <file>data/icons/format_text_bold.svgz</file>
+      <file>data/icons/format_text_italic.svgz</file>
+      <file>data/icons/format_text_underline.svgz</file>
+      <file>data/icons/text_left.svg</file>
+      <file>data/icons/text_center.svg</file>
+      <file>data/icons/text_right.svg</file>
+      <file>data/icons/format_text_subscript.svgz</file>
+      <file>data/icons/format_text_superscript.svgz</file>
+      <file>data/icons/fotomode.svg</file>
+      <file>data/icons/text_top.svg</file>
+      <file>data/icons/text_bottom.svg</file>
+      <file>data/icons/text_vcenter.svg</file>
+      <file>data/icons/mscore.png</file>
+      <file>data/icons/hraster.svg</file>
+      <file>data/icons/vraster.svg</file>
+      <file>data/icons/repitch.svg</file>
+      <file>data/icons/format_list_unordered.svgz</file>
+      <file>data/icons/format_list_ordered.svgz</file>
+      <file>data/icons/format_indent_more.svgz</file>
+      <file>data/icons/format_indent_less.svgz</file>
+      <file>data/icons/community.svg</file>
+      <file>data/icons/metronome.svg</file>
+      <file>data/icons/resetproperty.png</file>
+      <file>data/icons/vframe.svg</file>
+      <file>data/icons/hframe.svg</file>
+      <file>data/icons/tframe.svg</file>
+      <file>data/icons/fframe.svg</file>
+      <file>data/icons/measure.svg</file>
+
+      <file>data/webview.css</file>
+
+      <file>data/icons-dark/minus.svg</file>
+      <file>data/icons-dark/flip.svg</file>
+      <file>data/icons-dark/undo.svg</file>
+      <file>data/icons-dark/redo.svg</file>
+      <file>data/icons-dark/midiin.svg</file>
+      <file>data/icons-dark/speaker.svg</file>
+      <file>data/icons-dark/start.svg</file>
+      <file>data/icons-dark/play.svg</file>
+      <file>data/icons-dark/sbeam.svg</file>
+      <file>data/icons-dark/mbeam.svg</file>
+      <file>data/icons-dark/nbeam.svg</file>
+      <file>data/icons-dark/beam32.svg</file>
+      <file>data/icons-dark/beam64.svg</file>
+      <file>data/icons-dark/abeam.svg</file>
+      <file>data/icons-dark/fbeam1.svg</file>
+      <file>data/icons-dark/fbeam2.svg</file>
+      <file>data/icons-dark/fileopen.svg</file>
+      <file>data/icons-dark/filenew.svg</file>
+      <file>data/icons-dark/filesave.svg</file>
+      <file>data/icons-dark/filesaveas.svg</file>
+      <file>data/icons-dark/exit.svg</file>
+      <file>data/icons-dark/viewmag.svg</file>
+      <file>data/icons-dark/repeat.svg</file>
+      <file>data/icons-dark/pan.svg</file>
+      <file>data/icons-dark/noteentry.svg</file>
+      <file>data/icons-dark/grace4.svg</file>
+      <file>data/icons-dark/grace8b.svg</file>
+      <file>data/icons-dark/grace16.svg</file>
+      <file>data/icons-dark/grace32.svg</file>
+      <file>data/icons-dark/keyboard.svg</file>
+      <file>data/icons-dark/tie.svg</file>
+      <file>data/icons-dark/acciaccatura.svg</file>
+      <file>data/icons-dark/appoggiatura.svg</file>
+      <file>data/icons-dark/brevis.svg</file>
+      <file>data/icons-dark/clef.svg</file>
+      <file>data/icons-dark/dfermata.svg</file>
+      <file>data/icons-dark/dlongfermata.svg</file>
+      <file>data/icons-dark/dmarcato.svg</file>
+      <file>data/icons-dark/dotdot.svg</file>
+      <file>data/icons-dark/dot.svg</file>
+      <file>data/icons-dark/downbow.svg</file>
+      <file>data/icons-dark/downmordent.svg</file>
+      <file>data/icons-dark/downprall.svg</file>
+      <file>data/icons-dark/dportato.svg</file>
+      <file>data/icons-dark/dshortfermata.svg</file>
+      <file>data/icons-dark/dstaccatissimo.svg</file>
+      <file>data/icons-dark/dverylongfermata.svg</file>
+      <file>data/icons-dark/espressivo.svg</file>
+      <file>data/icons-dark/flatflat.svg</file>
+      <file>data/icons-dark/flat.svg</file>
+      <file>data/icons-dark/longaUp.svg</file>
+      <file>data/icons-dark/mordent.svg</file>
+      <file>data/icons-dark/natural.svg</file>
+      <file>data/icons-dark/note16.svg</file>
+      <file>data/icons-dark/note2.svg</file>
+      <file>data/icons-dark/note32.svg</file>
+      <file>data/icons-dark/note4.svg</file>
+      <file>data/icons-dark/note64.svg</file>
+      <file>data/icons-dark/note128.svg</file>
+      <file>data/icons-dark/note8.svg</file>
+      <file>data/icons-dark/note.svg</file>
+      <file>data/icons-dark/ouvert.svg</file>
+      <file>data/icons-dark/plus.svg</file>
+      <file>data/icons-dark/plusstop.svg</file>
+      <file>data/icons-dark/popping.svg</file>
+      <file>data/icons-dark/prallmordent.svg</file>
+      <file>data/icons-dark/prall.svg</file>
+      <file>data/icons-dark/prallprall.svg</file>
+      <file>data/icons-dark/quartrest.svg</file>
+      <file>data/icons-dark/reverseturn.svg</file>
+      <file>data/icons-dark/sforzatoaccent.svg</file>
+      <file>data/icons-dark/sforzato.svg</file>
+      <file>data/icons-dark/sharp.svg</file>
+      <file>data/icons-dark/sharpsharp.svg</file>
+      <file>data/icons-dark/slapping.svg</file>
+      <file>data/icons-dark/snappizzicato.svg</file>
+      <file>data/icons-dark/staccato.svg</file>
+      <file>data/icons-dark/tapping.svg</file>
+      <file>data/icons-dark/tenuto.svg</file>
+      <file>data/icons-dark/thumb.svg</file>
+      <file>data/icons-dark/trill.svg</file>
+      <file>data/icons-dark/turn.svg</file>
+      <file>data/icons-dark/ufermata.svg</file>
+      <file>data/icons-dark/ulongfermata.svg</file>
+      <file>data/icons-dark/umarcato.svg</file>
+      <file>data/icons-dark/upbow.svg</file>
+      <file>data/icons-dark/upmordent.svg</file>
+      <file>data/icons-dark/uportato.svg</file>
+      <file>data/icons-dark/upprall.svg</file>
+      <file>data/icons-dark/ushortfermata.svg</file>
+      <file>data/icons-dark/ustaccatissimo.svg</file>
+      <file>data/icons-dark/uverylongfermata.svg</file>
+      <file>data/icons-dark/editcut.svg</file>
+      <file>data/icons-dark/editcopy.svg</file>
+      <file>data/icons-dark/editpaste.svg</file>
+      <file>data/icons-dark/fileprint.svg</file>
+      <file>data/icons-dark/format_text_bold.svgz</file>
+      <file>data/icons-dark/format_text_italic.svgz</file>
+      <file>data/icons-dark/format_text_underline.svgz</file>
+      <file>data/icons-dark/text_left.svg</file>
+      <file>data/icons-dark/text_center.svg</file>
+      <file>data/icons-dark/text_right.svg</file>
+      <file>data/icons-dark/format_text_subscript.svgz</file>
+      <file>data/icons-dark/format_text_superscript.svgz</file>
+      <file>data/icons-dark/fotomode.svg</file>
+      <file>data/icons-dark/text_top.svg</file>
+      <file>data/icons-dark/text_bottom.svg</file>
+      <file>data/icons-dark/text_vcenter.svg</file>
+      <file>data/icons-dark/mscore.png</file>
+      <file>data/icons-dark/hraster.svg</file>
+      <file>data/icons-dark/vraster.svg</file>
+      <file>data/icons-dark/repitch.svg</file>
+      <file>data/icons-dark/format_list_unordered.svgz</file>
+      <file>data/icons-dark/format_list_ordered.svgz</file>
+      <file>data/icons-dark/format_indent_more.svgz</file>
+      <file>data/icons-dark/format_indent_less.svgz</file>
+      <file>data/icons-dark/community.svg</file>
+      <file>data/icons-dark/metronome.svg</file>
+      <file>data/icons-dark/resetproperty.png</file>
+      <file>data/icons-dark/vframe.svg</file>
+      <file>data/icons-dark/hframe.svg</file>
+      <file>data/icons-dark/tframe.svg</file>
+      <file>data/icons-dark/fframe.svg</file>
+      <file>data/icons-dark/measure.svg</file>
+
+      <file>schema/license.html</file>
+      <file>schema/musicxml.xsd</file>
+      <file>schema/xlink.xsd</file>
+      <file>schema/xml.xsd</file>
+   </qresource>
+</RCC>

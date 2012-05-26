@@ -1,4 +1,4 @@
-MuseScore2
-==========
+mscore
+======
 
-MuseScore is a free music notation software. 
+MuseScore free music notation software

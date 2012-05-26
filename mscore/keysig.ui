@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KeySig</class>
+ <widget class="QWidget" name="KeySig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>493</width>
+    <height>131</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="margin">
+    <number>8</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string notr="true" comment="do not translate">KeySig</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>accidentalType</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="custom">
+        <property name="text">
+         <string>custom</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>customType</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="accidentalType">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="minimum">
+         <number>-99</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="invalid">
+        <property name="text">
+         <string>invalid</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>naturalType</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="naturalType"/>
+      </item>
+      <item row="1" column="5">
+       <widget class="QSpinBox" name="customType"/>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="showCourtesySig">
+        <property name="text">
+         <string>showCourtesySig</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" colspan="2">
+       <widget class="QCheckBox" name="showNaturals">
+        <property name="text">
+         <string>showNaturals</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

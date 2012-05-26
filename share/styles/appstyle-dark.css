@@ -1,0 +1,107 @@
+* {
+      font-size: 10pt; font-family: "freeSans";
+      }
+*:disabled {
+      color: gray
+      }
+QPushButton {
+      color: white
+      }
+QToolTip {
+      color: black;
+      opacity: 200;
+      }
+PlayPanel QLabel#posLabel       {
+      font-size: 28pt; font-family: "San Serif"
+      }
+PlayPanel QLabel#timeLabel      {
+      font-size: 28pt; font-family: "San Serif"
+      }
+SynthControl QLabel#titleLabel  {
+      font-size: 24pt; font-family: "San Serif"
+      }
+ChordEdit QLabel#chordLabel     {
+      font-size: 24pt; font-family: "San Serif"
+      }
+PlayPanel QLabel#tempoLabel     {
+      font-size: 10pt; font-family: "San Serif"
+      }
+PlayPanel QLabel#relTempo       {
+      font-size: 10pt; font-family: "San Serif"
+      }
+QGroupBox#changeStops > QPushButton { background-color: rgb(32, 32, 64); color: white }
+QGroupBox#changeStops > QPushButton:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_3_11         { background: rgb(32,64,32); color: white }
+QGroupBox#changeStops QPushButton#stop_3_11:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_2_11         { background: rgb(32,64,32); color: white }
+QGroupBox#changeStops QPushButton#stop_2_11:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_2_12         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_2_12:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_1_14         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_1_14:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_1_15         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_1_15:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_p_13         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_p_13:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_p_14         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_p_14:checked { border: none; background: white; color: black }
+QGroupBox#changeStops QPushButton#stop_p_15         { background: rgb(64,48,32); color: white }
+QGroupBox#changeStops QPushButton#stop_p_15:checked { border: none; background: white; color: black }
+
+AboutBoxDialog QLabel#titleLabel {
+      font-size: 28pt
+      }
+PaletteBoxButton {
+      font-size: 9pt; font-family: "FreeSans";
+      border: 1px solid #787878;
+      border-style: outset;
+      border-radius: 4px;
+      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+         stop: 0 #606060, stop: 1 #707070);
+      color: white;
+      }
+PaletteBoxButton:hover {
+      /* border: 1px solid #8080ff; */
+      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+         stop: 0 #787878, stop: 1 #888888);
+      }
+PaletteBoxButton:checked {
+      border-style: inset;
+      }
+PaletteBoxButton:disabled {
+      border-style: inset;
+      color: #909090;
+      }
+PaletteBox {
+      background: #525252; color: white
+      }
+QMenu#PaletteContext  {
+      border: 1px solid #787878;
+      border-style: outset;
+      border-radius: 4px;
+      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+         stop: 0 #606060, stop: 1 #707070);
+      color: white
+      }
+Palette {
+      color: black;
+      background-color: #b0b0b0;
+      alternate-background-color: blue;
+      }
+VoiceSelector VoiceButton {
+      color: black;
+      }
+VoiceSelector > VoiceButton:checked {
+      color: white;
+      }
+VoiceSelector {
+      border-style: outset;
+      border: 1px solid #787878;
+      border-radius: 4px;
+      }
+
+QGroupBox::title {
+      subcontrol-origin: margin;
+      subcontrol-position: top left;
+      padding: 5px 5px;
+      }

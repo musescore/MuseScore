@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChordEdit</class>
+ <widget class="QDialog" name="ChordEdit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>606</width>
+    <height>328</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore: Harmony Properties</string>
+  </property>
+  <layout class="QGridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="chordLabel">
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>3</number>
+     </property>
+     <property name="text">
+      <string notr="true">Cmin</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="root">
+     <property name="title">
+      <string>Root</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <property name="horizontalSpacing">
+       <number>9</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>4</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="rootC">
+        <property name="text">
+         <string>C</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="rootE">
+        <property name="text">
+         <string>E</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QRadioButton" name="accDFlat">
+        <property name="text">
+         <string>bb (double flat)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="rootF">
+        <property name="text">
+         <string>F</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QRadioButton" name="accFlat">
+        <property name="text">
+         <string>b (flat)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QRadioButton" name="rootG">
+        <property name="text">
+         <string>G</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QRadioButton" name="accNone">
+        <property name="text">
+         <string>(no accidental)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QRadioButton" name="rootA">
+        <property name="text">
+         <string>A</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QRadioButton" name="accSharp">
+        <property name="text">
+         <string># (sharp)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QRadioButton" name="rootB">
+        <property name="text">
+         <string>B</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QRadioButton" name="accDSharp">
+        <property name="text">
+         <string>## (double sharp)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="rootD">
+        <property name="text">
+         <string>D</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1" rowspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" rowspan="2">
+    <widget class="QFrame" name="frame_2">
+     <property name="frameShape">
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Bass Note / Inversion</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QHBoxLayout">
+      <item>
+       <widget class="QComboBox" name="bassNote">
+        <item>
+         <property name="text">
+          <string>none</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/C</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/Db</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/Eb</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/E</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/F</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/F#</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/G</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/Ab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/A</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/Bb</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/B</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="inversion">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>none</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" rowspan="3">
+    <widget class="QGroupBox" name="extension">
+     <property name="title">
+      <string>Extension</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <property name="margin">
+       <number>4</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="extMaj">
+        <property name="text">
+         <string>Maj</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="ext2">
+        <property name="text">
+         <string>2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="extMaj7">
+        <property name="text">
+         <string>Maj7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QRadioButton" name="extMaj9">
+        <property name="text">
+         <string>Maj9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QRadioButton" name="ext6">
+        <property name="text">
+         <string>6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QRadioButton" name="ext69">
+        <property name="text">
+         <string>69</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="extm">
+        <property name="text">
+         <string>m</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="extm7">
+        <property name="text">
+         <string>m7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QRadioButton" name="extm7b5">
+        <property name="text">
+         <string>m7b5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QRadioButton" name="ext7">
+        <property name="text">
+         <string>7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QRadioButton" name="extsus">
+        <property name="text">
+         <string>sus</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QRadioButton" name="ext7Sus">
+        <property name="text">
+         <string>7Sus</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QRadioButton" name="extm6">
+        <property name="text">
+         <string>m6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QRadioButton" name="extm9">
+        <property name="text">
+         <string>m9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QRadioButton" name="extmMaj7">
+        <property name="text">
+         <string>mMaj7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QRadioButton" name="extdim">
+        <property name="text">
+         <string>dim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QRadioButton" name="ext9">
+        <property name="text">
+         <string>9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QRadioButton" name="ext13">
+        <property name="text">
+         <string>13</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QRadioButton" name="ext7b9">
+        <property name="text">
+         <string>7b9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QRadioButton" name="extOther">
+        <property name="text">
+         <string>Other:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2" colspan="2">
+       <widget class="QComboBox" name="extOtherCombo">
+        <item>
+         <property name="text">
+          <string>Maj</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5b</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>aug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj13#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>+</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj7#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>69</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>maug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>mMaj7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m7#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m69</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj7Lyd</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Maj7b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m7b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dim</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>m9b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7+</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9+</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13+</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>(blues)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7(Blues)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b9#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#9#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9b5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9b5b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13b5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5b9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13b5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7b5#9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7alt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9susb13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13susb9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13susb9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb9#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#9#11b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13susb5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9susb5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9susb5b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13susb5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5b9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13susb5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7susb5#9b13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus#5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9sus#5#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5b9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5b9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5#9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7sus#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>13sus#5#9#11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sus</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="4" rowspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Degrees</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <property name="margin">
+       <number>4</number>
+      </property>
+      <item row="0" column="0" colspan="2">
+       <widget class="QTableView" name="degreeTable"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="addButton">
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="deleteButton">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ChordEdit</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ChordEdit</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

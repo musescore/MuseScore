@@ -1,0 +1,59 @@
+#=============================================================================
+#  Mscore
+#  Linux Music Score Editor
+#  $Id:$
+#
+#  Copyright (C) 2002-2007 by Werner Schweer and others
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#=============================================================================
+
+
+REVISION  = $(shell type mscore\mscore\revision.h)
+VERSION   = 2.0r${REVISION}
+MINGW_DIR = C:\QtSDK\mingw
+CPUS = 2
+
+release:
+	if not exist win32build\nul mkdir win32build
+	if not exist win32install\nul mkdir win32install
+	cd win32build & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
+	cd win32build & $(MAKE) lrelease
+	cd win32build & $(MAKE) -j ${CPUS}
+
+debug:
+	if not exist win32build\nul mkdir win32build
+	if not exist win32install\nul mkdir win32install
+	cd win32build & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
+	cd win32build & $(MAKE) lrelease
+	cd win32build & $(MAKE) -j ${CPUS}
+
+install:
+	cd win32build & $(MAKE) install
+
+package:
+	cd win32build & $(MAKE) package
+
+revision:
+	FOR /F "tokens=1 delims=M" %%A IN ('svnversion -n') DO echo %%A > mscore/mscore/revision.h
+
+version:
+	@echo ${VERSION}
+
+#
+# clean out of source build
+#
+
+clean:
+	-rmdir /S/Q win32build win32install
+

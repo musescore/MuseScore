@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TransposeDialogBase</class>
+ <widget class="QDialog" name="TransposeDialogBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>496</width>
+    <height>370</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore: Transpose</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QGroupBox" name="transposeByKey">
+        <property name="title">
+         <string>Transpose by Key</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="keyList">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>Cb major / Ab minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gb major / Eb minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Db major / Bb minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Ab major / F minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Eb major / C minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Bb major / G minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>F major / D minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>C major / A minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>G major / E minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>D major / B minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A major / F# minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>E major / C# minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>B major / G# minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>F# major / D# minor</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>C# major / A# minor</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="upKey">
+           <property name="text">
+            <string>Up</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="downKey">
+           <property name="text">
+            <string>Down</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="closestKey">
+           <property name="text">
+            <string>Closest</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="transposeByInterval">
+        <property name="title">
+         <string>Transpose by Interval</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="upInterval">
+           <property name="text">
+            <string>Up</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="intervalList">
+           <item>
+            <property name="text">
+             <string>Perfect Unison</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Unison</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Minor Second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Major Second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Third</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Minor Third</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Major Third</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Third</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Fourth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Perfect Fourth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Fourth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Fifth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Perfect Fifth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Fifth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Sixth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Minor Sixth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Major Sixth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Sixth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Seventh</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Minor Seventh</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Major Seventh</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Augmented Seventh</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Diminished Octave</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Perfect Octave</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="downInterval">
+           <property name="text">
+            <string>Down</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
+         <string>Options</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="transposeKeys">
+           <property name="text">
+            <string>Transpose key signatures</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="transposeChordNames">
+           <property name="text">
+            <string>Transpose chord names</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="accidentalOptions">
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>Single sharps and flats only</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Use double sharps and flats</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>TransposeDialogBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>386</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>TransposeDialogBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>450</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

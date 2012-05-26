@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' sodipodi:docname='tool_shutdown.svg' height='60.0000000' sodipodi:version='0.32' width='60.0000000' _SVGFile__filename='scalable/actions/exit.svg' version='1.0' y='0' x='0' inkscape:version='0.38.1' id='svg1' sodipodi:docbase='/home/danny/flat/scalable/actions'>
+  <sodipodi:namedview bordercolor='#666666' inkscape:pageshadow='2' inkscape:window-y='0' pagecolor='#ffffff' inkscape:window-height='685' inkscape:zoom='4.9119411' inkscape:window-x='0' borderopacity='1.0' inkscape:cx='34.683295' inkscape:cy='24.513029' inkscape:window-width='1016' inkscape:pageopacity='0.0' id='base'/>
+  <defs id='defs3'>
+    <linearGradient id='linearGradient900'>
+      <stop style='stop-color:#000;stop-opacity:1;' id='stop901' offset='0'/>
+      <stop style='stop-color:#fff;stop-opacity:1;' id='stop902' offset='1'/>
+    </linearGradient>
+    <linearGradient xlink:href='#linearGradient900' id='linearGradient903'/>
+    <linearGradient xlink:href='#linearGradient900' id='linearGradient904'/>
+    <linearGradient xlink:href='#linearGradient900' id='linearGradient905'/>
+    <linearGradient xlink:href='#linearGradient900' id='linearGradient906'/>
+    <linearGradient xlink:href='#linearGradient900' id='linearGradient907'/>
+  </defs>
+  <path sodipodi:rx='20.86751366' sodipodi:ry='20.86751366' style='font-size:12;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#333333;stroke-width:4.9999992;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;' sodipodi:type='arc' d='M 48.549387,35.070498 A 20.867514,20.867514 0 1 1 45.200939,22.109473' sodipodi:open='true' transform='matrix(0.258819,-0.965926,0.965926,0.258819,-9.287162,51.64803)' sodipodi:cy='33.53388596' sodipodi:cx='27.73852539' sodipodi:stroke-cmyk='(0 0 0 0.8)' sodipodi:end='5.70384307' id='path696' sodipodi:start='0.07370328'/>
+  <path style='fill:none;fill-rule:evenodd;stroke:#333333;stroke-opacity:1;stroke-width:5.0000000;stroke-linejoin:round;stroke-linecap:round;fill-opacity:0.75;stroke-dasharray:none;' transform='translate(0.254482,1.781373)' d='M 30.028862 3.2505412 L 30.028862 33.279403 ' sodipodi:stroke-cmyk='(0 0 0 0.8)' id='path701'/>
+
+  <metadata>
+    <rdf:RDF 
+     xmlns="http://web.resource.org/cc/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <Work rdf:about="">
+        <dc:title>Part of the Flat Icon Collection (Thu Aug 26 14:38:01 2004)</dc:title>
+	<dc:description></dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li></rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+           <Agent rdf:about="">
+             <dc:title></dc:title>
+           </Agent>
+         </dc:publisher>
+         <dc:creator>
+           <Agent rdf:about="">
+             <dc:title>Danny Allen</dc:title>
+           </Agent>
+        </dc:creator>
+         <dc:rights>
+           <Agent rdf:about="">
+             <dc:title>Danny Allen</dc:title>
+           </Agent>
+        </dc:rights>
+        <dc:date></dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <license rdf:resource="http://creativecommons.org/licenses/LGPL/2.1/">
+	  <dc:date></dc:date>
+	</license>
+        <dc:language>en</dc:language>
+      </Work>
+
+    </rdf:RDF>
+  </metadata>
+</svg>

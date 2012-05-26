@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InspectorNote</class>
+ <widget class="QWidget" name="InspectorNote">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>238</width>
+    <height>293</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="small">
+       <property name="text">
+        <string>Small</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Mirror Head</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Offtime Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="ontimeOffset">
+       <property name="minimum">
+        <number>-9999</number>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="dotPosition">
+       <item>
+        <property name="text">
+         <string>Auto</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Top</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bottom</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QToolButton" name="resetDotPosition">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Ontime Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="resetSmall">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QToolButton" name="resetOntimeOffset">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QSpinBox" name="offtimeOffset">
+       <property name="minimum">
+        <number>-9999</number>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QToolButton" name="resetOfftimeOffset">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="mirrorHead">
+       <item>
+        <property name="text">
+         <string>Auto</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Right</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QToolButton" name="resetMirrorHead">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Dot Position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Note Head Group</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QToolButton" name="resetTuning">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QDoubleSpinBox" name="tuning"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Tuning Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Note Head Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Velocity Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="noteHeadType">
+       <item>
+        <property name="text">
+         <string>Auto</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Whole</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Half</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Quarter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Breve</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetNoteHeadType">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="resetNoteHeadGroup">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Velocity</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QSpinBox" name="velocity"/>
+     </item>
+     <item row="8" column="1">
+      <widget class="QComboBox" name="velocityType">
+       <item>
+        <property name="text">
+         <string>Offset</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>User</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QToolButton" name="resetVelocityType">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="noteHeadGroup">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <item>
+        <property name="text">
+         <string>normal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>cross</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>diamond</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>triangle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>slash</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>xcircle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>do</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>re</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>mi</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>fa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>sol</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>la</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ti</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>alt. brevis</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections/>
+</ui>

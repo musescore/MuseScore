@@ -1,0 +1,1272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.11">
+  <Mag>0.746171</Mag>
+  <xoff>25.9086</xoff>
+  <yoff>-56.9059</yoff>
+  <Spatium>1.76389</Spatium>
+  <Division>480</Division>
+  <Style>
+    <akkoladeDistance>5.5</akkoladeDistance>
+    <systemDistance>9.2</systemDistance>
+    <frameSystemDistance>0</frameSystemDistance>
+    <bracketDistance>0.3</bracketDistance>
+    <minNoteDistance>0.5</minNoteDistance>
+    <measureSpacing>1.3</measureSpacing>
+    <ledgerLineWidth>0.08</ledgerLineWidth>
+    <beamMinSlope>0.1</beamMinSlope>
+    <beamMaxSlope>0.5</beamMaxSlope>
+    <dotNoteDistance>0.5</dotNoteDistance>
+    <pageFillLimit>0.7</pageFillLimit>
+    <lastSystemFillLimit>0</lastSystemFillLimit>
+    <smallNoteMag>0.7</smallNoteMag>
+    <graceNoteMag>0.7</graceNoteMag>
+    <smallStaffMag>0.7</smallStaffMag>
+    <chordNamesUseJazzFont>1</chordNamesUseJazzFont>
+    <concertPitch>1</concertPitch>
+    <minEmptyMeasures>0</minEmptyMeasures>
+    <minMMRestWidth>2</minMMRestWidth>
+    <stemDir1>2</stemDir1>
+    <stemDir2>1</stemDir2>
+    <stemDir4>1</stemDir4>
+    <gateTime>1</gateTime>
+    <staccatoGateTime>40</staccatoGateTime>
+    <slurGateTime>90</slurGateTime>
+    </Style>
+  <TextStyle name="Chordname">
+    <family>Times New Roman</family>
+    <size>16</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <xoffset>0</xoffset>
+    <yoffset>-3</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    <frameWidth>0</frameWidth>
+    <paddingWidth>0</paddingWidth>
+    <frameRound>25</frameRound>
+    <frameColor r="0" g="0" b="0"/>
+    </TextStyle>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="both">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <movement-title>Chord test</movement-title>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <Instrument>
+      <Channel name="normal">
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="60"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <subtype>Title</subtype>
+        <style>2</style>
+        <text>Chord test</text>
+        </Text>
+      <Text>
+        <subtype>Composer</subtype>
+        <style>4</style>
+        <text>Wijnand</text>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>12</root>
+        <extension>1</extension>
+        </Harmony>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">none</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>21</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">other</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">(empty)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">(space)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major-sixth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>5</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major-seventh</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>6</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major-ninth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>7</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major-11th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">major-13th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>10</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>16</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-sixth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>23</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="13">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-seventh</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>19</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="14">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-ninth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>20</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="15">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-11th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>21</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="16">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-13th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>22</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="17">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">minor-major</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="18">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">dominant-seventh</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="19">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">dominant-ninth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>70</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="20">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">dominant-11th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="21">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">dominant-13th</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="22">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">diminished</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>33</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="23">
+      <Harmony>
+        <root>14</root>
+        <extension>185</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">diminished-</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">seventh</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="24">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">half-diminished</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>88</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="25">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">augmented</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>4</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="26">
+      <Harmony>
+        <root>14</root>
+        <extension>99</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">augmented-</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">seventh</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="27">
+      <Harmony>
+        <root>14</root>
+        <extension>128</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">suspended-</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">fourth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="28">
+      <Harmony>
+        <root>14</root>
+        <extension>186</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">suspended-</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">second</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="29">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">power</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="30">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">neapolitan</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>187</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="31">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">italian</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>188</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="32">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">french</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>189</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="33">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">german</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>190</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="34">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj69</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>191</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="35">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">augmented-ninth</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="36">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">altered</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="37">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj(no5)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="38">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj(add2)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>1</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="39">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj7(#11)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>6</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="40">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj7(#5)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>6</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="41">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">maj7(#5#11)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>6</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="42">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">m7(b9)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>19</extension>
+        </Harmony>
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="43">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">m7(b13)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>19</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="44">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">7(b5)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="45">
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">7(b5b9)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="46">
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">alt1:</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">7(#5#9#11)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="47">
+      <Harmony>
+        <root>14</root>
+        <extension>64</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">alt2:</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">7(#5b9#9#11)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="48">
+      <Harmony>
+        <root>14</root>
+        <extension>99</extension>
+        </Harmony>
+      <Text>
+        <subtype>Staff</subtype>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>7</yoffset>
+        <rxoffset>0</rxoffset>
+        <ryoffset>0</ryoffset>
+        <spatiumSizeDependent>0</spatiumSizeDependent>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">alt3:</span></p>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:12pt; font-style:italic;">aug7(#9#11)</span></p></body></html>
+          </html-data>
+        </Text>
+      <Rest>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>

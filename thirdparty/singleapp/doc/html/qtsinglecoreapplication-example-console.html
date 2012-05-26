@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- qtsingleapplication-2.6-opensource/examples/console/console.qdoc -->
+<head>
+  <title>A non-GUI example</title>
+  <link href="classic.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td align="left" valign="top" width="32"><img src="images/qt-logo.png" align="left" width="57" height="67" border="0" /></td>
+<td width="1">&nbsp;&nbsp;</td><td class="postheader" valign="center"><a href="index.html"><font color="#004faf">Home</font></a></td>
+</tr></table><h1 class="title">A non-GUI example<br /><span class="subtitle"></span>
+</h1>
+<p>This example shows how to use the single-application functionality in a console application. It does not require the <tt>QtGui</tt> library at all.</p>
+<p>The only differences from the GUI application usage demonstrated in the other examples are:</p>
+<p>1) The <tt>.pro</tt> file should include <tt>qtsinglecoreapplication.pri</tt> instead of <tt>qtsingleapplication.pri</tt></p>
+<p>2) The class name is <tt>QtSingleCoreApplication</tt> instead of <tt>QtSingleApplication</tt>.</p>
+<p>3) No calls are made regarding window activation, for obvious reasons.</p>
+<p>console.pro:</p>
+<pre> TEMPLATE   = app
+ CONFIG    += console
+ SOURCES   += main.cpp
+ include(../../src/qtsinglecoreapplication.pri)
+ QT -= gui</pre>
+<p>main.cpp:</p>
+<pre><span class="comment"> /****************************************************************************
+ **
+ ** This file is part of a Qt Solutions component.
+ **
+ ** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ **
+ ** Contact:  Qt Software Information (qt-info@nokia.com)
+ **
+ ** Commercial Usage
+ ** Licensees holding valid Qt Commercial licenses may use this file in
+ ** accordance with the Qt Solutions Commercial License Agreement provided
+ ** with the Software or, alternatively, in accordance with the terms
+ ** contained in a written agreement between you and Nokia.
+ **
+ ** GNU Lesser General Public License Usage
+ ** Alternatively, this file may be used under the terms of the GNU Lesser
+ ** General Public License version 2.1 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.LGPL included in the
+ ** packaging of this file.  Please review the following information to
+ ** ensure the GNU Lesser General Public License version 2.1 requirements
+ ** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+ **
+ ** In addition, as a special exception, Nokia gives you certain
+ ** additional rights. These rights are described in the Nokia Qt LGPL
+ ** Exception version 1.0, included in the file LGPL_EXCEPTION.txt in this
+ ** package.
+ **
+ ** GNU General Public License Usage
+ ** Alternatively, this file may be used under the terms of the GNU
+ ** General Public License version 3.0 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.  Please review the following information to
+ ** ensure the GNU General Public License version 3.0 requirements will be
+ ** met: http://www.gnu.org/copyleft/gpl.html.
+ **
+ ** Please note Third Party Software included with Qt Solutions may impose
+ ** additional restrictions and it is the user's responsibility to ensure
+ ** that they have met the licensing requirements of the GPL, LGPL, or Qt
+ ** Solutions Commercial license and the relevant license of the Third
+ ** Party Software they are using.
+ **
+ ** If you are unsure which license is appropriate for your use, please
+ ** contact the sales department at qt-sales@nokia.com.
+ **
+ ****************************************************************************/</span>
+
+ #include &quot;qtsinglecoreapplication.h&quot;
+ #include &lt;QtCore/QDebug&gt;
+
+ void report(const QString&amp; msg)
+ {
+     qDebug(&quot;[%i] %s&quot;, (int)QCoreApplication::applicationPid(), qPrintable(msg));
+ }
+
+ class MainClass : public QObject
+ {
+     Q_OBJECT
+ public:
+     MainClass()
+         : QObject()
+         {}
+
+ public slots:
+     void handleMessage(const QString&amp; message)
+         {
+             report( &quot;Message received: \&quot;&quot; + message + &quot;\&quot;&quot;);
+         }
+ };
+
+ int main(int argc, char **argv)
+ {
+     report(&quot;Starting up&quot;);
+
+     QtSingleCoreApplication app(argc, argv);
+
+     if (app.isRunning()) {
+         QString msg(QString(&quot;Hi master, I am %1.&quot;).arg(QCoreApplication::applicationPid()));
+         bool sentok = app.sendMessage(msg);
+         QString rep(&quot;Another instance is running, so I will exit.&quot;);
+         rep += sentok ? &quot; Message sent ok.&quot; : &quot; Message sending failed.&quot;;
+         report(rep);
+         return 0;
+     } else {
+         report(&quot;No other instance is running; so I will.&quot;);
+         MainClass mainObj;
+         QObject::connect(&amp;app, SIGNAL(messageReceived(const QString&amp;)),
+                          &amp;mainObj, SLOT(handleMessage(const QString&amp;)));
+         return app.exec();
+     }
+ }
+
+ #include &quot;main.moc&quot;</pre>
+<p /><address><hr /><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr class="address">
+<td width="30%" align="left">Copyright &copy; 2009 Nokia</td>
+<td width="40%" align="center"><a href="http://doc.trolltech.com/trademarks.html">Trademarks</a></td>
+<td width="30%" align="right"><div align="right">Qt Solutions</div></td>
+</tr></table></div></address></body>
+</html>

@@ -1,0 +1,35 @@
+Version 0.2.0 - 2007/07/29
+ - Fixed configure.in
+ - Rewokerd character formatting handling - it became less effective 
+   in terms of output size, but more conforming to XHTML standard 
+   (no cross-tags)
+ - Added font size support
+ - Added foreground color, backgound color and highlighting (in fact, 
+   bg color too) support
+ - Added fontface support
+ - Fixed interparagraph spacing to resemble the rtf default one
+ - Borland C++ is no longer supported
+Version 0.1.1 - 2005/12/15
+ - Fixed fields handling
+ - Added handling for some special characters (dashes, ellipsis, etc.)
+Version 0.1.0 - 2005/09/29
+ - Version numbering scheme changed.
+ - The code was almost completely rewritten and split into
+   a number of files.
+ - Now using autoconf and automake, compiling and installation under
+   POSIX systems is stantard.
+ - Gave up using rope, it is really slower than string here.
+ - A few more bugs fixed.
+Version 0.03 - 2003/12/11
+ - Moved from char* to strings/ropes (ropes are 
+   used only if they are available, seems they are faster).
+ - Instead of reading the whole file into memory and parsing the string,
+   we now read the file byte by byte. It is slower but consumes much less
+   memory
+ - Lots of bugs fixed
+Version 0.02 - 2003/11/20
+ - Code slightly optimized and made more C++-ish.
+ - Moved from vectors of objects to vectors of pointers.
+ - A few bugs fixed.
+Version 0.01 - 2003/11/09
+ - First release. Quite buggy.

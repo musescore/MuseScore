@@ -1,0 +1,45 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2012 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
+#ifndef __PLUGINS_H__
+#define __PLUGINS_H__
+
+//---------------------------------------------------------
+//   QmlPlugin
+//---------------------------------------------------------
+
+class QmlPlugin : public QDeclarativeItem {
+      Q_OBJECT
+      Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
+      Q_PROPERTY(bool hasGui READ hasGui WRITE setHasGui)
+      Q_PROPERTY(int mscoreVersion READ mscoreVersion)
+
+      QString _menuPath;
+      bool _hasGui;
+
+   signals:
+      void run();
+
+   public:
+      QmlPlugin(QDeclarativeItem* parent = 0) : QDeclarativeItem(parent) {}
+
+      void setMenuPath(const QString& s) { _menuPath = s;    }
+      QString menuPath() const           { return _menuPath; }
+      bool hasGui() const                { return _hasGui;   }
+      void setHasGui(bool val)           { _hasGui = val;    }
+      int mscoreVersion() const          { return version(); }
+      void runPlugin()                   { emit run();       }
+      };
+
+
+#endif
+

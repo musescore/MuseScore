@@ -1,0 +1,62 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+[
+ <!ATTLIST svg
+  xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   xml:space="preserve"
+   width="128pt"
+   height="128pt"
+   viewBox="0 0 507.946 507.946"
+   id="svg49"
+   sodipodi:version="0.27"
+   sodipodi:docname="/mnt/windows/themes/Work/Blue-Sphere/text_under.svg"
+   sodipodi:docbase="/mnt/windows/themes/Work/Blue-Sphere/"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs62">
+    <radialGradient
+       id="aigrd1"
+       cx="218.9404"
+       cy="219.7715"
+       r="150.7063"
+       fx="218.9404"
+       fy="219.7715"
+       gradientUnits="userSpaceOnUse"
+       style="stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;">
+      <stop
+         offset="0"
+         style="stop-color:#73ffff;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop53" />
+      <stop
+         offset="0.2809"
+         style="stop-color:#2EA6B9;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop54" />
+      <stop
+         offset="1"
+         style="stop-color:#006b8b;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop55" />
+    </radialGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base" />
+  <path
+     d="M255.689,0.39V0.156h5.634V0.39h-0.306c-0.889,0-1.387,0.312-1.494,0.936l-0.018,0.342v6.642c0,2.04,0.762,3.246,2.285,3.618c0.396,0.096,0.847,0.144,1.351,0.144c1.859,0,3.018-0.804,3.474-2.412c0.12-0.444,0.181-0.954,0.181-1.53V1.668      c0-0.852-0.505-1.278-1.513-1.278h-0.306V0.156h4.446V0.39h-0.307c-0.912,0-1.41,0.342-1.494,1.026l-0.018,0.252v6.804c0,2.088-0.828,3.45-2.484,4.086c-0.012,0-0.023,0.006-0.035,0.018c-0.469,0.168-0.996,0.276-1.584,0.324      c-0.181,0.012-0.366,0.018-0.559,0.018c-2.832,0-4.566-0.984-5.202-2.952c-0.156-0.492-0.233-1.056-0.233-1.692V1.668c0-0.852-0.505-1.278-1.513-1.278h-0.306z"
+     id="path107"
+     style="font-size:12;stroke:#0c6772;stroke-opacity:0.992157;stroke-width:0.478131;fill:#a4c9ee;fill-opacity:0.701961;"
+     transform="matrix(29.8155,0,0,29.8155,-7593.72,41.973)" />
+  <rect
+     style="font-size:12;fill:#0c6772;fill-opacity:0.992157;fill-rule:evenodd;stroke:#0c6772;stroke-width:8.41811;stroke-opacity:0.992157;"
+     id="rect2234"
+     x="53.678833"
+     y="462.278920"
+     width="400.588318"
+     height="16.023554"
+     rx="0.000000"
+     ry="0.000000" />
+</svg>

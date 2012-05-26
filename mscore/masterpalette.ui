@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MasterPalette</class>
+ <widget class="QWidget" name="MasterPalette">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>692</width>
+    <height>407</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore: Master Palette</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QListWidget" name="listWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Grace Notes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Clefs</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Key Signatures</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Time Signatures</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Barlines</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Lines</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Arpeggio &amp; Glissando</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Breath &amp; Pauses</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Brackets</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Articulations &amp; Ornaments</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Accidentals</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Dynamics</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Fingering</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Note Heads</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Tremolo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Fall/Doit</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Repeats</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Text</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Breaks &amp; Spacer</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Beam Properties</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Frames &amp; Measures</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Symbols</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="stack"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>stack</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>331</x>
+     <y>104</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

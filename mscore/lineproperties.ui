@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LinePropertiesDialog</class>
+ <widget class="QDialog" name="LinePropertiesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>767</width>
+    <height>321</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore: Line Properties</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>4</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Line</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QHBoxLayout">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Line style:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="lineStyle">
+        <item>
+         <property name="text">
+          <string>solid</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dash</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dot</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dash dot</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dash dot dot</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Color:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Awl::ColorLabel" name="linecolor">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="diagonal">
+     <property name="text">
+      <string>diagonally</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Begin</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="beginTextRb">
+          <property name="text">
+           <string>Text</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QLineEdit" name="beginText"/>
+        </item>
+        <item row="0" column="5">
+         <widget class="QToolButton" name="beginTextTb">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>place:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" colspan="3">
+         <widget class="QComboBox" name="beginTextPlace">
+          <item>
+           <property name="text">
+            <string>Above</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Below</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Left</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QRadioButton" name="beginSymbolRb">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Symb.</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="5">
+         <widget class="QComboBox" name="beginSymbol">
+          <item>
+           <property name="text">
+            <string>Ped (Pedal)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_12">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>x:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="beginSymbolX">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3" colspan="2">
+         <widget class="QLabel" name="label_14">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>y:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5">
+         <widget class="QDoubleSpinBox" name="beginSymbolY">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="beginHook">
+          <property name="text">
+           <string>Hook</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="3">
+         <widget class="QDoubleSpinBox" name="beginHookHeight">
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4" colspan="2">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="5" column="1" colspan="2">
+         <widget class="QRadioButton" name="beginHookType90">
+          <property name="text">
+           <string>90°</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3" colspan="3">
+         <widget class="QRadioButton" name="beginHookType45">
+          <property name="text">
+           <string>45°</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Continue</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="continueTextRb">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Text</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QLineEdit" name="continueText"/>
+        </item>
+        <item row="0" column="4" rowspan="2" colspan="2">
+         <widget class="QToolButton" name="continueTextTb">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" rowspan="2" colspan="2">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>place:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3" colspan="3">
+         <widget class="QComboBox" name="continueTextPlace">
+          <item>
+           <property name="text">
+            <string>Above</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Below</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Left</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QRadioButton" name="continueSymbolRb">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Symb.</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="5">
+         <widget class="QComboBox" name="continueSymbol">
+          <item>
+           <property name="text">
+            <string>Ped (Pedal)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="label_17">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>x:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QDoubleSpinBox" name="continueSymbolX">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QLabel" name="label_18">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>y:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4" colspan="2">
+         <widget class="QDoubleSpinBox" name="continueSymbolY">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="title">
+        <string>End</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="endSymbolRb">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Symb.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="5">
+         <widget class="QComboBox" name="endSymbol">
+          <item>
+           <property name="text">
+            <string>Ped (Pedal)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_23">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>x:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="endSymbolX">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.989999999999782</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" colspan="2">
+         <widget class="QLabel" name="label_24">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>y:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="5">
+         <widget class="QDoubleSpinBox" name="endSymbolY">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.989999999999782</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="endHook">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Hook</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="3">
+         <widget class="QDoubleSpinBox" name="endHookHeight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="suffix">
+           <string>sp</string>
+          </property>
+          <property name="minimum">
+           <double>-999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999.990000000000009</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4" colspan="2">
+         <widget class="QLabel" name="label_25">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1" colspan="2">
+         <widget class="QRadioButton" name="endHookType90">
+          <property name="text">
+           <string>90°</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3" colspan="3">
+         <widget class="QRadioButton" name="endHookType45">
+          <property name="text">
+           <string>45°</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>LinePropertiesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>LinePropertiesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

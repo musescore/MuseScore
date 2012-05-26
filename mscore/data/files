@@ -1,0 +1,61 @@
+
+svn --force delete plusstop.png
+svn --force delete popping.png
+svn --force delete prallmordent.png
+svn --force delete prall.png
+svn --force delete prallprall.png
+svn --force delete quartrest.png
+svn --force delete reverseturn.png
+svn --force delete sforzatoaccent.png
+svn --force delete sforzato.png
+svn --force delete sharp.png
+svn --force delete sharpsharp.png
+svn --force delete slapping.png
+svn --force delete snappizzicato.png
+svn --force delete staccato.png
+svn --force delete tapping.png
+svn --force delete tenuto.png
+svn --force delete thumb.png
+svn --force delete trill.png
+svn --force delete turn.png
+svn --force delete ufermata.png
+svn --force delete ulongfermata.png
+svn --force delete umarcato.png
+svn --force delete upbow.png
+svn --force delete upmordent.png
+svn --force delete uportato.png
+svn --force delete upprall.png
+svn --force delete ushortfermata.png
+svn --force delete ustaccatissimo.png
+svn --force delete uverylongfermata.png
+
+svn add plusstop.svg
+svn add popping.svg
+svn add prallmordent.svg
+svn add prall.svg
+svn add prallprall.svg
+svn add quartrest.svg
+svn add reverseturn.svg
+svn add sforzatoaccent.svg
+svn add sforzato.svg
+svn add sharp.svg
+svn add sharpsharp.svg
+svn add slapping.svg
+svn add snappizzicato.svg
+svn add staccato.svg
+svn add tapping.svg
+svn add tenuto.svg
+svn add thumb.svg
+svn add trill.svg
+svn add turn.svg
+svn add ufermata.svg
+svn add ulongfermata.svg
+svn add umarcato.svg
+svn add upbow.svg
+svn add upmordent.svg
+svn add uportato.svg
+svn add upprall.svg
+svn add ushortfermata.svg
+svn add ustaccatissimo.svg
+svn add uverylongfermata.svg
+

@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditStaffType</class>
+ <widget class="QDialog" name="EditStaffType">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>606</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore: Edit Staff Type</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QListWidget" name="staffTypeList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="name"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QFormLayout" name="formLayout">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Lines:</string>
+             </property>
+             <property name="margin">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="lines">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Line Distance:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="margin">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="lineDistance">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="genClef">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="text">
+            <string>Show Clef</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="genTimesig">
+           <property name="text">
+            <string>Show Time Sign.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="showBarlines">
+           <property name="text">
+            <string>Show Barlines</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="stack">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="page">
+          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0">
+           <item>
+            <widget class="QLabel" name="pitchedGroupName">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>PITCHED STAFF</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="showLedgerLinesPitched">
+             <property name="text">
+              <string>Ledger Lines</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="genKeysigPitched">
+             <property name="text">
+              <string>Key Signature</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="stemlessPitched">
+             <property name="text">
+              <string>Stemless</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QPushButton" name="newTypePitched">
+               <property name="toolTip">
+                <string>Create a new staff type of current group.</string>
+               </property>
+               <property name="text">
+                <string>Create new pitched type</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_2">
+          <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0,0">
+           <item>
+            <widget class="QLabel" name="tablatureGroupName">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>TABLATURE STAFF</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="tabPresets">
+             <property name="title">
+              <string>Presets</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_16">
+              <item>
+               <widget class="QLabel" name="presetLabel">
+                <property name="text">
+                 <string>Select:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="presetTablatureCombo">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <property name="maxCount">
+                 <number>10</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string comment="tablatture type">Guitar (modern)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string comment="tablature type">Bass (modern)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string comment="tablature type">Italian (historic)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string comment="tablature type">French (historic)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="presetTablature">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Set</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushFullConfig">
+                <property name="text">
+                 <string>« Full Configur. </string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="tabDetails">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="upsideDown">
+                  <property name="text">
+                   <string>Upside Down</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QPushButton" name="pushQuickConfig">
+                  <property name="text">
+                   <string>Quick Presets »</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="fretMarksGroup">
+                <property name="title">
+                 <string>Fret Marks</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                   <item>
+                    <widget class="QLabel" name="fretFontLabel">
+                     <property name="text">
+                      <string>Font:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QFontComboBox" name="fretFontName">
+                     <property name="currentFont">
+                      <font>
+                       <family>MS Shell Dlg 2</family>
+                      </font>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="fretFontSizeLabel">
+                     <property name="text">
+                      <string>Size:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDoubleSpinBox" name="fretFontSize">
+                     <property name="suffix">
+                      <string>pt</string>
+                     </property>
+                     <property name="decimals">
+                      <number>1</number>
+                     </property>
+                     <property name="minimum">
+                      <double>5.000000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>10.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="fretYLabel">
+                     <property name="text">
+                      <string>Vert. Offset:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDoubleSpinBox" name="fretY">
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="minimum">
+                      <double>-99.989999999999995</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.250000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>0.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="numbersLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Marks are:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="numbersRadio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Numbers</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="lettersRadio">
+                      <property name="text">
+                       <string>Letters</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_2">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="onStringsLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Marks are drawn:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="onLinesRadio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>On Lines</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="aboveLinesRadio">
+                      <property name="text">
+                       <string>Above Lines</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_4">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_3">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="linesThroughLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Lines are:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="linesThroughRadio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Continuous</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="linesBrokenRadio">
+                      <property name="text">
+                       <string>Broken</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_5">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="durationsGroup">
+                <property name="title">
+                 <string>Note Values</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="frame_4">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="durSymLabel">
+                      <property name="text">
+                       <string>Shown as:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="noteValues0">
+                      <property name="text">
+                       <string>None</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="noteValues1">
+                      <property name="text">
+                       <string>Note Symbols</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="noteValues2">
+                      <property name="text">
+                       <string>Stems and beams</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <item>
+                    <widget class="QLabel" name="durFontLabel">
+                     <property name="text">
+                      <string>Font:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QFontComboBox" name="durFontName"/>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="durFontSizeLabel">
+                     <property name="text">
+                      <string>Size:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDoubleSpinBox" name="durFontSize">
+                     <property name="suffix">
+                      <string>pt</string>
+                     </property>
+                     <property name="decimals">
+                      <number>1</number>
+                     </property>
+                     <property name="minimum">
+                      <double>5.000000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>15.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="durYLabel">
+                     <property name="text">
+                      <string>Vert. Offset:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDoubleSpinBox" name="durY">
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="minimum">
+                      <double>-99.989999999999995</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.250000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+             <zorder>upsideDown</zorder>
+             <zorder>upsideDown</zorder>
+             <zorder>fretMarksGroup</zorder>
+             <zorder></zorder>
+             <zorder>fretMarksGroup</zorder>
+             <zorder>durationsGroup</zorder>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupPreview">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Preview</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_14"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <item>
+              <widget class="QPushButton" name="newTypeTablature">
+               <property name="text">
+                <string>Create new tablature type</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_3">
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="percussionGroupName">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>PERCUSSION STAFF</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="showLedgerLinesPercussion">
+             <property name="text">
+              <string>Ledger Lines</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="genKeysigPercussion">
+             <property name="text">
+              <string>Key Signature</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="stemlessPercussion">
+             <property name="text">
+              <string>Stemless</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <widget class="QPushButton" name="newTypePercussion">
+               <property name="text">
+                <string>Create new percussion type</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="save">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="load">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>staffTypeList</tabstop>
+  <tabstop>name</tabstop>
+  <tabstop>lines</tabstop>
+  <tabstop>lineDistance</tabstop>
+  <tabstop>newTypePitched</tabstop>
+  <tabstop>presetTablatureCombo</tabstop>
+  <tabstop>presetTablature</tabstop>
+  <tabstop>upsideDown</tabstop>
+  <tabstop>fretFontName</tabstop>
+  <tabstop>fretFontSize</tabstop>
+  <tabstop>fretY</tabstop>
+  <tabstop>numbersRadio</tabstop>
+  <tabstop>lettersRadio</tabstop>
+  <tabstop>onLinesRadio</tabstop>
+  <tabstop>aboveLinesRadio</tabstop>
+  <tabstop>linesThroughRadio</tabstop>
+  <tabstop>linesBrokenRadio</tabstop>
+  <tabstop>noteValues0</tabstop>
+  <tabstop>noteValues1</tabstop>
+  <tabstop>noteValues2</tabstop>
+  <tabstop>durFontName</tabstop>
+  <tabstop>durFontSize</tabstop>
+  <tabstop>durY</tabstop>
+  <tabstop>newTypeTablature</tabstop>
+  <tabstop>newTypePercussion</tabstop>
+  <tabstop>save</tabstop>
+  <tabstop>load</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EditStaffType</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EditStaffType</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>0.9.6</programVersion>
+  <programRevision>2613
+</programRevision>
+  <Spatium>1.764</Spatium>
+  <Division>480</Division>
+  <Style>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="1" span="3"/>
+      <barLineSpan>3</barLineSpan>
+      </Staff>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <name>
+      <subtype>InstrumentLong</subtype>
+      <style>9</style>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:12.0008pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'DejaVu Sans'; font-size:10pt;">Organ</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <subtype>InstrumentShort</subtype>
+      <style>10</style>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:12.0008pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'DejaVu Sans'; font-size:10pt;">Org.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <trackName>Organ</trackName>
+      <MidiAction name="Reset I">
+        <controller ctrl="98" value="66"/>
+        </MidiAction>
+      <MidiAction name="Principal-8">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="0"/>
+        </MidiAction>
+      <MidiAction name="Principal-4">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="1"/>
+        </MidiAction>
+      <MidiAction name="Octave-1">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="2"/>
+        </MidiAction>
+      <MidiAction name="Quint-5-1/3">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="3"/>
+        </MidiAction>
+      <MidiAction name="Quint-2-2/3">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="4"/>
+        </MidiAction>
+      <MidiAction name="Tibia-8">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="5"/>
+        </MidiAction>
+      <MidiAction name="Celesta-8">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="6"/>
+        </MidiAction>
+      <MidiAction name="FlÃ¶te-8">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="7"/>
+        </MidiAction>
+      <MidiAction name="FlÃ¶te-4">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="8"/>
+        </MidiAction>
+      <MidiAction name="FlÃ¶te-2">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="9"/>
+        </MidiAction>
+      <MidiAction name="Cymbel">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="10"/>
+        </MidiAction>
+      <MidiAction name="Mixtur">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="11"/>
+        </MidiAction>
+      <MidiAction name="Trumpet">
+        <controller ctrl="98" value="98"/>
+        <controller ctrl="98" value="12"/>
+        </MidiAction>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        <synti>1</synti>
+        </Channel>
+      <Channel name="I">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="II">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="1"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="III">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="2"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="P">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="3"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <subtype>Title</subtype>
+        <style>2</style>
+        <frame>0</frame>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:24pt; font-weight:400; font-style:normal;">
+<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">aeolus</p></body></html>
+          </html-data>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <StaffText>
+        <MidiAction name="Reset I"/>
+        <MidiAction name="Principal-8"/>
+        <subtype>Staff</subtype>
+        <offset x="-1.0838" y="-0.619316"/>
+        <style>23</style>
+        <frame>0</frame>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:10pt;">R1</span></p></body></html>
+          </html-data>
+        </StaffText>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>74</pitch>
+          <tpc>16</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>76</pitch>
+          <tpc>18</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>77</pitch>
+          <tpc>13</tpc>
+          </Note>
+        </Chord>
+      </Measure>
+    <Measure number="2">
+      <StaffText>
+        <MidiAction name="Reset I"/>
+        <MidiAction name="Principal-8"/>
+        <MidiAction name="Principal-4"/>
+        <MidiAction name="Octave-1"/>
+        <MidiAction name="Quint-5-1/3"/>
+        <MidiAction name="Quint-2-2/3"/>
+        <MidiAction name="Tibia-8"/>
+        <MidiAction name="Celesta-8"/>
+        <MidiAction name="Flöte-8"/>
+        <MidiAction name="Flöte-4"/>
+        <MidiAction name="Flöte-2"/>
+        <MidiAction name="Cymbel"/>
+        <MidiAction name="Mixtur"/>
+        <MidiAction name="Trumpet"/>
+        <subtype>Staff</subtype>
+        <style>23</style>
+        <frame>0</frame>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:10pt;">R2</span></p></body></html>
+          </html-data>
+        </StaffText>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>69</pitch>
+          <tpc>17</tpc>
+          </Note>
+        <Note>
+          <pitch>72</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>65</pitch>
+          <tpc>13</tpc>
+          </Note>
+        <Note>
+          <pitch>69</pitch>
+          <tpc>17</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>64</pitch>
+          <tpc>18</tpc>
+          </Note>
+        <Note>
+          <pitch>67</pitch>
+          <tpc>15</tpc>
+          </Note>
+        </Chord>
+      <Chord>
+        <durationType>quarter</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        <Note>
+          <pitch>64</pitch>
+          <tpc>18</tpc>
+          </Note>
+        </Chord>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      <BarLine>
+        <subtype>5</subtype>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <Staff id="2">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="3">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>

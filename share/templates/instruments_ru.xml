@@ -1,0 +1,4383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<museScore version="1.0">
+
+  <Articulation>
+     <gateTime>100%</gateTime>
+     <velocity>100%</velocity>
+     </Articulation>
+  <Articulation name="staccato">
+     <gateTime>85%</gateTime>
+     </Articulation>
+  <Articulation name="tenuto">
+     <gateTime>100%</gateTime>
+     </Articulation>
+  <Articulation name="sforzato">
+     <velocity>120%</velocity>
+     </Articulation>
+
+   <instrument-group name="Деревянные духовые">
+      <instrument>
+         <name>Флейта-пикколо</name>
+        <short-name>Picc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-105</aPitchRange>
+        <pPitchRange>74-108</pPitchRange>
+        <channel>
+           <program>72</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Treble Flute</name>
+        <short-name>Tr. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>4</transposeDiatonic>
+        <transposeChromatic>7</transposeChromatic>
+        <aPitchRange>67-100</aPitchRange>
+        <pPitchRange>67-103</pPitchRange>
+        <channel>
+           <program>72</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Флейта в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>63-96</aPitchRange>
+        <pPitchRange>63-101</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+        <name>Флейта</name>
+        <short-name>Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-93</aPitchRange>
+        <pPitchRange>59-98</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+      </instrument>
+      <instrument>
+        <name>Альтовая флейта</name>
+        <short-name>Alt. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-91</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+      </instrument>
+      <instrument>
+         <name>Басовая флейта</name>
+         <short-name>Bs. Fl.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-77</aPitchRange>
+        <pPitchRange>48-81</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Контральтовая флейта</name>
+        <short-name>C-a. Fl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-10</transposeDiatonic>
+        <transposeChromatic>-17</transposeChromatic>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>42-79</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Контрабасовая флейта</name>
+        <short-name>Cb. Fl.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-65</aPitchRange>
+        <pPitchRange>36-69</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Субконтральтовая флейта</name>
+        <short-name>Sc-a. Fl.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>31-60</aPitchRange>
+        <pPitchRange>31-64</pPitchRange>
+        <channel>
+           <program>73</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Субконтрабасовая флейта</name>
+        <short-name>Scb. Fl.</short-name>
+        <clef>5</clef>
+        <aPitchRange>24-60</aPitchRange>
+        <pPitchRange>24-64</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Гипобасовая флейта</name>
+        <short-name>Hb. Fl.</short-name>
+        <clef>6</clef>
+        <aPitchRange>12-48</aPitchRange>
+        <pPitchRange>12-45</pPitchRange>
+        <channel>
+           <program>73</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Поперечная флейта</name>
+        <short-name>Tr. Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-89</aPitchRange>
+        <pPitchRange>62-93</pPitchRange>
+        <channel>
+           <program>77</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Альтовая поперечная флейта</name>
+        <short-name>A. Tr. Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-76</aPitchRange>
+        <pPitchRange>55-80</pPitchRange>
+        <channel>
+           <program>82</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Дансо</name>
+        <short-name>Da.</short-name>
+        <clef>1</clef>
+        <aPitchRange>67-91</aPitchRange>
+        <pPitchRange>67-91</pPitchRange>
+        <channel>
+           <program>76</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Ди в строе ля</name>
+        <short-name>A Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>76-107</aPitchRange>
+        <pPitchRange>76-107</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Ди в строе соль</name>
+        <short-name>G Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>74-105</aPitchRange>
+        <pPitchRange>74-105</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Ди в строе фа</name>
+        <short-name>A Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>72-103</aPitchRange>
+        <pPitchRange>72-103</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Ди в строе ми</name>
+        <short-name>E Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>71-102</aPitchRange>
+        <pPitchRange>71-102</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Ди в строе ре</name>
+        <short-name>D Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>69-100</aPitchRange>
+        <pPitchRange>69-100</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Ди в строе до</name>
+        <short-name>C Di.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-98</aPitchRange>
+        <pPitchRange>67-98</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Кена в строе до</name>
+        <short-name>C Qn.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-92</aPitchRange>
+        <pPitchRange>72-96</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Кена в строе соль</name>
+        <short-name>G Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-87</aPitchRange>
+        <pPitchRange>67-91</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Кена в строе фа</name>
+        <short-name>F Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-85</aPitchRange>
+        <pPitchRange>65-89</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Кена в строе ре</name>
+        <short-name>D Qn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-82</aPitchRange>
+        <pPitchRange>62-86</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+         <name>Флейта Пана</name>
+        <short-name>Pn. Fl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-96</aPitchRange>
+        <pPitchRange>60-96</pPitchRange>
+        <channel>
+           <program>75</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Гаркляйн</name>
+        <short-name>Gk. Rec.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-105</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Блокфлейта-сопранино</name>
+        <short-name>Si. Rec.</short-name>
+        <clef>1</clef>
+        <aPitchRange>77-100</aPitchRange>
+        <pPitchRange>77-103</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+      <instrument>
+        <name>Блокфлейта-сопрано</name>
+        <short-name>S. Rec.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-98</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+      <instrument>
+           <name>Альтовая блокфлейта</name>
+        <short-name>A. Rec.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-88</aPitchRange>
+        <pPitchRange>65-91</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+      <instrument>
+        <name>Теноровая блокфлейта</name>
+        <short-name>T. Rec.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+      <instrument>
+        <name>Басовая блокфлейта</name>
+        <short-name>B. Rec.</short-name>
+        <clef>17</clef>
+        <aPitchRange>53-74</aPitchRange>
+        <pPitchRange>53-77</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Басовая блокфлейта в строе до</name>
+        <short-name>Gb. Rec.</short-name>
+        <clef>17</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Контрабасовая блокфлейта</name>
+        <short-name>Cb. Rec.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-62</aPitchRange>
+        <pPitchRange>41-65</pPitchRange>
+        <channel>
+           <program>74</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Французский флажолет</name>
+        <short-name>Fr. Fla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>80-105</aPitchRange>
+        <pPitchRange>80-105</pPitchRange>
+        <channel>
+           <program>78</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Английский флажолет</name>
+        <short-name>Eng. Fla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-98</aPitchRange>
+        <pPitchRange>74-98</pPitchRange>
+        <channel>
+           <program>78</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Тонет</name>
+        <short-name>To.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-74</pPitchRange>
+        <channel>
+           <program>68</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановая окарина в строе соль</name>
+        <short-name>G S. Oc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>79-93</aPitchRange>
+        <pPitchRange>79-95</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановая окарина в строе фа</name>
+        <short-name>F S. Oc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>77-91</aPitchRange>
+        <pPitchRange>77-93</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановая окарина в строе до</name>
+        <short-name>C S. Oc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-86</aPitchRange>
+        <pPitchRange>72-88</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановая окарина в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> S. Oc.</short-name>
+        <clef>1</clef>
+        <aPitchRange>70-84</aPitchRange>
+        <pPitchRange>70-86</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовая окарина в строе соль</name>
+        <short-name>G A. Oc.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-81</aPitchRange>
+        <pPitchRange>67-83</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовая окарина в строе фа</name>
+        <short-name>F A. Oc.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-79</aPitchRange>
+        <pPitchRange>65-81</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовая окарина в строе до</name>
+        <short-name>C A. Oc.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-76</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовая окарина в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> A. Oc.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-72</aPitchRange>
+        <pPitchRange>58-74</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Басовая окарина в строе до</name>
+        <short-name>C B. Oc.</short-name>
+        <clef>4</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-64</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановый гемсхорн</name>
+        <short-name>S. Gh.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-87</aPitchRange>
+        <pPitchRange>72-87</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовый гемсхорн</name>
+        <short-name>A. Gh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-80</aPitchRange>
+        <pPitchRange>65-80</pPitchRange>
+        <channel>
+           <program>79</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Теноровый гемсхорн</name>
+        <short-name>T. Gh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-75</aPitchRange>
+        <pPitchRange>60-75</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый гемсхорн</name>
+        <short-name>B. Gh.</short-name>
+        <clef>17</clef>
+        <aPitchRange>53-68</aPitchRange>
+        <pPitchRange>53-68</pPitchRange>
+        <channel>
+           <program>79</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Галубет в строе си</name>
+        <short-name>B Gal.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>13</transposeDiatonic>
+        <transposeChromatic>23</transposeChromatic>
+        <aPitchRange>86-105</aPitchRange>
+        <pPitchRange>74,76,78,80,86-108,112</pPitchRange>
+        <channel>
+           <program>74</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Цугфлейта</name>
+        <short-name>Sl. Wh.</short-name>
+        <clef>1</clef>
+        <aPitchRange>69-96</aPitchRange>
+        <pPitchRange>69-96</pPitchRange>
+        <channel>
+           <program>79</program>
+      </channel>
+      </instrument>
+     <instrument>
+        <name>Мюзетт</name>
+        <short-name>P. Ob.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-90</aPitchRange>
+        <pPitchRange>61-94</pPitchRange>
+        <channel>
+           <program>68</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+         <name>Гобой</name>
+        <short-name>Ob.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-87</aPitchRange>
+        <pPitchRange>58-93</pPitchRange>
+        <channel>
+           <program>68</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Гобой д’амур</name>
+        <short-name>Ob. d'a.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>56-84</aPitchRange>
+        <pPitchRange>56-87</pPitchRange>
+        <channel>
+           <program>68</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+         <name>Английский рожок</name>
+        <short-name>E. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>52-81</aPitchRange>
+        <pPitchRange>52-83</pPitchRange>
+        <channel>
+           <program>69</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Баритоновый гобой</name>
+        <short-name>Bar. Ob.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-76</aPitchRange>
+        <pPitchRange>47-78</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Гекельфон</name>
+        <short-name>Hph.</short-name>
+        <clef>3</clef>
+        <aPitchRange>45-75</aPitchRange>
+        <pPitchRange>45-78</pPitchRange>
+        <channel>
+           <program>68</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочный гобой</name>
+        <short-name>Bq. Ob.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-83</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>69</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Гобой да качча</name>
+        <short-name>Ob. d. ca.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>53-79</aPitchRange>
+        <pPitchRange>53-81</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Шалмей</name>
+        <short-name>Sh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-76</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Шалмей-сопранино</name>
+        <short-name>Si. Sh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-81</aPitchRange>
+        <pPitchRange>65-86</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Дискантовый поммер</name>
+        <short-name>D. Po.</short-name>
+        <clef>0</clef>
+        <aPitchRange>61-95</aPitchRange>
+        <pPitchRange>61-98</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый поммер</name>
+        <short-name>A. Po.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-74</aPitchRange>
+        <pPitchRange>55-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Сопрановый крумхорн</name>
+        <short-name>S. Crh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый крумхорн</name>
+        <short-name>A. Crh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-69</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый крумхорн</name>
+        <short-name>T. Crh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый крумхорн</name>
+        <short-name>B. Crh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый крумхорн в строе до (greatbass)</name>
+        <short-name>Gb. Crh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-50</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Сопрановый корнамуз</name>
+        <short-name>S. Cm.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый корнамуз</name>
+        <short-name>A. Cm.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-67</aPitchRange>
+        <pPitchRange>55-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый корнамуз</name>
+        <short-name>T. Cm.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый корнамуз</name>
+        <short-name>B. Cm.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Сопрановый кельгорн</name>
+        <short-name>S. Kh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовый кельгорн</name>
+        <short-name>A. Kh.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-69</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Теноровый кельгорн</name>
+        <short-name>T. Kh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Басовый кельгорн</name>
+        <short-name>B. Kh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-55</aPitchRange>
+        <pPitchRange>41-58</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Басовый кельгорн в строе до (greatbass)</name>
+        <short-name>Gb. Kh.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-50</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Раушпфайф-сопранино</name>
+        <short-name>Si. Rpf.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-81</aPitchRange>
+        <pPitchRange>65-84</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Раушпфайф-сопрано</name>
+        <short-name>S. Rpf.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-76</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Дудук в строе фа</name>
+        <short-name>F Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>74-89</aPitchRange>
+        <pPitchRange>74-89</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе ми</name>
+        <short-name>E Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>73-88</aPitchRange>
+        <pPitchRange>73-88</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе ре</name>
+        <short-name>D Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>71-86</aPitchRange>
+        <pPitchRange>71-86</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе до</name>
+        <short-name>C Du.</short-name>
+        <clef>1</clef>
+        <aPitchRange>69-84</aPitchRange>
+        <pPitchRange>69-84</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе си</name>
+        <short-name>B Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>68-83</aPitchRange>
+        <pPitchRange>68-83</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>67-82</aPitchRange>
+        <pPitchRange>67-82</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе ля</name>
+        <short-name>A Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>66-81</aPitchRange>
+        <pPitchRange>66-81</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Дудук в строе соль</name>
+        <short-name>G Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>64-79</aPitchRange>
+        <pPitchRange>64-79</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый дудук в строе ля</name>
+        <short-name>A B. Du.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-69</aPitchRange>
+        <pPitchRange>54-69</pPitchRange>
+        <channel>
+           <program>71</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Шахнай</name>
+        <short-name>Sha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>62-84</aPitchRange>
+        <pPitchRange>62-84</pPitchRange>
+        <channel>
+           <program>111</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Малый кларнет (кларнет-пикколо)</name>
+        <short-name>P. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>5</transposeDiatonic>
+        <transposeChromatic>8</transposeChromatic>
+        <aPitchRange>60-99</aPitchRange>
+        <pPitchRange>60-104</pPitchRange>
+        <channel>
+           <program>71</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Сопрановый кларнет</name>
+        <short-name>S. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>4</transposeDiatonic>
+        <transposeChromatic>7</transposeChromatic>
+        <aPitchRange>59-88</aPitchRange>
+        <pPitchRange>59-88</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+      </instrument>
+      <instrument>
+         <name>Кларнет в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>55-94</aPitchRange>
+        <pPitchRange>55-99</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Кларнет в строе ре</name>
+        <short-name>D Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>54-93</aPitchRange>
+        <pPitchRange>54-98</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Кларнет в строе до</name>
+        <short-name>C Cl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-91</aPitchRange>
+        <pPitchRange>52-96</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Кларнет в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>50-89</aPitchRange>
+        <pPitchRange>50-94</pPitchRange>
+        <channel>
+           <program>71</program>
+        </channel>
+     </instrument>
+      <instrument>
+        <name>Кларнет в строе ля</name>
+        <short-name>A Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>49-88</aPitchRange>
+        <pPitchRange>49-93</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Бассет-кларнет</name>
+        <short-name>Ba. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>45-88</aPitchRange>
+        <pPitchRange>45-93</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Альтовый кларнет</name>
+        <short-name>A. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>43-80</aPitchRange>
+        <pPitchRange>43-84</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Бассетгорн</name>
+        <short-name>Ba. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>41-84</aPitchRange>
+        <pPitchRange>41-86</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Бас-кларнет</name>
+        <short-name>B. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>37-75</aPitchRange>
+        <pPitchRange>37-79</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Контральтовый кларнет</name>
+        <short-name>C-a. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>31-70</aPitchRange>
+        <pPitchRange>31-75</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Контрабасовый кларнет</name>
+        <short-name>Cb. Cl.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>26-65</aPitchRange>
+        <pPitchRange>26-70</pPitchRange>
+        <channel>
+           <program>71</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Шалюмо-сопранино</name>
+        <short-name>Si. Cha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>65-79</aPitchRange>
+        <pPitchRange>65-82</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Шалюмо-сопрано</name>
+        <short-name>S. Cha.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-74</aPitchRange>
+        <pPitchRange>60-77</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый шалюмо</name>
+        <short-name>A. Cha.</short-name>
+        <clef>3</clef>
+        <aPitchRange>53-67</aPitchRange>
+        <pPitchRange>53-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый шалюмо</name>
+        <short-name>T. Cha.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-62</aPitchRange>
+        <pPitchRange>48-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Тарогато</name>
+        <short-name>Tar.</short-name>
+        <clef>0</clef>
+        <aPitchRange>58-84</aPitchRange>
+        <pPitchRange>58-81</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Октавин</name>
+        <short-name>Oct.</short-name>
+        <clef>0</clef>
+        <aPitchRange>56-86</aPitchRange>
+        <pPitchRange>56-91</pPitchRange>
+        <channel>
+           <program>69</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+         <name>Фагот</name>
+        <short-name>Bsn.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-69</aPitchRange>
+        <pPitchRange>34-76</pPitchRange>
+        <channel>
+           <program>70</program>
+        </channel>
+      </instrument>
+      <instrument>
+         <name>Контрафагот</name>
+        <short-name>Cbsn.</short-name>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <clef>5</clef>
+        <aPitchRange>22-57</aPitchRange>
+        <pPitchRange>22-60</pPitchRange>
+        <channel>
+           <program>70</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Дульциан</name>
+        <short-name>Du.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-62</aPitchRange>
+        <pPitchRange>40-65</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Ранкет</name>
+        <short-name>Ra.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-62</aPitchRange>
+        <pPitchRange>34-65</pPitchRange>
+        <channel>
+           <program>67</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Сарюсофон-сопранино</name>
+        <short-name>Si. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-87</aPitchRange>
+        <pPitchRange>61-90</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Сарюсофон-сопрано</name>
+        <short-name>S. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>56-87</aPitchRange>
+        <pPitchRange>56-92</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый сарюсофон</name>
+        <short-name>A. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>49-80</aPitchRange>
+        <pPitchRange>49-85</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый сарюсофон</name>
+        <short-name>T. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>44-75</aPitchRange>
+        <pPitchRange>44-80</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Баритоновый сарюсофон</name>
+        <short-name>Bar. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>37-68</aPitchRange>
+        <pPitchRange>36-73</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый сарюсофон</name>
+        <short-name>B. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>32-63</aPitchRange>
+        <pPitchRange>32-68</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Контрабасовый сарюсофон</name>
+        <short-name>Cb. Sar.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-19</transposeDiatonic>
+        <transposeChromatic>-33</transposeChromatic>
+        <aPitchRange>25-53</aPitchRange>
+        <pPitchRange>25-56</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Саксофон-сопраниссимо</name>
+        <short-name>Sio. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>6</transposeDiatonic>
+        <transposeChromatic>10</transposeChromatic>
+        <aPitchRange>68-92</aPitchRange>
+        <pPitchRange>68-97</pPitchRange>
+        <channel>
+           <program>64</program>
+        </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Саксофон-сопранино</name>
+        <short-name>Si. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>61-87</aPitchRange>
+        <pPitchRange>61-90</pPitchRange>
+        <channel>
+           <program>64</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Саксофон-сопрано</name>
+        <short-name>S. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>56-89</aPitchRange>
+        <pPitchRange>56-94</pPitchRange>
+        <channel>
+           <program>64</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Альтовый саксофон</name>
+        <short-name>A. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>49-82</aPitchRange>
+        <pPitchRange>49-87</pPitchRange>
+        <channel>
+           <program>65</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Теноровый саксофон</name>
+        <short-name>T. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>44-77</aPitchRange>
+        <pPitchRange>44-82</pPitchRange>
+        <channel>
+           <program>66</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Баритоновый саксофон</name>
+        <short-name>Bar. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-12</transposeDiatonic>
+        <transposeChromatic>-21</transposeChromatic>
+        <aPitchRange>37-70</aPitchRange>
+        <pPitchRange>36-75</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Басовый саксофон</name>
+        <short-name>B. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-15</transposeDiatonic>
+        <transposeChromatic>-26</transposeChromatic>
+        <aPitchRange>32-65</aPitchRange>
+        <pPitchRange>32-70</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Контрабасовый саксофон</name>
+        <short-name>Cb. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-19</transposeDiatonic>
+        <transposeChromatic>-33</transposeChromatic>
+        <aPitchRange>25-53</aPitchRange>
+        <pPitchRange>25-56</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Субконтрабасовый саксофон</name>
+        <short-name>Scb. Sax.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-22</transposeDiatonic>
+        <transposeChromatic>-38</transposeChromatic>
+        <aPitchRange>20-52</aPitchRange>
+        <pPitchRange>20-60</pPitchRange>
+        <channel>
+           <program>67</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+      <instrument>
+        <name>Волынка</name>
+        <short-name>Bagp.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>67-81</aPitchRange>
+        <pPitchRange>67-81</pPitchRange>
+        <channel>
+           <program>109</program>
+        </channel>
+      </instrument>
+   </instrument-group>
+
+   <instrument-group name="Медные духовые">
+      <instrument>
+         <name>Валторна</name>
+        <short-name>Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>35-75</aPitchRange>
+        <pPitchRange>29-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Валторна в высоком строе до</name>
+        <short-name>H. C Hn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>46-75</aPitchRange>
+        <pPitchRange>42-84</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в высоком строе си-бемоль</name>
+        <short-name>H. B<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>44-77</aPitchRange>
+        <pPitchRange>40-82</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе ля</name>
+        <short-name>A Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-3</transposeChromatic>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>39-81</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе ля-бемоль</name>
+        <short-name>A<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-2</transposeDiatonic>
+        <transposeChromatic>-4</transposeChromatic>
+        <aPitchRange>42-75</aPitchRange>
+        <pPitchRange>38-80</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе соль</name>
+        <short-name>G Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-3</transposeDiatonic>
+        <transposeChromatic>-5</transposeChromatic>
+        <aPitchRange>41-74</aPitchRange>
+        <pPitchRange>37-79</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе ми</name>
+        <short-name>E Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-8</transposeChromatic>
+        <aPitchRange>38-71</aPitchRange>
+        <pPitchRange>34-76</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>37-70</aPitchRange>
+        <pPitchRange>33-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в строе ре</name>
+        <short-name>D Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-6</transposeDiatonic>
+        <transposeChromatic>-10</transposeChromatic>
+        <aPitchRange>36-69</aPitchRange>
+        <pPitchRange>32-74</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в низком строе до</name>
+        <short-name>L. C Hn.</short-name>
+        <clef>4</clef>
+        <aPitchRange>34-67</aPitchRange>
+        <pPitchRange>30-72</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Валторна в низком строе си-бемоль</name>
+        <short-name>L. B<symbol name="flat"/> Hn.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>32-65</aPitchRange>
+        <pPitchRange>28-70</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Труба-пикколо в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> P. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>6</transposeDiatonic>
+        <transposeChromatic>10</transposeChromatic>
+        <aPitchRange>59-86</aPitchRange>
+        <pPitchRange>59-89</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Труба-пикколо в строе ля</name>
+        <short-name>A P. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>5</transposeDiatonic>
+        <transposeChromatic>9</transposeChromatic>
+        <aPitchRange>58-85</aPitchRange>
+        <pPitchRange>58-88</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Труба в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>57-84</aPitchRange>
+        <pPitchRange>57-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Труба в строе ре</name>
+        <short-name>D Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>56-83</aPitchRange>
+        <pPitchRange>56-86</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Труба в строе до</name>
+        <short-name>C Tpt.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-82</aPitchRange>
+        <pPitchRange>54-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Труба в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-80</aPitchRange>
+        <pPitchRange>52-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+     </instrument>
+     <instrument>
+        <name>Басовая труба в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> B. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>46-73</aPitchRange>
+        <pPitchRange>46-76</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовая труба в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> B. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-8</transposeDiatonic>
+        <transposeChromatic>-14</transposeChromatic>
+        <aPitchRange>39-66</aPitchRange>
+        <pPitchRange>39-69</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочная труба в строе фа</name>
+        <short-name>F Bq. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>3</transposeDiatonic>
+        <transposeChromatic>5</transposeChromatic>
+        <aPitchRange>65-86</aPitchRange>
+        <pPitchRange>65-90</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочная труба в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Bq. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>63-84</aPitchRange>
+        <pPitchRange>63-88</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочная труба в строе ре</name>
+        <short-name>D Bq. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>1</transposeDiatonic>
+        <transposeChromatic>2</transposeChromatic>
+        <aPitchRange>62-83</aPitchRange>
+        <pPitchRange>62-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочная труба в строе до</name>
+        <short-name>C Bq. Tpt.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-85</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Барочная труба в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Bq. Tpt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>58-79</aPitchRange>
+        <pPitchRange>58-83</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Корнет в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Cnt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>2</transposeDiatonic>
+        <transposeChromatic>3</transposeChromatic>
+        <aPitchRange>57-84</aPitchRange>
+        <pPitchRange>57-87</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+      </instrument>
+      <instrument>
+         <name>Корнет в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Cnt.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-79</aPitchRange>
+        <pPitchRange>52-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+      </instrument>
+      <instrument>
+         <name>Флюгельгорн</name>
+        <short-name>Flghn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>52-79</aPitchRange>
+        <pPitchRange>52-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <channel name="mute">
+          <program value="59"/>
+          </channel>
+      </instrument>
+     <instrument>
+        <name>Корнет-сопрано</name>
+        <short-name>S. Zi.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-83</aPitchRange>
+        <pPitchRange>60-86</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый корнет</name>
+        <short-name>A. Zi.</short-name>
+        <clef>0</clef>
+        <aPitchRange>57-80</aPitchRange>
+        <pPitchRange>57-83</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый корнет</name>
+        <short-name>T. Zi.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-71</aPitchRange>
+        <pPitchRange>48-75</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Серпент</name>
+        <short-name>Spt.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-65</aPitchRange>
+        <pPitchRange>36-69</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовый офиклеид в строе фа</name>
+        <short-name>F A. Oph.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-81</aPitchRange>
+        <pPitchRange>52-84</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый офиклеид в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> A. Oph.</short-name>
+        <clef>0</clef>
+        <aPitchRange>51-79</aPitchRange>
+        <pPitchRange>51-82</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый офиклеид в строе до</name>
+        <short-name>C B. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>35-63</aPitchRange>
+        <pPitchRange>35-67</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый офиклеид в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> B. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>33-62</aPitchRange>
+        <pPitchRange>33-66</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Контрабасовый офиклеид в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Cb. Oph.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-55</aPitchRange>
+        <pPitchRange>26-58</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Альтгорн в строе фа</name>
+        <short-name>F A. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтгорн в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> A. Hn.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Баритон-горн</name>
+        <short-name>Bar. Hn.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-67</aPitchRange>
+        <pPitchRange>40-70</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Мелофон в строе фа</name>
+        <short-name>F Mph.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Мелофон в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Mph.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Меллофониум в строе фа</name>
+        <short-name>F Mpm.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>47-74</aPitchRange>
+        <pPitchRange>47-77</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Меллофониум в строе ми-бемоль</name>
+        <short-name>E<symbol name="flat"/> Mpm.</short-name>
+        <clef>0</clef>
+        <transposeDiatonic>-5</transposeDiatonic>
+        <transposeChromatic>-9</transposeChromatic>
+        <aPitchRange>45-72</aPitchRange>
+        <pPitchRange>45-75</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Вагнеровская туба в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Wag. Tu.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <aPitchRange>40-75</aPitchRange>
+        <pPitchRange>40-79</pPitchRange>
+        <channel>
+           <program>60</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Вагнеровская туба в строе фа</name>
+        <short-name>F Wag. Tu.</short-name>
+        <clef>4</clef>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <aPitchRange>35-74</aPitchRange>
+        <pPitchRange>35-77</pPitchRange>
+        <channel>
+           <program>56</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+        <name>Тромбон</name>
+        <short-name>Trb.</short-name>
+        <clef>4</clef>
+        <aPitchRange>35-70</aPitchRange>
+        <pPitchRange>35-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Тромбон-сопрано</name>
+        <short-name>S. Trb.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-77</aPitchRange>
+        <pPitchRange>52-81</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый тромбон</name>
+        <short-name>A. Trb.</short-name>
+        <clef>11</clef>
+        <aPitchRange>45-74</aPitchRange>
+        <pPitchRange>45-77</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+      <instrument>
+         <name>Теноровый тромбон</name>
+        <short-name>T. Trb.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-70</aPitchRange>
+        <pPitchRange>40-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+      <instrument>
+         <name>Басовый тромбон</name>
+        <short-name>B. Trb.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-70</aPitchRange>
+        <pPitchRange>36-74</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Контрабасовый тромбон</name>
+        <short-name>Cb. Trb.</short-name>
+        <clef>4</clef>
+        <aPitchRange>28-55</aPitchRange>
+        <pPitchRange>28-58</pPitchRange>
+        <channel>
+           <program>57</program>
+           </channel>
+        <extended>1</extended>
+      </instrument>
+     <instrument>
+        <name>Эуфониум</name>
+        <short-name>Eu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-70</aPitchRange>
+        <pPitchRange>40-74</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Туба в строе фа</name>
+        <short-name>F Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-64</aPitchRange>
+        <pPitchRange>24-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Туба в строе до</name>
+        <short-name>C Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>26-60</aPitchRange>
+        <pPitchRange>24-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Туба в строе си-бемоль</name>
+        <short-name>B<symbol name="flat"/> Tu.</short-name>
+        <clef>4</clef>
+        <aPitchRange>28-58</aPitchRange>
+        <pPitchRange>22-72</pPitchRange>
+        <channel>
+           <program>58</program>
+           </channel>
+        </instrument>
+      </instrument-group>
+
+  <instrument-group name="Тональная перкуссия">
+     <instrument>
+        <name>Литавры</name>
+        <short-name>Timp.</short-name>
+        <clef>4</clef>
+        <aPitchRange>38-60</aPitchRange>
+        <pPitchRange>38-60</pPitchRange>
+        <channel>
+           <program>47</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Высокие рототомы</name>
+        <short-name>H. Rt-t.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-76</aPitchRange>
+        <pPitchRange>55-76</pPitchRange>
+        <channel>
+           <program>117</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Низкие рототомы</name>
+        <short-name>L. Rt.-t-</short-name>
+        <clef>4</clef>
+        <aPitchRange>40-58</aPitchRange>
+        <pPitchRange>40-58</pPitchRange>
+        <channel>
+           <program>117</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Колокольчики</name>
+        <short-name>Glk.</short-name>
+        <clef>2</clef>
+        <aPitchRange>79-108</aPitchRange>
+        <pPitchRange>79-108</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Сопрановые колокольчики Орфа</name>
+        <short-name>O. S. Glk.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-105</aPitchRange>
+        <pPitchRange>84-105</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Альтовые колокольчики Орфа</name>
+        <short-name>O. A. Glk.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>9</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Кротали</name>
+        <short-name>Cro.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-108</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>10</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Тубафон</name>
+        <short-name>Tph.</short-name>
+        <clef>2</clef>
+        <aPitchRange>84-108</aPitchRange>
+        <pPitchRange>84-108</pPitchRange>
+        <channel>
+           <program>47</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Ковбелл</name>
+        <short-name>Agl.</short-name>
+        <staves>2</staves>
+        <clef staff="1">2</clef>
+        <clef staff="2">18</clef>
+        <bracket>1</bracket>
+        <aPitchRange>60-105</aPitchRange>
+        <pPitchRange>60-105</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Вибрафон</name>
+        <short-name>Vib.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-89</aPitchRange>
+        <pPitchRange>48-96</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Сопрановый металлофон Орфа</name>
+        <short-name>O. S. Met.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Альтовый металлофон Орфа</name>
+        <short-name>O. A. Met.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Басовый металлофон Орфа</name>
+        <short-name>O. B. Met.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-69</pPitchRange>
+        <channel>
+           <program>11</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Колокола</name>
+        <short-name>Tu. Be.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-79</aPitchRange>
+        <pPitchRange>60-79</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Басовые стальные барабаны</name>
+        <short-name>B. St. Dr.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-53</aPitchRange>
+        <pPitchRange>36-53</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cтальные барабаны (cello)</name>
+        <short-name>Ce. St. Dr.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-67</aPitchRange>
+        <pPitchRange>47-67</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Теноровые стальные барабаны</name>
+        <short-name>T. St. Dr.</short-name>
+        <clef>3</clef>
+        <aPitchRange>52-69</aPitchRange>
+        <pPitchRange>52-69</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Cтальные барабаны (guitar)</name>
+        <short-name>Gtr. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>54-81</aPitchRange>
+        <pPitchRange>54-81</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Альтовые стальные барабаны</name>
+        <short-name>A. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>56-85</aPitchRange>
+        <pPitchRange>56-85</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Сопрановые стальные барабаны</name>
+        <short-name>S. St. Dr.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-88</aPitchRange>
+        <pPitchRange>60-88</pPitchRange>
+        <channel>
+           <program>114</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Высокие ручные колокольчики</name>
+        <short-name>H. Ha. Be.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-97</aPitchRange>
+        <pPitchRange>60-97</pPitchRange>
+        <channel>
+           <program>112</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Низкие ручные колокольчики</name>
+        <short-name>L. Ha. Be.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-60</aPitchRange>
+        <pPitchRange>36-60</pPitchRange>
+        <channel>
+           <program>112</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Настроенные гонги</name>
+        <short-name>Td. Go.</short-name>
+        <clef>4</clef>
+        <aPitchRange>45-57</aPitchRange>
+        <pPitchRange>45-57</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Флексатон</name>
+        <short-name>Flt.</short-name>
+        <clef>1</clef>
+        <aPitchRange>76-93</aPitchRange>
+        <pPitchRange>76-93</pPitchRange>
+        <channel>
+           <program>14</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Музыкальная пила</name>
+        <short-name>Mu. Sw.</short-name>
+        <clef>0</clef>
+        <aPitchRange>64-100</aPitchRange>
+        <pPitchRange>64-100</pPitchRange>
+        <channel>
+           <program>92</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Музыкальные бокалы</name>
+        <short-name>Mu. Gla.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-91</aPitchRange>
+        <pPitchRange>72-91</pPitchRange>
+        <channel>
+           <program>93</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Стеклянная гармоника</name>
+        <short-name>Gla. Har.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-89</aPitchRange>
+        <pPitchRange>53-89</pPitchRange>
+        <channel>
+           <program>92</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Ксилофон</name>
+        <short-name>Xyl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>65-108</aPitchRange>
+        <pPitchRange>65-108</pPitchRange>
+        <channel>
+           <program>13</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Сопрановый ксилофон Орфа</name>
+        <short-name>O. S. Xyl.</short-name>
+        <clef>1</clef>
+        <aPitchRange>72-93</aPitchRange>
+        <pPitchRange>72-93</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Альтовый ксилофон Орфа</name>
+        <short-name>O. A. Xyl.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Басовый ксилофон Орфа</name>
+        <short-name>O. B. Xyl.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-69</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Маримба</name>
+        <short-name>Mrm.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>45-96</aPitchRange>
+        <pPitchRange>45-96</pPitchRange>
+        <channel>
+           <program>12</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Дульцимер</name>
+        <short-name>Dlc.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>48-86</aPitchRange>
+        <pPitchRange>48-86</pPitchRange>
+        <channel>
+           <program>15</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Ксилофон Маллета</name>
+        <short-name>Mal. Syn.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>0-127</aPitchRange>
+        <pPitchRange>0-127</pPitchRange>
+        <channel>
+           <program>80</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Настроенные клаксоны</name>
+        <short-name>Tn. Klx. Hns.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>48-72</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>84</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Дискантовая калимба</name>
+        <short-name>Tr. Kal.</short-name>
+        <clef>0</clef>
+        <aPitchRange>59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86</aPitchRange>
+        <pPitchRange>59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Альтовая калимба</name>
+        <short-name>A. Kal.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55, 57, 59, 60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79</aPitchRange>
+        <pPitchRange>55, 57, 59, 60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79</pPitchRange>
+        <channel>
+           <program>108</program>
+           </channel>
+        </instrument>
+   </instrument-group>
+
+   <instrument-group name="Нетональная перкуссия">
+      <instrument>
+        <name>Набор ударных</name>
+        <description>Набор ударных в три линейки</description>
+        <short-name>Drs.</short-name>
+        <stafflines>3</stafflines>
+        <clef>19</clef>
+        <drumset>1</drumset>
+        <channel>
+           <program>0</program>
+        </channel>
+      </instrument>
+      <instrument>
+         <name>Набор ударных</name>
+         <description>Набор ударных в пять линеек</description>
+        <short-name>Drs.</short-name>
+        <stafflines>5</stafflines>
+        <clef>19</clef>
+        <drumset>1</drumset>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Малый барабан</name>
+        <short-name>Sn. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="38">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Snare</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Большой барабан</name>
+        <short-name>B. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="35">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Bass Drum</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Малый барабан пикколо</name>
+        <short-name>P. Sn. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="40">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Snare Drum 2</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Военный барабан</name>
+        <short-name>Mil. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="37">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Side Stick</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="38">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Acoustic Snare</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Высокий том-том</name>
+        <short-name>H. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="50">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>>Высокий том-том 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="48">
+           <head>0</head>
+           <line>2</line>
+           <voice>0</voice>
+           <name>>Высокий том-том 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Средний том-том</name>
+        <short-name>M. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="47">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Средний том-том 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="45">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Средний том-том 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Низкий том-том</name>
+        <short-name>L. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="43">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Низкий том-том 1</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="43">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Низкий том-том 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Хайхэт</name>
+        <short-name>Ped. Hi-hat</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="44">
+           <head>1</head>
+           <line>4</line>
+           <voice>3</voice>
+           <name>Хайхэт</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="n">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Чинг</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Китайский том-том</name>
+        <short-name>Ch. To.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="61">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Низкий бонго</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Бонго</name>
+        <short-name>Bo.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="60">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Высокий бонго</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="61">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Низкий бонго</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Конга</name>
+        <short-name>Co.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="63">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Открытый высокий конга</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="62">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Приглушённый высокий конга</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="63">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Низкий конга</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Тимбалес</name>
+        <short-name>Timb.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="65">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Высокий тимбалес</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="66">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Низкий тимбалес</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Рамочный барабан</name>
+        <short-name>Fr. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="45">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Средний том-том 2</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Табла</name>
+        <short-name>Tbs.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="62">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Приглушённый низкий конга</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="64">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Низкий конга</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Куика</name>
+        <short-name>Cu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="79">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Открытая куика</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="78">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Приглушённая куика</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Сагаты</name>
+        <short-name>Fi. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="81">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Triangle</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Хай-хэт</name>
+        <short-name>Hi-hat</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="46">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Открытый хай-хэт</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="42">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Закрытый хай-хэт</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Там-там</name>
+        <short-name>Tam-tam</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Колокольчики</name>
+        <short-name>Be.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="53">
+           <head>1</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Колокольчики на санях</name>
+        <short-name>Sle. Be.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Bell Plate</name>
+        <short-name>Be. Pla.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="58">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Vibra Slap</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Поющая чаша</name>
+        <short-name>Bw. Go.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Тубо</name>
+        <short-name>Tu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="81">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Open Triangle</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Металлические кастаньеты</name>
+        <short-name>Met. Cst.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="67">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Автомобильные тормозные барабаны</name>
+        <short-name>Aut. Brk. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="68">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Железные трубы</name>
+        <short-name>Ir. Pi.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="68">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Agogo</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Цепи</name>
+        <short-name>Chn.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Наковальня</name>
+        <short-name>Anv.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="53">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Деревянные коробочки</name>
+        <short-name>Wd. Bl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Деревянная коробочка с высоким тоном</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Деревянная коробочка с низким тоном</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Тэмпл-блок</name>
+        <short-name>Tmp. Bl.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>3</line>
+           <voice>0</voice>
+           <name>Тэмпл-блок с высоким тоном</name>
+           <stem>1</stem>
+           </Drum>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>5</line>
+           <voice>0</voice>
+           <name>Тэмпл-блок с низким тоном</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+
+      <instrument>
+         <name>Треугольник</name>
+         <short-name>Trgl.</short-name>
+         <drumset>1</drumset>
+         <Drum pitch="80">
+            <head>1</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Приглушённый треугольник</name>
+            <stem>2</stem>
+            </Drum>
+         <Drum pitch="81">
+            <head>0</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Открытый треугольник</name>
+            <stem>2</stem>
+            </Drum>
+         <clef>14</clef>
+         <stafflines>1</stafflines>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>
+      <instrument>
+         <name>Тарелка</name>
+        <short-name>Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="57">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 2</name>
+           <stem>2</stem>
+           </Drum>
+         </instrument>
+     <instrument>
+        <name>Ride Cymbal</name>
+        <short-name>R. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="51">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Cymbal 1</name>
+           <stem>2</stem>
+           </Drum>
+        <Drum pitch="53">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Ride Bell</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Китайские тарелки</name>
+        <short-name>Ch. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="52">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Chinese Cymbal</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Крэш</name>
+        <short-name>Cr. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="49">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 1</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Сплэш</name>
+        <short-name>Sp. Cym.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="55">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Splash Cymbal</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+      <instrument>
+        <name>Ковбелл</name>
+        <short-name>Cwb.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="56">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cowbell</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Клаве</name>
+        <short-name>Clv.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="75">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Клаве</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Кастаньеты</name>
+        <short-name>Cst.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Гуиро</name>
+        <short-name>Gro.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="73">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Short Guiro</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Марака</name>
+        <short-name>Mrcs.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="70">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Марака</name>
+           <stem>2</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Кабаса</name>
+        <short-name>Cab.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Кабаса</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Кихада</name>
+        <short-name>Qui.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="69">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Cabasa</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Вибраслэп</name>
+        <short-name>Vib. Slp.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="58">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Вибраслэп</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Щелевой барабан</name>
+        <short-name>Slt. Dr.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="77">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Low Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Хлыст</name>
+        <short-name>Wh.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="76">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>High Wood Block</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Трещотка</name>
+        <short-name>Rat.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="73">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Short Guiro</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Громовой лист</name>
+        <short-name>Thu.</short-name>
+        <stafflines>1</stafflines>
+        <clef>14</clef>
+        <drumset>1</drumset>
+        <Drum pitch="49">
+           <head>0</head>
+           <line>4</line>
+           <voice>0</voice>
+           <name>Crash Cymbal 1</name>
+           <stem>1</stem>
+           </Drum>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+   </instrument-group>
+
+   <instrument-group name="Гитары">
+     <instrument>
+        <name>Гитара-сопрано</name>
+        <short-name>S. Guit.</short-name>
+        <clef>0</clef>
+        <aPitchRange>52-93</aPitchRange>
+        <pPitchRange>52-93</pPitchRange>
+        <channel>
+           <program>24</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Альтовая гитара</name>
+        <short-name>A. Guit.</short-name>
+        <clef>3</clef>
+        <aPitchRange>47-88</aPitchRange>
+        <pPitchRange>47-88</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+      </instrument>
+      <instrument>
+         <name>Гитара</name>
+        <short-name>Guit.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>11-струнная альтовая гитара</name>
+        <short-name>11-str. A. Guit.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>34-86</aPitchRange>
+        <pPitchRange>34-86</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Стил-гитара</name>
+        <short-name>St. str. Guit.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>25</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>12-струнная гитара</name>
+        <short-name>12-str. Guit.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-83</aPitchRange>
+        <pPitchRange>40-83</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Бас-гитара</name>
+        <short-name>B. Guit.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>34</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Педальная стил-гитара</name>
+        <short-name>Ped. st. Guit.</short-name>
+        <clef>13</clef>
+        <aPitchRange>35-84</aPitchRange>
+        <pPitchRange>35-84</pPitchRange>
+        <channel>
+           <program>25</program>
+        </channel>
+      </instrument>
+      <instrument>
+        <name>Электрогитара</name>
+        <short-name>El. Guit.</short-name>
+        <clef>3</clef>
+        <aPitchRange>40-86</aPitchRange>
+        <pPitchRange>40-86</pPitchRange>
+        <channel>
+           <program>27</program>
+        </channel>
+      </instrument>
+     <instrument>
+        <name>Электрическая бас-гитара</name>
+        <short-name>El. B.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>33</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Безладовая электрическая бас-гитара</name>
+        <short-name>Frtl. El. B.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-65</aPitchRange>
+        <pPitchRange>28-65</pPitchRange>
+        <channel>
+           <program>35</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Мандолина</name>
+        <short-name>Mdn.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-85</aPitchRange>
+        <pPitchRange>55-85</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Мандола</name>
+        <short-name>Mda.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-87</aPitchRange>
+        <pPitchRange>48-87</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Бузуки (3-струнный)</name>
+        <short-name>Bou.</short-name>
+        <clef>3</clef>
+        <aPitchRange>38-89</aPitchRange>
+        <pPitchRange>38-89</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Бузуки (4-струнный)</name>
+        <short-name>Bou.</short-name>
+        <clef>3</clef>
+        <aPitchRange>36-89</aPitchRange>
+        <pPitchRange>36-89</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Укулеле</name>
+        <short-name>Uk.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-81</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Баритоновый укулеле Ukulele</name>
+        <short-name>Bar. Uk.</short-name>
+        <clef>0</clef>
+        <aPitchRange>50-76</aPitchRange>
+        <pPitchRange>50-76</pPitchRange>
+        <channel>
+           <program>24</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Банджо</name>
+        <short-name>Bj.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-87</aPitchRange>
+        <pPitchRange>48-87</pPitchRange>
+        <channel>
+           <program>105</program>
+        </channel>
+     </instrument>
+     <instrument>
+        <name>Теноровый банджо</name>
+        <short-name>T. Bj.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-83</aPitchRange>
+        <pPitchRange>48-83</pPitchRange>
+        <channel>
+           <program>105</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Хосодзао сямисэн</name>
+        <short-name>Ho. Sh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>50-83</aPitchRange>
+        <pPitchRange>50-83</pPitchRange>
+        <channel>
+           <program>106</program>
+        </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Футодзао сямисэн</name>
+        <short-name>Hu. Sh.</short-name>
+        <clef>3</clef>
+        <aPitchRange>43-76</aPitchRange>
+        <pPitchRange>43-76</pPitchRange>
+        <channel>
+           <program>106</program>
+           </channel>
+        <extended>1</extended>
+     </instrument>
+     <instrument>
+        <name>Ситар</name>
+        <short-name>Si.</short-name>
+        <clef>0</clef>
+        <aPitchRange>36-84</aPitchRange>
+        <pPitchRange>36-84</pPitchRange>
+        <channel>
+           <program>104</program>
+        </channel>
+     </instrument>
+   </instrument-group>
+
+   <instrument-group name="Вокал">
+      <instrument>
+         <name>Голос</name>
+        <short-name>Vo.</short-name>
+        <clef>0</clef>
+        <aPitchRange>40-79</aPitchRange>
+        <pPitchRange>36-94</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Детское мужское сопрано</name>
+        <short-name>B. S.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-77</aPitchRange>
+        <pPitchRange>60-81</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+      <instrument>
+         <name>Сопрано</name>
+        <short-name>S.</short-name>
+        <clef>0</clef>
+        <aPitchRange>60-79</aPitchRange>
+        <pPitchRange>60-84</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+      <instrument>
+         <name>Меццо-сопрано</name>
+        <short-name>Mzs.</short-name>
+        <clef>0</clef>
+        <aPitchRange>57-77</aPitchRange>
+        <pPitchRange>57-77</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+      </instrument>
+      <instrument>
+         <name>Альт</name>
+        <short-name>A.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-74</aPitchRange>
+        <pPitchRange>55-77</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+     </instrument>
+     <instrument>
+        <name>Тенор</name>
+        <short-name>T.</short-name>
+        <clef>3</clef>
+        <aPitchRange>48-69</aPitchRange>
+        <pPitchRange>48-72</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Баритон</name>
+        <short-name>Bar.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-62</aPitchRange>
+        <pPitchRange>41-65</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Бас</name>
+        <short-name>B.</short-name>
+        <clef>4</clef>
+        <aPitchRange>41-59</aPitchRange>
+        <pPitchRange>40-62</pPitchRange>
+        <channel>
+           <program>52</program>
+           </channel>
+        </instrument>
+      <instrument>
+        <name>Казу</name>
+        <short-name>Kaz.</short-name>
+        <clef>0</clef>
+        <aPitchRange>41-81</aPitchRange>
+        <pPitchRange>41-84</pPitchRange>
+        <channel>
+           <program>85</program>
+           </channel>
+        </instrument>
+      </instrument-group>
+
+   <instrument-group name="Клавишные">
+      <instrument>
+         <name>Фортепиано</name>
+        <short-name>Pno.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>21-108</aPitchRange>
+        <pPitchRange>21-108</pPitchRange>
+        <Articulation>
+           <gateTime>70%</gateTime>
+           <velocity>100%</velocity>
+           </Articulation>
+        <Articulation name="staccato">
+           <gateTime>40%</gateTime>
+           </Articulation>
+        <Articulation name="tenuto">
+           <gateTime>100%</gateTime>
+           </Articulation>
+        <Articulation name="sforzato">
+           <velocity>120%</velocity>
+           </Articulation>
+        <channel>
+           <program>0</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Клавикорд</name>
+        <short-name>Cch.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>7</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Клавесин</name>
+        <short-name>Hch.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>6</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Челеста</name>
+        <short-name>Cel.</short-name>
+        <staves>2</staves>
+        <clef staff="1">2</clef>
+        <clef staff="2">18</clef>
+        <bracket>1</bracket>
+        <aPitchRange>60-108</aPitchRange>
+        <pPitchRange>60-108</pPitchRange>
+        <channel>
+           <program>8</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Электропиано</name>
+        <short-name>El. Pno.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>21-108</aPitchRange>
+        <pPitchRange>21-108</pPitchRange>
+        <channel>
+           <program>4</program>
+           </channel>
+      </instrument>
+     <instrument>
+        <name>Клавишный синтезатор</name>
+        <short-name>Synth.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>0-127</aPitchRange>
+        <pPitchRange>0-127</pPitchRange>
+        <channel>
+           <program>81</program>
+           </channel>
+      </instrument>
+      <instrument>
+         <name>Орган</name>
+        <short-name>Org.</short-name>
+        <staves>3</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <clef staff="3">4</clef>
+        <bracket>1</bracket>
+        <channel>
+           <program>19</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Электроорган</name>
+        <short-name>Et. Org.</short-name>
+        <staves>3</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <clef staff="3">4</clef>
+        <bracket>1</bracket>
+        <channel>
+           <program>18</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Фисгармония</name>
+        <short-name>Harm.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>29-89</aPitchRange>
+        <pPitchRange>29-89</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Аккордеон</name>
+        <short-name>Acc.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>36-93</aPitchRange>
+        <pPitchRange>36-93</pPitchRange>
+        <channel>
+           <program>21</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Бандонеон</name>
+        <short-name>Ban.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>36-93</aPitchRange>
+        <pPitchRange>36-93</pPitchRange>
+        <channel>
+           <program>23</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Мелодическая гармоника</name>
+        <short-name>Mel.</short-name>
+        <clef>0</clef>
+        <aPitchRange>53-84</aPitchRange>
+        <pPitchRange>53-84</pPitchRange>
+        <channel>
+           <program>22</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Шэн-сопрано</name>
+        <short-name>S She.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-90</aPitchRange>
+        <pPitchRange>55-90</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовый шэн</name>
+        <short-name>A She.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-83</aPitchRange>
+        <pPitchRange>48-83</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровый шэн</name>
+        <short-name>T She.</short-name>
+        <clef>12</clef>
+        <aPitchRange>44-78</aPitchRange>
+        <pPitchRange>44-78</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Басовый шэн</name>
+        <short-name>B She.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-67</pPitchRange>
+        <channel>
+           <program>20</program>
+           </channel>
+        <extended>1</extended>
+        </instrument>
+   </instrument-group>
+
+   <instrument-group name="Струнно-щипковые">
+      <instrument>
+         <name>Арфа</name>
+        <short-name>Hrp.</short-name>
+        <staves>2</staves>
+        <clef staff="1">0</clef>
+        <clef staff="2">4</clef>
+        <bracket>1</bracket>
+        <aPitchRange>23-104</aPitchRange>
+        <pPitchRange>23-104</pPitchRange>
+        <channel>
+           <program>46</program>
+           </channel>
+        </instrument>
+     <instrument>
+        <name>Кото</name>
+        <short-name>Ko.</short-name>
+        <clef>0</clef>
+        <aPitchRange>43-83</aPitchRange>
+        <pPitchRange>43-83</pPitchRange>
+        <channel>
+           <program>107</program>
+           </channel>
+        </instrument>
+      </instrument-group>
+
+   <instrument-group name="Струнно-смычковые">
+      <instrument>
+         <name>Скрипка</name>
+        <short-name>Vln.</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+           <program>40</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+         <name>Первые скрипки</name>
+        <short-name>Vlns. 1</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+          <program value="48"/>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+         <name>Вторые скрипки</name>
+        <short-name>Vlns. 2</short-name>
+        <clef>0</clef>
+        <aPitchRange>55-88</aPitchRange>
+        <pPitchRange>55-103</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Виола</name>
+        <short-name>Vla.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-79</aPitchRange>
+        <pPitchRange>48-93</pPitchRange>
+        <channel>
+           <program>41</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+         <name>Альт</name>
+         <short-name>Vla.</short-name>
+         <clef>11</clef>
+         <channel>
+            <program>41</program>
+            </channel>
+         </instrument>
+     <instrument>
+        <name>Виолы</name>
+        <short-name>Vlas.</short-name>
+        <clef>11</clef>
+        <aPitchRange>48-79</aPitchRange>
+        <pPitchRange>48-93</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Сопрановая виола да гамба</name>
+        <short-name>S. Vla. d. g.</short-name>
+        <clef>9</clef>
+        <aPitchRange>50-86</aPitchRange>
+        <pPitchRange>50-93</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Альтовая виола да гамба</name>
+        <short-name>A. Vla. d. g.</short-name>
+        <clef>11</clef>
+        <aPitchRange>45-81</aPitchRange>
+        <pPitchRange>45-88</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Теноровая виола да гамба</name>
+        <short-name>T. Vla. d. g.</short-name>
+        <clef>12</clef>
+        <aPitchRange>43-79</aPitchRange>
+        <pPitchRange>43-86</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+     <instrument>
+        <name>Виола да гамба</name>
+        <short-name>Vla. d. g.</short-name>
+        <clef>4</clef>
+        <aPitchRange>38-74</aPitchRange>
+        <pPitchRange>38-81</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Виолончель</name>
+        <short-name>Vlc.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-90</pPitchRange>
+        <channel>
+           <program>42</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+      </instrument>
+     <instrument>
+        <name>Виолончели</name>
+        <short-name>Vlcs.</short-name>
+        <clef>4</clef>
+        <aPitchRange>36-67</aPitchRange>
+        <pPitchRange>36-90</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+      </instrument>
+     <instrument>
+        <name>Контрабас</name>
+        <short-name>Cb.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>43</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="32"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+      </instrument>
+     <instrument>
+        <name>Контрабас (Double Bass)</name>
+        <short-name>Cb.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>43</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="32"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+        <name>Контрабасы</name>
+        <short-name>Cbs.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+      <instrument>
+        <name>Контрабасы (Double Basses)</name>
+        <short-name>Dbs.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>23-67</pPitchRange>
+        <channel>
+           <program>48</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        </instrument>
+     <instrument>
+        <name>Violone</name>
+        <short-name>Vne.</short-name>
+        <clef>5</clef>
+        <aPitchRange>28-62</aPitchRange>
+        <pPitchRange>28-67</pPitchRange>
+        <channel>
+           <program>110</program>
+           </channel>
+        <channel name="pizzicato">
+          <program value="45"/>
+          </channel>
+        <channel name="tremolo">
+          <program value="44"/>
+          </channel>
+        <extended>1</extended>
+        </instrument>
+      </instrument-group>
+
+  <instrument-group name="Тест группирования" extended="1">
+     <ref>Виолон</ref>
+     <ref>Пикколо</ref>
+  </instrument-group>
+</museScore>

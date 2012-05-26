@@ -1,0 +1,1413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore>
+  <Glyph>
+    <name>rests.0</name>
+    <code>0xe100</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="0" y="0" w="7.5" h="3.125"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.1</name>
+    <code>0xe101</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="0" y="-3.125" w="7.5" h="3.125"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.0o</name>
+    <code>0xe102</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="0" y="-0.50005" w="7.5" h="3.62505"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.1o</name>
+    <code>0xe103</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="0" y="-3.125" w="7.5" h="3.62505"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.M3</name>
+    <code>0xe104</code>
+    <attach x="9" y="0"/>
+    <bbox x="0" y="-5" w="9" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.M2</name>
+    <code>0xe105</code>
+    <attach x="3" y="0"/>
+    <bbox x="0" y="-5" w="3" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.M1</name>
+    <code>0xe106</code>
+    <attach x="3" y="0"/>
+    <bbox x="0" y="-5" w="3" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.2</name>
+    <code>0xe107</code>
+    <attach x="4.74998" y="0"/>
+    <bbox x="0" y="-7.8125" w="4.74998" h="14.0625"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.2classical</name>
+    <code>0xe108</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-4.1" w="5" h="9.35003"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.3</name>
+    <code>0xe109</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-4.1" w="5" h="9.35003"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.4</name>
+    <code>0xe10a</code>
+    <attach x="5.99998" y="0"/>
+    <bbox x="0" y="-4.1" w="5.99998" h="14.35"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.5</name>
+    <code>0xe10b</code>
+    <attach x="6.50002" y="0"/>
+    <bbox x="0" y="-9.1" w="6.50002" h="19.35"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.6</name>
+    <code>0xe10c</code>
+    <attach x="6.99997" y="0"/>
+    <bbox x="0" y="-9.1" w="6.99997" h="24.35"/>
+    </Glyph>
+  <Glyph>
+    <name>rests.7</name>
+    <code>0xe10d</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="0" y="-14.1" w="7.5" h="29.35"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp</name>
+    <code>0xe10e</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="0" y="-7.5" w="5.50003" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.arrowup</name>
+    <code>0xe1c1</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="0" y="-13.5" w="5.50003" h="21"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.arrowdown</name>
+    <code>0xe1c2</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="-0.75008" y="-7.5" w="6.25011" h="21"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.arrowboth</name>
+    <code>0xe1c3</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="-0.75008" y="-13.5" w="6.25011" h="27"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.slashslash.stem</name>
+    <code>0xe10f</code>
+    <attach x="3.49998" y="0"/>
+    <bbox x="0" y="-7.5" w="3.49998" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.slashslashslash.stemstem</name>
+    <code>0xe110</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="0" y="-7.5" w="5.50003" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.slashslashslash.stem</name>
+    <code>0xe111</code>
+    <attach x="4.74998" y="0"/>
+    <bbox x="0" y="-6.50002" w="4.74998" h="13"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sharp.slashslash.stemstemstem</name>
+    <code>0xe112</code>
+    <attach x="8.00003" y="0"/>
+    <bbox x="0" y="-7.5" w="8.00003" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.natural</name>
+    <code>0xe113</code>
+    <attach x="3.33333" y="0"/>
+    <bbox x="0" y="-7.5" w="3.33333" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.natural.arrowup</name>
+    <code>0xe1be</code>
+    <attach x="3.33333" y="0"/>
+    <bbox x="-1.50014" y="-13.5" w="4.83347" h="21"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.natural.arrowdown</name>
+    <code>0xe1bf</code>
+    <attach x="3.33333" y="0"/>
+    <bbox x="0" y="-7.5" w="3.33333" h="21"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.natural.arrowboth</name>
+    <code>0xe1c0</code>
+    <attach x="3.33333" y="0"/>
+    <bbox x="-1.50014" y="-13.5" w="4.83347" h="27"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat</name>
+    <code>0xe114</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-0.60005" y="-9.49997" w="4.60007" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat.arrowup</name>
+    <code>0xe1bb</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.72516" y="-13.5" w="5.72518" h="16.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat.arrowdown</name>
+    <code>0xe1bc</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.72516" y="-9.49997" w="5.72518" h="20.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat.arrowboth</name>
+    <code>0xe1bd</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.72516" y="-13.5" w="5.72518" h="24.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat.slash</name>
+    <code>0xe115</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.99997" y="-9.49997" w="5.99999" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flat.slashslash</name>
+    <code>0xe116</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.99997" y="-9.49997" w="5.99999" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.mirroredflat.flat</name>
+    <code>0xe117</code>
+    <attach x="8.00003" y="0"/>
+    <bbox x="0" y="-9.49997" w="8.00003" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.mirroredflat</name>
+    <code>0xe118</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-0.60005" y="-9.49997" w="4.60007" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.mirroredflat.backslash</name>
+    <code>0xe119</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="-1.99997" y="-9.49997" w="5.99999" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flatflat</name>
+    <code>0xe11a</code>
+    <attach x="7.24998" y="0"/>
+    <bbox x="-0.60005" y="-9.49997" w="7.85003" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.flatflat.slash</name>
+    <code>0xe11b</code>
+    <attach x="7.24998" y="0"/>
+    <bbox x="-0.60005" y="-9.49997" w="7.85003" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.doublesharp</name>
+    <code>0xe11c</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-2.5" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.rightparen</name>
+    <code>0xe11d</code>
+    <attach x="3.00005" y="0"/>
+    <bbox x="0" y="-5" w="3.00005" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.leftparen</name>
+    <code>0xe11e</code>
+    <attach x="0" y="0"/>
+    <bbox x="-3.00005" y="-5" w="3.00005" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.open.01</name>
+    <code>0xe11f</code>
+    <attach x="0.40004" y="0"/>
+    <bbox x="-5" y="-2.5" w="5.40004" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.open.0M1</name>
+    <code>0xe120</code>
+    <attach x="5" y="0"/>
+    <bbox x="-0.40004" y="-2.5" w="5.40004" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.open.11</name>
+    <code>0xe121</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-0.40004" w="5" h="5.40004"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.open.1M1</name>
+    <code>0xe122</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-5" w="5" h="5.40004"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.close.01</name>
+    <code>0xe123</code>
+    <attach x="0" y="0"/>
+    <bbox x="-5" y="-2.5" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.close.0M1</name>
+    <code>0xe124</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-2.5" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.close.11</name>
+    <code>0xe125</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="0" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>arrowheads.close.1M1</name>
+    <code>0xe126</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-5" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>dots.dot</name>
+    <code>0xe127</code>
+    <attach x="2.24998" y="0"/>
+    <bbox x="0" y="-1.125" w="2.24998" h="2.25"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.uM2</name>
+    <code>0xe128</code>
+    <attach x="10.79" y="0"/>
+    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.dM2</name>
+    <code>0xe129</code>
+    <attach x="10.79" y="0"/>
+    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.sM1</name>
+    <code>0xe12a</code>
+    <attach x="10.79" y="0"/>
+    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.sM1double</name>
+    <code>0xe1ba</code>
+    <attach x="9.90013" y="0"/>
+    <bbox x="0" y="-2.75003" w="9.90013" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0</name>
+    <code>0xe12b</code>
+    <attach x="9.90004" y="0"/>
+    <bbox x="0" y="-2.75003" w="9.90004" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1</name>
+    <code>0xe12c</code>
+    <attach x="6.94992" y="-1.30693"/>
+    <bbox x="0" y="-2.75003" w="6.94992" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2</name>
+    <code>0xe12d</code>
+    <attach x="6.58089" y="-0.93907"/>
+    <bbox x="0" y="-2.75003" w="6.58089" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0diamond</name>
+    <code>0xe12e</code>
+    <attach x="9.90013" y="0"/>
+    <bbox x="0" y="-2.75003" w="9.90013" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1diamond</name>
+    <code>0xe12f</code>
+    <attach x="7.28357" y="-1.94417"/>
+    <bbox x="0" y="-2.75003" w="7.28357" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2diamond</name>
+    <code>0xe130</code>
+    <attach x="7.37505" y="-1.98125"/>
+    <bbox x="0" y="-2.75003" w="7.37505" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0triangle</name>
+    <code>0xe131</code>
+    <attach x="11.571" y="-0.71634"/>
+    <bbox x="0" y="-3.65997" w="11.571" h="8.0363"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d1triangle</name>
+    <code>0xe132</code>
+    <attach x="7.03813" y="-3.44557"/>
+    <bbox x="0" y="-3.30887" w="8.36156" h="7.25449"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u1triangle</name>
+    <code>0xe133</code>
+    <attach x="8.36157" y="-0.63673"/>
+    <bbox x="0" y="-3.30887" w="8.36156" h="7.25449"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u2triangle</name>
+    <code>0xe134</code>
+    <attach x="6.968" y="-0.63673"/>
+    <bbox x="0" y="-3.30887" w="6.96799" h="7.25449"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d2triangle</name>
+    <code>0xe135</code>
+    <attach x="5.86513" y="-3.44557"/>
+    <bbox x="0" y="-3.30887" w="6.96799" h="7.25449"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0slash</name>
+    <code>0xe136</code>
+    <attach x="15.0765" y="-5.25003"/>
+    <bbox x="0" y="-5.25003" w="15.0765" h="10.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1slash</name>
+    <code>0xe137</code>
+    <attach x="11.7265" y="-5.25003"/>
+    <bbox x="0" y="-5.25003" w="11.7265" h="10.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2slash</name>
+    <code>0xe138</code>
+    <attach x="8.5765" y="-5.25003"/>
+    <bbox x="0" y="-5.25003" w="8.5765" h="10.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0cross</name>
+    <code>0xe139</code>
+    <attach x="8.58107" y="-1.5821"/>
+    <bbox x="0" y="-3.00005" w="8.58107" h="6.0001"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1cross</name>
+    <code>0xe13a</code>
+    <attach x="7.58098" y="-1.65086"/>
+    <bbox x="0" y="-2.87505" w="7.58098" h="5.7501"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2cross</name>
+    <code>0xe13b</code>
+    <attach x="6.58089" y="-2.12648"/>
+    <bbox x="0" y="-2.75003" w="6.58089" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2xcircle</name>
+    <code>0xe13c</code>
+    <attach x="7.82605" y="0"/>
+    <bbox x="0" y="-3.27036" w="7.82605" h="6.54072"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0do</name>
+    <code>0xe13d</code>
+    <attach x="9.90005" y="1.99995"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d1do</name>
+    <code>0xe13e</code>
+    <attach x="6.94992" y="-1.99995"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u1do</name>
+    <code>0xe13f</code>
+    <attach x="6.94992" y="1.99995"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d2do</name>
+    <code>0xe140</code>
+    <attach x="6.58089" y="-1.99995"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u2do</name>
+    <code>0xe141</code>
+    <attach x="6.58089" y="1.99995"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0re</name>
+    <code>0xe142</code>
+    <attach x="9.90005" y="-0.89998"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u1re</name>
+    <code>0xe143</code>
+    <attach x="6.94992" y="-0.89998"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d1re</name>
+    <code>0xe144</code>
+    <attach x="6.94992" y="0.89998"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u2re</name>
+    <code>0xe145</code>
+    <attach x="6.58089" y="-0.89998"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d2re</name>
+    <code>0xe146</code>
+    <attach x="6.58089" y="0.89998"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0mi</name>
+    <code>0xe147</code>
+    <attach x="9.90005" y="0"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1mi</name>
+    <code>0xe148</code>
+    <attach x="6.58089" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2mi</name>
+    <code>0xe149</code>
+    <attach x="6.58089" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u0fa</name>
+    <code>0xe14a</code>
+    <attach x="9.90005" y="0"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d0fa</name>
+    <code>0xe14b</code>
+    <attach x="9.90005" y="0"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u1fa</name>
+    <code>0xe14c</code>
+    <attach x="6.94992" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d1fa</name>
+    <code>0xe14d</code>
+    <attach x="6.94992" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u2fa</name>
+    <code>0xe14e</code>
+    <attach x="6.58089" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d2fa</name>
+    <code>0xe14f</code>
+    <attach x="6.58089" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0la</name>
+    <code>0xe150</code>
+    <attach x="9.90005" y="0"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1la</name>
+    <code>0xe151</code>
+    <attach x="6.94992" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2la</name>
+    <code>0xe152</code>
+    <attach x="6.58089" y="0"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0ti</name>
+    <code>0xe153</code>
+    <attach x="9.90005" y="-0.62999"/>
+    <bbox x="0" y="-2.24998" w="9.90005" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u1ti</name>
+    <code>0xe154</code>
+    <attach x="6.94992" y="-0.62999"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d1ti</name>
+    <code>0xe155</code>
+    <attach x="6.94992" y="0.62999"/>
+    <bbox x="0" y="-2.24998" w="6.94992" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.u2ti</name>
+    <code>0xe156</code>
+    <attach x="6.58089" y="-0.62999"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.d2ti</name>
+    <code>0xe157</code>
+    <attach x="6.58089" y="0.62999"/>
+    <bbox x="0" y="-2.24998" w="6.58089" h="4.49996"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.ufermata</name>
+    <code>0xe158</code>
+    <attach x="6.62505" y="0"/>
+    <bbox x="-6.62505" y="-7.25005" w="13.2501" h="7.6251"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dfermata</name>
+    <code>0xe159</code>
+    <attach x="6.62505" y="0"/>
+    <bbox x="-6.62505" y="-0.37505" w="13.2501" h="7.6251"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.ushortfermata</name>
+    <code>0xe15a</code>
+    <attach x="5" y="0"/>
+    <bbox x="-5" y="-11" w="10" h="11"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dshortfermata</name>
+    <code>0xe15b</code>
+    <attach x="5" y="0"/>
+    <bbox x="-5" y="0" w="10" h="11"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.ulongfermata</name>
+    <code>0xe15c</code>
+    <attach x="6.25" y="0"/>
+    <bbox x="-6.25" y="-7.5" w="12.5" h="7.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dlongfermata</name>
+    <code>0xe15d</code>
+    <attach x="6.25" y="0"/>
+    <bbox x="-6.25" y="0" w="12.5" h="7.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.uverylongfermata</name>
+    <code>0xe15e</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="-7.5" y="-8.00003" w="15" h="8.00003"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dverylongfermata</name>
+    <code>0xe15f</code>
+    <attach x="7.5" y="0"/>
+    <bbox x="-7.5" y="0" w="15" h="8.00003"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.thumb</name>
+    <code>0xe160</code>
+    <attach x="2" y="0"/>
+    <bbox x="-2" y="-2.5" w="4" h="6.50002"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.sforzato</name>
+    <code>0xe161</code>
+    <attach x="4.49997" y="0"/>
+    <bbox x="-4.49997" y="-2.5" w="8.99994" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.espr</name>
+    <code>0xe162</code>
+    <attach x="9.49997" y="0"/>
+    <bbox x="-9.49997" y="-2.5" w="18.9999" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.staccato</name>
+    <code>0xe163</code>
+    <attach x="0.99998" y="0"/>
+    <bbox x="-0.99998" y="-0.99998" w="1.99996" h="1.99996"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.ustaccatissimo</name>
+    <code>0xe164</code>
+    <attach x="1.00008" y="0"/>
+    <bbox x="-1.00008" y="-5.00009" w="2.00016" h="5.20009"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dstaccatissimo</name>
+    <code>0xe165</code>
+    <attach x="1.00008" y="0"/>
+    <bbox x="-1.00008" y="-0.2" w="2.00016" h="5.20009"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.tenuto</name>
+    <code>0xe166</code>
+    <attach x="3.00003" y="0"/>
+    <bbox x="-3.00003" y="-0.40004" w="6.00006" h="0.80008"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.uportato</name>
+    <code>0xe167</code>
+    <attach x="3.00003" y="0"/>
+    <bbox x="-3.00003" y="-3.30006" w="6.00006" h="3.6501"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dportato</name>
+    <code>0xe168</code>
+    <attach x="3.00003" y="0"/>
+    <bbox x="-3.00003" y="-0.35004" w="6.00006" h="3.6501"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.umarcato</name>
+    <code>0xe169</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-5.50003" w="5" h="5.50003"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dmarcato</name>
+    <code>0xe16a</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="0" w="5" h="5.50003"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.open</name>
+    <code>0xe16b</code>
+    <attach x="2" y="0"/>
+    <bbox x="-2" y="-2.5" w="4" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.stopped</name>
+    <code>0xe16c</code>
+    <attach x="2.75002" y="0"/>
+    <bbox x="-2.75002" y="-2.75002" w="5.50004" h="5.50004"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.upbow</name>
+    <code>0xe16d</code>
+    <attach x="3.25002" y="0"/>
+    <bbox x="-3.25002" y="-10.4001" w="6.50004" h="10.4001"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.downbow</name>
+    <code>0xe16e</code>
+    <attach x="3.75" y="0"/>
+    <bbox x="-3.75" y="-6.66664" w="7.5" h="6.66664"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.reverseturn</name>
+    <code>0xe16f</code>
+    <attach x="5.46875" y="0"/>
+    <bbox x="-5.46875" y="-2.64706" w="10.9375" h="5.29412"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.turn</name>
+    <code>0xe170</code>
+    <attach x="5.46875" y="0"/>
+    <bbox x="-5.46875" y="-2.64706" w="10.9375" h="5.29412"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.trill</name>
+    <code>0xe171</code>
+    <attach x="4.25003" y="0"/>
+    <bbox x="-4.25003" y="-10.5" w="8.50006" h="10.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.upedalheel</name>
+    <code>0xe172</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-3.33333" w="5" h="5.83333"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dpedalheel</name>
+    <code>0xe173</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-2.5" w="5" h="5.83333"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.upedaltoe</name>
+    <code>0xe174</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="-7.5" w="5" h="7.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.dpedaltoe</name>
+    <code>0xe175</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="-2.5" y="0" w="5" h="7.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.flageolet</name>
+    <code>0xe176</code>
+    <attach x="2.66667" y="0"/>
+    <bbox x="-2.66667" y="-2.66667" w="5.33334" h="5.33334"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.segno</name>
+    <code>0xe177</code>
+    <attach x="5" y="0"/>
+    <bbox x="-5" y="-7.5" w="10" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.coda</name>
+    <code>0xe178</code>
+    <attach x="5.08336" y="0"/>
+    <bbox x="-5.08336" y="-6.75003" w="10.1667" h="13.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.varcoda</name>
+    <code>0xe179</code>
+    <attach x="5.08337" y="0"/>
+    <bbox x="-5.08337" y="-6.75005" w="10.1667" h="13.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.rcomma</name>
+    <code>0xe17a</code>
+    <attach x="2.5" y="0"/>
+    <bbox x="0" y="-3.00003" w="2.5" h="6.00006"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.lcomma</name>
+    <code>0xe17b</code>
+    <attach x="0" y="0"/>
+    <bbox x="-2.5" y="-3.00003" w="2.5" h="6.00006"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.rvarcomma</name>
+    <code>0xe17c</code>
+    <attach x="1.25" y="0"/>
+    <bbox x="-1.25" y="-3.00003" w="2.5" h="6.00006"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.lvarcomma</name>
+    <code>0xe17d</code>
+    <attach x="1.25" y="0"/>
+    <bbox x="-1.25" y="-3.00003" w="2.5" h="6.00006"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.arpeggio</name>
+    <code>0xe17e</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="0" y="-5" w="4.00002" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.trill_element</name>
+    <code>0xe17f</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-4.00002" w="5" h="4.00002"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.arpeggio.arrow.M1</name>
+    <code>0xe180</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="0" y="-5" w="4.00002" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.arpeggio.arrow.1</name>
+    <code>0xe181</code>
+    <attach x="4.00002" y="0"/>
+    <bbox x="0" y="-5" w="4.00002" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.trilelement</name>
+    <code>0xe182</code>
+    <attach x="2.08334" y="0"/>
+    <bbox x="-2.08334" y="-2.5" w="4.16668" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.prall</name>
+    <code>0xe183</code>
+    <attach x="4.16667" y="0"/>
+    <bbox x="-4.16667" y="-2.5" w="8.33334" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.mordent</name>
+    <code>0xe184</code>
+    <attach x="4.16667" y="0"/>
+    <bbox x="-4.16667" y="-3.33333" w="8.33334" h="6.66666"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.prallprall</name>
+    <code>0xe185</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-2.5" w="12.5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.prallmordent</name>
+    <code>0xe186</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-3.33333" w="12.5" h="6.66666"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.upprall</name>
+    <code>0xe187</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-2.5" w="12.5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.upmordent</name>
+    <code>0xe188</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-3.33333" w="12.5" h="6.66666"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.pralldown</name>
+    <code>0xe189</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-2.5" w="12.5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.downprall</name>
+    <code>0xe18a</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-2.5" w="12.5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.downmordent</name>
+    <code>0xe18b</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-3.33333" w="12.5" h="6.66666"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.prallup</name>
+    <code>0xe18c</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-2.5" w="12.5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.lineprall</name>
+    <code>0xe18d</code>
+    <attach x="6.25002" y="0"/>
+    <bbox x="-6.25002" y="-10" w="12.5" h="12.5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.caesura.curved</name>
+    <code>0xe18e</code>
+    <attach x="10" y="0"/>
+    <bbox x="0" y="-5.99998" w="10" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.caesura.straight</name>
+    <code>0xe18f</code>
+    <attach x="10" y="0"/>
+    <bbox x="0" y="-5.99998" w="10" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.snappizzicato</name>
+    <code>0xe1b9</code>
+    <attach x="2.66667" y="0"/>
+    <bbox x="-2.66667" y="-4" w="5.33334" h="6.66667"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.u3</name>
+    <code>0xe190</code>
+    <attach x="4.50507" y="0"/>
+    <bbox x="0" y="-0.32503" w="4.50507" h="15.5764"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.u4</name>
+    <code>0xe191</code>
+    <attach x="4.50507" y="0"/>
+    <bbox x="0" y="-0.32503" w="4.50507" h="18.0764"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.u5</name>
+    <code>0xe192</code>
+    <attach x="4.18004" y="0"/>
+    <bbox x="0" y="-0.32503" w="4.18004" h="22.0264"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.u6</name>
+    <code>0xe193</code>
+    <attach x="4.18004" y="0"/>
+    <bbox x="0" y="-0.32503" w="4.18004" h="27.0264"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.u7</name>
+    <code>0xe1b8</code>
+    <attach x="4.18004" y="0"/>
+    <bbox x="0" y="-0.32503" w="4.18004" h="32.0264"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.d3</name>
+    <code>0xe194</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="0" y="-14.7014" w="5.38432" h="15.0265"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.ugrace</name>
+    <code>0xe195</code>
+    <attach x="4.18004" y="0"/>
+    <bbox x="-3.00963" y="5" w="7.18967" h="5.80002"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.dgrace</name>
+    <code>0xe196</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="-3.87672" y="-10.26" w="9.26104" h="5.31001"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.d4</name>
+    <code>0xe197</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="0" y="-15.2514" w="5.38432" h="15.5764"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.d5</name>
+    <code>0xe198</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="0" y="-19.7014" w="5.38432" h="20.0265"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.d6</name>
+    <code>0xe199</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="0" y="-22.2014" w="5.38432" h="22.5265"/>
+    </Glyph>
+  <Glyph>
+    <name>flags.d7</name>
+    <code>0xe1b7</code>
+    <attach x="5.38432" y="0"/>
+    <bbox x="0" y="-26.7014" w="5.38432" h="27.0264"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.C</name>
+    <code>0xe19a</code>
+    <attach x="13.6" y="0"/>
+    <bbox x="0" y="-10" w="13.6" h="20"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.C_change</name>
+    <code>0xe19b</code>
+    <attach x="10.9801" y="0"/>
+    <bbox x="0" y="-8.00003" w="10.9801" h="16.0001"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.F</name>
+    <code>0xe19c</code>
+    <attach x="13.4167" y="0"/>
+    <bbox x="0" y="-5" w="13.4167" h="17.5"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.F_change</name>
+    <code>0xe19d</code>
+    <attach x="10.7334" y="0"/>
+    <bbox x="0" y="-4.00002" w="10.7334" h="14.0001"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.G</name>
+    <code>0xe19e</code>
+    <attach x="12.8251" y="0"/>
+    <bbox x="0" y="-25" w="12.8251" h="38"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.G_change</name>
+    <code>0xe19f</code>
+    <attach x="10.2601" y="0"/>
+    <bbox x="0" y="-20.0001" w="10.2601" h="30.4002"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.percussion</name>
+    <code>0xe1a0</code>
+    <attach x="10" y="0"/>
+    <bbox x="3.34999" y="-5" w="6.65001" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.percussion_change</name>
+    <code>0xe1a1</code>
+    <attach x="8.00003" y="0"/>
+    <bbox x="2.68001" y="-4.00002" w="5.32002" h="8.00004"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.tab</name>
+    <code>0xe1a2</code>
+    <attach x="14" y="0"/>
+    <bbox x="0.99998" y="-14.4001" w="13" h="28.8002"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.tab_change</name>
+    <code>0xe1a3</code>
+    <attach x="11.2001" y="0"/>
+    <bbox x="0.79999" y="-11.5201" w="10.4001" h="23.0402"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.C44</name>
+    <code>0xe1a4</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.C22</name>
+    <code>0xe1a5</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.*</name>
+    <code>0xe1a6</code>
+    <attach x="7.77777" y="0"/>
+    <bbox x="0" y="-10" w="7.77777" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.M</name>
+    <code>0xe1a7</code>
+    <attach x="4.20021" y="0"/>
+    <bbox x="0" y="-5.71428" w="4.20021" h="5.71428"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal..</name>
+    <code>0xe1a8</code>
+    <attach x="1.40007" y="0"/>
+    <bbox x="0" y="-1.40007" w="1.40007" h="1.40007"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.P</name>
+    <code>0xe1a9</code>
+    <attach x="8.33333" y="0"/>
+    <bbox x="0" y="-10" w="8.33333" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.d</name>
+    <code>0xe1aa</code>
+    <attach x="6.66667" y="0"/>
+    <bbox x="0" y="-8.75" w="6.66667" h="8.75"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.e</name>
+    <code>0xe1ab</code>
+    <attach x="4" y="0"/>
+    <bbox x="0" y="-5.71428" w="4" h="5.71428"/>
+    </Glyph>
+  <Glyph>
+    <name>pedal.Ped</name>
+    <code>0xe1ac</code>
+    <attach x="15.96" y="0"/>
+    <bbox x="0" y="-10" w="15.96" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>brackettips.uright</name>
+    <code>0xe1ad</code>
+    <attach x="9.49997" y="0"/>
+    <bbox x="0" y="-6.84" w="9.49997" h="7.965"/>
+    </Glyph>
+  <Glyph>
+    <name>brackettips.dright</name>
+    <code>0xe1ae</code>
+    <attach x="9.49997" y="0"/>
+    <bbox x="0" y="-1.125" w="9.49997" h="7.965"/>
+    </Glyph>
+  <Glyph>
+    <name>brackettips.uleft</name>
+    <code>0xe1b5</code>
+    <attach x="9.49997" y="0"/>
+    <bbox x="-9.49997" y="-6.84" w="18.9999" h="7.965"/>
+    </Glyph>
+  <Glyph>
+    <name>brackettips.dleft</name>
+    <code>0xe1b6</code>
+    <attach x="9.49997" y="0"/>
+    <bbox x="-9.49997" y="-1.125" w="18.9999" h="7.965"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accDiscant</name>
+    <code>0xe1af</code>
+    <attach x="7.82503" y="0"/>
+    <bbox x="-7.82503" y="-15.455" w="15.6501" h="15.455"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accDot</name>
+    <code>0xe1b0</code>
+    <attach x="1.25" y="0"/>
+    <bbox x="-1.25" y="-1.25" w="2.5" h="2.5"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accFreebase</name>
+    <code>0xe1b1</code>
+    <attach x="5.32503" y="0"/>
+    <bbox x="-5.32503" y="-10.455" w="10.6501" h="10.455"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accStdbase</name>
+    <code>0xe1b2</code>
+    <attach x="10.325" y="0"/>
+    <bbox x="-10.325" y="-20.455" w="20.6501" h="20.455"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accBayanbase</name>
+    <code>0xe1b3</code>
+    <attach x="5.32503" y="0"/>
+    <bbox x="-5.32503" y="-15.6501" w="10.6501" h="15.6501"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.accOldEE</name>
+    <code>0xe1b4</code>
+    <attach x="5.32503" y="0"/>
+    <bbox x="-5.32503" y="-10.455" w="10.6501" h="10.455"/>
+    </Glyph>
+  <Glyph>
+    <name>plus</name>
+    <code>0x2b</code>
+    <attach x="5" y="0"/>
+    <bbox x="0" y="-7.5" w="5" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>comma</name>
+    <code>0x2c</code>
+    <attach x="2.29677" y="0"/>
+    <bbox x="0" y="-2.29677" w="2.29677" h="5.74193"/>
+    </Glyph>
+  <Glyph>
+    <name>hyphen</name>
+    <code>0x2d</code>
+    <attach x="3.33333" y="0"/>
+    <bbox x="0" y="-10" w="3.33333" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>period</name>
+    <code>0x2e</code>
+    <attach x="2.29677" y="0"/>
+    <bbox x="0" y="-2.29677" w="2.29677" h="2.29677"/>
+    </Glyph>
+  <Glyph>
+    <name>zero</name>
+    <code>0x30</code>
+    <attach x="7.33333" y="0"/>
+    <bbox x="0" y="-10" w="7.33333" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>one</name>
+    <code>0x31</code>
+    <attach x="6.35803" y="0"/>
+    <bbox x="0" y="-10" w="6.35803" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>two</name>
+    <code>0x32</code>
+    <attach x="7.33333" y="0"/>
+    <bbox x="0" y="-10" w="7.33333" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>three</name>
+    <code>0x33</code>
+    <attach x="6.66667" y="0"/>
+    <bbox x="0" y="-10" w="6.66667" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>four</name>
+    <code>0x34</code>
+    <attach x="8" y="0"/>
+    <bbox x="0" y="-10" w="8" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>five</name>
+    <code>0x35</code>
+    <attach x="6.75" y="0"/>
+    <bbox x="0" y="-10" w="6.75" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>six</name>
+    <code>0x36</code>
+    <attach x="6.79993" y="0"/>
+    <bbox x="0" y="-10" w="6.79993" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>seven</name>
+    <code>0x37</code>
+    <attach x="6.75005" y="0"/>
+    <bbox x="0" y="-10" w="6.75005" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>eight</name>
+    <code>0x38</code>
+    <attach x="7.33333" y="0"/>
+    <bbox x="0" y="-10" w="7.33333" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>nine</name>
+    <code>0x39</code>
+    <attach x="6.79993" y="0"/>
+    <bbox x="0" y="-10" w="6.79993" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>space</name>
+    <code>0x20</code>
+    <attach x="6.87505" y="0"/>
+    <bbox x="0" y="-10.4167" w="6.87505" h="10.4167"/>
+    </Glyph>
+  <Glyph>
+    <name>z</name>
+    <code>0x7a</code>
+    <attach x="10.2083" y="0"/>
+    <bbox x="0" y="-9.37495" w="10.2083" h="9.37495"/>
+    </Glyph>
+  <Glyph>
+    <name>f</name>
+    <code>0x66</code>
+    <attach x="11.4584" y="0"/>
+    <bbox x="0" y="-17.9167" w="11.4584" h="23.1251"/>
+    </Glyph>
+  <Glyph>
+    <name>s</name>
+    <code>0x73</code>
+    <attach x="7.37848" y="0"/>
+    <bbox x="0" y="-10.4167" w="7.37848" h="10.4167"/>
+    </Glyph>
+  <Glyph>
+    <name>p</name>
+    <code>0x70</code>
+    <attach x="13.0209" y="0"/>
+    <bbox x="0" y="-10.4167" w="13.0209" h="15.625"/>
+    </Glyph>
+  <Glyph>
+    <name>m</name>
+    <code>0x6d</code>
+    <attach x="15.625" y="0"/>
+    <bbox x="0" y="-10.4167" w="15.625" h="10.4167"/>
+    </Glyph>
+  <Glyph>
+    <name>r</name>
+    <code>0x72</code>
+    <attach x="7.81252" y="0"/>
+    <bbox x="0" y="-10.4167" w="7.81252" h="10.4167"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.uM2alt</name>
+    <code>0xe1c4</code>
+    <attach x="9.50" y="0"/>
+    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.dM2alt</name>
+    <code>0xe1c5</code>
+    <attach x="9.50" y="0"/>
+    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.sM1alt</name>
+    <code>0xe1c6</code>
+    <attach x="9.50" y="0"/>
+    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.Cdot</name>
+    <code>0xe1c7</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.O</name>
+    <code>0xe1c8</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.Ocut</name>
+    <code>0xe1c9</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>timesig.Odot</name>
+    <code>0xe1ca</code>
+    <attach x="8.49997" y="0"/>
+    <bbox x="0" y="-5" w="8.49997" h="10"/>
+    </Glyph>
+  <Glyph>
+    <name>clefs.tab2</name>
+    <code>0xe1cb</code>
+    <attach x="13" y="0"/>
+    <bbox x="0.0" y="-16.35" w="10.67" h="32.7"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s0sol</name>
+    <code>0xe1cc</code>
+    <attach x="6.94992" y="-1.30693"/>
+    <bbox x="0" y="-2.75003" w="6.94992" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s1sol</name>
+    <code>0xe1cd</code>
+    <attach x="6.94992" y="-1.30693"/>
+    <bbox x="0" y="-2.75003" w="6.94992" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>noteheads.s2sol</name>
+    <code>0xe1ce</code>
+    <attach x="6.94992" y="-1.30693"/>
+    <bbox x="0" y="-2.75003" w="6.94992" h="5.50006"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.varsegno</name>
+    <code>0xe1cf</code>
+    <attach x="6.25" y="0"/>
+    <bbox x="-6.25" y="-20" w="12.5" h="40"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.push</name>
+    <code>0xe1d0</code>
+    <attach x="0" y="0"/>
+    <bbox x="-4.59999" y="-11.5001" w="4.59999" h="11.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>accordion.pull</name>
+    <code>0xe1d1</code>
+    <attach x="0.75006" y="0"/>
+    <bbox x="-3.84993" y="-11.5001" w="4.59999" h="11.5001"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.halfopen</name>
+    <code>0xe1d2</code>
+    <attach x="2" y="0"/>
+    <bbox x="-2" y="-2.5" w="4" h="5"/>
+    </Glyph>
+  <Glyph>
+    <name>scripts.schleifer</name>
+    <code>0xe1d3</code>
+    <attach x="4.2" y="0"/>
+    <bbox x="-4.2" y="-12.5" w="15" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.sori</name>
+    <code>0xe1d4</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="0" y="-7.5" w="9.2" h="15"/>
+    </Glyph>
+  <Glyph>
+    <name>accidentals.koron</name>
+    <code>0xe1d5</code>
+    <attach x="5.50003" y="0"/>
+    <bbox x="0" y="-5.1" w="5.50003" h="14.1"/>
+    </Glyph>
+  </museScore>
