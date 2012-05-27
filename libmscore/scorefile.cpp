@@ -31,7 +31,7 @@
 #include "volta.h"
 #include "excerpt.h"
 #include "zarchive/zarchive.h"
-#include "diff/diff_match_patch.h"
+#include "thirdparty/diff/diff_match_patch.h"
 #include "mscore.h"
 #include "stafftype.h"
 #include "omr/omr.h"
