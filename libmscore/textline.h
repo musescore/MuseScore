@@ -27,6 +27,8 @@ class Text;
 //---------------------------------------------------------
 
 class TextLineSegment : public LineSegment {
+      Q_OBJECT
+
       Text* _text;
 
    public:
@@ -54,6 +56,8 @@ enum HookType { HOOK_90, HOOK_45 };
 //---------------------------------------------------------
 
 class TextLine : public SLine {
+      Q_OBJECT
+
       Spatium _lineWidth;
       QColor _lineColor;
       Qt::PenStyle _lineStyle;

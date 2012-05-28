@@ -49,6 +49,8 @@ enum AccidentalRole {
 //---------------------------------------------------------
 
 class Accidental : public Element {
+      Q_OBJECT
+
       QList<SymElement> el;
       AccidentalType _subtype;
       bool _hasBracket;
@@ -99,6 +101,8 @@ class Accidental : public Element {
 //---------------------------------------------------------
 
 class AccidentalBracket : public Compound {
+      Q_OBJECT
+
       int _subtype;
 
    public:

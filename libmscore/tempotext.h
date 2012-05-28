@@ -21,6 +21,8 @@
 //---------------------------------------------------------
 
 class TempoText : public Text  {
+      Q_OBJECT
+
       qreal _tempo;          // beats per second
       bool _followText;       // parse text to determine tempo
 

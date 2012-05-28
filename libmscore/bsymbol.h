@@ -23,6 +23,8 @@
 //---------------------------------------------------------
 
 class BSymbol : public Element, public ElementLayout {
+      Q_OBJECT
+
       QList<Element*> _leafs;
       int _z;                     ///< stacking order when drawing or selecting;
                                   ///< elements are drawn from high number to low number;

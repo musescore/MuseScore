@@ -50,6 +50,8 @@ enum {
 //---------------------------------------------------------
 
 class SlurSegment : public SpannerSegment {
+      Q_OBJECT
+
    protected:
       struct UP ups[SLUR_GRIPS];
       QPainterPath path;
@@ -110,6 +112,8 @@ struct SlurPos {
 //---------------------------------------------------------
 
 class SlurTie : public Spanner {
+      Q_OBJECT
+
       int _lineType;          // 0 = solid, 1 = dotted
 
    protected:
@@ -157,6 +161,8 @@ class SlurTie : public Spanner {
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
+      Q_OBJECT
+
       int _track2; // obsolete used temporarily for reading old version
 
    public:
@@ -189,6 +195,8 @@ class Slur : public SlurTie {
 //---------------------------------------------------------
 
 class Tie : public SlurTie {
+      Q_OBJECT
+
 
    public:
       Tie(Score*);

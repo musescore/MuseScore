@@ -12,6 +12,7 @@
 //=============================================================================
 
 #include "box.h"
+#include "textframe.h"
 #include "text.h"
 #include "score.h"
 #include "barline.h"

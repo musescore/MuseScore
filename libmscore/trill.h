@@ -31,6 +31,8 @@ enum TrillType {
 //---------------------------------------------------------
 
 class TrillSegment : public LineSegment {
+      Q_OBJECT
+
    protected:
    public:
       TrillSegment(Score* s) : LineSegment(s) {}
@@ -48,6 +50,8 @@ class TrillSegment : public LineSegment {
 //---------------------------------------------------------
 
 class Trill : public SLine {
+      Q_OBJECT
+
       TrillType _subtype;
       ElementList _el;        // accidentals etc.
 

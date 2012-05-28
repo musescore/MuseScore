@@ -6,10 +6,10 @@
       <KontextList>
         <Kontext>
           <path>/home/ws/mscore/share/plugins/helloqml.qml</path>
-          <column>2</column>
-          <line>1</line>
+          <column>29</column>
+          <line>5</line>
           <xoff>0</xoff>
-          <yoff>1</yoff>
+          <yoff>5</yoff>
           </Kontext>
         <cur>1</cur>
         </KontextList>

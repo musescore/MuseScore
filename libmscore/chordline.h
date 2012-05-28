@@ -31,6 +31,8 @@ enum ChordLineType {
 //---------------------------------------------------------
 
 class ChordLine : public Element {
+      Q_OBJECT
+
       ChordLineType _subtype;
       QPainterPath path;
       bool modified;

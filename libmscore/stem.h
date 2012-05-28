@@ -29,6 +29,8 @@ class QPainter;
 */
 
 class Stem : public Element {
+      Q_OBJECT
+
       QLineF line;            // p1 is attached to note head
       qreal _userLen;
       qreal _len;             // allways positive

@@ -27,6 +27,8 @@ struct SymCode;
 //---------------------------------------------------------
 
 class Text : public SimpleText {
+      Q_OBJECT
+
       QTextDocument* _doc;
       int _styleIndex;
 

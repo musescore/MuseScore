@@ -1735,7 +1735,7 @@ void Preferences::updatePluginList()
                   QFileInfo fi = it.fileInfo();
                   if (fi.isFile()) {
                         QString path(fi.filePath());
-                        if (path.endsWith(".js")) {
+                        if (path.endsWith(".js") || path.endsWith(".qml")) {
                               bool alreadyInList = false;
                               foreach (PluginDescription* p, pluginList) {
                                     if (p->path == path) {

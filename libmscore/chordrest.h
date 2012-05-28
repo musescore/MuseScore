@@ -34,6 +34,8 @@ class Spanner;
 //---------------------------------------------------------
 
 class ChordRest : public DurationElement {
+      Q_OBJECT
+
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
 

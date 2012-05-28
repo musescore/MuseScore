@@ -24,6 +24,8 @@ class ImageStoreItem;
 //---------------------------------------------------------
 
 class Image : public BSymbol {
+      Q_OBJECT
+
       void write(Xml& xml, P_ID id) const;
 
    protected:

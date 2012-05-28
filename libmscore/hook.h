@@ -23,6 +23,8 @@ class Chord;
 //---------------------------------------------------------
 
 class Hook : public Symbol {
+      Q_OBJECT
+
       int _subtype;
 
    public:

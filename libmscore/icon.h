@@ -29,6 +29,8 @@
 //---------------------------------------------------------
 
 class Icon : public Element {
+      Q_OBJECT
+
       int _subtype;
       const char* _action;
       QIcon _icon;

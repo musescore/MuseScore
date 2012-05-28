@@ -26,6 +26,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Bracket : public Element {
+      Q_OBJECT
+
       BracketType _subtype;
 
       qreal h2;

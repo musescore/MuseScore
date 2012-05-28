@@ -31,6 +31,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Box : public MeasureBase {
+      Q_OBJECT
+
       Spatium _boxWidth;   // only valid for HBox
       Spatium _boxHeight;  // only valid for VBox
       qreal _topGap;       // distance from previous system (left border for hbox)
@@ -99,6 +101,8 @@ class Box : public MeasureBase {
 //---------------------------------------------------------
 
 class HBox : public Box {
+      Q_OBJECT
+
    public:
       HBox(Score* score);
       ~HBox() {}
@@ -118,6 +122,8 @@ class HBox : public Box {
 //---------------------------------------------------------
 
 class VBox : public Box {
+      Q_OBJECT
+
    public:
       VBox(Score* score);
       ~VBox() {}
@@ -131,27 +137,13 @@ class VBox : public Box {
       };
 
 //---------------------------------------------------------
-//   TBox
-//---------------------------------------------------------
-
-class TBox : public VBox {
-   public:
-      TBox(Score* score);
-      ~TBox() {}
-      virtual TBox* clone() const      { return new TBox(*this); }
-      virtual ElementType type() const { return TBOX;       }
-
-      virtual void layout();
-      virtual void add(Element*);
-      Text* getText();
-      };
-
-//---------------------------------------------------------
 //   FBox
 //    frame containing fret diagrams
 //---------------------------------------------------------
 
 class FBox : public VBox {
+      Q_OBJECT
+
    public:
       FBox(Score* score) : VBox(score) {}
       ~FBox() {}

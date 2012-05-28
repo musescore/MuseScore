@@ -26,6 +26,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Lyrics : public Text {
+      Q_OBJECT
+
    public:
       enum Syllabic { SINGLE, BEGIN, END, MIDDLE };
 

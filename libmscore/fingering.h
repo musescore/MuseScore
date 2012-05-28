@@ -23,6 +23,8 @@ class Note;
 //---------------------------------------------------------
 
 class Fingering : public Text {
+      Q_OBJECT
+
 
    public:
       Fingering(Score* s);

@@ -37,6 +37,8 @@ enum TremoloType {
 //---------------------------------------------------------
 
 class Tremolo : public Element {
+      Q_OBJECT
+
       TremoloType _subtype;
       Chord* _chord1;
       Chord* _chord2;

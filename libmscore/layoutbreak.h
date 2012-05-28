@@ -30,6 +30,8 @@ enum LayoutBreakType {
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {
+      Q_OBJECT
+
       LayoutBreakType _subtype;
       qreal lw;
       QPainterPath path;

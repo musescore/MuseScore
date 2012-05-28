@@ -54,6 +54,8 @@ struct MeasureWidth {
 */
 
 class MeasureBase : public Element {
+      Q_OBJECT
+
       MeasureBase* _next;
       MeasureBase* _prev;
       int _tick;

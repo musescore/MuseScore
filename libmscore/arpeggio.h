@@ -28,6 +28,8 @@ enum ArpeggioType {
 //---------------------------------------------------------
 
 class Arpeggio : public Element {
+      Q_OBJECT
+
       ArpeggioType _subtype;
       Spatium _userLen1;
       Spatium _userLen2;

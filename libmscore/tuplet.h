@@ -32,6 +32,8 @@ class QPainter;
 //------------------------------------------------------------------------
 
 class Tuplet : public DurationElement {
+      Q_OBJECT
+
       int _tick;
 
    public:

@@ -21,6 +21,8 @@
 //---------------------------------------------------------
 
 class Pedal : public TextLine {
+      Q_OBJECT
+
    public:
       Pedal(Score* s);
       virtual Pedal* clone() const     { return new Pedal(*this); }

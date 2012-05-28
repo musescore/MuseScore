@@ -26,6 +26,8 @@ struct SymCode;
 //---------------------------------------------------------
 
 class SimpleText : public Element {
+      Q_OBJECT
+
       QString _text;
       bool _layoutToParentWidth;
       QRectF drawingRect;

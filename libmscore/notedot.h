@@ -21,6 +21,7 @@
 //---------------------------------------------------------
 
 class NoteDot : public Element {
+      Q_OBJECT
 
       int _idx;
 

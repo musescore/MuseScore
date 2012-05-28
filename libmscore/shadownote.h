@@ -28,6 +28,8 @@ class QPainter;
 */
 
 class ShadowNote : public Element {
+      Q_OBJECT
+
       int _line;
       Sym* sym;
 
