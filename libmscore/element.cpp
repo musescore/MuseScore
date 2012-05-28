@@ -306,6 +306,7 @@ Element::~Element()
 //---------------------------------------------------------
 
 Element::Element(Score* s) :
+   QObject(0),
    _links(0),
    _parent(0),
    _selected(false),
@@ -323,6 +324,7 @@ Element::Element(Score* s) :
       }
 
 Element::Element(const Element& e)
+   : QObject(0)
       {
       _links      = 0;
       _parent     = e._parent;
