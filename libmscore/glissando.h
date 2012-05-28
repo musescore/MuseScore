@@ -23,6 +23,8 @@ class Note;
 //---------------------------------------------------------
 
 class Glissando : public Element {
+      Q_OBJECT
+
       int _subtype;
       QLineF line;
       QString _text;

@@ -39,6 +39,8 @@ struct KeySym {
 //---------------------------------------------------------
 
 class KeySig : public Element {
+      Q_OBJECT
+
 	bool	_showCourtesySig;
 	bool	_showNaturals;
       QList<KeySym*> keySymbols;

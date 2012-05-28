@@ -26,6 +26,8 @@ class Spanner;
 //---------------------------------------------------------
 
 class DurationElement : public Element {
+      Q_OBJECT
+
       Fraction _duration;
       Tuplet* _tuplet;
 

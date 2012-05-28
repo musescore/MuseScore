@@ -82,6 +82,8 @@ enum {
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
+      Q_OBJECT
+
       SegmentList _segments;
 
       Fraction _timesig;

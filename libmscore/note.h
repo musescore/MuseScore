@@ -44,6 +44,8 @@ extern const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES];
 //---------------------------------------------------------
 
 class NoteHead : public Symbol {
+      Q_OBJECT
+
 
    public:
       NoteHead(Score* s) : Symbol(s) {}
@@ -62,6 +64,8 @@ class NoteHead : public Symbol {
 */
 
 class Note : public Element {
+      Q_OBJECT
+
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
       int _fret;              ///< for tablature view

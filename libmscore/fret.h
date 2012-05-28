@@ -25,6 +25,8 @@ class Harmony;
 //---------------------------------------------------------
 
 class FretDiagram : public Element {
+      Q_OBJECT
+
       int _strings;
       int maxStrings;
       int _frets;

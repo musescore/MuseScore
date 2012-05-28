@@ -33,6 +33,8 @@ class Ottava;
 //---------------------------------------------------------
 
 class OttavaSegment : public TextLineSegment {
+      Q_OBJECT
+
    protected:
 
    public:
@@ -48,6 +50,8 @@ class OttavaSegment : public TextLineSegment {
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
+      Q_OBJECT
+
       int _subtype;
 
    protected:

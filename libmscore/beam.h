@@ -27,10 +27,11 @@ struct BeamFragment;
 
 //---------------------------------------------------------
 //   Beam
-//    Balken
 //---------------------------------------------------------
 
 class Beam : public Element {
+      Q_OBJECT
+
       QList<ChordRest*> _elements;        // must be sorted by tick
       QList<QLineF*> beamSegments;
       Direction _direction;

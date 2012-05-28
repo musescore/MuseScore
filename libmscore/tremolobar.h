@@ -24,6 +24,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class TremoloBar : public Element {
+      Q_OBJECT
+
       QList<PitchValue> _points;
       qreal _lw;
       QPointF notePos;

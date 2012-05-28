@@ -61,6 +61,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 class FiguredBass;
 
 class FiguredBassItem : public SimpleText {
+      Q_OBJECT
 
       enum FBIAccidental {
             FBIAccidNone = 0,
@@ -156,6 +157,7 @@ struct FiguredBassFont {
 //---------------------------------------------------------
 
 class FiguredBass : public Text {
+      Q_OBJECT
 
       QList<FiguredBassItem>  items;            // the individual lines of the F.B.
       QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)

@@ -30,6 +30,8 @@ enum VoltaType {
 //---------------------------------------------------------
 
 class VoltaSegment : public TextLineSegment {
+      Q_OBJECT
+
 
    public:
       VoltaSegment(Score* s) : TextLineSegment(s) {}
@@ -43,6 +45,8 @@ class VoltaSegment : public TextLineSegment {
 //---------------------------------------------------------
 
 class Volta : public TextLine {
+      Q_OBJECT
+
       VoltaType _subtype;
       QList<int> _endings;
 

@@ -25,6 +25,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class HairpinSegment : public LineSegment {
+      Q_OBJECT
+
       QLineF l1, l2;
 
    protected:
@@ -44,6 +46,8 @@ class HairpinSegment : public LineSegment {
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
+      Q_OBJECT
+
       int _subtype;
       int _veloChange;
       DynamicType _dynType;

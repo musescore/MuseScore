@@ -24,6 +24,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Breath : public Element {
+      Q_OBJECT
+
       int _subtype;
       static const int breathSymbols = 4;
       static int symList[breathSymbols];

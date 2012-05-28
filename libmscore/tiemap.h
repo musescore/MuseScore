@@ -23,6 +23,7 @@ class Tie;
 //---------------------------------------------------------
 
 class TieMap : public ElementMap {
+
    public:
       TieMap() {}
       Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((Element*)o)); }

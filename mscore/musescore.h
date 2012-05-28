@@ -279,10 +279,13 @@ class MuseScore : public QMainWindow {
       QList<QString> plugins;
       ScriptEngine* se;
       QString pluginPath;
-
       QScriptEngineDebugger* scriptDebugger;
 
+      QDeclarativeEngine* qml;
+      void createMenuEntry(const QString&);
+
       QTimer* autoSaveTimer;
+      QList<QAction*> qmlPluginActions;
       QList<QAction*> pluginActions;
       QSignalMapper* pluginMapper;
 
@@ -352,6 +355,7 @@ class MuseScore : public QMainWindow {
       void showKeyEditor();
       void saveFile();
       void fingeringMenu();
+      void registerQmlPlugin(const QString&);
       void registerPlugin(const QString& pluginPath);
       void pluginExecuteFunction(int idx, const char* functionName);
       int  pluginIdxFromPath(QString pluginPath);

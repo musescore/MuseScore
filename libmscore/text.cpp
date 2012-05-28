@@ -25,6 +25,7 @@
 #include "box.h"
 #include "segment.h"
 #include "mscore.h"
+#include "textframe.h"
 
 QReadWriteLock docRenderLock;
 

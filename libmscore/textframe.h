@@ -21,6 +21,8 @@
 //---------------------------------------------------------
 
 class TBox : public VBox {
+      Q_OBJECT
+
    public:
       TBox(Score* score);
       ~TBox() {}

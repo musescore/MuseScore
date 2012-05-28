@@ -83,6 +83,8 @@ class SysStaff {
 */
 
 class System : public Element {
+      Q_OBJECT
+
       QList<MeasureBase*> ml;
       QList<SysStaff*> _staves;
       Line* barLine;          ///< Left hand bar, connects staves in system.

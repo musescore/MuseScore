@@ -39,6 +39,8 @@ enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 //---------------------------------------------------------
 
 class StemSlash : public Element {
+      Q_OBJECT
+
       QLineF line;
 
    public:
@@ -63,6 +65,7 @@ class StemSlash : public Element {
 //---------------------------------------------------------
 
 class LedgerLine : public Line {
+      Q_OBJECT
 
    public:
       LedgerLine(Score*);
@@ -86,6 +89,8 @@ class LedgerLine : public Line {
 */
 
 class Chord : public ChordRest {
+      Q_OBJECT
+
       QList<Note*> _notes;                // sorted to increasing pitch
       QList<LedgerLine*> _ledgerLines;
 

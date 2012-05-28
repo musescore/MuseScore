@@ -164,5 +164,10 @@
 #include <QtScriptTools/QScriptEngineDebugger>
 #endif
 
+#include <QtDeclarative/QDeclarativeEngine>
+#include <QtDeclarative/QDeclarativeComponent>
+#include <QtDeclarative/QDeclarativeItem>
+#include <QtDeclarative/QDeclarativeView>
+
 #endif
 

@@ -52,6 +52,8 @@ class System;
 */
 
 class Segment : public Element {
+      Q_OBJECT
+
       Segment* _next;               // linked list of segments inside a measure
       Segment* _prev;
 

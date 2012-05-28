@@ -25,6 +25,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
+      Q_OBJECT
+
 
    protected:
       int _sym;
@@ -58,6 +60,8 @@ class Symbol : public BSymbol {
 //---------------------------------------------------------
 
 class FSymbol : public Element {
+      Q_OBJECT
+
       QFont _font;
       int _code;
 

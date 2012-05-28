@@ -28,6 +28,7 @@ install(FILES
       removenotes.js
       removenotes.ui
       chordchart.js
+      helloqml.qml
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}plugins
       )
 

@@ -125,7 +125,9 @@ struct EditData {
 ///   More details: TBD
 //---------------------------------------------------------
 
-class Element {
+class Element : public QObject {
+      Q_OBJECT
+
       LinkedElements* _links;
       Element* _parent;
 
@@ -426,6 +428,8 @@ typedef ElementList::const_iterator ciElement;
 */
 
 class StaffLines : public Element {
+      Q_OBJECT
+
       qreal dist;
       qreal lw;
       int lines;
@@ -448,6 +452,8 @@ class StaffLines : public Element {
 //---------------------------------------------------------
 
 class Line : public Element {
+      Q_OBJECT
+
       Spatium _width;
       Spatium _len;
 
@@ -479,6 +485,8 @@ class Line : public Element {
 //---------------------------------------------------------
 
 class Compound : public Element {
+      Q_OBJECT
+
       QList<Element*> elemente;
 
    protected:
@@ -502,6 +510,8 @@ class Compound : public Element {
 //---------------------------------------------------------
 
 class RubberBand : public Element {
+      Q_OBJECT
+
       QPointF _p1, _p2;
 
    public:

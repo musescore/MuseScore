@@ -22,6 +22,8 @@
 //---------------------------------------------------------
 
 class InstrumentChange : public Text  {
+      Q_OBJECT
+
       Instrument _instrument;
 
    public:

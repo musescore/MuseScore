@@ -61,6 +61,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/lasso.h"
 #include "libmscore/box.h"
+#include "libmscore/textframe.h"
 #include "texttools.h"
 #include "edittools.h"
 #include "libmscore/clef.h"

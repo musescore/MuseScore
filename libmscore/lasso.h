@@ -23,6 +23,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class Lasso : public Element {
+      Q_OBJECT
+
       QRectF _rect;
       MuseScoreView* view;        // valid in edit mode
 

@@ -99,6 +99,8 @@ class PageFormat {
 //---------------------------------------------------------
 
 class Page : public Element {
+      Q_OBJECT
+
       QList<System*> _systems;
       int _no;                      // page number
 #ifdef USE_BSP

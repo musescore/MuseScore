@@ -33,6 +33,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class LineSegment : public SpannerSegment {
+      Q_OBJECT
+
    protected:
       QPointF _p2;
       QPointF _userOff2;
@@ -73,6 +75,8 @@ class LineSegment : public SpannerSegment {
 //---------------------------------------------------------
 
 class SLine : public Spanner {
+      Q_OBJECT
+
    protected:
       bool _diagonal;
 

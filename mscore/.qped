@@ -5,11 +5,11 @@
     <Editor1>
       <KontextList>
         <Kontext>
-          <path>/home/ws/mscore/mscore/actions.cpp</path>
-          <column>0</column>
-          <line>2290</line>
+          <path>/home/ws/mscore/mscore/scoreview.cpp</path>
+          <column>29</column>
+          <line>63</line>
           <xoff>0</xoff>
-          <yoff>10</yoff>
+          <yoff>26</yoff>
           </Kontext>
         <cur>1</cur>
         </KontextList>

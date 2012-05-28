@@ -25,6 +25,8 @@ class QPainter;
 //---------------------------------------------------------
 
 class BarLine : public Element {
+      Q_OBJECT
+
       BarLineType _subtype;
       int _span;
       qreal yoff;       // used during drag edit to extend y2

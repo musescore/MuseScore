@@ -51,6 +51,8 @@ struct ArticulationInfo {
 //---------------------------------------------------------
 
 class Articulation : public Element {
+      Q_OBJECT
+
       ArticulationType _subtype;
       Direction _direction;
       QString _channelName;

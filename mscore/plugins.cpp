@@ -30,9 +30,47 @@
 #include "libmscore/utils.h"
 #include "sccursor.h"
 #include "libmscore/mscore.h"
+#include "plugins.h"
 
 Q_DECLARE_METATYPE(Score*);
 Q_DECLARE_METATYPE(SCursor*);
+
+int QmlPlugin::mscoreVersion() const  { return version(); }
+
+//---------------------------------------------------------
+//   registerQmlPlugin
+//---------------------------------------------------------
+
+void MuseScore::registerQmlPlugin(const QString& path)
+      {
+      printf("register qml plugin <%s>\n", qPrintable(path));
+      if (qml == 0) {
+            qml = new QDeclarativeEngine;
+            qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
+            }
+      QDeclarativeComponent component(qml, QUrl::fromLocalFile(path));
+      QObject* obj = component.create();
+      if (obj == 0) {
+            qDebug("creating component failed");
+            return;
+            }
+      else
+            qDebug("component ok");
+#if 1
+      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      QString menuPath = item->menuPath();
+      printf("   menuPath: <%s>\n", qPrintable(menuPath));
+#endif
+
+#if 0
+      QDeclarativeView* view = new QDeclarativeView;
+      view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+      view->setSource(QUrl::fromLocalFile(path));
+      view->show();
+#endif
+      plugins.append(path);
+      createMenuEntry(menuPath);
+      }
 
 //---------------------------------------------------------
 //   registerPlugin
@@ -59,7 +97,13 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             return;
             }
       if (MScore::debugMode)
-            qDebug("Register Plugin <%s>\n", qPrintable(pluginPath));
+            qDebug("Register Plugin <%s>", qPrintable(pluginPath));
+
+      if (np.suffix() == "qml") {
+            f.close();
+            registerQmlPlugin(pluginPath);
+            return;
+            }
 
       if (se == 0) {
             se = new ScriptEngine();
@@ -67,8 +111,7 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             }
 
       //load translation
-      QFileInfo fi(pluginPath);
-      QString pPath = fi.absolutePath();
+      QString pPath = np.absolutePath();
       QSettings settings;
       QString lName = settings.value("language", "system").toString();
       if (lName.toLower() == "system")
@@ -128,7 +171,6 @@ void MuseScore::registerPlugin(const QString& pluginPath)
                   }
             }
 
-      // int pluginIdx = plugins.size();
       plugins.append(pluginPath);
 
       //give access to pluginPath in init
@@ -136,13 +178,20 @@ void MuseScore::registerPlugin(const QString& pluginPath)
 
       init.call();
       QString menu = val.property("menu").toString();
-      QString context = fi.baseName();
-      menu = qApp->translate(qPrintable(context), qPrintable(menu));
+      menu = qApp->translate(qPrintable(baseName), qPrintable(menu));
       if (menu.isEmpty()) {
             qDebug("Load plugin: no menu property\n");
             return;
             }
+      createMenuEntry(menu);
+      }
 
+//---------------------------------------------------------
+//   createMenuEntry
+//---------------------------------------------------------
+
+void MuseScore::createMenuEntry(const QString& menu)
+      {
       if (!pluginMapper)
             return;
 
@@ -216,10 +265,6 @@ void MuseScore::registerPlugin(const QString& pluginPath)
                               a = cm->addAction(m);
                               }
                         registerPlugin(a);
-#if 0
-                        connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
-                        pluginMapper->setMapping(a, pluginIdx);
-#endif
                         if (MScore::debugMode)
                               qDebug("add action <%s>\n", qPrintable(m));
                         }
@@ -269,9 +314,9 @@ void MuseScore::registerPlugin(QAction* a)
             qDebug("registerPlugin: no pluginMapper\n");
             return;
             }
-//      a->setEnabled(_sstate != STATE_DISABLED);
       pluginActions.append(a);
       int pluginIdx = plugins.size() - 1; // plugin is already appended
+printf("register plugin <%s> idx %d\n", qPrintable(plugins[pluginIdx]), pluginIdx);
       connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
       pluginMapper->setMapping(a, pluginIdx);
       }
@@ -297,9 +342,9 @@ void MuseScore::loadPlugins()
 
 void MuseScore::unloadPlugins()
       {
-      for(int idx = 0; idx < plugins.size() ; idx++){
-          pluginExecuteFunction(idx, "onClose");
-          }
+      for (int idx = 0; idx < plugins.size() ; idx++) {
+            pluginExecuteFunction(idx, "onClose");
+            }
       }
 
 //---------------------------------------------------------
@@ -380,7 +425,22 @@ ScriptEngine::ScriptEngine()
 
 void MuseScore::pluginTriggered(int idx)
       {
-      pluginExecuteFunction(idx, "run");
+printf("plugin triggered %d\n", idx);
+      QString pp = plugins[idx];
+      QFileInfo fi(pp);
+      if (fi.suffix() == "qml") {
+            QDeclarativeView* view = new QDeclarativeView;
+            view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+            view->setSource(QUrl::fromLocalFile(pp));
+printf("show plugin <%s>\n", qPrintable(pp));
+            view->show();
+            QmlPlugin* p = (QmlPlugin*)(view->rootObject());
+            p->runPlugin();
+
+            }
+      else {
+            pluginExecuteFunction(idx, "run");
+            }
       }
 
 

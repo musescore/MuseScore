@@ -31,6 +31,8 @@ struct ChannelActions {
 //---------------------------------------------------------
 
 class StaffText : public Text  {
+      Q_OBJECT
+
       QString _channelNames[4];
       QList<ChannelActions> _channelActions;
       bool _setAeolusStops;

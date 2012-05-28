@@ -29,6 +29,8 @@ enum SpannerSegmentType {
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {
+      Q_OBJECT
+
       SpannerSegmentType _subtype;
       Spanner* _spanner;
 
@@ -56,6 +58,8 @@ class SpannerSegment : public Element {
 //---------------------------------------------------------
 
 class Spanner : public Element {
+      Q_OBJECT
+
       Element* _startElement;       // can be ChordRest, Segment or Measure
       Element* _endElement;         // depending on anchor
 

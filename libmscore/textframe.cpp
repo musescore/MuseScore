@@ -22,6 +22,7 @@
 #include "layoutbreak.h"
 #include "fret.h"
 #include "mscore.h"
+#include "textframe.h"
 
 //---------------------------------------------------------
 //   TBox

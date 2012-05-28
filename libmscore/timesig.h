@@ -34,6 +34,8 @@ enum TimeSigType {
 //---------------------------------------------------------
 
 class TimeSig : public Element {
+      Q_OBJECT
+
       TimeSigType _subtype;
       bool	_showCourtesySig;
       QString sz, sn;         // calculated from actualSig() if !customText

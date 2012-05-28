@@ -345,6 +345,8 @@ MuseScore::MuseScore()
       cs                    = 0;
       cv                    = 0;
       se                    = 0;    // script engine
+      scriptDebugger        = 0;
+      qml                   = 0;
       pluginMapper          = 0;
       debugger              = 0;
       instrList             = 0;
@@ -1028,6 +1030,7 @@ void MuseScore::resizeEvent(QResizeEvent*)
 
 MuseScore::~MuseScore()
       {
+      delete qml;
       }
 
 //---------------------------------------------------------

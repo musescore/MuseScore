@@ -21,6 +21,8 @@
 //---------------------------------------------------------
 
 class Ossia : public Element {
+      Q_OBJECT
+
 
    public:
       Ossia(Score*);

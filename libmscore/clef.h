@@ -68,6 +68,8 @@ extern const ClefInfo clefTable[];
 //---------------------------------------------------------
 
 class Clef : public Element {
+      Q_OBJECT
+
       QList<Element*> elements;
       bool _showCourtesyClef;
       bool _showPreviousClef;       // show clef type at position tick-1

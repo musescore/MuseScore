@@ -21,6 +21,8 @@
 //---------------------------------------------------------
 
 class RehearsalMark : public Text  {
+      Q_OBJECT
+
 
    public:
       RehearsalMark(Score* score);

@@ -77,6 +77,7 @@
 #include "figuredbass.h"
 #include "rehearsalmark.h"
 #include "notedot.h"
+#include "textframe.h"
 
 extern bool showInvisible;
 
