@@ -94,7 +94,7 @@ clean:
 	-rm -rf win32build win32install
 
 revision:
-	@svnversion -n  > mscore/mscore/revision.h
+	@git rev-parse --short HEAD > mscore/revision.h
 
 version: revision
 	@echo ${VERSION}
