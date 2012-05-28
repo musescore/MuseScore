@@ -336,6 +336,15 @@ void Score::init()
 //   Score
 //---------------------------------------------------------
 
+Score::Score()
+   : QObject(0), _selection(this)
+      {
+      init();
+      _tempomap = new TempoMap;
+      _sigmap   = new TimeSigMap();
+      _style    = *(MScore::defaultStyle());
+      }
+
 Score::Score(const MStyle* s)
    : _selection(this)
       {

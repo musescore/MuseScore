@@ -39,10 +39,16 @@ case $1 in
             rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune
             ;;
 
+      gitupdate)
+            git pull git@github.com:musescore/MuseScore.git master
+
+            ;;
+
       *)
             echo "gitpush      -- push libmscore upstream"
             echo "gitpull      -- pull libmscore from upstream"
             echo "gitremove a  -- permanently remove file/folder a"
+            echo "gitupdate    -- pull from master"
             ;;
       esac
 

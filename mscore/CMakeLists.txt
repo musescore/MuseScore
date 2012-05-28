@@ -156,9 +156,8 @@ add_executable ( ${ExecutableName}
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       chordedit.cpp plugins.cpp excerptsdialog.cpp
       metaedit.cpp magbox.cpp voiceselector.cpp capella.cpp
-      scscore.cpp sccursor.cpp scchord.cpp scnote.cpp scpart.cpp sctext.cpp
-      scmeasure.cpp scpageformat.cpp exportaudio.cpp exportmidi.cpp
-      textproperties.cpp screst.cpp scharmony.cpp slurproperties.cpp
+      exportaudio.cpp exportmidi.cpp
+      textproperties.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp importove.cpp ove.cpp ruler.cpp

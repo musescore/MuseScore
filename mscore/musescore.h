@@ -355,9 +355,7 @@ class MuseScore : public QMainWindow {
       void showKeyEditor();
       void saveFile();
       void fingeringMenu();
-      void registerQmlPlugin(const QString&);
       void registerPlugin(const QString& pluginPath);
-      void pluginExecuteFunction(int idx, const char* functionName);
       int  pluginIdxFromPath(QString pluginPath);
       void addGlobalObjectToPluginEngine(const char * name, const QString & value );
       void startDebugger();

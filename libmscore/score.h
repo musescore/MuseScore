@@ -205,7 +205,10 @@ struct Layer {
 //   Score
 //---------------------------------------------------------
 
-class Score {
+class Score : public QObject {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name WRITE setName)
+
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
       QReadWriteLock _layoutLock;
@@ -412,6 +415,7 @@ class Score {
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
 
+      Score();
       Score(const MStyle*);
       Score(Score*);                // used for excerpts
       ~Score();
@@ -730,13 +734,13 @@ class Score {
 
       MeasureBase* first() const;
       MeasureBase* last()  const;
-      Measure* firstMeasure() const;
-      Measure* lastMeasure() const;
+      Q_INVOKABLE Measure* firstMeasure() const;
+      Q_INVOKABLE Measure* lastMeasure() const;
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Segment* firstSegment(SegmentTypes s = SegAll) const;
-      Segment* lastSegment() const;
+      Q_INVOKABLE Segment* firstSegment(SegmentTypes s = SegAll) const;
+      Q_INVOKABLE Segment* lastSegment() const;
 
       void connectTies();
 
@@ -816,7 +820,6 @@ class Score {
       void cmdUpdateNotes();
       void updateAccidentals(Measure* m, int staffIdx);
       QHash<int, LinkedElements*>& links();
-//      void appendMeasures(int, ElementType);
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);

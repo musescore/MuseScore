@@ -75,6 +75,7 @@ QT4_WRAP_CPP (mocs
       trill.h
       tuplet.h
       volta.h
+      score.h
       )
 
 add_library (

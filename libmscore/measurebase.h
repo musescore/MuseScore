@@ -71,7 +71,7 @@ class MeasureBase : public Element {
       LayoutBreak* _sectionBreak;
 
    public:
-      MeasureBase(Score* score);
+      MeasureBase(Score* score = 0);
       ~MeasureBase();
       MeasureBase(const MeasureBase&);
       virtual MeasureBase* clone() const = 0;
@@ -82,8 +82,8 @@ class MeasureBase : public Element {
       MeasureBase* prev() const              { return _prev;   }
       void setPrev(MeasureBase* e)           { _prev = e;      }
 
-      Measure* nextMeasure() const;
-      Measure* prevMeasure() const;
+      Q_INVOKABLE Measure* nextMeasure() const;
+      Q_INVOKABLE Measure* prevMeasure() const;
 
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&, int, bool) const = 0;
