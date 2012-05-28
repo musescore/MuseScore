@@ -36,7 +36,7 @@ class QmlPlugin : public QDeclarativeItem {
       QString menuPath() const           { return _menuPath; }
       bool hasGui() const                { return _hasGui;   }
       void setHasGui(bool val)           { _hasGui = val;    }
-      int mscoreVersion() const          { return version(); }
+      int mscoreVersion() const;
       void runPlugin()                   { emit run();       }
       };
 

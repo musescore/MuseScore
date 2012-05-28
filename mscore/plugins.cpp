@@ -28,49 +28,15 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/utils.h"
-#include "sccursor.h"
 #include "libmscore/mscore.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/measure.h"
+#include "libmscore/segment.h"
 #include "plugins.h"
 
-Q_DECLARE_METATYPE(Score*);
-Q_DECLARE_METATYPE(SCursor*);
+// Q_DECLARE_METATYPE(Score*);
 
 int QmlPlugin::mscoreVersion() const  { return version(); }
-
-//---------------------------------------------------------
-//   registerQmlPlugin
-//---------------------------------------------------------
-
-void MuseScore::registerQmlPlugin(const QString& path)
-      {
-      printf("register qml plugin <%s>\n", qPrintable(path));
-      if (qml == 0) {
-            qml = new QDeclarativeEngine;
-            qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
-            }
-      QDeclarativeComponent component(qml, QUrl::fromLocalFile(path));
-      QObject* obj = component.create();
-      if (obj == 0) {
-            qDebug("creating component failed");
-            return;
-            }
-      else
-            qDebug("component ok");
-#if 1
-      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-      QString menuPath = item->menuPath();
-      printf("   menuPath: <%s>\n", qPrintable(menuPath));
-#endif
-
-#if 0
-      QDeclarativeView* view = new QDeclarativeView;
-      view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-      view->setSource(QUrl::fromLocalFile(path));
-      view->show();
-#endif
-      plugins.append(path);
-      createMenuEntry(menuPath);
-      }
 
 //---------------------------------------------------------
 //   registerPlugin
@@ -79,6 +45,8 @@ void MuseScore::registerQmlPlugin(const QString& path)
 void MuseScore::registerPlugin(const QString& pluginPath)
       {
       QFileInfo np(pluginPath);
+      if (np.suffix() != "qml")
+            return;
       QString baseName = np.baseName();
 
       foreach(QString s, plugins) {
@@ -98,92 +66,29 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             }
       if (MScore::debugMode)
             qDebug("Register Plugin <%s>", qPrintable(pluginPath));
-
-      if (np.suffix() == "qml") {
-            f.close();
-            registerQmlPlugin(pluginPath);
-            return;
-            }
-
-      if (se == 0) {
-            se = new ScriptEngine();
-            se->installTranslatorFunctions();
-            }
-
-      //load translation
-      QString pPath = np.absolutePath();
-      QSettings settings;
-      QString lName = settings.value("language", "system").toString();
-      if (lName.toLower() == "system")
-            lName = QLocale::system().name();
-      QTranslator* translator = new QTranslator;
-      if (translator->load("locale_"+lName, pPath+"/translations"))
-            qApp->installTranslator(translator);
-
-      QScriptValue val  = se->evaluate(f.readAll(), pluginPath);
-      if (se->hasUncaughtException()) {
-            QScriptValue sv = se->uncaughtException();
-#if 0
-            qDebug("Load plugin <%s>: line %d: %s\n",
-               qPrintable(pluginPath),
-               se->uncaughtExceptionLineNumber(),
-               qPrintable(sv.toString()));
-#endif
-            QMessageBox::critical(0, "MuseScore Error",
-               tr("Error loading plugin\n"
-                  "\"%1\" line %2:\n"
-                  "%3").arg(pluginPath)
-                     .arg(se->uncaughtExceptionLineNumber())
-                     .arg(sv.toString())
-               );
-            return;
-            }
-
       f.close();
-      QScriptValue init = val.property("init");
-      if (!init.isFunction()) {
-            qDebug("Load plugin <%s>: no init function found\n", qPrintable(pluginPath));
-            return;
+      if (qml == 0) {
+            qml = new QDeclarativeEngine;
+            qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
+            qmlRegisterType<Score>("Score", 1, 0, "Score");
+            qmlRegisterType<Segment>("Segment", 1, 0, "Segment");
+            qmlRegisterType<Measure>("Measure", 1, 0, "Measure");
             }
-      QScriptValue run = val.property("run");
-      if (!run.isFunction()) {
-            qDebug("Load plugin <%s>: no run function found\n", qPrintable(pluginPath));
+      QObject* obj = 0;
+      {
+      QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
+      obj = component.create();
+      if (obj == 0) {
+            qDebug("creating component failed");
             return;
-            }
-      int majorVersion = val.property("majorVersion").toInt32();
-      int minorVersion = val.property("minorVersion").toInt32();
-      if (majorVersion) {
-            if (majorVersion != SCRIPT_MAJOR_VERSION) {
-                  QString s = tr("Script\n%1\nis incompatible with current interface");
-                  QMessageBox::warning(0,
-                     QWidget::tr("MuseScore: register script plugin:"),
-                     s.arg(pluginPath),
-                     QString::null, QString::null, QString::null, 0, 1);
-                  }
-            else if (minorVersion > SCRIPT_MINOR_VERSION) {
-                  qDebug("Your MuseScore version may be too old to run script <%s> (minor version %d > %d)\n",
-                     qPrintable(pluginPath), minorVersion, SCRIPT_MINOR_VERSION);
-                  QString s = tr("MuseScore is too old to run script\n%1");
-                  QMessageBox::warning(0,
-                     QWidget::tr("MuseScore: register script plugin:"),
-                     s.arg(pluginPath),
-                     QString::null, QString::null, QString::null, 0, 1);
-                  }
             }
 
+      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      QString menuPath = item->menuPath();
       plugins.append(pluginPath);
-
-      //give access to pluginPath in init
-      se->globalObject().setProperty("pluginPath", se->newVariant(pPath));
-
-      init.call();
-      QString menu = val.property("menu").toString();
-      menu = qApp->translate(qPrintable(baseName), qPrintable(menu));
-      if (menu.isEmpty()) {
-            qDebug("Load plugin: no menu property\n");
-            return;
+      createMenuEntry(menuPath);
             }
-      createMenuEntry(menu);
+      delete obj;
       }
 
 //---------------------------------------------------------
@@ -287,13 +192,12 @@ int MuseScore::pluginIdxFromPath(QString pluginPath) {
       int idx = 0;
       foreach(QString s, plugins) {
             QFileInfo fi(s);
-            if (fi.baseName() == baseName) {
+            if (fi.baseName() == baseName)
                   return idx;
-                  }
             idx++;
             }
       return -1;
-}
+      }
 
 //---------------------------------------------------------
 //   addGlobalObjectToPluginEngine
@@ -316,7 +220,6 @@ void MuseScore::registerPlugin(QAction* a)
             }
       pluginActions.append(a);
       int pluginIdx = plugins.size() - 1; // plugin is already appended
-printf("register plugin <%s> idx %d\n", qPrintable(plugins[pluginIdx]), pluginIdx);
       connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
       pluginMapper->setMapping(a, pluginIdx);
       }
@@ -343,7 +246,7 @@ void MuseScore::loadPlugins()
 void MuseScore::unloadPlugins()
       {
       for (int idx = 0; idx < plugins.size() ; idx++) {
-            pluginExecuteFunction(idx, "onClose");
+            ;
             }
       }
 
@@ -359,7 +262,7 @@ bool MuseScore::loadPlugin(const QString& filename)
       if (MScore::debugMode)
             qDebug("Plugin Path <%s>\n", qPrintable(mscoreGlobalShare + "plugins"));
 
-      if (filename.endsWith(".js")){
+      if (filename.endsWith(".qml")){
             QFileInfo fi(pluginDir, filename);
             if (fi.exists()) {
                   QString path(fi.filePath());
@@ -371,148 +274,17 @@ bool MuseScore::loadPlugin(const QString& filename)
       }
 
 //---------------------------------------------------------
-//   ScriptEngine
-//---------------------------------------------------------
-
-ScriptEngine::ScriptEngine()
-   : QScriptEngine()
-      {
-#if 0
-      QStringList sl = availableExtensions();
-      foreach(QString s, sl)
-            qDebug("available script extension: <%s>\n", qPrintable(s));
-#endif
-      static const char* xts[] = {
-            "qt.core", "qt.gui", "qt.xml", "qt.network", "qt.uitools", "qt.webkit"
-            };
-      for (unsigned i = 0; i < sizeof(xts)/sizeof(*xts); ++i) {
-            importExtension(xts[i]);
-            if (hasUncaughtException()) {
-                  QScriptValue val = uncaughtException();
-                  qDebug("Error loading Script extension <%s>: %s\n",
-                     xts[i], qPrintable(val.toString()));
-                  }
-            }
-
-      //
-      // create MuseScore bindings
-      //
-
-      globalObject().setProperty("Cursor",    create_Cursor_class(this),  QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Score",     create_Score_class(this),   QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Note",      create_Note_class(this),    QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Chord",     create_Chord_class(this),   QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Rest",      create_Rest_class(this),    QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Harmony",   create_Harmony_class(this), QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Text",      create_Text_class(this),    QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Measure",   create_Measure_class(this), QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("Part",      create_Part_class(this),    QScriptValue::SkipInEnumeration);
-      globalObject().setProperty("PageFormat",create_PageFormat_class(this),    QScriptValue::SkipInEnumeration);
-
-      globalObject().setProperty("mscore",              newQObject(mscore));
-      globalObject().setProperty("division",            newVariant(MScore::division));
-      globalObject().setProperty("mscoreVersion",       newVariant(version()));
-      globalObject().setProperty("mscoreMajorVersion",  newVariant(majorVersion()));
-      globalObject().setProperty("mscoreMinorVersion",  newVariant(minorVersion()));
-      globalObject().setProperty("mscoreUpdateVersion", newVariant(updateVersion()));
-      globalObject().setProperty("mscoreDPI",			newVariant(MScore::DPI));
-      //globalObject().setProperty("localeName",          newVariant(lName));
-      }
-
-//---------------------------------------------------------
 //   pluginTriggered
 //---------------------------------------------------------
 
 void MuseScore::pluginTriggered(int idx)
       {
-printf("plugin triggered %d\n", idx);
       QString pp = plugins[idx];
-      QFileInfo fi(pp);
-      if (fi.suffix() == "qml") {
-            QDeclarativeView* view = new QDeclarativeView;
-            view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-            view->setSource(QUrl::fromLocalFile(pp));
-printf("show plugin <%s>\n", qPrintable(pp));
-            view->show();
-            QmlPlugin* p = (QmlPlugin*)(view->rootObject());
-            p->runPlugin();
-
-            }
-      else {
-            pluginExecuteFunction(idx, "run");
-            }
-      }
-
-
-void MuseScore::pluginExecuteFunction(int idx, const char* functionName)
-      {
-      QString pp = plugins[idx];
-      QFile f(pp);
-      if (!f.open(QIODevice::ReadOnly)) {
-            if (MScore::debugMode)
-                  qDebug("Loading Plugin <%s> failed\n", qPrintable(pp));
-            return;
-            }
-      if (MScore::debugMode)
-            qDebug("Run Plugin <%s> : <%s>\n", qPrintable(pp), functionName);
-      if (se == 0) {
-            se = new ScriptEngine();
-            se->installTranslatorFunctions();
-            if (MScore::debugMode) {
-                  QStringList lp = qApp->libraryPaths();
-                  foreach(const QString& s, lp)
-                        qDebug("lib path <%s>\n", qPrintable(s));
-
-                  QStringList sl = se->availableExtensions();
-                  qDebug("available:\n");
-                  foreach(const QString& s, sl)
-                        qDebug("  <%s>\n", qPrintable(s));
-
-                  sl = se->importedExtensions();
-                  qDebug("imported:\n");
-                  foreach(const QString& s, sl)
-                        qDebug("  <%s>\n", qPrintable(s));
-                  }
-            }
-      if (scriptDebug) {
-            if (debugger == 0) {
-                  scriptDebugger = new QScriptEngineDebugger();
-                  scriptDebugger->attachTo(se);
-                  }
-            scriptDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
-            }
-
-      if (cs)
-            se->globalObject().setProperty("curScore", se->newVariant(qVariantFromValue(cs)));
-
-      QFileInfo fi(f);
-      pluginPath = fi.absolutePath();
-      se->globalObject().setProperty("pluginPath", se->newVariant(pluginPath));
-
-      QScriptValue val = se->evaluate(f.readAll(), pp);
-      f.close();
-      QScriptValue run = val.property(functionName);
-      if (!run.isFunction()) {
-            if (MScore::debugMode)
-                qDebug("Execute plugin: no %s function found\n", functionName);
-            return;
-            }
-
-      foreach(Score* s, scoreList)
-            s->startCmd();
-      run.call();
-      if (se->hasUncaughtException()) {
-            QScriptValue sv = se->uncaughtException();
-            QMessageBox::critical(0, "MuseScore Error",
-               tr("Error loading plugin\n"
-                  "\"%1\" line %2:\n"
-                  "%3").arg(pluginPath)
-                     .arg(se->uncaughtExceptionLineNumber())
-                     .arg(sv.toString())
-               );
-            }
-      foreach(Score* s, scoreList)
-          s->endCmd();
-      if(cs)
-          cs->end();
+      QDeclarativeView* view = new QDeclarativeView;
+      view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+      view->setSource(QUrl::fromLocalFile(pp));
+      connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
+      view->show();
+      QmlPlugin* p = (QmlPlugin*)(view->rootObject());
+      p->runPlugin();
       }

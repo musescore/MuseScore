@@ -131,7 +131,7 @@ class Measure : public MeasureBase {
       void* pLen()      { return &_len;     }
 
    public:
-      Measure(Score*);
+      Measure(Score* = 0);
       Measure(const Measure&);
       ~Measure();
       virtual Measure* clone() const   { return new Measure(*this); }

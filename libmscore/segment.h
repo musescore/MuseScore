@@ -78,7 +78,7 @@ class Segment : public Element {
       void removeSpanner(Spanner*);
 
    public:
-      Segment(Measure*);
+      Segment(Measure* m = 0);
       Segment(Measure*, SegmentType, int tick);
       Segment(const Segment&);
       ~Segment();
