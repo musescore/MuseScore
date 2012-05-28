@@ -45,7 +45,7 @@ package:
 	cd win32build & $(MAKE) package
 
 revision:
-	FOR /F "tokens=1 delims=M" %%A IN ('svnversion -n') DO echo %%A > mscore/mscore/revision.h
+	git rev-parse --short HEAD > mscore/revision.h
 
 version:
 	@echo ${VERSION}
