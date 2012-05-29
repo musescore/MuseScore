@@ -5,40 +5,13 @@
     <Editor1>
       <KontextList>
         <Kontext>
-          <path>/home/ws/mscore/mscore/plugins.cpp</path>
+          <path>/home/ws/mscore/mscore/element.h</path>
           <column>0</column>
-          <line>289</line>
+          <line>0</line>
           <xoff>0</xoff>
-          <yoff>51</yoff>
+          <yoff>0</yoff>
           </Kontext>
         <cur>1</cur>
-        </KontextList>
-      <KontextList>
-        <Kontext>
-          <path>/home/ws/mscore/mscore/mscore.cpp</path>
-          <column>0</column>
-          <line>0</line>
-          <xoff>0</xoff>
-          <yoff>0</yoff>
-          </Kontext>
-        </KontextList>
-      <KontextList>
-        <Kontext>
-          <path>/home/ws/mscore/mscore/musescore.cpp</path>
-          <column>0</column>
-          <line>0</line>
-          <xoff>0</xoff>
-          <yoff>0</yoff>
-          </Kontext>
-        </KontextList>
-      <KontextList>
-        <Kontext>
-          <path>/home/ws/mscore/mscore/musescore.h</path>
-          <column>32</column>
-          <line>358</line>
-          <xoff>0</xoff>
-          <yoff>0</yoff>
-          </Kontext>
         </KontextList>
       </Editor1>
     <search>pluginExecuteFunction</search>

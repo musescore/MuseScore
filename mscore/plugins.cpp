@@ -32,6 +32,7 @@
 #include "libmscore/measurebase.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
+#include "libmscore/rest.h"
 #include "plugins.h"
 
 // Q_DECLARE_METATYPE(Score*);
@@ -70,9 +71,13 @@ void MuseScore::registerPlugin(const QString& pluginPath)
       if (qml == 0) {
             qml = new QDeclarativeEngine;
             qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
-            qmlRegisterType<Score>("Score", 1, 0, "Score");
-            qmlRegisterType<Segment>("Segment", 1, 0, "Segment");
-            qmlRegisterType<Measure>("Measure", 1, 0, "Measure");
+            qmlRegisterType<Score>    ("MuseScore", 1, 0, "Score");
+            qmlRegisterType<Segment>  ("MuseScore", 1, 0, "Segment");
+//            qmlRegisterType<Element>  ("MuseScore", 1, 0, "Element");
+            qmlRegisterType<Chord>    ("MuseScore", 1, 0, "Chord");
+            qmlRegisterType<Rest>     ("MuseScore", 1, 0, "Rest");
+            qmlRegisterType<Measure>  ("MuseScore", 1, 0, "Measure");
+            qmlRegisterType<MScore>   ("MuseScore", 1, 0, "MScore");
             }
       QObject* obj = 0;
       {

@@ -1559,7 +1559,6 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             return true;
             }
       qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
-      abort();
       return false;
       }
 
@@ -1666,4 +1665,24 @@ QVariant Element::getVariant(P_ID id, void* data) const
       return QVariant();
       }
 
+bool Element::isChordRest() const                   { return type() == REST || type() == CHORD;   }
+bool Element::isDurationElement() const             { return isChordRest() || (type() == TUPLET); }
+bool Element::isSLine() const {
+            return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
+               || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
+            }
+bool Element::isText() const {
+              return type()  == TEXT
+                || type() == LYRICS
+                || type() == DYNAMIC
+                || type() == FINGERING
+                || type() == HARMONY
+                || type() == MARKER
+                || type() == JUMP
+                || type() == STAFF_TEXT
+                || type() == REHEARSAL_MARK
+                || type() == INSTRUMENT_CHANGE
+                || type() == FIGURED_BASS
+                || type() == TEMPO_TEXT;
+            }
 
