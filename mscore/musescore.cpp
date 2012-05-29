@@ -975,13 +975,18 @@ MuseScore::MuseScore()
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
-      menuHelp->addSeparator();
-
+      
+      
       a = getAction("script-debug");
       a->setCheckable(true);
       a->setChecked(scriptDebug);
       menuHelp->addAction(a);
       a->setEnabled(false);
+
+#ifdef MSCORE_UNSTABLE
+      menuHelp->addSeparator();
+      menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
+#endif
 
       setCentralWidget(mainWindow);
 
@@ -2110,7 +2115,7 @@ int main(int argc, char* av[])
 
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
-      revision = QString(f.readAll());
+      revision = QString(f.readAll()).trimmed();
       f.close();
 
 #ifdef Q_WS_MAC
@@ -2834,6 +2839,16 @@ void MuseScore::play(Element* e, int pitch) const
             const Channel& channel = instr->channel(note->subchannel());
             seq->startNote(channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
+      }
+
+//---------------------------------------------------------
+//   reportBug
+//---------------------------------------------------------
+void MuseScore::reportBug()
+      {
+      QString url("http://musescore.org/en/node/add/project-issue/musescore?sha=");
+      url += revision();
+      QDesktopServices::openUrl(QUrl(url.trimmed());
       }
 
 //---------------------------------------------------------
