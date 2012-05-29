@@ -45,6 +45,9 @@ static const int MSCVERSION = 124;
 //    1.24  default image size is spatium dependent
 
 
+class MStyle;
+class Sequencer;
+
 static const int VOICES = 4;
 static const int MAX_TAGS = 32;
 
@@ -57,106 +60,7 @@ static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
 static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 
-//---------------------------------------------------------
-//   ElementType
-//    The value of this enum determines the "stacking order"
-//    of elements on the canvas.
-//---------------------------------------------------------
-
-enum ElementType {
-      INVALID = 0,
-      SYMBOL  = 1,
-      TEXT,
-      INSTRUMENT_NAME,
-      SLUR_SEGMENT,
-      BAR_LINE,
-      STEM_SLASH,
-      LINE,
-      BRACKET,
-      ARPEGGIO,
-      ACCIDENTAL,
-      NOTE,
-      STEM,
-      CLEF,
-      KEYSIG,
-      TIMESIG,
-      REST,
-      BREATH,
-      GLISSANDO,
-      REPEAT_MEASURE,
-      IMAGE,
-/*19*/TIE,
-      ARTICULATION,
-      CHORDLINE,
-      DYNAMIC,
-      BEAM,
-      HOOK,
-      LYRICS,
-      FIGURED_BASS,
-      MARKER,
-      JUMP,
-      FINGERING,
-      TUPLET,
-/*30*/TEMPO_TEXT,
-      STAFF_TEXT,
-      REHEARSAL_MARK,
-      INSTRUMENT_CHANGE,
-      HARMONY,
-      FRET_DIAGRAM,
-      BEND,
-      TREMOLOBAR,
-      VOLTA,
-      HAIRPIN_SEGMENT,
-      OTTAVA_SEGMENT,
-      TRILL_SEGMENT,
-      TEXTLINE_SEGMENT,
-      VOLTA_SEGMENT,
-      LAYOUT_BREAK,
-      SPACER,
-      STAFF_STATE,
-      LEDGER_LINE,
-      NOTEHEAD,
-      NOTEDOT,
-      TREMOLO,
-      MEASURE,
-      STAFF_LINES,
-      SELECTION,
-      LASSO,
-      SHADOW_NOTE,
-      RUBBERBAND,
-      TAB_DURATION_SYMBOL,
-      FSYMBOL,
-      PAGE,
-
-      // not drawable elements:
-      HAIRPIN,
-      OTTAVA,
-      PEDAL,
-      TRILL,
-      TEXTLINE,
-      SEGMENT,
-      SYSTEM,
-      COMPOUND,
-      CHORD,
-      SLUR,
-
-      // special types for drag& drop:
-      ELEMENT,
-      ELEMENT_LIST,
-      STAFF_LIST,
-      MEASURE_LIST,
-      LAYOUT,
-
-      HBOX,
-      VBOX,
-      TBOX,
-      FBOX,
-      ACCIDENTAL_BRACKET,
-      ICON,
-      OSSIA,
-
-      MAXTYPE
-      };
+#include "elementType.h"
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -537,6 +441,15 @@ enum BarLineType {
       BROKEN_BAR, END_BAR, END_START_REPEAT
       };
 
+// Icon() subtypes
+enum {
+      ICON_ACCIACCATURA, ICON_APPOGGIATURA, ICON_GRACE4, ICON_GRACE16, ICON_GRACE32,
+      ICON_GRACE8B,
+      ICON_SBEAM, ICON_MBEAM, ICON_NBEAM, ICON_BEAM32, ICON_BEAM64, ICON_AUTOBEAM,
+      ICON_FBEAM1, ICON_FBEAM2,
+      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE
+      };
+
 //---------------------------------------------------------
 //   NoteVal
 //    helper structure
@@ -550,30 +463,120 @@ struct NoteVal {
       NoteVal() { pitch = -1; fret = -1; string = -1; headGroup = HEAD_NORMAL; }
       };
 
-// Icon() subtypes
-enum {
-      ICON_ACCIACCATURA, ICON_APPOGGIATURA, ICON_GRACE4, ICON_GRACE16, ICON_GRACE32,
-      ICON_GRACE8B,
-      ICON_SBEAM, ICON_MBEAM, ICON_NBEAM, ICON_BEAM32, ICON_BEAM64, ICON_AUTOBEAM,
-      ICON_FBEAM1, ICON_FBEAM2,
-      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE
-      };
-
-class MStyle;
-class Sequencer;
-
 //---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
 
-class MScore {
+class MScore : public QObject {
+      Q_OBJECT
+      Q_ENUMS(ElementType)
+
       static MStyle* _defaultStyle;       // default modified by preferences
       static MStyle* _baseStyle;          // buildin initial style
       static QString _globalShare;
       static int _hRaster, _vRaster;
 
    public:
+// #include "elementType.h"
+
+#if 1
+enum ElementType {
+      INVALID = 0,
+      SYMBOL  = 1,
+      TEXT,
+      INSTRUMENT_NAME,
+      SLUR_SEGMENT,
+      BAR_LINE,
+      STEM_SLASH,
+      LINE,
+      BRACKET,
+      ARPEGGIO,
+      ACCIDENTAL,
+      NOTE,
+      STEM,
+      CLEF,
+      KEYSIG,
+      TIMESIG,
+      REST,
+      BREATH,
+      GLISSANDO,
+      REPEAT_MEASURE,
+      IMAGE,
+/*19*/TIE,
+      ARTICULATION,
+      CHORDLINE,
+      DYNAMIC,
+      BEAM,
+      HOOK,
+      LYRICS,
+      FIGURED_BASS,
+      MARKER,
+      JUMP,
+      FINGERING,
+      TUPLET,
+/*30*/TEMPO_TEXT,
+      STAFF_TEXT,
+      REHEARSAL_MARK,
+      INSTRUMENT_CHANGE,
+      HARMONY,
+      FRET_DIAGRAM,
+      BEND,
+      TREMOLOBAR,
+      VOLTA,
+      HAIRPIN_SEGMENT,
+      OTTAVA_SEGMENT,
+      TRILL_SEGMENT,
+      TEXTLINE_SEGMENT,
+      VOLTA_SEGMENT,
+      LAYOUT_BREAK,
+      SPACER,
+      STAFF_STATE,
+      LEDGER_LINE,
+      NOTEHEAD,
+      NOTEDOT,
+      TREMOLO,
+      MEASURE,
+      STAFF_LINES,
+      SELECTION,
+      LASSO,
+      SHADOW_NOTE,
+      RUBBERBAND,
+      TAB_DURATION_SYMBOL,
+      FSYMBOL,
+      PAGE,
+
+      // not drawable elements:
+      HAIRPIN,
+      OTTAVA,
+      PEDAL,
+      TRILL,
+      TEXTLINE,
+      SEGMENT,
+      SYSTEM,
+      COMPOUND,
+      CHORD,
+      SLUR,
+
+      // special types for drag& drop:
+      ELEMENT,
+      ELEMENT_LIST,
+      STAFF_LIST,
+      MEASURE_LIST,
+      LAYOUT,
+
+      HBOX,
+      VBOX,
+      TBOX,
+      FBOX,
+      ACCIDENTAL_BRACKET,
+      ICON,
+      OSSIA,
+
+      MAXTYPE
+      };
+#endif
+
       static void init();
       static MStyle* defaultStyle();
       static MStyle* baseStyle();

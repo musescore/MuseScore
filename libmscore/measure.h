@@ -175,10 +175,10 @@ class Measure : public MeasureBase {
       virtual int ticks() const            { return _len.ticks(); }
 
       int size() const                     { return _segments.size();        }
-      Segment* first() const               { return _segments.first();       }
+      Q_INVOKABLE Segment* first() const   { return _segments.first();       }
       Segment* first(SegmentTypes t) const { return _segments.first(t);      }
 
-      Segment* last() const                { return _segments.last();        }
+      Q_INVOKABLE Segment* last() const    { return _segments.last();        }
       Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }

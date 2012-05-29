@@ -127,6 +127,10 @@ struct EditData {
 
 class Element : public QObject {
       Q_OBJECT
+      // Q_PROPERTY(MScore::ElementType type READ type)
+      Q_PROPERTY(int type READ type)
+      Q_PROPERTY(int track READ track WRITE setTrack)
+      Q_PROPERTY(Element* parent READ parent WRITE setParent)
 
       LinkedElements* _links;
       Element* _parent;
@@ -237,12 +241,9 @@ class Element : public QObject {
       virtual qreal baseLine() const          { return -height();       }
 
       virtual ElementType type() const = 0;
-      bool isChordRest() const                   { return type() == REST || type() == CHORD;   }
-      bool isDurationElement() const             { return isChordRest() || (type() == TUPLET); }
-      bool isSLine() const {
-            return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
-               || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
-            }
+      bool isChordRest() const;
+      bool isDurationElement() const;
+      bool isSLine() const;
 
       virtual void draw(QPainter*) const {}
 
@@ -286,7 +287,7 @@ class Element : public QObject {
 
       // debug functions
       virtual void dump() const;
-      const char* name() const;
+      Q_INVOKABLE const char* name() const;
       virtual QString userName() const;
       void dumpQPointF(const char*) const;
 
@@ -335,20 +336,8 @@ class Element : public QObject {
       qreal magS() const;
       virtual void setMag(qreal val)           { _mag = val;    }
 
-      bool isText() const {
-              return type()  == TEXT
-                || type() == LYRICS
-                || type() == DYNAMIC
-                || type() == FINGERING
-                || type() == HARMONY
-                || type() == MARKER
-                || type() == JUMP
-                || type() == STAFF_TEXT
-                || type() == REHEARSAL_MARK
-                || type() == INSTRUMENT_CHANGE
-                || type() == FIGURED_BASS
-                || type() == TEMPO_TEXT;
-            }
+      bool isText() const;
+
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
       //
@@ -437,7 +426,7 @@ class StaffLines : public Element {
    public:
       StaffLines(Score*);
       virtual StaffLines* clone() const    { return new StaffLines(*this); }
-      virtual ElementType type() const     { return STAFF_LINES; }
+      virtual ElementType type() const     { return ElementType(STAFF_LINES); }
       virtual void layout();
 
       Measure* measure() const             { return (Measure*)parent(); }
@@ -466,7 +455,7 @@ class Line : public Element {
       Line &operator=(const Line&);
 
       virtual Line* clone() const { return new Line(*this); }
-      virtual ElementType type() const { return LINE; }
+      virtual ElementType type() const { return ElementType(LINE); }
       virtual void layout();
 
       virtual void draw(QPainter*) const;
@@ -517,7 +506,7 @@ class RubberBand : public Element {
    public:
       RubberBand(Score* s) : Element(s) {}
       virtual RubberBand* clone() const { return new RubberBand(*this); }
-      virtual ElementType type() const { return RUBBERBAND; }
+      virtual ElementType type() const { return ElementType(RUBBERBAND); }
       virtual void draw(QPainter*) const;
 
       void set(const QPointF& p1, const QPointF& p2) { _p1 = p1; _p2 = p2; }
