@@ -393,6 +393,7 @@ class MuseScore : public QMainWindow {
       void about();
       void aboutQt();
       void aboutMusicXML();
+      void reportBug();
       void openRecentMenu();
       void selectScore(QAction*);
       void startPreferenceDialog();
