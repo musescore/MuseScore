@@ -251,7 +251,7 @@ void MuseScore::loadPlugins()
 void MuseScore::unloadPlugins()
       {
       for (int idx = 0; idx < plugins.size() ; idx++) {
-            ;
+            ; // TODO
             }
       }
 
