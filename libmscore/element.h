@@ -131,6 +131,7 @@ class Element : public QObject {
       Q_PROPERTY(int type READ type)
       Q_PROPERTY(int track READ track WRITE setTrack)
       Q_PROPERTY(Element* parent READ parent WRITE setParent)
+      Q_PROPERTY(QColor color READ color WRITE setColor)
 
       LinkedElements* _links;
       Element* _parent;

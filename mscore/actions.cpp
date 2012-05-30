@@ -1906,14 +1906,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Insert special characters"),
           keys_ICON
          ),
-      Shortcut(
-         STATE_ALL,
-         0,
-         "script-debug",
-         QT_TRANSLATE_NOOP("action","Enable script debugger"),
-         QT_TRANSLATE_NOOP("action","Enable Script Debugger"),
-         QT_TRANSLATE_NOOP("action","Enable script debugger")
-         ),
+//      Shortcut(
+//         STATE_ALL,
+//         0,
+//         "script-debug",
+//         QT_TRANSLATE_NOOP("action","Enable script debugger"),
+//         QT_TRANSLATE_NOOP("action","Enable Script Debugger"),
+//         QT_TRANSLATE_NOOP("action","Enable script debugger")
+//         ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,

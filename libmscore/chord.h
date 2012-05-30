@@ -91,6 +91,8 @@ class LedgerLine : public Line {
 class Chord : public ChordRest {
       Q_OBJECT
 
+      Q_PROPERTY(QDeclarativeListProperty<Note> notes READ qmlNotes);
+
       QList<Note*> _notes;                // sorted to increasing pitch
       QList<LedgerLine*> _ledgerLines;
 
@@ -141,6 +143,7 @@ class Chord : public ChordRest {
       virtual void layoutStem();
       void layoutArpeggio2();
 
+      QDeclarativeListProperty<Note> qmlNotes() { return QDeclarativeListProperty<Note>(this, _notes); }
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 

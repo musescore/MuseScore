@@ -16,6 +16,8 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 
+class Cursor;
+
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -34,7 +36,8 @@ class QmlPlugin : public QDeclarativeItem {
       void run();
 
    public:
-      QmlPlugin(QDeclarativeItem* parent = 0) : QDeclarativeItem(parent) {}
+      QmlPlugin(QDeclarativeItem* parent = 0);
+      ~QmlPlugin();
 
       void setMenuPath(const QString& s) { _menuPath = s;    }
       QString menuPath() const           { return _menuPath; }
@@ -43,6 +46,7 @@ class QmlPlugin : public QDeclarativeItem {
       int mscoreVersion() const;
       void runPlugin()                   { emit run();       }
       Score* curScore()                  { return mscore->currentScore(); }
+      Q_INVOKABLE Cursor* newCursor();
       };
 
 
