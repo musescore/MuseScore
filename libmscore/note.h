@@ -65,6 +65,11 @@ class NoteHead : public Symbol {
 
 class Note : public Element {
       Q_OBJECT
+      Q_PROPERTY(int pitch  READ pitch  WRITE setPitch)
+      Q_PROPERTY(int tpc    READ tpc    WRITE setTpc)
+      Q_PROPERTY(int line   READ line   WRITE setLine)
+      Q_PROPERTY(int fret   READ fret   WRITE setFret)
+      Q_PROPERTY(int string READ string WRITE setString)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.

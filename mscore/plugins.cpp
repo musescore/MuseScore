@@ -34,10 +34,39 @@
 #include "libmscore/segment.h"
 #include "libmscore/rest.h"
 #include "plugins.h"
+#include "cursor.h"
 
-// Q_DECLARE_METATYPE(Score*);
+//---------------------------------------------------------
+//   QmlPlugin
+//---------------------------------------------------------
 
-int QmlPlugin::mscoreVersion() const  { return version(); }
+QmlPlugin::QmlPlugin(QDeclarativeItem* parent)
+   : QDeclarativeItem(parent)
+      {
+      }
+
+QmlPlugin::~QmlPlugin()
+      {
+      }
+
+//---------------------------------------------------------
+//   mscoreVersion
+//---------------------------------------------------------
+
+int QmlPlugin::mscoreVersion() const
+      {
+      return version();
+      }
+
+//---------------------------------------------------------
+//   newCursor
+//---------------------------------------------------------
+
+Cursor* QmlPlugin::newCursor()
+      {
+      Cursor* cursor = new Cursor(curScore());
+      return cursor;
+      }
 
 //---------------------------------------------------------
 //   registerPlugin
@@ -73,11 +102,14 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>    ("MuseScore", 1, 0, "Score");
             qmlRegisterType<Segment>  ("MuseScore", 1, 0, "Segment");
-//            qmlRegisterType<Element>  ("MuseScore", 1, 0, "Element");
             qmlRegisterType<Chord>    ("MuseScore", 1, 0, "Chord");
+            qmlRegisterType<Note>     ("MuseScore", 1, 0, "Note");
             qmlRegisterType<Rest>     ("MuseScore", 1, 0, "Rest");
             qmlRegisterType<Measure>  ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<MScore>   ("MuseScore", 1, 0, "MScore");
+            qmlRegisterType<Cursor>   ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<Element>();
+            qmlRegisterType<ChordRest>();
             }
       QObject* obj = 0;
       {

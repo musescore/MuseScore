@@ -345,7 +345,7 @@ MuseScore::MuseScore()
       cs                    = 0;
       cv                    = 0;
       se                    = 0;    // script engine
-      scriptDebugger        = 0;
+//      scriptDebugger        = 0;
       qml                   = 0;
       pluginMapper          = 0;
       debugger              = 0;
@@ -977,13 +977,13 @@ MuseScore::MuseScore()
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
-      
-      
-      a = getAction("script-debug");
-      a->setCheckable(true);
-      a->setChecked(scriptDebug);
-      menuHelp->addAction(a);
-      a->setEnabled(false);
+
+
+//      a = getAction("script-debug");
+//      a->setCheckable(true);
+//      a->setChecked(scriptDebug);
+//      menuHelp->addAction(a);
+//      a->setEnabled(false);
 
 #ifdef MSCORE_UNSTABLE
       menuHelp->addSeparator();
@@ -1284,7 +1284,7 @@ static void usage()
         "   -v        print version\n"
         "   -d        debug mode\n"
         "   -L        layout debug\n"
-        "   -D        enable plugin script debugger\n"
+//        "   -D        enable plugin script debugger\n"
         "   -s        no internal synthesizer\n"
         "   -m        no midi\n"
         "   -n        start with new score\n"
@@ -2202,9 +2202,9 @@ int main(int argc, char* av[])
                               usage();
                         styleFile = argv.takeAt(i + 1);
                         break;
-                  case 'D':
-                        scriptDebug = true;
-                        break;
+//                  case 'D':
+//                        scriptDebug = true;
+//                        break;
                   case 'F':
                         useFactorySettings = true;
                         break;
@@ -2886,7 +2886,7 @@ AboutBoxDialog::AboutBoxDialog()
       copyRevisionButton->hide();
 #endif
       }
-      
+
 //---------------------------------------------------------
 //   copyRevisionToClipboard
 //---------------------------------------------------------
@@ -4175,8 +4175,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showAlbumManager();
       else if (cmd == "layer")
             showLayerManager();
-      else if (cmd == "script-debug")
-            scriptDebug = a->isChecked();
+//      else if (cmd == "script-debug")
+//            scriptDebug = a->isChecked();
       else if (cmd == "backspace")
             undo();
       else if (cmd == "zoomin")
