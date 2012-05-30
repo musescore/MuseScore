@@ -125,6 +125,8 @@ class AboutBoxDialog : public QDialog, Ui::AboutBox {
 
    public:
       AboutBoxDialog();
+   private slots:
+      void copyRevisionToClipboard();
       };
 
 //---------------------------------------------------------
@@ -395,6 +397,7 @@ class MuseScore : public QMainWindow {
       void about();
       void aboutQt();
       void aboutMusicXML();
+      void reportBug();
       void openRecentMenu();
       void selectScore(QAction*);
       void startPreferenceDialog();

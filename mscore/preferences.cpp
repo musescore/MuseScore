@@ -133,9 +133,9 @@ void Preferences::init()
 #else
       useAlsaAudio       = false;
       useJackAudio       = false;
-      usePortaudioAudio  = true;
-      useJackMidi        = false;
+      usePortaudioAudio  = false;
       usePulseAudio      = true;
+      useJackMidi        = false;
 #endif
 
       midiPorts          = 2;
