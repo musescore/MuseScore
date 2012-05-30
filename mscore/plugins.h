@@ -47,6 +47,7 @@ class QmlPlugin : public QDeclarativeItem {
       void runPlugin()                   { emit run();       }
       Score* curScore()                  { return mscore->currentScore(); }
       Q_INVOKABLE Cursor* newCursor();
+      Q_INVOKABLE Element* newElement(int);
       };
 
 

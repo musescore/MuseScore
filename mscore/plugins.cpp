@@ -33,6 +33,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/rest.h"
+#include "libmscore/stafftext.h"
 #include "plugins.h"
 #include "cursor.h"
 
@@ -108,22 +109,25 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             qmlRegisterType<Measure>  ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<MScore>   ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<Cursor>   ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<StaffText>("MuseScore", 1, 0, "StaffText");
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             }
       QObject* obj = 0;
       {
-      QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
-      obj = component.create();
-      if (obj == 0) {
-            qDebug("creating component failed");
-            return;
-            }
-
-      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-      QString menuPath = item->menuPath();
-      plugins.append(pluginPath);
-      createMenuEntry(menuPath);
+            QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
+            obj = component.create();
+            if (obj == 0) {
+                  qDebug("creating component <%s> failed", qPrintable(pluginPath));
+                  foreach(QDeclarativeError e, component.errors()) {
+                        qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+                        }
+                  return;
+                  }
+            QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+            QString menuPath = item->menuPath();
+            plugins.append(pluginPath);
+            createMenuEntry(menuPath);
             }
       delete obj;
       }
@@ -325,3 +329,12 @@ void MuseScore::pluginTriggered(int idx)
       QmlPlugin* p = (QmlPlugin*)(view->rootObject());
       p->runPlugin();
       }
+
+Element* QmlPlugin::newElement(int t)
+      {
+      Score* score = curScore();
+      if (score == 0)
+            return 0;
+      return Element::create(ElementType(t), score);
+      }
+

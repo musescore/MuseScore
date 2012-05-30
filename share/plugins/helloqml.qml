@@ -4,18 +4,53 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath: "Plugins.helloQml"
-      width: 150
+      width:  150
       height: 75
+      onRun: {
+            console.log("hello world");
+            var score = curScore;
+            console.log(curScore);
+            console.log(score.name);
+            var m;
+            m = score.firstMeasure();
+            while (m) {
+                  console.log("measure");
+                  var segment = m.first();
+                  while (segment) {
+                        console.log("  segment");
+                        console.log(segment.type);
+                        if (segment.type == MScore.SEGMENT)
+                              console.log(" ---hello segment");
+                        else {
+                              console.log(MScore.SEGMENT);
+                              }
+
+                        var element;
+                        element = segment.element(0);
+                        if (element) {
+                              console.log("    element");
+                              console.log(element.type);
+                              }
+                        segment = segment.next();
+                        }
+                  m = m.nextMeasure();
+                  }
+            }
+
       Rectangle {
             id: simplebutton
             color: "grey"
-            width: 150
-            height: 75
+            anchors.fill: parent
 
             Text {
                   id: buttonLabel
                   anchors.centerIn: parent
                   text: "Hello Qml"
+                  }
+
+            MouseArea {
+                  anchors.fill: parent
+                  onClicked: Qt.quit()
                   }
             }
       }

@@ -127,11 +127,14 @@ struct EditData {
 
 class Element : public QObject {
       Q_OBJECT
-      // Q_PROPERTY(MScore::ElementType type READ type)
-      Q_PROPERTY(int type READ type)
-      Q_PROPERTY(int track READ track WRITE setTrack)
-      Q_PROPERTY(Element* parent READ parent WRITE setParent)
-      Q_PROPERTY(QColor color READ color WRITE setColor)
+      Q_PROPERTY(int type        READ type)
+      Q_PROPERTY(Element* parent READ parent    WRITE setParent)
+      Q_PROPERTY(int track       READ track     WRITE setTrack)
+      Q_PROPERTY(QColor color    READ color     WRITE setColor)
+      Q_PROPERTY(bool visible    READ visible   WRITE setVisible)
+      Q_PROPERTY(bool generated  READ generated WRITE setGenerated)
+      Q_PROPERTY(bool selected   READ selected  WRITE setSelected)
+      Q_PROPERTY(QPointF pos     READ pos       WRITE setPos)
 
       LinkedElements* _links;
       Element* _parent;

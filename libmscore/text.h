@@ -28,6 +28,7 @@ struct SymCode;
 
 class Text : public SimpleText {
       Q_OBJECT
+      Q_PROPERTY(QString text READ getText WRITE setText)
 
       QTextDocument* _doc;
       int _styleIndex;
@@ -44,7 +45,7 @@ class Text : public SimpleText {
       bool setCursor(const QPointF& p, QTextCursor::MoveMode mm = QTextCursor::MoveAnchor);
 
    public:
-      Text(Score*);
+      Text(Score* = 0);
       Text(const Text&);
       ~Text();
 

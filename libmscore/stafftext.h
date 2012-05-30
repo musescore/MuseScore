@@ -39,7 +39,7 @@ class StaffText : public Text  {
       int aeolusStops[4];
 
    public:
-      StaffText(Score*);
+      StaffText(Score* = 0);
       virtual StaffText* clone() const { return new StaffText(*this); }
       virtual ElementType type() const { return STAFF_TEXT; }
       virtual void write(Xml& xml) const;

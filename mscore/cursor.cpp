@@ -22,7 +22,6 @@
 #include "libmscore/rest.h"
 #include "libmscore/note.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/text.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/page.h"
@@ -36,26 +35,14 @@
 //---------------------------------------------------------
 
 Cursor::Cursor(Score* s)
+   : QObject(0)
       {
-      _score    = s;
-      _staffIdx = 0;
-      _voice    = 0;
-      _segment  = 0;
-      _expandRepeat = false;
-      _curRepeatSegment = 0;
+      _score                 = s;
+      _track                 = 0;
+      _expandRepeats         = false;
+      _segment               = 0;
+      _curRepeatSegment      = 0;
       _curRepeatSegmentIndex = 0;
-      }
-
-Cursor::Cursor(Score* s, bool expandRepeat)
-      {
-      _score    = s;
-      _staffIdx = 0;
-      _voice    = 0;
-      _segment  = 0;
-      _expandRepeat = expandRepeat;
-      _curRepeatSegment = 0;
-      _curRepeatSegmentIndex = 0;
-      _score->updateRepeatList(expandRepeat);
       }
 
 //---------------------------------------------------------
@@ -67,28 +54,23 @@ void Cursor::rewind(int type)
       if (type == 0) {
             _segment   = 0;
             Measure* m = _score->firstMeasure();
-            if (_expandRepeat && !_score->repeatList()->isEmpty()){
+            if (_expandRepeats && !_score->repeatList()->isEmpty()){
                   _curRepeatSegment = _score->repeatList()->first();
                   _curRepeatSegmentIndex = 0;
                   }
             if (m) {
-                  _segment = m->first();
-                  if (_staffIdx >= 0) {
-                        int track = _staffIdx * VOICES + _voice;
-                        while (_segment && ((_segment->subtype() != SegChordRest) || (_segment->element(track) == 0)))
-                              _segment = _segment->next1();
-                        }
+                  _segment = m->first(SegChordRest);
+                  while (_segment && _segment->element(_track) == 0)
+                        _segment = _segment->next1(SegChordRest);
                   }
             }
       else if (type == 1) {
             _segment  = _score->selection().startSegment();
-            _staffIdx = _score->selection().staffStart();
-            _voice    = 0;
+            _track    = _score->selection().staffStart() * VOICES;
             }
       else if (type == 2) {
             _segment  = _score->selection().endSegment();
-            _staffIdx = _score->selection().staffEnd();
-            _voice    = 0;
+            _track    = _score->selection().staffEnd() * VOICES;
             }
       }
 
@@ -102,10 +84,13 @@ bool Cursor::next()
       {
       if (!_segment)
             return false;
-      Segment* seg = _segment;
-      seg = seg->next1();
+      Segment* seg = _segment->next1(SegChordRest | SegGrace);
+      if (!seg) {
+            _segment = 0;
+            return  false;
+            }
       RepeatSegment* rs = repeatSegment();
-      if (rs && expandRepeat()){
+      if (rs && _expandRepeats){
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             if ((seg  && (seg->tick() >= endTick) ) || (!seg) ){
@@ -116,21 +101,14 @@ bool Cursor::next()
                         setRepeatSegment(rs);
                         setRepeatSegmentIndex(rsIdx);
                         Measure* m = score()->tick2measure(rs->tick);
-                        seg = m ? m->first() : 0;
+                        seg = m ? m->first(SegChordRest | SegGrace) : 0;
                         }
                   else
                         seg = 0;
                   }
             }
-
-      if (_staffIdx >= 0) {
-            //int track = _staffIdx * VOICES + _voice;
-            while (seg && (!(seg->subtype() & (SegChordRest | SegGrace)) /*|| !seg->element(track)*/)) {
-                  seg = seg->next1();
-                  }
-            }
       _segment = seg;
-      return seg != 0;
+      return _segment != 0;
       }
 
 //---------------------------------------------------------
@@ -141,10 +119,11 @@ bool Cursor::next()
 
 bool Cursor::nextMeasure()
       {
-      Measure* m = segment()->measure();
-      m = m->nextMeasure();
+      if (_segment == 0)
+            return false;
+      Measure* m = _segment->measure()->nextMeasure();
       RepeatSegment* rs = repeatSegment();
-      if (rs && expandRepeat()){
+      if (rs && _expandRepeats){
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             if ((m  && (m->tick() + m->ticks() > endTick) ) || (!m) ){
@@ -163,43 +142,38 @@ bool Cursor::nextMeasure()
             }
 
       if (m == 0) {
-            setSegment(0);
+            _segment = 0;
             return false;
             }
-      Segment* seg = m->first();
-      if (_staffIdx >= 0) {
-            int track = _staffIdx * VOICES + _voice;
-            while (seg && ((seg->subtype() != SegChordRest) || (seg->element(track) == 0)))
-                  seg = seg->next1();
-            }
+      Segment* seg = m->first(SegChordRest | SegGrace);
+      while (seg->element(_track) == 0)
+            seg = seg->next1(SegChordRest | SegGrace);
       _segment = seg;
-      return seg != 0;
-      }
-
-//---------------------------------------------------------
-//   putStaffText
-//---------------------------------------------------------
-
-void Cursor::putStaffText(Text* s)
-      {
-#if 0
-      if (!element() || !s)
-            return;
-      s->setTrack(element()->track());
-      s->setTextStyleType(TEXT_STYLE_STAFF);
-      s->setParent(element()->measure());
-      s->score()->undoAddElement(s);
-      s->score()->setLayoutAll(true);
-#endif
+      return _segment != 0;
       }
 
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
+void Cursor::add(Element* s)
+      {
+      if (!_segment)
+            return;
+      s->setTrack(_track);
+      s->score()->startCmd();
+      s->score()->undoAddElement(s);
+      s->score()->setLayoutAll(true);
+      s->score()->endCmd();
+      }
+
+//---------------------------------------------------------
+//   add
+//---------------------------------------------------------
+
+#if 0
 void Cursor::add(ChordRest* c)
       {
-#if 0
       ChordRest* chordRest = cr();
       int track       = _staffIdx * VOICES + _voice;
 
@@ -249,8 +223,8 @@ void Cursor::add(ChordRest* c)
       c->setParent(seg);
       c->setTrack(track);
       score()->undoAddElement(c);
-#endif
       }
+#endif
 
 //---------------------------------------------------------
 //   tick
@@ -260,7 +234,7 @@ int Cursor::tick()
       {
       int offset = 0;
       RepeatSegment* rs = repeatSegment();
-      if (rs && expandRepeat())
+      if (rs && _expandRepeats)
             offset = rs->utick - rs->tick;
       if (_segment)
           return _segment->tick() + offset;
@@ -277,23 +251,48 @@ double Cursor::time()
       return score()->utick2utime(tick()) * 1000;
       }
 
-bool Cursor::eos() const
-      {
-      return _segment == 0;
-      }
-
-bool Cursor::isChord() const
-      {
-      return (element() ? (element()->type() == CHORD) : false);
-      }
-bool Cursor::isRest() const
-      {
-      return (element() ? (element()->type() == REST) : false);
-      }
-
 Element* Cursor::element() const
       {
-      int track = _voice + _staffIdx * VOICES;
-      return _segment ? _segment->element(track) : 0;
+      return _segment ? _segment->element(_track) : 0;
+      }
+
+void Cursor::setTrack(int v)
+      {
+      _track = v;
+      int tracks = _score->nstaves() * VOICES;
+      if (_track < 0)
+            _track = 0;
+      else if (_track >= tracks)
+            _track = tracks - 1;
+      }
+
+void Cursor::setStaffIdx(int v)
+      {
+      _track = v * VOICES + _track % VOICES;
+      int tracks = _score->nstaves() * VOICES;
+      if (_track < 0)
+            _track = 0;
+      else if (_track >= tracks)
+            _track = tracks - 1;
+      }
+
+void Cursor::setVoice(int v)
+      {
+      _track = (_track / VOICES) * VOICES + v;
+      int tracks = _score->nstaves() * VOICES;
+      if (_track < 0)
+            _track = 0;
+      else if (_track >= tracks)
+            _track = tracks - 1;
+      }
+
+int Cursor::staffIdx() const
+      {
+      return _track / VOICES;
+      }
+
+int Cursor::voice() const
+      {
+      return _track % VOICES;
       }
 
