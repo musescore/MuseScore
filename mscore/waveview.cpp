@@ -118,8 +118,8 @@ void WaveView::setAudio(Audio* audio)
       int rn = 0;
       const int n = 10000 / WSCALE;
       uchar dst[n];
-      float* r;
-      float* l;
+      float* r = 0;
+      float* l = 0;
       for (;;) {
             for (int i = 0; i < n; ++i) {
                   float val = 0;
