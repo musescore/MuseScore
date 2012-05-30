@@ -208,6 +208,8 @@ struct Layer {
 class Score : public QObject {
       Q_OBJECT
       Q_PROPERTY(QString name READ name WRITE setName)
+      Q_PROPERTY(int nstaves  READ nstaves)
+      Q_PROPERTY(int ntracks  READ ntracks)
 
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
@@ -431,7 +433,8 @@ class Score : public QObject {
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
-      Q_INVOKABLE int nstaves() const        { return _staves.size(); }
+      int nstaves() const                    { return _staves.size(); }
+      int ntracks() const                    { return _staves.size() * VOICES; }
 
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }

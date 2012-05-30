@@ -7,7 +7,7 @@
 //	Noteheads are colored according to pitch. User can change to color by
 //  modifying the colors array. First element is C, second C# etc...
 //
-//  Copyright (C)2008 Werner Schweer and others
+//  Copyright (C)2012 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -27,43 +27,33 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath: "Plugins.colornotes"
-      // width:  150
-      // height: 75
+
       onRun: {
             console.log("hello colornotes");
-            var score = curScore;
-
-//            var colors = [new color(226,28,72),new color(242,102,34),new color(249,157,28),
-//            new color(255,204,51),new color(255,243,43),new color(188,216,95),
-//            new color(98,188,71),new color(0,156,149),new color(0,113,187),
-//            new color(94,80,161),new color(141,91,166),new color(207,62,150)];
 
             var colors = [
-               "#ff0000", "#00ff00", "#0000ff",
-               "#ff0000", "#00ff00", "#0000ff",
-               "#ff0000", "#00ff00", "#0000ff",
-               "#ff0000", "#00ff00", "#0000ff"
+               "#e21c48", "#f26622", "#f99d1c",
+               "#ffcc33", "#fff32b", "#bcd85f",
+               "#62bc47", "#009c95", "#0071bb",
+               "#5e50a1", "#8d5ba6", "#cf3e96"
                ];
 
             if (typeof curScore === 'undefined')
                   return;
             var cursor = newCursor();
-            for (var staff = 0; staff < curScore.nstaves(); ++staff) {
-                  cursor.staffIdx = staff;
-                  for (var v = 0; v < 4; v++) {
-                        cursor.voice = v;
-                        cursor.rewind(0);  // set cursor to first chord/rest
+            for (var track = 0; track < curScore.ntracks; ++track) {
+                  cursor.track = track;
+                  cursor.rewind(0);  // set cursor to first chord/rest
 
-                        while (cursor.element()) {
-                              if (cursor.element().type == MScore.CHORD) {
-                                    var notes = cursor.element().notes;
-                                    for (var i = 0; i < notes.length; i++) {
-                                          var note = notes[i];
-                                          note.color = colors[note.pitch % 12];
-                                          }
+                  while (cursor.segment) {
+                        if (cursor.element.type == MScore.CHORD) {
+                              var notes = cursor.element.notes;
+                              for (var i = 0; i < notes.length; i++) {
+                                    var note = notes[i];
+                                    note.color = colors[note.pitch % 12];
                                     }
-                              cursor.next();
                               }
+                        cursor.next();
                         }
                   }
             Qt.quit()

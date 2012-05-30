@@ -27,7 +27,7 @@ class Rest;
 class Segment;
 class RepeatSegment;
 class ChordRest;
-class Text;
+class StaffText;
 class Measure;
 
 //---------------------------------------------------------
@@ -36,13 +36,21 @@ class Measure;
 
 class Cursor : public QObject {
       Q_OBJECT
-      Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx)
-      Q_PROPERTY(int voice READ voice WRITE setVoice)
+      Q_PROPERTY(int track          READ track         WRITE setTrack)
+      Q_PROPERTY(int staffIdx       READ staffIdx      WRITE setStaffIdx)
+      Q_PROPERTY(int voice          READ voice         WRITE setVoice)
+      Q_PROPERTY(bool expandRepeats READ expandRepeats WRITE setExpandRepeats)
+
+      Q_PROPERTY(Element* element READ element)
+      Q_PROPERTY(Segment* segment READ segment)
+
+      Q_PROPERTY(int tick         READ tick)
+      Q_PROPERTY(double time      READ time)
+      Q_PROPERTY(Score* score     READ score    WRITE setScore)
 
       Score* _score;
-      int _staffIdx;
-      int _voice;
-      bool _expandRepeat;
+      int _track;
+      bool _expandRepeats;
 
       //state
       Segment* _segment;
@@ -52,31 +60,38 @@ class Cursor : public QObject {
    public:
       Cursor(Score* c = 0);
       Cursor(Score*, bool);
-      int staffIdx() const                    { return _staffIdx; }
-      void setStaffIdx(int v)                 { _staffIdx = v;    }
-      int voice() const                       { return _voice;    }
-      void setVoice(int v)                    { _voice = v;       }
-      Segment* segment() const                { return _segment;  }
-      void setSegment(Segment* s)             { _segment = s;     }
-      RepeatSegment* repeatSegment() const    { return _curRepeatSegment;  }
-      void setRepeatSegment(RepeatSegment* s) { _curRepeatSegment = s;     }
-      int repeatSegmentIndex()                { return _curRepeatSegmentIndex; }
-      void setRepeatSegmentIndex(int idx)     { _curRepeatSegmentIndex = idx; }
-      bool expandRepeat()                     { return _expandRepeat; }
+
       Score* score() const                    { return _score;    }
       void setScore(Score* s)                 { _score = s; }
 
-      Q_INVOKABLE Element* element() const;
+      int track() const                       { return _track;    }
+      void setTrack(int v);
+
+      int staffIdx() const;
+      void setStaffIdx(int v);
+
+      int voice() const;
+      void setVoice(int v);
+
+      bool expandRepeats() const              { return _expandRepeats; }
+      void setExpandRepeats(bool v)           { _expandRepeats = v;    }
+
+      Element* element() const;
+      Segment* segment() const                { return _segment;  }
+
+      RepeatSegment* repeatSegment() const    { return _curRepeatSegment;  }
+      void setRepeatSegment(RepeatSegment* s) { _curRepeatSegment = s;     }
+
+      int repeatSegmentIndex()                { return _curRepeatSegmentIndex; }
+      void setRepeatSegmentIndex(int idx)     { _curRepeatSegmentIndex = idx; }
+
+      int tick();
+      double time();
+
       Q_INVOKABLE void rewind(int);
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
-      void putStaffText(Text* s);
-      void add(ChordRest* c);
-      Q_INVOKABLE int tick();
-      Q_INVOKABLE double time();
-      Q_INVOKABLE bool eos() const;
-      Q_INVOKABLE bool isChord() const;
-      Q_INVOKABLE bool isRest() const;
+      Q_INVOKABLE void add(Element*);
       };
 
 #endif
