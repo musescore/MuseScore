@@ -977,13 +977,18 @@ MuseScore::MuseScore()
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
-      menuHelp->addSeparator();
-
+      
+      
       a = getAction("script-debug");
       a->setCheckable(true);
       a->setChecked(scriptDebug);
       menuHelp->addAction(a);
       a->setEnabled(false);
+
+#ifdef MSCORE_UNSTABLE
+      menuHelp->addSeparator();
+      menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
+#endif
 
       setCentralWidget(mainWindow);
 
@@ -2113,7 +2118,7 @@ int main(int argc, char* av[])
 
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
-      revision = QString(f.readAll());
+      revision = QString(f.readAll()).trimmed();
       f.close();
 
 #ifdef Q_WS_MAC
@@ -2840,6 +2845,16 @@ void MuseScore::play(Element* e, int pitch) const
       }
 
 //---------------------------------------------------------
+//   reportBug
+//---------------------------------------------------------
+void MuseScore::reportBug()
+      {
+      QString url("http://musescore.org/en/node/add/project-issue/musescore?sha=");
+      url += revision();
+      QDesktopServices::openUrl(QUrl(url.trimmed()));
+      }
+
+//---------------------------------------------------------
 //   about
 //---------------------------------------------------------
 
@@ -2864,6 +2879,21 @@ AboutBoxDialog::AboutBoxDialog()
 #endif
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+#ifdef MSCORE_UNSTABLE
+      copyRevisionButton->setIcon(*icons[copy_ICON]);
+      connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
+#else
+      copyRevisionButton->hide();
+#endif
+      }
+      
+//---------------------------------------------------------
+//   copyRevisionToClipboard
+//---------------------------------------------------------
+void AboutBoxDialog::copyRevisionToClipboard()
+      {
+      QClipboard* cb = QApplication::clipboard();
+      cb->setText(QString("github-musescore-musescore-") + revision);
       }
 
 //---------------------------------------------------------

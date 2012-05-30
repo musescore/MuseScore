@@ -64,18 +64,16 @@ MasterSynth::~MasterSynth()
 
 void MasterSynth::init(int sampleRate)
       {
-      bool useJackFlag      = preferences.useJackAudio || preferences.useJackMidi;
-      bool useAlsaFlag      = preferences.useAlsaAudio;
-      bool usePortaudioFlag = preferences.usePortaudioAudio;
-
-      if (useJackFlag || useAlsaFlag || usePortaudioFlag) {
+      if (preferences.useJackAudio
+         || preferences.useJackMidi
+         || preferences.useAlsaAudio
+         || preferences.usePortaudioAudio
+         || preferences.usePulseAudio) {
             syntis.append(new FluidS::Fluid());
 #ifdef AEOLUS
             syntis.append(new Aeolus());
 #endif
             }
-      if (syntis.isEmpty())
-            return;
       foreach(Synth* s, syntis)
             s->init(sampleRate);
       foreach(Synth* s, syntis) {
