@@ -125,6 +125,8 @@ class AboutBoxDialog : public QDialog, Ui::AboutBox {
 
    public:
       AboutBoxDialog();
+   private slots:
+      void copyRevisionToClipboard();
       };
 
 //---------------------------------------------------------
