@@ -2848,7 +2848,7 @@ void MuseScore::reportBug()
       {
       QString url("http://musescore.org/en/node/add/project-issue/musescore?sha=");
       url += revision();
-      QDesktopServices::openUrl(QUrl(url.trimmed());
+      QDesktopServices::openUrl(QUrl(url.trimmed()));
       }
 
 //---------------------------------------------------------
@@ -2876,6 +2876,21 @@ AboutBoxDialog::AboutBoxDialog()
 #endif
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+#ifdef MSCORE_UNSTABLE
+      copyRevisionButton->setIcon(*icons[copy_ICON]);
+      connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
+#else
+      copyRevisionButton->hide();
+#endif
+      }
+      
+//---------------------------------------------------------
+//   copyRevisionToClipboard
+//---------------------------------------------------------
+void AboutBoxDialog::copyRevisionToClipboard()
+      {
+      QClipboard* cb = QApplication::clipboard();
+      cb->setText(QString("github-musescore-musescore-") + revision);
       }
 
 //---------------------------------------------------------
