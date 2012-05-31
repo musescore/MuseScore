@@ -318,11 +318,6 @@ else (MINGW)
       dl
       pthread
       vorbisfile
-      QtPrintSupport
-      QtWidgets
-      QtQuick
-      QtQml
-      QtConcurrent
       )
     if (USE_PORTAUDIO)
       target_link_libraries(mscore ${PORTAUDIO_LIB})
