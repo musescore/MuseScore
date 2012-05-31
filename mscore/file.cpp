@@ -1536,10 +1536,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as pdf file *.pdf
             rv = savePsPdf(cs, fn, QPrinter::PdfFormat);
             }
+#if QT_VERSION < 0x050000
       else if (ext == "ps") {
             // save as postscript file *.ps
             rv = savePsPdf(cs, fn, QPrinter::PostScriptFormat);
             }
+#endif
       else if (ext == "png") {
             // save as png file *.png
             rv = savePng(cs, fn);

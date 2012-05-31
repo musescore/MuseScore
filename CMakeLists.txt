@@ -306,12 +306,6 @@ if (NOT MINGW AND NOT APPLE)
 endif (NOT MINGW AND NOT APPLE)
 
 
-#if (GCC_VISIBILITY)
-#      set(CMAKE_CXX_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch -fvisibility=hidden -fvisibility-inlines-hidden")
-#else (GCC_VISIBILITY)
-#      set(CMAKE_CXX_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch")
-#endif (GCC_VISIBILITY)
-
 if (NOT MINGW AND NOT APPLE)
 #
 #     set library search path for runtime linker to load the same
@@ -331,17 +325,17 @@ add_custom_command(
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
-set(CMAKE_CXX_FLAGS_DEBUG   "")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG   "-fPIC")
+set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -DNDEBUG")
 
 if (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
       if (MINGW)
             set(FLAGS -DQT_DEBUG -DQT_DLL)
       else (MINGW)
-      		if(APPLE)
+      	if(APPLE)
             	set (FLAGS -O0 -DQT_DEBUG)
-            else(APPLE)
-            	set (FLAGS -DQT_DEBUG)
+            else (APPLE)
+            	set (FLAGS -DQT_DEBUG -fPIC)
             endif(APPLE)
       endif (MINGW)
 else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")

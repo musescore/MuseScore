@@ -40,7 +40,7 @@ void MuseScore::showNavigator(bool visible)
             n->setScoreView(cv);
             n->updateViewRect();
             }
-      _navigator->setShown(visible);
+      _navigator->setVisible(visible);
       getAction("toggle-navigator")->setChecked(visible);
       }
 
@@ -177,10 +177,10 @@ void Navigator::rescale()
       qreal m;
       qreal m1    = h / scoreHeight;
       int w1      = int (scoreWidth * m1);
-      
+
       setFixedWidth(w1);
       m = m1;
-      
+
       matrix.setMatrix(m, matrix.m12(), matrix.m13(), matrix.m21(), m,
          matrix.m23(), matrix.m31(), matrix.m32(), matrix.m33());
       int n = pcl.size();
@@ -423,7 +423,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
             p.drawRect(viewRect);
             }
       if (!npcl.isEmpty()) {
-            updatePixmap = QtConcurrent::map(npcl, createPixmap);
+//TODOWS            updatePixmap = QtConcurrent::map(npcl, createPixmap);
             watcher.setFuture(updatePixmap);
             }
       }

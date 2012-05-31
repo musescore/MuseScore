@@ -30,13 +30,7 @@
 #include <math.h>
 
 #include <QtGui/QtGui>
-#include <QtGui/QItemDelegate>
 #include <QtCore/QModelIndex>
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QSpinBox>
-#include <QtGui/QFormLayout>
-#include <QtGui/QDateTimeEdit>
-#include <QtGui/QInputDialog>
 
 #include <QtWebKit/QWebView>
 #include <QtWebKit/QWebFrame>
@@ -57,75 +51,150 @@
 #include <QtCore/QtDebug>
 #include <QtCore/QSharedData>
 
-#if QT_VERSION >= 0x040400
 #include <QtCore/QAtomicInt>
-#endif
-#if QT_VERSION >= 0x040700
 #include <QtGui/QStaticText>
-#endif
+
 // #include <QtGui/QGlyphRun>
 #include <QtGui/QPainterPath>
-#include <QtGui/QScrollArea>
-#include <QtGui/QScrollBar>
-#include <QtGui/QToolBar>
-#include <QtGui/QWhatsThis>
 #include <QtGui/QBitmap>
 #include <QtGui/QPixmap>
-#include <QtGui/QDockWidget>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QStackedLayout>
-#include <QtGui/QListWidget>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPrinter>
 #include <QtGui/QPainter>
-#include <QtGui/QComboBox>
-#include <QtGui/QAction>
-#include <QtGui/QActionGroup>
-#include <QtGui/QLayout>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QMainWindow>
-#include <QtGui/QFileDialog>
-#include <QtGui/QPrintDialog>
-#include <QtGui/QColorDialog>
 #include <QtGui/QKeyEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QSplitter>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QSpinBox>
+
 #include <QtGui/QFontDatabase>
-#include <QtGui/QFontComboBox>
-#include <QtGui/QApplication>
-#include <QtGui/QToolTip>
 #include <QtCore/QProcess>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextDocumentFragment>
 #include <QtGui/QTextCursor>
 #include <QtGui/QAbstractTextDocumentLayout>
-#include <QtGui/QToolBox>
-#include <QtGui/QToolButton>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextList>
 #include <QtGui/QTextFrameFormat>
 #include <QtGui/QClipboard>
-#include <QtGui/QStatusBar>
-#include <QtGui/QSplashScreen>
+
+#if QT_VERSION >= 0x050000
+#include <QtWidgets/QDateTimeEdit>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QItemDelegate>
+#include <QtWidgets/QStandardItemModel>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QScrollArea>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWhatsThis>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
+#include <QtWidgets/QColorDialog>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QStackedLayout>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QActionGroup>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QBoxLayout>
+#include <QtWidgets/QStandardItemModel>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QToolBox>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QWizard>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QDial>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSplashScreen>
+#include <QtWidgets/QFontComboBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QStylePainter>
+#include <QtWidgets/QStyleOptionButton>
+#include <QtWidgets/QStyleFactory>
+#include <QtWidgets/QFileSystemModel>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QUndoGroup>
+#include <QtWidgets/QUndoStack>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsScene>
+#include <QtWidgets/QGraphicsRectItem>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QFocusFrame>
+#include <QtWidgets/QMouseEventTransition>
+#include <QtWidgets/QCommonStyle>
+#include <QtWidgets/QMdiSubWindow>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
+
+#else
+
+#include <QtGui/QDateTimeEdit>
+#include <QtGui/QInputDialog>
+#include <QtGui/QFormLayout>
+#include <QtGui/QItemDelegate>
+#include <QtGui/QStandardItemModel>
+#include <QtGui/QSpinBox>
+#include <QtGui/QScrollArea>
+#include <QtGui/QScrollBar>
+#include <QtGui/QToolBar>
+#include <QtGui/QWhatsThis>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QFileDialog>
+#include <QtGui/QPrintDialog>
+#include <QtGui/QColorDialog>
+#include <QtGui/QDockWidget>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QStackedLayout>
+#include <QtGui/QListWidget>
+#include <QtGui/QMessageBox>
+#include <QtGui/QPrinter>
+#include <QtGui/QComboBox>
+#include <QtGui/QMainWindow>
+#include <QtGui/QMenu>
+#include <QtGui/QMenuBar>
+#include <QtGui/QSplitter>
+#include <QtGui/QAction>
+#include <QtGui/QActionGroup>
+#include <QtGui/QLayout>
+#include <QtGui/QBoxLayout>
+#include <QtGui/QStandardItemModel>
+#include <QtGui/QToolTip>
+#include <QtGui/QToolBox>
+#include <QtGui/QToolButton>
 #include <QtGui/QPushButton>
+#include <QtGui/QWizard>
+#include <QtGui/QGroupBox>
+#include <QtGui/QDial>
+#include <QtGui/QTextEdit>
+#include <QtGui/QLineEdit>
+#include <QtGui/QCheckBox>
+#include <QtGui/QDialogButtonBox>
+#include <QtGui/QProgressBar>
+#include <QtGui/QRadioButton>
+#include <QtGui/QSplashScreen>
+#include <QtGui/QFontComboBox>
+#include <QtGui/QApplication>
+#include <QtGui/QStatusBar>
 #include <QtGui/QStylePainter>
 #include <QtGui/QStyleOptionButton>
 #include <QtGui/QStyleFactory>
-#include <QtGui/QWizard>
-#include <QtGui/QRadioButton>
 #include <QtGui/QFileSystemModel>
 #include <QtGui/QHeaderView>
 #include <QtGui/QUndoGroup>
 #include <QtGui/QUndoStack>
-#include <QtGui/QProgressBar>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QCheckBox>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsRectItem>
@@ -133,13 +202,10 @@
 #include <QtGui/QFocusFrame>
 #include <QtGui/QMouseEventTransition>
 #include <QtGui/QCommonStyle>
-#include <QtGui/QLineEdit>
-#include <QtGui/QGroupBox>
-#include <QtGui/QDial>
-#include <QtGui/QTextEdit>
 #include <QtGui/QMdiSubWindow>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QGraphicsSceneMouseEvent>
+#endif
 
 #include <QtSvg/QSvgRenderer>
 #include <QtSvg/QSvgGenerator>
@@ -150,24 +216,29 @@
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QUdpSocket>
 
-#if QT_VERSION >= 0x040800
 #include <QtNetwork/QHttpPart>
 #include <QtNetwork/QHttpMultiPart>
-#endif
 
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValueIterator>
 #include <QtScript/QScriptable>
 #include <QtScript/QScriptClass>
 #include <QtScript/QScriptClassPropertyIterator>
-#if QT_VERSION >= 0x040500
 #include <QtScriptTools/QScriptEngineDebugger>
-#endif
 
+#if QT_VERSION >= 0x050000
+#include <QtNetwork/QNetworkCookie>
+#include <QtConcurrent/QFuture>
+#include <QtConcurrent/QFutureWatcher>
+#include <QtQuick1/QDeclarativeEngine>
+#include <QtQuick1/QDeclarativeComponent>
+#include <QtQuick1/QDeclarativeItem>
+#include <QtQuick1/QDeclarativeView>
+#else
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeComponent>
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDeclarative/QDeclarativeView>
-
+#endif
 #endif
 

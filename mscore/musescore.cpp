@@ -325,7 +325,7 @@ void MuseScore::preferencesChanged()
       playId->setEnabled(!noSeq);
 
       getAction("midi-on")->setEnabled(preferences.enableMidiInput);
-      _statusBar->setShown(preferences.showStatusBar);
+      _statusBar->setVisible(preferences.showStatusBar);
       }
 
 //---------------------------------------------------------
@@ -2020,8 +2020,10 @@ static bool processNonGui()
                   return saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
                   return mscore->savePsPdf(fn, QPrinter::PdfFormat);
+#if QT_VERSION < 0x050000
             if (fn.endsWith(".ps"))
                   return mscore->savePsPdf(fn, QPrinter::PostScriptFormat);
+#endif
             if (fn.endsWith(".png"))
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
@@ -4162,7 +4164,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showMasterPalette();
       else if (cmd == "toggle-statusbar") {
             preferences.showStatusBar = a->isChecked();
-            _statusBar->setShown(preferences.showStatusBar);
+            _statusBar->setVisible(preferences.showStatusBar);
             preferences.write();
             }
       else if (cmd == "append-measures")
