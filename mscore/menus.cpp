@@ -760,7 +760,7 @@ void MuseScore::showPalette(bool visible)
       if (paletteBox == 0)
             profile->read();
       if (paletteBox)   // read failed?
-            paletteBox->setShown(visible);
+            paletteBox->setVisible(visible);
       a->setChecked(visible);
       }
 

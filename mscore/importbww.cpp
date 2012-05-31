@@ -168,7 +168,7 @@ private:
             QChar s;
             int a;
             int o;
-            StepAlterOct(QChar step = 'C', int alter = 0, int oct = 1)
+            StepAlterOct(QChar step = QChar('C'), int alter = 0, int oct = 1)
                   : s(step), a(alter), o(oct) {};
             };
       Score* score;                                     ///< The score

@@ -199,7 +199,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       void saveChord(Xml&);
 
       virtual bool event(QEvent* event);
+#if QT_VERSION < 0x050000
       virtual bool gestureEvent(QGestureEvent*);
+#endif
       virtual void resizeEvent(QResizeEvent*);
       virtual void wheelEvent(QWheelEvent*);
       virtual void dragEnterEvent(QDragEnterEvent*);

@@ -318,6 +318,11 @@ else (MINGW)
       dl
       pthread
       vorbisfile
+      QtPrintSupport
+      QtWidgets
+      QtQuick
+      QtQml
+      QtConcurrent
       )
     if (USE_PORTAUDIO)
       target_link_libraries(mscore ${PORTAUDIO_LIB})
@@ -331,6 +336,7 @@ else (MINGW)
       mscore
       PROPERTIES
          COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
+         LINK_FLAGS "-L${QT_LIBRARY_DIR}"
       )
    if (HAS_AUDIOFILE)
        target_link_libraries(mscore sndfile)

@@ -76,7 +76,7 @@ QT4_WRAP_CPP (mocs
       tuplet.h
       volta.h
       score.h
-      mscore.h
+      mscore1.h
       )
 
 add_library (

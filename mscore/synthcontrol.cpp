@@ -213,7 +213,7 @@ void MuseScore::showSynthControl()
                      SLOT(patchListChanged()));
                   }
             }
-      synthControl->setShown(a->isChecked());
+      synthControl->setVisible(a->isChecked());
       }
 
 //---------------------------------------------------------

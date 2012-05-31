@@ -221,8 +221,8 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             case PM_IndicatorHeight: return CheckBox_Size;
             case PM_ExclusiveIndicatorWidth: return CheckBox_Size;
             case PM_ExclusiveIndicatorHeight: return CheckBox_Size;
-            case PM_CheckListControllerSize: return CheckBox_Size;
-            case PM_CheckListButtonSize: return CheckBox_Size;
+//            case PM_CheckListControllerSize: return CheckBox_Size;
+//            case PM_CheckListButtonSize: return CheckBox_Size;
 
             // splitters and dock widgets
             case PM_SplitterWidth: return Splitter_Width;

@@ -675,8 +675,10 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setOutputFileName(fn);
             if (ext == "pdf")
                   printer.setOutputFormat(QPrinter::PdfFormat);
+#if QT_VERSION < 0x050000
             else
                   printer.setOutputFormat(QPrinter::PostScriptFormat);
+#endif
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
             }
@@ -765,7 +767,9 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       printer.setColorMode(QPrinter::Color);
       printer.setDocName(fn);
       printer.setOutputFileName(fn);
+#if QT_VERSION < 0x050000
       printer.setOutputFormat(QPrinter::PostScriptFormat);
+#endif
       QPainter p(&printer);
       paintRect(printMode, p, r, mag);
 

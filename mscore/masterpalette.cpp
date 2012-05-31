@@ -54,7 +54,7 @@ void MuseScore::showMasterPalette()
             masterPalette = new MasterPalette(0);
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
-      masterPalette->setShown(a->isChecked());
+      masterPalette->setVisible(a->isChecked());
       }
 
 //---------------------------------------------------------

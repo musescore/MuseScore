@@ -179,7 +179,7 @@ void MuseScore::showMixer(bool val)
                   }
             }
       iledit->updateAll(cs);
-      iledit->setShown(val);
+      iledit->setVisible(val);
       }
 
 //---------------------------------------------------------
