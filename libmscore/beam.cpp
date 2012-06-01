@@ -1567,14 +1567,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
             //
             // PITCHED STAVES: SETUP
             //
+            qreal px1 = c1->stemPos().x();
+            qreal px2 = c2->stemPos().x();
             if (_userModified[dIdx]) {
                   py1 += canvPos.y();
                   py2 += canvPos.y();
 
-                  qreal beamY   = py1;
-                  qreal px1     = c1->stemPos().x();
-                  qreal px2     = c2->stemPos().x();
-                  slope         = (py2 - py1) / (px2 - px1);
+                  qreal beamY = py1;
+                  slope       = (py2 - py1) / (px2 - px1);
                   //
                   // set stem direction for every chord
                   //
@@ -1604,7 +1604,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                   else
                         beamY = _up ? y2 : y1;
                   py1 = beamY;
-                  py2 = beamY;
                   //
                   // set stem direction for every chord
                   //
@@ -1628,17 +1627,17 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                         else
                               yDownMax = qMax(y, yDownMax);
                         }
-                  qreal y = yUpMin + (yDownMax - yUpMin) * .5;
-                  py1 = y;
-                  py2 = y;
+                  qreal slant = _spatium;
+                  if (cl.front()->up())
+                        slant = -slant;
+                  py1   = yUpMin + (yDownMax - yUpMin) * .5 - slant * .5;
+                  slope = slant / (px2 - px1);
                   }
             else {
                   py1 = c1->stemPos().y();
                   py2 = c2->stemPos().y();
                   computeStemLen(cl, py1, beamLevels);
                   }
-            qreal px1 = c1->stemPos().x();
-            qreal px2 = c2->stemPos().x();
             py2 = (px2 - px1) * slope + py1;
             py1 -= canvPos.y();
             py2 -= canvPos.y();
