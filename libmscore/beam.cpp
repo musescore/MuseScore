@@ -1676,7 +1676,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                         cr1 = cr;
                         // set direction
                         QPointF p(cr->stemPos() - canvPos);
-                        stemUp = py1 < p.y();
+                        if (idx == 0 && cross)
+                              stemUp = true;
+                        else
+                              stemUp = py1 < p.y();
                         dist = _beamDist * beamLevel * (stemUp ? 1.0 : -1.0);
                         }
                   else
