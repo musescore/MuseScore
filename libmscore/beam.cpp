@@ -1524,12 +1524,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
       const Chord* c2 = cl.back();        // last chord in beam
 
       int beamLevels = 1;
-      int chordRests = crl.size();
-      bool hasBeamSegment[chordRests];
-      for (int idx = 0; idx < chordRests; ++idx) {
-            if (crl[idx]->type() != REST)
-                  beamLevels = qMax(beamLevels, crl[idx]->durationType().hooks());
-            hasBeamSegment[idx] = false;
+      foreach(Chord* c, cl) {
+            int bl        = c->durationType().hooks();
+            beamLevels    = qMax(beamLevels, bl);
             }
 
       BeamFragment* f = fragments[frag];
@@ -1644,159 +1641,172 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
             }
 
       //---------------------------------------------
-      //   create beam segments:
-      //   COMMON TO BOTH TABLATURES AND PITCHED
+      //   create beam segments
       //---------------------------------------------
 
-      qreal stemWidth = point(score()->styleS(ST_stemWidth));
+      qreal x1 = cl[0]->stemPos().x() - canvPos.x();
+      int n    = cl.size();
 
-      qreal x1 = c1->stemPos().x() - canvPos.x();
+      int baseLevel = 0;
+// printf("Beam ==\n");
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
-            ChordRest* cr1 = 0;
-            ChordRest* cr2 = 0;
-            bool hasBeamSegment1[chordRests];
-            memset(hasBeamSegment1, 0, sizeof(hasBeamSegment));
-
-            qreal dist;
-            bool stemUp = _up;
-            bool firstChord = true;
-
-            for (int idx = 0; idx < chordRests; ++idx) {
-                  Chord* cr = static_cast<Chord*>(crl[idx]);
-                  if (cr->type() == REST)
-                        continue;
-                  int crLevel = cr->durationType().hooks() - 1;
-
-                  if ((cr1 == 0) && (crLevel < beamLevel)) {
-                        hasBeamSegment1[idx] = false;
-                        continue;
-                        }
-                  if (cr1 == 0) {
-                        cr1 = cr;
-                        // set direction
-                        QPointF p(cr->stemPos() - canvPos);
-                        if (idx == 0 && cross)
-                              stemUp = true;
-                        else
-                              stemUp = py1 < p.y();
-                        dist = _beamDist * beamLevel * (stemUp ? 1.0 : -1.0);
-                        }
-                  else
-                        cr2 = cr;
-
-                  if (crLevel == beamLevel) {
-                        //
-                        // create stem
-                        //
-                        Stem* stem = cr->stem();
-                        if (!stem) {
-                              stem = new Stem(score());
-                              cr->setStem(stem);
-                              }
-                        if (cr->hook())
-                              score()->undoRemoveElement(cr->hook());
-
-                        QPointF stemPos(cr->stemPos());
-                        qreal x2 = stemPos.x() - canvPos.x();
-                        qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
-                        qreal y2 = stemPos.y();
-                        if ((y2 > y1) != stemUp)
-                              y2 -= dist;
-                        stem->setLen(y2 - y1);
-                        stem->setPos(stemPos - cr->pagePos());
-                        //
-                        // layout stem slash for acciacatura
-                        //
-                        if (firstChord && cr->noteType() == NOTE_ACCIACCATURA) {
-                              StemSlash* stemSlash = cr->stemSlash();
-                              if (!stemSlash) {
-                                    stemSlash = new StemSlash(score());
-                                    cr->add(stemSlash);
+            bool growDown = _up || cross;
+            for (int i = 0; i < n; ++i) {
+                  Chord* cr1 = cl[i];
+                  int l = cr1->durationType().hooks() - 1;
+                  if (l >= beamLevel) {
+                        int c1 = i;
+                        ++i;
+                        for (; i < n; ++i) {
+                              Chord* c = cl[i];
+                              int l = c->durationType().hooks() - 1;
+                              bool b32 = (beamLevel >= 1) && (c->beamMode() == BEAM_BEGIN32);
+                              bool b64 = (beamLevel >= 2) && (c->beamMode() == BEAM_BEGIN64);
+                              if (l >= beamLevel && (b32 || b64)) {
+                                    ++i;
+                                    break;
                                     }
-                              stemSlash->layout();
+                              if (l < beamLevel)
+                                    break;
                               }
-                        else
-                              cr->setStemSlash(0);
-                        firstChord = false;
 
-                        Tremolo* tremolo = cr->tremolo();
-                        if (tremolo)
-                              tremolo->layout();
-                        }
+                        int bl = growDown ? beamLevel : -beamLevel;
 
-                  if (idx < chordRests-1) {
-                        bool b32 = (beamLevel >= 1) && (cr->beamMode() == BEAM_BEGIN32);
-                        bool b64 = (beamLevel >= 2) && (cr->beamMode() == BEAM_BEGIN64);
+                        Chord* cr2 = cl[i-1];
+// printf("  c1 %d i %d n %d up %d %d\n", c1, i, n, cr1->up(), cr2->up());
+                        if (c1
+//                           && ((i != n) || (c1 == (i-1)))
+//                           && (c1 != i)
+                           && (cr1->up() == cr2->up())
+                           ) {
+// printf("  flip\n");
+                              QPointF stemPos(cr1->stemPos());
+                              qreal x2 = stemPos.x() - canvPos.x();
+                              qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
+                              qreal y2 = stemPos.y();
 
-                        // end current beam level?
-                        int crLevel = crl[idx+1]->durationType().hooks() - 1;
-                        if (!((crLevel < beamLevel) || b32 || b64)) {
-                              continue;
+                              if ((y1 < y2) != growDown)
+                                    bl = baseLevel - (beamLevel + 1);
                               }
-                        }
-                  hasBeamSegment1[idx] = true;
-                  qreal x2 = cr1->stemPos().x() - canvPos.x();
-                  qreal x3;
-                  if (cr2) {
-                        // create segment
-                        x3 = cr2->stemPos().x() - canvPos.x();
+                        int c2 = i;
+                        if (c1 == 0 && c2 == n)
+                              ++baseLevel;
 
-                        if (st == SEGMENT_BEGIN)
-                              x3 += _spatium * 2;
-                        else if (st == SEGMENT_END)
-                              x2 -= _spatium * 2;
-                        else {
+                        qreal stemWidth  = point(score()->styleS(ST_stemWidth));
+                        qreal x2   = cr1->stemPos().x() - canvPos.x();
+                        qreal x3;
+
+                        if ((c2 - c1) > 1) {
+                              Chord* cr2 = cl[c2-1];
+                              // create segment
+                              x3 = cr2->stemPos().x() - canvPos.x();
+
                               if (cr1->up())
                                     x2 -= stemWidth;
                               if (!cr2->up())
                                     x3 += stemWidth;
                               }
-                        }
-                  else {
-                        // create broken segment
-
-                        qreal len = beamMinLen;
-                        if (idx == 0)                       // point to right
-                              ;
-                        else if (idx == chordRests-1)       // point to left
-                              len = -len;
-                        else if ((idx > 1) && (idx < chordRests)
-                           && (crl[idx-2]->duration() != crl[idx]->duration())) {
-                              Fraction a = crl[idx-2]->duration();
-                              Fraction b = crl[idx-1]->duration();
-                              Fraction c = crl[idx]->duration();
-                              if (((a + b) / 2 == c)
-                                 || ((a < c) && !((b+c)/2 == a))) {
-                                    len = -len;
-                                    }
-                              }
                         else {
-                              // find out direction of beam fragment:
-                              // point to same direction as beam starting
-                              //    one level higher
+                              // create broken segment
+                              int n = cl.size();
+                              qreal len = point(score()->styleS(ST_beamMinLen));
                               //
-                              if (!hasBeamSegment[idx-1]) {
-                                    TDuration d = cr1->durationType();
-                                    d = d.shift(-1);
-                                    int rtick = cr1->tick() - cr1->measure()->tick();
-                                    if (rtick % d.ticks())
+                              // find direction
+                              //
+                              if (c1 == 0)                // point to right
+                                    ;
+                              else if (c1 == n - 1)       // point to left
+                                    len = -len;
+                              else {
+                                    // 0 < c1 < (n-1)
+                                    Fraction a  = cl[c1-1]->duration();
+                                    Fraction b  = cr1->duration();
+                                    Fraction c  = cl[c1+1]->duration();
+                                    Fraction ab = (a + b).reduced();
+                                    Fraction bc = (b + c).reduced();
+
+                                    if (ab.denominator() < bc.denominator())
                                           len = -len;
+                                    else if (ab.denominator() == bc.denominator()) {
+                                          if (a.reduced().denominator() < b.reduced().denominator())
+                                                len = -len;
+                                          }
                                     }
+                              bool stemUp = cr1->up();
+                              if (stemUp && len > 0)
+                                    x2 -= stemWidth;
+                              else if (!stemUp && len < 0)
+                                    x2 += stemWidth;
+                              x3 = x2 + len;
                               }
-                        if (stemUp && len > 0)
-                              x2 -= stemWidth;
-                        else if (!stemUp && len < 0)
-                              x2 += stemWidth;
-                        x3 = x2 + len;
-                        hasBeamSegment1[idx-1] = false;
+                        qreal yo   = py1 + bl * _beamDist * _grow1;
+                        qreal ly1  = (x2 - x1) * slope + yo;
+                        qreal ly2  = (x3 - x1) * slope + yo;
+                        beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                        --i;
                         }
-                  qreal yo  = py1 + dist * _grow1;
-                  qreal ly1 = (x2 - x1) * slope + yo;
-                  qreal ly2 = (x3 - x1) * slope + yo;
-                  beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
-                  cr1 = cr2 = 0;
                   }
-            memcpy(hasBeamSegment, hasBeamSegment1, sizeof(hasBeamSegment));
+            }
+
+      //
+      //  create stems
+      //
+      for (int i = 0; i < n; ++i) {
+            Chord* cr  = cl[i];
+            Stem* stem = cr->stem();
+            if (!stem) {
+                  stem = new Stem(score());
+                  cr->setStem(stem);
+                  }
+            if (cr->hook())
+                  score()->undoRemoveElement(cr->hook());
+
+            QPointF stemPos(cr->stemPos());
+            qreal x2 = stemPos.x() - canvPos.x();
+            qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
+            qreal y2 = stemPos.y();
+            if (y2 < y1) {
+                  // search bottom beam
+                  qreal by = -1000000.0;
+                  foreach(QLineF* l, beamSegments) {
+                        if (x2 >= l->x1() && x2 <= l->x2()) {
+                              qreal y = (x2 - l->x1()) * slope + l->y1();
+                              by = qMax(by, y);
+                              }
+                        }
+                  y1 = by + canvPos.y();
+                  }
+            else {
+                  // search top beam
+                  qreal by = 1000000.0;
+                  foreach(QLineF* l, beamSegments) {
+                        if (x2 >= l->x1() && x2 <= l->x2()) {
+                              qreal y = (x2 - l->x1()) * slope + l->y1();
+                              by = qMin(by, y);
+                              }
+                        }
+                  y1 = by + canvPos.y();
+                  }
+
+            stem->setLen(y2 - y1);
+            stem->setPos(stemPos - cr->pagePos());
+            //
+            // layout stem slash for acciacatura
+            //
+            if ((i == 0) && cr->noteType() == NOTE_ACCIACCATURA) {
+                  StemSlash* stemSlash = cr->stemSlash();
+                  if (!stemSlash) {
+                        stemSlash = new StemSlash(score());
+                        cr->add(stemSlash);
+                        }
+                  stemSlash->layout();
+                  }
+            else
+                  cr->setStemSlash(0);
+
+            Tremolo* tremolo = cr->tremolo();
+            if (tremolo)
+                  tremolo->layout();
             }
       }
 
