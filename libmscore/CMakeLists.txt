@@ -44,6 +44,6 @@ add_library (
 set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
       )
 
