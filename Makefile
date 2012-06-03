@@ -39,12 +39,12 @@ release:
 
 debug:
 	mkdir build.debug;                         \
-  cd build.debug;                            \
-  cmake -DCMAKE_BUILD_TYPE=DEBUG	       \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-  	   ..; 		             \
-  make lrelease;                             \
-  make -j ${CPUS};                           \
+      cd build.debug;                            \
+      cmake -DCMAKE_BUILD_TYPE=DEBUG	       \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
+  	   ..; 		                         \
+      make lrelease;                             \
+      make -j ${CPUS};                           \
 
 
 qt5:
