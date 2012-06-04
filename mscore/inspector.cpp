@@ -16,6 +16,8 @@
 #include "inspectorImage.h"
 #include "inspectorGroupElement.h"
 #include "musescore.h"
+#include "scoreview.h"
+
 #include "libmscore/element.h"
 #include "libmscore/score.h"
 #include "libmscore/box.h"
@@ -44,8 +46,13 @@ void MuseScore::showInspector(bool visible)
                   connect(inspector, SIGNAL(inspectorVisible(bool)), a, SLOT(setChecked(bool)));
                   addDockWidget(Qt::RightDockWidgetArea, inspector);
                   }
-            if (cs)
-                  selectionChanged(cs->selection().state());
+            if (cs) {
+                  if (state() == STATE_EDIT) {
+                        inspector->setElement(cv->getEditObject());
+                        }
+                  else
+                        selectionChanged(cs->selection().state());
+                  }
             }
       if (inspector)
             inspector->setVisible(visible);
@@ -283,17 +290,26 @@ void InspectorElementElement::apply()
          &&  visible->isChecked() == e->visible())
             return;
 
-      Score* score    = e->score();
-      score->startCmd();
-      QPointF o(offsetX->value() * _spatium, offsetY->value() * _spatium);
-      if (o != e->pos())
-            score->undoChangeUserOffset(e, o - e->ipos());
-      if (e->color() != color->color())
-            score->undoChangeProperty(e, P_COLOR, color->color());
-      if (e->visible() != visible->isChecked())
-            score->undoChangeProperty(e, P_VISIBLE, visible->isChecked());
-      score->endCmd();
-      mscore->endCmd();
+      if (mscore->state() == STATE_EDIT) {
+            if (e->color() != color->color()) {
+                  ChangeProperty cp(e, P_COLOR, color->color());
+                  cp.redo();
+                  e->score()->update();
+                  }
+            }
+      else {
+            Score* score = e->score();
+            score->startCmd();
+            QPointF o(offsetX->value() * _spatium, offsetY->value() * _spatium);
+            if (o != e->pos())
+                  score->undoChangeUserOffset(e, o - e->ipos());
+            if (e->color() != color->color())
+                  score->undoChangeProperty(e, P_COLOR, color->color());
+            if (e->visible() != visible->isChecked())
+                  score->undoChangeProperty(e, P_VISIBLE, visible->isChecked());
+            score->endCmd();
+            mscore->endCmd();
+            }
       }
 
 //---------------------------------------------------------
