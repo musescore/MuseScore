@@ -793,7 +793,6 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <selected>1</selected>
             <pitch>53</pitch>
             <tpc>13</tpc>
             </Note>
