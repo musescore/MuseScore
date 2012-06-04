@@ -354,7 +354,7 @@ class Element : public QObject {
       void setStartDragPosition(const QPointF& v) { _startDragPosition = v; }
 
       static const char* name(ElementType type);
-      static Element* create(ElementType type, Score*);
+      Q_INVOKABLE static Element* create(ElementType type, Score*);
       static ElementType name2type(const QString&);
       static Element* name2Element(const QString&, Score*);
 

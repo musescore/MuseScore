@@ -102,7 +102,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       stack->addWidget(new TimeDialog);
 
       addPalette(MuseScore::newBarLinePalette());
-      addPalette(MuseScore::newKeySigPalette());
+      addPalette(MuseScore::newLinesPalette());
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newBracketsPalette());

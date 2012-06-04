@@ -1141,23 +1141,14 @@ bool Score::read(const QDomElement& de)
                         if (s1 == 0 || s2 == 0) {
                               qDebug("cannot place %s at tick %d - %d\n",
                                  s->name(), s->__tick1(), tick2);
-                                 continue;
+                              continue;
                               }
-                        else {
-                              s->setStartElement(s1);
-                              Measure* m = s2->measure();
-                              if (s->anchor() == ANCHOR_MEASURE && tick2 == m->tick()) {
-                                    // anchor to EndBarLine segment of previous measure:
-                                    m  = m->prevMeasure();
-                                    s2 = m->getSegment(SegEndBarLine, tick2);
-                                    }
-                              s->setEndElement(s2);
-                              s1->add(s);
-                              }
+                        Measure* m = s2->measure();
                         if (s->type() == VOLTA) {
                               Volta* volta = static_cast<Volta*>(s);
                               volta->setStartMeasure(s1->measure());
                               volta->setEndMeasure(s2->measure());
+                              volta->setAnchor(ANCHOR_MEASURE);
                               int n = volta->spannerSegments().size();
                               for (int i = 0; i < n; ++i) {
                                     LineSegment* seg = volta->segmentAt(i);
@@ -1165,7 +1156,20 @@ bool Score::read(const QDomElement& de)
                                           seg->setUserYoffset(seg->userOff().y() + 0.5 * spatium());
                                     }
                               }
-                        else if (s->type() == OTTAVA) {
+                        if (s->anchor() == ANCHOR_MEASURE) {
+                              if (tick2 == m->tick()) {
+                                    // anchor to EndBarLine segment of previous measure:
+                                    m  = m->prevMeasure();
+                                    s2 = m->getSegment(SegEndBarLine, tick2);
+                                    }
+                              s1->measure()->add(s);
+                              }
+                        else {
+                              s->setStartElement(s1);
+                              s->setEndElement(s2);
+                              s1->add(s);
+                              }
+                        if (s->type() == OTTAVA) {
                               // fix ottava position
                               Ottava* volta = static_cast<Ottava*>(s);
                               int n = volta->spannerSegments().size();

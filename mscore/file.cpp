@@ -117,6 +117,7 @@ static QString createDefaultFileName(QString fn)
       // special characters in filenames are a constant source
       // of trouble, this replaces some of them common in german:
       //
+      fn = fn.simplified();
       fn = fn.replace(QChar(' '),  "_");
       fn = fn.replace(QChar('\n'), "_");
       fn = fn.replace(QChar(0xe4), "ae");
@@ -126,6 +127,9 @@ static QString createDefaultFileName(QString fn)
       fn = fn.replace(QChar(0xc4), "Ae");
       fn = fn.replace(QChar(0xd6), "Oe");
       fn = fn.replace(QChar(0xdc), "Ue");
+      fn = fn.replace(QChar(':'),  "_");
+      fn = fn.replace(QChar('/'),  "_");
+      fn = fn.replace(QChar('\\'), "_");
       return fn;
       }
 

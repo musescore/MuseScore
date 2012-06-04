@@ -463,7 +463,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           <Note>
             <lid>48</lid>
-            <selected>1</selected>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
@@ -1221,7 +1220,6 @@ p, li { white-space: pre-wrap; }
             <durationType>quarter</durationType>
             <Note>
               <lid>48</lid>
-              <selected>1</selected>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>

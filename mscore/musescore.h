@@ -453,7 +453,7 @@ class MuseScore : public QMainWindow {
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
       void setNormalState()    { changeState(STATE_NORMAL); }
-      void setEditState()      { changeState(STATE_EDIT); }
+      void setEditState(Element*);
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void setSearchState()    { changeState(STATE_SEARCH); }
@@ -641,6 +641,8 @@ class MuseScore : public QMainWindow {
       static Palette* newAccidentalsPalette();
       static Palette* newBarLinePalette();
       static Palette* newLinesPalette();
+
+      Inspector* getInspector() { return inspector; }
       };
 
 extern MuseScore* mscore;

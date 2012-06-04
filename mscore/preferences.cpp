@@ -1675,8 +1675,13 @@ bool Preferences::readPluginList()
                                           d->path = eee.text();
                                     else if (tag == "load")
                                           d->load = eee.text().toInt();
+                                    else
+                                          domError(eee);
                                     }
-                              pluginList.append(d);
+                              if (d->path.endsWith(".qml"))
+                                    pluginList.append(d);
+                              else
+                                    delete d;
                               }
                         else
                               domError(ee);
