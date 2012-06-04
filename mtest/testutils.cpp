@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
+#include "config.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
@@ -20,7 +21,9 @@
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
 
+#ifdef OMR
 extern bool importPdf(Score*, const QString&);
+#endif
 bool debugMode = false;
 bool noGui = true;
 QString revision;
@@ -109,9 +112,10 @@ Score* MTest::readCreatedScore(const QString& name)
             rv = score->loadCompressedMsc(name);
       else if (csl == "mscx")
             rv = score->loadMsc(name);
+#ifdef OMR
       else if (csl == "pdf")
             rv = importPdf(score, name);
-
+#endif
       if (!rv) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
