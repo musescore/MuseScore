@@ -79,6 +79,7 @@
 #include "libmscore/excerpt.h"
 
 #include "navigator.h"
+#include "inspector.h"
 
 static const QEvent::Type CloneDrag = QEvent::Type(QEvent::User + 1);
 extern TextPalette* textPalette;
@@ -1285,7 +1286,6 @@ void ScoreView::startEdit(Element* element, int startGrip)
 
 void ScoreView::startEdit()
       {
-      mscore->setEditState();
       score()->setLayoutAll(false);
       curElement  = 0;
       setFocus();
@@ -1314,6 +1314,7 @@ void ScoreView::startEdit()
             editObject->layout();
             editObject->startEdit(this, startMove);
             }
+      mscore->setEditState(editObject);
       if (origEditObject->isText()) {
             Text* t = static_cast<Text*>(editObject);
             mscore->textTools()->setText(t);
@@ -1342,7 +1343,7 @@ void ScoreView::endEdit()
       setDropTarget(0);
       if (!editObject) {
             origEditObject = 0;
-          return;
+            return;
             }
 
       _score->addRefresh(editObject->canvasBoundingRect());
@@ -1350,6 +1351,8 @@ void ScoreView::endEdit()
             score()->addRefresh(grip[i]);
 
       editObject->endEdit();
+      if (mscore->getInspector())
+            mscore->getInspector()->setElement(0);
 
       if (editObject->isText()) {
             if (textPalette) {
@@ -1361,7 +1364,8 @@ void ScoreView::endEdit()
             Spanner* spanner  = static_cast<SpannerSegment*>(editObject)->spanner();
             Spanner* original = static_cast<SpannerSegment*>(origEditObject)->spanner();
 
-            if (!spanner->isEdited(original)) {
+            bool colorChanged = editObject->color() != origEditObject->color();
+            if (!spanner->isEdited(original) && !colorChanged) {
                   UndoStack* undo = _score->undo();
                   undo->current()->unwind();
                   _score->select(editObject);
@@ -4883,9 +4887,6 @@ void ScoreView::cmdAddText(int type)
       {
       if (!_score->checkHasMeasures())
             return;
-      Page* page = _score->pages().front();
-      const QList<System*>* sl = page->systems();
-      const QList<MeasureBase*>& ml = sl->front()->measures();
       Text* s = 0;
       _score->startCmd();
       switch(type) {
@@ -4894,11 +4895,9 @@ void ScoreView::cmdAddText(int type)
             case TEXT_COMPOSER:
             case TEXT_POET:
                   {
-                  MeasureBase* measure = ml.front();
-                  if (measure->type() != VBOX) {
-                        _score->insertMeasure(VBOX, measure);
-                        measure = ml.front();
-                        }
+                  MeasureBase* measure = _score->first();
+                  if (measure->type() != VBOX)
+                        measure = _score->insertMeasure(VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
                         case TEXT_TITLE:    s->setTextStyle(_score->textStyle(TEXT_STYLE_TITLE));    break;

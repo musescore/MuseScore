@@ -658,9 +658,6 @@ class Score : public QObject {
 
       QList<Excerpt*>& excerpts()             { return _excerpts; }
       const QList<Excerpt*>& excerpts() const { return _excerpts; }
-      MeasureBaseList* measures()             { return &_measures; }
-
-      bool checkHasMeasures() const;
 
       void setLayout(Measure* m);
 
@@ -735,6 +732,8 @@ class Score : public QObject {
       const QList<Page*>& pages() const        { return _pages;                }
       QList<System*>* systems()                { return &_systems;             }
 
+      MeasureBaseList* measures()             { return &_measures; }
+      bool checkHasMeasures() const;
       MeasureBase* first() const;
       MeasureBase* last()  const;
       Q_INVOKABLE Measure* firstMeasure() const;
