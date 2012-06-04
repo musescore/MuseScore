@@ -30,7 +30,6 @@
 #include "ottava.h"
 #include "volta.h"
 #include "excerpt.h"
-#include "zarchive/zarchive.h"
 #include "thirdparty/diff/diff_match_patch.h"
 #include "mscore.h"
 #include "stafftype.h"
@@ -40,6 +39,8 @@
 #include "undo.h"
 #include "imageStore.h"
 #include "audio.h"
+#include "libmscore/qzipreader_p.h"
+#include "libmscore/qzipwriter_p.h"
 
 //---------------------------------------------------------
 //   write
@@ -384,15 +385,15 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
 
 void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection)
       {
-      Zip uz;
-      if (!uz.createArchive(f))
-            throw (QString("Cannot create compressed musescore file: " + uz.errorString()));
+      QZipWriter uz(f);
 
+#if 0
       QDateTime dt;
       if (MScore::debugMode)
             dt = QDateTime(QDate(2007, 9, 10), QTime(12, 0));
       else
             dt = QDateTime::currentDateTime();
+#endif
 
       QString fn = info.completeBaseName() + ".mscx";
       QBuffer cbuf;
@@ -413,18 +414,18 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      if (!uz.createEntry("META-INF/container.xml", cbuf, dt))
-            throw(QString("Cannot add container.xml to zipfile '%1': ").arg(info.filePath())
-               + uz.errorString());
+      uz.addDirectory("META-INF");
+      uz.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
+      uz.addDirectory("Pictures");
       foreach(ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
             cbuf.setBuffer(&ip->buffer());
             cbuf.open(QIODevice::ReadOnly);
-            uz.createEntry(path, cbuf, dt, false, false, 0);
+            uz.addFile(path, cbuf.data());
             cbuf.close();
             }
 #ifdef OMR
@@ -440,10 +441,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
                   QImage image = page->image();
                   if (!image.save(&cbuf, "PNG"))
                         throw(QString("cannot create image"));
-                  if (!cbuf.open(QIODevice::ReadOnly))
-                        throw(QString("cannot open buffer cbuf"));
-                  if (!uz.createEntry(path, cbuf, dt, false, true))
-                        throw(QString("Cannot add <%1> to zipfile\n").arg(path));
+                  uz.addFile(path, cbuf.data());
                   cbuf.close();
                   }
             }
@@ -455,8 +453,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             QByteArray ba(_audio->data());
             QBuffer dbuf(&ba);
             dbuf.open(QIODevice::ReadOnly);
-            if (!uz.createEntry("audio.ogg", dbuf, dt, false, true))
-                  throw(QString("Cannot add <audio.ogg> to zipfile\n"));
+            uz.addFile("audio.ogg", dbuf.data());
             dbuf.close();
             }
 
@@ -464,10 +461,8 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       dbuf.open(QIODevice::ReadWrite);
       saveFile(&dbuf, true, onlySelection);
       dbuf.seek(0);
-      if (!uz.createEntry(fn, dbuf, dt))
-            throw(QString("Cannot add %1 to zipfile '%2'").arg(fn).arg(info.filePath()));
-      if (!uz.closeArchive())
-            throw(QString("Cannot close zipfile '%1'").arg(info.filePath()));
+      uz.addFile(fn, dbuf.data());
+      uz.close();
       }
 
 //---------------------------------------------------------
@@ -584,18 +579,14 @@ bool Score::loadCompressedMsc(QString name)
             info.setFile(name);
             }
 
-      Unzip uz;
-      if (!uz.openArchive(name))
-            return false;
+      QZipReader uz(name);
 
-      QBuffer cbuf;
-      cbuf.open(QIODevice::WriteOnly);
-      uz.extractFile("META-INF/container.xml", &cbuf);
+      QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
       QDomDocument container;
       int line, column;
       QString err;
-      if (!container.setContent(cbuf.data(), false, &err, &line, &column)) {
+      if (!container.setContent(cbuf, false, &err, &line, &column)) {
             QString col, ln;
             col.setNum(column);
             ln.setNum(line);
@@ -636,24 +627,18 @@ bool Score::loadCompressedMsc(QString name)
       // load images
       //
       foreach(const QString& s, images) {
-            QBuffer dbuf;
-            dbuf.open(QIODevice::WriteOnly);
-            if (!uz.extractFile(s, &dbuf))
-                  qDebug("Cannot read <%s> from zipfile\n", qPrintable(s));
-            else
-                  imageStore.add(s, dbuf.data());
+            QByteArray dbuf = uz.fileData(s);
+            imageStore.add(s, dbuf);
             }
       if (rootfile.isEmpty()) {
             qDebug("can't find rootfile in: %s\n", qPrintable(name));
             return false;
             }
 
-      QBuffer dbuf;
-      dbuf.open(QIODevice::WriteOnly);
-      uz.extractFile(rootfile, &dbuf);
+      QByteArray dbuf = uz.fileData(rootfile);
 
       QDomDocument doc;
-      if (!doc.setContent(dbuf.data(), false, &err, &line, &column)) {
+      if (!doc.setContent(dbuf, false, &err, &line, &column)) {
             QString col, ln;
             col.setNum(column);
             ln.setNum(line);
@@ -661,7 +646,6 @@ bool Score::loadCompressedMsc(QString name)
             qDebug("error: %s", qPrintable(error));
             return false;
             }
-      dbuf.close();
       docName = info.completeBaseName();
       bool retval = read1(doc.documentElement());
 
@@ -672,20 +656,15 @@ bool Score::loadCompressedMsc(QString name)
       if (_omr) {
             int n = _omr->numPages();
             for (int i = 0; i < n; ++i) {
-                  QBuffer dbuf;
-                  dbuf.open(QIODevice::WriteOnly);
                   QString path = QString("OmrPages/page%1.png").arg(i+1);
-                  if (!uz.extractFile(path, &dbuf))
-                        qDebug("Cannot read <%s> from zipfile", qPrintable(path));
-                  else  {
-                        OmrPage* page = _omr->page(i);
-                        QImage image;
-                        if (image.loadFromData(dbuf.data(), "PNG")) {
-                              page->setImage(image);
-                              }
-                        else
-                              qDebug("load image failed");
+                  QByteArray dbuf = uz.fileData(path);
+                  OmrPage* page = _omr->page(i);
+                  QImage image;
+                  if (image.loadFromData(dbuf, "PNG")) {
+                        page->setImage(image);
                         }
+                  else
+                        qDebug("load image failed");
                   }
             }
 #endif
@@ -693,12 +672,8 @@ bool Score::loadCompressedMsc(QString name)
       //  read audio
       //
       if (_audio) {
-            QBuffer dbuf;
-            dbuf.open(QIODevice::WriteOnly);
-            if (!uz.extractFile("audio.ogg", &dbuf))
-                  qDebug("Cannot read <audio.ogg> from zipfile");
-            else
-                  _audio->setData(dbuf.data());
+            QByteArray dbuf = uz.fileData("audio.ogg");
+            _audio->setData(dbuf);
             }
       return retval;
       }
@@ -1339,18 +1314,14 @@ void Score::print(QPainter* painter, int pageNo)
 
 QByteArray Score::readCompressedToBuffer()
       {
-      QBuffer cbuf;
-      Unzip uz;
-      if (!uz.openArchive(filePath()))
-            return QByteArray();
+      QZipReader uz(filePath());
 
-      cbuf.open(QIODevice::WriteOnly);
-      uz.extractFile("META-INF/container.xml", &cbuf);
+      QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
       QDomDocument container;
       int line, column;
       QString err;
-      if (!container.setContent(cbuf.data(), false, &err, &line, &column)) {
+      if (!container.setContent(cbuf, false, &err, &line, &column)) {
             QString col, ln;
             col.setNum(column);
             ln.setNum(line);
@@ -1391,24 +1362,15 @@ QByteArray Score::readCompressedToBuffer()
       // load images
       //
       foreach(const QString& s, images) {
-            QBuffer dbuf;
-            dbuf.open(QIODevice::WriteOnly);
-            if (!uz.extractFile(s, &dbuf))
-                  qDebug("Cannot read <%s> from zipfile\n", qPrintable(s));
-            else
-                  imageStore.add(s, dbuf.data());
+            QByteArray dbuf = uz.fileData(s);
+            imageStore.add(s, dbuf);
             }
 
       if (rootfile.isEmpty()) {
             qDebug("can't find rootfile in: %s\n", qPrintable(filePath()));
             return QByteArray();
             }
-
-      QBuffer dbuf;
-      dbuf.open(QIODevice::WriteOnly);
-      uz.extractFile(rootfile, &dbuf);
-      dbuf.close();
-      return dbuf.data();
+      return uz.fileData(rootfile);
       }
 
 //---------------------------------------------------------
