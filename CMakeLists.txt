@@ -379,7 +379,7 @@ endif(${CMAKE_CXX_COMPILER_ID} EQUAL "Clang")
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 
-subdirs(mscore awl bww2mxml zarchive share
+subdirs(mscore awl bww2mxml share
       fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
