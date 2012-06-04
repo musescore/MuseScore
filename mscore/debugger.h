@@ -457,6 +457,7 @@ class VoltaView : public ShowElementBase {
 
       Ui::TextLineBase tlb;
       Ui::SLineBase lb;
+      Ui::SpannerBase sp;
 
    private slots:
       void segmentClicked(QTreeWidgetItem* item);
@@ -464,6 +465,8 @@ class VoltaView : public ShowElementBase {
       void continueTextClicked();
       void leftElementClicked();
       void rightElementClicked();
+      void startClicked();
+      void endClicked();
 
    public:
       VoltaView();

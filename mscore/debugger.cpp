@@ -1911,6 +1911,10 @@ void VoltaView::continueTextClicked()
 VoltaView::VoltaView()
    : ShowElementBase()
       {
+      QWidget* spanner = new QWidget;
+      sp.setupUi(spanner);
+      layout->addWidget(spanner);
+
       // SLineBase
       QWidget* w = new QWidget;
       lb.setupUi(w);
@@ -1922,11 +1926,11 @@ VoltaView::VoltaView()
       layout->addWidget(w);
 
       layout->addStretch(10);
-//      connect(lb.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(segmentClicked(QTreeWidgetItem*)));
-      connect(tlb.beginText, SIGNAL(clicked()), SLOT(beginTextClicked()));
+      connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
-//      connect(lb.leftElement, SIGNAL(clicked()), SLOT(leftElementClicked()));
-//      connect(lb.rightElement, SIGNAL(clicked()), SLOT(rightElementClicked()));
+      connect(sp.startElement,  SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement,    SIGNAL(clicked()), SLOT(endClicked()));
+      connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -1944,15 +1948,18 @@ void VoltaView::setElement(Element* e)
 //      lb.leftElement->setText(QString("%1").arg((unsigned long)volta->startElement(), 8, 16));
 //      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
 
-/*      lb.segments->clear();
+      sp.segments->clear();
       const QList<SpannerSegment*>& el = volta->spannerSegments();
       foreach(const SpannerSegment* e, el) {
-            QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)e, 8, 16));
-            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)e));
-            lb.segments->addTopLevelItem(item);
+            QListWidgetItem* item = new QListWidgetItem;
+            item->setText(QString("%1").arg((unsigned long)e, 8, 16));
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)e));
+            sp.segments->addItem(item);
             }
-      */
+
+      sp.startElement->setEnabled(volta->startElement() != 0);
+      sp.endElement->setEnabled(volta->endElement() != 0);
+      sp.anchor->setCurrentIndex(int(volta->anchor()));
 
       tlb.beginText->setEnabled(volta->beginText());
       tlb.continueText->setEnabled(volta->continueText());
@@ -1975,6 +1982,25 @@ void VoltaView::rightElementClicked()
       {
       emit elementChanged(static_cast<Volta*>(element())->endElement());
       }
+
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void VoltaView::startClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void VoltaView::endClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      }
+
 
 //---------------------------------------------------------
 //   VoltaSegmentView

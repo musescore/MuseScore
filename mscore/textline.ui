@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QGroupBox" name="TextLine">
      <property name="title">
-      <string>TextLine</string>
+      <string notr="true">TextLine</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -28,24 +28,28 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>line width:</string>
+           <string notr="true">line width:</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="lineWidth"/>
+         <widget class="QDoubleSpinBox" name="lineWidth">
+          <property name="suffix">
+           <string notr="true"/>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QPushButton" name="beginText">
           <property name="text">
-           <string>BeginText</string>
+           <string notr="true">BeginText</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
          <widget class="QPushButton" name="continueText">
           <property name="text">
-           <string>ContinueText</string>
+           <string notr="true">ContinueText</string>
           </property>
          </widget>
         </item>
