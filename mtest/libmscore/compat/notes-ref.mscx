@@ -380,7 +380,6 @@ p, li { white-space: pre-wrap; }
           <durationType>32nd</durationType>
           <Beam>6</Beam>
           <Note>
-            <selected>1</selected>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>

@@ -5,7 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <systemDistance>9.2</systemDistance>
+      <minSystemDistance>9.2</minSystemDistance>
       <bracketDistance>0.2</bracketDistance>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <page-layout>

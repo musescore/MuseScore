@@ -19,12 +19,16 @@ include_directories(
       ${PROJECT_SOURCE_DIR}
       )
 
+if (OMR)
+set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
+endif (OMR)
+
 add_library(
       testutils STATIC
       testutils.cpp
       mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp
+      ${OMR_SRC}
       ${PROJECT_SOURCE_DIR}/mscore/midifile.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       omr
@@ -54,6 +58,9 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs(libmscore omr)
+subdirs(libmscore)
 
+if (OMR)
+subdirs(omr)
+endif (OMR)
 

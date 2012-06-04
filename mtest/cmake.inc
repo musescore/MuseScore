@@ -23,7 +23,6 @@ add_executable(
 
 target_link_libraries(
       ${TARGET}
-      ${QT_LIBRARIES}
       ${QT_QTTEST_LIBRARY}
       testutils
       libmscore
@@ -32,14 +31,18 @@ target_link_libraries(
       z
       dl
       pthread
-      omr
-      fitz
-      jbig2dec
-      jpeg
-      openjpeg
       fontconfig
       freetype
+      ${QT_LIBRARIES}
       )
+
+if (OMR)
+      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg)
+      if (OCR)
+            target_link_libraries(mscore tesseract_api)
+      endif (OCR)
+endif (OMR)
+
 
 set_target_properties (
       ${TARGET}
