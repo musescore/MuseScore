@@ -148,7 +148,6 @@ p, li { white-space: pre-wrap; }
           <text>testpart</text>
           </Text>
         <Text>
-          <selected>1</selected>
           <style>Subtitle</style>
           <text>Fingering</text>
           </Text>
