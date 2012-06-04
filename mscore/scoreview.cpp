@@ -4878,9 +4878,6 @@ void ScoreView::cmdAddText(int type)
       {
       if (!_score->checkHasMeasures())
             return;
-      Page* page = _score->pages().front();
-      const QList<System*>* sl = page->systems();
-      const QList<MeasureBase*>& ml = sl->front()->measures();
       Text* s = 0;
       _score->startCmd();
       switch(type) {
@@ -4889,11 +4886,9 @@ void ScoreView::cmdAddText(int type)
             case TEXT_COMPOSER:
             case TEXT_POET:
                   {
-                  MeasureBase* measure = ml.front();
-                  if (measure->type() != VBOX) {
-                        _score->insertMeasure(VBOX, measure);
-                        measure = ml.front();
-                        }
+                  MeasureBase* measure = _score->first();
+                  if (measure->type() != VBOX)
+                        measure = _score->insertMeasure(VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
                         case TEXT_TITLE:    s->setTextStyle(_score->textStyle(TEXT_STYLE_TITLE));    break;
