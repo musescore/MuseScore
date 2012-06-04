@@ -171,7 +171,6 @@ p, li { white-space: pre-wrap; }
             <lid>2</lid>
             <Symbol>
               <name>accordeon stdbase</name>
-              <selected>1</selected>
               </Symbol>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -822,7 +821,6 @@ p, li { white-space: pre-wrap; }
               <lid>2</lid>
               <Symbol>
                 <name>accordeon stdbase</name>
-                <selected>1</selected>
                 </Symbol>
               <pitch>72</pitch>
               <tpc>14</tpc>
