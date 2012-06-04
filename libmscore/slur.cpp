@@ -312,12 +312,12 @@ void SlurSegment::write(Xml& xml, int no) const
          && ups[GRIP_BEZIER1].off.isNull()
          && ups[GRIP_BEZIER2].off.isNull()
          && userOff().isNull()
-         && visible())
+         && visible()
+         && (color() == Qt::black)
+            )
             return;
 
       xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
-      if (!visible())
-            xml.tag("visible", visible());
       if (!userOff().isNull())
             xml.tag("offset", userOff() / spatium());
       if (!(ups[GRIP_START].off.isNull()))
@@ -328,6 +328,7 @@ void SlurSegment::write(Xml& xml, int no) const
             xml.tag("o3", ups[GRIP_BEZIER2].off);
       if (!(ups[GRIP_END].off.isNull()))
             xml.tag("o4", ups[GRIP_END].off);
+      Element::writeProperties(xml);
       xml.etag();
       }
 

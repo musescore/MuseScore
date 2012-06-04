@@ -975,8 +975,8 @@ MuseScore::MuseScore()
 #if defined(Q_WS_MAC) || defined(Q_WS_WIN)
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
-      
-      
+
+
       a = getAction("script-debug");
       a->setCheckable(true);
       a->setChecked(scriptDebug);
@@ -1187,20 +1187,20 @@ void MuseScore::selectScore(QAction* action)
 //   selectionChanged
 //---------------------------------------------------------
 
-void MuseScore::selectionChanged(int state)
+void MuseScore::selectionChanged(int selectionState)
       {
-      bool enable = state != SEL_NONE;
+      bool enable = selectionState != SEL_NONE;
       getAction("cut")->setEnabled(enable);
       getAction("copy")->setEnabled(enable);
       if (pianorollEditor)
-            pianorollEditor->changeSelection(state);
+            pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
-            drumrollEditor->changeSelection(state);
-      if (inspector) {
+            drumrollEditor->changeSelection(selectionState);
+      if (inspector && (state() != STATE_EDIT)) {
             if (cs) {
                   if (cs->selection().isSingle())
                         inspector->setElement(cs->selection().element());
-                  else if (cs->selection().state() == SEL_NONE)
+                  else if (selectionState == SEL_NONE)
                         inspector->setElement(0);
                   else
                         inspector->setElementList(cs->selection().elements());
@@ -1208,6 +1208,17 @@ void MuseScore::selectionChanged(int state)
             else
                   inspector->setElement(0);
             }
+      }
+
+//---------------------------------------------------------
+//   setEditState
+//---------------------------------------------------------
+
+void MuseScore::setEditState(Element* e)
+      {
+      if (inspector)
+            inspector->setElement(e);
+      changeState(STATE_EDIT);
       }
 
 //---------------------------------------------------------
@@ -2883,7 +2894,7 @@ AboutBoxDialog::AboutBoxDialog()
       copyRevisionButton->hide();
 #endif
       }
-      
+
 //---------------------------------------------------------
 //   copyRevisionToClipboard
 //---------------------------------------------------------
