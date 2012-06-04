@@ -1314,7 +1314,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                   a->setParent(note);
                   a->setSubtype(accidental);
                   a->setRole(ACC_USER);
-                  note->setAccidental(a);
+                  undoAddElement(a);
                   }
             else {
                   accType = accidental;
@@ -1352,7 +1352,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                               tab->convertPitch(pitch, &string, &fret);
                         }
                   }
-            undo(new ChangePitch(n, pitch, tpc, n->line()/*, fret, string*/));
+            undo(new ChangePitch(n, pitch, tpc, n->line()));
             if (!st->useTablature()) {
                   //
                   // handle ties
@@ -1366,7 +1366,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                         Note* nn = n;
                         while (nn->tieFor()) {
                               nn = nn->tieFor()->endNote();
-                              undo(new ChangePitch(nn, pitch, tpc, nn->line()/*, fret, string*/));
+                              undo(new ChangePitch(nn, pitch, tpc, nn->line()));
                               }
                         }
                   }
@@ -2470,7 +2470,7 @@ void Score::cmd(const QAction* a)
 	else if (cmd == "add-tenuto")
             addArticulation(Articulation_Tenuto);
   else if (cmd == "add-marcato")
-            addArticulation(Articulation_Marcato);            
+            addArticulation(Articulation_Marcato);
 	else if (cmd == "add-trill")
             addArticulation(Articulation_Trill);
       else if (cmd == "add-hairpin")
