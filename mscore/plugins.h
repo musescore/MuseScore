@@ -25,12 +25,13 @@ class Cursor;
 class QmlPlugin : public QDeclarativeItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
+      Q_PROPERTY(QString pluginType READ pluginType WRITE setPluginType)
       Q_PROPERTY(int mscoreVersion READ mscoreVersion)
       Q_PROPERTY(Score* curScore READ curScore)
       Q_PROPERTY(QDeclarativeListProperty<Score> scores READ scores);
 
       QString _menuPath;
-      bool _hasGui;
+      QString _pluginType;
 
    signals:
       void run();
@@ -39,9 +40,11 @@ class QmlPlugin : public QDeclarativeItem {
       QmlPlugin(QDeclarativeItem* parent = 0);
       ~QmlPlugin();
 
-      void setMenuPath(const QString& s) { _menuPath = s;    }
-      QString menuPath() const           { return _menuPath; }
-      void runPlugin()                   { emit run();       }
+      void setMenuPath(const QString& s)   { _menuPath = s;    }
+      QString menuPath() const             { return _menuPath; }
+      void setPluginType(const QString& s) { _pluginType = s;        }
+      QString pluginType() const           { return _pluginType;     }
+      void runPlugin()                     { emit run();       }
 
       int mscoreVersion() const;
       Score* curScore() const;

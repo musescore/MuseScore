@@ -131,21 +131,19 @@ void MuseScore::registerPlugin(const QString& pluginPath)
             qmlRegisterType<ChordRest>();
             }
       QObject* obj = 0;
-      {
-            QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
-            obj = component.create();
-            if (obj == 0) {
-                  qDebug("creating component <%s> failed", qPrintable(pluginPath));
-                  foreach(QDeclarativeError e, component.errors()) {
-                        qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
-                        }
-                  return;
+      QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
+      obj = component.create();
+      if (obj == 0) {
+            qDebug("creating component <%s> failed", qPrintable(pluginPath));
+            foreach(QDeclarativeError e, component.errors()) {
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
-            QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-            QString menuPath = item->menuPath();
-            plugins.append(pluginPath);
-            createMenuEntry(menuPath);
+            return;
             }
+      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      QString menuPath = item->menuPath();
+      plugins.append(pluginPath);
+      createMenuEntry(menuPath);
       delete obj;
       }
 
@@ -335,6 +333,15 @@ void MuseScore::pluginTriggered(int idx)
       connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
       view->show();
       QmlPlugin* p = (QmlPlugin*)(view->rootObject());
+      if (p->pluginType() == "panel-right") {
+            QDockWidget* dock = new QDockWidget("Plugin", 0);
+            dock->setWidget(view);
+            addDockWidget(Qt::RightDockWidgetArea, dock);
+            connect((QObject*)view->engine(), SIGNAL(quit()), dock, SLOT(close()));
+            }
+      else {
+            connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
+            }
       p->runPlugin();
       }
 
