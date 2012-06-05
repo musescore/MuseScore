@@ -71,7 +71,6 @@
 #include "libmscore/repeat.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
-#include "zarchive/zarchive.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
@@ -93,6 +92,7 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/tablature.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/qzipwriter_p.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -4125,18 +4125,16 @@ bool MuseScore::saveXml(Score* score, const QString& name)
 
 bool MuseScore::saveMxl(Score* score, const QString& name)
       {
-      Zip uz;
-      if (!uz.createArchive(name)) {
-            qDebug("Cannot create zipfile %s\n", qPrintable(name + ": " + uz.errorString()));
-            return false;
-            }
+      QZipWriter uz(name);
 
       QFileInfo fi(name);
+#if 0
       QDateTime dt;
       if (MScore::debugMode)
             dt = QDateTime(QDate(2007, 9, 10), QTime(12, 0));
       else
             dt = QDateTime::currentDateTime();
+#endif
       QString fn = fi.completeBaseName() + ".xml";
 
       QBuffer cbuf;
@@ -4151,25 +4149,16 @@ bool MuseScore::saveMxl(Score* score, const QString& name)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      if (!uz.createEntry("META-INF/container.xml", cbuf, dt)) {
-            qDebug("Cannot add container.xml to zipfile '%s'\n", qPrintable(name + ": " + uz.errorString()));
-            return false;
-            }
+      uz.addDirectory("META-INF");
+      uz.addFile("META-INF/container.xml", cbuf.data());
 
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
       ExportMusicXml em(score);
       em.write(&dbuf);
       dbuf.seek(0);
-      if (!uz.createEntry(fn, dbuf, dt)) {
-            qDebug("Cannot add %s to zipfile '%s'\n", qPrintable(fn), qPrintable(name));
-            return false;
-            }
-
-      if (!uz.closeArchive()) {
-            qDebug("Cannot close zipfile '%s'\n", qPrintable(name));
-            return false;
-            }
+      uz.addFile(fn, dbuf.data());
+      uz.close();
       return true;
       }
 
