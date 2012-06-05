@@ -71,7 +71,7 @@ QT4_WRAP_CPP (mocs
       jumpproperties.h markerproperties.h boxproperties.h newwizard.h
       transposedialog.h chordedit.h tempoproperties.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
-      script.h articulationprop.h metaedit.h magbox.h voiceselector.h
+      articulationprop.h metaedit.h magbox.h voiceselector.h
       textprop.h dynamicprop.h textproperties.h tupletdialog.h tupletproperties.h
       slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h

@@ -359,7 +359,6 @@ class MuseScore : public QMainWindow {
       void fingeringMenu();
       void registerPlugin(const QString& pluginPath);
       int  pluginIdxFromPath(QString pluginPath);
-      void addGlobalObjectToPluginEngine(const char * name, const QString & value );
       void startDebugger();
       void midiinToggled(bool);
       void speakerToggled(bool);
@@ -495,6 +494,7 @@ class MuseScore : public QMainWindow {
       double getMag(ScoreView*) const;
       void setMag(double);
       bool noScore() const { return scoreList.isEmpty(); }
+      QList<Score*>& scores() { return scoreList; }
 
       TextTools* textTools();
       EditTools* editTools();
