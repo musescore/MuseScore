@@ -22,7 +22,6 @@
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "globals.h"
-#include "script.h"
 #include "config.h"
 #include "preferences.h"
 #include "libmscore/chord.h"
@@ -57,6 +56,24 @@ QmlPlugin::~QmlPlugin()
 int QmlPlugin::mscoreVersion() const
       {
       return version();
+      }
+
+//---------------------------------------------------------
+//   curScore
+//---------------------------------------------------------
+
+Score* QmlPlugin::curScore() const
+      {
+      return mscore->currentScore();
+      }
+
+//---------------------------------------------------------
+//   scores
+//---------------------------------------------------------
+
+QDeclarativeListProperty<Score> QmlPlugin::scores()
+      {
+      return QDeclarativeListProperty<Score>(this, mscore->scores());
       }
 
 //---------------------------------------------------------
@@ -238,15 +255,6 @@ int MuseScore::pluginIdxFromPath(QString pluginPath) {
             idx++;
             }
       return -1;
-      }
-
-//---------------------------------------------------------
-//   addGlobalObjectToPluginEngine
-//---------------------------------------------------------
-
-void MuseScore::addGlobalObjectToPluginEngine(const char * name, const QString & value )
-      {
-      se->globalObject().setProperty(name, se->newVariant(value));
       }
 
 //---------------------------------------------------------

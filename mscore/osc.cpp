@@ -197,8 +197,10 @@ void MuseScore::oscTempo(int val)
 //---------------------------------------------------------
 //   oscTriggerPlugin
 //---------------------------------------------------------
+
 void MuseScore::oscTriggerPlugin(QString s)
       {
+#if 0 // TODO
       QStringList args = s.split(",");
       if(args.length() > 0) {
             int idx = pluginIdxFromPath(args.at(0));
@@ -210,6 +212,7 @@ void MuseScore::oscTriggerPlugin(QString s)
                   pluginTriggered(idx);
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -237,7 +240,7 @@ void MuseScore::oscColorNote(QVariantList list)
             if(color.isValid())
                   noteColor = color;
             }
-      
+
       Measure* measure = cs->tick2measure(tick);
       if(!measure)
             return;

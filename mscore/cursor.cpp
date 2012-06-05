@@ -17,6 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "libmscore/score.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/rest.h"
@@ -27,7 +28,6 @@
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
-#include "script.h"
 #include "cursor.h"
 
 //---------------------------------------------------------

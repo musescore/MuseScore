@@ -46,7 +46,7 @@ MuseScore {
                   cursor.rewind(0);  // set cursor to first chord/rest
 
                   while (cursor.segment) {
-                        if (cursor.element.type == MScore.CHORD) {
+                        if (cursor.element && cursor.element.type == MScore.CHORD) {
                               var notes = cursor.element.notes;
                               for (var i = 0; i < notes.length; i++) {
                                     var note = notes[i];

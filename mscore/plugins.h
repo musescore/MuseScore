@@ -25,9 +25,9 @@ class Cursor;
 class QmlPlugin : public QDeclarativeItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
-      Q_PROPERTY(bool hasGui READ hasGui WRITE setHasGui)
       Q_PROPERTY(int mscoreVersion READ mscoreVersion)
       Q_PROPERTY(Score* curScore READ curScore)
+      Q_PROPERTY(QDeclarativeListProperty<Score> scores READ scores);
 
       QString _menuPath;
       bool _hasGui;
@@ -41,15 +41,15 @@ class QmlPlugin : public QDeclarativeItem {
 
       void setMenuPath(const QString& s) { _menuPath = s;    }
       QString menuPath() const           { return _menuPath; }
-      bool hasGui() const                { return _hasGui;   }
-      void setHasGui(bool val)           { _hasGui = val;    }
-      int mscoreVersion() const;
       void runPlugin()                   { emit run();       }
-      Score* curScore()                  { return mscore->currentScore(); }
+
+      int mscoreVersion() const;
+      Score* curScore() const;
+      QDeclarativeListProperty<Score> scores();
+
       Q_INVOKABLE Cursor* newCursor();
       Q_INVOKABLE Element* newElement(int);
       };
-
 
 #endif
 
