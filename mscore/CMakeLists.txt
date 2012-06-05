@@ -236,7 +236,6 @@ if (MINGW)
       diff_match_patch
       msynth
       bww
-      zarchive
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
       fluid
@@ -310,7 +309,6 @@ else (MINGW)
       mstyle
       msynth
       bww
-      zarchive
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
       fluid
