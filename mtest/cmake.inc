@@ -27,7 +27,6 @@ target_link_libraries(
       testutils
       libmscore
       msynth
-      zarchive
       z
       dl
       pthread
