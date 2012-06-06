@@ -22,6 +22,7 @@
 #define __PREFERENCES_H__
 
 #include "globals.h"
+#include "shortcut.h"
 
 enum SessionStart {
       EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
@@ -66,6 +67,8 @@ enum MusicxmlExportBreaks {
 struct PluginDescription {
       QString path;
       bool load;
+      Shortcut shortcut;
+      QString menuPath;
       };
 
 //---------------------------------------------------------

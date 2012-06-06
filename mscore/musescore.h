@@ -83,6 +83,7 @@ class NScrollArea;
 class EditTools;
 class Sym;
 class MasterPalette;
+struct PluginDescription;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
@@ -284,7 +285,7 @@ class MuseScore : public QMainWindow {
 //      QScriptEngineDebugger* scriptDebugger;
 
       QDeclarativeEngine* qml;
-      void createMenuEntry(const QString&);
+      void createMenuEntry(PluginDescription*);
 
       QTimer* autoSaveTimer;
       QList<QAction*> qmlPluginActions;
@@ -357,7 +358,7 @@ class MuseScore : public QMainWindow {
       void showKeyEditor();
       void saveFile();
       void fingeringMenu();
-      void registerPlugin(const QString& pluginPath);
+      void registerPlugin(PluginDescription*);
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
       void midiinToggled(bool);
@@ -458,7 +459,6 @@ class MuseScore : public QMainWindow {
       void setSearchState()    { changeState(STATE_SEARCH); }
       void setFotomode()       { changeState(STATE_FOTO); }
       void checkForUpdate();
-      void registerPlugin(QAction*);
       QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl);

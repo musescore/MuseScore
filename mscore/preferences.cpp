@@ -655,6 +655,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       pluginTable->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("load")));
       pluginTable->setHorizontalHeaderItem(1, new QTableWidgetItem(tr("Plugin Path")));
+      pluginTable->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Shortcut")));
 
       connect(buttonBox,          SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
@@ -676,6 +677,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
+      connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
 
       recordButtons = new QButtonGroup(this);
       recordButtons->setExclusive(false);
@@ -1018,6 +1020,8 @@ void PreferenceDialog::updateValues(Preferences* p)
             item = new QTableWidgetItem;
             item->setCheckState(d->load ? Qt::Checked : Qt::Unchecked);
             pluginTable->setItem(i, 0, item);
+            item = new QTableWidgetItem(d->shortcut.keysToString());
+            pluginTable->setItem(i, 2, item);
             }
       sfChanged = false;
 
@@ -1110,30 +1114,6 @@ void PreferenceDialog::clearShortcutClicked()
       Shortcut* s = localShortcuts[str.toAscii().data()];
       s->clear();
       active->setText(1, "");
-      shortcutsChanged = true;
-      }
-
-//---------------------------------------------------------
-//   defineShortcutClicked
-//---------------------------------------------------------
-
-void PreferenceDialog::defineShortcutClicked()
-      {
-      QTreeWidgetItem* active = shortcutList->currentItem();
-      if (!active)
-            return;
-      QString str = active->data(0, Qt::UserRole).toString();
-      if (str.isEmpty())
-            return;
-      Shortcut* s = localShortcuts[str.toAscii().data()];
-      ShortcutCaptureDialog sc(s, localShortcuts, this);
-      int rv = sc.exec();
-      if (rv == 0)
-            return;
-      if (rv == 2)
-            s->clear();
-      s->addShortcut(sc.getKey());
-      active->setText(1, s->keysToString());
       shortcutsChanged = true;
       }
 
@@ -1461,15 +1441,14 @@ void PreferenceDialog::apply()
       mscore->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
       int n = pluginTable->rowCount();
-      qDeleteAll(preferences.pluginList);
-      preferences.pluginList.clear();
+//      qDeleteAll(preferences.pluginList);
+//      preferences.pluginList.clear();
       for (int i = 0; i < n; ++i) {
-            PluginDescription* d = new PluginDescription;
-            d->path = pluginTable->item(i, 1)->text();
+            PluginDescription* d = preferences.pluginList[i];
+            // d->path = pluginTable->item(i, 1)->text();
             d->load = pluginTable->item(i, 0)->checkState() == Qt::Checked;
-            preferences.pluginList.append(d);
+            // preferences.pluginList.append(d);
             }
-
       emit preferencesChanged();
       preferences.write();
       mscore->startAutoSave();
@@ -1641,11 +1620,63 @@ void PreferenceDialog::selectImagesDirectory()
       }
 
 //---------------------------------------------------------
+//   defineShortcutClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::defineShortcutClicked()
+      {
+      QTreeWidgetItem* active = shortcutList->currentItem();
+      if (!active)
+            return;
+      QString str = active->data(0, Qt::UserRole).toString();
+      if (str.isEmpty())
+            return;
+      Shortcut* s = localShortcuts[str.toAscii().data()];
+      ShortcutCaptureDialog sc(s, localShortcuts, this);
+      int rv = sc.exec();
+      if (rv == 0)
+            return;
+      if (rv == 2)
+            s->clear();
+      s->addShortcut(sc.getKey());
+      active->setText(1, s->keysToString());
+      shortcutsChanged = true;
+      }
+
+//---------------------------------------------------------
+//   definePluginShortcutClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::definePluginShortcutClicked()
+      {
+      QTableWidgetItem* active = pluginTable->currentItem();
+      if (!active)
+            return;
+      int row = active->row();
+      PluginDescription* pd = preferences.pluginList[row];
+      Shortcut* s = &pd->shortcut;
+      ShortcutCaptureDialog sc(s, localShortcuts, this);
+      int rv = sc.exec();
+      if (rv == 0)            // abort
+            return;
+      if (rv == 2)            // replace
+            s->clear();
+      s->addShortcut(sc.getKey());
+      QAction* action = s->action();
+      action->setShortcuts(s->keys());
+      pluginTable->item(row, 2)->setText(s->keysToString());
+
+      printf("shortcuts %p %d\n", pd, pd->shortcut.keys().size());
+      preferences.dirty = true;
+      }
+
+//---------------------------------------------------------
 //   readPluginList
 //---------------------------------------------------------
 
 bool Preferences::readPluginList()
       {
+printf("readPluginList\n");
       QFile f(dataPath + "/plugins.xml");
       if (!f.exists())
             return false;
@@ -1675,6 +1706,8 @@ bool Preferences::readPluginList()
                                           d->path = eee.text();
                                     else if (tag == "load")
                                           d->load = eee.text().toInt();
+                                    else if (tag == "SC")
+                                          d->shortcut.read(eee);
                                     else
                                           domError(eee);
                                     }
@@ -1699,6 +1732,7 @@ bool Preferences::readPluginList()
 
 void Preferences::writePluginList()
       {
+printf("writePluginList\n");
       QDir dir;
       dir.mkpath(dataPath);
       QFile f(dataPath + "/plugins.xml");
@@ -1713,6 +1747,10 @@ void Preferences::writePluginList()
             xml.stag("Plugin");
             xml.tag("path", d->path);
             xml.tag("load", d->load);
+printf("   writePluginList %p shortcut %d\n", d, d->shortcut.keys().size());
+            if (!d->shortcut.keys().isEmpty()) {
+                  d->shortcut.write(xml);
+                  }
             xml.etag();
             }
       xml.etag();
@@ -1727,6 +1765,7 @@ void Preferences::writePluginList()
 
 void Preferences::updatePluginList()
       {
+printf("updatePluginList\n");
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
@@ -1740,7 +1779,7 @@ void Preferences::updatePluginList()
                   QFileInfo fi = it.fileInfo();
                   if (fi.isFile()) {
                         QString path(fi.filePath());
-                        if (path.endsWith(".js") || path.endsWith(".qml")) {
+                        if (path.endsWith(".qml")) {
                               bool alreadyInList = false;
                               foreach (PluginDescription* p, pluginList) {
                                     if (p->path == path) {
