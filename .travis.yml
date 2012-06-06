@@ -1,0 +1,29 @@
+before_install:
+  # rm the rabbitmq source file since it currently times out and we don't need it
+  - "sudo rm -f /etc/apt/sources.list.d/rabbitmq-source.list"
+  - "sudo add-apt-repository -y ppa:kubuntu-ppa/backports"
+  - "sudo add-apt-repository -y ppa:julien-malik/cmake"
+  - "sudo apt-get update"
+  - "sudo apt-get install -y libqt4-dev"
+  - "sudo apt-get install -y alsa libsndfile1 make cmake g++ ant"
+  - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
+  - "sudo apt-get install -y lame libmp3lame-dev"
+before_script: 
+  - "make"
+  - "sudo make install"
+  - "cd build.release/mtest"
+script:
+  - "make && xvfb-run ctest"
+notifications:
+  recipients:
+    - build@musescore.org
+  email:
+    on_success: change
+    on_failure: always
+  irc:
+    channels:
+      - "irc.freenode.net#musescore"
+    on_success: change
+    on_failure: change
+
+
