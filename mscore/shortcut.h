@@ -80,6 +80,7 @@ class Shortcut {
       bool compareKeys(const Shortcut&) const;
       QString keysToString();
       void write(Xml&);
+      void read(const QDomElement&);
 
       static void init();
       static void load();

@@ -314,6 +314,26 @@ void Shortcut::write(Xml& xml)
 //   read
 //---------------------------------------------------------
 
+void Shortcut::read(const QDomElement& e)
+      {
+      for (QDomElement eee = e.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
+            const QString& tag(eee.tagName());
+            const QString& val(eee.text());
+            if (tag == "key")
+                  _key = val.toAscii().data();
+            else if (tag == "std")
+                  _standardKey = QKeySequence::StandardKey(val.toInt());
+            else if (tag == "seq")
+                  _keys.append(QKeySequence::fromString(val, QKeySequence::PortableText));
+            else
+                  domError(eee);
+            }
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
 void Shortcut::load()
       {
       QFile f(dataPath + "/shortcuts.xml");
