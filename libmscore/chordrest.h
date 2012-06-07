@@ -35,6 +35,7 @@ class Spanner;
 
 class ChordRest : public DurationElement {
       Q_OBJECT
+      Q_PROPERTY(int durationType READ durationTypeTicks WRITE setDurationType);
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -123,6 +124,7 @@ class ChordRest : public DurationElement {
       void setDurationType(const TDuration& v);
       void setDots(int n)                       { _durationType.setDots(n); }
       int dots() const                          { return _durationType.dots(); }
+      int durationTypeTicks()                   { return _durationType.ticks(); }
 
       virtual void setTrack(int val);
       virtual int tick() const;

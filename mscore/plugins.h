@@ -54,6 +54,7 @@ class QmlPlugin : public QDeclarativeItem {
       Score* curScore() const;
       QDeclarativeListProperty<Score> scores();
 
+      Q_INVOKABLE Score* newScore();
       Q_INVOKABLE Cursor* newCursor();
       Q_INVOKABLE Element* newElement(int);
       };
