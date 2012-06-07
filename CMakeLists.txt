@@ -351,6 +351,7 @@ else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
       endif (MINGW)
 endif (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 
+<<<<<<< HEAD
 if (${CMAKE_CXX_COMPILER_ID} EQUAL "Clang")
       add_custom_command(
          OUTPUT ${PROJECT_BINARY_DIR}/all.h.pch
@@ -374,6 +375,19 @@ else (${CMAKE_CXX_COMPILER_ID} EQUAL "Clang")
          )
       set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
 endif(${CMAKE_CXX_COMPILER_ID} EQUAL "Clang")
+=======
+
+add_custom_command(
+ OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch
+ COMMAND ${CMAKE_CXX_COMPILER}
+   -x c++-header -g  ${FLAGS}
+   -I${QT_HEADERS_DIR}
+   -o all.h.gch all.h
+ DEPENDS ${PROJECT_BINARY_DIR}/all.h
+ WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+ )
+set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
+>>>>>>> ecabd2aa890bcbada78bfcb18e29019e9caa65a2
 
 
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
