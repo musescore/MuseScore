@@ -27,6 +27,7 @@ class Spanner;
 
 class DurationElement : public Element {
       Q_OBJECT
+      Q_PROPERTY(int duration READ durationTicks WRITE setDuration);
 
       Fraction _duration;
       Tuplet* _tuplet;
@@ -51,6 +52,8 @@ class DurationElement : public Element {
       Fraction duration() const           { return _duration; }
       Fraction globalDuration() const;
       void setDuration(const Fraction& f) { _duration = f;    }
+      void setDuration(int ticks)         { _duration = Fraction::fromTicks(ticks); }
+      int durationTicks() const           { return _duration.ticks(); }
       };
 
 #endif

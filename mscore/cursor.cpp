@@ -161,8 +161,14 @@ void Cursor::add(Element* s)
       if (!_segment)
             return;
       s->setTrack(_track);
+      s->setParent(_segment);
       s->score()->startCmd();
-      s->score()->undoAddElement(s);
+      if (s->isChordRest()) {
+            printf("Cursor::add CR\n");
+            s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
+            }
+      else
+            s->score()->undoAddElement(s);
       s->score()->setLayoutAll(true);
       s->score()->endCmd();
       }
@@ -178,7 +184,7 @@ void Cursor::add(ChordRest* c)
       int track       = _staffIdx * VOICES + _voice;
 
       if (!chordRest) {
-            if(_voice > 0) { //create rests
+            if (_voice > 0) { //create rests
                 int t = tick();
                 //trick : go to the start if we don't have segment nor chord.
                 if(t == _score->lastMeasure()->tick() + _score->lastMeasure()->ticks())

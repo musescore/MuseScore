@@ -66,6 +66,7 @@
 #include "omr/omr.h"
 #include "bracket.h"
 #include "audio.h"
+#include "instrtemplate.h"
 
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
@@ -3293,4 +3294,77 @@ bool Score::switchLayer(const QString& s)
       return false;
       }
 
+//---------------------------------------------------------
+//   appendPart
+//---------------------------------------------------------
+
+void Score::appendPart(const QString& name)
+      {
+      static InstrumentTemplate defaultInstrument;
+      InstrumentTemplate* t;
+
+      t = searchTemplate(name);
+      if (t == 0)
+            t = &defaultInstrument;
+
+      if (t->channel.isEmpty()) {
+            Channel a;
+            a.chorus = 0;
+            a.reverb = 0;
+            a.name   = "normal";
+            a.bank   = 0;
+            a.volume = 100;
+            a.pan    = 60;
+            t->channel.append(a);
+            }
+      Part* part = new Part(this);
+      part->initFromInstrTemplate(t);
+      int n = nstaves();
+      for (int i = 0; i < t->staves; ++i) {
+            Staff* staff = new Staff(this, part, i);
+            staff->setLines(t->staffLines[i]);
+            staff->setSmall(t->smallStaff[i]);
+            if (i == 0) {
+                  staff->setBracket(0, t->bracket[0]);
+                  staff->setBracketSpan(0, t->staves);
+                  }
+            undoInsertStaff(staff, n + i);
+            }
+
+      part->staves()->front()->setBarLineSpan(part->nstaves());
+      cmdInsertPart(part, n);
+      fixTicks();
+      rebuildMidiMapping();
+      }
+
+//---------------------------------------------------------
+//   appendMeasures
+//---------------------------------------------------------
+
+void Score::appendMeasures(int n)
+      {
+      for (int i = 0; i < n; ++i)
+            insertMeasure(MEASURE, 0, false);
+      }
+
+//---------------------------------------------------------
+//   addText
+//---------------------------------------------------------
+
+void Score::addText(const QString& type, const QString& txt)
+      {
+      MeasureBase* measure = first();
+      if (measure == 0 || measure->type() != VBOX) {
+            insertMeasure(VBOX, measure);
+            measure = first();
+            }
+      Text* text = new Text(this);
+      if (type == "title")
+            text->setTextStyleType(TEXT_STYLE_TITLE);
+      else if (type == "subtitle")
+            text->setTextStyleType(TEXT_STYLE_SUBTITLE);
+      text->setParent(measure);
+      text->setText(txt);
+      undoAddElement(text);
+      }
 

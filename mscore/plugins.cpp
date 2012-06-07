@@ -356,3 +356,15 @@ Element* QmlPlugin::newElement(int t)
       return Element::create(ElementType(t), score);
       }
 
+//---------------------------------------------------------
+//   newScore
+//---------------------------------------------------------
+
+Score* QmlPlugin::newScore()
+      {
+      Score* score = new Score(MScore::defaultStyle());
+      int view = mscore->appendScore(score);
+      mscore->setCurrentView(0, view);
+      return score;
+      }
+

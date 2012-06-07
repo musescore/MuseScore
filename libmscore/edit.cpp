@@ -1548,7 +1548,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure,
             }
       else {
             measure = last();
-            tick = measure->tick() + measure->ticks();
+            if (measure)
+                  tick = measure->tick() + measure->ticks();
+            else
+                  tick = 0;
             idx  = -1;
             }
 

@@ -888,6 +888,9 @@ class Score : public QObject {
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
       void layoutPage(const PageContext&,  qreal);
+      Q_INVOKABLE void appendPart(const QString&);
+      Q_INVOKABLE void appendMeasures(int);
+      Q_INVOKABLE void addText(const QString&, const QString&);
       };
 
 extern Score* gscore;
