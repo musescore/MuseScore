@@ -130,7 +130,7 @@ class Element : public QObject {
       Q_PROPERTY(int type        READ type)
       Q_PROPERTY(Element* parent READ parent    WRITE setParent)
       Q_PROPERTY(int track       READ track     WRITE setTrack)
-      Q_PROPERTY(QColor color    READ color     WRITE setColor)
+      Q_PROPERTY(QColor color    READ color     WRITE undoSetColor)
       Q_PROPERTY(bool visible    READ visible   WRITE setVisible)
       Q_PROPERTY(bool generated  READ generated WRITE setGenerated)
       Q_PROPERTY(bool selected   READ selected  WRITE setSelected)
@@ -295,11 +295,12 @@ class Element : public QObject {
       virtual QString userName() const;
       void dumpQPointF(const char*) const;
 
-      virtual Space space() const     { return Space(0.0, width()); }
+      virtual Space space() const      { return Space(0.0, width()); }
 
       QColor color() const             { return _color; }
       QColor curColor() const;
-      void setColor(const QColor& c)   { _color = c;    }
+      void setColor(const QColor& c)     { _color = c;    }
+      void undoSetColor(const QColor& c);
 
       static ElementType readType(QDomElement& node, QPointF*, Fraction*);
 

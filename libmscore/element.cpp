@@ -1686,3 +1686,12 @@ bool Element::isText() const {
                 || type() == TEMPO_TEXT;
             }
 
+//---------------------------------------------------------
+//   undoSetColor
+//---------------------------------------------------------
+
+void Element::undoSetColor(const QColor& c)
+      {
+      score()->undoChangeProperty(this, P_COLOR, c);
+      }
+

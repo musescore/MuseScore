@@ -392,6 +392,7 @@ class MuseScore : public QMainWindow {
       virtual void resizeEvent(QResizeEvent*);
 
    private slots:
+      void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
       void helpBrowser1();
       void about();
@@ -411,8 +412,6 @@ class MuseScore : public QMainWindow {
       void showPageSettings();
       void removeTab(int);
       void removeTab();
-      void cmd(QAction*);
-      void cmd(QAction* a, const QString& cmd);
       void clipboardChanged();
       void endSearch();
       void saveScoreDialogFilterSelected(const QString&);
@@ -445,6 +444,7 @@ class MuseScore : public QMainWindow {
       void switchLayoutMode(int);
 
    public slots:
+      void cmd(QAction* a);
       void dirtyChanged(Score*);
       void setPos(int tick);
       void searchTextChanged(const QString& s);
@@ -475,7 +475,7 @@ class MuseScore : public QMainWindow {
       int appendScore(Score*);
       void midiCtrlReceived(int controller, int value);
       void showElementContext(Element* el);
-	    void cmdAppendMeasures(int);
+      void cmdAppendMeasures(int);
       bool midiinEnabled() const;
       bool playEnabled() const;
 

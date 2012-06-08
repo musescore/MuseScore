@@ -4,7 +4,9 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath:   "Plugins.panel"
-      pluginType: "panel-right"
+      pluginType: "dock"
+      dockArea:   "left"
+
       width:  150
       height: 75
       onRun: {

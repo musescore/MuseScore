@@ -781,7 +781,7 @@ class Score : public QObject {
       void removeAudio();
       void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue.enqueue(ev); }
 
-      void doLayout();
+      Q_INVOKABLE void doLayout();
       void layoutSystems();
       void layoutLinear();
       void layoutPages();

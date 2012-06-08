@@ -38,7 +38,6 @@ MuseScore {
                   if (cursor.element.type == MScore.CHORD) {
                         var text  = newElement(MScore.STAFF_TEXT);
                         text.text = names[cursor.element.notes[0].pitch % 12];
-                        text.parent = cursor.segment;
                         cursor.add(text);
                         }
                   cursor.next();
