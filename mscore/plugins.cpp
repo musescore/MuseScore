@@ -345,7 +345,12 @@ void MuseScore::pluginTriggered(int idx)
       else {
             connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
             }
+      if (cs)
+            cs->startCmd();
       p->runPlugin();
+      if (cs)
+            cs->endCmd();
+      endCmd();
       }
 
 Element* QmlPlugin::newElement(int t)
@@ -360,11 +365,35 @@ Element* QmlPlugin::newElement(int t)
 //   newScore
 //---------------------------------------------------------
 
-Score* QmlPlugin::newScore()
+Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
       {
+      if (mscore->currentScore()) {
+            mscore->currentScore()->endCmd();
+            mscore->endCmd();
+            }
       Score* score = new Score(MScore::defaultStyle());
       int view = mscore->appendScore(score);
       mscore->setCurrentView(0, view);
+      qApp->processEvents();
+      score->setName(name);
+      score->appendPart(part);
+      score->appendMeasures(measures);
+      score->doLayout();
+      score->startCmd();
       return score;
+      }
+
+//---------------------------------------------------------
+//   cmd
+//---------------------------------------------------------
+
+void QmlPlugin::cmd(const QString& s)
+      {
+      Shortcut* sc = Shortcut::getShortcut(s.toAscii().data());
+      if (sc) {
+            mscore->cmd(sc->action());
+            }
+      else
+            printf("QmlPlugin:cmd: not found <%s>\n", qPrintable(s));
       }
 

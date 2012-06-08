@@ -39,13 +39,11 @@ class Cursor : public QObject {
       Q_PROPERTY(int track          READ track         WRITE setTrack)
       Q_PROPERTY(int staffIdx       READ staffIdx      WRITE setStaffIdx)
       Q_PROPERTY(int voice          READ voice         WRITE setVoice)
-      Q_PROPERTY(bool expandRepeats READ expandRepeats WRITE setExpandRepeats)
 
       Q_PROPERTY(Element* element READ element)
       Q_PROPERTY(Segment* segment READ segment)
 
       Q_PROPERTY(int tick         READ tick)
-      Q_PROPERTY(double time      READ time)
       Q_PROPERTY(Score* score     READ score    WRITE setScore)
 
       Score* _score;
@@ -54,8 +52,6 @@ class Cursor : public QObject {
 
       //state
       Segment* _segment;
-      RepeatSegment* _curRepeatSegment;
-      int _curRepeatSegmentIndex;
 
    public:
       Cursor(Score* c = 0);
@@ -73,17 +69,8 @@ class Cursor : public QObject {
       int voice() const;
       void setVoice(int v);
 
-      bool expandRepeats() const              { return _expandRepeats; }
-      void setExpandRepeats(bool v)           { _expandRepeats = v;    }
-
       Element* element() const;
       Segment* segment() const                { return _segment;  }
-
-      RepeatSegment* repeatSegment() const    { return _curRepeatSegment;  }
-      void setRepeatSegment(RepeatSegment* s) { _curRepeatSegment = s;     }
-
-      int repeatSegmentIndex()                { return _curRepeatSegmentIndex; }
-      void setRepeatSegmentIndex(int idx)     { _curRepeatSegmentIndex = idx; }
 
       int tick();
       double time();
@@ -92,6 +79,8 @@ class Cursor : public QObject {
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Element*);
+      Q_INVOKABLE void addNote(int pitch);
+      Q_INVOKABLE void setDuration(int z, int n);
       };
 
 #endif

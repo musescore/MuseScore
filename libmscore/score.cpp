@@ -3304,8 +3304,10 @@ void Score::appendPart(const QString& name)
       InstrumentTemplate* t;
 
       t = searchTemplate(name);
-      if (t == 0)
+      if (t == 0) {
+            qDebug("appendPart: <%s> not found", qPrintable(name));
             t = &defaultInstrument;
+            }
 
       if (t->channel.isEmpty()) {
             Channel a;
