@@ -18,10 +18,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-REVISION  = `cat mscore/mscore/revision.h`
+REVISION  = `cat mscore/revision.h`
 CPUS      = `grep -c processor /proc/cpuinfo`
 
-VERSION   = "2.0b${REVISION}"
+VERSION   = "2.0b-${REVISION}"
 
 PREFIX=../applebuild
 
