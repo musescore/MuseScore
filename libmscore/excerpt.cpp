@@ -193,32 +193,10 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                      m->endBarLineVisible(),
                      m->endBarLineColor());
 
-                  foreach(Spanner* s, m->spannerFor()) {
-                        Spanner* ns = static_cast<Spanner*>(s->linkedClone());
-                        foreach(SpannerSegment* ss, ns->spannerSegments())
-                              ss->setParent(0);
-                        ns->setParent(nm);
-                        ns->setScore(score);
-                        ns->setStartElement(nm);
-                        nm->addSpannerFor(ns);
-                        spannerMap.add(s, ns);
-                        }
-                  foreach(Spanner* s, m->spannerBack()) {
-                        Spanner* ns = spannerMap.findNew(s);
-                        if (ns) {
-                              ns->setEndElement(nm);
-                              nm->addSpannerBack(ns);
-                              }
-                        else {
-                              qDebug("cloneSpanner(measure): cannot find spanner\n");
-                              }
-                        }
-
                   // Fraction ts = nm->len();
                   int tracks = oscore->nstaves() * VOICES;
                   for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
                         TupletMap tupletMap;    // tuplets cannot cross measure boundaries
-                        // int srcTrack = map[track/VOICES] * VOICES + (track % VOICES);
                         int track = -1;
                         int st = 0;
                         foreach(int staff, map) {
@@ -228,44 +206,76 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               ++st;
                               }
+                        if (((srcTrack % VOICES) == 0) && track != -1) {
+                              foreach(Spanner* s, m->spannerFor()) {
+                                    if (s->track() != srcTrack)
+                                          continue;
+                                    Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+                                    ns->setTrack(track);
+                                    foreach(SpannerSegment* ss, ns->spannerSegments()) {
+                                          ss->setParent(0);
+                                          ss->setTrack(track);    //??
+                                          }
+                                    ns->setParent(nm);
+                                    ns->setScore(score);
+                                    ns->setStartElement(nm);
+                                    nm->addSpannerFor(ns);
+                                    spannerMap.add(s, ns);
+                                    }
+                              foreach(Spanner* s, m->spannerBack()) {
+                                    if (s->track() != srcTrack)
+                                          continue;
+                                    Spanner* ns = spannerMap.findNew(s);
+                                    if (ns) {
+                                          ns->setEndElement(nm);
+                                          nm->addSpannerBack(ns);
+                                          }
+#if 1
+                                    else {
+                                          qDebug("cloneSpanner(measure): cannot find spanner <%s> %d track %d\n",
+                                             s->name(), m->no(), srcTrack);
+                                          }
+#endif
+                                    }
+                              }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nm->getSegment(SegmentType(oseg->subtype()), oseg->tick());
 
                               foreach(Spanner* spanner, oseg->spannerFor()) {
-                                    if ((spanner->track() == srcTrack) && (track != -1)) {
-                                          Spanner* nspanner = static_cast<Spanner*>(spanner->linkedClone());
-                                          nspanner->setUserOff(QPointF());  // reset user offset as most likely
-                                                                      // it will not fit
-                                          nspanner->setReadPos(QPointF());
-                                          foreach(SpannerSegment* ss, nspanner->spannerSegments()) {
-                                                ss->setParent(0);
-                                                ss->setUserOff(QPointF());
-                                                ss->setReadPos(QPointF());
-                                                }
-                                          nspanner->setScore(score);
-                                          nspanner->setParent(ns);
-                                          nspanner->setTrack(track == -1 ? 0 : track);
-                                          if (spanner->anchor() == ANCHOR_SEGMENT)
-                                                nspanner->setStartElement(ns);
-                                          else //spanner->anchor() == ANCHOR_MEASURE
-                                                nspanner->setStartElement(nm);
-                                          ns->addSpannerFor(nspanner);
-                                          spannerMap.add(spanner, nspanner);
+                                    if ((spanner->track() != srcTrack) || (track == -1))
+                                          continue;
+                                    Spanner* nspanner = static_cast<Spanner*>(spanner->linkedClone());
+                                    nspanner->setUserOff(QPointF());  // reset user offset as most likely
+                                                                // it will not fit
+                                    nspanner->setReadPos(QPointF());
+                                    foreach(SpannerSegment* ss, nspanner->spannerSegments()) {
+                                          ss->setParent(0);
+                                          ss->setUserOff(QPointF());
+                                          ss->setReadPos(QPointF());
                                           }
+                                    nspanner->setScore(score);
+                                    nspanner->setParent(ns);
+                                    nspanner->setTrack(track == -1 ? 0 : track);
+                                    if (spanner->anchor() == ANCHOR_SEGMENT)
+                                          nspanner->setStartElement(ns);
+                                    else //spanner->anchor() == ANCHOR_MEASURE
+                                          nspanner->setStartElement(nm);
+                                    ns->addSpannerFor(nspanner);
+                                    spannerMap.add(spanner, nspanner);
                                     }
                               foreach(Spanner* spanner, oseg->spannerBack()) {
-                                    if ((spanner->track() == srcTrack) && (track != -1)) {
-                                          Spanner* nspanner = spannerMap.findNew(spanner);
-                                          if (nspanner) {
-                                                if (spanner->anchor() == ANCHOR_SEGMENT)
-                                                      nspanner->setEndElement(ns);
-                                                else //spanner->anchor() == ANCHOR_MEASURE
-                                                      nspanner->setEndElement(nm);
-                                                ns->addSpannerBack(nspanner);
-                                                }
-                                          else {
-                                                qDebug("cloneSpanner(seg): cannot find spanner\n");
-                                                }
+                                    if ((spanner->track() != srcTrack) || (track == -1))
+                                          continue;
+                                    Spanner* nspanner = spannerMap.findNew(spanner);
+                                    if (nspanner) {
+                                          if (spanner->anchor() == ANCHOR_SEGMENT)
+                                                nspanner->setEndElement(ns);
+                                          else //spanner->anchor() == ANCHOR_MEASURE
+                                                nspanner->setEndElement(nm);
+                                          ns->addSpannerBack(nspanner);
+                                          }
+                                    else {
+                                          qDebug("cloneSpanner(seg): cannot find spanner\n");
                                           }
                                     }
 
