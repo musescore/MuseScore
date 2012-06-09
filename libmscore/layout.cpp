@@ -181,7 +181,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             if (conflict && (nmirror == mirror) && idx) {
                   if (sameHead) {
                         Note* pnote = notes[idx-1];
-                        if (note->userOff().isNull() && pnote->userOff().isNull()) {
+                        if (!(pnote->parent()->isNudged() || note->parent()->isNudged())) {
                               if (ticks > pnote->chord()->actualTicks()) {
                                     pnote->setHidden(true);
                                     // TODO: pnote->setAccidentalType(ACC_NONE);

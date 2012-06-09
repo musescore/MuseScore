@@ -3127,10 +3127,8 @@ void Measure::layoutX(qreal stretch, bool firstPass)
                         qreal w  = xpos[segs-1] - x1;
                         e->rxpos() = (w - e->width()) * .5 + x1 - s->x();
                         }
-                  else if (t == CHORD) {
-                        Chord* chord = static_cast<Chord*>(e);
-                        chord->layout2();
-                        }
+                  else if (t == CHORD)
+                        static_cast<Chord*>(e)->layout2();
                   else if (t == CLEF) {
                         qreal gap = 0.0;
                         Segment* ps = s->prev();

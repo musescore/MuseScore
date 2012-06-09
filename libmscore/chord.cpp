@@ -1306,7 +1306,7 @@ void Chord::layout()
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-      // needed?        _tabDur->setTrack(track());
+                        // needed?        _tabDur->setTrack(track());
                         }
                   else {                    // symbol not needed: if exists, delete
                         delete _tabDur;
@@ -1342,7 +1342,7 @@ void Chord::layout()
             //-----------------------------------------
 
             qreal stepDistance = _spatium * .5;
-            int stepOffset      = staff()->staffType()->stepOffset();
+            int stepOffset     = staff()->staffType()->stepOffset();
 
             adjustReadPos();
             foreach(Note* note, _notes) {
