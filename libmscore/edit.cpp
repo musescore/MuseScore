@@ -690,7 +690,7 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
                   note = static_cast<Chord*>(cr)->upNote();
                   if (note) {
                         Note* note2 = note;
-                        while (note2->tieFor()) {
+                        while (note2->tieFor() && note2->tieFor()->endNote()) {
                               note2 = note2->tieFor()->endNote();
                               f += note2->chord()->duration();
                               }
