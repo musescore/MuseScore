@@ -2802,7 +2802,7 @@ void Measure::layoutX(qreal stretch, bool firstPass)
             }
 
       if (nstaves == 0 || segs == 0) {
-            _mw = MeasureWidth(1.0, 0.0);
+            _mw    = 1.0;
             _dirty = false;
             return;
             }
@@ -3007,7 +3007,12 @@ void Measure::layoutX(qreal stretch, bool firstPass)
 
       if (firstPass) {
             // qDebug("this is pass 1");
-            _mw = MeasureWidth(xpos[segs], 0.0);
+            _mw = xpos[segs];
+            if (types[0] == SegClef && first()->element(0)->generated()) {
+                  _mw -= width[0];
+                  if ((segs > 2) && (types[1] == SegKeySig) && first()->next()->element(0)->generated())
+                        _mw -= width[1];
+                  }
             _dirty = false;
             return;
             }
