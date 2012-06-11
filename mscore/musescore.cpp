@@ -270,7 +270,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       ev->accept();
       if (preferences.dirty)
             preferences.write();
-//      this->deleteLater();     !?
+      this->deleteLater();     //this is necessary on windows http://musescore.org/node/16713
       qApp->quit();
       }
 
@@ -2291,6 +2291,10 @@ int main(int argc, char* av[])
       MScore::PDPI = wi.logicalDpiX();         // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
       MScore::init();                          // initialize libmscore
+
+      if (MScore::debugMode)
+            printf("DPI %f\n", MScore::DPI);
+
       preferences.readDefaultStyle();
 
       if (!useFactorySettings)
