@@ -270,7 +270,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       ev->accept();
       if (preferences.dirty)
             preferences.write();
-//      this->deleteLater();     !?
+      this->deleteLater();     //this is necessary on windows http://musescore.org/node/16713
       qApp->quit();
       }
 
