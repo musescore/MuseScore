@@ -85,7 +85,9 @@ bool StaffType::isEqual(const StaffType& st) const
       {
       return st.group() == group()
          && st._name         == _name
+         && st._lines        == _lines
          && st._stepOffset   == _stepOffset
+         && st._lineDistance == _lineDistance
          && st._genClef      == _genClef
          && st._showBarlines == _showBarlines
          && st._slashStyle   == _slashStyle
@@ -142,6 +144,8 @@ void StaffType::writeProperties(Xml& xml) const
             xml.tag("slashStyle", slashStyle());
       if (!showBarlines())
             xml.tag("barlines", showBarlines());
+      if(!genTimesig())
+            xml.tag("timesig", genTimesig());
       }
 
 //---------------------------------------------------------
@@ -176,6 +180,8 @@ bool StaffType::readProperties(const QDomElement& e)
             setSlashStyle(v);
       else if (tag == "barlines")
             setShowBarlines(v);
+      else if (tag == "timesig")
+            setGenTimesig(v);
       else
             return false;
       return true;
@@ -310,10 +316,9 @@ void StaffTypeTablature::init()
       setLines(6);
       setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
       setGenClef(true);
-//      setGenKeysig(false);
       setSlashStyle(false);
       setShowBarlines(true);
-//      setShowLedgerLines(false);
+      setGenTimesig(false);
       // for specific members
       setDurationFontName("MScoreTabulatureModern");
       setDurationFontSize(15.0);
@@ -322,7 +327,6 @@ void StaffTypeTablature::init()
       setFretFontSize(10.0);
       setFretFontUserY(0.0);
       setGenDurations(false);
-      setGenTimesig(false);
       setLinesThrough(false);
       setOnLines(true);
       setUpsideDown(false);
@@ -381,8 +385,6 @@ void StaffTypeTablature::read(const QDomElement& de)
                   setLinesThrough(val.toInt() != 0);
             else if (tag == "onLines")
                   setOnLines(val.toInt() != 0);
-            else if (tag == "timesig")
-                  setGenTimesig(val.toInt() != 0);
             else if (tag == "upsideDown")
                   setUpsideDown(val.toInt() != 0);
             else if (tag == "useNumbers")
@@ -410,7 +412,6 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.tag("fretFontY",        _fretFontUserY);
       xml.tag("linesThrough",     _linesThrough);
       xml.tag("onLines",          _onLines);
-      xml.tag("timesig",          _genTimesig);
       xml.tag("upsideDown",       _upsideDown);
       xml.tag("useNumbers",       _useNumbers);
       xml.etag();
