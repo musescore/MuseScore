@@ -18,7 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "midifile.h"
+#include "libmscore/midifile.h"
 #include "scoreview.h"
 #include "file.h"
 #include "libmscore/score.h"

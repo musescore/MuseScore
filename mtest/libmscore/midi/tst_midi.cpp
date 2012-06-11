@@ -20,12 +20,11 @@
 #include "libmscore/segment.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
-#include "libmscore/keysig.h"
+#include "libmscore/exportmidi.h"
 
 #include "mtest/mcursor.h"
 #include "mtest/testutils.h"
 
-extern bool saveMidi(Score*, const QString&);
 extern bool importMidi(Score*, const QString&);
 
 //---------------------------------------------------------
@@ -50,6 +49,17 @@ class TestMidi : public QObject, public MTest
 void TestMidi::initTestCase()
       {
       initMTest();
+      }
+
+
+//---------------------------------------------------------
+//   saveMidi
+//---------------------------------------------------------
+
+bool saveMidi(Score* score, const QString& name)
+      {
+      ExportMidi em(score);
+      return em.write(name, true);
       }
 
 //---------------------------------------------------------

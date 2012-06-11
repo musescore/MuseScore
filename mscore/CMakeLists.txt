@@ -157,7 +157,7 @@ add_executable ( ${ExecutableName}
       chordedit.cpp plugins.cpp excerptsdialog.cpp
       metaedit.cpp magbox.cpp voiceselector.cpp capella.cpp
       scscore.cpp sccursor.cpp scchord.cpp scnote.cpp scpart.cpp sctext.cpp
-      scmeasure.cpp scpageformat.cpp exportaudio.cpp exportmidi.cpp
+      scmeasure.cpp scpageformat.cpp exportaudio.cpp
       textproperties.cpp screst.cpp scharmony.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
@@ -174,7 +174,7 @@ add_executable ( ${ExecutableName}
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp jumpproperties.cpp selectdialog.cpp
       propertymenu.cpp shortcut.cpp bb.cpp
-      midifile.cpp inspector.cpp dragelement.cpp svggenerator.cpp
+      inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp
