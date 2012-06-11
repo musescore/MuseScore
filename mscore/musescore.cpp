@@ -2291,6 +2291,10 @@ int main(int argc, char* av[])
       MScore::PDPI = wi.logicalDpiX();         // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
       MScore::init();                          // initialize libmscore
+
+      if (MScore::debugMode)
+            printf("DPI %f\n", MScore::DPI);
+
       preferences.readDefaultStyle();
 
       if (!useFactorySettings)

@@ -313,8 +313,8 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Beam id="5">
-          <l1>5</l1>
-          <l2>1</l2>
+          <l1>1</l1>
+          <l2>-3</l2>
           </Beam>
         <Chord>
           <durationType>32nd</durationType>
@@ -349,8 +349,8 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Beam id="6">
-          <l1>-3</l1>
-          <l2>-7</l2>
+          <l1>-7</l1>
+          <l2>-11</l2>
           </Beam>
         <Chord>
           <durationType>32nd</durationType>
