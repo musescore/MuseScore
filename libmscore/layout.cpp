@@ -927,7 +927,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
             qreal ww      = 0.0;
-            qreal stretch = 0.0;
 
             if (curMeasure->type() == HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -958,9 +957,29 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   m->createEndBarLines();       // TODO: not set here
 
                   m->layoutX(1.0, true);
-                  ww      = m->layoutWidth();
-                  stretch = m->userStretch() * styleD(ST_measureSpacing);
-
+                  ww = m->layoutWidth();
+                  if (!isFirstMeasure) {
+                        // remove width of generated system header
+                        Segment* seg = m->first();
+                        if ((seg->subtype() == SegClef) && seg->element(0)->generated()) {
+                              ww -= seg->width();
+                              seg = seg->next();
+                              if (seg && (seg->subtype() == SegKeySig) && seg->element(0)->generated())
+                                    ww -= seg->width();
+                              }
+                        }
+                  // add width for EndBarLine
+                  Segment* seg = m->last();
+                  if (seg->subtype() == SegEndBarLine) {
+                        BarLine* bl = static_cast<BarLine*>(seg->element(0));
+                        if (m->repeatFlags() & RepeatEnd) {
+                              if (bl && (bl->subtype() != END_REPEAT)) {
+                                    // printf("BarLine type does not fit\n");
+                                    ww += spatium();   // HACK
+                                    }
+                              }
+                        }
+                  qreal stretch = m->userStretch() * styleD(ST_measureSpacing);
                   ww *= stretch;
                   if (ww < point(styleS(ST_minMeasureWidth)))
                         ww = point(styleS(ST_minMeasureWidth));

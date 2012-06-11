@@ -631,11 +631,21 @@ bool Score::loadCompressedMsc(QString name)
             imageStore.add(s, dbuf);
             }
       if (rootfile.isEmpty()) {
-            qDebug("can't find rootfile in: %s\n", qPrintable(name));
+            qDebug("can't find rootfile in: %s", qPrintable(name));
             return false;
             }
 
       QByteArray dbuf = uz.fileData(rootfile);
+      if (dbuf.isEmpty()) {
+            qDebug("root file <%s> is empty", qPrintable(rootfile));
+            QList<QZipReader::FileInfo> fil = uz.fileInfoList();
+            foreach(const QZipReader::FileInfo& fi, fil) {
+                  if (fi.isFile && fi.filePath.endsWith(".mscx")) {
+                        dbuf = uz.fileData(fi.filePath);
+                        break;
+                        }
+                  }
+            }
 
       QDomDocument doc;
       if (!doc.setContent(dbuf, false, &err, &line, &column)) {
