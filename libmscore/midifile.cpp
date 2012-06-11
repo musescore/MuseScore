@@ -12,11 +12,11 @@
 //=============================================================================
 
 #include "midifile.h"
-#include "libmscore/xml.h"
-#include "libmscore/part.h"
-#include "libmscore/note.h"
-#include "libmscore/drumset.h"
-#include "libmscore/utils.h"
+#include "xml.h"
+#include "part.h"
+#include "note.h"
+#include "drumset.h"
+#include "utils.h"
 
 #define BE_SHORT(x) ((((x)&0xFF)<<8) | (((x)>>8)&0xFF))
 #ifdef __i486__

@@ -14,7 +14,7 @@
 #ifndef _BB_H__
 #define __BB_H__
 
-#include "midifile.h"
+#include "libmscore/midifile.h"
 
 const int MAX_BARS = 255;
 
