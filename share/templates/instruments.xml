@@ -3992,13 +3992,6 @@
         <channel>
            <program>24</program>
            </channel>
-        </instrument>
-     <instrument>
-        <name>Ukulele (tablature)</name>
-        <short-name>Uk.</short-name>
-        <clef>0</clef>
-        <aPitchRange>60-81</aPitchRange>
-        <pPitchRange>60-81</pPitchRange>
         <Tablature>
           <frets>18</frets>
           <string>67</string>
@@ -4006,9 +3999,11 @@
           <string>64</string>
           <string>69</string>
           </Tablature>
-        <channel>
-           <program>24</program>
-           </channel>
+        </instrument>
+     <instrument>
+        <init>Ukulele</init>
+        <description>Ukulele (4-str. TAB)</description>
+        <stafftype>tablature</stafftype>
         </instrument>
      <instrument>
         <name>Baritone Ukulele</name>
