@@ -4,7 +4,6 @@ MuseScore [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)
 
 MuseScore [free music notation software](http://musescore.org). http://musescore.org
 
->>>>>>> ecabd2aa890bcbada78bfcb18e29019e9caa65a2
 * **aeolus** Clone of [Aeolus](http://users.skynet.be/solaris/linuxaudio/aeolus.html)
 
 * **awl** Audio Widget Library, from the MusE project
