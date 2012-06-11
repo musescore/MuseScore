@@ -48,7 +48,7 @@ Xml::Xml()
 Xml::Xml(QIODevice* device)
    : QTextStream(device)
       {
-      setCodec("utf8");
+      setCodec("UTF-8");
       stack.clear();
       curTick       = 0;
       curTrack      = -1;

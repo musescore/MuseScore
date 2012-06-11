@@ -3008,11 +3008,13 @@ void Measure::layoutX(qreal stretch, bool firstPass)
       if (firstPass) {
             // qDebug("this is pass 1");
             _mw = xpos[segs];
-            if (types[0] == SegClef && first()->element(0)->generated()) {
+#if 0
+            if (!firstMeasure && (types[0] == SegClef) && first()->element(0)->generated()) {
                   _mw -= width[0];
                   if ((segs > 2) && (types[1] == SegKeySig) && first()->next()->element(0)->generated())
                         _mw -= width[1];
                   }
+#endif
             _dirty = false;
             return;
             }
