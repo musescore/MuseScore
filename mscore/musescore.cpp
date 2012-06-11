@@ -2025,7 +2025,7 @@ static bool processNonGui()
             if (fn.endsWith(".mxl"))
                   return mscore->saveMxl(cs, fn);
             if (fn.endsWith(".mid"))
-                  return saveMidi(cs, fn);
+                  return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
                   return mscore->savePsPdf(fn, QPrinter::PdfFormat);
             if (fn.endsWith(".ps"))

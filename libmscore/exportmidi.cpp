@@ -18,46 +18,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/tempo.h"
+#include "exportmidi.h"
 #include "midifile.h"
-#include "libmscore/event.h"
-#include "libmscore/sig.h"
-#include "libmscore/key.h"
-#include "preferences.h"
-#include "libmscore/text.h"
-#include "libmscore/measure.h"
-#include "libmscore/repeatlist.h"
-
-//---------------------------------------------------------
-//   exportMidi
-//---------------------------------------------------------
-
-class ExportMidi {
-      QFile f;
-      Score* cs;
-
-      void writeHeader();
-
-   public:
-      MidiFile mf;
-
-      ExportMidi(Score* s) { cs = s; }
-      bool write(const QString& name);
-      };
-
-//---------------------------------------------------------
-//   exportMidi
-//    return false on error
-//---------------------------------------------------------
-
-bool saveMidi(Score* score, const QString& name)
-      {
-      ExportMidi em(score);
-      return em.write(name);
-      }
+#include "score.h"
+#include "part.h"
+#include "staff.h"
+#include "tempo.h"
+#include "event.h"
+#include "sig.h"
+#include "key.h"
+#include "text.h"
+#include "measure.h"
+#include "repeatlist.h"
 
 //---------------------------------------------------------
 //   writeHeader
@@ -240,7 +212,7 @@ void ExportMidi::writeHeader()
 //    return false on error
 //---------------------------------------------------------
 
-bool ExportMidi::write(const QString& name)
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
       {
       f.setFileName(name);
       if (!f.open(QIODevice::WriteOnly))
@@ -258,7 +230,7 @@ bool ExportMidi::write(const QString& name)
             tracks->append(t);
             }
 
-      cs->updateRepeatList(preferences.midiExpandRepeats);
+      cs->updateRepeatList(midiExpandRepeats);
       writeHeader();
 
       foreach (MidiTrack* track, *tracks) {

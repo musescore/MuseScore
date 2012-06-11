@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "musescore.h"
 #include "scoreview.h"
+#include "libmscore/exportmidi.h"
 #include "libmscore/xml.h"
 #include "libmscore/element.h"
 #include "libmscore/note.h"
@@ -1567,6 +1568,16 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             return false;
             }
       return rv;
+      }
+
+//---------------------------------------------------------
+//   saveMidi
+//---------------------------------------------------------
+
+bool MuseScore::saveMidi(Score* score, const QString& name)
+      {
+      ExportMidi em(score);
+      return em.write(name, preferences.midiExpandRepeats);
       }
 
 //---------------------------------------------------------

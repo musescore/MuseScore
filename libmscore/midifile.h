@@ -14,8 +14,8 @@
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
-#include "libmscore/sig.h"
-#include "libmscore/event.h"
+#include "sig.h"
+#include "event.h"
 
 const int MIDI_CHANNEL = 16;
 

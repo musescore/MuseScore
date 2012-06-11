@@ -29,8 +29,6 @@ add_library(
       mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${OMR_SRC}
-      ${PROJECT_SOURCE_DIR}/mscore/midifile.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       omr
       )
 
