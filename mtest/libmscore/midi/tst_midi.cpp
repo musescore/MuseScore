@@ -20,6 +20,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
+#include "libmscore/keysig.h"
 #include "libmscore/exportmidi.h"
 
 #include "mtest/mcursor.h"
