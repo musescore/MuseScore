@@ -10,8 +10,8 @@ before_install:
   - "sudo apt-get install -y lame libmp3lame-dev"
 before_script: 
   - "make debug"
-  - "sudo make install"
-  - "cd build.release/mtest"
+  - "sudo make installdebug"
+  - "cd build.debug/mtest"
 script:
   - "make && xvfb-run ./mtest"
 notifications:

@@ -102,6 +102,9 @@ version: revision
 install: release revision
 	cd build.release; make install
 
+installdebug: debug revision
+	cd build.debug; make install
+
 #
 #  linux
 #     linux binary package build
