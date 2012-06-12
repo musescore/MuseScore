@@ -13,7 +13,7 @@ before_script:
   - "sudo make install"
   - "cd build.release/mtest"
 script:
-  - "make && xvfb-run mtest"
+  - "make && xvfb-run ./mtest"
 notifications:
   recipients:
     - build@musescore.org
