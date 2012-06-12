@@ -5,15 +5,23 @@ before_install:
   - "sudo add-apt-repository -y ppa:julien-malik/cmake"
   - "sudo apt-get update"
   - "sudo apt-get install -y libqt4-dev"
-  - "sudo apt-get install -y alsa libsndfile1 make cmake g++ ant"
+  - "sudo apt-get install -y alsa libsndfile1 make cmake g++ ant curl"
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
   - "sudo apt-get install -y lame libmp3lame-dev"
 before_script: 
+  - "make revision"
   - "make debug"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
 script:
-  - "make && xvfb-run ./mtest"
+  - "make && xvfb-run ctest"
+after_script
+  - "make reporthtml"
+  - "REVISION = `cat mscore/revision.h`"
+  - "mv reporthtml $REVISION"
+  - "zip $REVISION.zip $REVISION"
+  - "curl -F zip_file=@$REVISION.zip  http://prereleases.musescore.org/test/index.php"
+  - echo "Test results: http://prereleasese.musescore.org/test/$REVISION/" 
 notifications:
   recipients:
     - build@musescore.org
