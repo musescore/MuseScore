@@ -9,7 +9,7 @@ before_install:
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
   - "sudo apt-get install -y lame libmp3lame-dev"
 before_script: 
-  - "make"
+  - "make debug"
   - "sudo make install"
   - "cd build.release/mtest"
 script:
