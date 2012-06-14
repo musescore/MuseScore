@@ -961,10 +961,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   if (!isFirstMeasure) {
                         // remove width of generated system header
                         Segment* seg = m->first();
-                        if ((seg->subtype() == SegClef) && seg->element(0)->generated()) {
+                        if ((seg->subtype() == SegClef) && seg->element(0) && seg->element(0)->generated()) {
                               ww -= seg->width();
                               seg = seg->next();
-                              if (seg && (seg->subtype() == SegKeySig) && seg->element(0)->generated())
+                              if (seg && (seg->subtype() == SegKeySig) && seg->element(0) && seg->element(0)->generated())
                                     ww -= seg->width();
                               }
                         }
