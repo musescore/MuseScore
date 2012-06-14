@@ -2,7 +2,7 @@
 xvfb-run ctest
 PROC_RET=$?
 make reporthtml
-REVISION = `cat ../../mscore/revision.h`
+REVISION=`git rev-parse --short HEAD`
 mv reporthtml $REVISION
 zip $REVISION.zip $REVISION
 curl -F zip_file=@$REVISION.zip  http://prereleases.musescore.org/test/index.php
