@@ -13,15 +13,9 @@ before_script:
   - "make debug"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
+  - "make"
 script:
-  - "make && xvfb-run ctest"
-after_script
-  - "make reporthtml"
-  - "REVISION = `cat mscore/revision.h`"
-  - "mv reporthtml $REVISION"
-  - "zip $REVISION.zip $REVISION"
-  - "curl -F zip_file=@$REVISION.zip  http://prereleases.musescore.org/test/index.php"
-  - echo "Test results: http://prereleasese.musescore.org/test/$REVISION/" 
+  - "../../build/run_tests.sh"
 notifications:
   recipients:
     - build@musescore.org
