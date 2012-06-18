@@ -273,6 +273,8 @@ void Image::read(const QDomElement& de)
                   _storeItem = imageStore.getImage(_path);
                   if (_storeItem)
                         _storeItem->reference(this);
+                  else
+                        load(_path);
                   }
             else if (!Element::readProperties(e))
                   domError(e);
