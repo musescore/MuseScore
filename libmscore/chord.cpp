@@ -977,7 +977,7 @@ void LedgerLine::layout()
 
 void Chord::setMag(qreal val)
       {
-      Element::setMag(val);
+      ChordRest::setMag(val);
       foreach (LedgerLine* ll, _ledgerLines)
             ll->setMag(val);
       if (_stem)
