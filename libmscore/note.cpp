@@ -1237,6 +1237,7 @@ void Note::layout2()
                   NoteDot* dot = _dots[i];
                   if (dot) {
                         dot->setPos(x + d + dd * i, y);
+                        dot->setMag(mag());
                         _dots[i]->adjustReadPos();
                         }
                   }
