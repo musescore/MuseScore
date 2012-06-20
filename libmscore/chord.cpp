@@ -1248,12 +1248,11 @@ void Chord::layout()
 
       qreal _spatium  = spatium();
 
-      foreach(const LedgerLine* l, _ledgerLines)
-            delete l;
+      qDeleteAll(_ledgerLines);
       _ledgerLines.clear();
 
       qreal lx         = 0.0;
-      Note*  upnote     = upNote();
+      Note*  upnote    = upNote();
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
