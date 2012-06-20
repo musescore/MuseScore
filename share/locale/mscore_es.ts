@@ -3,10 +3,6 @@
 <TS version="2.0" language="es_ES">
 <context>
     <name>AboutBox</name>
-    <message>
-        <source>AboutBox</source>
-        <translation>Acerca de</translation>
-    </message>
     <message utf8="true">
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -19,6 +15,14 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2009 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visita &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; para nuevas versiones y más información &lt;/span&gt;&lt;/p&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Apoya MuseScore con &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;tu donación&lt;/span&gt;&lt;/a&gt;&lt;/p&gt; &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;/p&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2009 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Publicado bajo la GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>About MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy revision number</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -34,6 +38,71 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Revision: %1</source>
         <translation>Revisión: %1</translation>
+    </message>
+</context>
+<context>
+    <name>AboutMusicXMLBox</name>
+    <message>
+        <source>About MusicXML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information see: &lt;a href=&quot;http://www.makemusic.com/xml.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MakeMusic&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The MusicXML Public License:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;ParentMain_MPMain_lblTitle&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-size:xx-large; font-weight:600;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-size:xx-large; font-weight:600;&quot;&gt;ublic License 3.0&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This MusicXML™ work (including software, documents, or other related items) is being provided by the Copyright Holder under the following license. By obtaining, using and/or copying this work, each Contributor and Recipient (hereinafter, collectively known as &amp;quot;Licensee&amp;quot;) agree that he/she has read, understood, and will comply with the following terms and conditions:&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;A. DEFINITIONS&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Copyright Holder&amp;quot; means MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Contribution&amp;quot; means:&lt;/p&gt;
+&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;in the case of MakeMusic, Inc., the Original Program, and&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;in the case of each Contributor, &lt;/li&gt;&lt;/ol&gt;
+&lt;ol type=&quot;a&quot; style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;changes to the Program, and&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;additions to the Program;&lt;/li&gt;&lt;/ol&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;where such changes and/or additions to the Program originate from and are distributed by that particular Contributor. A Contribution &apos;originates&apos; from a Contributor if it was added to the Program by such Contributor itself or anyone acting on such Contributor&apos;s behalf. Contributions do not include additions to the Program which: (i) are separate modules of software distributed in conjunction with the Program under their own license agreement, and (ii) are not derivative works of the Program.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Contributor&amp;quot; means MakeMusic, Inc. and any other entity that distributes the Program.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;MusicXML™ Mark&amp;quot; means the MusicXML™ trademark owned by MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Original Program&amp;quot; means the original version of the software accompanying this Agreement as released by MakeMusic, Inc., including source code, object code and documentation, if any.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Program&amp;quot; means the Original Program and Contributions.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;quot;Recipient&amp;quot; means anyone who receives the Program under this Agreement, including all Contributors.&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;B. GRANT OF RIGHTS&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Permission to use, copy, modify, and distribute the Program, with or without modification, for any purpose and without fee or royalty is hereby granted, provided that each Recipient include the following on ALL copies of the Program or portions thereof, including modifications, that he/she make:&lt;/p&gt;
+&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The full text of this License in a location viewable to users of the redistributed or derivative work.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, a short notice of the following form (hypertext is preferred, text is permitted) should be used within the body of any redistributed or derivative code: &amp;quot;© MakeMusic, Inc. All rights reserved. http://www.makemusic.com&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Notice of any changes or modifications to the MusicXML™ files, including the date changes were made. (We recommend you provide URLs to the location from which the code is derived.)&lt;/li&gt;&lt;/ol&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;In addition, creators of derivative works must include the full text of this License in a location viewable to users of the derivative work.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Title to copyright in the Program will at all times remain with Copyright Holder.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;C. NO WARRANTY&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, THE PROGRAM IS PROVIDED ON AN &amp;quot;AS IS&amp;quot; BASIS, AND COPYRIGHT HOLDER MAKES NO WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Each Recipient is solely responsible for determining the appropriateness of using and distributing the Program and assumes all risks associated with its exercise of rights under this Agreement, including but not limited to the risks and costs of program errors, compliance with applicable laws, damage to or loss of data, programs or equipment, and unavailability or interruption of operations.&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;D. DISCLAIMER OF LIABILITY&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER COPYRIGHT HOLDER NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OR DISTRIBUTION OF THE PROGRAM OR THE EXERCISE OF ANY RIGHTS GRANTED HEREUNDER, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;E. TRADEMARK&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. The MusicXML™ Mark (or a derivative Mark, such as MusicXML™ Plus) may not be used to identify any product or service not originating from or licensed by Copyright Holder without specific, written prior permission. However, it is acceptable for a Contributor product or service to be described as being MusicXML™-compatible, assuming that the claim is true in Copyright Holder’s reasonable judgment.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. This License does not grant any rights to use any other trademarks owned by Copyright Holder, including without limitation &amp;quot;Recordare®&amp;quot;, &amp;quot;Dolet®&amp;quot;, and &amp;quot;In the Beginning Was the Note®&amp;quot;, even if such marks are included in the Program. For purposes of clarification and the avoidance of doubt, the trademarks &amp;quot;Recordare®&amp;quot;, &amp;quot;Dolet®&amp;quot;, and &amp;quot;In the Beginning Was the Note®&amp;quot; must not be used to endorse or promote Contributor versions of the Program without the prior written permission of Copyright Holder.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. All rights not expressly granted herein by Copyright Holder with respect to the MusicXML™ Mark or any other trademarks owned by Copyright Holder are reserved by and to Copyright Holder.&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;F. GENERAL&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If any provision of this Agreement is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this Agreement, and without further action by the parties hereto, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All Recipient&apos;s rights under this Agreement shall terminate if it fails to comply with any of the material terms or conditions of this Agreement and does not cure such failure in a reasonable period of time after becoming aware of such noncompliance. If all Recipient&apos;s rights under this Agreement terminate, Recipient agrees to cease use and distribution of the Program as soon as reasonably practicable. However, Recipient&apos;s obligations under this Agreement and any licenses granted by Recipient relating to the Program shall continue and survive.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MakeMusic, Inc. may publish new versions (including revisions) of this Agreement from time to time. Each new version of the Agreement will be given a distinguishing version number. The Program (including Contributions) may always be distributed subject to the version of the Agreement under which it was received. In addition, after a new version of the Agreement is published, Contributor may elect to distribute the Program (including its Contributions) under the new version. No one other than MakeMusic, Inc. has the right to modify this Agreement. Except as expressly stated in Sections B and E above, Recipient receives no rights or licenses to the intellectual property of any Contributor under this Agreement, whether expressly, by implication, estoppel or otherwise. All rights in the Program not expressly granted under this Agreement are reserved.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This Agreement is governed by the laws of the State of California and the intellectual property laws of the United States of America.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1156,7 +1225,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>offset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Desplazamiento</translation>
     </message>
     <message>
         <source>Pitch:</source>
@@ -2673,10 +2742,6 @@ spatium unit</extracomment>
         <translation>Distancia entre pentagramas</translation>
     </message>
     <message>
-        <source>System distance</source>
-        <translation>Distancia entre sistemas</translation>
-    </message>
-    <message>
         <source>Lyrics upper margin</source>
         <translation>Margen superior de la letra</translation>
     </message>
@@ -2837,10 +2902,6 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Page fill threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create courtesy clefs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2958,11 +3019,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">subir</translation>
     </message>
     <message>
         <source>down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bajar</translation>
     </message>
     <message>
         <source>Lyrics line height</source>
@@ -3114,6 +3175,14 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Historic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min. System distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. System distance</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3301,29 +3370,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>ImageProperties</name>
-    <message>
-        <source>lock aspect ratio</source>
-        <translation>bloquear proporción de aspecto</translation>
-    </message>
-    <message>
-        <source>Image Properties</source>
-        <translation>Propiedades de Imagen</translation>
-    </message>
-    <message>
-        <source>scale to fill frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stacking Order:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(0 = foreground)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>InsertMeasuresDialogBase</name>
     <message>
         <source>Mscore: Insert Measures</source>
@@ -3351,10 +3397,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Inspector</source>
         <translation type="unfinished">Inspector</translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation type="unfinished">Aplicar</translation>
     </message>
 </context>
 <context>
@@ -3463,6 +3505,18 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Grow Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <translation type="unfinished">sp</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3637,6 +3691,14 @@ spatium unit</extracomment>
     <message>
         <source>Scale to Frame Size</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation type="unfinished">Escala:</translation>
+    </message>
+    <message>
+        <source>%</source>
+        <translation type="unfinished">%</translation>
     </message>
 </context>
 <context>
@@ -3817,6 +3879,10 @@ spatium unit</extracomment>
         <source>Stem</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Beam</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InspectorRest</name>
@@ -3988,10 +4054,6 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add linked Staff</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Staves</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4011,12 +4073,20 @@ spatium unit</extracomment>
         <source>staff linked to previous</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add Linked Staff</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InstrumentListEditor</name>
     <message>
         <source>MuseScore: Part List</source>
         <translation>MuseScore: Lista de Partes</translation>
+    </message>
+    <message>
+        <source>MuseScore: Mixer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4070,12 +4140,12 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add linked Staff</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Visible</source>
         <translation type="unfinished">Visible</translation>
+    </message>
+    <message>
+        <source>Add Linked Staff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4231,10 +4301,6 @@ fallido: </translation>
 </context>
 <context>
     <name>LayerManager</name>
-    <message>
-        <source>MuseScore: Layer</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Layer</source>
         <translation type="unfinished"></translation>
@@ -4397,6 +4463,10 @@ fallido: </translation>
     </message>
     <message>
         <source>layer tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MuseScore: Layers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4627,7 +4697,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Barlines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barras de Compás</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -4907,10 +4977,6 @@ Would you like to locate %2 now?</source>
 <context>
     <name>MetaEditDialog</name>
     <message>
-        <source>MuseScore: Meta Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MuseScore Version:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4936,6 +5002,10 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>New Tag Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MuseScore: Score information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5650,10 +5720,6 @@ please choose a different name:</source>
         <translation type="unfinished">Archivo Gráfico de Vectores Escalables (*.svg)</translation>
     </message>
     <message>
-        <source>Lilypond Format (*.ly)</source>
-        <translation type="unfinished">Formato Lilypond (*.ly)</translation>
-    </message>
-    <message>
         <source>Wave Audio (*.wav)</source>
         <translation type="unfinished">Archivo de Audio Wave (*.wav)</translation>
     </message>
@@ -5818,10 +5884,6 @@ please choose a different name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Continous View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Measure</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5875,6 +5937,30 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Delete Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LilyPond Format (*.ly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MuseScore: Export Parts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parts were successfully exported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continuous View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;MusicXML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report a bug</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6255,10 +6341,6 @@ please choose a different name:</source>
 <context>
     <name>PaletteCellProperties</name>
     <message>
-        <source>Chord Properties</source>
-        <translation>Propiedades del Acorde</translation>
-    </message>
-    <message>
         <source>Palette Cell Properties</source>
         <translation>Propiedades de las Celdas de la Paleta</translation>
     </message>
@@ -6285,6 +6367,10 @@ please choose a different name:</source>
     <message>
         <source>sp</source>
         <translation type="unfinished">sp</translation>
+    </message>
+    <message>
+        <source>Cell Properties</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6388,6 +6474,10 @@ please choose a different name:</source>
         <source>drumset</source>
         <translation>set de percusión</translation>
     </message>
+    <message>
+        <source>MIDI Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PianoTools</name>
@@ -6429,6 +6519,14 @@ please choose a different name:</source>
     <message>
         <source>toolbar2</source>
         <translation>barra de herramientas 2</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show wave display</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7030,10 +7128,6 @@ please choose a different name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Character Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>PNG/SVG</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7171,6 +7265,14 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PulseAudio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Character Set:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7566,14 +7668,6 @@ por favor, selecciona primero un compás y vuelve a intentarlo</translation>
         <translation type="unfinished">Propiedades de Armonía...</translation>
     </message>
     <message>
-        <source>Image</source>
-        <translation type="unfinished">Imagen</translation>
-    </message>
-    <message>
-        <source>Image Properties...</source>
-        <translation type="unfinished">Propiedades de Imagen...</translation>
-    </message>
-    <message>
         <source>Measure Properties...</source>
         <translation type="unfinished">Propiedades de Compás...</translation>
     </message>
@@ -7589,6 +7683,19 @@ please select range of measures to join and try again</source>
     </message>
     <message>
         <source>Object Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select the complete tuplet and retry the copy operation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select the complete tuplet and retry the cut operation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+cannot split tuplet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7795,10 +7902,6 @@ El secuenciador será desactivado</translation>
         <translation>Pulsa hasta 4 teclas simultáneas para introducir la combinación</translation>
     </message>
     <message>
-        <source>Old shortcut:</source>
-        <translation>Combinación de teclas antigua:</translation>
-    </message>
-    <message>
         <source>New shortcut:</source>
         <translation>Nueva combinación de teclas:</translation>
     </message>
@@ -7807,12 +7910,20 @@ El secuenciador será desactivado</translation>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>Aceptar</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Old shortcuts:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished">Añadir</translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8449,19 +8560,15 @@ altera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>no score</source>
-        <translation type="unfinished">sin partitura</translation>
-    </message>
-    <message>
         <source>MuseScore</source>
         <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont already loaded %s</source>
+        <source>Soundfont %1 already loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cannot load soundfont %s</source>
+        <source>cannot load soundfont %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8582,29 +8689,9 @@ altera</source>
         <source>Form</source>
         <translation>Formulario</translation>
     </message>
-    <message>
-        <source>TextLine</source>
-        <translation>Línea de Texto</translation>
-    </message>
-    <message>
-        <source>line width:</source>
-        <translation>grosor de la línea:</translation>
-    </message>
-    <message>
-        <source>BeginText</source>
-        <translation>Comenzar Texto</translation>
-    </message>
-    <message>
-        <source>ContinueText</source>
-        <translation>Continuar Texto</translation>
-    </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
-    <message>
-        <source>MuseScore: Special Text Symbols</source>
-        <translation>MuseScore: Símbolos Especiales de Texto</translation>
-    </message>
     <message>
         <source>Musical Symbols</source>
         <translation type="unfinished"></translation>
@@ -8615,6 +8702,10 @@ altera</source>
     </message>
     <message>
         <source>Code Page:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MuseScore: Special Characters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9919,30 +10010,6 @@ p, li { white-space: pre-wrap; }
         <translation>Longa</translation>
     </message>
     <message>
-        <source>Double whole note (breve)</source>
-        <translation>Cuadrada</translation>
-    </message>
-    <message>
-        <source>Whole note (semibreve)</source>
-        <translation>Redonda</translation>
-    </message>
-    <message>
-        <source>Half note (minim)</source>
-        <translation>Blanca</translation>
-    </message>
-    <message>
-        <source>Quarter note (crochet)</source>
-        <translation>Negra</translation>
-    </message>
-    <message>
-        <source>Eighth note (quaver)</source>
-        <translation>Corchea</translation>
-    </message>
-    <message>
-        <source>16th note (semiquaver)</source>
-        <translation>Semicorchea</translation>
-    </message>
-    <message>
         <source>Enable sound while editing</source>
         <translation>Habilitar sonido mientras se edita</translation>
     </message>
@@ -10739,10 +10806,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Note duration: breve</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Note duration: whole</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10767,15 +10830,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>32nd note (hemisemiquaver)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Note duration: 64th</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>64th note (hemidemisemiquaver)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11067,10 +11122,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Edit score meta data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Toggle system break</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11104,18 +11155,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show frames</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert text symbol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert Text Symbol...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert special characters and text symbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11227,14 +11266,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add audio track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Audio Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Full screen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11308,10 +11339,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11427,10 +11454,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Meta &amp;Data...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Reset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11448,10 +11471,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Enable Script Debugger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11492,10 +11511,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Album...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Layer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11551,15 +11566,127 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Insert measure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Insert Measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Parts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Parts...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save a copy of the score&apos;s parts in various formats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add marcato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Marcato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>select section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note duration: double whole</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Double whole note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whole note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Half note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quarter note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>8th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32nd note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>64th note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit score info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Info...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert Special Characters...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Script Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Layers...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MuseScore Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>next syllable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>previous syllable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set unvisible</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11578,6 +11705,44 @@ p, li { white-space: pre-wrap; }
     <name>barlines</name>
     <message>
         <source>Barlines</source>
+        <translation type="unfinished">Barras de Compás</translation>
+    </message>
+</context>
+<context>
+    <name>file</name>
+    <message>
+        <source>error at line %1 column %2: %3
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>internal error: could not open resource musicxml.xsd
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>internal error: MusicXML schema is invalid
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error reading container.xml at line %1 column %2: %3
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>can&apos;t find rootfile
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>this is not a valid MusicXML file
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>could not open MusicXML file
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11596,7 +11761,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ligadura</translation>
     </message>
     <message>
         <source>Crescendo</source>
