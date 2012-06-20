@@ -3863,8 +3863,11 @@ void MuseScore::selectElementDialog(Element* e)
                         score->select(ee, SELECT_ADD, 0);
                   }
             else if (sd.doAdd()) {
-                  foreach(Element* ee, pattern.el)
-                        score->select(ee, SELECT_ADD, 0);
+                  QList<Element*> sl(score->selection().elements());
+                  foreach(Element* ee, pattern.el) {
+                        if(!sl.contains(ee))
+                              score->select(ee, SELECT_ADD, 0);
+                        }
                   }
             }
       }
