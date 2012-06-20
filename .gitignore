@@ -7,3 +7,4 @@ win32install
 build.xcode
 applebuild
 *.user
+*.qm
