@@ -294,8 +294,6 @@ class Score {
                         ///< saves will not overwrite the backup file.
       int _playPos;     ///< sequencer seek position
 
-      qreal _swingRatio; ///< Swing ratio
-
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
                                       ///< has been calculated.
@@ -672,9 +670,6 @@ class Score {
       void removeTempo(int tick);
       void setPause(int tick, qreal seconds);
       qreal tempo(int tick) const;
-
-      qreal swingRatio()                            { return _swingRatio;}
-      void setSwingRatio(qreal d)                   { _swingRatio = d;}
 
       bool creditsRead() const                       { return _creditsRead;     }
       void setCreditsRead(bool val)                  { _creditsRead = val;      }
