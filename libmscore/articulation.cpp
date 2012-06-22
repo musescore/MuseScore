@@ -197,7 +197,7 @@ void Articulation::setSubtype(ArticulationType idx)
 
 void Articulation::read(const QDomElement& de)
       {
-      setSubtype(Articulation_Staccato);    // default
+      setSubtype(Articulation_Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
@@ -299,8 +299,9 @@ void Articulation::setSubtype(const QString& s)
                   { "dlongfermata",     false, Articulation_Longfermata },
                   { "uverylongfermata", true,  Articulation_Verylongfermata },
                   { "dverylongfermata", false, Articulation_Verylongfermata },
-                  { "uportato",         true,  Articulation_Portato },
-                  { "dportato",         false, Articulation_Portato },
+                  // watch out, bug in 1.2 uportato and dportato are reversed
+                  { "dportato",         true,  Articulation_Portato }, 
+                  { "uportato",         false, Articulation_Portato },
                   { "ustaccatissimo",   true,  Articulation_Staccatissimo },
                   { "dstaccatissimo",   false, Articulation_Staccatissimo }
                   };
@@ -310,6 +311,7 @@ void Articulation::setSubtype(const QString& s)
             for (i = 0; i < n; ++i) {
                   if (s == al[i].name) {
                         _up = al[i].up;
+                        _direction = (_up ? UP : DOWN);
                         st  = int(al[i].type);
                         break;
                         }
