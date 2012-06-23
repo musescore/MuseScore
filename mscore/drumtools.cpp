@@ -182,5 +182,11 @@ void DrumTools::drumNoteSelected(int val)
       int pitch        = note->pitch();
       seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
       _score->inputState().setDrumNote(note->pitch());
+      _score->inputState().setTrack(element->track());
+
+      getAction("voice-1")->setChecked(element->voice() == 0);
+      getAction("voice-2")->setChecked(element->voice() == 1);
+      getAction("voice-3")->setChecked(element->voice() == 2);
+      getAction("voice-4")->setChecked(element->voice() == 3);
       }
 
