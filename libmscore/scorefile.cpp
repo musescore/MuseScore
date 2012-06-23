@@ -602,7 +602,7 @@ bool Score::loadCompressedMsc(QString name)
 //            qDebug("root file <%s> is empty", qPrintable(rootfile));
             QList<QZipReader::FileInfo> fil = uz.fileInfoList();
             foreach(const QZipReader::FileInfo& fi, fil) {
-                  if (fi.isFile && fi.filePath.endsWith(".mscx")) {
+                  if (fi.filePath.endsWith(".mscx")) {
                         dbuf = uz.fileData(fi.filePath);
                         break;
                         }
