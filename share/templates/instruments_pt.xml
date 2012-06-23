@@ -346,21 +346,21 @@
    <instrument-group name="Percussão">
       <instrument>
          <name>Bateria</name>
+         <description>Bateria 5 linhas</description>
+         <short-name>Bat.</short-name>
+         <drumset>1</drumset>
+         <clef>14</clef>
+         <channel>
+            <program>0</program>
+            </channel>
+         </instrument>      
+      <instrument>
+         <name>Bateria</name>
          <description>Bateria 3 linhas</description>
          <short-name>Bat.</short-name>
          <drumset>1</drumset>
          <clef>14</clef>
          <stafflines>3</stafflines>
-         <channel>
-            <program>0</program>
-            </channel>
-         </instrument>
-      <instrument>
-         <name>Bateria</name>
-         <description>Bateria 5 linhas</description>
-         <short-name>Bat.</short-name>
-         <drumset>1</drumset>
-         <clef>14</clef>
          <channel>
             <program>0</program>
             </channel>

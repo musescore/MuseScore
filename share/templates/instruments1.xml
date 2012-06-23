@@ -2360,20 +2360,20 @@
   <instrument-group name="Unpitched Percussion">
      <instrument>
         <name>Drumset</name>
-        <description>Drumset 3 lines</description>
+        <description>Drumset 5 lines</description>
         <short-name>Drs.</short-name>
-        <stafflines>3</stafflines>
+        <stafflines>5</stafflines>
         <clef>19</clef>
         <drumset>1</drumset>
         <channel>
            <program>0</program>
            </channel>
-        </instrument>
+        </instrument>     
      <instrument>
         <name>Drumset</name>
-        <description>Drumset 5 lines</description>
+        <description>Drumset 3 lines</description>
         <short-name>Drs.</short-name>
-        <stafflines>5</stafflines>
+        <stafflines>3</stafflines>
         <clef>19</clef>
         <drumset>1</drumset>
         <channel>

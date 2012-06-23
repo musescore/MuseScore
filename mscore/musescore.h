@@ -497,6 +497,7 @@ class MuseScore : public QMainWindow {
       TextTools* textTools();
       EditTools* editTools();
       void showDrumTools(Drumset*, Staff*);
+      void updateDrumTools();
       void showWebPanel(bool on);
 
       void updateTabNames();
