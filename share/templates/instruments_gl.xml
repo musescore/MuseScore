@@ -2426,6 +2426,17 @@
   <instrument-group name="Percusión de altura indeterminada">
      <instrument>
         <name>Batería</name>
+        <description>Batería 5 liñas</description>
+        <short-name>Bat.</short-name>
+        <stafflines>5</stafflines>
+        <clef>19</clef>
+        <drumset>1</drumset>
+        <channel>
+           <program>0</program>
+           </channel>
+        </instrument>  
+     <instrument>
+        <name>Batería</name>
         <description>Batería 3 liñas</description>
         <short-name>Bat.</short-name>
         <stafflines>3</stafflines>
@@ -2435,17 +2446,7 @@
            <program>0</program>
            </channel>
         </instrument>
-     <instrument>
-        <name>Batería</name>
-        <description>Batería 5 liñas</description>
-        <short-name>Bat.</short-name>
-        <stafflines>5</stafflines>
-        <clef>19</clef>
-        <drumset>1</drumset>
-        <channel>
-           <program>0</program>
-           </channel>
-        </instrument>
+
      <instrument>
         <name>Caixa</name>
         <short-name>Ca.</short-name>

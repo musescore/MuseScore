@@ -78,7 +78,7 @@ DrumTools::DrumTools(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   drumTools
+//   showDrumTools
 //---------------------------------------------------------
 
 void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
@@ -98,16 +98,21 @@ void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
       }
 
 //---------------------------------------------------------
-//   setDrumset
+//   updateDrumTools
 //---------------------------------------------------------
 
-void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+void MuseScore::updateDrumTools()
       {
-      if (s == _score && staff == st && drumset == ds)
-            return;
-      _score  = s;
-      staff   = st;
-      drumset = ds;
+      if (_drumTools)
+            _drumTools->updateDrumset();
+      }
+
+//---------------------------------------------------------
+//   updateDrumset
+//---------------------------------------------------------
+
+void DrumTools::updateDrumset() 
+      {
       drumPalette->clear();
       if (drumset == 0)
             return;
@@ -119,13 +124,13 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
       int i = 0;
       double _spatium = gscore->spatium();
       for (int pitch = 0; pitch < 128; ++pitch) {
-            if (!ds->isValid(pitch))
+            if (!drumset->isValid(pitch))
                   continue;
             bool up;
-            int line      = ds->line(pitch);
-            NoteHeadGroup noteHead  = ds->noteHead(pitch);
-            int voice     = ds->voice(pitch);
-            Direction dir = ds->stemDirection(pitch);
+            int line      = drumset->line(pitch);
+            NoteHeadGroup noteHead  = drumset->noteHead(pitch);
+            int voice     = drumset->voice(pitch);
+            Direction dir = drumset->stemDirection(pitch);
             if (dir == UP)
                   up = true;
             else if (dir == DOWN)
@@ -157,6 +162,20 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
             drumPalette->append(chord, qApp->translate("drumset", qPrintable(drumset->name(pitch))), shortcut);
             ++i;
             }
+      }
+
+//---------------------------------------------------------
+//   setDrumset
+//---------------------------------------------------------
+
+void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+      {
+      if (s == _score && staff == st && drumset == ds)
+            return;
+      _score  = s;
+      staff   = st;
+      drumset = ds;
+      updateDrumset();
       }
 
 //---------------------------------------------------------
