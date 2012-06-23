@@ -1945,12 +1945,6 @@ static void loadScores(const QStringList& argv)
                   Score* score = new Score(MScore::defaultStyle());
                   if (!mscore->readScore(score, name)) {
                         mscore->readScoreError(name);
-                        QMessageBox::warning(0,
-                              QWidget::tr("MuseScore"),
-                              QWidget::tr("reading file <")
-                                 + name + QWidget::tr("> failed: ") +
-                              QString(strerror(errno)),
-                              QString::null, QWidget::tr("&Quit"), QString::null, 0, 1);
                         delete score;
                         }
                   else {
