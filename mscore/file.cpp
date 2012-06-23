@@ -1638,7 +1638,6 @@ bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFo
 //---------------------------------------------------------
 //   readScore
 ///   Import file \a name
-//    return 0 - OK, 1 _errno, 2 - bad file type
 //---------------------------------------------------------
 
 bool MuseScore::readScore(Score* score, QString name)

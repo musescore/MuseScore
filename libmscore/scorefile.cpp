@@ -387,14 +387,6 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       {
       QZipWriter uz(f);
 
-#if 0
-      QDateTime dt;
-      if (MScore::debugMode)
-            dt = QDateTime(QDate(2007, 9, 10), QTime(12, 0));
-      else
-            dt = QDateTime::currentDateTime();
-#endif
-
       QString fn = info.completeBaseName() + ".mscx";
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
@@ -423,10 +415,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
-            cbuf.setBuffer(&ip->buffer());
-            cbuf.open(QIODevice::ReadOnly);
-            uz.addFile(path, cbuf.data());
-            cbuf.close();
+            uz.addFile(path, ip->buffer());
             }
 #ifdef OMR
       //
@@ -449,13 +438,8 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       //
       // save audio
       //
-      if (_audio) {
-            QByteArray ba(_audio->data());
-            QBuffer dbuf(&ba);
-            dbuf.open(QIODevice::ReadOnly);
-            uz.addFile("audio.ogg", dbuf.data());
-            dbuf.close();
-            }
+      if (_audio)
+            uz.addFile("audio.ogg", _audio->data());
 
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
@@ -571,16 +555,18 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
 
 bool Score::loadCompressedMsc(QString name)
       {
-      QString ext(".mscz");
-
       info.setFile(name);
       if (info.suffix().isEmpty()) {
-            name += ext;
+            name += ".mscz";
             info.setFile(name);
             }
 
       QZipReader uz(name);
-
+      if (!uz.exists()) {
+            qDebug("loadCompressedMsc: <%s> not found\n", qPrintable(name));
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
+            return false;
+            }
       QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
       QDomDocument container;
@@ -591,53 +577,29 @@ bool Score::loadCompressedMsc(QString name)
             col.setNum(column);
             ln.setNum(line);
             QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("error: %s\n", qPrintable(error));
+            qDebug("loadCompressedMsc: read container error: %s\n", qPrintable(error));
             return false;
             }
 
       // extract first rootfile
-      QString rootfile = "";
-      QList<QString> images;
-      for (QDomElement e = container.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() != "container") {
-                  domError(e);
-                  continue;
-                  }
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  if (ee.tagName() != "rootfiles") {
-                        domError(ee);
-                        continue;
-                        }
-                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                        const QString& tag(eee.tagName());
-                        const QString& val(eee.text());
-
-                        if (tag == "rootfile") {
-                              if (rootfile.isEmpty())
-                                    rootfile = eee.attribute(QString("full-path"));
-                              }
-                        else if (tag == "file")
-                              images.append(val);
-                        else
-                              domError(eee);
-                        }
-                  }
-            }
-      //
-      // load images
-      //
-      foreach(const QString& s, images) {
-            QByteArray dbuf = uz.fileData(s);
-            imageStore.add(s, dbuf);
-            }
-      if (rootfile.isEmpty()) {
+      QDomNodeList nl = container.elementsByTagName("rootfile");
+      if (nl.isEmpty()) {
             qDebug("can't find rootfile in: %s", qPrintable(name));
             return false;
+            }
+      QDomElement e = nl.at(0).toElement();
+      QString rootfile = e.attribute("full-path");
+
+      nl = container.elementsByTagName("file");
+      for (int i = 0; i < nl.size(); ++i) {
+            QString image = nl.at(i).toElement().text();
+            QByteArray dbuf = uz.fileData(image);
+            imageStore.add(image, dbuf);
             }
 
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
-            qDebug("root file <%s> is empty", qPrintable(rootfile));
+//            qDebug("root file <%s> is empty", qPrintable(rootfile));
             QList<QZipReader::FileInfo> fil = uz.fileInfoList();
             foreach(const QZipReader::FileInfo& fi, fil) {
                   if (fi.isFile && fi.filePath.endsWith(".mscx")) {
