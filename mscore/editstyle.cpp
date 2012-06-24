@@ -212,7 +212,7 @@ void EditStyle::getValues()
       lstyle.set(ST_timesigLeftMargin,       Spatium(timesigLeftMargin->value()));
       lstyle.set(ST_clefKeyRightMargin,      Spatium(clefKeyRightMargin->value()));
       lstyle.set(ST_clefBarlineDistance,     Spatium(clefBarlineDistance->value()));
-      lstyle.set(ST_beginRepeatLeftMargin,   Spatium(beginRepeatLeftMargin->value()));
+//      lstyle.set(ST_beginRepeatLeftMargin,   Spatium(beginRepeatLeftMargin->value()));
       lstyle.set(ST_staffLineWidth,          Spatium(staffLineWidth->value()));
       lstyle.set(ST_beamWidth,               Spatium(beamWidth->value()));
       lstyle.set(ST_beamDistance,            beamDistance->value());
@@ -417,7 +417,7 @@ void EditStyle::setValues()
       timesigLeftMargin->setValue(lstyle.value(ST_timesigLeftMargin).toSpatium().val());
       clefKeyRightMargin->setValue(lstyle.value(ST_clefKeyRightMargin).toSpatium().val());
       clefBarlineDistance->setValue(lstyle.value(ST_clefBarlineDistance).toSpatium().val());
-      beginRepeatLeftMargin->setValue(lstyle.value(ST_beginRepeatLeftMargin).toSpatium().val());
+//      beginRepeatLeftMargin->setValue(lstyle.value(ST_beginRepeatLeftMargin).toSpatium().val());
       staffLineWidth->setValue(lstyle.value(ST_staffLineWidth).toSpatium().val());
 
       beamWidth->setValue(lstyle.value(ST_beamWidth).toSpatium().val());
