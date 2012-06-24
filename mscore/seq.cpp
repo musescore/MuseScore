@@ -857,6 +857,9 @@ void Seq::initInstruments()
 
 void Seq::collectEvents()
       {
+      //do not collect even while playing
+      if (state == TRANSPORT_PLAY)
+            return;
       events.clear();
 
       cs->toEList(&events);

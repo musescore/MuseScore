@@ -363,21 +363,21 @@
    <instrument-group name="Percussions">
       <instrument>
          <name>Batterie</name>
-         <description>Batterie 3 lignes</description>
+         <description>Batterie 5 lignes</description>
          <short-name>Bat.</short-name>
          <drumset>1</drumset>
          <clef>14</clef>
-         <stafflines>3</stafflines>
          <channel>
             <program>0</program>
             </channel>
          </instrument>
       <instrument>
          <name>Batterie</name>
-         <description>Batterie 5 lignes</description>
+         <description>Batterie 3 lignes</description>
          <short-name>Bat.</short-name>
          <drumset>1</drumset>
          <clef>14</clef>
+         <stafflines>3</stafflines>
          <channel>
             <program>0</program>
             </channel>
