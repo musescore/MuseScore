@@ -60,7 +60,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
       setupUi(this);
 
       drumNote->setGrid(70, 80);
-      drumNote->setDrawGrid(true);
+      drumNote->setDrawGrid(false);
       drumNote->setReadOnly(true);
 
       updateList();
@@ -199,7 +199,9 @@ void EditDrumset::bboxClicked(QAbstractButton* button)
 
 void EditDrumset::apply()
       {
+      valueChanged();  //save last changes in name
       *oDrumset = nDrumset;
+      mscore->updateDrumTools();      
       }
 
 //---------------------------------------------------------
@@ -256,6 +258,8 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
 
 void EditDrumset::valueChanged()
       {
+      if(!pitchList->currentItem())
+            return;
       int pitch = pitchList->currentItem()->data(COL_PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();
       nDrumset.drum(pitch).notehead      = NoteHeadGroup(noteHead->currentIndex() - 1);
@@ -371,7 +375,7 @@ void EditDrumset::save()
             QMessageBox::critical(mscore, tr("MuseScore: Open File"), s);
             return;
             }
-
+      valueChanged();  //save last changes in name
       Xml xml(&f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
