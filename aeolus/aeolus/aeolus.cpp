@@ -148,7 +148,7 @@ void Aeolus::play(const Event& event)
                   case MIDICTL_BANK:
                         break;
                   case MIDICTL_IFELM:
-                        // if (!(f & 4))  enabale control for all channels
+                        // if (!(f & 4))  enable control for all channels
                         //      break;
                         if (v & 64) {
                               // Set mode or clear group.
@@ -287,14 +287,14 @@ void Aeolus::setState(const SyntiState&)
       {
       }
 
-void Aeolus::allSoundsOff(int)
+void Aeolus::allSoundsOff(int n)
       {
-      memset(_keymap, 0, sizeof(_keymap));
+      allNotesOff(n);
       }
 
 void Aeolus::allNotesOff(int)
       {
-      memset(_keymap, 0, sizeof(_keymap));
+      memset(_keymap, 0x80, sizeof(_keymap));
       }
 
 
