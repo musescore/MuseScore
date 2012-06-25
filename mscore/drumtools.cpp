@@ -195,17 +195,19 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      Chord* ch        = static_cast<Chord*>(element);
-      Note* note       = ch->downNote();
-      int ticks        = MScore::defaultPlayDuration;
-      int pitch        = note->pitch();
-      seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
-      _score->inputState().setDrumNote(note->pitch());
-      _score->inputState().setTrack(element->track());
-
-      getAction("voice-1")->setChecked(element->voice() == 0);
-      getAction("voice-2")->setChecked(element->voice() == 1);
-      getAction("voice-3")->setChecked(element->voice() == 2);
-      getAction("voice-4")->setChecked(element->voice() == 3);
+      if(element && element->type() == CHORD) {
+            Chord* ch        = static_cast<Chord*>(element);
+            Note* note       = ch->downNote();
+            int ticks        = MScore::defaultPlayDuration;
+            int pitch        = note->pitch();
+            seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
+            _score->inputState().setDrumNote(note->pitch());
+            _score->inputState().setTrack(element->track());
+      
+            getAction("voice-1")->setChecked(element->voice() == 0);
+            getAction("voice-2")->setChecked(element->voice() == 1);
+            getAction("voice-3")->setChecked(element->voice() == 2);
+            getAction("voice-4")->setChecked(element->voice() == 3);
+            }
       }
 
