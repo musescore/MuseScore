@@ -57,7 +57,7 @@ void PulseAudio::paCallback(pa_stream* s, size_t len, void* data)
       if (len > n)
             len = n;
       float* p = pa->buffer;
-      pa->seq->process(len / 2 * sizeof(float), p);
+      pa->seq->process(len / (2 * sizeof(float)), p);
       pa_stream_write(s, p, len, NULL, 0LL, PA_SEEK_RELATIVE);
       }
 
