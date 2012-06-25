@@ -727,8 +727,8 @@ void Seq::process(unsigned n, float* buffer)
                      state, driverState);
             }
 
+      memset(buffer, 0, sizeof(float) * n * 2);
       float* p = buffer;
-      memset(p, 0, sizeof(float) * n * 2);
       processMessages();
 
       if (state == TRANSPORT_PLAY) {
