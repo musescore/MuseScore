@@ -174,22 +174,24 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                   }
             else {
                   el = Element::create(type, score());
-                  if (type == BAR_LINE || type == ARPEGGIO || type == BRACKET)
-                        el->setHeight(_spatium * 5);
-                  else if (el->isText()) {
+                  if (el) {
+                        if (type == BAR_LINE || type == ARPEGGIO || type == BRACKET)
+                              el->setHeight(_spatium * 5);
+                        else if (el->isText()) {
 #if 0
-                        Text* text = static_cast<Text*>(el);
-                        // QString sname = text->styleName();
-                        // if (!text->styled() && !sname.isEmpty()) {         // TODO
-                        if (!text->styled()) {
-                              // check if we can transform text into styled text
-                              MStyle* s = score()->style();
-                              TextStyleType st = s->textStyleType(sname);
-                              if (st != TEXT_STYLE_INVALID)
-                                    text->setTextStyle(st);
-                              }
+                              Text* text = static_cast<Text*>(el);
+                              // QString sname = text->styleName();
+                              // if (!text->styled() && !sname.isEmpty()) {         // TODO
+                              if (!text->styled()) {
+                                    // check if we can transform text into styled text
+                                    MStyle* s = score()->style();
+                                    TextStyleType st = s->textStyleType(sname);
+                                    if (st != TEXT_STYLE_INVALID)
+                                          text->setTextStyle(st);
+                                    }
 #endif
-                        }
+                              }
+                        }  
                   }
             if (el) {
                   dragElement = el;
