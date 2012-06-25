@@ -568,6 +568,9 @@ void Chord::computeUp()
             _up = _stemDirection == UP;
             }
       else if (_noteType != NOTE_NORMAL) {
+            //
+            // stem direction for grace notes
+            //
             if (measure()->mstaff(staffIdx())->hasVoices) {
                   switch(voice()) {
                         case 0:  _up = (score()->style(ST_stemDir1).toDirection() == UP); break;
@@ -1055,7 +1058,7 @@ void Chord::layoutStem1()
 
 //---------------------------------------------------------
 //   layoutStem
-///   Layout chord stem and hook.
+///   Layout chord tremolo stem and hook.
 //---------------------------------------------------------
 
 void Chord::layoutStem()

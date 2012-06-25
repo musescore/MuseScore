@@ -90,7 +90,7 @@ class ChordRest : public DurationElement {
       Articulation* hasArticulation(const Articulation*);
       bool small() const                        { return _small; }
       void setSmall(bool val);
-      
+
       virtual void setMag(qreal val);
 
       int staffMove() const                     { return _staffMove; }
