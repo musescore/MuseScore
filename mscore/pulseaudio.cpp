@@ -28,7 +28,7 @@ class PulseAudio : public Driver {
       pa_sample_spec ss;
       pa_mainloop* pa_ml;
       pa_buffer_attr bufattr;
-      float buffer[FRAMES * 2 * sizeof(short)];
+      float buffer[FRAMES * 2];
       pthread_t thread;
 
       static void paCallback(pa_stream* s, size_t len, void* data);
@@ -56,10 +56,8 @@ void PulseAudio::paCallback(pa_stream* s, size_t len, void* data)
       size_t n = FRAMES * 2 * sizeof(float);
       if (len > n)
             len = n;
-      int frames = len / (2 * sizeof(float));
       float* p = pa->buffer;
-      memset(p, 0, len);
-      pa->seq->process(frames, p);
+      pa->seq->process(len / 2 * sizeof(float), p);
       pa_stream_write(s, p, len, NULL, 0LL, PA_SEEK_RELATIVE);
       }
 
