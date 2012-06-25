@@ -531,18 +531,9 @@ void Beam::layout1()
                               }
                         }
                   else if (!twoBeamedNotes()) {
-                        // if (upCount == 0) {
-                              // highest or lowest note determines stem direction
-                              // down-stems is preferred if equal
-                              _up = mUp > mDown;
-                        //      }
-#if 0
-                        else {
-                              // the number of notes above/below the middle line
-                              // determines stem direction
-                              _up = upCount > 0;
-                              }
-#endif
+                        // highest or lowest note determines stem direction
+                        // down-stems is preferred if equal
+                        _up = mUp > mDown;
                         }
                   }
 
@@ -554,6 +545,7 @@ void Beam::layout1()
                   //
                   // guess stem direction for every chord
                   //
+#if 0
                   foreach(ChordRest* cr, _elements) {
                         if (cr->type() != CHORD)
                               continue;
@@ -566,6 +558,7 @@ void Beam::layout1()
                         else if (move < 0)
                               c->setUp(false);
                         }
+#endif
                   }
             else {
                   foreach(ChordRest* cr, _elements)
@@ -1575,7 +1568,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                   //
                   // set stem direction for every chord
                   //
-                  foreach(Chord* c, cl) {
+                  foreach (Chord* c, cl) {
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
@@ -1585,7 +1578,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                               score()->layoutChords1(c->segment(), c->staffIdx());
                               }
                         }
-                  // _up = cl.front()->up();
+                  _up = cl.front()->up();
                   }
             else if (cross) {
                   qreal beamY   = 0.0;  // y position of main beam start
@@ -1648,7 +1641,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
       int n    = cl.size();
 
       int baseLevel = 0;
-// printf("Beam ==\n");
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
             bool growDown = _up || cross;
             for (int i = 0; i < n; ++i) {
@@ -1673,13 +1665,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
                         int bl = growDown ? beamLevel : -beamLevel;
 
                         Chord* cr2 = cl[i-1];
-// printf("  c1 %d i %d n %d up %d %d\n", c1, i, n, cr1->up(), cr2->up());
-                        if (c1
-//                           && ((i != n) || (c1 == (i-1)))
-//                           && (c1 != i)
-                           && (cr1->up() == cr2->up())
-                           ) {
-// printf("  flip\n");
+                        if (c1 && (cr1->up() == cr2->up())) {
                               QPointF stemPos(cr1->stemPos());
                               qreal x2 = stemPos.x() - canvPos.x();
                               qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
@@ -1941,7 +1927,6 @@ void Beam::editDrag(const EditData& ed)
       setGenerated(false);
       layout1();
       layout();
-      // score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
