@@ -370,6 +370,10 @@ Note* Score::addNote(Chord* chord, int pitch)
 
 bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       {
+      int measures = 1;
+      for (Measure* m = fm; m != lm; m = m -> nextMeasure())
+            ++measures;
+
       ScoreRange range;
       range.read(fm->first(), lm->last(), 0, nstaves() * VOICES);
       if (!range.canWrite(ns))
@@ -382,6 +386,10 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       Fraction k   = range.duration();
       k           /= ns;
       int nm       = (k.numerator() + k.denominator() - 1)/ k.denominator();
+
+      Fraction nd(nm * ns.numerator(), ns.denominator()); // total new duration
+      Fraction fill = nd - range.duration();
+      range.fill(fill);
 
       Measure* nfm = 0;
       Measure* nlm = 0;
@@ -404,6 +412,9 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             qDebug("cannot write measures\n");
             abort();
             }
+      nlm->setEndBarLineType(lm->endBarLineType(), lm->endBarLineGenerated(),
+         lm->endBarLineVisible(), lm->endBarLineColor());
+
       //
       // insert new calculated measures
       //
