@@ -35,7 +35,6 @@ class TrackList : public QList<Element*>
 
       Tuplet* writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const;
       void append(Element*, QHash<Spanner*, Spanner*>*);
-      void appendGap(const Fraction&);
       void readSpanner(int track, const QList<Spanner*>& spannerFor,
          const QList<Spanner*>& spannerBack, ChordRest* dst,
          QHash<Spanner*,Spanner*>* map);
@@ -50,6 +49,7 @@ class TrackList : public QList<Element*>
       bool write(int track, Measure*, QHash<Spanner*, Spanner*>*) const;
       Fraction duration() const  { return _duration; }
       ScoreRange* range() const { return _range; }
+      void appendGap(const Fraction&);
       };
 
 //---------------------------------------------------------
@@ -71,6 +71,7 @@ class ScoreRange {
       Fraction duration() const;
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
+      void fill(const Fraction&);
       };
 
 #endif
