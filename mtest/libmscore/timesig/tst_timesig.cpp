@@ -14,55 +14,42 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
+#include "libmscore/measure.h"
+#include "libmscore/timesig.h"
 
-#define DIR QString("libmscore/beam/")
+#define DIR QString("libmscore/timesig/")
 
 //---------------------------------------------------------
-//   TestBeam
+//   TestTimesig
 //---------------------------------------------------------
 
-class TestBeam : public QObject, public MTest
+class TestTimesig : public QObject, public MTest
       {
       Q_OBJECT
 
-      void beam(const char* path);
-
    private slots:
-      void initTestCase();
-      void beamA()   { beam("Beam-A.mscx"); }
-      void beamB()   { beam("Beam-B.mscx"); }
-      void beamC()   { beam("Beam-C.mscx"); }
-      void beamD()   { beam("Beam-D.mscx"); }
-      void beamE()   { beam("Beam-E.mscx"); }
-      void beamF()   { beam("Beam-F.mscx"); }
-      void beamG()   { beam("Beam-G.mscx"); }
-      void beam2()   { beam("Beam-2.mscx"); }
-      void beam23()  { beam("Beam-23.mscx"); }
-      void beamS0()  { beam("Beam-S0.mscx"); }
-      void beamDir() { beam("Beam-dir.mscx"); }
+      void initTestCase() { initMTest(); }
+      void timesig1();
       };
 
 //---------------------------------------------------------
-//   initTestCase
+//   timesig1
 //---------------------------------------------------------
 
-void TestBeam::initTestCase()
+void TestTimesig::timesig1()
       {
-      initMTest();
-      }
-
-//---------------------------------------------------------
-//   beam
-//---------------------------------------------------------
-
-void TestBeam::beam(const char* path)
-      {
-      Score* score = readScore(DIR + path);
+      Score* score = readScore(DIR + "timesig1.mscx");
       QVERIFY(score);
-      QVERIFY(saveCompareScore(score, path, DIR + path));
+      Measure* m = score->firstMeasure()->nextMeasure();
+      TimeSig* ts = new TimeSig(score, 3, 4);
+
+      score->cmdAddTimeSig(m, 0, ts);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig1.mscx", DIR + "timesig1-ref.mscx"));
       delete score;
       }
 
-QTEST_MAIN(TestBeam)
-#include "tst_beam.moc"
+QTEST_MAIN(TestTimesig)
+#include "tst_timesig.moc"
 
