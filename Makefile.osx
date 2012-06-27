@@ -74,5 +74,8 @@ version: revision
 install:
 	cd build.release;xcodebuild -project mscore.xcodeproj -configuration Release -target install;
 
+installdebug:
+	cd build.debug;xcodebuild -project mscore.xcodeproj -configuration Debug -target install;
+
 package:
 	build/package_mac;
