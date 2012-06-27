@@ -4080,6 +4080,8 @@ void ScoreView::cloneElement(Element* e)
       {
       if (!e->isMovable() && e->type() != SPACER && e->type() != VBOX)
             return;
+      if(e->type() == NOTE)
+            return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;
       if (e->isSegment())
