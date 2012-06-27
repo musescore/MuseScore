@@ -11,7 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-set(TARGET tst_beam)
+set(TARGET tst_timesig)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

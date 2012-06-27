@@ -487,18 +487,19 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
-      Fraction stretch, lsig;
+      Fraction stretch;
+      Fraction lsig;                // last signature
       if (lts) {
             stretch = lts->stretch();
             lsig    = lts->sig();
             }
       else {
             stretch.set(1,1);
-            lsig.set(4,4);
+            lsig.set(4,4);          // set to default
             }
 
       int track    = staffIdx * VOICES;
-      Segment* seg = fm->getSegment(SegTimeSig, tick);
+      Segment* seg = fm->undoGetSegment(SegTimeSig, tick);
       TimeSig* ots = static_cast<TimeSig*>(seg->element(track));
       if (ots) {
             //
@@ -512,6 +513,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   return;
                   }
             }
+#if 0
       else {
             //
             //  check for local timesig (only staff value changes)
@@ -525,6 +527,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   return;
                   }
             }
+#endif
       Measure* nfm = fm;
       if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
             //
