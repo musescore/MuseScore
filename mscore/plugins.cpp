@@ -34,7 +34,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
 #include "plugins.h"
-#include "cursor.h"
+#include "libmscore/cursor.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -74,16 +74,6 @@ Score* QmlPlugin::curScore() const
 QDeclarativeListProperty<Score> QmlPlugin::scores()
       {
       return QDeclarativeListProperty<Score>(this, mscore->scores());
-      }
-
-//---------------------------------------------------------
-//   newCursor
-//---------------------------------------------------------
-
-Cursor* QmlPlugin::newCursor()
-      {
-      Cursor* cursor = new Cursor(curScore());
-      return cursor;
       }
 
 //---------------------------------------------------------

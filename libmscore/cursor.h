@@ -24,6 +24,7 @@ class Element;
 class Score;
 class Chord;
 class Rest;
+class Note;
 class Segment;
 class RepeatSegment;
 class ChordRest;
@@ -79,7 +80,7 @@ class Cursor : public QObject {
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Element*);
-      Q_INVOKABLE void addNote(int pitch);
+      Q_INVOKABLE Note* addNote(int pitch);
       Q_INVOKABLE void setDuration(int z, int n);
       };
 

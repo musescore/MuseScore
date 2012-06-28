@@ -67,6 +67,7 @@
 #include "bracket.h"
 #include "audio.h"
 #include "instrtemplate.h"
+#include "cursor.h"
 
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
@@ -3368,4 +3369,14 @@ void Score::addText(const QString& type, const QString& txt)
       text->setText(txt);
       undoAddElement(text);
       }
+
+//---------------------------------------------------------
+//   newCursor
+//---------------------------------------------------------
+
+Cursor* Score::newCursor()
+      {
+      return new Cursor(this);
+      }
+
 
