@@ -56,6 +56,9 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       synti->init(sampleRate);
       synti->setState(score->syntiState());
 
+      int oldSampleRate = MScore::sampleRate;
+      MScore::sampleRate = sampleRate;
+
       EventMap events;
       score->toEList(&events);
 
@@ -68,6 +71,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       if (sf == 0) {
             qDebug("open soundfile failed: %s\n", sf_strerror(sf));
             delete synti;
+            MScore::sampleRate = oldSampleRate;
             return false;
             }
 
@@ -152,6 +156,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
 
       hideProgressBar();
 
+      MScore::sampleRate = oldSampleRate;
       delete synti;
       if (sf_close(sf)) {
             qDebug("close soundfile failed\n");

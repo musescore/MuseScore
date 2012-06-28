@@ -222,6 +222,7 @@ class Element : public QObject {
       void setUserOff(const QPointF& o)       { _userOff = o;     }
       void setUserXoffset(qreal v)            { _userOff.setX(v); }
       void setUserYoffset(qreal v)            { _userOff.setY(v); }
+      bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
       int mxmlOff() const                     { return _mxmlOff;  }
       void setMxmlOff(int o)                  { _mxmlOff = o;     }
 

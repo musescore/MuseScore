@@ -78,6 +78,9 @@ extern Measure* tick2measure(int tick);
 
 void updateNoteLines(Segment* segment, int track)
       {
+      Staff* staff = segment->score()->staff(track / VOICES);
+      if (staff->part()->instr()->drumset() || staff->useTablature())
+            return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
             if (s->subtype() == SegClef && s->element(track))
                   break;
@@ -2688,7 +2691,7 @@ ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
       timesig = _timesig;
       showCourtesy = sc;
       actual       = f1;
-      stretch      = f2;
+      nominal      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;
@@ -2703,19 +2706,19 @@ void ChangeTimesig::flip()
       timesig->score()->addRefresh(timesig->abbox());
       bool sc        = timesig->showCourtesySig();
       Fraction f1    = timesig->sig();
-      Fraction f2    = timesig->stretch();
+      Fraction f2    = timesig->actualSig();
       QString  s1    = timesig->zText();
       QString  s2    = timesig->nText();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
       timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
-      timesig->setSig(actual);
-      timesig->setStretch(stretch);
+      timesig->setSig(nominal);
+      timesig->setActualSig(actual);
       timesig->setText(sz, sn);
       showCourtesy = sc;
       actual       = f1;
-      stretch      = f2;
+      nominal      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;

@@ -199,15 +199,17 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
             else {
                   Element* element = e->clone();
                   QList<Element*>::append(element);
-                  if (element->type() == TUPLET) {
+                  if (e->type() == TUPLET) {
                         Tuplet* srcTuplet = static_cast<Tuplet*>(e);
                         Tuplet* dstTuplet = static_cast<Tuplet*>(element);
+
                         foreach(const DurationElement* de, srcTuplet->elements())
                               dstTuplet->add(de->clone());
                         }
                   else {
                         ChordRest* src = static_cast<ChordRest*>(e);
                         ChordRest* dst = static_cast<ChordRest*>(element);
+
                         readSpanner(-1, src->spannerFor(), src->spannerBack(), dst, map);
                         Segment* s = src->segment();
                         readSpanner(src->track(), s->spannerFor(), s->spannerBack(), dst, map);
@@ -228,11 +230,11 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
 
 void TrackList::appendGap(const Fraction& d)
       {
-      _duration += d;
       if (!isEmpty() && (back()->type() == REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
             dd          += d;
+            _duration   += d;
             rest->setDuration(dd);
             }
       else {
@@ -282,6 +284,8 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                         if (!(de->type() == CHORD && static_cast<Chord*>(de)->isGrace()))
                               tick += de->duration().ticks();;
                         }
+                  else if (e->type() == BAR_LINE)
+                        ;
                   else
                         append(e, map);
                   }
@@ -413,6 +417,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
             Element* e = at(i);
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
+
                   if (e->type() == CHORD && static_cast<Chord*>(e)->isGrace()) {
                         segment = m->getSegment(SegGrace, m->tick() + pos.ticks());
                         Element* element = e->clone();
@@ -433,7 +438,11 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
 
                   bool firstCRinSplit = true;
                   while (duration.numerator() > 0) {
-                        if (e->type() == REST && (duration >= rest || e == back()) && rest == m->len()) {
+                        // handle full measure rest
+                        if (e->type() == REST
+                           && (duration >= rest || e == back())
+                           && rest == m->len())
+                              {
                               segment = m->getSegment(e, m->tick() + pos.ticks());
                               //
                               // handle full measure rest
@@ -501,7 +510,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                               }
                         if (pos == m->len()) {
                               if (m->nextMeasure()) {
-                                    m = m->nextMeasure();
+                                    m    = m->nextMeasure();
                                     rest = m->len();
                                     pos  = Fraction();
                                     }
@@ -616,6 +625,17 @@ bool ScoreRange::write(int track, Measure* m) const
                   }
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   fill
+//---------------------------------------------------------
+
+void ScoreRange::fill(const Fraction& f)
+      {
+      int n = tracks.size();
+      for (int i = 0; i < n; ++i)
+            tracks[i]->appendGap(f);
       }
 
 //---------------------------------------------------------

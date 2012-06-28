@@ -270,7 +270,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       ev->accept();
       if (preferences.dirty)
             preferences.write();
-//      this->deleteLater();     !?
+      this->deleteLater();     //this is necessary on windows http://musescore.org/node/16713
       qApp->quit();
       }
 
@@ -1948,12 +1948,6 @@ static void loadScores(const QStringList& argv)
                   Score* score = new Score(MScore::defaultStyle());
                   if (!mscore->readScore(score, name)) {
                         mscore->readScoreError(name);
-                        QMessageBox::warning(0,
-                              QWidget::tr("MuseScore"),
-                              QWidget::tr("reading file <")
-                                 + name + QWidget::tr("> failed: ") +
-                              QString(strerror(errno)),
-                              QString::null, QWidget::tr("&Quit"), QString::null, 0, 1);
                         delete score;
                         }
                   else {
@@ -2028,7 +2022,7 @@ static bool processNonGui()
             if (fn.endsWith(".mxl"))
                   return mscore->saveMxl(cs, fn);
             if (fn.endsWith(".mid"))
-                  return saveMidi(cs, fn);
+                  return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
                   return mscore->savePsPdf(fn, QPrinter::PdfFormat);
 #if QT_VERSION < 0x050000
@@ -2296,6 +2290,10 @@ int main(int argc, char* av[])
       MScore::PDPI = wi.logicalDpiX();         // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
       MScore::init();                          // initialize libmscore
+
+      if (MScore::debugMode)
+            printf("DPI %f\n", MScore::DPI);
+
       preferences.readDefaultStyle();
 
       if (!useFactorySettings)
@@ -3864,8 +3862,11 @@ void MuseScore::selectElementDialog(Element* e)
                         score->select(ee, SELECT_ADD, 0);
                   }
             else if (sd.doAdd()) {
-                  foreach(Element* ee, pattern.el)
-                        score->select(ee, SELECT_ADD, 0);
+                  QList<Element*> sl(score->selection().elements());
+                  foreach(Element* ee, pattern.el) {
+                        if(!sl.contains(ee))
+                              score->select(ee, SELECT_ADD, 0);
+                        }
                   }
             }
       }

@@ -28,13 +28,10 @@ Requirements:
         and developer package and that you need to install both.
 
       - ALSA Version 1.0 or newer (audio/midi input/output)
-      - CMake >= 2.4.6
+      - CMake >= 2.8.6
       - libsndfile >= 1.0.19
 
-      - recommended: JACK audio server (audio output)
-
-      - recommended: portaudio 19
-        (required for windows version)
+      - portaudio 19, required for windows version
 
 Credits:
       MuseScore uses the "Emmentaler" font from the lilypond project.
@@ -74,15 +71,8 @@ Test:
             mscore
 
       to start mscore. On first invocation a demofile
-      (Modeste Moussorgsky: Pictures of an exhibition: Promenade)
       is shown. You probably want to change that in the
       "preferences" dialog.
-
-=================================================================
-      Help needed
-=================================================================
-
-      We need your help!
 
 =================================================================
       Contact

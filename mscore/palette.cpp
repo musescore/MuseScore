@@ -163,6 +163,18 @@ void Palette::setGrid(int hh, int vv)
       }
 
 //---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
+Element* Palette::element(int idx)
+      { 
+      if (idx < size() &&  cells[idx])
+            return cells[idx]->element;
+      else
+            return 0;
+      }
+
+//---------------------------------------------------------
 //   contentsMousePressEvent
 //---------------------------------------------------------
 
@@ -223,7 +235,9 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
 
 //      QMimeData* mimeData = new QMimeData;
-      Element* element    = cells[i]->element;
+      Element* element = 0;
+      if (i < size() &&  cells[i])
+            element = cells[i]->element;
       if (element == 0)
             return;
       ScoreView* viewer = mscore->currentScoreView();
@@ -803,6 +817,7 @@ void Palette::dropEvent(QDropEvent* event)
                   delete e;
                   ok = true;
                   }
+            update(idxRect(i) | idxRect(dragSrcIdx));
             event->setDropAction(Qt::MoveAction);
             }
       else {

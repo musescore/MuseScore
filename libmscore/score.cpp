@@ -296,7 +296,6 @@ void Score::init()
       _repeatList     = new RepeatList(this);
       foreach(StaffType* st, ::staffTypes)
              _staffTypes.append(st->clone());
-      _swingRatio     = 0.0;
 
       _mscVersion     = MSCVERSION;
       _created        = false;

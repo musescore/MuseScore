@@ -64,14 +64,20 @@ class InspectorChord : public QWidget, Ui::InspectorChord {
       Q_OBJECT
       Chord* chord;
 
+      void block(bool);
+
    private slots:
       void smallChanged(bool val);
       void stemlessChanged(bool val);
       void stemDirectionChanged(int idx);
+      void offsetXChanged(double);
+      void offsetYChanged(double);
 
       void resetSmallClicked();
       void resetStemlessClicked();
       void resetStemDirectionClicked();
+      void resetXClicked();
+      void resetYClicked();
 
    signals:
       void inspectorVisible(bool);
@@ -263,6 +269,7 @@ class InspectorNote : public InspectorBase {
       QToolButton* stem;
       QToolButton* beam;
 
+      void block(bool);
       bool dirty() const;
 
    private slots:

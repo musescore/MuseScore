@@ -507,65 +507,65 @@ QPointF Note::stemPos(bool upFlag) const
 
 void Note::draw(QPainter* painter) const
       {
+      if (_hidden)
+            return;
       painter->setPen(curColor());
-      if (!_hidden || !userOff().isNull()) {
-            bool tablature = staff() && staff()->useTablature();
-            if (tablature) {
-                  if (tieBack())
-                        return;
-                  StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
-                  qreal mag = magS();
-                  qreal imag = 1.0 / mag;
+      bool tablature = staff() && staff()->useTablature();
+      if (tablature) {
+            if (tieBack())
+                  return;
+            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            qreal mag = magS();
+            qreal imag = 1.0 / mag;
 
-                  painter->scale(mag, mag);
-                  painter->setFont(tab->fretFont());
+            painter->scale(mag, mag);
+            painter->setFont(tab->fretFont());
 
-                  // when using letters, "+(_fret > 8)" skips 'j'
-                  QString s = _ghost ? "X" :
-                          ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
+            // when using letters, "+(_fret > 8)" skips 'j'
+            QString s = _ghost ? "X" :
+                    ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
 
-                  qreal currSpatium = spatium();
-                  qreal d  = currSpatium * .2;
-                  QRectF bb = bbox().adjusted(-d, 2*d, d, -2*d);
+            qreal currSpatium = spatium();
+            qreal d  = currSpatium * .2;
+            QRectF bb = bbox().adjusted(-d, 2*d, d, -2*d);
 
-                  // draw background, if required
-                  if (!tab->linesThrough() || fretConflict()) {
-                        // we do not know which viewer did this draw() call
-                        // so update all:
-                        foreach(MuseScoreView* view, score()->getViewer())
-                              view->drawBackground(painter, bb);
+            // draw background, if required
+            if (!tab->linesThrough() || fretConflict()) {
+                  // we do not know which viewer did this draw() call
+                  // so update all:
+                  foreach(MuseScoreView* view, score()->getViewer())
+                        view->drawBackground(painter, bb);
 
-                        if (fretConflict()) {          //on fret conflict, draw on red background
-                              painter->save();
-                              painter->setPen(Qt::red);
-                              painter->setBrush(QBrush(QColor(Qt::red)));
-                              painter->drawRect(bb);
-                              painter->restore();
-                              }
+                  if (fretConflict()) {          //on fret conflict, draw on red background
+                        painter->save();
+                        painter->setPen(Qt::red);
+                        painter->setBrush(QBrush(QColor(Qt::red)));
+                        painter->drawRect(bb);
+                        painter->restore();
                         }
-                  painter->setPen(curColor());
-                  painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
-                  painter->scale(imag, imag);
                   }
-            else {                        // if not tablature
-                  //
-                  // warn if pitch extends usable range of instrument
-                  // by coloring the note head
-                  //
-                  if (chord() && chord()->segment() && staff() && !selected()
-                     && !score()->printing() && MScore::warnPitchRange) {
-                        const Instrument* in = staff()->part()->instr();
-                        int i = ppitch();
-                        if (i < in->minPitchP() || i > in->maxPitchP())
-                              painter->setPen(Qt::red);
-                        else if (i < in->minPitchA() || i > in->maxPitchA())
-                              painter->setPen(Qt::darkYellow);
-                        }
-                  qreal mag = magS();
-                  if (_small)
-                        mag *= score()->styleD(ST_smallNoteMag);
-                  symbols[score()->symIdx()][noteHead()].draw(painter, mag);
+            painter->setPen(curColor());
+            painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
+            painter->scale(imag, imag);
+            }
+      else {      // if not tablature
+            //
+            // warn if pitch extends usable range of instrument
+            // by coloring the note head
+            //
+            if (chord() && chord()->segment() && staff() && !selected()
+               && !score()->printing() && MScore::warnPitchRange) {
+                  const Instrument* in = staff()->part()->instr();
+                  int i = ppitch();
+                  if (i < in->minPitchP() || i > in->maxPitchP())
+                        painter->setPen(Qt::red);
+                  else if (i < in->minPitchA() || i > in->maxPitchA())
+                        painter->setPen(Qt::darkYellow);
                   }
+            qreal mag = magS();
+            if (_small)
+                  mag *= score()->styleD(ST_smallNoteMag);
+            symbols[score()->symIdx()][noteHead()].draw(painter, mag);
             }
       }
 
@@ -1237,6 +1237,7 @@ void Note::layout2()
                   NoteDot* dot = _dots[i];
                   if (dot) {
                         dot->setPos(x + d + dd * i, y);
+                        dot->setMag(mag());
                         _dots[i]->adjustReadPos();
                         }
                   }
@@ -1529,6 +1530,7 @@ void Note::endEdit()
       if (ch->notes().size() == 1) {
             score()->undoChangeUserOffset(ch, ch->userOff() + userOff());
             setUserOff(QPointF());
+            score()->setLayoutAll(true);
             }
       }
 

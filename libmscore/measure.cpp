@@ -1513,7 +1513,8 @@ qDebug("drop staffList");
                   }
 
             case TIMESIG:
-                  score()->cmdAddTimeSig(this, staffIdx, static_cast<TimeSig*>(e));
+                  score()->cmdAddTimeSig(this, staffIdx, static_cast<TimeSig*>(e),
+                     data.modifiers & Qt::ControlModifier);
                   return 0;
 
             case LAYOUT_BREAK:
@@ -2802,7 +2803,7 @@ void Measure::layoutX(qreal stretch, bool firstPass)
             }
 
       if (nstaves == 0 || segs == 0) {
-            _mw = MeasureWidth(1.0, 0.0);
+            _mw    = 1.0;
             _dirty = false;
             return;
             }
@@ -3007,7 +3008,14 @@ void Measure::layoutX(qreal stretch, bool firstPass)
 
       if (firstPass) {
             // qDebug("this is pass 1");
-            _mw = MeasureWidth(xpos[segs], 0.0);
+            _mw = xpos[segs];
+#if 0
+            if (!firstMeasure && (types[0] == SegClef) && first()->element(0)->generated()) {
+                  _mw -= width[0];
+                  if ((segs > 2) && (types[1] == SegKeySig) && first()->next()->element(0)->generated())
+                        _mw -= width[1];
+                  }
+#endif
             _dirty = false;
             return;
             }
@@ -3127,10 +3135,8 @@ void Measure::layoutX(qreal stretch, bool firstPass)
                         qreal w  = xpos[segs-1] - x1;
                         e->rxpos() = (w - e->width()) * .5 + x1 - s->x();
                         }
-                  else if (t == CHORD) {
-                        Chord* chord = static_cast<Chord*>(e);
-                        chord->layout2();
-                        }
+                  else if (t == CHORD)
+                        static_cast<Chord*>(e)->layout2();
                   else if (t == CLEF) {
                         qreal gap = 0.0;
                         Segment* ps = s->prev();

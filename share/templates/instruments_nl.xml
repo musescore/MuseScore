@@ -2057,20 +2057,20 @@
    <instrument-group name="Slaginstrumenten ongestemd">
       <instrument>
          <name>Drumset</name>
-         <description>Drumset 3 lijnen</description>
+         <description>Drumset 5 lijnen</description>
          <short-name>Drs.</short-name>
-         <stafflines>3</stafflines>
+         <stafflines>5</stafflines>
          <clef>19</clef>
          <drumset>1</drumset>
          <channel>
             <program>0</program>
             </channel>
-         </instrument>
+         </instrument>      
       <instrument>
          <name>Drumset</name>
-         <description>Drumset 5 lijnen</description>
+         <description>Drumset 3 lijnen</description>
          <short-name>Drs.</short-name>
-         <stafflines>5</stafflines>
+         <stafflines>3</stafflines>
          <clef>19</clef>
          <drumset>1</drumset>
          <channel>
