@@ -2831,7 +2831,7 @@ void MuseScore::play(Element* e) const
                   Instrument* instr = part->instr(tick);
                   foreach(Note* n, c->notes()) {
                         const Channel& channel = instr->channel(n->subchannel());
-                        seq->startNote(channel, n->ppitch(), 80, n->tuning());
+                        seq->startNote(channel.channel, n->ppitch(), 80, n->tuning());
                         }
                   seq->startNoteTimer(MScore::defaultPlayDuration);
                   }
@@ -2846,7 +2846,7 @@ void MuseScore::play(Element* e, int pitch) const
             int tick = note->chord()->segment() ? note->chord()->segment()->tick() : 0;
             Instrument* instr = part->instr(tick);
             const Channel& channel = instr->channel(note->subchannel());
-            seq->startNote(channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
+            seq->startNote(channel.channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
       }
 
