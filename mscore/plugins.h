@@ -16,8 +16,6 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 
-class Cursor;
-
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -55,7 +53,6 @@ class QmlPlugin : public QDeclarativeItem {
       QDeclarativeListProperty<Score> scores();
 
       Q_INVOKABLE Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Cursor* newCursor();
       Q_INVOKABLE Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       };

@@ -132,9 +132,9 @@ void Cursor::add(Element* s)
 //   addNote
 //---------------------------------------------------------
 
-void Cursor::addNote(int pitch)
+Note* Cursor::addNote(int pitch)
       {
-      _score->addPitch(pitch, false);
+      return _score->addPitch(pitch, false);
       }
 
 //---------------------------------------------------------

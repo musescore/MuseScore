@@ -178,7 +178,7 @@ class Element : public QObject {
       Element(const Element&);
       virtual ~Element();
       Element &operator=(const Element&);
-      virtual Element* clone() const = 0;
+      Q_INVOKABLE virtual Element* clone() const = 0;
       virtual Element* linkedClone();
       QList<Element*> linkList() const;
 
