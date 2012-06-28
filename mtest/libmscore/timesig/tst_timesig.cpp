@@ -41,9 +41,9 @@ void TestTimesig::timesig1()
       Score* score = readScore(DIR + "timesig1.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
-      TimeSig* ts = new TimeSig(score, 3, 4);
+      TimeSig* ts = new TimeSig(score, Fraction(3, 4));
 
-      score->cmdAddTimeSig(m, 0, ts);
+      score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
 
       QVERIFY(saveCompareScore(score, "timesig1.mscx", DIR + "timesig1-ref.mscx"));

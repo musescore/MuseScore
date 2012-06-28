@@ -1873,8 +1873,6 @@ void Measure::read(const QDomElement& de, int staffIdx)
             s->lines     = new StaffLines(score());
             s->lines->setParent(this);
             s->lines->setTrack(n * VOICES);
-//            s->distanceUp = 0.0;
-//            s->distanceDown = 0.0; // TODO point(n == 0 ? score()->styleS(ST_minSystemDistance) : score()->styleS(ST_staffDistance));
             s->lines->setVisible(!staff->invisible());
             staves.append(s);
             }
@@ -1902,6 +1900,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             }
 
       Staff* staff = score()->staff(staffIdx);
+      Fraction timeStretch(staff->timeStretch(tick()));
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
@@ -1954,11 +1953,8 @@ void Measure::read(const QDomElement& de, int staffIdx)
                         }
                   else
                         segment = getSegment(chord, score()->curTick);
-
-                  Fraction timeStretch(staff->timeStretch(score()->curTick));
                   Fraction ts(timeStretch * chord->globalDuration());
                   int crticks = chord->noteType() != NOTE_NORMAL ? 0 : ts.ticks();
-
                   if (chord->tremolo() && chord->tremolo()->subtype() < 6) {
                         //
                         // old style tremolo found
@@ -2013,7 +2009,6 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score());
                   rest->setDurationType(TDuration::V_MEASURE);
-                  Fraction timeStretch(staff->timeStretch(score()->curTick));
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(score()->curTrack);
                   rest->read(e, &tuplets, &score()->spanner);
@@ -2033,7 +2028,6 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   segment = getSegment(chord, score()->curTick);
                   segment->add(chord);
 
-                  Fraction timeStretch(staff->timeStretch(score()->curTick));
                   Fraction ts(timeStretch * chord->globalDuration());
                   score()->curTick += ts.ticks();
                   }
@@ -2126,11 +2120,13 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   ts->read(e);
                   segment = getSegment(SegTimeSig, score()->curTick);
                   segment->add(ts);
-                  _timesig = ts->sig();
-                  if (!irregular)
-                        _len = _timesig;
-                  score()->sigmap()->add(tick(), SigEvent(_timesig));
-                  // timeStretch = ts->stretch();
+                  timeStretch = ts->stretch();
+                  _timesig    = ts->sig();
+                  if (timeStretch == Fraction(1,1)) {
+                        if (!irregular)
+                              _len = _timesig * timeStretch;
+                        score()->sigmap()->add(tick(), SigEvent(_timesig));
+                        }
                   }
             else if (tag == "KeySig") {
                   KeySig* ks = new KeySig(score());
@@ -2298,28 +2294,26 @@ void Measure::read(const QDomElement& de, int staffIdx)
       //
       // for compatibility with 1.22:
       //
-      int endTick = tick();
+      int ticks1 = 0;
       for (Segment* s = last(); s; s = s->prev()) {
             if (s->subtype() == SegChordRest) {
                   if (s->element(0)) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
                         if (cr->type() == REPEAT_MEASURE)
-                              endTick = tick() + ticks();
+                              ticks1 = ticks();
                         else
-                              endTick = cr->tick() + cr->actualTicks();
+                              ticks1 = s->rtick() + cr->actualTicks();
                         break;
                         }
                   }
             }
-      if (endTick != (tick() + ticks())) {
-            int diff = tick() + ticks() - endTick;
-            if (diff) {
-                  // this is a irregular measure
-                  _len = Fraction::fromTicks(endTick - tick());
-                  _len.reduce();
-                  if (last() && last()->subtype() == SegBarLine)
-                        last()->setSubtype(SegEndBarLine);
-                  }
+      int diff   = ticks() - ticks1;
+      if (diff) {
+            // this is a irregular measure
+            _len = Fraction::fromTicks(ticks1);
+            _len.reduce();
+            if (last()->subtype() == SegBarLine)
+                  last()->setSubtype(SegEndBarLine);
             }
       foreach (Tuplet* tuplet, tuplets) {
             if (tuplet->elements().isEmpty()) {

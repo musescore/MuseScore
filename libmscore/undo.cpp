@@ -2690,8 +2690,8 @@ ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
       {
       timesig = _timesig;
       showCourtesy = sc;
-      actual       = f1;
-      nominal      = f2;
+      sig          = f1;
+      stretch      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;
@@ -2706,19 +2706,19 @@ void ChangeTimesig::flip()
       timesig->score()->addRefresh(timesig->abbox());
       bool sc        = timesig->showCourtesySig();
       Fraction f1    = timesig->sig();
-      Fraction f2    = timesig->actualSig();
+      Fraction f2    = timesig->stretch();
       QString  s1    = timesig->zText();
       QString  s2    = timesig->nText();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
       timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
-      timesig->setSig(nominal);
-      timesig->setActualSig(actual);
+      timesig->setSig(sig);
+      timesig->setStretch(stretch);
       timesig->setText(sz, sn);
       showCourtesy = sc;
-      actual       = f1;
-      nominal      = f2;
+      sig          = f1;
+      stretch      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;

@@ -61,16 +61,16 @@ TimeDialog::TimeDialog(QWidget* parent)
       //
       // create default palette
       //
-	sp->append(new TimeSig(gscore,  2, 2), "2/2");
-	sp->append(new TimeSig(gscore,  2, 4), "2/4");
-	sp->append(new TimeSig(gscore,  3, 4), "3/4");
-	sp->append(new TimeSig(gscore,  4, 4), "4/4");
-	sp->append(new TimeSig(gscore,  5, 4), "5/4");
-	sp->append(new TimeSig(gscore,  6, 4), "6/4");
-	sp->append(new TimeSig(gscore,  3, 8), "3/8");
-	sp->append(new TimeSig(gscore,  6, 8), "6/8");
-	sp->append(new TimeSig(gscore,  9, 8), "9/8");
-	sp->append(new TimeSig(gscore, 12, 8), "12/8");
+	sp->append(new TimeSig(gscore,  Fraction(2, 2)), "2/2");
+	sp->append(new TimeSig(gscore,  Fraction(2, 4)), "2/4");
+	sp->append(new TimeSig(gscore,  Fraction(3, 4)), "3/4");
+	sp->append(new TimeSig(gscore,  Fraction(4, 4)), "4/4");
+	sp->append(new TimeSig(gscore,  Fraction(5, 4)), "5/4");
+	sp->append(new TimeSig(gscore,  Fraction(6, 4)), "6/4");
+	sp->append(new TimeSig(gscore,  Fraction(3, 8)), "3/8");
+	sp->append(new TimeSig(gscore,  Fraction(6, 8)), "6/8");
+	sp->append(new TimeSig(gscore,  Fraction(9, 8)), "9/8");
+	sp->append(new TimeSig(gscore, Fraction(12, 8)), "12/8");
 	sp->append(new TimeSig(gscore, TSIG_FOUR_FOUR), tr("4/4 common time"));
 	sp->append(new TimeSig(gscore, TSIG_ALLA_BREVE), tr("2/2 alla breve"));
       }

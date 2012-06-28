@@ -38,14 +38,13 @@ class TimeSig : public Element {
       bool	_showCourtesySig;
       QString sz, sn;         // calculated from actualSig() if !customText
       QPointF pz, pn;
-      Fraction _nominal;
-      Fraction _actualSig;
+      Fraction _sig;
+      Fraction _stretch;      // localSig / globalSig
       bool customText;        // if false, sz and sn are calculated from actualSig()
 
    public:
       TimeSig(Score*);
       TimeSig(Score* s, TimeSigType st);
-      TimeSig(Score* s, int z, int n);
       TimeSig(Score* s, const Fraction& f);
 
       TimeSig* clone() const             { return new TimeSig(*this); }
@@ -60,13 +59,11 @@ class TimeSig : public Element {
       void layout();
       Space space() const;
 
-      Fraction sig() const               { return _nominal; }
-      void setSig(const Fraction& f)     { _nominal = f;    }
-      void setSig(int a, int b)          { _nominal.set(a,b); }
+      Fraction sig() const               { return _sig; }
+      void setSig(const Fraction& f)     { _sig = f;    }
 
-      Fraction actualSig() const           { return _actualSig;   }
-      void setActualSig(const Fraction& s) { _actualSig = s; }
-      Fraction stretch() const             { return _nominal / _actualSig;  }
+      Fraction stretch() const           { return _stretch;   }
+      void setStretch(const Fraction& s) { _stretch = s;      }
 
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
