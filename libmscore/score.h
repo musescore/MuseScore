@@ -299,8 +299,6 @@ class Score : public QObject {
                         ///< saves will not overwrite the backup file.
       int _playPos;     ///< sequencer seek position
 
-      qreal _swingRatio; ///< Swing ratio
-
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
                                       ///< has been calculated.
@@ -532,7 +530,7 @@ class Score : public QObject {
       void update();
 
       void cmdRemoveTimeSig(TimeSig*);
-      void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*);
+      void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
       void setUpdateAll(bool v = true) { _updateAll = v;   }
       void setLayoutAll(bool val);
@@ -679,9 +677,6 @@ class Score : public QObject {
       void removeTempo(int tick);
       void setPause(int tick, qreal seconds);
       qreal tempo(int tick) const;
-
-      qreal swingRatio()                            { return _swingRatio;}
-      void setSwingRatio(qreal d)                   { _swingRatio = d;}
 
       bool creditsRead() const                       { return _creditsRead;     }
       void setCreditsRead(bool val)                  { _creditsRead = val;      }

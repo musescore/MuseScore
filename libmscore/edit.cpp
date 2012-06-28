@@ -370,6 +370,10 @@ Note* Score::addNote(Chord* chord, int pitch)
 
 bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       {
+      int measures = 1;
+      for (Measure* m = fm; m != lm; m = m -> nextMeasure())
+            ++measures;
+
       ScoreRange range;
       range.read(fm->first(), lm->last(), 0, nstaves() * VOICES);
       if (!range.canWrite(ns))
@@ -382,6 +386,10 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       Fraction k   = range.duration();
       k           /= ns;
       int nm       = (k.numerator() + k.denominator() - 1)/ k.denominator();
+
+      Fraction nd(nm * ns.numerator(), ns.denominator()); // total new duration
+      Fraction fill = nd - range.duration();
+      range.fill(fill);
 
       Measure* nfm = 0;
       Measure* nlm = 0;
@@ -404,6 +412,9 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             qDebug("cannot write measures\n");
             abort();
             }
+      nlm->setEndBarLineType(lm->endBarLineType(), lm->endBarLineGenerated(),
+         lm->endBarLineVisible(), lm->endBarLineColor());
+
       //
       // insert new calculated measures
       //
@@ -471,23 +482,24 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
+void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       {
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
-      Fraction stretch, lsig;
+      Fraction stretch;
+      Fraction lsig;                // last signature
       if (lts) {
             stretch = lts->stretch();
             lsig    = lts->sig();
             }
       else {
             stretch.set(1,1);
-            lsig.set(4,4);
+            lsig.set(4,4);          // set to default
             }
 
       int track    = staffIdx * VOICES;
-      Segment* seg = fm->getSegment(SegTimeSig, tick);
+      Segment* seg = fm->undoGetSegment(SegTimeSig, tick);
       TimeSig* ots = static_cast<TimeSig*>(seg->element(track));
       if (ots) {
             //
@@ -501,19 +513,19 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   return;
                   }
             }
-      else {
-            //
-            //  check for local timesig (only staff value changes)
-            //  or redundant time signature
-            //
-            if (lsig == ts->sig()) {
-                  ts->setParent(seg);
-                  ts->setTrack(track);
-                  undoAddElement(ts);
-//TODO                  timesigStretchChanged(ts, fm, staffIdx);
-                  return;
-                  }
+
+      if (local) {
+printf("insert local timesig\n");
+            ts->setParent(seg);
+            ts->setTrack(track);
+            ts->setActualSig(ts->sig());
+            ts->setSig(lsig);
+            undoAddElement(ts);
+            timesigStretchChanged(ts, fm, staffIdx);
+            return;
             }
+
+
       Measure* nfm = fm;
       if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
             //
@@ -558,7 +570,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   }
             else {
                   undo(new ChangeTimesig(nsig, false,
-                     ts->sig(), nsig->stretch(), ts->subtype(),
+                     ts->actualSig(), ts->sig(), ts->subtype(),
                      QString(), QString()));
                   nsig->setDropTarget(0);       // DEBUG
                   }
@@ -690,7 +702,7 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
                   note = static_cast<Chord*>(cr)->upNote();
                   if (note) {
                         Note* note2 = note;
-                        while (note2->tieFor()) {
+                        while (note2->tieFor() && note2->tieFor()->endNote()) {
                               note2 = note2->tieFor()->endNote();
                               f += note2->chord()->duration();
                               }

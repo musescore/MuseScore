@@ -1,5 +1,6 @@
 MuseScore
-======
+
+MuseScore [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](http://travis-ci.org/musescore/MuseScore)
 
 MuseScore [free music notation software](http://musescore.org). http://musescore.org
 

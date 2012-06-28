@@ -27,25 +27,6 @@ class Measure;
 class LayoutBreak;
 
 //---------------------------------------------------------
-//   MeasureWidth
-//---------------------------------------------------------
-
-/**
- result of layoutX().
-*/
-
-struct MeasureWidth {
-      qreal stretchable;
-      qreal nonStretchable;
-
-      MeasureWidth() {}
-      MeasureWidth(qreal a, qreal b) {
-            stretchable = a;
-            nonStretchable = b;
-            }
-      };
-
-//---------------------------------------------------------
 //   MeasureBase
 //---------------------------------------------------------
 
@@ -61,7 +42,7 @@ class MeasureBase : public Element {
       int _tick;
 
    protected:
-      MeasureWidth _mw;
+      qreal _mw;
       ElementList _el;        ///< Measure(/tick) relative -elements: with defined start time
                               ///< but outside the staff
 
@@ -92,8 +73,8 @@ class MeasureBase : public Element {
       virtual void layout();
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      MeasureWidth& layoutWidth()            { return _mw;        }
-      void setLayoutWidth(const MeasureWidth& w) { _mw = w; }
+      qreal layoutWidth() const              { return _mw;  }
+      void setLayoutWidth(qreal w)           { _mw = w;     }
       ElementList* el()                      { return &_el; }
       const ElementList* el() const          { return &_el; }
       System* system() const                 { return (System*)parent(); }

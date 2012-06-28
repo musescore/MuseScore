@@ -83,16 +83,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>staccato</subtype>
-            </Articulation>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
             <subtype>fermata</subtype>
             </Articulation>
           <Note>
@@ -103,6 +93,18 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
+            <subtype>fermata</subtype>
+            </Articulation>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <direction>up</direction>
             <subtype>shortfermata</subtype>
             </Articulation>
           <Note>
@@ -113,6 +115,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>shortfermata</subtype>
             </Articulation>
           <Note>
@@ -125,6 +128,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>up</direction>
             <subtype>longfermata</subtype>
             </Articulation>
           <Note>
@@ -135,6 +139,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>longfermata</subtype>
             </Articulation>
           <Note>
@@ -145,6 +150,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>up</direction>
             <subtype>verylongfermata</subtype>
             </Articulation>
           <Note>
@@ -155,6 +161,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>verylongfermata</subtype>
             </Articulation>
           <Note>
@@ -213,6 +220,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>up</direction>
             <subtype>staccatissimo</subtype>
             </Articulation>
           <Note>
@@ -223,6 +231,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>staccatissimo</subtype>
             </Articulation>
           <Note>
@@ -243,6 +252,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>portato</subtype>
             </Articulation>
           <Note>
@@ -255,6 +265,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>up</direction>
             <subtype>portato</subtype>
             </Articulation>
           <Note>
@@ -265,6 +276,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>up</direction>
             <subtype>marcato</subtype>
             </Articulation>
           <Note>
@@ -275,6 +287,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
+            <direction>down</direction>
             <subtype>marcato</subtype>
             </Articulation>
           <Note>

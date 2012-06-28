@@ -1027,6 +1027,9 @@ InspectorNote::InspectorNote(QWidget* parent)
       hook->setText(tr("Hook"));
       hook->setEnabled(false);
       hbox->addWidget(hook);
+      layout->addLayout(hbox);
+
+      hbox = new QHBoxLayout;
       stem = new QToolButton(this);
       stem->setText(tr("Stem"));
       stem->setEnabled(false);
@@ -1035,8 +1038,6 @@ InspectorNote::InspectorNote(QWidget* parent)
       beam->setText(tr("Beam"));
       beam->setEnabled(false);
       hbox->addWidget(beam);
-
-
       layout->addLayout(hbox);
 
       connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
@@ -1260,10 +1261,14 @@ InspectorChord::InspectorChord(QWidget* parent)
       connect(small,         SIGNAL(toggled(bool)),            SLOT(smallChanged(bool)));
       connect(stemless,      SIGNAL(toggled(bool)),            SLOT(stemlessChanged(bool)));
       connect(stemDirection, SIGNAL(currentIndexChanged(int)), SLOT(stemDirectionChanged(int)));
+      connect(offsetX,       SIGNAL(valueChanged(double)),     SLOT(offsetXChanged(double)));
+      connect(offsetY,       SIGNAL(valueChanged(double)),     SLOT(offsetYChanged(double)));
 
       connect(resetSmall,    SIGNAL(clicked()),      SLOT(resetSmallClicked()));
       connect(resetStemless, SIGNAL(clicked()),      SLOT(resetStemlessClicked()));
       connect(resetStemDirection, SIGNAL(clicked()), SLOT(resetStemDirectionClicked()));
+      connect(resetX,        SIGNAL(clicked()),      SLOT(resetXClicked()));
+      connect(resetY,        SIGNAL(clicked()),      SLOT(resetYClicked()));
       }
 
 //---------------------------------------------------------
@@ -1275,7 +1280,22 @@ bool InspectorChord::dirty() const
       return chord->small() != small->isChecked()
          || chord->noStem() != stemless->isChecked()
          || chord->stemDirection() != (Direction)(stemDirection->currentIndex())
+         || chord->userOff().x() != offsetX->value()
+         || chord->userOff().y() != offsetY->value()
          ;
+      }
+
+//---------------------------------------------------------
+//   block
+//---------------------------------------------------------
+
+void InspectorChord::block(bool val)
+      {
+      small->blockSignals(val);
+      stemless->blockSignals(val);
+      stemDirection->blockSignals(val);
+      offsetX->blockSignals(val);
+      offsetY->blockSignals(val);
       }
 
 //---------------------------------------------------------
@@ -1286,9 +1306,10 @@ void InspectorChord::setElement(Chord* c)
       {
       chord = c;
 
-      small->blockSignals(true);
-      stemless->blockSignals(true);
-      stemDirection->blockSignals(true);
+      block(true);
+
+      offsetX->setValue(c->userOff().x());
+      offsetY->setValue(c->userOff().y());
 
       small->setChecked(chord->small());
       stemless->setChecked(chord->noStem());
@@ -1298,9 +1319,7 @@ void InspectorChord::setElement(Chord* c)
       resetStemless->setEnabled(chord->noStem());
       resetStemDirection->setEnabled(stemDirection->currentIndex() != 0);
 
-      small->blockSignals(false);
-      stemless->blockSignals(false);
-      stemDirection->blockSignals(false);
+      block(false);
       }
 
 //---------------------------------------------------------
@@ -1334,6 +1353,26 @@ void InspectorChord::stemDirectionChanged(int idx)
       }
 
 //---------------------------------------------------------
+//   offsetXChanged
+//---------------------------------------------------------
+
+void InspectorChord::offsetXChanged(double val)
+      {
+      resetX->setEnabled(val != 0);
+      apply();
+      }
+
+//---------------------------------------------------------
+//   offsetYChanged
+//---------------------------------------------------------
+
+void InspectorChord::offsetYChanged(double val)
+      {
+      resetY->setEnabled(val != 0);
+      apply();
+      }
+
+//---------------------------------------------------------
 //   resetSmall
 //---------------------------------------------------------
 
@@ -1360,6 +1399,26 @@ void InspectorChord::resetStemlessClicked()
 void InspectorChord::resetStemDirectionClicked()
       {
       stemDirection->setCurrentIndex(0);
+      apply();
+      }
+
+//---------------------------------------------------------
+//   resetX
+//---------------------------------------------------------
+
+void InspectorChord::resetXClicked()
+      {
+      offsetX->setValue(0.0);
+      apply();
+      }
+
+//---------------------------------------------------------
+//   resetY
+//---------------------------------------------------------
+
+void InspectorChord::resetYClicked()
+      {
+      offsetY->setValue(0.0);
       apply();
       }
 

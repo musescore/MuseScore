@@ -673,7 +673,7 @@ void OveToMScore::convertTrackElements(int track) {
                 	}
 
                 	if(y_off != 0) {
-                		ottava->frontSegment()->setUserOff(QPointF(0, y_off * score_->spatium()));
+                		ottava->setUserOff(QPointF(0, y_off * score_->spatium()));
                 	}
 
                     Segment* s = measure->getSegment(SegChordRest, absTick);

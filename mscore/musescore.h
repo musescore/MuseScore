@@ -499,6 +499,7 @@ class MuseScore : public QMainWindow {
       TextTools* textTools();
       EditTools* editTools();
       void showDrumTools(Drumset*, Staff*);
+      void updateDrumTools();
       void showWebPanel(bool on);
 
       void updateTabNames();
@@ -593,6 +594,7 @@ class MuseScore : public QMainWindow {
       bool saveSvg(Score*, const QString& name);
       bool savePng(Score*, const QString& name);
       bool saveLilypond(Score*, const QString& name);
+      bool saveMidi(Score* score, const QString& name);
 
 //      static bool importPdf(Score*, const QString& path);
       static bool importGTP(Score*, const QString& name);
@@ -653,10 +655,8 @@ extern Shortcut* midiActionMap[128];
 extern void setMscoreLocale(QString localeName);
 extern QPixmap sym2pixmap(const Sym* s, qreal mag);
 
-extern bool saveMidi(Score*, const QString& name);
 extern bool importMidi(Score*, const QString& name);
 extern void convertMidi(Score*, MidiFile* mf);
-
 
 #endif
 

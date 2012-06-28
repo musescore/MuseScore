@@ -609,8 +609,6 @@ QString MP3Exporter::getLibraryTypeString()
 
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
-      int sampleRate = preferences.exportAudioSampleRate;
-
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::Maybe)) {
             QSettings settings;
@@ -647,38 +645,39 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int channels = 2;
 
+      int oldSampleRate = MScore::sampleRate;
+      int sampleRate = preferences.exportAudioSampleRate;
+
       exporter.setMode(MODE_CBR);
       exporter.setBitrate(bitrate);
       exporter.setChannel(CHANNEL_STEREO);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
-            if(!noGui)
-                  QMessageBox::warning(0,
-                                 tr("Encoding error"),
-                                 tr("Unable to initialize MP3 stream"),
-                                 QString::null, QString::null);
+            if (!noGui) {
+                  QMessageBox::warning(0, tr("Encoding error"),
+                     tr("Unable to initialize MP3 stream"),
+                     QString::null, QString::null);
+                  }
             qDebug("Unable to initialize MP3 stream\n");
+            MScore::sampleRate = oldSampleRate;
             return false;
             }
-
-      int bufferSize = exporter.getOutBufferSize();
-      unsigned char *bufferOut = new unsigned char[bufferSize];
-      long bytes; // output length
 
       QFile file(name);
-      if(! file.open(QIODevice::WriteOnly)) {
-            if(!noGui)
+      if (!file.open(QIODevice::WriteOnly)) {
+            if (!noGui) {
                   QMessageBox::warning(0,
-                         tr("Encoding error"),
-                         tr("Unable to open target file for writing"),
-                         QString::null, QString::null);
-            delete bufferOut;
+                     tr("Encoding error"),
+                     tr("Unable to open target file for writing"),
+                     QString::null, QString::null);
+                  }
+            MScore::sampleRate = oldSampleRate;
             return false;
             }
 
-      QDataStream out(&file);
-
+      int bufferSize   = exporter.getOutBufferSize();
+      uchar* bufferOut = new uchar[bufferSize];
       MasterSynth* synti = new MasterSynth();
       synti->init(sampleRate);
       synti->setState(score->syntiState());
@@ -689,7 +688,11 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       QProgressBar* pBar = showProgressBar();
       pBar->reset();
 
-      double peak = 0.0;
+      static const int FRAMES = 512;
+      float bufferL[FRAMES];
+      float bufferR[FRAMES];
+
+      float  peak = 0.0;
       double gain = 1.0;
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
@@ -716,9 +719,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   }
 
-            int FRAMES = 512;
-            float bufferL[FRAMES];
-            float bufferR[FRAMES];
             double playTime = 0.0;
             synti->setGain(gain);
 
@@ -730,22 +730,28 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   memset(bufferL, 0, sizeof(float) * FRAMES);
                   memset(bufferR, 0, sizeof(float) * FRAMES);
                   double endTime = playTime + double(frames)/double(sampleRate);
+
                   float* l = bufferL;
                   float* r = bufferR;
+
                   for (; playPos != events.constEnd(); ++playPos) {
                         double f = score->utick2utime(playPos.key());
                         if (f >= endTime)
                               break;
                         int n = lrint((f - playTime) * sampleRate);
-                        float bu[n * 2];
-                        synti->process(n, bu);
-                        float* sp = bu;
-                        for (int i = 0; i < n; ++i) {
-                              *l++ = *sp++;
-                              *r++ = *sp++;
+                        if (n) {
+                              float bu[n * 2];
+                              memset(bu, 0, sizeof(float) * 2 * n);
+
+                              synti->process(n, bu);
+                              float* sp = bu;
+                              for (int i = 0; i < n; ++i) {
+                                    *l++ = *sp++;
+                                    *r++ = *sp++;
+                                    }
+                              playTime += double(n)/double(sampleRate);
+                              frames    -= n;
                               }
-                        playTime += double(n)/double(sampleRate);
-                        frames    -= n;
                         const Event& e = playPos.value();
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
@@ -757,6 +763,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   if (frames) {
                         float bu[frames * 2];
+                        memset(bu, 0, sizeof(float) * 2 * frames);
                         synti->process(frames, bu);
                         float* sp = bu;
                         for (unsigned i = 0; i < frames; ++i) {
@@ -766,39 +773,29 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         playTime += double(frames)/double(sampleRate);
                         }
                   if (pass == 1) {
-                        if (FRAMES < inSamples) {
-                              if (channels > 1) {
-                                    bytes = exporter.encodeRemainder(bufferL, bufferR,  FRAMES , bufferOut);
-                                    }
+                        long bytes;
+                        if (FRAMES < inSamples)
+                              bytes = exporter.encodeRemainder(bufferL, bufferR,  FRAMES , bufferOut);
+                        else
+                              bytes = exporter.encodeBuffer(bufferL, bufferR, bufferOut);
+                        if (bytes < 0) {
+                              if (noGui)
+                                    printf("exportmp3: error from encoder: %ld\n", bytes);
                               else {
-                                    bytes = exporter.encodeRemainderMono(bufferL,  FRAMES , bufferOut);
-                                    }
-                              }
-                              else {
-                                    if (channels > 1) {
-                                          bytes = exporter.encodeBuffer(bufferL, bufferR, bufferOut);
-                                          }
-                                    else {
-                                          bytes = exporter.encodeBufferMono(bufferL, bufferOut);
-                                          }
-                                    }
-                              if (bytes < 0) {
-                                    if(!noGui)
-                                          QMessageBox::warning(0,
-                                           tr("Encoding error"),
-                                           tr("Error %1 returned from MP3 encoder").arg(bytes),
-                                           QString::null, QString::null);
+                                    QMessageBox::warning(0,
+                                       tr("Encoding error"),
+                                       tr("Error %1 returned from MP3 encoder").arg(bytes),
+                                       QString::null, QString::null);
                                     break;
                                     }
-                              for (unsigned j = 0; j < bytes; ++j)
-                                    out << bufferOut[j];
+                              }
+                        else
+                              file.write((char*)bufferOut, bytes);
                         }
                   else {
                         for (int i = 0; i < FRAMES; ++i) {
-                              if (qAbs(bufferL[i]) > peak)
-                                    peak = qAbs(bufferL[i]);
-                              if (qAbs(bufferR[i]) > peak)
-                                    peak = qAbs(bufferR[i]);
+                              peak = qMax(peak, qAbs(bufferL[i]));
+                              peak = qMax(peak, qAbs(bufferR[i]));
                               }
                         }
                   playTime = endTime;
@@ -809,16 +806,15 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             gain = 0.99 / peak;
             }
 
-      bytes = exporter.finishStream(bufferOut);
-      if (bytes) {
-            for (unsigned j = 0; j < bytes; ++j)
-                  out << bufferOut[j];
-            }
+      long bytes = exporter.finishStream(bufferOut);
+      if (bytes > 0L)
+            file.write((char*)bufferOut, bytes);
 
       hideProgressBar();
       delete synti;
       delete bufferOut;
       file.close();
+      MScore::sampleRate = oldSampleRate;
       return true;
       }
 

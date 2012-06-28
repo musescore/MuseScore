@@ -361,6 +361,17 @@ void ChordRest::setSmall(bool val)
       }
 
 //---------------------------------------------------------
+//   setMag
+//---------------------------------------------------------
+
+void ChordRest::setMag(qreal val)
+      {
+      Element::setMag(val);
+      foreach(Articulation* a, articulations)
+            a->setMag(val);
+      }
+
+//---------------------------------------------------------
 //   layoutArticulations
 //    called from chord()->layout()
 //---------------------------------------------------------

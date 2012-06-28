@@ -250,6 +250,7 @@ Fraction Staff::timeStretch(int tick) const
 
 //---------------------------------------------------------
 //   timeSig
+//    lookup time signature before or at tick
 //---------------------------------------------------------
 
 TimeSig* Staff::timeSig(int tick) const

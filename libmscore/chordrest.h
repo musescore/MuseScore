@@ -94,6 +94,8 @@ class ChordRest : public DurationElement {
       bool small() const                        { return _small; }
       void setSmall(bool val);
 
+      virtual void setMag(qreal val);
+
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
 

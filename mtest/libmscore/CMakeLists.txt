@@ -13,5 +13,6 @@
 
 subdirs(
       hairpin note midi compat link measure beam split join
+      timesig
       )
 

@@ -174,7 +174,7 @@ add_executable ( ${ExecutableName}
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp jumpproperties.cpp selectdialog.cpp
       propertymenu.cpp shortcut.cpp bb.cpp
-      midifile.cpp inspector.cpp dragelement.cpp svggenerator.cpp
+      inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp cursor.cpp
@@ -196,6 +196,9 @@ if (APPLE)
       set_target_properties (mscore
          PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+      set_target_properties (mscore
+         PROPERTIES
+            XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
 endif(APPLE)
 
 if (OSC)

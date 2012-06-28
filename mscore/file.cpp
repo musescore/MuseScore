@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "musescore.h"
 #include "scoreview.h"
+#include "libmscore/exportmidi.h"
 #include "libmscore/xml.h"
 #include "libmscore/element.h"
 #include "libmscore/note.h"
@@ -1572,6 +1573,16 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       }
 
 //---------------------------------------------------------
+//   saveMidi
+//---------------------------------------------------------
+
+bool MuseScore::saveMidi(Score* score, const QString& name)
+      {
+      ExportMidi em(score);
+      return em.write(name, preferences.midiExpandRepeats);
+      }
+
+//---------------------------------------------------------
 //   savePsPdf
 //---------------------------------------------------------
 
@@ -1629,7 +1640,6 @@ bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFo
 //---------------------------------------------------------
 //   readScore
 ///   Import file \a name
-//    return 0 - OK, 1 _errno, 2 - bad file type
 //---------------------------------------------------------
 
 bool MuseScore::readScore(Score* score, QString name)

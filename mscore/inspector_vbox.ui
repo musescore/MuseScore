@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>240</width>
-    <height>245</height>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,12 @@
      </item>
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="leftMargin">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -102,6 +108,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="topGap">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
        </property>
@@ -125,6 +137,12 @@
      </item>
      <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="height">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>
@@ -145,6 +163,12 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="bottomGap">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
        </property>
@@ -182,6 +206,12 @@
      </item>
      <item row="6" column="1">
       <widget class="QDoubleSpinBox" name="topMargin">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -195,6 +225,12 @@
      </item>
      <item row="5" column="1">
       <widget class="QDoubleSpinBox" name="rightMargin">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -208,6 +244,12 @@
      </item>
      <item row="7" column="1">
       <widget class="QDoubleSpinBox" name="bottomMargin">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>

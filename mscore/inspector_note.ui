@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>238</width>
-    <height>293</height>
+    <height>294</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,6 +39,12 @@
      </item>
      <item row="5" column="1">
       <widget class="QSpinBox" name="ontimeOffset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum">
         <number>-9999</number>
        </property>
@@ -117,6 +123,12 @@
      </item>
      <item row="6" column="1">
       <widget class="QSpinBox" name="offtimeOffset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum">
         <number>-9999</number>
        </property>
@@ -201,7 +213,14 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QDoubleSpinBox" name="tuning"/>
+      <widget class="QDoubleSpinBox" name="tuning">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item row="7" column="0">
       <widget class="QLabel" name="label_5">
@@ -289,7 +308,14 @@
       </widget>
      </item>
      <item row="9" column="1">
-      <widget class="QSpinBox" name="velocity"/>
+      <widget class="QSpinBox" name="velocity">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item row="8" column="1">
       <widget class="QComboBox" name="velocityType">

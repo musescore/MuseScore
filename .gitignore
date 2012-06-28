@@ -6,3 +6,5 @@ win32build
 win32install
 build.xcode
 applebuild
+*.user
+*.qm

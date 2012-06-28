@@ -48,7 +48,6 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
-      connect(swingStyle,   SIGNAL(currentIndexChanged(int)), SLOT(swingStyleChanged(int)));
       }
 
 //---------------------------------------------------------
@@ -88,7 +87,6 @@ void PlayPanel::setScore(Score* s)
       volumeSlider->setEnabled(enable);
       posSlider->setEnabled(enable);
       tempoSlider->setEnabled(enable);
-      swingStyle->setEnabled(enable);
       if (cs) {
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
@@ -168,36 +166,6 @@ void PlayPanel::setPos(int tick)
       if (cachedTickPosition != tick)
             emit posChange(tick);
       heartBeat(tick, tick);
-      }
-
-//---------------------------------------------------------
-//   swingStyleChanged
-//---------------------------------------------------------
-
-void PlayPanel::swingStyleChanged(int index)
-      {
-      if (cs == 0)
-            return;
-      switch (index){
-            case 0:
-                  cs->setSwingRatio(0);
-                  break;
-            case 1:
-                  cs->setSwingRatio(0.333);
-                  break;
-            case 2:
-                  cs->setSwingRatio(0.5);
-                  break;
-            }
-      if (seq->isRunning()) {
-            if (seq->isStopped()) {
-                  seq->collectEvents();
-                  }
-            else {
-                  seq->guiStop(); // stop
-                  seq->start(); // start
-                  }
-            }
       }
 
 //---------------------------------------------------------

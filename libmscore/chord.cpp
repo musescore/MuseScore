@@ -568,6 +568,9 @@ void Chord::computeUp()
             _up = _stemDirection == UP;
             }
       else if (_noteType != NOTE_NORMAL) {
+            //
+            // stem direction for grace notes
+            //
             if (measure()->mstaff(staffIdx())->hasVoices) {
                   switch(voice()) {
                         case 0:  _up = (score()->style(ST_stemDir1).toDirection() == UP); break;
@@ -977,7 +980,7 @@ void LedgerLine::layout()
 
 void Chord::setMag(qreal val)
       {
-      Element::setMag(val);
+      ChordRest::setMag(val);
       foreach (LedgerLine* ll, _ledgerLines)
             ll->setMag(val);
       if (_stem)
@@ -1055,7 +1058,7 @@ void Chord::layoutStem1()
 
 //---------------------------------------------------------
 //   layoutStem
-///   Layout chord stem and hook.
+///   Layout chord tremolo stem and hook.
 //---------------------------------------------------------
 
 void Chord::layoutStem()
@@ -1248,12 +1251,11 @@ void Chord::layout()
 
       qreal _spatium  = spatium();
 
-      foreach(const LedgerLine* l, _ledgerLines)
-            delete l;
+      qDeleteAll(_ledgerLines);
       _ledgerLines.clear();
 
       qreal lx         = 0.0;
-      Note*  upnote     = upNote();
+      Note*  upnote    = upNote();
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
@@ -1306,7 +1308,7 @@ void Chord::layout()
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-      // needed?        _tabDur->setTrack(track());
+                        // needed?        _tabDur->setTrack(track());
                         }
                   else {                    // symbol not needed: if exists, delete
                         delete _tabDur;
@@ -1342,7 +1344,7 @@ void Chord::layout()
             //-----------------------------------------
 
             qreal stepDistance = _spatium * .5;
-            int stepOffset      = staff()->staffType()->stepOffset();
+            int stepOffset     = staff()->staffType()->stepOffset();
 
             adjustReadPos();
             foreach(Note* note, _notes) {

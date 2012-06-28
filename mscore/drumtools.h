@@ -1,7 +1,7 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$
+//  $Id:$ drumtools.h
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -45,6 +45,7 @@ class DrumTools : public QDockWidget {
    public:
       DrumTools(QWidget* parent = 0);
       void setDrumset(Score*, Staff*, Drumset*);
+      void updateDrumset();
       };
 
 

@@ -30,8 +30,8 @@ TimeSig::TimeSig(Score* s)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
-      _stretch.set(1, 1);
       setSubtype(TSIG_NORMAL);
+      _actualSig = _nominal;
       }
 
 TimeSig::TimeSig(Score* s, TimeSigType st)
@@ -40,8 +40,8 @@ TimeSig::TimeSig(Score* s, TimeSigType st)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
-      _stretch.set(1, 1);
       setSubtype(st);
+      _actualSig = _nominal;
       }
 
 TimeSig::TimeSig(Score* s, int z, int n)
@@ -50,8 +50,8 @@ TimeSig::TimeSig(Score* s, int z, int n)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
-      _stretch.set(1, 1);
       setSig(Fraction(z, n));
+      _actualSig = _nominal;
       setSubtype(TSIG_NORMAL);
       }
 
@@ -61,8 +61,8 @@ TimeSig::TimeSig(Score* s, const Fraction& f)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
-      _stretch.set(1, 1);
       setSig(f);
+      _actualSig = _nominal;
       setSubtype(TSIG_NORMAL);
       }
 
@@ -78,10 +78,12 @@ void TimeSig::setSubtype(TimeSigType st)
             case TSIG_FOUR_FOUR:
                   setSig(Fraction(4, 4));
                   customText = false;
+                  _actualSig = _nominal;
                   break;
             case TSIG_ALLA_BREVE:
                   setSig(Fraction(2, 2));
                   customText = false;
+                  _actualSig = _nominal;
                   break;
             default:
                   qDebug("illegal TimeSig subtype 0x%x\n", st);
@@ -110,7 +112,7 @@ Element* TimeSig::drop(const DropData& data)
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
             // ownership of e is transferred to cmdAddTimeSig
-            score()->cmdAddTimeSig(measure(), staffIdx(), static_cast<TimeSig*>(e));
+            score()->cmdAddTimeSig(measure(), staffIdx(), static_cast<TimeSig*>(e), false);
             return 0;
             }
       delete e;
@@ -129,18 +131,6 @@ void TimeSig::setText(const QString& a, const QString& b)
       }
 
 //---------------------------------------------------------
-//   setActualSig
-//---------------------------------------------------------
-
-void TimeSig::setActualSig(const Fraction& actual)
-      {
-      _stretch = (_nominal / actual).reduced();
-      qDebug("setActual %d/%d  stretch %d/%d\n",
-        actual.numerator(), actual.denominator(),
-        _stretch.numerator(), _stretch.denominator());
-      }
-
-//---------------------------------------------------------
 //   write TimeSig
 //---------------------------------------------------------
 
@@ -153,9 +143,9 @@ void TimeSig::write(Xml& xml) const
 
       xml.tag("sigN",   _nominal.numerator());
       xml.tag("sigD",  _nominal.denominator());
-      if (_stretch != Fraction(1,1)) {
-            xml.tag("stretchN", _stretch.numerator());
-            xml.tag("stretchD", _stretch.denominator());
+      if (stretch() != Fraction(1,1)) {
+            xml.tag("stretchN", stretch().numerator());
+            xml.tag("stretchD", stretch().denominator());
             }
       if (customText) {
             xml.tag("textN", sz);
@@ -175,7 +165,7 @@ void TimeSig::read(const QDomElement& de)
       bool old = false;
 
       customText = false;
-      _stretch.set(1, 1);
+      Fraction _stretch(1, 1);
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
@@ -244,6 +234,7 @@ void TimeSig::read(const QDomElement& de)
             else
                   setSubtype(TSIG_NORMAL);
             }
+      _actualSig = _nominal / _stretch;
       }
 
 //---------------------------------------------------------
@@ -372,6 +363,6 @@ void TimeSig::setFrom(const TimeSig* ts)
       sz         = ts->sz;
       sn         = ts->sn;
       _nominal   = ts->_nominal;
-      _stretch   = ts->_stretch;
+      _actualSig = ts->_actualSig;
       customText = ts->customText;
       }

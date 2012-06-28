@@ -78,7 +78,7 @@ DrumTools::DrumTools(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   drumTools
+//   showDrumTools
 //---------------------------------------------------------
 
 void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
@@ -98,16 +98,21 @@ void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
       }
 
 //---------------------------------------------------------
-//   setDrumset
+//   updateDrumTools
 //---------------------------------------------------------
 
-void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+void MuseScore::updateDrumTools()
       {
-      if (s == _score && staff == st && drumset == ds)
-            return;
-      _score  = s;
-      staff   = st;
-      drumset = ds;
+      if (_drumTools)
+            _drumTools->updateDrumset();
+      }
+
+//---------------------------------------------------------
+//   updateDrumset
+//---------------------------------------------------------
+
+void DrumTools::updateDrumset() 
+      {
       drumPalette->clear();
       if (drumset == 0)
             return;
@@ -119,13 +124,13 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
       int i = 0;
       double _spatium = gscore->spatium();
       for (int pitch = 0; pitch < 128; ++pitch) {
-            if (!ds->isValid(pitch))
+            if (!drumset->isValid(pitch))
                   continue;
             bool up;
-            int line      = ds->line(pitch);
-            NoteHeadGroup noteHead  = ds->noteHead(pitch);
-            int voice     = ds->voice(pitch);
-            Direction dir = ds->stemDirection(pitch);
+            int line      = drumset->line(pitch);
+            NoteHeadGroup noteHead  = drumset->noteHead(pitch);
+            int voice     = drumset->voice(pitch);
+            Direction dir = drumset->stemDirection(pitch);
             if (dir == UP)
                   up = true;
             else if (dir == DOWN)
@@ -160,6 +165,20 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
       }
 
 //---------------------------------------------------------
+//   setDrumset
+//---------------------------------------------------------
+
+void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+      {
+      if (s == _score && staff == st && drumset == ds)
+            return;
+      _score  = s;
+      staff   = st;
+      drumset = ds;
+      updateDrumset();
+      }
+
+//---------------------------------------------------------
 //   editDrumset
 //---------------------------------------------------------
 
@@ -176,11 +195,19 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      Chord* ch        = static_cast<Chord*>(element);
-      Note* note       = ch->downNote();
-      int ticks        = MScore::defaultPlayDuration;
-      int pitch        = note->pitch();
-      seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
-      _score->inputState().setDrumNote(note->pitch());
+      if(element && element->type() == CHORD) {
+            Chord* ch        = static_cast<Chord*>(element);
+            Note* note       = ch->downNote();
+            int ticks        = MScore::defaultPlayDuration;
+            int pitch        = note->pitch();
+            seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
+            _score->inputState().setDrumNote(note->pitch());
+            _score->inputState().setTrack(element->track());
+      
+            getAction("voice-1")->setChecked(element->voice() == 0);
+            getAction("voice-2")->setChecked(element->voice() == 1);
+            getAction("voice-3")->setChecked(element->voice() == 2);
+            getAction("voice-4")->setChecked(element->voice() == 3);
+            }
       }
 

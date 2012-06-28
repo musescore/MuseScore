@@ -1112,11 +1112,6 @@ p, li { white-space: pre-wrap; }
             <subtype>0</subtype>
             <veloChange>10</veloChange>
             <lid>8</lid>
-            <Segment>
-              <subtype>0</subtype>
-              <off2 x="0" y="0"/>
-              <pos x="34.6859" y="6.60645"/>
-              </Segment>
             </HairPin>
           <Chord>
             <lid>9</lid>
@@ -1168,7 +1163,6 @@ p, li { white-space: pre-wrap; }
           <Harmony>
             <root>15</root>
             <extension>64</extension>
-            <pos x="0" y="-3.22581"/>
             </Harmony>
           <Chord>
             <lid>17</lid>

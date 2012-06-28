@@ -3118,19 +3118,29 @@ int ExportLy::getLen(int l, int* dots)
     }
   else if (l == 2 * MScore::division)
     len = 2;
-  else if (l == MScore::division)
+  else if (l == MScore::division)         //quarter
     len = 4;
-  else if (l == MScore::division *3 /2)
+  else if (l == MScore::division *3 /2)   //dotted quarter
     {
       len=4;
       *dots=1;
     }
-  else if (l == MScore::division / 2)
+  else if (l == ((MScore::division/4)*7)) // double-dotted quarter
+    {
+      len = 4;
+      *dots=2;
+    }
+  else if (l == MScore::division / 2)     //8th
     len = 8;
   else if (l == MScore::division*3 /4) //dotted 8th
     {
       len = 8;
       *dots=1;
+    }
+  else if (l == ((MScore::division/8)*7)) // double-dotted 8th
+    {
+      len = 8;
+      *dots=2;
     }
   else if (l == MScore::division / 4)
     len = 16;
@@ -3140,6 +3150,11 @@ int ExportLy::getLen(int l, int* dots)
     {
       len = 16;
       *dots = 1;
+    }
+  else if (l == ((MScore::division/16)*7)) // double-dotted 16th.
+    {
+      len = 16;
+      *dots=2;
     }
   else if (l == MScore::division / 16)
     len = 64;
@@ -4579,7 +4594,7 @@ void ExportLy::writePageFormat()
 {
   const PageFormat* pf = score->pageFormat();
   os << "#(set-default-paper-size ";
-      os << QString(pf->paperSize()->name).toLower();
+      os << "\"" << QString(pf->paperSize()->name).toLower() << "\"";
 
   if (pf->size().width() > pf->size().height()) os << " 'landscape";
 

@@ -551,7 +551,7 @@ void Tuplet::read(const QDomElement& de, QList<Tuplet*>* tuplets, const QList<Sp
                   _number = new Text(score());
                   _number->setParent(this);
                   _number->read(e);
-                  _number->setTextStyle(score()->textStyle(TEXT_STYLE_TUPLET));
+                  _number->setTextStyleType(TEXT_STYLE_TUPLET);
                   _number->setVisible(visible());     //?? override saved property
                   }
             else if (tag == "subtype")    // obsolete

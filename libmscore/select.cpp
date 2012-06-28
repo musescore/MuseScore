@@ -262,7 +262,7 @@ void Selection::updateSelectedElements()
                               continue;
                         if (sp->endElement()->type() == SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() < _endSegment->tick())
+                              if (_endSegment && (s2->tick() < _endSegment->tick()))
                                     add(sp);
                               }
                         else {

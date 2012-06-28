@@ -228,7 +228,7 @@ class Palette : public QWidget {
       PaletteCell* append(int sym);
 
       void setGrid(int, int);
-      Element* element(int idx)      { return cells[idx]->element; }
+      Element* element(int idx);
       void setDrawGrid(bool val)     { _drawGrid = val; }
       bool drawGrid() const          { return _drawGrid; }
       void read(const QString& path);
