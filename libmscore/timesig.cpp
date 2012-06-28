@@ -30,8 +30,8 @@ TimeSig::TimeSig(Score* s)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
+      _stretch.set(1,1);
       setSubtype(TSIG_NORMAL);
-      _actualSig = _nominal;
       }
 
 TimeSig::TimeSig(Score* s, TimeSigType st)
@@ -39,20 +39,9 @@ TimeSig::TimeSig(Score* s, TimeSigType st)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
+      _stretch.set(1,1);
       customText = false;
       setSubtype(st);
-      _actualSig = _nominal;
-      }
-
-TimeSig::TimeSig(Score* s, int z, int n)
-  : Element(s)
-      {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _showCourtesySig = true;
-      customText = false;
-      setSig(Fraction(z, n));
-      _actualSig = _nominal;
-      setSubtype(TSIG_NORMAL);
       }
 
 TimeSig::TimeSig(Score* s, const Fraction& f)
@@ -60,9 +49,9 @@ TimeSig::TimeSig(Score* s, const Fraction& f)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
+      _stretch.set(1,1);
       customText = false;
       setSig(f);
-      _actualSig = _nominal;
       setSubtype(TSIG_NORMAL);
       }
 
@@ -78,12 +67,10 @@ void TimeSig::setSubtype(TimeSigType st)
             case TSIG_FOUR_FOUR:
                   setSig(Fraction(4, 4));
                   customText = false;
-                  _actualSig = _nominal;
                   break;
             case TSIG_ALLA_BREVE:
                   setSig(Fraction(2, 2));
                   customText = false;
-                  _actualSig = _nominal;
                   break;
             default:
                   qDebug("illegal TimeSig subtype 0x%x\n", st);
@@ -141,8 +128,8 @@ void TimeSig::write(Xml& xml) const
             xml.tag("subtype", subtype());
       Element::writeProperties(xml);
 
-      xml.tag("sigN",   _nominal.numerator());
-      xml.tag("sigD",  _nominal.denominator());
+      xml.tag("sigN",  _sig.numerator());
+      xml.tag("sigD",  _sig.denominator());
       if (stretch() != Fraction(1,1)) {
             xml.tag("stretchN", stretch().numerator());
             xml.tag("stretchD", stretch().denominator());
@@ -165,7 +152,6 @@ void TimeSig::read(const QDomElement& de)
       bool old = false;
 
       customText = false;
-      Fraction _stretch(1, 1);
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
@@ -206,9 +192,9 @@ void TimeSig::read(const QDomElement& de)
             else if (tag == "showCourtesySig")
                   _showCourtesySig = val.toInt();
             else if (tag == "sigN")
-                  _nominal.setNumerator(val.toInt());
+                  _sig.setNumerator(val.toInt());
             else if (tag == "sigD")
-                  _nominal.setDenominator(val.toInt());
+                  _sig.setDenominator(val.toInt());
             else if (tag == "stretchN")
                   _stretch.setNumerator(val.toInt());
             else if (tag == "stretchD")
@@ -225,7 +211,7 @@ void TimeSig::read(const QDomElement& de)
                   domError(e);
             }
       if (old) {
-            _nominal.set(z1+z2+z3+z4, n);
+            _sig.set(z1+z2+z3+z4, n);
             customText = false;
             if (subtype() == 0x40000104)
                   setSubtype(TSIG_FOUR_FOUR);
@@ -234,7 +220,6 @@ void TimeSig::read(const QDomElement& de)
             else
                   setSubtype(TSIG_NORMAL);
             }
-      _actualSig = _nominal / _stretch;
       }
 
 //---------------------------------------------------------
@@ -286,9 +271,8 @@ void TimeSig::layout()
             }
       else {
             if (!customText) {
-                  Fraction f(actualSig());
-                  sz = QString("%1").arg(f.numerator());   // build numerator string
-                  sn = QString("%1").arg(f.denominator()); // build denominator string
+                  sz = QString("%1").arg(_sig.numerator());   // build numerator string
+                  sn = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
             QFontMetricsF fm(fontId2font(0));
             QRectF rz = fm.tightBoundingRect(sz);     // get 'tight' bounding boxes for strings
@@ -304,8 +288,6 @@ void TimeSig::layout()
             // number of lines even:   0.5 (strings are moved up/down to leave 1 line dist. between them)
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.5 * lineDist * _spatium);
-//            yoff -= _spatium*.08;  //??
-//      lw = score()->styleS(ST_staffLineWidth).val() * _spatium;
 
             pz = QPointF(0.0, yoff - displ);
             // denom. horiz. posit.: centred around centre of numerator
@@ -362,7 +344,7 @@ void TimeSig::setFrom(const TimeSig* ts)
       _subtype   = ts->subtype();
       sz         = ts->sz;
       sn         = ts->sn;
-      _nominal   = ts->_nominal;
-      _actualSig = ts->_actualSig;
+      _sig       = ts->_sig;
+      _stretch   = ts->_stretch;
       customText = ts->customText;
       }
