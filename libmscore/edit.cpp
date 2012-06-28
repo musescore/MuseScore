@@ -482,7 +482,7 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
+void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       {
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
@@ -513,21 +513,19 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   return;
                   }
             }
-#if 0
-      else {
-            //
-            //  check for local timesig (only staff value changes)
-            //  or redundant time signature
-            //
-            if (lsig == ts->sig()) {
-                  ts->setParent(seg);
-                  ts->setTrack(track);
-                  undoAddElement(ts);
-//TODO                  timesigStretchChanged(ts, fm, staffIdx);
-                  return;
-                  }
+
+      if (local) {
+printf("insert local timesig\n");
+            ts->setParent(seg);
+            ts->setTrack(track);
+            ts->setActualSig(ts->sig());
+            ts->setSig(lsig);
+            undoAddElement(ts);
+            timesigStretchChanged(ts, fm, staffIdx);
+            return;
             }
-#endif
+
+
       Measure* nfm = fm;
       if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
             //
@@ -572,7 +570,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts)
                   }
             else {
                   undo(new ChangeTimesig(nsig, false,
-                     ts->sig(), nsig->stretch(), ts->subtype(),
+                     ts->actualSig(), ts->sig(), ts->subtype(),
                      QString(), QString()));
                   nsig->setDropTarget(0);       // DEBUG
                   }

@@ -1513,7 +1513,8 @@ qDebug("drop staffList");
                   }
 
             case TIMESIG:
-                  score()->cmdAddTimeSig(this, staffIdx, static_cast<TimeSig*>(e));
+                  score()->cmdAddTimeSig(this, staffIdx, static_cast<TimeSig*>(e),
+                     data.modifiers & Qt::ControlModifier);
                   return 0;
 
             case LAYOUT_BREAK:

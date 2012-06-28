@@ -39,7 +39,7 @@ class TimeSig : public Element {
       QString sz, sn;         // calculated from actualSig() if !customText
       QPointF pz, pn;
       Fraction _nominal;
-      Fraction _stretch;      // _nominal / aktualSig()
+      Fraction _actualSig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
 
    public:
@@ -64,10 +64,9 @@ class TimeSig : public Element {
       void setSig(const Fraction& f)     { _nominal = f;    }
       void setSig(int a, int b)          { _nominal.set(a,b); }
 
-      Fraction stretch() const           { return _stretch;  }
-      void setStretch(const Fraction& f) { _stretch = f;    }
-      Fraction actualSig() const         { return _nominal / _stretch; }
-      void setActualSig(const Fraction& f);
+      Fraction actualSig() const           { return _actualSig;   }
+      void setActualSig(const Fraction& s) { _actualSig = s; }
+      Fraction stretch() const             { return _nominal / _actualSig;  }
 
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
