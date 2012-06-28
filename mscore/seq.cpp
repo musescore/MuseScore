@@ -984,22 +984,22 @@ void Seq::seek(int tick)
 //   startNote
 //---------------------------------------------------------
 
-void Seq::startNote(const Channel& a, int pitch, int velo, double nt)
+void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
       if (state != TRANSPORT_STOP)
             return;
       Event ev(ME_NOTEON);
-      ev.setChannel(a.channel);
+      ev.setChannel(channel);
       ev.setPitch(pitch);
       ev.setTuning(nt);
       ev.setVelo(velo);
       sendEvent(ev);
       }
 
-void Seq::startNote(const Channel& a, int pitch, int velo, int duration, double nt)
+void Seq::startNote(int channel, int pitch, int velo, int duration, double nt)
       {
       stopNotes();
-      startNote(a, pitch, velo, nt);
+      startNote(channel, pitch, velo, nt);
       startNoteTimer(duration);
       }
 

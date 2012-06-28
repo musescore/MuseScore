@@ -53,7 +53,7 @@ DrumTools::DrumTools(QWidget* parent)
 
       QVBoxLayout* layout1 = new QVBoxLayout;
       QToolButton* tb = new QToolButton;
-      tb->setText(tr("Drumset"));
+      tb->setText(tr("Edit Drumset"));
       layout1->addWidget(tb);
       layout1->addStretch();
       layout->addLayout(layout1);
@@ -200,10 +200,11 @@ void DrumTools::drumNoteSelected(int val)
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;
             int pitch        = note->pitch();
-            seq->startNote(staff->part()->instr()->channel(0), pitch, 80, ticks, 0.0);
-            _score->inputState().setDrumNote(note->pitch());
+            seq->startNote(staff->part()->instr()->channel(0).channel, pitch, 80, ticks, 0.0);
+            
             _score->inputState().setTrack(element->track());
-      
+            _score->inputState().setDrumNote(pitch);
+            
             getAction("voice-1")->setChecked(element->voice() == 0);
             getAction("voice-2")->setChecked(element->voice() == 1);
             getAction("voice-3")->setChecked(element->voice() == 2);

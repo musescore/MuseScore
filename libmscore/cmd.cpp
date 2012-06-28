@@ -1566,7 +1566,7 @@ bool Score::processMidiInput()
                   else
                         p = staff(staffIdx)->part();
                   if (p)
-                        MScore::seq->startNote(p->instr()->channel(0), ev.pitch, 80,
+                        MScore::seq->startNote(p->instr()->channel(0).channel, ev.pitch, 80,
                            MScore::defaultPlayDuration, 0.0);
                   }
             else  {
