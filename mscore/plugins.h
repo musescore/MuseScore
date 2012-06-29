@@ -16,6 +16,34 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 
+
+//---------------------------------------------------------
+//   MsFile
+//---------------------------------------------------------
+
+class MsFile : public QFile {
+      Q_OBJECT
+
+   public:
+      MsFile() : QFile() {}
+      };
+
+
+//---------------------------------------------------------
+//   MsProcess
+//---------------------------------------------------------
+
+class MsProcess : public QProcess {
+      Q_OBJECT
+
+   public:
+      MsProcess(QObject* parent = 0) : QProcess(parent) {}
+   public slots:
+      void start(const QString& program)      { QProcess::start(program); }
+      bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
+      QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
+      };
+
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -55,6 +83,9 @@ class QmlPlugin : public QDeclarativeItem {
       Q_INVOKABLE Score* newScore(const QString& name, const QString& part, int measures);
       Q_INVOKABLE Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
+      Q_INVOKABLE MsProcess* newQProcess() { return new MsProcess(this); }
+      Q_INVOKABLE MsFile* newQFile()       { return new MsFile(); }
+
       };
 
 #endif
