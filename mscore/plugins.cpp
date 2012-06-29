@@ -35,6 +35,8 @@
 #include "libmscore/stafftext.h"
 #include "plugins.h"
 #include "libmscore/cursor.h"
+#include "libmscore/page.h"
+#include "libmscore/system.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -47,15 +49,6 @@ QmlPlugin::QmlPlugin(QDeclarativeItem* parent)
 
 QmlPlugin::~QmlPlugin()
       {
-      }
-
-//---------------------------------------------------------
-//   mscoreVersion
-//---------------------------------------------------------
-
-int QmlPlugin::mscoreVersion() const
-      {
-      return version();
       }
 
 //---------------------------------------------------------
@@ -109,19 +102,21 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       if (qml == 0) {
             //-----------some qt bindings
             qml = new QDeclarativeEngine;
-            qmlRegisterType<MsProcess> ("MuseScore", 1, 0, "QProcess");
-            qmlRegisterType<MsFile>    ("MuseScore", 1, 0, "QFile");
-            //-----------
-            qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
-            qmlRegisterType<Score>    ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Segment>  ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>    ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>     ("MuseScore", 1, 0, "Note");
-            qmlRegisterType<Rest>     ("MuseScore", 1, 0, "Rest");
-            qmlRegisterType<Measure>  ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<MScore>   ("MuseScore", 1, 0, "MScore");
-            qmlRegisterType<Cursor>   ("MuseScore", 1, 0, "Cursor");
-            qmlRegisterType<StaffText>("MuseScore", 1, 0, "StaffText");
+            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
+            qmlRegisterType<MsFile>     ("MuseScore", 1, 0, "QFile");
+            //-----------mscore bindings
+            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
+            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
+            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
+            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
+            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
+            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
+            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
+            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
+            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
+            //-----------virtual classes
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             }
@@ -384,10 +379,125 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
 void QmlPlugin::cmd(const QString& s)
       {
       Shortcut* sc = Shortcut::getShortcut(s.toAscii().data());
-      if (sc) {
+      if (sc)
             mscore->cmd(sc->action());
-            }
       else
             printf("QmlPlugin:cmd: not found <%s>\n", qPrintable(s));
+      }
+
+//---------------------------------------------------------
+//   MsScoreView
+//---------------------------------------------------------
+
+MsScoreView::MsScoreView(QDeclarativeItem* parent)
+   : QDeclarativeItem(parent)
+      {
+      setFlag(QGraphicsItem::ItemHasNoContents, false);
+      setCacheMode(QGraphicsItem::ItemCoordinateCache);
+      setAcceptedMouseButtons(Qt::LeftButton);
+      score = 0;
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void MsScoreView::setScore(Score* s)
+      {
+      _currentPage = 0;
+      score = s;
+
+      score->doLayout();
+
+      Page* page = score->pages()[_currentPage];
+      QRectF pr(page->abbox());
+      qreal m1 = width()  / pr.width();
+      qreal m2 = height() / pr.height();
+      mag = qMax(m1, m2);
+
+      _boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
+
+      setWidth(pr.width() * mag);
+      setHeight(pr.height() * mag);
+      update();
+      }
+
+//---------------------------------------------------------
+//   paint
+//---------------------------------------------------------
+
+void MsScoreView::paint(QPainter* p, const QStyleOptionGraphicsItem*, QWidget*)
+      {
+      if (!score)
+            return;
+
+      p->setRenderHint(QPainter::Antialiasing, true);
+      p->setRenderHint(QPainter::TextAntialiasing, true);
+      p->fillRect(QRect(0, 0, width(), height()), _color);
+      p->scale(mag, mag);
+
+      Page* page = score->pages()[_currentPage];
+      QList<const Element*> el;
+      foreach(System* s, *page->systems()) {
+            foreach(MeasureBase* m, s->measures())
+                  m->scanElements(&el, collectElements, false);
+            }
+      page->scanElements(&el, collectElements, false);
+
+      foreach(const Element* e, el) {
+            QPointF pos(e->pagePos());
+            p->translate(pos);
+            e->draw(p);
+            p->translate(-pos);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurrentPage
+//---------------------------------------------------------
+
+void MsScoreView::setCurrentPage(int n)
+      {
+      if (score == 0)
+            return;
+      if (n < 0)
+            n = 0;
+      int nn = score->pages().size();
+      if (nn == 0)
+            return;
+      if (n >= nn)
+            n = nn - 1;
+      _currentPage = n;
+      update();
+      }
+
+//---------------------------------------------------------
+//   nextPage
+//---------------------------------------------------------
+
+void MsScoreView::nextPage()
+      {
+      setCurrentPage(_currentPage + 1);
+      }
+
+//---------------------------------------------------------
+//   prevPage
+//---------------------------------------------------------
+
+void MsScoreView::prevPage()
+      {
+      setCurrentPage(_currentPage - 1);
+      }
+
+const QRectF& MsScoreView::getGrip(int) const
+      {
+      static const QRectF a;
+      return a;
+      }
+
+const QTransform& MsScoreView::matrix() const
+      {
+      static const QTransform t;
+      return t; // _matrix;
       }
 
