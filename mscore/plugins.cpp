@@ -107,7 +107,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             qDebug("Register Plugin <%s>", qPrintable(pluginPath));
       f.close();
       if (qml == 0) {
+            //-----------some qt bindings
             qml = new QDeclarativeEngine;
+            qmlRegisterType<MsProcess> ("MuseScore", 1, 0, "QProcess");
+            qmlRegisterType<MsFile>    ("MuseScore", 1, 0, "QFile");
+            //-----------
             qmlRegisterType<QmlPlugin>("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>    ("MuseScore", 1, 0, "Score");
             qmlRegisterType<Segment>  ("MuseScore", 1, 0, "Segment");
