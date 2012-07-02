@@ -95,6 +95,7 @@ void PlayPanel::setScore(Score* s)
             setRelTempo(1.0);
             setEndpos(0);
             heartBeat(0, 0);
+            updatePosLabel(0);
             }
       update();
       }
@@ -169,8 +170,6 @@ void PlayPanel::heartBeat(int tick, int utick)
       {
       if (cachedTickPosition == utick)
             return;
-      if (cs == 0)
-            return;
       updatePosLabel(utick);
       posSlider->setValue(utick);
       }
@@ -210,11 +209,14 @@ void PlayPanel::updateTimeLabel(int sec)
 void PlayPanel::updatePosLabel(int utick)      
       {
       cachedTickPosition = utick;
-
-      int bar, beat, t;
-      int tick = cs->repeatList()->utick2tick(utick);
-      cs->sigmap()->tickValues(tick, &bar, &beat, &t);
-
+      int bar = 0;
+      int beat = 0;
+      int t = 0;
+      int tick = 0;
+      if (cs) {
+            tick = cs->repeatList()->utick2tick(utick);
+            cs->sigmap()->tickValues(tick, &bar, &beat, &t);
+            }
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
