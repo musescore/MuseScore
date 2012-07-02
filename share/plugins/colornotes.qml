@@ -40,7 +40,7 @@ MuseScore {
 
             if (typeof curScore === 'undefined')
                   return;
-            var cursor = newCursor();
+            var cursor = curScore.newCursor();
             for (var track = 0; track < curScore.ntracks; ++track) {
                   cursor.track = track;
                   cursor.rewind(0);  // set cursor to first chord/rest
