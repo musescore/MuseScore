@@ -75,6 +75,7 @@
 #include "inspector.h"
 #include "omrpanel.h"
 #include "shortcut.h"
+#include "pluginCreator.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -265,6 +266,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (debugger)
             debugger->writeSettings();
 
+      if (pluginCreator)
+            pluginCreator->writeSettings();
+
+
       seq->stopWait();
       seq->exit();
       ev->accept();
@@ -345,8 +350,8 @@ MuseScore::MuseScore()
       cs                    = 0;
       cv                    = 0;
       se                    = 0;    // script engine
-//      scriptDebugger        = 0;
-      qml                   = 0;
+      pluginCreator         = 0;
+      _qml                  = 0;
       pluginMapper          = 0;
       debugger              = 0;
       instrList             = 0;
@@ -396,9 +401,11 @@ MuseScore::MuseScore()
       loadChordStyleDialog  = 0;
       saveChordStyleDialog  = 0;
       loadDrumsetDialog     = 0;
+      loadPluginDialog      = 0;
       loadPaletteDialog     = 0;
       savePaletteDialog     = 0;
       saveDrumsetDialog     = 0;
+      savePluginDialog      = 0;
 
       editRasterDialog      = 0;
       inChordEditor         = false;
@@ -908,6 +915,10 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuDisplay->addAction(a);
 
+      a = getAction("plugin-creator");
+      a->setCheckable(true);
+      menuDisplay->addAction(a);
+
       menuDisplay->addSeparator();
       menuDisplay->addAction(getAction("zoomin"));
       menuDisplay->addAction(getAction("zoomout"));
@@ -1035,7 +1046,7 @@ void MuseScore::resizeEvent(QResizeEvent*)
 
 MuseScore::~MuseScore()
       {
-      delete qml;
+      delete _qml;
       }
 
 //---------------------------------------------------------
@@ -3599,6 +3610,35 @@ void MuseScore::showWebPanel(bool on)
       }
 
 //---------------------------------------------------------
+//   showPluginCreator
+//---------------------------------------------------------
+
+void MuseScore::showPluginCreator(QAction* a)
+      {
+      bool on = a->isChecked();
+      if (on) {
+            if (pluginCreator == 0) {
+                  pluginCreator = new PluginCreator(0);
+                  connect(pluginCreator, SIGNAL(closed()), SLOT(closePluginCreator()));
+                  }
+            pluginCreator->show();
+            }
+      else {
+            if (pluginCreator)
+                  pluginCreator->hide();
+            }
+      }
+
+//---------------------------------------------------------
+//   closePluginCreator
+//---------------------------------------------------------
+
+void MuseScore::closePluginCreator()
+      {
+      getAction("plugin-creator")->setChecked(false);
+      }
+
+//---------------------------------------------------------
 //   showMediaDialog
 //---------------------------------------------------------
 
@@ -4266,6 +4306,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showPianoKeyboard(a->isChecked());
       else if (cmd == "musescore-connect")
             showWebPanel(a->isChecked());
+      else if (cmd == "plugin-creator")
+            showPluginCreator(a);
       else if (cmd == "media")
             showMediaDialog();
       else if (cmd == "page-settings")

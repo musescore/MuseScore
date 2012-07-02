@@ -38,13 +38,13 @@ Shortcut::Shortcut()
       _action      = 0;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont, const char* d,
-   const char* txt, const char* h, int i)
+Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+   const char* txt, const char* d, const char* h, int i)
       {
       _key         = name;
-      _descr       = d;
       _text        = txt;
-      _help        = h;
+      _descr       = d ? d : _text;
+      _help        = h ? h : _descr;
       _state       = s;
       _flags       = f;
       _standardKey = QKeySequence::UnknownKey;
@@ -53,13 +53,13 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont, con
       _action      = 0;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, const char* d,
-   const char* txt, const char* h, int i)
+Shortcut::Shortcut(int s, int f, const char* name,
+   const char* txt, const char* d, const char* h, int i)
       {
       _key         = name;
-      _descr       = d;
       _text        = txt;
-      _help        = h;
+      _descr       = d ? d : _text;
+      _help        = h ? h : _descr;
       _state       = s;
       _flags       = f;
       _standardKey = QKeySequence::UnknownKey;
