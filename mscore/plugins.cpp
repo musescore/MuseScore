@@ -99,29 +99,8 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       if (MScore::debugMode)
             qDebug("Register Plugin <%s>", qPrintable(pluginPath));
       f.close();
-      if (qml == 0) {
-            //-----------some qt bindings
-            qml = new QDeclarativeEngine;
-            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
-            qmlRegisterType<MsFile>     ("MuseScore", 1, 0, "QFile");
-            //-----------mscore bindings
-            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
-            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
-            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
-            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
-            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
-            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
-            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
-            //-----------virtual classes
-            qmlRegisterType<Element>();
-            qmlRegisterType<ChordRest>();
-            }
       QObject* obj = 0;
-      QDeclarativeComponent component(qml, QUrl::fromLocalFile(pluginPath));
+      QDeclarativeComponent component(qml(), QUrl::fromLocalFile(pluginPath));
       obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(pluginPath));
@@ -143,6 +122,36 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       pluginMapper->setMapping(a, pluginIdx);
 
       delete obj;
+      }
+
+//---------------------------------------------------------
+//   qml
+//---------------------------------------------------------
+
+QDeclarativeEngine* MuseScore::qml()
+      {
+      if (_qml == 0) {
+            //-----------some qt bindings
+            _qml = new QDeclarativeEngine;
+            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
+            qmlRegisterType<MsFile>     ("MuseScore", 1, 0, "QFile");
+            //-----------mscore bindings
+            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
+            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
+            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
+            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
+            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
+            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
+            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
+            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
+            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
+            //-----------virtual classes
+            qmlRegisterType<Element>();
+            qmlRegisterType<ChordRest>();
+            }
+      return _qml;
       }
 
 //---------------------------------------------------------

@@ -83,6 +83,8 @@ class NScrollArea;
 class EditTools;
 class Sym;
 class MasterPalette;
+class PluginCreator;
+
 struct PluginDescription;
 
 extern QString mscoreGlobalShare;
@@ -243,6 +245,7 @@ class MuseScore : public QMainWindow {
       MeasuresDialog* measuresDialog;
       InsertMeasuresDialog* insertMeasuresDialog;
       MasterPalette* masterPalette;
+      PluginCreator* pluginCreator;
 
       QMenu* _fileMenu;
       QMenu* menuEdit;
@@ -284,7 +287,7 @@ class MuseScore : public QMainWindow {
       QString pluginPath;
 //      QScriptEngineDebugger* scriptDebugger;
 
-      QDeclarativeEngine* qml;
+      QDeclarativeEngine* _qml;
       void createMenuEntry(PluginDescription*);
 
       QTimer* autoSaveTimer;
@@ -316,9 +319,11 @@ class MuseScore : public QMainWindow {
       QFileDialog* loadScanDialog;
       QFileDialog* loadAudioDialog;
       QFileDialog* loadDrumsetDialog;
+      QFileDialog* loadPluginDialog;
       QFileDialog* loadPaletteDialog;
       QFileDialog* savePaletteDialog;
       QFileDialog* saveDrumsetDialog;
+      QFileDialog* savePluginDialog;
 
       QDialog* editRasterDialog;
       QAction* hRasterAction;
@@ -442,6 +447,7 @@ class MuseScore : public QMainWindow {
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
       void switchLayoutMode(int);
+      void closePluginCreator();
 
    public slots:
       void cmd(QAction* a);
@@ -501,6 +507,7 @@ class MuseScore : public QMainWindow {
       void showDrumTools(Drumset*, Staff*);
       void updateDrumTools();
       void showWebPanel(bool on);
+      void showPluginCreator(QAction*);
 
       void updateTabNames();
       QProgressBar* showProgressBar();
@@ -556,6 +563,7 @@ class MuseScore : public QMainWindow {
       QString getScanFile(const QString&);
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);
+      QString getPluginFilename(bool open);
       QString getPaletteFilename(bool open);
       QString getWallpaper(const QString& caption);
 
@@ -596,7 +604,6 @@ class MuseScore : public QMainWindow {
       bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
 
-//      static bool importPdf(Score*, const QString& path);
       static bool importGTP(Score*, const QString& name);
       static bool importBww(Score*, const QString& path);
       static bool importMusicXml(Score*, const QString&);
@@ -645,6 +652,7 @@ class MuseScore : public QMainWindow {
       static Palette* newLinesPalette();
 
       Inspector* getInspector() { return inspector; }
+      QDeclarativeEngine* qml();
       };
 
 extern MuseScore* mscore;

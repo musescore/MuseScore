@@ -1906,14 +1906,6 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Insert special characters"),
           keys_ICON
          ),
-//      Shortcut(
-//         STATE_ALL,
-//         0,
-//         "script-debug",
-//         QT_TRANSLATE_NOOP("action","Enable script debugger"),
-//         QT_TRANSLATE_NOOP("action","Enable Script Debugger"),
-//         QT_TRANSLATE_NOOP("action","Enable script debugger")
-//         ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
@@ -1950,16 +1942,12 @@ Shortcut Shortcut::sc[] = {
          STATE_NOTE_ENTRY,
          0,
          "backspace",
-         QT_TRANSLATE_NOOP("action","Backspace"),
-         QT_TRANSLATE_NOOP("action","Backspace"),
          QT_TRANSLATE_NOOP("action","Backspace")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_SEARCH,
          0,
          "find",
-         QT_TRANSLATE_NOOP("action","Search"),
-         QT_TRANSLATE_NOOP("action","&Search"),
          QT_TRANSLATE_NOOP("action","Search")
          ),
       Shortcut(
@@ -2032,16 +2020,12 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "synth-control",
-         QT_TRANSLATE_NOOP("action","Synthesizer"),
-         QT_TRANSLATE_NOOP("action","Synthesizer"),
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(
          STATE_NOTE_ENTRY,
          A_CMD,
          "double-duration",
-         QT_TRANSLATE_NOOP("action","Double duration"),
-         QT_TRANSLATE_NOOP("action","Double duration"),
          QT_TRANSLATE_NOOP("action","Double duration")
          ),
       Shortcut(
@@ -2065,8 +2049,6 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "follow",
-         QT_TRANSLATE_NOOP("action","Follow song"),
-         QT_TRANSLATE_NOOP("action","Follow Song"),
          QT_TRANSLATE_NOOP("action","Follow song")
          ),
       Shortcut(
@@ -2273,6 +2255,13 @@ Shortcut Shortcut::sc[] = {
          community_ICON
          ),
       Shortcut(
+         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+         0,
+         "plugin-creator",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action", "Plugin Creator")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "inspector",
@@ -2301,40 +2290,30 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "figured-bass",
-         QT_TRANSLATE_NOOP("action","Figured Bass"),
-         QT_TRANSLATE_NOOP("action","Figured Bass"),
          QT_TRANSLATE_NOOP("action","Figured Bass")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "next-score",
-         QT_TRANSLATE_NOOP("action","Next Score"),
-         QT_TRANSLATE_NOOP("action","Next Score"),
          QT_TRANSLATE_NOOP("action","Next Score")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "prev-score",
-         QT_TRANSLATE_NOOP("action","Previous Score"),
-         QT_TRANSLATE_NOOP("action","Previous Score"),
          QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
          STATE_NORMAL,
          0,
          "transpose-up",
-         QT_TRANSLATE_NOOP("action","Transpose Up"),
-         QT_TRANSLATE_NOOP("action","Transpose Up"),
          QT_TRANSLATE_NOOP("action","Transpose Up")
          ),
       Shortcut(
          STATE_NORMAL,
          0,
          "transpose-down",
-         QT_TRANSLATE_NOOP("action","Transpose Down"),
-         QT_TRANSLATE_NOOP("action","Transpose Down"),
          QT_TRANSLATE_NOOP("action","Transpose Down")
          ),
       Shortcut(
@@ -2359,8 +2338,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "hframe",
          QT_TRANSLATE_NOOP("action","Insert horizontal frame"),
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         0,
+         0,
          hframe_ICON
          ),
       Shortcut(
