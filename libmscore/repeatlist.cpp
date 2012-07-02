@@ -129,7 +129,7 @@ int RepeatList::ticks()
       {
       if (length() > 0) {
             RepeatSegment* s = last();
-            return s->tick + s->len;
+            return s->utick + s->len;
             }
       return 0;
       }
