@@ -72,7 +72,7 @@
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="QmlEdit" name="textEdit"/>
-      <widget class="QTextBrowser" name="log"/>
+      <widget class="QPlainTextEdit" name="log"/>
      </widget>
     </item>
    </layout>

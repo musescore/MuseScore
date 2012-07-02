@@ -653,6 +653,7 @@ class MuseScore : public QMainWindow {
 
       Inspector* getInspector() { return inspector; }
       QDeclarativeEngine* qml();
+      PluginCreator* getPluginCreator() { return pluginCreator; }
       };
 
 extern MuseScore* mscore;

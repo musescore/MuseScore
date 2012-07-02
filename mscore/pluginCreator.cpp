@@ -30,6 +30,8 @@ PluginCreator::PluginCreator(QWidget* parent)
       textEdit->setTabStopWidth(6);
       run->setEnabled(false);
       stop->setEnabled(false);
+      log->setReadOnly(true);
+      log->setMaximumBlockCount(1000);
 
       actionSave->setEnabled(false);
 
@@ -97,29 +99,51 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
       }
 
 //---------------------------------------------------------
+//   qmlMsgHandler
+//---------------------------------------------------------
+
+static void qmlMsgHandler(QtMsgType type, const char* msg)
+      {
+      QString s;
+      switch(type) {
+            case QtDebugMsg:
+                  s = QString("Debug: %1\n").arg(msg);
+                  break;
+            case QtWarningMsg:
+                  s = QString("Warning: %1\n").arg(msg);
+                  break;
+            case QtCriticalMsg:
+                  s = QString("Critical: %1\n").arg(msg);
+                  break;
+            case QtFatalMsg:
+                  s = QString("Fatal: %1\n").arg(msg);
+                  break;
+            }
+      mscore->getPluginCreator()->msg(s);
+      }
+
+//---------------------------------------------------------
 //   runClicked
 //---------------------------------------------------------
 
 void PluginCreator::runClicked()
       {
       QDeclarativeEngine* qml = mscore->qml();
-
-      // save();
+      connect(qml, SIGNAL(warnings(const QList<QDeclarativeError>&)),
+         SLOT(qmlWarnings(const QList<QDeclarativeError>&)));
 
       item = 0;
       QDeclarativeComponent component(qml);
       component.setData(textEdit->toPlainText().toUtf8(), QUrl());
       QObject* obj = component.create();
       if (obj == 0) {
-            QString s = "creating component failed\n";
-            foreach(QDeclarativeError e, component.errors()) {
-                  s += QString("   line %1: %2").arg(e.line()).arg(e.description());
-                  }
-            log->setPlainText(s);
+            msg("creating component failed\n");
+            foreach(QDeclarativeError e, component.errors())
+                  msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
             return;
             }
-      log->setPlainText(QString());
+      qInstallMsgHandler(qmlMsgHandler);
       stop->setEnabled(true);
       run->setEnabled(false);
 
@@ -171,6 +195,7 @@ void PluginCreator::closePlugin()
             view->close();
       if (dock)
             dock->close();
+      qInstallMsgHandler(0);
       }
 
 //---------------------------------------------------------
@@ -275,5 +300,25 @@ void PluginCreator::newPlugin()
 void PluginCreator::textChanged()
       {
       actionSave->setEnabled(textEdit->document()->isModified());
+      }
+
+//---------------------------------------------------------
+//   qmlWarnings
+//---------------------------------------------------------
+
+void PluginCreator::qmlWarnings(const QList<QDeclarativeError>& el)
+      {
+      foreach(const QDeclarativeError& e, el)
+            msg(QString("%1:%2: %3\n").arg(e.line()).arg(e.column()).arg(e.description()));
+      }
+
+//---------------------------------------------------------
+//   msg
+//---------------------------------------------------------
+
+void PluginCreator::msg(const QString& s)
+      {
+      log->moveCursor(QTextCursor::End);
+      log->textCursor().insertText(s);
       }
 

@@ -41,6 +41,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void newPlugin();
       void textChanged();
       void closePlugin();
+      void qmlWarnings(const QList<QDeclarativeError>&);
 
    signals:
       void closed();
@@ -48,6 +49,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
    public:
       PluginCreator(QWidget* parent = 0);
       void writeSettings();
+      void msg(const QString&);
       };
 
 #endif
