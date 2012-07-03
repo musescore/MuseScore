@@ -630,9 +630,10 @@ void MuseScore::editInstrList()
                         Staff* staff       = new Staff(cs, part, rstaff);
                         sli->staff         = staff;
                         staff->setRstaff(rstaff);
-
+ 
                         staff->init(t, cidx);
-
+                        staff->setInitialClef(sli->clef());
+                        
                         cs->undoInsertStaff(staff, staffIdx + rstaff);
                         if (sli->linked()) {
                               // TODO: link staff
