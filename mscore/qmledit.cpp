@@ -299,6 +299,10 @@ void JSHighlighter::setKeywords(const QStringList &keywords)
 QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
+      QPalette p = palette();
+      p.setColor(QPalette::Text, Qt::black);
+      p.setColor(QPalette::Base, QColor(0xe0, 0xe0, 0xe0));
+      setPalette(p);
       hl = new JSHighlighter(document());
       lineNumberArea = new LineNumberArea(this);
 
@@ -382,7 +386,7 @@ void QmlEdit::highlightCurrentLine()
       if (!isReadOnly()) {
             QTextEdit::ExtraSelection selection;
 
-            QColor lineColor = QColor(Qt::darkGray);
+            QColor lineColor = QColor(Qt::white);
 
             selection.format.setBackground(lineColor);
             selection.format.setProperty(QTextFormat::FullWidthSelection, true);
