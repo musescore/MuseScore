@@ -13,6 +13,8 @@
 #ifndef __QML_EDIT_H__
 #define __QML_EDIT_H__
 
+class JSHighlighter;
+
 //---------------------------------------------------------
 //   QmlEdit
 //---------------------------------------------------------
@@ -21,6 +23,7 @@ class QmlEdit : public QPlainTextEdit {
       Q_OBJECT
 
       QWidget* lineNumberArea;
+      JSHighlighter* hl;
 
    private slots:
       void updateLineNumberAreaWidth(int);
@@ -32,8 +35,11 @@ class QmlEdit : public QPlainTextEdit {
 
    public:
       QmlEdit(QWidget* parent = 0);
+      ~QmlEdit();
       void lineNumberAreaPaintEvent(QPaintEvent*);
       int lineNumberAreaWidth();
+      enum ColorComponent { Normal, Comment, Number, String, Operator, Identifier,
+         Keyword, BuiltIn, Marker };
       };
 
 //---------------------------------------------------------
@@ -53,6 +59,38 @@ class LineNumberArea : public QWidget {
 
    public:
       LineNumberArea(QmlEdit* parent) : QWidget(parent) { editor = parent; }
+      };
+
+//---------------------------------------------------------
+//   JSBlockData
+//---------------------------------------------------------
+
+class JSBlockData : public QTextBlockUserData {
+   public:
+      QList<int> bracketPositions;
+      };
+
+//---------------------------------------------------------
+//   JSHighlighter
+//---------------------------------------------------------
+
+class JSHighlighter : public QSyntaxHighlighter {
+   public:
+      JSHighlighter(QTextDocument *parent = 0);
+      void setColor(QmlEdit::ColorComponent component, const QColor &color);
+      void mark(const QString &str, Qt::CaseSensitivity caseSensitivity);
+      QStringList keywords() const;
+      void setKeywords(const QStringList &keywords);
+
+   protected:
+      void highlightBlock(const QString &text);
+
+   private:
+      QSet<QString> m_keywords;
+      QSet<QString> m_knownIds;
+      QHash<QmlEdit::ColorComponent, QColor> m_colors;
+      QString m_markString;
+      Qt::CaseSensitivity m_markCaseSensitivity;
       };
 
 #endif
