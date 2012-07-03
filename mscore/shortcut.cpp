@@ -317,13 +317,8 @@ void Shortcut::write(Xml& xml)
 void Shortcut::load()
       {
       QFile f(dataPath + "/shortcuts.xml");
-      if (!f.exists()) {
+      if (!f.exists())
             f.setFileName(":/data/shortcuts.xml");
-            printf("load <:/data/shortcuts.xml>\n");
-            }
-      else {
-            printf("load <%s>\n", qPrintable(f.fileName()));
-            }
       if (!f.open(QIODevice::ReadOnly)) {
             printf("cannot open shortcuts\n");
             return;
