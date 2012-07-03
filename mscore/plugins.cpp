@@ -337,7 +337,7 @@ ScriptEngine::ScriptEngine()
       foreach(QString s, sl)
             qDebug("available script extension: <%s>\n", qPrintable(s));
 #endif
-      static const char* xts[] = {
+      /*static const char* xts[] = {
             "qt.core", "qt.gui", "qt.xml", "qt.network", "qt.uitools", "qt.webkit"
             };
       for (unsigned i = 0; i < sizeof(xts)/sizeof(*xts); ++i) {
@@ -347,7 +347,7 @@ ScriptEngine::ScriptEngine()
                   qDebug("Error loading Script extension <%s>: %s\n",
                      xts[i], qPrintable(val.toString()));
                   }
-            }
+            }*/
 
       //
       // create MuseScore bindings
