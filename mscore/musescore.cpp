@@ -1258,6 +1258,9 @@ void MuseScore::updateRecentScores(Score* score)
       QString path = score->fileInfo()->absoluteFilePath();
       recentScores.removeAll(path);
       recentScores.prepend(path);
+      if(recentScores.size() > RECENT_LIST_SIZE) {
+            recentScores.removeLast(); 
+            }
       }
 
 //---------------------------------------------------------
