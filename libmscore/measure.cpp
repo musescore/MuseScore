@@ -575,6 +575,8 @@ void Measure::layout2()
                         }
                   }
             }
+      foreach(Spanner* s, spannerFor())
+            s->layout();
       }
 
 //---------------------------------------------------------

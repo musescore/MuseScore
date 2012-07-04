@@ -40,6 +40,38 @@ LineSegment::LineSegment(const LineSegment& s)
       }
 
 //---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool LineSegment::readProperties(const QDomElement& e)
+      {
+      const QString& tag(e.tagName());
+      if (tag == "subtype")
+            setSubtype(SpannerSegmentType(e.text().toInt()));
+      else if (tag == "off1")       // obsolete
+            setUserOff(readPoint(e) * spatium());
+      else if (tag == "off2")
+            setUserOff2(readPoint(e) * spatium());
+      else if (tag == "pos")
+            ;
+      else if (!Element::readProperties(e)) {
+            domError(e);
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void LineSegment::read(const QDomElement& e)
+      {
+      for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement())
+            readProperties(ee);
+      }
+
+//---------------------------------------------------------
 //   isEdited
 //---------------------------------------------------------
 
@@ -613,17 +645,7 @@ bool SLine::readProperties(const QDomElement& e)
             __setTick1(score()->fileDivision(i));
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  const QString& tag(ee.tagName());
-                  if (tag == "subtype")
-                        ls->setSubtype(SpannerSegmentType(ee.text().toInt()));
-                  else if (tag == "off1")       // obsolete
-                        ls->setUserOff(readPoint(ee) * spatium());
-                  else if (tag == "off2")
-                        ls->setUserOff2(readPoint(ee) * spatium());
-                  else if (!ls->Element::readProperties(ee))
-                        domError(ee);
-                  }
+            ls->read(e);
             add(ls);
             }
       else if (tag == "track")

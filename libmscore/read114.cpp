@@ -276,26 +276,21 @@ bool Score::read114(const QDomElement& de)
                            s->name(), s->__tick1(), tick2);
                         continue;
                         }
-                  Measure* m = s2->measure();
                   if (s->type() == VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
-                        volta->setStartMeasure(s1->measure());
-                        volta->setEndMeasure(s2->measure());
                         volta->setAnchor(ANCHOR_MEASURE);
-                        int n = volta->spannerSegments().size();
-                        for (int i = 0; i < n; ++i) {
-                              LineSegment* seg = volta->segmentAt(i);
-                              if (!seg->userOff().isNull())
-                                    seg->setUserYoffset(seg->userOff().y() + 0.5 * spatium());
-                              }
-                        }
-                  if (s->anchor() == ANCHOR_MEASURE) {
-                        if (tick2 == m->tick()) {
-                              // anchor to EndBarLine segment of previous measure:
-                              m  = m->prevMeasure();
-                              s2 = m->getSegment(SegEndBarLine, tick2);
-                              }
+                        volta->setStartMeasure(s1->measure());
+                        Measure* m2 = s2->measure();
+                        if (s2->tick() == m2->tick())
+                              m2 = m2->prevMeasure();
+                        volta->setEndMeasure(m2);
                         s1->measure()->add(s);
+                        int n = volta->spannerSegments().size();
+                        if (n) {
+                              volta->setYoff(-styleS(ST_voltaHook).val());
+                              // LineSegment* ls = volta->segmentAt(0);
+                              // ls->setReadPos(QPointF());
+                              }
                         }
                   else {
                         s->setStartElement(s1);
@@ -311,27 +306,6 @@ bool Score::read114(const QDomElement& de)
                               if (!seg->userOff().isNull())
                                     seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
                               }
-                        }
-                  }
-            }
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            foreach(Spanner* s, m->spannerFor()) {
-                  if (s->type() == VOLTA) {
-                        Volta* volta = static_cast<Volta*>(s);
-                        // reset user offsets
-                        volta->setUserOff(QPointF());
-                        volta->setReadPos(QPointF());
-                        foreach(SpannerSegment* ss, volta->spannerSegments()) {
-                              ss->setUserOff(QPointF());
-                              ss->setReadPos(QPointF());
-                              }
-                        Measure* m2 = volta->endMeasure();
-                        m2->removeSpannerBack(volta);
-                        if (m2->prevMeasure())
-                              m2 = m2->prevMeasure();
-                        volta->setEndMeasure(m2);
-                        m2->addSpannerBack(volta);
                         }
                   }
             }
@@ -428,6 +402,7 @@ bool Score::read114(const QDomElement& de)
       if (!hasSoundfont)
             _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
 
+      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();
       renumberMeasures();
       rebuildMidiMapping();
