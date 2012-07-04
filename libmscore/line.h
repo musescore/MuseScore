@@ -64,6 +64,8 @@ class LineSegment : public SpannerSegment {
       virtual bool isEdited(SpannerSegment*) const;
 
       friend class SLine;
+      virtual void read(const QDomElement&);
+      bool readProperties(const QDomElement&);
       };
 
 //---------------------------------------------------------

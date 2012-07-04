@@ -773,7 +773,7 @@ bool Score::read1(const QDomElement& de)
                         msgBox.setIcon(QMessageBox::Warning);
                         msgBox.exec();
                         }
-                  if (_mscVersion == 114)
+                  if (_mscVersion <= 114)
                         return read114(e);
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         const QString& tag = ee.tagName();
