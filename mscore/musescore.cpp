@@ -1180,6 +1180,8 @@ void MuseScore::selectScore(QAction* action)
                   }
             else
                   setCurrentScoreView(appendScore(score));
+                  updateRecentScores(score);
+                  writeSessionFile(false);
             }
       }
 
@@ -1487,14 +1489,19 @@ void MuseScore::dropEvent(QDropEvent* event)
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
                         Score* score = new Score(MScore::defaultStyle());
-                        if (readScore(score, u.toLocalFile()))
+                        if (readScore(score, u.toLocalFile())) {
                               view = appendScore(score);
-                        else
+                              updateRecentScores(score);
+                              }
+                        else {
                               delete score;
+                              }
                         }
                   }
-            if(view != -1)
+            if(view != -1) {
                   setCurrentScoreView(view);
+                  writeSessionFile(false);
+                  }
             else {
                   QMessageBox::critical(0,
                         tr("MuseScore: Load error"),
@@ -1952,6 +1959,8 @@ static void loadScores(const QStringList& argv)
                         }
                   else {
                         mscore->appendScore(score);
+                        mscore->updateRecentScores(score);
+                        mscore->writeSessionFile(false);
                         }
                   }
             }
@@ -3133,7 +3142,8 @@ void MuseScore::handleMessage(const QString& message)
       Score* score = new Score(MScore::defaultStyle());
       if (readScore(score, message)) {
             setCurrentScoreView(appendScore(score));
-            lastOpenPath = score->fileInfo()->path();
+            updateRecentScores(score);
+            writeSessionFile(false);
             }
       else
             delete score;
@@ -3715,8 +3725,6 @@ void MuseScore::networkFinished(QNetworkReply* reply)
       score->setCreated(true);
       score->setDirty(true);
       setCurrentScoreView(appendScore(score));
-      lastOpenPath = score->fileInfo()->path();
-      writeSessionFile(false);
       }
 
 //---------------------------------------------------------
