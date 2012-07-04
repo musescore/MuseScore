@@ -2067,7 +2067,7 @@ StartDialog::StartDialog(QWidget* parent)
 
 void StartDialog::createScoreClicked()
       {
-      done(0);
+      done(1);
       }
 
 //---------------------------------------------------------
@@ -2076,7 +2076,7 @@ void StartDialog::createScoreClicked()
 
 void StartDialog::loadScoreClicked()
       {
-      done(1);
+      done(2);
       }
 
 //---------------------------------------------------------
@@ -2440,10 +2440,10 @@ int main(int argc, char* av[])
       if (preferences.sessionStart == EMPTY_SESSION && files == 0) {
             QDialog* start = new StartDialog(0);
             switch(start->exec()) {
-                  case 0:
+                  case 1:
                         mscore->newFile();
                         break;
-                  case 1:
+                  case 2:
                         mscore->loadFiles();
                         break;
                   }
