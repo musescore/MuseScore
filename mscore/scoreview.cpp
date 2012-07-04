@@ -3734,6 +3734,13 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
 
 void ScoreView::cmdEnterRest()
       {
+      InputState& is = _score->inputState();
+      if (is.track() == -1) {          // invalid state
+            return;
+            }
+      if (is.segment() == 0) {
+            return;
+            }
       cmdEnterRest(_score->inputState().duration());
       }
 
