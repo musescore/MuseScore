@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
   <SC>
+    <key>plugin-creator</key>
+    <seq>Shift+P</seq>
+    </SC>
+  <SC>
     <key>local-help</key>
     <seq>F1</seq>
     </SC>

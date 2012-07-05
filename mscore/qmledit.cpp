@@ -299,12 +299,18 @@ void JSHighlighter::setKeywords(const QStringList &keywords)
 QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
+      setTabStopWidth(6);
+
       QPalette p = palette();
       p.setColor(QPalette::Text, Qt::black);
       p.setColor(QPalette::Base, QColor(0xe0, 0xe0, 0xe0));
       setPalette(p);
       hl = new JSHighlighter(document());
       lineNumberArea = new LineNumberArea(this);
+
+      QAction* a = new QAction("gotoBeginLine", this);
+      a->addShortcut(QShortcut(Qt::CTRL + Qt::Key_Q));
+      addAction(a);
 
       connect(this, SIGNAL(blockCountChanged(int)),   SLOT(updateLineNumberAreaWidth(int)));
       connect(this, SIGNAL(updateRequest(QRect,int)), SLOT(updateLineNumberArea(QRect,int)));
@@ -422,7 +428,7 @@ void QmlEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                   }
 
             block = block.next();
-            top = bottom;
+            top   = bottom;
             bottom = top + (int) blockBoundingRect(block).height();
             ++blockNumber;
             }
