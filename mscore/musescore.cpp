@@ -1178,10 +1178,11 @@ void MuseScore::selectScore(QAction* action)
                   readScoreError(a);
                   delete score;
                   }
-            else
+            else {
                   setCurrentScoreView(appendScore(score));
                   updateRecentScores(score);
                   writeSessionFile(false);
+                  }
             }
       }
 
