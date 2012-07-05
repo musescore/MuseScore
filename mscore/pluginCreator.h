@@ -24,11 +24,16 @@ class QmlPlugin;
 class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       Q_OBJECT
 
+      enum PCState { S_INIT, S_EMPTY, S_CLEAN, S_DIRTY };
+      PCState state;
+      bool created;
+
       QString path;
       QmlPlugin* item;
       QPointer<QDeclarativeView> view;
       QPointer<QDockWidget> dock;
 
+      void setState(PCState newState);
       void closeEvent(QCloseEvent*);
       void readSettings();
       void setTitle(const QString&);

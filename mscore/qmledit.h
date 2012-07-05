@@ -75,22 +75,21 @@ class JSBlockData : public QTextBlockUserData {
 //---------------------------------------------------------
 
 class JSHighlighter : public QSyntaxHighlighter {
+      QSet<QString> m_keywords;
+      QSet<QString> m_knownIds;
+      QHash<QmlEdit::ColorComponent, QColor> m_colors;
+      QString m_markString;
+      Qt::CaseSensitivity m_markCaseSensitivity;
+
+   protected:
+      void highlightBlock(const QString &text);
+
    public:
       JSHighlighter(QTextDocument *parent = 0);
       void setColor(QmlEdit::ColorComponent component, const QColor &color);
       void mark(const QString &str, Qt::CaseSensitivity caseSensitivity);
       QStringList keywords() const;
       void setKeywords(const QStringList &keywords);
-
-   protected:
-      void highlightBlock(const QString &text);
-
-   private:
-      QSet<QString> m_keywords;
-      QSet<QString> m_knownIds;
-      QHash<QmlEdit::ColorComponent, QColor> m_colors;
-      QString m_markString;
-      Qt::CaseSensitivity m_markCaseSensitivity;
       };
 
 #endif
