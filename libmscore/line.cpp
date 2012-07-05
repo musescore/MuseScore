@@ -52,8 +52,13 @@ bool LineSegment::readProperties(const QDomElement& e)
             setUserOff(readPoint(e) * spatium());
       else if (tag == "off2")
             setUserOff2(readPoint(e) * spatium());
-      else if (tag == "pos")
-            ;
+      else if (tag == "pos") {
+            if (score()->mscVersion() > 114) {
+                  qreal _spatium = spatium();
+                  setUserOff(QPointF());
+                  setReadPos(readPoint(e) * _spatium);
+                  }
+            }
       else if (!Element::readProperties(e)) {
             domError(e);
             return false;
