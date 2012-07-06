@@ -610,7 +610,7 @@ StyleData::StyleData(const StyleData& s)
             _chordList = 0;
       _customChordList = s._customChordList;
       _textStyles      = s._textStyles;
-      _pageFormat      = s._pageFormat;
+      _pageFormat.copy(s._pageFormat);
       _spatium         = s._spatium;
       for (int i = 0; i < ARTICULATIONS; ++i)
             _articulationAnchor[i] = s._articulationAnchor[i];
@@ -1571,7 +1571,7 @@ void MStyle::setPageFormat(const PageFormat& pf)
 
 void StyleData::setPageFormat(const PageFormat& pf)
       {
-      _pageFormat = pf;
+      _pageFormat.copy(pf);
       }
 
 //---------------------------------------------------------

@@ -27,7 +27,9 @@ struct InstrumentTemplate;
 //   Part
 //---------------------------------------------------------
 
-class Part {
+class Part : public QObject {
+      Q_OBJECT
+
       Score* _score;
 
       QString _partName;           ///< used in tracklist (mixer)
@@ -38,7 +40,7 @@ class Part {
       bool _show;                   ///< show part in partitur if true
 
    public:
-      Part(Score*);
+      Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
 
       void read(const QDomElement&);

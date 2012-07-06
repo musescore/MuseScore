@@ -83,7 +83,9 @@ struct BracketItem {
  Global staff data not directly related to drawing.
 */
 
-class Staff {
+class Staff : public QObject {
+      Q_OBJECT
+
       Score* _score;
       Part* _part;
       int _rstaff;            ///< Index in Part.
@@ -114,6 +116,7 @@ class Staff {
       PitchList _pitchOffsets;      ///< cached value
 
    public:
+      Staff(Score* = 0);
       Staff(Score*, Part*, int);
       ~Staff();
       void init(const InstrumentTemplate*, int);

@@ -415,6 +415,23 @@ PageFormat::PageFormat()
       }
 
 //---------------------------------------------------------
+//   copy
+//---------------------------------------------------------
+
+void PageFormat::copy(const PageFormat& p)
+      {
+      _size               = p._size;
+      _printableWidth     = p._printableWidth;
+      _evenLeftMargin     = p._evenLeftMargin;
+      _oddLeftMargin      = p._oddLeftMargin;
+      _evenTopMargin      = p._evenTopMargin;
+      _evenBottomMargin   = p._evenBottomMargin;
+      _oddTopMargin       = p._oddTopMargin;
+      _oddBottomMargin    = p._oddBottomMargin;
+      _twosided           = p._twosided;
+      }
+
+//---------------------------------------------------------
 //   setSize
 //---------------------------------------------------------
 

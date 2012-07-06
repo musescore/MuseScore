@@ -156,6 +156,24 @@ QString Staff::partName() const
 //   Staff
 //---------------------------------------------------------
 
+Staff::Staff(Score* s)
+      {
+      _score          = s;
+      _rstaff         = 0;
+      _part           = 0;
+      _keymap         = new KeyList;
+      (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
+      _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
+      _show           = true;
+      _small          = false;
+      _invisible      = false;
+      _userDist       = .0;
+      _barLineSpan    = 1;
+      _updateKeymap   = true;
+      _linkedStaves   = 0;
+      _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
+      }
+
 Staff::Staff(Score* s, Part* p, int rs)
       {
       _score          = s;
