@@ -14,6 +14,7 @@
 //=============================================================================
 
 #include "qmledit.h"
+#include "musescore.h"
 
 //---------------------------------------------------------
 //   JSHighlighter
@@ -293,13 +294,35 @@ void JSHighlighter::setKeywords(const QStringList &keywords)
       }
 
 //---------------------------------------------------------
+//   Binding
+//---------------------------------------------------------
+
+struct Binding {
+      const char* name;
+      int key1, key2;
+      const char* slot;
+      };
+
+//---------------------------------------------------------
 //   QmlEdit
 //---------------------------------------------------------
 
 QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
+      static const Binding bindings[] = {
+            { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
+            { "endOfLine",   Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_D, SLOT(endOfLine())   },
+            { "up",          Qt::CTRL+Qt::Key_E, 0, SLOT(upLine())     },
+            { "down",        Qt::CTRL+Qt::Key_X, 0, SLOT(downLine())   },
+            { "right",       Qt::CTRL+Qt::Key_D, 0, SLOT(right())      },
+            { "left",        Qt::CTRL+Qt::Key_S, 0, SLOT(left())       },
+            { "rightWord",   Qt::CTRL+Qt::Key_F, 0, SLOT(rightWord())  },
+            { "leftWord",    Qt::CTRL+Qt::Key_A, 0, SLOT(leftWord())   }
+            };
       setTabStopWidth(6);
+      setBackgroundVisible(true);
+      setCursorWidth(3);
 
       QPalette p = palette();
       p.setColor(QPalette::Text, Qt::black);
@@ -308,9 +331,19 @@ QmlEdit::QmlEdit(QWidget* parent)
       hl = new JSHighlighter(document());
       lineNumberArea = new LineNumberArea(this);
 
-      QAction* a = new QAction("gotoBeginLine", this);
-      a->addShortcut(QShortcut(Qt::CTRL + Qt::Key_Q));
-      addAction(a);
+      QList<QAction*> al = viewport()->actions();
+      printf("%d actions\n", al.size());
+      for (unsigned int i = 0; i < sizeof(bindings)/sizeof(*bindings); ++i) {
+            const Binding& b = bindings[i];
+            QAction* a = new QAction(b.name, this);
+            a->setShortcut(QKeySequence(b.key1, b.key2));
+            foreach(QAction* wa, al) {
+                  if (wa->shortcut() == a->shortcut())
+                        removeAction(wa);
+                  }
+            addAction(a);
+            connect(a, SIGNAL(triggered()), b.slot);
+            }
 
       connect(this, SIGNAL(blockCountChanged(int)),   SLOT(updateLineNumberAreaWidth(int)));
       connect(this, SIGNAL(updateRequest(QRect,int)), SLOT(updateLineNumberArea(QRect,int)));
@@ -318,6 +351,43 @@ QmlEdit::QmlEdit(QWidget* parent)
 
       updateLineNumberAreaWidth(0);
       highlightCurrentLine();
+      }
+
+//---------------------------------------------------------
+//   focusInEvent
+//---------------------------------------------------------
+
+void QmlEdit::focusInEvent(QFocusEvent* event)
+      {
+      mscoreState = mscore->state();
+      mscore->changeState(STATE_DISABLED);
+      printf("focus in\n");
+      QPlainTextEdit::focusInEvent(event);
+      }
+
+//---------------------------------------------------------
+//   focusOutEvent
+//---------------------------------------------------------
+
+void QmlEdit::focusOutEvent(QFocusEvent* event)
+      {
+      printf("focus out\n");
+      mscore->changeState(mscoreState);
+      QPlainTextEdit::focusOutEvent(event);
+      }
+
+//---------------------------------------------------------
+//   move
+//---------------------------------------------------------
+
+void QmlEdit::move(QTextCursor::MoveOperation op)
+      {
+      printf("move %d\n", int(op));
+
+      QTextCursor tc(textCursor());
+      tc.movePosition(op);
+      setTextCursor(tc);
+      update();
       }
 
 //---------------------------------------------------------
@@ -387,6 +457,8 @@ void QmlEdit::resizeEvent(QResizeEvent *e)
 
 void QmlEdit::highlightCurrentLine()
       {
+      return;
+
       QList<QTextEdit::ExtraSelection> extraSelections;
 
       if (!isReadOnly()) {

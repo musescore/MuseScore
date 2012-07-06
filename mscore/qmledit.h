@@ -13,6 +13,8 @@
 #ifndef __QML_EDIT_H__
 #define __QML_EDIT_H__
 
+#include "globals.h"
+
 class JSHighlighter;
 
 //---------------------------------------------------------
@@ -24,11 +26,24 @@ class QmlEdit : public QPlainTextEdit {
 
       QWidget* lineNumberArea;
       JSHighlighter* hl;
+      ScoreState mscoreState;
+
+      virtual void focusInEvent(QFocusEvent*);
+      virtual void focusOutEvent(QFocusEvent*);
+      void move(QTextCursor::MoveOperation op);
 
    private slots:
       void updateLineNumberAreaWidth(int);
       void highlightCurrentLine();
       void updateLineNumberArea(const QRect&, int);
+      void startOfLine() { move(QTextCursor::StartOfLine); }
+      void endOfLine()   { move(QTextCursor::EndOfLine); }
+      void upLine()      { move(QTextCursor::Up); }
+      void downLine()    { move(QTextCursor::Down); }
+      void right()       { move(QTextCursor::Right); }
+      void left()        { move(QTextCursor::Left); }
+      void rightWord()   { move(QTextCursor::NextWord); }
+      void leftWord()    { move(QTextCursor::StartOfWord); }
 
    protected:
       void resizeEvent(QResizeEvent*);

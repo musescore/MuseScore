@@ -45,7 +45,7 @@ class TimeSig : public Element {
       bool customText;        // if false, sz and sn are calculated from actualSig()
 
    public:
-      TimeSig(Score*);
+      TimeSig(Score* = 0);
       TimeSig(Score* s, TimeSigType st);
       TimeSig(Score* s, const Fraction& f);
 

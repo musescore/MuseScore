@@ -37,6 +37,10 @@
 #include "libmscore/cursor.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
+#include "libmscore/staff.h"
+#include "libmscore/part.h"
+#include "libmscore/timesig.h"
+#include "libmscore/harmony.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -147,6 +151,11 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
             qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
+            qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
+            qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
+            qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
+            qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
+            qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
             //-----------virtual classes
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();

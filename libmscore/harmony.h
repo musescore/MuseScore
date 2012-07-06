@@ -74,7 +74,7 @@ class Harmony : public Text {
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
 
    public:
-      Harmony(Score*);
+      Harmony(Score* = 0);
       Harmony(const Harmony&);
       ~Harmony();
       virtual Harmony* clone() const           { return new Harmony(*this); }

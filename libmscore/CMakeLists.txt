@@ -12,72 +12,16 @@
 #=============================================================================
 
 QT4_WRAP_CPP (mocs
-      accidental.h
-      arpeggio.h
-      articulation.h
-      barline.h
-      beam.h
-      bend.h
-      box.h
-      bracket.h
-      breath.h
-      bsymbol.h
-      chord.h
-      chordline.h
-      chordrest.h
-      clef.h
-      duration.h
-      dynamic.h
-      element.h
-      figuredbass.h
-      fingering.h
-      fret.h
-      glissando.h
-      hairpin.h
-      harmony.h
-      hook.h
-      icon.h
-      image.h
-      instrchange.h
-      keysig.h
-      lasso.h
-      layoutbreak.h
-      line.h
-      lyrics.h
-      measurebase.h
-      measure.h
-      notedot.h
-      note.h
-      ossia.h
-      ottava.h
-      page.h
-      pedal.h
-      rehearsalmark.h
-      repeat.h
-      rest.h
-      segment.h
-      shadownote.h
-      simpletext.h
-      slur.h
-      spacer.h
-      spanner.h
-      stafftext.h
-      stem.h
-      symbol.h
-      system.h
-      tempotext.h
-      textframe.h
-      text.h
-      textline.h
-      timesig.h
-      tremolobar.h
-      tremolo.h
-      trill.h
-      tuplet.h
-      volta.h
-      score.h
-      mscore1.h
-      cursor.h
+      accidental.h arpeggio.h articulation.h barline.h beam.h bend.h
+      box.h bracket.h breath.h bsymbol.h chord.h chordline.h chordrest.h
+      clef.h duration.h dynamic.h element.h figuredbass.h fingering.h fret.h
+      glissando.h hairpin.h harmony.h hook.h icon.h image.h instrchange.h
+      keysig.h lasso.h layoutbreak.h line.h lyrics.h measurebase.h measure.h
+      notedot.h note.h ossia.h ottava.h page.h pedal.h rehearsalmark.h repeat.h
+      rest.h segment.h shadownote.h simpletext.h slur.h spacer.h spanner.h
+      stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
+      textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
+      score.h mscore1.h cursor.h page.h part.h staff.h
       )
 
 add_library (

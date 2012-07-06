@@ -44,7 +44,9 @@ extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 //   PageFormat
 //---------------------------------------------------------
 
-class PageFormat {
+class PageFormat : public QObject {
+      Q_OBJECT
+
       QSizeF _size;
       qreal _printableWidth;        // _width - left margin - right margin
       qreal _evenLeftMargin;        // values in inch
@@ -62,6 +64,7 @@ class PageFormat {
       qreal width() const           { return _size.width();  }
       qreal height() const          { return _size.height(); }
       void setSize(const QSizeF& s) { _size = s;             }
+      void copy(const PageFormat&);
 
       QString name() const;
       void read(const QDomElement&);

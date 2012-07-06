@@ -2289,7 +2289,8 @@ void ChangePatch::flip()
 ChangePageFormat::ChangePageFormat(Score* cs, PageFormat* p, qreal s, int po)
       {
       score      = cs;
-      pf         = new PageFormat(*p);
+      pf         = new PageFormat;
+      pf->copy(*p);
       spatium    = s;
       pageOffset = po;
       }
@@ -2305,7 +2306,8 @@ ChangePageFormat::~ChangePageFormat()
 
 void ChangePageFormat::flip()
       {
-      PageFormat f = *(score->pageFormat());
+      PageFormat f;
+      f.copy(*(score->pageFormat()));
       qreal os    = score->spatium();
       int po       = score->pageNumberOffset();
 
@@ -2317,7 +2319,7 @@ void ChangePageFormat::flip()
       score->setPageNumberOffset(pageOffset);
       score->setLayoutAll(true);
 
-      *pf     = f;
+      pf->copy(f);
       spatium = os;
       pageOffset = po;
       }

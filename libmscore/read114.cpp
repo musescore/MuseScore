@@ -129,7 +129,8 @@ bool Score::read114(const QDomElement& de)
                   }
             else if (tag == "page-layout") {
                   if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
-                        PageFormat pf = *pageFormat();
+                        PageFormat pf;
+                        pf.copy(*pageFormat());
                         pf.read(ee);
                         setPageFormat(pf);
                         }
