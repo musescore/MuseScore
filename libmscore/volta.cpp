@@ -64,7 +64,6 @@ void Volta::layout()
       setLineWidth(score()->styleS(ST_voltaLineWidth));
       Spatium hook(score()->styleS(ST_voltaHook));
       setBeginHookHeight(hook);
-      setYoff(score()->styleS(ST_voltaY).val());
       setEndHookHeight(hook);
       TextLine::layout();
       }

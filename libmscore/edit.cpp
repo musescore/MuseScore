@@ -518,8 +518,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 printf("insert local timesig\n");
             ts->setParent(seg);
             ts->setTrack(track);
-            ts->setActualSig(ts->sig());
-            ts->setSig(lsig);
+            ts->setStretch(ts->sig() / lsig);
             undoAddElement(ts);
             timesigStretchChanged(ts, fm, staffIdx);
             return;
@@ -570,7 +569,7 @@ printf("insert local timesig\n");
                   }
             else {
                   undo(new ChangeTimesig(nsig, false,
-                     ts->actualSig(), ts->sig(), ts->subtype(),
+                     ts->sig(), ts->stretch(), ts->subtype(),
                      QString(), QString()));
                   nsig->setDropTarget(0);       // DEBUG
                   }
@@ -594,9 +593,8 @@ void Score::timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx)
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (!cr)
                               continue;
-                        if (cr->type() == REST && cr->durationType() == TDuration::V_MEASURE) {
-                              cr->setDuration(ts->actualSig());
-                              }
+                        if (cr->type() == REST && cr->durationType() == TDuration::V_MEASURE)
+                              cr->setDuration(ts->sig());
                         else
                               qDebug("timeSigChanged: not implemented: chord/rest does not fit");
                         }
@@ -804,7 +802,7 @@ void Score::cmdAddTie()
                         if (cr == 0 || cr->type() != CHORD)
                               continue;
                         int staffIdx = cr->staffIdx() + cr->staffMove();
-                        if (staffIdx != chord->staffIdx())
+                        if (staffIdx != chord->staffIdx() + chord->staffMove())
                               continue;
                         foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
                               if (n->pitch() == note->pitch()) {

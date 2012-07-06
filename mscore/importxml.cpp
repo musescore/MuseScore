@@ -4764,7 +4764,10 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             cr->setTrack(track);
             ((Rest*)cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, tick);
-            s->add(cr);
+            //sibelius might import 2 rests at the same place, ignore the 2one
+            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?> 
+            if(!s->element(cr->track()))
+                  s->add(cr);
             cr->setVisible(printObject == "yes");
             if (step != "" && 0 <= octave && octave <= 9) {
                   qDebug("rest step=%s oct=%d", qPrintable(step), octave);

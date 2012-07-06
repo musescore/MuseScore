@@ -21,6 +21,7 @@
 #include "playpanel.h"
 #include "libmscore/sig.h"
 #include "libmscore/score.h"
+#include "libmscore/repeatlist.h"
 #include "seq.h"
 #include "musescore.h"
 #include "libmscore/measure.h"
@@ -78,21 +79,14 @@ void PlayPanel::setScore(Score* s)
       if (cs != 0 && cs == s)
             return;
       cs = s;
-      if (cs) {
-            MeasureBase* lm = cs->last();
-            if (lm)
-                  setEndpos(lm->tick() + lm->ticks());
-            }
       bool enable = cs != 0;
       volumeSlider->setEnabled(enable);
       posSlider->setEnabled(enable);
       tempoSlider->setEnabled(enable);
-      if (cs) {
+      if (cs && seq && seq->canStart()) {
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
-            Measure* m = cs->lastMeasure();
-            if (m)
-                  setEndpos(m ? m->tick() + m->ticks() : 0);
+            setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
             heartBeat(tick, tick);
             }
@@ -101,11 +95,8 @@ void PlayPanel::setScore(Score* s)
             setRelTempo(1.0);
             setEndpos(0);
             heartBeat(0, 0);
+            updatePosLabel(0);
             }
-//      heartBeat2(seq->getCurTime());
-//      int tick, utick;
-//      seq->getCurTick(&tick, &utick);
-//      heartBeat(tick, utick);
       update();
       }
 
@@ -161,11 +152,14 @@ void PlayPanel::volumeChanged(double val, int)
 //    setPos
 //---------------------------------------------------------
 
-void PlayPanel::setPos(int tick)
+void PlayPanel::setPos(int utick)
       {
-      if (cachedTickPosition != tick)
-            emit posChange(tick);
-      heartBeat(tick, tick);
+      if(!cs)
+            return;
+      if (cachedTickPosition != utick)
+            emit posChange(utick);
+      updatePosLabel(utick);
+      updateTimeLabel(cs->utick2utime(utick));
       }
 
 //---------------------------------------------------------
@@ -176,16 +170,7 @@ void PlayPanel::heartBeat(int tick, int utick)
       {
       if (cachedTickPosition == utick)
             return;
-      if (cs == 0)
-            return;
-      cachedTickPosition = utick;
-
-      int bar, beat, t;
-      cs->sigmap()->tickValues(tick, &bar, &beat, &t);
-
-      char buffer[32];
-      sprintf(buffer, "%03d.%02d", bar+1, beat+1);
-      posLabel->setText(QString(buffer));
+      updatePosLabel(utick);
       posSlider->setValue(utick);
       }
 
@@ -198,6 +183,15 @@ void PlayPanel::heartBeat2(int samples)
       int sec = samples/MScore::sampleRate;
       if (sec == cachedTimePosition)
             return;
+      updateTimeLabel(sec);
+      }
+
+//---------------------------------------------------------
+//   updateTime
+//---------------------------------------------------------
+
+void PlayPanel::updateTimeLabel(int sec)
+      {
       cachedTimePosition = sec;
       int m              = sec / 60;
       sec                = sec % 60;
@@ -208,3 +202,22 @@ void PlayPanel::heartBeat2(int samples)
       timeLabel->setText(QString(buffer));
       }
 
+//---------------------------------------------------------
+//   updatePos
+//---------------------------------------------------------
+      
+void PlayPanel::updatePosLabel(int utick)      
+      {
+      cachedTickPosition = utick;
+      int bar = 0;
+      int beat = 0;
+      int t = 0;
+      int tick = 0;
+      if (cs) {
+            tick = cs->repeatList()->utick2tick(utick);
+            cs->sigmap()->tickValues(tick, &bar, &beat, &t);
+            }
+      char buffer[32];
+      sprintf(buffer, "%03d.%02d", bar+1, beat+1);
+      posLabel->setText(QString(buffer));
+      }

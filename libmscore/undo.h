@@ -1032,8 +1032,8 @@ class ChangeNoteProperties : public UndoCommand {
 class ChangeTimesig : public UndoCommand {
       TimeSig* timesig;
       bool showCourtesy;
-      Fraction actual;
-      Fraction nominal;
+      Fraction sig;
+      Fraction stretch;
       QString sz;
       QString sn;
       TimeSigType subtype;

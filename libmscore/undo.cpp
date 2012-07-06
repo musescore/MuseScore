@@ -985,8 +985,8 @@ void Score::undoAddElement(Element* element)
                   Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
                   Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
                   Segment* ns2   = nm2 ? nm2->findSegment(s2->subtype(), s2->tick()) : 0;
-                  Chord* c1      = static_cast<Chord*>(ns1->element((staffIdx - cr1->staffMove()) * VOICES + cr1->voice()));
-                  Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element((staffIdx - cr2->staffMove()) * VOICES + cr2->voice())) : 0;
+                  Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
+                  Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice())) : 0;
                   Note* nn1      = c1->findNote(n1->pitch());
                   Note* nn2      = c2 ? c2->findNote(n2->pitch()) : 0;
                   Tie* ntie      = static_cast<Tie*>(ne);
@@ -2690,8 +2690,8 @@ ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
       {
       timesig = _timesig;
       showCourtesy = sc;
-      actual       = f1;
-      nominal      = f2;
+      sig          = f1;
+      stretch      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;
@@ -2706,19 +2706,19 @@ void ChangeTimesig::flip()
       timesig->score()->addRefresh(timesig->abbox());
       bool sc        = timesig->showCourtesySig();
       Fraction f1    = timesig->sig();
-      Fraction f2    = timesig->actualSig();
+      Fraction f2    = timesig->stretch();
       QString  s1    = timesig->zText();
       QString  s2    = timesig->nText();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
       timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
-      timesig->setSig(nominal);
-      timesig->setActualSig(actual);
+      timesig->setSig(sig);
+      timesig->setStretch(stretch);
       timesig->setText(sz, sn);
       showCourtesy = sc;
-      actual       = f1;
-      nominal      = f2;
+      sig          = f1;
+      stretch      = f2;
       sz           = s1;
       sn           = s2;
       subtype      = st;

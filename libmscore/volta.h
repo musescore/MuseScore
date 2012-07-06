@@ -25,6 +25,9 @@ enum VoltaType {
       VOLTA_OPEN, VOLTA_CLOSED
       };
 
+extern void vdebug(int n);
+extern LineSegment* voltaDebug;
+
 //---------------------------------------------------------
 //   VoltaSegment
 //---------------------------------------------------------

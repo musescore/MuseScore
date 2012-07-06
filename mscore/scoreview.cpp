@@ -2890,12 +2890,6 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "delete") {
-            // no delete in edit mode except for slurs/ties
-            if (editMode() && editObject->type() == SLUR_SEGMENT) {
-                  sm->postEvent(new CommandEvent("escape"));   // leave edit mode
-                  qApp->processEvents();
-                  _score->startCmd();     // start new command
-                  }
             _score->cmdDeleteSelection();
             }
       else if (cmd == "next-lyric" || cmd == "prev-lyric") {
@@ -3145,13 +3139,6 @@ void ScoreView::select(QMouseEvent* ev)
             curElement = 0;
       _score->setUpdateAll(true);   //DEBUG
       mscore->endCmd();
-      // Experimental:
-      if (_score->selection().isSingle()) {
-            // start edit mode
-            Element* e = _score->selection().element();
-            if (e->type() == SLUR_SEGMENT)
-                  startEdit(e);
-            }
       }
 
 //---------------------------------------------------------
@@ -3750,6 +3737,13 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
 
 void ScoreView::cmdEnterRest()
       {
+      InputState& is = _score->inputState();
+      if (is.track() == -1) {          // invalid state
+            return;
+            }
+      if (is.segment() == 0) {
+            return;
+            }
       cmdEnterRest(_score->inputState().duration());
       }
 

@@ -4156,7 +4156,7 @@ void ExportLy::writeScore()
 	{
 
 	  out << "\n";
-
+    relativ="";
 	  switch(staff->clef(0))
 	    {
 	    case CLEF_G:
@@ -4165,6 +4165,7 @@ void ExportLy::writeScore()
 	      break;
 	    case CLEF_TAB:
 	    case CLEF_PERC:
+	    case CLEF_PERC2:
 	    case CLEF_G3:
 	    case CLEF_F:
 	      relativ="";

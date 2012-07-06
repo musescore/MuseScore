@@ -619,7 +619,7 @@ Note* searchTieNote(Note* note)
                   if (cr == 0 || cr->type() != CHORD)
                         continue;
                   int staffIdx = cr->staffIdx() + cr->staffMove();
-                  if (staffIdx != chord->staffIdx())  // cannot happen?
+                  if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;
                   foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
                         if (n->pitch() == note->pitch()) {

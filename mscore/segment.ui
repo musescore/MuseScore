@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
+    <width>555</width>
     <height>330</height>
    </rect>
   </property>
@@ -22,6 +22,9 @@
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
      <property name="title">
       <string>Segment</string>
      </property>
@@ -37,6 +40,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>Annotations:</string>
         </property>
@@ -44,6 +50,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="label_2">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>Lyrics:</string>
         </property>
@@ -54,6 +63,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>SpannerFor:</string>
         </property>
@@ -61,6 +73,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label_4">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>SpannerBack:</string>
         </property>
@@ -74,7 +89,20 @@
       </item>
       <item row="0" column="0" colspan="2">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="2" column="8">
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="tick">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="maximum">
+           <number>16000000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="9">
          <widget class="QSpinBox" name="ticks">
           <property name="readOnly">
            <bool>true</bool>
@@ -90,7 +118,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="6">
+        <item row="2" column="7">
          <widget class="QSpinBox" name="beat">
           <property name="readOnly">
            <bool>true</bool>
@@ -103,8 +131,11 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="7">
+        <item row="2" column="8">
          <widget class="QLabel" name="label_9">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>Ticks</string>
           </property>
@@ -118,25 +149,15 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_6">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
           <property name="text">
-           <string>Tick:</string>
+           <string>tick:</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QSpinBox" name="tick">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="maximum">
-           <number>16000000</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="4">
+        <item row="2" column="5">
          <widget class="QSpinBox" name="bar">
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
@@ -146,8 +167,11 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
+        <item row="2" column="4">
          <widget class="QLabel" name="label_7">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>Bar</string>
           </property>
@@ -159,8 +183,11 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="5">
+        <item row="2" column="6">
          <widget class="QLabel" name="label_8">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>Beat</string>
           </property>
@@ -172,23 +199,16 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Segment Type:</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" colspan="2">
+        <item row="0" column="3" colspan="2">
          <widget class="QComboBox" name="segmentType">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string notr="true"/>
           </property>
           <property name="sizeAdjustPolicy">
            <enum>QComboBox::AdjustToContents</enum>
@@ -233,6 +253,42 @@
             <string>Time Signature Announce</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_10">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>rTick:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QSpinBox" name="rtick">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="maximum">
+           <number>16000000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Segment Type:</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
          </widget>
         </item>
        </layout>

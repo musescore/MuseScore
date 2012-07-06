@@ -701,12 +701,8 @@ void Score::doLayout()
                         }
                   }
             }
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layout2();
-            foreach(Spanner* s, m->spannerFor())
-                  s->layout();
-            }
 
       rebuildBspTree();
 

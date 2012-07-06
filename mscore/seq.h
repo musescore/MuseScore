@@ -173,7 +173,7 @@ class Seq : public QObject, public Sequencer {
       int getEndTick() const    { return endTick;  }
       bool isRealtime() const   { return true;     }
       void sendMessage(SeqMsg&) const;
-      virtual void startNote(const Channel&, int, int, int, double nt);
+      virtual void startNote(int channel, int, int, int, double nt);
       void setController(int, int, int);
       virtual void sendEvent(const Event&);
       void setScoreView(ScoreView*);
@@ -191,7 +191,7 @@ class Seq : public QObject, public Sequencer {
       QString synthIndexToName(int) const;
       void putEvent(const Event&);
       void startNoteTimer(int duration);
-      void startNote(const Channel&, int, int, double nt);
+      void startNote(int channel, int, int, double nt);
       void eventToGui(Event);
       void processToGuiMessages();
       void stopNoteTimer();

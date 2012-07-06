@@ -61,6 +61,9 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
+   private:
+      void updateTimeLabel(int sec);
+      void updatePosLabel(int utick);
       };
 
 #endif
