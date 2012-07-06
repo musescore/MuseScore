@@ -27,7 +27,7 @@
 #include "aeolus/aeolus/aeolus.h"
 #include "libmscore/score.h"
 #include "file.h"
-#include "msynth/sparm_p.h"
+#include "libmscore/sparm_p.h"
 #include "fluid/rev.h"
 #include "fluid/fluid.h"
 #include "icons.h"
