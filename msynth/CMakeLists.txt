@@ -29,7 +29,7 @@ add_library (
       msynth STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
-      synti.cpp sparm.cpp
+      synti.cpp
       )
 
 set_target_properties (

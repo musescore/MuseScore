@@ -21,7 +21,7 @@
 #ifndef __AWLASLIDER_H__
 #define __AWLASLIDER_H__
 
-#include "msynth/sparm.h"
+#include "libmscore/sparm.h"
 
 namespace Awl {
 
