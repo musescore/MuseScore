@@ -25,7 +25,7 @@
 #include "gen.h"
 #include "chorus.h"
 #include "voice.h"
-#include "msynth/sparm_p.h"
+#include "libmscore/sparm_p.h"
 
 namespace FluidS {
 

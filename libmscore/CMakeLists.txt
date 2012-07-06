@@ -24,8 +24,17 @@ QT4_WRAP_CPP (mocs
       score.h mscore1.h cursor.h page.h part.h staff.h
       )
 
+add_custom_command(
+   OUTPUT ${PROJECT_BINARY_DIR}/all.h
+   COMMAND ${CMAKE_COMMAND}
+   ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+   DEPENDS ${PROJECT_SOURCE_DIR}/all.h
+   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+   )
+
 add_library (
       libmscore STATIC
+      ${PROJECT_BINARY_DIR}/all.h
       ${mocs}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
       articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
@@ -54,7 +63,7 @@ add_library (
       figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
-      exportmidi.cpp cursor.cpp read114.cpp
+      exportmidi.cpp cursor.cpp read114.cpp sparm.cpp
       )
 set_target_properties (
       libmscore

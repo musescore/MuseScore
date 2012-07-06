@@ -25,7 +25,7 @@ struct MidiPatch;
 class Event;
 class Synth;
 
-#include "sparm.h"
+#include "libmscore/sparm.h"
 
 //---------------------------------------------------------
 //   Synth
