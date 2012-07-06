@@ -28,7 +28,7 @@
 #include "aeolus/aeolus/aeolus.h"
 #endif
 #include "libmscore/xml.h"
-#include "sparm_p.h"
+#include "libmscore/sparm_p.h"
 
 //---------------------------------------------------------
 //   reset

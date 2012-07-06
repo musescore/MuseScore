@@ -25,7 +25,7 @@
 #include "select.h"
 #include "fraction.h"
 #include "interval.h"
-#include "msynth/sparm.h"
+#include "sparm.h"
 #include "mscoreview.h"
 
 class TempoMap;

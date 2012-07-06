@@ -30,11 +30,13 @@
 #include "ottava.h"
 #include "volta.h"
 #include "excerpt.h"
-#include "thirdparty/diff/diff_match_patch.h"
+// #include "thirdparty/diff/diff_match_patch.h"
 #include "mscore.h"
 #include "stafftype.h"
+#ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrpage.h"
+#endif
 #include "sig.h"
 #include "undo.h"
 #include "imageStore.h"
@@ -51,8 +53,10 @@ void Score::write(Xml& xml, bool selectionOnly)
       spanner.clear();
       xml.stag("Score");
 
+#ifdef OMR
       if (_omr && xml.writeOmr)
             _omr->write(xml);
+#endif
       if (_showOmr && xml.writeOmr)
             xml.tag("showOmr", _showOmr);
       if (_audio && xml.writeOmr) {

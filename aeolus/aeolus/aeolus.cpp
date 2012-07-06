@@ -24,7 +24,7 @@ extern QString mscoreGlobalShare;
 
 #include "libmscore/event.h"
 #include "xml.h"
-#include "msynth/sparm_p.h"
+#include "libmscore/sparm_p.h"
 
 //---------------------------------------------------------
 //   init

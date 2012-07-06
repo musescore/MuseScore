@@ -17,6 +17,7 @@
 */
 
 #include <assert.h>
+#include "config.h"
 #include "score.h"
 #include "key.h"
 #include "sig.h"
@@ -63,7 +64,9 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
+#ifdef OMR
 #include "omr/omr.h"
+#endif
 #include "bracket.h"
 #include "audio.h"
 #include "instrtemplate.h"
@@ -2166,8 +2169,10 @@ void Score::setLayoutAll(bool val)
 void Score::removeOmr()
       {
       _showOmr = false;
+#ifdef OMR
       delete _omr;
       _omr = 0;
+#endif
       }
 
 //---------------------------------------------------------

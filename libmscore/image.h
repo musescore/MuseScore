@@ -46,7 +46,7 @@ class Image : public BSymbol {
       virtual QSizeF imageSize() const = 0;
 
    public:
-      Image(Score*);
+      Image(Score* = 0);
       Image(const Image&);
       ~Image();
       virtual ElementType type() const { return IMAGE; }
