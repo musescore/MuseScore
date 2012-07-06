@@ -2865,6 +2865,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         }
                   else {
                         qDebug("SELECT_RANGE: measure: sel state %d\n", _selection.state());
+                        return;
                         }
                   }
             else if (e->type() == NOTE || e->type() == REST || e->type() == CHORD) {
