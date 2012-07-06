@@ -676,6 +676,10 @@ void NewWizardPage4::initializePage()
             w->setVisible(false);
             }
       path.clear();
+      if (templateFileDialog->selectedFiles().size() > 0) {
+            path = templateFileDialog->selectedFiles()[0];
+            emit completeChanged();
+            }
       }
 
 //---------------------------------------------------------
