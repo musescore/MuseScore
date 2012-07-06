@@ -114,6 +114,13 @@ void Part::read(const QDomElement& de)
             }
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();
+
+      // for compatibility with old scores:
+      if(score()->mscVersion() <= 114 && instr(0)->useDrumset()) {
+            foreach(Staff* staff, _staves) {
+                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE)); 
+                  }
+            }
       }
 
 //---------------------------------------------------------

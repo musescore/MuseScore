@@ -186,7 +186,7 @@ bool MP3Exporter::initLibrary(QString libpath)
       qDebug("Loading LAME from %s\n", qPrintable(libpath));
       lame_lib = new QLibrary(libpath, 0);
       if (!lame_lib->load()) {
-            qDebug("load failed\n");
+            qDebug("load failed <%s>\n", qPrintable(lame_lib->errorString()));
             return false;
             }
 

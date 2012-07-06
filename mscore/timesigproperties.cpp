@@ -32,10 +32,12 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       timesig = t;
       zText->setText(timesig->zText());
       nText->setText(timesig->nText());
-      zNominal->setValue(timesig->sig().numerator());
-      nNominal->setValue(timesig->sig().denominator());
-      zActual->setValue(timesig->actualSig().numerator());
-      nActual->setValue(timesig->actualSig().denominator());
+      Fraction nominal = timesig->sig() * timesig->stretch();
+      nominal.reduce();
+      zNominal->setValue(nominal.numerator());
+      nNominal->setValue(nominal.denominator());
+      zActual->setValue(timesig->sig().numerator());
+      nActual->setValue(timesig->sig().denominator());
       switch(timesig->subtype()) {
             case TSIG_NORMAL:
                   textButton->setChecked(true);
@@ -71,8 +73,11 @@ void TimeSigProperties::accept()
             }
       // setSig() and setActualSig must be AFTER setSubType()
       // as setSubType() also reset sig
-      timesig->setSig(Fraction(zNominal->value(), nNominal->value()));
-      timesig->setActualSig(Fraction(zActual->value(), nActual->value()));
+      Fraction actual(zActual->value(), nActual->value());
+      Fraction nominal(zActual->value(), nActual->value());
+      Fraction stretch = nominal / actual;
+      timesig->setSig(actual);
+      timesig->setStretch(stretch);
       QDialog::accept();
       }
 

@@ -779,6 +779,7 @@ void SegmentView::setElement(Element* e)
       sb.beat->setValue(beat);
       sb.ticks->setValue(ticks);
       sb.tick->setValue(s->tick());
+      sb.rtick->setValue(s->rtick());
       sb.segmentType->setCurrentIndex(idx);
       sb.lyrics->clear();
 

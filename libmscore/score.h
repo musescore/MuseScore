@@ -428,6 +428,7 @@ class Score : public QObject {
 
       void write(Xml&, bool onlySelection);
       bool read(const QDomElement&);
+      bool read114(const QDomElement&);
       bool read1(const QDomElement&);
 
       QList<Staff*>& staves()                { return _staves; }

@@ -54,6 +54,7 @@ class RepeatList: public QList<RepeatSegment*>
       int utime2utick(qreal) const;
       qreal utick2utime(int) const;
       void update();
+      int ticks();
       };
 
 #endif

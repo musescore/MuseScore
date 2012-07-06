@@ -318,8 +318,6 @@ void SlurSegment::write(Xml& xml, int no) const
             return;
 
       xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
-      if (!userOff().isNull())
-            xml.tag("offset", userOff() / spatium());
       if (!(ups[GRIP_START].off.isNull()))
             xml.tag("o1", ups[GRIP_START].off);
       if (!(ups[GRIP_BEZIER1].off.isNull()))
@@ -580,6 +578,7 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       ups[GRIP_END].p   = p2;
       slurTie()->computeBezier(this);
       setbbox(path.boundingRect());
+      adjustReadPos();
       }
 
 //---------------------------------------------------------

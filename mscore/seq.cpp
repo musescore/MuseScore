@@ -951,29 +951,29 @@ void Seq::setPos(int utick)
 //    send seek message to sequencer
 //---------------------------------------------------------
 
-void Seq::seek(int tick)
+void Seq::seek(int utick)
       {
+      int tick = cs->repeatList()->utick2tick(utick);
       if (cs == 0)
             return;
       Segment* seg = cs->tick2segment(tick);
       if (seg) {
             mscore->currentScoreView()->moveCursor(seg, -1);
             }
-      cs->setPlayPos(tick);
+      cs->setPlayPos(utick);
       cs->setLayoutAll(false);
       cs->end();
-
-      tick = cs->repeatList()->tick2utick(tick);
+      
       if (cs->playMode() == PLAYMODE_AUDIO) {
-            ogg_int64_t sp = cs->utick2utime(tick) * MScore::sampleRate;
+            ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
             ov_pcm_seek(&vf, sp);
             }
 
       SeqMsg msg;
-      msg.data.intVal = tick;
+      msg.data.intVal = utick;
       msg.id   = SEQ_SEEK;
       guiToSeq(msg);
-      mscore->setPos(tick);
+      mscore->setPos(utick);
       foreach(const Note* n, markedNotes) {
             ((Note*)n)->setSelected(false);     // HACK
             cs->addRefresh(n->canvasBoundingRect());
@@ -984,22 +984,22 @@ void Seq::seek(int tick)
 //   startNote
 //---------------------------------------------------------
 
-void Seq::startNote(const Channel& a, int pitch, int velo, double nt)
+void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
       if (state != TRANSPORT_STOP)
             return;
       Event ev(ME_NOTEON);
-      ev.setChannel(a.channel);
+      ev.setChannel(channel);
       ev.setPitch(pitch);
       ev.setTuning(nt);
       ev.setVelo(velo);
       sendEvent(ev);
       }
 
-void Seq::startNote(const Channel& a, int pitch, int velo, int duration, double nt)
+void Seq::startNote(int channel, int pitch, int velo, int duration, double nt)
       {
       stopNotes();
-      startNote(a, pitch, velo, nt);
+      startNote(channel, pitch, velo, nt);
       startNoteTimer(duration);
       }
 
@@ -1376,11 +1376,12 @@ void Seq::heartBeat()
                   }
             }
 
-      int tick = cs->repeatList()->utick2tick(guiPos.key());
+      int utick = guiPos.key();
+      int tick = cs->repeatList()->utick2tick(utick);
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);
       if (pp)
-            pp->heartBeat(tick, playPos.key());
+            pp->heartBeat(tick, utick);
 
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())

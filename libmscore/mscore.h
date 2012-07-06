@@ -28,9 +28,8 @@ static const int MSCVERSION = 124;
 //      1.11  Instrument name in part saved as TextC
 //      1.12  use durationType, remove tickLen
 //      1.13  Clefs: userOffset is not (mis)used for vertical layout position
-// ==========1.0, 1.1
+// ==========1.0, 1.1 1.2
 //    1.14  save user modified beam position as spatium value
-//
 //    1.15  save timesig inline; Lyrics "endTick" replaced by "ticks"
 //    1.16  spanners (hairpin, trill etc.) are now inline and have no ticks anymore
 //    1.17  new <Score> toplevel structure to support linked parts (excerpts)
