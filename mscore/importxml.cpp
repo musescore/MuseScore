@@ -4128,7 +4128,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             if (ee.tagName() == "slur") {
                   int slurNo   = ee.attribute(QString("number"), "1").toInt() - 1;
                   QString slurType = ee.attribute(QString("type"));
-
+                  QString lineType  = ee.attribute(QString("line-type"), "solid");
                   // PriMus Music-Notation by Columbussoft (build 10093) generates overlapping
                   // slurs that do not have a number attribute to distinguish them.
                   // The duplicates must be ignored, to prevent memory allocation issues,
@@ -4143,6 +4143,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               bool endSlur = false;
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
+                                    if (lineType == "dotted")
+                                          slur[slurNo]->setLineType(1);
+                                    else if (lineType == "dashed")
+                                          slur[slurNo]->setLineType(2);
                                     cr->addSlurFor(slur[slurNo]);
                                     slur[slurNo]->setStartElement(cr);
                                     }

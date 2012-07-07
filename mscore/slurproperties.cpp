@@ -36,7 +36,12 @@ SlurProperties::SlurProperties(QWidget* parent)
 
 int SlurProperties::getLineType() const
       {
-      return dotted->isChecked() ? 1 : 0;
+         if (dotted->isChecked())
+              return 1;
+         else if (dashed->isChecked())
+              return 2;
+         else
+              return 0;
       }
 
 //---------------------------------------------------------
@@ -45,8 +50,14 @@ int SlurProperties::getLineType() const
 
 void SlurProperties::setLineType(int val)
       {
-      if (val == 0)
-            solid->setChecked(true);
-      else
-            dotted->setChecked(true);
+      switch (val) {
+            case 1:
+                  dotted->setChecked(true);
+                  break;
+            case 2:
+                  dashed->setChecked(true);
+                  break;
+            default:    
+                  solid->setChecked(true);
+            }            
       }
