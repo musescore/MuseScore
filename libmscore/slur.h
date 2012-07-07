@@ -110,7 +110,7 @@ struct SlurPos {
 //---------------------------------------------------------
 
 class SlurTie : public Spanner {
-      int _lineType;          // 0 = solid, 1 = dotted
+      int _lineType;          // 0 = solid, 1 = dotted, 2 = dashed
 
    protected:
       qreal _len;

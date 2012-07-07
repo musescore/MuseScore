@@ -87,11 +87,17 @@ void SlurSegment::draw(QPainter* painter) const
             qreal lw = point(score()->styleS(ST_SlurEndWidth));
             pen.setWidthF(lw);
             }
-      else {
+      else if (slurTie()->lineType() == 1) {
             painter->setBrush(Qt::NoBrush);
             qreal lw = point(score()->styleS(ST_SlurDottedWidth));
             pen.setWidthF(lw);
             pen.setStyle(Qt::DotLine);
+            }
+      else if (slurTie()->lineType() == 2) {
+            painter->setBrush(Qt::NoBrush);
+            qreal lw = point(score()->styleS(ST_SlurDottedWidth));
+            pen.setWidthF(lw);
+            pen.setStyle(Qt::DashLine);
             }
       painter->setPen(pen);
       painter->drawPath(path);

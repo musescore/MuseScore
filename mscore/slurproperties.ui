@@ -44,7 +44,7 @@
         <item>
          <widget class="QRadioButton" name="solid">
           <property name="text">
-           <string>solid</string>
+           <string>Solid</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -54,7 +54,14 @@
         <item>
          <widget class="QRadioButton" name="dotted">
           <property name="text">
-           <string>dotted</string>
+           <string>Dotted</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="dashed">
+          <property name="text">
+           <string>Dashed</string>
           </property>
          </widget>
         </item>
