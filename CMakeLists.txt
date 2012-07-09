@@ -31,25 +31,18 @@ set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 set(GCC_VISIBILITY TRUE)            # requires gcc 4.x?
 set(HAS_AUDIOFILE TRUE)             # requires libsndfile
 
-set(STATIC_SCRIPT_BINDINGS TRUE)
 set(USE_SSE           TRUE)
 set(SOUNDFONT3        TRUE)         # enable ogg vorbis compressed fonts, require ogg & vorbis
 set(AEOLUS            TRUE)         # pipe organ synthesizer
-set(EMBED_ICONS       FALSE)        # do not load icons from share/icons
 
 option (OSC "enable OSC remote control protocol" ON)        # osc remote control
 option (OMR "enable PDF import"  OFF)                        # OMR - optical music recognition
-option (BUILD_SCRIPTGEN "enable script bindings" OFF)
 
 if (APPLE OR MINGW)
       set(GCC_VISIBILITY FALSE)     # warnings if not, with gcc4.4 from qt
       set(AEOLUS TRUE)
       set(OMR FALSE) # needs work to get rid of fontconfig dependency
 endif (APPLE OR MINGW)
-
-if (MINGW)
-      set(STATIC_SCRIPT_BINDINGS TRUE)
-endif (MINGW)
 
 if (OMR)
       set(OCR    FALSE) # requires tesseract 3.0
@@ -79,7 +72,6 @@ if (APPLE)
 
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
-      set(STATIC_SCRIPT_BINDINGS TRUE)
 
       find_library(AudioToolboxFW        NAMES AudioToolbox)
       find_library(AudioUnitFW           NAMES AudioUnit)
@@ -132,22 +124,20 @@ include ( ${PROJECT_SOURCE_DIR}/build/FindPulseAudio.cmake)
 ##  look for Qt4
 ##
 
-set(QT_MIN_VERSION "4.7.0")
-set(QT_USE_QTXML     TRUE)
-set(QT_USE_QTSVG     TRUE)
-set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTUITOOLS TRUE)
-set(QT_USE_QTDESIGNER TRUE)
-set(QT_USE_QTSCRIPT   TRUE)
-set(QT_USE_QTSCRIPTTOOLS   TRUE)
-set(QT_USE_QTWEBKIT   TRUE)
+set(QT_MIN_VERSION    "4.8.0")
+set(QT_USE_QTXML         TRUE)
+set(QT_USE_QTSVG         TRUE)
+set(QT_USE_QTNETWORK     TRUE)
+set(QT_USE_QTUITOOLS     TRUE)
+set(QT_USE_QTDESIGNER    TRUE)
+set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTXMLPATTERNS TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
 
-find_package(Qt4 "4.7")
+find_package(Qt4 "4.8")
 
 if (NOT QT4_FOUND)
-      message(FATAL_ERROR "Fatal error: QT (version >= 4.7.0) required."
+      message(FATAL_ERROR "Fatal error: QT (version >= 4.8.0) required."
          " Cmake tries to detect QT4 by searching for 'qmake' in your PATH."
          "If you have QT4 installed, make sure qmake is found in your PATH. "
          "If you compiled QT4 yourself make sure your new qmake is found"
@@ -156,22 +146,6 @@ if (NOT QT4_FOUND)
 else (NOT QT4_FOUND)
       message("Qt lib found at ${QT_LIBRARY_DIR}")
 endif (NOT QT4_FOUND)
-
-
-# Set QT_QTSCRIPT_INCLUDE_DIR
-FIND_PATH(QT_QTSCRIPT_INCLUDE_DIR QtScript
-   PATHS
-   ${QT_INCLUDE_DIR}/QtScript
-   ${QT_LIBRARY_DIR}/QtScript.framework/Headers
-   NO_DEFAULT_PATH
-   )
-
-# Set QT_QTSCRIPT_TOOLS_LIBRARY (apparently still needed on Ubuntu 9.10 - cmake 2.6.4)
-if (NOT MINGW AND NOT APPLE)
-      FIND_LIBRARY(QT_QTSCRIPT_TOOLS_LIBRARY_RELEASE NAMES QtScriptTools QtScriptTools4 PATHS ${QT_LIBRARY_DIR}        NO_DEFAULT_PATH)
-      FIND_LIBRARY(QT_QTSCRIPT_TOOLS_LIBRARY_DEBUG   NAMES QtScriptTools QtScriptTools_debug QtScriptToolsd4 PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
-      _QT4_ADJUST_LIB_VARS(QTSCRIPT_TOOLS)
-endif (NOT MINGW AND NOT APPLE)
 
 include(${QT_USE_FILE})
 
@@ -365,10 +339,6 @@ subdirs(mscore awl bww2mxml share
       fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-
-#if (BUILD_SCRIPTGEN)
-#      subdirs (scriptgen)
-#endif (BUILD_SCRIPTGEN)
 
 if (USE_SYSTEM_QTSINGLEAPPLICATION)
       find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
