@@ -27,7 +27,7 @@ MuseScore {
       onRun: {
             if (typeof curScore === 'undefined')
                   return;
-            var cursor = newCursor();
+            var cursor = curScore.newCursor();
             cursor.staffIdx = 0;
             cursor.voice = 0;
             cursor.rewind(0);  // set cursor to first chord/rest
