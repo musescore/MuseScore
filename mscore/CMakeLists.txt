@@ -280,12 +280,11 @@ if (MINGW)
       ${CROSSQT}/bin/QtGui4.dll
       ${CROSSQT}/bin/QtXml4.dll
       ${CROSSQT}/bin/QtSvg4.dll
-      ${CROSSQT}/bin/QtScript4.dll
-      ${CROSSQT}/bin/QtScriptTools4.dll
       ${CROSSQT}/bin/QtNetwork4.dll
       ${CROSSQT}/bin/QtWebKit4.dll
       ${CROSSQT}/bin/phonon4.dll
       ${CROSSQT}/bin/QtXmlPatterns4.dll
+      ${CROSSQT}/bin/QtDeclarative4.dll
       )
    install_files ( /bin/iconengines .dll
       ${CROSSQT}/plugins/iconengines/qsvgicon4.dll
