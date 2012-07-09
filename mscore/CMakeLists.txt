@@ -26,7 +26,6 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${PROJECT_SOURCE_DIR}/scriptdebug
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -182,16 +181,6 @@ add_executable ( ${ExecutableName}
       ${AUDIO}
       )
 
-if (STATIC_SCRIPT_BINDINGS AND BUILD_SCRIPTGEN)
-      target_link_libraries(mscore
-            qtscript_core
-            qtscript_gui
-            qtscript_network
-            qtscript_uitools
-            qtscript_xml
-            qtscript_webkit)
-endif (STATIC_SCRIPT_BINDINGS AND BUILD_SCRIPTGEN)
-
 if (APPLE)
       set_target_properties (mscore
          PROPERTIES
@@ -221,13 +210,13 @@ if (MINGW)
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
         PROPERTIES
-           COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQT_SCRIPT_LIB"
+           COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "${PROJECT_BINARY_DIR}/resfile.o -mwindows -mconsole -L ${CROSSQT}/lib"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
           PROPERTIES
-             COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQT_SCRIPT_LIB"
+             COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
              LINK_FLAGS "-Wl,-S ${PROJECT_BINARY_DIR}/resfile.o -mwindows -L ${CROSSQT}/lib"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
@@ -302,12 +291,10 @@ if (MINGW)
 
 else (MINGW)
    target_link_libraries(mscore
+      libmscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
-      ${QT_QTSCRIPT_LIBRARY_RELEASE}
-      ${QT_QTSCRIPT_TOOLS_LIBRARY_RELEASE}
       diff_match_patch
-      libmscore
       awl
       mstyle
       msynth
@@ -370,10 +357,6 @@ else (MINGW)
       target_link_libraries(mscore rt)
    endif (NOT MINGW AND NOT APPLE)
 
-   if (QT45)
-     target_link_libraries(mscore ${QT_QTSCRIPT_TOOLS_LIBRARY_RELEASE} )
-   endif (QT45)
-
    if (APPLE)
      install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
@@ -383,244 +366,6 @@ else (MINGW)
      install( FILES   data/mscore.png DESTINATION share/pixmaps)
    endif (APPLE)
 endif (MINGW)
-
-#======================================
-#     install icons if not embedded
-#======================================
-
-# if (NOT EMBED_ICONS)
-   install (FILES
-      data/greendot.svg
-      data/darkgreendot.svg
-      data/recordOn.svg
-      data/recordOff.svg
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/icons
-      )
-   install (FILES
-      data/icons/text_top.svg
-      data/icons/text_bottom.svg
-      data/icons/text_vcenter.svg
-      data/icons/minus.svg
-      data/icons/flip.svg
-      data/icons/undo.svg
-      data/icons/redo.svg
-      data/icons/midiin.svg
-      data/icons/speaker.svg
-      data/icons/start.svg
-      data/icons/play.svg
-      data/icons/sbeam.svg
-      data/icons/mbeam.svg
-      data/icons/nbeam.svg
-      data/icons/beam32.svg
-      data/icons/beam64.svg
-      data/icons/abeam.svg
-      data/icons/fbeam1.svg
-      data/icons/fbeam2.svg
-      data/icons/fileopen.svg
-      data/icons/filenew.svg
-      data/icons/filesave.svg
-      data/icons/filesaveas.svg
-      data/icons/exit.svg
-      data/icons/viewmag.svg
-      data/icons/repeat.svg
-      data/icons/pan.svg
-      data/icons/noteentry.svg
-      data/icons/grace4.svg
-      data/icons/grace16.svg
-      data/icons/grace32.svg
-      data/icons/keyboard.svg
-      data/icons/tie.svg
-      data/icons/acciaccatura.svg
-      data/icons/appoggiatura.svg
-      data/icons/brevis.svg
-      data/icons/clef.svg
-      data/icons/dfermata.svg
-      data/icons/dlongfermata.svg
-      data/icons/dmarcato.svg
-      data/icons/dotdot.svg
-      data/icons/dot.svg
-      data/icons/downbow.svg
-      data/icons/downmordent.svg
-      data/icons/downprall.svg
-      data/icons/dportato.svg
-      data/icons/dshortfermata.svg
-      data/icons/dstaccatissimo.svg
-      data/icons/dverylongfermata.svg
-      data/icons/espressivo.svg
-      data/icons/flatflat.svg
-      data/icons/flat.svg
-      data/icons/longaUp.svg
-      data/icons/mordent.svg
-      data/icons/natural.svg
-      data/icons/note16.svg
-      data/icons/note2.svg
-      data/icons/note32.svg
-      data/icons/note4.svg
-      data/icons/note64.svg
-      data/icons/note8.svg
-      data/icons/note.svg
-      data/icons/ouvert.svg
-      data/icons/plus.svg
-      data/icons/plusstop.svg
-      data/icons/popping.svg
-      data/icons/prallmordent.svg
-      data/icons/prall.svg
-      data/icons/prallprall.svg
-      data/icons/quartrest.svg
-      data/icons/reverseturn.svg
-      data/icons/sforzatoaccent.svg
-      data/icons/sforzato.svg
-      data/icons/sharp.svg
-      data/icons/sharpsharp.svg
-      data/icons/slapping.svg
-      data/icons/snappizzicato.svg
-      data/icons/staccato.svg
-      data/icons/tapping.svg
-      data/icons/tenuto.svg
-      data/icons/thumb.svg
-      data/icons/trill.svg
-      data/icons/turn.svg
-      data/icons/ufermata.svg
-      data/icons/ulongfermata.svg
-      data/icons/umarcato.svg
-      data/icons/upbow.svg
-      data/icons/upmordent.svg
-      data/icons/uportato.svg
-      data/icons/upprall.svg
-      data/icons/ushortfermata.svg
-      data/icons/ustaccatissimo.svg
-      data/icons/uverylongfermata.svg
-      data/icons/editcut.svg
-      data/icons/editcopy.svg
-      data/icons/editpaste.svg
-      data/icons/fileprint.svg
-      data/icons/text_bold.svg
-      data/icons/text_italic.svg
-      data/icons/text_under.svg
-      data/icons/text_left.svg
-      data/icons/text_center.svg
-      data/icons/text_right.svg
-      data/icons/subscript.svg
-      data/icons/superscript.svg
-      data/icons/fotomode.svg
-      data/icons/hraster.svg
-      data/icons/vraster.svg
-      data/icons/repitch.svg
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/icons/icons
-      )
-   install (FILES
-      data/icons-dark/text_top.svg
-      data/icons-dark/text_bottom.svg
-      data/icons-dark/text_vcenter.svg
-      data/icons-dark/minus.svg
-      data/icons-dark/flip.svg
-      data/icons-dark/undo.svg
-      data/icons-dark/redo.svg
-      data/icons-dark/midiin.svg
-      data/icons-dark/speaker.svg
-      data/icons-dark/start.svg
-      data/icons-dark/play.svg
-      data/icons-dark/sbeam.svg
-      data/icons-dark/mbeam.svg
-      data/icons-dark/nbeam.svg
-      data/icons-dark/beam32.svg
-      data/icons-dark/beam64.svg
-      data/icons-dark/abeam.svg
-      data/icons-dark/fbeam1.svg
-      data/icons-dark/fbeam2.svg
-      data/icons-dark/fileopen.svg
-      data/icons-dark/filenew.svg
-      data/icons-dark/filesave.svg
-      data/icons-dark/filesaveas.svg
-      data/icons-dark/exit.svg
-      data/icons-dark/viewmag.svg
-      data/icons-dark/repeat.svg
-      data/icons-dark/pan.svg
-      data/icons-dark/noteentry.svg
-      data/icons-dark/grace4.svg
-      data/icons-dark/grace16.svg
-      data/icons-dark/grace32.svg
-      data/icons-dark/keyboard.svg
-      data/icons-dark/tie.svg
-      data/icons-dark/acciaccatura.svg
-      data/icons-dark/appoggiatura.svg
-      data/icons-dark/brevis.svg
-      data/icons-dark/clef.svg
-      data/icons-dark/dfermata.svg
-      data/icons-dark/dlongfermata.svg
-      data/icons-dark/dmarcato.svg
-      data/icons-dark/dotdot.svg
-      data/icons-dark/dot.svg
-      data/icons-dark/downbow.svg
-      data/icons-dark/downmordent.svg
-      data/icons-dark/downprall.svg
-      data/icons-dark/dportato.svg
-      data/icons-dark/dshortfermata.svg
-      data/icons-dark/dstaccatissimo.svg
-      data/icons-dark/dverylongfermata.svg
-      data/icons-dark/espressivo.svg
-      data/icons-dark/flatflat.svg
-      data/icons-dark/flat.svg
-      data/icons-dark/longaUp.svg
-      data/icons-dark/mordent.svg
-      data/icons-dark/natural.svg
-      data/icons-dark/note16.svg
-      data/icons-dark/note2.svg
-      data/icons-dark/note32.svg
-      data/icons-dark/note4.svg
-      data/icons-dark/note64.svg
-      data/icons-dark/note8.svg
-      data/icons-dark/note.svg
-      data/icons-dark/ouvert.svg
-      data/icons-dark/plus.svg
-      data/icons-dark/plusstop.svg
-      data/icons-dark/popping.svg
-      data/icons-dark/prallmordent.svg
-      data/icons-dark/prall.svg
-      data/icons-dark/prallprall.svg
-      data/icons-dark/quartrest.svg
-      data/icons-dark/reverseturn.svg
-      data/icons-dark/sforzatoaccent.svg
-      data/icons-dark/sforzato.svg
-      data/icons-dark/sharp.svg
-      data/icons-dark/sharpsharp.svg
-      data/icons-dark/slapping.svg
-      data/icons-dark/snappizzicato.svg
-      data/icons-dark/staccato.svg
-      data/icons-dark/tapping.svg
-      data/icons-dark/tenuto.svg
-      data/icons-dark/thumb.svg
-      data/icons-dark/trill.svg
-      data/icons-dark/turn.svg
-      data/icons-dark/ufermata.svg
-      data/icons-dark/ulongfermata.svg
-      data/icons-dark/umarcato.svg
-      data/icons-dark/upbow.svg
-      data/icons-dark/upmordent.svg
-      data/icons-dark/uportato.svg
-      data/icons-dark/upprall.svg
-      data/icons-dark/ushortfermata.svg
-      data/icons-dark/ustaccatissimo.svg
-      data/icons-dark/uverylongfermata.svg
-      data/icons-dark/editcut.svg
-      data/icons-dark/editcopy.svg
-      data/icons-dark/editpaste.svg
-      data/icons-dark/fileprint.svg
-      data/icons-dark/text_bold.svg
-      data/icons-dark/text_italic.svg
-      data/icons-dark/text_under.svg
-      data/icons-dark/text_left.svg
-      data/icons-dark/text_center.svg
-      data/icons-dark/text_right.svg
-      data/icons-dark/subscript.svg
-      data/icons-dark/superscript.svg
-      data/icons-dark/fotomode.svg
-      data/icons-dark/hraster.svg
-      data/icons-dark/vraster.svg
-      data/icons-dark/repitch.svg
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/icons/icons-dark
-      )
-# endif (NOT EMBED_ICONS)
 
 if (APPLE)
      install (FILES
