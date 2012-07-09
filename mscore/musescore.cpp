@@ -76,6 +76,7 @@
 #include "omrpanel.h"
 #include "shortcut.h"
 #include "pluginCreator.h"
+#include "plugins.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -266,9 +267,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (debugger)
             debugger->writeSettings();
 
+#ifdef PLUGIN_INTERFACE
       if (pluginCreator)
             pluginCreator->writeSettings();
-
+#endif
 
       seq->stopWait();
       seq->exit();
@@ -989,13 +991,6 @@ MuseScore::MuseScore()
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
 
-
-//      a = getAction("script-debug");
-//      a->setCheckable(true);
-//      a->setChecked(scriptDebug);
-//      menuHelp->addAction(a);
-//      a->setEnabled(false);
-
 #ifdef MSCORE_UNSTABLE
       menuHelp->addSeparator();
       menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
@@ -1276,7 +1271,7 @@ void MuseScore::updateRecentScores(Score* score)
       recentScores.removeAll(path);
       recentScores.prepend(path);
       if(recentScores.size() > RECENT_LIST_SIZE) {
-            recentScores.removeLast(); 
+            recentScores.removeLast();
             }
       }
 
@@ -1312,7 +1307,6 @@ static void usage()
         "   -v        print version\n"
         "   -d        debug mode\n"
         "   -L        layout debug\n"
-//        "   -D        enable plugin script debugger\n"
         "   -s        no internal synthesizer\n"
         "   -m        no midi\n"
         "   -n        start with new score\n"
@@ -2233,9 +2227,6 @@ int main(int argc, char* av[])
                               usage();
                         styleFile = argv.takeAt(i + 1);
                         break;
-//                  case 'D':
-//                        scriptDebug = true;
-//                        break;
                   case 'F':
                         useFactorySettings = true;
                         break;
@@ -3629,6 +3620,7 @@ void MuseScore::showWebPanel(bool on)
 
 void MuseScore::showPluginCreator(QAction* a)
       {
+#ifdef PLUGIN_INTERFACE
       bool on = a->isChecked();
       if (on) {
             if (pluginCreator == 0) {
@@ -3641,6 +3633,7 @@ void MuseScore::showPluginCreator(QAction* a)
             if (pluginCreator)
                   pluginCreator->hide();
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -4241,8 +4234,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showAlbumManager();
       else if (cmd == "layer")
             showLayerManager();
-//      else if (cmd == "script-debug")
-//            scriptDebug = a->isChecked();
       else if (cmd == "backspace")
             undo();
       else if (cmd == "zoomin")
@@ -4640,4 +4631,12 @@ void MuseScore::switchLayoutMode(int val)
             cv->update();
             }
       }
+
+#ifndef PLUGIN_INTERFACE
+void MuseScore::pluginTriggered(int) {}
+void MuseScore::loadPlugins() {}
+bool MuseScore::loadPlugin(const QString&) { return false;}
+void MuseScore::unloadPlugins() {}
+QDeclarativeEngine* MuseScore::qml() { return 0; }
+#endif
 

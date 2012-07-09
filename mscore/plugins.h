@@ -13,6 +13,8 @@
 #ifndef __PLUGINS_H__
 #define __PLUGINS_H__
 
+#ifdef PLUGIN_INTERFACE
+
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
@@ -151,6 +153,6 @@ class QmlPlugin : public QDeclarativeItem {
       Q_INVOKABLE MsProcess* newQProcess() { return new MsProcess(this); }
       Q_INVOKABLE MsFile* newQFile()       { return new MsFile(); }
       };
-
+#endif
 #endif
 

@@ -27,8 +27,7 @@
 #cmakedefine MSCORE_UNSTABLE
 
 #cmakedefine HAS_MIDI
-#cmakedefine STATIC_SCRIPT_BINDINGS
-#cmakedefine BUILD_SCRIPTGEN
+#cmakedefine SCRIPT_INTERFACE
 #cmakedefine HAS_AUDIOFILE
 #cmakedefine USE_SSE
 

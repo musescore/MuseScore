@@ -285,7 +285,6 @@ class MuseScore : public QMainWindow {
       QList<QString> plugins;
       ScriptEngine* se;
       QString pluginPath;
-//      QScriptEngineDebugger* scriptDebugger;
 
       QDeclarativeEngine* _qml;
       void createMenuEntry(PluginDescription*);
