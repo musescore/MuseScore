@@ -425,18 +425,20 @@ void MsScoreView::setScore(Score* s)
       _currentPage = 0;
       score = s;
 
-      score->doLayout();
+      if (score) {
+            score->doLayout();
 
-      Page* page = score->pages()[_currentPage];
-      QRectF pr(page->abbox());
-      qreal m1 = width()  / pr.width();
-      qreal m2 = height() / pr.height();
-      mag = qMax(m1, m2);
+            Page* page = score->pages()[_currentPage];
+            QRectF pr(page->abbox());
+            qreal m1 = width()  / pr.width();
+            qreal m2 = height() / pr.height();
+            mag = qMax(m1, m2);
 
-      _boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
+            _boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
 
-      setWidth(pr.width() * mag);
-      setHeight(pr.height() * mag);
+            setWidth(pr.width() * mag);
+            setHeight(pr.height() * mag);
+            }
       update();
       }
 
@@ -446,12 +448,11 @@ void MsScoreView::setScore(Score* s)
 
 void MsScoreView::paint(QPainter* p, const QStyleOptionGraphicsItem*, QWidget*)
       {
-      if (!score)
-            return;
-
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setRenderHint(QPainter::TextAntialiasing, true);
       p->fillRect(QRect(0, 0, width(), height()), _color);
+      if (!score)
+            return;
       p->scale(mag, mag);
 
       Page* page = score->pages()[_currentPage];
