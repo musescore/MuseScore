@@ -115,7 +115,8 @@ set_target_properties(awlplugin
          "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
       )
 
-install( TARGETS awlplugin DESTINATION ${QT_PLUGINS_DIR}/designer/ )
+# dont install awlplugin on default
+# install( TARGETS awlplugin DESTINATION ${QT_PLUGINS_DIR}/designer/ )
 
 #add_executable(ltest ltest.cpp)
 #target_link_libraries (ltest awlplugin msynth al ${QT_LIBRARIES})

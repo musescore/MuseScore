@@ -1666,7 +1666,6 @@ void PreferenceDialog::definePluginShortcutClicked()
       action->setShortcuts(s->keys());
       pluginTable->item(row, 2)->setText(s->keysToString());
 
-      printf("shortcuts %p %d\n", pd, pd->shortcut.keys().size());
       preferences.dirty = true;
       }
 
@@ -1676,7 +1675,6 @@ void PreferenceDialog::definePluginShortcutClicked()
 
 bool Preferences::readPluginList()
       {
-printf("readPluginList\n");
       QFile f(dataPath + "/plugins.xml");
       if (!f.exists())
             return false;
@@ -1732,7 +1730,6 @@ printf("readPluginList\n");
 
 void Preferences::writePluginList()
       {
-printf("writePluginList\n");
       QDir dir;
       dir.mkpath(dataPath);
       QFile f(dataPath + "/plugins.xml");
@@ -1747,7 +1744,6 @@ printf("writePluginList\n");
             xml.stag("Plugin");
             xml.tag("path", d->path);
             xml.tag("load", d->load);
-printf("   writePluginList %p shortcut %d\n", d, d->shortcut.keys().size());
             if (!d->shortcut.keys().isEmpty()) {
                   d->shortcut.write(xml);
                   }
@@ -1765,7 +1761,6 @@ printf("   writePluginList %p shortcut %d\n", d, d->shortcut.keys().size());
 
 void Preferences::updatePluginList()
       {
-printf("updatePluginList\n");
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");

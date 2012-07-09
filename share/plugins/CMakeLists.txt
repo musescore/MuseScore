@@ -20,7 +20,13 @@
 
 install(FILES
       helloqml.qml
-      colornotes.js
-      notenames.js
+      colornotes.qml
+      notenames.qml
+      createscore.qml
+      panel.qml
+      run.qml
+      scorelist.qml
+      view.qml
+
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}plugins
       )
