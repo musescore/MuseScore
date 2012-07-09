@@ -17,7 +17,6 @@
 */
 
 #include <assert.h>
-#include "config.h"
 #include "score.h"
 #include "key.h"
 #include "sig.h"

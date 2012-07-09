@@ -14,8 +14,6 @@
 #ifndef __SYM_H__
 #define __SYM_H__
 
-#include "config.h"
-
 class QPainter;
 class TextStyle;
 
