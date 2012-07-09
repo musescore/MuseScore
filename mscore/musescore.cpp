@@ -267,7 +267,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (debugger)
             debugger->writeSettings();
 
-#ifdef PLUGIN_INTERFACE
+#ifdef SCRIPT_INTERFACE
       if (pluginCreator)
             pluginCreator->writeSettings();
 #endif
@@ -3620,7 +3620,7 @@ void MuseScore::showWebPanel(bool on)
 
 void MuseScore::showPluginCreator(QAction* a)
       {
-#ifdef PLUGIN_INTERFACE
+#ifdef SCRIPT_INTERFACE
       bool on = a->isChecked();
       if (on) {
             if (pluginCreator == 0) {
@@ -4632,7 +4632,7 @@ void MuseScore::switchLayoutMode(int val)
             }
       }
 
-#ifndef PLUGIN_INTERFACE
+#ifndef SCRIPT_INTERFACE
 void MuseScore::pluginTriggered(int) {}
 void MuseScore::loadPlugins() {}
 bool MuseScore::loadPlugin(const QString&) { return false;}
