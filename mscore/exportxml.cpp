@@ -420,13 +420,27 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
             int i = findSlur(s);
+            //define line type
+            QString rest;
+            QString lineType;
+            switch (s->lineType()) {
+                  case 1:
+                        lineType = "dotted";
+                        break;
+                  case 2:
+                        lineType = "dashed";
+                        break;
+                  default:
+                        lineType = "";
+                  }
+            if (!lineType.isEmpty())
+                  rest += QString(" line-type=\"%1\"").arg(lineType);
             if (i >= 0) {
                   // remove from list and print start
                   slur[i] = 0;
                   started[i] = false;
-                  notations.tag(xml);
-
-                  xml.tagE("slur type=\"start\"%s number=\"%d\"", s->slurDirection() == UP ? " placement=\"above\"" : "", i + 1);
+                  notations.tag(xml);                  
+                  xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == UP ? " placement=\"above\"" : "").arg(i + 1));
                   }
             else {
                   // find free slot to store it
@@ -435,7 +449,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
                         slur[i] = s;
                         started[i] = true;
                         notations.tag(xml);
-                        xml.tagE("slur type=\"start\" number=\"%d\"", i + 1);
+                        xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
                         }
                   else
                         qDebug("no free slur slot");
@@ -1125,7 +1139,7 @@ static QString tick2xml(const int ticks, int* dots)
 //   findVolta -- find volta starting in measure m
 //---------------------------------------------------------
 
-static Volta* findVolta(Measure* m, bool left)
+static Volta* findVolta(Measure* m, bool /*left*/)
       {
       foreach(Spanner* el, m->spannerFor()) {
             if (el->type() != VOLTA)
