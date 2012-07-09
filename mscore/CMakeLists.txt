@@ -29,6 +29,12 @@ include_directories(
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
+if (SCRIPT_INTERFACE)
+      set (SCRIPT_FILES plugins.cpp pluginCreator.cpp qmledit.cpp)
+      set (SCRIPT_MOCS plugins.h pluginCreator.h qmledit.h)
+      set (SCRIPT_UI   pluginCreator.ui)
+endif (SCRIPT_INTERFACE)
+
 QT4_WRAP_UI (ui_headers
       insertmeasuresdialog.ui barline.ui chord.ui chordrest.ui editinstrument.ui editstyle.ui
       edittempo.ui element.ui hairpin.ui instrdialog.ui measure.ui measuresdialog.ui
@@ -53,7 +59,8 @@ QT4_WRAP_UI (ui_headers
       inspector_articulation.ui inspector_spacer.ui inspector_hbox.ui keysig.ui
       inspector_segment.ui inspector_beam.ui inspector_note.ui
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
-      inspector_group_element.ui inspector_image.ui stem.ui pluginCreator.ui
+      inspector_group_element.ui inspector_image.ui stem.ui
+      ${SCRIPT_UI}
       )
 
 if (OMR)
@@ -81,9 +88,9 @@ QT4_WRAP_CPP (mocs
       drumtools.h texteditor.h texttools.h edittools.h pianotools.h editpitch.h
       editstringdata.h editraster.h mediadialog.h chordeditor.h chordview.h album.h layer.h
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
-      inspectorGroupElement.h inspectorImage.h waveview.h plugins.h pluginCreator.h
-      qmledit.h
+      inspectorGroupElement.h inspectorImage.h waveview.h
       ${OMR_MOCS}
+      ${SCRIPT_MOCS}
       )
 
 if (APPLE)
@@ -154,7 +161,7 @@ add_executable ( ${ExecutableName}
       simplebutton.cpp musedata.cpp exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      chordedit.cpp plugins.cpp excerptsdialog.cpp
+      chordedit.cpp excerptsdialog.cpp
       metaedit.cpp magbox.cpp voiceselector.cpp capella.cpp
       exportaudio.cpp
       textproperties.cpp slurproperties.cpp
@@ -176,9 +183,10 @@ add_executable ( ${ExecutableName}
       inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
-      waveview.cpp musicxmlsupport.cpp pluginCreator.cpp qmledit.cpp
+      waveview.cpp musicxmlsupport.cpp
       ${OMR_FILES}
       ${AUDIO}
+      ${SCRIPT_FILES}
       )
 
 if (APPLE)

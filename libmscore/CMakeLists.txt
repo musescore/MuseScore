@@ -11,7 +11,8 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-QT4_WRAP_CPP (mocs
+if (SCRIPT_INTERFACE)
+   QT4_WRAP_CPP (mocs
       accidental.h arpeggio.h articulation.h barline.h beam.h bend.h
       box.h bracket.h breath.h bsymbol.h chord.h chordline.h chordrest.h
       clef.h duration.h dynamic.h element.h figuredbass.h fingering.h fret.h
@@ -23,6 +24,7 @@ QT4_WRAP_CPP (mocs
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h mscore1.h cursor.h page.h part.h staff.h
       )
+endif (SCRIPT_INTERFACE)
 
 add_custom_command(
    OUTPUT ${PROJECT_BINARY_DIR}/all.h
@@ -65,9 +67,18 @@ add_library (
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
       exportmidi.cpp cursor.cpp read114.cpp sparm.cpp
       )
-set_target_properties (
+if (SCRIPT_INTERFACE)
+   set_target_properties (
       libmscore
       PROPERTIES
          COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
       )
+else (SCRIPT_INTERFACE)
+   set_target_properties (
+      libmscore
+      PROPERTIES
+         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
+      )
+endif (SCRIPT_INTERFACE)
+
 

@@ -34,6 +34,7 @@ set(HAS_AUDIOFILE TRUE)             # requires libsndfile
 set(USE_SSE           TRUE)
 set(SOUNDFONT3        TRUE)         # enable ogg vorbis compressed fonts, require ogg & vorbis
 set(AEOLUS            TRUE)         # pipe organ synthesizer
+set(SCRIPT_INTERFACE  FALSE)
 
 option (OSC "enable OSC remote control protocol" ON)        # osc remote control
 option (OMR "enable PDF import"  OFF)                        # OMR - optical music recognition
