@@ -13,8 +13,8 @@
 #ifndef __PLUGINS_H__
 #define __PLUGINS_H__
 
-#ifdef PLUGIN_INTERFACE
-
+#include "config.h"
+#ifdef SCRIPT_INTERFACE
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
