@@ -11,7 +11,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
 #include "chordlist.h"
 #include "xml.h"
 #include "pitchspelling.h"

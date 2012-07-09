@@ -11,7 +11,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
 #include "score.h"
 #include "page.h"
 #include "segment.h"

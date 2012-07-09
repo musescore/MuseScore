@@ -11,7 +11,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
