@@ -14,12 +14,16 @@
 #include "musescore.h"
 #include "plugins.h"
 #include "icons.h"
+#include "helpBrowser.h"
 
 extern bool useFactorySettings;
 
-static const char* states[] = {
-      "S_INIT", "S_EMPTY", "S_CLEAN", "S_DIRTY"
-      };
+//static const char* states[] = {
+//      "S_INIT", "S_EMPTY", "S_CLEAN", "S_DIRTY"
+//      };
+
+// for debugging
+const char* manualPath = "/home/ws/mscore/share/manual/plugins.html";
 
 //---------------------------------------------------------
 //   PluginCreator
@@ -28,10 +32,13 @@ static const char* states[] = {
 PluginCreator::PluginCreator(QWidget* parent)
    : QMainWindow(parent)
       {
-      state = S_INIT;
-      item = 0;
-      view = 0;
-      dock = 0;
+      state       = S_INIT;
+      item        = 0;
+      view        = 0;
+      dock        = 0;
+      manualDock  = 0;
+      helpBrowser = 0;
+
       setupUi(this);
 
       QToolBar* fileTools = addToolBar(tr("File Operations"));
@@ -45,7 +52,6 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionSave->setIcon(*icons[fileSave_ICON]);
       fileTools->addAction(actionSave);
 
-
       textEdit->setTabStopWidth(6);
       log->setReadOnly(true);
       log->setMaximumBlockCount(1000);
@@ -58,6 +64,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       connect(actionOpen, SIGNAL(triggered()),  SLOT(loadPlugin()));
       connect(actionSave, SIGNAL(triggered()),  SLOT(savePlugin()));
       connect(actionNew,  SIGNAL(triggered()),  SLOT(newPlugin()));
+      connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
       connect(textEdit,   SIGNAL(textChanged()), SLOT(textChanged()));
       }
 
@@ -67,7 +74,6 @@ PluginCreator::PluginCreator(QWidget* parent)
 
 void PluginCreator::setState(PCState newState)
       {
-printf("state %s -> %s\n", states[state], states[newState]);
       if (state == newState)
             return;
       switch(state) {
@@ -147,8 +153,8 @@ void PluginCreator::writeSettings()
       {
       QSettings settings;
       settings.beginGroup("PluginCreator");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
+      settings.setValue("geometry", saveGeometry());
+      settings.setValue("windowState", saveState());
       settings.setValue("splitter", splitter->saveState());
       settings.endGroup();
       }
@@ -163,8 +169,8 @@ void PluginCreator::readSettings()
             QSettings settings;
             settings.beginGroup("PluginCreator");
             splitter->restoreState(settings.value("splitter").toByteArray());
-            resize(settings.value("size", QSize(1000, 500)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            restoreGeometry(settings.value("geometry").toByteArray());
+            restoreState(settings.value("windowState").toByteArray());
             settings.endGroup();
             }
       }
@@ -175,6 +181,19 @@ void PluginCreator::readSettings()
 
 void PluginCreator::closeEvent(QCloseEvent* ev)
       {
+      if (state == S_DIRTY) {
+            QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
+               tr("Plugin \"%1\" has changes\n"
+               "save before closing?").arg(path),
+               QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+               QMessageBox::Save);
+            if (n == QMessageBox::Save)
+                  savePlugin();
+            else if (n == QMessageBox::Cancel) {
+                  ev->ignore();
+                  return;
+                  }
+            }
       emit closed();
       QWidget::closeEvent(ev);
       }
@@ -294,7 +313,7 @@ void PluginCreator::stopClicked()
 
 void PluginCreator::loadPlugin()
       {
-      if (!path.isEmpty() && textEdit->document()->isModified()) {
+      if (state == S_DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Plugin \"%1\" has changes\n"
                "save before closing?").arg(path),
@@ -353,7 +372,7 @@ void PluginCreator::savePlugin()
 
 void PluginCreator::newPlugin()
       {
-      if (!path.isEmpty() && textEdit->document()->isModified()) {
+      if (state == S_DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Plugin \"%1\" has changes\n"
                "save before closing?").arg(path),
@@ -410,5 +429,22 @@ void PluginCreator::msg(const QString& s)
       {
       log->moveCursor(QTextCursor::End);
       log->textCursor().insertText(s);
+      }
+
+//---------------------------------------------------------
+//   showManual
+//---------------------------------------------------------
+
+void PluginCreator::showManual()
+      {
+      if (helpBrowser == 0) {
+            helpBrowser = new HelpBrowser;
+            manualDock = new QDockWidget("Manual", 0);
+            manualDock->setWidget(helpBrowser);
+            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+            addDockWidget(area, manualDock);
+            helpBrowser->setContent(manualPath);
+            }
+      manualDock->show();
       }
 

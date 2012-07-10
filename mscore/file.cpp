@@ -249,21 +249,25 @@ void MuseScore::loadFiles()
             }
       }
 
-void MuseScore::openScore(const QString& fn)
+//---------------------------------------------------------
+//   openScore
+//---------------------------------------------------------
+
+Score* MuseScore::openScore(const QString& fn)
       {
       if (fn.isEmpty())
-            return;
-            Score* score = new Score(MScore::defaultStyle());
+            return 0;
+      Score* score = new Score(MScore::defaultStyle());
       if (readScore(score, fn)) {
             setCurrentScoreView(appendScore(score));
             lastOpenPath = score->fileInfo()->path();
             updateRecentScores(score);
             writeSessionFile(false);
+            return score;
             }
-      else {
-            delete score;
-            readScoreError(fn);
-            }
+      delete score;
+      readScoreError(fn);
+      return 0;
       }
 
 //---------------------------------------------------------
