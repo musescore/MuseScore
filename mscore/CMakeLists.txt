@@ -88,7 +88,7 @@ QT4_WRAP_CPP (mocs
       drumtools.h texteditor.h texttools.h edittools.h pianotools.h editpitch.h
       editstringdata.h editraster.h mediadialog.h chordeditor.h chordview.h album.h layer.h
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
-      inspectorGroupElement.h inspectorImage.h waveview.h
+      inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -183,7 +183,7 @@ add_executable ( ${ExecutableName}
       inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
-      waveview.cpp musicxmlsupport.cpp
+      waveview.cpp musicxmlsupport.cpp helpBrowser.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

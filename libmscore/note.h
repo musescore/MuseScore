@@ -46,7 +46,6 @@ extern const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES];
 class NoteHead : public Symbol {
       Q_OBJECT
 
-
    public:
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&);

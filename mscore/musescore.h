@@ -536,7 +536,7 @@ class MuseScore : public QMainWindow {
       Q_INVOKABLE void newFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
-      void openScore(const QString& fn);
+      Score* openScore(const QString& fn);
       bool hasToCheckForUpdate();
       static bool unstable();
       bool eventFilter(QObject *, QEvent *);

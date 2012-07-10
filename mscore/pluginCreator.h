@@ -16,6 +16,7 @@
 #include "ui_pluginCreator.h"
 
 class QmlPlugin;
+class HelpBrowser;
 
 //---------------------------------------------------------
 //   PluginCreator
@@ -30,11 +31,13 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
 
       QString path;
       QmlPlugin* item;
+      HelpBrowser* helpBrowser;
+      QDockWidget* manualDock;
       QPointer<QDeclarativeView> view;
       QPointer<QDockWidget> dock;
 
       void setState(PCState newState);
-      void closeEvent(QCloseEvent*);
+      virtual void closeEvent(QCloseEvent*);
       void readSettings();
       void setTitle(const QString&);
 
@@ -46,6 +49,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void newPlugin();
       void textChanged();
       void closePlugin();
+      void showManual();
       void qmlWarnings(const QList<QDeclarativeError>&);
 
    signals:

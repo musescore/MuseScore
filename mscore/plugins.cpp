@@ -74,6 +74,24 @@ QDeclarativeListProperty<Score> QmlPlugin::scores()
       }
 
 //---------------------------------------------------------
+//   writeScore
+//---------------------------------------------------------
+
+bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
+      {
+      return mscore->saveAs(s, true, name, ext);
+      }
+
+//---------------------------------------------------------
+//   readScore
+//---------------------------------------------------------
+
+Score* QmlPlugin::readScore(const QString& name)
+      {
+      return mscore->openScore(name);
+      }
+
+//---------------------------------------------------------
 //   registerPlugin
 //---------------------------------------------------------
 

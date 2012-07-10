@@ -310,6 +310,12 @@ struct Binding {
 QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
+      QTextCursor c = textCursor();
+      QTextCharFormat cf = c.charFormat();
+      cf.setFont(QFont("FreeMono", 12));
+      c.setCharFormat(cf);
+      setTextCursor(c);
+
       static const Binding bindings[] = {
             { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
             { "endOfLine",   Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_D, SLOT(endOfLine())   },
@@ -331,16 +337,10 @@ QmlEdit::QmlEdit(QWidget* parent)
       hl = new JSHighlighter(document());
       lineNumberArea = new LineNumberArea(this);
 
-      QList<QAction*> al = viewport()->actions();
-      printf("%d actions\n", al.size());
       for (unsigned int i = 0; i < sizeof(bindings)/sizeof(*bindings); ++i) {
             const Binding& b = bindings[i];
             QAction* a = new QAction(b.name, this);
             a->setShortcut(QKeySequence(b.key1, b.key2));
-            foreach(QAction* wa, al) {
-                  if (wa->shortcut() == a->shortcut())
-                        removeAction(wa);
-                  }
             addAction(a);
             connect(a, SIGNAL(triggered()), b.slot);
             }
@@ -361,7 +361,6 @@ void QmlEdit::focusInEvent(QFocusEvent* event)
       {
       mscoreState = mscore->state();
       mscore->changeState(STATE_DISABLED);
-      printf("focus in\n");
       QPlainTextEdit::focusInEvent(event);
       }
 
@@ -371,7 +370,6 @@ void QmlEdit::focusInEvent(QFocusEvent* event)
 
 void QmlEdit::focusOutEvent(QFocusEvent* event)
       {
-      printf("focus out\n");
       mscore->changeState(mscoreState);
       QPlainTextEdit::focusOutEvent(event);
       }
@@ -382,8 +380,6 @@ void QmlEdit::focusOutEvent(QFocusEvent* event)
 
 void QmlEdit::move(QTextCursor::MoveOperation op)
       {
-      printf("move %d\n", int(op));
-
       QTextCursor tc(textCursor());
       tc.movePosition(op);
       setTextCursor(tc);
@@ -457,8 +453,6 @@ void QmlEdit::resizeEvent(QResizeEvent *e)
 
 void QmlEdit::highlightCurrentLine()
       {
-      return;
-
       QList<QTextEdit::ExtraSelection> extraSelections;
 
       if (!isReadOnly()) {

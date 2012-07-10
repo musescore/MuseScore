@@ -152,6 +152,8 @@ class QmlPlugin : public QDeclarativeItem {
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE MsProcess* newQProcess() { return new MsProcess(this); }
       Q_INVOKABLE MsFile* newQFile()       { return new MsFile(); }
+      Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);
+      Q_INVOKABLE Score* readScore(const QString& name);
       };
 #endif
 #endif

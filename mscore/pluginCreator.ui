@@ -94,7 +94,14 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionManual"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
@@ -110,6 +117,11 @@
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+  </action>
+  <action name="actionManual">
+   <property name="text">
+    <string>Manual</string>
    </property>
   </action>
  </widget>
