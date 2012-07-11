@@ -39,7 +39,7 @@ struct TextSegment {
       };
 
 //---------------------------------------------------------
-//   class Harmony
+//   @@ Harmony
 //
 //    root note and bass note are notatated as
 //    "tonal pitch class":

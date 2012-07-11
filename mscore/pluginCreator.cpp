@@ -22,8 +22,6 @@ extern bool useFactorySettings;
 //      "S_INIT", "S_EMPTY", "S_CLEAN", "S_DIRTY"
 //      };
 
-// for debugging
-const char* manualPath = "/home/ws/mscore/share/manual/plugins.html";
 
 //---------------------------------------------------------
 //   PluginCreator
@@ -52,6 +50,9 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionSave->setIcon(*icons[fileSave_ICON]);
       fileTools->addAction(actionSave);
 
+      actionManual->setIcon(QIcon(":/data/help.png"));
+      fileTools->addAction(actionManual);
+
       textEdit->setTabStopWidth(6);
       log->setReadOnly(true);
       log->setMaximumBlockCount(1000);
@@ -66,6 +67,22 @@ PluginCreator::PluginCreator(QWidget* parent)
       connect(actionNew,  SIGNAL(triggered()),  SLOT(newPlugin()));
       connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
       connect(textEdit,   SIGNAL(textChanged()), SLOT(textChanged()));
+      }
+
+//---------------------------------------------------------
+//   manualPath
+//---------------------------------------------------------
+
+QString PluginCreator::manualPath()
+      {
+      QString path = mscoreGlobalShare;
+      path += "/manual/plugins.html";
+
+      QString p1 = QDir::homePath();                  // hack for debugging
+      p1 += "/mscore/share/manual/plugins.html";
+      if (QFile(p1).exists())
+            return p1;
+      return path;
       }
 
 //---------------------------------------------------------
@@ -443,7 +460,7 @@ void PluginCreator::showManual()
             manualDock->setWidget(helpBrowser);
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             addDockWidget(area, manualDock);
-            helpBrowser->setContent(manualPath);
+            helpBrowser->setContent(manualPath());
             }
       manualDock->show();
       }

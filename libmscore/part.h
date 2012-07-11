@@ -24,7 +24,7 @@ class Score;
 struct InstrumentTemplate;
 
 //---------------------------------------------------------
-//   Part
+//   @@ Part
 //---------------------------------------------------------
 
 class Part : public QObject {

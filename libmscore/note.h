@@ -55,7 +55,12 @@ class NoteHead : public Symbol {
       };
 
 //---------------------------------------------------------
-//   Note
+//   @@ Note
+//   @P pitch  int  midi pitch
+//   @P tpc    int  tonal pitch class
+//   @P line   int  notehead position
+//   @P fret   int  fret number in tablature
+//   @P string int  string number in tablature
 //---------------------------------------------------------
 
 /**
