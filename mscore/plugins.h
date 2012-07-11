@@ -21,6 +21,7 @@
 
 //---------------------------------------------------------
 //   MsFile
+//    @@ QFile
 //---------------------------------------------------------
 
 class MsFile : public QFile {
@@ -32,6 +33,7 @@ class MsFile : public QFile {
 
 //---------------------------------------------------------
 //   MsProcess
+//    @@ QProcess
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
@@ -46,7 +48,9 @@ class MsProcess : public QProcess {
       };
 
 //---------------------------------------------------------
-//   ScoreView
+//   @@ ScoreView
+//   @P color QColor    background color
+//   @P scale qreal     scaling factor
 //---------------------------------------------------------
 
 class MsScoreView : public QDeclarativeItem, public MuseScoreView {
@@ -86,10 +90,10 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
       virtual void drawBackground(QPainter*, const QRectF&) const {}
 
    public slots:
-      void setScore(Score*);
-      void setCurrentPage(int n);
-      void nextPage();
-      void prevPage();
+      Q_INVOKABLE void setScore(Score*);
+      Q_INVOKABLE void setCurrentPage(int n);
+      Q_INVOKABLE void nextPage();
+      Q_INVOKABLE void prevPage();
 
    public:
       MsScoreView(QDeclarativeItem* parent = 0);
@@ -102,6 +106,18 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
 
 //---------------------------------------------------------
 //   QmlPlugin
+//   @@ MuseScore
+//   @P menuPath              QString
+//   @P pluginType            QString
+//   @P dockArea              QString
+//   @P division              int
+//   @P mscoreVersion         int
+//   @P mscoreMajorVersion    int
+//   @P mscoreMinorVersion    int
+//   @P mscoreUpdateVersion   int
+//   @P mscoreDPI             qreal
+//   @P curScore              Score*
+//   @P scores                array[Score]
 //---------------------------------------------------------
 
 class QmlPlugin : public QDeclarativeItem {

@@ -310,6 +310,7 @@ struct Binding {
 QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
+      setBackgroundVisible(true);
       QTextCursor c = textCursor();
       QTextCharFormat cf = c.charFormat();
       cf.setFont(QFont("FreeMono", 12));

@@ -19,7 +19,7 @@
 class TDuration;
 
 //---------------------------------------------------------
-//    Rest
+//    @@ Rest
 ///   This class implements a rest. Todo: detailed
 ///   description of Rest class.
 ///   More text.

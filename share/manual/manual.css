@@ -1,5 +1,40 @@
 body {
       background:#fff;
-      margin: 0;
+      margin-left: 5pt;
       padding: 0;
+      }
+
+div.tab1 {
+      margin-left: 50pt;
+      margin-top: 5pt;
+      margin-bottom: 5pt;
+      }
+
+div.tab1 table td code {
+      color: #0000ff;
+      font-weight: bold;
+      }
+
+div.tab2 {
+      margin-left: 10pt;
+      }
+
+div.tab2 table td {
+      padding-left: 4pt;
+      padding-right: 4pt;
+      }
+
+div.tab2 table td code {
+      color: #0000ff;
+      font-weight: bold;
+      }
+
+div.method {
+      margin-top: 20pt;
+      background: #d0d0f0;
+      margin-left: 10pt;
+      }
+
+div.mdescr {
+      margin-left: 20pt;
       }

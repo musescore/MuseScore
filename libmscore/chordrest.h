@@ -29,7 +29,7 @@ class TabDurationSymbol;
 class Spanner;
 
 //---------------------------------------------------------
-//   ChordRest
+//   @@ ChordRest
 //    chords and rests can be part of a beam
 //---------------------------------------------------------
 

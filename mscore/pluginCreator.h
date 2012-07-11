@@ -40,6 +40,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       virtual void closeEvent(QCloseEvent*);
       void readSettings();
       void setTitle(const QString&);
+      QString manualPath();
 
    private slots:
       void runClicked();

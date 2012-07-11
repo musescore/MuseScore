@@ -1,0 +1,6 @@
+This program creates the manual pages for the plugin
+framework from the sources.
+
+It reads in several header files and writes the output
+to mscore/share/manual.
+

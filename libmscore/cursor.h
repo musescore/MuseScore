@@ -32,7 +32,14 @@ class StaffText;
 class Measure;
 
 //---------------------------------------------------------
-//   Cursor
+//   @@ Cursor
+//   @P track    int
+//   @P staffIdx int
+//   @P voice    int
+//   @P element  Element*
+//   @P segment  Segment*
+//   @P tick     int
+//   @P score    Score*
 //---------------------------------------------------------
 
 class Cursor : public QObject {
@@ -76,7 +83,7 @@ class Cursor : public QObject {
       int tick();
       double time();
 
-      Q_INVOKABLE void rewind(int);
+      Q_INVOKABLE void rewind(int);             // rewind to start of score
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Element*);

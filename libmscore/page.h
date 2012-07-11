@@ -40,7 +40,7 @@ extern const PaperSize* getPaperSize(const QString&);
 extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 
 //---------------------------------------------------------
-//   PageFormat
+//   @@ PageFormat
 //---------------------------------------------------------
 
 class PageFormat : public QObject {
