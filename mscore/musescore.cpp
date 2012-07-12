@@ -77,6 +77,7 @@
 #include "shortcut.h"
 #include "pluginCreator.h"
 #include "plugins.h"
+#include "helpBrowser.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -1053,7 +1054,7 @@ void MuseScore::startAutoSave()
 //   getLocaleISOCode
 //---------------------------------------------------------
 
-QString MuseScore::getLocaleISOCode()
+QString MuseScore::getLocaleISOCode() const
       {
       QString lang;
       if (localeName.toLower() == "system")
@@ -1068,37 +1069,25 @@ QString MuseScore::getLocaleISOCode()
 //    show local help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser()
+void MuseScore::helpBrowser() const
       {
       QString lang = getLocaleISOCode();
+
+      if (lang == "en_US")    // HACK
+            lang = "en";
 
       if (MScore::debugMode)
             qDebug("open handbook for language <%s>", qPrintable(lang));
 
-      QFileInfo mscoreHelp(mscoreGlobalShare + QString("man/MuseScore-") + lang + QString(".pdf"));
-      if (!mscoreHelp.isReadable()) {
-            if (MScore::debugMode) {
-                  qDebug("cannot open doc <%s>", qPrintable(mscoreHelp.filePath()));
-                  }
-            lang = lang.left(2);
-            mscoreHelp.setFile(mscoreGlobalShare + QString("man/MuseScore-") + lang + QString(".pdf"));
-            if(!mscoreHelp.isReadable()){
-                mscoreHelp.setFile(mscoreGlobalShare + QString("man/MuseScore-en.pdf"));
-                if (!mscoreHelp.isReadable()) {
-                      QString info(tr("MuseScore handbook not found at: \n"));
-                      info += mscoreHelp.filePath();
-                      info += tr("\n\nFrom the \"Help\" menu try choosing \"Online Handbook\" instead.");
-                      QMessageBox::critical(this, tr("MuseScore: Open Help"), info);
-                      return;
-                      }
-                }
-            }
-      QString p = mscoreHelp.filePath();
-#ifndef __MINGW32__
-      p = p.replace(" ", "%20");    // HACK: why does'nt fromLocalFile() do this?
-#endif
-      QUrl url(QUrl::fromLocalFile(p));
-      QDesktopServices::openUrl(url);
+      QString mscoreHelp(mscoreGlobalShare + QString("manual/") + lang + QString("/manual.html"));
+      helpBrowser(QUrl::fromLocalFile(mscoreHelp));
+      }
+
+void MuseScore::helpBrowser(const QUrl& url) const
+      {
+      HelpBrowser* hb = new HelpBrowser(0);
+      hb->setContent(url);
+      hb->show();
       }
 
 //---------------------------------------------------------
@@ -1106,7 +1095,7 @@ void MuseScore::helpBrowser()
 //    show online help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser1()
+void MuseScore::helpBrowser1() const
       {
       QString lang = getLocaleISOCode();
 
@@ -1116,7 +1105,7 @@ void MuseScore::helpBrowser1()
       //try to find an exact match
       bool found = false;
       foreach (LanguageItem item, _languages) {
-            if (item.key == lang){
+            if (item.key == lang) {
                   QString handbook = item.handbook;
                   if (!handbook.isNull()) {
                       help = item.handbook;
@@ -1141,7 +1130,7 @@ void MuseScore::helpBrowser1()
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
       QUrl url(help);
-      QDesktopServices::openUrl(url);
+      helpBrowser(url);
       }
 
 //---------------------------------------------------------
