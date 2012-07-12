@@ -286,6 +286,8 @@ if (MINGW)
       ${CROSSQT}/bin/phonon4.dll
       ${CROSSQT}/bin/QtXmlPatterns4.dll
       ${CROSSQT}/bin/QtDeclarative4.dll
+      ${CROSSQT}/bin/QtScript4.dll
+      ${CROSSQT}/bin/QtSql4.dll
       )
    install_files ( /bin/iconengines .dll
       ${CROSSQT}/plugins/iconengines/qsvgicon4.dll

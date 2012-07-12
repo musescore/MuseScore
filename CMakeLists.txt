@@ -65,12 +65,6 @@ if (APPLE)
       # of MacOSX.
       # set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
 
-      # Building against the Binary-Package of Qt might require to uncomment
-      # and possibly adjust the following path, because the QtUiTools are not
-      # deployed as a framework.
-      # set(QT_QTUITOOLS_INCLUDE_DIR /usr/include/QtUiTools )
-
-
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
 
@@ -129,7 +123,6 @@ set(QT_MIN_VERSION    "4.8.0")
 set(QT_USE_QTXML         TRUE)
 set(QT_USE_QTSVG         TRUE)
 set(QT_USE_QTNETWORK     TRUE)
-set(QT_USE_QTUITOOLS     TRUE)
 set(QT_USE_QTDESIGNER    TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTXMLPATTERNS TRUE)
