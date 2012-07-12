@@ -178,7 +178,7 @@ class Measure : public MeasureBase {
       Q_INVOKABLE Segment* first() const   { return _segments.first();       }
       Segment* first(SegmentTypes t) const { return _segments.first(t);      }
 
-      Q_INVOKABLE Segment* last() const    { return _segments.last();        }
+      Q_INVOKABLE Segment* last() const    { return _segments.last(); }
       Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }

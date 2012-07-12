@@ -84,11 +84,10 @@ void writeMain()
 
 static void parseClass(const QString& name, const QString& in)
       {
-printf("  name %s\n", qPrintable(name));
       classes.append(name);
       QString out;
       addHeader(out);
-      out += QString("<h3>%1</h3>\n").arg(name);
+      out += QString("<h3 class=\"object\">%1</h3>\n").arg(name);
 
       QStringList sl = in.split("\n");
       QList<Prop> props;
@@ -97,9 +96,12 @@ printf("  name %s\n", qPrintable(name));
       QRegExp re("@P ([^\\s]+)\\s+([^\\s]+)(.*)");
 
       // matches Q_INVOKABLE void mops(int a);   // comment
-      QRegExp re1("Q_INVOKABLE +([\\w]+)\\s+([^;]+); */*(.*)");
-      QRegExp re2("Q_INVOKABLE +([\\w]+)\\s+([^\\{]+)\\{");
+      QRegExp re1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
+      QRegExp re2("Q_INVOKABLE +([^ ]+) +([^\\{]+)\\{");
+      QRegExp re3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
 
+      if (!re1.isValid() || !re2.isValid() || !re3.isValid())
+            abort();
       foreach(const QString& s, sl) {
             if (re.indexIn(s, 0) != -1) {
                   Prop p;
@@ -121,10 +123,16 @@ printf("  name %s\n", qPrintable(name));
                   p.description = re1.cap(3);
                   procs.append(p);
                   }
+            else if (re3.indexIn(s, 0) != -1) {
+                  Proc p;
+                  p.type        = re3.cap(1);
+                  p.name        = re3.cap(2);
+                  procs.append(p);
+                  }
             }
 
       if (!procs.isEmpty()) {
-            out += "<h4>Methods</h4>\n";
+            out += "<h4 class=\"groupA\">Methods</h4>\n";
 
             foreach(const Proc& p, procs) {
                   out += "<div class=\"method\">\n";
@@ -146,9 +154,9 @@ printf("  name %s\n", qPrintable(name));
                   }
             }
       if (!props.isEmpty()) {
-            out += "<h4>Properties</h4>\n";
+            out += "<h4 class=\"groupB\">Properties</h4>\n";
             out += "<div class=\"tab2\">\n";
-            out += "<table border=\"1\" rules=\"all\">\n";
+            out += "<table border=\"1\" rules=\"all\" cellpadding=\"0\" cellspacing=\"0\">\n";
             foreach(const Prop& m, props) {
                   out += "<tr>";
                   out += QString("<td><code>%1</code></td>"

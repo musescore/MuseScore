@@ -41,10 +41,11 @@ class MsProcess : public QProcess {
 
    public:
       MsProcess(QObject* parent = 0) : QProcess(parent) {}
+
    public slots:
-      void start(const QString& program)      { QProcess::start(program); }
-      bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
-      QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
+      Q_INVOKABLE void start(const QString& program)      { QProcess::start(program); }
+      Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
+      Q_INVOKABLE QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
       };
 
 //---------------------------------------------------------

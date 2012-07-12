@@ -30,6 +30,7 @@ class Spanner;
 
 //---------------------------------------------------------
 //   @@ ChordRest
+//   @P durationType int
 //    chords and rests can be part of a beam
 //---------------------------------------------------------
 

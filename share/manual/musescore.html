@@ -5,19 +5,39 @@
    <link rel="stylesheet" type="text/css" href="manual.css"/>
    </head>
 <body>
-<h3>MuseScore</h3>
-<h4>Methods</h4>
+<h3 class="object">MuseScore</h3>
+<h4 class="groupA">Methods</h4>
+<div class="method">
+<code>Score* <b>newScore</b>(const QString& name, const QString& part, int measures)</code>
+</div>
+<div class="mdescr"></div><par/>
+<div class="method">
+<code>Element* <b>newElement</b>(int)</code>
+</div>
+<div class="mdescr"></div><par/>
 <div class="method">
 <code>void <b>cmd</b>(const QString&)</code>
+</div>
+<div class="mdescr"></div><par/>
+<div class="method">
+<code>MsProcess* <b>newQProcess</b>()</code>
+</div>
+<div class="mdescr"></div><par/>
+<div class="method">
+<code>MsFile* <b>newQFile</b>()</code>
 </div>
 <div class="mdescr"></div><par/>
 <div class="method">
 <code>bool <b>writeScore</b>(Score*, const QString& name, const QString& ext)</code>
 </div>
 <div class="mdescr"></div><par/>
-<h4>Properties</h4>
+<div class="method">
+<code>Score* <b>readScore</b>(const QString& name)</code>
+</div>
+<div class="mdescr"></div><par/>
+<h4 class="groupB">Properties</h4>
 <div class="tab2">
-<table border="1" rules="all">
+<table border="1" rules="all" cellpadding="0" cellspacing="0">
 <tr><td><code>menuPath</code></td><td><code>QString</code></td><td></td></tr>
 <tr><td><code>pluginType</code></td><td><code>QString</code></td><td></td></tr>
 <tr><td><code>dockArea</code></td><td><code>QString</code></td><td></td></tr>

@@ -204,6 +204,9 @@ struct Layer {
 
 //---------------------------------------------------------
 //   @@ Score
+//   @P name QString    name of the score
+//   @P nstaves int     number of staves
+//   @P ntracks int     number of tracks (staves * 4)
 //---------------------------------------------------------
 
 class Score : public QObject {
