@@ -221,13 +221,6 @@
 #include <QtNetwork/QHttpPart>
 #include <QtNetwork/QHttpMultiPart>
 
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptValueIterator>
-#include <QtScript/QScriptable>
-#include <QtScript/QScriptClass>
-#include <QtScript/QScriptClassPropertyIterator>
-#include <QtScriptTools/QScriptEngineDebugger>
-
 #if QT_VERSION >= 0x050000
 #include <QtNetwork/QNetworkCookie>
 #include <QtConcurrent/QFuture>
