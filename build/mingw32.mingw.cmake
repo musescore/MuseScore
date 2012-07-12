@@ -48,9 +48,7 @@ set (QT_INCLUDES ${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR}
      ${QT_QTXMLPATTERNS_INCLUDE_DIR}
      )
 set (QT_mingw_LIBRARIES
-    QtScript4
     QtSvg4
-    QtUiTools
     QtGui4
     QtCore4
     QtXml4
@@ -58,6 +56,7 @@ set (QT_mingw_LIBRARIES
     QtScriptTools4
     QtWebKit4
     QtXmlPatterns4
+    QtDeclarative4
     )
 
 #    Qt3Support4

@@ -134,7 +134,9 @@ void StaffType::write(Xml& xml, int idx) const
 void StaffType::writeProperties(Xml& xml) const
       {
       xml.tag("name", name());
-      if (lines() != 5)
+      // unconditionally save number of lines
+      // as different staff types have different default
+//      if (lines() != 5)
             xml.tag("lines", lines());
       if (lineDistance().val() != 1.0)
             xml.tag("lineDistance", lineDistance().val());
