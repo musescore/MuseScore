@@ -376,7 +376,8 @@ class MuseScore : public QMainWindow {
       void showNavigator(bool);
       void showMixer(bool);
       void showSynthControl();
-      void helpBrowser();
+      void helpBrowser() const;
+      void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
       void removeSessionFile();
       void editChordStyle();
@@ -399,7 +400,7 @@ class MuseScore : public QMainWindow {
    private slots:
       void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
-      void helpBrowser1();
+      void helpBrowser1() const;
       void about();
       void aboutQt();
       void aboutMusicXML();
@@ -618,7 +619,7 @@ class MuseScore : public QMainWindow {
       void addTempo();
       void addMetronome();
 
-      Q_INVOKABLE QString getLocaleISOCode();
+      Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       void updateLayer();

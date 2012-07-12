@@ -21,7 +21,7 @@ class HelpBrowser : public QWidget {
       Q_OBJECT
       QWebView* view;
       QWidget* toolbar;
-      QString homePath;
+      QUrl homePath;
 
    private slots:
       void homeClicked();
@@ -29,6 +29,7 @@ class HelpBrowser : public QWidget {
    public:
       HelpBrowser(QWidget* parent = 0);
       void setContent(const QString& path);
+      void setContent(const QUrl& url);
       };
 
 #endif

@@ -8,3 +8,6 @@ build.xcode
 applebuild
 *.user
 *.qm
+share/manual/en
+share/manual/de
+

@@ -19,29 +19,34 @@
 #=============================================================================
 
 install(FILES
-      chord.html
-      chordrest.html
-      cursor.html
-      data.html
-      element.html
-      harmony.html
-      measurebase.html
-      measure.html
-      musescore.html
-      note.html
-      pageformat.html
-      page.html
-      part.html
-      plugins.html
-      qfile.html
-      qprocess.html
-      rest.html
-      score.html
-      scoreview.html
-      segment.html
-      staff.html
-      text.html
-      timesig.html
+      plugins/manual.css
+      plugins/chord.html
+      plugins/chordrest.html
+      plugins/cursor.html
+      plugins/data.html
+      plugins/element.html
+      plugins/harmony.html
+      plugins/measurebase.html
+      plugins/measure.html
+      plugins/musescore.html
+      plugins/note.html
+      plugins/pageformat.html
+      plugins/page.html
+      plugins/part.html
+      plugins/plugins.html
+      plugins/qfile.html
+      plugins/qprocess.html
+      plugins/rest.html
+      plugins/score.html
+      plugins/scoreview.html
+      plugins/segment.html
+      plugins/staff.html
+      plugins/text.html
+      plugins/timesig.html
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      )
+install (DIRECTORY
+      en de
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
       )
 
