@@ -40,6 +40,9 @@ struct TextSegment {
 
 //---------------------------------------------------------
 //   @@ Harmony
+//   @P id int          harmony identifier
+//   @P rootTpc int
+//   @P baseTpc int
 //
 //    root note and bass note are notatated as
 //    "tonal pitch class":
@@ -59,6 +62,9 @@ class HDegree;
 
 class Harmony : public Text {
       Q_OBJECT
+      Q_PROPERTY(int id  READ id  WRITE setId)
+      Q_PROPERTY(int rootTpc  READ rootTpc  WRITE setRootTpc)
+      Q_PROPERTY(int baseTpc  READ baseTpc  WRITE setBaseTpc)
 
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords

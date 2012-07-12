@@ -4,6 +4,23 @@ body {
       padding: 0;
       }
 
+h3.object {
+      padding: 0;
+      color: #0000ff;
+      margin-top: 0pt;
+      margin-bottom: 0pt;
+      }
+h4.groupA {
+      padding: 0;
+      margin-top: 0pt;
+      margin-bottom: 0pt;
+      }
+h4.groupB {
+      padding: 0;
+      margin-top: 10pt;
+      margin-bottom: 5pt;
+      }
+
 div.tab1 {
       margin-left: 50pt;
       margin-top: 5pt;
@@ -30,7 +47,8 @@ div.tab2 table td code {
       }
 
 div.method {
-      margin-top: 20pt;
+      margin-top:    0pt;
+      margin-bottom: 0pt;
       background: #d0d0f0;
       margin-left: 10pt;
       }

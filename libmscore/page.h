@@ -41,10 +41,28 @@ extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 
 //---------------------------------------------------------
 //   @@ PageFormat
+//   @P size            QSizeF     paper size in inch
+//   @P printableWidth   qreal
+//   @P evenLeftMargin   qreal
+//   @P oddLeftMargin    qreal
+//   @P eventTopMargin   qreal
+//   @P oddTopMargin     qreal
+//   @P evenBottomMargin qreal
+//   @P oddBottomMargin  qreal
+//   @P twosided         bool
 //---------------------------------------------------------
 
 class PageFormat : public QObject {
       Q_OBJECT
+      Q_PROPERTY(QSizeF size             READ size             WRITE setSize)
+      Q_PROPERTY(qreal  printableWidth   READ printableWidth   WRITE setPrintableWidth  )
+      Q_PROPERTY(qreal  evenLeftMargin   READ evenLeftMargin   WRITE setEvenLeftMargin  )
+      Q_PROPERTY(qreal  oddLeftMargin    READ oddLeftMargin    WRITE setOddLeftMargin   )
+      Q_PROPERTY(qreal  eventTopMargin   READ eventTopMargin   WRITE setEventTopMargin  )
+      Q_PROPERTY(qreal  oddTopMargin     READ oddTopMargin     WRITE setOddTopMargin    )
+      Q_PROPERTY(qreal  evenBottomMargin READ evenBottomMargin WRITE setEvenBottomMargin)
+      Q_PROPERTY(qreal  oddBottomMargin  READ oddBottomMargin  WRITE setOddBottomMargin )
+      Q_PROPERTY(bool   twosided         READ twosided         WRITE setTwosided        )
 
       QSizeF _size;
       qreal _printableWidth;        // _width - left margin - right margin

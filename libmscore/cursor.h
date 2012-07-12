@@ -36,10 +36,10 @@ class Measure;
 //   @P track    int
 //   @P staffIdx int
 //   @P voice    int
-//   @P element  Element*
-//   @P segment  Segment*
-//   @P tick     int
-//   @P score    Score*
+//   @P element  Element*     current element at track
+//   @P segment  Segment*     current segment
+//   @P tick     int          midi tick position
+//   @P score    Score*       associated score
 //---------------------------------------------------------
 
 class Cursor : public QObject {
