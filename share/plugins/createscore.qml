@@ -27,6 +27,8 @@ MuseScore {
             cursor.addNote(68);
             cursor.next();
             cursor.addNote(72);
+
+            Qt.quit();
             }
       }
 
