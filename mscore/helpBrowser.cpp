@@ -58,8 +58,14 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 
 void HelpBrowser::setContent(const QString& path)
       {
-      homePath = path;
-      homeClicked();
+      homePath = QUrl::fromLocalFile(path);
+      view->setUrl(homePath);
+      }
+
+void HelpBrowser::setContent(const QUrl& url)
+      {
+      homePath = url;
+      view->setUrl(url);
       }
 
 //---------------------------------------------------------
@@ -68,5 +74,5 @@ void HelpBrowser::setContent(const QString& path)
 
 void HelpBrowser::homeClicked()
       {
-      view->setUrl(QUrl::fromLocalFile(homePath));
+      view->setUrl(homePath);
       }
