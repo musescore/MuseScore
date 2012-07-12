@@ -425,6 +425,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       OmrView* omrView() const    { return _omrView; }
       void setOmrView(OmrView* v) { _omrView = v;    }
       Element* getEditObject()    { return editObject; }
+      Lasso* fotoLasso() const    { return _foto;    }
       };
 
 //---------------------------------------------------------

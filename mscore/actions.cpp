@@ -2262,19 +2262,19 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action", "Plugin Creator")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_FOTO,
          0,
          "inspector",
-         QT_TRANSLATE_NOOP("action","Show Inspector"),
          QT_TRANSLATE_NOOP("action","Inspector"),
+         QT_TRANSLATE_NOOP("action","Show Inspector"),
          QT_TRANSLATE_NOOP("action","Show inspector")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "omr",
-         QT_TRANSLATE_NOOP("action","Show OMR Panel"),
          QT_TRANSLATE_NOOP("action","OmrPanel"),
+         QT_TRANSLATE_NOOP("action","Show OMR Panel"),
          QT_TRANSLATE_NOOP("action","Show OMR PAnel")
          ),
       Shortcut(
@@ -2320,8 +2320,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "masterpalette",
-         QT_TRANSLATE_NOOP("action","Show master palette"),
          QT_TRANSLATE_NOOP("action","Master Palette..."),
+         QT_TRANSLATE_NOOP("action","Show master palette"),
          QT_TRANSLATE_NOOP("action","Show master palette")
          ),
       Shortcut(
