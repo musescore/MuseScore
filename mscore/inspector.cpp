@@ -14,6 +14,7 @@
 #include "inspector.h"
 #include "inspectorBeam.h"
 #include "inspectorImage.h"
+#include "inspectorLasso.h"
 #include "inspectorGroupElement.h"
 #include "musescore.h"
 #include "scoreview.h"
@@ -46,13 +47,7 @@ void MuseScore::showInspector(bool visible)
                   connect(inspector, SIGNAL(inspectorVisible(bool)), a, SLOT(setChecked(bool)));
                   addDockWidget(Qt::RightDockWidgetArea, inspector);
                   }
-            if (cs) {
-                  if (state() == STATE_EDIT) {
-                        inspector->setElement(cv->getEditObject());
-                        }
-                  else
-                        selectionChanged(cs->selection().state());
-                  }
+            updateInspector();
             }
       if (inspector)
             inspector->setVisible(visible);
@@ -129,6 +124,7 @@ void Inspector::setElement(Element* e)
                   case CLEF:         ie = new InspectorClef(this); break;
                   case BEAM:         ie = new InspectorBeam(this); break;
                   case IMAGE:        ie = new InspectorImage(this); break;
+                  case LASSO:        ie = new InspectorLasso(this); break;
                   default:           ie = new InspectorElement(this); break;
                   }
             layout->insertWidget(0, ie);

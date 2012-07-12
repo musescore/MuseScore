@@ -394,6 +394,7 @@ class MuseScore : public QMainWindow {
       static void convertCapella(Score*, Capella* cap);
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
+      void updateInspector();
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -462,7 +463,6 @@ class MuseScore : public QMainWindow {
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void setSearchState()    { changeState(STATE_SEARCH); }
-      void setFotomode()       { changeState(STATE_FOTO); }
       void checkForUpdate();
       QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);

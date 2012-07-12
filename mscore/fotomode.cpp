@@ -28,6 +28,7 @@
 #include "libmscore/image.h"
 #include "libmscore/mscore.h"
 #include "svggenerator.h"
+#include "inspector.h"
 
 //---------------------------------------------------------
 //   FotoScoreViewDragTransition
@@ -327,7 +328,6 @@ void ScoreView::setupFotoMode()
       s->setInitialState(f1);
       s->addTransition(new ScoreViewDragTransition(this, f2));
 
-      connect(s, SIGNAL(entered()), mscore, SLOT(setFotomode()));
       connect(s, SIGNAL(entered()), SLOT(startFotomode()));
       connect(s, SIGNAL(exited()),  SLOT(stopFotomode()));
       }
@@ -355,6 +355,7 @@ void ScoreView::startFotomode()
       updateGrips();
       _score->addRefresh(_foto->abbox());
       _score->end();
+      mscore->changeState(STATE_FOTO);
       }
 
 //---------------------------------------------------------
@@ -439,6 +440,8 @@ void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       updateGrips();
       startMove = p;
       _score->end();
+      if (mscore->getInspector())
+            mscore->getInspector()->setElement(_foto);
       }
 
 //---------------------------------------------------------
@@ -535,6 +538,8 @@ void ScoreView::doDragFotoRect(QMouseEvent* ev)
       startMove = p;
       updateGrips();
       _score->end();
+      if (mscore->getInspector())
+            mscore->getInspector()->setElement(_foto);
       }
 
 //---------------------------------------------------------

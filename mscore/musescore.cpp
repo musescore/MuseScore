@@ -83,6 +83,7 @@
 #include "libmscore/measurebase.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
+#include "libmscore/lasso.h"
 
 #include "msynth/synti.h"
 
@@ -1208,18 +1209,33 @@ void MuseScore::selectionChanged(int selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
-      if (inspector && (state() != STATE_EDIT)) {
-            if (cs) {
+      updateInspector();
+      }
+
+//---------------------------------------------------------
+//   updateInspector
+//---------------------------------------------------------
+
+void MuseScore::updateInspector()
+      {
+      if (!inspector)
+            return;
+      if (cs) {
+            if (state() == STATE_EDIT)
+                  inspector->setElement(cv->getEditObject());
+            else if (state() == STATE_FOTO)
+                  inspector->setElement(cv->fotoLasso());
+            else {
                   if (cs->selection().isSingle())
                         inspector->setElement(cs->selection().element());
-                  else if (selectionState == SEL_NONE)
+                  else if (cs->selection().state() == SEL_NONE)
                         inspector->setElement(0);
                   else
                         inspector->setElementList(cs->selection().elements());
                   }
-            else
-                  inspector->setElement(0);
             }
+      else
+            inspector->setElement(0);
       }
 
 //---------------------------------------------------------
@@ -2652,13 +2668,14 @@ void MuseScore::changeState(ScoreState val)
             }
 
       menuProfiles->setEnabled(enable);
-//      foreach (QAction* a, pluginActions)     allow for "create score" plugins
-//            a->setEnabled(true);
 
       transportTools->setEnabled(enable && !noSeq);
       cpitchTools->setEnabled(enable);
       mag->setEnabled(enable);
       entryTools->setEnabled(enable);
+
+      if (_sstate == STATE_FOTO)
+            updateInspector();
 
       switch(val) {
             case STATE_DISABLED:
@@ -2690,6 +2707,7 @@ void MuseScore::changeState(ScoreState val)
             case STATE_FOTO:
                   _modeText->setText(tr("foto mode"));
                   _modeText->show();
+                  updateInspector();
                   break;
             case STATE_SEARCH:
                   if (searchDialog == 0) {
