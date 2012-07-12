@@ -19,7 +19,7 @@
 HelpBrowser::HelpBrowser(QWidget* parent)
    : QWidget(parent)
       {
-      view    = new QWebView;
+      view    = new WebView;
       toolbar = new QWidget;
       QVBoxLayout* l = new QVBoxLayout;
       l->addWidget(toolbar);
@@ -76,3 +76,34 @@ void HelpBrowser::homeClicked()
       {
       view->setUrl(homePath);
       }
+
+//---------------------------------------------------------
+//   wheelEvent
+//---------------------------------------------------------
+
+void WebView::wheelEvent(QWheelEvent* event)
+      {
+      static int deltaSum = 0;
+      deltaSum += event->delta();
+      int step = deltaSum / 120;
+      deltaSum %= 120;
+
+      if (event->modifiers() & Qt::ControlModifier) {
+            qreal _mag = zoomFactor();
+
+            if (step > 0) {
+                  for (int i = 0; i < step; ++i)
+                        _mag *= 1.1;
+                  }
+            else {
+                  for (int i = 0; i < -step; ++i)
+                        _mag /= 1.1;
+                  }
+            setZoomFactor(_mag);
+            event->accept();
+            }
+      else
+            event->ignore();
+      QWebView::wheelEvent(event);
+      }
+
