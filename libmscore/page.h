@@ -58,7 +58,7 @@ class PageFormat : public QObject {
       Q_PROPERTY(qreal  printableWidth   READ printableWidth   WRITE setPrintableWidth  )
       Q_PROPERTY(qreal  evenLeftMargin   READ evenLeftMargin   WRITE setEvenLeftMargin  )
       Q_PROPERTY(qreal  oddLeftMargin    READ oddLeftMargin    WRITE setOddLeftMargin   )
-      Q_PROPERTY(qreal  eventTopMargin   READ eventTopMargin   WRITE setEventTopMargin  )
+      Q_PROPERTY(qreal  evenTopMargin    READ evenTopMargin    WRITE setEvenTopMargin  )
       Q_PROPERTY(qreal  oddTopMargin     READ oddTopMargin     WRITE setOddTopMargin    )
       Q_PROPERTY(qreal  evenBottomMargin READ evenBottomMargin WRITE setEvenBottomMargin)
       Q_PROPERTY(qreal  oddBottomMargin  READ oddBottomMargin  WRITE setOddBottomMargin )
