@@ -42,6 +42,8 @@ MuseScore {
                         }
                   cursor.next();
                   }
+
+            Qt.quit();
             }
       }
 
