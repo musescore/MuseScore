@@ -14,12 +14,24 @@
 #define __HELP_BROWSER_H
 
 //---------------------------------------------------------
+//   WebView
+//---------------------------------------------------------
+
+class WebView : public QWebView {
+      Q_OBJECT
+      virtual void wheelEvent(QWheelEvent*);
+
+   public:
+      WebView(QWidget* parent = 0) :QWebView(parent) {}
+      };
+
+//---------------------------------------------------------
 //   HelpBrowser
 //---------------------------------------------------------
 
 class HelpBrowser : public QWidget {
       Q_OBJECT
-      QWebView* view;
+      WebView* view;
       QWidget* toolbar;
       QUrl homePath;
 

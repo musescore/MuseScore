@@ -866,8 +866,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       sm->start();
 
-
-      grabGesture(Qt::PinchGesture);
+      grabGesture(Qt::PinchGesture);      // laptop pad
 
       //-----------------------------------------------------------------------
 
