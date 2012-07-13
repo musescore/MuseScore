@@ -39,7 +39,8 @@ MuseScore {
                ];
 
             if (typeof curScore === 'undefined')
-                  return;
+                  Qt.quit();
+
             var cursor = curScore.newCursor();
             for (var track = 0; track < curScore.ntracks; ++track) {
                   cursor.track = track;
@@ -56,7 +57,7 @@ MuseScore {
                         cursor.next();
                         }
                   }
-            Qt.quit()
+            Qt.quit();
             }
       }
 

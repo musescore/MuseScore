@@ -33,9 +33,9 @@ class Measure;
 
 //---------------------------------------------------------
 //   @@ Cursor
-//   @P track    int
-//   @P staffIdx int
-//   @P voice    int
+//   @P track    int          current track
+//   @P staffIdx int          current staff (track * 4)
+//   @P voice    int          current voice (track % 4)
 //   @P element  Element*     current element at track
 //   @P segment  Segment*     current segment
 //   @P tick     int          midi tick position
@@ -94,6 +94,11 @@ class Cursor : public QObject {
       Q_INVOKABLE void add(Element*);
 
       Q_INVOKABLE Note* addNote(int pitch);
+
+      //@ set duration
+      //@   z: numerator
+      //@   n: denominator
+      //@   Quarter, if n == 0
       Q_INVOKABLE void setDuration(int z, int n);
       };
 
