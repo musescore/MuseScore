@@ -68,7 +68,14 @@ class NoteHead : public Symbol {
 //   @P mirror     bool  mirror note head on x axis
 //   @P small      bool  small note head
 //   @P tuning     qreal tuning offset in cent
-//   @P veloType   enum  type of veloOffset: MScore.OFFSET_VAL, MScore.USER_VAL
+//   @P veloType          enum  OFFSET_VAL, USER_VAL
+//   @P veloOffset        int
+//   @P onTimeOffset      int
+//   @P onTimeUserOffset  int
+//   @P offTimeOffset     int
+//   @P offTimeUserOffset int
+//   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
+//   @P dotPosition       enum AUTO, UP, DOWN
 //-------------------------------------------------------------------
 
 /**
@@ -95,7 +102,6 @@ class Note : public Element {
       Q_PROPERTY(int onTimeUserOffset READ onTimeUserOffset WRITE setOnTimeUserOffset)
       Q_PROPERTY(int offTimeOffset READ offTimeOffset WRITE setOffTimeOffset)
       Q_PROPERTY(int offTimeUserOffset READ offTimeUserOffset WRITE setOffTimeUserOffset)
-
       Q_PROPERTY(DirectionH userMirror READ userMirror WRITE setUserMirror)
       Q_PROPERTY(Direction dotPosition READ dotPosition WRITE setDotPosition)
 
@@ -202,7 +208,7 @@ class Note : public Element {
       void setTpc(int v);
       void setTpcFromPitch();
 
-      Accidental* accidental() const    { return _accidental; }
+      Q_INVOKABLE Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a) { _accidental = a;    }
 
       int line() const                { return _line + _lineOffset;   }
@@ -226,8 +232,8 @@ class Note : public Element {
       bool small() const              { return _small;   }
       void setSmall(bool val)         { _small = val;    }
 
-      Tie* tieFor() const             { return _tieFor;  }
-      Tie* tieBack() const            { return _tieBack; }
+      Q_INVOKABLE Tie* tieFor() const  { return _tieFor;  }
+      Q_INVOKABLE Tie* tieBack() const { return _tieBack; }
       void setTieFor(Tie* t)          { _tieFor = t;     }
       void setTieBack(Tie* t)         { _tieBack = t;    }
 
@@ -235,8 +241,8 @@ class Note : public Element {
       void setChord(Chord* a)         { setParent((Element*)a);  }
 
       void draw(QPainter*) const;
-      void read(const QDomElement&);
 
+      void read(const QDomElement&);
       void write(Xml& xml) const;
 
       QPointF stemPos(bool upFlag) const;    ///< Point to connect stem.
@@ -283,7 +289,7 @@ class Note : public Element {
 
       void setBend(Bend* b)            { _bend = b;    }
       int customizeVelocity(int velo) const;
-      NoteDot* dot(int n)              { return _dots[n];           }
+      Q_INVOKABLE NoteDot* dot(int n)  { return _dots[n];           }
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);
