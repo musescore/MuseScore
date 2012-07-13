@@ -15,7 +15,7 @@ rewind cursor<br/>
 type=0 rewind to start of score<br/>
 type=1 rewind to start of selection<br/>
 type=2 rewind to end of selection<br/>
-</div>
+<div/>
 <div class="method">
 <code>bool <b>next</b>()</code>
 </div>
@@ -31,12 +31,18 @@ type=2 rewind to end of selection<br/>
 <div class="method">
 <code>void <b>setDuration</b>(int z, int n)</code>
 </div>
+<div class="mdescr">
+set duration<br/>
+z: numerator<br/>
+n: denominator<br/>
+Quarter, if n == 0<br/>
+<div/>
 <h4 class="groupB">Properties</h4>
 <div class="tab2">
 <table border="1" rules="all" cellpadding="0" cellspacing="0">
-<tr><td><code>track</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>staffIdx</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>voice</code></td><td><code>int</code></td><td></td></tr>
+<tr><td><code>track</code></td><td><code>int</code></td><td>          current track</td></tr>
+<tr><td><code>staffIdx</code></td><td><code>int</code></td><td>          current staff (track * 4)</td></tr>
+<tr><td><code>voice</code></td><td><code>int</code></td><td>          current voice (track % 4)</td></tr>
 <tr><td><code>element</code></td><td><code>Element*</code></td><td>     current element at track</td></tr>
 <tr><td><code>segment</code></td><td><code>Segment*</code></td><td>     current segment</td></tr>
 <tr><td><code>tick</code></td><td><code>int</code></td><td>          midi tick position</td></tr>
