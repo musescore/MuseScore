@@ -378,6 +378,10 @@ void MuseScore::pluginTriggered(int idx)
       endCmd();
       }
 
+//---------------------------------------------------------
+//   newElement
+//---------------------------------------------------------
+
 Element* QmlPlugin::newElement(int t)
       {
       Score* score = curScore();
