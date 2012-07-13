@@ -2255,7 +2255,7 @@ Shortcut Shortcut::sc[] = {
          community_ICON
          ),
       Shortcut(
-         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+         STATE_ALL,
          0,
          "plugin-creator",
          Qt::ApplicationShortcut,
