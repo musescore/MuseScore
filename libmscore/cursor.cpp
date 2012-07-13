@@ -158,10 +158,18 @@ int Cursor::tick()
       return (_segment) ? _segment->tick() : 0;
       }
 
+//---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
 Element* Cursor::element() const
       {
       return _segment ? _segment->element(_track) : 0;
       }
+
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
 
 void Cursor::setTrack(int v)
       {
@@ -174,6 +182,10 @@ void Cursor::setTrack(int v)
       _score->inputState().setTrack(_track);
       }
 
+//---------------------------------------------------------
+//   setStaffIdx
+//---------------------------------------------------------
+
 void Cursor::setStaffIdx(int v)
       {
       _track = v * VOICES + _track % VOICES;
@@ -184,6 +196,10 @@ void Cursor::setStaffIdx(int v)
             _track = tracks - 1;
       _score->inputState().setTrack(_track);
       }
+
+//---------------------------------------------------------
+//   setVoice
+//---------------------------------------------------------
 
 void Cursor::setVoice(int v)
       {
@@ -196,10 +212,18 @@ void Cursor::setVoice(int v)
       _score->inputState().setTrack(_track);
       }
 
+//---------------------------------------------------------
+//   staffIdx
+//---------------------------------------------------------
+
 int Cursor::staffIdx() const
       {
       return _track / VOICES;
       }
+
+//---------------------------------------------------------
+//   voice
+//---------------------------------------------------------
 
 int Cursor::voice() const
       {

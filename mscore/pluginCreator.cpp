@@ -76,10 +76,10 @@ PluginCreator::PluginCreator(QWidget* parent)
 QString PluginCreator::manualPath()
       {
       QString path = mscoreGlobalShare;
-      path += "/manual/plugins.html";
+      path += "/manual/plugins/plugins.html";
 
       QString p1 = QDir::homePath();                  // hack for debugging
-      p1 += "/mscore/share/manual/plugins.html";
+      p1 += "/mscore/share/manual/plugins/plugins.html";
       if (QFile(p1).exists())
             return p1;
       return path;
@@ -266,7 +266,8 @@ void PluginCreator::runClicked()
 
       item = qobject_cast<QmlPlugin*>(obj);
       view = new QDeclarativeView;
-      view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+      view->setResizeMode(QDeclarativeView::SizeViewToRootObject);
+      // view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
       QGraphicsObject* go = qobject_cast<QGraphicsObject*>(item);
       view->scene()->addItem(go);
 
@@ -457,6 +458,7 @@ void PluginCreator::showManual()
       if (helpBrowser == 0) {
             helpBrowser = new HelpBrowser;
             manualDock = new QDockWidget("Manual", 0);
+
             manualDock->setWidget(helpBrowser);
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             addDockWidget(area, manualDock);
