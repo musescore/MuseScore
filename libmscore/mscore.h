@@ -59,9 +59,7 @@ static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
 static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 
-#define MSCORE_GLOBAL
-#include "mscore1.h"
-#undef MSCORE_GLOBAL
+#include "elementType.h"
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -464,7 +462,62 @@ struct NoteVal {
       NoteVal() { pitch = -1; fret = -1; string = -1; headGroup = HEAD_NORMAL; }
       };
 
-#include "mscore1.h"
+//---------------------------------------------------------
+//   MScore
+//    MuseScore application object
+//---------------------------------------------------------
+
+class MScore : public QObject {
+      Q_OBJECT
+      Q_ENUMS(ElementType)
+
+   private:
+      static MStyle* _defaultStyle;       // default modified by preferences
+      static MStyle* _baseStyle;          // buildin initial style
+      static QString _globalShare;
+      static int _hRaster, _vRaster;
+
+   public:
+#include "elementType.h"
+
+      static void init();
+      static MStyle* defaultStyle();
+      static MStyle* baseStyle();
+      static void setDefaultStyle(MStyle*);
+      static const QString& globalShare() { return _globalShare; }
+      static qreal hRaster()              { return _hRaster;     }
+      static qreal vRaster()              { return _vRaster;     }
+      static void setHRaster(int val)     { _hRaster = val;      }
+      static void setVRaster(int val)     { _vRaster = val;      }
+
+      static QColor selectColor[4];
+      static QColor defaultColor;
+      static QColor dropColor;
+      static QColor layoutBreakColor;
+      static QColor bgColor;
+      static bool warnPitchRange;
+
+      static bool replaceFractions;
+      static bool playRepeats;
+      static bool panPlayback;
+      static qreal nudgeStep;
+      static int defaultPlayDuration;
+      static QString partStyle;
+      static QString soundFont;
+      static QString lastError;
+      static bool layoutDebug;
+
+      static int division;
+      static int sampleRate;
+      static int mtcType;
+      static Sequencer* seq;
+
+      static qreal PDPI;
+      static qreal DPI;
+      static qreal DPMM;
+      static bool debugMode;
+      };
+
 
 //---------------------------------------------------------
 //   center
