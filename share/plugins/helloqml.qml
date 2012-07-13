@@ -8,6 +8,9 @@ MuseScore {
       height: 75
       onRun: {
             console.log("hello world");
+            if (typeof curScore === 'undefined')
+                  Qt.quit();
+
             var score = curScore;
             console.log(curScore);
             console.log(score.name);

@@ -7,6 +7,9 @@ MuseScore {
       width:  400
       height: 400
       onRun: {
+            if (typeof curScore === 'undefined')
+                  Qt.quit();
+
             scoreview.setScore(curScore);
             }
 
