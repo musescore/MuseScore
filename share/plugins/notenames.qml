@@ -18,7 +18,8 @@ MuseScore {
 
       onRun: {
             if (typeof curScore === 'undefined')
-                  return;
+                  Qt.quit();
+
             var cursor = curScore.newCursor();
             cursor.rewind(0);  // set cursor to first chord/rest
 
