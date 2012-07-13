@@ -26,7 +26,8 @@ MuseScore {
 
       onRun: {
             if (typeof curScore === 'undefined')
-                  return;
+                  Qt.quit();
+
             var cursor = curScore.newCursor();
             cursor.staffIdx = 0;
             cursor.voice = 0;
