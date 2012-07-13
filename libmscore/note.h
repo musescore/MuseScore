@@ -16,7 +16,7 @@
 
 /**
  \file
- Definition of classes Note and ShadowNote.
+ Definition of classes Note and NoteHead.
 */
 
 #include "element.h"
@@ -54,14 +54,21 @@ class NoteHead : public Symbol {
       virtual void write(Xml& xml) const;
       };
 
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   @@ Note
-//   @P pitch  int  midi pitch
-//   @P tpc    int  tonal pitch class
-//   @P line   int  notehead position
-//   @P fret   int  fret number in tablature
-//   @P string int  string number in tablature
-//---------------------------------------------------------
+//   @P pitch      int   midi pitch
+//   @P tpc        int   tonal pitch class
+//   @P line       int   notehead position
+//   @P fret       int   fret number in tablature
+//   @P string     int   string number in tablature
+//   @P subchannel int   midi subchannel (for midi articulation)
+//   @P ppitch     int   actual played midi pitch (honoring ottavas)
+//   @P ghost      bool  ghost note (guitar: death note)
+//   @P hidden     bool  hidden, not played note
+//   @P mirror     bool  mirror note head on x axis
+//   @P small      bool  small note head
+//   @P tuning     qreal tuning offset in cent
+//-------------------------------------------------------------------
 
 /**
  Graphic representation of a note.
@@ -69,11 +76,18 @@ class NoteHead : public Symbol {
 
 class Note : public Element {
       Q_OBJECT
-      Q_PROPERTY(int pitch  READ pitch  WRITE setPitch)
-      Q_PROPERTY(int tpc    READ tpc    WRITE setTpc)
-      Q_PROPERTY(int line   READ line   WRITE setLine)
-      Q_PROPERTY(int fret   READ fret   WRITE setFret)
-      Q_PROPERTY(int string READ string WRITE setString)
+      Q_PROPERTY(int subchannel READ subchannel WRITE setSubchannel)
+      Q_PROPERTY(int line       READ line       WRITE setLine)
+      Q_PROPERTY(int fret       READ fret       WRITE setFret)
+      Q_PROPERTY(int string     READ string     WRITE setString)
+      Q_PROPERTY(int tpc        READ tpc        WRITE setTpc)
+      Q_PROPERTY(int pitch      READ pitch      WRITE setPitch)
+      Q_PROPERTY(int ppitch     READ ppitch)
+      Q_PROPERTY(bool ghost     READ ghost      WRITE setGhost)
+      Q_PROPERTY(bool hidden    READ hidden     WRITE setHidden)
+      Q_PROPERTY(bool mirror    READ mirror     WRITE setMirror)
+      Q_PROPERTY(bool small     READ small      WRITE setSmall)
+      Q_PROPERTY(qreal tuning   READ tuning     WRITE setTuning)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
@@ -82,7 +96,7 @@ class Note : public Element {
       NoteHeadGroup _headGroup;
       mutable int _tpc;       ///< tonal pitch class
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
-      int  _ppitch;           ///< played pitch (honor voltas etc.); cached value
+      int  _ppitch;           ///< played pitch (honor ottavas etc.); cached value
       bool _ghost;            ///< ghost note (guitar: death note)
       bool _hidden;           ///< markes this note as the hidden one if there are
                               ///< overlapping notes; hidden notes are not played

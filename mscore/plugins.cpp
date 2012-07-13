@@ -158,6 +158,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<MsFile>     ("MuseScore", 1, 0, "QFile");
             //-----------mscore bindings
+            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
             qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
@@ -166,7 +167,6 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
             qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
             qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
             qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
