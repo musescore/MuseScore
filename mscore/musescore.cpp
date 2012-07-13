@@ -909,10 +909,6 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuDisplay->addAction(a);
 
-      a = getAction("plugin-creator");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
       menuDisplay->addSeparator();
       menuDisplay->addAction(getAction("zoomin"));
       menuDisplay->addAction(getAction("zoomout"));
@@ -954,6 +950,18 @@ MuseScore::MuseScore()
       a->setChecked(false);
       menuDisplay->addAction(a);
 
+
+      //---------------------
+      //    Menu Plugins
+      //---------------------
+
+      QMenu* menuPlugins = mb->addMenu(tr("&Plugins"));
+      menuPlugins->setObjectName("Plugins");
+      a = getAction("plugin-creator");
+      a->setCheckable(true);
+      menuPlugins->addAction(a);
+      menuPlugins->addSeparator();
+      
       //---------------------
       //    Menu Help
       //---------------------
