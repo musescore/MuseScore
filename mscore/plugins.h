@@ -108,17 +108,17 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
 //---------------------------------------------------------
 //   QmlPlugin
 //   @@ MuseScore
-//   @P menuPath              QString
+//   @P menuPath              QString        where the plugin is placed in menu
 //   @P pluginType            QString
 //   @P dockArea              QString
-//   @P division              int
-//   @P mscoreVersion         int
-//   @P mscoreMajorVersion    int
-//   @P mscoreMinorVersion    int
-//   @P mscoreUpdateVersion   int
-//   @P mscoreDPI             qreal
-//   @P curScore              Score*
-//   @P scores                array[Score]
+//   @P division              int            number of MIDI ticks for 1/4 note, read only
+//   @P mscoreVersion         int            the complete version number of MuseScore in the form: MMmmuu, read only
+//   @P mscoreMajorVersion    int            the 1st part of the MuseScore version, read only
+//   @P mscoreMinorVersion    int            the 2nd part of the MuseScore version, read only
+//   @P mscoreUpdateVersion   int            the 3rd part of the MuseScore version, read only
+//   @P mscoreDPI             qreal          read only
+//   @P curScore              Score*         the current score, if any, read only
+//   @P scores                array[Score]   all currently open scores, read only
 //---------------------------------------------------------
 
 class QmlPlugin : public QDeclarativeItem {
