@@ -348,7 +348,7 @@ void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
       QDeclarativeView* view = new QDeclarativeView;
-      view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+      view->setResizeMode(QDeclarativeView::SizeViewToRootObject);
       view->setSource(QUrl::fromLocalFile(pp));
       connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
       view->show();

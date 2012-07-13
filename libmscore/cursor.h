@@ -83,10 +83,16 @@ class Cursor : public QObject {
       int tick();
       double time();
 
-      Q_INVOKABLE void rewind(int);             // rewind to start of score
+      //@ rewind cursor
+      //@   type=0      rewind to start of score
+      //@   type=1      rewind to start of selection
+      //@   type=2      rewind to end of selection
+      Q_INVOKABLE void rewind(int type);
+
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Element*);
+
       Q_INVOKABLE Note* addNote(int pitch);
       Q_INVOKABLE void setDuration(int z, int n);
       };

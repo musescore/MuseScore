@@ -18,10 +18,11 @@ struct Prop {
       QString type;
       QString description;
       };
+
 struct Proc {
       QString name;
       QString type;
-      QString description;
+      QStringList description;
       };
 
 QStringList classes;
@@ -68,7 +69,7 @@ void writeMain()
             }
       addFooter(out);
 
-      QString ofile = srcPath + "/share/manual/plugins.html";
+      QString ofile = srcPath + "/share/manual/plugins/plugins.html";
       QFile of(ofile);
       if (!of.open(QIODevice::WriteOnly)) {
             printf("open <%s> failed\n", qPrintable(ofile));
@@ -93,15 +94,19 @@ static void parseClass(const QString& name, const QString& in)
       QList<Prop> props;
       QList<Proc> procs;
 
+      QStringList methodDescription;
+
       QRegExp re("@P ([^\\s]+)\\s+([^\\s]+)(.*)");
 
       // matches Q_INVOKABLE void mops(int a);   // comment
       QRegExp re1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
       QRegExp re2("Q_INVOKABLE +([^ ]+) +([^\\{]+)\\{");
       QRegExp re3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
+      QRegExp reD("//@ (.*)");
 
       if (!re1.isValid() || !re2.isValid() || !re3.isValid())
             abort();
+
       foreach(const QString& s, sl) {
             if (re.indexIn(s, 0) != -1) {
                   Prop p;
@@ -114,20 +119,29 @@ static void parseClass(const QString& name, const QString& in)
                   Proc p;
                   p.type        = re2.cap(1);
                   p.name        = re2.cap(2);
+                  p.description = methodDescription;
+                  methodDescription.clear();
                   procs.append(p);
                   }
             else if (re1.indexIn(s, 0) != -1) {
                   Proc p;
                   p.type        = re1.cap(1);
                   p.name        = re1.cap(2);
-                  p.description = re1.cap(3);
+                  p.description = methodDescription;
+                  methodDescription.clear();
                   procs.append(p);
                   }
             else if (re3.indexIn(s, 0) != -1) {
                   Proc p;
                   p.type        = re3.cap(1);
                   p.name        = re3.cap(2);
+                  p.description = methodDescription;
+                  methodDescription.clear();
                   procs.append(p);
+                  }
+            else if (reD.indexIn(s, 0) != -1) {
+                  printf("description <%s>\n", qPrintable(reD.cap(1)));
+                  methodDescription.append(reD.cap(1));
                   }
             }
 
@@ -146,11 +160,14 @@ static void parseClass(const QString& name, const QString& in)
                           .arg(p.type).arg(p.name);
                         }
                   out += "</div>\n";
-                  QString s(p.description.simplified());
-                  if (s.startsWith("//"))
-                        s = s.mid(2).simplified();
-                  out += QString("<div class=\"mdescr\">%1</div>").arg(s);
-                  out += "<par/>\n";
+                  if (!p.description.isEmpty()) {
+                        out += "<div class=\"mdescr\">\n";
+                        foreach(const QString& s, p.description) {
+                              out += s.simplified();
+                              out += "<br/>\n";
+                              }
+                        out += "</div>\n";
+                        }
                   }
             }
       if (!props.isEmpty()) {
@@ -168,7 +185,7 @@ static void parseClass(const QString& name, const QString& in)
             out += "</table></div>\n";
             }
       addFooter(out);
-      QString ofile = srcPath + "/share/manual/" + name.toLower() + ".html";
+      QString ofile = srcPath + "/share/manual/plugins/" + name.toLower() + ".html";
       QFile of(ofile);
       if (!of.open(QIODevice::WriteOnly)) {
             printf("open <%s> failed\n", qPrintable(ofile));
