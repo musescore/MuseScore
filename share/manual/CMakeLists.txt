@@ -46,10 +46,10 @@ install(FILES
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
       )
 
-if (NOT MINGW AND NOT APPLE)
+if (IS_DIRECTORY en)
 install (DIRECTORY
       en de
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
       )
-endif (NOT MINGW AND NOT APPLE)
+endif (IS_DIRECTORY en)
 
