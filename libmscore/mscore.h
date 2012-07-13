@@ -59,7 +59,133 @@ static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
 static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 
-#include "elementType.h"
+//---------------------------------------------------------
+//   ElementType
+//    The value of this enum determines the "stacking order"
+//    of elements on the canvas.
+//---------------------------------------------------------
+
+enum ElementType {
+      INVALID = 0,
+      SYMBOL  = 1,
+      TEXT,
+      INSTRUMENT_NAME,
+      SLUR_SEGMENT,
+      BAR_LINE,
+      STEM_SLASH,
+      LINE,
+      BRACKET,
+      ARPEGGIO,
+      ACCIDENTAL,
+      NOTE,
+      STEM,
+      CLEF,
+      KEYSIG,
+      TIMESIG,
+      REST,
+      BREATH,
+      GLISSANDO,
+      REPEAT_MEASURE,
+      IMAGE,
+/*19*/TIE,
+      ARTICULATION,
+      CHORDLINE,
+      DYNAMIC,
+      BEAM,
+      HOOK,
+      LYRICS,
+      FIGURED_BASS,
+      MARKER,
+      JUMP,
+      FINGERING,
+      TUPLET,
+/*30*/TEMPO_TEXT,
+      STAFF_TEXT,
+      REHEARSAL_MARK,
+      INSTRUMENT_CHANGE,
+      HARMONY,
+      FRET_DIAGRAM,
+      BEND,
+      TREMOLOBAR,
+      VOLTA,
+      HAIRPIN_SEGMENT,
+      OTTAVA_SEGMENT,
+      TRILL_SEGMENT,
+      TEXTLINE_SEGMENT,
+      VOLTA_SEGMENT,
+      LAYOUT_BREAK,
+      SPACER,
+      STAFF_STATE,
+      LEDGER_LINE,
+      NOTEHEAD,
+      NOTEDOT,
+      TREMOLO,
+      MEASURE,
+      STAFF_LINES,
+      SELECTION,
+      LASSO,
+      SHADOW_NOTE,
+      RUBBERBAND,
+      TAB_DURATION_SYMBOL,
+      FSYMBOL,
+      PAGE,
+
+      // not drawable elements:
+      HAIRPIN,
+      OTTAVA,
+      PEDAL,
+      TRILL,
+      TEXTLINE,
+      SEGMENT,
+      SYSTEM,
+      COMPOUND,
+      CHORD,
+      SLUR,
+
+      // special types for drag& drop:
+      ELEMENT,
+      ELEMENT_LIST,
+      STAFF_LIST,
+      MEASURE_LIST,
+      LAYOUT,
+
+      HBOX,
+      VBOX,
+      TBOX,
+      FBOX,
+      ACCIDENTAL_BRACKET,
+      ICON,
+      OSSIA,
+
+      MAXTYPE
+      };
+
+//---------------------------------------------------------
+//   ValueType
+//    used for Note->velocity
+//---------------------------------------------------------
+
+enum ValueType {
+      OFFSET_VAL, USER_VAL
+      };
+
+//---------------------------------------------------------
+//   Direction
+//    used for stem and slur
+//---------------------------------------------------------
+
+enum Direction  {
+      AUTO, UP, DOWN
+      };
+
+//---------------------------------------------------------
+//   DirectionH
+//    used for note head mirror
+//---------------------------------------------------------
+
+enum DirectionH {
+      DH_AUTO, DH_LEFT, DH_RIGHT
+      };
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -143,33 +269,6 @@ enum BracketType {
 
 enum Anchor {
       ANCHOR_SEGMENT, ANCHOR_MEASURE, ANCHOR_CHORD, ANCHOR_NOTE
-      };
-
-//---------------------------------------------------------
-//   Direction
-//    used for stem and slur
-//---------------------------------------------------------
-
-enum Direction  {
-      AUTO, UP, DOWN
-      };
-
-//---------------------------------------------------------
-//   DirectionH
-//    used for note head mirror
-//---------------------------------------------------------
-
-enum DirectionH {
-      DH_AUTO, DH_LEFT, DH_RIGHT
-      };
-
-//---------------------------------------------------------
-//   ValueType
-//    used for Note->velocity
-//---------------------------------------------------------
-
-enum ValueType {
-      OFFSET_VAL, USER_VAL
       };
 
 //---------------------------------------------------------
@@ -470,6 +569,9 @@ struct NoteVal {
 class MScore : public QObject {
       Q_OBJECT
       Q_ENUMS(ElementType)
+      Q_ENUMS(ValueType)
+      Q_ENUMS(Direction)
+      Q_ENUMS(DirectionH)
 
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
@@ -478,7 +580,99 @@ class MScore : public QObject {
       static int _hRaster, _vRaster;
 
    public:
-#include "elementType.h"
+       enum ElementType {
+            INVALID = 0,
+            SYMBOL  = 1,
+            TEXT,
+            INSTRUMENT_NAME,
+            SLUR_SEGMENT,
+            BAR_LINE,
+            STEM_SLASH,
+            LINE,
+            BRACKET,
+            ARPEGGIO,
+            ACCIDENTAL,
+            NOTE,
+            STEM,
+            CLEF,
+            KEYSIG,
+            TIMESIG,
+            REST,
+            BREATH,
+            GLISSANDO,
+            REPEAT_MEASURE,
+            IMAGE,
+            TIE,
+            ARTICULATION,
+            CHORDLINE,
+            DYNAMIC,
+            BEAM,
+            HOOK,
+            LYRICS,
+            FIGURED_BASS,
+            MARKER,
+            JUMP,
+            FINGERING,
+            TUPLET,
+            TEMPO_TEXT,
+            STAFF_TEXT,
+            REHEARSAL_MARK,
+            INSTRUMENT_CHANGE,
+            HARMONY,
+            FRET_DIAGRAM,
+            BEND,
+            TREMOLOBAR,
+            VOLTA,
+            HAIRPIN_SEGMENT,
+            OTTAVA_SEGMENT,
+            TRILL_SEGMENT,
+            TEXTLINE_SEGMENT,
+            VOLTA_SEGMENT,
+            LAYOUT_BREAK,
+            SPACER,
+            STAFF_STATE,
+            LEDGER_LINE,
+            NOTEHEAD,
+            NOTEDOT,
+            TREMOLO,
+            MEASURE,
+            STAFF_LINES,
+            SELECTION,
+            LASSO,
+            SHADOW_NOTE,
+            RUBBERBAND,
+            TAB_DURATION_SYMBOL,
+            FSYMBOL,
+            PAGE,
+            HAIRPIN,
+            OTTAVA,
+            PEDAL,
+            TRILL,
+            TEXTLINE,
+            SEGMENT,
+            SYSTEM,
+            COMPOUND,
+            CHORD,
+            SLUR,
+            ELEMENT,
+            ELEMENT_LIST,
+            STAFF_LIST,
+            MEASURE_LIST,
+            LAYOUT,
+            HBOX,
+            VBOX,
+            TBOX,
+            FBOX,
+            ACCIDENTAL_BRACKET,
+            ICON,
+            OSSIA,
+
+            MAXTYPE
+            };
+
+      enum ValueType  { OFFSET_VAL, USER_VAL };
+      enum Direction  { AUTO, UP, DOWN };
+      enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
 
       static void init();
       static MStyle* defaultStyle();
@@ -518,6 +712,10 @@ class MScore : public QObject {
       static bool debugMode;
       };
 
+Q_DECLARE_METATYPE(MScore::ElementType)
+Q_DECLARE_METATYPE(MScore::ValueType)
+Q_DECLARE_METATYPE(MScore::Direction)
+Q_DECLARE_METATYPE(MScore::DirectionH)
 
 //---------------------------------------------------------
 //   center

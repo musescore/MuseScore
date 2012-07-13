@@ -58,6 +58,13 @@ extern void initDrumset();
 
 void MScore::init()
       {
+#ifdef SCRIPT_INTERFACE
+      qRegisterMetaType<MScore::ElementType>("ElementType");
+      qRegisterMetaType<MScore::ValueType>("ValueType");
+      qRegisterMetaType<MScore::Direction>("Direction");
+      qRegisterMetaType<MScore::DirectionH>("DirectionH");
+#endif
+
       DPMM = DPI / INCH;       // dots/mm
 
 #ifdef __MINGW32__

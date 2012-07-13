@@ -68,6 +68,7 @@ class NoteHead : public Symbol {
 //   @P mirror     bool  mirror note head on x axis
 //   @P small      bool  small note head
 //   @P tuning     qreal tuning offset in cent
+//   @P veloType   enum  type of veloOffset: MScore.OFFSET_VAL, MScore.USER_VAL
 //-------------------------------------------------------------------
 
 /**
@@ -88,6 +89,15 @@ class Note : public Element {
       Q_PROPERTY(bool mirror    READ mirror     WRITE setMirror)
       Q_PROPERTY(bool small     READ small      WRITE setSmall)
       Q_PROPERTY(qreal tuning   READ tuning     WRITE setTuning)
+      Q_PROPERTY(ValueType veloType READ veloType WRITE setVeloType)
+      Q_PROPERTY(int veloOffset READ veloOffset WRITE setVeloOffset)
+      Q_PROPERTY(int onTimeOffset READ onTimeOffset WRITE setOnTimeOffset)
+      Q_PROPERTY(int onTimeUserOffset READ onTimeUserOffset WRITE setOnTimeUserOffset)
+      Q_PROPERTY(int offTimeOffset READ offTimeOffset WRITE setOffTimeOffset)
+      Q_PROPERTY(int offTimeUserOffset READ offTimeUserOffset WRITE setOffTimeUserOffset)
+
+      Q_PROPERTY(DirectionH userMirror READ userMirror WRITE setUserMirror)
+      Q_PROPERTY(Direction dotPosition READ dotPosition WRITE setDotPosition)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
