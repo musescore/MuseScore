@@ -22,7 +22,7 @@ if (SCRIPT_INTERFACE)
       rest.h segment.h shadownote.h simpletext.h slur.h spacer.h spanner.h
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
-      score.h mscore1.h cursor.h page.h part.h staff.h
+      score.h cursor.h page.h part.h staff.h
       )
 endif (SCRIPT_INTERFACE)
 
