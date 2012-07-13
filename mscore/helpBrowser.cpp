@@ -21,6 +21,8 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       {
       view    = new WebView;
       toolbar = new QWidget;
+      toolbar->setSizePolicy(QSizePolicy::Expanding, 
+      QSizePolicy::Fixed);
       QVBoxLayout* l = new QVBoxLayout;
       l->addWidget(toolbar);
       l->addWidget(view);
