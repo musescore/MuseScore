@@ -108,7 +108,7 @@ struct SlurPos {
       };
 
 //---------------------------------------------------------
-//   SlurTie
+//   @@ SlurTie
 //---------------------------------------------------------
 
 class SlurTie : public Spanner {
@@ -156,7 +156,7 @@ class SlurTie : public Spanner {
       };
 
 //---------------------------------------------------------
-//   Slur
+//   @@ Slur
 //    slurs have Chord's as startElement/endElement
 //---------------------------------------------------------
 
@@ -166,7 +166,7 @@ class Slur : public SlurTie {
       int _track2; // obsolete used temporarily for reading old version
 
    public:
-      Slur(Score*);
+      Slur(Score* = 0);
       ~Slur();
       virtual Slur* clone() const      { return new Slur(*this); }
       virtual ElementType type() const { return SLUR; }
@@ -190,16 +190,15 @@ class Slur : public SlurTie {
       };
 
 //---------------------------------------------------------
-//   Tie
+//   @@ Tie
 //    slurs have Note's as startElement/endElement
 //---------------------------------------------------------
 
 class Tie : public SlurTie {
       Q_OBJECT
 
-
    public:
-      Tie(Score*);
+      Tie(Score* = 0);
       virtual Tie* clone() const          { return new Tie(*this);        }
       virtual ElementType type() const    { return TIE;                   }
       void setStartNote(Note* note);

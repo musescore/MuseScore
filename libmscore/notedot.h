@@ -17,7 +17,7 @@
 #include "element.h"
 
 //---------------------------------------------------------
-//   NoteDot
+//   @@ NoteDot
 //---------------------------------------------------------
 
 class NoteDot : public Element {
@@ -26,7 +26,7 @@ class NoteDot : public Element {
       int _idx;
 
    public:
-      NoteDot(Score*);
+      NoteDot(Score* =0);
       virtual NoteDot* clone() const   { return new NoteDot(*this); }
       virtual ElementType type() const { return NOTEDOT; }
       int idx() const                  { return _idx; }
