@@ -60,7 +60,6 @@ class DrumrollEditor;
 class Staff;
 class ScoreView;
 class ScoreTab;
-class QScriptEngineDebugger;
 class Drumset;
 class TextTools;
 class DrumTools;
