@@ -212,7 +212,7 @@ static void writeOutput()
                                     }
                               }
                         if (found)
-                              out += QString("<code><a href=\"%1.html\">%2 </a> ")
+                              out += QString("<code><a href=\"%1.html\">%2</a> ")
                                  .arg(type.toLower()).arg(type);
                         else
                               out += QString("<code>%1 ").arg(type);
