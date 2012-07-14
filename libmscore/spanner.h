@@ -54,7 +54,7 @@ class SpannerSegment : public Element {
       };
 
 //---------------------------------------------------------
-//   Spanner
+//   @@ Spanner
 //---------------------------------------------------------
 
 class Spanner : public Element {
