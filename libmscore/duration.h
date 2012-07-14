@@ -22,7 +22,7 @@ class Beam;
 class Spanner;
 
 //---------------------------------------------------------
-//   DurationElement
+//   @@ DurationElement
 //---------------------------------------------------------
 
 class DurationElement : public Element {
