@@ -459,7 +459,7 @@ void PluginCreator::showManual()
       {
       if (helpBrowser == 0) {
             helpBrowser = new HelpBrowser;
-            manualDock = new QDockWidget("Manual", 0);
+            manualDock = new QDockWidget(tr("Manual"), 0);
 
             manualDock->setWidget(helpBrowser);
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
