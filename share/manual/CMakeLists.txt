@@ -43,7 +43,7 @@ install(FILES
       plugins/staff.html
       plugins/text.html
       plugins/timesig.html
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual/plugins
       )
 
 if (IS_DIRECTORY en)
