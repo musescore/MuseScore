@@ -41,13 +41,13 @@ struct TextSegment {
 //---------------------------------------------------------
 //   @@ Harmony
 //   @P id int          harmony identifier
-//   @P rootTpc int
-//   @P baseTpc int
+//   @P rootTpc int     root note as "tonal pitch class"
+//   @P baseTpc int     bass note as "tonal pitch class"
 //
 //    root note and bass note are notatated as
 //    "tonal pitch class":
 //
-//           bb  b   -   #  ##
+//           bb   b   -   #  ##
 //            0,  7, 14, 21, 28,  // C
 //            2,  9, 16, 23, 30,  // D
 //            4, 11, 18, 25, 32,  // E
