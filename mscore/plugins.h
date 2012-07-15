@@ -19,17 +19,34 @@
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
-//---------------------------------------------------------
-//   MsFile
-//    @@ QFile
-//---------------------------------------------------------
-
-class MsFile : public QFile {
+class FileIO : public QObject {
       Q_OBJECT
-
+ 
    public:
-      MsFile() : QFile() {}
+      Q_PROPERTY(QString source
+               READ source
+               WRITE setSource
+               NOTIFY sourceChanged)
+      explicit FileIO(QObject *parent = 0);
+ 
+      Q_INVOKABLE QString read();
+      Q_INVOKABLE bool write(const QString& data);
+      Q_INVOKABLE bool remove(const QString& data);
+      Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
+ 
+      QString source() { return mSource; };
+ 
+   public slots:
+      void setSource(const QString& source) { mSource = source; };
+ 
+   signals:
+      void sourceChanged(const QString& source);
+      void error(const QString& msg);
+ 
+   private:
+      QString mSource;
       };
+
 
 //---------------------------------------------------------
 //   MsProcess
@@ -168,7 +185,6 @@ class QmlPlugin : public QDeclarativeItem {
       Q_INVOKABLE Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE MsProcess* newQProcess() { return new MsProcess(this); }
-      Q_INVOKABLE MsFile* newQFile()       { return new MsFile(); }
       Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Score* readScore(const QString& name);
       };
