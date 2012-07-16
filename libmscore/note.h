@@ -88,8 +88,8 @@ class Note : public Element {
       Q_PROPERTY(int line       READ line       WRITE setLine)
       Q_PROPERTY(int fret       READ fret       WRITE setFret)
       Q_PROPERTY(int string     READ string     WRITE setString)
-      Q_PROPERTY(int tpc        READ tpc        WRITE setTpc)
-      Q_PROPERTY(int pitch      READ pitch      WRITE setPitch)
+      Q_PROPERTY(int tpc        READ tpc        WRITE undoSetTpc)
+      Q_PROPERTY(int pitch      READ pitch      WRITE undoSetPitch)
       Q_PROPERTY(int ppitch     READ ppitch)
       Q_PROPERTY(bool ghost     READ ghost      WRITE setGhost)
       Q_PROPERTY(bool hidden    READ hidden     WRITE setHidden)
@@ -199,6 +199,7 @@ class Note : public Element {
 
       int pitch() const               { return _pitch;    }
       void setPitch(int val);
+      void undoSetPitch(int val);
       void setPitch(int a, int b);
       int ppitch() const;
       qreal tuning() const           { return _tuning;   }
@@ -206,6 +207,7 @@ class Note : public Element {
 
       int tpc() const                 { return _tpc;      }
       void setTpc(int v);
+      void undoSetTpc(int v);
       void setTpcFromPitch();
 
       Q_INVOKABLE Accidental* accidental() const    { return _accidental; }

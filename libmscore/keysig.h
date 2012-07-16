@@ -47,7 +47,7 @@ class KeySig : public Element {
       void addLayout(int sym, qreal x, int y);
 
    public:
-      KeySig(Score*);
+      KeySig(Score* = 0);
       KeySig(const KeySig&);
       virtual KeySig* clone() const { return new KeySig(*this); }
       virtual void draw(QPainter*) const;
