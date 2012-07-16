@@ -468,7 +468,7 @@ void MuseScore::newFile()
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
             int ticks = measure->ticks();
-	      for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   Staff* staff = score->staff(staffIdx);
                   if (tick == 0) {
                         if (!staff->useTablature()) {
@@ -503,21 +503,21 @@ void MuseScore::newFile()
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
                                     foreach(TDuration d, dList) {
-		                              Rest* rest = new Rest(score, d);
+                                          Rest* rest = new Rest(score, d);
                                           rest->setDuration(d.fraction());
-            	                        rest->setTrack(staffIdx * VOICES);
-	            	                  Segment* s = measure->getSegment(rest, tick);
-		                              s->add(rest);
+                                          rest->setTrack(staffIdx * VOICES);
+                                          Segment* s = measure->getSegment(rest, tick);
+                                          s->add(rest);
                                           tick += rest->actualTicks();
                                           }
                                     }
                               }
                         else {
-		                  Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                              Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
                               rest->setDuration(measure->len());
-            	            rest->setTrack(staffIdx * VOICES);
-	            	      Segment* s = measure->getSegment(rest, tick);
-		                  s->add(rest);
+                              rest->setTrack(staffIdx * VOICES);
+                              Segment* s = measure->getSegment(rest, tick);
+                              s->add(rest);
                               }
                         }
                   }
@@ -672,24 +672,24 @@ QString MuseScore::getSaveScoreName(const QString& title,
    QString& name, const QString& filter, QString* selectedFilter, bool selectFolder)
       {
       if (preferences.nativeDialogs) {
-	    if (!selectFolder) {
-		    QString fn = QFileDialog::getSaveFileName(this,
-				    title,
-				    name,
-				    filter,
-				    selectedFilter
-				    );
-		    return fn;
+          if (!selectFolder) {
+                QString fn = QFileDialog::getSaveFileName(this,
+                            title,
+                            name,
+                            filter,
+                            selectedFilter
+                            );
+                return fn;
                     } else {
-		    QString fn = QFileDialog::getSaveFileName(this,
-				    title,
-				    name,
-				    filter,
-				    selectedFilter,
-				    QFileDialog::ShowDirsOnly
-				    );
-		    return fn;
-	    	   }
+                QString fn = QFileDialog::getSaveFileName(this,
+                            title,
+                            name,
+                            filter,
+                            selectedFilter,
+                            QFileDialog::ShowDirsOnly
+                            );
+                return fn;
+               }
             }
 
       QFileInfo myScores(preferences.myScoresPath);
@@ -1513,21 +1513,21 @@ bool MuseScore::exportParts()
 
       QSettings settings;
       if (lastSaveCopyDirectory.isEmpty())
-	    lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.myScoresPath).toString();
+          lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.myScoresPath).toString();
       if (lastSaveDirectory.isEmpty())
-	    lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
+          lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
       QString saveDirectory = lastSaveCopyDirectory;
 
       if (saveDirectory.isEmpty()) {
-	    saveDirectory = preferences.myScoresPath;
-	    }
+          saveDirectory = preferences.myScoresPath;
+          }
 
       QString selectedFilter;
       QString name = QString("");
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter, &selectedFilter, true);
       if (fn.isEmpty())
-	    return false;
+          return false;
 
       lastSaveCopyDirectory = fn;
 
@@ -1536,25 +1536,25 @@ bool MuseScore::exportParts()
             thisScore = thisScore->parentScore();
 
       foreach(Excerpt* e, thisScore->excerpts())  {
-	      Score* pScore = e->score();
+            Score* pScore = e->score();
             QString partfn = fn + QDir::separator() + thisScore->name() + "-" + pScore->name();
-	      QFileInfo fi(partfn);
-	      QString ext;
+            QFileInfo fi(partfn);
+            QString ext;
             if (selectedFilter.isEmpty())
-		      ext = fi.suffix();
+                  ext = fi.suffix();
             else {
-		      int idx = fl.indexOf(selectedFilter);
-		      if (idx != -1) {
-			      static const char* extensions[] = {
-				      "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg", "ly",
+                  int idx = fl.indexOf(selectedFilter);
+                  if (idx != -1) {
+                        static const char* extensions[] = {
+                              "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg", "ly",
 #ifdef HAS_AUDIOFILE
-				      "wav", "flac", "ogg",
+                              "wav", "flac", "ogg",
 #endif
-				      "mp3"
-			            };
+                              "mp3"
+                              };
                         ext = extensions[idx];
-		            }
-	            }
+                        }
+                  }
             if (ext.isEmpty()) {
                   QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("cannot determine file type"));
                   return false;
@@ -1587,6 +1587,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as mscore *.msc[xz] file
             QFileInfo fi(fn);
             rv = true;
+            // store new file and path into score fileInfo
+            // to have it accessible to resources
+            QString originalScoreFName(cs->absoluteFilePath());
+            cs->fileInfo()->setFile(fn);
             try {
                   if (ext == "mscz")
                         cs->saveCompressedFile(fi, false);
@@ -1597,6 +1601,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   rv = false;
                   QMessageBox::critical(this, tr("MuseScore: Save As"), s);
                   }
+            cs->fileInfo()->setFile(originalScoreFName);          // restore original file name
+
             if (rv && !saveCopy) {
                   cs->fileInfo()->setFile(fn);
                   setWindowTitle("MuseScore: " + cs->name());
