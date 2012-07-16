@@ -40,6 +40,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/timesig.h"
+#include "libmscore/keysig.h"
 #include "libmscore/harmony.h"
 #include "libmscore/slur.h"
 #include "libmscore/notedot.h"
@@ -176,6 +177,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
             qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
             qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
+            qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
@@ -183,6 +185,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
+            qmlRegisterType<Spanner>();
             }
       return _qml;
       }

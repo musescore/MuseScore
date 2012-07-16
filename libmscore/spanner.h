@@ -83,7 +83,7 @@ class Spanner : public Element {
       qreal _yoffset;        // in spatium units
 
    public:
-      Spanner(Score*);
+      Spanner(Score* = 0);
       Spanner(const Spanner&);
       ~Spanner();
 
