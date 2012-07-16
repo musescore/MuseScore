@@ -118,6 +118,11 @@ struct EditData {
 
 //-------------------------------------------------------------------
 //    @@ Element
+///   \brief Base class of score layout elements
+///
+///   The Element class is the virtual base class of all
+///   score layout elements.
+//
 //      @P type      int         element type
 //      @P parent    Element*    parent in drawing hierarchy
 //      @P track     int
@@ -127,11 +132,6 @@ struct EditData {
 //      @P selected  bool
 //      @P pos       QPointF     position relativ to parent
 //      @P userOff   QPointF     manual offset to layout position
-//
-///   \brief base class of score layout elements
-///
-///   The Element class is the virtual base class of all
-///   score layout elements.
 //-------------------------------------------------------------------
 
 class Element : public QObject {

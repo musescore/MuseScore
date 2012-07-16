@@ -30,11 +30,16 @@ enum TimeSigType {
 
 //---------------------------------------------------------
 //   @@ TimeSig
-//    Time Signature
+///    This class represents a time signature.
+//
+//    @P zText QString  text of numerator
+//    @P nText QString  text of denominator
 //---------------------------------------------------------
 
 class TimeSig : public Element {
       Q_OBJECT
+      Q_PROPERTY(QString zText READ zText WRITE setZText)
+      Q_PROPERTY(QString nText READ nText WRITE setNText)
 
       TimeSigType _subtype;
       bool	_showCourtesySig;
@@ -78,6 +83,8 @@ class TimeSig : public Element {
 
       QString zText() const              { return sz; }
       QString nText() const              { return sn; }
+      void setZText(const QString&);
+      void setNText(const QString&);
       void setText(const QString&, const QString&);
       void setFrom(const TimeSig*);
       };

@@ -21,7 +21,6 @@ class Sym;
 class Segment;
 class QPainter;
 
-
 //---------------------------------------------------------
 //   KeySym
 //    position of one symbol in KeySig
@@ -34,7 +33,7 @@ struct KeySym {
       };
 
 //---------------------------------------------------------
-//   KeySig
+//   @@ KeySig
 ///   The KeySig class represents a Key Signature on a staff
 //---------------------------------------------------------
 
@@ -66,7 +65,8 @@ class KeySig : public Element {
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
       virtual void read(const QDomElement&);
-      int keySignature() const            { return _sig.accidentalType(); }    // -7 - +7
+      //@ -7 (flats) -- +7 (sharps)
+      Q_INVOKABLE int keySignature() const            { return _sig.accidentalType(); }    // -7 - +7
       int customType() const              { return _sig.customType(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }
@@ -76,8 +76,8 @@ class KeySig : public Element {
       int tick() const;
 
       bool showCourtesySig() const        { return _showCourtesySig; };
-      bool showNaturals() const           { return _showNaturals;    };
       void setShowCourtesySig(bool v)     { _showCourtesySig = v;    };
+      bool showNaturals() const           { return _showNaturals;    };
 	void setShowNaturals(bool v)        { _showNaturals = v;       };
 	};
 

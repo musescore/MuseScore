@@ -5,19 +5,20 @@
    <link rel="stylesheet" type="text/css" href="manual.css"/>
    </head>
 <body>
-<h3 class="object">Score</h3>
-<h4 class="groupA">Methods</h4>
+<h3>Score</h3>
+<h4>Methods</h4>
+<div class="methods">
 <div class="method">
-<code><a href="measure.html">Measure </a> <b>firstMeasure</b>()</code>
+<code><a href="measure.html">Measure</a> <b>firstMeasure</b>()</code>
 </div>
 <div class="method">
-<code><a href="measure.html">Measure </a> <b>lastMeasure</b>()</code>
+<code><a href="measure.html">Measure</a> <b>lastMeasure</b>()</code>
 </div>
 <div class="method">
-<code><a href="segment.html">Segment </a> <b>firstSegment</b>(SegmentTypes s = SegAll)</code>
+<code><a href="segment.html">Segment</a> <b>firstSegment</b>(SegmentTypes s = SegAll)</code>
 </div>
 <div class="method">
-<code><a href="segment.html">Segment </a> <b>lastSegment</b>()</code>
+<code><a href="segment.html">Segment</a> <b>lastSegment</b>()</code>
 </div>
 <div class="method">
 <code>void <b>doLayout</b>()</code>
@@ -38,14 +39,15 @@
 <code>void <b>addText</b>(const QString&, const QString&)</code>
 </div>
 <div class="method">
-<code><a href="cursor.html">Cursor </a> <b>newCursor</b>()</code>
+<code><a href="cursor.html">Cursor</a> <b>newCursor</b>()</code>
 </div>
-<h4 class="groupB">Properties</h4>
-<div class="tab2">
-<table border="1" rules="all" cellpadding="0" cellspacing="0">
-<tr><td><code>name</code></td><td><code>QString</code></td><td>    name of the score</td></tr>
-<tr><td><code>nstaves</code></td><td><code>int</code></td><td>     number of staves</td></tr>
-<tr><td><code>ntracks</code></td><td><code>int</code></td><td>     number of tracks (staves * 4)</td></tr>
+</div>
+<h4>Properties</h4>
+<div class="properties">
+<table cellpadding="0" cellspacing="0">
+<tr><td>name</td><td>QString</td><td>    name of the score</td></tr>
+<tr><td>nstaves</td><td>int</td><td>     number of staves, read only</td></tr>
+<tr><td>ntracks</td><td>int</td><td>     number of tracks (staves * 4), read only</td></tr>
 </table></div>
 </body>
 </html>

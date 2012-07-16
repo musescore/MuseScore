@@ -54,11 +54,17 @@ class SpannerSegment : public Element {
       };
 
 //---------------------------------------------------------
-//   Spanner
+//   @@ Spanner
+///   Virtual base class for slurs, ties, lines etc.
+//
+//    @P startElement Element*
+//    @P endElement Element*
 //---------------------------------------------------------
 
 class Spanner : public Element {
       Q_OBJECT
+      Q_PROPERTY(Element* startElement READ startElement WRITE setStartElement)
+      Q_PROPERTY(Element* endElement READ endElement WRITE setEndElement)
 
       Element* _startElement;       // can be ChordRest, Segment or Measure
       Element* _endElement;         // depending on anchor
