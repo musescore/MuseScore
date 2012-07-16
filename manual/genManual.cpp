@@ -341,6 +341,7 @@ int main(int argc, char* argv[])
       files << "libmscore/measure.h";
       files << "libmscore/segment.h";
       files << "libmscore/chordrest.h";
+      files << "libmscore/duration.h";
       files << "libmscore/chord.h";
       files << "libmscore/note.h";
       files << "libmscore/rest.h";
