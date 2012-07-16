@@ -121,7 +121,6 @@ class CookieJar : public QNetworkCookieJar
       QString file; // where to save cookies
       };
 
-
 #if 0
 //---------------------------------------------------------
 //   WebScoreView

@@ -19,34 +19,38 @@
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
+//---------------------------------------------------------
+//   @@ FileIO
+//   @P source QString
+//---------------------------------------------------------
+
 class FileIO : public QObject {
       Q_OBJECT
- 
+
    public:
       Q_PROPERTY(QString source
                READ source
                WRITE setSource
                NOTIFY sourceChanged)
       explicit FileIO(QObject *parent = 0);
- 
+
       Q_INVOKABLE QString read();
       Q_INVOKABLE bool write(const QString& data);
       Q_INVOKABLE bool remove(const QString& data);
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
- 
+
       QString source() { return mSource; };
- 
+
    public slots:
       void setSource(const QString& source) { mSource = source; };
- 
+
    signals:
       void sourceChanged(const QString& source);
       void error(const QString& msg);
- 
+
    private:
       QString mSource;
       };
-
 
 //---------------------------------------------------------
 //   MsProcess
@@ -67,6 +71,8 @@ class MsProcess : public QProcess {
 
 //---------------------------------------------------------
 //   @@ ScoreView
+///   This is an GUI element to show a score.
+//
 //   @P color QColor    background color
 //   @P scale qreal     scaling factor
 //---------------------------------------------------------
