@@ -21,8 +21,6 @@
 #ifndef __ALLQT_H__
 #define __ALLQT_H__
 
-#include "config.h"
-
 #include <stdio.h>
 #include <limits.h>
 #include <map>
