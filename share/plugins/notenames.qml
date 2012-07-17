@@ -15,6 +15,8 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath: "Plugins.notenames"
+      version:  "2.0"
+      description: "This demo plugin names notes."
 
       onRun: {
             if (typeof curScore === 'undefined')

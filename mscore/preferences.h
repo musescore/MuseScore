@@ -66,6 +66,8 @@ enum MusicxmlExportBreaks {
 
 struct PluginDescription {
       QString path;
+      QString version;
+      QString description;
       bool load;
       Shortcut shortcut;
       QString menuPath;

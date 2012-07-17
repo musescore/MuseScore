@@ -610,3 +610,26 @@ const QTransform& MsScoreView::matrix() const
       return t; // _matrix;
       }
 
+//---------------------------------------------------------
+//   collectPluginMetaInformation
+//---------------------------------------------------------
+
+void collectPluginMetaInformation(PluginDescription* d)
+      {
+      printf("collect meta for <%s>\n", qPrintable(d->path));
+
+      QDeclarativeComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
+      QObject* obj = component.create();
+      if (obj == 0) {
+            qDebug("creating component <%s> failed", qPrintable(d->path));
+            foreach(QDeclarativeError e, component.errors()) {
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+                  }
+            return;
+            }
+      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      d->version      = item->version();
+      d->description  = item->description();
+      delete obj;
+      }
+
