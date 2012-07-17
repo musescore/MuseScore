@@ -4,6 +4,9 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath:   "Plugins.panel"
+      version:  "2.0"
+      description: "This demo plugin creates a GUI panel."
+
       pluginType: "dock"
       dockArea:   "left"
 

@@ -36,6 +36,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QButtonGroup* recordButtons;
+      Preferences* prefs;
 
       void apply();
       bool sfChanged;
@@ -69,6 +70,8 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectSoundFontsDirectory();
       void selectImagesDirectory();
       void definePluginShortcutClicked();
+      void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
+      void pluginLoadToggled(bool);
 
    signals:
       void preferencesChanged();
