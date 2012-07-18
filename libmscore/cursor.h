@@ -61,6 +61,9 @@ class Cursor : public QObject {
       //state
       Segment* _segment;
 
+      // utility methods
+      void firstChordRestInTrack();
+
    public:
       Cursor(Score* c = 0);
       Cursor(Score*, bool);
