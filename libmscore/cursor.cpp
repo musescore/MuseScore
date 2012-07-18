@@ -55,17 +55,19 @@ void Cursor::rewind(int type)
             Measure* m = _score->firstMeasure();
             if (m) {
                   _segment = m->first(SegChordRest);
-                  while (_segment && _segment->element(_track) == 0)
-                        _segment = _segment->next1(SegChordRest);
+//                  while (_segment && _segment->element(_track) == 0)
+//                        _segment = _segment->next1(SegChordRest);
+                  firstChordRestInTrack();
                   }
             }
       else if (type == 1) {
             _segment  = _score->selection().startSegment();
             _track    = _score->selection().staffStart() * VOICES;
+            firstChordRestInTrack();
             }
       else if (type == 2) {
             _segment  = _score->selection().endSegment();
-            _track    = _score->selection().staffEnd() * VOICES;
+            _track    = (_score->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
             }
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
@@ -82,6 +84,7 @@ bool Cursor::next()
       if (!_segment)
             return false;
       _segment = _segment->next1(SegChordRest | SegGrace);
+      firstChordRestInTrack();
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
       return _segment != 0;
@@ -102,10 +105,10 @@ bool Cursor::nextMeasure()
             _segment = 0;
             return false;
             }
-      Segment* seg = m->first(SegChordRest | SegGrace);
-      while (seg->element(_track) == 0)
-            seg = seg->next1(SegChordRest | SegGrace);
-      _segment = seg;
+      _segment = m->first(SegChordRest | SegGrace);
+//      while (seg && seg->element(_track) == 0)
+//            seg = seg->next1(SegChordRest | SegGrace);
+      firstChordRestInTrack();
       return _segment != 0;
       }
 
@@ -228,5 +231,16 @@ int Cursor::staffIdx() const
 int Cursor::voice() const
       {
       return _track % VOICES;
+      }
+
+//---------------------------------------------------------
+//   nextInTrack
+//    go to first segment at or after _segment which has notes / rests in _track
+//---------------------------------------------------------
+
+inline void Cursor::firstChordRestInTrack()
+      {
+            while (_segment && _segment->element(_track) == 0)
+                  _segment = _segment->next1(SegChordRest | SegGrace);
       }
 
