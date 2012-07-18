@@ -147,27 +147,47 @@ void InspectorImage::valueChanged(int idx)
             }
       else if (idx == SCALE_W) {
             if (b.lockAspectRatio->isChecked()) {
-                  // scale width was changed, fix scale height
-                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
+//                  // scale width was changed, fix scale height
+//                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
+//                  qreal ratio = sz.width() / sz.height();
+//                  qreal h     = b.scaleWidth->value() / ratio;
+//                  b.scaleHeight->blockSignals(true);
+//                  b.scaleHeight->setValue(h);
+//                  b.scaleHeight->blockSignals(false);
+/* LOCK keeps original ratio
+                  b4->blockSignals(true);
+                  b4->setValue(b3->value());
+                  b4->blockSignals(false);*/
+/* LOCK keeps current ratio */
+                  QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
-
-                  qreal h     = b.scaleWidth->value() / ratio;
-                  b.scaleHeight->blockSignals(true);
-                  b.scaleHeight->setValue(h);
-                  b.scaleHeight->blockSignals(false);
+                  qreal w     = b3->value() / ratio;
+                  b4->blockSignals(true);
+                  b4->setValue(w);
+                  b4->blockSignals(false);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
       else if (idx == SCALE_H) {
             if (b.lockAspectRatio->isChecked()) {
-                  // scale height was changed, fix scale width
-                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
+//                  // scale height was changed, fix scale width
+//                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
+//                  qreal ratio = sz.width() / sz.height();
+//                  qreal w     = b.scaleHeight->value() * ratio;
+//                  b.scaleWidth->blockSignals(true);
+//                  b.scaleWidth->setValue(w);
+//                  b.scaleWidth->blockSignals(false);
+/* LOCK keeps original ratio
+                  b3->blockSignals(true);
+                  b3->setValue(b4->value());
+                  b3->blockSignals(false);*/
+/* LOCK keeps current ratio */
+                  QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
-
-                  qreal w     = b.scaleHeight->value() * ratio;
-                  b.scaleWidth->blockSignals(true);
-                  b.scaleWidth->setValue(w);
-                  b.scaleWidth->blockSignals(false);
+                  qreal w     = b4->value() * ratio;
+                  b3->blockSignals(true);
+                  b3->setValue(w);
+                  b3->blockSignals(false);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
