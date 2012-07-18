@@ -5,44 +5,46 @@
    <link rel="stylesheet" type="text/css" href="manual.css"/>
    </head>
 <body>
-<h3 class="object">Note</h3>
+<h3>Note</h3>
 inherits <a href="element.html">Element</a><br/><br/>
-<h4 class="groupA">Methods</h4>
+<h4>Methods</h4>
+<div class="methods">
 <div class="method">
 <code>Accidental <b>accidental</b>()</code>
 </div>
 <div class="method">
-<code><a href="tie.html">Tie </a> <b>tieFor</b>()</code>
+<code><a href="tie.html">Tie</a> <b>tieFor</b>()</code>
 </div>
 <div class="method">
-<code><a href="tie.html">Tie </a> <b>tieBack</b>()</code>
+<code><a href="tie.html">Tie</a> <b>tieBack</b>()</code>
 </div>
 <div class="method">
-<code><a href="notedot.html">NoteDot </a> <b>dot</b>(int n)</code>
+<code><a href="notedot.html">NoteDot</a> <b>dot</b>(int n)</code>
 </div>
-<h4 class="groupB">Properties</h4>
-<div class="tab2">
-<table border="1" rules="all" cellpadding="0" cellspacing="0">
-<tr><td><code>pitch</code></td><td><code>int</code></td><td>   midi pitch</td></tr>
-<tr><td><code>tpc</code></td><td><code>int</code></td><td>   tonal pitch class</td></tr>
-<tr><td><code>line</code></td><td><code>int</code></td><td>   notehead position</td></tr>
-<tr><td><code>fret</code></td><td><code>int</code></td><td>   fret number in tablature</td></tr>
-<tr><td><code>string</code></td><td><code>int</code></td><td>   string number in tablature</td></tr>
-<tr><td><code>subchannel</code></td><td><code>int</code></td><td>   midi subchannel (for midi articulation)</td></tr>
-<tr><td><code>ppitch</code></td><td><code>int</code></td><td>   actual played midi pitch (honoring ottavas)</td></tr>
-<tr><td><code>ghost</code></td><td><code>bool</code></td><td>  ghost note (guitar: death note)</td></tr>
-<tr><td><code>hidden</code></td><td><code>bool</code></td><td>  hidden, not played note</td></tr>
-<tr><td><code>mirror</code></td><td><code>bool</code></td><td>  mirror note head on x axis</td></tr>
-<tr><td><code>small</code></td><td><code>bool</code></td><td>  small note head</td></tr>
-<tr><td><code>tuning</code></td><td><code>qreal</code></td><td> tuning offset in cent</td></tr>
-<tr><td><code>veloType</code></td><td><code>enum</code></td><td>  OFFSET_VAL, USER_VAL</td></tr>
-<tr><td><code>veloOffset</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>onTimeOffset</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>onTimeUserOffset</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>offTimeOffset</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>offTimeUserOffset</code></td><td><code>int</code></td><td></td></tr>
-<tr><td><code>userMirror</code></td><td><code>enum</code></td><td> DH_AUTO, DH_LEFT, DH_RIGHT</td></tr>
-<tr><td><code>dotPosition</code></td><td><code>enum</code></td><td> AUTO, UP, DOWN</td></tr>
+</div>
+<h4>Properties</h4>
+<div class="properties">
+<table cellpadding="0" cellspacing="0">
+<tr><td>pitch</td><td>int</td><td>   midi pitch</td></tr>
+<tr><td>tpc</td><td>int</td><td>   tonal pitch class</td></tr>
+<tr><td>line</td><td>int</td><td>   notehead position</td></tr>
+<tr><td>fret</td><td>int</td><td>   fret number in tablature</td></tr>
+<tr><td>string</td><td>int</td><td>   string number in tablature</td></tr>
+<tr><td>subchannel</td><td>int</td><td>   midi subchannel (for midi articulation)</td></tr>
+<tr><td>ppitch</td><td>int</td><td>   actual played midi pitch (honoring ottavas)</td></tr>
+<tr><td>ghost</td><td>bool</td><td>  ghost note (guitar: death note)</td></tr>
+<tr><td>hidden</td><td>bool</td><td>  hidden, not played note</td></tr>
+<tr><td>mirror</td><td>bool</td><td>  mirror note head on x axis</td></tr>
+<tr><td>small</td><td>bool</td><td>  small note head</td></tr>
+<tr><td>tuning</td><td>qreal</td><td> tuning offset in cent</td></tr>
+<tr><td>veloType</td><td>enum</td><td>  OFFSET_VAL, USER_VAL</td></tr>
+<tr><td>veloOffset</td><td>int</td><td></td></tr>
+<tr><td>onTimeOffset</td><td>int</td><td></td></tr>
+<tr><td>onTimeUserOffset</td><td>int</td><td></td></tr>
+<tr><td>offTimeOffset</td><td>int</td><td></td></tr>
+<tr><td>offTimeUserOffset</td><td>int</td><td></td></tr>
+<tr><td>userMirror</td><td>enum</td><td> DH_AUTO, DH_LEFT, DH_RIGHT</td></tr>
+<tr><td>dotPosition</td><td>enum</td><td> AUTO, UP, DOWN</td></tr>
 </table></div>
 </body>
 </html>

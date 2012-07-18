@@ -40,6 +40,7 @@ struct Proc {
 
 struct Class {
       QString name;
+      QStringList description;
       QString parent;
 
       QList<Prop> props;
@@ -96,14 +97,19 @@ static void parseClass(const QString& name, const QString& in)
       QRegExp re1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
       QRegExp re2("Q_INVOKABLE +([^ ]+) +([^\\{]+)\\{");
       QRegExp re3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
+
       QRegExp reD("//@ (.*)");
+      QRegExp reD1("\\/\\/\\/ (.*)");
       QRegExp re4("class +(\\w+) *: *public +(\\w+) *\\{");
 
       if (!re1.isValid() || !re2.isValid() || !re3.isValid())
             abort();
 
+      bool parseClassDescription = true;
+
       foreach(const QString& s, sl) {
-            if (re.indexIn(s, 0) != -1) {
+            if (re.indexIn(s, 0) != -1) {             //@P
+                  parseClassDescription = false;
                   Prop p;
                   p.name        = re.cap(1);
                   p.type        = re.cap(2);
@@ -111,6 +117,7 @@ static void parseClass(const QString& name, const QString& in)
                   cl.props.append(p);
                   }
             else if (re2.indexIn(s, 0) != -1) {
+                  parseClassDescription = false;
                   Proc p;
                   p.type        = re2.cap(1);
                   p.name        = re2.cap(2);
@@ -119,6 +126,7 @@ static void parseClass(const QString& name, const QString& in)
                   cl.procs.append(p);
                   }
             else if (re1.indexIn(s, 0) != -1) {
+                  parseClassDescription = false;
                   Proc p;
                   p.type        = re1.cap(1);
                   p.name        = re1.cap(2);
@@ -127,6 +135,7 @@ static void parseClass(const QString& name, const QString& in)
                   cl.procs.append(p);
                   }
             else if (re3.indexIn(s, 0) != -1) {
+                  parseClassDescription = false;
                   Proc p;
                   p.type        = re3.cap(1);
                   p.name        = re3.cap(2);
@@ -134,13 +143,23 @@ static void parseClass(const QString& name, const QString& in)
                   methodDescription.clear();
                   cl.procs.append(p);
                   }
-            else if (reD.indexIn(s, 0) != -1) {
-                  printf("description <%s>\n", qPrintable(reD.cap(1)));
-                  methodDescription.append(reD.cap(1));
+            else if ((reD.indexIn(s, 0) != -1)) {
+                  if (parseClassDescription)
+                        cl.description.append(reD.cap(1));
+                  else
+                        methodDescription.append(reD.cap(1));
+                  }
+            else if (s.startsWith("///")) {
+                  QString ss = s.mid(3);
+                  if (parseClassDescription)
+                        cl.description.append(ss);
+                  else
+                        methodDescription.append(ss);
                   }
             else if (re4.indexIn(s, 0) != -1) {
+                  parseClassDescription = false;
                   QString parent = re4.cap(2).simplified();
-                  if (name == re4.cap(1).simplified() && parent != "QObject") {
+                  if (name == re4.cap(1).simplified()) {
                         cl.parent = parent;
                         }
                   else
@@ -187,16 +206,30 @@ static void writeOutput()
       foreach(const Class& cl, classes) {
             QString out;
             addHeader(out);
-            out += QString("<h3 class=\"object\">%1</h3>\n").arg(cl.name);
+            out += QString("<h3>%1</h3>\n").arg(cl.name);
 
             if (!cl.parent.isEmpty()) {
-                  QString path = cl.parent.toLower();
-                  out += QString("inherits <a href=\"%1.html\">%2</a><br/><br/>\n").arg(path).arg(cl.parent);
+                  // show parent only if its part of the exported classes
+                  foreach(const Class& lcl, classes) {
+                        if (lcl.name == cl.parent) {
+                              QString path = cl.parent.toLower();
+                              out += QString("inherits <a href=\"%1.html\">%2</a><br/><br/>\n").arg(path).arg(cl.parent);
+                              break;
+                              }
+                        }
+                  }
+            if (!cl.description.isEmpty()) {
+                  out += "<div class=\"class-description\">\n";
+                  foreach(const QString& s, cl.description) {
+                        out += s.simplified().replace("\\brief ", "");
+                        out += "<br/>\n";
+                        }
+                  out += "</div>\n";
                   }
 
             if (!cl.procs.isEmpty()) {
-                  out += "<h4 class=\"groupA\">Methods</h4>\n";
-
+                  out += "<h4>Methods</h4>\n";
+                  out += "<div class=\"methods\">\n";
                   foreach(const Proc& p, cl.procs) {
                         out += "<div class=\"method\">\n";
 
@@ -226,7 +259,7 @@ static void writeOutput()
                               }
                         out += "</div>\n";
                         if (!p.description.isEmpty()) {
-                              out += "<div class=\"mdescr\">\n";
+                              out += "<div class=\"method-description\">\n";
                               foreach(const QString& s, p.description) {
                                     out += s.simplified();
                                     out += "<br/>\n";
@@ -234,15 +267,16 @@ static void writeOutput()
                               out += "</div>\n";
                               }
                         }
+                  out += "</div>\n";
                   }
             if (!cl.props.isEmpty()) {
-                  out += "<h4 class=\"groupB\">Properties</h4>\n";
-                  out += "<div class=\"tab2\">\n";
-                  out += "<table border=\"1\" rules=\"all\" cellpadding=\"0\" cellspacing=\"0\">\n";
+                  out += "<h4>Properties</h4>\n";
+                  out += "<div class=\"properties\">\n";
+                  out += "<table cellpadding=\"0\" cellspacing=\"0\">\n";
                   foreach(const Prop& m, cl.props) {
                         out += "<tr>";
-                        out += QString("<td><code>%1</code></td>"
-                               "<td><code>%2</code></td>"
+                        out += QString("<td>%1</td>"
+                               "<td>%2</td>"
                                "<td>%3</td>")
                                .arg(m.name).arg(m.type).arg(m.description);
                         out += "</tr>\n";
@@ -333,6 +367,7 @@ int main(int argc, char* argv[])
             }
       srcPath = argv[0];
       QStringList files;
+      files << "mscore/plugins.h";
       files << "libmscore/part.h";
       files << "libmscore/staff.h";
       files << "libmscore/element.h";
@@ -341,6 +376,7 @@ int main(int argc, char* argv[])
       files << "libmscore/measure.h";
       files << "libmscore/segment.h";
       files << "libmscore/chordrest.h";
+      files << "libmscore/duration.h";
       files << "libmscore/chord.h";
       files << "libmscore/note.h";
       files << "libmscore/rest.h";
@@ -351,7 +387,8 @@ int main(int argc, char* argv[])
       files << "libmscore/cursor.h";
       files << "libmscore/notedot.h";
       files << "libmscore/slur.h";
-      files << "mscore/plugins.h";
+      files << "libmscore/spanner.h";
+      files << "libmscore/keysig.h";
 
       foreach(const QString& s, files) {
             QString infile = srcPath + "/" + s;

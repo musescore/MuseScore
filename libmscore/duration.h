@@ -22,7 +22,8 @@ class Beam;
 class Spanner;
 
 //---------------------------------------------------------
-//   DurationElement
+//   @@ DurationElement
+//   @P duration int     duration in ticks
 //---------------------------------------------------------
 
 class DurationElement : public Element {

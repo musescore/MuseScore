@@ -2,23 +2,34 @@ body {
       background:#fff;
       margin-left: 5pt;
       padding: 0;
+      font-family: Verdana, DejaVuSans, Geneva, sans-serif;
+      line-height: 1.4;
+      color: rgb(54, 53, 52);
+      font-size: 10px;
       }
 
-h3.object {
-      padding: 0;
-      color: #0000ff;
-      margin-top: 0pt;
-      margin-bottom: 0pt;
+a {
+      color: rgb(0,115,47);
+      text-decoration:none;
       }
-h4.groupA {
+
+h3 {
       padding: 0;
-      margin-top: 0pt;
-      margin-bottom: 0pt;
-      }
-h4.groupB {
-      padding: 0;
-      margin-top: 10pt;
+      font: bold 18px Arial;
+      margin-top: 5pt;
       margin-bottom: 5pt;
+      }
+h4 {
+      font: bold 11px Arial;
+      padding: 0;
+      margin-top: 0pt;
+      margin-bottom: 0pt;
+      }
+
+table.tab1 {
+      border-radius: 7px;
+      background-color: rgb(246, 246, 246);
+      border: 1px solid rgb(230, 230, 230);
       }
 
 div.tab1 {
@@ -27,32 +38,30 @@ div.tab1 {
       margin-bottom: 5pt;
       }
 
-div.tab1 table td code {
-      color: #0000ff;
-      font-weight: bold;
+div.methods,div.properties {
+      border-radius: 7px;
+      background-color: rgb(246, 246, 246);
+      border: 1px solid rgb(230, 230, 230);
+      margin-top: 5pt;
+      margin-bottom: 10pt;
       }
 
-div.tab2 {
-      margin-left: 10pt;
-      }
-
-div.tab2 table td {
-      padding-left: 4pt;
-      padding-right: 4pt;
-      }
-
-div.tab2 table td code {
-      color: #0000ff;
-      font-weight: bold;
+div.properties table td {
+      padding-left: 5pt;
+      padding-right: 5pt;
       }
 
 div.method {
       margin-top:    0pt;
       margin-bottom: 0pt;
-      background: #d0d0f0;
       margin-left: 10pt;
       }
 
-div.mdescr {
+div.method-description {
       margin-left: 20pt;
+      margin-bottom: 8pt;
+      }
+div.class-description {
+      margin-left: 10pt;
+      margin-bottom: 8pt;
       }

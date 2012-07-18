@@ -20,9 +20,7 @@ class TDuration;
 
 //---------------------------------------------------------
 //    @@ Rest
-///   This class implements a rest. Todo: detailed
-///   description of Rest class.
-///   More text.
+///   This class implements a rest.
 //---------------------------------------------------------
 
 class Rest : public ChordRest {

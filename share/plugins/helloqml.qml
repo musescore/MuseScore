@@ -4,6 +4,9 @@ import MuseScore 1.0
 
 MuseScore {
       menuPath: "Plugins.helloQml"
+      version:  "2.0"
+      description: "This demo plugin shows some basic tasks."
+
       width:  150
       height: 75
       onRun: {
