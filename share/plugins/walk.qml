@@ -26,18 +26,15 @@ MuseScore {
 							
             for (var track = 0; track < curScore.ntracks; ++track) {
                   var segment = curScore.firstSegment();                      
-       
                   while (segment) {
-																																								var element = segment.element(track);
+                        var element = segment.element(track);
                         if (element) {
                               var type    = element.type;
-																																									
-																																									     console.log(type);
-                             }
-																																							 segment = segment.next1();
+	                      console.log(type);
+                              }
+                        segment = segment.next1();
                         }
                   }
             Qt.quit();
             }
       }
-
