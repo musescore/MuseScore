@@ -2,7 +2,10 @@ import QtQuick 1.0
 import MuseScore 1.0
 
 MuseScore {
+      version:  "1.0"
+      description: "This demo plugin creates a new score."
       menuPath: "Plugins.createscore"
+
       onRun: {
             console.log("hello createscore");
             var score = newScore("Test-Score", "Piano", 5);

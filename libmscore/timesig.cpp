@@ -118,6 +118,26 @@ void TimeSig::setText(const QString& a, const QString& b)
       }
 
 //---------------------------------------------------------
+//   setZText
+//---------------------------------------------------------
+
+void TimeSig::setZText(const QString& a)
+      {
+      sz = a;
+      customText = !(sz.isEmpty() && sn.isEmpty());
+      }
+
+//---------------------------------------------------------
+//   setNText
+//---------------------------------------------------------
+
+void TimeSig::setNText(const QString& a)
+      {
+      sn = a;
+      customText = !(sz.isEmpty() && sn.isEmpty());
+      }
+
+//---------------------------------------------------------
 //   write TimeSig
 //---------------------------------------------------------
 

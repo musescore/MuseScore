@@ -19,34 +19,38 @@
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
+//---------------------------------------------------------
+//   @@ FileIO
+//   @P source QString
+//---------------------------------------------------------
+
 class FileIO : public QObject {
       Q_OBJECT
- 
+
    public:
       Q_PROPERTY(QString source
                READ source
                WRITE setSource
                NOTIFY sourceChanged)
       explicit FileIO(QObject *parent = 0);
- 
+
       Q_INVOKABLE QString read();
       Q_INVOKABLE bool write(const QString& data);
       Q_INVOKABLE bool remove(const QString& data);
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
- 
+
       QString source() { return mSource; };
- 
+
    public slots:
       void setSource(const QString& source) { mSource = source; };
- 
+
    signals:
       void sourceChanged(const QString& source);
       void error(const QString& msg);
- 
+
    private:
       QString mSource;
       };
-
 
 //---------------------------------------------------------
 //   MsProcess
@@ -67,6 +71,8 @@ class MsProcess : public QProcess {
 
 //---------------------------------------------------------
 //   @@ ScoreView
+///   This is an GUI element to show a score.
+//
 //   @P color QColor    background color
 //   @P scale qreal     scaling factor
 //---------------------------------------------------------
@@ -141,7 +147,10 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
 class QmlPlugin : public QDeclarativeItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
+      Q_PROPERTY(QString version         READ version WRITE setVersion)
+      Q_PROPERTY(QString description     READ description WRITE setDescription)
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
+
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
       Q_PROPERTY(int division            READ division)
       Q_PROPERTY(int mscoreVersion       READ mscoreVersion)
@@ -155,6 +164,8 @@ class QmlPlugin : public QDeclarativeItem {
       QString _menuPath;
       QString _pluginType;
       QString _dockArea;
+      QString _version;
+      QString _description;
 
    signals:
       void run();
@@ -165,6 +176,11 @@ class QmlPlugin : public QDeclarativeItem {
 
       void setMenuPath(const QString& s)   { _menuPath = s;    }
       QString menuPath() const             { return _menuPath; }
+      void setVersion(const QString& s)    { _version = s; }
+      QString version() const              { return _version; }
+      void setDescription(const QString& s) { _description = s; }
+      QString description() const          { return _description; }
+
       void setPluginType(const QString& s) { _pluginType = s;    }
       QString pluginType() const           { return _pluginType; }
       void setDockArea(const QString& s)   { _dockArea = s;    }
@@ -172,7 +188,7 @@ class QmlPlugin : public QDeclarativeItem {
       void runPlugin()                     { emit run();       }
 
       int division() const                { return MScore::division; }
-      int mscoreVersion() const           { return version();       }
+      int mscoreVersion() const           { return ::version();      }
       int mscoreMajorVersion() const      { return majorVersion();  }
       int mscoreMinorVersion() const      { return minorVersion();  }
       int mscoreUpdateVersion() const     { return updateVersion(); }
@@ -188,6 +204,9 @@ class QmlPlugin : public QDeclarativeItem {
       Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Score* readScore(const QString& name);
       };
+
+extern void collectPluginMetaInformation(PluginDescription*);
+
 #endif
 #endif
 

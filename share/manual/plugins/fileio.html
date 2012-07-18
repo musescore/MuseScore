@@ -5,30 +5,26 @@
    <link rel="stylesheet" type="text/css" href="manual.css"/>
    </head>
 <body>
-<h3>ScoreView</h3>
-<div class="class-description">
-This is an GUI element to show a score.<br/>
-</div>
+<h3>FileIO</h3>
 <h4>Methods</h4>
 <div class="methods">
 <div class="method">
-<code>void <b>setScore</b>(Score*)</code>
+<code>QString <b>read</b>()</code>
 </div>
 <div class="method">
-<code>void <b>setCurrentPage</b>(int n)</code>
+<code>bool <b>write</b>(const QString& data)</code>
 </div>
 <div class="method">
-<code>void <b>nextPage</b>()</code>
+<code>bool <b>remove</b>(const QString& data)</code>
 </div>
 <div class="method">
-<code>void <b>prevPage</b>()</code>
+<code>QString <b>tempPath</b>()</code>
 </div>
 </div>
 <h4>Properties</h4>
 <div class="properties">
 <table cellpadding="0" cellspacing="0">
-<tr><td>color</td><td>QColor</td><td>    background color</td></tr>
-<tr><td>scale</td><td>qreal</td><td>     scaling factor</td></tr>
+<tr><td>source</td><td>QString</td><td></td></tr>
 </table></div>
 </body>
 </html>

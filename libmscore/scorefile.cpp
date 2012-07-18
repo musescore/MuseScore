@@ -11,6 +11,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "config.h"
 #include "score.h"
 #include "xml.h"
 #include "element.h"

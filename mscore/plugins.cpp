@@ -40,6 +40,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/timesig.h"
+#include "libmscore/keysig.h"
 #include "libmscore/harmony.h"
 #include "libmscore/slur.h"
 #include "libmscore/notedot.h"
@@ -158,7 +159,7 @@ QDeclarativeEngine* MuseScore::qml()
             //-----------some qt bindings
             _qml = new QDeclarativeEngine;
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
-            qmlRegisterType<FileIO, 1>  ("FileIO", 1, 0, "FileIO");
+            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
@@ -176,6 +177,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
             qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
             qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
+            qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
@@ -183,6 +185,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
+            qmlRegisterType<Spanner>();
             }
       return _qml;
       }
@@ -451,16 +454,16 @@ MsScoreView::MsScoreView(QDeclarativeItem* parent)
 FileIO::FileIO(QObject *parent) :
     QObject(parent)
       {
- 
+
       }
- 
+
 QString FileIO::read()
       {
       if (mSource.isEmpty()) {
             emit error("source is empty");
             return QString();
             }
- 
+
       QFile file(mSource);
       QString fileContent;
       if ( file.open(QIODevice::ReadOnly) ) {
@@ -471,23 +474,23 @@ QString FileIO::read()
                 fileContent += line;
                 } while (!line.isNull());
             file.close();
-            } 
+            }
       else {
           emit error("Unable to open the file");
           return QString();
           }
       return fileContent;
       }
- 
+
 bool FileIO::write(const QString& data)
       {
       if (mSource.isEmpty())
             return false;
- 
+
       QFile file(mSource);
       if (!file.open(QFile::WriteOnly | QFile::Truncate))
             return false;
- 
+
       QTextStream out(&file);
       out << data;
       file.close();
@@ -498,7 +501,7 @@ bool FileIO::remove(const QString& data)
       {
       if (mSource.isEmpty())
             return false;
- 
+
       QFile file(mSource);
       return file.remove();
       }
@@ -605,5 +608,28 @@ const QTransform& MsScoreView::matrix() const
       {
       static const QTransform t;
       return t; // _matrix;
+      }
+
+//---------------------------------------------------------
+//   collectPluginMetaInformation
+//---------------------------------------------------------
+
+void collectPluginMetaInformation(PluginDescription* d)
+      {
+      printf("collect meta for <%s>\n", qPrintable(d->path));
+
+      QDeclarativeComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
+      QObject* obj = component.create();
+      if (obj == 0) {
+            qDebug("creating component <%s> failed", qPrintable(d->path));
+            foreach(QDeclarativeError e, component.errors()) {
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+                  }
+            return;
+            }
+      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      d->version      = item->version();
+      d->description  = item->description();
+      delete obj;
       }
 

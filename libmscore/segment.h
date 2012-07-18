@@ -29,9 +29,13 @@ class QPainter;
 class Spanner;
 class System;
 
-//---------------------------------------------------------
+//------------------------------------------------------------------------
 //   @@ Segment
-//---------------------------------------------------------
+///   A segment holds all vertical aligned staff elements.
+///   Segments are typed and contain only Elements of the same type.
+//
+//    @P subtype SegmentType
+//------------------------------------------------------------------------
 
 /**
  The Segment class stores all elements inside a staff.
@@ -53,6 +57,7 @@ class System;
 
 class Segment : public Element {
       Q_OBJECT
+      Q_PROPERTY(SegmentType subtype READ subtype WRITE setSubtype)
 
       Segment* _next;               // linked list of segments inside a measure
       Segment* _prev;

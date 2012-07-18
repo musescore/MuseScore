@@ -14,6 +14,8 @@ import QtQuick 1.0
 import MuseScore 1.0
 
 MuseScore {
+      version:  "1.0"
+      description: "This demo plugin colors notes depending on pitch"
       menuPath: "Plugins.colornotes"
 
       onRun: {
