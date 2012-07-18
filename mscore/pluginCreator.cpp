@@ -40,32 +40,54 @@ PluginCreator::PluginCreator(QWidget* parent)
       setupUi(this);
 
       QToolBar* fileTools = addToolBar(tr("File Operations"));
+      fileTools->setObjectName("FileOperations");
 
       actionNew->setIcon(*icons[fileNew_ICON]);
+      actionNew->setShortcut(QKeySequence(QKeySequence::New));
       fileTools->addAction(actionNew);
 
       actionOpen->setIcon(*icons[fileOpen_ICON]);
+      actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
       fileTools->addAction(actionOpen);
 
       actionSave->setIcon(*icons[fileSave_ICON]);
+      actionSave->setShortcut(QKeySequence(QKeySequence::Save));
       fileTools->addAction(actionSave);
 
+      actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
+
       actionManual->setIcon(QIcon(":/data/help.png"));
+      actionManual->setShortcut(QKeySequence(QKeySequence::HelpContents));
       fileTools->addAction(actionManual);
 
-      textEdit->setTabStopWidth(6);
+      QToolBar* editTools = addToolBar(tr("Edit Operations"));
+      editTools->setObjectName("EditOperations");
+      actionUndo->setIcon(*icons[undo_ICON]);
+      actionUndo->setShortcut(QKeySequence(QKeySequence::Undo));
+      editTools->addAction(actionUndo);
+      actionRedo->setIcon(*icons[redo_ICON]);
+      actionRedo->setShortcut(QKeySequence(QKeySequence::Redo));
+      editTools->addAction(actionRedo);
+      actionUndo->setEnabled(false);
+      actionRedo->setEnabled(false);
+
       log->setReadOnly(true);
       log->setMaximumBlockCount(1000);
 
       readSettings();
       setState(S_EMPTY);
 
-      connect(run,        SIGNAL(clicked()),    SLOT(runClicked()));
-      connect(stop,       SIGNAL(clicked()),    SLOT(stopClicked()));
-      connect(actionOpen, SIGNAL(triggered()),  SLOT(loadPlugin()));
-      connect(actionSave, SIGNAL(triggered()),  SLOT(savePlugin()));
-      connect(actionNew,  SIGNAL(triggered()),  SLOT(newPlugin()));
+      connect(run,        SIGNAL(clicked()),     SLOT(runClicked()));
+      connect(stop,       SIGNAL(clicked()),     SLOT(stopClicked()));
+      connect(actionOpen, SIGNAL(triggered()),   SLOT(loadPlugin()));
+      connect(actionSave, SIGNAL(triggered()),   SLOT(savePlugin()));
+      connect(actionNew,  SIGNAL(triggered()),   SLOT(newPlugin()));
+      connect(actionQuit, SIGNAL(triggered()),   SLOT(close()));
       connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
+      connect(actionUndo, SIGNAL(triggered()),         textEdit,   SLOT(undo()));
+      connect(actionRedo, SIGNAL(triggered()),         textEdit,   SLOT(redo()));
+      connect(textEdit,   SIGNAL(undoAvailable(bool)), actionUndo, SLOT(setEnabled(bool)));
+      connect(textEdit,   SIGNAL(redoAvailable(bool)), actionRedo, SLOT(setEnabled(bool)));
       connect(textEdit,   SIGNAL(textChanged()), SLOT(textChanged()));
       }
 
@@ -247,6 +269,7 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
 
 void PluginCreator::runClicked()
       {
+      log->clear();
       QDeclarativeEngine* qml = mscore->qml();
       connect(qml, SIGNAL(warnings(const QList<QDeclarativeError>&)),
          SLOT(qmlWarnings(const QList<QDeclarativeError>&)));
@@ -359,6 +382,7 @@ void PluginCreator::loadPlugin()
       created = false;
       setTitle(path);
       setState(S_CLEAN);
+      raise();
       }
 
 //---------------------------------------------------------
@@ -460,12 +484,13 @@ void PluginCreator::showManual()
       if (helpBrowser == 0) {
             helpBrowser = new HelpBrowser;
             manualDock = new QDockWidget(tr("Manual"), 0);
+            manualDock->setObjectName("Manual");
 
             manualDock->setWidget(helpBrowser);
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             addDockWidget(area, manualDock);
             helpBrowser->setContent(manualPath());
             }
-      manualDock->show();
+      manualDock->setVisible(!manualDock->isVisible());
       }
 
