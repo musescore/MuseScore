@@ -572,6 +572,7 @@ class MScore : public QObject {
       Q_ENUMS(ValueType)
       Q_ENUMS(Direction)
       Q_ENUMS(DirectionH)
+      Q_ENUMS(SegmentType)
 
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
@@ -673,6 +674,20 @@ class MScore : public QObject {
       enum ValueType  { OFFSET_VAL, USER_VAL };
       enum Direction  { AUTO, UP, DOWN };
       enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
+      enum SegmentType {
+            SegClef                 = 0x1,
+            SegKeySig               = 0x2,
+            SegTimeSig              = 0x4,
+            SegStartRepeatBarLine   = 0x8,
+            SegBarLine              = 0x10,
+            SegGrace                = 0x20,
+            SegChordRest            = 0x40,
+            SegBreath               = 0x80,
+            SegEndBarLine           = 0x100,
+            SegTimeSigAnnounce      = 0x200,
+            SegKeySigAnnounce       = 0x400,
+            SegAll                  = 0xfff
+            };
 
       static void init();
       static MStyle* defaultStyle();
@@ -716,6 +731,7 @@ Q_DECLARE_METATYPE(MScore::ElementType)
 Q_DECLARE_METATYPE(MScore::ValueType)
 Q_DECLARE_METATYPE(MScore::Direction)
 Q_DECLARE_METATYPE(MScore::DirectionH)
+Q_DECLARE_METATYPE(MScore::SegmentType)
 
 //---------------------------------------------------------
 //   center

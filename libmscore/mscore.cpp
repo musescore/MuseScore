@@ -64,6 +64,7 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<MScore::SegmentType>("SegmentType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

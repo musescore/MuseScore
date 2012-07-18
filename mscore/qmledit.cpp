@@ -311,13 +311,21 @@ QmlEdit::QmlEdit(QWidget* parent)
    : QPlainTextEdit(parent)
       {
       setBackgroundVisible(true);
+      setLineWrapMode(QPlainTextEdit::NoWrap);
+      QFont font("FreeMono", 12);
+      font.setFixedPitch(true);
+
+      document()->setDefaultFont(font);
+
       QTextCursor c = textCursor();
       QTextCharFormat cf = c.charFormat();
-      cf.setFont(QFont("FreeMono", 12));
+      cf.setFont(font);
       c.setCharFormat(cf);
       setTextCursor(c);
 
       static const Binding bindings[] = {
+            { "start",       Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_E, SLOT(start()) },
+            { "end",         Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_X, SLOT(end()) },
             { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
             { "endOfLine",   Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_D, SLOT(endOfLine())   },
             { "up",          Qt::CTRL+Qt::Key_E, 0, SLOT(upLine())     },
@@ -325,10 +333,14 @@ QmlEdit::QmlEdit(QWidget* parent)
             { "right",       Qt::CTRL+Qt::Key_D, 0, SLOT(right())      },
             { "left",        Qt::CTRL+Qt::Key_S, 0, SLOT(left())       },
             { "rightWord",   Qt::CTRL+Qt::Key_F, 0, SLOT(rightWord())  },
-            { "leftWord",    Qt::CTRL+Qt::Key_A, 0, SLOT(leftWord())   }
+            { "leftWord",    Qt::CTRL+Qt::Key_A, 0, SLOT(leftWord())   },
+            { "pick",        Qt::Key_F8,         0, SLOT(pick())       },
+            { "put",         Qt::Key_F9,         0, SLOT(put())        },
+            { "delLine",     Qt::CTRL+Qt::Key_Y, 0, SLOT(delLine())    },
+            { "delWord",     Qt::CTRL+Qt::Key_T, 0, SLOT(delWord())    }
             };
-      setTabStopWidth(6);
-      setBackgroundVisible(true);
+      setTabChangesFocus(false);
+      setBackgroundVisible(false);
       setCursorWidth(3);
 
       QPalette p = palette();
@@ -499,4 +511,146 @@ void QmlEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             bottom = top + (int) blockBoundingRect(block).height();
             ++blockNumber;
             }
-       }
+      }
+
+//---------------------------------------------------------
+//   pick
+//---------------------------------------------------------
+
+void QmlEdit::pick()
+      {
+      pickBuffer = textCursor().block().text();
+      }
+
+//---------------------------------------------------------
+//   put
+//---------------------------------------------------------
+
+void QmlEdit::put()
+      {
+      QTextCursor c = textCursor();
+      int column = c.columnNumber();
+      c.movePosition(QTextCursor::StartOfBlock);
+      c.insertText(pickBuffer + "\n");
+      c.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
+      c.movePosition(QTextCursor::Up);
+      setTextCursor(c);
+      }
+
+//---------------------------------------------------------
+//   delLine
+//---------------------------------------------------------
+
+void QmlEdit::delLine()
+      {
+      QTextCursor c = textCursor();
+      c.select(QTextCursor::BlockUnderCursor);
+      pickBuffer = c.selectedText().mid(1);
+      c.removeSelectedText();
+      c.movePosition(QTextCursor::Down);
+      setTextCursor(c);
+      }
+
+//---------------------------------------------------------
+//   delWord
+//---------------------------------------------------------
+
+void QmlEdit::delWord()
+      {
+      QTextCursor c = textCursor();
+      int i = c.position();
+      if (document()->characterAt(i) == QChar(' ')) {
+            while(document()->characterAt(i) == QChar(' '))
+                  c.deleteChar();
+            }
+      else {
+            for (;;) {
+                  QChar ch = document()->characterAt(i);
+                  if (ch == QChar(' ') || ch == QChar('\n'))
+                        break;
+                  c.deleteChar();
+                  }
+            while(document()->characterAt(i) == QChar(' '))
+                  c.deleteChar();
+            }
+      }
+
+//---------------------------------------------------------
+//   downLine
+//---------------------------------------------------------
+
+void QmlEdit::downLine()
+      {
+      move(QTextCursor::Down);
+      }
+
+//---------------------------------------------------------
+//   leftWord
+//---------------------------------------------------------
+
+void QmlEdit::leftWord()
+      {
+      QTextCursor c = textCursor();
+
+      if (c.positionInBlock() == 0)
+            return;
+      c.movePosition(QTextCursor::Left);
+
+      bool inSpace = true;
+      for (;c.positionInBlock();) {
+            int i = c.position();
+            if (document()->characterAt(i) == QChar(' ')) {
+                  if (!inSpace) {
+                        c.movePosition(QTextCursor::Right);
+                        break;
+                        }
+                  }
+            else {
+                  if (inSpace)
+                        inSpace = false;
+                  }
+            c.movePosition(QTextCursor::Left);
+            }
+      setTextCursor(c);
+      }
+
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void QmlEdit::keyPressEvent(QKeyEvent* event)
+      {
+      if (event->modifiers() == Qt::ControlModifier) {
+            if (event->key() == Qt::Key_X) {
+                  downLine();
+                  event->accept();
+                  return;
+                  }
+            if (event->key() == Qt::Key_A) {
+                  leftWord();
+                  event->accept();
+                  return;
+                  }
+            }
+      else {
+            if (event->key() == Qt::Key_Tab) {
+                  tab();
+                  event->accept();
+                  return;
+                  }
+            }
+      QPlainTextEdit::keyPressEvent(event);
+      }
+
+//---------------------------------------------------------
+//   tab
+//---------------------------------------------------------
+
+void QmlEdit::tab()
+      {
+      QTextCursor c = textCursor();
+      c.insertText(" ");
+      while (c.positionInBlock() % 6)
+            c.insertText(" ");
+      setTextCursor(c);
+      }

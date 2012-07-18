@@ -368,3 +368,29 @@ void TimeSig::setFrom(const TimeSig* ts)
       _stretch   = ts->_stretch;
       customText = ts->customText;
       }
+
+#ifdef SCRIPT_INTERFACE
+//---------------------------------------------------------
+//   ssig
+//---------------------------------------------------------
+
+QString TimeSig::ssig() const
+      {
+      return QString("%1/%2").arg(_sig.numerator()).arg(_sig.denominator());
+      }
+
+//---------------------------------------------------------
+//   setSSig
+//---------------------------------------------------------
+
+void TimeSig::setSSig(const QString& s)
+      {
+      QStringList sl = s.split("/");
+      if (sl.size() == 2) {
+            _sig.setNumerator(sl[0].toInt());
+            _sig.setDenominator(sl[1].toInt());
+            }
+      }
+
+#endif
+

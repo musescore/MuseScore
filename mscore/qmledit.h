@@ -27,10 +27,13 @@ class QmlEdit : public QPlainTextEdit {
       QWidget* lineNumberArea;
       JSHighlighter* hl;
       ScoreState mscoreState;
+      QString pickBuffer;
 
       virtual void focusInEvent(QFocusEvent*);
       virtual void focusOutEvent(QFocusEvent*);
-      void move(QTextCursor::MoveOperation op);
+      void move(QTextCursor::MoveOperation);
+      virtual void keyPressEvent(QKeyEvent*);
+      void tab();
 
    private slots:
       void updateLineNumberAreaWidth(int);
@@ -39,11 +42,17 @@ class QmlEdit : public QPlainTextEdit {
       void startOfLine() { move(QTextCursor::StartOfLine); }
       void endOfLine()   { move(QTextCursor::EndOfLine); }
       void upLine()      { move(QTextCursor::Up); }
-      void downLine()    { move(QTextCursor::Down); }
+      void downLine();
       void right()       { move(QTextCursor::Right); }
-      void left()        { move(QTextCursor::Left); }
+      void left()        { move(QTextCursor::Left);  }
       void rightWord()   { move(QTextCursor::NextWord); }
-      void leftWord()    { move(QTextCursor::StartOfWord); }
+      void start()       { move(QTextCursor::Start); }
+      void end()         { move(QTextCursor::End);   }
+      void leftWord();
+      void pick();
+      void put();
+      void delLine();
+      void delWord();
 
    protected:
       void resizeEvent(QResizeEvent*);
