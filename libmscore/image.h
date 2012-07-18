@@ -29,7 +29,10 @@ class Image : public BSymbol {
 
    protected:
       ImageStoreItem* _storeItem;
-      QString _path;
+//      QString _path;
+      QString _storePath;           // the path of the img in the ImageStore
+      QString _linkPath;            // the path of an external linked img
+      bool _linkIsValid;            // whether _linkPath file exists or not
       mutable QPixmap buffer;       ///< cached rendering
       QSizeF _size;                 // in mm or spatium units
       bool _lockAspectRatio;
