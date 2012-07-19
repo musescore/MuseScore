@@ -39,7 +39,7 @@ Shortcut::Shortcut()
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* d, const char* txt, const char* h, int i)
+   const char* txt, const char* d, const char* h, int i)
       {
       _key         = name;
       _text        = txt;
@@ -54,7 +54,7 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       }
 
 Shortcut::Shortcut(int s, int f, const char* name,
-   const char* d, const char* txt, const char* h, int i)
+   const char* txt, const char* d, const char* h, int i)
       {
       _key         = name;
       _text        = txt;
@@ -68,7 +68,8 @@ Shortcut::Shortcut(int s, int f, const char* name,
       _action      = 0;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, const char* txt, const char* d, int i)
+Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
+   const char* d, int i)
       {
       _key         = name;
       _text        = txt;
