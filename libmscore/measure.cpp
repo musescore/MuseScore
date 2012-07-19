@@ -2314,7 +2314,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             // this is a irregular measure
             _len = Fraction::fromTicks(ticks1);
             _len.reduce();
-            if (last()->subtype() == SegBarLine)
+            if (last() && last()->subtype() == SegBarLine)
                   last()->setSubtype(SegEndBarLine);
             }
       foreach (Tuplet* tuplet, tuplets) {
