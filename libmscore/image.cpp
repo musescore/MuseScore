@@ -22,9 +22,9 @@
 //   propertyList
 //---------------------------------------------------------
 
-static bool defaultAutoScale       = false;
-static bool defaultLockAspectRatio = true;
-static bool defaultSizeIsSpatium   = true;
+static bool defaultAutoScale        = false;
+static bool defaultLockAspectRatio  = true;
+static bool defaultSizeIsSpatium    = true;
 
 //---------------------------------------------------------
 //   Image
@@ -40,6 +40,7 @@ Image::Image(Score* s)
       _autoScale       = defaultAutoScale;
       _sizeIsSpatium   = defaultSizeIsSpatium;
       setZ(IMAGE * 100);
+      _linkIsValid     = false;
       }
 
 Image::Image(const Image& img)
@@ -53,6 +54,7 @@ Image::Image(const Image& img)
       _storeItem       = img._storeItem;
       _sizeIsSpatium   = img._sizeIsSpatium;
       _storeItem->reference(this);
+      _linkIsValid     = img._linkIsValid;
       }
 
 //---------------------------------------------------------
@@ -171,11 +173,11 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Image::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_AUTOSCALE:         return defaultAutoScale;
-            case P_SIZE:              break;
-            case P_LOCK_ASPECT_RATIO: return defaultLockAspectRatio;
-            case P_SIZE_IS_SPATIUM:   return defaultSizeIsSpatium;
-            default:                  return Element::propertyDefault(id);
+            case P_AUTOSCALE:             return defaultAutoScale;
+            case P_SIZE:                  break;
+            case P_LOCK_ASPECT_RATIO:     return defaultLockAspectRatio;
+            case P_SIZE_IS_SPATIUM:       return defaultSizeIsSpatium;
+            default:                      return Element::propertyDefault(id);
             }
       return QVariant();
       }
@@ -237,9 +239,54 @@ void Image::write(Xml& xml, P_ID id) const
 
 void Image::write(Xml& xml) const
       {
+      // attempt to convert the _linkPath to a path relative to the score
+      //
+      // TODO : on Save As, _score->fileInfo() still contains the old path and fname
+      //          if the Save As path is different, image relative path will be wrong!
+      //
+      QString relativeFilePath= QString();
+      if(!_linkPath.isEmpty() && _linkIsValid) {
+            QFileInfo fi(_linkPath);
+            // _score->fileInfo()->canonicalPath() would be better
+            // but we are saving under a temp file name and the 'final' file
+            // might not exist yet, so canonicalFilePath() may return only "/"
+            // OTOH, the score 'final' file name is practically always canonical, at this point
+            QString scorePath = _score->fileInfo()->absolutePath();
+            QString imgFPath  = fi.canonicalFilePath();
+            // if imgFPath is in (or below) the directory of scorePath
+            if(imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+                  // relative img path is the part exceeding scorePath
+                  imgFPath.remove(0, scorePath.size());
+                  if(imgFPath.startsWith('/'))
+                        imgFPath.remove(0, 1);
+                  relativeFilePath = imgFPath;
+                  }
+            // try 1 level up
+            else {
+                  // reduce scorePath by one path level
+                  fi.setFile(scorePath);
+                  scorePath = fi.path();
+                  // if imgFPath is in (or below) the directory up the score directory
+                  if(imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+                        // relative img path is the part exceeding new scorePath plus "../"
+                        imgFPath.remove(0, scorePath.size());
+                        if(!imgFPath.startsWith('/'))
+                              imgFPath.prepend('/');
+                        imgFPath.prepend("..");
+                        relativeFilePath = imgFPath;
+                        }
+                  }
+            }
+      // if no match, use full _linkPath
+      if(relativeFilePath.isEmpty())
+            relativeFilePath = _linkPath;
+
       xml.stag("Image");
       Element::writeProperties(xml);
-      xml.tag("path", _storeItem ? _storeItem->hashName() : _path);
+      // keep old "path" tag, for backward compatibility and because it is used elsewhere
+      // (for instance by Box:read(), Measure:read(), Note:read(), ...)
+      xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
+      xml.tag("linkPath", relativeFilePath);
 
       write(xml, P_AUTOSCALE);
       write(xml, P_SIZE);
@@ -268,16 +315,24 @@ void Image::read(const QDomElement& de)
                   setProperty(P_LOCK_ASPECT_RATIO, ::getProperty(P_LOCK_ASPECT_RATIO, e));
             else if (tag == "sizeIsSpatium")
                   setProperty(P_SIZE_IS_SPATIUM, ::getProperty(P_SIZE_IS_SPATIUM, e));
-            else if (tag == "path") {
-                  _path = e.text();
-                  _storeItem = imageStore.getImage(_path);
-                  if (_storeItem)
-                        _storeItem->reference(this);
-                  else
-                        load(_path);
-                  }
+            else if (tag == "path")
+                  _storePath = e.text();
+            else if(tag == "linkPath")
+                  _linkPath = e.text();
             else if (!Element::readProperties(e))
                   domError(e);
+            }
+
+      // once all paths are read, load img or retrieve it from store
+      // loading from file is tried first to update the stored image, if necessary
+      if(_linkPath.isEmpty() || !load(_linkPath)) {
+            // if could not load img from _linkPath, retrieve from store
+            _storeItem = imageStore.getImage(_storePath);
+            if (_storeItem)
+                  _storeItem->reference(this);
+            // if not in store, try to load from _storePath for backward compatibility
+            else
+                  load(_storePath);
             }
       }
 
@@ -289,12 +344,24 @@ void Image::read(const QDomElement& de)
 
 bool Image::load(const QString& ss)
       {
-      QFile f(ss);
+      QString path(ss);
+      // if file path is relative, prepend score path
+      QFileInfo fi(path);
+      if(fi.isRelative()) {
+            path.prepend(_score->fileInfo()->absolutePath() + "/");
+            fi.setFile(path);
+      }
+
+      _linkIsValid = false;                     // assume link fname is invalid
+      QFile f(path);
       if (!f.open(QIODevice::ReadOnly))
             return false;
       QByteArray ba = f.readAll();
       f.close();
-      _storeItem = imageStore.add(ss, ba);
+
+      _linkIsValid = true;
+      _linkPath = fi.canonicalFilePath();
+      _storeItem = imageStore.add(_linkPath, ba);
       _storeItem->reference(this);
       return true;
       }
