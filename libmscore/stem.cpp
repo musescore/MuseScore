@@ -150,7 +150,8 @@ void Stem::draw(QPainter* painter) const
             useTab = true;
             }
       qreal lw = point(score()->styleS(ST_stemWidth));
-      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+//      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
       // NOT THE BEST PLACE FOR THIS?
