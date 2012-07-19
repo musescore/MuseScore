@@ -1262,7 +1262,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "toggle-playpanel",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Play panel")
+         QT_TRANSLATE_NOOP("action","Play Panel")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
@@ -1301,7 +1301,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "toggle-statusbar",
-         QT_TRANSLATE_NOOP("action","Status bar")
+         QT_TRANSLATE_NOOP("action","Status Bar")
          ),
 
       Shortcut(
