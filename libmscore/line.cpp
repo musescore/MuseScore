@@ -545,7 +545,8 @@ void SLine::layout()
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();
-            qreal x1 = m->first(SegChordRest)->pos().x() + m->pos().x();
+            Segment* mseg = m->first(SegChordRest);
+            qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
             qreal x2 = system->bbox().right();
             qreal y  = system->staff(si)->y();
 
