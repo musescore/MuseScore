@@ -393,7 +393,6 @@ void Navigator::paintEvent(QPaintEvent* ev)
       QPainter p(this);
       QRect r(ev->rect());
 
-      // p.fillRect(r, Qt::gray);
       QRegion region(r);
 
       npcl.clear();
@@ -423,7 +422,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
             p.drawRect(viewRect);
             }
       if (!npcl.isEmpty()) {
-//TODOWS            updatePixmap = QtConcurrent::map(npcl, createPixmap);
+            updatePixmap = QtConcurrent::map(npcl, createPixmap);
             watcher.setFuture(updatePixmap);
             }
       }
