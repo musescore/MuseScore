@@ -34,7 +34,7 @@ Shortcut::Shortcut()
       _flags       = 0;
       _standardKey = QKeySequence::UnknownKey;
       _context     = Qt::WindowShortcut;
-      _icon        = 0;
+      _icon        = -1;
       _action      = 0;
       }
 
