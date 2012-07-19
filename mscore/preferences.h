@@ -51,7 +51,6 @@ enum {
 
 enum MuseScoreStyleType {
       STYLE_DARK,
-      STYLE_LIGHT,
       STYLE_NATIVE
       };
 
