@@ -961,7 +961,7 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuPlugins->addAction(a);
       menuPlugins->addSeparator();
-      
+
       //---------------------
       //    Menu Help
       //---------------------
@@ -2344,21 +2344,6 @@ int main(int argc, char* av[])
                         p.setColor(QPalette::Button,        QColor(0x52, 0x52, 0x52));
                         p.setColor(QPalette::ButtonText,    Qt::white);
                         p.setColor(QPalette::BrightText,    Qt::black);
-                        QApplication::setPalette(p);
-                        break;
-                        }
-                  case STYLE_LIGHT: {
-                        QApplication::setStyle(new MgStyle);
-                        qApp->setStyleSheet(appStyleSheet());
-                        QPalette p(QApplication::palette());
-                        p.setColor(QPalette::Window,        QColor(0xdc, 0xdc, 0xdc));
-                        p.setColor(QPalette::WindowText,    Qt::black);
-                        p.setColor(QPalette::Base,          QColor(0x82, 0x82, 0x82));
-                        p.setColor(QPalette::AlternateBase, QColor(0xa2, 0xa2, 0xa2));
-                        p.setColor(QPalette::Text,          Qt::black);
-                        p.setColor(QPalette::Button,        QColor(0xdc, 0xdc, 0xdc));
-                        p.setColor(QPalette::ButtonText,    Qt::black);
-                        p.setColor(QPalette::BrightText,    Qt::black);  //??
                         QApplication::setPalette(p);
                         break;
                         }

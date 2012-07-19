@@ -500,18 +500,13 @@ void Preferences::read()
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
-      if (styleName == "light") {
-            iconGroup = "icons/";
-            appStyleFile = ":/data/appstyle-light.css";
-            globalStyle  = STYLE_LIGHT;
-            }
-      else if (styleName == "dark") {
+      if (styleName == "dark") {
             iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
             globalStyle  = STYLE_DARK;
             }
       else {
-            iconGroup = "icons/";
+            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle.css";
             globalStyle  = STYLE_NATIVE;
             }
@@ -1407,12 +1402,6 @@ void PreferenceDialog::apply()
             appStyleFile = ":/data/appstyle-dark.css";
             preferences.styleName = "dark";
             preferences.globalStyle = STYLE_DARK;
-            }
-      else if (styleName->currentIndex() == STYLE_LIGHT) {
-            iconGroup = "icons/";
-            appStyleFile = ":/data/appstyle-light.css";
-            preferences.styleName = "light";
-            preferences.globalStyle = STYLE_LIGHT;
             }
       else {
             iconGroup = "icons/";

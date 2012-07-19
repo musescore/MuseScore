@@ -75,7 +75,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>9</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="accessibleName">
@@ -563,11 +563,6 @@
             <item>
              <property name="text">
               <string>dark</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>light</string>
              </property>
             </item>
             <item>
