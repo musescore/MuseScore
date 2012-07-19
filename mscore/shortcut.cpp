@@ -68,6 +68,65 @@ Shortcut::Shortcut(int s, int f, const char* name,
       _action      = 0;
       }
 
+Shortcut::Shortcut(int s, int f, const char* name, const char* txt, const char* d, int i)
+      {
+      _key         = name;
+      _text        = txt;
+      _descr       = d;
+      _help        = _descr;
+      _state       = s;
+      _flags       = f;
+      _standardKey = QKeySequence::UnknownKey;
+      _context     = Qt::WindowShortcut;
+      _icon        = i;
+      _action      = 0;
+      }
+
+Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+   const char* txt, const char* d, int i)
+      {
+      _key         = name;
+      _text        = txt;
+      _descr       = d;
+      _help        = _descr;
+      _state       = s;
+      _flags       = f;
+      _standardKey = QKeySequence::UnknownKey;
+      _context     = cont;
+      _icon        = i;
+      _action      = 0;
+      }
+
+Shortcut::Shortcut(int s, int f, const char* name, const char* txt, int i)
+      {
+      _key         = name;
+      _text        = txt;
+      _descr       = _text;
+      _help        = _descr;
+      _state       = s;
+      _flags       = f;
+      _standardKey = QKeySequence::UnknownKey;
+      _context     = Qt::WindowShortcut;
+      _icon        = i;
+      _action      = 0;
+      }
+
+Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+   const char* txt, int i)
+      {
+      _key         = name;
+      _text        = txt;
+      _descr       = _text;
+      _help        = _descr;
+      _state       = s;
+      _flags       = f;
+      _standardKey = QKeySequence::UnknownKey;
+      _context     = cont;
+      _context     = Qt::WindowShortcut;
+      _icon        = i;
+      _action      = 0;
+      }
+
 Shortcut::Shortcut(const Shortcut& sc)
       {
       _key         = sc._key;
