@@ -167,7 +167,7 @@ void Palette::setGrid(int hh, int vv)
 //---------------------------------------------------------
 
 Element* Palette::element(int idx)
-      { 
+      {
       if (idx < size() &&  cells[idx])
             return cells[idx]->element;
       else
@@ -234,7 +234,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (sel.state() == SEL_NONE)
             return;
 
-//      QMimeData* mimeData = new QMimeData;
       Element* element = 0;
       if (i < size() &&  cells[i])
             element = cells[i]->element;
@@ -243,7 +242,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       ScoreView* viewer = mscore->currentScoreView();
 
 
-      //      mimeData->setData(mimeSymbolFormat, element->mimeData(QPointF()));
       if (viewer->mscoreState() != STATE_EDIT && viewer->mscoreState() != STATE_LYRICS_EDIT) // Already in startCmd in this case
           score->startCmd();
       if (sel.state() == SEL_LIST) {
