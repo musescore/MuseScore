@@ -1328,8 +1328,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "tempo",
-         QT_TRANSLATE_NOOP("action","Tempo..."),
-         QT_TRANSLATE_NOOP("action","Tempo")
+         QT_TRANSLATE_NOOP("action","Tempo Marking..."),
+         QT_TRANSLATE_NOOP("action","Tempo Marking")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
