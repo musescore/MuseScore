@@ -68,8 +68,12 @@ void SimpleText::drawFrame(QPainter* painter) const
             color = Qt::gray;
       else if (selected())
             color = Qt::blue;
-      QPen pen(color, frameWidth() * MScore::DPMM);
-      painter->setPen(pen);
+      if (frameWidth() != 0.0) {
+            QPen pen(color, frameWidth() * MScore::DPMM);
+            painter->setPen(pen);
+            }
+      else
+            painter->setPen(Qt::NoPen);
       QColor bg(backgroundColor());
       painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
       if (circle())
@@ -154,10 +158,8 @@ void SimpleText::layout()
             drawingRect = QRectF();
             setPos(o);
             }
-
       QFontMetricsF fm(s.fontPx(spatium()));
       setbbox(fm.boundingRect(drawingRect, alignFlags(), _text));
-
       if (hasFrame())
             layoutFrame();
       }
