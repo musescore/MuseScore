@@ -1461,6 +1461,16 @@ void Score::cmdEnterRest(const TDuration& d)
             if (cr)
                   nextInputPos(cr, false);
             }
+
+      // avoid out of bounds crash at end of score
+      Measure* measure = last()->system()->lastMeasure();
+      if (_is.cr() == 0 && measure && seg->measure()->no() == measure->no()) {
+  	    ChordRest* cr = selection().lastChordRest();
+	    Element* el = measure->last()->nextChordRest(cr->track(), true);
+	    cr = static_cast<ChordRest*>(el);
+	    moveInputPos(cr->segment());
+            }
+
       _is.rest = false;  // continue with normal note entry
       endCmd();
       }
