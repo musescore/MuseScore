@@ -422,6 +422,8 @@ QPointF SLine::linePos(int grip, System** sys)
             Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
             Measure* m   = seg->measure();
             *sys         = m->system();
+            if (*sys == 0)
+                  return QPointF(x, 0.0);
             x            = seg->pos().x() + m->pos().x();
             if (grip == GRIP_LINE_END) {
                   if (((*sys)->firstMeasure() == m) && (seg->tick() == m->tick())) {
@@ -487,8 +489,8 @@ void SLine::layout()
             return;
             }
       if (startElement() == 0 || endElement() == 0) {
-            qDebug("SLine::layout() failed: %s %s\n", parent()->name(), name());
-            qDebug("   start %p   end %p\n", startElement(), endElement());
+            qDebug("SLine::layout() failed: %s %s", parent()->name(), name());
+            qDebug("   start %p   end %p", startElement(), endElement());
             return;
             }
 
@@ -521,10 +523,10 @@ void SLine::layout()
                   }
             else {
                   int n = segCount - segmentsNeeded;
-                  qDebug("SLine: segments %d needed %d, remove %d\n", segCount, segmentsNeeded, n);
+                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
                   for (int i = 0; i < n; ++i) {
                         if (spannerSegments().isEmpty()) {
-                              qDebug("SLine::layout(): no segment %d, %d expected\n", i, n);
+                              qDebug("SLine::layout(): no segment %d, %d expected", i, n);
                               break;
                               }
                         else {
