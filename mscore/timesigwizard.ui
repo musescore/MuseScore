@@ -107,8 +107,6 @@
         </item>
        </widget>
       </item>
-       </widget>
-      </item> 
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
