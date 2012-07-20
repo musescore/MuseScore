@@ -1455,12 +1455,8 @@ void Score::cmdEnterRest(const TDuration& d)
 
       int track = _is.track();
       NoteVal nval;
-      Segment* seg  = setNoteRest(_is.segment(), track, nval, d.fraction(), AUTO);
-      if (seg) {
-            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-            if (cr)
-                  nextInputPos(cr, false);
-            }
+      setNoteRest(_is.segment(), track, nval, d.fraction(), AUTO);
+      moveToNextInputPos();
       _is.rest = false;  // continue with normal note entry
       endCmd();
       }
