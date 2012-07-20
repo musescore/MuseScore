@@ -269,6 +269,10 @@ configure_file (
       ${PROJECT_SOURCE_DIR}/build/Doxyfile.in
       ${PROJECT_BINARY_DIR}/Doxyfile
       )
+configure_file (
+      ${PROJECT_SOURCE_DIR}/build/Doxyfile-LibMscore.in
+      ${PROJECT_BINARY_DIR}/Doxyfile-LibMscore
+      )
 if (NOT MINGW AND NOT APPLE)
       install( FILES build/mscore.desktop DESTINATION share/applications)
 endif (NOT MINGW AND NOT APPLE)
