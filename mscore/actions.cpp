@@ -787,7 +787,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          A_CMD,
          "delete-measures",
-         QT_TRANSLATE_NOOP("action","Delete selected measures")
+         QT_TRANSLATE_NOOP("action","Delete Selected Measures")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -1636,7 +1636,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_SCORE,
          "show-invisible",
-         QT_TRANSLATE_NOOP("action","Show invisible")
+         QT_TRANSLATE_NOOP("action","Show Invisible")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -1848,7 +1848,7 @@ Shortcut Shortcut::sc[] = {
          STATE_ALL,
          0,
          "fullscreen",
-         QT_TRANSLATE_NOOP("action","Full screen")
+         QT_TRANSLATE_NOOP("action","Full Screen")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
