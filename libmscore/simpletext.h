@@ -53,8 +53,8 @@ class SimpleText : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setText(const QString& s)        { _text = s;    }
-      QString getText() const               { return _text; }
+      void setText(const QString& s)        { _text = s;       }
+      QString getText() const               { return _text;    }
 
       virtual void draw(QPainter*) const;
 
@@ -70,6 +70,7 @@ class SimpleText : public Element {
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
       qreal frameWidth() const;
+      QColor backgroundColor() const;
       bool hasFrame() const;
       qreal paddingWidth() const;
       QColor frameColor() const;

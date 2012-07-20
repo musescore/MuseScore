@@ -30,15 +30,6 @@
 QReadWriteLock docRenderLock;
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-Property<Text> Text::propertyList[] = {
-      { P_TEXT_STYLE,  &Text::pStyleIndex, 0 },
-      { P_END, 0, 0 }
-      };
-
-//---------------------------------------------------------
 //   createDoc
 //---------------------------------------------------------
 
@@ -277,6 +268,7 @@ QRectF Text::pageRectangle() const
 
 void Text::draw(QPainter* painter) const
       {
+      drawFrame(painter);
       if (styled() && !_editMode) {
             SimpleText::draw(painter);
             return;
@@ -309,7 +301,6 @@ void Text::draw(QPainter* painter) const
 #else
       _doc->documentLayout()->draw(painter, c);
 #endif
-      drawFrame(painter);
       }
 
 //---------------------------------------------------------
@@ -1322,36 +1313,37 @@ QTextDocumentFragment Text::getFragment() const
             return QTextDocumentFragment(_doc);
       }
 
-Property<Text>* Text::property(P_ID id) const
-      {
-      for (int i = 0;; ++i) {
-            if (propertyList[i].id == P_END)
-                  break;
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
 
 QVariant Text::getProperty(P_ID propertyId) const
       {
-      Property<Text>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Text*)this).*(p->data))());
-      return Element::getProperty(propertyId);
+      switch(propertyId) {
+            case P_TEXT_STYLE:
+                  return QVariant(_styleIndex);
+            default:
+                  return Element::getProperty(propertyId);
+            }
       }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
 
 bool Text::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      Property<Text>* p = property(propertyId);
       bool rv = true;
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
+      switch(propertyId) {
+            case P_TEXT_STYLE:
+                  _styleIndex = v.toInt();
+                  setGenerated(false);
+                  break;
+            default:
+                  rv = Element::setProperty(propertyId, v);
+                  break;
             }
-      else
-            rv = Element::setProperty(propertyId, v);
       score()->setLayoutAll(true);
       return rv;
       }

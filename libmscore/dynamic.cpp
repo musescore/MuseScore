@@ -111,8 +111,7 @@ void Dynamic::write(Xml& xml) const
             xml.tag("velocity", _velocity);
       if (_dynType != DYNAMIC_PART)
             xml.tag("dynType", _dynType);
-      if (_subtype == 0)
-            Text::writeProperties(xml, subtype() == 0);
+      Text::writeProperties(xml, subtype() == 0);
       xml.etag();
       }
 

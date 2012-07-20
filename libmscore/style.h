@@ -44,7 +44,7 @@ class TextStyle {
          bool sd = false,
          qreal fw = 0.0, qreal pw = 0.0, int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
-         QColor fg = QColor(Qt::black));
+         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0));
 
       TextStyle(const TextStyle&);
       ~TextStyle();
@@ -71,6 +71,7 @@ class TextStyle {
       bool circle() const;
       bool systemFlag() const;
       QColor foregroundColor() const;
+      QColor backgroundColor() const;
       void setName(const QString& s);
       void setFamily(const QString& s);
       void setSize(qreal v);
@@ -92,6 +93,7 @@ class TextStyle {
       void setCircle(bool v);
       void setSystemFlag(bool v);
       void setForegroundColor(const QColor& v);
+      void setBackgroundColor(const QColor& v);
       void write(Xml& xml) const;
       void writeProperties(Xml& xml) const;
       void read(const QDomElement& v);

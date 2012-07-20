@@ -641,11 +641,11 @@ TextStyle::TextStyle(
    const QPointF& _off, OffsetType _ot, const QPointF& _roff,
    bool sd,
    qreal fw, qreal pw, int fr, QColor co, bool _circle, bool _systemFlag,
-   QColor fg)
+   QColor fg, QColor bg)
       {
       d = new TextStyleData(_name, _family, _size,
          _bold, _italic, _underline, _align, _off, _ot, _roff,
-         sd, fw, pw, fr, co, _circle, _systemFlag, fg);
+         sd, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
       }
 
 TextStyle::TextStyle(const TextStyle& s)
@@ -681,6 +681,7 @@ TextStyleData::TextStyleData()
       circle                 = false;
       systemFlag             = false;
       foregroundColor        = Qt::black;
+      backgroundColor        = QColor(255, 255, 255, 0);
       }
 
 TextStyleData::TextStyleData(
@@ -690,16 +691,16 @@ TextStyleData::TextStyleData(
    const QPointF& _off, OffsetType _ot, const QPointF& _roff,
    bool sd,
    qreal fw, qreal pw, int fr, QColor co, bool _circle, bool _systemFlag,
-   QColor fg)
+   QColor fg, QColor bg)
    :
    ElementLayout(_align, _off, _ot, _roff),
    name(_name), size(_size), bold(_bold),
    italic(_italic), underline(_underline),
    sizeIsSpatiumDependent(sd), frameWidth(fw), paddingWidth(pw),
    frameRound(fr), frameColor(co), circle(_circle), systemFlag(_systemFlag),
-   foregroundColor(fg)
+   foregroundColor(fg), backgroundColor(bg)
       {
-      hasFrame = fw != 0.0;
+      hasFrame = (fw != 0.0) | (bg.alpha() != 0);
       family = _family;
       }
 
@@ -724,6 +725,7 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
           || s.circle                 != circle
           || s.systemFlag             != systemFlag
           || s.foregroundColor        != foregroundColor
+          || s.backgroundColor        != backgroundColor
           || s.align()                != align()
           || s.offset()               != offset()
           || s.rxoff()                != rxoff()
@@ -806,6 +808,8 @@ void TextStyleData::writeProperties(Xml& xml) const
             xml.tag("sizeIsSpatiumDependent", sizeIsSpatiumDependent);
       if (foregroundColor != Qt::black)
             xml.tag("foregroundColor", foregroundColor);
+      if (backgroundColor != QColor(255, 255, 255, 0))
+            xml.tag("backgroundColor", backgroundColor);
 
       if (hasFrame) {
             xml.tag("frameWidth", frameWidth);
@@ -878,6 +882,8 @@ bool TextStyleData::readProperties(const QDomElement& e)
             frameColor = readColor(e);
       else if (tag == "foregroundColor")
             foregroundColor = readColor(e);
+      else if (tag == "backgroundColor")
+            backgroundColor = readColor(e);
       else if (tag == "circle")
             circle = val.toInt();
       else if (tag == "systemFlag")
@@ -1268,6 +1274,7 @@ QColor TextStyle::frameColor() const                     { return d->frameColor;
 bool TextStyle::circle() const                           { return d->circle;     }
 bool TextStyle::systemFlag() const                       { return d->systemFlag; }
 QColor TextStyle::foregroundColor() const                { return d->foregroundColor; }
+QColor TextStyle::backgroundColor() const                { return d->backgroundColor; }
 void TextStyle::setName(const QString& s)                { d->name = s; }
 void TextStyle::setFamily(const QString& s)              { d->family = s; }
 void TextStyle::setSize(qreal v)                         { d->size = v; }
@@ -1289,6 +1296,7 @@ void TextStyle::setFrameColor(const QColor& v)           { d->frameColor = v; }
 void TextStyle::setCircle(bool v)                        { d->circle = v;     }
 void TextStyle::setSystemFlag(bool v)                    { d->systemFlag = v; }
 void TextStyle::setForegroundColor(const QColor& v)      { d->foregroundColor = v; }
+void TextStyle::setBackgroundColor(const QColor& v)      { d->backgroundColor = v; }
 void TextStyle::write(Xml& xml) const                    { d->write(xml); }
 void TextStyle::read(const QDomElement& v)               { d->read(v); }
 QFont TextStyle::font(qreal space) const                 { return d->font(space); }

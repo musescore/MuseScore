@@ -423,7 +423,8 @@ void Xml::tag(const QString& name, QVariant data)
             case QVariant::Color:
                   {
                   QColor color(data.value<QColor>());
-                  *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\"/>\n").arg(name).arg(color.red()).arg(color.green()).arg(color.blue());
+                  *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
+                     .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
                   }
                   break;
             case QVariant::Rect:
@@ -526,6 +527,7 @@ QColor readColor(const QDomElement& e)
       c.setRed(e.attribute("r").toInt());
       c.setGreen(e.attribute("g").toInt());
       c.setBlue(e.attribute("b").toInt());
+      c.setAlpha(e.attribute("a", "255").toInt());
       return c;
       }
 

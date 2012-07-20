@@ -888,7 +888,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_17">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -897,7 +897,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Color:</string>
+              <string>Foreground Color:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -907,10 +907,36 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
+           <item row="2" column="3">
+            <widget class="Awl::ColorLabel" name="bgColor">
+             <property name="toolTip">
+              <string>frame color</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
             <widget class="Awl::ColorLabel" name="frameColor">
              <property name="toolTip">
               <string>frame color</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_27">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Background Color:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
              </property>
             </widget>
            </item>

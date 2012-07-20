@@ -90,6 +90,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "Text"),
       QT_TRANSLATE_NOOP("elementName", "InstrumentName"),
       QT_TRANSLATE_NOOP("elementName", "SlurSegment"),
+      QT_TRANSLATE_NOOP("elementName", "StaffLines"),
       QT_TRANSLATE_NOOP("elementName", "BarLine"),
       QT_TRANSLATE_NOOP("elementName", "StemSlash"),
       QT_TRANSLATE_NOOP("elementName", "Line"),
@@ -140,7 +141,6 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "NoteDot"),
       QT_TRANSLATE_NOOP("elementName", "Tremolo"),
       QT_TRANSLATE_NOOP("elementName", "Measure"),
-      QT_TRANSLATE_NOOP("elementName", "StaffLines"),
       QT_TRANSLATE_NOOP("elementName", "Selection"),
       QT_TRANSLATE_NOOP("elementName", "Lasso"),
       QT_TRANSLATE_NOOP("elementName", "ShadowNote"),
@@ -1474,7 +1474,7 @@ Element* Element::name2Element(const QString& s, Score* sc)
 
 bool elementLessThan(const Element* const e1, const Element* const e2)
       {
-      return e1->z() > e2->z();
+      return e1->z() <= e2->z();
       }
 
 //---------------------------------------------------------
