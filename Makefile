@@ -122,6 +122,8 @@ unix:
          fi
 
 doxy:
-	doxygen -f build/Doxyfile.in
+	doxygen build.debug/Doxyfile
+doxylib:
+	doxygen build.debug/Doxyfile-LibMscore
 
 
