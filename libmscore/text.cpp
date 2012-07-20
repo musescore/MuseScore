@@ -216,7 +216,7 @@ void Text::layout()
             to.setWrapMode(w <= 0.0 ? QTextOption::NoWrap : QTextOption::WrapAtWordBoundaryOrAnywhere);
             _doc->setDefaultTextOption(to);
 
-            if (w < 0.0)
+            if (w <= 0.0)
                   w = _doc->idealWidth();
             _doc->setTextWidth(w);
 

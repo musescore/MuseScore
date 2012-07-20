@@ -221,6 +221,8 @@ void Box::read(const QDomElement& de)
                         t = new Text(score());
                         t->read(e);
                         add(t);
+                        if (score()->mscVersion() <= 114)
+                              t->setLayoutToParentWidth(true);
                         }
                   }
             else if (tag == "Symbol") {

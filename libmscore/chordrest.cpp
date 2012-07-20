@@ -94,6 +94,8 @@ ChordRest::ChordRest(const ChordRest& cr)
       _space     = cr._space;
 
       foreach(Lyrics* l, cr._lyricsList) {        // make deep copy
+            if (l == 0)
+                  continue;
             Lyrics* nl = new Lyrics(*l);
             nl->setParent(this);
             nl->setTrack(track());
