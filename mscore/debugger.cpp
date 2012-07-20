@@ -1363,6 +1363,7 @@ void TextView::setElement(Element* e)
       tb.offsetType->setCurrentIndex(int(te->offsetType()));
       tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
+      tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
       }
 
 //---------------------------------------------------------

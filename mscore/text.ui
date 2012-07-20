@@ -118,6 +118,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="layoutToParentWidth">
+          <property name="text">
+           <string>layoutToParentWidth</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
