@@ -19,21 +19,19 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-CPUS      = `grep -c processor /proc/cpuinfo`
-
 VERSION   = "2.0b-${REVISION}"
 
 PREFIX=../applebuild
 
-ROOT=`pwd`
+XCODEPROJ = mscore.xcodeproj
 
 release:
 	mkdir build.release;                               \
     cd build.release;                                  \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
           .. -G Xcode; 			       \
-    xcodebuild -project mscore.xcodeproj -target lrelease;                             \
-	xcodebuild -project mscore.xcodeproj -configuration Release -target ALL_BUILD;     \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD;     \
 
 
 debug: xcode
@@ -41,29 +39,21 @@ debug: xcode
     cd build.debug;                            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
           .. -G Xcode; 			       \
-    xcodebuild -project mscore.xcodeproj -target lrelease;                             \
-    xcodebuild -project mscore.xcodeproj -configuration Debug -target ALL_BUILD;       \
+    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
+    xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD;       \
 
 xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
     cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
           .. -G Xcode;                         \
-    xcodebuild -project mscore.xcodeproj -target lrelease; 
-
-#
-# clean out of source build
-#
-
-clean:
-	-rm -rf build.release build.debug build.xcode
-	-rm -rf applebuild
+    xcodebuild -project ${XCODEPROJ} -target lrelease; 
 
 lupdate:
-	cd build.release;xcodebuild -project mscore.xcodeproj -target lupdate;
+	cd build.release;xcodebuild -project ${XCODEPROJ} -target lupdate;
 
 lrelease:
-	cd build.release;xcodebuild -project mscore.xcodeproj -target lrelease;
+	cd build.release;xcodebuild -project ${XCODEPROJ} -target lrelease;
 
 revision:
 	@git rev-parse --short HEAD > mscore/revision.h
@@ -72,10 +62,25 @@ version: revision
 	@echo ${VERSION}
 
 install:
-	cd build.release;xcodebuild -project mscore.xcodeproj -configuration Release -target install;
+	cd build.release;xcodebuild -project ${XCODEPROJ} -configuration Release -target install;
 
 installdebug:
-	cd build.debug;xcodebuild -project mscore.xcodeproj -configuration Debug -target install;
+	cd build.debug;xcodebuild -project ${XCODEPROJ} -configuration Debug -target install;
 
 package:
 	build/package_mac;
+
+#
+# clean out of source build
+#
+clean:
+	-rm -rf build.release build.debug build.xcode
+	-rm -rf applebuild
+
+#
+# generate code documentation
+#
+doxy:
+	doxygen build.debug/Doxyfile
+doxylib:
+	doxygen build.debug/Doxyfile-LibMscore
