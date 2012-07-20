@@ -75,7 +75,7 @@
         </item>
         <item>
        <widget class="QComboBox" name="TimesigN">
-       <item>
+        <item>
          <property name="text">
           <string>1</string>
          </property>
@@ -95,7 +95,7 @@
           <string>8</string>
          </property>
         </item>
-	       <item>
+	<item>
          <property name="text">
           <string>16</string>
          </property>
@@ -192,7 +192,7 @@
       </item>
       <item>
        <widget class="QComboBox" name="pickupTimesigN">
- <item>
+        <item>
          <property name="text">
           <string>1</string>
          </property>
@@ -212,20 +212,18 @@
           <string>8</string>
          </property>
         </item>
-	       <item>
+	<item>
          <property name="text">
           <string>16</string>
          </property>
         </item>
-	       <item>
+	<item>
          <property name="text">
           <string>32</string>
          </property>
         </item>
        </widget>
       </item>
-       </widget>
-      </item> 
       <item>
        <spacer>
         <property name="orientation">
