@@ -54,6 +54,7 @@ Image::Image(const Image& img)
       _storeItem       = img._storeItem;
       _sizeIsSpatium   = img._sizeIsSpatium;
       _storeItem->reference(this);
+      _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
       }
 
