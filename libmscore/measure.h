@@ -39,6 +39,7 @@ class TieMap;
 class SpannerMap;
 class AccidentalState;
 class Spanner;
+class Part;
 
 //---------------------------------------------------------
 //   MStaff
@@ -246,7 +247,7 @@ class Measure : public MeasureBase {
       bool hasVoice(int track) const;
       bool isMeasureRest(int staffIdx);
       bool isFullMeasureRest();
-      bool isRepeatMeasure();
+      bool isRepeatMeasure(Part* part);
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
 
