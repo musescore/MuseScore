@@ -339,17 +339,21 @@ void EditStyle::getValues()
       if(FiguredBass::fontData(idx, &family, 0, 0, 0))
             lstyle.set(ST_figuredBassFontFamily, family);
       qreal size = doubleSpinFBSize->value();
+      qreal vPos = doubleSpinFBVertPos->value();
       lstyle.set(ST_figuredBassFontSize,   size);
-      lstyle.set(ST_figuredBassYOffset,    doubleSpinFBVertPos->value());
+      lstyle.set(ST_figuredBassYOffset,    vPos);
       lstyle.set(ST_figuredBassLineHeight, ((double)spinFBLineHeight->value()) / 100.0);
       lstyle.set(ST_figuredBassStyle,      radioFBModern->isChecked() ? 0 : 1);
-      // copy to text style data relevant to it (LineHeight and Style are not in
-      // text style, and text style YOffset is not used by FB layout)
+      // copy to text style data relevant to it (LineHeight and Style are not in text style);
+      // offsetType is necessarily OFFSET_SPATIUM
       const TextStyle fbOld = lstyle.textStyle(TEXT_STYLE_FIGURED_BASS);
-      if(family != fbOld.family() || size != fbOld.size()) {
+      if(family != fbOld.family() || size != fbOld.size()
+                  || vPos != fbOld.offset().y() || fbOld.offsetType() != OFFSET_SPATIUM) {
             TextStyle fbNew(fbOld);
             fbNew.setFamily(family);
             fbNew.setSize(size);
+            fbNew.setYoff(vPos);
+            fbNew.setOffsetType(OFFSET_SPATIUM);
             lstyle.setTextStyle(fbNew);
       }
 
