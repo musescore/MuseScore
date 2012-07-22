@@ -10,6 +10,7 @@ case $1 in
 
       gitpull)
             echo "merge libmscore from upstream"
+            git subtree pull -P libmscore git@github.com:wschweer/libmscore.git master
             ;;
 
       gitremove)
