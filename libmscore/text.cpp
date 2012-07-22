@@ -439,7 +439,7 @@ bool Text::readProperties(const QDomElement& e)
       else if (tag == "subtype")          // obsolete
             ;
       else if (_textStyle.readProperties(e))
-            ; // setUnstyled();
+            ;
       else if (!Element::readProperties(e))
             return false;
       return true;

@@ -870,9 +870,9 @@ bool TextStyleData::readProperties(const QDomElement& e)
             sizeIsSpatiumDependent = val.toDouble();
       else if (tag == "frameWidth") {
             frameWidth = val.toDouble();
-            hasFrame = frameWidth != 0.0;
+            hasFrame = true;
             }
-      else if (tag == "frame")                  // obsolete
+      else if (tag == "frame")      // obsolete
             hasFrame = i;
       else if (tag == "paddingWidth")
             paddingWidth = val.toDouble();
