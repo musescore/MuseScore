@@ -23,14 +23,14 @@ MuseScore {
 
             if (typeof curScore === 'undefined')
                   Qt.quit();
-							
+
             for (var track = 0; track < curScore.ntracks; ++track) {
-                  var segment = curScore.firstSegment();                      
+                  var segment = curScore.firstSegment();
                   while (segment) {
                         var element = segment.element(track);
                         if (element) {
                               var type    = element.type;
-	                      console.log(type);
+	                        console.log(type);
                               }
                         segment = segment.next1();
                         }

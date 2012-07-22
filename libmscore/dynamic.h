@@ -44,7 +44,7 @@ class Dynamic : public Text {
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
-      DynamicType _dynType;
+      DynamicType _dynType;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 
    public:
       Dynamic(Score*);
@@ -71,7 +71,6 @@ class Dynamic : public Text {
       int velocity() const;
       DynamicType dynType() const    { return _dynType; }
       void setDynType(DynamicType t) { _dynType = t;    }
-
 
       virtual QLineF dragAnchor() const;
       };
