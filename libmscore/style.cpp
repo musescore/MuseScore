@@ -402,7 +402,7 @@ StyleData::StyleData()
 
             StyleVal(ST_lyricsMinBottomDistance, Spatium(2)),
             StyleVal(ST_lyricsLineHeight, qreal(1.0)),
-            StyleVal(ST_figuredBassFontFamily, QString("MScoreBC")),
+            StyleVal(ST_figuredBassFontFamily, QString("MuseScore Figured Bass")),
             StyleVal(ST_figuredBassFontSize, qreal(8.0)),
             StyleVal(ST_figuredBassYOffset, Spatium(6.0)),
             StyleVal(ST_figuredBassLineHeight, qreal(1.0)),
