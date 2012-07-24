@@ -62,12 +62,12 @@ Rest::Rest(Score* s, const TDuration& d)
 
 void Rest::draw(QPainter* painter) const
       {
-      if (staff()->useTablature() || generated())
+      if ((staff() && staff()->useTablature()) || generated())
             return;
       qreal _spatium = spatium();
 
       painter->setPen(curColor());
-      
+
       if (parent() && measure() && measure()->multiMeasure()) {
             Measure* m = measure();
             int n     = m->multiMeasure();
@@ -301,8 +301,6 @@ qDebug("Rest: no symbol for 1/256\n");
 
 void Rest::layout()
       {
-      int lines = staff()->lines();
-
       switch(durationType().type()) {
             case TDuration::V_64TH:
             case TDuration::V_32ND:
@@ -324,6 +322,7 @@ void Rest::layout()
       int line        = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
       int lineOffset  = 0;
 
+      int lines = staff() ? staff()->lines() : 5;
       if (segment() && measure() && measure()->mstaff(staffIdx())->hasVoices) {
             // move rests in a multi voice context
             bool up = (voice() == 0) || (voice() == 2);       // TODO: use style values
