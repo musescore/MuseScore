@@ -91,7 +91,7 @@ class SLine : public Spanner {
       void writeProperties(Xml& xml, const SLine* proto = 0) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
-      virtual QRectF bbox() const;
+      virtual const QRectF& bbox() const;
 
       virtual QPointF linePos(int grip, System** system);
 

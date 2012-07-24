@@ -688,12 +688,13 @@ void SLine::setLen(qreal l)
 //    used by palette: only one segment
 //---------------------------------------------------------
 
-QRectF SLine::bbox() const
+const QRectF& SLine::bbox() const
       {
       if (spannerSegments().isEmpty())
-            return QRectF();
+            setbbox(QRectF());
       else
-            return segmentAt(0)->bbox();
+            setbbox(segmentAt(0)->bbox());
+      return Element::bbox();
       }
 
 //---------------------------------------------------------

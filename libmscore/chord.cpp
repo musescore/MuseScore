@@ -1459,29 +1459,37 @@ void Chord::layout()
                         _space.setRw(x);
                   }
             }
+      }
 
-      QRectF _bbox;
+//---------------------------------------------------------
+//   bbox
+//---------------------------------------------------------
+
+const QRectF& Chord::bbox() const
+      {
+      QRectF bb;
       foreach (Note* note, _notes) {
             note->layout2();
-            _bbox |= note->bbox().translated(note->pos());
+            bb |= note->bbox().translated(note->pos());
             }
       foreach(const LedgerLine* l, _ledgerLines)
-            _bbox |= l->bbox().translated(l->pos());
+            bb |= l->bbox().translated(l->pos());
       foreach(Articulation* a, articulations)
-            _bbox |= a->bbox().translated(a->pos());
+            bb |= a->bbox().translated(a->pos());
       if (_hook)
-            _bbox |= _hook->bbox().translated(_hook->pos());
+            bb |= _hook->bbox().translated(_hook->pos());
       if (_stem)
-            _bbox |= _stem->bbox().translated(_stem->pos());
+            bb |= _stem->bbox().translated(_stem->pos());
       if (_arpeggio)
-            _bbox |= _arpeggio->bbox().translated(_arpeggio->pos());
+            bb |= _arpeggio->bbox().translated(_arpeggio->pos());
       if (_glissando)
-            _bbox |= _glissando->bbox().translated(_glissando->pos());
+            bb |= _glissando->bbox().translated(_glissando->pos());
       if (_stemSlash)
-            _bbox |= _stemSlash->bbox().translated(_stemSlash->pos());
+            bb |= _stemSlash->bbox().translated(_stemSlash->pos());
       if (_tremolo)
-            _bbox |= _tremolo->bbox().translated(_tremolo->pos());
-      setbbox(_bbox);
+            bb |= _tremolo->bbox().translated(_tremolo->pos());
+      setbbox(bb);
+      return Element::bbox();
       }
 
 //---------------------------------------------------------

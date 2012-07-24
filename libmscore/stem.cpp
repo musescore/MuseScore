@@ -82,7 +82,7 @@ void Stem::layout()
       if (up())
             l = -l;
       Staff* st = staff();
-      qreal lw  = point(score()->styleS(ST_stemWidth));
+      qreal lw5  = point(score()->styleS(ST_stemWidth)) * .5;
       QPointF p1(0.0, 0.0);
       QPointF p2(0.0, l);
       if (st) {
@@ -92,26 +92,27 @@ void Stem::layout()
                   if (c->up()) {
                         Note* n   = c->downNote();
                         p1 = symbols[score()->symIdx()][n->noteHead()].attach(n->magS());
-                        p1.rx() = -lw * .5;
-                        p2.rx() = -lw * .5;
+                        p1.rx() = -lw5;
+                        p2.rx() = -lw5;
                         }
                   else {
                         Note* n = c->upNote();
                         p1 = -symbols[score()->symIdx()][n->noteHead()].attach(n->magS());
-                        p1.rx() = lw * .5;
-                        p2.rx() = lw * .5;
+                        p1.rx() = lw5;
+                        p2.rx() = lw5;
                         }
                   }
             else if (st->useTablature()) {
-                  p1.rx() = -lw * .5;
-                  p2.rx() = -lw * .5;
+                  p1.rx() = -lw5;
+                  p2.rx() = -lw5;
                   }
             }
       line.setP1(p1);
       line.setP2(p2);
 
       // compute bounding rectangle
-      setbbox(QRectF(-lw * .5, 0, lw, l).normalized());
+      QRectF r(line.p1(), line.p2());
+      setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
       }
 
 //---------------------------------------------------------
@@ -150,7 +151,6 @@ void Stem::draw(QPainter* painter) const
             useTab = true;
             }
       qreal lw = point(score()->styleS(ST_stemWidth));
-//      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
