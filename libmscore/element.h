@@ -240,7 +240,7 @@ class Element : public QObject {
       void setReadPos(const QPointF& p)       { _readPos = p;      }
       void adjustReadPos();
 
-      const QRectF& bbox() const              { return _bbox;              }
+      virtual const QRectF& bbox() const      { return _bbox;              }
       virtual qreal height() const            { return bbox().height();    }
       virtual void setHeight(qreal v)         { _bbox.setHeight(v);        }
       virtual qreal width() const             { return bbox().width();     }

@@ -129,6 +129,8 @@ class Chord : public ChordRest {
       virtual void setScore(Score* s);
       virtual ElementType type() const { return CHORD; }
 
+      virtual const QRectF& bbox() const;
+
       virtual void write(Xml& xml) const;
       void read(const QDomElement&, QList<Tuplet*>*, QList<Spanner*>*);
       virtual void read(const QDomElement&);
