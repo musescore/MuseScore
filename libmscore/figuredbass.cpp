@@ -634,20 +634,36 @@ void FiguredBassItem::layout()
 
 void FiguredBassItem::draw(QPainter* painter) const
       {
-      SimpleText::draw(painter);
+      int font = 0;
+//      SimpleText::draw(painter);
+      // set font from general style
+      QFont f(g_FBFonts.at(font).family);
+#ifdef USE_GLYPHS
+      f.setHintingPreference(QFont::PreferVerticalHinting);
+#endif
+      qreal m = score()->styleD(ST_figuredBassFontSize) * MScore::DPI / PPI;
+      m *= spatium() / (SPATIUM20 * MScore::DPI);     // make spatium dependent
+      f.setPixelSize(lrint(m));
+
+      painter->setFont(f);
+      painter->setBrush(Qt::NoBrush);
+      painter->setPen(figuredBass()->curColor());
+      painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, getText());
+//      drawFrame(p);
+
       // continuation line
       qreal len = 0.0;
       if(contLine) {
             len = figuredBass()->lineLength(0);
             if(len > 0.0) {
                   qreal h = bbox().height() * 0.75;
-                  painter->setPen((QPen(curColor(), 1)));
+//                  painter->setPen((QPen(figuredBass()->curColor(), 1)));
                   painter->drawLine(textWidth, h, len - ipos().x(), h);
                   }
             }
+
       // closing cont.line parenthesis
       if(parenth[4] != FBIParenthNone) {
-            int font = 0;
             int x = len > 0.0 ? len : textWidth;
             painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
                   g_FBFonts.at(font).displayParenthesis[parenth[4]]);
