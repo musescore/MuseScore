@@ -2326,6 +2326,7 @@ static void drawDebugInfo(QPainter& p, const Element* e)
       QPointF pos(e->pagePos());
       p.translate(pos);
       p.setBrush(Qt::NoBrush);
+
       p.setPen(Qt::red);
       p.drawPath(e->shape());
 
@@ -2349,6 +2350,7 @@ static void drawDebugInfo(QPainter& p, const Element* e)
                   ee = static_cast<const Clef*>(e)->segment();
 
             p.setPen(Qt::green);
+
             p.drawRect(ee->pageBoundingRect());
 
             if (ee->type() == SEGMENT) {

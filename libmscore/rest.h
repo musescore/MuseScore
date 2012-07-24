@@ -45,6 +45,7 @@ class Rest : public ChordRest {
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;
+      virtual void read(const QDomElement& d) { read(d, 0, 0); }
       virtual void read(const QDomElement&, QList<Tuplet*>*, QList<Spanner*>*);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
