@@ -67,6 +67,7 @@ class Stem : public Element {
       void setLen(qreal l);
       qreal len() const               { return _len; }
       qreal stemLen() const;
+      QPointF p2() const              { return line.p2(); }
       };
 
 #endif

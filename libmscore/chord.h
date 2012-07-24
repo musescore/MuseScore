@@ -166,8 +166,8 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s)        { delete _stemSlash; _stemSlash = s; }
 
-      virtual QPointF stemPos() const;
-      QPointF stemPosBeam() const;
+      virtual QPointF stemPos() const;          ///< page coordinates
+      QPointF stemPosBeam() const;              ///< page coordinates
 
       Hook* hook() const                     { return _hook; }
 

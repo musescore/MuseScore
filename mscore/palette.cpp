@@ -792,7 +792,6 @@ void Palette::dropEvent(QDropEvent* event)
                         }
                   else if (e->type() == SLUR || e->type() == TIE) {
                         SlurTie* st = static_cast<SlurTie*>(e);
-                        st->setLen(gscore->spatium() * 7);
                         st->setTrack(0);
                         }
                   }
