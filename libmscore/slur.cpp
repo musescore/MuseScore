@@ -30,6 +30,17 @@
 #include "page.h"
 
 //---------------------------------------------------------
+//   SlurPos
+//---------------------------------------------------------
+
+struct SlurPos {
+      QPointF p1;             // start point of slur
+      System* system1;        // start system of slur
+      QPointF p2;             // end point of slur
+      System* system2;        // end system of slur
+      };
+
+//---------------------------------------------------------
 //   SlurSegment
 //---------------------------------------------------------
 
@@ -596,7 +607,7 @@ SlurTie::SlurTie(Score* s)
       {
       _slurDirection = AUTO;
       _up            = true;
-      _len           = 0;
+//      _len           = 0;
       _lineType      = 0;     // default is solid
       }
 
@@ -605,7 +616,7 @@ SlurTie::SlurTie(const SlurTie& t)
       {
       _up            = t._up;
       _slurDirection = t._slurDirection;
-      _len           = t._len;
+//      _len           = t._len;
       _lineType      = t._lineType;
       // delSegments    = t.delSegments;
       }
@@ -687,12 +698,43 @@ void Slur::slurPos(SlurPos* sp)
       Stem* stem1 = sc->stem();
       Stem* stem2 = ec->stem();
 
+      enum SlurAnchor {
+            SA_NONE, SA_STEM
+            };
+      SlurAnchor sa1 = SA_NONE;
+      SlurAnchor sa2 = SA_NONE;
+      if ((sc->up() == ec->up()) && !sc->beam() && !ec->beam() && (_up == sc->up())) {
+            sa1 = SA_STEM;
+            sa2 = SA_STEM;
+            printf("Stem-Stem\n");
+            }
+
+      qreal hw   = note1->headWidth();
+      if (sa1 != SA_NONE && sa2 != SA_NONE) {
+            switch (sa1) {
+                  case SA_STEM:
+                        sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
+                        sp->p1 += QPointF(0.25 * _spatium, 0.75 * _spatium);
+                        break;
+                  case SA_NONE:
+                        break;
+                  }
+            switch(sa2) {
+                  case SA_STEM:
+                        sp->p2 += ec->stemPosBeam() - ec->pagePos() + ec->stem()->p2();
+                        sp->p2 += QPointF(-0.25 * _spatium, 0.75 * _spatium);
+                        break;
+                  case SA_NONE:
+                        break;
+                  }
+            return;
+            }
+
       //
       // default position:
       //    horizontal: middle of note head
       //    vertical:   _spatium * .4 above/below note head
       //
-      qreal hw   = note1->headWidth();
       qreal __up = _up ? -1.0 : 1.0;
 
       //------p1
@@ -886,6 +928,24 @@ bool SlurTie::readProperties(const QDomElement& e)
       }
 
 //---------------------------------------------------------
+//   undoSetLineType
+//---------------------------------------------------------
+
+void SlurTie::undoSetLineType(int t)
+      {
+      score()->undoChangeProperty(this, P_LINE_TYPE, t);
+      }
+
+//---------------------------------------------------------
+//   undoSetSlurDirection
+//---------------------------------------------------------
+
+void SlurTie::undoSetSlurDirection(Direction d)
+      {
+      score()->undoChangeProperty(this, P_SLUR_DIRECTION, d);
+      }
+
+//---------------------------------------------------------
 //   toDefault
 //---------------------------------------------------------
 
@@ -1054,8 +1114,8 @@ void Slur::layout()
                   s = frontSegment();
                   }
             s->setSubtype(SEGMENT_SINGLE);
-            _len = _spatium * 6;
-            s->layout(QPointF(0, 0), QPointF(_len, 0));
+//            _len = _spatium * 6;
+            s->layout(QPointF(0, 0), QPointF(_spatium * 6, 0));
             setbbox(frontSegment()->bbox());
             return;
             }
