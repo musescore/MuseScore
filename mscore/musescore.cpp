@@ -2419,8 +2419,11 @@ int main(int argc, char* av[])
                         ++files;
                   }
 #ifdef Q_WS_MAC
-            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION))
-                  loadScores(static_cast<MuseScoreApplication*>(qApp)->paths);
+            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
+                  MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
+                  loadScores(mApp->paths);
+                  files = mApp->paths.size();
+                  }
 #else
             //
             // TODO: delete old session backups

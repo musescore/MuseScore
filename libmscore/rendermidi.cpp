@@ -411,7 +411,7 @@ void Score::renderPart(EventMap* events, Part* part)
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure()) {
+                  if (lastMeasure && m->isRepeatMeasure(part)) {
                         int offset = m->tick() - lastMeasure->tick();
                         collectMeasureEvents(events, lastMeasure, part, tickOffset + offset);
                         }

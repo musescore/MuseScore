@@ -2704,10 +2704,12 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure()
+bool Measure::isRepeatMeasure(Part* part)
       {
-      int strack = 0;
-      int etrack = score()->nstaves() * VOICES;
+      int firstStaffIdx = score()->staffIdx(part);
+      int nextStaffIdx  = firstStaffIdx + part->nstaves();
+      int strack      = firstStaffIdx * VOICES;
+      int etrack      = nextStaffIdx * VOICES;
 
       Segment* s = first(SegChordRest);
 
