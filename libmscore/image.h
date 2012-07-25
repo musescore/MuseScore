@@ -19,7 +19,7 @@
 class ImageStoreItem;
 
 //---------------------------------------------------------
-//   Image
+//   @@ Image
 //---------------------------------------------------------
 
 class Image : public BSymbol {
@@ -78,7 +78,7 @@ class Image : public BSymbol {
       };
 
 //---------------------------------------------------------
-//   RasterImage
+//   @@ RasterImage
 //---------------------------------------------------------
 
 class RasterImage : public Image {
@@ -94,7 +94,7 @@ class RasterImage : public Image {
       };
 
 //---------------------------------------------------------
-//   SvgImage
+//   @@ SvgImage
 //---------------------------------------------------------
 
 class SvgImage : public Image {

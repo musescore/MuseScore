@@ -23,7 +23,7 @@ class Element;
 class Text;
 
 //---------------------------------------------------------
-//   TextLineSegment
+//   @@ TextLineSegment
 //---------------------------------------------------------
 
 class TextLineSegment : public LineSegment {
@@ -51,8 +51,7 @@ class TextLineSegment : public LineSegment {
 enum HookType { HOOK_90, HOOK_45 };
 
 //---------------------------------------------------------
-//   TextLine
-//    brackets
+//   @@ TextLine
 //---------------------------------------------------------
 
 class TextLine : public SLine {

@@ -77,11 +77,8 @@ struct BracketItem {
 
 //---------------------------------------------------------
 //   @@ Staff
+///   Global staff data not directly related to drawing.
 //---------------------------------------------------------
-
-/**
- Global staff data not directly related to drawing.
-*/
 
 class Staff : public QObject {
       Q_OBJECT

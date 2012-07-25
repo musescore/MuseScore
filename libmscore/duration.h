@@ -23,6 +23,8 @@ class Spanner;
 
 //---------------------------------------------------------
 //   @@ DurationElement
+///   Virtual base class for Chord, Rest and Tuplet.
+//
 //   @P duration int     duration in ticks
 //---------------------------------------------------------
 

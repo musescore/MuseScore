@@ -91,6 +91,8 @@ static const PropertyData propertyList[] = {
       { P_BEAM_MODE,           "BeamMode",      T_BEAM_MODE  },
       { P_USER_LEN,            "",              T_REAL   },
       { P_SPACE,               "space",         T_REAL   },
+      { P_TEMPO,               "tempo",         T_REAL   },
+      { P_TEMPO_FOLLOW_TEXT,   "followText",    T_BOOL   },
       { P_END,                 "",              T_INT    }
       };
 

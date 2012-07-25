@@ -34,8 +34,8 @@ class Chord;
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 
 //---------------------------------------------------------
-//   StemSlash
-//    used for grace notes of type acciaccatura
+//   @@ StemSlash
+///   used for grace notes of type acciaccatura
 //---------------------------------------------------------
 
 class StemSlash : public Element {
@@ -57,6 +57,7 @@ class StemSlash : public Element {
       };
 
 //---------------------------------------------------------
+//    @@ LedgerLine
 ///   Graphic representation of a ledger line.
 ///
 ///    parent:     Chord
@@ -80,14 +81,11 @@ class LedgerLine : public Line {
 
 //---------------------------------------------------------
 //   @@ Chord
+///   Graphic representation of a chord.
+///   Single notes are handled as degenerated chords.
+//
 //   @P notes  array[Note]    the list of notes
 //---------------------------------------------------------
-
-/**
- Graphic representation of a chord.
-
- Single notes are handled as degenerated chords.
-*/
 
 class Chord : public ChordRest {
       Q_OBJECT

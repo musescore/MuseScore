@@ -21,7 +21,7 @@ class Score;
 class Segment;
 
 //---------------------------------------------------------
-//   RepeatMeasure
+//   @@ RepeatMeasure
 //---------------------------------------------------------
 
 class RepeatMeasure : public Rest {
@@ -50,10 +50,12 @@ enum MarkerType {
       };
 
 //---------------------------------------------------------
-//   Marker
+//   @@ Marker
 //---------------------------------------------------------
 
 class Marker : public Text {
+      Q_OBJECT
+
       MarkerType _markerType;
       QString _label;               ///< referenced from Jump() element
 
@@ -93,10 +95,12 @@ enum {
       };
 
 //---------------------------------------------------------
-//   Jump
+//   @@ Jump
 //---------------------------------------------------------
 
 class Jump : public Text {
+      Q_OBJECT
+
       QString _jumpTo;
       QString _playUntil;
       QString _continueAt;
