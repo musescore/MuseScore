@@ -28,11 +28,12 @@ class Lyrics;
 class TabDurationSymbol;
 class Spanner;
 
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   @@ ChordRest
+///    Virtual base class. Chords and rests can be part of a beam
+//
 //   @P durationType int
-//    chords and rests can be part of a beam
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
       Q_OBJECT

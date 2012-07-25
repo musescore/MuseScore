@@ -99,8 +99,8 @@ static void parseClass(const QString& name, const QString& in)
       QRegExp re3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
 
       QRegExp reD("//@ (.*)");
-      QRegExp reD1("\\/\\/\\/ (.*)");
-      QRegExp re4("class +(\\w+) *: *public +(\\w+) *\\{");
+      QRegExp re4 ("class +(\\w+) *: *public +(\\w+) *\\{");
+      QRegExp re4b("class +(\\w+) *: *public +(\\w+), *public");
 
       if (!re1.isValid() || !re2.isValid() || !re3.isValid())
             abort();
@@ -162,9 +162,21 @@ static void parseClass(const QString& name, const QString& in)
                   if (name == re4.cap(1).simplified()) {
                         cl.parent = parent;
                         }
-                  else
-                        printf("?<%s> derived from <%s>\n", qPrintable(name), qPrintable(parent));
-
+                  else {
+                        printf("?<%s>!=<%s> derived from <%s>\n",
+                           qPrintable(name), qPrintable(re4.cap(1).simplified()), qPrintable(parent));
+                        }
+                  }
+            else if (re4b.indexIn(s, 0) != -1) {
+                  parseClassDescription = false;
+                  QString parent = re4b.cap(2).simplified();
+                  if (name == re4b.cap(1).simplified()) {
+                        cl.parent = parent;
+                        }
+                  else {
+                        printf("?<%s>!=<%s> derived from <%s>\n",
+                           qPrintable(name), qPrintable(re4b.cap(1).simplified()), qPrintable(parent));
+                        }
                   }
             }
       classes.append(cl);
@@ -185,7 +197,8 @@ static void scanFile(const QString& in)
       for (;;) {
             int rv = re.indexIn(in, gpos);
             if (rv == -1) {
-                  parseClass(className, in.mid(gpos, in.size() - gpos));
+                  if (!className.isEmpty())
+                        parseClass(className, in.mid(gpos, in.size() - gpos));
                   break;
                   }
             int next = rv + re.matchedLength();
@@ -300,7 +313,7 @@ static void writeOutput()
       //
       QString out;
       addHeader(out);
-      out += "<h2>Objects</h2>\n"
+      out += "<h2>Score Elements</h2>\n"
              "<ul>\n";
       qSort(classes);
       foreach(const Class& s, classes) {
@@ -368,27 +381,14 @@ int main(int argc, char* argv[])
       srcPath = argv[0];
       QStringList files;
       files << "mscore/plugins.h";
-      files << "libmscore/part.h";
-      files << "libmscore/staff.h";
-      files << "libmscore/element.h";
-      files << "libmscore/score.h";
-      files << "libmscore/measurebase.h";
-      files << "libmscore/measure.h";
-      files << "libmscore/segment.h";
-      files << "libmscore/chordrest.h";
-      files << "libmscore/duration.h";
-      files << "libmscore/chord.h";
-      files << "libmscore/note.h";
-      files << "libmscore/rest.h";
-      files << "libmscore/harmony.h";
-      files << "libmscore/text.h";
-      files << "libmscore/timesig.h";
-      files << "libmscore/page.h";
-      files << "libmscore/cursor.h";
-      files << "libmscore/notedot.h";
-      files << "libmscore/slur.h";
-      files << "libmscore/spanner.h";
-      files << "libmscore/keysig.h";
+
+      QDir libdir(srcPath + "/libmscore");
+      QStringList filter;
+      filter << "*.h";
+      QStringList fl = libdir.entryList(filter, QDir::Files);
+
+      foreach(QString f, fl)
+            files << "libmscore/" + f;
 
       foreach(const QString& s, files) {
             QString infile = srcPath + "/" + s;

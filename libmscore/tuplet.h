@@ -21,14 +21,14 @@ class Spanner;
 class QPainter;
 
 //------------------------------------------------------------------------
-//   Tuplet
-//     Example of 1/8 triplet:
-//       _baseLen     = 1/8
-//       _actualNotes = 3
-//       _normalNotes = 2     (3 notes played in the time of 2/8)
+//   @@ Tuplet
+///     Example of 1/8 triplet:
+///       _baseLen     = 1/8
+///       _actualNotes = 3
+///       _normalNotes = 2     (3 notes played in the time of 2/8)
 //
-//    the tuplet has a len of _baseLen * _normalNotes
-//    a tuplet note has len of _baseLen * _normalNotes / _actualNotes
+////    The tuplet has a len of _baseLen * _normalNotes.
+////    A tuplet note has len of _baseLen * _normalNotes / _actualNotes.
 //------------------------------------------------------------------------
 
 class Tuplet : public DurationElement {

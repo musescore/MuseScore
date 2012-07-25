@@ -27,7 +27,7 @@ enum TrillType {
       };
 
 //---------------------------------------------------------
-//   TrillSegment
+//   @@ TrillSegment
 //---------------------------------------------------------
 
 class TrillSegment : public LineSegment {
@@ -46,7 +46,7 @@ class TrillSegment : public LineSegment {
       };
 
 //---------------------------------------------------------
-//   Trill
+//   @@ Trill
 //---------------------------------------------------------
 
 class Trill : public SLine {

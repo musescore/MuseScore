@@ -24,7 +24,7 @@
 TempoText::TempoText(Score* s)
    : Text(s)
       {
-      _tempo      = 2.0;
+      _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       setTextStyle(s->textStyle(TEXT_STYLE_TEMPO));
       }
@@ -115,4 +115,72 @@ void TempoText::textChanged()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   undoSetTempo
+//---------------------------------------------------------
+
+void TempoText::undoSetTempo(qreal v)
+      {
+      score()->undoChangeProperty(this, P_TEMPO, v);
+      }
+
+//---------------------------------------------------------
+//   undoSetFollowText
+//---------------------------------------------------------
+
+void TempoText::undoSetFollowText(bool v)
+      {
+      score()->undoChangeProperty(this, P_TEMPO_FOLLOW_TEXT, v);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TempoText::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_TEMPO:             return _tempo;
+            case P_TEMPO_FOLLOW_TEXT: return _followText;
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_TEMPO:
+                  _tempo = v.toDouble();
+                  break;
+            case P_TEMPO_FOLLOW_TEXT:
+                  _followText = v.toBool();
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TempoText::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_TEMPO:             return 2.0;
+            case P_TEMPO_FOLLOW_TEXT: return false;
+            default:                  return Element::propertyDefault(id);
+            }
+      }
+
 

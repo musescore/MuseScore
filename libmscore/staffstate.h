@@ -26,10 +26,12 @@ enum StaffStateType {
       };
 
 //---------------------------------------------------------
-//   StaffState
+//   @@ StaffState
 //---------------------------------------------------------
 
 class StaffState : public Element {
+      Q_OBJECT
+
       StaffStateType _subtype;
       qreal lw;
       QPainterPath path;

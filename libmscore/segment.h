@@ -38,10 +38,7 @@ class System;
 //------------------------------------------------------------------------
 
 /**
- The Segment class stores all elements inside a staff.
-
- A Segment is typed, i.e. all Elements in a Segment are of the same type.
- All Elements also start at the same tick. The Segment can store one Element for
+ All Elements in a segment start at the same tick. The Segment can store one Element for
  each voice in each staff in the score. It also stores the lyrics for each staff.
  Some elements (Clef, KeySig, TimeSig etc.) are assumed to always have voice zero
  and can be found in _elist[staffIdx * VOICES];

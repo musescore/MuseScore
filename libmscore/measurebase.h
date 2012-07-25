@@ -28,11 +28,8 @@ class LayoutBreak;
 
 //---------------------------------------------------------
 //   @@ MeasureBase
+///   Virtual base class for Measure, HBox and VBox
 //---------------------------------------------------------
-
-/**
-      Base class for Measure, HBox and VBox
-*/
 
 class MeasureBase : public Element {
       Q_OBJECT

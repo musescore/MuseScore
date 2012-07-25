@@ -17,7 +17,8 @@
 #include "element.h"
 
 //---------------------------------------------------------
-//   Ossia
+//   @@ Ossia
+///   not implemented yet
 //---------------------------------------------------------
 
 class Ossia : public Element {

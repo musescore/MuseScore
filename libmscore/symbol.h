@@ -20,13 +20,12 @@ class Segment;
 class QPainter;
 
 //---------------------------------------------------------
-//   Symbol
-//    score symbol
+//   @@ Symbol
+///   Symbol constructed from buildin symbol.
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
       Q_OBJECT
-
 
    protected:
       int _sym;
@@ -55,8 +54,8 @@ class Symbol : public BSymbol {
       };
 
 //---------------------------------------------------------
-//   FSymbol
-//    score symbol
+//   @@ FSymbol
+///   Symbol constructed from a font glyph.
 //---------------------------------------------------------
 
 class FSymbol : public Element {

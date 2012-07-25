@@ -45,13 +45,10 @@ TempoProperties::TempoProperties(TempoText* tt, QWidget* parent)
 
 void TempoProperties::saveValues()
       {
-      Score* score    = tempoText->score();
       double newTempo = tempo->value() / 60.0;
-      if ((newTempo != tempoText->tempo()) || (followText->isChecked() != tempoText->followText())) {
-            TempoText* ntt = new TempoText(*tempoText);
-            ntt->setTempo(newTempo);
-            ntt->setFollowText(followText->isChecked());
-            score->undoChangeElement(tempoText, ntt);
-            }
+      if (newTempo != tempoText->tempo())
+            tempoText->undoSetTempo(newTempo);
+      if (followText->isChecked() != tempoText->followText())
+            tempoText->undoSetFollowText(followText->isChecked());
       }
 

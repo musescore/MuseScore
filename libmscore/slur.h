@@ -46,8 +46,8 @@ struct UP {
       };
 
 //---------------------------------------------------------
-//   SlurSegment
-//    also used for Tie
+//   @@ SlurSegment
+///    also used for Tie
 //---------------------------------------------------------
 
 class SlurSegment : public SpannerSegment {
@@ -154,7 +154,7 @@ class SlurTie : public Spanner {
 
 //---------------------------------------------------------
 //   @@ Slur
-//    slurs have Chord's as startElement/endElement
+///   slurs have Chord's as startElement/endElement
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
@@ -188,7 +188,7 @@ class Slur : public SlurTie {
 
 //---------------------------------------------------------
 //   @@ Tie
-//    slurs have Note's as startElement/endElement
+///   ties have Note's as startElement/endElement
 //---------------------------------------------------------
 
 class Tie : public SlurTie {
