@@ -18,8 +18,8 @@
 #include "elementlayout.h"
 
 //---------------------------------------------------------
-//   BSymbol
-//    base class for Symbol and Image
+//   @@ BSymbol
+///    base class for Symbol and Image
 //---------------------------------------------------------
 
 class BSymbol : public Element, public ElementLayout {

@@ -25,7 +25,7 @@ enum SpannerSegmentType {
       };
 
 //---------------------------------------------------------
-//   SpannerSegment
+//   @@ SpannerSegment
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {

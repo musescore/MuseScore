@@ -27,7 +27,8 @@ class Text;
 class QPainter;
 
 //---------------------------------------------------------
-//   Box
+//   @@ Box
+////    virtual base class for frames "boxes"
 //---------------------------------------------------------
 
 class Box : public MeasureBase {
@@ -97,7 +98,8 @@ class Box : public MeasureBase {
       };
 
 //---------------------------------------------------------
-//   HBox
+//   @@ HBox
+///   horizontal frame
 //---------------------------------------------------------
 
 class HBox : public Box {
@@ -118,7 +120,8 @@ class HBox : public Box {
       };
 
 //---------------------------------------------------------
-//   VBox
+//   @@ VBox
+///   vertical frame
 //---------------------------------------------------------
 
 class VBox : public Box {
@@ -137,8 +140,8 @@ class VBox : public Box {
       };
 
 //---------------------------------------------------------
-//   FBox
-//    frame containing fret diagrams
+//   @@ FBox
+///    frame containing fret diagrams
 //---------------------------------------------------------
 
 class FBox : public VBox {

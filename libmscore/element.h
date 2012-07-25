@@ -423,14 +423,11 @@ class ElementList : public QList<Element*> {
 typedef ElementList::iterator iElement;
 typedef ElementList::const_iterator ciElement;
 
-//---------------------------------------------------------
-//   StaffLines
-//---------------------------------------------------------
-
-/**
- The StaffLines class is the graphic representation of a staff,
- it draws the horizontal staff lines.
-*/
+//-------------------------------------------------------------------
+//   @@ StaffLines
+///   The StaffLines class is the graphic representation of a staff,
+///   it draws the horizontal staff lines.
+//-------------------------------------------------------------------
 
 class StaffLines : public Element {
       Q_OBJECT
@@ -453,7 +450,7 @@ class StaffLines : public Element {
       };
 
 //---------------------------------------------------------
-//   Line
+//   @@ Line
 //---------------------------------------------------------
 
 class Line : public Element {
@@ -486,7 +483,7 @@ class Line : public Element {
       };
 
 //---------------------------------------------------------
-//   Compound
+//   @@ Compound
 //---------------------------------------------------------
 
 class Compound : public Element {
@@ -511,7 +508,7 @@ class Compound : public Element {
       };
 
 //---------------------------------------------------------
-//   RubberBand
+//   @@ RubberBand
 //---------------------------------------------------------
 
 class RubberBand : public Element {

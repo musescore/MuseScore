@@ -45,7 +45,7 @@ enum AccidentalRole {
       };
 
 //---------------------------------------------------------
-//   Accidental
+//   @@ Accidental
 //---------------------------------------------------------
 
 class Accidental : public Element {
@@ -96,7 +96,7 @@ class Accidental : public Element {
       };
 
 //---------------------------------------------------------
-//   AccidentalBracket
+//   @@ AccidentalBracket
 //    used as icon in palette
 //---------------------------------------------------------
 

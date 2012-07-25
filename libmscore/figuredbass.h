@@ -55,7 +55,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 ---------------------------------------------------------*/
 
 //---------------------------------------------------------
-//   FiguredBassItem
+//   @@ FiguredBassItem
 //---------------------------------------------------------
 
 class FiguredBass;
@@ -153,7 +153,7 @@ struct FiguredBassFont {
 };
 
 //---------------------------------------------------------
-//   FiguredBassItem
+//   @@ FiguredBass
 //---------------------------------------------------------
 
 class FiguredBass : public Text {
