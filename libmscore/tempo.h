@@ -70,8 +70,6 @@ class TempoMap : public std::map<int, TEvent> {
       void setPause(int t, qreal);
       void delTempo(int tick);
 
-//      int tick2samples(int tick);
-//      int samples2tick(int samples);
       void setRelTempo(qreal val);
       qreal relTempo() const { return _relTempo; }
       };

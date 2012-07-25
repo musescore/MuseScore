@@ -21,7 +21,7 @@ class Segment;
 class QPainter;
 
 //---------------------------------------------------------
-//   BarLine
+//   @@ BarLine
 //---------------------------------------------------------
 
 class BarLine : public Element {

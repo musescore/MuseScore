@@ -63,7 +63,7 @@ struct ClefInfo {
 extern const ClefInfo clefTable[];
 
 //---------------------------------------------------------
-//   Clef
+//   @@ Clef
 ///   Graphic representation of a clef.
 //---------------------------------------------------------
 

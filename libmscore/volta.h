@@ -29,12 +29,11 @@ extern void vdebug(int n);
 extern LineSegment* voltaDebug;
 
 //---------------------------------------------------------
-//   VoltaSegment
+//   @@ VoltaSegment
 //---------------------------------------------------------
 
 class VoltaSegment : public TextLineSegment {
       Q_OBJECT
-
 
    public:
       VoltaSegment(Score* s) : TextLineSegment(s) {}
@@ -44,7 +43,7 @@ class VoltaSegment : public TextLineSegment {
       };
 
 //---------------------------------------------------------
-//   Volta
+//   @@ Volta
 //---------------------------------------------------------
 
 class Volta : public TextLine {

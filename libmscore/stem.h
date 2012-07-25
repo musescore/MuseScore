@@ -20,13 +20,9 @@ class Chord;
 class QPainter;
 
 //---------------------------------------------------------
-//   Stem
-//    Notenhals
+//   @@ Stem
+///   Graphic representation of a note stem.
 //---------------------------------------------------------
-
-/**
- Graphic representation of a note stem.
-*/
 
 class Stem : public Element {
       Q_OBJECT

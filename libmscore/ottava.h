@@ -29,7 +29,7 @@ struct OttavaE {
 class Ottava;
 
 //---------------------------------------------------------
-//   OttavaSegment
+//   @@ OttavaSegment
 //---------------------------------------------------------
 
 class OttavaSegment : public TextLineSegment {
@@ -45,8 +45,7 @@ class OttavaSegment : public TextLineSegment {
       };
 
 //---------------------------------------------------------
-//   Ottava
-//    brackets
+//   @@ Ottava
 //---------------------------------------------------------
 
 class Ottava : public TextLine {

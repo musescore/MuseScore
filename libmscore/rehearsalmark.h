@@ -17,7 +17,7 @@
 #include "text.h"
 
 //---------------------------------------------------------
-//   RehearsalMark
+//   @@ RehearsalMark
 //---------------------------------------------------------
 
 class RehearsalMark : public Text  {

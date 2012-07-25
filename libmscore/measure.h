@@ -79,7 +79,7 @@ enum {
 
 //---------------------------------------------------------
 //   @@ Measure
-//    one measure in a system
+///    one measure in a system
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {

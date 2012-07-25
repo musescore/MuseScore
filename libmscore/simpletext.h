@@ -22,7 +22,7 @@ class MuseScoreView;
 struct SymCode;
 
 //---------------------------------------------------------
-//   SimpleText
+//   @@ SimpleText
 //---------------------------------------------------------
 
 class SimpleText : public Element {
