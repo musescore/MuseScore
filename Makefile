@@ -48,10 +48,10 @@ debug:
 
 
 qt5:
-	if test ! -d qt5;                        \
+	if test ! -d build.qt5;                        \
          then                                          \
-            mkdir qt5;                         \
-            cd qt5;                            \
+            mkdir build.qt5;                         \
+            cd build.qt5;                            \
             export PATH=/home/ws/qt/qt5/qtbase/bin:${PATH};        \
             cmake -DCMAKE_BUILD_TYPE=DEBUG -DBUILD_SCRIPTGEN=NO        \
             	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
