@@ -93,7 +93,8 @@ void Image::setScale(const QSizeF& scale)
 
 QSizeF Image::scaleForSize(const QSizeF& s) const
       {
-      QSizeF sz = s * (_sizeIsSpatium ? spatium() : MScore::DPMM);
+//      QSizeF sz = s * (_sizeIsSpatium ? spatium() : MScore::DPMM);
+      QSizeF sz = s * scaleFactor();
       return QSizeF(
          (sz.width()  * 100.0)/ imageSize().width(),
          (sz.height() * 100.0)/ imageSize().height()
@@ -107,8 +108,9 @@ QSizeF Image::scaleForSize(const QSizeF& s) const
 QSizeF Image::sizeForScale(const QSizeF& scale) const
       {
       QSizeF s = scale / 100.0;
-      qreal sz = _sizeIsSpatium ? spatium() : MScore::DPMM;
-      QSizeF oSize = imageSize() / sz;
+//      qreal sz = _sizeIsSpatium ? spatium() : MScore::DPMM;
+//      QSizeF oSize = imageSize() / sz;
+      QSizeF oSize = imageSize() / scaleFactor();
       return QSizeF(s.width() * oSize.width(), s.height() * oSize.height());
       }
 
