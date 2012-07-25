@@ -1358,8 +1358,9 @@ void MuseScore::openRecentMenu()
                   break;
             // QFileInfo fi(s);
             // QAction* action = openRecent->addAction(fi.completeBaseName());
-            QAction* action = openRecent->addAction(s);  // show complete path
-            action->setData(s);
+            QString data(s);
+            QAction* action = openRecent->addAction(s.replace("&", "&&"));  // show complete path
+            action->setData(data);
             }
       }
 
