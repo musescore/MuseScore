@@ -1610,7 +1610,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          0,
          "edit-element",
-         QT_TRANSLATE_NOOP("action","Edit element")
+         QT_TRANSLATE_NOOP("action","Edit Element")
          ),
       Shortcut(
          STATE_NORMAL | STATE_EDIT | STATE_LYRICS_EDIT,
