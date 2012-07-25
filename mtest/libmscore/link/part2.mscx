@@ -165,6 +165,7 @@ p, li { white-space: pre-wrap; }
           </Tempo>
         <Dynamic>
           <subtype>pp</subtype>
+          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <durationType>quarter</durationType>
