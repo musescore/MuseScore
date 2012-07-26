@@ -46,6 +46,7 @@ class Image : public BSymbol {
       virtual void updateGrips(int*, QRectF*) const;
       virtual QPointF gripAnchor(int /*grip*/) const { return QPointF(); }
       virtual QSizeF imageSize() const = 0;
+      virtual qreal scaleFactor() const = 0;
 
    public:
       Image(Score* = 0);
@@ -90,6 +91,7 @@ class RasterImage : public Image {
       virtual RasterImage* clone() const { return new RasterImage(*this); }
       virtual void draw(QPainter*) const;
       virtual QSizeF imageSize() const { return doc.size(); }
+      virtual qreal scaleFactor() const   { return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 ); }
       virtual void layout();
       };
 
@@ -106,6 +108,7 @@ class SvgImage : public Image {
       virtual SvgImage* clone() const;
       virtual void draw(QPainter*) const;
       virtual QSizeF imageSize() const { return doc->defaultSize(); }
+      virtual qreal scaleFactor() const   { return (_sizeIsSpatium ? 10.0 : MScore::DPMM); }
       virtual void layout();
       };
 

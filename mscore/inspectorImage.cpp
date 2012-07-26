@@ -147,18 +147,12 @@ void InspectorImage::valueChanged(int idx)
             }
       else if (idx == SCALE_W) {
             if (b.lockAspectRatio->isChecked()) {
-//                  // scale width was changed, fix scale height
-//                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
-//                  qreal ratio = sz.width() / sz.height();
-//                  qreal h     = b.scaleWidth->value() / ratio;
-//                  b.scaleHeight->blockSignals(true);
-//                  b.scaleHeight->setValue(h);
-//                  b.scaleHeight->blockSignals(false);
-/* LOCK keeps original ratio
+/* LOCK_RATIO keeps original ratio:
+//      NEEDS case "else if(idx == LOCK_RATIO) ..." to restore original ratio on checking LOCK_RATIO
                   b4->blockSignals(true);
                   b4->setValue(b3->value());
                   b4->blockSignals(false);*/
-/* LOCK keeps current ratio */
+/* LOCK_RATIO keeps current ratio: */
                   QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b3->value() / ratio;
@@ -170,18 +164,12 @@ void InspectorImage::valueChanged(int idx)
             }
       else if (idx == SCALE_H) {
             if (b.lockAspectRatio->isChecked()) {
-//                  // scale height was changed, fix scale width
-//                  QSizeF sz   = inspector->element()->getProperty(P_SIZE).toSizeF();
-//                  qreal ratio = sz.width() / sz.height();
-//                  qreal w     = b.scaleHeight->value() * ratio;
-//                  b.scaleWidth->blockSignals(true);
-//                  b.scaleWidth->setValue(w);
-//                  b.scaleWidth->blockSignals(false);
-/* LOCK keeps original ratio
+/* LOCK_RATIO keeps original ratio:
+//      NEEDS case "else if(idx == LOCK_RATIO) ..." to restore original ratio on checking LOCK_RATIO
                   b3->blockSignals(true);
                   b3->setValue(b4->value());
                   b3->blockSignals(false);*/
-/* LOCK keeps current ratio */
+/* LOCK_RATIO keeps current ratio: */
                   QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b4->value() * ratio;
@@ -194,6 +182,8 @@ void InspectorImage::valueChanged(int idx)
       else if (idx == SIZE_IS_SPATIUM) {
             QCheckBox* cb = static_cast<QCheckBox*>(iList[idx].w);
             qreal _spatium = inspector->element()->spatium();
+            b1->blockSignals(true);
+            b2->blockSignals(true);
             if (cb->isChecked()) {
                   b1->setSuffix("sp");
                   b2->setSuffix("sp");
@@ -206,6 +196,8 @@ void InspectorImage::valueChanged(int idx)
                   b1->setValue(b1->value() * _spatium / MScore::DPMM);
                   b2->setValue(b2->value() * _spatium / MScore::DPMM);
                   }
+            b1->blockSignals(false);
+            b2->blockSignals(false);
             }
       InspectorBase::valueChanged(idx);
       }
