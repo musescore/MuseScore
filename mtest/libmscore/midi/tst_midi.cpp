@@ -171,7 +171,7 @@ void TestMidi::midi1()
       {
       MCursor c;
       c.createScore("test1a");
-      c.addPart("Voice");
+      c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
       c.addKeySig(0);
@@ -211,7 +211,7 @@ void TestMidi::midi2()
       {
       MCursor c;
       c.createScore("test2a");
-      c.addPart("Voice");
+      c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
       c.addKeySig(0);
@@ -250,7 +250,7 @@ void TestMidi::midi3()
       {
       MCursor c;
       c.createScore("test3a");
-      c.addPart("Voice");
+      c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
       c.addKeySig(1);

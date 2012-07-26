@@ -240,7 +240,7 @@ int Cursor::voice() const
 
 inline void Cursor::firstChordRestInTrack()
       {
-            while (_segment && _segment->element(_track) == 0)
-                  _segment = _segment->next1(SegChordRest | SegGrace);
+      while (_segment && _segment->element(_track) == 0)
+            _segment = _segment->next1(SegChordRest | SegGrace);
       }
 
