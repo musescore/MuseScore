@@ -26,7 +26,11 @@ class Tablature;
 //   InstrumentTemplate
 //---------------------------------------------------------
 
-struct InstrumentTemplate {
+class InstrumentTemplate {
+      int staves;             // 1 <= MAX_STAVES
+
+   public:
+      QString id;
       QString trackName;
       QList<StaffName> longNames;      ///< shown on first system
       QList<StaffName> shortNames;     ///< shown on followup systems
@@ -41,15 +45,15 @@ struct InstrumentTemplate {
       bool useDrumset;
       Drumset* drumset;
 
+      bool useTablature;
+      Tablature* tablature;
+
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
 
-      int staves;             // 1 <= MAX_STAVES
       ClefType clefIdx[MAX_STAVES];
       int staffLines[MAX_STAVES];
-      bool useTablature;
-      Tablature* tablature;
       BracketType bracket[MAX_STAVES];            // bracket type (NO_BRACKET)
       int bracketSpan[MAX_STAVES];
       int barlineSpan[MAX_STAVES];
@@ -64,7 +68,10 @@ struct InstrumentTemplate {
 
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(Xml& xml) const;
+      void write1(Xml& xml) const;
       void read(const QDomElement&);
+      int nstaves() const { return staves; }
+      void setStaves(int val) { staves = val; }
       };
 
 //---------------------------------------------------------
@@ -72,13 +79,18 @@ struct InstrumentTemplate {
 //---------------------------------------------------------
 
 struct InstrumentGroup {
+      QString id;
       QString name;
-      bool extended;
+      bool extended;          // belongs to extended instruments set if true
       QList<InstrumentTemplate*> instrumentTemplates;
+      void read(const QDomElement&);
+
+      InstrumentGroup() { extended = false; }
       };
 
 extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
+extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 #endif
 

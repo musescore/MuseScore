@@ -119,7 +119,8 @@ struct Preferences {
       MidiRemote midiRemote[MIDI_REMOTES];
 
       bool midiExpandRepeats;
-      QString instrumentList; // file path of instrument templates
+      QString instrumentList1; // file path of instrument templates
+      QString instrumentList2;
 
       bool musicxmlImportLayout;
       bool musicxmlImportBreaks;

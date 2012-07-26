@@ -22,54 +22,6 @@
 Instrument InstrumentList::defaultInstrument;
 
 //---------------------------------------------------------
-//   parseInstrName
-//---------------------------------------------------------
-
-static QTextDocumentFragment parseInstrName(const QString& name)
-      {
-      if (name.isEmpty())
-            return QTextDocumentFragment();
-      QTextDocument doc;
-      QTextCursor cursor(&doc);
-      QTextCharFormat f = cursor.charFormat();
-      QTextCharFormat sf(f);
-
-      QFont font("MScore1");
-      sf.setFont(font);
-
-      QDomDocument dom;
-      int line, column;
-      QString err;
-      if (!dom.setContent(name, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("parse instrument name: %s\n", qPrintable(error));
-            qDebug("   data:<%s>\n", qPrintable(name));
-            return QTextDocumentFragment();
-            }
-
-      for (QDomNode e = dom.documentElement(); !e.isNull(); e = e.nextSibling()) {
-            for (QDomNode ee = e.firstChild(); !ee.isNull(); ee = ee.nextSibling()) {
-                  QDomElement de1 = ee.toElement();
-                  QString tag(de1.tagName());
-                  if (tag == "symbol") {
-                        QString name = de1.attribute(QString("name"));
-                        if (name == "flat")
-                              cursor.insertText(QString(0xe10d), sf);
-                        else if (name == "sharp")
-                              cursor.insertText(QString(0xe10c), sf);
-                        }
-                  QDomText t = ee.toText();
-                  if (!t.isNull())
-                        cursor.insertText(t.data(), f);
-                  }
-            }
-      return QTextDocumentFragment(&doc);
-      }
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -381,8 +333,8 @@ Channel::Channel()
       bank     = 0;
       volume   = 100;
       pan      = 64;
-      chorus   = 30;
-      reverb   = 30;
+      chorus   = 0;
+      reverb   = 0;
 
       mute     = false;
       solo     = false;
@@ -403,8 +355,24 @@ void Channel::write(Xml& xml) const
             xml.tag("descr", descr);
       updateInitList();
       foreach(const Event& e, init) {
-            if (e.type() != ME_INVALID)
-                  e.write(xml);
+            if (e.type() == ME_INVALID)
+                  continue;
+            if (e.type() == ME_CONTROLLER) {
+                  if (e.controller() == CTRL_HBANK && e.value() == 0)
+                        continue;
+                  if (e.controller() == CTRL_LBANK && e.value() == 0)
+                        continue;
+                  if (e.controller() == CTRL_VOLUME && e.value() == 100)
+                        continue;
+                  if (e.controller() == CTRL_PANPOT && e.value() == 64)
+                        continue;
+                  if (e.controller() == CTRL_REVERB_SEND && e.value() == 0)
+                        continue;
+                  if (e.controller() == CTRL_CHORUS_SEND && e.value() == 0)
+                        continue;
+                  }
+
+            e.write(xml);
             }
       if (synti)                    // HACK
             xml.tag("synti", "Aeolus");
@@ -460,6 +428,8 @@ void Channel::read(const QDomElement& de)
                         default:
                               {
                               Event e(ME_CONTROLLER);
+                              e.setOntime(-1);
+                              e.setChannel(0);
                               e.setController(ctrl);
                               e.setValue(value);
                               init.append(e);
@@ -563,7 +533,10 @@ int InstrumentData::channelIdx(const QString& s) const
 
 void MidiArticulation::write(Xml& xml) const
       {
-      xml.stag(QString("Articulation name=\"%1\"").arg(name));
+      if (name.isEmpty())
+            xml.stag("Articulation");
+      else
+            xml.stag(QString("Articulation name=\"%1\"").arg(name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       xml.tag("velocity", velocity);
@@ -1222,9 +1195,9 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
       instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
       foreach(StaffName sn, t->longNames)
-            instr.addLongName(StaffNameDoc(parseInstrName(sn.name), sn.pos));
+            instr.addLongName(StaffNameDoc(sn.name, sn.pos));
       foreach(StaffName sn, t->shortNames)
-            instr.addShortName(StaffNameDoc(parseInstrName(sn.name), sn.pos));
+            instr.addShortName(StaffNameDoc(sn.name, sn.pos));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       if (t->useDrumset) {

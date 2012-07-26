@@ -21,9 +21,9 @@
       </Instrument>
 
     <Instrument id="flute">
-      <longName>Flöte</longName>
+      <longName>Flute</longName>
       <shortName>Fl.</shortName>
-      <description>Flöte</description>
+      <description>Flute</description>
       </Instrument>
 
     <Instrument id="alto-flute">

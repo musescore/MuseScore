@@ -3327,13 +3327,13 @@ void Score::appendPart(const QString& name)
       Part* part = new Part(this);
       part->initFromInstrTemplate(t);
       int n = nstaves();
-      for (int i = 0; i < t->staves; ++i) {
+      for (int i = 0; i < t->nstaves(); ++i) {
             Staff* staff = new Staff(this, part, i);
             staff->setLines(t->staffLines[i]);
             staff->setSmall(t->smallStaff[i]);
             if (i == 0) {
                   staff->setBracket(0, t->bracket[0]);
-                  staff->setBracketSpan(0, t->staves);
+                  staff->setBracketSpan(0, t->nstaves());
                   }
             undoInsertStaff(staff, n + i);
             }

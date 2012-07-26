@@ -162,7 +162,8 @@ void Preferences::init()
       midiExpandRepeats        = true;
       MScore::playRepeats      = true;
       MScore::panPlayback      = true;
-      instrumentList           = ":/data/instruments.xml";
+      instrumentList1          = ":/data/instruments.xml";
+      instrumentList2          = "";
 
       musicxmlImportLayout     = true;
       musicxmlImportBreaks     = true;
@@ -304,7 +305,8 @@ void Preferences::write()
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
       s.setValue("playRepeats",        MScore::playRepeats);
       s.setValue("panPlayback",        MScore::panPlayback);
-      s.setValue("instrumentList", instrumentList);
+      s.setValue("instrumentList",     instrumentList1);
+      s.setValue("instrumentList2",    instrumentList2);
 
       s.setValue("musicxmlImportLayout",  musicxmlImportLayout);
       s.setValue("musicxmlImportBreaks",  musicxmlImportBreaks);
@@ -554,7 +556,8 @@ void Preferences::read()
             sessionStart = EMPTY_SESSION;
 
       startScore     = s.value("startScore", startScore).toString();
-      instrumentList = s.value("instrumentList", instrumentList).toString();
+      instrumentList1 = s.value("instrumentList",  instrumentList1).toString();
+      instrumentList2 = s.value("instrumentList2", instrumentList2).toString();
 
       useMidiRemote  = s.value("useMidiRemote", useMidiRemote).toBool();
       for (int i = 0; i < MIDI_REMOTES; ++i) {
@@ -602,7 +605,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       {
       setupUi(this);
       startWithButton->setIcon(*icons[fileOpen_ICON]);
-      instrumentListButton->setIcon(*icons[fileOpen_ICON]);
+      instrumentList1Button->setIcon(*icons[fileOpen_ICON]);
+      instrumentList2Button->setIcon(*icons[fileOpen_ICON]);
       defaultStyleButton->setIcon(*icons[fileOpen_ICON]);
       partStyleButton->setIcon(*icons[fileOpen_ICON]);
       myScoresButton->setIcon(*icons[fileOpen_ICON]);
@@ -658,7 +662,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
-      connect(instrumentListButton,   SIGNAL(clicked()), SLOT(selectInstrumentList()));
+      connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
+      connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
@@ -866,7 +871,8 @@ void PreferenceDialog::updateValues(Preferences* p)
       sessionScore->setText(p->startScore);
       showSplashScreen->setChecked(p->showSplashScreen);
       expandRepeats->setChecked(p->midiExpandRepeats);
-      instrumentList->setText(p->instrumentList);
+      instrumentList1->setText(p->instrumentList1);
+      instrumentList2->setText(p->instrumentList2);
 
       importLayout->setChecked(p->musicxmlImportLayout);
       importBreaks->setChecked(p->musicxmlImportBreaks);
@@ -1152,19 +1158,35 @@ void PreferenceDialog::selectPartStyle()
       }
 
 //---------------------------------------------------------
-//   selectInstrumentList
+//   selectInstrumentList1
 //---------------------------------------------------------
 
-void PreferenceDialog::selectInstrumentList()
+void PreferenceDialog::selectInstrumentList1()
       {
       QString s = QFileDialog::getOpenFileName(
          this,
          tr("Choose Instrument List"),
-         instrumentList->text(),
+         instrumentList1->text(),
          tr("Instrument List (*.xml)")
          );
       if (!s.isNull())
-            instrumentList->setText(s);
+            instrumentList1->setText(s);
+      }
+
+//---------------------------------------------------------
+//   selectInstrumentList2
+//---------------------------------------------------------
+
+void PreferenceDialog::selectInstrumentList2()
+      {
+      QString s = QFileDialog::getOpenFileName(
+         this,
+         tr("Choose Instrument List"),
+         instrumentList2->text(),
+         tr("Instrument List (*.xml)")
+         );
+      if (!s.isNull())
+            instrumentList2->setText(s);
       }
 
 //---------------------------------------------------------
@@ -1327,7 +1349,8 @@ void PreferenceDialog::apply()
 
       preferences.showSplashScreen   = showSplashScreen->isChecked();
       preferences.midiExpandRepeats  = expandRepeats->isChecked();
-      preferences.instrumentList     = instrumentList->text();
+      preferences.instrumentList1    = instrumentList1->text();
+      preferences.instrumentList2    = instrumentList2->text();
 
       preferences.musicxmlImportLayout  = importLayout->isChecked();
       preferences.musicxmlImportBreaks  = importBreaks->isChecked();
