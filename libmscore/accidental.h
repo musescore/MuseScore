@@ -109,8 +109,6 @@ class AccidentalBracket : public Compound {
       AccidentalBracket(Score*);
       virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
       virtual ElementType type() const         { return ACCIDENTAL_BRACKET; }
-      void setSubtype(int v);
-      int subtype() const                      { return _subtype; }
       };
 
 #endif

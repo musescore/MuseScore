@@ -442,29 +442,11 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 AccidentalBracket::AccidentalBracket(Score* s)
    : Compound(s)
       {
-      _subtype = 0;
-      }
-
-//---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
-void AccidentalBracket::setSubtype(int i)
-      {
-      _subtype = i;
-      clear();
-
       Symbol* s1 = new Symbol(score());
       Symbol* s2 = new Symbol(score());
-      switch(i) {
-            case 0:
-                  s1->setSym(leftparenSym);
-                  s2->setSym(rightparenSym);
-                  break;
-            default:
-            case 1:
-                  break;
-            }
+      s1->setSym(leftparenSym);
+      s2->setSym(rightparenSym);
       addElement(s1, -s1->bbox().x(), 0.0);
       addElement(s2, s2->bbox().width() - s2->bbox().x(), 0.0);
       }
+
