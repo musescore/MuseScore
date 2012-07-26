@@ -74,12 +74,39 @@
          </widget>
         </item>
         <item>
-         <widget class="Awl::DenominatorSpinBox" name="timesigN">
-          <property name="maximum">
-           <number>32</number>
-          </property>
-         </widget>
+       <widget class="QComboBox" name="TimesigN">
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
         </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+	<item>
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+	<item>
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+       </widget>
+      </item>
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -164,10 +191,37 @@
        </widget>
       </item>
       <item>
-       <widget class="Awl::DenominatorSpinBox" name="pickupTimesigN">
-        <property name="maximum">
-         <number>32</number>
-        </property>
+       <widget class="QComboBox" name="pickupTimesigN">
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+	<item>
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+	<item>
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
