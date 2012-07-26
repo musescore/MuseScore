@@ -450,7 +450,7 @@ int TimesigWizard::measures() const
 Fraction TimesigWizard::timesig() const
       {
       if (tsFraction->isChecked())
-            return Fraction(timesigZ->value(), timesigN->value());
+            return Fraction(timesigZ->value(), 1 << timesigN->currentIndex());
       else if (tsCommonTime->isChecked())
             return Fraction(4, 4);
       else
@@ -464,7 +464,7 @@ Fraction TimesigWizard::timesig() const
 bool TimesigWizard::pickup(int* z, int* n) const
       {
       *z = pickupTimesigZ->value();
-      *n = pickupTimesigN->value();
+      *n = 1 << timesigN->currentIndex();
       return pickupMeasure->isChecked();
       }
 
