@@ -26,18 +26,80 @@ QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
 
 //---------------------------------------------------------
+//   searchInstrumentGroup
+//---------------------------------------------------------
+
+static InstrumentGroup* searchInstrumentGroup(const QString& name)
+      {
+      foreach(InstrumentGroup* g, instrumentGroups) {
+            if (g->id == name)
+                  return g;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   readStaffIdx
+//---------------------------------------------------------
+
+static int readStaffIdx(QDomElement e)
+      {
+      int idx = e.attribute("staff", "1").toInt() - 1;
+      if (idx >= MAX_STAVES)
+            idx = MAX_STAVES-1;
+      if (idx < 0)
+            idx = 0;
+      return idx;
+      }
+
+//---------------------------------------------------------
+//   readInstrumentGroup
+//---------------------------------------------------------
+
+void InstrumentGroup::read(const QDomElement& de)
+      {
+      id   = de.attribute("id");
+      name = de.attribute("name");
+      extended = de.attribute("extended", "0").toInt();
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            if (tag == "instrument" || tag == "Instrument") {
+                  QString id = e.attribute("id");
+                  InstrumentTemplate* t = searchTemplate(id);
+                  if (t == 0) {
+                        t = new InstrumentTemplate;
+                        t->articulation.append(articulation);     // init with global articulation
+                        instrumentTemplates.append(t);
+                        }
+                  t->read(e);
+                  }
+            else if (tag == "ref") {
+                  InstrumentTemplate* ttt = searchTemplate(e.text());
+                  if (ttt) {
+                        InstrumentTemplate* t = new InstrumentTemplate(*ttt);
+                        instrumentTemplates.append(t);
+                        }
+                  else
+                        qDebug("instrument reference not found <%s>", qPrintable(e.text()));
+                  }
+            else if (tag == "name")
+                  name = e.text();
+            else if (tag == "extended")
+                  extended = e.text().toInt();
+            else
+                  domError(e);
+            }
+      if (id.isEmpty())
+            id = name.toLower().replace(" ", "-");
+      }
+
+//---------------------------------------------------------
 //   InstrumentTemplate
 //---------------------------------------------------------
 
 InstrumentTemplate::InstrumentTemplate()
       {
       staves             = 1;
-      clefIdx[0]         = CLEF_G;
-      staffLines[0]      = 5;
-      smallStaff[0]      = false;
-      bracket[0]         = NO_BRACKET;
-      bracketSpan[0]     = 1;
-      barlineSpan[0]     = 1;
       minPitchA          = 0;
       maxPitchA          = 127;
       minPitchP          = 0;
@@ -47,6 +109,17 @@ InstrumentTemplate::InstrumentTemplate()
       extended           = false;
       tablature          = 0;
       useTablature       = false;
+
+      for (int i = 0; i < MAX_STAVES; ++i) {
+            clefIdx[i]     = CLEF_G;      // CLEF_INVALID;
+            staffLines[i]  = 5;           // -1;
+            smallStaff[i]  = false;
+            bracket[i]     = NO_BRACKET;
+            bracketSpan[i] = 0;
+            barlineSpan[i] = 0;
+            }
+      transpose.diatonic   = 0;
+      transpose.chromatic  = 0;
       }
 
 InstrumentTemplate::InstrumentTemplate(const InstrumentTemplate& t)
@@ -103,119 +176,115 @@ InstrumentTemplate::~InstrumentTemplate()
 
 void InstrumentTemplate::write(Xml& xml) const
       {
-      xml.stag("Instrument");
-      foreach(StaffName sn, longNames)
-            xml.tag(QString("longName pos=\"%1\"").arg(sn.pos), sn.name);
-      foreach(StaffName sn, shortNames)
-            xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
+      xml.stag(QString("Instrument id=\"%1\"").arg(id));
+      foreach(StaffName sn, longNames) {
+            if (sn.pos == 0)
+                  xml.tag("longName", sn.name);
+            else
+                  xml.tag(QString("longName pos=\"%1\"").arg(sn.pos), sn.name);
+            }
+      foreach(StaffName sn, shortNames) {
+            if (sn.pos == 0)
+                  xml.tag("shortName", sn.name);
+            else
+                  xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
+            }
       xml.tag("description", trackName);
-      xml.tag("extended", extended);
+      if (extended)
+            xml.tag("extended", extended);
       if (tablature)
             tablature->write(xml);
-      if (staves == 1) {
-            xml.tag("clef", clefTable[clefIdx[0]].tag);
-            if (staffLines[0] != 5)
-                  xml.tag("stafflines", staffLines[0]);
-            if (smallStaff[0])
-                  xml.tag("smallStaff", smallStaff[0]);
-            }
-      else {
+      if (staves > 1)
             xml.tag("staves", staves);
-            for (int i = 0; i < staves; ++i) {
-                  xml.tag(QString("clef staff=\"%1\"").arg(i), clefTable[clefIdx[i]].tag);
-                  if (staffLines[i] != 5)
-                        xml.tag(QString("stafflines staff=\"%1\"").arg(i), staffLines[i]);
-                  if (smallStaff[i])
-                        xml.tag(QString("smallStaff staff=\"%1\"").arg(i), smallStaff[i]);
-                  xml.tag(QString("bracket staff=\"%1\"").arg(i), bracket[i]);
-                  xml.tag(QString("bracketSpan staff=\"%1\"").arg(i), bracketSpan[i]);
-                  xml.tag(QString("barlineSpan staff=\"%1\"").arg(i), barlineSpan[i]);
+      for (int i = 0; i < staves; ++i) {
+            if (i)
+                  xml.tag(QString("clef staff=\"%1\"").arg(i+1), clefTable[clefIdx[i]].tag);
+            else
+                  xml.tag("clef", clefTable[clefIdx[i]].tag);
+            if (staffLines[i] != 5) {
+                  if (i)
+                        xml.tag(QString("stafflines staff=\"%1\"").arg(i+1), staffLines[i]);
+                  else
+                        xml.tag("stafflines", staffLines[i]);
+                  }
+            if (smallStaff[i]) {
+                  if (i)
+                        xml.tag(QString("smallStaff staff=\"%1\"").arg(i+1), smallStaff[i]);
+                  else
+                        xml.tag("smallStaff", smallStaff[i]);
+                  }
+
+            if (bracket[i] != NO_BRACKET) {
+                  if (i)
+                        xml.tag(QString("bracket staff=\"%1\"").arg(i+1), bracket[i]);
+                  else
+                        xml.tag("bracket", bracket[i]);
+                  }
+            if (bracketSpan[i] != 0) {
+                  if (i)
+                        xml.tag(QString("bracketSpan staff=\"%1\"").arg(i+1), bracketSpan[i]);
+                  else
+                        xml.tag("bracketSpan", bracketSpan[i]);
+                  }
+            if (barlineSpan[i] != 0) {
+                  if (i)
+                        xml.tag(QString("barlineSpan staff=\"%1\"").arg(i+1), barlineSpan[i]);
+                  else
+                        xml.tag("barlineSpan", barlineSpan[i]);
                   }
             }
       if (minPitchA != 0 || maxPitchA != 127)
-            xml.tag("aPitchRange", QString("%1-%2").arg(minPitchA).arg(maxPitchA));
+            xml.tag("aPitchRange", QString("%1-%2").arg(int(minPitchA)).arg(int(maxPitchA)));
       if (minPitchP != 0 || maxPitchP != 127)
-            xml.tag("pPitchRange", QString("%1-%2").arg(minPitchP).arg(maxPitchP));
+            xml.tag("pPitchRange", QString("%1-%2").arg(int(minPitchP)).arg(int(maxPitchP)));
       if (transpose.diatonic)
             xml.tag("transposeDiatonic", transpose.diatonic);
       if (transpose.chromatic)
             xml.tag("transposeChromatic", transpose.chromatic);
-      if (useDrumset) {
+      if (useDrumset)
             xml.tag("drumset", useDrumset);
+      if (drumset)
             drumset->save(xml);
-            }
       foreach(const NamedEventList& a, midiActions)
             a.write(xml, "MidiAction");
       foreach(const Channel& a, channel)
             a.write(xml);
+      foreach(const MidiArticulation& ma, articulation) {
+            bool isGlobal = false;
+            foreach(const MidiArticulation& ga, ::articulation) {
+                  if (ma == ga) {
+                        isGlobal = true;
+                        break;
+                        }
+                  }
+            if (!isGlobal)
+                  ma.write(xml);
+            }
       xml.etag();
       }
 
 //---------------------------------------------------------
-//   setPitchRange
+//   write1
+//    output only translatable names
 //---------------------------------------------------------
 
-void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
+void InstrumentTemplate::write1(Xml& xml) const
       {
-      QStringList sl = s.split("-");
-      if (sl.size() != 2) {
-            *a = 0;
-            *b = 127;
-            return;
+      xml.stag(QString("Instrument id=\"%1\"").arg(id));
+      foreach(StaffName sn, longNames) {
+            if (sn.pos == 0)
+                  xml.tag("longName", sn.name);
+            else
+                  xml.tag(QString("longName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-      *a = sl[0].toInt();
-      *b = sl[1].toInt();
-      }
-
-//---------------------------------------------------------
-//   parseInstrName
-//---------------------------------------------------------
-
-static QString parseInstrName(const QString& name)
-      {
-      QString sName;
-      QDomDocument dom;
-      int line, column;
-      QString err;
-      if (!dom.setContent(name, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("error: %s\n", qPrintable(error));
-            qDebug("   data:<%s>\n", qPrintable(name));
-            return QString();
+      foreach(StaffName sn, shortNames) {
+            if (sn.pos == 0)
+                  xml.tag("shortName", sn.name);
+            else
+                  xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-
-      for (QDomNode e = dom.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            for (QDomNode ee = e.firstChild(); !ee.isNull(); ee = ee.nextSibling()) {
-                  QDomElement el = ee.toElement();
-                  const QString& tag(el.tagName());
-                  if (tag == "symbol") {
-                        QString name = el.attribute(QString("name"));
-                        if (name == "flat")
-                              sName += "b";
-                        else if (name == "sharp")
-                              sName += "#";
-                        }
-                  QDomText t = ee.toText();
-                  if (!t.isNull())
-                        sName += t.data();
-                  }
-            }
-      return sName;
-      }
-
-//---------------------------------------------------------
-//   readStaffIdx
-//---------------------------------------------------------
-
-static int readStaffIdx(QDomElement e)
-      {
-      int idx = e.attribute("staff", "1").toInt() - 1;
-      if (idx >= MAX_STAVES)
-            idx = MAX_STAVES-1;
-      return idx;
+      xml.tag("description", trackName);
+      xml.etag();
       }
 
 //---------------------------------------------------------
@@ -224,23 +293,7 @@ static int readStaffIdx(QDomElement e)
 
 void InstrumentTemplate::read(const QDomElement& de)
       {
-      bool customDrumset = false;
-      staves = 1;
-      for (int i = 0; i < MAX_STAVES; ++i) {
-            clefIdx[i]     = CLEF_INVALID;
-            staffLines[i]  = -1;
-            smallStaff[i]  = false;
-            bracket[i]     = NO_BRACKET;
-            bracketSpan[i] = 0;
-            barlineSpan[i] = 0;
-            }
-      minPitchA  = 0;
-      maxPitchA  = 127;
-      minPitchP  = 0;
-      maxPitchP  = 127;
-      transpose.diatonic  = 0;
-      transpose.chromatic  = 0;
-      useDrumset = false;
+      id = de.attribute("id");
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
@@ -248,18 +301,16 @@ void InstrumentTemplate::read(const QDomElement& de)
 
             if (tag == "name" || tag == "longName") {               // "name" is obsolete
                   int pos = e.attribute("pos", "0").toInt();
-                  QString longName = Xml::htmlToString(e);
-                  longNames.append(StaffName(longName, pos));
+                  longNames.append(StaffName(val, pos));
                   }
             else if (tag == "short-name" || tag == "shortName") {   // "short-name" is obsolete
                   int pos = e.attribute("pos", "0").toInt();
-                  QString shortName = Xml::htmlToString(e);
-                  shortNames.append(StaffName(shortName, pos));
+                  shortNames.append(StaffName(val, pos));
                   }
             else if (tag == "description")
                   trackName = val;
             else if (tag == "extended")
-                  extended = true;
+                  extended = val.toInt();
             else if (tag == "staves") {
                   staves = val.toInt();
                   bracketSpan[0] = staves;
@@ -315,13 +366,11 @@ void InstrumentTemplate::read(const QDomElement& de)
             else if (tag == "drumset")
                   useDrumset = val.toInt();
             else if (tag == "Drum") {
-                  // if we see on of this tags, a custom drumset will
+                  // if we see one of this tags, a custom drumset will
                   // be created
-                  if (drumset == 0)
+                  if (drumset == 0) {
                         drumset = new Drumset(*smDrumset);
-                  if (!customDrumset) {
                         drumset->clear();
-                        customDrumset = true;
                         }
                   drumset->load(e);
                   }
@@ -330,7 +379,7 @@ void InstrumentTemplate::read(const QDomElement& de)
                   a.read(e);
                   midiActions.append(a);
                   }
-            else if (tag == "channel") {
+            else if (tag == "Channel" || tag == "channel") {
                   Channel a;
                   a.read(e);
                   channel.append(a);
@@ -359,12 +408,10 @@ void InstrumentTemplate::read(const QDomElement& de)
                   }
             else if (tag == "init") {
                   InstrumentTemplate* ttt = searchTemplate(val);
-                  if (ttt) {
-// qDebug("Instrument template init <%s> from <%s>\n", qPrintable(trackName), qPrintable(ttt->trackName));
+                  if (ttt)
                         init(*ttt);
-                        }
                   else
-                        qDebug("Instrument template <%s> not found\n", qPrintable(val));
+                        qDebug("IntrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
             else
                   domError(e);
@@ -411,35 +458,94 @@ void InstrumentTemplate::read(const QDomElement& de)
             channel[0].updateInitList();
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
-            trackName = parseInstrName(longNames[0].name);
+            trackName = longNames[0].name;
+      if (id.isEmpty())
+            id = trackName.toLower().replace(" ", "-");
+
+      if (staves == 0)
+            printf(" 2Instrument: staves == 0 <%s>\n", qPrintable(id));
+      }
+
+
+//---------------------------------------------------------
+//   setPitchRange
+//---------------------------------------------------------
+
+void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
+      {
+      QStringList sl = s.split("-");
+      if (sl.size() != 2) {
+            *a = 0;
+            *b = 127;
+            return;
+            }
+      *a = sl[0].toInt();
+      *b = sl[1].toInt();
       }
 
 //---------------------------------------------------------
-//   readInstrumentGroup
+//   saveInstrumentTemplates
 //---------------------------------------------------------
 
-static void readInstrumentGroup(InstrumentGroup* group, const QDomElement& de)
+bool saveInstrumentTemplates(const QString& instrTemplates)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            if (tag == "instrument") {
-                  InstrumentTemplate* t = new InstrumentTemplate;
-                  t->articulation.append(articulation);     // init with global articulation
-                  group->instrumentTemplates.append(t);
-                  t->read(e);
-                  }
-            else if (tag == "ref") {
-                  InstrumentTemplate* ttt = searchTemplate(e.text());
-                  if (ttt) {
-                        InstrumentTemplate* t = new InstrumentTemplate(*ttt);
-                        group->instrumentTemplates.append(t);
-                        }
-                  else
-                        qDebug("instrument reference not found <%s>\n", qPrintable(e.text()));
-                  }
-            else
-                  domError(e);
+      QFile qf(instrTemplates);
+      if (!qf.open(QIODevice::WriteOnly)) {
+            qDebug("cannot save instrument templates at <%s>\n", qPrintable(instrTemplates));
+            return false;
             }
+      Xml xml(&qf);
+      xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+      xml.stag("museScore");
+
+      foreach(const MidiArticulation& a, articulation)
+            a.write(xml);
+      xml << "\n";
+      foreach(InstrumentGroup* group, instrumentGroups) {
+            xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
+            xml.tag("name", group->name);
+            if (group->extended)
+                  xml.tag("extended", group->extended);
+            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+                  it->write(xml);
+                  xml << "\n";
+                  }
+            xml.etag();
+            xml << "\n";
+            }
+      xml.etag();
+      qf.close();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   saveInstrumentTemplates1
+//---------------------------------------------------------
+
+bool saveInstrumentTemplates1(const QString& instrTemplates)
+      {
+      QFile qf(instrTemplates);
+      if (!qf.open(QIODevice::WriteOnly)) {
+            qDebug("cannot save instrument templates at <%s>\n", qPrintable(instrTemplates));
+            return false;
+            }
+      Xml xml(&qf);
+      xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+      xml.stag("museScore");
+
+      foreach(InstrumentGroup* group, instrumentGroups) {
+            xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
+            xml.tag("name", group->name);
+            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+                  it->write1(xml);
+                  xml << "\n";
+                  }
+            xml.etag();
+            xml << "\n";
+            }
+      xml.etag();
+      qf.close();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -448,6 +554,8 @@ static void readInstrumentGroup(InstrumentGroup* group, const QDomElement& de)
 
 bool loadInstrumentTemplates(const QString& instrTemplates)
       {
+      printf("load instrument templates <%s>\n", qPrintable(instrTemplates));
+
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::ReadOnly)) {
             qDebug("cannot load instrument templates at <%s>\n", qPrintable(instrTemplates));
@@ -484,11 +592,13 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         const QString& tag(ee.tagName());
                         if (tag == "instrument-group" || tag == "InstrumentGroup") {
-                              InstrumentGroup* group = new InstrumentGroup;
-                              instrumentGroups.append(group);
-                              group->name = ee.attribute("name");
-                              group->extended = ee.attribute("extended", "0").toInt();
-                              readInstrumentGroup(group, ee);
+                              QString id = ee.attribute("id");
+                              InstrumentGroup* group = searchInstrumentGroup(id);
+                              if (group == 0) {
+                                    group = new InstrumentGroup;
+                                    instrumentGroups.append(group);
+                                    }
+                              group->read(ee);
                               }
                         else if (tag == "Articulation") {
                               // read global articulation
@@ -501,6 +611,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                         }
                   }
             }
+      // saveInstrumentTemplates1("/home/ws/mops.xml");
       return true;
       }
 
@@ -510,11 +621,9 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
       {
-// qDebug("searchTemplate groups %d", instrumentGroups.size());
       foreach(InstrumentGroup* g, instrumentGroups) {
             foreach(InstrumentTemplate* it, g->instrumentTemplates) {
-// qDebug("<%s><%s>", qPrintable(name), qPrintable(it->trackName));
-                  if (it->trackName == name)
+                  if (it->id == name)
                         return it;
                   }
             }

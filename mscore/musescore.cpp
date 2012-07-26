@@ -998,7 +998,11 @@ MuseScore::MuseScore()
 
       setCentralWidget(mainWindow);
 
-      loadInstrumentTemplates(preferences.instrumentList);
+      // load cascading instrument templates
+      loadInstrumentTemplates(preferences.instrumentList1);
+      if (!preferences.instrumentList2.isEmpty())
+            loadInstrumentTemplates(preferences.instrumentList2);
+
       preferencesChanged();
       if (seq) {
             connect(seq, SIGNAL(started()), SLOT(seqStarted()));

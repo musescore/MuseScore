@@ -49,7 +49,7 @@ void EditInstrument::setInstrument(InstrumentTemplate* t)
       transposeChromatic->setValue(t->transpose.chromatic);
       transposeDiatonic->setValue(t->transpose.diatonic);
 //      midiProgram->setValue(t->midiProgram);
-      staves->setValue(t->staves);
+      staves->setValue(t->nstaves());
       }
 
 //---------------------------------------------------------
@@ -93,6 +93,6 @@ void EditInstrument::valueChanged()
       lt->transpose.diatonic   = transposeDiatonic->value();
       lt->transpose.chromatic   = transposeChromatic->value();
 //      lt->midiProgram = midiProgram->value();
-      lt->staves      = staves->value();
+      lt->setStaves(staves->value());
       }
 

@@ -1544,8 +1544,18 @@
           <property name="margin">
            <number>3</number>
           </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_90">
+            <property name="text">
+             <string>Instrument List2:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="2">
-           <widget class="QToolButton" name="instrumentListButton">
+           <widget class="QToolButton" name="instrumentList1Button">
             <property name="text">
              <string/>
             </property>
@@ -1554,7 +1564,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_85">
             <property name="text">
-             <string>Instrument List:</string>
+             <string>Instrument List1:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1562,9 +1572,9 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="instrumentList"/>
+           <widget class="QLineEdit" name="instrumentList1"/>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_87">
             <property name="text">
              <string>Style:</string>
@@ -1574,17 +1584,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QLineEdit" name="defaultStyle"/>
           </item>
-          <item row="1" column="2">
+          <item row="2" column="2">
            <widget class="QToolButton" name="defaultStyleButton">
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_28">
             <property name="text">
              <string>Style for Part:</string>
@@ -1594,11 +1604,21 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="partStyle"/>
           </item>
-          <item row="2" column="2">
+          <item row="3" column="2">
            <widget class="QToolButton" name="partStyleButton">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="instrumentList2"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="instrumentList2Button">
             <property name="text">
              <string/>
             </property>
