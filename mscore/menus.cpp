@@ -210,7 +210,6 @@ Palette* MuseScore::newAccidentalsPalette()
             sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
-      ab->setSubtype(0);
       sp->append(ab, qApp->translate("accidental", "round bracket"));
       return sp;
       }
