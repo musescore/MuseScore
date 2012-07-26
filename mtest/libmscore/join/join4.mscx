@@ -64,7 +64,7 @@
         <maxPitchP>94</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>79</maxPitchA>
-        <Articulation name="">
+        <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -81,13 +81,6 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="52"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
