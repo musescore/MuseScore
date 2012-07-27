@@ -2361,7 +2361,7 @@ void ClefView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       clef.clefType->setValue(c->clefType());
-      clef.showCourtesyClef->setChecked(c->showCourtesyClef());
+      clef.showCourtesy->setChecked(c->showCourtesy());
       clef.small->setChecked(c->small());
 
       clef.concertClef->setValue(int(c->concertClef()));

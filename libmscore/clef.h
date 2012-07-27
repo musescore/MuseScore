@@ -66,17 +66,17 @@ extern const ClefInfo clefTable[];
 //   @@ Clef
 ///   Graphic representation of a clef.
 //
-//    @P showCourtesyClef bool
-//    @P small            bool      r/o, set by layout
+//    @P showCourtesy bool
+//    @P small        bool      r/o, set by layout
 //---------------------------------------------------------
 
 class Clef : public Element {
       Q_OBJECT
-      Q_PROPERTY(bool showCourtesyClef READ showCourtesyClef WRITE undoSetShowCourtesyClef)
+      Q_PROPERTY(bool showCourtesy READ showCourtesy WRITE undoSetShowCourtesy)
       Q_PROPERTY(bool small READ small)
 
       QList<Element*> elements;
-      bool _showCourtesyClef;
+      bool _showCourtesy;
       bool _showPreviousClef;       // show clef type at position tick-1
                                     // used for first clef on staff immediatly followed
                                     // by a different clef at same tick position
@@ -114,9 +114,9 @@ class Clef : public Element {
 
       int tick() const;
 
-      bool showCourtesyClef() const       { return _showCourtesyClef; };
-      void setShowCourtesyClef(bool v);
-      void undoSetShowCourtesyClef(bool v);
+      bool showCourtesy() const        { return _showCourtesy; };
+      void setShowCourtesy(bool v)     { _showCourtesy = v; }
+      void undoSetShowCourtesy(bool v);
 
       static ClefType clefType(const QString& s);
 

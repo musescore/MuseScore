@@ -33,6 +33,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/hook.h"
 #include "libmscore/stem.h"
+#include "libmscore/keysig.h"
 
 //---------------------------------------------------------
 //   showInspector
@@ -121,8 +122,11 @@ void Inspector::setElement(Element* e)
                   case SPACER:       ie = new InspectorSpacer(this); break;
                   case NOTE:         ie = new InspectorNote(this); break;
                   case REST:         ie = new InspectorRest(this); break;
+
                   case CLEF:         ie = new InspectorClef(this); break;
                   case TIMESIG:      ie = new InspectorTimeSig(this); break;
+                  case KEYSIG:       ie = new InspectorKeySig(this); break;
+
                   case BEAM:         ie = new InspectorBeam(this); break;
                   case IMAGE:        ie = new InspectorImage(this); break;
                   case LASSO:        ie = new InspectorLasso(this); break;
@@ -1231,11 +1235,12 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       iSegment = new InspectorSegment(this);
 
       layout->addWidget(iElement);
-      QHBoxLayout* l   = new QHBoxLayout;
-      showCourtesySig = new QCheckBox;
-      showCourtesySig->setText(tr("Show Courtesy Time Signature"));
-      connect(showCourtesySig, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showCourtesySig);
+
+      QHBoxLayout* l = new QHBoxLayout;
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Time Signature"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
       layout->addLayout(l);
       layout->addWidget(iSegment);
       }
@@ -1251,7 +1256,9 @@ void InspectorTimeSig::setElement(Element* e)
 
       iElement->setElement(sig);
       iSegment->setElement(segment);
-      showCourtesySig->setChecked(sig->showCourtesySig());
+      showCourtesy->blockSignals(true);
+      showCourtesy->setChecked(sig->showCourtesySig());
+      showCourtesy->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -1262,11 +1269,80 @@ void InspectorTimeSig::apply()
       {
       TimeSig* sig = static_cast<TimeSig*>(inspector->element());
 
-      bool val = showCourtesySig->isChecked();
+      bool val = showCourtesy->isChecked();
       if (val != sig->showCourtesySig()) {
             Score* score = sig->score();
             score->startCmd();
             score->undoChangeProperty(sig, P_SHOW_COURTESY, val);
+            score->endCmd();
+            mscore->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   InspectorKeySig
+//---------------------------------------------------------
+
+InspectorKeySig::InspectorKeySig(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      iElement = new InspectorElementElement(this);
+      iSegment = new InspectorSegment(this);
+      layout->addWidget(iElement);
+
+      QHBoxLayout* l = new QHBoxLayout;
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Time Signature"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
+      layout->addLayout(l);
+
+      l = new QHBoxLayout;
+      showNaturals = new QCheckBox;
+      showNaturals->setText(tr("Show Naturals"));
+      connect(showNaturals, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showNaturals);
+      layout->addLayout(l);
+
+      layout->addWidget(iSegment);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorKeySig::setElement(Element* e)
+      {
+      KeySig* sig = static_cast<KeySig*>(e);
+      Segment* segment = sig->segment();
+
+      iElement->setElement(sig);
+      iSegment->setElement(segment);
+      showCourtesy->blockSignals(true);
+      showNaturals->blockSignals(true);
+      showCourtesy->setChecked(sig->showCourtesy());
+      showNaturals->setChecked(sig->showNaturals());
+      showCourtesy->blockSignals(false);
+      showNaturals->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   apply
+//---------------------------------------------------------
+
+void InspectorKeySig::apply()
+      {
+      KeySig* sig = static_cast<KeySig*>(inspector->element());
+
+      bool sc = showCourtesy->isChecked();
+      bool sn = showNaturals->isChecked();
+      if (sc != sig->showCourtesy() || sn != sig->showNaturals()) {
+            Score* score = sig->score();
+            score->startCmd();
+            if (sc != sig->showCourtesy())
+                  score->undoChangeProperty(sig, P_SHOW_COURTESY, sc);
+            if (sn != sig->showNaturals())
+                  score->undoChangeProperty(sig, P_SHOW_NATURALS, sn);
             score->endCmd();
             mscore->endCmd();
             }
@@ -1284,10 +1360,10 @@ InspectorClef::InspectorClef(QWidget* parent)
 
       layout->addWidget(iElement);
       QHBoxLayout* l   = new QHBoxLayout;
-      showCourtesyClef = new QCheckBox;
-      showCourtesyClef->setText(tr("Show Courtesy Clef"));
-      connect(showCourtesyClef, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showCourtesyClef);
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Clef"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
       layout->addLayout(l);
       layout->addWidget(iSegment);
       }
@@ -1303,7 +1379,7 @@ void InspectorClef::setElement(Element* e)
 
       iElement->setElement(clef);
       iSegment->setElement(segment);
-      showCourtesyClef->setChecked(clef->showCourtesyClef());
+      showCourtesy->setChecked(clef->showCourtesy());
       }
 
 //---------------------------------------------------------
@@ -1314,8 +1390,8 @@ void InspectorClef::apply()
       {
       Clef* clef = static_cast<Clef*>(inspector->element());
 
-      bool val = showCourtesyClef->isChecked();
-      if (val != clef->showCourtesyClef()) {
+      bool val = showCourtesy->isChecked();
+      if (val != clef->showCourtesy()) {
             Score* score = clef->score();
             score->startCmd();
             score->undoChangeProperty(clef, P_SHOW_COURTESY, val);

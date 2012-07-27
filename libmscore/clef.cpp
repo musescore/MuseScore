@@ -63,8 +63,8 @@ Clef::Clef(Score* s)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF | ELEMENT_MOVABLE);
 
-      _showCourtesyClef = true;
-      _small            = false;
+      _showCourtesy               = true;
+      _small                      = false;
       _clefTypes._concertClef     = CLEF_INVALID;
       _clefTypes._transposingClef = CLEF_INVALID;
       curClefType                 = CLEF_INVALID;
@@ -73,7 +73,7 @@ Clef::Clef(Score* s)
 Clef::Clef(const Clef& c)
    : Element(c)
       {
-      _showCourtesyClef = c._showCourtesyClef;
+      _showCourtesy     = c._showCourtesy;
       _showPreviousClef = c._showPreviousClef;
       _small            = c._small;
       _clefTypes        = c._clefTypes;
@@ -385,7 +385,7 @@ void Clef::read(const QDomElement& de)
             else if (tag == "transposingClefType")
                   _clefTypes._transposingClef = Clef::clefType(val);
             else if (tag == "showCourtesyClef")
-                  _showCourtesyClef = val.toInt();
+                  _showCourtesy = val.toInt();
             else if (!Element::readProperties(e))
                   domError(e);
             }
@@ -404,8 +404,8 @@ void Clef::write(Xml& xml) const
       xml.stag(name());
       xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
       xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
-      if (!_showCourtesyClef)
-            xml.tag("showCourtesyClef", _showCourtesyClef);
+      if (!_showCourtesy)
+            xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -502,15 +502,6 @@ void Clef::setClefType(ClefType i)
       }
 
 //---------------------------------------------------------
-//   setShowCourtesyClef
-//---------------------------------------------------------
-
-void Clef::setShowCourtesyClef(bool v)
-      {
-      _showCourtesyClef = v;
-      }
-
-//---------------------------------------------------------
 //   setConcertClef
 //---------------------------------------------------------
 
@@ -551,10 +542,10 @@ void Clef::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
-//   undoSetShowCourtesyClef
+//   undoSetShowCourtesy
 //---------------------------------------------------------
 
-void Clef::undoSetShowCourtesyClef(bool v)
+void Clef::undoSetShowCourtesy(bool v)
       {
       score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
       }
@@ -566,7 +557,7 @@ void Clef::undoSetShowCourtesyClef(bool v)
 QVariant Clef::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return showCourtesyClef();
+            case P_SHOW_COURTESY: return showCourtesy();
             case P_SMALL:         return small();
             default:
                   return Element::getProperty(propertyId);
@@ -580,7 +571,7 @@ QVariant Clef::getProperty(P_ID propertyId) const
 bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: _showCourtesyClef = v.toBool(); break;
+            case P_SHOW_COURTESY: _showCourtesy = v.toBool(); break;
             case P_SMALL:         setSmall(v.toBool()); break;
             default:
                   return Element::setProperty(propertyId, v);
