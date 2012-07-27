@@ -182,9 +182,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="showCourtesyClef">
+         <widget class="QCheckBox" name="showCourtesy">
           <property name="text">
-           <string>showCourtesyClef</string>
+           <string>showCourtesy</string>
           </property>
          </widget>
         </item>

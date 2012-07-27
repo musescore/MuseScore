@@ -1591,7 +1591,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     showCourtesySig = true;	// assume this clef change has court. sig turned on
                                     if (s) {
                                           c = static_cast<Clef*>(s->element(staffIdx*VOICES));
-                                          if (c && !c->showCourtesyClef())
+                                          if (c && !c->showCourtesy())
                                                 continue;   // this key change has court. sig turned off
                                           }
 

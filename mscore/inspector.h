@@ -314,7 +314,7 @@ class InspectorClef : public InspectorBase {
 
       InspectorElementElement* iElement;
       InspectorSegment* iSegment;
-      QCheckBox* showCourtesyClef;
+      QCheckBox* showCourtesy;
 
    public slots:
       virtual void apply();
@@ -334,13 +334,34 @@ class InspectorTimeSig : public InspectorBase {
 
       InspectorElementElement* iElement;
       InspectorSegment* iSegment;
-      QCheckBox* showCourtesySig;
+      QCheckBox* showCourtesy;
 
    public slots:
       virtual void apply();
 
    public:
       InspectorTimeSig(QWidget* parent);
+      virtual void setElement(Element*);
+      bool dirty() const;
+      };
+
+//---------------------------------------------------------
+//   InspectorKeySig
+//---------------------------------------------------------
+
+class InspectorKeySig : public InspectorBase {
+      Q_OBJECT
+
+      InspectorElementElement* iElement;
+      InspectorSegment* iSegment;
+      QCheckBox* showCourtesy;
+      QCheckBox* showNaturals;
+
+   public slots:
+      virtual void apply();
+
+   public:
+      InspectorKeySig(QWidget* parent);
       virtual void setElement(Element*);
       bool dirty() const;
       };

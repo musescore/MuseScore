@@ -217,7 +217,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             // if the clef is not generated (= not courtesy) add the specific menu item
             if (!e->generated()) {
-                  QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesyClef()
+                  QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
                      ? QT_TRANSLATE_NOOP("Clef", "Hide courtesy clef")
                      : QT_TRANSLATE_NOOP("Clef", "Show courtesy clef") );
                         a->setData("clef-courtesy");
@@ -542,7 +542,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "smallNote")
             score()->undoChangeProperty(e, P_SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
-            bool show = !static_cast<Clef*>(e)->showCourtesyClef();
+            bool show = !static_cast<Clef*>(e)->showCourtesy();
             score()->undoChangeProperty(e, P_SHOW_COURTESY, show);
             }
       else if (cmd == "d-props") {
