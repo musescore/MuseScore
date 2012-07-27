@@ -65,10 +65,15 @@ extern const ClefInfo clefTable[];
 //---------------------------------------------------------
 //   @@ Clef
 ///   Graphic representation of a clef.
+//
+//    @P showCourtesyClef bool
+//    @P small            bool      r/o, set by layout
 //---------------------------------------------------------
 
 class Clef : public Element {
       Q_OBJECT
+      Q_PROPERTY(bool showCourtesyClef READ showCourtesyClef WRITE undoSetShowCourtesyClef)
+      Q_PROPERTY(bool small READ small)
 
       QList<Element*> elements;
       bool _showCourtesyClef;
@@ -78,7 +83,8 @@ class Clef : public Element {
       bool _small;
 
       ClefTypeList _clefTypes;
-      ClefType    curClefType;      // cached value of cleg type (for re-laying out)
+
+      ClefType    curClefType;      // cached value of clef type (for re-laying out)
       int         curLines;         // cached value of staff nm. of lines  ( " )
       qreal       curLineDist;      // cached value of staff line distance ( " )
       void        layout1();        // lays the element out, using cached values
@@ -101,18 +107,16 @@ class Clef : public Element {
       virtual void write(Xml&) const;
 
       virtual void addElement(Element* e, qreal x, qreal y);
-
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-
       virtual Space space() const      { return Space(0.0, bbox().x() * 2.0 + width()); }
 
       bool small() const               { return _small; }
       void setSmall(bool val);
+
       int tick() const;
 
       bool showCourtesyClef() const       { return _showCourtesyClef; };
       void setShowCourtesyClef(bool v);
+      void undoSetShowCourtesyClef(bool v);
 
       static ClefType clefType(const QString& s);
 
@@ -127,6 +131,10 @@ class Clef : public Element {
       void setTransposingClef(ClefType val);
       void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

@@ -1831,11 +1831,11 @@ ChangeKeySig::ChangeKeySig(KeySig* _keysig, KeySigEvent _ks, bool sc, bool sn)
 void ChangeKeySig::flip()
       {
       KeySigEvent oe = keysig->keySigEvent();
-      bool sc        = keysig->showCourtesySig();
+      bool sc        = keysig->showCourtesy();
       bool sn        = keysig->showNaturals();
 
       keysig->setKeySigEvent(ks);
-      keysig->setShowCourtesySig(showCourtesy);
+      keysig->setShowCourtesy(showCourtesy);
       keysig->setShowNaturals(showNaturals);
 //      keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
@@ -2688,14 +2688,12 @@ void ChangeNoteProperties::flip()
 //---------------------------------------------------------
 
 ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
-   const Fraction& f2, TimeSigType st, const QString& s1, const QString& s2)
+   const Fraction& f2, TimeSigType st)
       {
       timesig = _timesig;
       showCourtesy = sc;
       sig          = f1;
       stretch      = f2;
-      sz           = s1;
-      sn           = s2;
       subtype      = st;
       };
 
@@ -2709,20 +2707,15 @@ void ChangeTimesig::flip()
       bool sc        = timesig->showCourtesySig();
       Fraction f1    = timesig->sig();
       Fraction f2    = timesig->stretch();
-      QString  s1    = timesig->zText();
-      QString  s2    = timesig->nText();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
       timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
       timesig->setSig(sig);
       timesig->setStretch(stretch);
-      timesig->setText(sz, sn);
       showCourtesy = sc;
       sig          = f1;
       stretch      = f2;
-      sz           = s1;
-      sn           = s2;
       subtype      = st;
       timesig->layout();
       timesig->score()->addRefresh(timesig->abbox());

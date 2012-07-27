@@ -1513,6 +1513,13 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               m->setDirty(true);
                               }
                         }
+                  else {
+                        // remove any existing time signatures
+                        Segment* tss = m->findSegment(SegTimeSigAnnounce, tick);
+                        if (tss) {
+                              undoRemoveElement(tss);
+                              }
+                        }
 
                   // courtesy key signatures
                   int n = _staves.size();
@@ -1530,7 +1537,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               showCourtesySig = true;	// assume this key change has court. sig turned on
                               if (s) {
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
-                                    if (ks && !ks->showCourtesySig())
+                                    if (ks && !ks->showCourtesy())
                                           showCourtesySig = false;     // this key change has court. sig turned off
                                     }
 
@@ -1552,7 +1559,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           }
                                     else if (ks->keySigEvent() != ksv) {
                                           undo(new ChangeKeySig(ks, ksv,
-                                             ks->showCourtesySig(), ks->showNaturals()));
+                                             ks->showCourtesy(), ks->showNaturals()));
                                           }
                                     // change bar line to qreal bar line
                                     m->setEndBarLineType(DOUBLE_BAR, true);
@@ -1569,7 +1576,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // courtesy clefs
                   // no courtesy clef if this measure is the end of a repeat
 
-                  if (styleB(ST_genCourtesyClef) && !(m->repeatFlags() & RepeatEnd)) {
+                  bool showCourtesyClef = styleB(ST_genCourtesyClef);
+                  if (showCourtesyClef && !(m->repeatFlags() & RepeatEnd)) {
                         Clef* c;
                         int n = _staves.size();
                         for (int staffIdx = 0; staffIdx < n; ++staffIdx) {

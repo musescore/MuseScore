@@ -327,6 +327,11 @@ void Xml::tag(P_ID id, void* data, void* defaultVal)
                   if (compareProperty<QColor>(data, defaultVal))
                         tag(name, QVariant(*(QColor*)data));
                   break;
+            case T_STRING:
+                  if (compareProperty<QString>(data, defaultVal))
+                        tag(name, QVariant(*(QString*)data));
+                  break;
+
             case T_DIRECTION:
                   if (compareProperty<Direction>(data, defaultVal)) {
                         switch(Direction(*(Direction*)data)) {

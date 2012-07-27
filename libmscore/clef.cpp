@@ -384,6 +384,8 @@ void Clef::read(const QDomElement& de)
                   _clefTypes._concertClef = Clef::clefType(val);
             else if (tag == "transposingClefType")
                   _clefTypes._transposingClef = Clef::clefType(val);
+            else if (tag == "showCourtesyClef")
+                  _showCourtesyClef = val.toInt();
             else if (!Element::readProperties(e))
                   domError(e);
             }
@@ -402,6 +404,8 @@ void Clef::write(Xml& xml) const
       xml.stag(name());
       xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
       xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
+      if (!_showCourtesyClef)
+            xml.tag("showCourtesyClef", _showCourtesyClef);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -537,13 +541,33 @@ ClefType Clef::clefType() const
       }
 
 //---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      layout1();
+      Element::spatiumChanged(oldValue, newValue);
+      }
+
+//---------------------------------------------------------
+//   undoSetShowCourtesyClef
+//---------------------------------------------------------
+
+void Clef::undoSetShowCourtesyClef(bool v)
+      {
+      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Clef::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return _showCourtesyClef;
+            case P_SHOW_COURTESY: return showCourtesyClef();
+            case P_SMALL:         return small();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -557,20 +581,22 @@ bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_SHOW_COURTESY: _showCourtesyClef = v.toBool(); break;
+            case P_SMALL:         setSmall(v.toBool()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }
       return true;
       }
 
-
 //---------------------------------------------------------
-//   spatiumChanged
+//   propertyDefault
 //---------------------------------------------------------
 
-void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+QVariant Clef::propertyDefault(P_ID id) const
       {
-      layout1();
-      Element::spatiumChanged(oldValue, newValue);
+      switch(id) {
+            case P_SHOW_COURTESY: return true;
+            case P_SMALL:         return false;
+            default:              return Element::propertyDefault(id);
+            }
       }
-

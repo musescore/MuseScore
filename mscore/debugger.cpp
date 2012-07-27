@@ -2418,7 +2418,7 @@ void KeySigView::setElement(Element* e)
       KeySig* ks = static_cast<KeySig*>(e);
       ShowElementBase::setElement(e);
 
-      keysig.showCourtesySig->setChecked(ks->showCourtesySig());
+      keysig.showCourtesySig->setChecked(ks->showCourtesy());
       keysig.showNaturals->setChecked(ks->showNaturals());
       keysig.accidentalType->setValue(ks->keySigEvent().accidentalType());
       keysig.naturalType->setValue(ks->keySigEvent().naturalType());

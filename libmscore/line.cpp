@@ -416,7 +416,7 @@ QPointF SLine::linePos(int grip, System** sys)
       {
       qreal _spatium = spatium();
 
-      qreal x;
+      qreal x = 0.0;
 
       if (anchor() == ANCHOR_SEGMENT) {
             Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());

@@ -93,6 +93,11 @@ static const PropertyData propertyList[] = {
       { P_SPACE,               "space",         T_REAL   },
       { P_TEMPO,               "tempo",         T_REAL   },
       { P_TEMPO_FOLLOW_TEXT,   "followText",    T_BOOL   },
+      { P_ACCIDENTAL_BRACKET,  "bracket",       T_BOOL   },
+      { P_NUMERATOR_STRING,    "textN",         T_STRING },
+      { P_DENOMINATOR_STRING,  "textD",         T_STRING },
+      { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
+
       { P_END,                 "",              T_INT    }
       };
 
@@ -139,6 +144,8 @@ QVariant getProperty(P_ID id, const QDomElement& e)
             case T_SCALE:
             case T_SIZE:
                   return QVariant(readSize(e));
+            case T_STRING:
+                  return QVariant(value);
             case T_DIRECTION:
                   {
                   if (value == "up")

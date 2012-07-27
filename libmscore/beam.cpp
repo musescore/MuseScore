@@ -1501,7 +1501,7 @@ void Beam::computeStemLen(const QList<Chord*>& cl, qreal& py1, int beamLevels)
 //   layout2
 //---------------------------------------------------------
 
-void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType st, int frag)
+void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       {
       if (_distribute)
             score()->respace(&crl);       // fix horizontal spacing of stems

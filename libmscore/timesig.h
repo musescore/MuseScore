@@ -28,24 +28,33 @@ enum TimeSigType {
       TSIG_ALLA_BREVE         // cut time
       };
 
-//---------------------------------------------------------
+//---------------------------------------------------------------------------------------
 //   @@ TimeSig
 ///    This class represents a time signature.
 //
-//    @P zText   QString  text of numerator
-//    @P nText   QString  text of denominator
-//    @P sig     QString  time signature "3/4"
-//---------------------------------------------------------
+//    @P numerator          int
+//    @P denominator        int
+//    @P numeratorStretch   int
+//    @P denominatorStretch int
+//    @P numeratorString   QString  text of numerator
+//    @P denominatorString QString  text of denominator
+//    @P showCourtesySig bool show courtesy time signature for this sig if appropriate
+//---------------------------------------------------------------------------------------
 
 class TimeSig : public Element {
       Q_OBJECT
-      Q_PROPERTY(QString zText READ zText WRITE setZText)
-      Q_PROPERTY(QString nText READ nText WRITE setNText)
-      Q_PROPERTY(QString sig   READ ssig WRITE setSSig)
+      Q_PROPERTY(QString numeratorString   READ numeratorString   WRITE undoSetNumeratorString)
+      Q_PROPERTY(QString denominatorString READ denominatorString WRITE undoSetDenominatorString)
+      Q_PROPERTY(bool showCourtesySig      READ showCourtesySig   WRITE undoSetShowCourtesySig)
+      Q_PROPERTY(int numerator             READ numerator)
+      Q_PROPERTY(int denominator           READ denominator)
+      Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
+      Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
 
       TimeSigType _subtype;
       bool	_showCourtesySig;
-      QString sz, sn;         // calculated from actualSig() if !customText
+      QString _numeratorString;     // calculated from actualSig() if !customText
+      QString _denominatorString;
       QPointF pz, pn;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
@@ -73,9 +82,13 @@ class TimeSig : public Element {
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f)     { _sig = f;    }
+      int numerator() const              { return _sig.numerator(); }
+      int denominator() const            { return _sig.denominator(); }
 
       Fraction stretch() const           { return _stretch;   }
       void setStretch(const Fraction& s) { _stretch = s;      }
+      int numeratorStretch() const       { return _stretch.numerator(); }
+      int denominatorStretch() const     { return _stretch.denominator(); }
 
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
@@ -85,13 +98,21 @@ class TimeSig : public Element {
 
       bool showCourtesySig() const       { return _showCourtesySig; };
       void setShowCourtesySig(bool v)    { _showCourtesySig = v;    };
+      void undoSetShowCourtesySig(bool v);
 
-      QString zText() const              { return sz; }
-      QString nText() const              { return sn; }
-      void setZText(const QString&);
-      void setNText(const QString&);
-      void setText(const QString&, const QString&);
+      QString numeratorString() const    { return _numeratorString;   }
+      void setNumeratorString(const QString&);
+      void undoSetNumeratorString(const QString&);
+
+      QString denominatorString() const  { return _denominatorString; }
+      void setDenominatorString(const QString&);
+      void undoSetDenominatorString(const QString&);
+
       void setFrom(const TimeSig*);
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

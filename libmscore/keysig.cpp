@@ -45,15 +45,15 @@ KeySig::KeySig(Score* s)
   : Element(s)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _showCourtesySig = true;
+      _showCourtesy = true;
 	_showNaturals = true;
       }
 
 KeySig::KeySig(const KeySig& k)
    : Element(k)
       {
-	_showCourtesySig = k.showCourtesySig();
-	_showNaturals = k.showNaturals();
+	_showCourtesy = k._showCourtesy;
+	_showNaturals = k._showNaturals;
 	foreach(KeySym* ks, k.keySymbols)
             keySymbols.append(new KeySym(*ks));
       _sig = k._sig;
@@ -285,7 +285,7 @@ void KeySig::write(Xml& xml) const
             xml.tag("pos", ks->spos);
             xml.etag();
             }
-      xml.tag("showCourtesySig", _showCourtesySig);
+      xml.tag("showCourtesySig", _showCourtesy);
       xml.tag("showNaturals",    _showNaturals);
 	xml.etag();
       }
@@ -317,7 +317,7 @@ void KeySig::read(const QDomElement& de)
                   keySymbols.append(ks);
                   }
             else if (tag == "showCourtesySig")
-		      _showCourtesySig = val.toInt();
+		      _showCourtesy = val.toInt();
             else if (tag == "showNaturals")
 		      _showNaturals = val.toInt();
             else if (tag == "accidental")
@@ -393,4 +393,65 @@ int KeySig::tick() const
       {
       return segment() ? segment()->tick() : 0;
       }
+
+//---------------------------------------------------------
+//   undoSetShowCourtesy
+//---------------------------------------------------------
+
+void KeySig::undoSetShowCourtesy(bool v)
+      {
+      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant KeySig::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_SHOW_COURTESY: return int(showCourtesy());
+            case P_SHOW_NATURALS: return int(showNaturals());
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_SHOW_COURTESY:
+                  setShowCourtesy(v.toBool());
+                  break;
+            case P_SHOW_NATURALS:
+                  setShowNaturals(v.toBool());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      setGenerated(false);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant KeySig::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_SHOW_COURTESY:      return true;
+            case P_SHOW_NATURALS:      return true;
+            default:                   return Element::propertyDefault(id);
+            }
+      }
+
+
 

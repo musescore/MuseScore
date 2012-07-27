@@ -87,7 +87,8 @@ void TimeDialog::addClicked()
       // check for special text
       if ((QString("%1").arg(zNominal->value()) != zText->text())
          || (QString("%1").arg(nNominal->value()) != nText->text())) {
-            ts->setText(zText->text(), nText->text());
+            ts->setNumeratorString(zText->text());
+            ts->setDenominatorString(nText->text());
             }
       // extend palette:
       sp->append(ts, "");
