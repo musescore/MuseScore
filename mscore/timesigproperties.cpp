@@ -30,8 +30,8 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       {
       setupUi(this);
       timesig = t;
-      zText->setText(timesig->zText());
-      nText->setText(timesig->nText());
+      zText->setText(timesig->numeratorString());
+      nText->setText(timesig->denominatorString());
       Fraction nominal = timesig->sig() * timesig->stretch();
       nominal.reduce();
       zNominal->setValue(nominal.numerator());
@@ -57,8 +57,11 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
 void TimeSigProperties::accept()
       {
-      if (zText->text() != timesig->zText() || nText->text() != timesig->nText())
-            timesig->setText(zText->text(), nText->text());
+      if (zText->text() != timesig->numeratorString())
+            timesig->setNumeratorString(zText->text());
+      if (nText->text() != timesig->denominatorString())
+            timesig->setDenominatorString(nText->text());
+
 //      timesig->setSig(Fraction(zNominal->value(), nNominal->value()));
 //      timesig->setActualSig(Fraction(zActual->value(), nActual->value()));
       if (textButton->isChecked())

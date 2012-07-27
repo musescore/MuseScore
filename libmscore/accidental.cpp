@@ -409,13 +409,32 @@ Element* Accidental::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
+//   undoSetHasBracket
+//---------------------------------------------------------
+
+void Accidental::undoSetHasBracket(bool val)
+      {
+      score()->undoChangeProperty(this, P_ACCIDENTAL_BRACKET, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetSmall
+//---------------------------------------------------------
+
+void Accidental::undoSetSmall(bool val)
+      {
+      score()->undoChangeProperty(this, P_SMALL, val);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Accidental::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SMALL: return _small;
+            case P_SMALL:              return _small;
+            case P_ACCIDENTAL_BRACKET: return _hasBracket;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -428,7 +447,8 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SMALL: _small = v.toBool(); break;
+            case P_SMALL:              _small = v.toBool(); break;
+            case P_ACCIDENTAL_BRACKET: _hasBracket = v.toBool(); break;
             default:
                   return Element::setProperty(propertyId, v);
             }

@@ -569,8 +569,7 @@ printf("insert local timesig\n");
                   }
             else {
                   undo(new ChangeTimesig(nsig, false,
-                     ts->sig(), ts->stretch(), ts->subtype(),
-                     QString(), QString()));
+                     ts->sig(), ts->stretch(), ts->subtype()));
                   nsig->setDropTarget(0);       // DEBUG
                   }
             }

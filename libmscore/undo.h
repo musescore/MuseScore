@@ -1034,15 +1034,13 @@ class ChangeTimesig : public UndoCommand {
       bool showCourtesy;
       Fraction sig;
       Fraction stretch;
-      QString sz;
-      QString sn;
       TimeSigType subtype;
 
       void flip();
 
    public:
       ChangeTimesig(TimeSig* _timesig, bool sc, const Fraction&,
-         const Fraction&, TimeSigType subtype, const QString&, const QString&);
+         const Fraction&, TimeSigType subtype);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeTimesig");

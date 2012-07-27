@@ -86,6 +86,10 @@ enum P_ID {
       P_SPACE,          // used for spacer
       P_TEMPO,
       P_TEMPO_FOLLOW_TEXT,
+      P_ACCIDENTAL_BRACKET,
+      P_NUMERATOR_STRING,
+      P_DENOMINATOR_STRING,
+      P_SHOW_NATURALS,
 
       P_END
       };
@@ -99,6 +103,7 @@ enum P_TYPE {
       T_FRACTION,
       T_POINT,
       T_SIZE,
+      T_STRING,
       T_SCALE,
       T_COLOR,
       T_DIRECTION,      // enum Direction

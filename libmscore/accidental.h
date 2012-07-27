@@ -46,16 +46,20 @@ enum AccidentalRole {
 
 //---------------------------------------------------------
 //   @@ Accidental
+//    @P hasBracket bool
+//    @P small      bool
 //---------------------------------------------------------
 
 class Accidental : public Element {
       Q_OBJECT
+      Q_PROPERTY(bool hasBracket READ hasBracket WRITE undoSetHasBracket)
+      Q_PROPERTY(bool small      READ small      WRITE undoSetSmall)
 
       QList<SymElement> el;
       AccidentalType _subtype;
       bool _hasBracket;
-      AccidentalRole _role;
       bool _small;
+      AccidentalRole _role;
 
    public:
       Accidental(Score* s);
@@ -76,12 +80,17 @@ class Accidental : public Element {
 
       int symbol() const;
       Note* note() const                  { return (Note*)parent(); }
+
       bool hasBracket() const             { return _hasBracket;     }
       void setHasBracket(bool val)        { _hasBracket = val;      }
+      void undoSetHasBracket(bool val);
+
       AccidentalRole role() const         { return _role;           }
       void setRole(AccidentalRole r)      { _role = r;              }
+
       bool small() const                  { return _small;          }
       void setSmall(bool val)             { _small = val;           }
+      void undoSetSmall(bool val);
 
       virtual void read(const QDomElement&);
       virtual void write(Xml& xml) const;

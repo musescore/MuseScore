@@ -273,7 +273,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         KeySigEvent key  = km->key(ks->tick());
                         KeySigEvent okey = km->key(ks->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        undo(new ChangeKeySig(ks, key, ks->showCourtesySig(),
+                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }
@@ -347,7 +347,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesySig(),
+                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }

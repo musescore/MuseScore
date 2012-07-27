@@ -255,7 +255,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
             if (!e->generated()) {
-                  QAction* a = popup->addAction(ks->showCourtesySig()
+                  QAction* a = popup->addAction(ks->showCourtesy()
                      ? QT_TRANSLATE_NOOP("KeySig", "Hide Courtesy Key Signature")
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );
                   a->setData("key-courtesy");
@@ -516,8 +516,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e),
-               !ts->showCourtesySig(), ts->sig(), ts->stretch(), ts->subtype(),
-               ts->zText(), ts->nText()));
+               !ts->showCourtesySig(), ts->sig(), ts->stretch(), ts->subtype()));
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -526,9 +525,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = vp.exec();
             if (rv) {
                   bool stretchChanged = r.stretch() != ts->stretch();
-                  if (r.zText() != ts->zText() || r.nText() != ts->nText() || r.sig() != ts->sig() || stretchChanged || r.subtype() != ts->subtype()) {
+                  if (r.numeratorString() != ts->numeratorString()
+                     || r.denominatorString() != ts->denominatorString()
+                     || r.sig() != ts->sig()
+                     || stretchChanged
+                     || r.subtype() != ts->subtype()) {
                         score()->undo(new ChangeTimesig(ts,
-                           r.showCourtesySig(), r.sig(), r.stretch(), r.subtype(), r.zText(), r.nText()));
+                           r.showCourtesySig(), r.sig(), r.stretch(), r.subtype()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
                         }
@@ -615,11 +618,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesySig(), ks->showNaturals()));
+            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy(), ks->showNaturals()));
             }
       else if (cmd == "key-naturals") {
             KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), ks->showCourtesySig(), !ks->showNaturals()));
+            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), ks->showCourtesy(), !ks->showNaturals()));
             }
       else if (cmd == "ss-props") {
             StaffState* ss = static_cast<StaffState*>(e);

@@ -107,34 +107,23 @@ Element* TimeSig::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
-//   setText
+//   setNumeratorString
 //---------------------------------------------------------
 
-void TimeSig::setText(const QString& a, const QString& b)
+void TimeSig::setNumeratorString(const QString& a)
       {
-      sz = a;
-      sn = b;
-      customText = !(a.isEmpty() && b.isEmpty());
+      _numeratorString = a;
+      customText = !(_numeratorString.isEmpty() && _denominatorString.isEmpty());
       }
 
 //---------------------------------------------------------
-//   setZText
+//   setDenominatorString
 //---------------------------------------------------------
 
-void TimeSig::setZText(const QString& a)
+void TimeSig::setDenominatorString(const QString& a)
       {
-      sz = a;
-      customText = !(sz.isEmpty() && sn.isEmpty());
-      }
-
-//---------------------------------------------------------
-//   setNText
-//---------------------------------------------------------
-
-void TimeSig::setNText(const QString& a)
-      {
-      sn = a;
-      customText = !(sz.isEmpty() && sn.isEmpty());
+      _denominatorString = a;
+      customText = !(_numeratorString.isEmpty() && _denominatorString.isEmpty());
       }
 
 //---------------------------------------------------------
@@ -155,8 +144,8 @@ void TimeSig::write(Xml& xml) const
             xml.tag("stretchD", stretch().denominator());
             }
       if (customText) {
-            xml.tag("textN", sz);
-            xml.tag("textD", sn);
+            xml.tag("textN", _numeratorString);
+            xml.tag("textD", _denominatorString);
             }
       xml.tag("showCourtesySig", _showCourtesySig);
       xml.etag();
@@ -219,14 +208,10 @@ void TimeSig::read(const QDomElement& de)
                   _stretch.setNumerator(val.toInt());
             else if (tag == "stretchD")
                   _stretch.setDenominator(val.toInt());
-            else if (tag == "textN") {
-                  customText = true;
-                  sz = val;
-                  }
-            else if (tag == "textD") {
-                  customText = true;
-                  sn = val;
-                  }
+            else if (tag == "textN")
+                  setNumeratorString(val);
+            else if (tag == "textD")
+                  setDenominatorString(val);
             else if (!Element::readProperties(e))
                   domError(e);
             }
@@ -279,24 +264,24 @@ void TimeSig::layout()
             pz = QPointF(0.0, yoff);
             Sym& sym = symbols[score()->symIdx()][fourfourmeterSym];
             setbbox(sym.bbox(mag).translated(pz));
-            sz = sym.toString();
-            sn.clear();
+            _numeratorString = sym.toString();
+            _denominatorString.clear();
             }
       else if (st == TSIG_ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             Sym& sym = symbols[score()->symIdx()][allabreveSym];
             setbbox(sym.bbox(mag).translated(pz));
-            sz = sym.toString();
-            sn.clear();
+            _numeratorString = sym.toString();
+            _denominatorString.clear();
             }
       else {
             if (!customText) {
-                  sz = QString("%1").arg(_sig.numerator());   // build numerator string
-                  sn = QString("%1").arg(_sig.denominator()); // build denominator string
+                  _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
+                  _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
             QFontMetricsF fm(fontId2font(0));
-            QRectF rz = fm.tightBoundingRect(sz);     // get 'tight' bounding boxes for strings
-            QRectF rn = fm.tightBoundingRect(sn);
+            QRectF rz = fm.tightBoundingRect(_numeratorString);   // get 'tight' bounding boxes for strings
+            QRectF rn = fm.tightBoundingRect(_denominatorString);
 
             // scale bounding boxes to mag
             qreal spatium2 = _spatium * 2.0;
@@ -317,7 +302,6 @@ void TimeSig::layout()
             setbbox(rz.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(rn.translated(pn));
             }
-
       qreal im = (MScore::DPI * SPATIUM20) / _spatium;
 
       pz *= im;                           // convert positions to raster units
@@ -341,8 +325,8 @@ void TimeSig::draw(QPainter* painter) const
       qreal imag = 1.0 / mag;
 
       painter->scale(mag, mag);
-      painter->drawText(pz, sz);    // use positions and strings computed in layout()
-      painter->drawText(pn, sn);
+      painter->drawText(pz, _numeratorString);    // use positions and strings computed in layout()
+      painter->drawText(pn, _denominatorString);
       painter->scale(imag, imag);
       }
 
@@ -361,15 +345,14 @@ Space TimeSig::space() const
 
 void TimeSig::setFrom(const TimeSig* ts)
       {
-      _subtype   = ts->subtype();
-      sz         = ts->sz;
-      sn         = ts->sn;
-      _sig       = ts->_sig;
-      _stretch   = ts->_stretch;
-      customText = ts->customText;
+      _subtype           = ts->subtype();
+      _numeratorString   = ts->_numeratorString;
+      _denominatorString = ts->_denominatorString;
+      _sig               = ts->_sig;
+      _stretch           = ts->_stretch;
+      customText         = ts->customText;
       }
 
-#ifdef SCRIPT_INTERFACE
 //---------------------------------------------------------
 //   ssig
 //---------------------------------------------------------
@@ -392,5 +375,86 @@ void TimeSig::setSSig(const QString& s)
             }
       }
 
-#endif
+//---------------------------------------------------------
+//   undoSetShowCourtesySig
+//---------------------------------------------------------
+
+void TimeSig::undoSetShowCourtesySig(bool v)
+      {
+      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      }
+
+//---------------------------------------------------------
+//   undoSetNumeratorString
+//---------------------------------------------------------
+
+void TimeSig::undoSetNumeratorString(const QString& s)
+      {
+      score()->undoChangeProperty(this, P_NUMERATOR_STRING, s);
+      }
+
+//---------------------------------------------------------
+//   undoSetDenominatorString
+//---------------------------------------------------------
+
+void TimeSig::undoSetDenominatorString(const QString& s)
+      {
+      score()->undoChangeProperty(this, P_DENOMINATOR_STRING, s);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TimeSig::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_SHOW_COURTESY: return int(showCourtesySig());
+            case P_NUMERATOR_STRING:  return numeratorString();
+            case P_DENOMINATOR_STRING: return denominatorString();
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_SHOW_COURTESY:
+                  setShowCourtesySig(v.toBool());
+                  break;
+            case P_NUMERATOR_STRING:
+                  setNumeratorString(v.toString());
+                  break;
+            case P_DENOMINATOR_STRING:
+                  setDenominatorString(v.toString());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      setGenerated(false);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TimeSig::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_SHOW_COURTESY:      return true;
+            case P_NUMERATOR_STRING:   return QString();
+            case P_DENOMINATOR_STRING: return QString();
+            default:                   return Element::propertyDefault(id);
+            }
+      }
+
 

@@ -1616,6 +1616,9 @@ void Element::setVariant(P_ID id, void* data, const QVariant& value)
             case T_COLOR:
                   *(QColor*)data = value.value<QColor>();
                   break;
+            case T_STRING:
+                  *(QString*)data = value.toString();
+                  break;
             case T_DIRECTION:
             case T_DIRECTION_H:
             case T_LAYOUT_BREAK:
@@ -1660,6 +1663,8 @@ QVariant Element::getVariant(P_ID id, void* data) const
                         return QVariant(*(QPointF*)data);
                   case T_SIZE:
                         return QVariant(*(QSizeF*)data);
+                  case T_STRING:
+                        return QVariant(*(QString*)data);
                   }
             }
       return QVariant();

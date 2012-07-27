@@ -32,15 +32,20 @@ struct KeySym {
       QPointF pos;
       };
 
-//---------------------------------------------------------
+//---------------------------------------------------------------------------------------
 //   @@ KeySig
 ///   The KeySig class represents a Key Signature on a staff
-//---------------------------------------------------------
+//
+//    @P showCourtesy bool show courtesy key signature for this sig if appropriate
+//    @P showNaturals bool
+//---------------------------------------------------------------------------------------
 
 class KeySig : public Element {
       Q_OBJECT
+      Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
+      Q_PROPERTY(bool showNaturals READ showNaturals   WRITE undoSetShowNaturals)
 
-	bool	_showCourtesySig;
+	bool	_showCourtesy;
 	bool	_showNaturals;
       QList<KeySym*> keySymbols;
       KeySigEvent _sig;
@@ -66,7 +71,7 @@ class KeySig : public Element {
       virtual void write(Xml&) const;
       virtual void read(const QDomElement&);
       //@ -7 (flats) -- +7 (sharps)
-      Q_INVOKABLE int keySignature() const            { return _sig.accidentalType(); }    // -7 - +7
+      Q_INVOKABLE int keySignature() const { return _sig.accidentalType(); }    // -7 - +7
       int customType() const              { return _sig.customType(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }
@@ -75,10 +80,17 @@ class KeySig : public Element {
       void setKeySigEvent(const KeySigEvent& e)      { _sig = e; }
       int tick() const;
 
-      bool showCourtesySig() const        { return _showCourtesySig; };
-      void setShowCourtesySig(bool v)     { _showCourtesySig = v;    };
+      bool showCourtesy() const           { return _showCourtesy; };
+      void setShowCourtesy(bool v)        { _showCourtesy = v;    };
+      void undoSetShowCourtesy(bool v);
+
       bool showNaturals() const           { return _showNaturals;    };
 	void setShowNaturals(bool v)        { _showNaturals = v;       };
+	void undoSetShowNaturals(bool v)    { _showNaturals = v;       };
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
 	};
 
 extern const char* keyNames[15];
