@@ -22,7 +22,7 @@ class System;
 class QPainter;
 
 //---------------------------------------------------------
-//   Bracket
+//   @@ Bracket
 //---------------------------------------------------------
 
 class Bracket : public Element {

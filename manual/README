@@ -9,6 +9,7 @@ Understood annotations in the source:
 
       //@ object description
       @@ ObjectName
+      /// object description
       @P propertyName propertyType propertyDescription
 
       //@ methodDescription

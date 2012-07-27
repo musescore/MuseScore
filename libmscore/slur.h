@@ -25,6 +25,12 @@ class Score;
 class MuseScoreView;
 class QPainter;
 class ChordRest;
+class SlurPos;
+
+enum {
+      GRIP_START, GRIP_BEZIER1, GRIP_SHOULDER, GRIP_BEZIER2, GRIP_END, GRIP_DRAG,
+      SLUR_GRIPS
+      };
 
 //---------------------------------------------------------
 //   UP
@@ -39,14 +45,9 @@ struct UP {
             }
       };
 
-enum {
-      GRIP_START, GRIP_BEZIER1, GRIP_SHOULDER, GRIP_BEZIER2, GRIP_END, GRIP_DRAG,
-      SLUR_GRIPS
-      };
-
 //---------------------------------------------------------
-//   SlurSegment
-//    also used for Tie
+//   @@ SlurSegment
+///    also used for Tie
 //---------------------------------------------------------
 
 class SlurSegment : public SpannerSegment {
@@ -81,7 +82,7 @@ class SlurSegment : public SpannerSegment {
       virtual void move(qreal xd, qreal yd) { move(QPointF(xd, yd)); }
       virtual void move(const QPointF& s);
 
-      SlurTie* slurTie() const                      { return (SlurTie*)spanner(); }
+      SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
       void write(Xml& xml, int no) const;
       void read(const QDomElement&);
@@ -96,29 +97,22 @@ class SlurSegment : public SpannerSegment {
       friend class Slur;
       };
 
-//---------------------------------------------------------
-//   SlurPos
-//---------------------------------------------------------
-
-struct SlurPos {
-      QPointF p1;             // start point of slur
-      System* system1;        // start system of slur
-      QPointF p2;             // end point of slur
-      System* system2;        // end system of slur
-      };
-
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   @@ SlurTie
-//---------------------------------------------------------
+//   @P lineType      int         0 - solid, 1 - dotted, 2 - dashed
+//   @P slurDirection Direction   AUTO, UP, DOWN
+//-------------------------------------------------------------------
 
 class SlurTie : public Spanner {
       Q_OBJECT
+      Q_PROPERTY(int lineType            READ lineType WRITE undoSetLineType)
+      Q_PROPERTY(Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
 
       int _lineType;          // 0 = solid, 1 = dotted, 2 = dashed
 
    protected:
-      qreal _len;
-      bool _up;
+      bool _up;               // actual direction
+
       QQueue<SlurSegment*> delSegments;   // "deleted" segments
       Direction _slurDirection;
       qreal firstNoteRestSegmentX(System* system);
@@ -131,9 +125,10 @@ class SlurTie : public Spanner {
 
       virtual ElementType type() const = 0;
       bool up() const                    { return _up; }
-      void setUp(bool val)               { _up = val;  }
+
       Direction slurDirection() const    { return _slurDirection; }
       void setSlurDirection(Direction d) { _slurDirection = d; }
+      void undoSetSlurDirection(Direction d);
 
       virtual void layout2(const QPointF, int, struct UP&)  {}
       virtual bool contains(const QPointF&) const     { return false; }  // not selectable
@@ -142,9 +137,11 @@ class SlurTie : public Spanner {
       bool readProperties(const QDomElement&);
 
       virtual void toDefault();
-      void setLen(qreal v)               { _len = v; }
+
       int lineType() const                { return _lineType; }
       void setLineType(int val)           { _lineType = val;  }
+      void undoSetLineType(int);
+
       SlurSegment* frontSegment() const   { return (SlurSegment*)spannerSegments().front(); }
       SlurSegment* backSegment() const    { return (SlurSegment*)spannerSegments().back();  }
       SlurSegment* takeLastSegment()      { return (SlurSegment*)spannerSegments().takeLast(); }
@@ -157,7 +154,7 @@ class SlurTie : public Spanner {
 
 //---------------------------------------------------------
 //   @@ Slur
-//    slurs have Chord's as startElement/endElement
+///   slurs have Chord's as startElement/endElement
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
@@ -191,7 +188,7 @@ class Slur : public SlurTie {
 
 //---------------------------------------------------------
 //   @@ Tie
-//    slurs have Note's as startElement/endElement
+///   ties have Note's as startElement/endElement
 //---------------------------------------------------------
 
 class Tie : public SlurTie {

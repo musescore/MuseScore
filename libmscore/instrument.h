@@ -43,6 +43,7 @@ struct StaffNameDoc {
       int pos;          // even number -> between staves
 
       StaffNameDoc(const QTextDocumentFragment& s, int p=0) : name(s), pos(p) {}
+      StaffNameDoc(const QString& s, int p=0) : name(QTextDocumentFragment::fromPlainText(s)), pos(p) {}
       bool operator==(const StaffNameDoc&) const;
       };
 

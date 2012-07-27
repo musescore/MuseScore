@@ -49,6 +49,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
       bool circle;
       bool systemFlag;
       QColor foregroundColor;
+      QColor backgroundColor;
 
    public:
       TextStyleData(QString _name, QString _family, qreal _size,
@@ -58,7 +59,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
          bool sizeSpatiumDependent,
          qreal fw, qreal pw, int fr,
          QColor co, bool circle, bool systemFlag,
-         QColor fg);
+         QColor fg, QColor bg);
       TextStyleData();
 
       void write(Xml&) const;

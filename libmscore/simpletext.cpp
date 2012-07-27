@@ -47,10 +47,11 @@ SimpleText::~SimpleText()
 
 void SimpleText::draw(QPainter* p) const
       {
-      p->setPen(textColor());
-      p->setFont(textStyle().fontPx(spatium()));
-      p->drawText(drawingRect, alignFlags(), _text);
       drawFrame(p);
+      p->setFont(textStyle().fontPx(spatium()));
+      p->setBrush(Qt::NoBrush);
+      p->setPen(textColor());
+      p->drawText(drawingRect, alignFlags(), _text);
       }
 
 //---------------------------------------------------------
@@ -67,9 +68,14 @@ void SimpleText::drawFrame(QPainter* painter) const
             color = Qt::gray;
       else if (selected())
             color = Qt::blue;
-      QPen pen(color, frameWidth() * MScore::DPMM);
-      painter->setPen(pen);
-      painter->setBrush(Qt::NoBrush);
+      if (frameWidth() != 0.0) {
+            QPen pen(color, frameWidth() * MScore::DPMM);
+            painter->setPen(pen);
+            }
+      else
+            painter->setPen(Qt::NoPen);
+      QColor bg(backgroundColor());
+      painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
       if (circle())
             painter->drawArc(frame, 0, 5760);
       else {
@@ -86,11 +92,13 @@ void SimpleText::drawFrame(QPainter* painter) const
 
 QColor SimpleText::textColor() const
       {
-      QColor color;
-      if (selected())
-            return MScore::selectColor[0];
-      if (!visible())
-            return Qt::gray;
+      if (!score()->printing()) {
+            QColor color;
+            if (selected())
+                  return MScore::selectColor[0];
+            if (!visible())
+                  return Qt::gray;
+            }
       return textStyle().foregroundColor();
       }
 
@@ -150,10 +158,8 @@ void SimpleText::layout()
             drawingRect = QRectF();
             setPos(o);
             }
-
       QFontMetricsF fm(s.fontPx(spatium()));
       setbbox(fm.boundingRect(drawingRect, alignFlags(), _text));
-
       if (hasFrame())
             layoutFrame();
       }
@@ -242,6 +248,15 @@ qreal SimpleText::paddingWidth() const
 QColor SimpleText::frameColor() const
       {
       return textStyle().frameColor();
+      }
+
+//---------------------------------------------------------
+//   backgroundColor
+//---------------------------------------------------------
+
+QColor SimpleText::backgroundColor() const
+      {
+      return textStyle().backgroundColor();
       }
 
 //---------------------------------------------------------

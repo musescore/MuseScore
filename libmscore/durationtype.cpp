@@ -65,7 +65,7 @@ static int headType(int tickLen, TDuration* type)
                   return rest;
                   }
             }
-qDebug("1: no duration type for ticks %d\n", tickLen);
+qDebug("1: no duration type for ticks %d", tickLen);
       *type = TDuration(TDuration::V_QUARTER);
       return 0;
       }
@@ -95,7 +95,7 @@ void TDuration::setVal(int ticks)
                         return;
                         }
                   }
-            qDebug("2: no duration type for ticks %d\n", ticks);
+            qDebug("2: no duration type for ticks %d", ticks);
             _val = V_QUARTER;       // fallback default value
             }
       }
@@ -152,7 +152,7 @@ QString TDuration::name() const
             case V_BREVE:     return "breve";
             case V_LONG:      return "long";
             default:
-qDebug("TDuration::name(): invalid duration type %d\n", _val);
+qDebug("TDuration::name(): invalid duration type %d", _val);
             case V_ZERO:
             case V_INVALID:   return "";
             }
@@ -275,8 +275,9 @@ void TDuration::setType(const QString& s)
       else if (s == "measure")
             _val = V_MEASURE;
       else {
-            _val = V_INVALID;
-            qDebug("TDuration::setVal(%s): unknown\n", qPrintable(s));
+            // _val = V_INVALID;
+            _val = V_QUARTER;
+            qDebug("TDuration::setVal(%s): unknown, assume \"quarter\"", qPrintable(s));
             }
       }
 
@@ -431,7 +432,7 @@ TDuration::TDuration(const Fraction& _f)
                         _dots = 2;
                         break;
                   default:
-                        qDebug("TDuration(%d/%d): not implemented\n", f.numerator(), f.denominator());
+                        qDebug("TDuration(%d/%d): not implemented", f.numerator(), f.denominator());
 // abort();
                         _val = V_INVALID;
                         _dots = 0;
@@ -513,7 +514,7 @@ QList<TDuration> toDurationList(Fraction l, bool useDottedValues)
                   }
             }
       if (l != Fraction())
-            qDebug("toDurationList:: rest remains %d/%d\n", l.numerator(), l.denominator());
+            qDebug("toDurationList:: rest remains %d/%d", l.numerator(), l.denominator());
       return dList;
       }
 
@@ -541,6 +542,6 @@ void TDuration::print() const
             case V_MEASURE:   s = "Measure"; break;
             case V_INVALID:   s = "Invalid"; break;
             };
-      qDebug("%s,dots=%d)", s, _dots);
+      qDebug("   %s,dots=%d)", s, _dots);
       }
 

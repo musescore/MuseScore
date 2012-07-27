@@ -273,7 +273,7 @@ bool Score::read114(const QDomElement& de)
                   Segment* s1 = tick2segment(curTick);
                   Segment* s2 = tick2segment(tick2);
                   if (s1 == 0 || s2 == 0) {
-                        qDebug("cannot place %s at tick %d - %d\n",
+                        qDebug("cannot place %s at tick %d - %d",
                            s->name(), s->__tick1(), tick2);
                         continue;
                         }
@@ -318,13 +318,13 @@ bool Score::read114(const QDomElement& de)
             Slur* slur = static_cast<Slur*>(s);
 
             if (!slur->startElement() || !slur->endElement()) {
-                  qDebug("incomplete Slur\n");
+                  qDebug("incomplete Slur");
                   if (slur->startElement()) {
-                        qDebug("  front %d\n", static_cast<ChordRest*>(slur->startElement())->tick());
+                        qDebug("  front %d", static_cast<ChordRest*>(slur->startElement())->tick());
                         static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
                         }
                   if (slur->endElement()) {
-                        qDebug("  back %d\n", static_cast<ChordRest*>(slur->endElement())->tick());
+                        qDebug("  back %d", static_cast<ChordRest*>(slur->endElement())->tick());
                         static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
                         }
                   }
@@ -332,7 +332,7 @@ bool Score::read114(const QDomElement& de)
                   ChordRest* cr1 = (ChordRest*)(slur->startElement());
                   ChordRest* cr2 = (ChordRest*)(slur->endElement());
                   if (cr1->tick() > cr2->tick()) {
-                        qDebug("Slur invalid start-end tick %d-%d\n", cr1->tick(), cr2->tick());
+                        qDebug("Slur invalid start-end tick %d-%d", cr1->tick(), cr2->tick());
                         slur->setStartElement(cr2);
                         slur->setEndElement(cr1);
                         }
@@ -347,7 +347,7 @@ bool Score::read114(const QDomElement& de)
                               ++n2;
                         }
                   if (n1 != 1 || n2 != 1) {
-                        qDebug("Slur references bad: %d %d\n", n1, n2);
+                        qDebug("Slur references bad: %d %d", n1, n2);
                         }
                   }
             }
@@ -366,7 +366,7 @@ bool Score::read114(const QDomElement& de)
             int idx = staffIdx(staff);
             int n = nstaves();
             if (idx + barLineSpan > n) {
-                  qDebug("bad span: idx %d  span %d staves %d\n", idx, barLineSpan, n);
+                  qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
                   staff->setBarLineSpan(n - idx);
                   }
             }

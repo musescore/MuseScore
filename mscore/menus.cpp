@@ -623,8 +623,8 @@ Palette* MuseScore::newLinesPalette()
       sp->setDrawGrid(true);
 
       qreal w = gscore->spatium() * 7;
+
       Slur* slur = new Slur(gscore);
-      slur->setLen(w);
       slur->setId(0);
       sp->append(slur, qApp->translate("lines", "Slur"));
 

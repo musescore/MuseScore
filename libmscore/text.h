@@ -38,8 +38,6 @@ class Text : public SimpleText {
       void setUnstyledText(const QString& s);
       void layoutEdit();
 
-      void* pStyleIndex() { return &_styleIndex; }
-
    protected:
       bool _editMode;
       QTextCursor* _cursor;
@@ -142,9 +140,6 @@ class Text : public SimpleText {
 
       virtual bool systemFlag() const;
 
-      static Property<Text> propertyList[];
-
-      Property<Text>* property(P_ID id) const;
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
       };

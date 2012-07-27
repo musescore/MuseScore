@@ -2865,8 +2865,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       xml.etag();
       if (offs)
             xml.tag("offset", offs);
-      if (staff)
-            xml.tag("staff", staff);
       directionETag(xml, staff);
       }
 

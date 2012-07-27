@@ -127,7 +127,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             QByteArray a = data->data(mimeSymbolFormat);
 
             if (MScore::debugMode)
-                  qDebug("ScoreView::dragEnterEvent: <%s>", a.data());
+                  qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
 
             QDomDocument doc;
             int line, column;
@@ -191,7 +191,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                                     }
 #endif
                               }
-                        }  
+                        }
                   }
             if (el) {
                   dragElement = el;

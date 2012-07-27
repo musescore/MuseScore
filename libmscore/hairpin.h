@@ -21,7 +21,7 @@ class Hairpin;
 class QPainter;
 
 //---------------------------------------------------------
-//   HairpinSegment
+//   @@ HairpinSegment
 //---------------------------------------------------------
 
 class HairpinSegment : public LineSegment {
@@ -40,7 +40,7 @@ class HairpinSegment : public LineSegment {
       };
 
 //---------------------------------------------------------
-//   Hairpin
+//   @@ Hairpin
 //
 //    subtype: 0 = crescendo,  1 = decrescendo
 //---------------------------------------------------------

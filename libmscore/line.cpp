@@ -422,6 +422,8 @@ QPointF SLine::linePos(int grip, System** sys)
             Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
             Measure* m   = seg->measure();
             *sys         = m->system();
+            if (*sys == 0)
+                  return QPointF(x, 0.0);
             x            = seg->pos().x() + m->pos().x();
             if (grip == GRIP_LINE_END) {
                   if (((*sys)->firstMeasure() == m) && (seg->tick() == m->tick())) {
@@ -487,8 +489,8 @@ void SLine::layout()
             return;
             }
       if (startElement() == 0 || endElement() == 0) {
-            qDebug("SLine::layout() failed: %s %s\n", parent()->name(), name());
-            qDebug("   start %p   end %p\n", startElement(), endElement());
+            qDebug("SLine::layout() failed: %s %s", parent()->name(), name());
+            qDebug("   start %p   end %p", startElement(), endElement());
             return;
             }
 
@@ -521,10 +523,10 @@ void SLine::layout()
                   }
             else {
                   int n = segCount - segmentsNeeded;
-                  qDebug("SLine: segments %d needed %d, remove %d\n", segCount, segmentsNeeded, n);
+                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
                   for (int i = 0; i < n; ++i) {
                         if (spannerSegments().isEmpty()) {
-                              qDebug("SLine::layout(): no segment %d, %d expected\n", i, n);
+                              qDebug("SLine::layout(): no segment %d, %d expected", i, n);
                               break;
                               }
                         else {
@@ -545,7 +547,8 @@ void SLine::layout()
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();
-            qreal x1 = m->first(SegChordRest)->pos().x() + m->pos().x();
+            Segment* mseg = m->first(SegChordRest);
+            qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
             qreal x2 = system->bbox().right();
             qreal y  = system->staff(si)->y();
 
@@ -685,12 +688,13 @@ void SLine::setLen(qreal l)
 //    used by palette: only one segment
 //---------------------------------------------------------
 
-QRectF SLine::bbox() const
+const QRectF& SLine::bbox() const
       {
       if (spannerSegments().isEmpty())
-            return QRectF();
+            setbbox(QRectF());
       else
-            return segmentAt(0)->bbox();
+            setbbox(segmentAt(0)->bbox());
+      return Element::bbox();
       }
 
 //---------------------------------------------------------

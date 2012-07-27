@@ -52,7 +52,8 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectBgWallpaper();
       void selectDefaultStyle();
       void selectPartStyle();
-      void selectInstrumentList();
+      void selectInstrumentList1();
+      void selectInstrumentList2();
       void selectStartWith();
       void resetShortcutClicked();
       void clearShortcutClicked();

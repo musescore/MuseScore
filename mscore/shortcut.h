@@ -58,6 +58,27 @@ class Shortcut {
          const char* txt = 0,
          const char* h = 0,
          int i = -1);
+      Shortcut(int state, int flags,
+         const char* name,
+         const char* d,
+         int i);
+      Shortcut(int state, int flags,
+         const char* name,
+         const char* d,
+         const char* txt,
+         int i);
+      Shortcut(int state, int flags,
+         const char* name,
+         Qt::ShortcutContext cont,
+         const char* d,
+         int i);
+      Shortcut(int state, int flags,
+         const char* name,
+         Qt::ShortcutContext cont,
+         const char* d,
+         const char* txt,
+         int i);
+
       Shortcut(const Shortcut& c);
       ~Shortcut();
 

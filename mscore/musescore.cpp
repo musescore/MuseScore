@@ -961,7 +961,7 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuPlugins->addAction(a);
       menuPlugins->addSeparator();
-      
+
       //---------------------
       //    Menu Help
       //---------------------
@@ -998,7 +998,11 @@ MuseScore::MuseScore()
 
       setCentralWidget(mainWindow);
 
-      loadInstrumentTemplates(preferences.instrumentList);
+      // load cascading instrument templates
+      loadInstrumentTemplates(preferences.instrumentList1);
+      if (!preferences.instrumentList2.isEmpty())
+            loadInstrumentTemplates(preferences.instrumentList2);
+
       preferencesChanged();
       if (seq) {
             connect(seq, SIGNAL(started()), SLOT(seqStarted()));
@@ -1358,8 +1362,9 @@ void MuseScore::openRecentMenu()
                   break;
             // QFileInfo fi(s);
             // QAction* action = openRecent->addAction(fi.completeBaseName());
-            QAction* action = openRecent->addAction(s);  // show complete path
-            action->setData(s);
+            QString data(s);
+            QAction* action = openRecent->addAction(s.replace("&", "&&"));  // show complete path
+            action->setData(data);
             }
       }
 
@@ -2347,21 +2352,6 @@ int main(int argc, char* av[])
                         QApplication::setPalette(p);
                         break;
                         }
-                  case STYLE_LIGHT: {
-                        QApplication::setStyle(new MgStyle);
-                        qApp->setStyleSheet(appStyleSheet());
-                        QPalette p(QApplication::palette());
-                        p.setColor(QPalette::Window,        QColor(0xdc, 0xdc, 0xdc));
-                        p.setColor(QPalette::WindowText,    Qt::black);
-                        p.setColor(QPalette::Base,          QColor(0x82, 0x82, 0x82));
-                        p.setColor(QPalette::AlternateBase, QColor(0xa2, 0xa2, 0xa2));
-                        p.setColor(QPalette::Text,          Qt::black);
-                        p.setColor(QPalette::Button,        QColor(0xdc, 0xdc, 0xdc));
-                        p.setColor(QPalette::ButtonText,    Qt::black);
-                        p.setColor(QPalette::BrightText,    Qt::black);  //??
-                        QApplication::setPalette(p);
-                        break;
-                        }
                   case STYLE_NATIVE:
                         break;
                   }
@@ -2434,8 +2424,11 @@ int main(int argc, char* av[])
                         ++files;
                   }
 #ifdef Q_WS_MAC
-            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION))
-                  loadScores(static_cast<MuseScoreApplication*>(qApp)->paths);
+            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
+                  MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
+                  loadScores(mApp->paths);
+                  files = mApp->paths.size();
+                  }
 #else
             //
             // TODO: delete old session backups

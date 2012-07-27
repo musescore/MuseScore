@@ -16,7 +16,7 @@
 
 /**
  \file
- Definition of classes SysStaff, System and SystemList.
+ Definition of classes SysStaff and System
 */
 
 #include "element.h"
@@ -37,11 +37,8 @@ class VBox;
 
 //---------------------------------------------------------
 //   SysStaff
+///  One staff of a System.
 //---------------------------------------------------------
-
-/**
- One staff of a System.
-*/
 
 class SysStaff {
       QRectF _bbox;           ///< Bbox of StaffLines.
@@ -74,13 +71,10 @@ class SysStaff {
       };
 
 //---------------------------------------------------------
-//   System
+//   @@ System
+///  One row of measures for all instruments;
+///  a complete piece of the timeline.
 //---------------------------------------------------------
-
-/**
- One row of measures for all instruments;
- a complete piece of the timeline.
-*/
 
 class System : public Element {
       Q_OBJECT

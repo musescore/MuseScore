@@ -23,13 +23,13 @@ class MuseScoreView;
 class QPainter;
 
 //---------------------------------------------------------
-//   LineSegment
-//    Virtual base class for segmented lines segments
-//    (OttavaSegment, HairpinSegment, TrillSegment...)
+//   @@ LineSegment
+///   Virtual base class for segmented lines segments
+///   (OttavaSegment, HairpinSegment, TrillSegment...)
 //
-//    This class describes one segment of an segmented
-//    line object. Line objects can span multiple staves.
-//    For every staff a segment is created.
+///   This class describes one segment of an segmented
+///   line object. Line objects can span multiple staves.
+///   For every staff a segment is created.
 //---------------------------------------------------------
 
 class LineSegment : public SpannerSegment {
@@ -71,7 +71,7 @@ class LineSegment : public SpannerSegment {
       };
 
 //---------------------------------------------------------
-//   SLine
+//   @@ SLine
 //    virtual base class for Ottava, Pedal, Hairpin,
 //    Trill and TextLine
 //---------------------------------------------------------
@@ -91,7 +91,7 @@ class SLine : public Spanner {
       void writeProperties(Xml& xml, const SLine* proto = 0) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
-      virtual QRectF bbox() const;
+      virtual const QRectF& bbox() const;
 
       virtual QPointF linePos(int grip, System** system);
 

@@ -25,8 +25,8 @@ enum LayoutBreakType {
       };
 
 //---------------------------------------------------------
-//   LayoutBreak
-//    symbols for line break, page break etc.
+//   @@ LayoutBreak
+///    symbols for line break, page break etc.
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {

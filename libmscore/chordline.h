@@ -25,9 +25,9 @@ enum ChordLineType {
       };
 
 //---------------------------------------------------------
-//   ChordLine
-//    bezier line attached to top note of a chord
-//    implements fall, doit, plop, bend
+//   @@ ChordLine
+///    bezier line attached to top note of a chord
+///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
 class ChordLine : public Element {

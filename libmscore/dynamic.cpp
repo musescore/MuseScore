@@ -111,8 +111,7 @@ void Dynamic::write(Xml& xml) const
             xml.tag("velocity", _velocity);
       if (_dynType != DYNAMIC_PART)
             xml.tag("dynType", _dynType);
-      if (_subtype == 0)
-            Text::writeProperties(xml, subtype() == 0);
+      Text::writeProperties(xml, subtype() == 0);
       xml.etag();
       }
 
@@ -155,13 +154,13 @@ void Dynamic::setSubtype(const QString& tag)
       for (int i = 1; i < n; ++i) {
             if (dynList[i].tag == tag) {
                   _subtype = i;
-                  setTextStyleType(TEXT_STYLE_DYNAMICS2);
+//                  setTextStyleType(TEXT_STYLE_DYNAMICS2);
                   setText(dynList[i].tag);
                   return;
                   }
             }
       _subtype = 0;
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
+//      setTextStyleType(TEXT_STYLE_DYNAMICS);
       setText(tag);
       }
 

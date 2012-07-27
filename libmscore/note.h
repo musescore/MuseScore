@@ -40,7 +40,7 @@ class NoteDot;
 extern const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES];
 
 //---------------------------------------------------------
-//   NoteHead
+//   @@ NoteHead
 //---------------------------------------------------------
 
 class NoteHead : public Symbol {
@@ -56,6 +56,8 @@ class NoteHead : public Symbol {
 
 //-------------------------------------------------------------------
 //   @@ Note
+///  Graphic representation of a note.
+//
 //   @P pitch      int   midi pitch
 //   @P tpc        int   tonal pitch class
 //   @P line       int   notehead position
@@ -77,10 +79,6 @@ class NoteHead : public Symbol {
 //   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
 //   @P dotPosition       enum AUTO, UP, DOWN
 //-------------------------------------------------------------------
-
-/**
- Graphic representation of a note.
-*/
 
 class Note : public Element {
       Q_OBJECT

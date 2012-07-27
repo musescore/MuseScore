@@ -46,8 +46,8 @@ struct ArticulationInfo {
       };
 
 //---------------------------------------------------------
-//   Articulation
-//    articulation marks
+//   @@ Articulation
+///    articulation marks
 //---------------------------------------------------------
 
 class Articulation : public Element {

@@ -62,7 +62,7 @@ p, li { white-space: pre-wrap; }
         <maxPitchP>77</maxPitchP>
         <minPitchA>55</minPitchA>
         <maxPitchA>74</maxPitchA>
-        <Articulation name="">
+        <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -79,13 +79,6 @@ p, li { white-space: pre-wrap; }
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="52"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
@@ -113,7 +106,7 @@ p, li { white-space: pre-wrap; }
         <maxPitchP>72</maxPitchP>
         <minPitchA>48</minPitchA>
         <maxPitchA>69</maxPitchA>
-        <Articulation name="">
+        <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -130,13 +123,6 @@ p, li { white-space: pre-wrap; }
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="52"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
@@ -759,7 +745,7 @@ p, li { white-space: pre-wrap; }
           <maxPitchP>77</maxPitchP>
           <minPitchA>55</minPitchA>
           <maxPitchA>74</maxPitchA>
-          <Articulation name="">
+          <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -776,13 +762,6 @@ p, li { white-space: pre-wrap; }
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
-            <controller tick="0" channel="0" ctrl="0" value="0"/>
-            <controller tick="0" channel="0" ctrl="32" value="0"/>
-            <program tick="0" channel="0" value="52"/>
-            <controller tick="0" channel="0" ctrl="7" value="100"/>
-            <controller tick="0" channel="0" ctrl="10" value="64"/>
-            <controller tick="0" channel="0" ctrl="93" value="30"/>
-            <controller tick="0" channel="0" ctrl="91" value="30"/>
             </Channel>
           </Instrument>
         </Part>
@@ -1145,7 +1124,7 @@ p, li { white-space: pre-wrap; }
           <maxPitchP>72</maxPitchP>
           <minPitchA>48</minPitchA>
           <maxPitchA>69</maxPitchA>
-          <Articulation name="">
+          <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -1162,13 +1141,6 @@ p, li { white-space: pre-wrap; }
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
-            <controller tick="0" channel="0" ctrl="0" value="0"/>
-            <controller tick="0" channel="0" ctrl="32" value="0"/>
-            <program tick="0" channel="0" value="52"/>
-            <controller tick="0" channel="0" ctrl="7" value="100"/>
-            <controller tick="0" channel="0" ctrl="10" value="64"/>
-            <controller tick="0" channel="0" ctrl="93" value="30"/>
-            <controller tick="0" channel="0" ctrl="91" value="30"/>
             </Channel>
           </Instrument>
         </Part>

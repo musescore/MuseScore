@@ -246,16 +246,16 @@ void Selection::updateSelectedElements()
                   if (e->type() == CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach(Note* note, chord->notes()) {
-                              add(note);
+                              _el.append(note);
                               }
                         }
                   else {
-                        add(e);
+                        _el.append(e);
                         }
                   foreach(Element* e, s->annotations()) {
                         if (e->track() < startTrack || e->track() >= endTrack)
                               continue;
-                        add(e);
+                        _el.append(e);
                         }
                   foreach(Spanner* sp, s->spannerFor()) {
                         if (sp->track() < startTrack || sp->track() >= endTrack)
@@ -263,7 +263,7 @@ void Selection::updateSelectedElements()
                         if (sp->endElement()->type() == SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
                               if (_endSegment && (s2->tick() < _endSegment->tick()))
-                                    add(sp);
+                                    _el.append(sp);
                               }
                         else {
                               qDebug("1spanner element type %s\n", sp->endElement()->name());
@@ -277,12 +277,12 @@ void Selection::updateSelectedElements()
                         if (sp->endElement()->type() == SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
                               if (s2->tick() < _endSegment->tick())
-                                    add(sp);
+                                    _el.append(sp);
                               }
                         else if (sp->endElement()->type() == MEASURE) {
                               Measure* s2 = static_cast<Measure*>(sp->endElement());
                               if (s2->tick() < _endSegment->tick())
-                                    add(sp);
+                                    _el.append(sp);
                               }
                         else {
                               qDebug("2spanner element type %s\n", sp->endElement()->name());

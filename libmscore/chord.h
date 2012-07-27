@@ -34,8 +34,8 @@ class Chord;
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 
 //---------------------------------------------------------
-//   StemSlash
-//    used for grace notes of type acciaccatura
+//   @@ StemSlash
+///   used for grace notes of type acciaccatura
 //---------------------------------------------------------
 
 class StemSlash : public Element {
@@ -57,6 +57,7 @@ class StemSlash : public Element {
       };
 
 //---------------------------------------------------------
+//    @@ LedgerLine
 ///   Graphic representation of a ledger line.
 ///
 ///    parent:     Chord
@@ -80,14 +81,11 @@ class LedgerLine : public Line {
 
 //---------------------------------------------------------
 //   @@ Chord
+///   Graphic representation of a chord.
+///   Single notes are handled as degenerated chords.
+//
 //   @P notes  array[Note]    the list of notes
 //---------------------------------------------------------
-
-/**
- Graphic representation of a chord.
-
- Single notes are handled as degenerated chords.
-*/
 
 class Chord : public ChordRest {
       Q_OBJECT
@@ -129,6 +127,8 @@ class Chord : public ChordRest {
       virtual void setScore(Score* s);
       virtual ElementType type() const { return CHORD; }
 
+      virtual const QRectF& bbox() const;
+
       virtual void write(Xml& xml) const;
       void read(const QDomElement&, QList<Tuplet*>*, QList<Spanner*>*);
       virtual void read(const QDomElement&);
@@ -164,8 +164,8 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s)        { delete _stemSlash; _stemSlash = s; }
 
-      virtual QPointF stemPos() const;
-      QPointF stemPosBeam() const;
+      virtual QPointF stemPos() const;          ///< page coordinates
+      QPointF stemPosBeam() const;              ///< page coordinates
 
       Hook* hook() const                     { return _hook; }
 

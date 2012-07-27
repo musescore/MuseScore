@@ -25,7 +25,7 @@
 EventData::EventData()
       {
       _type            = 0;
-      _ontime          = 0;
+      _ontime          = -1;
       _noquantOntime   = 0;
       _noquantDuration = 0;
       _channel         = 0;
@@ -44,7 +44,7 @@ EventData::EventData()
 EventData::EventData(int t)
       {
       _type            = t;
-      _ontime          = 0;
+      _ontime          = -1;
       _noquantOntime   = 0;
       _noquantDuration = 0;
       _channel         = 0;

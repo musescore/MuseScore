@@ -18,7 +18,7 @@
 #include "instrument.h"
 
 //---------------------------------------------------------
-//   InstrumentChange
+//   @@ InstrumentChange
 //---------------------------------------------------------
 
 class InstrumentChange : public Text  {

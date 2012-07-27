@@ -21,7 +21,7 @@ class Chord;
 class Harmony;
 
 //---------------------------------------------------------
-//   FretDiagram
+//   @@ FretDiagram
 //---------------------------------------------------------
 
 class FretDiagram : public Element {

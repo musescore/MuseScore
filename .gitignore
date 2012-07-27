@@ -10,4 +10,7 @@ applebuild
 *.qm
 share/manual/en
 share/manual/de
+Doc
+DocLib
+build.qt5
 

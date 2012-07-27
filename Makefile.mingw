@@ -25,24 +25,27 @@ MINGW_DIR = C:\QtSDK\mingw
 CPUS = 2
 
 release:
-	if not exist win32build\nul mkdir win32build
+	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd win32build & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
-	cd win32build & $(MAKE) lrelease
-	cd win32build & $(MAKE) -j ${CPUS}
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
+	cd build.release & $(MAKE) lrelease
+	cd build.release & $(MAKE) -j ${CPUS}
 
 debug:
-	if not exist win32build\nul mkdir win32build
+	if not exist build.debug\nul mkdir build.debug
 	if not exist win32install\nul mkdir win32install
-	cd win32build & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
-	cd win32build & $(MAKE) lrelease
-	cd win32build & $(MAKE) -j ${CPUS}
+	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=${MINGW_DIR}\bin\mingw32-make.exe ..
+	cd build.debug & $(MAKE) lrelease
+	cd build.debug & $(MAKE) -j ${CPUS}
 
 install:
-	cd win32build & $(MAKE) install
+	cd build.release & $(MAKE) install
+
+installdebug:
+	cd build.debug & $(MAKE) install
 
 package:
-	cd win32build & $(MAKE) package
+	cd build.release & $(MAKE) package
 
 revision:
 	git rev-parse --short HEAD > mscore/revision.h
@@ -55,5 +58,13 @@ version:
 #
 
 clean:
-	-rmdir /S/Q win32build win32install
+	-rmdir /S/Q build.debug build.release win32install
 
+
+#
+# generate code documentation
+#
+doxy:
+	doxygen build.debug/Doxyfile
+doxylib:
+	doxygen build.debug/Doxyfile-LibMscore

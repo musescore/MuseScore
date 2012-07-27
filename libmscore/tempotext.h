@@ -16,12 +16,18 @@
 
 #include "text.h"
 
-//---------------------------------------------------------
-//   TempoText
-//---------------------------------------------------------
+//-------------------------------------------------------------------
+//   @@ TempoText
+///   Tempo marker which determines the midi tempo.
+//
+//    @P tempo qreal      tempo in beats per second (beat=1/4)
+//    @P followText bool  determine tempo from text
+//-------------------------------------------------------------------
 
 class TempoText : public Text  {
       Q_OBJECT
+      Q_PROPERTY(qreal tempo      READ tempo      WRITE undoSetTempo)
+      Q_PROPERTY(bool  followText READ followText WRITE undoSetFollowText)
 
       qreal _tempo;          // beats per second
       bool _followText;       // parse text to determine tempo
@@ -34,11 +40,20 @@ class TempoText : public Text  {
       virtual void read(const QDomElement&);
       Segment* segment() const   { return (Segment*)parent(); }
       Measure* measure() const   { return (Measure*)parent()->parent(); }
+
       qreal tempo() const        { return _tempo;      }
       void setTempo(qreal v)     { _tempo = v;         }
+      void undoSetTempo(qreal v);
+
       bool followText() const    { return _followText; }
       void setFollowText(bool v) { _followText = v;    }
+      void undoSetFollowText(bool v);
+
       virtual void textChanged();
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

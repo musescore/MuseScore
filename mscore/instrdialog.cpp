@@ -318,7 +318,7 @@ void InstrumentsDialog::on_addButton_clicked()
       PartListItem* pli                = new PartListItem(it, partiturList);
       pli->op = ITEM_ADD;
 
-      int n = it->staves;
+      int n = it->nstaves();
       for (int i = 0; i < n; ++i) {
             StaffListItem* sli = new StaffListItem(pli);
             sli->op       = ITEM_ADD;
@@ -630,10 +630,10 @@ void MuseScore::editInstrList()
                         Staff* staff       = new Staff(cs, part, rstaff);
                         sli->staff         = staff;
                         staff->setRstaff(rstaff);
- 
+
                         staff->init(t, cidx);
                         staff->setInitialClef(sli->clef());
-                        
+
                         cs->undoInsertStaff(staff, staffIdx + rstaff);
                         if (sli->linked()) {
                               // TODO: link staff

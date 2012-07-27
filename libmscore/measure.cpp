@@ -2314,7 +2314,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             // this is a irregular measure
             _len = Fraction::fromTicks(ticks1);
             _len.reduce();
-            if (last()->subtype() == SegBarLine)
+            if (last() && last()->subtype() == SegBarLine)
                   last()->setSubtype(SegEndBarLine);
             }
       foreach (Tuplet* tuplet, tuplets) {
@@ -2704,10 +2704,12 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure()
+bool Measure::isRepeatMeasure(Part* part)
       {
-      int strack = 0;
-      int etrack = score()->nstaves() * VOICES;
+      int firstStaffIdx = score()->staffIdx(part);
+      int nextStaffIdx  = firstStaffIdx + part->nstaves();
+      int strack      = firstStaffIdx * VOICES;
+      int etrack      = nextStaffIdx * VOICES;
 
       Segment* s = first(SegChordRest);
 

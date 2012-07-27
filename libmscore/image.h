@@ -19,7 +19,7 @@
 class ImageStoreItem;
 
 //---------------------------------------------------------
-//   Image
+//   @@ Image
 //---------------------------------------------------------
 
 class Image : public BSymbol {
@@ -29,7 +29,10 @@ class Image : public BSymbol {
 
    protected:
       ImageStoreItem* _storeItem;
-      QString _path;
+//      QString _path;
+      QString _storePath;           // the path of the img in the ImageStore
+      QString _linkPath;            // the path of an external linked img
+      bool _linkIsValid;            // whether _linkPath file exists or not
       mutable QPixmap buffer;       ///< cached rendering
       QSizeF _size;                 // in mm or spatium units
       bool _lockAspectRatio;
@@ -43,6 +46,7 @@ class Image : public BSymbol {
       virtual void updateGrips(int*, QRectF*) const;
       virtual QPointF gripAnchor(int /*grip*/) const { return QPointF(); }
       virtual QSizeF imageSize() const = 0;
+      virtual qreal scaleFactor() const = 0;
 
    public:
       Image(Score* = 0);
@@ -75,7 +79,7 @@ class Image : public BSymbol {
       };
 
 //---------------------------------------------------------
-//   RasterImage
+//   @@ RasterImage
 //---------------------------------------------------------
 
 class RasterImage : public Image {
@@ -87,11 +91,12 @@ class RasterImage : public Image {
       virtual RasterImage* clone() const { return new RasterImage(*this); }
       virtual void draw(QPainter*) const;
       virtual QSizeF imageSize() const { return doc.size(); }
+      virtual qreal scaleFactor() const   { return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 ); }
       virtual void layout();
       };
 
 //---------------------------------------------------------
-//   SvgImage
+//   @@ SvgImage
 //---------------------------------------------------------
 
 class SvgImage : public Image {
@@ -103,6 +108,7 @@ class SvgImage : public Image {
       virtual SvgImage* clone() const;
       virtual void draw(QPainter*) const;
       virtual QSizeF imageSize() const { return doc->defaultSize(); }
+      virtual qreal scaleFactor() const   { return (_sizeIsSpatium ? 10.0 : MScore::DPMM); }
       virtual void layout();
       };
 

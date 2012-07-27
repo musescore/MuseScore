@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
-    <height>322</height>
+    <width>426</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,10 +74,45 @@
          </widget>
         </item>
         <item>
-         <widget class="Awl::DenominatorSpinBox" name="timesigN">
-          <property name="maximum">
-           <number>32</number>
+         <widget class="QComboBox" name="timesigN">
+          <property name="currentIndex">
+           <number>2</number>
           </property>
+          <item>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>8</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>16</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>32</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>64</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item>
@@ -164,10 +199,45 @@
        </widget>
       </item>
       <item>
-       <widget class="Awl::DenominatorSpinBox" name="pickupTimesigN">
-        <property name="maximum">
-         <number>32</number>
+       <widget class="QComboBox" name="pickupTimesigN">
+        <property name="currentIndex">
+         <number>2</number>
         </property>
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>64</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -264,13 +334,6 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Awl::DenominatorSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>awl/denomspinbox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

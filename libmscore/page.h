@@ -30,11 +30,10 @@ class MeasureBase;
 //---------------------------------------------------------
 
 struct PaperSize {
-//      QPrinter::PaperSize qtsize;
       const char* name;
       qreal w, h;            // size in inch
-      PaperSize(/*QPrinter::PaperSize s,*/ const char* n, qreal wi, qreal hi)
-         : /*qtsize(s),*/ name(n), w(wi), h(hi) {}
+      PaperSize(const char* n, qreal wi, qreal hi)
+         : name(n), w(wi), h(hi) {}
       };
 
 extern const PaperSize* getPaperSize(const QString&);
@@ -116,11 +115,13 @@ class PageFormat : public QObject {
       };
 
 //---------------------------------------------------------
-//   Page
+//   @@ Page
+//   @P pagenumber int
 //---------------------------------------------------------
 
 class Page : public Element {
       Q_OBJECT
+      Q_PROPERTY(int pagenumber READ no)
 
       QList<System*> _systems;
       int _no;                      // page number
