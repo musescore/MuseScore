@@ -464,7 +464,7 @@ Fraction TimesigWizard::timesig() const
 bool TimesigWizard::pickup(int* z, int* n) const
       {
       *z = pickupTimesigZ->value();
-      *n = 1 << timesigN->currentIndex();
+      *n = 1 << pickupTimesigN->currentIndex();
       return pickupMeasure->isChecked();
       }
 
