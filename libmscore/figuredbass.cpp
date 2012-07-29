@@ -1189,9 +1189,9 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       QFile f(path);
 
       if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "cannot open chord description:\n%1\n%2");
+            QString s = QT_TRANSLATE_NOOP("file", "cannot open figured bass description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("ChordList::read failed: <%s>\n", qPrintable(path));
+qDebug("FiguredBass::read failed: <%s>\n", qPrintable(path));
             return false;
             }
       QDomDocument doc;
