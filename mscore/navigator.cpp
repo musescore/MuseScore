@@ -329,10 +329,12 @@ static void createPixmap(PageCache* pc)
                   m->scanElements(&p, paintElement, false);
             }
       pc->page->scanElements(&p, paintElement, false);
-
-      p.setFont(QFont("FreeSans", 400));  // !!
-      p.setPen(QColor(0, 0, 255, 50));
-      p.drawText(pc->page->bbox(), Qt::AlignCenter, QString("%1").arg(pc->page->no()+1));
+      if (pc->page->score()->layoutMode() == LayoutPage) {
+            p.setFont(QFont("FreeSans", 400));  // !!
+            p.setPen(QColor(0, 0, 255, 50));
+            p.drawText(pc->page->bbox(), Qt::AlignCenter, QString("%1").arg(pc->page->no()+1));
+            }
+      
       pc->navigator->update(pageRect);
       pc->valid = true;
       }
