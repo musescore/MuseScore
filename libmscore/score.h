@@ -323,7 +323,6 @@ class Score : public QObject {
       Audio* _audio;
       bool _showOmr;
       PlayMode _playMode;
-      bool _playRepeats;
 
       SyntiState _syntiState;
 
@@ -857,8 +856,6 @@ class Score : public QObject {
       void setExcerptsChanged(bool val)     { _excerptsChanged = val; }
       bool instrumentsChanged() const       { return _instrumentsChanged; }
       void setInstrumentsChanged(bool val)  { _instrumentsChanged = val; }
-      bool playRepeats() const              { return _playRepeats; }
-      void setPlayRepeats(bool val)         { _playRepeats = val; }
       bool selectionChanged() const         { return _selectionChanged; }
       void setSelectionChanged(bool val)    { _selectionChanged = val;  }
 
