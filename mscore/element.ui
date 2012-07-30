@@ -240,6 +240,9 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="frameShape">
+            <set>QFrame::Box</set>
+          </property>
          </widget>
         </item>
         <item row="0" column="5">
