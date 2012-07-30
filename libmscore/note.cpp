@@ -956,7 +956,8 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == SLUR)
          || (type == STAFF_TEXT)
          || (type == TEMPO_TEXT)
-         || (type == BEND && (staff()->useTablature())));
+         || (type == BEND && (staff()->useTablature()))
+         || (type == FRET_DIAGRAM));
       }
 
 //---------------------------------------------------------
