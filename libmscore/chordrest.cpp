@@ -408,6 +408,7 @@ void ChordRest::layoutArticulations()
                      && (st2 == Articulation_Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spatium * .5 : _spatium * .5;
+                        a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
                         a2->adjustReadPos();
@@ -425,6 +426,7 @@ void ChordRest::layoutArticulations()
                      && (st2 == Articulation_Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spatium * .7 : _spatium * .7;
+                        a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
                         a2->adjustReadPos();
