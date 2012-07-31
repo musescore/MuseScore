@@ -200,8 +200,7 @@ void Score::endUndoRedo()
       foreach(Score* score, scoreList()) {
             if (score->layoutAll()) {
                   score->setUndoRedo(true);
-                  score->doLayout();           // TODO: does not really work
-                                               // creation/deletion of elements are not allowed
+                  score->doLayout();
                   score->setUndoRedo(false);
                   score->setUpdateAll(true);
                   }

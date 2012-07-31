@@ -35,7 +35,6 @@ MeasureBase::MeasureBase(Score* score)
       _lineBreak    = false;
       _pageBreak    = false;
       _sectionBreak = 0;
-      _dirty        = true;
       }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -44,8 +43,6 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _next         = m._next;
       _prev         = m._prev;
       _tick         = m._tick;
-      _mw           = m._mw;
-      _dirty        = m._dirty;
       _lineBreak    = m._lineBreak;
       _pageBreak    = m._pageBreak;
       _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;

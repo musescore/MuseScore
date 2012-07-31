@@ -301,6 +301,12 @@ qDebug("Rest: no symbol for 1/256\n");
 
 void Rest::layout()
       {
+      if (staff() && staff()->useTablature()) {
+            // no rests for tablature
+            _space.setLw(0.0);
+            _space.setRw(0.0);
+            return;
+            }
       switch(durationType().type()) {
             case TDuration::V_64TH:
             case TDuration::V_32ND:

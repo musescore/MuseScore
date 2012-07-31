@@ -785,6 +785,8 @@ class Score : public QObject {
       void layoutSystems();
       void layoutLinear();
       void layoutPages();
+      void layoutSystemsUndoRedo();
+      void layoutPagesUndoRedo();
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);

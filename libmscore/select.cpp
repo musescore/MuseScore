@@ -333,8 +333,7 @@ void Selection::searchSelectedElements()
 
 //---------------------------------------------------------
 //   reconstructElementList
-//    reconstruct list of selected elements after
-//    undo/redo
+///    reconstruct list of selected elements after undo/redo
 //---------------------------------------------------------
 
 void Selection::reconstructElementList()
@@ -344,11 +343,8 @@ void Selection::reconstructElementList()
 
 //---------------------------------------------------------
 //   update
+///   Set select flag for all Elements in select list.
 //---------------------------------------------------------
-
-/**
- Set select flag for all Elements in select list.
-*/
 
 void Selection::update()
       {

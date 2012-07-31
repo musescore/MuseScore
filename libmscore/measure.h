@@ -104,6 +104,11 @@ class Measure : public MeasureBase {
 
       qreal _userStretch;
 
+      mutable qreal _minWidth1;     ///< minimal measure width without system header
+      mutable qreal _minWidth2;     ///< minimal measure width with system header
+
+      bool _systemHeader;           ///< measure contains system header
+
       bool _irregular;              ///< Irregular measure, do not count
       bool _breakMultiMeasureRest;  ///< set by user
       bool _breakMMRest;            ///< set by layout
@@ -130,6 +135,7 @@ class Measure : public MeasureBase {
 
       void* pTimesig()  { return &_timesig; }
       void* pLen()      { return &_len;     }
+      qreal computeMinWidth() const;
 
    public:
       Measure(Score* = 0);
@@ -168,6 +174,15 @@ class Measure : public MeasureBase {
       virtual qreal userDistanceUp(int i) const;
       virtual qreal userDistanceDown(int i) const;
 
+      qreal minWidth() const;
+      qreal minWidth1() const;
+      qreal minWidth2() const;
+      void setMinWidth1(qreal w)           { _minWidth1 = w;      }
+      void setMinWidth2(qreal w)           { _minWidth2 = w;      }
+      bool systemHeader() const            { return _systemHeader; }
+      void setSystemHeader(bool val)       { _systemHeader = val;  }
+      void setDirty();
+
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }
       Fraction len() const                 { return _len;         }
@@ -184,10 +199,10 @@ class Measure : public MeasureBase {
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }
 
-      qreal userStretch() const           { return _userStretch; }
-      void setUserStretch(qreal v)        { _userStretch = v;    }
+      qreal userStretch() const            { return _userStretch; }
+      void setUserStretch(qreal v)         { _userStretch = v;    }
 
-      void layoutX(qreal stretch, bool firstPass);
+      void layoutX(qreal stretch);
       void layout(qreal width);
       void layout2();
 

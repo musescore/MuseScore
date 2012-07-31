@@ -1219,6 +1219,8 @@ void RestView::setElement(Element* e)
       crb.durationType->setText(rest->durationType().name());
       crb.duration->setText(rest->duration().print());
       crb.move->setValue(rest->staffMove());
+      crb.spaceL->setValue(rest->space().lw());
+      crb.spaceR->setValue(rest->space().rw());
 
       crb.slurFor->clear();
       foreach(Spanner* slur, rest->spannerFor()) {
