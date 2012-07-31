@@ -97,7 +97,12 @@ void MScore::init()
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
       replaceFractions    = true;
+      playRepeats         = true;
+      panPlayback         = true;
       partStyle           = "";
+      
+      lastError           = "";
+      
       layoutBreakColor    = Qt::green;
       soundFont           = _globalShare + "sound/TimGM6mb.sf2";
       bgColor.setRgb(0x76, 0x76, 0x6e);
