@@ -460,7 +460,7 @@ void Score::updateRepeatList(bool expandRepeats)
 
 void Score::toEList(EventMap* events)
       {
-      updateRepeatList(_playRepeats);
+      updateRepeatList(MScore::playRepeats);
       _foundPlayPosAfterRepeats = false;
       updateChannel();
       updateVelo();

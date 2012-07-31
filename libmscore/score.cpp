@@ -331,7 +331,6 @@ void Score::init()
       _showOmr        = false;
       _sigmap         = 0; // new TimeSigMap();
       _tempomap       = 0; // new TempoMap;
-      _playRepeats    = true;
       _layoutMode     = LayoutPage;
       }
 

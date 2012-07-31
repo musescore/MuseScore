@@ -689,6 +689,7 @@ void Page::doRebuildBspTree()
             bspTree.initialize(abbox(), n);
       for (int i = 0; i < n; ++i)
             bspTree.insert(el.at(i));
+      bspTreeValid = true;
       }
 #endif
 

@@ -683,7 +683,11 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Awl::ColorLabel" name="bgColorLabel"/>
+             <widget class="Awl::ColorLabel" name="bgColorLabel">
+              <property name="frameShape">
+                <set>QFrame::Box</set>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -734,7 +738,11 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Awl::ColorLabel" name="fgColorLabel"/>
+             <widget class="Awl::ColorLabel" name="fgColorLabel">
+                <property name="frameShape">
+                  <set>QFrame::Box</set>
+                </property>
+             </widget>
             </item>
            </layout>
           </item>
