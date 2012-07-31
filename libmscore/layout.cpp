@@ -630,16 +630,6 @@ void Score::doLayout()
                   }
             st->setUpdateKeymap(false);
             }
-
-#if 0 // DEBUG
-      if (startLayout) {
-            startLayout->setDirty();
-            if (doReLayout()) {
-                  startLayout = 0;
-                  return;
-                  }
-            }
-#endif
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             foreach(Page* page, _pages)
@@ -713,7 +703,7 @@ void Score::doLayout()
 
 //---------------------------------------------------------
 //   processSystemHeader
-//    add generated timesig keysig and clef
+//    add generated clef and keysig
 //---------------------------------------------------------
 
 void Score::processSystemHeader(Measure* m, bool isFirstSystem)
@@ -722,7 +712,8 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
             return;
 
       int tick = m->tick();
-      int i = 0;
+      int i    = 0;
+
       foreach (Staff* staff, _staves) {
             if (!m->system()->staff(i)->show()) {
                   ++i;
@@ -766,12 +757,10 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            bool needKeysig = keyIdx.isValid()
-               /* && keyIdx.accidentalType() != 0 */
-               && (isFirstSystem || styleB(ST_genKeysig))
-               ;
-            if (staff->useTablature())
-                  needKeysig = false;
+            bool needKeysig = !staff->useTablature()
+               && keyIdx.isValid()
+               && (isFirstSystem || styleB(ST_genKeysig));
+
             if (needKeysig && !keysig) {
                   //
                   // create missing key signature
@@ -787,11 +776,13 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                         keysig->setMag(staff->mag());
                         Segment* seg = m->undoGetSegment(SegKeySig, tick);
                         keysig->setParent(seg);
+                        keysig->layout();
                         undoAddElement(keysig);
                         }
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
+
             bool needClef = isFirstSystem || styleB(ST_genClef);
             if (needClef) {
                   if (!clef) {
@@ -807,6 +798,7 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
 
                         Segment* s = m->undoGetSegment(SegClef, tick);
                         clef->setParent(s);
+                        clef->layout();
                         undoAddElement(clef);
                         }
                   if (clef->generated())
@@ -818,6 +810,8 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                   }
             ++i;
             }
+      m->setSystemHeader(true);
+      m->setMinWidth2(0.0);
       }
 
 //---------------------------------------------------------
@@ -898,6 +892,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       system->setInstrumentNames(longName);
       system->layout(xo);
 
+      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
       minWidth              = system->leftMargin();
       qreal systemWidth     = w;
       bool continueFlag     = false;
@@ -944,53 +939,40 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   }
             else if (curMeasure->type() == MEASURE) {
                   Measure* m = static_cast<Measure*>(curMeasure);
-                  if (firstMeasure == 0)
+                  if (firstMeasure == 0) {
                         firstMeasure = m;
-
-                  if (isFirstMeasure)
-                        processSystemHeader(m, isFirstSystem);
+                        processSystemHeader(m, !isFirstSystem);
+                        }
 
                   m->createEndBarLines();       // TODO: not set here
+                  ww = isFirstMeasure ? m->minWidth2() : m->minWidth1();
 
-                  m->layoutX(1.0, true);
-                  ww = m->layoutWidth();
-                  if (!isFirstMeasure) {
-                        // remove width of generated system header
-                        Segment* seg = m->first();
-                        if ((seg->subtype() == SegClef) && seg->element(0) && seg->element(0)->generated()) {
-                              ww -= seg->width();
-                              seg = seg->next();
-                              if (seg && (seg->subtype() == SegKeySig) && seg->element(0) && seg->element(0)->generated())
-                                    ww -= seg->width();
-                              }
-                        }
                   // add width for EndBarLine
                   Segment* seg = m->last();
                   if (seg->subtype() == SegEndBarLine) {
                         BarLine* bl = static_cast<BarLine*>(seg->element(0));
                         if (m->repeatFlags() & RepeatEnd) {
                               if (bl && (bl->subtype() != END_REPEAT)) {
-                                    // printf("BarLine type does not fit\n");
                                     ww += spatium();   // HACK
                                     }
                               }
                         }
                   qreal stretch = m->userStretch() * styleD(ST_measureSpacing);
                   ww *= stretch;
-                  if (ww < point(styleS(ST_minMeasureWidth)))
-                        ww = point(styleS(ST_minMeasureWidth));
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
                   isFirstMeasure = false;
                   }
 
             // collect at least one measure
-            if ((minWidth + ww > systemWidth) && !system->measures().isEmpty()) {
+            if (!system->measures().isEmpty() && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
-
             if (curMeasure->type() == MEASURE)
                   lastMeasure = static_cast<Measure*>(curMeasure);
             minWidth += ww;
+
             system->measures().append(curMeasure);
             ElementType nt = curMeasure->next() ? curMeasure->next()->type() : INVALID;
             int n = styleI(ST_FixMeasureNumbers);
@@ -1014,6 +996,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   break;
                   }
             curMeasure = nextMeasure;
+            if (minWidth + minMeasureWidth > systemWidth)
+                  break;                                  // next measure will not fit
             }
 
       if (firstMeasure && lastMeasure && firstMeasure != lastMeasure) {
@@ -1021,9 +1005,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   foreach(MeasureBase* mb, system->measures()) {
                         if (mb->type() != MEASURE)
                               continue;
-                        Measure* m = static_cast<Measure*>(mb);
-                        m->setDirty(true);
-                        m->layoutX(1.0, true);
+//                        Measure* m = static_cast<Measure*>(mb);
+//                        m->setDirty(true);
+//                        m->layoutX(1.0, true);
                         }
                   }
             }
@@ -1125,7 +1109,7 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
                         qreal staffMag = staff(staffIdx)->mag();
 
                         if (el->generated() && ((st == SegTimeSigAnnounce && m != em)
-                            || (el->type() == CLEF && seg->tick() != sm->tick())
+                            || (el->type() == CLEF   && seg->tick() != sm->tick())
                             || (el->type() == KEYSIG && seg->tick() != sm->tick())))
                               {
                               if (!_undoRedo) {
@@ -1154,6 +1138,8 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
                               }
                         }
                   }
+            m->setSystemHeader(false);
+            m->setMinWidth2(0.0);
             if (m == em)
                   break;
             }
@@ -1285,6 +1271,7 @@ void Score::reLayout(Measure* m)
 bool Score::doReLayout()
       {
 #if 0
+#if 0
       if (startLayout->type() == MEASURE)
             static_cast<Measure*>(startLayout)->layout0();
 #endif
@@ -1381,6 +1368,8 @@ bool Score::doReLayout()
 
       rebuildBspTree();
       return true;
+#endif
+      return false;
       }
 
 //---------------------------------------------------------
@@ -1510,7 +1499,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     undoAddElement(ts);
                                     }
                               ts->setFrom(nts);
-                              m->setDirty(true);
+                              m->setDirty();
                               }
                         }
                   else {
@@ -1657,7 +1646,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         else if (m->endBarLineGenerated())
                               m->setEndBarLineType(bl, true);
                         if (m->setStartRepeatBarLine(fmr))
-                              m->setDirty(true);
+                              m->setDirty();
                         }
                   else {
                         MeasureBase* mb = m->next();
@@ -1681,7 +1670,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               m->setEndBarLineType(NORMAL_BAR, true);
                         }
                   if (m->createEndBarLines())
-                        m->setDirty(true);
+                        m->setDirty();
                   firstMeasure = false;
                   if (mb == lmb)
                         break;
@@ -1715,11 +1704,9 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         minWidth += point(((Box*)mb)->boxWidth());
                   else if (mb->type() == MEASURE) {
                         Measure* m = (Measure*)mb;
-                        if (needRelayout || m->dirty()) {
-                              m->setDirty(true);
-                              m->layoutX(1.0, true);
-                              }
-                        minWidth    += m->layoutWidth();
+                        if (needRelayout)
+                              m->setDirty();
+                        minWidth    += m->minWidth();
                         totalWeight += m->ticks() * m->userStretch();
                         }
                   }
@@ -1761,7 +1748,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         else {
                               qreal weight = m->ticks() * m->userStretch();
-                              ww           = m->layoutWidth() + rest * weight;
+                              ww           = m->minWidth() + rest * weight;
                               }
                         m->layout(ww);
                         }
@@ -1878,8 +1865,7 @@ void Score::layoutLinear()
             if (mb->type() == MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   m->createEndBarLines();       // TODO: not set here
-                  m->layoutX(1.0, true);
-                  w = m->layoutWidth() * 1.5;
+                  w = m->minWidth1() * 1.5;
                   m->layout(w);
                   }
             else

@@ -39,11 +39,10 @@ class MeasureBase : public Element {
       int _tick;
 
    protected:
-      qreal _mw;
+//      qreal _mw;
       ElementList _el;        ///< Measure(/tick) relative -elements: with defined start time
                               ///< but outside the staff
 
-      bool _dirty;
       bool _lineBreak;        ///< Forced line break
       bool _pageBreak;        ///< Forced page break
       LayoutBreak* _sectionBreak;
@@ -70,8 +69,6 @@ class MeasureBase : public Element {
       virtual void layout();
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      qreal layoutWidth() const              { return _mw;  }
-      void setLayoutWidth(qreal w)           { _mw = w;     }
       ElementList* el()                      { return &_el; }
       const ElementList* el() const          { return &_el; }
       System* system() const                 { return (System*)parent(); }
@@ -93,8 +90,6 @@ class MeasureBase : public Element {
 
       virtual void add(Element*);
       virtual void remove(Element*);
-      void setDirty(bool val = true)         { _dirty = val;  }
-      bool dirty() const                     { return _dirty; }
       int tick() const                       { return _tick;  }
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
