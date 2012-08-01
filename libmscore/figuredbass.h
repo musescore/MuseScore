@@ -48,7 +48,7 @@ and provides its FiguredBass parent with a normalized text for future editing.
 
 FiguredBassItem has not use for formats (italics, bold, ...) and it is never edited directly;
 more generally, it is never accessed directly, only via its FiguredBass parent;
-so it is derived from SimpleText and returns INVALID as type.
+so it is directly derived from Element and returns INVALID as type.
 
 FiguredBass might require formatting (discouraged, but might be necessary for very uncommon cases)
 and it is edited (via the normalized text); so it is derived from Text.
@@ -60,7 +60,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 
 class FiguredBass;
 
-class FiguredBassItem : public SimpleText {
+class FiguredBassItem : public Element {
       Q_OBJECT
 
       enum FBIAccidental {
@@ -84,11 +84,9 @@ class FiguredBassItem : public SimpleText {
                   FBINumOfParenth
       };
 
-      // configuration tables: to be moved to configuration files?
-//      static const QChar accidToChar[FBINumOfAccid];
       static const QChar normParenthToChar[FBINumOfParenth];
-//      static const QChar parenthToChar[FBINumOfParenth];
 
+      QString           _displayText;           // the constructed display text (read-only)
       int               ord;                    // the line ordinal of this element in the FB stack
       // the parts making a FiguredBassItem up
       FBIAccidental     prefix;                 // the accidental coming before the body
@@ -102,6 +100,8 @@ class FiguredBassItem : public SimpleText {
       int               parseDigit(QString& str);
       int               parseParenthesis(QString& str, int parenthIdx);
       int               parsePrefixSuffix(QString& str, bool bPrefix);
+
+      void              setDisplayText(const QString& s)    { _displayText = s;       }
 
    public:
       FiguredBassItem(Score * score, int line);
@@ -127,6 +127,7 @@ class FiguredBassItem : public SimpleText {
       const FiguredBass *    figuredBass() const      { return (FiguredBass*)(parent()); }
       bool              parse(QString& text);
       QString           normalizedText() const;
+      QString           displayText() const           { return _displayText;    }
 
 protected:
 
@@ -165,15 +166,7 @@ class FiguredBass : public Text {
       int               _ticks;                 // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
       void              layoutLines();
-/*
-      // static variables used to manage FiguredBass durations while 'tabbing' during editing
-      static FiguredBass*     currFB;           // the starting element of the FB element being worked on;
-      static int        endTick;                // the tick where the currFB is supposed to end (internally managed);
-      static bool       bExtTicks;              // true if the user asked to extend (or shrink) the current FB
-      // static (private) functions to configure how FB element durations are managed
-      static void       setCurrFB(FiguredBass* fb)    { currFB = fb;    }
-      static void       setExtTicks(bool val)         { bExtTicks = val;}
-*/
+
    public:
       FiguredBass(Score*);
       FiguredBass(const FiguredBass&);
@@ -212,9 +205,6 @@ class FiguredBass : public Text {
       Segment *         segment() const         { return static_cast<Segment*>(parent()); }
       int               ticks() const           { return _ticks;  }
       void              setTicks(int val)       { _ticks = val;   }
-
-      // other methods
-//      void              adjustDuration();
 
 private:
       // read / write MusicXML support

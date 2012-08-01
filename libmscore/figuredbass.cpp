@@ -34,17 +34,16 @@ const QChar FiguredBassItem::normParenthToChar[FBINumOfParenth] =
 
 
 FiguredBassItem::FiguredBassItem(Score* s, int l)
-      : SimpleText(s), ord(l)
+      : Element(s), ord(l)
       {
       prefix      = suffix = FBIAccidNone;
       digit       = FBIDigitNone;
       parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = FBIParenthNone;
       contLine    = false;
-      setTextStyle(s->textStyle(TEXT_STYLE_FIGURED_BASS));
       }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
-   : SimpleText(item)
+      : Element(item)
       {
       ord         = item.ord;
       prefix      = item.prefix;
@@ -57,6 +56,7 @@ FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
       parenth[4]  = item.parenth[4];
       contLine    = item.contLine;
       textWidth   = item.textWidth;
+      _displayText= item._displayText;
       }
 
 FiguredBassItem::~FiguredBassItem()
@@ -555,9 +555,15 @@ void FiguredBassItem::layout()
       {
       qreal             h, w, x, x1, x2, y;
 
-      setTextStyle(score()->textStyle(TEXT_STYLE_FIGURED_BASS));    // needed?
+      // contruct font metrics
+      int   fontIdx = 0;
+      qreal _spatium = spatium();
+      QFont f(g_FBFonts.at(fontIdx).family);
+      qreal m = score()->styleD(ST_figuredBassFontSize) * MScore::DPI / PPI;
+      m *= _spatium / ( SPATIUM20 * MScore::DPI);
+      f.setPointSizeF(m);
+      QFontMetrics      fm(f);
 
-      QFontMetricsF     fm(textStyle().font(spatium()));
       QString           str = QString();
       x = symbols[score()->symIdx()][quartheadSym].width(magS()) * .5;
       x1 = x2 = 0.0;
@@ -612,7 +618,7 @@ void FiguredBassItem::layout()
       if(parenth[3] != FBIParenthNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[3]]);
 
-      setText(str);                             // this text will be displayed
+      setDisplayText(str);                // this text will be displayed
 
       // position the text so that [x1<-->x2] is centered below the note
       x = x - (x1+x2) * 0.5;
@@ -635,7 +641,6 @@ void FiguredBassItem::layout()
 void FiguredBassItem::draw(QPainter* painter) const
       {
       int font = 0;
-//      SimpleText::draw(painter);
       // set font from general style
       QFont f(g_FBFonts.at(font).family);
 #ifdef USE_GLYPHS
@@ -648,7 +653,7 @@ void FiguredBassItem::draw(QPainter* painter) const
       painter->setFont(f);
       painter->setBrush(Qt::NoBrush);
       painter->setPen(figuredBass()->curColor());
-      painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, getText());
+      painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 //      drawFrame(p);
 
       // continuation line
@@ -657,7 +662,6 @@ void FiguredBassItem::draw(QPainter* painter) const
             len = figuredBass()->lineLength(0);
             if(len > 0.0) {
                   qreal h = bbox().height() * 0.75;
-//                  painter->setPen((QPen(figuredBass()->curColor(), 1)));
                   painter->drawLine(textWidth, h, len - ipos().x(), h);
                   }
             }
