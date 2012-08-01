@@ -197,27 +197,19 @@ void Segment::init()
 
 //---------------------------------------------------------
 //   next1
+///   return next \a Segment, dont stop searching at end
+///   of \a Measure
 //---------------------------------------------------------
 
-/**
- return next \a Segment, dont stop searching at end
- of \a Measure
-*/
-
-Segment* Segment::next1() const
+inline Segment* Segment::next1() const
       {
       if (next())
             return next();
-      MeasureBase* m = measure();
-      for (;;) {
-            m = m->next();
-            if (m == 0)
-                  return 0;
-            if (m->type() == MEASURE)
-                  return static_cast<Measure*>(m)->first();
-            }
+      Measure* m = measure()->nextMeasure();
+      if (m == 0)
+            return 0;
+      return m->first();
       }
-
 
 Segment* Segment::next1(SegmentTypes types) const
       {
@@ -258,12 +250,9 @@ Segment* Segment::prev(SegmentTypes types) const
 
 //---------------------------------------------------------
 //   prev1
+///   return previous \a Segment, dont stop searching at
+///   \a Measure begin
 //---------------------------------------------------------
-
-/**
- return previous \a Segment, dont stop searching at
- \a Measure begin
-*/
 
 Segment* Segment::prev1() const
       {

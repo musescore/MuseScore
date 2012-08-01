@@ -706,7 +706,6 @@ void Slur::slurPos(SlurPos* sp)
       if ((sc->up() == ec->up()) && !sc->beam() && !ec->beam() && (_up == sc->up())) {
             sa1 = SA_STEM;
             sa2 = SA_STEM;
-            printf("Stem-Stem\n");
             }
 
       qreal hw   = note1->headWidth();

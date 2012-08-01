@@ -169,13 +169,13 @@ void MeasureBase::remove(Element* el)
 
 Measure* MeasureBase::nextMeasure() const
       {
-      MeasureBase* m = next();
-      while (m) {
-            if (m->type() == MEASURE)
-                  return static_cast<Measure*>(m);
-            m = m->next();
+      MeasureBase* m = _next;
+      for (;;) {
+            if (m == 0 || m->type() == MEASURE)
+                  break;
+            m = m->_next;
             }
-      return 0;
+      return static_cast<Measure*>(m);
       }
 
 //---------------------------------------------------------
@@ -213,9 +213,7 @@ void MeasureBase::layout0()
       _sectionBreak = 0;
 
       foreach (Element* element, _el) {
-            if (!score()->tagIsValid(element->tag()))
-                  continue;
-            if (element->type() != LAYOUT_BREAK)
+            if (!score()->tagIsValid(element->tag()) || (element->type() != LAYOUT_BREAK))
                   continue;
             LayoutBreak* e = static_cast<LayoutBreak*>(element);
             switch (e->subtype()) {

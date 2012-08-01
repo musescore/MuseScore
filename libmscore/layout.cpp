@@ -44,6 +44,7 @@
 #include "accidental.h"
 #include "undo.h"
 #include "layout.h"
+#include "lyrics.h"
 
 //---------------------------------------------------------
 //   rebuildBspTree
@@ -350,9 +351,8 @@ void Score::layoutStage1()
             ++idx;
             m->layoutStage1();
             foreach(Spanner* spanner, m->spannerFor()) {
-                  if (spanner->type() == VOLTA) {
+                  if (spanner->type() == VOLTA)
                         m->setBreakMMRest(true);
-                        }
                   }
             MeasureBase* mb = m->prev();
             if (mb && mb->type() == MEASURE) {
@@ -360,9 +360,8 @@ void Score::layoutStage1()
                   if (pm->endBarLineType() != NORMAL_BAR && pm->endBarLineType() != BROKEN_BAR)
                         m->setBreakMMRest(true);
                   foreach(Spanner* spanner, pm->spannerBack()) {
-                        if (spanner->type() == VOLTA) {
+                        if (spanner->type() == VOLTA)
                               m->setBreakMMRest(true);
-                              }
                         }
                   }
             }
@@ -612,8 +611,6 @@ void Score::doLayout()
             KeySig* key1 = 0;
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s == s->next())
-                              abort();
                         Element* e = s->element(track);
                         if (e == 0 || e->generated())
                               continue;
@@ -711,9 +708,10 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
       if (undoRedo())
             return;
 
+      m->setSystemHeader(true);
+
       int tick = m->tick();
       int i    = 0;
-
       foreach (Staff* staff, _staves) {
             if (!m->system()->staff(i)->show()) {
                   ++i;
@@ -810,8 +808,6 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                   }
             ++i;
             }
-      m->setSystemHeader(true);
-      m->setMinWidth2(0.0);
       }
 
 //---------------------------------------------------------
@@ -917,7 +913,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
-            qreal ww      = 0.0;
+            qreal ww = 0.0;
 
             if (curMeasure->type() == HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -944,7 +940,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         processSystemHeader(m, !isFirstSystem);
                         }
 
-                  m->createEndBarLines();       // TODO: not set here
+                  m->createEndBarLines();       // TODO: type not set right here
                   ww = isFirstMeasure ? m->minWidth2() : m->minWidth1();
 
                   // add width for EndBarLine
@@ -957,8 +953,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                                     }
                               }
                         }
-                  qreal stretch = m->userStretch() * styleD(ST_measureSpacing);
-                  ww *= stretch;
+// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
+
+                  ww *= m->userStretch() * styleD(ST_measureSpacing);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
@@ -1000,17 +997,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   break;                                  // next measure will not fit
             }
 
-      if (firstMeasure && lastMeasure && firstMeasure != lastMeasure) {
-            if (removeGeneratedElements(firstMeasure, lastMeasure)) {
-                  foreach(MeasureBase* mb, system->measures()) {
-                        if (mb->type() != MEASURE)
-                              continue;
-//                        Measure* m = static_cast<Measure*>(mb);
-//                        m->setDirty(true);
-//                        m->layoutX(1.0, true);
-                        }
-                  }
-            }
+      if (firstMeasure && lastMeasure && firstMeasure != lastMeasure)
+            removeGeneratedElements(firstMeasure, lastMeasure);
 
       //
       //    hide empty staves
@@ -1084,13 +1072,12 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       }
 
 //---------------------------------------------------------
-//   removeGeneratedElements (TimeSig Announce)
+//   removeGeneratedElements (System Header + TimeSig Announce)
 //    helper function
 //---------------------------------------------------------
 
-bool Score::removeGeneratedElements(Measure* sm, Measure* em)
+void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
-      bool layoutChanged = false;
       for (Measure* m = sm; m; m = m->nextMeasure()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -1113,8 +1100,8 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
                             || (el->type() == KEYSIG && seg->tick() != sm->tick())))
                               {
                               if (!_undoRedo) {
+                                    m->setSystemHeader(false);
                                     undoRemoveElement(el);
-                                    layoutChanged = true;
                                     }
                               }
                         else if (el->type() == CLEF) {
@@ -1123,27 +1110,24 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
                               bool small = seg != m->first() || s->firstMeasure() != m;
                               if (clef->small() != small) {
                                     clef->setSmall(small);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               if (clef->mag() != staffMag) {
                                     clef->setMag(staffMag);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               }
                         else if (el->type() == KEYSIG || el->type() == TIMESIG) {
                               if (el->mag() != staffMag) {
                                     el->setMag(staffMag);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               }
                         }
                   }
-            m->setSystemHeader(false);
-            m->setMinWidth2(0.0);
             if (m == em)
                   break;
             }
-      return layoutChanged;
       }
 
 //---------------------------------------------------------
@@ -2231,7 +2215,7 @@ void Score::doLayoutPages()
 //    compute 1/Force for a given Extend
 //---------------------------------------------------------
 
-qreal sff(qreal x, qreal xMin, SpringMap& springs)
+qreal sff(qreal x, qreal xMin, const SpringMap& springs)
       {
       if (x <= xMin)
             return 0.0;
@@ -2309,8 +2293,167 @@ void Score::respace(QList<ChordRest*>* elements)
             x += width[i-1];
             ChordRest* cr = (*elements)[i];
             qreal dx = x - cr->segment()->pos().x();
-//            cr->setUserXoffset(dx);
             cr->rxpos() += dx;
             }
       }
 
+//---------------------------------------------------------
+//   computeMinWidth
+///    compute the minimum width of a measure with
+///    segment list fs
+//---------------------------------------------------------
+
+qreal Score::computeMinWidth(Segment* fs) const
+      {
+      int segs = 1;
+      for (const Segment* s = fs->next(); s; s = s->next()) {
+            if (s->subtype() == SegClef)
+                  continue;
+            ++segs;
+            }
+
+      int _nstaves = nstaves();
+      if (_nstaves == 0 || segs == 0)
+            return 1.0;
+
+      qreal _spatium           = spatium();
+      qreal clefKeyRightMargin = styleS(ST_clefKeyRightMargin).val() * _spatium;
+      qreal minNoteDistance    = styleS(ST_minNoteDistance).val()    * _spatium;
+
+      qreal rest[_nstaves];    // fixed space needed from previous segment
+      memset(rest, 0, _nstaves * sizeof(qreal));
+
+      qreal clefWidth[_nstaves];
+      memset(clefWidth, 0, _nstaves * sizeof(qreal));
+
+      int segmentIdx = 0;
+      qreal x        = 0.0;
+
+      for (Segment* s = fs; s; s = s->next(), ++segmentIdx) {
+            qreal elsp = s->extraLeadingSpace().val()  * _spatium;
+            qreal etsp = s->extraTrailingSpace().val() * _spatium;
+
+            if ((s->subtype() == SegClef) && (s != fs)) {
+                  --segmentIdx;
+                  for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                        int track  = staffIdx * VOICES;
+                        Element* e = s->element(track);
+                        if (e) {
+                              e->layout();
+                              clefWidth[staffIdx] = e->width() + _spatium + elsp;
+                              }
+                        }
+                  continue;
+                  }
+            bool rest2[_nstaves+1];
+            SegmentType segType    = s->subtype();
+            qreal segmentWidth     = 0.0;
+            qreal stretchDistance  = 0.0;
+            Segment* pSeg          = s->prev();
+            int pt                 = pSeg ? pSeg->subtype() : SegBarLine;
+
+            for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  qreal minDistance = 0.0;
+                  Space space;
+                  int track  = staffIdx * VOICES;
+                  bool found = false;
+                  if (segType & (SegChordRest | SegGrace)) {
+                        qreal llw = 0.0;
+                        qreal rrw = 0.0;
+                        Lyrics* lyrics = 0;
+                        for (int voice = 0; voice < VOICES; ++voice) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
+                              if (!cr)
+                                    continue;
+                              found = true;
+                              if (pt & (SegStartRepeatBarLine | SegBarLine)) {
+                                    qreal sp        = styleS(ST_barNoteDistance).val() * _spatium;
+                                    sp += elsp;
+                                    minDistance     = qMax(minDistance, sp);
+                                    stretchDistance = sp * .7;
+                                    }
+                              else if (pt & (SegChordRest | SegGrace)) {
+                                    minDistance = qMax(minDistance, minNoteDistance);
+                                    }
+                              else {
+                                    // if (pt & (SegKeySig | SegClef))
+                                    bool firstClef = (segmentIdx == 1) && (pt == SegClef);
+                                    if ((pt & (SegKeySig | SegTimeSig)) || firstClef)
+                                          minDistance = qMax(minDistance, clefKeyRightMargin);
+                                    }
+                              cr->layout();
+                              space.max(cr->space());
+                              foreach(Lyrics* l, cr->lyricsList()) {
+                                    if (!l)
+                                          continue;
+                                    if (!l->isEmpty()) {
+                                          l->layout();
+                                          lyrics = l;
+                                          if (!lyrics->isMelisma()) {
+                                                QRectF b(l->bbox().translated(l->pos()));
+                                                llw = qMax(llw, -b.left());
+                                                rrw = qMax(rrw, b.right());
+                                                }
+                                          }
+                                    }
+                              }
+                        if (lyrics)
+                              space.max(Space(llw, rrw));
+                        }
+                  else {
+                        Element* e = s->element(track);
+                        if ((segType == SegClef) && (pt != SegChordRest))
+                              minDistance = styleP(ST_clefLeftMargin);
+                        else if (segType == SegStartRepeatBarLine)
+                              minDistance = .5 * _spatium;
+                        else if ((segType == SegEndBarLine) && segmentIdx) {
+                              if (pSeg->subtype() == SegClef)
+                                    minDistance = styleP(ST_clefBarlineDistance);
+                              else
+                                    stretchDistance = styleP(ST_noteBarDistance);
+                              if (e == 0) {
+                                    // look for barline
+                                    for (int i = track - VOICES; i >= 0; i -= VOICES) {
+                                          e = s->element(i);
+                                          if (e)
+                                                break;
+                                          }
+                                    }
+                              }
+                        if (e) {
+                              found = true;
+                              e->layout();
+                              space.max(e->space());
+                              }
+                        }
+                  space += Space(elsp, etsp);
+                  if (found) {
+                        space.rLw() += clefWidth[staffIdx];
+                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
+                        if (space.lw() > stretchDistance)
+                              sp += (space.lw() - stretchDistance);
+                        rest[staffIdx]  = space.rw();
+                        rest2[staffIdx] = false;
+                        segmentWidth    = qMax(segmentWidth, sp);
+                        }
+                  else
+                        rest2[staffIdx] = true;
+                  clefWidth[staffIdx] = 0.0;
+                  }
+
+            x += segmentWidth;
+
+            if (segmentIdx)
+                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
+
+            for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  if (rest2[staffIdx])
+                        rest[staffIdx] -= segmentWidth;
+                  }
+            }
+      qreal segmentWidth = 0.0;
+      for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx)
+            segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+      x += segmentWidth;
+      return x;
+      }
