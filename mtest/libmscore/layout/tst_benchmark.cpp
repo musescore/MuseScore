@@ -25,11 +25,13 @@ class TestBenchmark : public QObject, public MTest
       {
       Q_OBJECT
 
+      Score* score;
       void beam(const char* path);
 
    private slots:
       void initTestCase();
-      void benchmark();
+      void benchmark1();
+      void benchmark2();
       };
 
 //---------------------------------------------------------
@@ -45,10 +47,18 @@ void TestBenchmark::initTestCase()
 //   benchmark
 //---------------------------------------------------------
 
-void TestBenchmark::benchmark()
+void TestBenchmark::benchmark1()
       {
-      Score* score = readScore(DIR + "goldberg.mscx");
-      QBENCHMARK {
+      score = readScore(DIR + "goldberg.mscx");
+      QBENCHMARK {                        // cold run
+            score->doLayout();
+            }
+      }
+
+void TestBenchmark::benchmark2()
+      {
+      score->doLayout();
+      QBENCHMARK {                        // warm run
             score->doLayout();
             }
       }
