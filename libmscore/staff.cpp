@@ -164,7 +164,6 @@ Staff::Staff(Score* s)
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
-      _show           = true;
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -182,7 +181,6 @@ Staff::Staff(Score* s, Part* p, int rs)
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
-      _show           = true;
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -716,5 +714,14 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
 void Staff::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userDist = (_userDist / oldValue) * newValue;
+      }
+
+//---------------------------------------------------------
+//   show
+//---------------------------------------------------------
+
+bool Staff::show() const
+      {
+      return _part->show();
       }
 

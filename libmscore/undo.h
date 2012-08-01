@@ -837,13 +837,12 @@ class ChangeStaff : public UndoCommand {
       Staff* staff;
       bool small;
       bool invisible;
-      bool show;
       StaffType* staffType;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, bool show, StaffType*);
+      ChangeStaff(Staff*, bool small, bool invisible, StaffType*);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeStaff");
@@ -867,6 +866,26 @@ class ChangePart : public UndoCommand {
       virtual void redo() { flip(); }
       UNDO_NAME("ChangePart");
       };
+
+//---------------------------------------------------------
+//   ChangePartProperty
+//---------------------------------------------------------
+
+class ChangePartProperty : public UndoCommand {
+      Part* part;
+      int id;
+      QVariant property;
+
+      void flip();
+
+   public:
+      ChangePartProperty(Part* e, int i, const QVariant& v)
+         : part(e), id(i), property(v) {}
+      virtual void undo() { flip(); }
+      virtual void redo() { flip(); }
+      UNDO_NAME("ChangePartProperty");
+      };
+
 
 //---------------------------------------------------------
 //   ChangeTextStyle

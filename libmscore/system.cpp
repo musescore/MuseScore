@@ -152,7 +152,7 @@ void System::layout(qreal xo1)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s     = score()->staff(staffIdx);
             SysStaff* ss = _staves[staffIdx];
-            if (!ss->show())
+            if (!s->show() || !ss->show())
                   continue;
 
             if (bracketLevels < ss->brackets.size()) {
@@ -207,7 +207,7 @@ void System::layout(qreal xo1)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];
             Staff* staff = score()->staff(staffIdx);
-            if (!s->show()) {
+            if (!staff->show() || !s->show()) {
                   s->setbbox(QRectF());
                   continue;
                   }
@@ -234,8 +234,9 @@ void System::layout(qreal xo1)
       //---------------------------------------------------
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            Staff* s = score()->staff(staffIdx);
             SysStaff* ss = _staves[staffIdx];
-            if (!ss->show())
+            if (!s->show() || !ss->show())
                   continue;
 
             qreal xo = -xo1;
@@ -252,13 +253,14 @@ void System::layout(qreal xo1)
                         //
                         b->setSpan(nstaves - staffIdx);
                         }
-                  if (!_staves[staffIdx + b->span() - 1]->show()) {
+                  int idx = staffIdx + b->span() - 1;
+                  if (!_staves[idx]->show() || !score()->staff(idx)->show()) {
                         //
                         // if the bracket ends on an invisible staff
                         // find last visible staff in bracket
                         //
                         for (int j = staffIdx + b->span() - 2; j >= staffIdx; --j) {
-                              if (_staves[j]->show()) {
+                              if (_staves[j]->show() && score()->staff(j)->show()) {
                                     b->setSpan(j - staffIdx + 1);
                                     break;
                                     }
@@ -276,6 +278,8 @@ void System::layout(qreal xo1)
       int idx = 0;
       foreach (Part* p, score()->parts()) {
             SysStaff* s = staff(idx);
+            if (!s->show() || !p->show())
+                  continue;
             int nstaves = p->nstaves();
             foreach(InstrumentName* t, s->instrumentNames) {
                   qreal d  = point(instrumentNameOffset) + t->bbox().width();
@@ -342,7 +346,7 @@ void System::layout2()
             s->setDistanceDown(distDown);
             s->setDistanceUp(distUp);
 
-            if (!s->show()) {
+            if (!staff->show() || !s->show()) {
                   s->setbbox(QRectF());  // already done in layout() ?
                   continue;
                   }
@@ -351,6 +355,7 @@ void System::layout2()
             y += sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
             }
+
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       setHeight(systemHeight);
       foreach(MeasureBase* m, ml) {
@@ -378,7 +383,7 @@ void System::layout2()
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* ss = _staves[staffIdx];
-            if (!ss->show())
+            if (!ss->show() || !score()->staff(staffIdx)->show())
                   continue;
 
             foreach(Bracket* b, ss->brackets) {
@@ -946,8 +951,9 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool /*all*
             return;
       if (barLine)
             func(data, barLine);
+      int idx = 0;
       foreach (SysStaff* st, _staves) {
-            if (!st->show())
+            if (!st->show() || !score()->staff(idx)->show())
                   continue;
             foreach(Bracket* b, st->brackets) {
                   if (b)
@@ -955,6 +961,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool /*all*
                   }
             foreach(InstrumentName* t, st->instrumentNames)
                   func(data, t);
+            ++idx;
             }
       foreach(SpannerSegment* ss, _spannerSegments)
             func(data, ss);

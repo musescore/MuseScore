@@ -288,11 +288,11 @@ void InstrumentWizard::on_linkedButton_clicked()
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
       PartListItem* pli   = (PartListItem*)sli->parent();
+      pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       nsli->setLinked(true);
-      nsli->setVisible(true);
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);

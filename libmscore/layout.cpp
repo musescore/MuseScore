@@ -708,8 +708,6 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
       if (undoRedo())
             return;
 
-      m->setSystemHeader(true);
-
       int tick = m->tick();
       int i    = 0;
       foreach (Staff* staff, _staves) {
@@ -935,13 +933,14 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   }
             else if (curMeasure->type() == MEASURE) {
                   Measure* m = static_cast<Measure*>(curMeasure);
-                  if (firstMeasure == 0) {
+                  m->createEndBarLines();       // TODO: type not set right here
+                  if (isFirstMeasure) {
                         firstMeasure = m;
                         processSystemHeader(m, !isFirstSystem);
+                        ww = m->minWidth2();
                         }
-
-                  m->createEndBarLines();       // TODO: type not set right here
-                  ww = isFirstMeasure ? m->minWidth2() : m->minWidth1();
+                  else
+                        ww = m->minWidth1();
 
                   // add width for EndBarLine
                   Segment* seg = m->last();
@@ -997,7 +996,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   break;                                  // next measure will not fit
             }
 
-      if (firstMeasure && lastMeasure && firstMeasure != lastMeasure)
+      if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
             removeGeneratedElements(firstMeasure, lastMeasure);
 
       //
@@ -1099,10 +1098,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                             || (el->type() == CLEF   && seg->tick() != sm->tick())
                             || (el->type() == KEYSIG && seg->tick() != sm->tick())))
                               {
-                              if (!_undoRedo) {
-                                    m->setSystemHeader(false);
-                                    undoRemoveElement(el);
-                                    }
+                              undoRemoveElement(el);
                               }
                         else if (el->type() == CLEF) {
                               Clef* clef = static_cast<Clef*>(el);
@@ -1596,88 +1592,90 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             //
             //    compute repeat bar lines
             //
-            bool firstMeasure = true;
-            MeasureBase* lmb = ml.back();
-            if (lmb->type() == MEASURE) {
-                  if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
-                        for (;;lmb = lmb->next()) {
-                              if (lmb->next() == 0)
-                                    break;
-                              if ((lmb->next()->type() == MEASURE) && ((Measure*)(lmb->next()))->multiMeasure() >= 0)
-                                    break;
+//            if (!undoRedo()) {
+                  bool firstMeasure = true;
+                  MeasureBase* lmb = ml.back();
+                  if (lmb->type() == MEASURE) {
+                        if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
+                              for (;;lmb = lmb->next()) {
+                                    if (lmb->next() == 0)
+                                          break;
+                                    if ((lmb->next()->type() == MEASURE) && ((Measure*)(lmb->next()))->multiMeasure() >= 0)
+                                          break;
+                                    }
                               }
                         }
-                  }
-            for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
-                  if (mb->type() != MEASURE) {
-                        if (mb == lmb)
-                              break;
-                        continue;
-                        }
-                  Measure* m = static_cast<Measure*>(mb);
-                  // first measure repeat?
-                  bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
+                  for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
+                        if (mb->type() != MEASURE) {
+                              if (mb == lmb)
+                                    break;
+                              continue;
+                              }
+                        Measure* m = static_cast<Measure*>(mb);
+                        // first measure repeat?
+                        bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
 
-                  if (mb == ml.back()) {       // last measure in system?
-                        //
-                        // if last bar has a courtesy key signature,
-                        // create a double bar line as end bar line
-                        //
-                        BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
+                        if (mb == ml.back()) {       // last measure in system?
+                              //
+                              // if last bar has a courtesy key signature,
+                              // create a double bar line as end bar line
+                              //
+                              BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
 
-                        if (m->repeatFlags() & RepeatEnd)
-                              m->setEndBarLineType(END_REPEAT, true);
-                        else if (m->endBarLineGenerated())
-                              m->setEndBarLineType(bl, true);
-                        if (m->setStartRepeatBarLine(fmr))
-                              m->setDirty();
-                        }
-                  else {
-                        MeasureBase* mb = m->next();
-                        while (mb && mb->type() != MEASURE && (mb != ml.back()))
-                              mb = mb->next();
-
-                        Measure* nm = 0;
-                        if (mb && mb->type() == MEASURE)
-                              nm = static_cast<Measure*>(mb);
-
-                        needRelayout |= m->setStartRepeatBarLine(fmr);
-                        if (m->repeatFlags() & RepeatEnd) {
-                              if (nm && (nm->repeatFlags() & RepeatStart))
-                                    m->setEndBarLineType(END_START_REPEAT, true);
-                              else
+                              if (m->repeatFlags() & RepeatEnd)
                                     m->setEndBarLineType(END_REPEAT, true);
-                              }
-                        else if (nm && (nm->repeatFlags() & RepeatStart))
-                              m->setEndBarLineType(START_REPEAT, true);
-                        else if (m->endBarLineGenerated())
-                              m->setEndBarLineType(NORMAL_BAR, true);
-                        }
-                  if (m->createEndBarLines())
-                        m->setDirty();
-                  firstMeasure = false;
-                  if (mb == lmb)
-                        break;
-                  }
-
-            foreach (MeasureBase* mb, ml) {
-                  if (mb->type() != MEASURE)
-                        continue;
-                  Measure* m = static_cast<Measure*>(mb);
-                  int nn = m->multiMeasure() - 1;
-                  if (nn > 0) {
-                        // skip to last rest measure of multi measure rest
-                        Measure* mm = m;
-                        for (int k = 0; k < nn; ++k)
-                              mm = mm->nextMeasure();
-                        if (mm) {
-                              m->setMmEndBarLineType(mm->endBarLineType());
-                              if (m->createEndBarLines())
+                              else if (m->endBarLineGenerated())
+                                    m->setEndBarLineType(bl, true);
+                              if (m->setStartRepeatBarLine(fmr))
                                     m->setDirty();
                               }
+                        else {
+                              MeasureBase* mb = m->next();
+                              while (mb && mb->type() != MEASURE && (mb != ml.back()))
+                                    mb = mb->next();
+
+                              Measure* nm = 0;
+                              if (mb && mb->type() == MEASURE)
+                                    nm = static_cast<Measure*>(mb);
+
+                              needRelayout |= m->setStartRepeatBarLine(fmr);
+                              if (m->repeatFlags() & RepeatEnd) {
+                                    if (nm && (nm->repeatFlags() & RepeatStart))
+                                          m->setEndBarLineType(END_START_REPEAT, true);
+                                    else
+                                          m->setEndBarLineType(END_REPEAT, true);
+                                    }
+                              else if (nm && (nm->repeatFlags() & RepeatStart))
+                                    m->setEndBarLineType(START_REPEAT, true);
+                              else if (m->endBarLineGenerated())
+                                    m->setEndBarLineType(NORMAL_BAR, true);
+                              }
+                        if (m->createEndBarLines())
+                              m->setDirty();
+                        firstMeasure = false;
+                        if (mb == lmb)
+                              break;
+                        }
+
+                  foreach (MeasureBase* mb, ml) {
+                        if (mb->type() != MEASURE)
+                              continue;
+                        Measure* m = static_cast<Measure*>(mb);
+                        int nn = m->multiMeasure() - 1;
+                        if (nn > 0) {
+                              // skip to last rest measure of multi measure rest
+                              Measure* mm = m;
+                              for (int k = 0; k < nn; ++k)
+                                    mm = mm->nextMeasure();
+                              if (mm) {
+                                    m->setMmEndBarLineType(mm->endBarLineType());
+                                    if (m->createEndBarLines())
+                                          m->setDirty();
+                                    }
+                              }
                         }
                   }
-            }
+//            }
 
       minWidth          = 0.0;
       qreal totalWeight = 0.0;
@@ -1690,7 +1688,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Measure* m = (Measure*)mb;
                         if (needRelayout)
                               m->setDirty();
-                        minWidth    += m->minWidth();
+                        minWidth    += m->minWidth2();
                         totalWeight += m->ticks() * m->userStretch();
                         }
                   }
@@ -1732,7 +1730,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         else {
                               qreal weight = m->ticks() * m->userStretch();
-                              ww           = m->minWidth() + rest * weight;
+                              ww           = m->minWidth2() + rest * weight;
                               }
                         m->layout(ww);
                         }
@@ -2353,6 +2351,8 @@ qreal Score::computeMinWidth(Segment* fs) const
             int pt                 = pSeg ? pSeg->subtype() : SegBarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  if (!staff(staffIdx)->show())
+                        continue;
                   qreal minDistance = 0.0;
                   Space space;
                   int track  = staffIdx * VOICES;
@@ -2447,13 +2447,18 @@ qreal Score::computeMinWidth(Segment* fs) const
                   pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  if (!staff(staffIdx)->show())
+                        continue;
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
             }
       qreal segmentWidth = 0.0;
-      for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx)
+      for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+            if (!staff(staffIdx)->show())
+                  continue;
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            }
       x += segmentWidth;
       return x;
       }
