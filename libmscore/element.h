@@ -69,7 +69,7 @@ class Space {
       qreal& rRw()                 { return _rw; }
       void setLw(qreal e)          { _lw = e; }
       void setRw(qreal m)          { _rw = m; }
-      inline void max(const Space& s);
+      void max(const Space& s);
       Space& operator+=(const Space&);
       };
 

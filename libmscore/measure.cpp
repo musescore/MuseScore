@@ -329,7 +329,10 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
                         }
                   chord->computeUp();
                   }
-            cr->setMag(m);
+            if (m != mag()) {
+                  cr->setMag(m);
+                  setDirty();
+                  }
             }
       }
 
@@ -852,6 +855,8 @@ void Measure::add(Element* el)
       el->setParent(this);
       ElementType type = el->type();
 
+      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
+
 
 //      if (MScore::debugMode)
 //            qDebug("measure %p(%d): add %s %p", this, _no, el->name(), el);
@@ -988,6 +993,8 @@ void Measure::add(Element* el)
 
 void Measure::remove(Element* el)
       {
+      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
+
       switch(el->type()) {
             case SPACER:
                   if (static_cast<Spacer*>(el)->subtype() == SPACER_DOWN)
@@ -2787,209 +2794,18 @@ void Space::max(const Space& s)
 
 qreal Measure::computeMinWidth() const
       {
-      int nstaves = _score->nstaves();
+      return score()->computeMinWidth(first());
+      }
 
-      int segs = 0;
-      for (const Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() == SegClef && (s != first()))
-                  continue;
-            ++segs;
-            }
+//---------------------------------------------------------
+//   setDirty
+//---------------------------------------------------------
 
-      if (nstaves == 0 || segs == 0)
-            return 1.0;
-
-      qreal _spatium           = spatium();
-      qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
-
-      qreal rest[nstaves];    // fixed space needed from previous segment
-      memset(rest, 0, nstaves * sizeof(qreal));
-
-      //--------tick table for segments
-      int ticksList[segs];
-      memset(ticksList, 0, segs * sizeof(int));
-
-      qreal xpos[segs+1];
-
-      int segmentIdx = 0;
-      qreal x        = 0.0;
-      int minTick    = 100000;
-      int ntick      = tick() + ticks();   // position of next measure
-
-      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
-
-      qreal clefWidth[nstaves];
-      memset(clefWidth, 0, nstaves * sizeof(qreal));
-
-      const Segment* s = first();
-      for (; s; s = s->next(), ++segmentIdx) {
-            qreal elsp = s->extraLeadingSpace().val()  * _spatium;
-            qreal etsp = s->extraTrailingSpace().val() * _spatium;
-
-            if ((s->subtype() == SegClef) && (s != first())) {
-                  --segmentIdx;
-                  for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                        int track  = staffIdx * VOICES;
-                        Element* e = s->element(track);
-                        if (e) {
-                              e->layout();
-                              clefWidth[staffIdx] = e->width() + _spatium + elsp;
-                              }
-                        }
-                  continue;
-                  }
-            bool rest2[nstaves+1];
-            SegmentType segType    = s->subtype();
-            qreal segmentWidth     = 0.0;
-            qreal stretchDistance  = 0.0;
-            Segment* pSeg          = s->prev();
-            int pt                 = pSeg ? pSeg->subtype() : SegBarLine;
-
-            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  qreal minDistance = 0.0;
-                  Space space;
-                  int track  = staffIdx * VOICES;
-                  bool found = false;
-                  if (segType & (SegChordRest | SegGrace)) {
-                        qreal llw = 0.0;
-                        qreal rrw = 0.0;
-                        Lyrics* lyrics = 0;
-                        for (int voice = 0; voice < VOICES; ++voice) {
-                              ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
-                              if (!cr)
-                                    continue;
-                              found = true;
-                              if (pt & (SegStartRepeatBarLine | SegBarLine)) {
-                                    qreal sp        = score()->styleS(ST_barNoteDistance).val() * _spatium;
-                                    sp += elsp;
-                                    minDistance     = qMax(minDistance, sp);
-                                    stretchDistance = sp * .7;
-                                    }
-                              else if (pt & (SegChordRest | SegGrace)) {
-                                    minDistance = qMax(minDistance, minNoteDistance);
-                                    }
-                              else {
-                                    // if (pt & (SegKeySig | SegClef))
-                                    bool firstClef = (segmentIdx == 1) && (pt == SegClef);
-                                    if ((pt & (SegKeySig | SegTimeSig)) || firstClef)
-                                          minDistance = qMax(minDistance, clefKeyRightMargin);
-                                    }
-                              cr->layout();
-                              space.max(cr->space());
-                              foreach(Lyrics* l, cr->lyricsList()) {
-                                    if (!l)
-                                          continue;
-                                    if (!l->isEmpty()) {
-                                          l->layout();
-                                          lyrics = l;
-                                          if (!lyrics->isMelisma()) {
-                                                QRectF b(l->bbox().translated(l->pos()));
-                                                llw = qMax(llw, -b.left());
-                                                rrw = qMax(rrw, b.right());
-                                                }
-                                          }
-                                    }
-                              }
-                        if (lyrics) {
-                              qreal y = lyrics->ipos().y() + point(score()->styleS(ST_lyricsMinBottomDistance));
-                              if (y > staves[staffIdx]->distanceDown)
-                                 staves[staffIdx]->distanceDown = y;
-                              space.max(Space(llw, rrw));
-                              }
-                        }
-                  else {
-                        Element* e = s->element(track);
-                        if ((segType == SegClef) && (pt != SegChordRest))
-                              minDistance = score()->styleP(ST_clefLeftMargin);
-                        else if (segType == SegStartRepeatBarLine)
-                              minDistance = .5 * _spatium;
-                        else if ((segType == SegEndBarLine) && segmentIdx) {
-                              if (pSeg->subtype() == SegClef)
-                                    minDistance = score()->styleP(ST_clefBarlineDistance);
-                              else
-                                    stretchDistance = score()->styleP(ST_noteBarDistance);
-                              if (e == 0) {
-                                    // look for barline
-                                    for (int i = track - VOICES; i >= 0; i -= VOICES) {
-                                          e = s->element(i);
-                                          if (e)
-                                                break;
-                                          }
-                                    }
-                              }
-                        if (e) {
-                              found = true;
-                              e->layout();
-                              space.max(e->space());
-                              }
-                        }
-                  space += Space(elsp, etsp);
-                  if (found) {
-                        space.rLw() += clefWidth[staffIdx];
-                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
-                        if (space.lw() > stretchDistance)
-                              sp += (space.lw() - stretchDistance);
-                        rest[staffIdx]  = space.rw();
-                        rest2[staffIdx] = false;
-                        segmentWidth    = qMax(segmentWidth, sp);
-                        }
-                  else
-                        rest2[staffIdx] = true;
-                  clefWidth[staffIdx] = 0.0;
-                  }
-
-            x += segmentWidth;
-            xpos[segmentIdx]  = x;
-
-            if (segmentIdx) {
-//                  width[segmentIdx-1] = segmentWidth;
-                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
-                  }
-
-            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  if (rest2[staffIdx])
-                        rest[staffIdx] -= segmentWidth;
-                  }
-            if ((s->subtype() == SegChordRest)) {
-                  const Segment* nseg = s;
-                  for (;;) {
-                        nseg = nseg->next();
-                        if (nseg == 0 || nseg->subtype() == SegChordRest)
-                              break;
-                        }
-                  int nticks = (nseg ? nseg->tick() : ntick) - s->tick();
-                  if (nticks == 0) {
-                        // this happens for tremolo notes
-                        qDebug("layoutX: empty segment(%p)%s: measure: tick %d ticks %d",
-                           s, s->subTypeName(), tick(), ticks());
-                        qDebug("         nticks==0 segmente %d, segmentIdx: %d, segTick: %d nsegTick(%p) %d",
-                           size(), segmentIdx-1, s->tick(), nseg, ntick
-                           );
-                        }
-                  else {
-                        if (nticks < minTick)
-                              minTick = nticks;
-                        }
-                  ticksList[segmentIdx] = nticks;
-                  }
-            else
-                  ticksList[segmentIdx] = 0;
-            }
-
-      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            qreal distAbove;
-            Staff * staff = _score->staff(staffIdx);
-            if (staff->useTablature()) {
-                  distAbove = -((StaffTypeTablature*)(staff->staffType()))->durationBoxY();
-                  if (distAbove > staves[staffIdx]->distanceUp)
-                     staves[staffIdx]->distanceUp = distAbove;
-                  }
-            }
-      qreal segmentWidth = 0.0;
-      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx)
-            segmentWidth = qMax(segmentWidth, rest[staffIdx]);
-      xpos[segmentIdx]    = x + segmentWidth;
-      return xpos[segs];
+void Measure::setDirty()
+      {
+// printf("%d) setDirty\n", no()+1);
+      _minWidth1 = 0.0;
+      _minWidth2 = 0.0;
       }
 
 //---------------------------------------------------------
@@ -3008,8 +2824,18 @@ qreal Measure::minWidth() const
 qreal Measure::minWidth1() const
       {
       if (_minWidth1 == 0.0) {
-            Q_ASSERT(!_systemHeader);
-            _minWidth1 = computeMinWidth();
+            if (_systemHeader) {
+                  Segment* s = first();
+                  if (s->subtype() == SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
+                        s = s->next();
+                        if (s->subtype() == SegKeySig && s->element(0) && s->element(0)->generated() && s->next()) {
+                              s = s->next();
+                              }
+                        }
+                  _minWidth1 = score()->computeMinWidth(s);
+                  }
+            else
+                  _minWidth1 = computeMinWidth();
             }
       return _minWidth1;
       }
@@ -3143,7 +2969,7 @@ void Measure::layoutX(qreal stretch)
                                     }
                               }
                         if (lyrics) {
-                              qreal y = lyrics->ipos().y() + point(score()->styleS(ST_lyricsMinBottomDistance));
+                              qreal y = lyrics->ipos().y() + score()->styleS(ST_lyricsMinBottomDistance).val() * _spatium;
                               if (y > staves[staffIdx]->distanceDown)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
@@ -3381,10 +3207,8 @@ void Measure::layoutX(qreal stretch)
 
 void Measure::layoutStage1()
       {
-      setDirty();
+      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-//            KeySigEvent key = score()->staff(staffIdx)->keymap()->key(tick());
-
             setBreakMMRest(false);
             if (score()->styleB(ST_createMultiMeasureRests)) {
                   if ((repeatFlags() & RepeatStart) || (prevMeasure() && (prevMeasure()->repeatFlags() & RepeatEnd)))
@@ -3420,9 +3244,7 @@ void Measure::layoutStage1()
             for (Segment* segment = first(); segment; segment = segment->next()) {
                   Element* e = segment->element(track);
 
-                  if (segment->subtype() == SegKeySig
-                     || segment->subtype() == SegStartRepeatBarLine
-                     || segment->subtype() == SegTimeSig) {
+                  if (segment->subtype() & (SegKeySig | SegStartRepeatBarLine | SegTimeSig)) {
                         if (e && !e->generated())
                               setBreakMMRest(true);
                         }
@@ -3712,16 +3534,6 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
             s = ns;
             }
       return s->tick();
-      }
-
-//---------------------------------------------------------
-//   setDirty
-//---------------------------------------------------------
-
-void Measure::setDirty()
-      {
-      _minWidth1 = 0.0;
-      _minWidth2 = 0.0;
       }
 
 PROPERTY_FUNCTIONS(Measure)

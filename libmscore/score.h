@@ -390,7 +390,7 @@ class Score : public QObject {
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick);
       void init();
-      bool removeGeneratedElements(Measure* mb, Measure* end);
+      void removeGeneratedElements(Measure* mb, Measure* end);
 
    public:
       void setDirty(bool val);
@@ -891,6 +891,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Cursor* newCursor();
+      qreal computeMinWidth(Segment* fs) const;
       };
 
 extern Score* gscore;

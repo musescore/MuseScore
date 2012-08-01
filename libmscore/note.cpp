@@ -1197,13 +1197,10 @@ void Note::layout()
             qreal xo = (headWidth() - w) * .5;
             setbbox(QRectF(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags));
             }
-      else
+      else {
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
-      if (parent() == 0)
-            return;
-
-      // for tablature, dots are hidden: do not spend time with them!
-      if (!useTablature) {
+            if (parent() == 0)
+                  return;
             int dots = chord()->dots();
             for (int i = 0; i < 3; ++i) {
                   if (i < dots) {

@@ -26,9 +26,9 @@ struct Spring {
       };
 
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
-typedef SpringMap::iterator iSpring;
+typedef SpringMap::const_iterator iSpring;
 
-extern qreal sff(qreal x, qreal xMin, SpringMap& springs);
+extern qreal sff(qreal x, qreal xMin, const SpringMap& springs);
 
 #endif
 
