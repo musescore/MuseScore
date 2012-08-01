@@ -81,8 +81,8 @@ class Part : public QObject {
 
       void insertStaff(Staff*);
       void removeStaff(Staff*);
-      bool show() const                        { return _show;        }
-      void setShow(bool val);
+      bool show() const                        { return _show;  }
+      void setShow(bool val)                   { _show = val;   }
       Score* score() const                     { return _score; }
 
       Instrument* instr(int tick = 0);
@@ -93,6 +93,10 @@ class Part : public QObject {
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
       InstrumentList* instrList()              { return &_instrList;       }
+
+      enum { SHOW };
+      QVariant getProperty(int id) const;
+      void setProperty(int id, const QVariant& property);
       };
 
 #endif

@@ -96,7 +96,6 @@ class Staff : public QObject {
       KeyList* _keymap;
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
-      bool _show;             ///< derived from part->show()
       bool _small;
       bool _invisible;
       qreal _userDist;        ///< user edited extra distance
@@ -157,9 +156,8 @@ class Staff : public QObject {
       void setKey(int tick, const KeySigEvent& st);
       void removeKey(int tick);
 
-      bool show() const              { return _show;        }
+      bool show() const;
       bool slashStyle() const;
-      void setShow(bool val)         { _show = val;         }
       bool small() const             { return _small;       }
       void setSmall(bool val)        { _small = val;        }
       bool invisible() const         { return _invisible;   }

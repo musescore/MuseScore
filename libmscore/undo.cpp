@@ -2328,12 +2328,11 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, bool _show, StaffType* st)
+ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, StaffType* st)
       {
       staff     = _staff;
       small     = _small;
       invisible = _invisible;
-      show      = _show;
       staffType = st;
       }
 
@@ -2348,17 +2347,14 @@ void ChangeStaff::flip()
 
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
-      bool oldShow      = staff->show();
       StaffType* st     = staff->staffType();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
-      staff->setShow(show);
       staff->setStaffType(staffType);
 
       small     = oldSmall;
       invisible = oldInvisible;
-      show      = oldShow;
       staffType = st;
 
       if (invisibleChanged || typeChanged) {
@@ -3166,6 +3162,17 @@ void ChangeStaffUserDist::flip()
       staff->setUserDist(dist);
       dist = v;
       staff->score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangePartProperty::flip
+//---------------------------------------------------------
+
+void ChangePartProperty::flip()
+      {
+      QVariant v = part->getProperty(id);
+      part->setProperty(id, property);
+      property = v;
       }
 
 //---------------------------------------------------------

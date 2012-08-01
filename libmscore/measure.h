@@ -135,7 +135,6 @@ class Measure : public MeasureBase {
 
       void* pTimesig()  { return &_timesig; }
       void* pLen()      { return &_len;     }
-      qreal computeMinWidth() const;
 
    public:
       Measure(Score* = 0);
@@ -174,12 +173,11 @@ class Measure : public MeasureBase {
       virtual qreal userDistanceUp(int i) const;
       virtual qreal userDistanceDown(int i) const;
 
-      qreal minWidth() const;
       qreal minWidth1() const;
       qreal minWidth2() const;
       void setMinWidth1(qreal w)           { _minWidth1 = w;      }
       void setMinWidth2(qreal w)           { _minWidth2 = w;      }
-      bool systemHeader() const            { return _systemHeader; }
+      bool systemHeader() const;
       void setSystemHeader(bool val)       { _systemHeader = val;  }
       void setDirty();
 
@@ -291,7 +289,9 @@ class Measure : public MeasureBase {
       void addSpannerFor(Spanner* e)      { _spannerFor.append(e);     }
       void removeSpannerFor(Spanner* e)   { _spannerFor.removeOne(e);  }
 
-      PROPERTY_DECLARATIONS(Measure)
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 #endif

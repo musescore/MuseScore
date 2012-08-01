@@ -79,16 +79,6 @@
 #include "icon.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-Property<Measure> Measure::propertyList[] = {
-      { P_TIMESIG_NOMINAL, &Measure::pTimesig, 0 },
-      { P_TIMESIG_ACTUAL,  &Measure::pLen,     0 },
-      { P_END, 0, 0 }
-      };
-
-//---------------------------------------------------------
 //   MStaff
 //---------------------------------------------------------
 
@@ -135,7 +125,6 @@ Measure::Measure(Score* s)
 
       _minWidth1             = 0.0;
       _minWidth2             = 0.0;
-      _systemHeader          = false;
 
       _no                    = 0;
       _noOffset              = 0;
@@ -170,7 +159,6 @@ Measure::Measure(const Measure& m)
 
       _minWidth1             = m._minWidth1;
       _minWidth2             = m._minWidth2;
-      _systemHeader          = m._systemHeader;
 
       _no                    = m._no;
       _noOffset              = m._noOffset;
@@ -855,9 +843,6 @@ void Measure::add(Element* el)
       el->setParent(this);
       ElementType type = el->type();
 
-      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
-
-
 //      if (MScore::debugMode)
 //            qDebug("measure %p(%d): add %s %p", this, _no, el->name(), el);
 
@@ -981,6 +966,8 @@ void Measure::add(Element* el)
                   MeasureBase::add(el);
                   break;
             }
+
+      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       }
 
 //---------------------------------------------------------
@@ -993,8 +980,6 @@ void Measure::add(Element* el)
 
 void Measure::remove(Element* el)
       {
-      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
-
       switch(el->type()) {
             case SPACER:
                   if (static_cast<Spacer*>(el)->subtype() == SPACER_DOWN)
@@ -1056,6 +1041,7 @@ void Measure::remove(Element* el)
                   MeasureBase::remove(el);
                   break;
             }
+      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       }
 
 //---------------------------------------------------------
@@ -2441,8 +2427,13 @@ bool Measure::setStartRepeatBarLine(bool val)
                   bl = new BarLine(score());
                   bl->setTrack(track);
                   bl->setSubtype(START_REPEAT);
-                  if (s == 0)
+                  if (s == 0) {
+                        if (score()->undoRedo()) {
+                              printf("Measure %d) setStartRepeatBarLine %d\n", no()+1, val);
+                              return false;
+                              }
                         s = undoGetSegment(SegStartRepeatBarLine, tick());
+                        }
                   bl->setParent(s);
                   score()->undoAddElement(bl);
                   changed = true;
@@ -2788,15 +2779,6 @@ void Space::max(const Space& s)
             _rw = s._rw;
       }
 
-//-----------------------------------------------------------------------------
-//    computeMinWidth
-//-----------------------------------------------------------------------------
-
-qreal Measure::computeMinWidth() const
-      {
-      return score()->computeMinWidth(first());
-      }
-
 //---------------------------------------------------------
 //   setDirty
 //---------------------------------------------------------
@@ -2809,12 +2791,13 @@ void Measure::setDirty()
       }
 
 //---------------------------------------------------------
-//   minWidth
+//   systemHeader
 //---------------------------------------------------------
 
-qreal Measure::minWidth() const
+bool Measure::systemHeader() const
       {
-      return _systemHeader ? minWidth2() : minWidth1();
+      Segment* s = first();
+      return s && (s->subtype() == SegClef) && s->element(0) && s->element(0)->generated();
       }
 
 //---------------------------------------------------------
@@ -2823,20 +2806,15 @@ qreal Measure::minWidth() const
 
 qreal Measure::minWidth1() const
       {
-      if (_minWidth1 == 0.0) {
-            if (_systemHeader) {
-                  Segment* s = first();
-                  if (s->subtype() == SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
+//      if (_minWidth1 == 0.0) {
+            Segment* s = first();
+            if (s->subtype() == SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
+                  s = s->next();
+                  if (s->subtype() == SegKeySig && s->element(0) && s->element(0)->generated() && s->next())
                         s = s->next();
-                        if (s->subtype() == SegKeySig && s->element(0) && s->element(0)->generated() && s->next()) {
-                              s = s->next();
-                              }
-                        }
-                  _minWidth1 = score()->computeMinWidth(s);
                   }
-            else
-                  _minWidth1 = computeMinWidth();
-            }
+            _minWidth1 = score()->computeMinWidth(s);
+//            }
       return _minWidth1;
       }
 
@@ -2846,10 +2824,8 @@ qreal Measure::minWidth1() const
 
 qreal Measure::minWidth2() const
       {
-      if (_minWidth2 == 0.0) {
-            Q_ASSERT(_systemHeader);
-            _minWidth2 = computeMinWidth();
-            }
+  //    if (_minWidth2 == 0.0)
+            _minWidth2 = score()->computeMinWidth(first());
       return _minWidth2;
       }
 
@@ -2926,6 +2902,8 @@ void Measure::layoutX(qreal stretch)
             int pt                 = pSeg ? pSeg->subtype() : SegBarLine;
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                  if (!score()->staff(staffIdx)->show())
+                        continue;
                   qreal minDistance = 0.0;
                   Space space;
                   int track  = staffIdx * VOICES;
@@ -3024,6 +3002,8 @@ void Measure::layoutX(qreal stretch)
                   }
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                  if (!score()->staff(staffIdx)->show())
+                        continue;
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
@@ -3054,6 +3034,8 @@ void Measure::layoutX(qreal stretch)
             }
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            if (!score()->staff(staffIdx)->show())
+                  continue;
             qreal distAbove;
             Staff * staff = _score->staff(staffIdx);
             if (staff->useTablature()) {
@@ -3063,8 +3045,11 @@ void Measure::layoutX(qreal stretch)
                   }
             }
       qreal segmentWidth = 0.0;
-      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx)
+      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            if (!score()->staff(staffIdx)->show())
+                  continue;
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            }
       xpos[segmentIdx]    = x + segmentWidth;
       width[segmentIdx-1] = segmentWidth;
 
@@ -3121,6 +3106,8 @@ void Measure::layoutX(qreal stretch)
             if ((s->subtype() == SegClef) && (s != first())) {
                   s->setPos(xpos[seg], 0.0);
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                        if (!score()->staff(staffIdx)->show())
+                              continue;
                         int track  = staffIdx * VOICES;
                         Element* e = s->element(track);
                         if (e) {
@@ -3143,6 +3130,8 @@ void Measure::layoutX(qreal stretch)
             s->setPos(xpos[seg], 0.0);
 
             for (int track = 0; track < tracks; ++track) {
+                  if (!score()->staff(track/VOICES)->show())
+                        continue;
                   Element* e = s->element(track);
                   if (e == 0)
                         continue;
@@ -3536,4 +3525,48 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
       return s->tick();
       }
 
-PROPERTY_FUNCTIONS(Measure)
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Measure::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_TIMESIG_NOMINAL:
+                  return QVariant::fromValue(_timesig);
+                  break;
+            case P_TIMESIG_ACTUAL:
+                  return QVariant::fromValue(_len);
+                  break;
+            default:
+                  return MeasureBase::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Measure::setProperty(P_ID propertyId, const QVariant& value)
+      {
+      switch(propertyId) {
+            case P_TIMESIG_NOMINAL:
+                  _timesig = value.value<Fraction>();
+                  break;
+            case P_TIMESIG_ACTUAL:
+                  _len = value.value<Fraction>();
+                  break;
+            default:
+                  return MeasureBase::setProperty(propertyId, value);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Measure::propertyDefault(P_ID) const
+      {
+      return QVariant();
+      }

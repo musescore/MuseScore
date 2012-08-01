@@ -278,6 +278,7 @@ class Score : public QObject {
       LayoutFlags layoutFlags;
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
+
       bool _excerptsChanged;
       bool _instrumentsChanged;
       bool _selectionChanged;
