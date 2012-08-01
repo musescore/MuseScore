@@ -13,6 +13,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
+#include "libmscore/score.h"
 
 #define DIR QString("libmscore/compat/")
 
@@ -70,6 +71,7 @@ void TestCompat::compat()
       QString reference(DIR  + file + "-ref.mscx");
 
       Score* score = readScore(readFile);
+      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, writeFile, reference));
       }

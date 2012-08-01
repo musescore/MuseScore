@@ -138,6 +138,7 @@ void TestParts::createParts(Score* score)
 void TestParts::testPartCreation(const QString& test)
       {
       Score* score = readScore(DIR + test + ".mscx");
+      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, test + "-1.mscx", DIR + test + ".mscx"));
       createParts(score);
@@ -152,6 +153,8 @@ void TestParts::testPartCreation(const QString& test)
 void TestParts::appendMeasure()
       {
       Score* score = readScore(DIR + "part2.mscx");
+      score->doLayout();
+
       QVERIFY(score);
       createParts(score);
 
@@ -175,6 +178,7 @@ void TestParts::appendMeasure()
 void TestParts::insertMeasure()
       {
       Score* score = readScore(DIR + "part2.mscx");
+      score->doLayout();
       QVERIFY(score);
       createParts(score);
 
