@@ -557,10 +557,9 @@ void FiguredBassItem::layout()
 
       // contruct font metrics
       int   fontIdx = 0;
-      qreal _spatium = spatium();
       QFont f(g_FBFonts.at(fontIdx).family);
-      qreal m = score()->styleD(ST_figuredBassFontSize) * MScore::DPI / PPI;
-      m *= _spatium / ( SPATIUM20 * MScore::DPI);
+      // font size in points, scaled according to spatium()
+      qreal m = score()->styleD(ST_figuredBassFontSize) * spatium() / ( SPATIUM20 * MScore::DPI);
       f.setPointSizeF(m);
       QFontMetrics      fm(f);
 
@@ -646,6 +645,7 @@ void FiguredBassItem::draw(QPainter* painter) const
 #ifdef USE_GLYPHS
       f.setHintingPreference(QFont::PreferVerticalHinting);
 #endif
+      // font size in pixels, scaled according to spatium()
       qreal m = score()->styleD(ST_figuredBassFontSize) * MScore::DPI / PPI;
       m *= spatium() / (SPATIUM20 * MScore::DPI);     // make spatium dependent
       f.setPixelSize(lrint(m));
