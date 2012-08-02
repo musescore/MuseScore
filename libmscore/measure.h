@@ -43,11 +43,8 @@ class Part;
 
 //---------------------------------------------------------
 //   MStaff
+///   Per staff values of measure.
 //---------------------------------------------------------
-
-/**
- Per staff values of measure.
-*/
 
 struct MStaff {
       qreal distanceUp;
@@ -106,8 +103,6 @@ class Measure : public MeasureBase {
 
       mutable qreal _minWidth1;     ///< minimal measure width without system header
       mutable qreal _minWidth2;     ///< minimal measure width with system header
-
-      bool _systemHeader;           ///< measure contains system header
 
       bool _irregular;              ///< Irregular measure, do not count
       bool _breakMultiMeasureRest;  ///< set by user
@@ -178,7 +173,6 @@ class Measure : public MeasureBase {
       void setMinWidth1(qreal w)           { _minWidth1 = w;      }
       void setMinWidth2(qreal w)           { _minWidth2 = w;      }
       bool systemHeader() const;
-      void setSystemHeader(bool val)       { _systemHeader = val;  }
       void setDirty();
 
       Fraction timesig() const             { return _timesig;     }

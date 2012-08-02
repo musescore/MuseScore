@@ -698,14 +698,17 @@ void Score::doLayout()
             v->layoutChanged();
       }
 
-//---------------------------------------------------------
-//   processSystemHeader
-//    add generated clef and keysig
-//---------------------------------------------------------
+//-------------------------------------------------------------------
+//   addSystemHeader
+///   Add elements to make this measure suitable as the first measure
+///   of a system.
+//    The system header can contain a Clef, a KeySig and a
+//    RepeatBarLine.
+//-------------------------------------------------------------------
 
-void Score::processSystemHeader(Measure* m, bool isFirstSystem)
+void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       {
-      if (undoRedo())
+      if (undoRedo())   // no change possible in this state
             return;
 
       int tick = m->tick();
@@ -806,6 +809,7 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                   }
             ++i;
             }
+      m->setStartRepeatBarLine(m->repeatFlags() & RepeatStart);
       }
 
 //---------------------------------------------------------
@@ -877,6 +881,9 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
 
 bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool longName)
       {
+      if (undoRedo())   // no change possible in this state
+            return layoutSystem1(minWidth, isFirstSystem, longName);
+
       System* system = getNextSystem(isFirstSystem, false);
 
       qreal xo = 0;
@@ -936,22 +943,33 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   m->createEndBarLines();       // TODO: type not set right here
                   if (isFirstMeasure) {
                         firstMeasure = m;
-                        processSystemHeader(m, !isFirstSystem);
+                        addSystemHeader(m, !isFirstSystem);
                         ww = m->minWidth2();
                         }
                   else
                         ww = m->minWidth1();
 
-                  // add width for EndBarLine
-                  Segment* seg = m->last();
-                  if (seg->subtype() == SegEndBarLine) {
-                        BarLine* bl = static_cast<BarLine*>(seg->element(0));
-                        if (m->repeatFlags() & RepeatEnd) {
-                              if (bl && (bl->subtype() != END_REPEAT)) {
-                                    ww += spatium();   // HACK
-                                    }
+                  Segment* s = m->last();
+                  if ((s->subtype() == SegEndBarLine) && s->element(0)) {
+                        BarLine*    bl = static_cast<BarLine*>(s->element(0));
+                        BarLineType ot = bl->subtype();
+                        BarLineType nt = NORMAL_BAR;
+
+                        if (m->repeatFlags() & RepeatEnd)
+                              nt = END_REPEAT;
+                        else {
+                              Measure* nm = m->nextMeasure();
+                              if (nm && (nm->repeatFlags() & RepeatStart))
+                                    nt = START_REPEAT;
+                              }
+                        if (ot != nt) {
+                              qreal w =
+                                 BarLine::layoutWidth(this, nt, bl->magS())
+                                 - BarLine::layoutWidth(this, ot, bl->magS());
+                              ww += w;
                               }
                         }
+
 // printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
 
                   ww *= m->userStretch() * styleD(ST_measureSpacing);
@@ -962,6 +980,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             // collect at least one measure
             if (!system->measures().isEmpty() && (minWidth + ww > systemWidth)) {
+                  undoChangeProperty(curMeasure->prev(), P_BREAK_HINT, true);
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
@@ -988,16 +1007,201 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             if ((n && system->measures().size() >= n)
                || continueFlag || pbreak || (nt == VBOX || nt == TBOX || nt == FBOX)) {
                   system->setPageBreak(curMeasure->pageBreak());
+                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
                   curMeasure = nextMeasure;
                   break;
                   }
-            curMeasure = nextMeasure;
-            if (minWidth + minMeasureWidth > systemWidth)
+            if (minWidth + minMeasureWidth > systemWidth) {
+                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
+                  curMeasure = nextMeasure;
                   break;                                  // next measure will not fit
+                  }
+            undoChangeProperty(curMeasure, P_BREAK_HINT, false);
+            curMeasure = nextMeasure;
             }
 
       if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
             removeGeneratedElements(firstMeasure, lastMeasure);
+
+      //
+      //    hide empty staves
+      //
+      int staves = _staves.size();
+      int staffIdx = 0;
+      foreach (Staff* staff, _staves) {
+            SysStaff* s  = system->staff(staffIdx);
+            bool oldShow = s->show();
+            if (styleB(ST_hideEmptyStaves)
+               && (staves > 1)
+               && !(isFirstSystem && styleB(ST_dontHideStavesInFirstSystem))
+               ) {
+                  bool hideStaff = true;
+                  foreach(MeasureBase* m, system->measures()) {
+                        if (m->type() != MEASURE)
+                              continue;
+                        Measure* measure = static_cast<Measure*>(m);
+                        if (!measure->isMeasureRest(staffIdx)) {
+                              hideStaff = false;
+                              break;
+                              }
+                        }
+                  // check if notes moved into this staff
+                  Part* part = staff->part();
+                  int n = part->nstaves();
+                  if (hideStaff && (n > 1)) {
+                        int idx = part->staves()->front()->idx();
+                        for (int i = 0; i < part->nstaves(); ++i) {
+                              int st = idx + i;
+
+                              foreach(MeasureBase* mb, system->measures()) {
+                                    if (mb->type() != MEASURE)
+                                          continue;
+                                    Measure* m = static_cast<Measure*>(mb);
+                                    for (Segment* s = m->first(SegChordRest); s; s = s->next(SegChordRest)) {
+                                          for (int voice = 0; voice < VOICES; ++voice) {
+                                                ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
+                                                if (cr == 0 || cr->type() == REST)
+                                                      continue;
+                                                int staffMove = cr->staffMove();
+                                                if (staffIdx == st + staffMove) {
+                                                      hideStaff = false;
+                                                      break;
+                                                      }
+                                                }
+                                          }
+                                    if (!hideStaff)
+                                          break;
+                                    }
+                              if (!hideStaff)
+                                    break;
+                              }
+                        }
+                  s->setShow(hideStaff ? false : staff->show());
+                  }
+            else {
+                  s->setShow(true);
+                  }
+
+            if (oldShow != s->show()) {
+                  foreach (MeasureBase* mb, system->measures()) {
+                        if (mb->type() != MEASURE)
+                              continue;
+                        static_cast<Measure*>(mb)->createEndBarLines();
+                        }
+                  }
+            ++staffIdx;
+            }
+      return continueFlag && curMeasure;
+      }
+
+//---------------------------------------------------------
+//   layoutSystem1
+//    used in undoRedo state
+//    return true if line continues
+//---------------------------------------------------------
+
+bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
+      {
+      System* system = getNextSystem(isFirstSystem, false);
+
+      qreal xo = 0;
+      if (curMeasure->type() == HBOX)
+            xo = point(static_cast<Box*>(curMeasure)->boxWidth());
+
+      system->setInstrumentNames(longName);
+      system->layout(xo);
+
+      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
+      minWidth              = system->leftMargin();
+      bool continueFlag     = false;
+      bool isFirstMeasure   = true;
+
+      for (; curMeasure;) {
+            MeasureBase* nextMeasure;
+            if (curMeasure->type() == MEASURE) {
+                  Measure* m = static_cast<Measure*>(curMeasure);
+                  if (styleB(ST_createMultiMeasureRests)) {
+                        nextMeasure = skipEmptyMeasures(m, system)->next();
+                        }
+                  else {
+                        m->setMultiMeasure(0);
+                        nextMeasure = curMeasure->next();
+                        }
+                  }
+            else
+                  nextMeasure = curMeasure->next();
+
+            // System* oldSystem = curMeasure->system();
+            curMeasure->setSystem(system);
+            qreal ww = 0.0;
+
+            if (curMeasure->type() == HBOX) {
+                  ww = point(static_cast<Box*>(curMeasure)->boxWidth());
+                  if (!isFirstMeasure) {
+                        // try to put another system on current row
+                        // if not a line break
+                        switch(_layoutMode) {
+                              case LayoutFloat:
+                                    break;
+                              case LayoutSystem:
+                                    continueFlag = !curMeasure->lineBreak();
+                                    break;
+                              case LayoutLine:
+                              case LayoutPage:
+                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    break;
+                              }
+                        }
+                  }
+            else if (curMeasure->type() == MEASURE) {
+                  Measure* m = static_cast<Measure*>(curMeasure);
+                  m->createEndBarLines();       // TODO: type not set right here
+                  if (isFirstMeasure) {
+                        addSystemHeader(m, !isFirstSystem);
+                        ww = m->minWidth2();
+                        }
+                  else
+                        ww = m->minWidth1();
+
+// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
+
+                  ww *= m->userStretch() * styleD(ST_measureSpacing);
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
+                  isFirstMeasure = false;
+                  }
+
+            minWidth += ww;
+
+            system->measures().append(curMeasure);
+            ElementType nt = curMeasure->next() ? curMeasure->next()->type() : INVALID;
+            int n = styleI(ST_FixMeasureNumbers);
+            bool pbreak;
+            switch (_layoutMode) {
+                  case LayoutPage:
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        break;
+                  case LayoutFloat:
+                  case LayoutLine:
+                        pbreak = false;
+                        break;
+                  case LayoutSystem:
+                        pbreak = curMeasure->lineBreak();
+                        break;
+                  }
+            if ((n && system->measures().size() >= n)
+               || continueFlag || pbreak || (nt == VBOX || nt == TBOX || nt == FBOX)) {
+                  system->setPageBreak(curMeasure->pageBreak());
+                  curMeasure = nextMeasure;
+                  break;
+                  }
+            // do not change line break
+            if (curMeasure->breakHint()) {
+                  curMeasure = nextMeasure;
+                  break;
+                  }
+            curMeasure = nextMeasure;
+            }
 
       //
       //    hide empty staves
@@ -1088,6 +1292,9 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                   SegmentType st = seg->subtype();
                   if (st == SegEndBarLine)
                         continue;
+                  if (st == SegStartRepeatBarLine && m != sm) {
+                        undoRemoveElement(seg);
+                        }
                   for (int staffIdx = 0;  staffIdx < nstaves(); ++staffIdx) {
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
@@ -1581,19 +1788,12 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
                   }
 
-            const QList<MeasureBase*>& ml = system->measures();
-            int n                         = ml.size();
-            while (n > 0) {
-                  if (ml[n-1]->type() == MEASURE)
-                        break;
-                  --n;
-                  }
-
             //
             //    compute repeat bar lines
             //
 //            if (!undoRedo()) {
                   bool firstMeasure = true;
+                  const QList<MeasureBase*>& ml = system->measures();
                   MeasureBase* lmb = ml.back();
                   if (lmb->type() == MEASURE) {
                         if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
@@ -1838,7 +2038,7 @@ void Score::layoutLinear()
             }
       if (system->measures().isEmpty())
             return;
-      processSystemHeader(firstMeasure(), true);
+      addSystemHeader(firstMeasure(), true);
       removeGeneratedElements(firstMeasure(), lastMeasure());
 
       QPointF pos(system->leftMargin(), 0.0);

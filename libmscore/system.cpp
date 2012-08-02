@@ -1006,4 +1006,3 @@ void System::read(const QDomElement& de)
                   domError(e);
             }
       }
-

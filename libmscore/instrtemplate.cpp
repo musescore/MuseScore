@@ -554,8 +554,6 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
 
 bool loadInstrumentTemplates(const QString& instrTemplates)
       {
-      printf("load instrument templates <%s>\n", qPrintable(instrTemplates));
-
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::ReadOnly)) {
             qDebug("cannot load instrument templates at <%s>\n", qPrintable(instrTemplates));
