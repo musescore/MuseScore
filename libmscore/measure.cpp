@@ -2605,12 +2605,9 @@ void Measure::exchangeVoice(int v1, int v2, int staffIdx1, int staffIdx2)
 
 //---------------------------------------------------------
 //   checkMultiVoices
+///   Check for more than on voice in this measure and staff and
+///   set MStaff->hasVoices
 //---------------------------------------------------------
-
-/**
- Check for more than on voice in this measure and staff and
- set MStaff->hasVoices
-*/
 
 void Measure::checkMultiVoices(int staffIdx)
       {
@@ -2644,14 +2641,12 @@ bool Measure::hasVoice(int track) const
       return false;
       }
 
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   isMeasureRest
-//---------------------------------------------------------
-
-/**
- Check if the measure is filled by a full-measure rest or full of rests on
- this staff. If staff is -1, then check for all staves
-*/
+///   Check if the measure is filled by a full-measure rest or full
+///   of rests on this staff. If staff is -1, then check for
+///   all staves.
+//-------------------------------------------------------------------
 
 bool Measure::isMeasureRest(int staffIdx)
       {
@@ -2708,12 +2703,11 @@ bool Measure::isRepeatMeasure(Part* part)
       {
       int firstStaffIdx = score()->staffIdx(part);
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
-      int strack      = firstStaffIdx * VOICES;
-      int etrack      = nextStaffIdx * VOICES;
+      int strack        = firstStaffIdx * VOICES;
+      int etrack        = nextStaffIdx * VOICES;
+      Segment* s        = first(SegChordRest);
 
-      Segment* s = first(SegChordRest);
-
-      if(s == 0)
+      if (s == 0)
             return false;
 
       for (int track = strack; track < etrack; ++track) {
@@ -2785,13 +2779,15 @@ void Space::max(const Space& s)
 
 void Measure::setDirty()
       {
-// printf("%d) setDirty\n", no()+1);
       _minWidth1 = 0.0;
       _minWidth2 = 0.0;
       }
 
 //---------------------------------------------------------
 //   systemHeader
+///   return true if the measure contains a system header
+//    The system header is identified by a generated Clef in
+//    the first segment.
 //---------------------------------------------------------
 
 bool Measure::systemHeader() const
@@ -2811,6 +2807,8 @@ qreal Measure::minWidth1() const
             if (s->subtype() == SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
                   s = s->next();
                   if (s->subtype() == SegKeySig && s->element(0) && s->element(0)->generated() && s->next())
+                        s = s->next();
+                  if (s->subtype() == SegStartRepeatBarLine && s->next())
                         s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s);
@@ -3196,7 +3194,7 @@ void Measure::layoutX(qreal stretch)
 
 void Measure::layoutStage1()
       {
-      (_systemHeader ? _minWidth2 : _minWidth1) = 0.0;
+      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             setBreakMMRest(false);
             if (score()->styleB(ST_createMultiMeasureRests)) {
@@ -3350,7 +3348,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
 
       m->_minWidth1             = _minWidth1;
       m->_minWidth2             = _minWidth2;
-      m->_systemHeader          = _systemHeader;
+//      m->_systemHeader          = _systemHeader;
 
       m->setTick(tick());
       m->setLineBreak(lineBreak());

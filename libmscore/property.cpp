@@ -97,6 +97,7 @@ static const PropertyData propertyList[] = {
       { P_NUMERATOR_STRING,    "textN",         T_STRING },
       { P_DENOMINATOR_STRING,  "textD",         T_STRING },
       { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
+      { P_BREAK_HINT,          "",              T_BOOL   },
 
       { P_END,                 "",              T_INT    }
       };

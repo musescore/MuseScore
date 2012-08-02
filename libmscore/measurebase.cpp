@@ -32,6 +32,7 @@ MeasureBase::MeasureBase(Score* score)
       {
       _prev = 0;
       _next = 0;
+      _breakHint    = false;
       _lineBreak    = false;
       _pageBreak    = false;
       _sectionBreak = 0;
@@ -43,6 +44,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _next         = m._next;
       _prev         = m._prev;
       _tick         = m._tick;
+      _breakHint    = m._breakHint;
       _lineBreak    = m._lineBreak;
       _pageBreak    = m._pageBreak;
       _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
@@ -268,6 +270,38 @@ MeasureBase* Score::first() const
 MeasureBase* Score::last()  const
       {
       return _measures.last();
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant MeasureBase::getProperty(P_ID id) const
+      {
+      switch(id) {
+            case P_BREAK_HINT:
+                  return QVariant(_breakHint);
+            default:
+                  return Element::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool MeasureBase::setProperty(P_ID id, const QVariant& property)
+      {
+      switch(id) {
+            case P_BREAK_HINT:
+                  setBreakHint(property.toBool());
+                  break;
+            default:
+                  if (!Element::setProperty(id, property))
+                        return false;
+                  break;
+            }
+      return true;
       }
 
 

@@ -480,38 +480,36 @@ void BarLine::endEditDrag()
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutWidth
 //---------------------------------------------------------
 
-void BarLine::layout()
+qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       {
-      qreal y1, y2;
-      getY(&y1, &y2);
-      qreal _spatium = spatium();
-      qreal dw = score()->styleS(ST_barWidth).val() * _spatium;
+      qreal _spatium = score->spatium();
+      qreal dw = score->styleS(ST_barWidth).val() * _spatium;
 
-      qreal dotwidth = symbols[score()->symIdx()][dotSym].width(magS());
-      switch(subtype()) {
+      qreal dotwidth = symbols[score->symIdx()][dotSym].width(mag);
+      switch(type) {
             case DOUBLE_BAR:
-                  dw  = (score()->styleS(ST_doubleBarWidth) * 2
-                     + score()->styleS(ST_doubleBarDistance)).val() * _spatium;
+                  dw  = (score->styleS(ST_doubleBarWidth) * 2
+                     + score->styleS(ST_doubleBarDistance)).val() * _spatium;
                   break;
             case START_REPEAT:
-                  dw += dotwidth + (score()->styleS(ST_endBarWidth)
-                     + 2 * score()->styleS(ST_endBarDistance)).val() * _spatium;
+                  dw += dotwidth + (score->styleS(ST_endBarWidth)
+                     + 2 * score->styleS(ST_endBarDistance)).val() * _spatium;
                   break;
             case END_REPEAT:
-                  dw += dotwidth + (score()->styleS(ST_endBarWidth)
-                     + 2 * score()->styleS(ST_endBarDistance)).val() * _spatium;
+                  dw += dotwidth + (score->styleS(ST_endBarWidth)
+                     + 2 * score->styleS(ST_endBarDistance)).val() * _spatium;
                   break;
             case END_BAR:
-                  dw += (score()->styleS(ST_endBarWidth)
-                     + score()->styleS(ST_endBarDistance)).val() * _spatium;
+                  dw += (score->styleS(ST_endBarWidth)
+                     + score->styleS(ST_endBarDistance)).val() * _spatium;
                   break;
             case  END_START_REPEAT:
-                  dw += 2 * dotwidth + (score()->styleS(ST_barWidth)
-                     + score()->styleS(ST_endBarWidth)
-                     + 4 * score()->styleS(ST_endBarDistance)).val() * _spatium;
+                  dw += 2 * dotwidth + (score->styleS(ST_barWidth)
+                     + score->styleS(ST_endBarWidth)
+                     + 4 * score->styleS(ST_endBarDistance)).val() * _spatium;
                   break;
             case BROKEN_BAR:
             case NORMAL_BAR:
@@ -520,6 +518,20 @@ void BarLine::layout()
                   qDebug("illegal bar line type\n");
                   break;
             }
+      return dw;
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void BarLine::layout()
+      {
+      qreal y1, y2;
+      getY(&y1, &y2);
+      qreal _spatium = spatium();
+
+      qreal dw = layoutWidth(score(), subtype(), magS());
       QRectF r(0.0, y1, dw, y2-y1);
 
       if (score()->styleB(ST_repeatBarTips)) {
@@ -689,18 +701,5 @@ bool BarLine::setProperty(P_ID propertyId, const QVariant& v)
             }
       score()->setLayoutAll(true);
       return Element::setProperty(propertyId, v);
-      }
-
-bool BarLine::setProperty(const QString& name, const QDomElement& e)
-      {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            if (propertyName(propertyList[i].id) == name) {
-                  QVariant v = ::getProperty(propertyList[i].id, e);
-                  setVariant(propertyList[i].id, ((*this).*(propertyList[i].data))(), v);
-                  setGenerated(false);
-                  return true;
-                  }
-            }
-      return Element::setProperty(name, e);
       }
 

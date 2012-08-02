@@ -369,8 +369,9 @@ class Score : public QObject {
 
       Page* addPage();
       bool layoutSystem(qreal& minWidth, qreal w, bool, bool);
+      bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
-      void processSystemHeader(Measure* m, bool);
+      void addSystemHeader(Measure* m, bool);
       System* getNextSystem(bool, bool);
       bool doReLayout();
       Measure* skipEmptyMeasures(Measure*, System*);

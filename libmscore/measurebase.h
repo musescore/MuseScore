@@ -39,10 +39,10 @@ class MeasureBase : public Element {
       int _tick;
 
    protected:
-//      qreal _mw;
       ElementList _el;        ///< Measure(/tick) relative -elements: with defined start time
                               ///< but outside the staff
 
+      bool _breakHint;
       bool _lineBreak;        ///< Forced line break
       bool _pageBreak;        ///< Forced page break
       LayoutBreak* _sectionBreak;
@@ -74,6 +74,9 @@ class MeasureBase : public Element {
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
 
+      bool breakHint() const                 { return _breakHint;   }
+      void setBreakHint(bool val)            { _breakHint = val;  }
+
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }
       LayoutBreak* sectionBreak() const      { return _sectionBreak; }
@@ -95,6 +98,9 @@ class MeasureBase : public Element {
       void setTick(int t)                    { _tick = t;     }
 
       qreal pause() const;
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
 #endif
