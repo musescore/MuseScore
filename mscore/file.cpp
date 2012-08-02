@@ -239,7 +239,8 @@ void MuseScore::loadFiles()
          tr("Overture / Score Writer Files <experimental> (*.ove *.scw);;")+
          tr("Bagpipe Music Writer Files <experimental> (*.bww);;")+
          tr("Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5);;")+
-         tr("All Files (*)")
+         tr("All Files (*)"),
+         tr("MuseScore: Load Score")
          );
       QStringList list = files;
       QStringList::Iterator it = list.begin();
@@ -620,11 +621,11 @@ void MuseScore::newFile()
 //   getOpenScoreNames
 //---------------------------------------------------------
 
-QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter)
+QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter, const QString& title)
       {
       if (preferences.nativeDialogs) {
             return QFileDialog::getOpenFileNames(this,
-               tr("MuseScore: Load Score"), dir, filter);
+               title, dir, filter);
             }
       QFileInfo myScores(preferences.myScoresPath);
       if (myScores.isRelative())
@@ -633,7 +634,7 @@ QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter)
             loadScoreDialog = new QFileDialog(this);
             loadScoreDialog->setFileMode(QFileDialog::ExistingFiles);
             loadScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadScoreDialog->setWindowTitle(tr("MuseScore: Load Score"));
+            loadScoreDialog->setWindowTitle(title);
 
             QSettings settings;
             loadScoreDialog->restoreState(settings.value("loadScoreDialog").toByteArray());
