@@ -550,7 +550,7 @@ class MuseScore : public QMainWindow {
       void readScoreError(const QString&) const;
       QList<LanguageItem>& languages() { return _languages; }
 
-      QStringList getOpenScoreNames(QString& dir, const QString& filter);
+      QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
       QString getSaveScoreName(const QString& title,
          QString& name, const QString& filter, QString* selectedFilter);
       QString getSaveScoreName(const QString& title,
