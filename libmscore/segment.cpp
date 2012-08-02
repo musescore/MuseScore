@@ -201,7 +201,7 @@ void Segment::init()
 ///   of \a Measure
 //---------------------------------------------------------
 
-inline Segment* Segment::next1() const
+Segment* Segment::next1() const
       {
       if (next())
             return next();

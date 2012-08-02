@@ -202,14 +202,8 @@ void Preferences::init()
       appStyleFile            = ":/data/appstyle-dark.css";
       singlePalette           = false;
 
-#if defined(Q_WS_MAC)
-      // On OSX, the default style should be native to get Aqua
-      styleName               = "native";   // ??
-      globalStyle             = STYLE_NATIVE;
-#else
       styleName               = "dark";   // ??
       globalStyle             = STYLE_DARK;
-#endif
 
       QString workingDirectory = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
       myScoresPath            = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("scores_directory", "Scores"))).absolutePath();

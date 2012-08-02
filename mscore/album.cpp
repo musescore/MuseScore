@@ -445,7 +445,8 @@ void AlbumManager::loadClicked()
       QStringList files = mscore->getOpenScoreNames(
          home,
          tr("MuseScore Album Files (*.album);;")+
-         tr("All Files (*)")
+         tr("All Files (*)"),
+         tr("MuseScore: Load Album")
          );
       if (files.isEmpty())
             return;
@@ -529,7 +530,8 @@ void AlbumManager::fileDialogClicked()
       QStringList files = mscore->getOpenScoreNames(
          home,
          tr("MuseScore Files (*.mscz *.mscx *.msc);;")+
-         tr("All Files (*)")
+         tr("All Files (*)"),
+         tr("MuseScore: Load Score")
          );
       if (files.isEmpty())
             return;
