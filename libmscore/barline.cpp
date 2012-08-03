@@ -332,7 +332,7 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
       return type == BAR_LINE
-         || (type == ARTICULATION && segment() && segment()->subtype() == SegEndBarLine)
+         || (type == ARTICULATION && segment() && segment()->subtype() == Segment::SegEndBarLine)
          ;
       }
 

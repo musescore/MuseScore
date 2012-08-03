@@ -1163,7 +1163,7 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                                           Rest* rest = new Rest(score, d);
                                           rest->setDuration(d.fraction());
                                           rest->setTrack(staffIdx * VOICES);
-                                          Segment* s = measure->getSegment(SegChordRest, ctick);
+                                          Segment* s = measure->getSegment(Segment::SegChordRest, ctick);
                                           s->add(rest);
                                           restLen -= d.ticks();
                                           ctick   += d.ticks();

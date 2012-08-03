@@ -68,7 +68,7 @@ void Score::checkScore()
       for (Segment* s = firstMeasure()->first(); s;) {
             Segment* ns = s->next1();
 
-            if (s->subtype() & (SegChordRest | SegGrace)) {
+            if (s->subtype() & (Segment::SegChordRest | Segment::SegGrace)) {
                   bool empty = true;
                   foreach(Element* e, s->elist()) {
                         if (e) {
@@ -92,7 +92,7 @@ qDebug("checkScore: remove empty ChordRest segment\n");
             int track = staffIdx * VOICES;
             int tick  = 0;
             Staff* st = staff(staffIdx);
-            for (Segment* s = firstMeasure()->first(SegChordRest); s; s = s->next1(SegChordRest)) {
+            for (Segment* s = firstMeasure()->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                   if (!cr)
                         continue;

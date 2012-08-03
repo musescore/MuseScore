@@ -451,12 +451,12 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
       //
       for (MeasureBase* m = fm; ; m = m->next()) {
             if (!m || (m->type() != MEASURE)
-              || (static_cast<Measure*>(m)->first(SegTimeSig) && m != fm))
+              || (static_cast<Measure*>(m)->first(Segment::SegTimeSig) && m != fm))
                   {
                   if (!rewriteMeasures(fm1, lm, ns)) {
                         warnTupletCrossing();
                         for (Measure* m = fm1; m; m = m->nextMeasure()) {
-                              if (m->first(SegTimeSig))
+                              if (m->first(Segment::SegTimeSig))
                                     break;
                               Fraction fr(ns);
                               undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(fr));
@@ -499,7 +499,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             }
 
       int track    = staffIdx * VOICES;
-      Segment* seg = fm->undoGetSegment(SegTimeSig, tick);
+      Segment* seg = fm->undoGetSegment(Segment::SegTimeSig, tick);
       TimeSig* ots = static_cast<TimeSig*>(seg->element(track));
       if (ots) {
             //
@@ -532,7 +532,7 @@ printf("insert local timesig\n");
             // time signature. Do not touch measure contents.
             //
             for (Measure* m = fm; m; m = m->nextMeasure()) {
-                  if ((m != fm) && m->first(SegTimeSig))
+                  if ((m != fm) && m->first(Segment::SegTimeSig))
                         break;
                   bool changeActual = m->len() == m->timesig();
                   undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
@@ -555,7 +555,7 @@ printf("insert local timesig\n");
                   }
             }
 
-      seg   = nfm->undoGetSegment(SegTimeSig, nfm->tick());
+      seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
       int n = _staves.size();
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
             TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
@@ -583,11 +583,11 @@ printf("insert local timesig\n");
 void Score::timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx)
       {
       for (Measure* m = fm; m; m = m->nextMeasure()) {
-            if ((m != fm) && m->first(SegTimeSig))
+            if ((m != fm) && m->first(Segment::SegTimeSig))
                   break;
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
-            for (Segment* s = m->first(SegChordRest); s; s = s->next(SegChordRest)) {
+            for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
                   for (int track = strack; track < etrack; ++track) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (!cr)
@@ -614,7 +614,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       Measure* pm = fm->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
       for (Measure* m = lm; m; m = m->nextMeasure()) {
-            if (m->first(SegTimeSig))
+            if (m->first(Segment::SegTimeSig))
                   break;
             lm = m;
             }
@@ -794,7 +794,7 @@ void Score::cmdAddTie()
             int strack = part->staves()->front()->idx() * VOICES;
             int etrack = strack + part->staves()->size() * VOICES;
 
-            for (Segment* seg = chord->segment()->next1(SegChordRest); seg; seg = seg->next1(SegChordRest)) {
+            for (Segment* seg = chord->segment()->next1(Segment::SegChordRest); seg; seg = seg->next1(Segment::SegChordRest)) {
                   bool noteFound = false;
                   for (int track = strack; track < etrack; ++track) {
                         ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
@@ -1083,11 +1083,11 @@ void Score::deleteItem(Element* el)
                   BarLine* bl  = static_cast<BarLine*>(el);
                   Segment* seg = bl->segment();
                   Measure* m   = seg->measure();
-                  if (seg->subtype() == SegStartRepeatBarLine)
+                  if (seg->subtype() == Segment::SegStartRepeatBarLine)
                         undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatStart);
-                  else if (seg->subtype() == SegBarLine)
+                  else if (seg->subtype() == Segment::SegBarLine)
                         undoRemoveElement(el);
-                  else if (seg->subtype() == SegEndBarLine) {
+                  else if (seg->subtype() == Segment::SegEndBarLine) {
                         if (m->endBarLineType() != NORMAL_BAR) {
                               undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatEnd);
                               Measure* nm = m->nextMeasure();
@@ -1184,10 +1184,10 @@ void Score::cmdDeleteSelection()
             Segment* s2 = selection().endSegment();
 
             Segment* ss1 = s1;
-            if (ss1->subtype() != SegChordRest)
-                  ss1 = ss1->next1(SegChordRest);
-            bool fullMeasure = ss1 && (ss1->measure()->first(SegChordRest) == ss1)
-                  && (s2 == 0 || (s2->subtype() == SegEndBarLine));
+            if (ss1->subtype() != Segment::SegChordRest)
+                  ss1 = ss1->next1(Segment::SegChordRest);
+            bool fullMeasure = ss1 && (ss1->measure()->first(Segment::SegChordRest) == ss1)
+                  && (s2 == 0 || (s2->subtype() == Segment::SegEndBarLine));
 
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
@@ -1198,12 +1198,12 @@ void Score::cmdDeleteSelection()
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s != s2; s = s->next1()) {
                         if (s->element(track) &&
-                           ((s->subtype() == SegBreath)
-                           || (s->subtype() == SegGrace))) {
+                           ((s->subtype() == Segment::SegBreath)
+                           || (s->subtype() == Segment::SegGrace))) {
                               deleteItem(s->element(track));
                               continue;
                               }
-                        if (s->subtype() != SegChordRest || !s->element(track))
+                        if (s->subtype() != Segment::SegChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (tick == -1) {
@@ -1398,7 +1398,7 @@ void Score::colorItem(Element* element)
                   refresh |= e->abbox();
                   if (e->type() == BAR_LINE) {
                         Element* ep = e->parent();
-                        if (ep->type() == SEGMENT && static_cast<Segment*>(ep)->subtype() == SegEndBarLine) {
+                        if (ep->type() == SEGMENT && static_cast<Segment*>(ep)->subtype() == Segment::SegEndBarLine) {
                               Measure* m = static_cast<Segment*>(ep)->measure();
                               BarLine* bl = static_cast<BarLine*>(e);
                               m->setEndBarLineType(bl->subtype(), false, e->visible(), e->color());
@@ -1643,19 +1643,19 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure,
                   //
                   foreach(TimeSig* ts, tsl) {
                         TimeSig* nts = new TimeSig(*ts);
-                        Segment* s   = m->undoGetSegment(SegTimeSig, 0);
+                        Segment* s   = m->undoGetSegment(Segment::SegTimeSig, 0);
                         nts->setParent(s);
                         undoAddElement(nts);
                         }
                   foreach(KeySig* ks, ksl) {
                         KeySig* nks = new KeySig(*ks);
-                        Segment* s  = m->undoGetSegment(SegKeySig, 0);
+                        Segment* s  = m->undoGetSegment(Segment::SegKeySig, 0);
                         nks->setParent(s);
                         undoAddElement(nks);
                         }
                   foreach(Clef* clef, cl) {
                         Clef* nClef = new Clef(*clef);
-                        Segment* s  = m->undoGetSegment(SegClef, 0);
+                        Segment* s  = m->undoGetSegment(Segment::SegClef, 0);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }

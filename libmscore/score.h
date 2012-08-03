@@ -27,6 +27,7 @@
 #include "interval.h"
 #include "sparm.h"
 #include "mscoreview.h"
+#include "segment.h"
 
 class TempoMap;
 struct TEvent;
@@ -587,7 +588,7 @@ class Score : public QObject {
       int pos();
       Measure* tick2measure(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, SegmentTypes st = SegAll) const;
+      Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       void fixTicks();
       void addArticulation(Element*, Articulation* atr);
@@ -742,7 +743,7 @@ class Score : public QObject {
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Segment* firstSegment(SegmentTypes s = SegAll) const;
+      Q_INVOKABLE Segment* firstSegment(Segment::SegmentTypes s = Segment::SegAll) const;
       Q_INVOKABLE Segment* lastSegment() const;
 
       void connectTies();

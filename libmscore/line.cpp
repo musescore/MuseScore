@@ -447,7 +447,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   x = m->pos().x() + m->bbox().right();
                   if (type() == VOLTA) {
                         Segment* seg = m->last();
-                        if (seg->subtype() == SegEndBarLine) {
+                        if (seg->subtype() == Segment::SegEndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == BAR_LINE) {
                                     if (static_cast<BarLine*>(e)->subtype() == START_REPEAT)
@@ -547,7 +547,7 @@ void SLine::layout()
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();
-            Segment* mseg = m->first(SegChordRest);
+            Segment* mseg = m->first(Segment::SegChordRest);
             qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
             qreal x2 = system->bbox().right();
             qreal y  = system->staff(si)->y();

@@ -54,7 +54,7 @@ void Cursor::rewind(int type)
             _segment = 0;
             Measure* m = _score->firstMeasure();
             if (m) {
-                  _segment = m->first(SegChordRest);
+                  _segment = m->first(Segment::SegChordRest);
 //                  while (_segment && _segment->element(_track) == 0)
 //                        _segment = _segment->next1(SegChordRest);
                   firstChordRestInTrack();
@@ -83,7 +83,7 @@ bool Cursor::next()
       {
       if (!_segment)
             return false;
-      _segment = _segment->next1(SegChordRest | SegGrace);
+      _segment = _segment->next1(Segment::SegChordRest | Segment::SegGrace);
       firstChordRestInTrack();
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
@@ -105,7 +105,7 @@ bool Cursor::nextMeasure()
             _segment = 0;
             return false;
             }
-      _segment = m->first(SegChordRest | SegGrace);
+      _segment = m->first(Segment::SegChordRest | Segment::SegGrace);
 //      while (seg && seg->element(_track) == 0)
 //            seg = seg->next1(SegChordRest | SegGrace);
       firstChordRestInTrack();
@@ -241,6 +241,6 @@ int Cursor::voice() const
 inline void Cursor::firstChordRestInTrack()
       {
       while (_segment && _segment->element(_track) == 0)
-            _segment = _segment->next1(SegChordRest | SegGrace);
+            _segment = _segment->next1(Segment::SegChordRest | Segment::SegGrace);
       }
 

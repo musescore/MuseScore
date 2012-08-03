@@ -618,7 +618,7 @@ void Segment::remove(Element* el)
 //    returns segment type suitable for storage of Element
 //---------------------------------------------------------
 
-SegmentType Segment::segmentType(ElementType type)
+Segment::SegmentType Segment::segmentType(ElementType type)
       {
       switch (type) {
             case CHORD:

@@ -153,7 +153,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = *i;
             if (el->type() == NOTE)
                   el = ((Note*)el)->chord();
-            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == SegChordRest) {
+            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == Segment::SegChordRest) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
@@ -238,7 +238,7 @@ void Selection::updateSelectedElements()
 
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1()) {
-                  if (s->subtype() == SegEndBarLine)  // do not select end bar line
+                  if (s->subtype() == Segment::SegEndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
                   if (!e)
@@ -490,7 +490,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->subtype() & (SegChordRest | SegGrace)))
+                        if (!(seg->subtype() & (Segment::SegChordRest | Segment::SegGrace)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);

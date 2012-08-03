@@ -55,7 +55,26 @@ class System;
 class Segment : public Element {
       Q_OBJECT
       Q_PROPERTY(SegmentType subtype READ subtype WRITE setSubtype)
+      Q_ENUMS(SegmentType)
 
+   public:
+      enum SegmentType {
+            SegClef               = 0x1,
+            SegKeySig             = 0x2,
+            SegTimeSig            = 0x4,
+            SegStartRepeatBarLine = 0x8,
+            SegBarLine            = 0x10,
+            SegGrace              = 0x20,
+            SegChordRest          = 0x40,
+            SegBreath             = 0x80,
+            SegEndBarLine         = 0x100,
+            SegTimeSigAnnounce    = 0x200,
+            SegKeySigAnnounce     = 0x400,
+            SegAll                = 0xfff
+            };
+      typedef QFlags<SegmentType> SegmentTypes;
+
+   private:
       Segment* _next;               // linked list of segments inside a measure
       Segment* _prev;
 
@@ -169,6 +188,9 @@ class Segment : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes)
+Q_DECLARE_METATYPE(Segment::SegmentType)
 
 #endif
 

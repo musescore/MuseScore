@@ -1550,7 +1550,7 @@ qDebug("readCapVoice 1\n");
                               if (!o->invisible) {
                                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
                                           Measure* m = score->getCreateMeasure(tick + i * ft);
-                                          Segment* s = m->getSegment(SegChordRest, tick + i * ft);
+                                          Segment* s = m->getSegment(Segment::SegChordRest, tick + i * ft);
                                           Rest* rest = new Rest(score);
                                           rest->setDurationType(TDuration(TDuration::V_MEASURE));
                                           rest->setDuration(m->len());
@@ -1560,7 +1560,7 @@ qDebug("readCapVoice 1\n");
                                     }
                               }
                         if (!o->invisible || voice == 0) {
-                              Segment* s = m->getSegment(SegChordRest, tick);
+                              Segment* s = m->getSegment(Segment::SegChordRest, tick);
                               Rest* rest = new Rest(score);
                               TDuration d;
                               if (o->fullMeasures) {
@@ -1588,7 +1588,7 @@ qDebug("readCapVoice 1\n");
                         TDuration d;
                         d.setVal(ticks);
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(SegChordRest, tick);
+                        Segment* s = m->getSegment(Segment::SegChordRest, tick);
 
                         if (o->count) {
                               if (tuplet == 0) {
@@ -1727,7 +1727,7 @@ qDebug("readCapVoice 1\n");
                         clef->setClefType(nclef);
                         clef->setTrack(staffIdx * VOICES);
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(SegClef, tick);
+                        Segment* s = m->getSegment(Segment::SegClef, tick);
                         s->add(clef);
                         }
                         break;
@@ -1741,7 +1741,7 @@ qDebug("readCapVoice 1\n");
                               KeySig* ks = new KeySig(score);
                               ks->setTrack(staffIdx * VOICES);
                               Measure* m = score->getCreateMeasure(tick);
-                              Segment* s = m->getSegment(SegKeySig, tick);
+                              Segment* s = m->getSegment(Segment::SegKeySig, tick);
                               s->add(ks);
                               ks->setSig(key, o->signature);
                               }
@@ -1764,7 +1764,7 @@ qDebug("     <Meter> tick %d %d/%d\n", tick, o->numerator, 1 << o->log2Denom);
                         ts->setSig(f);
                         ts->setTrack(track);
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(SegTimeSig, tick);
+                        Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(ts);
                         }
                         break;
@@ -1851,7 +1851,7 @@ qDebug("readCapVoice 2\n");
                               if (seg) {
                                     int n = so->nNotes;
                                     for (seg = seg->next1(); seg; seg = seg->next1()) {
-                                          if (seg->subtype() != SegChordRest)
+                                          if (seg->subtype() != Segment::SegChordRest)
                                                 continue;
                                           if (seg->element(track))
                                                 --n;
@@ -2099,7 +2099,7 @@ qDebug("  ReadCapStaff %d/%d\n", cstaff->numerator, 1 << cstaff->log2Denom);
       //
       // fill empty measures with rests
       //
-      SegmentType st = SegChordRest;
+      Segment::SegmentType st = Segment::SegChordRest;
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
                   bool empty = true;
@@ -2110,7 +2110,7 @@ qDebug("  ReadCapStaff %d/%d\n", cstaff->numerator, 1 << cstaff->log2Denom);
                               }
                         }
                   if (empty) {
-                        Segment* s = m->getSegment(SegChordRest, m->tick());
+                        Segment* s = m->getSegment(Segment::SegChordRest, m->tick());
                         Rest* rest = new Rest(score);
                         TDuration d(m->len());
                         if ((m->len() == m->timesig()) || !d.isValid())
