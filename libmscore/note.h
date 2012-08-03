@@ -78,6 +78,8 @@ class NoteHead : public Symbol {
 //   @P offTimeUserOffset int
 //   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
 //   @P dotPosition       enum AUTO, UP, DOWN
+//   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
+//   @P headType          enum HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
 //-------------------------------------------------------------------
 
 class Note : public Element {
@@ -102,6 +104,8 @@ class Note : public Element {
       Q_PROPERTY(int offTimeUserOffset READ offTimeUserOffset WRITE setOffTimeUserOffset)
       Q_PROPERTY(DirectionH userMirror READ userMirror WRITE setUserMirror)
       Q_PROPERTY(Direction dotPosition READ dotPosition WRITE setDotPosition)
+      Q_PROPERTY(NoteHeadGroup headGroup READ headGroup WRITE setHeadGroup)
+      Q_PROPERTY(NoteHeadType headType READ headType WRITE setHeadType)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
