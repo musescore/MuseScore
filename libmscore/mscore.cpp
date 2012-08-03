@@ -64,6 +64,8 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<MScore::NoteHeadGroup>("NoteHeadGroup");
+      qRegisterMetaType<MScore::NoteHeadType>("NoteHeadType");
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
 #endif
 
