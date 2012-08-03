@@ -82,9 +82,9 @@ void updateNoteLines(Segment* segment, int track)
       if (staff->part()->instr()->drumset() || staff->useTablature())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if (s->subtype() == SegClef && s->element(track))
+            if (s->subtype() == Segment::SegClef && s->element(track))
                   break;
-            if (s->subtype() != SegChordRest)
+            if (s->subtype() != Segment::SegChordRest)
                   continue;
             for (int t = track; t < track+VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
@@ -442,7 +442,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   qDebug("measure for tick %d not found!", tick);
                   continue;
                   }
-            Segment* s   = measure->undoGetSegment(SegKeySig, tick);
+            Segment* s   = measure->undoGetSegment(Segment::SegKeySig, tick);
             int staffIdx = score->staffIdx(staff);
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
@@ -508,12 +508,12 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
             int tick = seg->tick();
             Segment* segment = measure->findSegment(seg->subtype(), seg->tick());
             if (segment) {
-                  if (segment->subtype() != SegClef) {
-                        if (segment->prev() && segment->prev()->subtype() == SegClef) {
+                  if (segment->subtype() != Segment::SegClef) {
+                        if (segment->prev() && segment->prev()->subtype() == Segment::SegClef) {
                               segment = segment->prev();
                              }
                         else {
-                              Segment* s = new Segment(measure, SegClef, seg->tick());
+                              Segment* s = new Segment(measure, Segment::SegClef, seg->tick());
                               s->setNext(segment);
                               s->setPrev(segment->prev());
                               score->undoAddElement(s);
@@ -522,7 +522,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                         }
                   }
             else {
-                  segment = new Segment(measure, SegClef, seg->tick());
+                  segment = new Segment(measure, Segment::SegClef, seg->tick());
                   score->undoAddElement(segment);
                   }
             int staffIdx = staff->idx();
@@ -665,7 +665,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
                   // check for complete timeline of voice 0
                   int ctick  = measure->tick();
                   int track = staffIdx * VOICES;
-                  for (Segment* s = measure->first(SegChordRest); s; s = s->next(SegChordRest)) {
+                  for (Segment* s = measure->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr == 0)
                               continue;
@@ -905,19 +905,19 @@ void Score::undoAddElement(Element* element)
             if (element->type() == ARTICULATION) {
                   Articulation* a  = static_cast<Articulation*>(element);
                   Segment* segment;
-                  SegmentType st;
+                  Segment::SegmentType st;
                   Measure* m;
                   int tick;
                   if (a->parent()->isChordRest()) {
                         ChordRest* cr = a->chordRest();
                         segment       = cr->segment();
-                        st            = SegChordRest;
+                        st            = Segment::SegChordRest;
                         tick          = segment->tick();
                         m             = score->tick2measure(tick);
                         }
                   else {
                         segment  = static_cast<Segment*>(a->parent()->parent());
-                        st       = SegEndBarLine;
+                        st       = Segment::SegEndBarLine;
                         tick     = segment->tick();
                         m        = score->tick2measure(tick);
                         if (m->tick() == tick)
@@ -946,7 +946,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = d->segment();
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(SegChordRest, tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
                   Dynamic* nd      = static_cast<Dynamic*>(ne);
                   int ntrack       = staffIdx * VOICES + d->voice();
                   nd->setTrack(ntrack);
@@ -1047,7 +1047,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = cr->segment();
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(SegChordRest, tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
                   Note* nnote      = static_cast<Note*>(ne);
                   int ntrack       = staffIdx * VOICES + nnote->voice();
                   nnote->setScore(score);
@@ -1062,7 +1062,7 @@ void Score::undoAddElement(Element* element)
                   Breath* breath   = static_cast<Breath*>(element);
                   int tick         = breath->segment()->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->undoGetSegment(SegBreath, tick);
+                  Segment* seg     = m->undoGetSegment(Segment::SegBreath, tick);
                   Breath* nbreath  = static_cast<Breath*>(ne);
                   int ntrack       = staffIdx * VOICES + nbreath->voice();
                   nbreath->setScore(score);
@@ -1105,10 +1105,10 @@ void Score::undoAddGrace(Chord* chord, Segment* s, bool behind)
                   }
             else {
                   m   = score->tick2measure(tick);
-                  ss  = m->findSegment(SegChordRest, tick);
+                  ss  = m->findSegment(Segment::SegChordRest, tick);
                   }
             // always create new segment for grace note:
-            Segment* seg = new Segment(m, SegGrace, tick);
+            Segment* seg = new Segment(m, Segment::SegGrace, tick);
             if (behind) {
                   seg->setNext(ss->next());
                   seg->setPrev(ss);
@@ -1150,17 +1150,17 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             staffList = linkedStaves->staves();
       else
             staffList.append(ostaff);
-      SegmentType segmentType;
+      Segment::SegmentType segmentType;
       if ((cr->type() == CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL))
-            segmentType = SegGrace;
+            segmentType = Segment::SegGrace;
       else
-            segmentType = SegChordRest;
+            segmentType = Segment::SegChordRest;
       foreach(Staff* staff, staffList) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             // always create new segment for grace note:
             Segment* seg = 0;
-            if (segmentType != SegGrace)
+            if (segmentType != Segment::SegGrace)
                   seg = m->findSegment(segmentType, tick);
             if (seg == 0) {
                   seg = new Segment(m, segmentType, tick);
@@ -1867,8 +1867,8 @@ void ChangeMeasureLen::flip()
       //
       int endTick = measure->tick() + len.ticks();
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->subtype() != SegEndBarLine
-               && segment->subtype() != SegTimeSigAnnounce)
+            if (segment->subtype() != Segment::SegEndBarLine
+               && segment->subtype() != Segment::SegTimeSigAnnounce)
                   continue;
             segment->setTick(endTick);
             }

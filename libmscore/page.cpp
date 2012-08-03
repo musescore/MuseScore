@@ -927,7 +927,7 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
       int track    = i * VOICES;
 
       SysStaff* sstaff = m->system()->staff(i);
-      for (Segment* segment = m->first(SegChordRest); segment; segment = segment->next(SegChordRest)) {
+      for (Segment* segment = m->first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
             if ((segment->element(track) == 0)
                && (segment->element(track+1) == 0)
                && (segment->element(track+2) == 0)
@@ -936,7 +936,7 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
                   continue;
             Segment* ns = segment->next();
             for (; ns; ns = ns->next()) {
-                  if (ns->subtype() != SegChordRest)
+                  if (ns->subtype() != Segment::SegChordRest)
                         continue;
                   if (ns->element(track)
                      || ns->element(track+1)

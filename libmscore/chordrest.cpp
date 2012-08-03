@@ -729,7 +729,7 @@ Element* ChordRest::drop(const DropData& data)
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(SegBreath, tick());
+                  Segment* seg = m->undoGetSegment(Segment::SegBreath, tick());
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }
@@ -743,7 +743,7 @@ Element* ChordRest::drop(const DropData& data)
                   if (tick() == m->tick())
                         return m->drop(data);
 
-                  Segment* seg = m->undoGetSegment(SegBarLine, tick());
+                  Segment* seg = m->undoGetSegment(Segment::SegBarLine, tick());
                   bl->setParent(seg);
                   score()->undoAddElement(bl);
                   }

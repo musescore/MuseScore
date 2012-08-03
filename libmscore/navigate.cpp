@@ -38,7 +38,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       if (!cr)
             return 0;
       int track = cr->track();
-      for (Segment* seg = cr->segment()->next1(SegChordRest); seg; seg = seg->next1(SegChordRest)) {
+      for (Segment* seg = cr->segment()->next1(Segment::SegChordRest); seg; seg = seg->next1(Segment::SegChordRest)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
             Element* e = seg->element(track);
@@ -59,7 +59,7 @@ ChordRest* prevChordRest(ChordRest* cr)
             return 0;
       int track = cr->track();
       for (Segment* seg = cr->segment()->prev1(); seg; seg = seg->prev1()) {
-            if (seg->subtype() != SegChordRest)
+            if (seg->subtype() != Segment::SegChordRest)
                   continue;
             if (seg->measure()->multiMeasure() < 0)
                   continue;

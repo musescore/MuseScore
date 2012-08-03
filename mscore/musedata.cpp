@@ -385,7 +385,7 @@ void MuseData::readNote(Part* part, const QString& s)
             Dynamic* dyn = new Dynamic(score);
             dyn->setSubtype(dynamics);
             dyn->setTrack(gstaff * VOICES);
-            Segment* s = measure->getSegment(SegChordRest, tick);
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
             s->add(dyn);
             }
 

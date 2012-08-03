@@ -58,7 +58,7 @@ void Score::updateChannel()
       Measure* fm = firstMeasure();
       if (!fm)
             return;
-      for (Segment* s = fm->first(SegChordRest); s; s = s->next1(SegChordRest)) {
+      for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             foreach(const Element* e, s->annotations()) {
                   if (e->type() != STAFF_TEXT)
                         continue;
@@ -75,7 +75,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(SegChordRest | SegGrace); s; s = s->next1(SegChordRest | SegGrace)) {
+      for (Segment* s = fm->first(Segment::SegChordRest | Segment::SegGrace); s; s = s->next1(Segment::SegChordRest | Segment::SegGrace)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -238,7 +238,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       int firstStaffIdx = m->score()->staffIdx(part);
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
 
-      SegmentTypes st = SegGrace | SegChordRest;
+      Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
       int strack      = firstStaffIdx * VOICES;
       int etrack      = nextStaffIdx * VOICES;
 
@@ -320,7 +320,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       //
       // collect program changes and controller
       //
-      for (Segment* s = m->first(SegChordRest); s; s = s->next(SegChordRest)) {
+      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             // int tick = s->tick();
             foreach(Element* e, s->annotations()) {
                   if (e->type() != STAFF_TEXT

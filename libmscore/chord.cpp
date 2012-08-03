@@ -1199,7 +1199,7 @@ void Chord::layout2()
 
       const qreal minDist = _spatium * .17;
 
-      Segment* s = segment()->prev(SegChordRest | SegGrace);
+      Segment* s = segment()->prev(Segment::SegChordRest | Segment::SegGrace);
       if (s) {
             int strack = staffIdx() * VOICES;
             int etrack = strack + VOICES;
@@ -1590,12 +1590,12 @@ void Chord::renderPlayback()
       //  Layout acciaccatura and appoggiatura
       //-----------------------------------------
 
-      if (segment()->subtype() == SegChordRest) {
+      if (segment()->subtype() == Segment::SegChordRest) {
             QList<Chord*> gl;
             Segment* s = segment();
             while (s->prev()) {
                   s = s->prev();
-                  if (s->subtype() != SegGrace)
+                  if (s->subtype() != Segment::SegGrace)
                         break;
                   Element* cr = s->element(track());
                   if (cr && cr->type() == CHORD)

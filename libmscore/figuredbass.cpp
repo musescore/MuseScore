@@ -851,10 +851,10 @@ NoLen:
       Measure* m = score()->tick2measure(nextTick-1);
       if (m != 0) {
             // locate the first segment (of ANY type) right after this' last tick
-            for (nextSegm = m->first(SegAll); nextSegm; ) {
+            for (nextSegm = m->first(Segment::SegAll); nextSegm; ) {
                   if(nextSegm->tick() >= nextTick)
                         break;
-                  nextSegm = nextSegm->next(SegAll);
+                  nextSegm = nextSegm->next();
                   }
             }
       if (m == 0 || nextSegm == 0) {
@@ -1061,7 +1061,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             // locate previous FB for same staff
             Segment *         prevSegm;
             FiguredBass*      prevFB = 0;
-            for(prevSegm = seg->prev1(SegChordRest); prevSegm; prevSegm = prevSegm->prev1(SegChordRest)) {
+            for(prevSegm = seg->prev1(Segment::SegChordRest); prevSegm; prevSegm = prevSegm->prev1(Segment::SegChordRest)) {
                   const QList<Element*>& annot = prevSegm->annotations();
                   count = annot.size();
                   for(i = 0; i < count; i++) {

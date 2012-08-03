@@ -1077,7 +1077,7 @@ static bool chordsHaveTie(Chord* c1, Chord* c2)
 static bool isDirectionMixture(Chord* c1, Chord* c2)
       {
       bool up = c1->up();
-      for (Segment* seg = c1->segment(); seg; seg = seg->next(SegChordRest)) {
+      for (Segment* seg = c1->segment(); seg; seg = seg->next(Segment::SegChordRest)) {
             Chord* c = static_cast<Chord*>(seg->element(c1->track()));
             if (!c || c->type() != CHORD)
                   continue;
@@ -1250,7 +1250,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
             if (mb->type() == MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                        if (seg->subtype() == SegChordRest) {
+                        if (seg->subtype() == Segment::SegChordRest) {
                               return seg->pos().x() + seg->measure()->pos().x();
                               }
                         }

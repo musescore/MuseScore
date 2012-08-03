@@ -222,7 +222,7 @@ bool Score::read114(const QDomElement& de)
                   Measure* m = tick2measure(tick);
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
-                  Segment* seg = m->getSegment(SegClef, tick);
+                  Segment* seg = m->getSegment(Segment::SegClef, tick);
                   if (seg->element(track))
                         static_cast<Clef*>(seg->element(track))->setGenerated(false);
                   else {
@@ -240,7 +240,7 @@ bool Score::read114(const QDomElement& de)
                   int tick = i->first;
                   KeySigEvent ke = i->second;
                   Measure* m = tick2measure(tick);
-                  Segment* seg = m->getSegment(SegKeySig, tick);
+                  Segment* seg = m->getSegment(Segment::SegKeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {

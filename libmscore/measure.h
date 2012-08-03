@@ -184,7 +184,7 @@ class Measure : public MeasureBase {
 
       int size() const                     { return _segments.size();        }
       Q_INVOKABLE Segment* first() const   { return _segments.first();       }
-      Segment* first(SegmentTypes t) const { return _segments.first(t);      }
+      Segment* first(Segment::SegmentTypes t) const { return _segments.first(t);      }
 
       Q_INVOKABLE Segment* last() const    { return _segments.last(); }
       Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
@@ -226,11 +226,11 @@ class Measure : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(SegmentType st, int tick);
+      Segment* undoGetSegment(Segment::SegmentType st, int tick);
       Segment* getSegment(Element* el, int tick);
-      Segment* getSegment(SegmentType st, int tick);
-      Segment* getSegment(SegmentType st, int tick, int gl);
-      Segment* findSegment(SegmentType st, int t);
+      Segment* getSegment(Segment::SegmentType st, int tick);
+      Segment* getSegment(Segment::SegmentType st, int tick, int gl);
+      Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();
       void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = Qt::black);

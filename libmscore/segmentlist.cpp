@@ -213,14 +213,14 @@ void SegmentList::insert(Segment* seg)
 
 Segment* SegmentList::firstCRSegment() const
       {
-      return first(SegChordRest);
+      return first(Segment::SegChordRest);
       }
 
 //---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
-Segment* SegmentList::first(SegmentTypes types) const
+Segment* SegmentList::first(Segment::SegmentTypes types) const
       {
       for (Segment* s = _first; s; s = s->next()) {
             if (s->subtype() & types)

@@ -239,7 +239,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
-                              Segment* ns = nm->getSegment(SegmentType(oseg->subtype()), oseg->tick());
+                              Segment* ns = nm->getSegment(oseg->subtype(), oseg->tick());
 
                               foreach(Spanner* spanner, oseg->spannerFor()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))

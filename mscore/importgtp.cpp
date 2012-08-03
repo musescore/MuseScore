@@ -396,7 +396,7 @@ qDebug("staff %d group %d timesig %d\n", staffIdx, int(staffType->group()), staf
                         if (staffType->genTimesig()) {
                               TimeSig* t = new TimeSig(score, nts);
                               t->setTrack(staffIdx * VOICES);
-                              Segment* s = m->getSegment(SegTimeSig, tick);
+                              Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                               s->add(t);
                               }
                         }
@@ -407,7 +407,7 @@ qDebug("staff %d group %d timesig %d\n", staffIdx, int(staffType->group()), staf
                         int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
                         t->setSig(0, keysig);
                         t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(SegKeySig, tick);
+                        Segment* s = m->getSegment(Segment::SegKeySig, tick);
                         s->add(t);
                         }
                   }
@@ -515,7 +515,7 @@ void GuitarPro1::read(QFile* fp)
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         TimeSig* t = new TimeSig(score, nts);
                         t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(SegTimeSig, tick);
+                        Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
                   }
@@ -533,7 +533,7 @@ void GuitarPro1::read(QFile* fp)
                   Text* s = new RehearsalMark(score);
                   s->setText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(SegChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -554,7 +554,7 @@ void GuitarPro1::read(QFile* fp)
                         int tuple = 0;
                         if (beatBits & 0x20)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(SegChordRest, tick);
+                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
                         if (beatBits & 0x2)
                               readChord(segment, staffIdx * VOICES);
                         Lyrics* lyrics = 0;
@@ -632,7 +632,7 @@ void GuitarPro::setTempo(int tempo)
 
       tt->setTrack(0);
       Measure* measure = score->firstMeasure();
-      Segment* segment = measure->getSegment(SegChordRest, 0);
+      Segment* segment = measure->getSegment(Segment::SegChordRest, 0);
       segment->add(tt);
       }
 
@@ -735,7 +735,7 @@ qDebug("BeginRepeat=============================================\n");
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         TimeSig* t = new TimeSig(score, nts);
                         t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(SegTimeSig, tick);
+                        Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
                   }
@@ -798,7 +798,7 @@ qDebug("BeginRepeat=============================================\n");
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegClef, 0);
+            Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
 
 
@@ -827,7 +827,7 @@ qDebug("BeginRepeat=============================================\n");
                   Text* s = new RehearsalMark(score);
                   s->setText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(SegChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -848,7 +848,7 @@ qDebug("BeginRepeat=============================================\n");
                         int tuple = 0;
                         if (beatBits & 0x20)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(SegChordRest, tick);
+                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
                         if (beatBits & 0x2)
                               readChord(segment, staffIdx * VOICES);
                         Lyrics* lyrics = 0;
@@ -1018,7 +1018,7 @@ void GuitarPro1::readNote(int string, Note* note)
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(SegChordRest);
+            Segment* segment = chord->segment()->prev1(Segment::SegChordRest);
             int track        = note->track();
             while (segment) {
                   Element* e = segment->element(track);
@@ -1040,7 +1040,7 @@ void GuitarPro1::readNote(int string, Note* note)
                         if (found)
                               break;
                         }
-                  segment = segment->prev1(SegChordRest);
+                  segment = segment->prev1(Segment::SegChordRest);
                   }
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d\n", note->pitch(), note->fret(), note->string());
@@ -1205,7 +1205,7 @@ qDebug("BeginRepeat=============================================\n");
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         TimeSig* t = new TimeSig(score, nts);
                         t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(SegTimeSig, tick);
+                        Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
                   }
@@ -1214,7 +1214,7 @@ qDebug("BeginRepeat=============================================\n");
                         KeySig* t = new KeySig(score);
                         t->setSig(0, key);
                         t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(SegKeySig, tick);
+                        Segment* s = m->getSegment(Segment::SegKeySig, tick);
                         s->add(t);
                         }
                   }
@@ -1277,7 +1277,7 @@ qDebug("BeginRepeat=============================================\n");
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegClef, 0);
+            Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
 
             Channel& ch = instr->channel(0);
@@ -1305,7 +1305,7 @@ qDebug("BeginRepeat=============================================\n");
                   Text* s = new RehearsalMark(score);
                   s->setText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(SegChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -1328,7 +1328,7 @@ qDebug("BeginRepeat=============================================\n");
                         if (beatBits & 0x20)
                               tuple = readInt();
 
-                        Segment* segment = measure->getSegment(SegChordRest, tick);
+                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
                         if (beatBits & 0x2)
                               readChord(segment, staffIdx * VOICES);
                         Lyrics* lyrics = 0;
@@ -1589,7 +1589,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(SegChordRest);
+            Segment* segment = chord->segment()->prev1(Segment::SegChordRest);
             int track        = note->track();
             while (segment) {
                   Element* e = segment->element(track);
@@ -1611,7 +1611,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                         if (found)
                               break;
                         }
-                  segment = segment->prev1(SegChordRest);
+                  segment = segment->prev1(Segment::SegChordRest);
                   }
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d\n", note->pitch(), note->fret(), note->string());
@@ -1795,7 +1795,7 @@ void GuitarPro4::read(QFile* fp)
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegClef, 0);
+            Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
 
 
@@ -1827,7 +1827,7 @@ void GuitarPro4::read(QFile* fp)
                   Text* s = new RehearsalMark(score);
                   s->setText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(SegChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -1848,7 +1848,7 @@ void GuitarPro4::read(QFile* fp)
                         int tuple = 0;
                         if (beatBits & 0x20)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(SegChordRest, tick);
+                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
                         if (beatBits & 0x2)
                               readChord(segment, staffIdx * VOICES);
                         Lyrics* lyrics = 0;
@@ -2081,7 +2081,7 @@ void GuitarPro5::readNote(int string, Note* note)
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(SegChordRest);
+            Segment* segment = chord->segment()->prev1(Segment::SegChordRest);
             int track        = note->track();
             while (segment) {
                   Element* e = segment->element(track);
@@ -2103,7 +2103,7 @@ void GuitarPro5::readNote(int string, Note* note)
                         if (found)
                               break;
                         }
-                  segment = segment->prev1(SegChordRest);
+                  segment = segment->prev1(Segment::SegChordRest);
                   }
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d\n", note->pitch(), note->fret(), note->string());
@@ -2247,7 +2247,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (beatBits & 0x20)
             tuple = readInt();
 
-      Segment* segment = measure->getSegment(SegChordRest, tick);
+      Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
       if (beatBits & 0x2)
             readChord(segment, staffIdx * VOICES);
       Lyrics* lyrics = 0;
@@ -2485,7 +2485,7 @@ void GuitarPro5::readTracks()
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegClef, 0);
+            Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
 
 
@@ -2522,7 +2522,7 @@ void GuitarPro5::readMeasures()
                   Text* s = new RehearsalMark(score);
                   s->setText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(SegChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
                   segment->add(s);
                   }
 

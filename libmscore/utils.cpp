@@ -93,7 +93,7 @@ MeasureBase* Score::tick2measureBase(int tick) const
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Score::tick2segment(int tick, bool first, SegmentTypes st) const
+Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
@@ -178,7 +178,7 @@ int Score::nextSeg(int tick, int track)
             seg = seg->next1();
             if (seg == 0)
                   break;
-            if (seg->subtype() != SegChordRest)
+            if (seg->subtype() != Segment::SegChordRest)
                   continue;
             if (seg->element(track))
                   break;
@@ -195,7 +195,7 @@ Segment* nextSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->next1(SegChordRest))) {
+      while ((seg = seg->next1(Segment::SegChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -215,7 +215,7 @@ Segment* prevSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->prev1(SegChordRest))) {
+      while ((seg = seg->prev1(Segment::SegChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -609,7 +609,7 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
       int tick     = seg->tick() + chord->globalDuration().ticks();
 
-      while ((seg = seg->next1(SegChordRest))) {
+      while ((seg = seg->next1(Segment::SegChordRest))) {
             if (seg->tick() < tick)
                   continue;
             if (seg->tick() > tick)

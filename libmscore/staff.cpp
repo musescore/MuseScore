@@ -215,7 +215,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
       for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
             if (s->tick() > tick)
                   break;
-            if (s->subtype() != SegClef)
+            if (s->subtype() != Segment::SegClef)
                   continue;
             if (s->element(track) && !s->element(track)->generated())
                   ctl = static_cast<Clef*>(s->element(track))->clefTypeList();
@@ -243,7 +243,7 @@ ClefType Staff::clef(Segment* segment) const
       ClefType ct = _initialClef._concertClef;
       int track = idx() * VOICES;
       for (;;) {
-            segment = segment->prev1(SegClef);
+            segment = segment->prev1(Segment::SegClef);
             if (segment == 0)
                   break;
             if (segment->element(track)) {

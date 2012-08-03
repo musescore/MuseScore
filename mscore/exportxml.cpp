@@ -439,7 +439,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
                   // remove from list and print start
                   slur[i] = 0;
                   started[i] = false;
-                  notations.tag(xml);                  
+                  notations.tag(xml);
                   xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == UP ? " placement=\"above\"" : "").arg(i + 1));
                   }
             else {
@@ -1413,7 +1413,7 @@ static Breath* hasBreathMark(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       Breath* b = 0;
-      if (s->subtype() == SegBreath)
+      if (s->subtype() == Segment::SegBreath)
             b = static_cast<Breath*>(s->element(ch->track()));
       return b;
       }
@@ -1847,7 +1847,7 @@ static Chord* nextChord(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       while (s) {
-            if (s->subtype() == SegChordRest && s->element(ch->track()))
+            if (s->subtype() == Segment::SegChordRest && s->element(ch->track()))
                   break;
             s = s->next1();
             }
@@ -3103,7 +3103,7 @@ static void directionMarker(Xml& xml, const Marker* const m)
 
 static int findTrackForAnnotations(int track, Segment* seg)
       {
-      if (seg->subtype() != SegChordRest)
+      if (seg->subtype() != Segment::SegChordRest)
             return -1;
 
       int staff = track / VOICES;
@@ -3125,7 +3125,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
       {
       // loop over all segments
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->subtype() == SegChordRest) {
+            if (seg->subtype() == Segment::SegChordRest) {
                   foreach(const Element* e, seg->annotations()) {
 #ifdef DEBUG_REPEATS
                         qDebug("repeatAtMeasureStart seg %p elem %p type %d (%s) track %d",
@@ -3201,7 +3201,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
       {
       // loop over all segments
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->subtype() == SegChordRest) {
+            if (seg->subtype() == Segment::SegChordRest) {
                   foreach(const Element* e, seg->annotations()) {
 #ifdef DEBUG_REPEATS
                         qDebug("repeatAtMeasureStop seg %p elem %p type %d (%s) track %d",
@@ -3331,7 +3331,7 @@ static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
 
 static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->subtype() == SegChordRest) {
+      if (seg->subtype() == Segment::SegChordRest) {
             foreach(const Element* e, seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3391,7 +3391,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
 
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->subtype() == SegChordRest) {
+      if (seg->subtype() == Segment::SegChordRest) {
             foreach(const Element* e, seg->spannerFor()) {
 
                   int wtrack = -1; // track to write spanner
@@ -3434,7 +3434,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 
 static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->subtype() == SegChordRest) {
+      if (seg->subtype() == Segment::SegChordRest) {
             foreach(const Element* e, seg->spannerBack()) {
 
                   int wtrack = -1; // track to write spanner
