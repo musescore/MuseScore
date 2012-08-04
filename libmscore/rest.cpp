@@ -181,6 +181,8 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == TEMPO_TEXT)
          || (type == STAFF_TEXT)
          || (type == REHEARSAL_MARK)
+         || (type == FRET_DIAGRAM)
+         || (type == SYMBOL)
          ) {
             return true;
             }
