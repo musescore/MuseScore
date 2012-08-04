@@ -312,7 +312,7 @@ class StyleVal {
             qreal  dbl;
             bool      b;
             int       i;
-            Direction d;
+            MScore::Direction d;
             } v;
 
    public:
@@ -324,7 +324,7 @@ class StyleVal {
       StyleVal(StyleIdx t, qreal val);
       StyleVal(StyleIdx t, bool val);
       StyleVal(StyleIdx t, int val);
-      StyleVal(StyleIdx t, Direction val);
+      StyleVal(StyleIdx t, MScore::Direction val);
       StyleVal(StyleIdx t, const QString& val);
 
       Spatium toSpatium() const       { return Spatium(v.dbl); }
@@ -332,7 +332,7 @@ class StyleVal {
       bool toBool() const             { return v.b;  }
       int toInt() const               { return v.i;  }
       QString toString() const        { return s;    }
-      Direction toDirection() const   { return v.d;  }
+      MScore::Direction toDirection() const   { return v.d;  }
       StyleIdx getIdx() const         { return idx;  }
       StyleVal(const QString& name, const QString& val);
       };
@@ -369,7 +369,7 @@ class MStyle {
       void set(StyleIdx t, bool val);
       void set(StyleIdx t, qreal val);
       void set(StyleIdx t, int val);
-      void set(StyleIdx t, Direction val);
+      void set(StyleIdx t, MScore::Direction val);
       void set(const StyleVal& v);
 
       StyleVal value(StyleIdx idx) const;

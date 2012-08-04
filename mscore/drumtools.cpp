@@ -111,7 +111,7 @@ void MuseScore::updateDrumTools()
 //   updateDrumset
 //---------------------------------------------------------
 
-void DrumTools::updateDrumset() 
+void DrumTools::updateDrumset()
       {
       drumPalette->clear();
       if (drumset == 0)
@@ -128,12 +128,12 @@ void DrumTools::updateDrumset()
                   continue;
             bool up;
             int line      = drumset->line(pitch);
-            NoteHeadGroup noteHead  = drumset->noteHead(pitch);
+            Note::NoteHeadGroup noteHead  = drumset->noteHead(pitch);
             int voice     = drumset->voice(pitch);
-            Direction dir = drumset->stemDirection(pitch);
-            if (dir == UP)
+            MScore::Direction dir = drumset->stemDirection(pitch);
+            if (dir == MScore::UP)
                   up = true;
-            else if (dir == DOWN)
+            else if (dir == MScore::DOWN)
                   up = false;
             else
                   up = line > 4;
@@ -201,10 +201,10 @@ void DrumTools::drumNoteSelected(int val)
             int ticks        = MScore::defaultPlayDuration;
             int pitch        = note->pitch();
             seq->startNote(staff->part()->instr()->channel(0).channel, pitch, 80, ticks, 0.0);
-            
+
             _score->inputState().setTrack(element->track());
             _score->inputState().setDrumNote(pitch);
-            
+
             getAction("voice-1")->setChecked(element->voice() == 0);
             getAction("voice-2")->setChecked(element->voice() == 1);
             getAction("voice-3")->setChecked(element->voice() == 2);

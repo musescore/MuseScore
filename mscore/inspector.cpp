@@ -454,7 +454,7 @@ void InspectorArticulation::apply()
       qreal _spatium  = score->spatium();
 
       QPointF o(ar.x->value() * _spatium, ar.y->value() * _spatium);
-      Direction d = Direction(ar.direction->currentIndex());
+      MScore::Direction d = MScore::Direction(ar.direction->currentIndex());
       ArticulationAnchor anchor = ArticulationAnchor(ar.anchor->currentIndex());
 
       if (o == a->pos() && anchor == a->anchor() && d == a->direction())
@@ -611,9 +611,10 @@ void InspectorSegment::apply()
       }
 
 static const int heads[] = {
-      HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE,
-      HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_MI, HEAD_FA, HEAD_SOL, HEAD_LA, HEAD_TI,
-      HEAD_BREVIS_ALT
+      Note::HEAD_NORMAL, Note::HEAD_CROSS, Note::HEAD_DIAMOND, Note::HEAD_TRIANGLE,
+      Note::HEAD_SLASH, Note::HEAD_XCIRCLE, Note::HEAD_DO, Note::HEAD_RE, Note::HEAD_MI, Note::HEAD_FA,
+      Note::HEAD_SOL, Note::HEAD_LA, Note::HEAD_TI,
+      Note::HEAD_BREVIS_ALT
       };
 
 //---------------------------------------------------------
@@ -627,7 +628,7 @@ InspectorNoteBase::InspectorNoteBase(QWidget* parent)
       //
       // fix order of note heads
       //
-      for (int i = 0; i < HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             noteHeadGroup->setItemData(i, QVariant(heads[i]));
             }
       connect(small,              SIGNAL(stateChanged(int)),        SLOT(smallChanged(int)));
@@ -695,7 +696,7 @@ void InspectorNoteBase::setElement(Note* n)
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;
-      for (int i = 0; i < HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             noteHeadGroup->setItemData(i, QVariant(heads[i]));
             if (headGroup == heads[i])
                   headGroupIndex = i;
@@ -706,14 +707,14 @@ void InspectorNoteBase::setElement(Note* n)
       int val = note->veloOffset();
       velocity->setValue(val);
       velocityType->setCurrentIndex(int(note->veloType()));
-      if (note->veloType() == USER_VAL)
+      if (note->veloType() == MScore::USER_VAL)
             _userVelocity = val;
       else
             _veloOffset = val;
 
       resetSmall->setEnabled(note->small());
-      resetMirrorHead->setEnabled(note->userMirror() != DH_AUTO);
-      resetDotPosition->setEnabled(note->dotPosition() != AUTO);
+      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
+      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
       resetOntimeOffset->setEnabled(note->onTimeUserOffset());
       resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
       block(false);
@@ -793,7 +794,7 @@ void InspectorNoteBase::smallChanged(int)
 
 void InspectorNoteBase::mirrorHeadChanged(int)
       {
-      resetMirrorHead->setEnabled(note->userMirror() != DH_AUTO);
+      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
       apply();
       }
 
@@ -803,7 +804,7 @@ void InspectorNoteBase::mirrorHeadChanged(int)
 
 void InspectorNoteBase::dotPositionChanged(int)
       {
-      resetDotPosition->setEnabled(note->dotPosition() != AUTO);
+      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
       apply();
       }
 
@@ -864,13 +865,13 @@ void InspectorNoteBase::tuningChanged(double val)
 void InspectorNoteBase::velocityTypeChanged(int val)
       {
       switch(val) {
-            case USER_VAL:
+            case MScore::USER_VAL:
                   velocity->setEnabled(true);
                   velocity->setSuffix("");
                   velocity->setRange(0, 127);
                   velocity->setValue(_userVelocity);
                   break;
-            case OFFSET_VAL:
+            case MScore::OFFSET_VAL:
                   velocity->setEnabled(true);
                   velocity->setSuffix("%");
                   velocity->setRange(-200, 200);
@@ -887,7 +888,7 @@ void InspectorNoteBase::velocityTypeChanged(int val)
 
 void InspectorNoteBase::velocityChanged(int val)
       {
-      if (velocityType->currentIndex() == USER_VAL)
+      if (velocityType->currentIndex() == MScore::USER_VAL)
             _userVelocity = val;
       else
             _veloOffset = val;
@@ -1429,7 +1430,7 @@ bool InspectorChord::dirty() const
       {
       return chord->small() != small->isChecked()
          || chord->noStem() != stemless->isChecked()
-         || chord->stemDirection() != (Direction)(stemDirection->currentIndex())
+         || chord->stemDirection() != (MScore::Direction)(stemDirection->currentIndex())
          || chord->userOff().x() != offsetX->value()
          || chord->userOff().y() != offsetY->value()
          ;
@@ -1586,7 +1587,7 @@ void InspectorChord::apply()
             score->undoChangeProperty(chord, P_SMALL, small->isChecked());
       if (stemless->isChecked() != chord->noStem())
             score->undoChangeProperty(chord, P_NO_STEM, stemless->isChecked());
-      Direction d = Direction(stemDirection->currentIndex());
+      MScore::Direction d = MScore::Direction(stemDirection->currentIndex());
       if (d != chord->stemDirection())
             score->undoChangeProperty(chord, P_STEM_DIRECTION, d);
       score->endCmd();

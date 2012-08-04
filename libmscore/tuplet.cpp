@@ -26,7 +26,7 @@
 //   propertyList
 //---------------------------------------------------------
 
-static Direction defaultDirection = AUTO;
+static MScore::Direction defaultDirection = MScore::AUTO;
 static int defaultNumberType      = Tuplet::SHOW_NUMBER;
 static int defaultBracketType     = Tuplet::AUTO_BRACKET;
 static QPointF zeroPoint          = QPointF();
@@ -152,13 +152,13 @@ void Tuplet::layout()
       //
       // find out main direction
       //
-      if (_direction == AUTO) {
+      if (_direction == MScore::AUTO) {
             int up = 1;
             foreach(const DurationElement* e, _elements) {
                   if (e->type() == CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
-                        if (c->stemDirection() != AUTO)
-                              up += c->stemDirection() == UP ? 1000 : -1000;
+                        if (c->stemDirection() != MScore::AUTO)
+                              up += c->stemDirection() == MScore::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
@@ -169,7 +169,7 @@ void Tuplet::layout()
             _isUp = up > 0;
             }
       else
-            _isUp = _direction == UP;
+            _isUp = _direction == MScore::UP;
 
       //
       // set all elements to main direction

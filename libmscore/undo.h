@@ -972,12 +972,12 @@ class ChangeChordStaffMove : public UndoCommand {
 
 class ChangeVelocity : public UndoCommand {
       Note* note;
-      ValueType veloType;
+      MScore::ValueType veloType;
       int veloOffset;
       void flip();
 
    public:
-      ChangeVelocity(Note*, ValueType, int);
+      ChangeVelocity(Note*, MScore::ValueType, int);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeVelocity");
@@ -1029,7 +1029,7 @@ class ChangeMeasureProperties : public UndoCommand {
 class ChangeNoteProperties : public UndoCommand {
       Note* note;
 
-      ValueType _veloType;
+      MScore::ValueType _veloType;
       int _veloOffset;        ///< velocity user offset in promille
 
       int _onTimeUserOffset;  ///< start note user offset
@@ -1038,7 +1038,7 @@ class ChangeNoteProperties : public UndoCommand {
       void flip();
 
    public:
-      ChangeNoteProperties(Note*, ValueType, int, int, int);
+      ChangeNoteProperties(Note*, MScore::ValueType, int, int, int);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeNoteProperties");

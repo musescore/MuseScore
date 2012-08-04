@@ -150,21 +150,21 @@ QVariant getProperty(P_ID id, const QDomElement& e)
             case T_DIRECTION:
                   {
                   if (value == "up")
-                        return QVariant(UP);
+                        return QVariant(MScore::UP);
                   else if (value == "down")
-                        return QVariant(DOWN);
+                        return QVariant(MScore::DOWN);
                   else if (value == "auto")
-                        return QVariant(AUTO);
+                        return QVariant(MScore::AUTO);
                   }
                   break;
             case T_DIRECTION_H:
                   {
                   if (value == "left")
-                        return QVariant(DH_LEFT);
+                        return QVariant(MScore::DH_LEFT);
                   else if (value == "right")
-                        return QVariant(DH_RIGHT);
+                        return QVariant(MScore::DH_RIGHT);
                   else if (value == "auto")
-                        return QVariant(DH_AUTO);
+                        return QVariant(MScore::DH_AUTO);
                   }
                   break;
             case T_LAYOUT_BREAK:
@@ -178,9 +178,9 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                   break;
             case T_VALUE_TYPE:
                   if (value == "offset")
-                        return QVariant(int(OFFSET_VAL));
+                        return QVariant(int(MScore::OFFSET_VAL));
                   else if (value == "user")
-                        return QVariant(int(USER_VAL));
+                        return QVariant(int(MScore::USER_VAL));
                   break;
             case T_BEAM_MODE:             // TODO
                   return QVariant(int(0));

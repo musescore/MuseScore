@@ -168,7 +168,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             int line      = note->line();
             int ticks     = chord->actualTicks();
             int headGroup = note->headGroup();
-            int headType  =  (note->headType() == HEAD_AUTO) ? note->chord()->durationType().headType() : note->headType() - 1;
+            int headType  =  (note->headType() == Note::HEAD_AUTO) ? note->chord()->durationType().headType() : note->headType() - 1;
 
             bool conflict = (qAbs(ll - line) < 2) && (move1 == move);
             bool sameHead = (ll == line) && (headGroup == lastHeadGroup) && (headType == lastHeadType);
@@ -208,12 +208,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         moveLeft = true;
                         }
                   }
-            if (note->userMirror() == DH_AUTO) {
+            if (note->userMirror() == MScore::DH_AUTO) {
                   mirror = nmirror;
                   }
             else {
                   mirror = note->chord()->up();
-                  if (note->userMirror() == DH_LEFT)
+                  if (note->userMirror() == MScore::DH_LEFT)
                         mirror = !mirror;
                   }
             note->setMirror(mirror);

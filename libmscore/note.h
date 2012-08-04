@@ -36,8 +36,20 @@ class AccidentalState;
 class Accidental;
 class Spanner;
 class NoteDot;
+class Note;
 
-extern const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES];
+//---------------------------------------------------------
+//   NoteVal
+//    helper structure
+//---------------------------------------------------------
+
+struct NoteVal {
+      int pitch;
+      int fret;
+      int string;
+      int headGroup;
+      NoteVal() { pitch = -1; fret = -1; string = -1; headGroup = 0; }
+      };
 
 //---------------------------------------------------------
 //   @@ NoteHead
@@ -83,6 +95,18 @@ class NoteHead : public Symbol {
 //-------------------------------------------------------------------
 
 class Note : public Element {
+   public:
+      enum NoteHeadGroup {
+            HEAD_NORMAL = 0, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI,
+            HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI,
+            HEAD_SOL,
+            HEAD_BREVIS_ALT,
+            HEAD_GROUPS,
+            HEAD_INVALID = -1
+            };
+      enum NoteHeadType { HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS };
+
+   private:
       Q_OBJECT
       Q_PROPERTY(int subchannel READ subchannel WRITE setSubchannel)
       Q_PROPERTY(int line       READ line       WRITE setLine)
@@ -96,16 +120,16 @@ class Note : public Element {
       Q_PROPERTY(bool mirror    READ mirror     WRITE setMirror)
       Q_PROPERTY(bool small     READ small      WRITE setSmall)
       Q_PROPERTY(qreal tuning   READ tuning     WRITE setTuning)
-      Q_PROPERTY(ValueType veloType READ veloType WRITE setVeloType)
-      Q_PROPERTY(int veloOffset READ veloOffset WRITE setVeloOffset)
-      Q_PROPERTY(int onTimeOffset READ onTimeOffset WRITE setOnTimeOffset)
-      Q_PROPERTY(int onTimeUserOffset READ onTimeUserOffset WRITE setOnTimeUserOffset)
-      Q_PROPERTY(int offTimeOffset READ offTimeOffset WRITE setOffTimeOffset)
-      Q_PROPERTY(int offTimeUserOffset READ offTimeUserOffset WRITE setOffTimeUserOffset)
-      Q_PROPERTY(DirectionH userMirror READ userMirror WRITE setUserMirror)
-      Q_PROPERTY(Direction dotPosition READ dotPosition WRITE setDotPosition)
-      Q_PROPERTY(NoteHeadGroup headGroup READ headGroup WRITE setHeadGroup)
-      Q_PROPERTY(NoteHeadType headType READ headType WRITE setHeadType)
+      Q_PROPERTY(MScore::ValueType veloType    READ veloType          WRITE setVeloType)
+      Q_PROPERTY(int veloOffset                READ veloOffset        WRITE setVeloOffset)
+      Q_PROPERTY(int onTimeOffset              READ onTimeOffset      WRITE setOnTimeOffset)
+      Q_PROPERTY(int onTimeUserOffset          READ onTimeUserOffset  WRITE setOnTimeUserOffset)
+      Q_PROPERTY(int offTimeOffset             READ offTimeOffset     WRITE setOffTimeOffset)
+      Q_PROPERTY(int offTimeUserOffset         READ offTimeUserOffset WRITE setOffTimeUserOffset)
+      Q_PROPERTY(MScore::DirectionH userMirror READ userMirror        WRITE setUserMirror)
+      Q_PROPERTY(MScore::Direction dotPosition READ dotPosition       WRITE setDotPosition)
+      Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE setHeadGroup)
+      Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE setHeadType)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
@@ -127,7 +151,7 @@ class Note : public Element {
       bool _small;
 
       NoteHeadType _headType;
-      ValueType _veloType;
+      MScore::ValueType _veloType;
       int _veloOffset;        ///< velocity user offset in percent, or absolute velocity for this note
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
@@ -138,8 +162,8 @@ class Note : public Element {
       int _offTimeOffset;     ///< stop note offset in ticks
       int _offTimeUserOffset; ///< stop note user offset
 
-      DirectionH _userMirror; ///< user override of mirror
-      Direction _dotPosition; ///< dot position: above or below current staff line
+      MScore::DirectionH _userMirror; ///< user override of mirror
+      MScore::Direction _dotPosition; ///< dot position: above or below current staff line
 
       Accidental* _accidental;
 
@@ -266,18 +290,18 @@ class Note : public Element {
       int subchannel() const           { return _subchannel; }
       void setSubchannel(int val)      { _subchannel = val;  }
 
-      DirectionH userMirror() const    { return _userMirror; }
-      void setUserMirror(DirectionH d) { _userMirror = d; }
+      MScore::DirectionH userMirror() const    { return _userMirror; }
+      void setUserMirror(MScore::DirectionH d) { _userMirror = d; }
 
-      Direction dotPosition() const    { return _dotPosition; }
-      void setDotPosition(Direction d) { _dotPosition = d;    }
+      MScore::Direction dotPosition() const    { return _dotPosition; }
+      void setDotPosition(MScore::Direction d) { _dotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void toDefault();
       void setMag(qreal val);
 
-      ValueType veloType() const       { return _veloType;          }
-      void setVeloType(ValueType v)    { _veloType = v;             }
+      MScore::ValueType veloType() const    { return _veloType;          }
+      void setVeloType(MScore::ValueType v) { _veloType = v;             }
       int veloOffset() const           { return _veloOffset;        }
       void setVeloOffset(int v)        { _veloOffset = v;           }
 
@@ -304,7 +328,11 @@ class Note : public Element {
       PROPERTY_DECLARATIONS(Note)
       };
 
+Q_DECLARE_METATYPE(Note::NoteHeadGroup)
+Q_DECLARE_METATYPE(Note::NoteHeadType)
+
 extern Sym* noteHeadSym(bool up, int group, int n);
+extern const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES];
 
 #endif
 

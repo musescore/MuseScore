@@ -1239,7 +1239,7 @@ void Score::undoChangeTuning(Note* n, qreal v)
       undoChangeProperty(n, P_TUNING, v);
       }
 
-void Score::undoChangeUserMirror(Note* n, DirectionH d)
+void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
       {
       undoChangeProperty(n, P_MIRROR_HEAD, d);
       }
@@ -1667,23 +1667,17 @@ void ChangePitch::flip()
 //   ChangeFret
 //---------------------------------------------------------
 
-ChangeFret::ChangeFret(Note* _note, /*int _pitch, int _tpc, int l,*/ int f, int s)
+ChangeFret::ChangeFret(Note* _note, int f, int s)
       {
       note  = _note;
       if (_note == 0)
             abort();
-//      pitch  = _pitch;
-//      tpc    = _tpc;
-//      line   = l;
       fret   = f;
       string = s;
       }
 
 void ChangeFret::flip()
       {
-//      int f_pitch                 = note->pitch();
-//      int f_tpc                   = note->tpc();
-//      int f_line                  = note->line();
       int f_fret                  = note->fret();
       int f_string                = note->string();
 
@@ -1696,12 +1690,6 @@ void ChangeFret::flip()
       string         = f_string;
 
       Score* score = note->score();
-//      if(updateAccid) {
-//            Chord* chord = note->chord();
-//            Measure* measure = chord->segment()->measure();
-//            score->updateAccidentals(measure, chord->staffIdx());
-//            }
-      // score->setLayout(measure);
       score->setLayoutAll(true);
       }
 
@@ -1711,7 +1699,7 @@ void ChangeFret::flip()
 
 void FlipNoteDotDirection::flip()
       {
-      note->setDotPosition(note->dotIsUp() ? DOWN : UP);
+      note->setDotPosition(note->dotIsUp() ? MScore::DOWN : MScore::UP);
       }
 
 //---------------------------------------------------------
@@ -2553,14 +2541,14 @@ void ChangeChordStaffMove::flip()
 //   ChangeVelocity
 //---------------------------------------------------------
 
-ChangeVelocity::ChangeVelocity(Note* n, ValueType t, int o)
+ChangeVelocity::ChangeVelocity(Note* n, MScore::ValueType t, int o)
    : note(n), veloType(t), veloOffset(o)
       {
       }
 
 void ChangeVelocity::flip()
       {
-      ValueType t = note->veloType();
+      MScore::ValueType t = note->veloType();
       int o       = note->veloOffset();
       note->setVeloType(veloType);
       note->setVeloOffset(veloOffset);
@@ -2647,7 +2635,7 @@ void ChangeMeasureProperties::flip()
 //   ChangeNoteProperties
 //---------------------------------------------------------
 
-ChangeNoteProperties::ChangeNoteProperties(Note* n, ValueType v1, int v3,
+ChangeNoteProperties::ChangeNoteProperties(Note* n, MScore::ValueType v1, int v3,
    int v6, int v9)
       {
       note               = n;
@@ -2663,7 +2651,7 @@ ChangeNoteProperties::ChangeNoteProperties(Note* n, ValueType v1, int v3,
 
 void ChangeNoteProperties::flip()
       {
-      ValueType v1 = note->veloType();
+      MScore::ValueType v1 = note->veloType();
       int       v3 = note->veloOffset();
       int       v6 = note->onTimeUserOffset();
       int       v9 = note->offTimeUserOffset();

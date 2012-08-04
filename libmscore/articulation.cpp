@@ -176,7 +176,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
 Articulation::Articulation(Score* s)
    : Element(s)
       {
-      _direction = AUTO;
+      _direction = MScore::AUTO;
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       }
@@ -208,13 +208,13 @@ void Articulation::read(const QDomElement& de)
             else if (tag == "anchor")
                   _anchor = ArticulationAnchor(val.toInt());
             else if (tag == "direction") {
-                  Direction dir = AUTO;
+                  MScore::Direction dir = MScore::AUTO;
                   if (val == "up")
-                        dir = UP;
+                        dir = MScore::UP;
                   else if (val == "down")
-                        dir = DOWN;
+                        dir = MScore::DOWN;
                   else if (val == "auto")
-                        dir = AUTO;
+                        dir = MScore::AUTO;
                   else
                         domError(e);
                   setDirection(dir);
@@ -234,13 +234,13 @@ void Articulation::write(Xml& xml) const
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       switch(_direction) {
-            case UP:
+            case MScore::UP:
                   xml.tag("direction", QVariant("up"));
                   break;
-            case DOWN:
+            case MScore::DOWN:
                   xml.tag("direction", QVariant("down"));
                   break;
-            case AUTO:
+            case MScore::AUTO:
                   break;
             }
       xml.tag("subtype", subtypeName());
@@ -300,7 +300,7 @@ void Articulation::setSubtype(const QString& s)
                   { "uverylongfermata", true,  Articulation_Verylongfermata },
                   { "dverylongfermata", false, Articulation_Verylongfermata },
                   // watch out, bug in 1.2 uportato and dportato are reversed
-                  { "dportato",         true,  Articulation_Portato }, 
+                  { "dportato",         true,  Articulation_Portato },
                   { "uportato",         false, Articulation_Portato },
                   { "ustaccatissimo",   true,  Articulation_Staccatissimo },
                   { "dstaccatissimo",   false, Articulation_Staccatissimo }
@@ -311,7 +311,7 @@ void Articulation::setSubtype(const QString& s)
             for (i = 0; i < n; ++i) {
                   if (s == al[i].name) {
                         _up = al[i].up;
-                        _direction = (_up ? UP : DOWN);
+                        _direction = (_up ? MScore::UP : MScore::DOWN);
                         st  = int(al[i].type);
                         break;
                         }
@@ -423,11 +423,11 @@ void Articulation::layout()
 //   setDirection
 //---------------------------------------------------------
 
-void Articulation::setDirection(Direction d)
+void Articulation::setDirection(MScore::Direction d)
       {
       _direction = d;
-      if (d != AUTO)
-            _up = (d == UP);
+      if (d != MScore::AUTO)
+            _up = (d == MScore::UP);
 //      qDebug("setDirection %p %d %d\n", this, _up, int(d));
       }
 
@@ -437,8 +437,8 @@ void Articulation::setDirection(Direction d)
 
 void Articulation::toDefault()
       {
-      if (_direction != AUTO)
-            score()->undoChangeProperty(this, P_DIRECTION, int(AUTO));
+      if (_direction != MScore::AUTO)
+            score()->undoChangeProperty(this, P_DIRECTION, int(MScore::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(subtype());
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ARTICULATION_ANCHOR, int(a));
@@ -479,7 +479,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_DIRECTION:           setDirection(Direction(v.toInt())); break;
+            case P_DIRECTION:           setDirection(MScore::Direction(v.toInt())); break;
             case P_ARTICULATION_ANCHOR: setAnchor(ArticulationAnchor(v.toInt())); break;
             default:
                   return Element::setProperty(propertyId, v);

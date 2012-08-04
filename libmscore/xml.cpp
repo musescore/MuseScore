@@ -235,26 +235,26 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
 #endif
             case T_DIRECTION:
-                  switch(Direction(data.toInt())) {
-                        case UP:
+                  switch(MScore::Direction(data.toInt())) {
+                        case MScore::UP:
                               tag(name, QVariant("up"));
                               break;
-                        case DOWN:
+                        case MScore::DOWN:
                               tag(name, QVariant("down"));
                               break;
-                        case AUTO:
+                        case MScore::AUTO:
                               break;
                         }
                   break;
             case T_DIRECTION_H:
-                  switch(DirectionH(data.toInt())) {
-                        case DH_LEFT:
+                  switch(MScore::DirectionH(data.toInt())) {
+                        case MScore::DH_LEFT:
                               tag(name, QVariant("left"));
                               break;
-                        case DH_RIGHT:
+                        case MScore::DH_RIGHT:
                               tag(name, QVariant("right"));
                               break;
-                        case DH_AUTO:
+                        case MScore::DH_AUTO:
                               break;
                         }
                   break;
@@ -272,11 +272,11 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case T_VALUE_TYPE:
-                  switch(ValueType(data.toInt())) {
-                        case OFFSET_VAL:
+                  switch(MScore::ValueType(data.toInt())) {
+                        case MScore::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
-                        case USER_VAL:
+                        case MScore::USER_VAL:
                               tag(name, QVariant("user"));
                               break;
                         }
@@ -333,29 +333,29 @@ void Xml::tag(P_ID id, void* data, void* defaultVal)
                   break;
 
             case T_DIRECTION:
-                  if (compareProperty<Direction>(data, defaultVal)) {
-                        switch(Direction(*(Direction*)data)) {
-                              case UP:
+                  if (compareProperty<MScore::Direction>(data, defaultVal)) {
+                        switch(MScore::Direction(*(MScore::Direction*)data)) {
+                              case MScore::UP:
                                     tag(name, QVariant("up"));
                                     break;
-                              case DOWN:
+                              case MScore::DOWN:
                                     tag(name, QVariant("down"));
                                     break;
-                              case AUTO:
+                              case MScore::AUTO:
                                     break;
                               }
                         }
                   break;
             case T_DIRECTION_H:
-                  if (compareProperty<DirectionH>(data, defaultVal)) {
-                        switch(DirectionH(*(DirectionH*)data)) {
-                              case DH_LEFT:
+                  if (compareProperty<MScore::DirectionH>(data, defaultVal)) {
+                        switch(MScore::DirectionH(*(MScore::DirectionH*)data)) {
+                              case MScore::DH_LEFT:
                                     tag(name, QVariant("left"));
                                     break;
-                              case DH_RIGHT:
+                              case MScore::DH_RIGHT:
                                     tag(name, QVariant("right"));
                                     break;
-                              case DH_AUTO:
+                              case MScore::DH_AUTO:
                                     break;
                               }
                         }
@@ -376,16 +376,18 @@ void Xml::tag(P_ID id, void* data, void* defaultVal)
                         }
                   break;
             case T_VALUE_TYPE:
-                  if (compareProperty<ValueType>(data, defaultVal)) {
-                        switch(*(ValueType*)data) {
-                              case OFFSET_VAL:
+                  if (compareProperty<MScore::ValueType>(data, defaultVal)) {
+                        switch(*(MScore::ValueType*)data) {
+                              case MScore::OFFSET_VAL:
                                     tag(name, QVariant("offset"));
                                     break;
-                              case USER_VAL:
+                              case MScore::USER_VAL:
                                     tag(name, QVariant("user"));
                                     break;
                               }
                         }
+                  break;
+            case T_BEAM_MODE:
                   break;
             }
       }

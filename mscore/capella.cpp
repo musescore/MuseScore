@@ -1622,10 +1622,10 @@ qDebug("readCapVoice 1\n");
                         chord->setTrack(track);
                         switch (o->stemDir) {
                               case -1:    // down
-                                    chord->setStemDirection(DOWN);
+                                    chord->setStemDirection(MScore::DOWN);
                                     break;
                               case 1:     // up
-                                    chord->setStemDirection(UP);
+                                    chord->setStemDirection(MScore::UP);
                                     break;
                               case 3:     // no stem
                                     chord->setNoStem(true);

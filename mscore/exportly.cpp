@@ -95,7 +95,7 @@ class ExportLy {
   QTextStream os;
   int level;        // indent level
   int curTicks;
-  Direction stemDirection;
+  MScore::Direction stemDirection;
   int indx;
   bool partial; //length of pickupbar
 
@@ -353,7 +353,7 @@ public:
     level  = 0;
     curTicks = MScore::division;
     slur   = false;
-    stemDirection = AUTO;
+    stemDirection = MScore::AUTO;
   }
   bool write(const QString& name);
 };
@@ -2457,8 +2457,8 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 	  slurstack++;
 	  slurre[i] = 0;
 	  started[i] = false;
-	  if (s->slurDirection() == UP) out << "^";
-	  if (s->slurDirection() == DOWN) out << "_";
+	  if (s->slurDirection() == MScore::UP) out << "^";
+	  if (s->slurDirection() == MScore::DOWN) out << "_";
 	  if (slurcount==2)
 	    {
 	      phraseslur=slurstack;
@@ -2480,8 +2480,8 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 	      slurstack++;
 	      slurre[i] = s;
 	      started[i] = true;
-	      if (s->slurDirection() == UP) out << "^";
-	      if (s->slurDirection() == DOWN) out << "_";
+	      if (s->slurDirection() == MScore::UP) out << "^";
+	      if (s->slurDirection() == MScore::DOWN) out << "_";
 	      if (slurcount==2)
 		{
 		  phraseslur=slurstack;
@@ -2775,15 +2775,15 @@ void ExportLy::stemDir(Chord * chord)
   // For now, we only export stem directions for gracenotes.
   if (chord->beam() == 0 || chord->beam()->elements().front() == chord)
     {
-      Direction d = chord->stemDirection();
+      MScore::Direction d = chord->stemDirection();
       if (d != stemDirection)
 	{
 	  stemDirection = d;
-	  if ((d == UP) and (graceswitch == true))
+	  if ((d == MScore::UP) and (graceswitch == true))
 	    out << "\\stemUp ";
-	  else if ((d == DOWN)  and (graceswitch == true))
+	  else if ((d == MScore::DOWN)  and (graceswitch == true))
 	    out << "\\stemDown ";
-	  //   else if (d == AUTO)
+	  //   else if (d == MScore::AUTO)
 	  // 	    {
 	  // 	      if (graceswitch == true)
 	  // 		{

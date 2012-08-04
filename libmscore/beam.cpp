@@ -33,8 +33,8 @@
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
-//    idx 0 - AUTO or DOWN
-//        1 - UP
+//    idx 0 - MScore::AUTO or MScore::DOWN
+//        1 - MScore::UP
 //---------------------------------------------------------
 
 struct BeamFragment {
@@ -209,7 +209,7 @@ Beam::Beam(Score* s)
    : Element(s)
       {
       setFlags(ELEMENT_SELECTABLE);
-      _direction       = AUTO;
+      _direction       = MScore::AUTO;
       _up              = true;
       _distribute      = false;
       _userModified[0] = false;
@@ -462,7 +462,7 @@ void Beam::layout1()
       Chord* c2 = 0;
 
       if (staff()->useTablature()) {
-            //TABULATURES: all beams (and related chords) are UP at slope 0
+            //TABULATURES: all beams (and related chords) are MScore::UP at slope 0
             _up   = true;
             slope = 0.0;
             cross = isGrace = false;
@@ -516,18 +516,18 @@ void Beam::layout1()
             //
             // determine beam stem direction
             //
-            if (_direction != AUTO) {
-                  _up = _direction == UP;
+            if (_direction != MScore::AUTO) {
+                  _up = _direction == MScore::UP;
                   }
             else {
                   ChordRest* cr = _elements[0];
                   Measure* m = cr->measure();
                   if (m->hasVoices(cr->staffIdx())) {
                         switch(cr->voice()) {
-                              case 0:  _up = (score()->style(ST_stemDir1).toDirection() == UP); break;
-                              case 1:  _up = (score()->style(ST_stemDir2).toDirection() == UP); break;
-                              case 2:  _up = (score()->style(ST_stemDir3).toDirection() == UP); break;
-                              case 3:  _up = (score()->style(ST_stemDir4).toDirection() == UP); break;
+                              case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
+                              case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
+                              case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
+                              case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
                               }
                         }
                   else if (!twoBeamedNotes()) {
@@ -538,7 +538,7 @@ void Beam::layout1()
                   }
 
             cross   = minMove < maxMove;
-            int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+            int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
             slope   = 0.0;
 
             if (cross || _userModified[idx]) {
@@ -1523,7 +1523,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             }
 
       BeamFragment* f = fragments[frag];
-      int dIdx        = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int dIdx        = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       qreal& py1      = f->py1[dIdx];
       qreal& py2      = f->py2[dIdx];
 
@@ -1555,7 +1555,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             }
       else {
             //
-            // PITCHED STAVES: SETUP
+            // PITCHED STAVES: SETMScore::UP
             //
             qreal px1 = c1->stemPos().x();
             qreal px2 = c2->stemPos().x();
@@ -1821,7 +1821,7 @@ void Beam::write(Xml& xml) const
       write(xml, P_GROW_LEFT);
       write(xml, P_GROW_RIGHT);
 
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal _spatium = spatium();
             foreach(BeamFragment* f, fragments) {
@@ -1871,7 +1871,7 @@ void Beam::read(const QDomElement& de)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py1[idx] = val.toDouble() * _spatium;
                   }
@@ -1879,13 +1879,13 @@ void Beam::read(const QDomElement& de)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py2[idx] = val.toDouble() * _spatium;
                   }
             else if (tag == "Fragment") {
                   BeamFragment* f = new BeamFragment;
-                  int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   qreal _spatium = spatium();
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -1917,7 +1917,7 @@ void Beam::read(const QDomElement& de)
 
 void Beam::editDrag(const EditData& ed)
       {
-      int idx  = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx  = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
       if (ed.curGrip == 0)
@@ -1936,7 +1936,7 @@ void Beam::editDrag(const EditData& ed)
 void Beam::updateGrips(int* grips, QRectF* grip) const
       {
       *grips = 2;
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
       Chord* c1;
@@ -1963,11 +1963,11 @@ void Beam::updateGrips(int* grips, QRectF* grip) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(Direction d)
+void Beam::setBeamDirection(MScore::Direction d)
       {
       _direction = d;
-      if (d != AUTO)
-            _up = d == UP;
+      if (d != MScore::AUTO)
+            _up = d == MScore::UP;
       }
 
 //---------------------------------------------------------
@@ -1986,8 +1986,8 @@ void Beam::toDefault()
             score()->undoChangeProperty(this, P_BEAM_POS, QVariant(beamPos()));
             score()->undoChangeProperty(this, P_USER_MODIFIED, false);
             }
-      if (beamDirection() != AUTO)
-            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(AUTO));
+      if (beamDirection() != MScore::AUTO)
+            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
       setGenerated(true);
       }
 
@@ -1999,7 +1999,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
       {
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       int i = 0;
       editFragment = 0;
       foreach (BeamFragment* f, fragments) {
@@ -2061,7 +2061,7 @@ QPointF Beam::beamPos() const
       if (fragments.isEmpty())
             return QPointF(0.0, 0.0);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       qreal _spatium = spatium();
       return QPointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
       }
@@ -2075,7 +2075,7 @@ void Beam::setBeamPos(const QPointF& bp)
       if (fragments.isEmpty())
             fragments.append(new BeamFragment);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       _userModified[idx] = true;
       setGenerated(false);
       qreal _spatium = spatium();
@@ -2089,7 +2089,7 @@ void Beam::setBeamPos(const QPointF& bp)
 
 bool Beam::userModified() const
       {
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       return _userModified[idx];
       }
 
@@ -2099,7 +2099,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
       {
-      int idx = (_direction == AUTO || _direction == DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       _userModified[idx] = val;
       }
 
@@ -2129,7 +2129,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_STEM_DIRECTION:
-                  setBeamDirection(Direction(v.toInt()));
+                  setBeamDirection(MScore::Direction(v.toInt()));
                   break;
             case P_DISTRIBUTE:
                   setDistribute(v.toBool());
@@ -2164,7 +2164,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_STEM_DIRECTION: return int(AUTO);
+            case P_STEM_DIRECTION: return int(MScore::AUTO);
             case P_DISTRIBUTE:     return false;
             case P_GROW_LEFT:      return 1.0;
             case P_GROW_RIGHT:     return 1.0;

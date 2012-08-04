@@ -268,10 +268,10 @@ void EditStyle::getValues()
       lstyle.set(ST_propertyDistanceHead,    Spatium(propertyDistanceHead->value()));
       lstyle.set(ST_propertyDistanceStem,    Spatium(propertyDistanceStem->value()));
       lstyle.set(ST_propertyDistance,        Spatium(propertyDistance->value()));
-      lstyle.set(ST_stemDir1,                voice1Up->isChecked() ? UP : DOWN);
-      lstyle.set(ST_stemDir2,                voice2Up->isChecked() ? UP : DOWN);
-      lstyle.set(ST_stemDir3,                voice3Up->isChecked() ? UP : DOWN);
-      lstyle.set(ST_stemDir4,                voice4Up->isChecked() ? UP : DOWN);
+      lstyle.set(ST_stemDir1,                voice1Up->isChecked() ? MScore::UP : MScore::DOWN);
+      lstyle.set(ST_stemDir2,                voice2Up->isChecked() ? MScore::UP : MScore::DOWN);
+      lstyle.set(ST_stemDir3,                voice3Up->isChecked() ? MScore::UP : MScore::DOWN);
+      lstyle.set(ST_stemDir4,                voice4Up->isChecked() ? MScore::UP : MScore::DOWN);
 
       lstyle.set(ST_shortenStem,             shortenStem->isChecked());
       lstyle.set(ST_shortStemProgression,    Spatium(shortStemProgression->value()));
@@ -476,15 +476,15 @@ void EditStyle::setValues()
       propertyDistanceStem->setValue(lstyle.value(ST_propertyDistanceStem).toSpatium().val());
       propertyDistance->setValue(lstyle.value(ST_propertyDistance).toSpatium().val());
 
-      voice1Up->setChecked(lstyle.value(ST_stemDir1).toDirection() == UP);
-      voice2Up->setChecked(lstyle.value(ST_stemDir2).toDirection() == UP);
-      voice3Up->setChecked(lstyle.value(ST_stemDir3).toDirection() == UP);
-      voice4Up->setChecked(lstyle.value(ST_stemDir4).toDirection() == UP);
+      voice1Up->setChecked(lstyle.value(ST_stemDir1).toDirection() == MScore::UP);
+      voice2Up->setChecked(lstyle.value(ST_stemDir2).toDirection() == MScore::UP);
+      voice3Up->setChecked(lstyle.value(ST_stemDir3).toDirection() == MScore::UP);
+      voice4Up->setChecked(lstyle.value(ST_stemDir4).toDirection() == MScore::UP);
 
-      voice1Down->setChecked(lstyle.value(ST_stemDir1).toDirection() != UP);
-      voice2Down->setChecked(lstyle.value(ST_stemDir2).toDirection() != UP);
-      voice3Down->setChecked(lstyle.value(ST_stemDir3).toDirection() != UP);
-      voice4Down->setChecked(lstyle.value(ST_stemDir4).toDirection() != UP);
+      voice1Down->setChecked(lstyle.value(ST_stemDir1).toDirection() != MScore::UP);
+      voice2Down->setChecked(lstyle.value(ST_stemDir2).toDirection() != MScore::UP);
+      voice3Down->setChecked(lstyle.value(ST_stemDir3).toDirection() != MScore::UP);
+      voice4Down->setChecked(lstyle.value(ST_stemDir4).toDirection() != MScore::UP);
 
       shortenStem->setChecked(lstyle.value(ST_shortenStem).toBool());
       shortStemProgression->setValue(lstyle.value(ST_shortStemProgression).toSpatium().val());

@@ -98,7 +98,7 @@ class Chord : public ChordRest {
       Stem*      _stem;
       Hook*      _hook;
       StemSlash* _stemSlash;
-      Direction  _stemDirection;
+      MScore::Direction  _stemDirection;
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
       TremoloChordType _tremoloChordType;
@@ -135,8 +135,8 @@ class Chord : public ChordRest {
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
-      void setStemDirection(Direction d)     { _stemDirection = d; }
-      Direction stemDirection() const        { return _stemDirection; }
+      void setStemDirection(MScore::Direction d)     { _stemDirection = d; }
+      MScore::Direction stemDirection() const        { return _stemDirection; }
 
       QList<LedgerLine*>* ledgerLines()      { return &_ledgerLines; }
 

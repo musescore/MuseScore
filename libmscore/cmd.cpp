@@ -390,8 +390,8 @@ qDebug("add pitch %d %d", pitch, addFlag);
       expandVoice();
 
       // insert note
-      Direction stemDirection = AUTO;
-      NoteHeadGroup headGroup = HEAD_NORMAL;
+      MScore::Direction stemDirection = MScore::AUTO;
+      Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
       int track               = _is.track();
       if (_is.drumNote() != -1) {
             pitch         = _is.drumNote();
@@ -530,7 +530,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
-   Direction stemDirection)
+   MScore::Direction stemDirection)
       {
       if (segment->subtype() == Segment::SegGrace) {
             Chord* chord = static_cast<Chord*>(segment->element(track));
@@ -2311,11 +2311,11 @@ void Score::cmdMirrorNoteHead()
                   if (note->staff() && note->staff()->useTablature())
                         note->score()->undoChangeProperty(e, P_GHOST, true);
                   else {
-                        DirectionH d = note->userMirror();
-                        if (d == DH_AUTO)
-                              d = note->chord()->up() ? DH_RIGHT : DH_LEFT;
+                        MScore::DirectionH d = note->userMirror();
+                        if (d == MScore::DH_AUTO)
+                              d = note->chord()->up() ? MScore::DH_RIGHT : MScore::DH_LEFT;
                         else
-                              d = d == DH_LEFT ? DH_RIGHT : DH_LEFT;
+                              d = d == MScore::DH_LEFT ? MScore::DH_RIGHT : MScore::DH_LEFT;
                         undoChangeUserMirror(note, d);
                         }
                   }
@@ -2386,12 +2386,12 @@ void Score::cmdDoubleDuration()
 //   cmdMoveRest
 //---------------------------------------------------------
 
-void Score::cmdMoveRest(Rest* rest, Direction dir)
+void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
       {
       QPointF pos(rest->userOff());
-      if (dir == UP)
+      if (dir == MScore::UP)
             pos.ry() -= spatium();
-      else if (dir == DOWN)
+      else if (dir == MScore::DOWN)
             pos.ry() += spatium();
       undoChangeUserOffset(rest, pos);
       setLayoutAll(false);
@@ -2401,12 +2401,12 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 //   cmdMoveLyrics
 //---------------------------------------------------------
 
-void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
+void Score::cmdMoveLyrics(Lyrics* lyrics, MScore::Direction dir)
       {
       ChordRest* cr      = lyrics->chordRest();
       QList<Lyrics*>& ll = cr->lyricsList();
       int no             = lyrics->no();
-      if (dir == UP) {
+      if (dir == MScore::UP) {
             if (no) {
                   if (ll[no-1] == 0) {
                         ll[no-1] = ll[no];
@@ -2447,9 +2447,9 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == ARTICULATION || el->type() == FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == REST)
-                  cmdMoveRest(static_cast<Rest*>(el), UP);
+                  cmdMoveRest(static_cast<Rest*>(el), MScore::UP);
             else if (el && el->type() == LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), UP);
+                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::UP);
             else
                   upDown(true, UP_DOWN_CHROMATIC);
             }
@@ -2457,9 +2457,9 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == ARTICULATION || el->type() == FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == REST)
-                  cmdMoveRest(static_cast<Rest*>(el), DOWN);
+                  cmdMoveRest(static_cast<Rest*>(el), MScore::DOWN);
             else if (el && el->type() == LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), DOWN);
+                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::DOWN);
             else
                   upDown(false, UP_DOWN_CHROMATIC);
             }
