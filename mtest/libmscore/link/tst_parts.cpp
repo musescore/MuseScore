@@ -315,7 +315,7 @@ Score* TestParts::doRemoveBreath()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegBreath);
+      Segment* s   = m->first()->next(Segment::SegBreath);
       Breath*  b   = static_cast<Breath*>(s->element(0));
 
       score->select(b);
@@ -445,7 +445,7 @@ Score* TestParts::doRemoveFingering()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegChordRest);
+      Segment* s   = m->first()->next(Segment::SegChordRest);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
@@ -580,7 +580,7 @@ Score* TestParts::doRemoveSymbol()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegChordRest);
+      Segment* s   = m->first()->next(Segment::SegChordRest);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
