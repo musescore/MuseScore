@@ -310,7 +310,6 @@ Property<Box>* Box::property(P_ID id) const
             if (propertyList[i].id == id)
                   return &propertyList[i];
             }
-      qFatal("Box: property %d not found\n", id);
       return 0;
       }
 
@@ -323,7 +322,7 @@ QVariant Box::getProperty(P_ID propertyId) const
       Property<Box>* p = property(propertyId);
       if (p)
             return getVariant(propertyId, ((*(Box*)this).*(p->data))());
-      return Element::getProperty(propertyId);
+      return MeasureBase::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
@@ -340,7 +339,7 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
             setGenerated(false);
             }
       else
-            rv = Element::setProperty(propertyId, v);
+            rv = MeasureBase::setProperty(propertyId, v);
       score()->setLayoutAll(true);
       return rv;
       }
@@ -358,6 +357,7 @@ bool Box::setProperty(const QString& name, const QDomElement& e)
                   return true;
                   }
             }
+//      return MeasureBase::setProperty(name, e);
       return Element::setProperty(name, e);
       }
 
