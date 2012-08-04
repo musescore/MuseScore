@@ -738,14 +738,14 @@ void Slur::slurPos(SlurPos* sp)
 
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
-      yo = note1->yPos() + _spatium * .9 * __up;
+      yo = note1->pos().y() + _spatium * .9 * __up;
       xo = hw * .5;
 
       if (stem1) {
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                   qreal sh = stem1->height() + _spatium;
-                  yo       = sc->downNote()->yPos() + sh * __up;
+                  yo       = sc->downNote()->pos().y() + sh * __up;
                   xo       = stem1->pos().x();
                   stemPos  = true;
                   }
@@ -759,7 +759,7 @@ void Slur::slurPos(SlurPos* sp)
                   if ((sc->up() != ec->up()) && (sc->up() == _up)) {
                         Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
                         Note* n2  = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = n2->yPos() - n1->yPos();
+                        qreal yd  = n2->pos().y() - n1->pos().y();
 
                         yd *= .5;
 
@@ -785,7 +785,7 @@ void Slur::slurPos(SlurPos* sp)
 
       //------p2
       xo = hw * .5;
-      yo = note2->yPos() + _spatium * .9 * __up;
+      yo = note2->pos().y() + _spatium * .9 * __up;
 
       if (stem2) {
             Beam* beam2 = ec->beam();
@@ -799,9 +799,9 @@ void Slur::slurPos(SlurPos* sp)
                   ) {
                   qreal sh = stem2->height() + _spatium;
                   if (_up)
-                        yo = ec->downNote()->yPos() - sh;
+                        yo = ec->downNote()->pos().y() - sh;
                   else
-                        yo = ec->upNote()->yPos() + sh;
+                        yo = ec->upNote()->pos().y() + sh;
                   xo = stem2->pos().x();
                   }
             else if (!ec->up() && !_up)
@@ -813,7 +813,7 @@ void Slur::slurPos(SlurPos* sp)
             if ((sc->up() != ec->up()) && (ec->up() == _up)) {
                   Note* n1 = sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->yPos() - n1->yPos();
+                  qreal yd = n2->pos().y() - n1->pos().y();
 
                   yd *= .5;
 
