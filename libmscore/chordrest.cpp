@@ -764,6 +764,7 @@ Element* ChordRest::drop(const DropData& data)
 
             case DYNAMIC:
             case FRET_DIAGRAM:
+            case SYMBOL:            
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -809,7 +810,6 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
                   }
 
-            case SYMBOL:
             case IMAGE:
                   e->setParent(segment());
                   score()->undoAddElement(e);
