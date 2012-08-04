@@ -34,7 +34,7 @@ class Beam : public Element {
 
       QList<ChordRest*> _elements;        // must be sorted by tick
       QList<QLineF*> beamSegments;
-      Direction _direction;
+      MScore::Direction _direction;
       bool _up;
       bool _distribute;                   // equal spacing of elements
       qreal _grow1;                       // define "feather" beams
@@ -98,8 +98,8 @@ class Beam : public Element {
       void setId(int i) const             { _id = i;    }
       int id() const                      { return _id; }
 
-      void setBeamDirection(Direction d);
-      Direction beamDirection() const     { return _direction; }
+      void setBeamDirection(MScore::Direction d);
+      MScore::Direction beamDirection() const     { return _direction; }
 
       virtual QPainterPath shape() const;
       virtual bool contains(const QPointF& p) const;

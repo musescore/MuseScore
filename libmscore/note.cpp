@@ -59,8 +59,8 @@
 //---------------------------------------------------------
 
 static bool falseVal                = false;
-static DirectionH defaultMirror     = DH_AUTO;
-static Direction defaultDotPosition = AUTO;
+static MScore::DirectionH defaultMirror     = MScore::DH_AUTO;
+static MScore::Direction defaultDotPosition = MScore::AUTO;
 static int defaultOnTimeOffset      = 0;
 static int defaultOffTimeOffset     = 0;
 static int defaultHeadGroup         = 0;
@@ -68,8 +68,8 @@ static int defaultVeloOffset        = 0;
 static qreal defaultTuning          = 0.0;
 static int defaultFret              = -1;
 static int defaultString            = -1;
-static ValueType defaultVeloType    = OFFSET_VAL;
-static NoteHeadType defaultHeadType = HEAD_AUTO;
+static MScore::ValueType defaultVeloType    = MScore::OFFSET_VAL;
+static Note::NoteHeadType defaultHeadType = Note::HEAD_AUTO;
 
 Property<Note> Note::propertyList[] = {
       { P_PITCH,          &Note::pPitch,         0 },
@@ -95,7 +95,7 @@ Property<Note> Note::propertyList[] = {
 //    note head groups
 //---------------------------------------------------------
 
-const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES] = {
+const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       {     // down stem
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadSym        },
       { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
@@ -165,9 +165,9 @@ Note::Note(Score* s)
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
-      _userMirror        = DH_AUTO;
+      _userMirror        = MScore::DH_AUTO;
       _small             = false;
-      _dotPosition       = AUTO;
+      _dotPosition       = MScore::AUTO;
       _line              = 0;
       _fret              = -1;
       _string            = -1;
@@ -183,7 +183,7 @@ Note::Note(Score* s)
       _hidden            = false;
       _subchannel        = 0;
 
-      _veloType          = OFFSET_VAL;
+      _veloType          = MScore::OFFSET_VAL;
       _veloOffset        = 0;
 
       _onTimeOffset      = 0;
@@ -1154,7 +1154,7 @@ Element* Note::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  MScore::Direction dir = c->stemDirection();
                   int t         = (staffIdx() * VOICES) + (n->voice() % VOICES);
                   score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
@@ -1241,9 +1241,9 @@ void Note::layout2()
             // do not draw dots on staff line
             if ((_line & 1) == 0) {
                   qreal up;
-                  if (_dotPosition == AUTO)
+                  if (_dotPosition == MScore::AUTO)
                         up = (voice() == 0 || voice() == 2) ? -1.0 : 1.0;
-                  else if (_dotPosition == UP)
+                  else if (_dotPosition == MScore::UP)
                         up = -1.0;
                   else
                         up = 1.0;
@@ -1460,7 +1460,7 @@ void Note::toDefault()
       {
       score()->undoChangeUserOffset(this, QPointF());
       score()->undoChangeUserOffset(chord(), QPointF());
-      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, AUTO);
+      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, MScore::AUTO);
       }
 
 //---------------------------------------------------------
@@ -1529,9 +1529,9 @@ int Note::ppitch() const
 
 int Note::customizeVelocity(int velo) const
       {
-      if (veloType() == OFFSET_VAL)
+      if (veloType() == MScore::OFFSET_VAL)
             velo = velo + (velo * veloOffset()) / 100;
-      else if (veloType() == USER_VAL)
+      else if (veloType() == MScore::USER_VAL)
             velo = veloOffset();
       return restrict(velo, 1, 127);
       }
@@ -1635,7 +1635,7 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
-      _headGroup = nval.headGroup;
+      _headGroup = NoteHeadGroup(nval.headGroup);
       }
 
 //---------------------------------------------------------

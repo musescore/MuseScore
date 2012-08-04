@@ -14,6 +14,7 @@
 #ifndef __ARTICULATION_H__
 #define __ARTICULATION_H__
 
+#include "mscore.h"
 #include "symbol.h"
 #include "sym.h"
 
@@ -54,7 +55,7 @@ class Articulation : public Element {
       Q_OBJECT
 
       ArticulationType _subtype;
-      Direction _direction;
+      MScore::Direction _direction;
       QString _channelName;
       ArticulationAnchor _anchor;
       bool _up;
@@ -92,8 +93,8 @@ class Articulation : public Element {
 
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
-      void setDirection(Direction d);
-      Direction direction() const           { return _direction; }
+      void setDirection(MScore::Direction d);
+      MScore::Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
 

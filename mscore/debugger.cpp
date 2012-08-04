@@ -1035,7 +1035,7 @@ void ShowChordWidget::beamModeChanged(int n)
 
 void ShowChordWidget::directionChanged(int val)
       {
-      ((Chord*)element())->setStemDirection(Direction(val));
+      ((Chord*)element())->setStemDirection(MScore::Direction(val));
       }
 
 //---------------------------------------------------------

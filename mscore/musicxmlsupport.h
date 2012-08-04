@@ -22,6 +22,7 @@
 #define __MUSICXMLSUPPORT_H__
 
 #include "libmscore/mscore.h"
+#include "libmscore/note.h"
 
 //---------------------------------------------------------
 //   NoteList
@@ -89,17 +90,17 @@ class VoiceOverlapDetector {
 struct MusicXMLDrumInstrument {
       int pitch;
       QString name;
-      NoteHeadGroup notehead; ///< notehead symbol set
+      Note::NoteHeadGroup notehead; ///< notehead symbol set
       int line;               ///< place notehead onto this line
-      Direction stemDirection;
+      MScore::Direction stemDirection;
 
       QString toString() const;
 
       MusicXMLDrumInstrument()
-         : pitch(-1), name(), notehead(HEAD_INVALID), line(0), stemDirection(AUTO) {}
+         : pitch(-1), name(), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
       MusicXMLDrumInstrument(QString s)
-         : pitch(-1), name(s), notehead(HEAD_INVALID), line(0), stemDirection(AUTO) {}
-      MusicXMLDrumInstrument(int p, QString s, NoteHeadGroup nh, int l, Direction d)
+         : pitch(-1), name(s), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
+      MusicXMLDrumInstrument(int p, QString s, Note::NoteHeadGroup nh, int l, MScore::Direction d)
          : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
       };
 

@@ -28,6 +28,7 @@
 #include "sparm.h"
 #include "mscoreview.h"
 #include "segment.h"
+#include "note.h"
 
 class TempoMap;
 struct TEvent;
@@ -360,8 +361,8 @@ class Score : public QObject {
       void cmdExchangeVoice(int, int);
 
       void removeChordRest(ChordRest* cr, bool clearSegment);
-      void cmdMoveRest(Rest*, Direction);
-      void cmdMoveLyrics(Lyrics*, Direction);
+      void cmdMoveRest(Rest*, MScore::Direction);
+      void cmdMoveLyrics(Lyrics*, MScore::Direction);
 
       void cmdHalfDuration();
       void cmdDoubleDuration();
@@ -481,7 +482,7 @@ class Score : public QObject {
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
-      void undoChangeUserMirror(Note*, DirectionH);
+      void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
@@ -491,7 +492,7 @@ class Score : public QObject {
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
       int clefOffset(int tick, Staff*) const;
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = AUTO);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*);

@@ -1007,7 +1007,7 @@ void GuitarPro1::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(HEAD_CROSS);
+            note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
@@ -1578,7 +1578,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(HEAD_CROSS);
+            note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
@@ -2070,7 +2070,7 @@ void GuitarPro5::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(HEAD_CROSS);
+            note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
@@ -2321,9 +2321,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == 0x2)
-                  chord->setStemDirection(DOWN);
+                  chord->setStemDirection(MScore::DOWN);
             else if (rr == 0xa)
-                  chord->setStemDirection(UP);
+                  chord->setStemDirection(MScore::UP);
             else
                   qDebug("  1beat read 0x%02x\n", rr);
             }

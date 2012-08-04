@@ -460,70 +460,70 @@ ClefType OveClefToClef(OVE::ClefType type){
 	return clef;
 }
 
-NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
-    NoteHeadGroup headGroup = HEAD_NORMAL;
+Note::NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
+    Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
 	switch (type) {
 	case OVE::NoteHead_Standard: {
-		headGroup = HEAD_NORMAL;
+		headGroup = Note::HEAD_NORMAL;
 		break;
 	}
 	case OVE::NoteHead_Invisible: {
 		break;
 	}
 	case OVE::NoteHead_Rhythmic_Slash: {
-		headGroup = HEAD_SLASH;
+		headGroup = Note::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Percussion: {
-		headGroup = HEAD_XCIRCLE;
+		headGroup = Note::HEAD_XCIRCLE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Rhythm: {
-		headGroup = HEAD_CROSS;
+		headGroup = Note::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Open_Rhythm: {
-		headGroup = HEAD_CROSS;
+		headGroup = Note::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Closed_Slash: {
-		headGroup = HEAD_SLASH;
+		headGroup = Note::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Open_Slash: {
-		headGroup = HEAD_SLASH;
+		headGroup = Note::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Closed_Do: {
-		headGroup = HEAD_DO;
+		headGroup = Note::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Open_Do: {
-		headGroup = HEAD_DO;
+		headGroup = Note::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Closed_Re: {
-		headGroup = HEAD_RE;
+		headGroup = Note::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Open_Re: {
-		headGroup = HEAD_RE;
+		headGroup = Note::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Mi: {
-		headGroup = HEAD_MI;
+		headGroup = Note::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Open_Mi: {
-		headGroup = HEAD_MI;
+		headGroup = Note::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Closed_Fa: {
-		headGroup = HEAD_FA;
+		headGroup = Note::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Open_Fa: {
-		headGroup = HEAD_FA;
+		headGroup = Note::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Sol: {
@@ -533,19 +533,19 @@ NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
 		break;
 	}
 	case OVE::NoteHead_Closed_La: {
-		headGroup = HEAD_LA;
+		headGroup = Note::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Open_La: {
-		headGroup = HEAD_LA;
+		headGroup = Note::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Ti: {
-		headGroup = HEAD_TI;
+		headGroup = Note::HEAD_TI;
 		break;
 	}
 	case OVE::NoteHead_Open_Ti: {
-		headGroup = HEAD_TI;
+		headGroup = Note::HEAD_TI;
 		break;
 	}
 	default: {
@@ -1459,7 +1459,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				int pitch = oveNote->getNote();
 
 				//note->setTrack(noteTrack);
-                note->setVeloType(USER_VAL);
+                note->setVeloType(MScore::USER_VAL);
 				note->setVeloOffset(oveNote->getOnVelocity());
 				//note->setUserAccidental(OveAccidental_to_Accidental(notePtr->getAccidental()));
 				note->setPitch(pitch);
@@ -1509,7 +1509,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				cr->setVisible(oveNote->getShow());
 				((Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
 				if(!setDirection)
-					((Chord*) cr)->setStemDirection(container->getStemUp() ? UP : DOWN);
+					((Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::UP : MScore::DOWN);
 
 				// cross staff
 				int staffMove = 0;
@@ -1576,7 +1576,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				const OVE::Tuplet* oveTuplet = getTuplet(tuplets, container->start()->getOffset());
 				if (oveTuplet != 0) {
 					//set direction
-					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? UP : DOWN);
+					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? MScore::UP : MScore::DOWN);
 
 					if(container->start()->getOffset() == oveTuplet->stop()->getOffset()){
 						tuplet = 0;
@@ -2175,7 +2175,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 			int absEndTick = mtt_->getTick(slurPtr->start()->getMeasure()+slurPtr->stop()->getMeasure(), endContainer->getTick());
 
 	        Slur* slur = new Slur(score_);
-	        slur->setSlurDirection(slurPtr->getShowOnTop()? UP : DOWN);
+	        slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::UP : MScore::DOWN);
               Element* n1 = score_->searchNote(absStartTick, track);
               Element* n2 = score_->searchNote(absEndTick, track);
               if (n1 == 0 || n2 == 0) {

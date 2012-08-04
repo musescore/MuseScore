@@ -140,7 +140,7 @@ Chord::Chord(Score* s)
       {
       _stem          = 0;
       _hook          = 0;
-      _stemDirection = AUTO;
+      _stemDirection = MScore::AUTO;
       _arpeggio      = 0;
       _tremolo       = 0;
       _tremoloChordType = TremoloSingle;
@@ -564,8 +564,8 @@ void Chord::computeUp()
             return;
             }
       // pitched staves
-      if (_stemDirection != AUTO) {
-            _up = _stemDirection == UP;
+      if (_stemDirection != MScore::AUTO) {
+            _up = _stemDirection == MScore::UP;
             }
       else if (_noteType != NOTE_NORMAL) {
             //
@@ -573,10 +573,10 @@ void Chord::computeUp()
             //
             if (measure()->mstaff(staffIdx())->hasVoices) {
                   switch(voice()) {
-                        case 0:  _up = (score()->style(ST_stemDir1).toDirection() == UP); break;
-                        case 1:  _up = (score()->style(ST_stemDir2).toDirection() == UP); break;
-                        case 2:  _up = (score()->style(ST_stemDir3).toDirection() == UP); break;
-                        case 3:  _up = (score()->style(ST_stemDir4).toDirection() == UP); break;
+                        case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
+                        case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
+                        case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
+                        case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
                         }
                   }
             else
@@ -584,10 +584,10 @@ void Chord::computeUp()
             }
       else if (measure()->mstaff(staffIdx())->hasVoices) {
             switch(voice()) {
-                  case 0:  _up = (score()->style(ST_stemDir1).toDirection() == UP); break;
-                  case 1:  _up = (score()->style(ST_stemDir2).toDirection() == UP); break;
-                  case 2:  _up = (score()->style(ST_stemDir3).toDirection() == UP); break;
-                  case 3:  _up = (score()->style(ST_stemDir4).toDirection() == UP); break;
+                  case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
+                  case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
+                  case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
+                  case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
                   }
             }
       else if (_notes.size() == 1 || staffMove()) {
@@ -673,9 +673,9 @@ void Chord::write(Xml& xml) const
       if (_hook && (!_hook->visible() || !_hook->userOff().isNull() || (_hook->color() != MScore::defaultColor)))
             _hook->write(xml);
       switch(_stemDirection) {
-            case UP:   xml.tag("StemDirection", QVariant("up")); break;
-            case DOWN: xml.tag("StemDirection", QVariant("down")); break;
-            case AUTO: break;
+            case MScore::UP:   xml.tag("StemDirection", QVariant("up")); break;
+            case MScore::DOWN: xml.tag("StemDirection", QVariant("down")); break;
+            case MScore::AUTO: break;
             }
       foreach (const Note* n, _notes)
             n->write(xml);
@@ -714,11 +714,11 @@ void Chord::readNote(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spann
 
             if (tag == "StemDirection") {
                   if (val == "up")
-                        _stemDirection = UP;
+                        _stemDirection = MScore::UP;
                   else if (val == "down")
-                        _stemDirection = DOWN;
+                        _stemDirection = MScore::DOWN;
                   else
-                        _stemDirection = Direction(val.toInt());
+                        _stemDirection = MScore::Direction(val.toInt());
                   }
             else if (tag == "pitch")
                   note->setPitch(val.toInt());
@@ -794,11 +794,11 @@ void Chord::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>
                   _noteType = NOTE_GRACE32;
             else if (tag == "StemDirection") {
                   if (val == "up")
-                        _stemDirection = UP;
+                        _stemDirection = MScore::UP;
                   else if (val == "down")
-                        _stemDirection = DOWN;
+                        _stemDirection = MScore::DOWN;
                   else
-                        _stemDirection = Direction(val.toInt());
+                        _stemDirection = MScore::Direction(val.toInt());
                   }
             else if (tag == "noStem")
                   _noStem = val.toInt();
@@ -1023,7 +1023,7 @@ void Chord::layoutStem1()
             if (!_stem)
                   setStem(new Stem(score()));
 //            if (staff()->useTablature()) {                  // in tab, all stems are up (if present)
-//                  setStemDirection(UP);
+//                  setStemDirection(MScore::UP);
 //                  setUp(true);
 //                  }
             }
@@ -1785,7 +1785,7 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
                   score()->setLayoutAll(true);
                   break;
             case P_STEM_DIRECTION:
-                  setStemDirection(Direction(v.toInt()));
+                  setStemDirection(MScore::Direction(v.toInt()));
                   score()->setLayoutAll(true);
                   break;
             default:
@@ -1925,8 +1925,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
       //
       // determine Direction
       //
-      if (a->direction() != AUTO) {
-            a->setUp(a->direction() == UP);
+      if (a->direction() != MScore::AUTO) {
+            a->setUp(a->direction() == MScore::UP);
             }
       else {
             if (measure()->hasVoices(a->staffIdx())) {

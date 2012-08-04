@@ -4009,7 +4009,7 @@ static AccidentalType convertAccidental(QString mxmlName)
  Convert a MusicXML notehead name to a MuseScore headgroup.
  */
 
-static NoteHeadGroup convertNotehead(QString mxmlName)
+static Note::NoteHeadGroup convertNotehead(QString mxmlName)
       {
       QMap<QString, int> map; // map MusicXML notehead name to a MuseScore headgroup
       map["slash"] = 5;
@@ -4027,11 +4027,11 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
       map["normal"] = 0;
 
       if (map.contains(mxmlName))
-            return NoteHeadGroup(map.value(mxmlName));
+            return Note::NoteHeadGroup(map.value(mxmlName));
       else
             qDebug("unknown notehead %s", qPrintable(mxmlName));
       // default: return 0
-      return HEAD_NORMAL;
+      return Note::HEAD_NORMAL;
       }
 
 //---------------------------------------------------------
@@ -4154,9 +4154,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     endSlur = true;
                               QString pl = ee.attribute(QString("placement"));
                               if (pl == "above")
-                                    slur[slurNo]->setSlurDirection(UP);
+                                    slur[slurNo]->setSlurDirection(MScore::UP);
                               else if (pl == "below")
-                                    slur[slurNo]->setSlurDirection(DOWN);
+                                    slur[slurNo]->setSlurDirection(MScore::DOWN);
                               // slur[slurNo]->setStart(tick, trk + voice);
                               // slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               // score->add(slur[slurNo]);
@@ -4203,9 +4203,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               }
                         QString tiedOrientation = e.attribute("orientation", "auto");
                         if (tiedOrientation == "over")
-                              tie->setSlurDirection(UP);
+                              tie->setSlurDirection(MScore::UP);
                         else if (tiedOrientation == "under")
-                              tie->setSlurDirection(DOWN);
+                              tie->setSlurDirection(MScore::DOWN);
                         else if (tiedOrientation == "auto")
                               ;  // ignore
                         else
@@ -4495,7 +4495,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       bool rest    = false;
       int relStaff = 0;
       BeamMode bm  = BEAM_AUTO;
-      Direction sd = AUTO;
+      MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
       QString graceSlash;
@@ -4507,7 +4507,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       bool editorial = false;
       bool cautionary = false;
       TDuration durationType(TDuration::V_INVALID);
-      NoteHeadGroup headGroup = HEAD_NORMAL;
+      Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
       bool chord = false;
@@ -4651,9 +4651,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   ;
             else if (tag == "stem") {
                   if (s == "up")
-                        sd = UP;
+                        sd = MScore::UP;
                   else if (s == "down")
-                        sd = DOWN;
+                        sd = MScore::DOWN;
                   else if (s == "none")
                         noStem = true;
                   else if (s == "double")
@@ -4801,7 +4801,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   note->setColor(noteheadColor);
 
             if (velocity > 0) {
-                  note->setVeloType(USER_VAL);
+                  note->setVeloType(MScore::USER_VAL);
                   note->setVeloOffset(velocity);
                   }
 

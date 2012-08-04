@@ -440,7 +440,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
                   slur[i] = 0;
                   started[i] = false;
                   notations.tag(xml);
-                  xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == UP ? " placement=\"above\"" : "").arg(i + 1));
+                  xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == MScore::UP ? " placement=\"above\"" : "").arg(i + 1));
                   }
             else {
                   // find free slot to store it
@@ -1942,7 +1942,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   noteTag += QString(" print-object=\"no\"");
                   }
             //TODO support for OFFSET_VAL
-            if (note->veloType() == USER_VAL) {
+            if (note->veloType() == MScore::USER_VAL) {
                   int velo = note->veloOffset();
                   noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0,'f',2));
                   }

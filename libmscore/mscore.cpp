@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "sequencer.h"
 #include "figuredbass.h"
+#include "note.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -64,8 +65,8 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
-      qRegisterMetaType<MScore::NoteHeadGroup>("NoteHeadGroup");
-      qRegisterMetaType<MScore::NoteHeadType>("NoteHeadType");
+      qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
+      qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
 #endif
 

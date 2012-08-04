@@ -496,10 +496,10 @@ StyleData::StyleData()
             StyleVal(ST_minMMRestWidth, Spatium(4)),
             StyleVal(ST_hideEmptyStaves, false),
             StyleVal(ST_dontHideStavesInFirstSystem, true),
-            StyleVal(ST_stemDir1, UP),
-            StyleVal(ST_stemDir2, DOWN),
-            StyleVal(ST_stemDir3, UP),
-            StyleVal(ST_stemDir4, DOWN),
+            StyleVal(ST_stemDir1, MScore::UP),
+            StyleVal(ST_stemDir2, MScore::DOWN),
+            StyleVal(ST_stemDir3, MScore::UP),
+            StyleVal(ST_stemDir4, MScore::DOWN),
 
             StyleVal(ST_gateTime, 100),
             StyleVal(ST_tenutoGateTime, 100),
@@ -948,7 +948,7 @@ void StyleData::load(const QDomElement& de)
                                     case ST_DOUBLE:    set(StyleVal(i, qreal(val.toDouble())));          break;
                                     case ST_BOOL:      set(StyleVal(i, bool(val.toInt())));       break;
                                     case ST_INT:       set(StyleVal(i, val.toInt()));             break;
-                                    case ST_DIRECTION: set(StyleVal(i, Direction(val.toInt())));  break;
+                                    case ST_DIRECTION: set(StyleVal(i, MScore::Direction(val.toInt())));  break;
                                     case ST_STRING:    set(StyleVal(i, val));                     break;
                                     }
                               break;
@@ -1114,7 +1114,7 @@ StyleVal::StyleVal(StyleIdx t, int val)
       v.i   = val;
       }
 
-StyleVal::StyleVal(StyleIdx t, Direction val)
+StyleVal::StyleVal(StyleIdx t, MScore::Direction val)
       {
       idx  = t;
       v.d   = val;
@@ -1159,7 +1159,7 @@ StyleVal::StyleVal(const QString& name, const QString& val)
                         v.i = val.toInt();
                         break;
                   case ST_DIRECTION:
-                        v.d = Direction(val.toInt());
+                        v.d = MScore::Direction(val.toInt());
                         break;
                   case ST_STRING:
                         s = val;
@@ -1449,7 +1449,7 @@ void MStyle::set(StyleIdx t, int val)
       set(StyleVal(t, val));
       }
 
-void MStyle::set(StyleIdx t, Direction val)
+void MStyle::set(StyleIdx t, MScore::Direction val)
       {
       set(StyleVal(t, val));
       }

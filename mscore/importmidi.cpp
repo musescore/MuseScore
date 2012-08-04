@@ -1086,7 +1086,7 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
                                     note->setOnTimeUserOffset(mn.noquantOntime() - tick);
                                     int ot = (mn.noquantOntime() + mn.noquantDuration()) - (tick + chord->actualTicks());
                                     note->setOffTimeUserOffset(ot);
-                                    note->setVeloType(USER_VAL);
+                                    note->setVeloType(MScore::USER_VAL);
                                     note->setVeloOffset(mn.velo());
 
                                     if (useDrumset) {
@@ -1244,7 +1244,7 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               note->setOnTimeUserOffset(mn.noquantOntime() - tick);
                               int ot = (mn.noquantOntime() + mn.noquantDuration()) - (tick + chord->actualTicks());
                               note->setOffTimeUserOffset(ot);
-                              note->setVeloType(USER_VAL);
+                              note->setVeloType(MScore::USER_VAL);
                               note->setVeloOffset(mn.velo());
 
                               if (n->ties[i]) {

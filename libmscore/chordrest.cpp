@@ -477,8 +477,8 @@ void ChordRest::layoutArticulations()
             //
             // determine Direction
             //
-            if (a->direction() != AUTO) {
-                  a->setUp(a->direction() == UP);
+            if (a->direction() != MScore::AUTO) {
+                  a->setUp(a->direction() == MScore::UP);
                   }
             else {
                   if (a->anchor() == A_CHORD)
@@ -775,7 +775,7 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, AUTO);
+                  score()->setNoteRest(segment(), track(), nval, data.duration, MScore::AUTO);
                   delete e;
                   }
                   break;
@@ -866,7 +866,7 @@ void ChordRest::toDefault()
       {
       score()->undoChangeUserOffset(this, QPointF());
       if (type() == CHORD) {
-            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(AUTO));
+            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
             score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
             }
       else

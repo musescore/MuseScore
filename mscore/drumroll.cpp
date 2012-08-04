@@ -90,8 +90,8 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("offset"), OFFSET_VAL);
-      veloType->addItem(tr("user"),   USER_VAL);
+      veloType->addItem(tr("offset"), MScore::OFFSET_VAL);
+      veloType->addItem(tr("user"),   MScore::USER_VAL);
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;
@@ -198,7 +198,7 @@ void DrumrollEditor::updateSelection()
             pitch->setValue(0);
             pitch->setEnabled(false);
             veloType->setEnabled(false);
-            veloType->setCurrentIndex(int(OFFSET_VAL));
+            veloType->setCurrentIndex(int(MScore::OFFSET_VAL));
             }
       else {
             velocity->setEnabled(true);
@@ -208,7 +208,7 @@ void DrumrollEditor::updateSelection()
             pitch->setDeltaMode(true);
             pitch->setValue(0);
             veloType->setEnabled(true);
-            veloType->setCurrentIndex(int(OFFSET_VAL));
+            veloType->setCurrentIndex(int(MScore::OFFSET_VAL));
             }
       }
 
@@ -271,11 +271,11 @@ void DrumrollEditor::veloTypeChanged(int val)
             return;
       QGraphicsItem* item = items[0];
       Note* note = (Note*)item->data(0).value<void*>();
-      if ((note == 0) || (ValueType(val) == note->veloType()))
+      if ((note == 0) || (MScore::ValueType(val) == note->veloType()))
             return;
 
       _score->undo()->beginMacro();
-      _score->undo(new ChangeVelocity(note, ValueType(val), note->veloOffset()));
+      _score->undo(new ChangeVelocity(note, MScore::ValueType(val), note->veloOffset()));
       _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
       updateVelocity(note);
       }
@@ -286,16 +286,16 @@ void DrumrollEditor::veloTypeChanged(int val)
 
 void DrumrollEditor::updateVelocity(Note* note)
       {
-      ValueType vt = note->veloType();
-      if (vt != ValueType(veloType->currentIndex())) {
+      MScore::ValueType vt = note->veloType();
+      if (vt != MScore::ValueType(veloType->currentIndex())) {
             veloType->setCurrentIndex(int(vt));
             switch(vt) {
-                  case USER_VAL:
+                  case MScore::USER_VAL:
                         velocity->setReadOnly(false);
                         velocity->setSuffix("");
                         velocity->setRange(0, 127);
                         break;
-                  case OFFSET_VAL:
+                  case MScore::OFFSET_VAL:
                         velocity->setReadOnly(false);
                         velocity->setSuffix("%");
                         velocity->setRange(-200, 200);
@@ -318,9 +318,9 @@ void DrumrollEditor::velocityChanged(int val)
       Note* note = (Note*)item->data(0).value<void*>();
       if (note == 0)
             return;
-      ValueType vt = note->veloType();
+      MScore::ValueType vt = note->veloType();
 
-      if (vt == OFFSET_VAL)
+      if (vt == MScore::OFFSET_VAL)
             return;
 
       _score->undo()->beginMacro();
