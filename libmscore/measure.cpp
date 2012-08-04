@@ -2353,7 +2353,7 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       int nstaves = score()->nstaves();
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            if (!all && !visible(staffIdx))
+            if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()))
                   continue;
             MStaff* ms = staves[staffIdx];
             if (ms->lines)
@@ -2366,12 +2366,9 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       int tracks = nstaves * VOICES;
       for (Segment* s = first(); s; s = s->next()) {
-            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  if (!all && !visible(staffIdx))
-                        continue;
-                  }
             for (int track = 0; track < tracks; ++track) {
-                  if (!all && !visible(track/VOICES)) {
+                  int staffIdx = track/VOICES;
+                  if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
                         track += VOICES - 1;
                         continue;
                         }

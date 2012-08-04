@@ -236,7 +236,7 @@ void System::layout(qreal xo1)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
             SysStaff* ss = _staves[staffIdx];
-            if (!s->show() || !ss->show())
+            if (!(s->show() && ss->show()))
                   continue;
 
             qreal xo = -xo1;
@@ -278,12 +278,12 @@ void System::layout(qreal xo1)
       int idx = 0;
       foreach (Part* p, score()->parts()) {
             SysStaff* s = staff(idx);
-            if (!s->show() || !p->show())
-                  continue;
             int nstaves = p->nstaves();
-            foreach(InstrumentName* t, s->instrumentNames) {
-                  qreal d  = point(instrumentNameOffset) + t->bbox().width();
-                  t->rxpos() = xoff2 - d + xo1;
+            if (s->show() && p->show()) {
+                  foreach(InstrumentName* t, s->instrumentNames) {
+                        qreal d  = point(instrumentNameOffset) + t->bbox().width();
+                        t->rxpos() = xoff2 - d + xo1;
+                        }
                   }
             idx += nstaves;
             }
@@ -945,16 +945,19 @@ qDebug("Lyrics: melisma end segment not implemented");
 //    collect all visible elements
 //---------------------------------------------------------
 
-void System::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
+void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       if (isVbox())
             return;
       if (barLine)
             func(data, barLine);
+
       int idx = 0;
       foreach (SysStaff* st, _staves) {
-            if (!st->show() || !score()->staff(idx)->show())
+            if (!all && !(st->show() && score()->staff(idx)->show())) {
+                  ++idx;
                   continue;
+                  }
             foreach(Bracket* b, st->brackets) {
                   if (b)
                         func(data, b);
@@ -963,8 +966,15 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool /*all*
                   func(data, t);
             ++idx;
             }
-      foreach(SpannerSegment* ss, _spannerSegments)
-            func(data, ss);
+      foreach(SpannerSegment* ss, _spannerSegments) {
+            int staffIdx;
+            if (ss->spanner()->type() == SLUR)
+                  staffIdx = ss->spanner()->startElement()->staffIdx();
+            else
+                  staffIdx = ss->spanner()->staffIdx();
+            if (all || score()->staff(staffIdx)->show())
+                  func(data, ss);
+            }
       }
 
 //---------------------------------------------------------
