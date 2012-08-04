@@ -2719,7 +2719,7 @@ void MuseScore::changeState(ScoreState val)
                   searchCombo->clearEditText();
                   searchCombo->setFocus();
                   searchDialog->show();
-                  _modeText->setText(tr("Search"));
+                  _modeText->setText(tr("Find"));
                   _modeText->show();
                   break;
             default:
