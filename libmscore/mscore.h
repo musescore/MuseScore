@@ -551,6 +551,8 @@ class MScore : public QObject {
       Q_ENUMS(ValueType)
       Q_ENUMS(Direction)
       Q_ENUMS(DirectionH)
+      Q_ENUMS(NoteHeadGroup)
+      Q_ENUMS(NoteHeadType)
 
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
@@ -652,6 +654,15 @@ class MScore : public QObject {
       enum ValueType  { OFFSET_VAL, USER_VAL };
       enum Direction  { AUTO, UP, DOWN };
       enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
+      enum NoteHeadGroup {
+            HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI,
+            HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI,
+            HEAD_SOL,
+            HEAD_BREVIS_ALT,
+            HEAD_GROUPS,
+            HEAD_INVALID = -1
+            };
+      enum NoteHeadType { HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS };
 
       static void init();
       static MStyle* defaultStyle();
@@ -695,6 +706,8 @@ Q_DECLARE_METATYPE(MScore::ElementType)
 Q_DECLARE_METATYPE(MScore::ValueType)
 Q_DECLARE_METATYPE(MScore::Direction)
 Q_DECLARE_METATYPE(MScore::DirectionH)
+Q_DECLARE_METATYPE(MScore::NoteHeadGroup)
+Q_DECLARE_METATYPE(MScore::NoteHeadType)
 
 //---------------------------------------------------------
 //   center
