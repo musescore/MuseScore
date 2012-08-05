@@ -653,6 +653,8 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF: {
+                  if (_is.rest)
+                        break;
                   Drumset* ds   = instr->drumset();
                   nval.pitch    = _is.drumNote();
                   if (nval.pitch < 0)
@@ -664,6 +666,8 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
                   break;
                   }
             case TAB_STAFF: {
+                  if (_is.rest)
+                        return;
                   Tablature* neck = instr->tablature();
                   StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
                   // if tablature is upside down, 'flip' string number
