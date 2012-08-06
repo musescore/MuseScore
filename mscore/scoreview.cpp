@@ -5309,7 +5309,7 @@ void ScoreView::cmdAddPitch1(int pitch, bool addFlag, int step)
                                                 }
                                           }
                                     }
-                              segm = segm->next(SegGrace | SegChordRest);
+                              segm = segm->next(Segment::SegGrace | Segment::SegChordRest);
                               }
 //                        }
 //                  }

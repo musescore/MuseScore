@@ -46,9 +46,9 @@ extern int step2tpc(const QString& stepName, int alter);
 extern int step2tpc(int step, int alter);
 extern int tpc2pitch(int tpc);
 extern int tpc2step(int tpc);
-extern int tpc2alter(int tpc);
+static inline int tpc2alter(int tpc) { return ((tpc+1) / 7) - 2; }
 extern QString tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
-
+extern int computeLine(int tpc, int pitch);
 #endif
 

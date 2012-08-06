@@ -29,7 +29,7 @@
 
 const ClefInfo clefTable[] = {
 //        |--MusicXml-| octchng  pitchoffset
-// tag    xmlName    line     yoffs     |-lines for sharps--||--lines for flats--|   name
+// tag    xmlName    line yoffs   |-lines for sharps--||--lines for flats--|   name
 { "G",    "G",         2,  0,   0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef"),            PITCHED_STAFF },
 { "G8va", "G",         2,  1,   7, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8va"),        PITCHED_STAFF },
 { "G15ma","G",         2,  2,  14, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 15ma"),       PITCHED_STAFF },
