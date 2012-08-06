@@ -67,17 +67,11 @@ void InstrumentGroup::read(const QDomElement& de)
                   QString id = e.attribute("id");
                   InstrumentTemplate* t = searchTemplate(id);
                   if (t == 0) {
-if (id == "piano")
-      printf("create Piano\n");
                         t = new InstrumentTemplate;
                         t->articulation.append(articulation);     // init with global articulation
                         instrumentTemplates.append(t);
                         }
-if (id == "piano")
-      printf("Piano  %d\n", t->nstaves());
                   t->read(e);
-if (id == "piano")
-      printf(" ==Piano  %d\n", t->nstaves());
                   }
             else if (tag == "ref") {
                   InstrumentTemplate* ttt = searchTemplate(e.text());
@@ -417,7 +411,7 @@ void InstrumentTemplate::read(const QDomElement& de)
                   if (ttt)
                         init(*ttt);
                   else
-                        qDebug("IntrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                        qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
             else
                   domError(e);

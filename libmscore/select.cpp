@@ -211,6 +211,8 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
+      if (el->type() == CHORD)
+            printf("Selection::add Chord!\n");
       _el.append(el);
       update();
       }
@@ -245,9 +247,8 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->type() == CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        foreach(Note* note, chord->notes()) {
+                        foreach(Note* note, chord->notes())
                               _el.append(note);
-                              }
                         }
                   else {
                         _el.append(e);
