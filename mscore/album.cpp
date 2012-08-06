@@ -396,7 +396,6 @@ AlbumManager::AlbumManager(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
-      load->setIcon(*icons[fileOpen_ICON]);
 
       album = 0;
       connect(add,         SIGNAL(clicked()), SLOT(addClicked()));
