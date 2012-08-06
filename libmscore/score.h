@@ -463,7 +463,6 @@ class Score : public QObject {
       void undoChangeChordRestSize(ChordRest* cr, bool small);
       void undoChangeChordNoStem(Chord* cr, bool noStem);
       void undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret, int string*/);
-      void undoChangeFret(Note* note, /*int pitch, int tpc, int line,*/ int fret, int string);
       void spellNotelist(QList<Note*>& notes);
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);

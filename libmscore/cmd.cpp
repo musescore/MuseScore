@@ -1161,7 +1161,8 @@ void Score::upDown(bool up, UpDownMode mode)
                                     newTpc = pitch2tpc2(newPitch, up);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
-                                    undoChangeFret(oNote, fret, string);
+                                    undoChangeProperty(oNote, P_FRET, fret);
+                                    undoChangeProperty(oNote, P_STRING, string);
                                     }
                                     break;
                               }
@@ -1210,9 +1211,12 @@ void Score::upDown(bool up, UpDownMode mode)
                   undoChangePitch(oNote, newPitch, newTpc, oNote->line()/*, fret, string*/);
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if( oNote->staff()->staffType()->group() == TAB_STAFF
-                        && (oNote->string() != string || oNote->fret() != fret) )
-                  undoChangeFret(oNote, fret, string);
+            else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
+                  if (oNote->string() != string)
+                        undoChangeProperty(oNote, P_STRING, string);
+                  if (oNote->fret() != fret)
+                        undoChangeProperty(oNote, P_FRET, fret);
+                  }
 
             // play new note with velocity 80 for 0.3 sec:
             _playNote = true;

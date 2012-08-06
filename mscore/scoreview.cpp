@@ -4017,8 +4017,8 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                   int string = n->line() + (up ? 1 : -1);
                   int fret = staff->part()->instr()->tablature()->fret(n->pitch(), string);
                   if (fret != -1) {
-//                        _score->undoChangePitch(n, n->pitch(), n->tpc(), n->line(), fret, string);
-                        _score->undoChangeFret(n, fret, string);
+                        score()->undoChangeProperty(n, P_FRET, fret);
+                        score()->undoChangeProperty(n, P_STRING, string);
                         }
                   }
             else {
