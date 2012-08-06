@@ -378,49 +378,6 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret
       }
 
 //---------------------------------------------------------
-//   undoChangeFret
-//---------------------------------------------------------
-
-void Score::undoChangeFret(Note* note, int fret, int string)
-      {
-/* Scanning linked staves seem pointless, as the specific fretting is relative to
-   the single tablature (and a linked staff might not even be a tablature)
-   This code is kept here for future reference, just in case...
-
-      QList<Staff*> staffList;
-      Staff* ostaff = note->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
-      Chord* chord = note->chord();
-      int noteIndex = chord->notes().indexOf(note);
-      Segment* segment = chord->segment();
-      Measure* measure = segment->measure();
-      foreach(Staff* staff, staffList) {
-            Score* score = staff->score();
-            Measure* m;
-            Segment* s;
-            if (score == this) {
-                  m = measure;
-                  s = segment;
-                  }
-            else {
-                  m = score->tick2measure(measure->tick());
-                  s = m->findSegment(segment->subtype(), segment->tick());
-                  }
-            int staffIdx = score->staffIdx(staff);
-            Chord* c     = static_cast<Chord*>(s->element(staffIdx * VOICES + chord->voice()));
-            Note* n      = c->notes().at(noteIndex);
-            undo(new ChangeFret(n, fret, string));
-            }
-*/
-      undo(new ChangeFret(note, fret, string));
-      }
-
-//---------------------------------------------------------
 //   undoChangeKeySig
 //---------------------------------------------------------
 
@@ -1630,28 +1587,20 @@ void ChangePitch::flip()
       int f_pitch                 = note->pitch();
       int f_tpc                   = note->tpc();
       int f_line                  = note->line();
-//      int f_fret                  = note->fret();
-//      int f_string                = note->string();
 
       // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
       // which triggers ChangePitch(), leading to recursion with negative side effects
       bool updateAccid = false;
-      if(f_pitch != pitch || f_tpc != tpc) {
+      if (f_pitch != pitch || f_tpc != tpc) {
             updateAccid = true;
             note->setPitch(pitch, tpc);
             }
-      if(f_line != line)
+      if (f_line != line)
             note->setLine(line);
-//      if(f_fret != fret)
-//            note->setFret(fret);
-//      if(f_string != string)
-//            note->setString(string);
 
       pitch          = f_pitch;
       tpc            = f_tpc;
       line           = f_line;
-//      fret           = f_fret;
-//      string         = f_string;
 
       Score* score = note->score();
       if(updateAccid) {
@@ -1660,36 +1609,6 @@ void ChangePitch::flip()
             score->updateAccidentals(measure, chord->staffIdx());
             }
       // score->setLayout(measure);
-      score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
-//   ChangeFret
-//---------------------------------------------------------
-
-ChangeFret::ChangeFret(Note* _note, int f, int s)
-      {
-      note  = _note;
-      if (_note == 0)
-            abort();
-      fret   = f;
-      string = s;
-      }
-
-void ChangeFret::flip()
-      {
-      int f_fret                  = note->fret();
-      int f_string                = note->string();
-
-      if(f_fret != fret)
-            note->setFret(fret);
-      if(f_string != string)
-            note->setString(string);
-
-      fret           = f_fret;
-      string         = f_string;
-
-      Score* score = note->score();
       score->setLayoutAll(true);
       }
 

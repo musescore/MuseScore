@@ -867,13 +867,10 @@ void Note::endDrag()
             _lineOffset = 0;
             // get a fret number for same pitch on new string
             nFret       = staff->part()->instr()->tablature()->fret(_pitch, nString);
-            if(nFret < 0)                       // no fret?
+            if (nFret < 0)                      // no fret?
                   return;                       // no party!
-            // these values do not change
-//            nLine       = _line;
-//            nPitch      = _pitch;
-//            tpc         = _tpc;
-            score()->undoChangeFret(this, /*nPitch, tpc, nLine,*/ nFret, nString);
+            score()->undoChangeProperty(this, P_FRET, nFret);
+            score()->undoChangeProperty(this, P_STRING, nString);
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch

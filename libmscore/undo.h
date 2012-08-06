@@ -309,8 +309,6 @@ class ChangePitch : public UndoCommand {
       int pitch;
       int tpc;
       int line;
-//      int fret;
-//      int string;
       void flip();
 
    public:
@@ -318,26 +316,6 @@ class ChangePitch : public UndoCommand {
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangePitch");
-      };
-
-//---------------------------------------------------------
-//   ChangeFret
-//---------------------------------------------------------
-
-class ChangeFret : public UndoCommand {
-      Note* note;
-//      int pitch;
-//      int tpc;
-//      int line;
-      int fret;
-      int string;
-      void flip();
-
-   public:
-      ChangeFret(Note* note, /*int pitch, int tpc, int l,*/ int f, int string);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("ChangeFret");
       };
 
 //---------------------------------------------------------
