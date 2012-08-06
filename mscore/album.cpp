@@ -406,9 +406,7 @@ AlbumManager::AlbumManager(QWidget* parent)
       connect(up,          SIGNAL(clicked()), SLOT(upClicked()));
       connect(down,        SIGNAL(clicked()), SLOT(downClicked()));
       connect(remove,      SIGNAL(clicked()), SLOT(removeClicked()));
-      connect(fileDialog,  SIGNAL(clicked()), SLOT(fileDialogClicked()));
       connect(createNew,   SIGNAL(clicked()), SLOT(createNewClicked()));
-      connect(scoreName,   SIGNAL(textChanged(const QString&)), SLOT(scoreNameChanged(const QString&)));
       connect(albumName,   SIGNAL(textChanged(const QString&)), SLOT(albumNameChanged(const QString&)));
       connect(scoreList,   SIGNAL(currentRowChanged(int)), SLOT(currentScoreChanged(int)));
       connect(scoreList,   SIGNAL(itemChanged(QListWidgetItem*)), SLOT(itemChanged(QListWidgetItem*)));
@@ -425,14 +423,27 @@ AlbumManager::AlbumManager(QWidget* parent)
 
 void AlbumManager::addClicked()
       {
+      QString home = preferences.myScoresPath;
+      QStringList files = mscore->getOpenScoreNames(
+         home,
+         tr("MuseScore Files (*.mscz *.mscx *.msc);;")+
+         tr("All Files (*)"),
+         tr("MuseScore: Add Score")
+         );
+      if (files.isEmpty())
+            return;
+      QString fn = files.front();
+      if (fn.isEmpty())
+            return;
+      
       AlbumItem* item = new AlbumItem;
-      item->path = scoreName->text();
+      item->path = fn;
       album->append(item);
-      QFileInfo fi(item->path);
+      QFileInfo fi(fn);
 
       QListWidgetItem* li = new QListWidgetItem(fi.baseName(), scoreList);
+      li->setToolTip(fn);
       li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
-      scoreName->setText("");
       }
 
 //---------------------------------------------------------
@@ -521,28 +532,6 @@ void AlbumManager::removeClicked()
       }
 
 //---------------------------------------------------------
-//   fileDialogClicked
-//---------------------------------------------------------
-
-void AlbumManager::fileDialogClicked()
-      {
-      QString home = preferences.myScoresPath;
-      QStringList files = mscore->getOpenScoreNames(
-         home,
-         tr("MuseScore Files (*.mscz *.mscx *.msc);;")+
-         tr("All Files (*)"),
-         tr("MuseScore: Load Score")
-         );
-      if (files.isEmpty())
-            return;
-      QString fn = files.front();
-      if (fn.isEmpty())
-            return;
-      scoreName->setText(fn);
-      add->setEnabled(true);
-      }
-
-//---------------------------------------------------------
 //   setAlbum
 //---------------------------------------------------------
 
@@ -553,14 +542,14 @@ void AlbumManager::setAlbum(Album* a)
       delete album;
       album = a;
       scoreList->clear();
-      albumName->setText(album->name());
+      albumName->setText(album->name().isEmpty() ? QWidget::tr("Untitled") : album->name());
       foreach(AlbumItem* a, album->scores()) {
             QListWidgetItem* li = new QListWidgetItem(a->name, scoreList);
+            li->setToolTip(a->path);
             li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
             }
-      scoreName->setText("");
-      add->setEnabled(false);
       albumName->setEnabled(true);
+      add->setEnabled(true);
       print->setEnabled(true);
       }
 
@@ -571,15 +560,6 @@ void AlbumManager::setAlbum(Album* a)
 void AlbumManager::createNewClicked()
       {
       setAlbum(new Album);
-      }
-
-//---------------------------------------------------------
-//   scoreNameChanged
-//---------------------------------------------------------
-
-void AlbumManager::scoreNameChanged(const QString& s)
-      {
-      add->setEnabled(!s.isEmpty());
       }
 
 //---------------------------------------------------------
