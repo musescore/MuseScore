@@ -51,6 +51,13 @@
       </spacer>
      </item>
      <item row="5" column="1">
+      <widget class="QPushButton" name="add">
+       <property name="text">
+        <string>Add Score</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
       <widget class="QPushButton" name="remove">
        <property name="toolTip">
         <string>remove current score</string>
@@ -60,11 +67,8 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" rowspan="4">
+     <item row="2" column="0" rowspan="5">
       <widget class="QListWidget" name="scoreList">
-       <property name="toolTip">
-        <string>score list</string>
-       </property>
       </widget>
      </item>
      <item row="3" column="1">
@@ -84,34 +88,6 @@
        </property>
        <property name="text">
         <string>Up</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="add">
-       <property name="text">
-        <string>Add Score</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="scoreName">
-       <property name="toolTip">
-        <string>path to new score you want to add</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="fileDialog">
-       <property name="toolTip">
-        <string>open file manager</string>
-       </property>
-       <property name="text">
-        <string>...</string>
        </property>
       </widget>
      </item>

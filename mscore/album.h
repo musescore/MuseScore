@@ -88,9 +88,7 @@ class AlbumManager : public QDialog, public Ui::AlbumManager {
       void upClicked();
       void downClicked();
       void removeClicked();
-      void fileDialogClicked();
       void createNewClicked();
-      void scoreNameChanged(const QString&);
       void albumNameChanged(const QString&);
       void currentScoreChanged(int);
       void itemChanged(QListWidgetItem*);   // score name in list is edited
