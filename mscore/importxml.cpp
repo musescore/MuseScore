@@ -825,18 +825,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 
             btp = beatType.toInt();
             QStringList list = beats.split("+");
-#if 0 // TODO TS
-            for (int i = 0; i < 4; i++)
-                  bts[i] = 0;
-            for (int i = 0; i < list.size() && i < 4; i++)
-                  bts[i] = list.at(i).toInt();
-            // the beat type and at least one beat must be non-zero
-            if (btp && (bts[0] || bts[1] || bts[2] || bts[3])) {
-                  TimeSig ts = TimeSig(score, btp, bts[0], bts[1], bts[2], bts[3]);
-                  st = ts.subtype();
-                  }
-#endif
-            for (int i = 0; i < list.size() && i < 4; i++)
+            for (int i = 0; i < list.size(); i++)
                   bts += list.at(i).toInt();
             }
       return true;
@@ -3315,7 +3304,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
       if (beats != "" && beatType != "") {
             // determine if timesig is valid
             TimeSigType st  = TSIG_NORMAL;
-            int bts = 0; // the beats (max 4 separated by "+") as integer
+            int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   // add timesig to all staves
@@ -3326,6 +3315,11 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         TimeSig* timesig = new TimeSig(score);
                         timesig->setSubtype(st);
                         timesig->setSig(Fraction(bts, btp));
+                        // handle simple compound time signature
+                        if (beats.contains(QChar('+'))) {
+                              timesig->setNumeratorString(beats);
+                              timesig->setDenominatorString(beatType);
+                              }
                         timesig->setTrack((staff + i) * VOICES);
                         Segment* s = measure->getSegment(timesig, tick);
                         s->add(timesig);
