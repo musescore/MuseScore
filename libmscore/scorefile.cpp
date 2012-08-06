@@ -106,6 +106,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       while (i.hasNext()) {
             i.next();
             // if (!i.value().isEmpty())
+            if (!_testMode  || i.key() != "platform")      
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
 
