@@ -1918,7 +1918,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Page Settings")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_DISABLED | STATE_NORMAL,
          0,
          "album",
          Qt::ApplicationShortcut,
