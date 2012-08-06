@@ -27,13 +27,17 @@ target_link_libraries(
       testutils
       libmscore
       msynth
-      z
-      dl
-      pthread
-      fontconfig
-      freetype
       ${QT_LIBRARIES}
       )
+
+if (NOT MINGW)
+      target_link_libraries(${TARGET} 
+      z 
+      dl       
+      pthread
+      fontconfig
+      freetype)
+endif (NOT MINGW)
 
 if (OMR)
       target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg)
