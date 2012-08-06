@@ -28,7 +28,7 @@ class QPainter;
 
 //---------------------------------------------------------
 //   @@ Box
-////    virtual base class for frames "boxes"
+///    virtual base class for frames "boxes"
 //---------------------------------------------------------
 
 class Box : public MeasureBase {

@@ -21,7 +21,7 @@ class QPainter;
 
 //---------------------------------------------------------
 //   @@ Symbol
-///   Symbol constructed from buildin symbol.
+///   Symbol constructed from builtin symbol.
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
