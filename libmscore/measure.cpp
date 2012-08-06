@@ -384,28 +384,53 @@ int Measure::findAccidental(Note* note) const
                   foreach(Note* note1, chord->notes()) {
                         if (note1->tieBack())
                               continue;
-                        int pitch   = note1->pitch();
-
                         //
                         // compute accidental
                         //
-                        int tpc        = note1->tpc();
-                        int line       = tpc2step(tpc) + (pitch/12) * 7;
-                        int tpcPitch   = tpc2pitch(tpc);
-                        if (tpcPitch < 0)
-                              line += 7;
-                        else
-                              line -= (tpcPitch/12)*7;
+                        int tpc  = note1->tpc();
+                        int line = computeLine(tpc, note1->pitch());
 
                         if (note == note1)
                               return tversatz.accidentalVal(line);
-                        int accVal = ((tpc + 1) / 7) - 2;
-                        if (accVal != tversatz.accidentalVal(line))
-                              tversatz.setAccidentalVal(line, accVal);
+                        tversatz.setAccidentalVal(line, tpc2alter(tpc));
                         }
                   }
             }
       qDebug("note not found");
+      return 0;
+      }
+
+int Measure::findAccidental(Segment* s, int staffIdx, int line) const
+      {
+      AccidentalState tversatz;  // state of already set accidentals for this measure
+      Staff* staff = score()->staff(staffIdx);
+      tversatz.init(staff->keymap()->key(tick()));
+
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      int startTrack           = staffIdx * VOICES;
+      int endTrack             = startTrack + VOICES;
+      for (Segment* segment = first(st); segment; segment = segment->next(st)) {
+            if (segment == s) {
+                  int clef = staff->clef(s->tick());
+                  int l = -line + 45 + clefTable[clef].yOffset;
+                  return tversatz.accidentalVal(l);
+                  }
+            for (int track = startTrack; track < endTrack; ++track) {
+                  Element* e = segment->element(track);
+                  if (!e || e->type() != CHORD)
+                        continue;
+                  Chord* chord = static_cast<Chord*>(e);
+
+                  foreach(Note* note, chord->notes()) {
+                        if (note->tieBack())
+                              continue;
+                        int tpc    = note->tpc();
+                        int l      = computeLine(tpc, note->pitch());
+                        tversatz.setAccidentalVal(l, tpc2alter(tpc));
+                        }
+                  }
+            }
+      qDebug("segment not found");
       return 0;
       }
 

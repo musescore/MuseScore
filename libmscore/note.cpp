@@ -1285,12 +1285,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-            int tpcPitch   = tpc2pitch(_tpc);
-            if (tpcPitch < 0)
-                  _line += 7;
-            else
-                  _line -= (tpcPitch/12)*7;
+            _line = computeLine(_tpc, _pitch);
 
             // calculate accidental
 
@@ -1303,12 +1298,7 @@ void Note::layout10(AccidentalState* as)
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
                               setColor(QColor(255, 0, 0));
                               _tpc = ntpc;
-                              _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-                              int tpcPitch   = tpc2pitch(_tpc);
-                              if (tpcPitch < 0)
-                                    _line += 7;
-                              else
-                                    _line -= (tpcPitch/12)*7;
+                              _line          = computeLine(_tpc, _pitch);
                               }
                         }
                   }
@@ -1597,12 +1587,7 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateLine()
       {
-      _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-      int tpcPitch   = tpc2pitch(_tpc);
-      if (tpcPitch < 0)
-            _line += 7;
-      else
-            _line -= (tpcPitch/12)*7;
+      _line = computeLine(_tpc, _pitch);
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       int tick = chord()->tick();
       int clef = s->clef(tick);

@@ -641,9 +641,10 @@ void Score::putNote(const QPointF& pos, bool replace)
       Staff* st       = staff(staffIdx);
       KeySigEvent key = st->keymap()->key(tick);
       int clef        = st->clef(tick);
+      int acci        = s->measure()->findAccidental(s, staffIdx, line);
 
-qDebug("putNote at tick %d staff %d line %d key %d clef %d",
-   tick, staffIdx, line, key.accidentalType(), clef);
+qDebug("putNote at tick %d staff %d line %d key %d clef %d currentAccidental %d",
+   tick, staffIdx, line, key.accidentalType(), clef, acci);
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
@@ -686,7 +687,8 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
                   }
 
             case PITCHED_STAFF:
-                  nval.pitch = line2pitch(line, clef, key.accidentalType());
+                  // nval.pitch = line2pitch(line, clef, key.accidentalType());
+                  nval.pitch = line2pitch(line, clef, 0) + acci;
                   break;
             }
 
