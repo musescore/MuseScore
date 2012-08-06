@@ -114,6 +114,7 @@
         <string>load an existing album</string>
        </property>
        <property name="text">
+         <string>Load</string>
         <string/>
        </property>
       </widget>
