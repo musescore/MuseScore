@@ -2763,11 +2763,10 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   _selection.add(e);
                   _is.setTrack(e->track());
                   selState = SEL_LIST;
-                  if (e->type() == NOTE || e->type() == REST || e->type() == CHORD) {
-                        if (e->type() == NOTE)
-                              e = e->parent();
+                  if (e->type() == NOTE)
+                        e = e->parent();
+                  if (e->type() == REST || e->type() == CHORD)
                         _is.setSegment(static_cast<ChordRest*>(e)->segment());
-                        }
                   }
             _selection.setActiveSegment(0);
             _selection.setActiveTrack(0);
@@ -2884,7 +2883,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   }
             else if (e->type() == NOTE || e->type() == REST || e->type() == CHORD) {
                   if (e->type() == NOTE)
-                        e = static_cast<Note*>(e)->chord();
+                        e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
 
                   if (_selection.state() == SEL_NONE) {
@@ -2896,7 +2895,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         }
                   else if (_selection.isSingle()) {
                         Element* oe = _selection.element();
-                        if (oe && (oe->type() == NOTE || oe->type() == REST || oe->type() == CHORD)) {
+                        if (oe && (oe->type() == NOTE || oe->type() == REST)) {
                               if (oe->type() == NOTE)
                                     oe = oe->parent();
                               ChordRest* ocr = static_cast<ChordRest*>(oe);

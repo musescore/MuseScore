@@ -2133,6 +2133,7 @@ Element* Score::move(const QString& cmd)
       if (cr == 0)
             return 0;
 
+#if 0
       if (!cr) {
             if (selection().elements().isEmpty())
                   return 0;
@@ -2190,6 +2191,7 @@ Element* Score::move(const QString& cmd)
             else
                   return 0;
             }
+#endif
 
       Element* el = 0;
       if (cmd == "next-chord") {
@@ -2226,18 +2228,20 @@ Element* Score::move(const QString& cmd)
       else if (cmd == "next-measure"){
             el = nextMeasure(cr);
             if (noteEntryMode() && el && (el->type() == CHORD || el->type() == REST)){
-                ChordRest* crc = static_cast<ChordRest*>(el);
-                moveInputPos(crc->segment());
-                }
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
             }
       else if (cmd == "prev-measure"){
             el = prevMeasure(cr);
             if (noteEntryMode() && el && (el->type() == CHORD || el->type() == REST)){
-                ChordRest* crc = static_cast<ChordRest*>(el);
-                moveInputPos(crc->segment());
-                }
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
             }
       if (el) {
+            if (el->type() == CHORD)
+                  el = static_cast<Chord*>(el)->downNote();
             _playNote = true;
             select(el, SELECT_SINGLE, 0);
             }
