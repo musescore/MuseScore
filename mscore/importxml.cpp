@@ -71,6 +71,7 @@
 #include "libmscore/textline.h"
 #include "libmscore/keysig.h"
 #include "libmscore/pitchspelling.h"
+#include "libmscore/utils.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/box.h"
@@ -4903,9 +4904,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   // int line = absoluteStaffLine(po) - absoluteStaffLine(pitch);
                   // TODO: magic constant "19" seems to work only for percussion clef.
                   // find out why and fix for other clefs (G seems to work also, but F doesn't)
-                  int line = absoluteStaffLine(po) - absoluteStaffLine(pitch) + 19;
+                  int line = absStep(po) - absStep(pitch) + 19;
                   qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
-                         clef, po, absoluteStaffLine(po), pitch, absoluteStaffLine(pitch));
+                         clef, po, absStep(po), pitch, absStep(pitch));
                   qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",
                          qPrintable(partId), qPrintable(instrId), headGroup, line, sd);
                   if (drumsets.contains(partId)

@@ -388,7 +388,7 @@ int Measure::findAccidental(Note* note) const
                         // compute accidental
                         //
                         int tpc  = note1->tpc();
-                        int line = absoluteStaffLine(tpc, note1->pitch());
+                        int line = absStep(tpc, note1->pitch());
 
                         if (note == note1)
                               return tversatz.accidentalVal(line);
@@ -418,7 +418,7 @@ int Measure::findAccidental(Segment* s, int staffIdx, int line) const
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
             if (segment == s) {
                   ClefType clef = staff->clef(s->tick());
-                  int l = relativeStaffLine(line, clef);
+                  int l = relStep(line, clef);
                   return tversatz.accidentalVal(l);
                   }
             for (int track = startTrack; track < endTrack; ++track) {
@@ -431,7 +431,7 @@ int Measure::findAccidental(Segment* s, int staffIdx, int line) const
                         if (note->tieBack())
                               continue;
                         int tpc    = note->tpc();
-                        int l      = absoluteStaffLine(tpc, note->pitch());
+                        int l      = absStep(tpc, note->pitch());
                         tversatz.setAccidentalVal(l, tpc2alter(tpc));
                         }
                   }

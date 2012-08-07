@@ -53,7 +53,6 @@ struct ClefInfo {
       const char* sign;       ///< Name for musicXml.
       int line;               ///< Line for musicXml.
       int octChng;            ///< Octave change for musicXml.
-      int yOffset;
       int pitchOffset;        ///< Pitch offset for line 0.
       char lines[14];
       const char* name;

@@ -634,4 +634,48 @@ Note* searchTieNote(Note* note)
       return note2;
       }
 
+//---------------------------------------------------------
+//   absStep
+///   Compute absolute step.
+///   C D E F G A B ....
+//---------------------------------------------------------
+
+int absStep(int tpc, int pitch)
+      {
+      int line     = tpc2step(tpc) + (pitch / 12) * 7;
+      int tpcPitch = tpc2pitch(tpc);
+      if (tpcPitch < 0)
+            line += 7;
+      else
+            line -= (tpcPitch / 12) * 7;
+      return line;
+      }
+
+int absStep(int pitch)
+      {
+      int tpc = pitch2tpc(pitch);
+      return absStep(tpc, pitch);
+      }
+
+int absStep(int line, ClefType clef)
+      {
+      return clefTable[clef].pitchOffset - line;
+      }
+
+//---------------------------------------------------------
+//   relStep
+///   Compute relative step from absolute step
+///   which depends on actual clef. Step 0 starts on the
+///   first (top) staff line.
+//---------------------------------------------------------
+
+int relStep(int line, ClefType clef)
+      {
+      return clefTable[clef].pitchOffset - line;
+      }
+
+int relStep(int pitch, int tpc, ClefType clef)
+      {
+      return relStep(absStep(tpc, pitch), clef);
+      }
 

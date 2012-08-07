@@ -1285,7 +1285,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line = absoluteStaffLine(_tpc, _pitch);
+            _line = absStep(_tpc, _pitch);
 
             // calculate accidental
 
@@ -1298,7 +1298,7 @@ void Note::layout10(AccidentalState* as)
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
                               setColor(QColor(255, 0, 0));
                               _tpc = ntpc;
-                              _line = absoluteStaffLine(_tpc, _pitch);
+                              _line = absStep(_tpc, _pitch);
                               }
                         }
                   }
@@ -1339,8 +1339,7 @@ void Note::layout10(AccidentalState* as)
                   //
                   Staff* s = score()->staff(staffIdx() + chord()->staffMove());
                   int tick = chord()->tick();
-                  int clef = s->clef(tick);
-                  _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+                  _line    = relStep(_line, s->clef(tick));
                   }
             }
       }
@@ -1529,7 +1528,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line = absoluteStaffLine(_tpc, _pitch);
+      _line = absStep(_tpc, _pitch);
 
       // calculate accidental
 
@@ -1573,7 +1572,7 @@ void Note::updateAccidental(AccidentalState* as)
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       int tick = chord()->tick();
       ClefType clef = s->clef(tick);
-      _line    = relativeStaffLine(_line, clef);
+      _line    = relStep(_line, clef);
       }
 
 //---------------------------------------------------------
@@ -1584,7 +1583,7 @@ void Note::updateLine()
       {
       Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
-      _line         = relativeStaffLine(_pitch, _tpc, clef);
+      _line         = relStep(_pitch, _tpc, clef);
       }
 
 //---------------------------------------------------------

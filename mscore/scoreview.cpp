@@ -81,6 +81,7 @@
 #include "navigator.h"
 #include "inspector.h"
 
+#if 0
 // a useful enum for scale steps (could be moved to libmscore/pitchspelling.h)
 enum {
       STEP_NONE      = -1,
@@ -92,6 +93,7 @@ enum {
       STEP_A,
       STEP_B
 };
+#endif
 
 static const QEvent::Type CloneDrag = QEvent::Type(QEvent::User + 1);
 extern TextPalette* textPalette;
@@ -4816,8 +4818,8 @@ void ScoreView::cmdInsertNote(int note)
 
 //---------------------------------------------------------
 //   cmdAddPitch
+///   insert note or add note to chord
 //    c d e f g a b entered:
-//       insert note or add note to chord
 //---------------------------------------------------------
 
 void ScoreView::cmdAddPitch(int note, bool addFlag)
@@ -4831,6 +4833,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             }
       Drumset* ds = is.drumset();
       int pitch;
+      int octave = is.pitch / 12;
       if (ds) {
             char note1 = "CDEFGAB"[note];
             pitch = -1;
@@ -4847,23 +4850,19 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   return;
                   }
             is.setDrumNote(pitch);
+            octave = pitch / 12;
             }
       else {
-            int octave = is.pitch / 12;
-            pitch      = pitchKeyAdjust(note, 0);
-            int delta  = is.pitch - (octave*12 + pitch);
+            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+            int delta = octave * 12 + tab[note] - is.pitch;
+
             if (delta > 6)
-                   is.pitch = (octave+1)*12 + pitch;
+                   --octave;
             else if (delta < -6)
-                  is.pitch = (octave-1)*12 + pitch;
-            else
-                  is.pitch = octave*12 + pitch;
-            is.pitch = restrict(is.pitch, 0, 127);
-            pitch = is.pitch;
+                  ++octave;
             }
 
       _score->startCmd();
-      _score->expandVoice();
       if (!noteEntryMode()) {
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
@@ -4872,8 +4871,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       pos.segment   = is.segment();
       pos.staffIdx  = is.track() / VOICES;
       ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
-      int absoluteLine = (pitch / 12) * 8 + note;
-      pos.line      = relativeStaffLine(absoluteLine, clef);
+      pos.line      = relStep(octave * 7 + note, clef);
 
       score()->putNote(pos, !addFlag);
       _score->endCmd();
