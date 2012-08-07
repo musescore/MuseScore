@@ -66,5 +66,11 @@ extern Segment* prevSeg1(Segment* seg, int& track);
 
 extern Note* searchTieNote(Note* note);
 
+extern int absStep(int pitch);
+extern int absStep(int tpc, int pitch);
+extern int absStep(int line, ClefType clef);
+extern int relStep(int line, ClefType clef);
+extern int relStep(int pitch, int tpc, ClefType clef);
+
 #endif
 

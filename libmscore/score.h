@@ -488,7 +488,6 @@ class Score : public QObject {
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
-      int clefOffset(int tick, Staff*) const;
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);

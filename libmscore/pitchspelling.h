@@ -59,10 +59,5 @@ inline static int tpc2alter(int tpc) {
 extern QString tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
 
-extern int absoluteStaffLine(int pitch);
-extern int absoluteStaffLine(int tpc, int pitch);
-extern int absoluteStaffLine(int line, ClefType clef);
-extern int relativeStaffLine(int line, ClefType clef);
-extern int relativeStaffLine(int pitch, int tpc, ClefType clef);
 #endif
 
