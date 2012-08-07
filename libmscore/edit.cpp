@@ -786,16 +786,20 @@ void Score::cmdAddTie()
                   bool addFlag = _is.cr()->type() == CHORD;
                   Note* n = addPitch(note->pitch(), addFlag);
                   if (n) {
-                        n->setLine(note->line());
-                        n->setTpc(note->tpc());
-                        Tie* tie = new Tie(this);
-                        tie->setStartNote(note);
-                        tie->setEndNote(n);
-                        tie->setTrack(note->track());
-                        note->setTieFor(tie);
-                        n->setTieBack(tie);
-                        undoAddElement(tie);
-                        nextInputPos(n->chord(), false);
+                        // n is not necessarly next note if duration span over measure
+                        Note* nnote = searchTieNote(note);
+                        if (nnote) {
+                              n->setLine(note->line());
+                              n->setTpc(note->tpc());
+                              Tie* tie = new Tie(this);
+                              tie->setStartNote(note);
+                              tie->setEndNote(nnote);
+                              tie->setTrack(note->track());
+                              note->setTieFor(tie);
+                              nnote->setTieBack(tie);
+                              undoAddElement(tie);
+                              nextInputPos(n->chord(), false);
+                              }
                         }
                   continue;
                   }
