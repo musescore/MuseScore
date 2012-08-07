@@ -4899,13 +4899,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   ClefType clef = cr->staff()->clef(tick);
                   int po = clefTable[clef].pitchOffset;
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
-                  // int line = pitch2line(pitch) - pitch2line(po);
-                  // int line = pitch2line(po) - pitch2line(pitch);
+                  // int line = absoluteStaffLine(pitch) - absoluteStaffLine(po);
+                  // int line = absoluteStaffLine(po) - absoluteStaffLine(pitch);
                   // TODO: magic constant "19" seems to work only for percussion clef.
                   // find out why and fix for other clefs (G seems to work also, but F doesn't)
-                  int line = pitch2line(po) - pitch2line(pitch) + 19;
+                  int line = absoluteStaffLine(po) - absoluteStaffLine(pitch) + 19;
                   qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
-                         clef, po, pitch2line(po), pitch, pitch2line(pitch));
+                         clef, po, absoluteStaffLine(po), pitch, absoluteStaffLine(pitch));
                   qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",
                          qPrintable(partId), qPrintable(instrId), headGroup, line, sd);
                   if (drumsets.contains(partId)

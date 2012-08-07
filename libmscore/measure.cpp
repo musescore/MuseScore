@@ -363,7 +363,7 @@ void Measure::layoutChords10(Segment* segment, int startTrack, AccidentalState* 
 
 //---------------------------------------------------------
 //   findAccidental
-//    return current accidental value at note position
+///   return current accidental value at note position
 //---------------------------------------------------------
 
 int Measure::findAccidental(Note* note) const
@@ -388,7 +388,7 @@ int Measure::findAccidental(Note* note) const
                         // compute accidental
                         //
                         int tpc  = note1->tpc();
-                        int line = computeLine(tpc, note1->pitch());
+                        int line = absoluteStaffLine(tpc, note1->pitch());
 
                         if (note == note1)
                               return tversatz.accidentalVal(line);
@@ -399,6 +399,12 @@ int Measure::findAccidental(Note* note) const
       qDebug("note not found");
       return 0;
       }
+
+//---------------------------------------------------------
+//   findAccidental
+///   Compute accidental state at segment/staffIdx for
+///   relative staff line.
+//---------------------------------------------------------
 
 int Measure::findAccidental(Segment* s, int staffIdx, int line) const
       {
@@ -411,8 +417,8 @@ int Measure::findAccidental(Segment* s, int staffIdx, int line) const
       int endTrack             = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
             if (segment == s) {
-                  int clef = staff->clef(s->tick());
-                  int l = -line + 45 + clefTable[clef].yOffset;
+                  ClefType clef = staff->clef(s->tick());
+                  int l = relativeStaffLine(line, clef);
                   return tversatz.accidentalVal(l);
                   }
             for (int track = startTrack; track < endTrack; ++track) {
@@ -425,7 +431,7 @@ int Measure::findAccidental(Segment* s, int staffIdx, int line) const
                         if (note->tieBack())
                               continue;
                         int tpc    = note->tpc();
-                        int l      = computeLine(tpc, note->pitch());
+                        int l      = absoluteStaffLine(tpc, note->pitch());
                         tversatz.setAccidentalVal(l, tpc2alter(tpc));
                         }
                   }

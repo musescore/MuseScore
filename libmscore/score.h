@@ -167,7 +167,6 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-      Measure* measure;
       Segment* segment;
       int staffIdx;
       int line;
@@ -527,6 +526,7 @@ class Score : public QObject {
       void cmdDeleteSelection();
 
       void putNote(const QPointF& pos, bool replace);
+      void putNote(const Position& pos, bool replace);
       void setInputState(Element* obj);
 
       void startCmd();        // start undoable command

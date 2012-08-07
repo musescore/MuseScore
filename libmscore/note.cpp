@@ -1285,7 +1285,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line = computeLine(_tpc, _pitch);
+            _line = absoluteStaffLine(_tpc, _pitch);
 
             // calculate accidental
 
@@ -1298,7 +1298,7 @@ void Note::layout10(AccidentalState* as)
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
                               setColor(QColor(255, 0, 0));
                               _tpc = ntpc;
-                              _line          = computeLine(_tpc, _pitch);
+                              _line = absoluteStaffLine(_tpc, _pitch);
                               }
                         }
                   }
@@ -1529,12 +1529,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-      int tpcPitch   = tpc2pitch(_tpc);
-      if (tpcPitch < 0)
-            _line += 7;
-      else
-            _line -= (tpcPitch/12)*7;
+      _line = absoluteStaffLine(_tpc, _pitch);
 
       // calculate accidental
 
@@ -1577,8 +1572,8 @@ void Note::updateAccidental(AccidentalState* as)
       //
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       int tick = chord()->tick();
-      int clef = s->clef(tick);
-      _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+      ClefType clef = s->clef(tick);
+      _line    = relativeStaffLine(_line, clef);
       }
 
 //---------------------------------------------------------
@@ -1587,11 +1582,9 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateLine()
       {
-      _line = computeLine(_tpc, _pitch);
-      Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-      int tick = chord()->tick();
-      int clef = s->clef(tick);
-      _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+      Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
+      ClefType clef = s->clef(chord()->tick());
+      _line         = relativeStaffLine(_pitch, _tpc, clef);
       }
 
 //---------------------------------------------------------
