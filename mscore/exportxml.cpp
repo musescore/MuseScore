@@ -1052,10 +1052,15 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
       Staff* i   = note->score()->staff(staffIdx);
 
       ClefType clef   = i->clef(tick);
-      int offset = clefTable[clef].yOffset;
+      int offset = clefTable[clef].pitchOffset - 45;  // HACK
 
       int step   = (note->line() - offset + 700) % 7;
+      // step = 6 - ((absoluteStaffLine(note->line(), clef) + 3)%7));
+
+      // c          = "CDEFGA"[absoluteStaffLine(note->line(), clef) % 7];
       c          = table1[step];
+
+      // printf("====<%c>  <%c>\n", c, "CDEFGAB"[absoluteStaffLine(note->line(), clef) % 7]);
 
       int pitch  = note->pitch() - 12;
       octave     = pitch / 12;
@@ -1113,7 +1118,7 @@ void ExportMusicXml::unpitch2xml(Note* note, char& c, int& octave)
 
       int tick   = note->chord()->tick();
       Staff* i   = note->staff();
-      int offset = clefTable[i->clef(tick)].yOffset;
+      int offset = clefTable[i->clef(tick)].pitchOffset - 45;     // HACK
 
       int step   = (note->line() - offset + 700) % 7;
       c          = table1[step];

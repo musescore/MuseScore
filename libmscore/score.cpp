@@ -1190,8 +1190,8 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
 
 bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       {
-      pos->measure = searchMeasure(p);
-      if (pos->measure == 0)
+      Measure* measure = searchMeasure(p);
+      if (measure == 0)
             return false;
 
       //
@@ -1199,7 +1199,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       //
       pos->staffIdx      = 0;
       SysStaff* sstaff   = 0;
-      System* system     = pos->measure->system();
+      System* system     = measure->system();
       qreal y           = p.y() - system->pagePos().y();
       for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
             qreal sy2;
@@ -1222,7 +1222,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       //
       //    search segment
       //
-      QPointF pppp(p - pos->measure->canvasPos());
+      QPointF pppp(p - measure->canvasPos());
       qreal x         = pppp.x();
       Segment* segment = 0;
       pos->segment     = 0;
@@ -1230,7 +1230,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       // int track = pos->staffIdx * VOICES + voice;
       int track = pos->staffIdx * VOICES;
 
-      for (segment = pos->measure->first(Segment::SegChordRest); segment;) {
+      for (segment = measure->first(Segment::SegChordRest); segment;) {
             segment = getNextValidInputSegment(segment, track, voice);
             if (segment == 0)
                   break;
@@ -1244,7 +1244,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   d     = x2 - x1;
                   }
             else {
-                  x2    = pos->measure->bbox().width();
+                  x2    = measure->bbox().width();
                   d     = (x2 - x1) * 2.0;
                   x     = x1;
                   pos->segment = segment;
@@ -1277,18 +1277,18 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   pos->line = s->lines() - 1;
             }
       else {
-            int minLine = pitch2line(0);
-            int clef    = s->clef(pos->segment->tick());
-            minLine     = 127 - minLine - 82 + clefTable[clef].yOffset;
-            int maxLine = pitch2line(127);
-            maxLine     = 127 - maxLine - 82 + clefTable[clef].yOffset;
+            int minLine   = absStep(0);
+            ClefType clef = s->clef(pos->segment->tick());
+            minLine       = relStep(minLine, clef);
+            int maxLine   = absStep(127);
+            maxLine       = relStep(maxLine, clef);
 
             if (pos->line > minLine || pos->line < maxLine)
                   return false;
             }
 
       y         = sstaff->y() + pos->line * lineDist;
-      pos->pos  = QPointF(x, y) + pos->measure->canvasPos();
+      pos->pos  = QPointF(x, y) + measure->canvasPos();
       return true;
       }
 

@@ -633,17 +633,22 @@ void Score::putNote(const QPointF& pos, bool replace)
             qDebug("cannot put note here, get position failed");
             return;
             }
+      putNote(p, replace);
+      }
 
+void Score::putNote(const Position& p, bool replace)
+      {
       Segment* s      = p.segment;
-      int tick        = s->tick();
       int staffIdx    = p.staffIdx;
       int line        = p.line;
-      Staff* st       = staff(staffIdx);
-      KeySigEvent key = st->keymap()->key(tick);
-      int clef        = st->clef(tick);
 
-qDebug("putNote at tick %d staff %d line %d key %d clef %d",
-   tick, staffIdx, line, key.accidentalType(), clef);
+      int tick        = s->tick();
+      Staff* st       = staff(staffIdx);
+      ClefType clef   = st->clef(tick);
+      int acci        = s->measure()->findAccidental(s, staffIdx, line);
+
+// qDebug("putNote at tick %d staff %d line %d clef %d currentAccidental %d",
+//   tick, staffIdx, line, clef, acci);
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
@@ -686,7 +691,8 @@ qDebug("putNote at tick %d staff %d line %d key %d clef %d",
                   }
 
             case PITCHED_STAFF:
-                  nval.pitch = line2pitch(line, clef, key.accidentalType());
+                  // nval.pitch = line2pitch(line, clef, key.accidentalType());
+                  nval.pitch = line2pitch(line, clef, 0) + acci;
                   break;
             }
 
