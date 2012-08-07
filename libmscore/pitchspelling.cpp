@@ -681,10 +681,11 @@ int pitch2tpc(int pitch, int key)
       }
 
 //---------------------------------------------------------
-//   computeLine
+//   absoluteStaffLine
+///   Compute absolute staff line for note.
 //---------------------------------------------------------
 
-int computeLine(int tpc, int pitch)
+int absoluteStaffLine(int tpc, int pitch)
       {
       int line       = tpc2step(tpc) + (pitch/12) * 7;
       int tpcPitch   = tpc2pitch(tpc);
@@ -695,14 +696,31 @@ int computeLine(int tpc, int pitch)
       return line;
       }
 
-//---------------------------------------------------------
-//   pitch2line
-//---------------------------------------------------------
-
-int pitch2line(int pitch)
+int absoluteStaffLine(int pitch)
       {
       int tpc = pitch2tpc(pitch);
-      return tpc2step(tpc) + (pitch / 12) * 7;
+      return absoluteStaffLine(tpc, pitch);
       }
 
+int absoluteStaffLine(int line, ClefType clef)
+      {
+      return -line + 45 + clefTable[clef].yOffset;
+      }
+
+//---------------------------------------------------------
+//   relativeStaffLine
+///   Compute relative staff line from absolute staff line
+///   which depends on actual clef.
+//---------------------------------------------------------
+
+int relativeStaffLine(int line, ClefType clef)
+      {
+      // return = 127 - line - 82 + clefTable[clef].yOffset;
+      return 45 - line + clefTable[clef].yOffset;
+      }
+
+int relativeStaffLine(int pitch, int tpc, ClefType clef)
+      {
+      return relativeStaffLine(absoluteStaffLine(tpc, pitch), clef);
+      }
 

@@ -52,6 +52,7 @@ class KeySigEvent {
 
 //---------------------------------------------------------
 //   AccidentalState
+///   Contains a state for every absolute staff line.
 //---------------------------------------------------------
 
 static const int TIE_CONTEXT = 0x10;

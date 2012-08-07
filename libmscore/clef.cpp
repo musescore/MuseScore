@@ -27,6 +27,7 @@
 
 #define TR(a)  QT_TRANSLATE_NOOP("clefTable", a)
 
+// table must be in sync with enum ClefType
 const ClefInfo clefTable[] = {
 //        |--MusicXml-| octchng  pitchoffset
 // tag    xmlName    line yoffs   |-lines for sharps--||--lines for flats--|   name

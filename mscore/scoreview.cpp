@@ -4825,6 +4825,10 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       InputState& is = _score->inputState();
       if (is.track() == -1)          // invalid state
             return;
+      if (is.segment() == 0 || is.cr() == 0) {
+            qDebug("cannot enter notes here (no chord rest at current position)");
+            return;
+            }
       Drumset* ds = is.drumset();
       int pitch;
       if (ds) {
@@ -4845,24 +4849,34 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             is.setDrumNote(pitch);
             }
       else {
-//            KeySigEvent key = _score->staff(is.track() / VOICES)->keymap()->key(is.tick());
             int octave = is.pitch / 12;
-//            pitch      = pitchKeyAdjust(note, key.accidentalType());
-            pitch      = pitchKeyAdjust(note, 0);     // for now, no accidentals (cmdAddPitch1() will compute them)
+            pitch      = pitchKeyAdjust(note, 0);
             int delta  = is.pitch - (octave*12 + pitch);
             if (delta > 6)
-                  is.pitch = (octave+1)*12 + pitch;
+                   is.pitch = (octave+1)*12 + pitch;
             else if (delta < -6)
                   is.pitch = (octave-1)*12 + pitch;
             else
                   is.pitch = octave*12 + pitch;
-            if (is.pitch < 0)
-                  is.pitch = 0;
-            if (is.pitch > 127)
-                  is.pitch = 127;
+            is.pitch = restrict(is.pitch, 0, 127);
             pitch = is.pitch;
             }
-      cmdAddPitch1(pitch, addFlag, note);
+
+      _score->startCmd();
+      _score->expandVoice();
+      if (!noteEntryMode()) {
+            sm->postEvent(new CommandEvent("note-input"));
+            qApp->processEvents();
+            }
+      Position pos;
+      pos.segment   = is.segment();
+      pos.staffIdx  = is.track() / VOICES;
+      ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
+      int absoluteLine = (pitch / 12) * 8 + note;
+      pos.line      = relativeStaffLine(absoluteLine, clef);
+
+      score()->putNote(pos, !addFlag);
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -5072,8 +5086,11 @@ void ScoreView::cmdRepeatSelection()
       {
       const Selection& selection = _score->selection();
       if (selection.isSingle() && noteEntryMode()) {
+#if 0 // TODO
+            qDebug("cmdRepeatSelection(): single selection not implemented");
             const InputState& is = _score->inputState();
             cmdAddPitch1(is.pitch, false, STEP_NONE);
+#endif
             return;
             }
 
@@ -5201,147 +5218,6 @@ void ScoreView::search(int n)
             _score->end();
             break;
             }
-      }
-
-//---------------------------------------------------------
-//   wrongPosition
-//---------------------------------------------------------
-
-static void wrongPosition()
-      {
-      qDebug("cannot enter notes here (no chord rest at current position)");
-      }
-
-//---------------------------------------------------------
-//   cmdAddPitch1
-//
-//    Modified to compute note pitch and tpc according to measure context
-//    in addition to key signature, if step != STEP_NONE
-//    (emun for steps provisionaly added at the beginning of this file)
-//
-//    Note: if step != STEP_NONE, assumes pitch to be for note with no accidental
-//
-//    Deals with keyboard input (both for new chord and for adding new note to existing chord);
-//    Does NOT deal with mouse input.
-//
-//    Added parameter 'step' to hold scale step (C=0, D=1, ...) if actual pitch / tpc have to be computed
-//    or STEP_NONE if pitch has to be taken literaly (no context effect).
-//---------------------------------------------------------
-
-void ScoreView::cmdAddPitch1(int pitch, bool addFlag, int step)
-      {
-      InputState& is = _score->inputState();
-      Drumset *   drumSet     = is.drumset();
-
-      if (is.segment() == 0) {
-            wrongPosition();
-            return;
-            }
-      _score->startCmd();
-      _score->expandVoice();
-      if (is.cr() == 0) {
-            wrongPosition();
-            return;
-            }
-      if (!noteEntryMode()) {
-            sm->postEvent(new CommandEvent("note-input"));
-            qApp->processEvents();
-            if (is.drumset())
-                  is.setDrumNote(pitch);
-            }
-
-      // determine actual pitch and tcp according to note input method and context (if required)
-      //
-      //    TODO : most or all of this process could be moved to separate functions
-      //
-      //    Note: the code below is ready for a 3-level input method (no accidentals at all,
-      //          key accidentals only, key + measure context accidentals) according to the value of
-      //          some global value (InputState::noteInputMethod is used as a place holder);
-      //          level selection statements are commented out
-
-      int   line  = (pitch / 12) * 7 + step;          // compute 'line' (octave*7 + step)
-      int   tpc   = pitch2tpc(pitch);                 // get default tpc (without any accidental)
-
-      if(!drumSet && step != STEP_NONE) {
-//            if(is.noteInputMethod() != NOTEINPUTMETHOD_NONE) {
-                  // take into account accidentals in current key signature
-                  // current tpc value is for a note without accidentals => in the 13 - 19 range (F - B)
-                  KeySigEvent key   = _score->staff(is.track() / VOICES)->keymap()->key(is.tick());
-                  int keyType       = key.accidentalType();
-                  // if keyType == 0 (no accidentals), do nothing
-                  // if key has flats...
-                  if(keyType < 0) {                   // ...our note will be flattened
-                        if(tpc >= 20 + keyType) {     // if its tpc is <= tpc of B at most as many steps
-                              pitch--;                // as there are flats in the key
-                              tpc -= 7;
-                              }
-                        }
-                  // if key has sharps...
-                  else if(keyType > 0) {              // ...our note will be sharpened
-                        if(tpc <= 12 + keyType) {     // if its tpc is >= tpc of F at most as many steps
-                              pitch++;                // as there are sharps in the key
-                              tpc += 7;
-                              }
-                        }
-//                  if(is.noteInputMethod() != NOTEINPUTMMETHOD_KEYSIGONLY) {
-                        // take into account accidentals in previous notes on same line (same measure)
-                        Chord *     chord;
-                        Element *   elem;
-                        // from 1st chord/rest segment of current measure
-                        Measure *   m =         is.segment()->measure();
-                        Segment *   segm =      m->firstCRSegment();
-                        int         fromTrack   = (is.track() / VOICES) * VOICES;
-                        int         toTrack     = fromTrack + VOICES;
-                        // scan ChordRest segments up to current input tick
-                        while(segm->tick() < is.tick()) {
-                              // look in each track of the current input staff
-                              for(int i = fromTrack; i < toTrack; i++) {
-                                    // if element exists and is a chord, check all its notes
-                                    if( (elem=segm->element(i)) != 0 && elem->type() == CHORD) {
-                                          chord = static_cast<Chord*>(elem);
-                                          foreach(Note * note, chord->notes()) {
-                                                // if chord note is in the same line as input note...
-                                                if( tpc2step(note->tpc()) + (note->pitch() / 12) * 7 == line) {
-                                                      // ...use its pitch and tpc
-                                                      pitch = note->pitch();
-                                                      tpc = note->tpc();
-                                                      }
-                                                }
-                                          }
-                                    }
-                              segm = segm->next(Segment::SegGrace | Segment::SegChordRest);
-                              }
-//                        }
-//                  }
-            }
-
-      if (noteEntryMode()) {
-            Note* note = _score->addPitch(pitch, addFlag);
-            if (note) {
-                  // if Score::addPitch() thought of a different tpc, force note tpc to our value
-                  if(!drumSet && step != STEP_NONE && tpc != note->tpc()) {
-                        // passing the same line as the note currently has will force it
-                        // to be recomputed, if pitch and/or tpc are different
-                        _score->undoChangePitch(note, pitch, tpc, note->line());
-                        }
-                  mscore->play(note->chord());
-                  adjustCanvasPosition(note, false);
-                  }
-            }
-      // not sure this 'else' is ever executed: test in line 5232 entered entry mode, if it was not active already
-      else {
-            Element* e = _score->selection().element();
-            if (e && e->type() == NOTE) {
-                  Note* note = static_cast<Note*>(e);
-//                  Chord* chord = note->chord();
-//                  int key = _score->staff(chord->staffIdx())->key(chord->segment()->tick()).accidentalType();
-//                  int newTpc = pitch2tpc(pitch, key);
-//                  _score->undoChangePitch(note, pitch, newTpc, note->line());
-                  // we already computed right pitch and tpc
-                  _score->undoChangePitch(note, pitch, tpc, note->line());
-                  }
-            }
-      _score->endCmd();
       }
 
 //---------------------------------------------------------
