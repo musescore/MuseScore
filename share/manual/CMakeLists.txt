@@ -18,38 +18,22 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-install(FILES
-      plugins/manual.css
-      plugins/chord.html
-      plugins/chordrest.html
-      plugins/cursor.html
-      plugins/data.html
-      plugins/element.html
-      plugins/harmony.html
-      plugins/measurebase.html
-      plugins/measure.html
-      plugins/musescore.html
-      plugins/note.html
-      plugins/pageformat.html
-      plugins/page.html
-      plugins/part.html
-      plugins/plugins.html
-      plugins/qfile.html
-      plugins/qprocess.html
-      plugins/rest.html
-      plugins/score.html
-      plugins/scoreview.html
-      plugins/segment.html
-      plugins/staff.html
-      plugins/text.html
-      plugins/timesig.html
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual/plugins
+install(DIRECTORY
+      plugins
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
       )
 
 if (IS_DIRECTORY en)
 install (DIRECTORY
-      en de
+      en
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
       )
 endif (IS_DIRECTORY en)
+
+if (IS_DIRECTORY de)
+install (DIRECTORY
+      de
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      )
+endif (IS_DIRECTORY de)
 
