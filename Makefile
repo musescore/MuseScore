@@ -25,7 +25,7 @@ PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
 #VERSION   = 2.0
 
-release:
+release: revision
 	mkdir build.release;                       \
       cd build.release;                          \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
