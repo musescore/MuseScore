@@ -87,15 +87,6 @@ ChordRest* Score::searchNote(int tick, int track) const
       }
 
 //---------------------------------------------------------
-//   clefOffset
-//---------------------------------------------------------
-
-int Score::clefOffset(int tick, Staff* staff) const
-      {
-      return clefTable[staff->clef(tick)].yOffset;
-      }
-
-//---------------------------------------------------------
 //   AcEl
 //---------------------------------------------------------
 

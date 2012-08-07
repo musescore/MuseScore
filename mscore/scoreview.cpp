@@ -81,6 +81,20 @@
 #include "navigator.h"
 #include "inspector.h"
 
+#if 0
+// a useful enum for scale steps (could be moved to libmscore/pitchspelling.h)
+enum {
+      STEP_NONE      = -1,
+      STEP_C,
+      STEP_D,
+      STEP_E,
+      STEP_F,
+      STEP_G,
+      STEP_A,
+      STEP_B
+};
+#endif
+
 static const QEvent::Type CloneDrag = QEvent::Type(QEvent::User + 1);
 extern TextPalette* textPalette;
 
@@ -4804,8 +4818,8 @@ void ScoreView::cmdInsertNote(int note)
 
 //---------------------------------------------------------
 //   cmdAddPitch
+///   insert note or add note to chord
 //    c d e f g a b entered:
-//       insert note or add note to chord
 //---------------------------------------------------------
 
 void ScoreView::cmdAddPitch(int note, bool addFlag)
@@ -4813,8 +4827,13 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       InputState& is = _score->inputState();
       if (is.track() == -1)          // invalid state
             return;
+      if (is.segment() == 0 || is.cr() == 0) {
+            qDebug("cannot enter notes here (no chord rest at current position)");
+            return;
+            }
       Drumset* ds = is.drumset();
       int pitch;
+      int octave = is.pitch / 12;
       if (ds) {
             char note1 = "CDEFGAB"[note];
             pitch = -1;
@@ -4831,25 +4850,31 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   return;
                   }
             is.setDrumNote(pitch);
+            octave = pitch / 12;
             }
       else {
-            KeySigEvent key = _score->staff(is.track() / VOICES)->keymap()->key(is.tick());
-            int octave = is.pitch / 12;
-            pitch      = pitchKeyAdjust(note, key.accidentalType());
-            int delta  = is.pitch - (octave*12 + pitch);
+            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+            int delta = octave * 12 + tab[note] - is.pitch;
+
             if (delta > 6)
-                  is.pitch = (octave+1)*12 + pitch;
+                   --octave;
             else if (delta < -6)
-                  is.pitch = (octave-1)*12 + pitch;
-            else
-                  is.pitch = octave*12 + pitch;
-            if (is.pitch < 0)
-                  is.pitch = 0;
-            if (is.pitch > 127)
-                  is.pitch = 127;
-            pitch = is.pitch;
+                  ++octave;
             }
-      cmdAddPitch1(pitch, addFlag);
+
+      _score->startCmd();
+      if (!noteEntryMode()) {
+            sm->postEvent(new CommandEvent("note-input"));
+            qApp->processEvents();
+            }
+      Position pos;
+      pos.segment   = is.segment();
+      pos.staffIdx  = is.track() / VOICES;
+      ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
+      pos.line      = relStep(octave * 7 + note, clef);
+
+      score()->putNote(pos, !addFlag);
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -5059,8 +5084,11 @@ void ScoreView::cmdRepeatSelection()
       {
       const Selection& selection = _score->selection();
       if (selection.isSingle() && noteEntryMode()) {
+#if 0 // TODO
+            qDebug("cmdRepeatSelection(): single selection not implemented");
             const InputState& is = _score->inputState();
-            cmdAddPitch1(is.pitch, false);
+            cmdAddPitch1(is.pitch, false, STEP_NONE);
+#endif
             return;
             }
 
@@ -5188,59 +5216,6 @@ void ScoreView::search(int n)
             _score->end();
             break;
             }
-      }
-
-//---------------------------------------------------------
-//   wrongPosition
-//---------------------------------------------------------
-
-static void wrongPosition()
-      {
-      qDebug("cannot enter notes here (no chord rest at current position)");
-      }
-
-//---------------------------------------------------------
-//   cmdAddPitch1
-//---------------------------------------------------------
-
-void ScoreView::cmdAddPitch1(int pitch, bool addFlag)
-      {
-      InputState& is = _score->inputState();
-
-      if (is.segment() == 0) {
-            wrongPosition();
-            return;
-            }
-      _score->startCmd();
-      _score->expandVoice();
-      if (is.cr() == 0) {
-            wrongPosition();
-            return;
-            }
-      if (!noteEntryMode()) {
-            sm->postEvent(new CommandEvent("note-input"));
-            qApp->processEvents();
-            if (is.drumset())
-                  is.setDrumNote(pitch);
-            }
-      if (noteEntryMode()) {
-            Note* note = _score->addPitch(pitch, addFlag);
-            if (note) {
-                  mscore->play(note->chord());
-                  adjustCanvasPosition(note, false);
-                  }
-            }
-      else {
-            Element* e = _score->selection().element();
-            if (e && e->type() == NOTE) {
-                  Note* note = static_cast<Note*>(e);
-                  Chord* chord = note->chord();
-                  int key = _score->staff(chord->staffIdx())->key(chord->segment()->tick()).accidentalType();
-                  int newTpc = pitch2tpc(pitch, key);
-                  _score->undoChangePitch(note, pitch, newTpc, note->line()/*, note->fret(), note->string()*/);
-                  }
-            }
-      _score->endCmd();
       }
 
 //---------------------------------------------------------

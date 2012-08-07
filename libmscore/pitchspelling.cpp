@@ -118,16 +118,6 @@ int tpc2pitch(int tpc)
       }
 
 //---------------------------------------------------------
-//   pitch2line
-//---------------------------------------------------------
-
-int pitch2line(int pitch)
-      {
-      int tpc = pitch2tpc(pitch);
-      return tpc2step(tpc) + (pitch / 12) * 7;
-      }
-
-//---------------------------------------------------------
 //   printTpc
 //    print note name
 //---------------------------------------------------------
@@ -173,15 +163,6 @@ QString tpc2stepName(int tpc)
       {
       const char names[] = "FCGDAEB";
       return QString(names[(tpc + 1) % 7]);
-      }
-
-//---------------------------------------------------------
-//   tpc2alter
-//---------------------------------------------------------
-
-int tpc2alter(int tpc)
-      {
-      return ((tpc+1) / 7) - 2;
       }
 
 // table of alternative spellings for one octave
