@@ -337,7 +337,7 @@ subdirs(mscore awl bww2mxml share
       fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-add_subdirectory(manual EXCLUDE_FROM_ALL)
+add_subdirectory(manual)
 
 if (USE_SYSTEM_QTSINGLEAPPLICATION)
       find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)

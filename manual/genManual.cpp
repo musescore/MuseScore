@@ -338,9 +338,9 @@ static void writeOutput()
 
 static void usage(const char* program, const char* hint)
       {
-      printf("%s: %s\n", program, hint);
-      printf("usage: %s [options] srcPath\n", program);
-      printf("options: -v        print version\n"
+      fprintf(stderr, "%s: %s\n", program, hint);
+      fprintf(stderr, "usage: %s [options] srcPath\n", program);
+      fprintf(stderr, "options: -v        print version\n"
             );
       }
 
@@ -394,7 +394,8 @@ int main(int argc, char* argv[])
             QString infile = srcPath + "/" + s;
             QFile inFile(infile);
             if (!inFile.open(QIODevice::ReadOnly)) {
-                  printf("cannot open input file <%s>\n", qPrintable(infile));
+                  fprintf(stderr, "%s: cannot open input file <%s>\n",
+                     argv[0], qPrintable(infile));
                   return -2;
                   }
             printf("ScanFile %s\n", qPrintable(infile));

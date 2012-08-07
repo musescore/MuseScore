@@ -3,7 +3,7 @@
 #  Linux Music Score Editor
 #  $Id:$
 #
-#  Copyright (C) 2002-2007 by Werner Schweer and others
+#  Copyright (C) 2002-2012 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -25,26 +25,26 @@ PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
 #VERSION   = 2.0
 
-ROOT=`pwd`
-
 release:
 	mkdir build.release;                       \
-  cd build.release;                          \
-  cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-  	   ..; 			               \
-  make lrelease;                             \
-  make -j ${CPUS};                           \
+      cd build.release;                          \
+      cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
+  	   ..; 			                   \
+      make lrelease;                             \
+      make -j ${CPUS};                           \
+      ./manual/genManual ..                      \
 
 
 debug:
-	mkdir build.debug;                         \
-      cd build.debug;                            \
-      cmake -DCMAKE_BUILD_TYPE=DEBUG	       \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
-  	   ..; 		                         \
-      make lrelease;                             \
-      make -j ${CPUS};                           \
+	if test ! -d build.debug; then mkdir build.debug; fi; \
+      cd build.debug;                                       \
+      cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
+  	   ..; 		                                    \
+      make lrelease;                                        \
+      make -j ${CPUS};                                      \
+      ./manual/genManual ..                                 \
 
 
 qt5:
