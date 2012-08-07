@@ -276,13 +276,13 @@ void Score::init()
 
       _creationDate   = QDate::currentDate();
 #ifdef Q_WS_WIN
-      _metaTags.insert("Platform", "WIN");
+      _metaTags.insert("platform", "WIN");
 #endif
 #ifdef Q_WS_MAC
-      _metaTags.insert("Platform", "MAC");
+      _metaTags.insert("platform", "MAC");
 #endif
 #ifdef Q_WS_X11
-      _metaTags.insert("Platform", "X11");
+      _metaTags.insert("platform", "X11");
 #endif
       _metaTags.insert("movementNumber", "");
       _metaTags.insert("movementTitle", "");
