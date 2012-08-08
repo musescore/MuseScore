@@ -13,6 +13,7 @@
 #include <stdio.h>
 
 QString srcPath;
+QString dstPath;
 
 //---------------------------------------------------------
 //   Prop
@@ -298,10 +299,10 @@ static void writeOutput()
                   }
             addFooter(out);
 
-            QString ofile = srcPath + "/share/manual/plugins/" + cl.name.toLower() + ".html";
+            QString ofile = dstPath + "/plugins/" + cl.name.toLower() + ".html";
             QFile of(ofile);
             if (!of.open(QIODevice::WriteOnly)) {
-                  printf("open <%s> failed\n", qPrintable(ofile));
+                  printf("open <%s> failed: %s\n", qPrintable(ofile), qPrintable(of.errorString()));
                   exit(-4);
                   }
             of.write(out.toUtf8());
@@ -322,7 +323,7 @@ static void writeOutput()
             }
       addFooter(out);
 
-      QString ofile = srcPath + "/share/manual/plugins/plugins.html";
+      QString ofile = dstPath + "/plugins/plugins.html";
       QFile of(ofile);
       if (!of.open(QIODevice::WriteOnly)) {
             printf("open <%s> failed\n", qPrintable(ofile));
@@ -339,7 +340,7 @@ static void writeOutput()
 static void usage(const char* program, const char* hint)
       {
       fprintf(stderr, "%s: %s\n", program, hint);
-      fprintf(stderr, "usage: %s [options] srcPath\n", program);
+      fprintf(stderr, "usage: %s [options] srcPath dstPath\n", program);
       fprintf(stderr, "options: -v        print version\n"
             );
       }
@@ -374,11 +375,12 @@ int main(int argc, char* argv[])
             }
       argc -= optind;
       argv += optind;
-      if (argc != 1) {
+      if (argc != 2) {
             usage(prog, "bad arguments");
             return -1;
             }
       srcPath = argv[0];
+      dstPath = argv[1];
       QStringList files;
       files << "mscore/plugins.h";
 
@@ -402,6 +404,13 @@ int main(int argc, char* argv[])
             QString in = inFile.readAll();
             scanFile(in);
             inFile.close();
+            }
+      QDir dir;
+      QString opath = dstPath + "/plugins";
+      if (!dir.mkpath(opath)) {
+            fprintf(stderr, "%s: cannot create destination path: <%s>\n",
+               argv[0], qPrintable(dstPath));
+            return -3;
             }
       writeOutput();
       return 0;
