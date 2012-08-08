@@ -99,13 +99,6 @@ QString PluginCreator::manualPath()
       {
       QString path = mscoreGlobalShare;
       path += "/manual/plugins/plugins.html";
-
-      QString p1 = QDir::homePath();                  // hack for debugging
-      p1 += "/mscore/share/manual/plugins/plugins.html";
-      if (QFile(p1).exists()) {
-            printf("PluginManual: found <%s>\n", qPrintable(p1));
-            return p1;
-            }
       return path;
       }
 
