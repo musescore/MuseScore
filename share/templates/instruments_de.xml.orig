@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore>
   <InstrumentGroup id="woodwinds">
-    <name>Holzblasinstrumente</name>
+    <name>Holzblasintrumente</name>
     <Instrument id="piccolo">
-      <longName>Piccoloflöte</longName>
+      <longName>Piccolo</longName>
       <shortName>Picc.</shortName>
-      <description>Piccoloflöte</description>
+      <description>Piccolo</description>
       </Instrument>
 
     <Instrument id="treble-flute">
@@ -17,7 +17,7 @@
     <Instrument id="b-flute">
       <longName>Es Flöte</longName>
       <shortName>Es Fl.</shortName>
-      <description>Es Flöte</description>
+      <description>Es Flute</description>
       </Instrument>
 
     <Instrument id="flute">
@@ -39,9 +39,9 @@
       </Instrument>
 
     <Instrument id="contra-alto-flute">
-      <longName>Kontra-Altflöte</longName>
+      <longName>Kontra-altflöte</longName>
       <shortName>K-a. Fl.</shortName>
-      <description>Kontra-Altflöte</description>
+      <description>Kontra-altflöte</description>
       </Instrument>
 
     <Instrument id="contrabass-flute">
@@ -51,9 +51,9 @@
       </Instrument>
 
     <Instrument id="subcontra-alto-flute">
-      <longName>Subkontra-Altflöte</longName>
+      <longName>Subkontra-altflöte</longName>
       <shortName>Sk-a. Fl.</shortName>
-      <description>Subkontra-Altflöte</description>
+      <description>Subkontra-altflöte</description>
       </Instrument>
 
     <Instrument id="subcontrabass-flute">
@@ -189,9 +189,9 @@
       </Instrument>
 
     <Instrument id="greatbass-recorder">
-      <longName>Großbassblockflöte</longName>
+      <longName>Gro�bassblockflöte</longName>
       <shortName>Gb. Bfl.</shortName>
-      <description>Großbassblockflöte</description>
+      <description>Gro�bassblockflöte</description>
       </Instrument>
 
     <Instrument id="contrabass-recorder">
@@ -201,9 +201,9 @@
       </Instrument>
 
     <Instrument id="french-flageolet">
-      <longName>Fanzösisches Flageolet</longName>
+      <longName>Fanz�sisches Flageolet</longName>
       <shortName>Fr. Fla.</shortName>
-      <description>Fanzösisches Flageolet</description>
+      <description>Fanz�sisches Flageolet</description>
       </Instrument>
 
     <Instrument id="english-flageolet">
@@ -303,9 +303,9 @@
       </Instrument>
 
     <Instrument id="slide-whistle">
-      <longName>Kolbenflöte</longName>
+      <longName>Kolbenfl�te</longName>
       <shortName>Kb. Fl.</shortName>
-      <description>Kolbenflöte</description>
+      <description>Kolbenfl�te</description>
       </Instrument>
 
     <Instrument id="piccolo-oboe">
@@ -405,9 +405,9 @@
       </Instrument>
 
     <Instrument id="greatbass-crumhorn">
-      <longName>Großbass Krummhorn</longName>
+      <longName>Gro�bass Krummhorn</longName>
       <shortName>Gb. Krh.</shortName>
-      <description>Großbass Krummhorn</description>
+      <description>Gro�bass Krummhorn</description>
       </Instrument>
 
     <Instrument id="soprano-cornamuse">
@@ -459,9 +459,9 @@
       </Instrument>
 
     <Instrument id="greatbass-kelhorn">
-      <longName>Großbass Kelhorn</longName>
+      <longName>Gro�bass Kelhorn</longName>
       <shortName>Gb. Kh.</shortName>
-      <description>Großbass Kelhorn</description>
+      <description>Gro�bass Kelhorn</description>
       </Instrument>
 
     <Instrument id="sopranino-rauschpfeife">
@@ -621,15 +621,15 @@
       </Instrument>
 
     <Instrument id="soprano-chalumeau">
-      <longName>Sopran Chalumeau</longName>
+      <longName>Soprano Chalumeau</longName>
       <shortName>S. Cha.</shortName>
-      <description>Sopran Chalumeau</description>
+      <description>Soprano Chalumeau</description>
       </Instrument>
 
     <Instrument id="alto-chalumeau">
-      <longName>Alt Chalumeau</longName>
+      <longName>Alto Chalumeau</longName>
       <shortName>A. Cha.</shortName>
-      <description>Alt Chalumeau</description>
+      <description>Alto Chalumeau</description>
       </Instrument>
 
     <Instrument id="tenor-chalumeau">
@@ -639,15 +639,15 @@
       </Instrument>
 
     <Instrument id="tarogato">
-      <longName>Taragot</longName>
+      <longName>Tarogato</longName>
       <shortName>Tar.</shortName>
-      <description>Taragot</description>
+      <description>Tarogato</description>
       </Instrument>
 
     <Instrument id="octavin">
-      <longName>Oktavin</longName>
-      <shortName>Okt.</shortName>
-      <description>Oktavin</description>
+      <longName>Octavin</longName>
+      <shortName>Oct.</shortName>
+      <description>Octavin</description>
       </Instrument>
 
     <Instrument id="bassoon">
@@ -779,7 +779,7 @@
     </InstrumentGroup>
 
   <InstrumentGroup id="brass">
-    <name>Blechblasinstrumente</name>
+    <name>Blechblasinstrimente</name>
     <Instrument id="horn">
       <longName>Horn</longName>
       <shortName>Hn.</shortName>
@@ -787,15 +787,15 @@
       </Instrument>
 
     <Instrument id="high-c-horn">
-      <longName>Hohes C Horn</longName>
+      <longName>High C Horn</longName>
       <shortName>H. C Hn.</shortName>
-      <description>Hohes C Horn</description>
+      <description>High C Horn</description>
       </Instrument>
 
     <Instrument id="high-bb-horn">
-      <longName>Hohes B Horn</longName>
-      <shortName>H. B Hn.</shortName>
-      <description>Hohes Bb Horn</description>
+      <longName>High Bb Horn</longName>
+      <shortName>H. Bb Hn.</shortName>
+      <description>High Bb Horn</description>
       </Instrument>
 
     <Instrument id="a-horn">
@@ -805,9 +805,9 @@
       </Instrument>
 
     <Instrument id="ab-horn">
-      <longName>As Horn</longName>
-      <shortName>As Hn.</shortName>
-      <description>As Horn</description>
+      <longName>Ab Horn</longName>
+      <shortName>Ab Hn.</shortName>
+      <description>Ab Horn</description>
       </Instrument>
 
     <Instrument id="g-horn">
@@ -823,9 +823,9 @@
       </Instrument>
 
     <Instrument id="eb-horn">
-      <longName>Es Horn</longName>
-      <shortName>Es Hn.</shortName>
-      <description>Es Horn</description>
+      <longName>Eb Horn</longName>
+      <shortName>Eb Hn.</shortName>
+      <description>Eb Horn</description>
       </Instrument>
 
     <Instrument id="d-horn">
@@ -835,15 +835,15 @@
       </Instrument>
 
     <Instrument id="low-c-horn">
-      <longName>Tiefes C Horn</longName>
-      <shortName>T. C Hn.</shortName>
-      <description>Tiefes C Horn</description>
+      <longName>Low C Horn</longName>
+      <shortName>L. C Hn.</shortName>
+      <description>Low C Horn</description>
       </Instrument>
 
     <Instrument id="low-bb-horn">
-      <longName>Tiefes B Horn</longName>
-      <shortName>T. B Hn.</shortName>
-      <description>Tiefes B Horn</description>
+      <longName>Low Bb Horn</longName>
+      <shortName>L. Bb Hn.</shortName>
+      <description>Low Bb Horn</description>
       </Instrument>
 
     <Instrument id="bb-piccolo-trumpet">
@@ -937,9 +937,9 @@
       </Instrument>
 
     <Instrument id="flugelhorn">
-      <longName>Flügelhorn</longName>
+      <longName>Fl�gelhorn</longName>
       <shortName>Flghn.</shortName>
-      <description>Flügelhorn</description>
+      <description>Fl�gelhorn</description>
       </Instrument>
 
     <Instrument id="soprano-zink">
@@ -1193,9 +1193,9 @@
       </Instrument>
 
     <Instrument id="tubular-bells">
-      <longName>Röhrenglocken</longName>
+      <longName>R�hrenglocken</longName>
       <shortName>Tu. Be.</shortName>
-      <description>Röhrenglocken</description>
+      <description>R�hrenglocken</description>
       </Instrument>
 
     <Instrument id="bass-steel-drums">
@@ -2228,7 +2228,7 @@
     <Instrument id="viola-da-gamba-(tablature)">
       <longName>Viola da gamba</longName>
       <shortName>Vla. d. g.</shortName>
-      <description>Viola da gamba (Tablatur)</description>
+      <description>Viola da gamba (Tablature)</description>
       </Instrument>
 
     <Instrument id="viola-da-gamba-(6-strings)">
