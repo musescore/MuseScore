@@ -4799,25 +4799,10 @@
       </Instrument>
 
     <Instrument id="guitar-(tablature)">
-      <longName>Guitar</longName>
-      <shortName>Guit.</shortName>
+      <init>guitar</init>
       <description>Guitar (Tablature)</description>
-      <Tablature>
-        <frets>19</frets>
-        <string>40</string>
-        <string>45</string>
-        <string>50</string>
-        <string>55</string>
-        <string>59</string>
-        <string>64</string>
-        </Tablature>
-      <clef>G8vb</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>40-83</aPitchRange>
-      <pPitchRange>40-83</pPitchRange>
-      <Channel>
-        <program value="24"/>
-        </Channel>
+      <stafftype>tablature</stafftype>
+      <clef>TAB</clef>
       </Instrument>
 
     <Instrument id="11-string-alto-guitar">
@@ -4923,23 +4908,10 @@
       </Instrument>
 
     <Instrument id="electric-bass-(4-str.-tab)">
-      <longName>Electric Bass</longName>
-      <shortName>El. B.</shortName>
+      <init>electric-bass</init>
       <description>Electric Bass (4-str. TAB)</description>
-      <Tablature>
-        <frets>24</frets>
-        <string>28</string>
-        <string>33</string>
-        <string>38</string>
-        <string>43</string>
-        </Tablature>
-      <clef>F8vb</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>28-65</aPitchRange>
-      <pPitchRange>28-65</pPitchRange>
-      <Channel>
-        <program value="33"/>
-        </Channel>
+      <stafftype>tablature</stafftype>
+      <clef>TAB</clef>
       </Instrument>
 
     <Instrument id="fretless-electric-bass">
@@ -4976,23 +4948,10 @@
       </Instrument>
 
     <Instrument id="ukulele-(4-str.-tab)">
-      <longName>Ukulele</longName>
-      <shortName>Uk.</shortName>
+      <init>ukulele</init>
       <description>Ukulele (4-str. TAB)</description>
-      <Tablature>
-        <frets>18</frets>
-        <string>67</string>
-        <string>60</string>
-        <string>64</string>
-        <string>69</string>
-        </Tablature>
-      <clef>G</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>60-81</aPitchRange>
-      <pPitchRange>60-81</pPitchRange>
-      <Channel>
-        <program value="24"/>
-        </Channel>
+      <stafftype>tablature</stafftype>
+      <clef>TAB</clef>
       </Instrument>
 
     <Instrument id="baritone-ukulele">
@@ -5036,25 +4995,10 @@
       </Instrument>
 
     <Instrument id="lute-(tablature)">
-      <longName>Lute</longName>
-      <shortName>Lute</shortName>
+      <init>lute</init>
       <description>Lute (Tablature)</description>
-      <Tablature>
-        <frets>13</frets>
-        <string>43</string>
-        <string>48</string>
-        <string>53</string>
-        <string>57</string>
-        <string>62</string>
-        <string>67</string>
-        </Tablature>
-      <clef>G</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>33-79</aPitchRange>
-      <pPitchRange>33-79</pPitchRange>
-      <Channel>
-        <program value="25"/>
-        </Channel>
+      <stafftype>tablature</stafftype>
+      <clef>TAB</clef>
       </Instrument>
 
     <Instrument id="ren.-tenor-lute-(5-course)">
@@ -6447,47 +6391,17 @@
       </Instrument>
 
     <Instrument id="viola-da-gamba-(tablature)">
-      <longName>Viola da gamba</longName>
-      <shortName>Vla. d. g.</shortName>
+      <init>viola-da-gamba</init>
       <description>Viola da gamba (Tablature)</description>
-      <Tablature>
-        <frets>13</frets>
-        <string>38</string>
-        <string>43</string>
-        <string>48</string>
-        <string>52</string>
-        <string>57</string>
-        <string>62</string>
-        </Tablature>
-      <clef>F</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>33-74</aPitchRange>
-      <pPitchRange>33-79</pPitchRange>
-      <Channel>
-        <program value="42"/>
-        </Channel>
+      <stafftype>tablature</stafftype>
+      <clef>TAB</clef>
       </Instrument>
 
     <Instrument id="viola-da-gamba-(6-strings)">
-      <longName>Viola da gamba</longName>
-      <shortName>Vla. d. g.</shortName>
+      <init>viola-da-gamba</init>
       <description>Viola da gamba (6 strings)</description>
-      <Tablature>
-        <frets>13</frets>
-        <string>38</string>
-        <string>43</string>
-        <string>48</string>
-        <string>52</string>
-        <string>57</string>
-        <string>62</string>
-        </Tablature>
-      <clef>F</clef>
-      <barlineSpan>1</barlineSpan>
       <aPitchRange>38-74</aPitchRange>
       <pPitchRange>38-79</pPitchRange>
-      <Channel>
-        <program value="42"/>
-        </Channel>
       </Instrument>
 
     <Instrument id="violone">
