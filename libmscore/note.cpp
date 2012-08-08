@@ -131,6 +131,19 @@ const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       };
 
 //---------------------------------------------------------
+//   NoteVal
+//---------------------------------------------------------
+
+NoteVal::NoteVal()
+      {
+      pitch     = -1;
+      tpc       = INVALID_TPC,
+      fret      = -1;
+      string    = -1;
+      headGroup = 0;
+      }
+
+//---------------------------------------------------------
 //   noteHeadSym
 //---------------------------------------------------------
 
@@ -1303,7 +1316,7 @@ void Note::layout10(AccidentalState* as)
                         }
                   }
             else  {
-                  int accVal = tpc2alter(_tpc);
+                  AccidentalVal accVal = tpc2alter(_tpc);
 
                   if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                         as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
@@ -1536,7 +1549,7 @@ void Note::updateAccidental(AccidentalState* as)
       if (_accidental && _accidental->role() == ACC_USER)
             acci = _accidental->subtype();
       else  {
-            int accVal = tpc2alter(_tpc);
+            AccidentalVal accVal = tpc2alter(_tpc);
             if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                   as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
                   if (_tieBack)
@@ -1595,6 +1608,9 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
+      if (nval.tpc != INVALID_TPC)
+            _tpc = nval.tpc;
+
       _headGroup = NoteHeadGroup(nval.headGroup);
       }
 

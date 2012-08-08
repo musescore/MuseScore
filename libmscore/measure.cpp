@@ -264,6 +264,7 @@ void Measure::remove(Segment* el)
                   score()->staff(track/VOICES)->setUpdateKeymap(true);
             }
       _segments.remove(el);
+      setDirty();
       }
 
 //---------------------------------------------------------
@@ -366,7 +367,7 @@ void Measure::layoutChords10(Segment* segment, int startTrack, AccidentalState* 
 ///   return current accidental value at note position
 //---------------------------------------------------------
 
-int Measure::findAccidental(Note* note) const
+AccidentalVal Measure::findAccidental(Note* note) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       tversatz.init(note->chord()->staff()->keymap()->key(tick()));
@@ -397,7 +398,7 @@ int Measure::findAccidental(Note* note) const
                   }
             }
       qDebug("note not found");
-      return 0;
+      return NATURAL;
       }
 
 //---------------------------------------------------------
@@ -406,7 +407,7 @@ int Measure::findAccidental(Note* note) const
 ///   relative staff line.
 //---------------------------------------------------------
 
-int Measure::findAccidental(Segment* s, int staffIdx, int line) const
+AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
@@ -437,7 +438,7 @@ int Measure::findAccidental(Segment* s, int staffIdx, int line) const
                   }
             }
       qDebug("segment not found");
-      return 0;
+      return NATURAL;
       }
 
 //---------------------------------------------------------
@@ -857,6 +858,7 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
                         _segments.insert(s, prevs);
                         prevs = s;
                         }
+                  setDirty();
                   return s;
                   }
             }
@@ -871,6 +873,7 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
 
 void Measure::add(Element* el)
       {
+      setDirty();
       el->setParent(this);
       ElementType type = el->type();
 
@@ -998,19 +1001,16 @@ void Measure::add(Element* el)
                   break;
             }
 
-      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       }
 
 //---------------------------------------------------------
 //   remove
+///   Remove Element \a el from Measure.
 //---------------------------------------------------------
-
-/**
- Remove Element \a el from Measure.
-*/
 
 void Measure::remove(Element* el)
       {
+      setDirty();
       switch(el->type()) {
             case SPACER:
                   if (static_cast<Spacer*>(el)->subtype() == SPACER_DOWN)
@@ -1072,7 +1072,6 @@ void Measure::remove(Element* el)
                   MeasureBase::remove(el);
                   break;
             }
-      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       }
 
 //---------------------------------------------------------
@@ -3376,7 +3375,6 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
 
       m->_minWidth1             = _minWidth1;
       m->_minWidth2             = _minWidth2;
-//      m->_systemHeader          = _systemHeader;
 
       m->setTick(tick());
       m->setLineBreak(lineBreak());

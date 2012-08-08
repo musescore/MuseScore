@@ -679,3 +679,23 @@ int relStep(int pitch, int tpc, ClefType clef)
       return relStep(absStep(tpc, pitch), clef);
       }
 
+//---------------------------------------------------------
+//   pitch2step
+//---------------------------------------------------------
+
+int pitch2step(int pitch)
+      {
+      static const char tab[12] = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
+      return tab[pitch%12];
+      }
+
+//---------------------------------------------------------
+//   step2pitch
+//---------------------------------------------------------
+
+int step2pitch(int step)
+      {
+      static const char tab[7] = { 0, 2, 4, 5, 7, 9, 11 };
+      return tab[step % 7];
+      }
+

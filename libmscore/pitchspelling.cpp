@@ -34,10 +34,9 @@ bool tpcIsValid(int val)
 
 //---------------------------------------------------------
 //   step2tpc
-//    alter =  -2 <= 2   (bb b - # ##)
 //---------------------------------------------------------
 
-int step2tpc(int step, int alter)
+int step2tpc(int step, AccidentalVal alter)
       {
       //    TPC - tonal pitch classes
       //    "line of fifth's" LOF
@@ -54,10 +53,14 @@ int step2tpc(int step, int alter)
              };
 
       int i = step * 5 + 2 + alter;
-      if (i < 0 || (i >= int(sizeof(spellings)/sizeof(*spellings))))
-            return INVALID_TPC;
+      Q_ASSERT(i >= 0 && (i < int(sizeof(spellings)/sizeof(*spellings))));
       return spellings[i];
       };
+
+int step2tpc(int step)
+      {
+      return step2tpc(step);
+      }
 
 //---------------------------------------------------------
 //   tpc2step
@@ -69,6 +72,7 @@ int tpc2step(int tpc)
       // 15 % 7 = 1
       //                            f  c  g  d  a  e  b
       static const int steps[7] = { 3, 0, 4, 1, 5, 2, 6 };
+      // TODO: optimize +1
       return steps[(tpc+1) % 7];
       }
 
@@ -76,13 +80,12 @@ int tpc2step(int tpc)
 //   step2tpc
 //---------------------------------------------------------
 
-int step2tpc(const QString& stepName, int alter)
+int step2tpc(const QString& stepName, AccidentalVal alter)
       {
       if (stepName.isEmpty())
             return INVALID_TPC;
-      char c = stepName[0].toLower().toAscii();
-      int r = -1;
-      switch (c) {
+      int r;
+      switch (stepName[0].toLower().toAscii()) {
             case 'c': r = 0; break;
             case 'd': r = 1; break;
             case 'e': r = 2; break;
@@ -90,6 +93,8 @@ int step2tpc(const QString& stepName, int alter)
             case 'g': r = 4; break;
             case 'a': r = 5; break;
             case 'b': r = 6; break;
+            default:
+                  return INVALID_TPC;
             }
       return step2tpc(r, alter);
       }

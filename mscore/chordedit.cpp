@@ -243,7 +243,7 @@ const ChordDescription* ChordEdit::extension()
 
 int ChordEdit::root()
       {
-      int tpc = step2tpc(rootGroup->checkedId(), accidentalsGroup->checkedId() - 3);
+      int tpc = step2tpc(rootGroup->checkedId(), AccidentalVal(accidentalsGroup->checkedId() - 3));
 //      qDebug("ChordEdit::root() rootid=%d accid=%d -> tpc=%d\n",
 //             rootGroup->checkedId(), accidentalsGroup->checkedId() - 3, tpc);
       return tpc;

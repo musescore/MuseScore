@@ -538,7 +538,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   Note* note = chord->upNote();
                   int tpc = pitch2tpc2(nval.pitch, true);
                   int line = note->line();
-                  undoChangePitch(note, nval.pitch, tpc, line/*, nval.fret, nval.string*/);
+                  undoChangePitch(note, nval.pitch, tpc, line);
                   }
             return segment;
             }
@@ -1199,7 +1199,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     while (step < 0)
                                           step += 7;
                                     step %= 7;
-                                    newTpc = step2tpc(step, 0);
+                                    newTpc = step2tpc(step, NATURAL);
                                     }
                                     break;
                               }
@@ -1285,8 +1285,8 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
       //
       // accidental change may result in pitch change
       //
-      int acc    = Accidental::subtype2value(accidental);
-      int acc2   = measure->findAccidental(note);
+      AccidentalVal acc    = Accidental::subtype2value(accidental);
+      AccidentalVal acc2   = measure->findAccidental(note);
       AccidentalType accType;
 
       int pitch, tpc;

@@ -98,9 +98,9 @@ class Accidental : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
 
-      static int subtype2value(AccidentalType);             // return effective pitch offset
-      static const char* subtype2name(AccidentalType);      // return effective pitch offset
-      static AccidentalType value2subtype(int);
+      static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
+      static const char* subtype2name(AccidentalType);
+      static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
       };
 

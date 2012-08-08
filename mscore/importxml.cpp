@@ -166,7 +166,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
       int istep = step - 'A';
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-      int tpc  = step2tpc(table1[istep], alter);
+      int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
       // alternativ: tpc = step2tpc((istep + 5) % 7, alter);      // rotate istep 5 steps
       n->setTpc(tpc);
       }
@@ -5055,7 +5055,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         else
                               domError(ee);
                         }
-                  ha->setRootTpc(step2tpc(step, alter));
+                  ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (tag == "function") {
                   // attributes: print-style
@@ -5089,7 +5089,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         else
                               domError(ee);
                         }
-                  ha->setBaseTpc(step2tpc(step, alter));
+                  ha->setBaseTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (tag == "degree") {
                   int degreeValue = 0;

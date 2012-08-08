@@ -323,7 +323,7 @@ enum NoteType {
       };
 
 //---------------------------------------------------------
-//    Accidental Values
+//    AccidentalType
 //---------------------------------------------------------
 
 enum AccidentalType {
@@ -358,6 +358,14 @@ enum AccidentalType {
       ACC_SORI,
       ACC_KORON,
       ACC_END
+      };
+
+enum AccidentalVal {
+      SHARP2  = 2,
+      SHARP   = 1,
+      NATURAL = 0,
+      FLAT    = -1,
+      FLAT2   = -2
       };
 
 //---------------------------------------------------------

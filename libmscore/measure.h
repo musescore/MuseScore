@@ -248,8 +248,8 @@ class Measure : public MeasureBase {
       void adjustToLen(Fraction);
       int repeatFlags() const                   { return _repeatFlags; }
       void setRepeatFlags(int val);
-      int findAccidental(Note*) const;
-      int findAccidental(Segment* s, int staffIdx, int line) const;
+      AccidentalVal findAccidental(Note*) const;
+      AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
       void exchangeVoice(int, int, int, int);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
