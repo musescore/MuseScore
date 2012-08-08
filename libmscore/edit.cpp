@@ -49,6 +49,7 @@
 #include "iname.h"
 #include "range.h"
 #include "hook.h"
+#include "pitchspelling.h"
 
 //---------------------------------------------------------
 //   getSelectedNote
@@ -645,7 +646,7 @@ void Score::putNote(const Position& p, bool replace)
       int tick        = s->tick();
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);
-      int acci        = s->measure()->findAccidental(s, staffIdx, line);
+      AccidentalVal acci        = s->measure()->findAccidental(s, staffIdx, line);
 
 // qDebug("putNote at tick %d staff %d line %d clef %d currentAccidental %d",
 //   tick, staffIdx, line, clef, acci);
@@ -691,8 +692,12 @@ void Score::putNote(const Position& p, bool replace)
                   }
 
             case PITCHED_STAFF:
-                  // nval.pitch = line2pitch(line, clef, key.accidentalType());
-                  nval.pitch = line2pitch(line, clef, 0) + acci;
+                  {
+                  int step   = absStep(line, clef);
+                  int octave = step/7;
+                  nval.pitch = step2pitch(step) + octave * 12 + acci;
+                  nval.tpc   = step2tpc(step % 7, acci);
+                  }
                   break;
             }
 
@@ -1045,10 +1050,14 @@ void Score::deleteItem(Element* el)
                         Rest* rest = new Rest(this, chord->durationType());
                         rest->setDurationType(chord->durationType());
                         rest->setDuration(chord->duration());
+printf("setRest %p %d %d/%d\n", rest, chord->durationType().type(), chord->duration().numerator(),
+                        chord->duration().denominator());
+
                         rest->setTrack(el->track());
                         rest->setParent(chord->parent());
                         Segment* segment = chord->segment();
                         undoAddCR(rest, segment->measure(), segment->tick());
+
                         // undoAddElement(rest);
                         if (tuplet) {
                               tuplet->add(rest);
@@ -1056,6 +1065,7 @@ void Score::deleteItem(Element* el)
                               rest->setDurationType(chord->durationType());
                               }
                         select(rest, SELECT_SINGLE, 0);
+//                        segment->measure()->setDirty();
                         }
                   else  {
                         // remove segment if empty

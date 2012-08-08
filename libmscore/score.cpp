@@ -1399,6 +1399,9 @@ void Score::addElement(Element* element)
                this, element, element->name(), element->parent(),
                element->parent() ? element->parent()->name() : "");
             }
+      if (element->parent() && element->parent()->type() == SEGMENT)
+            static_cast<Segment*>(element->parent())->measure()->setDirty();
+
       ElementType et = element->type();
       if (et == TREMOLO) {
             Chord* chord = static_cast<Chord*>(element->parent());
@@ -1526,6 +1529,8 @@ void Score::removeElement(Element* element)
             qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
+      if (element->parent() && element->parent()->type() == SEGMENT)
+            static_cast<Segment*>(element->parent())->measure()->setDirty();
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static

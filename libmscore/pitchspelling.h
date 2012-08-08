@@ -43,8 +43,9 @@ extern int computeWindow(const QList<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
 extern QString tpc2name(int tpc, bool germanNames);
 extern void tpc2name(int tpc, bool germanNames, QChar* name, int* acc);
-extern int step2tpc(const QString& stepName, int alter);
-extern int step2tpc(int step, int alter);
+extern int step2tpc(const QString& stepName, AccidentalVal alter);
+extern int step2tpc(int step);
+extern int step2tpc(int step, AccidentalVal alter);
 extern int tpc2pitch(int tpc);
 extern int tpc2step(int tpc);
 
@@ -52,8 +53,8 @@ extern int tpc2step(int tpc);
 //   tpc2alter
 //---------------------------------------------------------
 
-inline static int tpc2alter(int tpc) {
-      return ((tpc+1) / 7) - 2;
+inline static AccidentalVal tpc2alter(int tpc) {
+      return AccidentalVal(((tpc+1) / 7) - 2);
       }
 
 extern QString tpc2stepName(int tpc);

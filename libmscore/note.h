@@ -45,10 +45,11 @@ class Note;
 
 struct NoteVal {
       int pitch;
+      int tpc;
       int fret;
       int string;
       int headGroup;
-      NoteVal() { pitch = -1; fret = -1; string = -1; headGroup = 0; }
+      NoteVal();
       };
 
 //---------------------------------------------------------

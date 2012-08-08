@@ -1,4 +1,4 @@
-
+//=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
 //  $Id: importbww.cpp 5427 2012-03-07 12:41:34Z wschweer $
@@ -95,7 +95,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave)
 
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-      int tpc  = step2tpc(table1[istep], alter);
+      int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
       n->setTpc(tpc);
       }
 

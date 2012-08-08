@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: rest.cpp 5655 2012-05-21 12:33:32Z lasconic $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -293,6 +293,7 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
 qDebug("Rest: no symbol for 1/256\n");
                   return rest128Sym;
             default:
+                  qDebug("unknown rest type %d\n", type);
                   return rest4Sym;
             }
       }
@@ -324,9 +325,8 @@ void Rest::layout()
             }
       qreal _spatium = spatium();
       int stepOffset     = 0;
-      if (staff()) {
+      if (staff())
             stepOffset = staff()->staffType()->stepOffset();
-            }
       int line        = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
       int lineOffset  = 0;
 
