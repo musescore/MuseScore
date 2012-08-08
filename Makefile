@@ -33,7 +33,6 @@ release: revision
   	   ..; 			                   \
       make lrelease;                             \
       make -j ${CPUS};                           \
-      ./manual/genManual ..                      \
 
 
 debug:
@@ -44,7 +43,6 @@ debug:
   	   ..; 		                                    \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
-      ./manual/genManual ..                                 \
 
 
 qt5:

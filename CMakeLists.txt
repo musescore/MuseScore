@@ -468,3 +468,14 @@ add_custom_target(lrelease
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
+add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
+   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
+   DEPENDS genManual
+   )
+
+add_custom_target(install_plugins_manual
+   COMMAND ${PROJECT_BINARY_DIR}/manual/genManual ${PROJECT_SOURCE_DIR} /usr/local/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+   )
+
+install(CODE "execute_process(COMMAND make install_plugins_manual)")
+
