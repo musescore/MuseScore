@@ -502,6 +502,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& p)
             setBlockFormat(bf);
             }
       qreal w = 2.0; // 8.0 / view->matrix().m11();
+      score()->rebuildBspTree();
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
 
