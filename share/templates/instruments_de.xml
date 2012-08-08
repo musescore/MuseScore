@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore>
   <InstrumentGroup id="woodwinds">
-    <name>Woodwinds</name>
+    <name>Holzblasintrumente</name>
     <Instrument id="piccolo">
       <longName>Piccolo</longName>
       <shortName>Picc.</shortName>
@@ -15,9 +15,9 @@
       </Instrument>
 
     <Instrument id="b-flute">
-      <longName>Eb Flute</longName>
-      <shortName>Eb Fl.</shortName>
-      <description>Eb Flute</description>
+      <longName>Es Flöte</longName>
+      <shortName>Es Fl.</shortName>
+      <description>Es Flute</description>
       </Instrument>
 
     <Instrument id="flute">
@@ -27,57 +27,57 @@
       </Instrument>
 
     <Instrument id="alto-flute">
-      <longName>Alto Flute</longName>
+      <longName>Altflöte</longName>
       <shortName>A. Fl.</shortName>
-      <description>Alto Flute</description>
+      <description>Altflöte</description>
       </Instrument>
 
     <Instrument id="bass-flute">
-      <longName>Bass Flute</longName>
+      <longName>Bassflöte</longName>
       <shortName>B. Fl.</shortName>
-      <description>Bass Flute</description>
+      <description>Bassflöte</description>
       </Instrument>
 
     <Instrument id="contra-alto-flute">
-      <longName>Contra-alto Flute</longName>
-      <shortName>C-a. Fl.</shortName>
-      <description>Contra-alto Flute</description>
+      <longName>Kontra-altflöte</longName>
+      <shortName>K-a. Fl.</shortName>
+      <description>Kontra-altflöte</description>
       </Instrument>
 
     <Instrument id="contrabass-flute">
-      <longName>Contrabass Flute</longName>
-      <shortName>Cb. Fl.</shortName>
-      <description>Contrabass Flute</description>
+      <longName>Kontrabassflöte</longName>
+      <shortName>Kb. Fl.</shortName>
+      <description>Kontrabassflöte</description>
       </Instrument>
 
     <Instrument id="subcontra-alto-flute">
-      <longName>Subcontra-alto Flute</longName>
-      <shortName>Sc-a. Fl.</shortName>
-      <description>Subcontra-alto Flute</description>
+      <longName>Subkontra-altflöte</longName>
+      <shortName>Sk-a. Fl.</shortName>
+      <description>Subkontra-altflöte</description>
       </Instrument>
 
     <Instrument id="subcontrabass-flute">
-      <longName>Subcontrabass Flute</longName>
-      <shortName>Scb. Fl.</shortName>
-      <description>Subcontrabass Flute</description>
+      <longName>Subkontrabassflöte</longName>
+      <shortName>Skb. Fl.</shortName>
+      <description>Subkontrabassflöte</description>
       </Instrument>
 
     <Instrument id="hyperbass-flute">
-      <longName>Hyperbass Flute</longName>
+      <longName>Hyperbassflöte</longName>
       <shortName>Hb. Fl.</shortName>
-      <description>Hyperbass Flute</description>
+      <description>Hyperbassflöte</description>
       </Instrument>
 
     <Instrument id="transverse-flute">
-      <longName>Transverse Flute</longName>
-      <shortName>Tr. Fl.</shortName>
-      <description>Transverse Flute</description>
+      <longName>Querflöte</longName>
+      <shortName>Qfl.</shortName>
+      <description>Querflöte</description>
       </Instrument>
 
     <Instrument id="alto-transverse-flute">
-      <longName>Alto Transverse Flute</longName>
-      <shortName>A. Tr. Fl.</shortName>
-      <description>Alto Transverse Flute</description>
+      <longName>Altquerflöte</longName>
+      <shortName>A. fl.</shortName>
+      <description>Altquerflöte</description>
       </Instrument>
 
     <Instrument id="danso">
@@ -147,69 +147,69 @@
       </Instrument>
 
     <Instrument id="pan-flute">
-      <longName>Pan Flute</longName>
+      <longName>Panflöte</longName>
       <shortName>Pn. Fl.</shortName>
-      <description>Pan Flute</description>
+      <description>Panflöte</description>
       </Instrument>
 
     <Instrument id="garklein-recorder">
-      <longName>Garklein Recorder</longName>
-      <shortName>Gk. Rec.</shortName>
-      <description>Garklein Recorder</description>
+      <longName>Garkleinblockflöte</longName>
+      <shortName>Gk. Bfl.</shortName>
+      <description>Garkleinblockflöte</description>
       </Instrument>
 
     <Instrument id="sopranino-recorder">
-      <longName>Sopranino Recorder</longName>
-      <shortName>Si. Rec.</shortName>
-      <description>Sopranino Recorder</description>
+      <longName>Sopraninoblockflöte</longName>
+      <shortName>Si. Bfl.</shortName>
+      <description>Sopraninblockflöte</description>
       </Instrument>
 
     <Instrument id="soprano-recorder">
-      <longName>Soprano Recorder</longName>
-      <shortName>S. Rec.</shortName>
-      <description>Soprano Recorder</description>
+      <longName>Sopranblockflöte</longName>
+      <shortName>S. Bfl.</shortName>
+      <description>Sopranblockflöte</description>
       </Instrument>
 
     <Instrument id="alto-recorder">
-      <longName>Alto Recorder</longName>
-      <shortName>A. Rec.</shortName>
-      <description>Alto Recorder</description>
+      <longName>Altblockflöte</longName>
+      <shortName>A. Bfl.</shortName>
+      <description>Altblockflöte</description>
       </Instrument>
 
     <Instrument id="tenor-recorder">
-      <longName>Tenor Recorder</longName>
-      <shortName>T. Rec.</shortName>
-      <description>Tenor Recorder</description>
+      <longName>Tenorblockflöte</longName>
+      <shortName>T. Bfl.</shortName>
+      <description>Tenorblockflöte</description>
       </Instrument>
 
     <Instrument id="bass-recorder">
-      <longName>Bass Recorder</longName>
-      <shortName>B. Rec.</shortName>
-      <description>Bass Recorder</description>
+      <longName>Bassblockflöte</longName>
+      <shortName>B. Bfl.</shortName>
+      <description>Bassblockflöte</description>
       </Instrument>
 
     <Instrument id="greatbass-recorder">
-      <longName>Greatbass Recorder</longName>
-      <shortName>Gb. Rec.</shortName>
-      <description>Greatbass Recorder</description>
+      <longName>Gro�bassblockflöte</longName>
+      <shortName>Gb. Bfl.</shortName>
+      <description>Gro�bassblockflöte</description>
       </Instrument>
 
     <Instrument id="contrabass-recorder">
-      <longName>Contrabass Recorder</longName>
-      <shortName>Cb. Rec.</shortName>
-      <description>Contrabass Recorder</description>
+      <longName>Kontrabassblockflöte</longName>
+      <shortName>Kb. Bfl.</shortName>
+      <description>Kontrabassblockflöte</description>
       </Instrument>
 
     <Instrument id="french-flageolet">
-      <longName>French Flageolet</longName>
+      <longName>Fanz�sisches Flageolet</longName>
       <shortName>Fr. Fla.</shortName>
-      <description>French Flageolet</description>
+      <description>Fanz�sisches Flageolet</description>
       </Instrument>
 
     <Instrument id="english-flageolet">
-      <longName>English Flageolet</longName>
+      <longName>Englisches Flageolet</longName>
       <shortName>Eng. Fla.</shortName>
-      <description>English Flageolet</description>
+      <description>Englisches Flageolet</description>
       </Instrument>
 
     <Instrument id="tonette">
@@ -219,69 +219,69 @@
       </Instrument>
 
     <Instrument id="g-soprano-ocarina">
-      <longName>G Soprano Ocarina</longName>
-      <shortName>G S. Oc.</shortName>
-      <description>G Soprano Ocarina</description>
+      <longName>G Sopran Okarina</longName>
+      <shortName>G S. Ok.</shortName>
+      <description>G Sopran Okarina</description>
       </Instrument>
 
     <Instrument id="f-soprano-ocarina">
-      <longName>F Soprano Ocarina</longName>
-      <shortName>F S. Oc.</shortName>
-      <description>F Soprano Ocarina</description>
+      <longName>F Sopran Okarina</longName>
+      <shortName>F S. Ok.</shortName>
+      <description>F Sopran Okarina</description>
       </Instrument>
 
     <Instrument id="c-soprano-ocarina">
-      <longName>C Soprano Ocarina</longName>
-      <shortName>C S. Oc.</shortName>
-      <description>C Soprano Ocarina</description>
+      <longName>C Sopran Ocarina</longName>
+      <shortName>C S. Ok.</shortName>
+      <description>C Sopran Okarina</description>
       </Instrument>
 
     <Instrument id="bb-soprano-ocarina">
-      <longName>Bb Soprano Ocarina</longName>
-      <shortName>Bb S. Oc.</shortName>
-      <description>Bb Soprano Ocarina</description>
+      <longName>Bb Sopran Okarina</longName>
+      <shortName>Bb S. Ok.</shortName>
+      <description>Bb Sopran Okarina</description>
       </Instrument>
 
     <Instrument id="g-alto-ocarina">
-      <longName>G Alto Ocarina</longName>
-      <shortName>G A. Oc.</shortName>
-      <description>G Alto Ocarina</description>
+      <longName>G Alt Okarina</longName>
+      <shortName>G A. Ok.</shortName>
+      <description>G Alt Okarina</description>
       </Instrument>
 
     <Instrument id="f-alto-ocarina">
-      <longName>F Alto Ocarina</longName>
-      <shortName>F A. Oc.</shortName>
-      <description>F Alto Ocarina</description>
+      <longName>F Alt Okarina</longName>
+      <shortName>F A. Ok.</shortName>
+      <description>F Alt Okarina</description>
       </Instrument>
 
     <Instrument id="c-alto-ocarina">
-      <longName>C Alto Ocarina</longName>
-      <shortName>C A. Oc.</shortName>
-      <description>C Alto Ocarina</description>
+      <longName>C Alt Okarina</longName>
+      <shortName>C A. Ok.</shortName>
+      <description>C Alt Okarina</description>
       </Instrument>
 
     <Instrument id="bb-alto-ocarina">
-      <longName>Bb Alto Ocarina</longName>
-      <shortName>Bb A. Oc.</shortName>
-      <description>Bb Alto Ocarina</description>
+      <longName>Bb Alt Okarina</longName>
+      <shortName>Bb A. Ok.</shortName>
+      <description>Bb Alt Okarina</description>
       </Instrument>
 
     <Instrument id="c-bass-ocarina">
-      <longName>C Bass Ocarina</longName>
-      <shortName>C B. Oc.</shortName>
-      <description>C Bass Ocarina</description>
+      <longName>C Bass Okarina</longName>
+      <shortName>C B. Ok.</shortName>
+      <description>C Bass Okarina</description>
       </Instrument>
 
     <Instrument id="soprano-gemshorn">
-      <longName>Soprano Gemshorn</longName>
+      <longName>Sopran Gemshorn</longName>
       <shortName>S. Gh.</shortName>
-      <description>Soprano Gemshorn</description>
+      <description>Sopran Gemshorn</description>
       </Instrument>
 
     <Instrument id="alto-gemshorn">
-      <longName>Alto Gemshorn</longName>
+      <longName>Alt Gemshorn</longName>
       <shortName>A. Gh.</shortName>
-      <description>Alto Gemshorn</description>
+      <description>Alt Gemshorn</description>
       </Instrument>
 
     <Instrument id="tenor-gemshorn">
@@ -303,9 +303,9 @@
       </Instrument>
 
     <Instrument id="slide-whistle">
-      <longName>Slide Whistle</longName>
-      <shortName>Sl. Wh.</shortName>
-      <description>Slide Whistle</description>
+      <longName>Kolbenfl�te</longName>
+      <shortName>Kb. Fl.</shortName>
+      <description>Kolbenfl�te</description>
       </Instrument>
 
     <Instrument id="piccolo-oboe">
@@ -327,15 +327,15 @@
       </Instrument>
 
     <Instrument id="english-horn">
-      <longName>English Horn</longName>
+      <longName>Englisch Horn</longName>
       <shortName>E. Hn.</shortName>
       <description>English Horn</description>
       </Instrument>
 
     <Instrument id="baritone-oboe">
-      <longName>Baritone Oboe</longName>
+      <longName>Bariton Oboe</longName>
       <shortName>Bar. Ob.</shortName>
-      <description>Baritone Oboe</description>
+      <description>Bariton Oboe</description>
       </Instrument>
 
     <Instrument id="heckelphone">
@@ -345,9 +345,9 @@
       </Instrument>
 
     <Instrument id="baroque-oboe">
-      <longName>Baroque Oboe</longName>
-      <shortName>Bq. Ob.</shortName>
-      <description>Baroque Oboe</description>
+      <longName>Barock Oboe</longName>
+      <shortName>Bk. Ob.</shortName>
+      <description>Barock Oboe</description>
       </Instrument>
 
     <Instrument id="oboe-da-caccia">
@@ -357,69 +357,69 @@
       </Instrument>
 
     <Instrument id="shawm">
-      <longName>Shawm</longName>
+      <longName>Schalmei</longName>
       <shortName>Sh.</shortName>
-      <description>Shawm</description>
+      <description>Schalmei</description>
       </Instrument>
 
     <Instrument id="sopranino-shawm">
-      <longName>Sopranino Shawm</longName>
+      <longName>Sopranino Schalmei</longName>
       <shortName>Si. Sh.</shortName>
-      <description>Sopranino Shawm</description>
+      <description>Sopranino Schalmei</description>
       </Instrument>
 
     <Instrument id="descant-pommer">
-      <longName>Descant Pommer</longName>
+      <longName>Diskant Pommer</longName>
       <shortName>D. Po.</shortName>
-      <description>Descant Pommer</description>
+      <description>Diskant Pommer</description>
       </Instrument>
 
     <Instrument id="alto-pommer">
-      <longName>Alto Pommer</longName>
+      <longName>Alt Pommer</longName>
       <shortName>A. Po.</shortName>
-      <description>Alto Pommer</description>
+      <description>Alt Pommer</description>
       </Instrument>
 
     <Instrument id="soprano-crumhorn">
-      <longName>Soprano Crumhorn</longName>
-      <shortName>S. Crh.</shortName>
-      <description>Soprano Crumhorn</description>
+      <longName>Sopran Krummhorn</longName>
+      <shortName>S. Krh.</shortName>
+      <description>Sopran Krummhorn</description>
       </Instrument>
 
     <Instrument id="alto-crumhorn">
-      <longName>Alto Crumhorn</longName>
-      <shortName>A. Crh.</shortName>
-      <description>Alto Crumhorn</description>
+      <longName>Alt Krummhorn</longName>
+      <shortName>A. Krh.</shortName>
+      <description>Alt Krummhorn</description>
       </Instrument>
 
     <Instrument id="tenor-crumhorn">
-      <longName>Tenor Crumhorn</longName>
-      <shortName>T. Crh.</shortName>
-      <description>Tenor Crumhorn</description>
+      <longName>Tenor Krummhorn</longName>
+      <shortName>T. Krh.</shortName>
+      <description>Tenor Krummhorn</description>
       </Instrument>
 
     <Instrument id="bass-crumhorn">
-      <longName>Bass Crumhorn</longName>
-      <shortName>B. Crh.</shortName>
-      <description>Bass Crumhorn</description>
+      <longName>Bass Krummhorn</longName>
+      <shortName>B. Krh.</shortName>
+      <description>Bass Krummhorn</description>
       </Instrument>
 
     <Instrument id="greatbass-crumhorn">
-      <longName>Greatbass Crumhorn</longName>
-      <shortName>Gb. Crh.</shortName>
-      <description>Greatbass Crumhorn</description>
+      <longName>Gro�bass Krummhorn</longName>
+      <shortName>Gb. Krh.</shortName>
+      <description>Gro�bass Krummhorn</description>
       </Instrument>
 
     <Instrument id="soprano-cornamuse">
-      <longName>Soprano Cornamuse</longName>
+      <longName>Sopran Cornamuse</longName>
       <shortName>S. Cm.</shortName>
-      <description>Soprano Cornamuse</description>
+      <description>Sopran Cornamuse</description>
       </Instrument>
 
     <Instrument id="alto-cornamuse">
-      <longName>Alto Cornamuse</longName>
+      <longName>Alt Cornamuse</longName>
       <shortName>A. Cm.</shortName>
-      <description>Alto Cornamuse</description>
+      <description>Alt Cornamuse</description>
       </Instrument>
 
     <Instrument id="tenor-cornamuse">
@@ -435,15 +435,15 @@
       </Instrument>
 
     <Instrument id="soprano-kelhorn">
-      <longName>Soprano Kelhorn</longName>
+      <longName>Sopran Kelhorn</longName>
       <shortName>S. Kh.</shortName>
-      <description>Soprano Kelhorn</description>
+      <description>Sopran Kelhorn</description>
       </Instrument>
 
     <Instrument id="alto-kelhorn">
-      <longName>Alto Kelhorn</longName>
+      <longName>Alt Kelhorn</longName>
       <shortName>A. Kh.</shortName>
-      <description>Alto Kelhorn</description>
+      <description>Alt Kelhorn</description>
       </Instrument>
 
     <Instrument id="tenor-kelhorn">
@@ -459,9 +459,9 @@
       </Instrument>
 
     <Instrument id="greatbass-kelhorn">
-      <longName>Greatbass Kelhorn</longName>
+      <longName>Gro�bass Kelhorn</longName>
       <shortName>Gb. Kh.</shortName>
-      <description>Greatbass Kelhorn</description>
+      <description>Gro�bass Kelhorn</description>
       </Instrument>
 
     <Instrument id="sopranino-rauschpfeife">
@@ -471,9 +471,9 @@
       </Instrument>
 
     <Instrument id="soprano-rauschpfeife">
-      <longName>Soprano Rauschpfeife</longName>
+      <longName>Sopran Rauschpfeife</longName>
       <shortName>S. Rpf.</shortName>
-      <description>Soprano Rauschpfeife</description>
+      <description>Sopran Rauschpfeife</description>
       </Instrument>
 
     <Instrument id="f-duduk">
@@ -537,81 +537,81 @@
       </Instrument>
 
     <Instrument id="piccolo-clarinet">
-      <longName>Piccolo Clarinet</longName>
-      <shortName>P. Cl.</shortName>
-      <description>Piccolo Clarinet</description>
+      <longName>Piccolo Klarinette</longName>
+      <shortName>P. Kl.</shortName>
+      <description>Piccolo Klarinette</description>
       </Instrument>
 
     <Instrument id="soprano-clarinet">
-      <longName>Soprano Clarinet</longName>
-      <shortName>S. Cl.</shortName>
-      <description>Soprano Clarinet</description>
+      <longName>Sopran Klarinette</longName>
+      <shortName>S. Kl.</shortName>
+      <description>Sopran Klarinette</description>
       </Instrument>
 
     <Instrument id="eb-clarinet">
-      <longName>Eb Clarinet</longName>
-      <shortName>Eb Cl.</shortName>
-      <description>Eb Clarinet</description>
+      <longName>Eb Klarinette</longName>
+      <shortName>Es Kl.</shortName>
+      <description>Es Klarinette</description>
       </Instrument>
 
     <Instrument id="d-clarinet">
-      <longName>D Clarinet</longName>
-      <shortName>D Cl.</shortName>
-      <description>D Clarinet</description>
+      <longName>D Klarinette</longName>
+      <shortName>D Kl.</shortName>
+      <description>D Klarinette</description>
       </Instrument>
 
     <Instrument id="c-clarinet">
-      <longName>C Clarinet</longName>
-      <shortName>C Cl.</shortName>
-      <description>C Clarinet</description>
+      <longName>C Klarinette</longName>
+      <shortName>C Kl.</shortName>
+      <description>C Klarinette</description>
       </Instrument>
 
     <Instrument id="bb-clarinet">
-      <longName>Bb Clarinet</longName>
-      <shortName>Bb Cl.</shortName>
-      <description>Bb Clarinet</description>
+      <longName>B Klarinette</longName>
+      <shortName>B Kl.</shortName>
+      <description>B Klarinette</description>
       </Instrument>
 
     <Instrument id="a-clarinet">
-      <longName>A Clarinet</longName>
-      <shortName>A Cl.</shortName>
-      <description>A Clarinet</description>
+      <longName>A Klarinette</longName>
+      <shortName>A Kl.</shortName>
+      <description>A Klarinette</description>
       </Instrument>
 
     <Instrument id="basset-clarinet">
-      <longName>Basset Clarinet</longName>
-      <shortName>Ba. Cl.</shortName>
-      <description>Basset Clarinet</description>
+      <longName>Bass Klarinette</longName>
+      <shortName>Ba. Kl.</shortName>
+      <description>Bass Klarinette</description>
       </Instrument>
 
     <Instrument id="alto-clarinet">
-      <longName>Alto Clarinet</longName>
-      <shortName>A. Cl.</shortName>
-      <description>Alto Clarinet</description>
+      <longName>Alt Klarinette</longName>
+      <shortName>A. Kl.</shortName>
+      <description>Alt Klarinette</description>
       </Instrument>
 
     <Instrument id="basset-horn">
-      <longName>Basset Horn</longName>
+      <longName>Bass Horn</longName>
       <shortName>Ba. Hn.</shortName>
-      <description>Basset Horn</description>
+      <description>Bass Horn</description>
       </Instrument>
 
     <Instrument id="bass-clarinet">
-      <longName>Bass Clarinet</longName>
-      <shortName>B. Cl.</shortName>
-      <description>Bass Clarinet</description>
+      <longName>Bass Klarinette</longName>
+      <shortName>B. Kl.</shortName>
+      <description>Bass Klarinette</description>
       </Instrument>
 
     <Instrument id="contra-alto-clarinet">
-      <longName>Contra-alto Clarinet</longName>
-      <shortName>C-a. Cl.</shortName>
-      <description>Contra-alto Clarinet</description>
+      <longName>Kontra-alt Klarinette</longName>
+      <shortName>K-a. Kl.</shortName>
+      <description>Kontra-alt Klarinette</description>
       </Instrument>
 
     <Instrument id="contrabass-clarinet">
-      <longName>Contrabass Clarinet</longName>
-      <shortName>Cb. Cl.</shortName>
-      <description>Contrabass Clarinet</description>
+      <longName>Kontrabass Klarinette</longName>
+      <shortName>Kb. Kl.</shortName>
+      <description>Kontrabass Klarinette</description>
       </Instrument>
 
     <Instrument id="sopranino-chalumeau">
@@ -651,135 +651,135 @@
       </Instrument>
 
     <Instrument id="bassoon">
-      <longName>Bassoon</longName>
-      <shortName>Bsn.</shortName>
-      <description>Bassoon</description>
+      <longName>Fagott</longName>
+      <shortName>Fag.</shortName>
+      <description>Fagott</description>
       </Instrument>
 
     <Instrument id="contrabassoon">
-      <longName>Contrabassoon</longName>
-      <shortName>Cbsn.</shortName>
-      <description>Contrabassoon</description>
+      <longName>Kontrafagott</longName>
+      <shortName>Kfag.</shortName>
+      <description>Kontrafagott</description>
       </Instrument>
 
     <Instrument id="dulcian">
-      <longName>Dulcian</longName>
+      <longName>Dulzian</longName>
       <shortName>Du.</shortName>
-      <description>Dulcian</description>
+      <description>Dulzian</description>
       </Instrument>
 
     <Instrument id="rackett">
-      <longName>Rackett</longName>
+      <longName>Rankett</longName>
       <shortName>Ra.</shortName>
-      <description>Rackett</description>
+      <description>Rankett</description>
       </Instrument>
 
     <Instrument id="sopranino-sarrusophone">
-      <longName>Sopranino Sarrusophone</longName>
+      <longName>Sopranino Sarrusophon</longName>
       <shortName>Si. Sar.</shortName>
-      <description>Sopranino Sarrusophone</description>
+      <description>Sopranino Sarrusophon</description>
       </Instrument>
 
     <Instrument id="soprano-sarrusophone">
-      <longName>Soprano Sarrusophone</longName>
+      <longName>Sopran Sarrusophon</longName>
       <shortName>S. Sar.</shortName>
-      <description>Soprano Sarrusophone</description>
+      <description>Sopran Sarrusophon</description>
       </Instrument>
 
     <Instrument id="alto-sarrusophone">
-      <longName>Alto Sarrusophone</longName>
+      <longName>Alt Sarrusophon</longName>
       <shortName>A. Sar.</shortName>
-      <description>Alto Sarrusophone</description>
+      <description>Alt Sarrusophon</description>
       </Instrument>
 
     <Instrument id="tenor-sarrusophone">
-      <longName>Tenor Sarrusophone</longName>
+      <longName>Tenor Sarrusophon</longName>
       <shortName>T. Sar.</shortName>
-      <description>Tenor Sarrusophone</description>
+      <description>Tenor Sarrusophon</description>
       </Instrument>
 
     <Instrument id="baritone-sarrusophone">
-      <longName>Baritone Sarrusophone</longName>
+      <longName>Bariton Sarrusophon</longName>
       <shortName>Bar. Sar.</shortName>
       <description>Baritone Sarrusophone</description>
       </Instrument>
 
     <Instrument id="bass-sarrusophone">
-      <longName>Bass Sarrusophone</longName>
+      <longName>Bass Sarrusophon</longName>
       <shortName>B. Sar.</shortName>
-      <description>Bass Sarrusophone</description>
+      <description>Bass Sarrusophon</description>
       </Instrument>
 
     <Instrument id="contrabass-sarrusophone">
-      <longName>Contrabass Sarrusophone</longName>
-      <shortName>Cb. Sar.</shortName>
-      <description>Contrabass Sarrusophone</description>
+      <longName>Contrabass Sarrusophon</longName>
+      <shortName>Kb. Sar.</shortName>
+      <description>Kontrabass Sarrusophon</description>
       </Instrument>
 
     <Instrument id="sopranissimo-saxophone">
-      <longName>Sopranissimo Saxophone</longName>
+      <longName>Sopranissimo Saxophon</longName>
       <shortName>Sio. Sax.</shortName>
-      <description>Sopranissimo Saxophone</description>
+      <description>Sopranissimo Saxophon</description>
       </Instrument>
 
     <Instrument id="sopranino-saxophone">
-      <longName>Sopranino Saxophone</longName>
+      <longName>Sopranino Saxophon</longName>
       <shortName>Si. Sax.</shortName>
-      <description>Sopranino Saxophone</description>
+      <description>Sopranino Saxophon</description>
       </Instrument>
 
     <Instrument id="soprano-saxophone">
-      <longName>Soprano Saxophone</longName>
+      <longName>Sopran Saxophon</longName>
       <shortName>S. Sax.</shortName>
-      <description>Soprano Saxophone</description>
+      <description>Sopran Saxophon</description>
       </Instrument>
 
     <Instrument id="alto-saxophone">
-      <longName>Alto Saxophone</longName>
+      <longName>Alt Saxophon</longName>
       <shortName>A. Sax.</shortName>
-      <description>Alto Saxophone</description>
+      <description>Alt Saxophon</description>
       </Instrument>
 
     <Instrument id="tenor-saxophone">
-      <longName>Tenor Saxophone</longName>
+      <longName>Tenor Saxophon</longName>
       <shortName>T. Sax.</shortName>
-      <description>Tenor Saxophone</description>
+      <description>Tenor Saxophon</description>
       </Instrument>
 
     <Instrument id="baritone-saxophone">
-      <longName>Baritone Saxophone</longName>
+      <longName>Bariton Saxophon</longName>
       <shortName>Bar. Sax.</shortName>
-      <description>Baritone Saxophone</description>
+      <description>Bariton Saxophon</description>
       </Instrument>
 
     <Instrument id="bass-saxophone">
-      <longName>Bass Saxophone</longName>
+      <longName>Bass Saxophon</longName>
       <shortName>B. Sax.</shortName>
-      <description>Bass Saxophone</description>
+      <description>Bass Saxophon</description>
       </Instrument>
 
     <Instrument id="contrabass-saxophone">
-      <longName>Contrabass Saxophone</longName>
-      <shortName>Cb. Sax.</shortName>
-      <description>Contrabass Saxophone</description>
+      <longName>Kontrabass Saxophon</longName>
+      <shortName>Kb. Sax.</shortName>
+      <description>Kontrabass Saxophon</description>
       </Instrument>
 
     <Instrument id="subcontrabass-saxophone">
-      <longName>Subcontrabass Saxophone</longName>
-      <shortName>Scb. Sax.</shortName>
-      <description>Subcontrabass Saxophone</description>
+      <longName>Subkontrabass Saxophon</longName>
+      <shortName>Skb. Sax.</shortName>
+      <description>Subkontrabass Saxophon</description>
       </Instrument>
 
     <Instrument id="bagpipe">
-      <longName>Bagpipe</longName>
-      <shortName>Bagp.</shortName>
-      <description>Bagpipe</description>
+      <longName>Dudelsack</longName>
+      <shortName>Ddls.</shortName>
+      <description>Dudelsack</description>
       </Instrument>
 
     </InstrumentGroup>
 
   <InstrumentGroup id="brass">
-    <name>Brass</name>
+    <name>Blechblasinstrimente</name>
     <Instrument id="horn">
       <longName>Horn</longName>
       <shortName>Hn.</shortName>
@@ -847,111 +847,111 @@
       </Instrument>
 
     <Instrument id="bb-piccolo-trumpet">
-      <longName>Bb Piccolo Trumpet</longName>
-      <shortName>Bb P. Tpt.</shortName>
-      <description>Bb Piccolo Trumpet</description>
+      <longName>B Piccolo Trompete</longName>
+      <shortName>B P. Tpt.</shortName>
+      <description>B Piccolo Trompete</description>
       </Instrument>
 
     <Instrument id="a-piccolo-trumpet">
-      <longName>A Piccolo Trumpet</longName>
+      <longName>A Piccolo Trompete</longName>
       <shortName>A P. Tpt.</shortName>
-      <description>A Piccolo Trumpet</description>
+      <description>A Piccolo Trompete</description>
       </Instrument>
 
     <Instrument id="eb-trumpet">
-      <longName>Eb Trumpet</longName>
-      <shortName>Eb Tpt.</shortName>
-      <description>Eb Trumpet</description>
+      <longName>Es Trompete</longName>
+      <shortName>Es Tpt.</shortName>
+      <description>Es Trompete</description>
       </Instrument>
 
     <Instrument id="d-trumpet">
-      <longName>D Trumpet</longName>
+      <longName>D Trompete</longName>
       <shortName>D Tpt.</shortName>
-      <description>D Trumpet</description>
+      <description>D Trompete</description>
       </Instrument>
 
     <Instrument id="c-trumpet">
-      <longName>C Trumpet</longName>
+      <longName>C Trompete</longName>
       <shortName>C Tpt.</shortName>
-      <description>C Trumpet</description>
+      <description>C Trompete</description>
       </Instrument>
 
     <Instrument id="bb-trumpet">
-      <longName>Bb Trumpet</longName>
-      <shortName>Bb Tpt.</shortName>
-      <description>Bb Trumpet</description>
+      <longName>B Trompete</longName>
+      <shortName>B Tpt.</shortName>
+      <description>B Trompete</description>
       </Instrument>
 
     <Instrument id="eb-bass-trumpet">
-      <longName>Eb Bass Trumpet</longName>
-      <shortName>Eb B. Tpt.</shortName>
-      <description>Eb Bass Trumpet</description>
+      <longName>Es Bass Trompete</longName>
+      <shortName>Es B. Tpt.</shortName>
+      <description>Es Bass Trompete</description>
       </Instrument>
 
     <Instrument id="bb-bass-trumpet">
-      <longName>Bb Bass Trumpet</longName>
-      <shortName>Bb B. Tpt.</shortName>
-      <description>Bb Bass Trumpet</description>
+      <longName>B Bass Trompete</longName>
+      <shortName>B B. Tpt.</shortName>
+      <description>B Bass Trompete</description>
       </Instrument>
 
     <Instrument id="f-baroque-trumpet">
-      <longName>F Baroque Trumpet</longName>
-      <shortName>F Bq. Tpt.</shortName>
-      <description>F Baroque Trumpet</description>
+      <longName>F Barock Trompete</longName>
+      <shortName>F Bk. Tpt.</shortName>
+      <description>F Barock Trompete</description>
       </Instrument>
 
     <Instrument id="eb-baroque-trumpet">
-      <longName>Eb Baroque Trumpet</longName>
-      <shortName>Eb Bq. Tpt.</shortName>
-      <description>Eb Baroque Trumpet</description>
+      <longName>Es Barock Trompete</longName>
+      <shortName>Es Bk. Tpt.</shortName>
+      <description>Es Barock Trompete</description>
       </Instrument>
 
     <Instrument id="d-baroque-trumpet">
-      <longName>D Baroque Trumpet</longName>
+      <longName>D Barock Trompete</longName>
       <shortName>D Bq. Tpt.</shortName>
-      <description>D Baroque Trumpet</description>
+      <description>D Barock Trompete</description>
       </Instrument>
 
     <Instrument id="c-baroque-trumpet">
-      <longName>C Baroque Trumpet</longName>
+      <longName>C Baro.k Trompete</longName>
       <shortName>C Bq. Tpt.</shortName>
-      <description>C Baroque Trumpet</description>
+      <description>C Barock Trompete</description>
       </Instrument>
 
     <Instrument id="bb-baroque-trumpet">
-      <longName>Bb Baroque Trumpet</longName>
-      <shortName>Bb Bq. Tpt.</shortName>
-      <description>Bb Baroque Trumpet</description>
+      <longName>B Barock Trompete</longName>
+      <shortName>B Bq. Tpt.</shortName>
+      <description>B Barock Trompete</description>
       </Instrument>
 
     <Instrument id="eb-cornet">
-      <longName>Eb Cornet</longName>
-      <shortName>Eb Cnt.</shortName>
-      <description>Eb Cornet</description>
+      <longName>Es Kornet</longName>
+      <shortName>Es Knt.</shortName>
+      <description>Es Kornet</description>
       </Instrument>
 
     <Instrument id="bb-cornet">
-      <longName>Bb Cornet</longName>
-      <shortName>Bb Cnt.</shortName>
-      <description>Bb Cornet</description>
+      <longName>B Kornet</longName>
+      <shortName>B Knt.</shortName>
+      <description>B Kornet</description>
       </Instrument>
 
     <Instrument id="flugelhorn">
-      <longName>Flugelhorn</longName>
+      <longName>Fl�gelhorn</longName>
       <shortName>Flghn.</shortName>
-      <description>Flugelhorn</description>
+      <description>Fl�gelhorn</description>
       </Instrument>
 
     <Instrument id="soprano-zink">
-      <longName>Soprano Zink</longName>
+      <longName>Sopran Zink</longName>
       <shortName>S. Zi.</shortName>
-      <description>Soprano Zink</description>
+      <description>Sopran Zink</description>
       </Instrument>
 
     <Instrument id="alto-zink">
-      <longName>Alto Zink</longName>
+      <longName>Alt Zink</longName>
       <shortName>A. Zi.</shortName>
-      <description>Alto Zink</description>
+      <description>Alt Zink</description>
       </Instrument>
 
     <Instrument id="tenor-zink">
@@ -967,63 +967,63 @@
       </Instrument>
 
     <Instrument id="f-alto-ophicleide">
-      <longName>F Alto Ophicleide</longName>
+      <longName>F Alt Ophikleide</longName>
       <shortName>F A. Oph.</shortName>
-      <description>F Alto Ophicleide</description>
+      <description>F Alt Ophikleide</description>
       </Instrument>
 
     <Instrument id="eb-alto-ophicleide">
-      <longName>Eb Alto Ophicleide</longName>
-      <shortName>Eb A. Oph.</shortName>
-      <description>Eb Alto Ophicleide</description>
+      <longName>Es Alt Ophikleide</longName>
+      <shortName>Es A. Oph.</shortName>
+      <description>Es Alt Ophikleide</description>
       </Instrument>
 
     <Instrument id="c-bass-ophicleide">
-      <longName>C Bass Ophicleide</longName>
+      <longName>C Bass Ophikleide</longName>
       <shortName>C B. Oph.</shortName>
-      <description>C Bass Ophicleide</description>
+      <description>C Bass Ophikleide</description>
       </Instrument>
 
     <Instrument id="bb-bass-ophicleide">
-      <longName>Bb Bass Ophicleide</longName>
-      <shortName>Bb B. Oph.</shortName>
-      <description>Bb Bass Ophicleide</description>
+      <longName>B Bass Ophikleide</longName>
+      <shortName>B B. Oph.</shortName>
+      <description>B Bass Ophikleide</description>
       </Instrument>
 
     <Instrument id="eb-contrabass-ophicleide">
-      <longName>Eb Contrabass Ophicleide</longName>
-      <shortName>Eb Cb. Oph.</shortName>
-      <description>Eb Contrabass Ophicleide</description>
+      <longName>Es Kontrabass Ophikleide</longName>
+      <shortName>Es Kb. Oph.</shortName>
+      <description>Es Kontrabass Ophikleide</description>
       </Instrument>
 
     <Instrument id="f-alto-horn">
-      <longName>F Alto Horn</longName>
+      <longName>F Alt Horn</longName>
       <shortName>F A. Hn.</shortName>
-      <description>F Alto Horn</description>
+      <description>F Alt Horn</description>
       </Instrument>
 
     <Instrument id="eb-alto-horn">
-      <longName>Eb Alto Horn</longName>
-      <shortName>Eb A. Hn.</shortName>
-      <description>Eb Alto Horn</description>
+      <longName>Es Alt Horn</longName>
+      <shortName>Es A. Hn.</shortName>
+      <description>Es Alt Horn</description>
       </Instrument>
 
     <Instrument id="baritone-horn">
-      <longName>Baritone Horn</longName>
+      <longName>Bariton Horn</longName>
       <shortName>Bar. Hn.</shortName>
-      <description>Baritone Horn</description>
+      <description>Bariton Horn</description>
       </Instrument>
 
     <Instrument id="f-mellophone">
-      <longName>F Mellophone</longName>
+      <longName>F Mellophon</longName>
       <shortName>F Mph.</shortName>
-      <description>F Mellophone</description>
+      <description>F Mellophon</description>
       </Instrument>
 
     <Instrument id="eb-mellophone">
-      <longName>Eb Mellophone</longName>
-      <shortName>Eb Mph.</shortName>
-      <description>Eb Mellophone</description>
+      <longName>Es Mellophon</longName>
+      <shortName>Es Mph.</shortName>
+      <description>Es Mellophon</description>
       </Instrument>
 
     <Instrument id="f-mellophonium">
@@ -1033,15 +1033,15 @@
       </Instrument>
 
     <Instrument id="eb-mellophonium">
-      <longName>Eb Mellophonium</longName>
-      <shortName>Eb Mpm.</shortName>
-      <description>Eb Mellophonium</description>
+      <longName>Es Mellophonium</longName>
+      <shortName>Es Mpm.</shortName>
+      <description>Es Mellophonium</description>
       </Instrument>
 
     <Instrument id="bb-wagner-tuba">
-      <longName>Bb Wagner Tuba</longName>
-      <shortName>Bb Wag. Tu.</shortName>
-      <description>Bb Wagner Tuba</description>
+      <longName>B Wagner Tuba</longName>
+      <shortName>B Wag. Tu.</shortName>
+      <description>B Wagner Tuba</description>
       </Instrument>
 
     <Instrument id="f-wagner-tuba">
@@ -1051,39 +1051,39 @@
       </Instrument>
 
     <Instrument id="trombone">
-      <longName>Trombone</longName>
-      <shortName>Trb.</shortName>
-      <description>Trombone</description>
+      <longName>Posaune</longName>
+      <shortName>Pos.</shortName>
+      <description>Posaune</description>
       </Instrument>
 
     <Instrument id="soprano-trombone">
-      <longName>Soprano Trombone</longName>
-      <shortName>S. Trb.</shortName>
-      <description>Soprano Trombone</description>
+      <longName>Sopran Posaune</longName>
+      <shortName>S. Pos.</shortName>
+      <description>Sopran Posaune</description>
       </Instrument>
 
     <Instrument id="alto-trombone">
-      <longName>Alto Trombone</longName>
-      <shortName>A. Trb.</shortName>
-      <description>Alto Trombone</description>
+      <longName>Alt Posaune</longName>
+      <shortName>A. Pos.</shortName>
+      <description>Alt Posaune</description>
       </Instrument>
 
     <Instrument id="tenor-trombone">
-      <longName>Tenor Trombone</longName>
-      <shortName>T. Trb.</shortName>
-      <description>Tenor Trombone</description>
+      <longName>Tenor Posaune</longName>
+      <shortName>T. Pos.</shortName>
+      <description>Tenor Posaune</description>
       </Instrument>
 
     <Instrument id="bass-trombone">
-      <longName>Bass Trombone</longName>
-      <shortName>B. Trb.</shortName>
-      <description>Bass Trombone</description>
+      <longName>Bass Posaune</longName>
+      <shortName>B. Pos.</shortName>
+      <description>Bass Posaune</description>
       </Instrument>
 
     <Instrument id="contrabass-trombone">
-      <longName>Contrabass Trombone</longName>
-      <shortName>Cb. Trb.</shortName>
-      <description>Contrabass Trombone</description>
+      <longName>Contrabass Posaune</longName>
+      <shortName>Cb. Pos.</shortName>
+      <description>Contrabass Posaune</description>
       </Instrument>
 
     <Instrument id="euphonium">
@@ -1105,19 +1105,19 @@
       </Instrument>
 
     <Instrument id="bb-tuba">
-      <longName>Bb Tuba</longName>
-      <shortName>Bb Tu.</shortName>
-      <description>Bb Tuba</description>
+      <longName>B Tuba</longName>
+      <shortName>B Tu.</shortName>
+      <description>B Tuba</description>
       </Instrument>
 
     </InstrumentGroup>
 
   <InstrumentGroup id="pitched-percussion">
-    <name>Pitched Percussion</name>
+    <name>Gestimmtes Schlagwerk</name>
     <Instrument id="timpani">
-      <longName>Timpani</longName>
-      <shortName>Timp.</shortName>
-      <description>Timpani</description>
+      <longName>Pauke</longName>
+      <shortName>Pk.</shortName>
+      <description>Pauke</description>
       </Instrument>
 
     <Instrument id="high-roto-toms">
@@ -1139,15 +1139,15 @@
       </Instrument>
 
     <Instrument id="orff-soprano-glockenspiel">
-      <longName>Orff Soprano Glockenspiel</longName>
+      <longName>Orff Sopran Glockenspiel</longName>
       <shortName>O. S. Glk.</shortName>
-      <description>Orff Soprano Glockenspiel</description>
+      <description>Orff Sopran Glockenspiel</description>
       </Instrument>
 
     <Instrument id="orff-alto-glockenspiel">
-      <longName>Orff Alto Glockenspiel</longName>
+      <longName>Orff Alt Glockenspiel</longName>
       <shortName>O. A. Glk.</shortName>
-      <description>Orff Alto Glockenspiel</description>
+      <description>Orff Alt Glockenspiel</description>
       </Instrument>
 
     <Instrument id="crotales">
@@ -1169,33 +1169,33 @@
       </Instrument>
 
     <Instrument id="vibraphone">
-      <longName>Vibraphone</longName>
+      <longName>Vibraphon</longName>
       <shortName>Vib.</shortName>
-      <description>Vibraphone</description>
+      <description>Vibraphon</description>
       </Instrument>
 
     <Instrument id="orff-soprano-metallophone">
-      <longName>Orff Soprano Metallophone</longName>
+      <longName>Orff Sopran Metallophon</longName>
       <shortName>O. S. Met.</shortName>
-      <description>Orff Soprano Metallophone</description>
+      <description>Orff Sopran Metallophon</description>
       </Instrument>
 
     <Instrument id="orff-alto-metallophone">
-      <longName>Orff Alto Metallophone</longName>
+      <longName>Orff Alt Metallophon</longName>
       <shortName>O. A. Met.</shortName>
-      <description>Orff Alto Metallophone</description>
+      <description>Orff Alt Metallophon</description>
       </Instrument>
 
     <Instrument id="orff-bass-metallophone">
-      <longName>Orff Bass Metallophone</longName>
+      <longName>Orff Bass Metallophon</longName>
       <shortName>O. B. Met.</shortName>
-      <description>Orff Bass Metallophone</description>
+      <description>Orff Bass Metallophon</description>
       </Instrument>
 
     <Instrument id="tubular-bells">
-      <longName>Tubular Bells</longName>
+      <longName>R�hrenglocken</longName>
       <shortName>Tu. Be.</shortName>
-      <description>Tubular Bells</description>
+      <description>R�hrenglocken</description>
       </Instrument>
 
     <Instrument id="bass-steel-drums">
@@ -1277,27 +1277,27 @@
       </Instrument>
 
     <Instrument id="xylophone">
-      <longName>Xylophone</longName>
+      <longName>Xylophon</longName>
       <shortName>Xyl.</shortName>
-      <description>Xylophone</description>
+      <description>Xylophon</description>
       </Instrument>
 
     <Instrument id="orff-soprano-xylophone">
-      <longName>Orff Soprano Xylophone</longName>
+      <longName>Orff Sopran Xylophon</longName>
       <shortName>O. S. Xyl.</shortName>
-      <description>Orff Soprano Xylophone</description>
+      <description>Orff Sopran Xylophon</description>
       </Instrument>
 
     <Instrument id="orff-alto-xylophone">
-      <longName>Orff Alto Xylophone</longName>
+      <longName>Orff Alt Xylophon</longName>
       <shortName>O. A. Xyl.</shortName>
-      <description>Orff Alto Xylophone</description>
+      <description>Orff Alto Xylophon</description>
       </Instrument>
 
     <Instrument id="orff-bass-xylophone">
-      <longName>Orff Bass Xylophone</longName>
+      <longName>Orff Bass Xylophon</longName>
       <shortName>O. B. Xyl.</shortName>
-      <description>Orff Bass Xylophone</description>
+      <description>Orff Bass Xylophon</description>
       </Instrument>
 
     <Instrument id="marimba">
@@ -1339,7 +1339,7 @@
     </InstrumentGroup>
 
   <InstrumentGroup id="unpitched-percussion">
-    <name>Unpitched Percussion</name>
+    <name>Ungestimmtes Schlagwerk</name>
     <Instrument id="drumset-5-lines">
       <longName>Drumset</longName>
       <shortName>Drs.</shortName>
@@ -1683,15 +1683,15 @@
       </Instrument>
 
     <Instrument id="finger-snap">
-      <longName>Finger Snap</longName>
-      <shortName>Fi. Sna.</shortName>
-      <description>Finger Snap</description>
+      <longName>Fingerschnippen</longName>
+      <shortName>Fi. Sni.</shortName>
+      <description>Fingerschnippen</description>
       </Instrument>
 
     <Instrument id="hand-clap">
-      <longName>Hand Clap</longName>
+      <longName>Klatschen</longName>
       <shortName>Hd. Clp.</shortName>
-      <description>Hand Clap</description>
+      <description>Klatschen</description>
       </Instrument>
 
     <Instrument id="slap">
@@ -1713,91 +1713,91 @@
       </Instrument>
 
     <Instrument id="tambourine">
-      <longName>Tambourine</longName>
+      <longName>Tamburin</longName>
       <shortName>Tamb.</shortName>
-      <description>Tambourine</description>
+      <description>Tamburin</description>
       </Instrument>
 
     </InstrumentGroup>
 
   <InstrumentGroup id="guitars">
-    <name>Guitars</name>
+    <name>Gitarren</name>
     <Instrument id="soprano-guitar">
-      <longName>Soprano Guitar</longName>
-      <shortName>S. Guit.</shortName>
-      <description>Soprano Guitar</description>
+      <longName>Sopran Gitarre</longName>
+      <shortName>S. Git.</shortName>
+      <description>Sopran Gitarre</description>
       </Instrument>
 
     <Instrument id="alto-guitar">
-      <longName>Alto Guitar</longName>
-      <shortName>A. Guit.</shortName>
-      <description>Alto Guitar</description>
+      <longName>Alt Gitarre</longName>
+      <shortName>A. Git.</shortName>
+      <description>Alt Gitarre</description>
       </Instrument>
 
     <Instrument id="guitar">
-      <longName>Guitar</longName>
-      <shortName>Guit.</shortName>
-      <description>Guitar</description>
+      <longName>Gitarre</longName>
+      <shortName>Git.</shortName>
+      <description>Gitarre</description>
       </Instrument>
 
     <Instrument id="guitar-(tablature)">
-      <longName>Guitar</longName>
-      <shortName>Guit.</shortName>
-      <description>Guitar (Tablature)</description>
+      <longName>Gitarre</longName>
+      <shortName>Git.</shortName>
+      <description>Gitarre (Tablature)</description>
       </Instrument>
 
     <Instrument id="11-string-alto-guitar">
-      <longName>11-string Alto Guitar</longName>
-      <shortName>11-str. A. Guit.</shortName>
-      <description>11-string Alto Guitar</description>
+      <longName>11-saitige Alt Gitarre</longName>
+      <shortName>11-stg. A. Git.</shortName>
+      <description>11-saitige Alt Gitarre</description>
       </Instrument>
 
     <Instrument id="steel-string-guitar">
-      <longName>Steel string Guitar</longName>
-      <shortName>St. str. Guit.</shortName>
-      <description>Steel string Guitar</description>
+      <longName>Stahlsaiten Gitarre</longName>
+      <shortName>Stsn. Git.</shortName>
+      <description>Stahlsaiten Gitarre</description>
       </Instrument>
 
     <Instrument id="12-string-guitar">
-      <longName>12-string Guitar</longName>
-      <shortName>12-str. Guit.</shortName>
-      <description>12-string Guitar</description>
+      <longName>12-saitige Gitarre</longName>
+      <shortName>12-s. Git.</shortName>
+      <description>12-saitige Gitarre</description>
       </Instrument>
 
     <Instrument id="bass-guitar">
-      <longName>Bass Guitar</longName>
+      <longName>Bass Gitarre</longName>
       <shortName>B. Guit.</shortName>
-      <description>Bass Guitar</description>
+      <description>Bass Gitarre</description>
       </Instrument>
 
     <Instrument id="pedal-steel-guitar">
-      <longName>Pedal steel Guitar</longName>
-      <shortName>Ped. st. Guit.</shortName>
-      <description>Pedal steel Guitar</description>
+      <longName>Pedal Stahl Gitarre</longName>
+      <shortName>Ped. st. Git.</shortName>
+      <description>Pedal Stahl Gitarre</description>
       </Instrument>
 
     <Instrument id="electric-guitar">
-      <longName>Electric Guitar</longName>
-      <shortName>El. Guit.</shortName>
-      <description>Electric Guitar</description>
+      <longName>Elektrische Gitarre</longName>
+      <shortName>El. Git.</shortName>
+      <description>Elektrische Gitarre</description>
       </Instrument>
 
     <Instrument id="electric-bass">
-      <longName>Electric Bass</longName>
+      <longName>Elektrischer Bass</longName>
       <shortName>El. B.</shortName>
-      <description>Electric Bass</description>
+      <description>Elektrischer Bass</description>
       </Instrument>
 
     <Instrument id="electric-bass-(4-str.-tab)">
-      <longName>Electric Bass</longName>
+      <longName>Elektrischer Bass</longName>
       <shortName>El. B.</shortName>
-      <description>Electric Bass (4-str. TAB)</description>
+      <description>Elektrischer Bass (4-stg. TAB)</description>
       </Instrument>
 
     <Instrument id="fretless-electric-bass">
-      <longName>Fretless Electric Bass</longName>
-      <shortName>Frtl. El. B.</shortName>
-      <description>Fretless Electric Bass</description>
+      <longName>Stegloser Elektrischer Bass</longName>
+      <shortName>Stgl. El. B.</shortName>
+      <description>Stegloser Elektrischer Bass</description>
       </Instrument>
 
     <Instrument id="ukulele">
@@ -1809,13 +1809,13 @@
     <Instrument id="ukulele-(4-str.-tab)">
       <longName>Ukulele</longName>
       <shortName>Uk.</shortName>
-      <description>Ukulele (4-str. TAB)</description>
+      <description>Ukulele (4-stg. TAB)</description>
       </Instrument>
 
     <Instrument id="baritone-ukulele">
-      <longName>Baritone Ukulele</longName>
+      <longName>Bariton Ukulele</longName>
       <shortName>Bar. Uk.</shortName>
-      <description>Baritone Ukulele</description>
+      <description>Bariton Ukulele</description>
       </Instrument>
 
     </InstrumentGroup>
@@ -1903,19 +1903,19 @@
     <Instrument id="bouzouki-(3-course)">
       <longName>Bouzouki</longName>
       <shortName>Bou.</shortName>
-      <description>Bouzouki (3-course)</description>
+      <description>Bouzouki (3-saitig)</description>
       </Instrument>
 
     <Instrument id="bouzouki-(4-course)">
       <longName>Bouzouki</longName>
       <shortName>Bou.</shortName>
-      <description>Bouzouki (4-course)</description>
+      <description>Bouzouki (4-saitig)</description>
       </Instrument>
 
     <Instrument id="mandolin">
-      <longName>Mandolin</longName>
+      <longName>Mandoline</longName>
       <shortName>Mdn.</shortName>
-      <description>Mandolin</description>
+      <description>Mandoline</description>
       </Instrument>
 
     <Instrument id="mandola">
@@ -1945,35 +1945,35 @@
     </InstrumentGroup>
 
   <InstrumentGroup id="vocals">
-    <name>Vocals</name>
+    <name>Gesang</name>
     <Instrument id="voice">
-      <longName>Voice</longName>
+      <longName>Stimme</longName>
       <shortName>Vo.</shortName>
-      <description>Voice</description>
+      <description>Stimme</description>
       </Instrument>
 
     <Instrument id="boy-soprano">
-      <longName>Boy Soprano</longName>
+      <longName>Knabensopran</longName>
       <shortName>B. S.</shortName>
-      <description>Boy Soprano</description>
+      <description>Knabensopran</description>
       </Instrument>
 
     <Instrument id="soprano">
-      <longName>Soprano</longName>
+      <longName>Sopran</longName>
       <shortName>S.</shortName>
-      <description>Soprano</description>
+      <description>Sopran</description>
       </Instrument>
 
     <Instrument id="mezzosoprano">
-      <longName>Mezzosoprano</longName>
+      <longName>Mezzosopran</longName>
       <shortName>Mzs.</shortName>
-      <description>Mezzosoprano</description>
+      <description>Mezzosopran</description>
       </Instrument>
 
     <Instrument id="alto">
-      <longName>Alto</longName>
+      <longName>Alt</longName>
       <shortName>A.</shortName>
-      <description>Alto</description>
+      <description>Alt</description>
       </Instrument>
 
     <Instrument id="tenor">
@@ -1983,9 +1983,9 @@
       </Instrument>
 
     <Instrument id="baritone">
-      <longName>Baritone</longName>
+      <longName>Bariton</longName>
       <shortName>Bar.</shortName>
-      <description>Baritone</description>
+      <description>Bariton</description>
       </Instrument>
 
     <Instrument id="bass">
@@ -2003,7 +2003,7 @@
     </InstrumentGroup>
 
   <InstrumentGroup id="keyboards">
-    <name>Keyboards</name>
+    <name>Tasteninstrumente</name>
 
     <Instrument id="piano">
       <longName>Piano</longName>
@@ -2018,9 +2018,9 @@
       </Instrument>
 
     <Instrument id="harpsichord">
-      <longName>Harpsichord</longName>
-      <shortName>Hch.</shortName>
-      <description>Harpsichord</description>
+      <longName>Cembalo</longName>
+      <shortName>Cbl.</shortName>
+      <description>Cembalo</description>
       </Instrument>
 
     <Instrument id="celesta">
@@ -2030,9 +2030,9 @@
       </Instrument>
 
     <Instrument id="electric-piano">
-      <longName>Electric Piano</longName>
+      <longName>Elektrisches Piano</longName>
       <shortName>El. Pno.</shortName>
-      <description>Electric Piano</description>
+      <description>Elektrisches Piano</description>
       </Instrument>
 
     <Instrument id="keyboard-synthesizer">
@@ -2042,9 +2042,9 @@
       </Instrument>
 
     <Instrument id="organ">
-      <longName>Organ</longName>
+      <longName>Orgel</longName>
       <shortName>Org.</shortName>
-      <description>Organ</description>
+      <description>Orgel</description>
       </Instrument>
 
     <Instrument id="pipe-organ">
@@ -2052,13 +2052,13 @@
       <longName pos="5">Ped.</longName>
       <shortName pos="2">Man.</shortName>
       <shortName pos="5">Ped.</shortName>
-      <description>Pipe-Organ</description>
+      <description>Pfeifen-Orgel</description>
       </Instrument>
 
     <Instrument id="electronic-organ">
-      <longName>Electronic Organ</longName>
+      <longName>Elektronische Orgel</longName>
       <shortName>Et. Org.</shortName>
-      <description>Electronic Organ</description>
+      <description>Elektronische Orgel</description>
       </Instrument>
 
     <Instrument id="harmonium">
@@ -2068,9 +2068,9 @@
       </Instrument>
 
     <Instrument id="accordion">
-      <longName>Accordion</longName>
+      <longName>Akkordeon</longName>
       <shortName>Acc.</shortName>
-      <description>Accordion</description>
+      <description>Akkordeon</description>
       </Instrument>
 
     <Instrument id="bandoneon">
@@ -2080,21 +2080,21 @@
       </Instrument>
 
     <Instrument id="melodica">
-      <longName>Melodica</longName>
+      <longName>Melodika</longName>
       <shortName>Mel.</shortName>
-      <description>Melodica</description>
+      <description>Melodika</description>
       </Instrument>
 
     <Instrument id="soprano-sheng">
-      <longName>Soprano Sheng</longName>
+      <longName>Sopran Sheng</longName>
       <shortName>S She.</shortName>
-      <description>Soprano Sheng</description>
+      <description>Sopran Sheng</description>
       </Instrument>
 
     <Instrument id="alto-sheng">
-      <longName>Alto Sheng</longName>
+      <longName>Alt Sheng</longName>
       <shortName>A She.</shortName>
-      <description>Alto Sheng</description>
+      <description>Alt Sheng</description>
       </Instrument>
 
     <Instrument id="tenor-sheng">
@@ -2112,11 +2112,11 @@
     </InstrumentGroup>
 
   <InstrumentGroup id="plucked-strings">
-    <name>Plucked Strings</name>
+    <name>Gezupfte Saiteninstrumente</name>
     <Instrument id="harp">
-      <longName>Harp</longName>
-      <shortName>Hrp.</shortName>
-      <description>Harp</description>
+      <longName>Harfe</longName>
+      <shortName>Hrf.</shortName>
+      <description>Harfe</description>
       </Instrument>
 
     <Instrument id="koto">
@@ -2130,33 +2130,33 @@
   <InstrumentGroup id="strings">
     <name>Strings</name>
     <Instrument id="violin">
-      <longName>Violin</longName>
+      <longName>Violine</longName>
       <shortName>Vln.</shortName>
-      <description>Violin</description>
+      <description>Violine</description>
       </Instrument>
 
     <Instrument id="violins-1">
-      <longName>Violins 1</longName>
+      <longName>Violinen 1</longName>
       <shortName>Vlns. 1</shortName>
-      <description>Violins 1</description>
+      <description>Violinen 1</description>
       </Instrument>
 
     <Instrument id="violins-2">
-      <longName>Violins 2</longName>
+      <longName>Violinen 2</longName>
       <shortName>Vlns. 2</shortName>
-      <description>Violins 2</description>
+      <description>Violinen 2</description>
       </Instrument>
 
     <Instrument id="viola">
-      <longName>Viola</longName>
-      <shortName>Vla.</shortName>
-      <description>Viola</description>
+      <longName>Bratsche</longName>
+      <shortName>Bra.</shortName>
+      <description>Bratsche</description>
       </Instrument>
 
     <Instrument id="violas">
-      <longName>Violas</longName>
-      <shortName>Vlas.</shortName>
-      <description>Violas</description>
+      <longName>Bratschen</longName>
+      <shortName>Bran.</shortName>
+      <description>Bratschen</description>
       </Instrument>
 
     <Instrument id="violoncello">
@@ -2172,9 +2172,9 @@
       </Instrument>
 
     <Instrument id="contrabass">
-      <longName>Contrabass</longName>
-      <shortName>Cb.</shortName>
-      <description>Contrabass</description>
+      <longName>Kontrabass</longName>
+      <shortName>Kb.</shortName>
+      <description>Kontrabass</description>
       </Instrument>
 
     <Instrument id="double-bass">
@@ -2190,9 +2190,9 @@
       </Instrument>
 
     <Instrument id="contrabasses">
-      <longName>Contrabasses</longName>
-      <shortName>Cbs.</shortName>
-      <description>Contrabasses</description>
+      <longName>Kontrabasse</longName>
+      <shortName>Kbs.</shortName>
+      <description>Kontrabasse</description>
       </Instrument>
 
     <Instrument id="double-basses">
