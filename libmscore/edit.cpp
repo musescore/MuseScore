@@ -646,7 +646,6 @@ void Score::putNote(const Position& p, bool replace)
       int tick        = s->tick();
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);
-      AccidentalVal acci        = s->measure()->findAccidental(s, staffIdx, line);
 
 // qDebug("putNote at tick %d staff %d line %d clef %d currentAccidental %d",
 //   tick, staffIdx, line, clef, acci);
@@ -678,6 +677,8 @@ void Score::putNote(const Position& p, bool replace)
                   StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
                   // if tablature is upside down, 'flip' string number
                   int string = tab->upsideDown() ? (tab->lines() - line - 1) : line;
+                  if (string < 0 && string >= neck->strings())
+                      return;
                   // check the chord does not already contains a note on the same string
                   ChordRest* cr = _is.cr();
                   if(cr != 0 && cr->type() == CHORD)
@@ -693,6 +694,7 @@ void Score::putNote(const Position& p, bool replace)
 
             case PITCHED_STAFF:
                   {
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);    
                   int step   = absStep(line, clef);
                   int octave = step/7;
                   nval.pitch = step2pitch(step) + octave * 12 + acci;
