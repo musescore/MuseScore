@@ -694,7 +694,7 @@ void Score::putNote(const Position& p, bool replace)
 
             case PITCHED_STAFF:
                   {
-                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);    
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;
                   nval.pitch = step2pitch(step) + octave * 12 + acci;
@@ -899,8 +899,10 @@ void Score::cmdFlip()
             }
       foreach (Element* e, el) {
             if (e->type() == NOTE || e->type() == STEM || e->type() == HOOK) {
-                  Chord* chord = static_cast<Note*>(e)->chord();
-                  if (e->type() == STEM)
+                  Chord* chord;
+                  if (e->type() == NOTE)
+                        chord = static_cast<Note*>(e)->chord();
+                  else if (e->type() == STEM)
                         chord = static_cast<Stem*>(e)->chord();
                   else if (e->type() == HOOK)
                         chord = static_cast<Hook*>(e)->chord();
@@ -911,6 +913,7 @@ void Score::cmdFlip()
                         undoChangeProperty(chord, P_STEM_DIRECTION, dir);
                         }
                   }
+
             if (e->type() == BEAM) {
                   Beam* beam = static_cast<Beam*>(e);
                   MScore::Direction dir = beam->up() ? MScore::DOWN : MScore::UP;
