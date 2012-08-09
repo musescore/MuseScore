@@ -279,6 +279,8 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
                   return (line <= -2 || line >= (lines - 1)) ? outsidewholerestSym : wholerestSym;
             case TDuration::V_HALF:
                   return (line <= -3 || line >= (lines - 2)) ? outsidehalfrestSym : halfrestSym;
+            case TDuration::V_QUARTER:
+                  return rest4Sym;
             case TDuration::V_EIGHT:
                   return rest8Sym;
             case TDuration::V_16TH:
@@ -290,7 +292,7 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
             case TDuration::V_128TH:
                   return rest128Sym;
             case TDuration::V_256TH:
-qDebug("Rest: no symbol for 1/256\n");
+                  qDebug("Rest: no symbol for 1/256\n");
                   return rest128Sym;
             default:
                   qDebug("unknown rest type %d\n", type);
