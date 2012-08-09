@@ -106,7 +106,7 @@
 //---------------------------------------------------------
 
 // #define DEBUG_VOICE_MAPPER true
-// #define DEBUG_TICK true
+#define DEBUG_TICK true
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
@@ -206,16 +206,18 @@ static int stringToInt(const QString& s, bool* ok)
 static int calcTicks(QString text, int divisions)
       {
       bool ok;
-      int val = stringToInt(text, &ok);
+      int val1 = stringToInt(text, &ok);
       if (!ok) {
             qDebug("MusicXml-Import: bad duration value: <%s>",
                    qPrintable(text));
             }
-      if (val == 0)     // neuratron scanner produces sometimes 0 !?
-            val = 1;
-      val *= MScore::division;
-      val /= divisions;
-      return val;
+      if (val1 == 0)     // neuratron scanner produces sometimes 0 !?
+            val1 = 1;
+      int val2 = val1 * MScore::division;
+      int val3 = val2 / divisions;
+//      qDebug("calcTicks text %s divisions %d val1 %d val2 %d val3 %d",
+//             qPrintable(text), divisions, val1, val2, val3);
+      return val3;
       }
 
 
@@ -277,11 +279,103 @@ static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomE
                         }
                   }
             if (!grace) {
+#ifdef DEBUG_TICK
+                  qDebug("note %d", ticks);
+#endif
                   lastLen = ticks; // ?
                   tick += ticks;
                   if (tick > maxtick)
                         maxtick = tick;
                   }
+            }
+      }
+
+
+//---------------------------------------------------------
+//   moveTick
+//---------------------------------------------------------
+
+/**
+ Move tick by amount specified in the element e, which must be
+ a forward, backup or note.
+ */
+
+static void testingMoveTick(int& tick, int& maxtick, Fraction& tickFr, int divisions, QDomElement e)
+      {
+      if (e.tagName() == "forward") {
+            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                  if (ee.tagName() == "duration") {
+                        int val = calcTicks(ee.text(), divisions);
+#ifdef DEBUG_TICK
+                        qDebug("forward %d", val);
+#endif
+                        tick += val;
+                        if (tick > maxtick)
+                              maxtick = tick;
+
+                        qDebug("testingMoveTick: tickFr before fraction %s tick %d",
+                               qPrintable(tickFr.print()), tickFr.ticks());
+                        bool ok;
+                        val = stringToInt(ee.text(), &ok);
+                        if (!ok || divisions <= 0)
+                               qDebug("MusicXml-Import: bad divisions value: <%s>",
+                                      qPrintable(ee.text()));
+                        Fraction f(val, 4 * divisions); // note divisions = ticks / quarter note
+                        qDebug("testingMoveTick: val %d divisions %d fraction %s tick %d",
+                               val, divisions, qPrintable(f.print()), f.ticks());
+                        tickFr += f;
+                        qDebug("testingMoveTick: tickFr after fraction %s tick %d",
+                               qPrintable(tickFr.print()), tickFr.ticks());
+                        }
+                  else if (ee.tagName() == "voice")
+                        ;
+                  else if (ee.tagName() == "staff")
+                        ;
+                  else
+                        domError(ee);
+                  }
+            }
+      else if (e.tagName() == "backup") {
+            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                  if (ee.tagName() == "duration") {
+                        int val = calcTicks(ee.text(), divisions);
+#ifdef DEBUG_TICK
+                        qDebug("backup %d", val);
+#endif
+                        tick -= val;
+
+                        qDebug("testingMoveTick: tickFr before fraction %s tick %d",
+                               qPrintable(tickFr.print()), tickFr.ticks());
+                        bool ok;
+                        val = stringToInt(ee.text(), &ok);
+                        if (!ok || divisions <= 0)
+                               qDebug("MusicXml-Import: bad divisions value: <%s>",
+                                      qPrintable(ee.text()));
+                        Fraction f(val, 4 * divisions); // note divisions = ticks / quarter note
+                        qDebug("testingMoveTick: val %d divisions %d fraction %s tick %d",
+                               val, divisions, qPrintable(f.print()), f.ticks());
+                        tickFr -= f;
+                        qDebug("testingMoveTick: tickFr after fraction %s tick %d",
+                               qPrintable(tickFr.print()), tickFr.ticks());
+                        }
+                  else
+                        domError(ee);
+                  }
+            }
+      else if (e.tagName() == "note") {
+            int ticks = 0;
+            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                  QString tag(ee.tagName());
+                  if (tag == "duration") {
+                        ticks = calcTicks(ee.text(), divisions);
+                        }
+                  }
+#ifdef DEBUG_TICK
+            qDebug("note %d", ticks);
+#endif
+            tick += ticks;
+            if (tick > maxtick)
+                  maxtick = tick;
             }
       }
 
@@ -842,16 +936,23 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
  Return false on error.
  */
 
+
+/*
+ * TODO for debugging issue 17654, dump both
+ * - the timing in fraction based on note type (and backup/restore)
+ * - the timing in duration (as fraction) only
+ */
+
 static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       {
 #ifdef DEBUG_TICK
+      qDebug("time-in-fraction: determineMeasureLength() begin");
       qDebug("measurelength ml size %d", ml.size());
 #endif
       int divisions = -1;
       int tick = 0;
       int maxtick = 0;
       int prevmaxtick = 0;
-      int lastLen = 0;
       int measureNr = 0;
       bool result = true;
       QString beats = "";
@@ -861,6 +962,10 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             // handle all measures in this part
             if (e.tagName() == "measure") {
+                  // current tick within this measure as fraction
+                  // calculated using note type, backup and forward
+                  Fraction tickFr;
+                  // Fraction maxtickFr; // maximum tick within this measure as fraction
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "attributes") {
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
@@ -898,7 +1003,7 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                                       Fraction f(bts, btp);
                                                       timeSigLen = f.ticks();
 #ifdef DEBUG_TICK
-                                                      qDebug("fraction %s len %d",
+                                                      qDebug("measurelength fraction %s len %d",
                                                              qPrintable(f.print()), timeSigLen);
 #endif
                                                       }
@@ -906,28 +1011,82 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                           }
                                     }
                               }
-                        // following tags can only be handled if duration is valid
+                        // (most of) following tags can only be handled if duration can be calculated
+                        // (divisions must be valid)
                         if (divisions > 0) {
                               if (ee.tagName() == "note") {
-                                    bool chord = false;
-                                    bool grace = false;
+                                    int     actualNotes = 0;
+                                    bool    chord = false;
+                                    int     dots  = 0;
+                                    int     duration = 0;
+                                    bool    grace = false;
+                                    int     normalNotes = 0;
+                                    QString type;
                                     for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                                           if (eee.tagName() == "chord")
                                                 chord = true;
+                                          else if (eee.tagName() == "dot")
+                                                dots++;
+                                          else if (eee.tagName() == "duration") {
+                                                bool ok;
+                                                duration = stringToInt(eee.text(), &ok);
+                                                if (!ok)
+                                                      qDebug("MusicXml-Import: bad duration value: <%s>",
+                                                             qPrintable(eee.text()));
+                                                }
                                           else if (eee.tagName() == "grace")
                                                 grace = true;
+                                          else if (eee.tagName() == "time-modification") {
+                                                for (QDomElement eeee = eee.firstChildElement(); !eeee.isNull(); eeee = eeee.nextSiblingElement()) {
+                                                      if (eeee.tagName() == "actual-notes") {
+                                                            bool ok;
+                                                            actualNotes = stringToInt(eeee.text(), &ok);
+                                                            if (!ok || divisions <= 0)
+                                                                  qDebug("MusicXml-Import: bad actual-notes value: <%s>",
+                                                                         qPrintable(eeee.text()));
+                                                            }
+                                                      if (eeee.tagName() == "normal-notes") {
+                                                            bool ok;
+                                                            normalNotes = stringToInt(eeee.text(), &ok);
+                                                            if (!ok || divisions <= 0)
+                                                                  qDebug("MusicXml-Import: bad normal-notes value: <%s>",
+                                                                         qPrintable(eeee.text()));
+                                                            }
+                                                      }
+                                                }
+                                          else if (eee.tagName() == "type")
+                                                type = eee.text();
                                           }
-                                    if (chord && !grace)
-                                          // LVIFIX: use of lastLen for chord handling is abit of a hack
-                                          // TODO: replace by more elegant mechanism
-                                          tick -= lastLen;
-                                    moveTick(tick, maxtick, lastLen, divisions, ee);
+                                    // calculate note duration as fraction based on type, dots, normal and actual notes
+                                    // TODO: check type is valid (TDuration silently converts invalid type to quarter)
+                                    TDuration dur(type);
+                                    dur.setDots(dots);
+                                    Fraction f(dur.fraction());
+                                    if (actualNotes > 0 && normalNotes > 0) {
+                                          f *= normalNotes;
+                                          f /= actualNotes;
+                                          }
+#ifdef DEBUG_TICK
+                                    qDebug("time-in-fraction: note type %s dots %d norm %d act %d dur %d chord %d grace %d-> dt frac %s (ticks %d)",
+                                           qPrintable(type), dots, normalNotes, actualNotes, duration,
+                                           chord, grace, qPrintable(f.print()), f.ticks());
+#endif
+                                    if (!chord && !grace) {
+                                          testingMoveTick(tick, maxtick, tickFr, divisions, ee);
+                                          tickFr += f;
+                                          qDebug("time-in-fraction: after note fraction %s tick %d",
+                                                 qPrintable(tickFr.print()), tickFr.ticks());
+                                          }
                                     }
                               else if (ee.tagName() == "backup") {
-                                    moveTick(tick, maxtick, lastLen, divisions, ee);
+                                    testingMoveTick(tick, maxtick, tickFr, divisions, ee);
+                                    qDebug("time-in-fraction: after backup fraction %s tick %d",
+                                           qPrintable(tickFr.print()), tickFr.ticks());
                                     }
                               else if (ee.tagName() == "forward") {
-                                    moveTick(tick, maxtick, lastLen, divisions, ee);
+                                    testingMoveTick(tick, maxtick, tickFr, divisions, ee);
+                                    qDebug("time-in-fraction: after forward fraction %s tick %d",
+                                           qPrintable(tickFr.print()), tickFr.ticks());
                                     }
                               }
                         else
@@ -978,6 +1137,7 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       qDebug("measurelength ml size %d res %d", ml.size(), result);
       for (int i = 0; i < ml.size(); i++)
             qDebug("measurelength ml[%d] %d", i + 1, ml.at(i));
+      qDebug("time-in-fraction: determineMeasureLength() end");
 #endif
       return result;
       }
