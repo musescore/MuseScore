@@ -3047,9 +3047,9 @@ void Score::lassoSelectEnd()
             if (e->type() == NOTE)
                   e = e->parent();
             Segment* seg = static_cast<const ChordRest*>(e)->segment();
-            if ((startSegment == 0) || (seg->tick() < startSegment->tick()))
+            if ((startSegment == 0) || (*seg < *startSegment))
                   startSegment = seg;
-            if ((endSegment == 0) || (seg->tick() > endSegment->tick())) {
+            if ((endSegment == 0) || (*seg > *endSegment)) {
                   endSegment = seg;
                   endTrack = e->track();
                   }

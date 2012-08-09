@@ -65,7 +65,7 @@ add_library (
       figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
-      exportmidi.cpp cursor.cpp read114.cpp sparm.cpp
+      exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

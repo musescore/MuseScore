@@ -845,3 +845,40 @@ bool Segment::splitsTuplet() const
       return false;
       }
 
+//---------------------------------------------------------
+//   operator<
+///   return true if segment is before s in list
+//---------------------------------------------------------
+
+bool Segment::operator<(const Segment& s) const
+      {
+      if (tick() < s.tick())
+            return true;
+      if (tick() > s.tick())
+            return false;
+      for (Segment* ns = next1(); ns && (ns->tick() == s.tick()); ns = ns->next1()) {
+            if (ns == &s)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   operator>
+///   return true if segment is after s in list
+//---------------------------------------------------------
+
+bool Segment::operator>(const Segment& s) const
+      {
+      if (tick() > s.tick())
+            return true;
+      if (tick() < s.tick())
+            return false;
+      for (Segment* ns = prev1(); ns && (ns->tick() == s.tick()); ns = ns->prev1()) {
+            if (ns == &s)
+                  return true;
+            }
+      return false;
+      }
+
+

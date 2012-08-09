@@ -187,6 +187,9 @@ class Segment : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+
+      bool operator<(const Segment&) const;
+      bool operator>(const Segment&) const;
       };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes)
