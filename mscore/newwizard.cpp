@@ -112,18 +112,45 @@ void InstrumentWizard::on_instrumentList_itemSelectionChanged()
 void InstrumentWizard::on_partiturList_itemSelectionChanged()
       {
       QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
-      if (wi.isEmpty())
+      if (wi.isEmpty()) {
+            removeButton->setEnabled(false);
+            upButton->setEnabled(false);
+            downButton->setEnabled(false);
+            linkedButton->setEnabled(false);
+            belowButton->setEnabled(false);
             return;
+            }
       QTreeWidgetItem* item = wi.front();
       bool flag = item != 0;
-      bool onlyOneStaff = (item->type() == STAFF_LIST_ITEM) && (item->parent()->childCount() == 1);
-      bool first = (item->type() == PART_LIST_ITEM && partiturList->topLevelItem(0) == item)
-              || (item->type() == STAFF_LIST_ITEM && item->parent()->child(0) == item);
-      bool last = (item->type() == PART_LIST_ITEM && partiturList->topLevelItem(partiturList->topLevelItemCount() -1) == item)
-              || (item->type() == STAFF_LIST_ITEM && item->parent()->child(item->parent()->childCount() - 1) == item);
+      
+      int count = 0; // item can be hidden
+      QTreeWidgetItem* it = 0;
+      QList<QTreeWidgetItem*> witems;
+      if(item->type() == PART_LIST_ITEM) {
+            for (int idx = 0; (it = partiturList->topLevelItem(idx)); ++idx) {
+                  if (!it->isHidden()) {
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+      else {
+            for (int idx = 0; (it = item->parent()->child(idx)); ++idx) {
+                  if (!it->isHidden()){
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+            
+      bool onlyOne = (count == 1);            
+      bool onlyOneStaff = ((item->type() == STAFF_LIST_ITEM) && onlyOne);
+      bool first = (witems.first() == item);
+      bool last = (witems.last() == item);
+      
       removeButton->setEnabled(flag && !onlyOneStaff);
-      upButton->setEnabled(flag && !first);
-      downButton->setEnabled(flag && !last);
+      upButton->setEnabled(flag && !onlyOne && !first);
+      downButton->setEnabled(flag && !onlyOne && !last);
       linkedButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       belowButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       }
@@ -198,7 +225,7 @@ void InstrumentWizard::on_removeButton_clicked()
                   }
             else {
                   ((StaffListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       else {
@@ -206,7 +233,7 @@ void InstrumentWizard::on_removeButton_clicked()
                   delete item;
             else {
                   ((PartListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       partiturList->clearSelection();
