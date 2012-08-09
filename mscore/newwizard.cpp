@@ -288,11 +288,11 @@ void InstrumentWizard::on_linkedButton_clicked()
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
       PartListItem* pli   = (PartListItem*)sli->parent();
+      pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       nsli->setLinked(true);
-      nsli->setVisible(true);
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
@@ -406,8 +406,11 @@ void InstrumentWizard::createInstruments(Score* cs)
                   staff->setBarLineSpan(1);
             int nstaffIdx = staffIdx + barLineSpan;
 
-            for (int idx = staffIdx+1; idx < nstaffIdx; ++idx)
-                  cs->staff(idx)->setBarLineSpan(0);
+            for (int idx = staffIdx+1; idx < nstaffIdx; ++idx) {
+                  Staff* tStaff = cs->staff(idx);
+                  if (tStaff)
+                        tStaff->setBarLineSpan(0);
+                  }
 
             staffIdx = nstaffIdx;
             }
@@ -464,7 +467,7 @@ Fraction TimesigWizard::timesig() const
 bool TimesigWizard::pickup(int* z, int* n) const
       {
       *z = pickupTimesigZ->value();
-      *n = 1 << timesigN->currentIndex();
+      *n = 1 << pickupTimesigN->currentIndex();
       return pickupMeasure->isChecked();
       }
 

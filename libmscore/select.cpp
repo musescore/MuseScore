@@ -153,7 +153,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = *i;
             if (el->type() == NOTE)
                   el = ((Note*)el)->chord();
-            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == SegChordRest) {
+            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == Segment::SegChordRest) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
@@ -211,6 +211,8 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
+      if (el->type() == CHORD)
+            printf("Selection::add Chord!\n");
       _el.append(el);
       update();
       }
@@ -238,16 +240,15 @@ void Selection::updateSelectedElements()
 
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1()) {
-                  if (s->subtype() == SegEndBarLine)  // do not select end bar line
+                  if (s->subtype() == Segment::SegEndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
                   if (!e)
                         continue;
                   if (e->type() == CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        foreach(Note* note, chord->notes()) {
+                        foreach(Note* note, chord->notes())
                               _el.append(note);
-                              }
                         }
                   else {
                         _el.append(e);
@@ -333,8 +334,7 @@ void Selection::searchSelectedElements()
 
 //---------------------------------------------------------
 //   reconstructElementList
-//    reconstruct list of selected elements after
-//    undo/redo
+///    reconstruct list of selected elements after undo/redo
 //---------------------------------------------------------
 
 void Selection::reconstructElementList()
@@ -344,11 +344,8 @@ void Selection::reconstructElementList()
 
 //---------------------------------------------------------
 //   update
+///   Set select flag for all Elements in select list.
 //---------------------------------------------------------
-
-/**
- Set select flag for all Elements in select list.
-*/
 
 void Selection::update()
       {
@@ -494,7 +491,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->subtype() & (SegChordRest | SegGrace)))
+                        if (!(seg->subtype() & (Segment::SegChordRest | Segment::SegGrace)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);

@@ -137,7 +137,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
       Slur* sl = static_cast<Slur*>(slurTie());
 
       if (key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? DOWN : UP);
+            sl->setSlurDirection(sl->up() ? MScore::DOWN : MScore::UP);
             sl->layout();
             return true;
             }
@@ -605,7 +605,7 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
 SlurTie::SlurTie(Score* s)
    : Spanner(s)
       {
-      _slurDirection = AUTO;
+      _slurDirection = MScore::AUTO;
       _up            = true;
 //      _len           = 0;
       _lineType      = 0;     // default is solid
@@ -706,7 +706,6 @@ void Slur::slurPos(SlurPos* sp)
       if ((sc->up() == ec->up()) && !sc->beam() && !ec->beam() && (_up == sc->up())) {
             sa1 = SA_STEM;
             sa2 = SA_STEM;
-            printf("Stem-Stem\n");
             }
 
       qreal hw   = note1->headWidth();
@@ -739,14 +738,14 @@ void Slur::slurPos(SlurPos* sp)
 
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
-      yo = note1->yPos() + _spatium * .9 * __up;
+      yo = note1->pos().y() + _spatium * .9 * __up;
       xo = hw * .5;
 
       if (stem1) {
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                   qreal sh = stem1->height() + _spatium;
-                  yo       = sc->downNote()->yPos() + sh * __up;
+                  yo       = sc->downNote()->pos().y() + sh * __up;
                   xo       = stem1->pos().x();
                   stemPos  = true;
                   }
@@ -760,7 +759,7 @@ void Slur::slurPos(SlurPos* sp)
                   if ((sc->up() != ec->up()) && (sc->up() == _up)) {
                         Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
                         Note* n2  = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = n2->yPos() - n1->yPos();
+                        qreal yd  = n2->pos().y() - n1->pos().y();
 
                         yd *= .5;
 
@@ -786,7 +785,7 @@ void Slur::slurPos(SlurPos* sp)
 
       //------p2
       xo = hw * .5;
-      yo = note2->yPos() + _spatium * .9 * __up;
+      yo = note2->pos().y() + _spatium * .9 * __up;
 
       if (stem2) {
             Beam* beam2 = ec->beam();
@@ -800,9 +799,9 @@ void Slur::slurPos(SlurPos* sp)
                   ) {
                   qreal sh = stem2->height() + _spatium;
                   if (_up)
-                        yo = ec->downNote()->yPos() - sh;
+                        yo = ec->downNote()->pos().y() - sh;
                   else
-                        yo = ec->upNote()->yPos() + sh;
+                        yo = ec->upNote()->pos().y() + sh;
                   xo = stem2->pos().x();
                   }
             else if (!ec->up() && !_up)
@@ -814,7 +813,7 @@ void Slur::slurPos(SlurPos* sp)
             if ((sc->up() != ec->up()) && (ec->up() == _up)) {
                   Note* n1 = sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->yPos() - n1->yPos();
+                  qreal yd = n2->pos().y() - n1->pos().y();
 
                   yd *= .5;
 
@@ -919,7 +918,7 @@ bool SlurTie::readProperties(const QDomElement& e)
             add(segment);
             }
       else if (tag == "up")
-            _slurDirection = Direction(val.toInt());
+            _slurDirection = MScore::Direction(val.toInt());
       else if (tag == "lineType")
             _lineType = val.toInt();
       else if (!Element::readProperties(e))
@@ -940,7 +939,7 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(Direction d)
+void SlurTie::undoSetSlurDirection(MScore::Direction d)
       {
       score()->undoChangeProperty(this, P_SLUR_DIRECTION, d);
       }
@@ -976,7 +975,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
+            case P_SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1078,7 +1077,7 @@ static bool chordsHaveTie(Chord* c1, Chord* c2)
 static bool isDirectionMixture(Chord* c1, Chord* c2)
       {
       bool up = c1->up();
-      for (Segment* seg = c1->segment(); seg; seg = seg->next(SegChordRest)) {
+      for (Segment* seg = c1->segment(); seg; seg = seg->next(Segment::SegChordRest)) {
             Chord* c = static_cast<Chord*>(seg->element(c1->track()));
             if (!c || c->type() != CHORD)
                   continue;
@@ -1120,13 +1119,13 @@ void Slur::layout()
             return;
             }
       switch (_slurDirection) {
-            case UP:
+            case MScore::UP:
                   _up = true;
                   break;
-            case DOWN:
+            case MScore::DOWN:
                   _up = false;
                   break;
-            case AUTO:
+            case MScore::AUTO:
                   {
                   //
                   // assumption:
@@ -1251,7 +1250,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
             if (mb->type() == MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                        if (seg->subtype() == SegChordRest) {
+                        if (seg->subtype() == Segment::SegChordRest) {
                               return seg->pos().x() + seg->measure()->pos().x();
                               }
                         }
@@ -1366,7 +1365,7 @@ void Tie::layout()
                   return;
                   }
             Chord* c1 = startNote()->chord();
-            if (_slurDirection == AUTO) {
+            if (_slurDirection == MScore::AUTO) {
                   if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
@@ -1375,7 +1374,7 @@ void Tie::layout()
                         _up = !c1->up();
                   }
             else
-                  _up = _slurDirection == UP ? true : false;
+                  _up = _slurDirection == MScore::UP ? true : false;
             fixupSegments(1);
             SlurSegment* segment = segmentAt(0);
             segment->setSubtype(SEGMENT_SINGLE);
@@ -1391,7 +1390,7 @@ void Tie::layout()
       Measure* m1 = c1->measure();
       Measure* m2 = c1->measure();
 
-      if (_slurDirection == AUTO) {
+      if (_slurDirection == MScore::AUTO) {
             QList<Note*> notes = c1->notes();
             int n = notes.size();
             if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
@@ -1435,7 +1434,7 @@ void Tie::layout()
                   }
             }
       else
-            _up = _slurDirection == UP ? true : false;
+            _up = _slurDirection == MScore::UP ? true : false;
 
       qreal w   = startNote()->headWidth();
       qreal xo1 = w * 1.12;

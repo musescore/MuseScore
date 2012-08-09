@@ -161,33 +161,6 @@ enum ElementType {
       };
 
 //---------------------------------------------------------
-//   ValueType
-//    used for Note->velocity
-//---------------------------------------------------------
-
-enum ValueType {
-      OFFSET_VAL, USER_VAL
-      };
-
-//---------------------------------------------------------
-//   Direction
-//    used for stem and slur
-//---------------------------------------------------------
-
-enum Direction  {
-      AUTO, UP, DOWN
-      };
-
-//---------------------------------------------------------
-//   DirectionH
-//    used for note head mirror
-//---------------------------------------------------------
-
-enum DirectionH {
-      DH_AUTO, DH_LEFT, DH_RIGHT
-      };
-
-//---------------------------------------------------------
 //   ArticulationType
 //---------------------------------------------------------
 
@@ -230,28 +203,6 @@ enum ArticulationType {
       ARTICULATIONS
       };
 
-//---------------------------------------------------------
-//   NoteHeadGroup
-//---------------------------------------------------------
-
-enum NoteHeadGroup {
-      HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI,
-      HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI,
-      HEAD_SOL,
-      HEAD_BREVIS_ALT,
-      HEAD_GROUPS,
-      HEAD_INVALID = -1
-      };
-
-static const int HEAD_TYPES = 4;
-
-//---------------------------------------------------------
-//   NoteHeadType
-//---------------------------------------------------------
-
-enum NoteHeadType {
-      HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
-      };
 
 //---------------------------------------------------------
 //   BracketType
@@ -372,7 +323,7 @@ enum NoteType {
       };
 
 //---------------------------------------------------------
-//    Accidental Values
+//    AccidentalType
 //---------------------------------------------------------
 
 enum AccidentalType {
@@ -407,6 +358,14 @@ enum AccidentalType {
       ACC_SORI,
       ACC_KORON,
       ACC_END
+      };
+
+enum AccidentalVal {
+      SHARP2  = 2,
+      SHARP   = 1,
+      NATURAL = 0,
+      FLAT    = -1,
+      FLAT2   = -2
       };
 
 //---------------------------------------------------------
@@ -510,27 +469,6 @@ enum {
       };
 
 //---------------------------------------------------------
-//   SegmentType
-//---------------------------------------------------------
-
-enum SegmentType {
-      SegClef                 = 0x1,
-      SegKeySig               = 0x2,
-      SegTimeSig              = 0x4,
-      SegStartRepeatBarLine   = 0x8,
-      SegBarLine              = 0x10,
-      SegGrace                = 0x20,
-      SegChordRest            = 0x40,
-      SegBreath               = 0x80,
-      SegEndBarLine           = 0x100,
-      SegTimeSigAnnounce      = 0x200,
-      SegKeySigAnnounce       = 0x400,
-      SegAll                  = 0xfff
-      };
-typedef QFlags<SegmentType> SegmentTypes;
-Q_DECLARE_OPERATORS_FOR_FLAGS(SegmentTypes)
-
-//---------------------------------------------------------
 //   BarLineType
 //---------------------------------------------------------
 
@@ -549,19 +487,6 @@ enum {
       };
 
 //---------------------------------------------------------
-//   NoteVal
-//    helper structure
-//---------------------------------------------------------
-
-struct NoteVal {
-      int pitch;
-      int fret;
-      int string;
-      NoteHeadGroup headGroup;
-      NoteVal() { pitch = -1; fret = -1; string = -1; headGroup = HEAD_NORMAL; }
-      };
-
-//---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
@@ -572,7 +497,8 @@ class MScore : public QObject {
       Q_ENUMS(ValueType)
       Q_ENUMS(Direction)
       Q_ENUMS(DirectionH)
-      Q_ENUMS(SegmentType)
+      Q_ENUMS(NoteHeadGroup)
+      Q_ENUMS(NoteHeadType)
 
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
@@ -674,20 +600,6 @@ class MScore : public QObject {
       enum ValueType  { OFFSET_VAL, USER_VAL };
       enum Direction  { AUTO, UP, DOWN };
       enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
-      enum SegmentType {
-            SegClef                 = 0x1,
-            SegKeySig               = 0x2,
-            SegTimeSig              = 0x4,
-            SegStartRepeatBarLine   = 0x8,
-            SegBarLine              = 0x10,
-            SegGrace                = 0x20,
-            SegChordRest            = 0x40,
-            SegBreath               = 0x80,
-            SegEndBarLine           = 0x100,
-            SegTimeSigAnnounce      = 0x200,
-            SegKeySigAnnounce       = 0x400,
-            SegAll                  = 0xfff
-            };
 
       static void init();
       static MStyle* defaultStyle();
@@ -731,7 +643,8 @@ Q_DECLARE_METATYPE(MScore::ElementType)
 Q_DECLARE_METATYPE(MScore::ValueType)
 Q_DECLARE_METATYPE(MScore::Direction)
 Q_DECLARE_METATYPE(MScore::DirectionH)
-Q_DECLARE_METATYPE(MScore::SegmentType)
+
+static const int HEAD_TYPES = 4;
 
 //---------------------------------------------------------
 //   center

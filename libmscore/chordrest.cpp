@@ -408,6 +408,7 @@ void ChordRest::layoutArticulations()
                      && (st2 == Articulation_Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spatium * .5 : _spatium * .5;
+                        a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
                         a2->adjustReadPos();
@@ -425,6 +426,7 @@ void ChordRest::layoutArticulations()
                      && (st2 == Articulation_Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spatium * .7 : _spatium * .7;
+                        a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
                         a2->adjustReadPos();
@@ -475,8 +477,8 @@ void ChordRest::layoutArticulations()
             //
             // determine Direction
             //
-            if (a->direction() != AUTO) {
-                  a->setUp(a->direction() == UP);
+            if (a->direction() != MScore::AUTO) {
+                  a->setUp(a->direction() == MScore::UP);
                   }
             else {
                   if (a->anchor() == A_CHORD)
@@ -727,7 +729,7 @@ Element* ChordRest::drop(const DropData& data)
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(SegBreath, tick());
+                  Segment* seg = m->undoGetSegment(Segment::SegBreath, tick());
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }
@@ -741,7 +743,7 @@ Element* ChordRest::drop(const DropData& data)
                   if (tick() == m->tick())
                         return m->drop(data);
 
-                  Segment* seg = m->undoGetSegment(SegBarLine, tick());
+                  Segment* seg = m->undoGetSegment(Segment::SegBarLine, tick());
                   bl->setParent(seg);
                   score()->undoAddElement(bl);
                   }
@@ -761,6 +763,8 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
 
             case DYNAMIC:
+            case FRET_DIAGRAM:
+            case SYMBOL:            
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -772,7 +776,7 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, AUTO);
+                  score()->setNoteRest(segment(), track(), nval, data.duration, MScore::AUTO);
                   delete e;
                   }
                   break;
@@ -806,7 +810,6 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
                   }
 
-            case SYMBOL:
             case IMAGE:
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -863,7 +866,7 @@ void ChordRest::toDefault()
       {
       score()->undoChangeUserOffset(this, QPointF());
       if (type() == CHORD) {
-            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(AUTO));
+            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
             score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
             }
       else

@@ -138,6 +138,7 @@ void TestParts::createParts(Score* score)
 void TestParts::testPartCreation(const QString& test)
       {
       Score* score = readScore(DIR + test + ".mscx");
+      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, test + "-1.mscx", DIR + test + ".mscx"));
       createParts(score);
@@ -152,6 +153,8 @@ void TestParts::testPartCreation(const QString& test)
 void TestParts::appendMeasure()
       {
       Score* score = readScore(DIR + "part2.mscx");
+      score->doLayout();
+
       QVERIFY(score);
       createParts(score);
 
@@ -175,6 +178,7 @@ void TestParts::appendMeasure()
 void TestParts::insertMeasure()
       {
       Score* score = readScore(DIR + "part2.mscx");
+      score->doLayout();
       QVERIFY(score);
       createParts(score);
 
@@ -311,7 +315,7 @@ Score* TestParts::doRemoveBreath()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegBreath);
+      Segment* s   = m->first()->next(Segment::SegBreath);
       Breath*  b   = static_cast<Breath*>(s->element(0));
 
       score->select(b);
@@ -441,7 +445,7 @@ Score* TestParts::doRemoveFingering()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegChordRest);
+      Segment* s   = m->first()->next(Segment::SegChordRest);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
@@ -576,7 +580,7 @@ Score* TestParts::doRemoveSymbol()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(SegChordRest);
+      Segment* s   = m->first()->next(Segment::SegChordRest);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;

@@ -200,12 +200,12 @@ void MuseData::readNote(Part* part, const QString& s)
                   break;
                   }
             }
-      Direction dir = AUTO;
+      MScore::Direction dir = MScore::AUTO;
       if (s.size() >= 23) {
             if (s[22] == 'u')
-                  dir = UP;
+                  dir = MScore::UP;
             else if (s[22] == 'd')
-                  dir = DOWN;
+                  dir = MScore::DOWN;
             }
 
       int staffIdx = 0;
@@ -385,7 +385,7 @@ void MuseData::readNote(Part* part, const QString& s)
             Dynamic* dyn = new Dynamic(score);
             dyn->setSubtype(dynamics);
             dyn->setTrack(gstaff * VOICES);
-            Segment* s = measure->getSegment(SegChordRest, tick);
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
             s->add(dyn);
             }
 

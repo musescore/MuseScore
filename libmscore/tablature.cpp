@@ -233,8 +233,10 @@ void Tablature::fretChord(Chord * chord) const
                   }
 
             // if fretting did change, store as a fret change
-            if(nString != nNewString || nFret != nNewFret)
-                  chord->score()->undo(new ChangeFret(note, nNewFret, nNewString));
+            if (nFret != nNewFret)
+                  note->score()->undoChangeProperty(note, P_FRET, nNewFret);
+            if (nString != nNewString)
+                  note->score()->undoChangeProperty(note, P_STRING, nNewString);
 
             bUsed[nNewString] = true;           // string is used
             }

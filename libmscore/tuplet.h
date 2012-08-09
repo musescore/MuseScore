@@ -27,8 +27,8 @@ class QPainter;
 ///       _actualNotes = 3
 ///       _normalNotes = 2     (3 notes played in the time of 2/8)
 //
-////    The tuplet has a len of _baseLen * _normalNotes.
-////    A tuplet note has len of _baseLen * _normalNotes / _actualNotes.
+///    The tuplet has a len of _baseLen * _normalNotes.
+///    A tuplet note has len of _baseLen * _normalNotes / _actualNotes.
 //------------------------------------------------------------------------
 
 class Tuplet : public DurationElement {
@@ -49,7 +49,7 @@ class Tuplet : public DurationElement {
       Fraction _ratio;
       TDuration _baseLen;      // 1/8 for a triplet of 1/8
 
-      Direction _direction;
+      MScore::Direction _direction;
       bool _isUp;
 
       QPointF p1, p2;
@@ -116,8 +116,8 @@ class Tuplet : public DurationElement {
 
       virtual void dump() const;
 
-      void setDirection(Direction d)       { _direction = d; }
-      Direction direction() const          { return _direction; }
+      void setDirection(MScore::Direction d) { _direction = d; }
+      MScore::Direction direction() const    { return _direction; }
       bool isUp() const                    { return _isUp; }
       virtual int tick() const             { return _tick; }
       void setTick(int val)                { _tick = val; }

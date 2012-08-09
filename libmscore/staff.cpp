@@ -164,7 +164,6 @@ Staff::Staff(Score* s)
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
-      _show           = true;
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -182,7 +181,6 @@ Staff::Staff(Score* s, Part* p, int rs)
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
-      _show           = true;
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -217,7 +215,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
       for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
             if (s->tick() > tick)
                   break;
-            if (s->subtype() != SegClef)
+            if (s->subtype() != Segment::SegClef)
                   continue;
             if (s->element(track) && !s->element(track)->generated())
                   ctl = static_cast<Clef*>(s->element(track))->clefTypeList();
@@ -245,7 +243,7 @@ ClefType Staff::clef(Segment* segment) const
       ClefType ct = _initialClef._concertClef;
       int track = idx() * VOICES;
       for (;;) {
-            segment = segment->prev1(SegClef);
+            segment = segment->prev1(Segment::SegClef);
             if (segment == 0)
                   break;
             if (segment->element(track)) {
@@ -716,5 +714,14 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
 void Staff::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userDist = (_userDist / oldValue) * newValue;
+      }
+
+//---------------------------------------------------------
+//   show
+//---------------------------------------------------------
+
+bool Staff::show() const
+      {
+      return _part->show();
       }
 

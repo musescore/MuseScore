@@ -27,6 +27,8 @@
 #include "interval.h"
 #include "sparm.h"
 #include "mscoreview.h"
+#include "segment.h"
+#include "note.h"
 
 class TempoMap;
 struct TEvent;
@@ -165,7 +167,6 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-      Measure* measure;
       Segment* segment;
       int staffIdx;
       int line;
@@ -278,6 +279,7 @@ class Score : public QObject {
       LayoutFlags layoutFlags;
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
+
       bool _excerptsChanged;
       bool _instrumentsChanged;
       bool _selectionChanged;
@@ -323,7 +325,6 @@ class Score : public QObject {
       Audio* _audio;
       bool _showOmr;
       PlayMode _playMode;
-      bool _playRepeats;
 
       SyntiState _syntiState;
 
@@ -359,8 +360,8 @@ class Score : public QObject {
       void cmdExchangeVoice(int, int);
 
       void removeChordRest(ChordRest* cr, bool clearSegment);
-      void cmdMoveRest(Rest*, Direction);
-      void cmdMoveLyrics(Lyrics*, Direction);
+      void cmdMoveRest(Rest*, MScore::Direction);
+      void cmdMoveLyrics(Lyrics*, MScore::Direction);
 
       void cmdHalfDuration();
       void cmdDoubleDuration();
@@ -369,8 +370,9 @@ class Score : public QObject {
 
       Page* addPage();
       bool layoutSystem(qreal& minWidth, qreal w, bool, bool);
+      bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
-      void processSystemHeader(Measure* m, bool);
+      void addSystemHeader(Measure* m, bool);
       System* getNextSystem(bool, bool);
       bool doReLayout();
       Measure* skipEmptyMeasures(Measure*, System*);
@@ -391,7 +393,7 @@ class Score : public QObject {
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick);
       void init();
-      bool removeGeneratedElements(Measure* mb, Measure* end);
+      void removeGeneratedElements(Measure* mb, Measure* end);
 
    public:
       void setDirty(bool val);
@@ -460,7 +462,6 @@ class Score : public QObject {
       void undoChangeChordRestSize(ChordRest* cr, bool small);
       void undoChangeChordNoStem(Chord* cr, bool noStem);
       void undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret, int string*/);
-      void undoChangeFret(Note* note, /*int pitch, int tpc, int line,*/ int fret, int string);
       void spellNotelist(QList<Note*>& notes);
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
@@ -479,7 +480,7 @@ class Score : public QObject {
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
-      void undoChangeUserMirror(Note*, DirectionH);
+      void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
@@ -487,9 +488,8 @@ class Score : public QObject {
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
-      int clefOffset(int tick, Staff*) const;
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = AUTO);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*);
@@ -525,6 +525,7 @@ class Score : public QObject {
       void cmdDeleteSelection();
 
       void putNote(const QPointF& pos, bool replace);
+      void putNote(const Position& pos, bool replace);
       void setInputState(Element* obj);
 
       void startCmd();        // start undoable command
@@ -586,7 +587,7 @@ class Score : public QObject {
       int pos();
       Measure* tick2measure(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, SegmentTypes st = SegAll) const;
+      Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       void fixTicks();
       void addArticulation(Element*, Articulation* atr);
@@ -741,7 +742,7 @@ class Score : public QObject {
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Segment* firstSegment(SegmentTypes s = SegAll) const;
+      Q_INVOKABLE Segment* firstSegment(Segment::SegmentTypes s = Segment::SegAll) const;
       Q_INVOKABLE Segment* lastSegment() const;
 
       void connectTies();
@@ -785,6 +786,8 @@ class Score : public QObject {
       void layoutSystems();
       void layoutLinear();
       void layoutPages();
+      void layoutSystemsUndoRedo();
+      void layoutPagesUndoRedo();
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
@@ -857,8 +860,6 @@ class Score : public QObject {
       void setExcerptsChanged(bool val)     { _excerptsChanged = val; }
       bool instrumentsChanged() const       { return _instrumentsChanged; }
       void setInstrumentsChanged(bool val)  { _instrumentsChanged = val; }
-      bool playRepeats() const              { return _playRepeats; }
-      void setPlayRepeats(bool val)         { _playRepeats = val; }
       bool selectionChanged() const         { return _selectionChanged; }
       void setSelectionChanged(bool val)    { _selectionChanged = val;  }
 
@@ -892,6 +893,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Cursor* newCursor();
+      qreal computeMinWidth(Segment* fs) const;
       };
 
 extern Score* gscore;

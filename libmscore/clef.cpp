@@ -27,30 +27,30 @@
 
 #define TR(a)  QT_TRANSLATE_NOOP("clefTable", a)
 
+// table must be in sync with enum ClefType
 const ClefInfo clefTable[] = {
-//        |--MusicXml-| octchng  pitchoffset
-// tag    xmlName    line     yoffs     |-lines for sharps--||--lines for flats--|   name
-{ "G",    "G",         2,  0,   0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef"),            PITCHED_STAFF },
-{ "G8va", "G",         2,  1,   7, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8va"),        PITCHED_STAFF },
-{ "G15ma","G",         2,  2,  14, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 15ma"),       PITCHED_STAFF },
-{ "G8vb", "G",         2, -1,  -7, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8vb"),        PITCHED_STAFF },
-{ "F",    "F",         4,  0, -12, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef"),              PITCHED_STAFF },
-{ "F8vb", "F",         4, -1, -19, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8vb"),          PITCHED_STAFF },
-{ "F15mb","F",         4, -2, -26, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15mb"),         PITCHED_STAFF },
-{ "F3",   "F",         3,  0, -10, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (F clef)"), PITCHED_STAFF },
-{ "F5",   "F",         5,  0, -14, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Subbass clef"),           PITCHED_STAFF },
-{ "C1",   "C",         1,  0,  -2, 43, { 5, 1, 4, 0, 3,-1, 2, 2,-1, 3, 0, 4, 1, 5 }, TR("Soprano clef"),           PITCHED_STAFF }, // CLEF_C1
-{ "C2",   "C",         2,  0,  -4, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, TR("Mezzo-soprano clef"),     PITCHED_STAFF }, // CLEF_C2
-{ "C3",   "C",         3,  0,  -6, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, TR("Alto clef"),              PITCHED_STAFF }, // CLEF_C3
-{ "C4",   "C",         4,  0,  -8, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, TR("Tenor clef"),             PITCHED_STAFF }, // CLEF_C4
-{ "TAB",  "TAB",       5,  0,   0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature"),              TAB_STAFF     },
-{ "PERC", "percussion",2,  0,   0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF },
-{ "C5",   "C",         5,  0, -10, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (C clef)"), PITCHED_STAFF }, // CLEF_C5
-{ "G1",   "G",         1,  0,   2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("French violin clef"),     PITCHED_STAFF }, // CLEF_G4
-{ "F8va", "F",         4,  1,  -5, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8va"),          PITCHED_STAFF }, // CLEF_F_8VA
-{ "F15ma","F",         4,  2,   2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15ma"),         PITCHED_STAFF }, // CLEF_F_15MA
-{ "PERC2","percussion",2,  0,   0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF }, // CLEF_PERC2 placeholder
-{ "TAB2", "TAB",       5,  0,   0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature2"),             TAB_STAFF     },
+// tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|   name
+{ "G",    "G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef"),            PITCHED_STAFF },
+{ "G8va", "G",         2,  1, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8va"),        PITCHED_STAFF },
+{ "G15ma","G",         2,  2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 15ma"),       PITCHED_STAFF },
+{ "G8vb", "G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8vb"),        PITCHED_STAFF },
+{ "F",    "F",         4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef"),              PITCHED_STAFF },
+{ "F8vb", "F",         4, -1, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8vb"),          PITCHED_STAFF },
+{ "F15mb","F",         4, -2, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15mb"),         PITCHED_STAFF },
+{ "F3",   "F",         3,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (F clef)"), PITCHED_STAFF },
+{ "F5",   "F",         5,  0, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Subbass clef"),           PITCHED_STAFF },
+{ "C1",   "C",         1,  0, 43, { 5, 1, 4, 0, 3,-1, 2, 2,-1, 3, 0, 4, 1, 5 }, TR("Soprano clef"),           PITCHED_STAFF }, // CLEF_C1
+{ "C2",   "C",         2,  0, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, TR("Mezzo-soprano clef"),     PITCHED_STAFF }, // CLEF_C2
+{ "C3",   "C",         3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, TR("Alto clef"),              PITCHED_STAFF }, // CLEF_C3
+{ "C4",   "C",         4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, TR("Tenor clef"),             PITCHED_STAFF }, // CLEF_C4
+{ "TAB",  "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature"),              TAB_STAFF     },
+{ "PERC", "percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF },
+{ "C5",   "C",         5,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (C clef)"), PITCHED_STAFF }, // CLEF_C5
+{ "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("French violin clef"),     PITCHED_STAFF }, // CLEF_G4
+{ "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8va"),          PITCHED_STAFF }, // CLEF_F_8VA
+{ "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15ma"),         PITCHED_STAFF }, // CLEF_F_15MA
+{ "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF }, // CLEF_PERC2 placeholder
+{ "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature2"),             TAB_STAFF     },
       };
 #undef TR
 
@@ -63,8 +63,8 @@ Clef::Clef(Score* s)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF | ELEMENT_MOVABLE);
 
-      _showCourtesyClef = true;
-      _small            = false;
+      _showCourtesy               = true;
+      _small                      = false;
       _clefTypes._concertClef     = CLEF_INVALID;
       _clefTypes._transposingClef = CLEF_INVALID;
       curClefType                 = CLEF_INVALID;
@@ -73,7 +73,7 @@ Clef::Clef(Score* s)
 Clef::Clef(const Clef& c)
    : Element(c)
       {
-      _showCourtesyClef = c._showCourtesyClef;
+      _showCourtesy     = c._showCourtesy;
       _showPreviousClef = c._showPreviousClef;
       _small            = c._small;
       _clefTypes        = c._clefTypes;
@@ -384,6 +384,8 @@ void Clef::read(const QDomElement& de)
                   _clefTypes._concertClef = Clef::clefType(val);
             else if (tag == "transposingClefType")
                   _clefTypes._transposingClef = Clef::clefType(val);
+            else if (tag == "showCourtesyClef")
+                  _showCourtesy = val.toInt();
             else if (!Element::readProperties(e))
                   domError(e);
             }
@@ -402,6 +404,8 @@ void Clef::write(Xml& xml) const
       xml.stag(name());
       xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
       xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
+      if (!_showCourtesy)
+            xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -498,15 +502,6 @@ void Clef::setClefType(ClefType i)
       }
 
 //---------------------------------------------------------
-//   setShowCourtesyClef
-//---------------------------------------------------------
-
-void Clef::setShowCourtesyClef(bool v)
-      {
-      _showCourtesyClef = v;
-      }
-
-//---------------------------------------------------------
 //   setConcertClef
 //---------------------------------------------------------
 
@@ -537,13 +532,33 @@ ClefType Clef::clefType() const
       }
 
 //---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      layout1();
+      Element::spatiumChanged(oldValue, newValue);
+      }
+
+//---------------------------------------------------------
+//   undoSetShowCourtesy
+//---------------------------------------------------------
+
+void Clef::undoSetShowCourtesy(bool v)
+      {
+      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Clef::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return _showCourtesyClef;
+            case P_SHOW_COURTESY: return showCourtesy();
+            case P_SMALL:         return small();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -556,21 +571,23 @@ QVariant Clef::getProperty(P_ID propertyId) const
 bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: _showCourtesyClef = v.toBool(); break;
+            case P_SHOW_COURTESY: _showCourtesy = v.toBool(); break;
+            case P_SMALL:         setSmall(v.toBool()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }
       return true;
       }
 
-
 //---------------------------------------------------------
-//   spatiumChanged
+//   propertyDefault
 //---------------------------------------------------------
 
-void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+QVariant Clef::propertyDefault(P_ID id) const
       {
-      layout1();
-      Element::spatiumChanged(oldValue, newValue);
+      switch(id) {
+            case P_SHOW_COURTESY: return true;
+            case P_SMALL:         return false;
+            default:              return Element::propertyDefault(id);
+            }
       }
-

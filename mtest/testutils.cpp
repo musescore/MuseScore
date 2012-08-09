@@ -121,7 +121,6 @@ Score* MTest::readCreatedScore(const QString& name)
             delete score;
             return 0;
             }
-      score->doLayout();
       return score;
       }
 

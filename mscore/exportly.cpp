@@ -95,7 +95,7 @@ class ExportLy {
   QTextStream os;
   int level;        // indent level
   int curTicks;
-  Direction stemDirection;
+  MScore::Direction stemDirection;
   int indx;
   bool partial; //length of pickupbar
 
@@ -353,7 +353,7 @@ public:
     level  = 0;
     curTicks = MScore::division;
     slur   = false;
-    stemDirection = AUTO;
+    stemDirection = MScore::AUTO;
   }
   bool write(const QString& name);
 };
@@ -2159,7 +2159,7 @@ void ExportLy::findStartRepNoBarline(int &i, Measure* m)
  // loop over all measure relative segments in this measure
   for (Segment* seg = m->first(); seg; seg = seg->next())
     {
-      if (seg->subtype() == SegStartRepeatBarLine)
+      if (seg->subtype() == Segment::SegStartRepeatBarLine)
 	{
 	  i++; // insert at next slot of voltarray
 	  voltarray[i].voltart = startrepeat;
@@ -2457,8 +2457,8 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 	  slurstack++;
 	  slurre[i] = 0;
 	  started[i] = false;
-	  if (s->slurDirection() == UP) out << "^";
-	  if (s->slurDirection() == DOWN) out << "_";
+	  if (s->slurDirection() == MScore::UP) out << "^";
+	  if (s->slurDirection() == MScore::DOWN) out << "_";
 	  if (slurcount==2)
 	    {
 	      phraseslur=slurstack;
@@ -2480,8 +2480,8 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 	      slurstack++;
 	      slurre[i] = s;
 	      started[i] = true;
-	      if (s->slurDirection() == UP) out << "^";
-	      if (s->slurDirection() == DOWN) out << "_";
+	      if (s->slurDirection() == MScore::UP) out << "^";
+	      if (s->slurDirection() == MScore::DOWN) out << "_";
 	      if (slurcount==2)
 		{
 		  phraseslur=slurstack;
@@ -2775,15 +2775,15 @@ void ExportLy::stemDir(Chord * chord)
   // For now, we only export stem directions for gracenotes.
   if (chord->beam() == 0 || chord->beam()->elements().front() == chord)
     {
-      Direction d = chord->stemDirection();
+      MScore::Direction d = chord->stemDirection();
       if (d != stemDirection)
 	{
 	  stemDirection = d;
-	  if ((d == UP) and (graceswitch == true))
+	  if ((d == MScore::UP) and (graceswitch == true))
 	    out << "\\stemUp ";
-	  else if ((d == DOWN)  and (graceswitch == true))
+	  else if ((d == MScore::DOWN)  and (graceswitch == true))
 	    out << "\\stemDown ";
-	  //   else if (d == AUTO)
+	  //   else if (d == MScore::AUTO)
 	  // 	    {
 	  // 	      if (graceswitch == true)
 	  // 		{
@@ -3401,7 +3401,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
   Element*  nextelem;
   nextelem= nextseg->element(track);
 
-  while (!(nextseg->subtype() == SegEndBarLine))//  and !(nextseg->subtype() == SegEndBarLine)))
+  while (!(nextseg->subtype() == Segment::SegEndBarLine))//  and !(nextseg->subtype() == Segment::SegEndBarLine)))
     {
       //go to next segment, check if it is chord or end of measure.
       if (nextseg->isChordRest())	break;
@@ -3411,7 +3411,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   //if it is not on this track, continue until end we find segment
   //containing element of this track, or end of measure
-  while ((nextelem==0) and (!(nextseg->subtype() == SegEndBarLine)))
+  while ((nextelem==0) and (!(nextseg->subtype() == Segment::SegEndBarLine)))
     {
       nextseg = nextseg->next();
       nextelem = nextseg->element(track);
@@ -3419,7 +3419,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   // if next segment contains element of this track, check for end of
   // measure and chordorrest.
-  if ((nextseg->subtype() != SegEndBarLine) &&  (nextseg->isChordRest()))
+  if ((nextseg->subtype() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
     {
       // probably superfluous as we have previously checked for
       // element on this track (!=0)
@@ -3517,7 +3517,7 @@ void ExportLy::findLyrics()
 	    continue;
 	  Measure* meas = (Measure*)mb;
 
-        SegmentTypes st = SegChordRest | SegGrace;
+        Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
 	  for(Segment* seg = meas->first(st); seg; seg = seg->next(st))
 	    {
 	      const QList<Lyrics*>* lyrlist = seg->lyricsList(staffno);

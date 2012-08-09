@@ -14,6 +14,8 @@
 #ifndef __KEY_H__
 #define __KEY_H__
 
+#include "mscore.h"
+
 class Xml;
 class Score;
 
@@ -52,6 +54,7 @@ class KeySigEvent {
 
 //---------------------------------------------------------
 //   AccidentalState
+///   Contains a state for every absolute staff line.
 //---------------------------------------------------------
 
 static const int TIE_CONTEXT = 0x10;
@@ -62,15 +65,15 @@ class AccidentalState {
    public:
       AccidentalState() {}
       void init(const KeySigEvent&);
-      int accidentalVal(int line) const {
+      AccidentalVal accidentalVal(int line) const {
             Q_ASSERT(line >= 0 && line < 75);
-            return (state[line] & 0x0f) - 2;
+            return AccidentalVal((state[line] & 0x0f) - 2);
             }
       bool tieContext(int line) const {
             Q_ASSERT(line >= 0 && line < 75);
             return state[line] & TIE_CONTEXT;
             }
-      void setAccidentalVal(int line, int val, bool tieContext = false) {
+      void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false) {
             Q_ASSERT(line >= 0 && line < 75);
             Q_ASSERT(val >= -2 && val <= 2);
             state[line] = (val + 2) | (tieContext ? TIE_CONTEXT : 0);

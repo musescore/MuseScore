@@ -434,7 +434,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
             if (mb->type() != MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
-            Segment* s = measure->findSegment(SegChordRest, measure->tick());
+            Segment* s = measure->findSegment(Segment::SegChordRest, measure->tick());
             if (s == 0) {
                   Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
                   rest->setDuration(measure->len());
@@ -479,7 +479,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
                   qDebug("import BB: measure for tick %d not found\n", tick);
                   continue;
                   }
-            Segment* s = m->getSegment(SegChordRest, tick);
+            Segment* s = m->getSegment(Segment::SegChordRest, tick);
             Harmony* h = new Harmony(score);
             h->setTrack(0);
             h->setRootTpc(table[c.root-1]);

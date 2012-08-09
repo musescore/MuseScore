@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: rest.cpp 5655 2012-05-21 12:33:32Z lasconic $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -181,6 +181,8 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == TEMPO_TEXT)
          || (type == STAFF_TEXT)
          || (type == REHEARSAL_MARK)
+         || (type == FRET_DIAGRAM)
+         || (type == SYMBOL)
          ) {
             return true;
             }
@@ -208,7 +210,7 @@ Element* Rest::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  MScore::Direction dir = c->stemDirection();
                   // score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
@@ -277,6 +279,8 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
                   return (line <= -2 || line >= (lines - 1)) ? outsidewholerestSym : wholerestSym;
             case TDuration::V_HALF:
                   return (line <= -3 || line >= (lines - 2)) ? outsidehalfrestSym : halfrestSym;
+            case TDuration::V_QUARTER:
+                  return rest4Sym;
             case TDuration::V_EIGHT:
                   return rest8Sym;
             case TDuration::V_16TH:
@@ -288,9 +292,10 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
             case TDuration::V_128TH:
                   return rest128Sym;
             case TDuration::V_256TH:
-qDebug("Rest: no symbol for 1/256\n");
+                  qDebug("Rest: no symbol for 1/256\n");
                   return rest128Sym;
             default:
+                  qDebug("unknown rest type %d\n", type);
                   return rest4Sym;
             }
       }
@@ -301,6 +306,12 @@ qDebug("Rest: no symbol for 1/256\n");
 
 void Rest::layout()
       {
+      if (staff() && staff()->useTablature()) {
+            // no rests for tablature
+            _space.setLw(0.0);
+            _space.setRw(0.0);
+            return;
+            }
       switch(durationType().type()) {
             case TDuration::V_64TH:
             case TDuration::V_32ND:
@@ -316,9 +327,8 @@ void Rest::layout()
             }
       qreal _spatium = spatium();
       int stepOffset     = 0;
-      if (staff()) {
+      if (staff())
             stepOffset = staff()->staffType()->stepOffset();
-            }
       int line        = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
       int lineOffset  = 0;
 

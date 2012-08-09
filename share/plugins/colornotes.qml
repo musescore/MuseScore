@@ -42,6 +42,7 @@ MuseScore {
                               for (var i = 0; i < notes.length; i++) {
                                     var note = notes[i];
                                     note.color = colors[note.pitch % 12];
+                                    console.log("group " + note.headGroup + " type " + note.headType);
                                     }
                               }
                         cursor.next();

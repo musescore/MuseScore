@@ -239,7 +239,8 @@ void MuseScore::loadFiles()
          tr("Overture / Score Writer Files <experimental> (*.ove *.scw);;")+
          tr("Bagpipe Music Writer Files <experimental> (*.bww);;")+
          tr("Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5);;")+
-         tr("All Files (*)")
+         tr("All Files (*)"),
+         tr("MuseScore: Load Score")
          );
       QStringList list = files;
       QStringList::Iterator it = list.begin();
@@ -405,7 +406,7 @@ void MuseScore::newFile()
             score->deselectAll();
             for (Segment* s = score->firstMeasure()->first(); s;) {
                   Segment* ns = s->next1();
-                  if (s->subtype() == SegChordRest && s->tick() == 0) {
+                  if (s->subtype() == Segment::SegChordRest && s->tick() == 0) {
                         int tracks = s->elist().size();
                         for (int track = 0; track < tracks; ++track) {
                               delete s->element(track);
@@ -413,11 +414,11 @@ void MuseScore::newFile()
                               }
                         }
                   else if (
-                     (s->subtype() == SegChordRest)
-//                     || (s->subtype() == SegClef)
-                     || (s->subtype() == SegKeySig)
-                     || (s->subtype() == SegGrace)
-                     || (s->subtype() == SegBreath)
+                     (s->subtype() == Segment::SegChordRest)
+//                     || (s->subtype() == Segment::SegClef)
+                     || (s->subtype() == Segment::SegKeySig)
+                     || (s->subtype() == Segment::SegGrace)
+                     || (s->subtype() == Segment::SegBreath)
                      ) {
                         s->measure()->remove(s);
                         delete s;
@@ -541,7 +542,7 @@ void MuseScore::newFile()
       //
       Measure* m = score->firstMeasure();
       for (Segment* s = m->first(); s; s = s->next()) {
-            if (s->subtype() == SegChordRest) {
+            if (s->subtype() == Segment::SegChordRest) {
                   if (s->element(0)) {
                         score->select(s->element(0), SELECT_SINGLE, 0);
                         break;
@@ -602,7 +603,7 @@ void MuseScore::newFile()
 
             tt->setTempo(tempo);
             tt->setTrack(0);
-            Segment* seg = score->firstMeasure()->first(SegChordRest);
+            Segment* seg = score->firstMeasure()->first(Segment::SegChordRest);
             seg->add(tt);
             score->setTempo(0, tempo);
             }
@@ -620,11 +621,11 @@ void MuseScore::newFile()
 //   getOpenScoreNames
 //---------------------------------------------------------
 
-QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter)
+QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter, const QString& title)
       {
       if (preferences.nativeDialogs) {
             return QFileDialog::getOpenFileNames(this,
-               tr("MuseScore: Load Score"), dir, filter);
+               title, dir, filter);
             }
       QFileInfo myScores(preferences.myScoresPath);
       if (myScores.isRelative())
@@ -633,7 +634,7 @@ QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter)
             loadScoreDialog = new QFileDialog(this);
             loadScoreDialog->setFileMode(QFileDialog::ExistingFiles);
             loadScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadScoreDialog->setWindowTitle(tr("MuseScore: Load Score"));
+            loadScoreDialog->setWindowTitle(title);
 
             QSettings settings;
             loadScoreDialog->restoreState(settings.value("loadScoreDialog").toByteArray());
@@ -1819,7 +1820,7 @@ bool MuseScore::readScore(Score* score, QString name)
                         //      Clef* clef = static_cast<Clef*>(e);
                         //      st->setClef(s->tick(), clef->clefTypeList());
                         //      }
-                        if ((s->subtype() == SegKeySig) && st->updateKeymap()) {
+                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);

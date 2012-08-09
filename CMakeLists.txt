@@ -337,7 +337,7 @@ subdirs(mscore awl bww2mxml share
       fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-add_subdirectory(manual EXCLUDE_FROM_ALL)
+add_subdirectory(manual)
 
 if (USE_SYSTEM_QTSINGLEAPPLICATION)
       find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
@@ -467,4 +467,15 @@ add_custom_target(lrelease
    COMMAND ${QT_LRELEASE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/share/locale/*.ts
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
+
+add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
+   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
+   DEPENDS genManual
+   )
+
+add_custom_target(install_plugins_manual
+   COMMAND ${PROJECT_BINARY_DIR}/manual/genManual ${PROJECT_SOURCE_DIR} /usr/local/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+   )
+
+install(CODE "execute_process(COMMAND make install_plugins_manual)")
 

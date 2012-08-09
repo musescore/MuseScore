@@ -411,7 +411,7 @@ void InstrumentTemplate::read(const QDomElement& de)
                   if (ttt)
                         init(*ttt);
                   else
-                        qDebug("IntrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                        qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
             else
                   domError(e);
@@ -554,8 +554,6 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
 
 bool loadInstrumentTemplates(const QString& instrTemplates)
       {
-      printf("load instrument templates <%s>\n", qPrintable(instrTemplates));
-
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::ReadOnly)) {
             qDebug("cannot load instrument templates at <%s>\n", qPrintable(instrTemplates));
@@ -571,12 +569,14 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
       docName = qf.fileName();
       qf.close();
 
+#if 0
       foreach(InstrumentGroup* g, instrumentGroups) {
             foreach(InstrumentTemplate* t, g->instrumentTemplates)
                   delete t;
             delete g;
             }
       instrumentGroups.clear();
+#endif
 
       if (!rv) {
             QString s;

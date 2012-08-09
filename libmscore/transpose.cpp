@@ -134,7 +134,8 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
       if (semitones == 0 && steps == 0)
             return tpc;
 
-      int step, alter;
+      int step;
+      int alter;
       int pitch = tpc2pitch(tpc);
 
       for (int k = 0; k < 10; ++k) {
@@ -142,8 +143,8 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
             while (step < 0)
                   step += 7;
             step   %= 7;
-            int p1 = tpc2pitch(step2tpc(step, 0));
-            alter  = semitones - (p1 - pitch);
+            int p1 = tpc2pitch(step2tpc(step, NATURAL));
+            alter  = AccidentalVal(semitones - (p1 - pitch));
             // alter  = p1 + semitones - pitch;
             if (alter < 0) {
                   alter *= -1;
@@ -161,7 +162,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 //            qDebug("  again alter %d steps %d, step %d\n", alter, steps, step);
             }
 //      qDebug("  = step %d alter %d  tpc %d\n", step, alter, step2tpc(step, alter));
-      return step2tpc(step, alter);
+      return step2tpc(step, AccidentalVal(alter));
       }
 
 //---------------------------------------------------------
@@ -273,7 +274,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         KeySigEvent key  = km->key(ks->tick());
                         KeySigEvent okey = km->key(ks->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        undo(new ChangeKeySig(ks, key, ks->showCourtesySig(),
+                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }
@@ -336,7 +337,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
                   }
             for (Segment* s = firstSegment(); s; s = s->next1()) {
-                  if (s->subtype() != SegKeySig)
+                  if (s->subtype() != Segment::SegKeySig)
                         continue;
                   if (s->tick() < tickStart)
                         continue;
@@ -347,7 +348,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesySig(),
+                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }

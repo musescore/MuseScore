@@ -210,7 +210,6 @@ Palette* MuseScore::newAccidentalsPalette()
             sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
-      ab->setSubtype(0);
       sp->append(ab, qApp->translate("accidental", "round bracket"));
       return sp;
       }
@@ -449,9 +448,9 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             int sym = noteHeads[0][i][1];
-            if (i == HEAD_BREVIS_ALT)
+            if (i == Note::HEAD_BREVIS_ALT)
                   sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);

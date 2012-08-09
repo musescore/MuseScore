@@ -72,7 +72,7 @@ void MCursor::addChord(int pitch, const TDuration& duration)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
-      Segment* segment = measure->getSegment(SegChordRest, _tick);
+      Segment* segment = measure->getSegment(Segment::SegChordRest, _tick);
       Chord* chord = static_cast<Chord*>(segment->element(_track));
       if (chord == 0) {
             chord = new Chord(_score);
@@ -96,7 +96,7 @@ void MCursor::addKeySig(int sig)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
-      Segment* segment = measure->getSegment(SegKeySig, _tick);
+      Segment* segment = measure->getSegment(Segment::SegKeySig, _tick);
       int n = _score->nstaves();
       for (int i = 0; i < n; ++i) {
             KeySig* ks = new KeySig(_score);
@@ -114,7 +114,7 @@ void MCursor::addTimeSig(const Fraction& f)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
-      Segment* segment = measure->getSegment(SegTimeSig, _tick);
+      Segment* segment = measure->getSegment(Segment::SegTimeSig, _tick);
       int n = _score->nstaves();
       for (int i = 0; i < n; ++i) {
             TimeSig* ts = new TimeSig(_score, f);

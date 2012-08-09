@@ -82,9 +82,9 @@ void updateNoteLines(Segment* segment, int track)
       if (staff->part()->instr()->drumset() || staff->useTablature())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if (s->subtype() == SegClef && s->element(track))
+            if (s->subtype() == Segment::SegClef && s->element(track))
                   break;
-            if (s->subtype() != SegChordRest)
+            if (s->subtype() != Segment::SegChordRest)
                   continue;
             for (int t = track; t < track+VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
@@ -378,49 +378,6 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret
       }
 
 //---------------------------------------------------------
-//   undoChangeFret
-//---------------------------------------------------------
-
-void Score::undoChangeFret(Note* note, int fret, int string)
-      {
-/* Scanning linked staves seem pointless, as the specific fretting is relative to
-   the single tablature (and a linked staff might not even be a tablature)
-   This code is kept here for future reference, just in case...
-
-      QList<Staff*> staffList;
-      Staff* ostaff = note->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
-      Chord* chord = note->chord();
-      int noteIndex = chord->notes().indexOf(note);
-      Segment* segment = chord->segment();
-      Measure* measure = segment->measure();
-      foreach(Staff* staff, staffList) {
-            Score* score = staff->score();
-            Measure* m;
-            Segment* s;
-            if (score == this) {
-                  m = measure;
-                  s = segment;
-                  }
-            else {
-                  m = score->tick2measure(measure->tick());
-                  s = m->findSegment(segment->subtype(), segment->tick());
-                  }
-            int staffIdx = score->staffIdx(staff);
-            Chord* c     = static_cast<Chord*>(s->element(staffIdx * VOICES + chord->voice()));
-            Note* n      = c->notes().at(noteIndex);
-            undo(new ChangeFret(n, fret, string));
-            }
-*/
-      undo(new ChangeFret(note, fret, string));
-      }
-
-//---------------------------------------------------------
 //   undoChangeKeySig
 //---------------------------------------------------------
 
@@ -442,7 +399,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   qDebug("measure for tick %d not found!", tick);
                   continue;
                   }
-            Segment* s   = measure->undoGetSegment(SegKeySig, tick);
+            Segment* s   = measure->undoGetSegment(Segment::SegKeySig, tick);
             int staffIdx = score->staffIdx(staff);
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
@@ -508,12 +465,12 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
             int tick = seg->tick();
             Segment* segment = measure->findSegment(seg->subtype(), seg->tick());
             if (segment) {
-                  if (segment->subtype() != SegClef) {
-                        if (segment->prev() && segment->prev()->subtype() == SegClef) {
+                  if (segment->subtype() != Segment::SegClef) {
+                        if (segment->prev() && segment->prev()->subtype() == Segment::SegClef) {
                               segment = segment->prev();
                              }
                         else {
-                              Segment* s = new Segment(measure, SegClef, seg->tick());
+                              Segment* s = new Segment(measure, Segment::SegClef, seg->tick());
                               s->setNext(segment);
                               s->setPrev(segment->prev());
                               score->undoAddElement(s);
@@ -522,7 +479,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                         }
                   }
             else {
-                  segment = new Segment(measure, SegClef, seg->tick());
+                  segment = new Segment(measure, Segment::SegClef, seg->tick());
                   score->undoAddElement(segment);
                   }
             int staffIdx = staff->idx();
@@ -665,7 +622,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
                   // check for complete timeline of voice 0
                   int ctick  = measure->tick();
                   int track = staffIdx * VOICES;
-                  for (Segment* s = measure->first(SegChordRest); s; s = s->next(SegChordRest)) {
+                  for (Segment* s = measure->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr == 0)
                               continue;
@@ -905,19 +862,19 @@ void Score::undoAddElement(Element* element)
             if (element->type() == ARTICULATION) {
                   Articulation* a  = static_cast<Articulation*>(element);
                   Segment* segment;
-                  SegmentType st;
+                  Segment::SegmentType st;
                   Measure* m;
                   int tick;
                   if (a->parent()->isChordRest()) {
                         ChordRest* cr = a->chordRest();
                         segment       = cr->segment();
-                        st            = SegChordRest;
+                        st            = Segment::SegChordRest;
                         tick          = segment->tick();
                         m             = score->tick2measure(tick);
                         }
                   else {
                         segment  = static_cast<Segment*>(a->parent()->parent());
-                        st       = SegEndBarLine;
+                        st       = Segment::SegEndBarLine;
                         tick     = segment->tick();
                         m        = score->tick2measure(tick);
                         if (m->tick() == tick)
@@ -946,7 +903,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = d->segment();
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(SegChordRest, tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
                   Dynamic* nd      = static_cast<Dynamic*>(ne);
                   int ntrack       = staffIdx * VOICES + d->voice();
                   nd->setTrack(ntrack);
@@ -1047,7 +1004,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = cr->segment();
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(SegChordRest, tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
                   Note* nnote      = static_cast<Note*>(ne);
                   int ntrack       = staffIdx * VOICES + nnote->voice();
                   nnote->setScore(score);
@@ -1062,7 +1019,7 @@ void Score::undoAddElement(Element* element)
                   Breath* breath   = static_cast<Breath*>(element);
                   int tick         = breath->segment()->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->undoGetSegment(SegBreath, tick);
+                  Segment* seg     = m->undoGetSegment(Segment::SegBreath, tick);
                   Breath* nbreath  = static_cast<Breath*>(ne);
                   int ntrack       = staffIdx * VOICES + nbreath->voice();
                   nbreath->setScore(score);
@@ -1105,10 +1062,10 @@ void Score::undoAddGrace(Chord* chord, Segment* s, bool behind)
                   }
             else {
                   m   = score->tick2measure(tick);
-                  ss  = m->findSegment(SegChordRest, tick);
+                  ss  = m->findSegment(Segment::SegChordRest, tick);
                   }
             // always create new segment for grace note:
-            Segment* seg = new Segment(m, SegGrace, tick);
+            Segment* seg = new Segment(m, Segment::SegGrace, tick);
             if (behind) {
                   seg->setNext(ss->next());
                   seg->setPrev(ss);
@@ -1150,17 +1107,17 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             staffList = linkedStaves->staves();
       else
             staffList.append(ostaff);
-      SegmentType segmentType;
+      Segment::SegmentType segmentType;
       if ((cr->type() == CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL))
-            segmentType = SegGrace;
+            segmentType = Segment::SegGrace;
       else
-            segmentType = SegChordRest;
+            segmentType = Segment::SegChordRest;
       foreach(Staff* staff, staffList) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             // always create new segment for grace note:
             Segment* seg = 0;
-            if (segmentType != SegGrace)
+            if (segmentType != Segment::SegGrace)
                   seg = m->findSegment(segmentType, tick);
             if (seg == 0) {
                   seg = new Segment(m, segmentType, tick);
@@ -1239,7 +1196,7 @@ void Score::undoChangeTuning(Note* n, qreal v)
       undoChangeProperty(n, P_TUNING, v);
       }
 
-void Score::undoChangeUserMirror(Note* n, DirectionH d)
+void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
       {
       undoChangeProperty(n, P_MIRROR_HEAD, d);
       }
@@ -1630,28 +1587,20 @@ void ChangePitch::flip()
       int f_pitch                 = note->pitch();
       int f_tpc                   = note->tpc();
       int f_line                  = note->line();
-//      int f_fret                  = note->fret();
-//      int f_string                = note->string();
 
       // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
       // which triggers ChangePitch(), leading to recursion with negative side effects
       bool updateAccid = false;
-      if(f_pitch != pitch || f_tpc != tpc) {
+      if (f_pitch != pitch || f_tpc != tpc) {
             updateAccid = true;
             note->setPitch(pitch, tpc);
             }
-      if(f_line != line)
+      if (f_line != line)
             note->setLine(line);
-//      if(f_fret != fret)
-//            note->setFret(fret);
-//      if(f_string != string)
-//            note->setString(string);
 
       pitch          = f_pitch;
       tpc            = f_tpc;
       line           = f_line;
-//      fret           = f_fret;
-//      string         = f_string;
 
       Score* score = note->score();
       if(updateAccid) {
@@ -1664,54 +1613,12 @@ void ChangePitch::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeFret
-//---------------------------------------------------------
-
-ChangeFret::ChangeFret(Note* _note, /*int _pitch, int _tpc, int l,*/ int f, int s)
-      {
-      note  = _note;
-      if (_note == 0)
-            abort();
-//      pitch  = _pitch;
-//      tpc    = _tpc;
-//      line   = l;
-      fret   = f;
-      string = s;
-      }
-
-void ChangeFret::flip()
-      {
-//      int f_pitch                 = note->pitch();
-//      int f_tpc                   = note->tpc();
-//      int f_line                  = note->line();
-      int f_fret                  = note->fret();
-      int f_string                = note->string();
-
-      if(f_fret != fret)
-            note->setFret(fret);
-      if(f_string != string)
-            note->setString(string);
-
-      fret           = f_fret;
-      string         = f_string;
-
-      Score* score = note->score();
-//      if(updateAccid) {
-//            Chord* chord = note->chord();
-//            Measure* measure = chord->segment()->measure();
-//            score->updateAccidentals(measure, chord->staffIdx());
-//            }
-      // score->setLayout(measure);
-      score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
 //   FlipNoteDotDirection
 //---------------------------------------------------------
 
 void FlipNoteDotDirection::flip()
       {
-      note->setDotPosition(note->dotIsUp() ? DOWN : UP);
+      note->setDotPosition(note->dotIsUp() ? MScore::DOWN : MScore::UP);
       }
 
 //---------------------------------------------------------
@@ -1831,11 +1738,11 @@ ChangeKeySig::ChangeKeySig(KeySig* _keysig, KeySigEvent _ks, bool sc, bool sn)
 void ChangeKeySig::flip()
       {
       KeySigEvent oe = keysig->keySigEvent();
-      bool sc        = keysig->showCourtesySig();
+      bool sc        = keysig->showCourtesy();
       bool sn        = keysig->showNaturals();
 
       keysig->setKeySigEvent(ks);
-      keysig->setShowCourtesySig(showCourtesy);
+      keysig->setShowCourtesy(showCourtesy);
       keysig->setShowNaturals(showNaturals);
 //      keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
@@ -1867,8 +1774,8 @@ void ChangeMeasureLen::flip()
       //
       int endTick = measure->tick() + len.ticks();
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->subtype() != SegEndBarLine
-               && segment->subtype() != SegTimeSigAnnounce)
+            if (segment->subtype() != Segment::SegEndBarLine
+               && segment->subtype() != Segment::SegTimeSigAnnounce)
                   continue;
             segment->setTick(endTick);
             }
@@ -2328,12 +2235,11 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, bool _show, StaffType* st)
+ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, StaffType* st)
       {
       staff     = _staff;
       small     = _small;
       invisible = _invisible;
-      show      = _show;
       staffType = st;
       }
 
@@ -2348,17 +2254,14 @@ void ChangeStaff::flip()
 
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
-      bool oldShow      = staff->show();
       StaffType* st     = staff->staffType();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
-      staff->setShow(show);
       staff->setStaffType(staffType);
 
       small     = oldSmall;
       invisible = oldInvisible;
-      show      = oldShow;
       staffType = st;
 
       if (invisibleChanged || typeChanged) {
@@ -2557,14 +2460,14 @@ void ChangeChordStaffMove::flip()
 //   ChangeVelocity
 //---------------------------------------------------------
 
-ChangeVelocity::ChangeVelocity(Note* n, ValueType t, int o)
+ChangeVelocity::ChangeVelocity(Note* n, MScore::ValueType t, int o)
    : note(n), veloType(t), veloOffset(o)
       {
       }
 
 void ChangeVelocity::flip()
       {
-      ValueType t = note->veloType();
+      MScore::ValueType t = note->veloType();
       int o       = note->veloOffset();
       note->setVeloType(veloType);
       note->setVeloOffset(veloOffset);
@@ -2651,7 +2554,7 @@ void ChangeMeasureProperties::flip()
 //   ChangeNoteProperties
 //---------------------------------------------------------
 
-ChangeNoteProperties::ChangeNoteProperties(Note* n, ValueType v1, int v3,
+ChangeNoteProperties::ChangeNoteProperties(Note* n, MScore::ValueType v1, int v3,
    int v6, int v9)
       {
       note               = n;
@@ -2667,7 +2570,7 @@ ChangeNoteProperties::ChangeNoteProperties(Note* n, ValueType v1, int v3,
 
 void ChangeNoteProperties::flip()
       {
-      ValueType v1 = note->veloType();
+      MScore::ValueType v1 = note->veloType();
       int       v3 = note->veloOffset();
       int       v6 = note->onTimeUserOffset();
       int       v9 = note->offTimeUserOffset();
@@ -2688,14 +2591,12 @@ void ChangeNoteProperties::flip()
 //---------------------------------------------------------
 
 ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
-   const Fraction& f2, TimeSigType st, const QString& s1, const QString& s2)
+   const Fraction& f2, TimeSigType st)
       {
       timesig = _timesig;
       showCourtesy = sc;
       sig          = f1;
       stretch      = f2;
-      sz           = s1;
-      sn           = s2;
       subtype      = st;
       };
 
@@ -2709,20 +2610,15 @@ void ChangeTimesig::flip()
       bool sc        = timesig->showCourtesySig();
       Fraction f1    = timesig->sig();
       Fraction f2    = timesig->stretch();
-      QString  s1    = timesig->zText();
-      QString  s2    = timesig->nText();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
       timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
       timesig->setSig(sig);
       timesig->setStretch(stretch);
-      timesig->setText(sz, sn);
       showCourtesy = sc;
       sig          = f1;
       stretch      = f2;
-      sz           = s1;
-      sn           = s2;
       subtype      = st;
       timesig->layout();
       timesig->score()->addRefresh(timesig->abbox());
@@ -3173,6 +3069,17 @@ void ChangeStaffUserDist::flip()
       staff->setUserDist(dist);
       dist = v;
       staff->score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangePartProperty::flip
+//---------------------------------------------------------
+
+void ChangePartProperty::flip()
+      {
+      QVariant v = part->getProperty(id);
+      part->setProperty(id, property);
+      property = v;
       }
 
 //---------------------------------------------------------

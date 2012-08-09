@@ -342,11 +342,11 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
       foreach (DurationElement* e, tuplet->elements()) {
             if (e->isChordRest()) {
                   Element* ne = e->clone();
-                  SegmentType st;
+                  Segment::SegmentType st;
                   if (ne->type() == CHORD && static_cast<Chord*>(ne)->noteType() != NOTE_NORMAL)
-                        st = SegGrace;
+                        st = Segment::SegGrace;
                   else
-                        st = SegChordRest;
+                        st = Segment::SegChordRest;
                   Segment* segment = measure->getSegment(st, tick);
                   segment->add(ne);
                   dt->add(ne);
@@ -419,7 +419,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
 
                   if (e->type() == CHORD && static_cast<Chord*>(e)->isGrace()) {
-                        segment = m->getSegment(SegGrace, m->tick() + pos.ticks());
+                        segment = m->getSegment(Segment::SegGrace, m->tick() + pos.ticks());
                         Element* element = e->clone();
                         element->setTrack(track);
                         segment->add(element);
@@ -466,7 +466,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                               Fraction d = qMin(rest, duration);
                               ChordRest* dst;
                               if (e->type() == REST) {
-                                    segment = m->getSegment(SegChordRest, m->tick() + pos.ticks());
+                                    segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     dst = r;
                                     r->setTrack(track);

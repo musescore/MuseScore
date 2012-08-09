@@ -83,15 +83,15 @@
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
       if (!e->generated() || e->type() == BAR_LINE) {
-            if (e->type() != LAYOUT_BREAK) {
 #if 0
+            if (e->type() != LAYOUT_BREAK) {
                   if (e->visible())
                         popup->addAction(tr("Set Invisible"))->setData("invisible");
                   else
                         popup->addAction(tr("Set Visible"))->setData("invisible");
                   popup->addAction(tr("Color..."))->setData("color");
-#endif
                   }
+#endif
             if (e->flag(ELEMENT_HAS_TAG)) {
                   popup->addSeparator();
 
@@ -152,6 +152,15 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == ARTICULATION) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Articulation Properties..."))->setData("a-props");
+            }
+      else if (e->type() == BEAM) {
+            popup->addAction(getAction("flip"));
+            }
+      else if (e->type() == STEM) {
+            popup->addAction(getAction("flip"));
+            }
+      else if (e->type() == HOOK) {
+            popup->addAction(getAction("flip"));
             }
       else if (e->type() == BEND) {
             genPropertyMenu1(e, popup);
@@ -217,7 +226,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             // if the clef is not generated (= not courtesy) add the specific menu item
             if (!e->generated()) {
-                  QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesyClef()
+                  QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
                      ? QT_TRANSLATE_NOOP("Clef", "Hide courtesy clef")
                      : QT_TRANSLATE_NOOP("Clef", "Show courtesy clef") );
                         a->setData("clef-courtesy");
@@ -255,7 +264,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
             if (!e->generated()) {
-                  QAction* a = popup->addAction(ks->showCourtesySig()
+                  QAction* a = popup->addAction(ks->showCourtesy()
                      ? QT_TRANSLATE_NOOP("KeySig", "Hide Courtesy Key Signature")
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );
                   a->setData("key-courtesy");
@@ -516,8 +525,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e),
-               !ts->showCourtesySig(), ts->sig(), ts->stretch(), ts->subtype(),
-               ts->zText(), ts->nText()));
+               !ts->showCourtesySig(), ts->sig(), ts->stretch(), ts->subtype()));
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -526,9 +534,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = vp.exec();
             if (rv) {
                   bool stretchChanged = r.stretch() != ts->stretch();
-                  if (r.zText() != ts->zText() || r.nText() != ts->nText() || r.sig() != ts->sig() || stretchChanged || r.subtype() != ts->subtype()) {
+                  if (r.numeratorString() != ts->numeratorString()
+                     || r.denominatorString() != ts->denominatorString()
+                     || r.sig() != ts->sig()
+                     || stretchChanged
+                     || r.subtype() != ts->subtype()) {
                         score()->undo(new ChangeTimesig(ts,
-                           r.showCourtesySig(), r.sig(), r.stretch(), r.subtype(), r.zText(), r.nText()));
+                           r.showCourtesySig(), r.sig(), r.stretch(), r.subtype()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
                         }
@@ -539,7 +551,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "smallNote")
             score()->undoChangeProperty(e, P_SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
-            bool show = !static_cast<Clef*>(e)->showCourtesyClef();
+            bool show = !static_cast<Clef*>(e)->showCourtesy();
             score()->undoChangeProperty(e, P_SHOW_COURTESY, show);
             }
       else if (cmd == "d-props") {
@@ -615,11 +627,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesySig(), ks->showNaturals()));
+            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy(), ks->showNaturals()));
             }
       else if (cmd == "key-naturals") {
             KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), ks->showCourtesySig(), !ks->showNaturals()));
+            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), ks->showCourtesy(), !ks->showNaturals()));
             }
       else if (cmd == "ss-props") {
             StaffState* ss = static_cast<StaffState*>(e);

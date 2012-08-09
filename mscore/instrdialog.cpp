@@ -54,7 +54,7 @@ StaffListItem::StaffListItem(PartListItem* li)
       staffIdx = 0;
       setLinked(false);
       setClef(CLEF_G);
-      setFlags(flags() | Qt::ItemIsUserCheckable);
+//      setFlags(flags() | Qt::ItemIsUserCheckable);
       }
 
 StaffListItem::StaffListItem()
@@ -102,7 +102,7 @@ void StaffListItem::setLinked(bool val)
 //   setVisible
 //---------------------------------------------------------
 
-void StaffListItem::setVisible(bool val)
+void PartListItem::setVisible(bool val)
       {
       setCheckState(1, val ? Qt::Checked : Qt::Unchecked);
       }
@@ -111,7 +111,7 @@ void StaffListItem::setVisible(bool val)
 //   visible
 //---------------------------------------------------------
 
-bool StaffListItem::visible() const
+bool PartListItem::visible() const
       {
       return checkState(1) == Qt::Checked;
       }
@@ -127,6 +127,7 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv)
       it   = 0;
       op   = ITEM_KEEP;
       setText(0, p->partName());
+      setFlags(flags() | Qt::ItemIsUserCheckable);
       }
 
 PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
@@ -245,6 +246,7 @@ void InstrumentsDialog::genPartList()
 
       foreach(Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
+            pli->setVisible(p->show());
             foreach(Staff* s, *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->staff    = s;
@@ -256,7 +258,6 @@ void InstrumentsDialog::genPartList()
                         sli->setClef(s->clef(0));
                   const LinkedStaves* ls = s->linkedStaves();
                   sli->setLinked(ls && !ls->isEmpty());
-                  sli->setVisible(s->show());
                   }
             partiturList->setItemExpanded(pli, true);
             }
@@ -543,7 +544,6 @@ void InstrumentsDialog::on_linkedButton_clicked()
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       nsli->setLinked(true);
-      nsli->setVisible(true);
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
@@ -648,6 +648,9 @@ void MuseScore::editInstrList()
                   }
             else {
                   part = pli->part;
+                  if (part->show() != pli->visible()) {
+                        part->score()->undo()->push(new ChangePartProperty(part, Part::SHOW, pli->visible()));
+                        }
                   QTreeWidgetItem* ci = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = (StaffListItem*)ci;
@@ -699,11 +702,6 @@ void MuseScore::editInstrList()
                               ++staffIdx;
                               }
                         else {
-                              Staff* staff = sli->staff;
-                              if (sli->visible() != staff->show()) {
-                                    cs->undo(new ChangeStaff(staff, staff->small(), staff->invisible(),
-                                       sli->visible(), staff->staffType()));
-                                    }
                               ++staffIdx;
                               ++rstaff;
                               }

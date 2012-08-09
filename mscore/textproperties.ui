@@ -500,6 +500,9 @@
           <property name="toolTip">
            <string>text color</string>
           </property>
+          <property name="frameShape">
+            <set>QFrame::Box</set>
+          </property>      
          </widget>
         </item>
         <item>
@@ -912,6 +915,9 @@
              <property name="toolTip">
               <string>frame color</string>
              </property>
+             <property name="frameShape">
+              <set>QFrame::Box</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="1">
@@ -919,6 +925,9 @@
              <property name="toolTip">
               <string>frame color</string>
              </property>
+             <property name="frameShape">
+              <set>QFrame::Box</set>
+             </property>             
             </widget>
            </item>
            <item row="2" column="2">

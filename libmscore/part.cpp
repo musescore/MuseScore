@@ -118,7 +118,7 @@ void Part::read(const QDomElement& de)
       // for compatibility with old scores:
       if(score()->mscVersion() <= 114 && instr(0)->useDrumset()) {
             foreach(Staff* staff, _staves) {
-                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE)); 
+                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
                   }
             }
       }
@@ -239,7 +239,6 @@ void Part::insertStaff(Staff* staff)
       if (idx > _staves.size())
             idx = _staves.size();
       _staves.insert(idx, staff);
-      staff->setShow(_show);
       staff->setPart(this);
       idx = 0;
       foreach(Staff* staff, _staves)
@@ -262,17 +261,6 @@ void Part::removeStaff(Staff* staff)
       }
 
 //---------------------------------------------------------
-//   setShow
-//---------------------------------------------------------
-
-void Part::setShow(bool val)
-      {
-      _show = val;
-      foreach(Staff* staff, _staves)
-            staff->setShow(_show);
-      }
-
-//---------------------------------------------------------
 //   setMidiProgram
 //    TODO
 //---------------------------------------------------------
@@ -290,9 +278,9 @@ int Part::volume() const
       {
       return instr(0)->channel(0).volume;
       }
-      
+
 void Part::setVolume(int volume)
-      { 
+      {
       instr(0)->channel(0).volume = volume;
       }
 
@@ -312,10 +300,10 @@ int Part::pan() const
       }
 
 void Part::setPan(int pan)
-      { 
+      {
       instr(0)->channel(0).pan = pan;
       }
-      
+
 int Part::midiProgram() const
       {
       return instr(0)->channel(0).program;
@@ -438,4 +426,38 @@ void Part::setShortName(const QString& s)
       {
       instr(0)->setShortName(QTextDocumentFragment::fromPlainText(s));
       }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Part::getProperty(int id) const
+      {
+      switch(id) {
+            case SHOW:
+                  return QVariant(_show);
+            default:
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+void Part::setProperty(int id, const QVariant& property)
+      {
+      switch(id) {
+            case SHOW:
+                  setShow(property.toBool());
+                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure())
+                        m->setDirty();
+                  break;
+            default:
+                  qDebug("Part::setProperty: unknown id %d", id);
+                  break;
+            }
+      score()->setLayoutAll(true);
+      }
+
 

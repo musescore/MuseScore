@@ -118,8 +118,6 @@ class System : public Element {
       void layout2();                     ///< Called after Measure layout.
       void clear();                       ///< Clear measure list.
 
-      QList<MeasureBase*>& measures()        { return ml; }
-
       QRectF bboxStaff(int staff) const      { return _staves[staff]->bbox(); }
       QList<SysStaff*>* staves()             { return &_staves;   }
       const QList<SysStaff*>* staves() const { return &_staves;   }
@@ -151,6 +149,7 @@ class System : public Element {
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;
 
+      QList<MeasureBase*>& measures()        { return ml; }
       Measure* firstMeasure() const;
       Measure* lastMeasure() const;
 

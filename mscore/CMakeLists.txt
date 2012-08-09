@@ -194,9 +194,10 @@ if (APPLE)
       set_target_properties (mscore
          PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
-      set_target_properties (mscore
-         PROPERTIES
-            XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
+      #enable dSym generation
+      #set_target_properties (mscore
+      #   PROPERTIES
+      #      XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
 endif(APPLE)
 
 if (OSC)

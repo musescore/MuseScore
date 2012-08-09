@@ -44,6 +44,7 @@
 #include "accidental.h"
 #include "undo.h"
 #include "layout.h"
+#include "lyrics.h"
 
 //---------------------------------------------------------
 //   rebuildBspTree
@@ -69,8 +70,8 @@ ChordRest* Score::searchNote(int tick, int track) const
       ChordRest* ipe = 0;
       for (const Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             for (int track = startTrack; track < endTrack; ++track) {
-                  for (Segment* segment = m->first(SegChordRest);
-                     segment; segment = segment->next(SegChordRest)) {
+                  for (Segment* segment = m->first(Segment::SegChordRest);
+                     segment; segment = segment->next(Segment::SegChordRest)) {
                         ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                         if (!cr)
                               continue;
@@ -83,15 +84,6 @@ ChordRest* Score::searchNote(int tick, int track) const
                   }
             }
       return 0;
-      }
-
-//---------------------------------------------------------
-//   clefOffset
-//---------------------------------------------------------
-
-int Score::clefOffset(int tick, Staff* staff) const
-      {
-      return clefTable[staff->clef(tick)].yOffset;
       }
 
 //---------------------------------------------------------
@@ -167,7 +159,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             int line      = note->line();
             int ticks     = chord->actualTicks();
             int headGroup = note->headGroup();
-            int headType  =  (note->headType() == HEAD_AUTO) ? note->chord()->durationType().headType() : note->headType() - 1;
+            int headType  =  (note->headType() == Note::HEAD_AUTO) ? note->chord()->durationType().headType() : note->headType() - 1;
 
             bool conflict = (qAbs(ll - line) < 2) && (move1 == move);
             bool sameHead = (ll == line) && (headGroup == lastHeadGroup) && (headType == lastHeadType);
@@ -207,12 +199,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         moveLeft = true;
                         }
                   }
-            if (note->userMirror() == DH_AUTO) {
+            if (note->userMirror() == MScore::DH_AUTO) {
                   mirror = nmirror;
                   }
             else {
                   mirror = note->chord()->up();
-                  if (note->userMirror() == DH_LEFT)
+                  if (note->userMirror() == MScore::DH_LEFT)
                         mirror = !mirror;
                   }
             note->setMirror(mirror);
@@ -350,9 +342,8 @@ void Score::layoutStage1()
             ++idx;
             m->layoutStage1();
             foreach(Spanner* spanner, m->spannerFor()) {
-                  if (spanner->type() == VOLTA) {
+                  if (spanner->type() == VOLTA)
                         m->setBreakMMRest(true);
-                        }
                   }
             MeasureBase* mb = m->prev();
             if (mb && mb->type() == MEASURE) {
@@ -360,9 +351,8 @@ void Score::layoutStage1()
                   if (pm->endBarLineType() != NORMAL_BAR && pm->endBarLineType() != BROKEN_BAR)
                         m->setBreakMMRest(true);
                   foreach(Spanner* spanner, pm->spannerBack()) {
-                        if (spanner->type() == VOLTA) {
+                        if (spanner->type() == VOLTA)
                               m->setBreakMMRest(true);
-                              }
                         }
                   }
             }
@@ -383,7 +373,7 @@ void Score::layoutStage2()
             Measure* measure = 0;
 
             BeamMode bm = BEAM_AUTO;
-            SegmentTypes st = SegGrace | SegChordRest;
+            Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
@@ -407,10 +397,10 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
-                  if (segment->subtype() == SegGrace) {
+                  if (segment->subtype() == Segment::SegGrace) {
                         Segment* nseg = segment->next();
                         if (nseg
-                           && nseg->subtype() == SegGrace
+                           && nseg->subtype() == Segment::SegGrace
                            && nseg->element(track)
                            && cr->durationType().hooks()
                            && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks())
@@ -431,7 +421,7 @@ void Score::layoutStage2()
                                           break;
                                     b->add(cr);
                                     s = nseg->next();
-                                    if (!s || (s->subtype() != SegGrace) || !s->element(track)
+                                    if (!s || (s->subtype() != Segment::SegGrace) || !s->element(track)
                                        || !static_cast<ChordRest*>(s->element(track))->durationType().hooks())
                                           break;
                                     }
@@ -565,7 +555,7 @@ void Score::layoutStage2()
 
 void Score::layoutStage3()
       {
-      SegmentTypes st = SegChordRest | SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   layoutChords1(segment, staffIdx);
@@ -612,12 +602,10 @@ void Score::doLayout()
             KeySig* key1 = 0;
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s == s->next())
-                              abort();
                         Element* e = s->element(track);
                         if (e == 0 || e->generated())
                               continue;
-                        if ((s->subtype() == SegKeySig) && st->updateKeymap()) {
+                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
@@ -630,16 +618,6 @@ void Score::doLayout()
                   }
             st->setUpdateKeymap(false);
             }
-
-#if 0 // DEBUG
-      if (startLayout) {
-            startLayout->setDirty();
-            if (doReLayout()) {
-                  startLayout = 0;
-                  return;
-                  }
-            }
-#endif
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             foreach(Page* page, _pages)
@@ -711,18 +689,21 @@ void Score::doLayout()
             v->layoutChanged();
       }
 
-//---------------------------------------------------------
-//   processSystemHeader
-//    add generated timesig keysig and clef
-//---------------------------------------------------------
+//-------------------------------------------------------------------
+//   addSystemHeader
+///   Add elements to make this measure suitable as the first measure
+///   of a system.
+//    The system header can contain a Clef, a KeySig and a
+//    RepeatBarLine.
+//-------------------------------------------------------------------
 
-void Score::processSystemHeader(Measure* m, bool isFirstSystem)
+void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       {
-      if (undoRedo())
+      if (undoRedo())   // no change possible in this state
             return;
 
       int tick = m->tick();
-      int i = 0;
+      int i    = 0;
       foreach (Staff* staff, _staves) {
             if (!m->system()->staff(i)->show()) {
                   ++i;
@@ -741,7 +722,7 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
-                  if (seg->subtype() == SegChordRest)
+                  if (seg->subtype() == Segment::SegChordRest)
                         break;
                   Element* el = seg->element(strack);
                   if (!el)
@@ -766,12 +747,10 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            bool needKeysig = keyIdx.isValid()
-               /* && keyIdx.accidentalType() != 0 */
-               && (isFirstSystem || styleB(ST_genKeysig))
-               ;
-            if (staff->useTablature())
-                  needKeysig = false;
+            bool needKeysig = !staff->useTablature()
+               && keyIdx.isValid()
+               && (isFirstSystem || styleB(ST_genKeysig));
+
             if (needKeysig && !keysig) {
                   //
                   // create missing key signature
@@ -785,13 +764,15 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                         keysig->setTrack(i * VOICES);
                         keysig->setGenerated(true);
                         keysig->setMag(staff->mag());
-                        Segment* seg = m->undoGetSegment(SegKeySig, tick);
+                        Segment* seg = m->undoGetSegment(Segment::SegKeySig, tick);
                         keysig->setParent(seg);
+                        keysig->layout();
                         undoAddElement(keysig);
                         }
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
+
             bool needClef = isFirstSystem || styleB(ST_genClef);
             if (needClef) {
                   if (!clef) {
@@ -805,8 +786,9 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setSmall(false);
                         clef->setMag(staff->mag());
 
-                        Segment* s = m->undoGetSegment(SegClef, tick);
+                        Segment* s = m->undoGetSegment(Segment::SegClef, tick);
                         clef->setParent(s);
+                        clef->layout();
                         undoAddElement(clef);
                         }
                   if (clef->generated())
@@ -818,6 +800,7 @@ void Score::processSystemHeader(Measure* m, bool isFirstSystem)
                   }
             ++i;
             }
+      m->setStartRepeatBarLine(m->repeatFlags() & RepeatStart);
       }
 
 //---------------------------------------------------------
@@ -889,6 +872,9 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
 
 bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool longName)
       {
+      if (undoRedo())   // no change possible in this state
+            return layoutSystem1(minWidth, isFirstSystem, longName);
+
       System* system = getNextSystem(isFirstSystem, false);
 
       qreal xo = 0;
@@ -898,6 +884,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       system->setInstrumentNames(longName);
       system->layout(xo);
 
+      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
       minWidth              = system->leftMargin();
       qreal systemWidth     = w;
       bool continueFlag     = false;
@@ -922,7 +909,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
-            qreal ww      = 0.0;
+            qreal ww = 0.0;
 
             if (curMeasure->type() == HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -944,53 +931,54 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   }
             else if (curMeasure->type() == MEASURE) {
                   Measure* m = static_cast<Measure*>(curMeasure);
-                  if (firstMeasure == 0)
+                  m->createEndBarLines();       // TODO: type not set right here
+                  if (isFirstMeasure) {
                         firstMeasure = m;
+                        addSystemHeader(m, !isFirstSystem);
+                        ww = m->minWidth2();
+                        }
+                  else
+                        ww = m->minWidth1();
 
-                  if (isFirstMeasure)
-                        processSystemHeader(m, isFirstSystem);
+                  Segment* s = m->last();
+                  if ((s->subtype() == Segment::SegEndBarLine) && s->element(0)) {
+                        BarLine*    bl = static_cast<BarLine*>(s->element(0));
+                        BarLineType ot = bl->subtype();
+                        BarLineType nt = NORMAL_BAR;
 
-                  m->createEndBarLines();       // TODO: not set here
-
-                  m->layoutX(1.0, true);
-                  ww = m->layoutWidth();
-                  if (!isFirstMeasure) {
-                        // remove width of generated system header
-                        Segment* seg = m->first();
-                        if ((seg->subtype() == SegClef) && seg->element(0) && seg->element(0)->generated()) {
-                              ww -= seg->width();
-                              seg = seg->next();
-                              if (seg && (seg->subtype() == SegKeySig) && seg->element(0) && seg->element(0)->generated())
-                                    ww -= seg->width();
+                        if (m->repeatFlags() & RepeatEnd)
+                              nt = END_REPEAT;
+                        else {
+                              Measure* nm = m->nextMeasure();
+                              if (nm && (nm->repeatFlags() & RepeatStart))
+                                    nt = START_REPEAT;
+                              }
+                        if (ot != nt) {
+                              qreal w =
+                                 BarLine::layoutWidth(this, nt, bl->magS())
+                                 - BarLine::layoutWidth(this, ot, bl->magS());
+                              ww += w;
                               }
                         }
-                  // add width for EndBarLine
-                  Segment* seg = m->last();
-                  if (seg->subtype() == SegEndBarLine) {
-                        BarLine* bl = static_cast<BarLine*>(seg->element(0));
-                        if (m->repeatFlags() & RepeatEnd) {
-                              if (bl && (bl->subtype() != END_REPEAT)) {
-                                    // printf("BarLine type does not fit\n");
-                                    ww += spatium();   // HACK
-                                    }
-                              }
-                        }
-                  qreal stretch = m->userStretch() * styleD(ST_measureSpacing);
-                  ww *= stretch;
-                  if (ww < point(styleS(ST_minMeasureWidth)))
-                        ww = point(styleS(ST_minMeasureWidth));
+
+// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
+
+                  ww *= m->userStretch() * styleD(ST_measureSpacing);
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
                   isFirstMeasure = false;
                   }
 
             // collect at least one measure
-            if ((minWidth + ww > systemWidth) && !system->measures().isEmpty()) {
+            if (!system->measures().isEmpty() && (minWidth + ww > systemWidth)) {
+                  undoChangeProperty(curMeasure->prev(), P_BREAK_HINT, true);
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
-
             if (curMeasure->type() == MEASURE)
                   lastMeasure = static_cast<Measure*>(curMeasure);
             minWidth += ww;
+
             system->measures().append(curMeasure);
             ElementType nt = curMeasure->next() ? curMeasure->next()->type() : INVALID;
             int n = styleI(ST_FixMeasureNumbers);
@@ -1010,23 +998,21 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             if ((n && system->measures().size() >= n)
                || continueFlag || pbreak || (nt == VBOX || nt == TBOX || nt == FBOX)) {
                   system->setPageBreak(curMeasure->pageBreak());
+                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
                   curMeasure = nextMeasure;
                   break;
                   }
+            if (minWidth + minMeasureWidth > systemWidth) {
+                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
+                  curMeasure = nextMeasure;
+                  break;                                  // next measure will not fit
+                  }
+            undoChangeProperty(curMeasure, P_BREAK_HINT, false);
             curMeasure = nextMeasure;
             }
 
-      if (firstMeasure && lastMeasure && firstMeasure != lastMeasure) {
-            if (removeGeneratedElements(firstMeasure, lastMeasure)) {
-                  foreach(MeasureBase* mb, system->measures()) {
-                        if (mb->type() != MEASURE)
-                              continue;
-                        Measure* m = static_cast<Measure*>(mb);
-                        m->setDirty(true);
-                        m->layoutX(1.0, true);
-                        }
-                  }
-            }
+      if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
+            removeGeneratedElements(firstMeasure, lastMeasure);
 
       //
       //    hide empty staves
@@ -1062,7 +1048,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                                     if (mb->type() != MEASURE)
                                           continue;
                                     Measure* m = static_cast<Measure*>(mb);
-                                    for (Segment* s = m->first(SegChordRest); s; s = s->next(SegChordRest)) {
+                                    for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
                                                 ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
                                                 if (cr == 0 || cr->type() == REST)
@@ -1100,13 +1086,192 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       }
 
 //---------------------------------------------------------
-//   removeGeneratedElements (TimeSig Announce)
+//   layoutSystem1
+//    used in undoRedo state
+//    return true if line continues
+//---------------------------------------------------------
+
+bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
+      {
+      System* system = getNextSystem(isFirstSystem, false);
+
+      qreal xo = 0;
+      if (curMeasure->type() == HBOX)
+            xo = point(static_cast<Box*>(curMeasure)->boxWidth());
+
+      system->setInstrumentNames(longName);
+      system->layout(xo);
+
+      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
+      minWidth              = system->leftMargin();
+      bool continueFlag     = false;
+      bool isFirstMeasure   = true;
+
+      for (; curMeasure;) {
+            MeasureBase* nextMeasure;
+            if (curMeasure->type() == MEASURE) {
+                  Measure* m = static_cast<Measure*>(curMeasure);
+                  if (styleB(ST_createMultiMeasureRests)) {
+                        nextMeasure = skipEmptyMeasures(m, system)->next();
+                        }
+                  else {
+                        m->setMultiMeasure(0);
+                        nextMeasure = curMeasure->next();
+                        }
+                  }
+            else
+                  nextMeasure = curMeasure->next();
+
+            // System* oldSystem = curMeasure->system();
+            curMeasure->setSystem(system);
+            qreal ww = 0.0;
+
+            if (curMeasure->type() == HBOX) {
+                  ww = point(static_cast<Box*>(curMeasure)->boxWidth());
+                  if (!isFirstMeasure) {
+                        // try to put another system on current row
+                        // if not a line break
+                        switch(_layoutMode) {
+                              case LayoutFloat:
+                                    break;
+                              case LayoutSystem:
+                                    continueFlag = !curMeasure->lineBreak();
+                                    break;
+                              case LayoutLine:
+                              case LayoutPage:
+                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    break;
+                              }
+                        }
+                  }
+            else if (curMeasure->type() == MEASURE) {
+                  Measure* m = static_cast<Measure*>(curMeasure);
+                  m->createEndBarLines();       // TODO: type not set right here
+                  if (isFirstMeasure) {
+                        addSystemHeader(m, !isFirstSystem);
+                        ww = m->minWidth2();
+                        }
+                  else
+                        ww = m->minWidth1();
+
+// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
+
+                  ww *= m->userStretch() * styleD(ST_measureSpacing);
+                  if (ww < minMeasureWidth)
+                        ww = minMeasureWidth;
+                  isFirstMeasure = false;
+                  }
+
+            minWidth += ww;
+
+            system->measures().append(curMeasure);
+            ElementType nt = curMeasure->next() ? curMeasure->next()->type() : INVALID;
+            int n = styleI(ST_FixMeasureNumbers);
+            bool pbreak;
+            switch (_layoutMode) {
+                  case LayoutPage:
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        break;
+                  case LayoutFloat:
+                  case LayoutLine:
+                        pbreak = false;
+                        break;
+                  case LayoutSystem:
+                        pbreak = curMeasure->lineBreak();
+                        break;
+                  }
+            if ((n && system->measures().size() >= n)
+               || continueFlag || pbreak || (nt == VBOX || nt == TBOX || nt == FBOX)) {
+                  system->setPageBreak(curMeasure->pageBreak());
+                  curMeasure = nextMeasure;
+                  break;
+                  }
+            // do not change line break
+            if (curMeasure->breakHint()) {
+                  curMeasure = nextMeasure;
+                  break;
+                  }
+            curMeasure = nextMeasure;
+            }
+
+      //
+      //    hide empty staves
+      //
+      int staves = _staves.size();
+      int staffIdx = 0;
+      foreach (Staff* staff, _staves) {
+            SysStaff* s  = system->staff(staffIdx);
+            bool oldShow = s->show();
+            if (styleB(ST_hideEmptyStaves)
+               && (staves > 1)
+               && !(isFirstSystem && styleB(ST_dontHideStavesInFirstSystem))
+               ) {
+                  bool hideStaff = true;
+                  foreach(MeasureBase* m, system->measures()) {
+                        if (m->type() != MEASURE)
+                              continue;
+                        Measure* measure = static_cast<Measure*>(m);
+                        if (!measure->isMeasureRest(staffIdx)) {
+                              hideStaff = false;
+                              break;
+                              }
+                        }
+                  // check if notes moved into this staff
+                  Part* part = staff->part();
+                  int n = part->nstaves();
+                  if (hideStaff && (n > 1)) {
+                        int idx = part->staves()->front()->idx();
+                        for (int i = 0; i < part->nstaves(); ++i) {
+                              int st = idx + i;
+
+                              foreach(MeasureBase* mb, system->measures()) {
+                                    if (mb->type() != MEASURE)
+                                          continue;
+                                    Measure* m = static_cast<Measure*>(mb);
+                                    for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+                                          for (int voice = 0; voice < VOICES; ++voice) {
+                                                ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
+                                                if (cr == 0 || cr->type() == REST)
+                                                      continue;
+                                                int staffMove = cr->staffMove();
+                                                if (staffIdx == st + staffMove) {
+                                                      hideStaff = false;
+                                                      break;
+                                                      }
+                                                }
+                                          }
+                                    if (!hideStaff)
+                                          break;
+                                    }
+                              if (!hideStaff)
+                                    break;
+                              }
+                        }
+                  s->setShow(hideStaff ? false : staff->show());
+                  }
+            else {
+                  s->setShow(true);
+                  }
+
+            if (oldShow != s->show()) {
+                  foreach (MeasureBase* mb, system->measures()) {
+                        if (mb->type() != MEASURE)
+                              continue;
+                        static_cast<Measure*>(mb)->createEndBarLines();
+                        }
+                  }
+            ++staffIdx;
+            }
+      return continueFlag && curMeasure;
+      }
+
+//---------------------------------------------------------
+//   removeGeneratedElements (System Header + TimeSig Announce)
 //    helper function
 //---------------------------------------------------------
 
-bool Score::removeGeneratedElements(Measure* sm, Measure* em)
+void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
-      bool layoutChanged = false;
       for (Measure* m = sm; m; m = m->nextMeasure()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -1115,23 +1280,23 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
             //    - set size of clefs to small
             //
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                  SegmentType st = seg->subtype();
-                  if (st == SegEndBarLine)
+                  Segment::SegmentType st = seg->subtype();
+                  if (st == Segment::SegEndBarLine)
                         continue;
+                  if (st == Segment::SegStartRepeatBarLine && m != sm) {
+                        undoRemoveElement(seg);
+                        }
                   for (int staffIdx = 0;  staffIdx < nstaves(); ++staffIdx) {
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
                               continue;
                         qreal staffMag = staff(staffIdx)->mag();
 
-                        if (el->generated() && ((st == SegTimeSigAnnounce && m != em)
-                            || (el->type() == CLEF && seg->tick() != sm->tick())
+                        if (el->generated() && ((st == Segment::SegTimeSigAnnounce && m != em)
+                            || (el->type() == CLEF   && seg->tick() != sm->tick())
                             || (el->type() == KEYSIG && seg->tick() != sm->tick())))
                               {
-                              if (!_undoRedo) {
-                                    undoRemoveElement(el);
-                                    layoutChanged = true;
-                                    }
+                              undoRemoveElement(el);
                               }
                         else if (el->type() == CLEF) {
                               Clef* clef = static_cast<Clef*>(el);
@@ -1139,17 +1304,17 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
                               bool small = seg != m->first() || s->firstMeasure() != m;
                               if (clef->small() != small) {
                                     clef->setSmall(small);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               if (clef->mag() != staffMag) {
                                     clef->setMag(staffMag);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               }
                         else if (el->type() == KEYSIG || el->type() == TIMESIG) {
                               if (el->mag() != staffMag) {
                                     el->setMag(staffMag);
-                                    layoutChanged = true;
+                                    m->setDirty();
                                     }
                               }
                         }
@@ -1157,7 +1322,6 @@ bool Score::removeGeneratedElements(Measure* sm, Measure* em)
             if (m == em)
                   break;
             }
-      return layoutChanged;
       }
 
 //---------------------------------------------------------
@@ -1285,6 +1449,7 @@ void Score::reLayout(Measure* m)
 bool Score::doReLayout()
       {
 #if 0
+#if 0
       if (startLayout->type() == MEASURE)
             static_cast<Measure*>(startLayout)->layout0();
 #endif
@@ -1381,6 +1546,8 @@ bool Score::doReLayout()
 
       rebuildBspTree();
       return true;
+#endif
+      return false;
       }
 
 //---------------------------------------------------------
@@ -1485,7 +1652,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // locate a time sig. in the next measure and, if found,
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
-                  Segment* tss         = nm->findSegment(SegTimeSig, tick);
+                  Segment* tss         = nm->findSegment(Segment::SegTimeSig, tick);
                   bool showCourtesySig = tss && styleB(ST_genCourtesyTimesig);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
@@ -1494,7 +1661,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
                   if (showCourtesySig) {
                         // if due, create a new courtesy time signature for each staff
-                        s  = m->undoGetSegment(SegTimeSigAnnounce, tick);
+                        s  = m->undoGetSegment(Segment::SegTimeSigAnnounce, tick);
                         int nstaves = Score::nstaves();
                         for (int track = 0; track < nstaves * VOICES; track += VOICES) {
                               TimeSig* nts = static_cast<TimeSig*>(tss->element(track));
@@ -1510,7 +1677,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     undoAddElement(ts);
                                     }
                               ts->setFrom(nts);
-                              m->setDirty(true);
+                              m->setDirty();
+                              }
+                        }
+                  else {
+                        // remove any existing time signatures
+                        Segment* tss = m->findSegment(Segment::SegTimeSigAnnounce, tick);
+                        if (tss) {
+                              undoRemoveElement(tss);
                               }
                         }
 
@@ -1526,17 +1700,17 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         if (styleB(ST_genCourtesyKeysig) && (key1 != key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
-                              s = nm->findSegment(SegKeySig, tick);
+                              s = nm->findSegment(Segment::SegKeySig, tick);
                               showCourtesySig = true;	// assume this key change has court. sig turned on
                               if (s) {
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
-                                    if (ks && !ks->showCourtesySig())
+                                    if (ks && !ks->showCourtesy())
                                           showCourtesySig = false;     // this key change has court. sig turned off
                                     }
 
                               if (showCourtesySig) {
                                     hasCourtesyKeysig = true;
-                                    s  = m->undoGetSegment(SegKeySigAnnounce, tick);
+                                    s  = m->undoGetSegment(Segment::SegKeySigAnnounce, tick);
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
                                     KeySigEvent ksv(key2);
                                     ksv.setNaturalType(key1.accidentalType());
@@ -1552,7 +1726,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           }
                                     else if (ks->keySigEvent() != ksv) {
                                           undo(new ChangeKeySig(ks, ksv,
-                                             ks->showCourtesySig(), ks->showNaturals()));
+                                             ks->showCourtesy(), ks->showNaturals()));
                                           }
                                     // change bar line to qreal bar line
                                     m->setEndBarLineType(DOUBLE_BAR, true);
@@ -1560,7 +1734,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         if (!showCourtesySig) {
                               // remove any existent courtesy key signature
-                              Segment* s = m->findSegment(SegKeySigAnnounce, tick);
+                              Segment* s = m->findSegment(Segment::SegKeySigAnnounce, tick);
                               if (s && s->element(track))
                                     undoRemoveElement(s->element(track));
                               }
@@ -1569,7 +1743,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // courtesy clefs
                   // no courtesy clef if this measure is the end of a repeat
 
-                  if (styleB(ST_genCourtesyClef) && !(m->repeatFlags() & RepeatEnd)) {
+                  bool showCourtesyClef = styleB(ST_genCourtesyClef);
+                  if (showCourtesyClef && !(m->repeatFlags() & RepeatEnd)) {
                         Clef* c;
                         int n = _staves.size();
                         for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
@@ -1579,15 +1754,15 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               if (c1 != c2) {
                                     // locate a clef in next measure and, if found,
                                     // check if it has court. sig turned off
-                                    s = nm->findSegment(SegClef, tick);
+                                    s = nm->findSegment(Segment::SegClef, tick);
                                     showCourtesySig = true;	// assume this clef change has court. sig turned on
                                     if (s) {
                                           c = static_cast<Clef*>(s->element(staffIdx*VOICES));
-                                          if (c && !c->showCourtesyClef())
+                                          if (c && !c->showCourtesy())
                                                 continue;   // this key change has court. sig turned off
                                           }
 
-                                    s = m->undoGetSegment(SegClef, tick);
+                                    s = m->undoGetSegment(Segment::SegClef, tick);
                                     int track = staffIdx * VOICES;
                                     if (!s->element(track)) {
                                           c = new Clef(this);
@@ -1604,99 +1779,94 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
                   }
 
-            const QList<MeasureBase*>& ml = system->measures();
-            int n                         = ml.size();
-            while (n > 0) {
-                  if (ml[n-1]->type() == MEASURE)
-                        break;
-                  --n;
-                  }
-
             //
             //    compute repeat bar lines
             //
-            bool firstMeasure = true;
-            MeasureBase* lmb = ml.back();
-            if (lmb->type() == MEASURE) {
-                  if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
-                        for (;;lmb = lmb->next()) {
-                              if (lmb->next() == 0)
-                                    break;
-                              if ((lmb->next()->type() == MEASURE) && ((Measure*)(lmb->next()))->multiMeasure() >= 0)
-                                    break;
+//            if (!undoRedo()) {
+                  bool firstMeasure = true;
+                  const QList<MeasureBase*>& ml = system->measures();
+                  MeasureBase* lmb = ml.back();
+                  if (lmb->type() == MEASURE) {
+                        if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
+                              for (;;lmb = lmb->next()) {
+                                    if (lmb->next() == 0)
+                                          break;
+                                    if ((lmb->next()->type() == MEASURE) && ((Measure*)(lmb->next()))->multiMeasure() >= 0)
+                                          break;
+                                    }
                               }
                         }
-                  }
-            for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
-                  if (mb->type() != MEASURE) {
-                        if (mb == lmb)
-                              break;
-                        continue;
-                        }
-                  Measure* m = static_cast<Measure*>(mb);
-                  // first measure repeat?
-                  bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
+                  for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
+                        if (mb->type() != MEASURE) {
+                              if (mb == lmb)
+                                    break;
+                              continue;
+                              }
+                        Measure* m = static_cast<Measure*>(mb);
+                        // first measure repeat?
+                        bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
 
-                  if (mb == ml.back()) {       // last measure in system?
-                        //
-                        // if last bar has a courtesy key signature,
-                        // create a double bar line as end bar line
-                        //
-                        BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
+                        if (mb == ml.back()) {       // last measure in system?
+                              //
+                              // if last bar has a courtesy key signature,
+                              // create a double bar line as end bar line
+                              //
+                              BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
 
-                        if (m->repeatFlags() & RepeatEnd)
-                              m->setEndBarLineType(END_REPEAT, true);
-                        else if (m->endBarLineGenerated())
-                              m->setEndBarLineType(bl, true);
-                        if (m->setStartRepeatBarLine(fmr))
-                              m->setDirty(true);
-                        }
-                  else {
-                        MeasureBase* mb = m->next();
-                        while (mb && mb->type() != MEASURE && (mb != ml.back()))
-                              mb = mb->next();
-
-                        Measure* nm = 0;
-                        if (mb && mb->type() == MEASURE)
-                              nm = static_cast<Measure*>(mb);
-
-                        needRelayout |= m->setStartRepeatBarLine(fmr);
-                        if (m->repeatFlags() & RepeatEnd) {
-                              if (nm && (nm->repeatFlags() & RepeatStart))
-                                    m->setEndBarLineType(END_START_REPEAT, true);
-                              else
+                              if (m->repeatFlags() & RepeatEnd)
                                     m->setEndBarLineType(END_REPEAT, true);
-                              }
-                        else if (nm && (nm->repeatFlags() & RepeatStart))
-                              m->setEndBarLineType(START_REPEAT, true);
-                        else if (m->endBarLineGenerated())
-                              m->setEndBarLineType(NORMAL_BAR, true);
-                        }
-                  if (m->createEndBarLines())
-                        m->setDirty(true);
-                  firstMeasure = false;
-                  if (mb == lmb)
-                        break;
-                  }
-
-            foreach (MeasureBase* mb, ml) {
-                  if (mb->type() != MEASURE)
-                        continue;
-                  Measure* m = static_cast<Measure*>(mb);
-                  int nn = m->multiMeasure() - 1;
-                  if (nn > 0) {
-                        // skip to last rest measure of multi measure rest
-                        Measure* mm = m;
-                        for (int k = 0; k < nn; ++k)
-                              mm = mm->nextMeasure();
-                        if (mm) {
-                              m->setMmEndBarLineType(mm->endBarLineType());
-                              if (m->createEndBarLines())
+                              else if (m->endBarLineGenerated())
+                                    m->setEndBarLineType(bl, true);
+                              if (m->setStartRepeatBarLine(fmr))
                                     m->setDirty();
                               }
+                        else {
+                              MeasureBase* mb = m->next();
+                              while (mb && mb->type() != MEASURE && (mb != ml.back()))
+                                    mb = mb->next();
+
+                              Measure* nm = 0;
+                              if (mb && mb->type() == MEASURE)
+                                    nm = static_cast<Measure*>(mb);
+
+                              needRelayout |= m->setStartRepeatBarLine(fmr);
+                              if (m->repeatFlags() & RepeatEnd) {
+                                    if (nm && (nm->repeatFlags() & RepeatStart))
+                                          m->setEndBarLineType(END_START_REPEAT, true);
+                                    else
+                                          m->setEndBarLineType(END_REPEAT, true);
+                                    }
+                              else if (nm && (nm->repeatFlags() & RepeatStart))
+                                    m->setEndBarLineType(START_REPEAT, true);
+                              else if (m->endBarLineGenerated())
+                                    m->setEndBarLineType(NORMAL_BAR, true);
+                              }
+                        if (m->createEndBarLines())
+                              m->setDirty();
+                        firstMeasure = false;
+                        if (mb == lmb)
+                              break;
+                        }
+
+                  foreach (MeasureBase* mb, ml) {
+                        if (mb->type() != MEASURE)
+                              continue;
+                        Measure* m = static_cast<Measure*>(mb);
+                        int nn = m->multiMeasure() - 1;
+                        if (nn > 0) {
+                              // skip to last rest measure of multi measure rest
+                              Measure* mm = m;
+                              for (int k = 0; k < nn; ++k)
+                                    mm = mm->nextMeasure();
+                              if (mm) {
+                                    m->setMmEndBarLineType(mm->endBarLineType());
+                                    if (m->createEndBarLines())
+                                          m->setDirty();
+                                    }
+                              }
                         }
                   }
-            }
+//            }
 
       minWidth          = 0.0;
       qreal totalWeight = 0.0;
@@ -1707,11 +1877,9 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         minWidth += point(((Box*)mb)->boxWidth());
                   else if (mb->type() == MEASURE) {
                         Measure* m = (Measure*)mb;
-                        if (needRelayout || m->dirty()) {
-                              m->setDirty(true);
-                              m->layoutX(1.0, true);
-                              }
-                        minWidth    += m->layoutWidth();
+                        if (needRelayout)
+                              m->setDirty();
+                        minWidth    += m->minWidth2();
                         totalWeight += m->ticks() * m->userStretch();
                         }
                   }
@@ -1753,7 +1921,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         else {
                               qreal weight = m->ticks() * m->userStretch();
-                              ww           = m->layoutWidth() + rest * weight;
+                              ww           = m->minWidth2() + rest * weight;
                               }
                         m->layout(ww);
                         }
@@ -1861,7 +2029,7 @@ void Score::layoutLinear()
             }
       if (system->measures().isEmpty())
             return;
-      processSystemHeader(firstMeasure(), true);
+      addSystemHeader(firstMeasure(), true);
       removeGeneratedElements(firstMeasure(), lastMeasure());
 
       QPointF pos(system->leftMargin(), 0.0);
@@ -1870,8 +2038,7 @@ void Score::layoutLinear()
             if (mb->type() == MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   m->createEndBarLines();       // TODO: not set here
-                  m->layoutX(1.0, true);
-                  w = m->layoutWidth() * 1.5;
+                  w = m->minWidth1() * 1.5;
                   m->layout(w);
                   }
             else
@@ -2237,7 +2404,7 @@ void Score::doLayoutPages()
 //    compute 1/Force for a given Extend
 //---------------------------------------------------------
 
-qreal sff(qreal x, qreal xMin, SpringMap& springs)
+qreal sff(qreal x, qreal xMin, const SpringMap& springs)
       {
       if (x <= xMin)
             return 0.0;
@@ -2315,8 +2482,174 @@ void Score::respace(QList<ChordRest*>* elements)
             x += width[i-1];
             ChordRest* cr = (*elements)[i];
             qreal dx = x - cr->segment()->pos().x();
-//            cr->setUserXoffset(dx);
             cr->rxpos() += dx;
             }
       }
 
+//---------------------------------------------------------
+//   computeMinWidth
+///    compute the minimum width of a measure with
+///    segment list fs
+//---------------------------------------------------------
+
+qreal Score::computeMinWidth(Segment* fs) const
+      {
+      int segs = 1;
+      for (const Segment* s = fs->next(); s; s = s->next()) {
+            if (s->subtype() == Segment::SegClef)
+                  continue;
+            ++segs;
+            }
+
+      int _nstaves = nstaves();
+      if (_nstaves == 0 || segs == 0)
+            return 1.0;
+
+      qreal _spatium           = spatium();
+      qreal clefKeyRightMargin = styleS(ST_clefKeyRightMargin).val() * _spatium;
+      qreal minNoteDistance    = styleS(ST_minNoteDistance).val()    * _spatium;
+
+      qreal rest[_nstaves];    // fixed space needed from previous segment
+      memset(rest, 0, _nstaves * sizeof(qreal));
+
+      qreal clefWidth[_nstaves];
+      memset(clefWidth, 0, _nstaves * sizeof(qreal));
+
+      int segmentIdx = 0;
+      qreal x        = 0.0;
+
+      for (Segment* s = fs; s; s = s->next(), ++segmentIdx) {
+            qreal elsp = s->extraLeadingSpace().val()  * _spatium;
+            qreal etsp = s->extraTrailingSpace().val() * _spatium;
+
+            if ((s->subtype() == Segment::SegClef) && (s != fs)) {
+                  --segmentIdx;
+                  for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                        int track  = staffIdx * VOICES;
+                        Element* e = s->element(track);
+                        if (e) {
+                              e->layout();
+                              clefWidth[staffIdx] = e->width() + _spatium + elsp;
+                              }
+                        }
+                  continue;
+                  }
+            bool rest2[_nstaves+1];
+            Segment::SegmentType segType    = s->subtype();
+            qreal segmentWidth     = 0.0;
+            qreal stretchDistance  = 0.0;
+            Segment* pSeg          = s->prev();
+            int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
+
+            for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  if (!staff(staffIdx)->show())
+                        continue;
+                  qreal minDistance = 0.0;
+                  Space space;
+                  int track  = staffIdx * VOICES;
+                  bool found = false;
+                  if (segType & (Segment::SegChordRest | Segment::SegGrace)) {
+                        qreal llw = 0.0;
+                        qreal rrw = 0.0;
+                        Lyrics* lyrics = 0;
+                        for (int voice = 0; voice < VOICES; ++voice) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
+                              if (!cr)
+                                    continue;
+                              found = true;
+                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
+                                    qreal sp        = styleS(ST_barNoteDistance).val() * _spatium;
+                                    sp += elsp;
+                                    minDistance     = qMax(minDistance, sp);
+                                    stretchDistance = sp * .7;
+                                    }
+                              else if (pt & (Segment::SegChordRest | Segment::SegGrace)) {
+                                    minDistance = qMax(minDistance, minNoteDistance);
+                                    }
+                              else {
+                                    // if (pt & (Segment::SegKeySig | Segment::SegClef))
+                                    bool firstClef = (segmentIdx == 1) && (pt == Segment::SegClef);
+                                    if ((pt & (Segment::SegKeySig | Segment::SegTimeSig)) || firstClef)
+                                          minDistance = qMax(minDistance, clefKeyRightMargin);
+                                    }
+                              cr->layout();
+                              space.max(cr->space());
+                              foreach(Lyrics* l, cr->lyricsList()) {
+                                    if (!l)
+                                          continue;
+                                    if (!l->isEmpty()) {
+                                          l->layout();
+                                          lyrics = l;
+                                          if (!lyrics->isMelisma()) {
+                                                QRectF b(l->bbox().translated(l->pos()));
+                                                llw = qMax(llw, -b.left());
+                                                rrw = qMax(rrw, b.right());
+                                                }
+                                          }
+                                    }
+                              }
+                        if (lyrics)
+                              space.max(Space(llw, rrw));
+                        }
+                  else {
+                        Element* e = s->element(track);
+                        if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
+                              minDistance = styleP(ST_clefLeftMargin);
+                        else if (segType == Segment::SegStartRepeatBarLine)
+                              minDistance = .5 * _spatium;
+                        else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
+                              if (pSeg->subtype() == Segment::SegClef)
+                                    minDistance = styleP(ST_clefBarlineDistance);
+                              else
+                                    stretchDistance = styleP(ST_noteBarDistance);
+                              if (e == 0) {
+                                    // look for barline
+                                    for (int i = track - VOICES; i >= 0; i -= VOICES) {
+                                          e = s->element(i);
+                                          if (e)
+                                                break;
+                                          }
+                                    }
+                              }
+                        if (e) {
+                              found = true;
+                              e->layout();
+                              space.max(e->space());
+                              }
+                        }
+                  space += Space(elsp, etsp);
+                  if (found) {
+                        space.rLw() += clefWidth[staffIdx];
+                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
+                        if (space.lw() > stretchDistance)
+                              sp += (space.lw() - stretchDistance);
+                        rest[staffIdx]  = space.rw();
+                        rest2[staffIdx] = false;
+                        segmentWidth    = qMax(segmentWidth, sp);
+                        }
+                  else
+                        rest2[staffIdx] = true;
+                  clefWidth[staffIdx] = 0.0;
+                  }
+
+            x += segmentWidth;
+
+            if (segmentIdx)
+                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
+
+            for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                  if (!staff(staffIdx)->show())
+                        continue;
+                  if (rest2[staffIdx])
+                        rest[staffIdx] -= segmentWidth;
+                  }
+            }
+      qreal segmentWidth = 0.0;
+      for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+            if (!staff(staffIdx)->show())
+                  continue;
+            segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            }
+      x += segmentWidth;
+      return x;
+      }

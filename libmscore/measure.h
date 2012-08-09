@@ -43,11 +43,8 @@ class Part;
 
 //---------------------------------------------------------
 //   MStaff
+///   Per staff values of measure.
 //---------------------------------------------------------
-
-/**
- Per staff values of measure.
-*/
 
 struct MStaff {
       qreal distanceUp;
@@ -103,6 +100,9 @@ class Measure : public MeasureBase {
       Text* _noText;          ///< Measure number text object
 
       qreal _userStretch;
+
+      mutable qreal _minWidth1;     ///< minimal measure width without system header
+      mutable qreal _minWidth2;     ///< minimal measure width with system header
 
       bool _irregular;              ///< Irregular measure, do not count
       bool _breakMultiMeasureRest;  ///< set by user
@@ -168,6 +168,13 @@ class Measure : public MeasureBase {
       virtual qreal userDistanceUp(int i) const;
       virtual qreal userDistanceDown(int i) const;
 
+      qreal minWidth1() const;
+      qreal minWidth2() const;
+      void setMinWidth1(qreal w)           { _minWidth1 = w;      }
+      void setMinWidth2(qreal w)           { _minWidth2 = w;      }
+      bool systemHeader() const;
+      void setDirty();
+
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }
       Fraction len() const                 { return _len;         }
@@ -177,17 +184,17 @@ class Measure : public MeasureBase {
 
       int size() const                     { return _segments.size();        }
       Q_INVOKABLE Segment* first() const   { return _segments.first();       }
-      Segment* first(SegmentTypes t) const { return _segments.first(t);      }
+      Segment* first(Segment::SegmentTypes t) const { return _segments.first(t);      }
 
       Q_INVOKABLE Segment* last() const    { return _segments.last(); }
       Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }
 
-      qreal userStretch() const           { return _userStretch; }
-      void setUserStretch(qreal v)        { _userStretch = v;    }
+      qreal userStretch() const            { return _userStretch; }
+      void setUserStretch(qreal v)         { _userStretch = v;    }
 
-      void layoutX(qreal stretch, bool firstPass);
+      void layoutX(qreal stretch);
       void layout(qreal width);
       void layout2();
 
@@ -219,11 +226,11 @@ class Measure : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(SegmentType st, int tick);
+      Segment* undoGetSegment(Segment::SegmentType st, int tick);
       Segment* getSegment(Element* el, int tick);
-      Segment* getSegment(SegmentType st, int tick);
-      Segment* getSegment(SegmentType st, int tick, int gl);
-      Segment* findSegment(SegmentType st, int t);
+      Segment* getSegment(Segment::SegmentType st, int tick);
+      Segment* getSegment(Segment::SegmentType st, int tick, int gl);
+      Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();
       void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = Qt::black);
@@ -241,7 +248,8 @@ class Measure : public MeasureBase {
       void adjustToLen(Fraction);
       int repeatFlags() const                   { return _repeatFlags; }
       void setRepeatFlags(int val);
-      int findAccidental(Note*) const;
+      AccidentalVal findAccidental(Note*) const;
+      AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
       void exchangeVoice(int, int, int, int);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
@@ -276,7 +284,9 @@ class Measure : public MeasureBase {
       void addSpannerFor(Spanner* e)      { _spannerFor.append(e);     }
       void removeSpannerFor(Spanner* e)   { _spannerFor.removeOne(e);  }
 
-      PROPERTY_DECLARATIONS(Measure)
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 #endif

@@ -93,7 +93,7 @@ MeasureBase* Score::tick2measureBase(int tick) const
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Score::tick2segment(int tick, bool first, SegmentTypes st) const
+Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
@@ -178,7 +178,7 @@ int Score::nextSeg(int tick, int track)
             seg = seg->next1();
             if (seg == 0)
                   break;
-            if (seg->subtype() != SegChordRest)
+            if (seg->subtype() != Segment::SegChordRest)
                   continue;
             if (seg->element(track))
                   break;
@@ -195,7 +195,7 @@ Segment* nextSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->next1(SegChordRest))) {
+      while ((seg = seg->next1(Segment::SegChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -215,7 +215,7 @@ Segment* prevSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->prev1(SegChordRest))) {
+      while ((seg = seg->prev1(Segment::SegChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -609,7 +609,7 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
       int tick     = seg->tick() + chord->globalDuration().ticks();
 
-      while ((seg = seg->next1(SegChordRest))) {
+      while ((seg = seg->next1(Segment::SegChordRest))) {
             if (seg->tick() < tick)
                   continue;
             if (seg->tick() > tick)
@@ -634,4 +634,68 @@ Note* searchTieNote(Note* note)
       return note2;
       }
 
+//---------------------------------------------------------
+//   absStep
+///   Compute absolute step.
+///   C D E F G A B ....
+//---------------------------------------------------------
+
+int absStep(int tpc, int pitch)
+      {
+      int line     = tpc2step(tpc) + (pitch / 12) * 7;
+      int tpcPitch = tpc2pitch(tpc);
+      if (tpcPitch < 0)
+            line += 7;
+      else
+            line -= (tpcPitch / 12) * 7;
+      return line;
+      }
+
+int absStep(int pitch)
+      {
+      int tpc = pitch2tpc(pitch);
+      return absStep(tpc, pitch);
+      }
+
+int absStep(int line, ClefType clef)
+      {
+      return clefTable[clef].pitchOffset - line;
+      }
+
+//---------------------------------------------------------
+//   relStep
+///   Compute relative step from absolute step
+///   which depends on actual clef. Step 0 starts on the
+///   first (top) staff line.
+//---------------------------------------------------------
+
+int relStep(int line, ClefType clef)
+      {
+      return clefTable[clef].pitchOffset - line;
+      }
+
+int relStep(int pitch, int tpc, ClefType clef)
+      {
+      return relStep(absStep(tpc, pitch), clef);
+      }
+
+//---------------------------------------------------------
+//   pitch2step
+//---------------------------------------------------------
+
+int pitch2step(int pitch)
+      {
+      static const char tab[12] = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
+      return tab[pitch%12];
+      }
+
+//---------------------------------------------------------
+//   step2pitch
+//---------------------------------------------------------
+
+int step2pitch(int step)
+      {
+      static const char tab[7] = { 0, 2, 4, 5, 7, 9, 11 };
+      return tab[step % 7];
+      }
 

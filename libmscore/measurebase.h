@@ -39,11 +39,10 @@ class MeasureBase : public Element {
       int _tick;
 
    protected:
-      qreal _mw;
       ElementList _el;        ///< Measure(/tick) relative -elements: with defined start time
                               ///< but outside the staff
 
-      bool _dirty;
+      bool _breakHint;
       bool _lineBreak;        ///< Forced line break
       bool _pageBreak;        ///< Forced page break
       LayoutBreak* _sectionBreak;
@@ -70,12 +69,13 @@ class MeasureBase : public Element {
       virtual void layout();
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      qreal layoutWidth() const              { return _mw;  }
-      void setLayoutWidth(qreal w)           { _mw = w;     }
       ElementList* el()                      { return &_el; }
       const ElementList* el() const          { return &_el; }
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
+
+      bool breakHint() const                 { return _breakHint;   }
+      void setBreakHint(bool val)            { _breakHint = val;  }
 
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }
@@ -93,13 +93,14 @@ class MeasureBase : public Element {
 
       virtual void add(Element*);
       virtual void remove(Element*);
-      void setDirty(bool val = true)         { _dirty = val;  }
-      bool dirty() const                     { return _dirty; }
       int tick() const                       { return _tick;  }
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
 
       qreal pause() const;
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
 #endif

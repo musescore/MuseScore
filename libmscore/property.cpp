@@ -39,6 +39,7 @@ static const PropertyData propertyList[] = {
       { P_PITCH,               "pitch",         T_INT },
       { P_TPC,                 "tpc",           T_INT },
       { P_HEAD_TYPE,           "headType",      T_INT },
+
       { P_HEAD_GROUP,          "head",          T_INT },
       { P_VELO_TYPE,           "veloType",      T_VALUE_TYPE },
       { P_VELO_OFFSET,         "velocity",      T_INT },
@@ -49,6 +50,7 @@ static const PropertyData propertyList[] = {
       { P_SLUR_DIRECTION,      "",              T_INT },
       { P_LEADING_SPACE,       "",              T_INT },
       { P_TRAILING_SPACE,      "",              T_INT },
+
       { P_DISTRIBUTE,          "distribute",    T_BOOL },
       { P_MIRROR_HEAD,         "mirror",        T_DIRECTION_H },
       { P_DOT_POSITION,        "dotPosition",   T_DIRECTION },
@@ -59,6 +61,7 @@ static const PropertyData propertyList[] = {
       { P_BARLINE_SPAN,        "",              T_INT },
       { P_USER_OFF,            0,               T_POINT },
       { P_FRET,                "fret",          T_INT   },
+
       { P_STRING,              "string",        T_INT   },
       { P_GHOST,               "ghost",         T_BOOL  },
       { P_TIMESIG_NOMINAL,     0,               T_FRACTION },
@@ -69,6 +72,7 @@ static const PropertyData propertyList[] = {
       { P_ACTUAL_NOTES,        "actualNotes",   T_INT   },
       { P_P1,                  "p1",            T_POINT },
       { P_P2,                  "p2",            T_POINT },
+
       { P_GROW_LEFT,           "growLeft",      T_REAL  },
       { P_GROW_RIGHT,          "growRight",     T_REAL  },
       { P_BOX_HEIGHT,          "height",        T_REAL  },
@@ -79,6 +83,7 @@ static const PropertyData propertyList[] = {
       { P_RIGHT_MARGIN,        "rightMargin",   T_REAL  },
       { P_TOP_MARGIN,          "topMargin",     T_REAL  },
       { P_BOTTOM_MARGIN,       "bottomMargin",  T_REAL  },
+
       { P_LAYOUT_BREAK,        "subtype",       T_LAYOUT_BREAK },
       { P_AUTOSCALE,           "autoScale",     T_BOOL   },
       { P_SIZE,                "size",            T_SIZE },
@@ -89,10 +94,17 @@ static const PropertyData propertyList[] = {
       { P_USER_MODIFIED,       0,               T_BOOL   },
       { P_BEAM_POS,            0,               T_POINT  },
       { P_BEAM_MODE,           "BeamMode",      T_BEAM_MODE  },
+
       { P_USER_LEN,            "",              T_REAL   },
       { P_SPACE,               "space",         T_REAL   },
       { P_TEMPO,               "tempo",         T_REAL   },
       { P_TEMPO_FOLLOW_TEXT,   "followText",    T_BOOL   },
+      { P_ACCIDENTAL_BRACKET,  "bracket",       T_BOOL   },
+      { P_NUMERATOR_STRING,    "textN",         T_STRING },
+      { P_DENOMINATOR_STRING,  "textD",         T_STRING },
+      { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
+      { P_BREAK_HINT,          "",              T_BOOL   },
+
       { P_END,                 "",              T_INT    }
       };
 
@@ -139,24 +151,26 @@ QVariant getProperty(P_ID id, const QDomElement& e)
             case T_SCALE:
             case T_SIZE:
                   return QVariant(readSize(e));
+            case T_STRING:
+                  return QVariant(value);
             case T_DIRECTION:
                   {
                   if (value == "up")
-                        return QVariant(UP);
+                        return QVariant(MScore::UP);
                   else if (value == "down")
-                        return QVariant(DOWN);
+                        return QVariant(MScore::DOWN);
                   else if (value == "auto")
-                        return QVariant(AUTO);
+                        return QVariant(MScore::AUTO);
                   }
                   break;
             case T_DIRECTION_H:
                   {
                   if (value == "left")
-                        return QVariant(DH_LEFT);
+                        return QVariant(MScore::DH_LEFT);
                   else if (value == "right")
-                        return QVariant(DH_RIGHT);
+                        return QVariant(MScore::DH_RIGHT);
                   else if (value == "auto")
-                        return QVariant(DH_AUTO);
+                        return QVariant(MScore::DH_AUTO);
                   }
                   break;
             case T_LAYOUT_BREAK:
@@ -170,9 +184,9 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                   break;
             case T_VALUE_TYPE:
                   if (value == "offset")
-                        return QVariant(int(OFFSET_VAL));
+                        return QVariant(int(MScore::OFFSET_VAL));
                   else if (value == "user")
-                        return QVariant(int(USER_VAL));
+                        return QVariant(int(MScore::USER_VAL));
                   break;
             case T_BEAM_MODE:             // TODO
                   return QVariant(int(0));

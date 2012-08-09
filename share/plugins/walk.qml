@@ -27,6 +27,7 @@ MuseScore {
             for (var track = 0; track < curScore.ntracks; ++track) {
                   var segment = curScore.firstSegment();
                   while (segment) {
+                        console.log("segment: " + segment.type);
                         var element = segment.element(track);
                         if (element) {
                               var type    = element.type;

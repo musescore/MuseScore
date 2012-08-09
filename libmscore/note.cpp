@@ -59,8 +59,8 @@
 //---------------------------------------------------------
 
 static bool falseVal                = false;
-static DirectionH defaultMirror     = DH_AUTO;
-static Direction defaultDotPosition = AUTO;
+static MScore::DirectionH defaultMirror     = MScore::DH_AUTO;
+static MScore::Direction defaultDotPosition = MScore::AUTO;
 static int defaultOnTimeOffset      = 0;
 static int defaultOffTimeOffset     = 0;
 static int defaultHeadGroup         = 0;
@@ -68,8 +68,8 @@ static int defaultVeloOffset        = 0;
 static qreal defaultTuning          = 0.0;
 static int defaultFret              = -1;
 static int defaultString            = -1;
-static ValueType defaultVeloType    = OFFSET_VAL;
-static NoteHeadType defaultHeadType = HEAD_AUTO;
+static MScore::ValueType defaultVeloType    = MScore::OFFSET_VAL;
+static Note::NoteHeadType defaultHeadType = Note::HEAD_AUTO;
 
 Property<Note> Note::propertyList[] = {
       { P_PITCH,          &Note::pPitch,         0 },
@@ -95,7 +95,7 @@ Property<Note> Note::propertyList[] = {
 //    note head groups
 //---------------------------------------------------------
 
-const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES] = {
+const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       {     // down stem
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadSym        },
       { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
@@ -129,6 +129,19 @@ const int noteHeads[2][HEAD_GROUPS][HEAD_TYPES] = {
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadaltSym     },
       }
       };
+
+//---------------------------------------------------------
+//   NoteVal
+//---------------------------------------------------------
+
+NoteVal::NoteVal()
+      {
+      pitch     = -1;
+      tpc       = INVALID_TPC,
+      fret      = -1;
+      string    = -1;
+      headGroup = 0;
+      }
 
 //---------------------------------------------------------
 //   noteHeadSym
@@ -165,9 +178,9 @@ Note::Note(Score* s)
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
-      _userMirror        = DH_AUTO;
+      _userMirror        = MScore::DH_AUTO;
       _small             = false;
-      _dotPosition       = AUTO;
+      _dotPosition       = MScore::AUTO;
       _line              = 0;
       _fret              = -1;
       _string            = -1;
@@ -183,7 +196,7 @@ Note::Note(Score* s)
       _hidden            = false;
       _subchannel        = 0;
 
-      _veloType          = OFFSET_VAL;
+      _veloType          = MScore::OFFSET_VAL;
       _veloOffset        = 0;
 
       _onTimeOffset      = 0;
@@ -488,20 +501,6 @@ void Note::remove(Element* e)
                   qDebug("Note::remove() not impl. %s\n", e->name());
                   break;
             }
-      }
-
-//---------------------------------------------------------
-//   yPos
-//---------------------------------------------------------
-
-qreal Note::yPos() const
-      {
-      qreal y = pos().y();
-//      if (chord()->staffMove()) {
-//            System* system = chord()->measure()->system();
-//          y += system->staff(staffIdx() + chord()->staffMove())->y() - system->staff(staffIdx())->y();
-//            }
-      return y;
       }
 
 //---------------------------------------------------------
@@ -881,13 +880,10 @@ void Note::endDrag()
             _lineOffset = 0;
             // get a fret number for same pitch on new string
             nFret       = staff->part()->instr()->tablature()->fret(_pitch, nString);
-            if(nFret < 0)                       // no fret?
+            if (nFret < 0)                      // no fret?
                   return;                       // no party!
-            // these values do not change
-//            nLine       = _line;
-//            nPitch      = _pitch;
-//            tpc         = _tpc;
-            score()->undoChangeFret(this, /*nPitch, tpc, nLine,*/ nFret, nString);
+            score()->undoChangeProperty(this, P_FRET, nFret);
+            score()->undoChangeProperty(this, P_STRING, nString);
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
@@ -956,7 +952,8 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == SLUR)
          || (type == STAFF_TEXT)
          || (type == TEMPO_TEXT)
-         || (type == BEND && (staff()->useTablature())));
+         || (type == BEND && (staff()->useTablature()))
+         || (type == FRET_DIAGRAM));
       }
 
 //---------------------------------------------------------
@@ -1101,7 +1098,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if (s->subtype() == SegChordRest && s->element(track()))
+                        if (s->subtype() == Segment::SegChordRest && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1153,7 +1150,7 @@ Element* Note::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  MScore::Direction dir = c->stemDirection();
                   int t         = (staffIdx() * VOICES) + (n->voice() % VOICES);
                   score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
@@ -1196,13 +1193,10 @@ void Note::layout()
             qreal xo = (headWidth() - w) * .5;
             setbbox(QRectF(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags));
             }
-      else
+      else {
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
-      if (parent() == 0)
-            return;
-
-      // for tablature, dots are hidden: do not spend time with them!
-      if (!useTablature) {
+            if (parent() == 0)
+                  return;
             int dots = chord()->dots();
             for (int i = 0; i < 3; ++i) {
                   if (i < dots) {
@@ -1243,9 +1237,9 @@ void Note::layout2()
             // do not draw dots on staff line
             if ((_line & 1) == 0) {
                   qreal up;
-                  if (_dotPosition == AUTO)
+                  if (_dotPosition == MScore::AUTO)
                         up = (voice() == 0 || voice() == 2) ? -1.0 : 1.0;
-                  else if (_dotPosition == UP)
+                  else if (_dotPosition == MScore::UP)
                         up = -1.0;
                   else
                         up = 1.0;
@@ -1304,12 +1298,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-            int tpcPitch   = tpc2pitch(_tpc);
-            if (tpcPitch < 0)
-                  _line += 7;
-            else
-                  _line -= (tpcPitch/12)*7;
+            _line = absStep(_tpc, _pitch);
 
             // calculate accidental
 
@@ -1322,17 +1311,12 @@ void Note::layout10(AccidentalState* as)
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
                               setColor(QColor(255, 0, 0));
                               _tpc = ntpc;
-                              _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-                              int tpcPitch   = tpc2pitch(_tpc);
-                              if (tpcPitch < 0)
-                                    _line += 7;
-                              else
-                                    _line -= (tpcPitch/12)*7;
+                              _line = absStep(_tpc, _pitch);
                               }
                         }
                   }
             else  {
-                  int accVal = tpc2alter(_tpc);
+                  AccidentalVal accVal = tpc2alter(_tpc);
 
                   if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                         as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
@@ -1368,8 +1352,7 @@ void Note::layout10(AccidentalState* as)
                   //
                   Staff* s = score()->staff(staffIdx() + chord()->staffMove());
                   int tick = chord()->tick();
-                  int clef = s->clef(tick);
-                  _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+                  _line    = relStep(_line, s->clef(tick));
                   }
             }
       }
@@ -1462,7 +1445,7 @@ void Note::toDefault()
       {
       score()->undoChangeUserOffset(this, QPointF());
       score()->undoChangeUserOffset(chord(), QPointF());
-      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, AUTO);
+      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, MScore::AUTO);
       }
 
 //---------------------------------------------------------
@@ -1531,9 +1514,9 @@ int Note::ppitch() const
 
 int Note::customizeVelocity(int velo) const
       {
-      if (veloType() == OFFSET_VAL)
+      if (veloType() == MScore::OFFSET_VAL)
             velo = velo + (velo * veloOffset()) / 100;
-      else if (veloType() == USER_VAL)
+      else if (veloType() == MScore::USER_VAL)
             velo = veloOffset();
       return restrict(velo, 1, 127);
       }
@@ -1558,12 +1541,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-      int tpcPitch   = tpc2pitch(_tpc);
-      if (tpcPitch < 0)
-            _line += 7;
-      else
-            _line -= (tpcPitch/12)*7;
+      _line = absStep(_tpc, _pitch);
 
       // calculate accidental
 
@@ -1571,7 +1549,7 @@ void Note::updateAccidental(AccidentalState* as)
       if (_accidental && _accidental->role() == ACC_USER)
             acci = _accidental->subtype();
       else  {
-            int accVal = tpc2alter(_tpc);
+            AccidentalVal accVal = tpc2alter(_tpc);
             if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                   as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
                   if (_tieBack)
@@ -1606,8 +1584,8 @@ void Note::updateAccidental(AccidentalState* as)
       //
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       int tick = chord()->tick();
-      int clef = s->clef(tick);
-      _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+      ClefType clef = s->clef(tick);
+      _line    = relStep(_line, clef);
       }
 
 //---------------------------------------------------------
@@ -1616,16 +1594,9 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateLine()
       {
-      _line          = tpc2step(_tpc) + (_pitch/12) * 7;
-      int tpcPitch   = tpc2pitch(_tpc);
-      if (tpcPitch < 0)
-            _line += 7;
-      else
-            _line -= (tpcPitch/12)*7;
-      Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-      int tick = chord()->tick();
-      int clef = s->clef(tick);
-      _line    = 127 - _line - 82 + clefTable[clef].yOffset;
+      Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
+      ClefType clef = s->clef(chord()->tick());
+      _line         = relStep(_pitch, _tpc, clef);
       }
 
 //---------------------------------------------------------
@@ -1637,7 +1608,10 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
-      _headGroup = nval.headGroup;
+      if (nval.tpc != INVALID_TPC)
+            _tpc = nval.tpc;
+
+      _headGroup = NoteHeadGroup(nval.headGroup);
       }
 
 //---------------------------------------------------------

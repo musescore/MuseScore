@@ -48,6 +48,8 @@ class PartListItem : public QTreeWidgetItem {
 
       PartListItem(Part* p, QTreeWidget* lv);
       PartListItem(const InstrumentTemplate* i, QTreeWidget* lv);
+      bool visible() const;
+      void setVisible(bool val);
       };
 
 //---------------------------------------------------------
@@ -73,8 +75,6 @@ class StaffListItem : public QTreeWidgetItem {
       ClefType clef() const    { return _clef;    }
       void setLinked(bool val);
       bool linked() const      { return _linked;  }
-      bool visible() const;
-      void setVisible(bool val);
       };
 
 //---------------------------------------------------------

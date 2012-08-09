@@ -106,6 +106,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       while (i.hasNext()) {
             i.next();
             // if (!i.value().isEmpty())
+            if (!_testMode  || i.key() != "platform")
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
 
@@ -1216,7 +1217,8 @@ qDebug("createRevision\n");
 //   writeSegments
 //---------------------------------------------------------
 
-void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack, Segment* fs, Segment* ls,
+void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
+   Segment* fs, Segment* ls,
    bool writeSystemElements)
       {
       for (int track = strack; track < etrack; ++track) {
@@ -1229,7 +1231,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack, Se
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = segment->tick() != xml.curTick;
-                  if ((segment->subtype() == SegEndBarLine)
+                  if ((segment->subtype() == Segment::SegEndBarLine)
                      && (e == 0)
                      && writeSystemElements
                      && ((track % VOICES) == 0)) {
@@ -1340,7 +1342,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack, Se
                                     }
                               }
                         }
-                  if ((segment->subtype() == SegEndBarLine) && m && (m->multiMeasure() > 0)) {
+                  if ((segment->subtype() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");
                         xml.tag("subtype", m->endBarLineType());
                         xml.tag("visible", m->endBarLineVisible());

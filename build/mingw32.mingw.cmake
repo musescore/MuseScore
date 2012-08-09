@@ -12,14 +12,6 @@ set (CMAKE_CXX_COMPILER   ${CROSS}/bin/g++.exe)
 set (CMAKE_STRIP          ${CROSS}/bin/strip.exe)
 set (CMAKE_FIND_ROOT_PATH ${CROSS})
 
-# adjust the default behaviour of the FIND_XXX() commands:
-# search headers and libraries in the target environment, search
-# programs in the host environment
-
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
 set (QT_INCLUDE_DIR           ${CROSSQT}/include)
 set (QT_QT_INCLUDE_DIR        ${CROSSQT}/include/Qt)
 set (QT_QTCORE_INCLUDE_DIR    ${CROSSQT}/include/QtCore)

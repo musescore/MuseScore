@@ -71,6 +71,7 @@
 #include "libmscore/textline.h"
 #include "libmscore/keysig.h"
 #include "libmscore/pitchspelling.h"
+#include "libmscore/utils.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/box.h"
@@ -165,7 +166,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
       int istep = step - 'A';
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-      int tpc  = step2tpc(table1[istep], alter);
+      int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
       // alternativ: tpc = step2tpc((istep + 5) % 7, alter);      // rotate istep 5 steps
       n->setTpc(tpc);
       }
@@ -825,18 +826,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 
             btp = beatType.toInt();
             QStringList list = beats.split("+");
-#if 0 // TODO TS
-            for (int i = 0; i < 4; i++)
-                  bts[i] = 0;
-            for (int i = 0; i < list.size() && i < 4; i++)
-                  bts[i] = list.at(i).toInt();
-            // the beat type and at least one beat must be non-zero
-            if (btp && (bts[0] || bts[1] || bts[2] || bts[3])) {
-                  TimeSig ts = TimeSig(score, btp, bts[0], bts[1], bts[2], bts[3]);
-                  st = ts.subtype();
-                  }
-#endif
-            for (int i = 0; i < list.size() && i < 4; i++)
+            for (int i = 0; i < list.size(); i++)
                   bts += list.at(i).toInt();
             }
       return true;
@@ -1245,7 +1235,7 @@ void MusicXml::scorePartwise(QDomElement ee)
       // now attach all jumps and markers to segments
       // simply use the first SegChordRest in the measure
       for (int i = 0; i < jumpsMarkers.size(); i++) {
-            Segment* seg = jumpsMarkers.at(i).meas()->first(SegChordRest);
+            Segment* seg = jumpsMarkers.at(i).meas()->first(Segment::SegChordRest);
             qDebug("jumpsMarkers jm %p meas %p ",
                    jumpsMarkers.at(i).el(), jumpsMarkers.at(i).meas());
             if (seg) {
@@ -1989,7 +1979,7 @@ static void fixupFiguredBass(Part* part, Measure* measure)
       qDebug("fixupFiguredBass part %p measure %p staves %d strack %d etrack %d",
              part, measure, staves, strack, etrack);
 
-      for (Segment* seg = measure->first(SegChordRest); seg; seg = seg->next(SegChordRest)) {
+      for (Segment* seg = measure->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest)) {
             qDebug("fixupFiguredBass measure %p segment %p", measure, seg);
             foreach(Element* e, seg->annotations()) {
                   if (e->type() == FIGURED_BASS) {
@@ -2264,7 +2254,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   FiguredBass* fb = new FiguredBass(score);
                   fb->setTrack(staff * VOICES);
                   fb->readMusicXML(e, divisions);
-                  Segment* s = measure->getSegment(SegChordRest, tick);
+                  Segment* s = measure->getSegment(Segment::SegChordRest, tick);
                   // TODO: use addelement() instead of Segment::add() ?
                   //       or FiguredBass::addFiguredBassToSegment() ?
                   // TODO: set correct onNote value
@@ -2472,7 +2462,7 @@ static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Scor
       el->setUserOff(QPointF(rx, ry));
       el->setMxmlOff(offset);
       el->setTrack((staff + rstaff) * VOICES);
-      Segment* s = measure->getSegment(SegChordRest, tick);
+      Segment* s = measure->getSegment(Segment::SegChordRest, tick);
       s->add(el);
       }
 
@@ -2797,7 +2787,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             t->setUserOff(QPointF(rx, ry));
             t->setMxmlOff(offset);
             t->setTrack((staff + rstaff) * VOICES);
-            Segment* s = measure->getSegment(SegChordRest, tick);
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
             s->add(t);
             */
             }
@@ -2813,7 +2803,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             t->setUserOff(QPointF(rx, ry));
             t->setMxmlOff(offset);
             t->setTrack((staff + rstaff) * VOICES);
-            Segment* s = measure->getSegment(SegChordRest, tick);
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
             s->add(t);
             */
             }
@@ -2871,7 +2861,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   s->setUserOff(QPointF(rx, ry));
                   s->setMxmlOff(offset);
                   s->setTrack((staff + rstaff) * VOICES);
-                  Segment* seg = measure->getSegment(SegChordRest, tick);
+                  Segment* seg = measure->getSegment(Segment::SegChordRest, tick);
                   seg->add(s);
                   }
             }
@@ -3315,7 +3305,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
       if (beats != "" && beatType != "") {
             // determine if timesig is valid
             TimeSigType st  = TSIG_NORMAL;
-            int bts = 0; // the beats (max 4 separated by "+") as integer
+            int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   // add timesig to all staves
@@ -3326,6 +3316,11 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         TimeSig* timesig = new TimeSig(score);
                         timesig->setSubtype(st);
                         timesig->setSig(Fraction(bts, btp));
+                        // handle simple compound time signature
+                        if (beats.contains(QChar('+'))) {
+                              timesig->setNumeratorString(beats);
+                              timesig->setDenominatorString(beatType);
+                              }
                         timesig->setTrack((staff + i) * VOICES);
                         Segment* s = measure->getSegment(timesig, tick);
                         s->add(timesig);
@@ -4009,7 +4004,7 @@ static AccidentalType convertAccidental(QString mxmlName)
  Convert a MusicXML notehead name to a MuseScore headgroup.
  */
 
-static NoteHeadGroup convertNotehead(QString mxmlName)
+static Note::NoteHeadGroup convertNotehead(QString mxmlName)
       {
       QMap<QString, int> map; // map MusicXML notehead name to a MuseScore headgroup
       map["slash"] = 5;
@@ -4027,11 +4022,11 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
       map["normal"] = 0;
 
       if (map.contains(mxmlName))
-            return NoteHeadGroup(map.value(mxmlName));
+            return Note::NoteHeadGroup(map.value(mxmlName));
       else
             qDebug("unknown notehead %s", qPrintable(mxmlName));
       // default: return 0
-      return HEAD_NORMAL;
+      return Note::HEAD_NORMAL;
       }
 
 //---------------------------------------------------------
@@ -4154,9 +4149,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     endSlur = true;
                               QString pl = ee.attribute(QString("placement"));
                               if (pl == "above")
-                                    slur[slurNo]->setSlurDirection(UP);
+                                    slur[slurNo]->setSlurDirection(MScore::UP);
                               else if (pl == "below")
-                                    slur[slurNo]->setSlurDirection(DOWN);
+                                    slur[slurNo]->setSlurDirection(MScore::DOWN);
                               // slur[slurNo]->setStart(tick, trk + voice);
                               // slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               // score->add(slur[slurNo]);
@@ -4203,9 +4198,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               }
                         QString tiedOrientation = e.attribute("orientation", "auto");
                         if (tiedOrientation == "over")
-                              tie->setSlurDirection(UP);
+                              tie->setSlurDirection(MScore::UP);
                         else if (tiedOrientation == "under")
-                              tie->setSlurDirection(DOWN);
+                              tie->setSlurDirection(MScore::DOWN);
                         else if (tiedOrientation == "auto")
                               ;  // ignore
                         else
@@ -4407,7 +4402,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
             b->setSubtype(breath);
-            Segment* seg = measure->getSegment(SegBreath, tick);
+            Segment* seg = measure->getSegment(Segment::SegBreath, tick);
             seg->add(b);
             }
 
@@ -4495,7 +4490,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       bool rest    = false;
       int relStaff = 0;
       BeamMode bm  = BEAM_AUTO;
-      Direction sd = AUTO;
+      MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
       QString graceSlash;
@@ -4507,7 +4502,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       bool editorial = false;
       bool cautionary = false;
       TDuration durationType(TDuration::V_INVALID);
-      NoteHeadGroup headGroup = HEAD_NORMAL;
+      Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
       bool chord = false;
@@ -4651,9 +4646,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   ;
             else if (tag == "stem") {
                   if (s == "up")
-                        sd = UP;
+                        sd = MScore::UP;
                   else if (s == "down")
-                        sd = DOWN;
+                        sd = MScore::DOWN;
                   else if (s == "none")
                         noStem = true;
                   else if (s == "double")
@@ -4769,7 +4764,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             ((Rest*)cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, tick);
             //sibelius might import 2 rests at the same place, ignore the 2one
-            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?> 
+            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if(!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
@@ -4801,7 +4796,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   note->setColor(noteheadColor);
 
             if (velocity > 0) {
-                  note->setVeloType(USER_VAL);
+                  note->setVeloType(MScore::USER_VAL);
                   note->setVeloOffset(velocity);
                   }
 
@@ -4810,7 +4805,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             int gl = nrOfGraceSegsReq(pn);
             cr = measure->findChord(tick, track, grace);
             if (cr == 0) {
-                  SegmentType st = SegChordRest;
+                  Segment::SegmentType st = Segment::SegChordRest;
                   cr = new Chord(score);
                   cr->setBeamMode(bm);
                   cr->setTrack(track);
@@ -4836,7 +4831,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                               }
                         else
                               cr->setDurationType(TDuration::V_EIGHT);
-                        st = SegGrace;
+                        st = Segment::SegGrace;
                         }
                   else {
                         if (durationType.type() == TDuration::V_INVALID)
@@ -4905,13 +4900,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   ClefType clef = cr->staff()->clef(tick);
                   int po = clefTable[clef].pitchOffset;
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
-                  // int line = pitch2line(pitch) - pitch2line(po);
-                  // int line = pitch2line(po) - pitch2line(pitch);
+                  // int line = absoluteStaffLine(pitch) - absoluteStaffLine(po);
+                  // int line = absoluteStaffLine(po) - absoluteStaffLine(pitch);
                   // TODO: magic constant "19" seems to work only for percussion clef.
                   // find out why and fix for other clefs (G seems to work also, but F doesn't)
-                  int line = pitch2line(po) - pitch2line(pitch) + 19;
+                  int line = absStep(po) - absStep(pitch) + 19;
                   qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
-                         clef, po, pitch2line(po), pitch, pitch2line(pitch));
+                         clef, po, absStep(po), pitch, absStep(pitch));
                   qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",
                          qPrintable(partId), qPrintable(instrId), headGroup, line, sd);
                   if (drumsets.contains(partId)
@@ -4994,11 +4989,11 @@ void MusicXml::genWedge(int no, int endTick, Measure* measure, int staff)
       hp->setUserOff(QPointF(wedgeList[no].rx, wedgeList[no].ry));
       hp->setTrack(staff * VOICES);
       // TODO LVI following fails for wedges starting in a different measure !
-      Segment* seg = measure->getSegment(SegChordRest, wedgeList[no].startTick);
+      Segment* seg = measure->getSegment(Segment::SegChordRest, wedgeList[no].startTick);
       qDebug("start seg %p", seg);
       hp->setStartElement(seg);
       seg->add(hp);
-      seg = measure->getSegment(SegChordRest, endTick);
+      seg = measure->getSegment(Segment::SegChordRest, endTick);
       qDebug(", stop seg %p", seg);
       hp->setEndElement(seg);
       seg->addSpannerBack(hp);
@@ -5060,7 +5055,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         else
                               domError(ee);
                         }
-                  ha->setRootTpc(step2tpc(step, alter));
+                  ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (tag == "function") {
                   // attributes: print-style
@@ -5094,7 +5089,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         else
                               domError(ee);
                         }
-                  ha->setBaseTpc(step2tpc(step, alter));
+                  ha->setBaseTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (tag == "degree") {
                   int degreeValue = 0;
@@ -5135,7 +5130,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   fd->setTrack(staff * VOICES);
                   // read frame into FretDiagram
                   fd->readMusicXML(e);
-                  Segment* s = measure->getSegment(SegChordRest, tick);
+                  Segment* s = measure->getSegment(Segment::SegChordRest, tick);
                   s->add(fd);
                   }
             else if (tag == "level")
@@ -5186,7 +5181,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
       ha->setTrack(staff * VOICES);
-      Segment* s = measure->getSegment(SegChordRest, tick);
+      Segment* s = measure->getSegment(Segment::SegChordRest, tick);
       s->add(ha);
       }
 

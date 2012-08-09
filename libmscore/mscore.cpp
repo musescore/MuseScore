@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "sequencer.h"
 #include "figuredbass.h"
+#include "note.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -64,7 +65,9 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
-      qRegisterMetaType<MScore::SegmentType>("SegmentType");
+      qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
+      qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");
+      qRegisterMetaType<Segment::SegmentType>("SegmentType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -97,7 +100,12 @@ void MScore::init()
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
       replaceFractions    = true;
+      playRepeats         = true;
+      panPlayback         = true;
       partStyle           = "";
+
+      lastError           = "";
+
       layoutBreakColor    = Qt::green;
       soundFont           = _globalShare + "sound/TimGM6mb.sf2";
       bgColor.setRgb(0x76, 0x76, 0x6e);

@@ -217,7 +217,7 @@ void EditStaff::apply()
             }
 
       if (s != staff->small() || inv != staff->invisible() || st  != staff->staffType())
-            score->undo(new ChangeStaff(staff, s, inv, staff->show(), st));
+            score->undo(new ChangeStaff(staff, s, inv, st));
 
       if (updateNeeded)
             score->cmdUpdateNotes();

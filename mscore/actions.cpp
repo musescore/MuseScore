@@ -1702,7 +1702,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_SEARCH,
          0,
          "find",
-         QT_TRANSLATE_NOOP("action","Search")
+         QT_TRANSLATE_NOOP("action","Find")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
@@ -1918,7 +1918,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Page Settings")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_DISABLED | STATE_NORMAL,
          0,
          "album",
          Qt::ApplicationShortcut,

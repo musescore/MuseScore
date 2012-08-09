@@ -82,7 +82,7 @@ void SegmentList::check()
 void SegmentList::insert(Segment* e, Segment* el)
       {
       if (e->score()->undoRedo())
-            qDebug("SegmentList:insert in undo/redo");
+            qFatal("SegmentList:insert in undo/redo");
       if (el == 0)
             push_back(e);
       else if (el == first())
@@ -213,14 +213,14 @@ void SegmentList::insert(Segment* seg)
 
 Segment* SegmentList::firstCRSegment() const
       {
-      return first(SegChordRest);
+      return first(Segment::SegChordRest);
       }
 
 //---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
-Segment* SegmentList::first(SegmentTypes types) const
+Segment* SegmentList::first(Segment::SegmentTypes types) const
       {
       for (Segment* s = _first; s; s = s->next()) {
             if (s->subtype() & types)

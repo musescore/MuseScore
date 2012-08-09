@@ -1035,7 +1035,7 @@ void ShowChordWidget::beamModeChanged(int n)
 
 void ShowChordWidget::directionChanged(int val)
       {
-      ((Chord*)element())->setStemDirection(Direction(val));
+      ((Chord*)element())->setStemDirection(MScore::Direction(val));
       }
 
 //---------------------------------------------------------
@@ -1219,6 +1219,8 @@ void RestView::setElement(Element* e)
       crb.durationType->setText(rest->durationType().name());
       crb.duration->setText(rest->duration().print());
       crb.move->setValue(rest->staffMove());
+      crb.spaceL->setValue(rest->space().lw());
+      crb.spaceR->setValue(rest->space().rw());
 
       crb.slurFor->clear();
       foreach(Spanner* slur, rest->spannerFor()) {
@@ -2361,7 +2363,7 @@ void ClefView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       clef.clefType->setValue(c->clefType());
-      clef.showCourtesyClef->setChecked(c->showCourtesyClef());
+      clef.showCourtesy->setChecked(c->showCourtesy());
       clef.small->setChecked(c->small());
 
       clef.concertClef->setValue(int(c->concertClef()));
@@ -2418,7 +2420,7 @@ void KeySigView::setElement(Element* e)
       KeySig* ks = static_cast<KeySig*>(e);
       ShowElementBase::setElement(e);
 
-      keysig.showCourtesySig->setChecked(ks->showCourtesySig());
+      keysig.showCourtesySig->setChecked(ks->showCourtesy());
       keysig.showNaturals->setChecked(ks->showNaturals());
       keysig.accidentalType->setValue(ks->keySigEvent().accidentalType());
       keysig.naturalType->setValue(ks->keySigEvent().naturalType());

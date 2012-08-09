@@ -106,7 +106,7 @@ class SlurSegment : public SpannerSegment {
 class SlurTie : public Spanner {
       Q_OBJECT
       Q_PROPERTY(int lineType            READ lineType WRITE undoSetLineType)
-      Q_PROPERTY(Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
+      Q_PROPERTY(MScore::Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
 
       int _lineType;          // 0 = solid, 1 = dotted, 2 = dashed
 
@@ -114,7 +114,7 @@ class SlurTie : public Spanner {
       bool _up;               // actual direction
 
       QQueue<SlurSegment*> delSegments;   // "deleted" segments
-      Direction _slurDirection;
+      MScore::Direction _slurDirection;
       qreal firstNoteRestSegmentX(System* system);
       void fixupSegments(unsigned nsegs);
 
@@ -126,9 +126,9 @@ class SlurTie : public Spanner {
       virtual ElementType type() const = 0;
       bool up() const                    { return _up; }
 
-      Direction slurDirection() const    { return _slurDirection; }
-      void setSlurDirection(Direction d) { _slurDirection = d; }
-      void undoSetSlurDirection(Direction d);
+      MScore::Direction slurDirection() const    { return _slurDirection; }
+      void setSlurDirection(MScore::Direction d) { _slurDirection = d; }
+      void undoSetSlurDirection(MScore::Direction d);
 
       virtual void layout2(const QPointF, int, struct UP&)  {}
       virtual bool contains(const QPointF&) const     { return false; }  // not selectable

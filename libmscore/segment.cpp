@@ -197,27 +197,19 @@ void Segment::init()
 
 //---------------------------------------------------------
 //   next1
+///   return next \a Segment, dont stop searching at end
+///   of \a Measure
 //---------------------------------------------------------
-
-/**
- return next \a Segment, dont stop searching at end
- of \a Measure
-*/
 
 Segment* Segment::next1() const
       {
       if (next())
             return next();
-      MeasureBase* m = measure();
-      for (;;) {
-            m = m->next();
-            if (m == 0)
-                  return 0;
-            if (m->type() == MEASURE)
-                  return static_cast<Measure*>(m)->first();
-            }
+      Measure* m = measure()->nextMeasure();
+      if (m == 0)
+            return 0;
+      return m->first();
       }
-
 
 Segment* Segment::next1(SegmentTypes types) const
       {
@@ -258,12 +250,9 @@ Segment* Segment::prev(SegmentTypes types) const
 
 //---------------------------------------------------------
 //   prev1
+///   return previous \a Segment, dont stop searching at
+///   \a Measure begin
 //---------------------------------------------------------
-
-/**
- return previous \a Segment, dont stop searching at
- \a Measure begin
-*/
 
 Segment* Segment::prev1() const
       {
@@ -629,7 +618,7 @@ void Segment::remove(Element* el)
 //    returns segment type suitable for storage of Element
 //---------------------------------------------------------
 
-SegmentType Segment::segmentType(ElementType type)
+Segment::SegmentType Segment::segmentType(ElementType type)
       {
       switch (type) {
             case CHORD:
@@ -855,4 +844,41 @@ bool Segment::splitsTuplet() const
             }
       return false;
       }
+
+//---------------------------------------------------------
+//   operator<
+///   return true if segment is before s in list
+//---------------------------------------------------------
+
+bool Segment::operator<(const Segment& s) const
+      {
+      if (tick() < s.tick())
+            return true;
+      if (tick() > s.tick())
+            return false;
+      for (Segment* ns = next1(); ns && (ns->tick() == s.tick()); ns = ns->next1()) {
+            if (ns == &s)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   operator>
+///   return true if segment is after s in list
+//---------------------------------------------------------
+
+bool Segment::operator>(const Segment& s) const
+      {
+      if (tick() > s.tick())
+            return true;
+      if (tick() < s.tick())
+            return false;
+      for (Segment* ns = prev1(); ns && (ns->tick() == s.tick()); ns = ns->prev1()) {
+            if (ns == &s)
+                  return true;
+            }
+      return false;
+      }
+
 

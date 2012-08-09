@@ -33,6 +33,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/hook.h"
 #include "libmscore/stem.h"
+#include "libmscore/keysig.h"
 
 //---------------------------------------------------------
 //   showInspector
@@ -121,7 +122,11 @@ void Inspector::setElement(Element* e)
                   case SPACER:       ie = new InspectorSpacer(this); break;
                   case NOTE:         ie = new InspectorNote(this); break;
                   case REST:         ie = new InspectorRest(this); break;
+
                   case CLEF:         ie = new InspectorClef(this); break;
+                  case TIMESIG:      ie = new InspectorTimeSig(this); break;
+                  case KEYSIG:       ie = new InspectorKeySig(this); break;
+
                   case BEAM:         ie = new InspectorBeam(this); break;
                   case IMAGE:        ie = new InspectorImage(this); break;
                   case LASSO:        ie = new InspectorLasso(this); break;
@@ -449,7 +454,7 @@ void InspectorArticulation::apply()
       qreal _spatium  = score->spatium();
 
       QPointF o(ar.x->value() * _spatium, ar.y->value() * _spatium);
-      Direction d = Direction(ar.direction->currentIndex());
+      MScore::Direction d = MScore::Direction(ar.direction->currentIndex());
       ArticulationAnchor anchor = ArticulationAnchor(ar.anchor->currentIndex());
 
       if (o == a->pos() && anchor == a->anchor() && d == a->direction())
@@ -606,9 +611,10 @@ void InspectorSegment::apply()
       }
 
 static const int heads[] = {
-      HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE,
-      HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_MI, HEAD_FA, HEAD_SOL, HEAD_LA, HEAD_TI,
-      HEAD_BREVIS_ALT
+      Note::HEAD_NORMAL, Note::HEAD_CROSS, Note::HEAD_DIAMOND, Note::HEAD_TRIANGLE,
+      Note::HEAD_SLASH, Note::HEAD_XCIRCLE, Note::HEAD_DO, Note::HEAD_RE, Note::HEAD_MI, Note::HEAD_FA,
+      Note::HEAD_SOL, Note::HEAD_LA, Note::HEAD_TI,
+      Note::HEAD_BREVIS_ALT
       };
 
 //---------------------------------------------------------
@@ -622,7 +628,7 @@ InspectorNoteBase::InspectorNoteBase(QWidget* parent)
       //
       // fix order of note heads
       //
-      for (int i = 0; i < HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             noteHeadGroup->setItemData(i, QVariant(heads[i]));
             }
       connect(small,              SIGNAL(stateChanged(int)),        SLOT(smallChanged(int)));
@@ -690,7 +696,7 @@ void InspectorNoteBase::setElement(Note* n)
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;
-      for (int i = 0; i < HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             noteHeadGroup->setItemData(i, QVariant(heads[i]));
             if (headGroup == heads[i])
                   headGroupIndex = i;
@@ -701,14 +707,14 @@ void InspectorNoteBase::setElement(Note* n)
       int val = note->veloOffset();
       velocity->setValue(val);
       velocityType->setCurrentIndex(int(note->veloType()));
-      if (note->veloType() == USER_VAL)
+      if (note->veloType() == MScore::USER_VAL)
             _userVelocity = val;
       else
             _veloOffset = val;
 
       resetSmall->setEnabled(note->small());
-      resetMirrorHead->setEnabled(note->userMirror() != DH_AUTO);
-      resetDotPosition->setEnabled(note->dotPosition() != AUTO);
+      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
+      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
       resetOntimeOffset->setEnabled(note->onTimeUserOffset());
       resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
       block(false);
@@ -788,7 +794,7 @@ void InspectorNoteBase::smallChanged(int)
 
 void InspectorNoteBase::mirrorHeadChanged(int)
       {
-      resetMirrorHead->setEnabled(note->userMirror() != DH_AUTO);
+      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
       apply();
       }
 
@@ -798,7 +804,7 @@ void InspectorNoteBase::mirrorHeadChanged(int)
 
 void InspectorNoteBase::dotPositionChanged(int)
       {
-      resetDotPosition->setEnabled(note->dotPosition() != AUTO);
+      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
       apply();
       }
 
@@ -859,13 +865,13 @@ void InspectorNoteBase::tuningChanged(double val)
 void InspectorNoteBase::velocityTypeChanged(int val)
       {
       switch(val) {
-            case USER_VAL:
+            case MScore::USER_VAL:
                   velocity->setEnabled(true);
                   velocity->setSuffix("");
                   velocity->setRange(0, 127);
                   velocity->setValue(_userVelocity);
                   break;
-            case OFFSET_VAL:
+            case MScore::OFFSET_VAL:
                   velocity->setEnabled(true);
                   velocity->setSuffix("%");
                   velocity->setRange(-200, 200);
@@ -882,7 +888,7 @@ void InspectorNoteBase::velocityTypeChanged(int val)
 
 void InspectorNoteBase::velocityChanged(int val)
       {
-      if (velocityType->currentIndex() == USER_VAL)
+      if (velocityType->currentIndex() == MScore::USER_VAL)
             _userVelocity = val;
       else
             _veloOffset = val;
@@ -1220,6 +1226,130 @@ void InspectorRest::apply()
       }
 
 //---------------------------------------------------------
+//   InspectorTimeSig
+//---------------------------------------------------------
+
+InspectorTimeSig::InspectorTimeSig(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      iElement = new InspectorElementElement(this);
+      iSegment = new InspectorSegment(this);
+
+      layout->addWidget(iElement);
+
+      QHBoxLayout* l = new QHBoxLayout;
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Time Signature"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
+      layout->addLayout(l);
+      layout->addWidget(iSegment);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorTimeSig::setElement(Element* e)
+      {
+      TimeSig* sig = static_cast<TimeSig*>(e);
+      Segment* segment = sig->segment();
+
+      iElement->setElement(sig);
+      iSegment->setElement(segment);
+      showCourtesy->blockSignals(true);
+      showCourtesy->setChecked(sig->showCourtesySig());
+      showCourtesy->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   apply
+//---------------------------------------------------------
+
+void InspectorTimeSig::apply()
+      {
+      TimeSig* sig = static_cast<TimeSig*>(inspector->element());
+
+      bool val = showCourtesy->isChecked();
+      if (val != sig->showCourtesySig()) {
+            Score* score = sig->score();
+            score->startCmd();
+            score->undoChangeProperty(sig, P_SHOW_COURTESY, val);
+            score->endCmd();
+            mscore->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   InspectorKeySig
+//---------------------------------------------------------
+
+InspectorKeySig::InspectorKeySig(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      iElement = new InspectorElementElement(this);
+      iSegment = new InspectorSegment(this);
+      layout->addWidget(iElement);
+
+      QHBoxLayout* l = new QHBoxLayout;
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Time Signature"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
+      layout->addLayout(l);
+
+      l = new QHBoxLayout;
+      showNaturals = new QCheckBox;
+      showNaturals->setText(tr("Show Naturals"));
+      connect(showNaturals, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showNaturals);
+      layout->addLayout(l);
+
+      layout->addWidget(iSegment);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorKeySig::setElement(Element* e)
+      {
+      KeySig* sig = static_cast<KeySig*>(e);
+      Segment* segment = sig->segment();
+
+      iElement->setElement(sig);
+      iSegment->setElement(segment);
+      showCourtesy->blockSignals(true);
+      showNaturals->blockSignals(true);
+      showCourtesy->setChecked(sig->showCourtesy());
+      showNaturals->setChecked(sig->showNaturals());
+      showCourtesy->blockSignals(false);
+      showNaturals->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   apply
+//---------------------------------------------------------
+
+void InspectorKeySig::apply()
+      {
+      KeySig* sig = static_cast<KeySig*>(inspector->element());
+
+      bool sc = showCourtesy->isChecked();
+      bool sn = showNaturals->isChecked();
+      if (sc != sig->showCourtesy() || sn != sig->showNaturals()) {
+            Score* score = sig->score();
+            score->startCmd();
+            if (sc != sig->showCourtesy())
+                  score->undoChangeProperty(sig, P_SHOW_COURTESY, sc);
+            if (sn != sig->showNaturals())
+                  score->undoChangeProperty(sig, P_SHOW_NATURALS, sn);
+            score->endCmd();
+            mscore->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
 //   InspectorClef
 //---------------------------------------------------------
 
@@ -1230,6 +1360,12 @@ InspectorClef::InspectorClef(QWidget* parent)
       iSegment = new InspectorSegment(this);
 
       layout->addWidget(iElement);
+      QHBoxLayout* l   = new QHBoxLayout;
+      showCourtesy = new QCheckBox;
+      showCourtesy->setText(tr("Show Courtesy Clef"));
+      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
+      l->addWidget(showCourtesy);
+      layout->addLayout(l);
       layout->addWidget(iSegment);
       }
 
@@ -1244,6 +1380,25 @@ void InspectorClef::setElement(Element* e)
 
       iElement->setElement(clef);
       iSegment->setElement(segment);
+      showCourtesy->setChecked(clef->showCourtesy());
+      }
+
+//---------------------------------------------------------
+//   apply
+//---------------------------------------------------------
+
+void InspectorClef::apply()
+      {
+      Clef* clef = static_cast<Clef*>(inspector->element());
+
+      bool val = showCourtesy->isChecked();
+      if (val != clef->showCourtesy()) {
+            Score* score = clef->score();
+            score->startCmd();
+            score->undoChangeProperty(clef, P_SHOW_COURTESY, val);
+            score->endCmd();
+            mscore->endCmd();
+            }
       }
 
 //---------------------------------------------------------
@@ -1275,7 +1430,7 @@ bool InspectorChord::dirty() const
       {
       return chord->small() != small->isChecked()
          || chord->noStem() != stemless->isChecked()
-         || chord->stemDirection() != (Direction)(stemDirection->currentIndex())
+         || chord->stemDirection() != (MScore::Direction)(stemDirection->currentIndex())
          || chord->userOff().x() != offsetX->value()
          || chord->userOff().y() != offsetY->value()
          ;
@@ -1432,7 +1587,7 @@ void InspectorChord::apply()
             score->undoChangeProperty(chord, P_SMALL, small->isChecked());
       if (stemless->isChecked() != chord->noStem())
             score->undoChangeProperty(chord, P_NO_STEM, stemless->isChecked());
-      Direction d = Direction(stemDirection->currentIndex());
+      MScore::Direction d = MScore::Direction(stemDirection->currentIndex());
       if (d != chord->stemDirection())
             score->undoChangeProperty(chord, P_STEM_DIRECTION, d);
       score->endCmd();

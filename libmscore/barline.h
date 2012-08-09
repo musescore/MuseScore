@@ -78,10 +78,11 @@ class BarLine : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual bool setProperty(const QString&, const QDomElement&);
 
       static Property<BarLine> propertyList[];
       Property<BarLine>* property(P_ID id) const;
+
+      static qreal layoutWidth(Score*, BarLineType, qreal mag);
       };
 
 #endif
