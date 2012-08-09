@@ -406,8 +406,11 @@ void InstrumentWizard::createInstruments(Score* cs)
                   staff->setBarLineSpan(1);
             int nstaffIdx = staffIdx + barLineSpan;
 
-            for (int idx = staffIdx+1; idx < nstaffIdx; ++idx)
-                  cs->staff(idx)->setBarLineSpan(0);
+            for (int idx = staffIdx+1; idx < nstaffIdx; ++idx) {
+                  Staff* tStaff = cs->staff(idx);
+                  if (tStaff)
+                        tStaff->setBarLineSpan(0);
+                  }
 
             staffIdx = nstaffIdx;
             }
