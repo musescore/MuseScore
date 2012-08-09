@@ -116,13 +116,12 @@ void InstrumentWizard::on_partiturList_itemSelectionChanged()
             return;
       QTreeWidgetItem* item = wi.front();
       bool flag = item != 0;
-      bool onlyOne = (item->type() == PART_LIST_ITEM && partiturList->topLevelItemCount() == 1)
-              || (item->type() == STAFF_LIST_ITEM && item->parent()->childCount() == 1);
+      bool onlyOneStaff = (item->type() == STAFF_LIST_ITEM) && (item->parent()->childCount() == 1);
       bool first = (item->type() == PART_LIST_ITEM && partiturList->topLevelItem(0) == item)
               || (item->type() == STAFF_LIST_ITEM && item->parent()->child(0) == item);
       bool last = (item->type() == PART_LIST_ITEM && partiturList->topLevelItem(partiturList->topLevelItemCount() -1) == item)
               || (item->type() == STAFF_LIST_ITEM && item->parent()->child(item->parent()->childCount() - 1) == item);
-      removeButton->setEnabled(flag && !onlyOne);
+      removeButton->setEnabled(flag && !onlyOneStaff);
       upButton->setEnabled(flag && !first);
       downButton->setEnabled(flag && !last);
       linkedButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
