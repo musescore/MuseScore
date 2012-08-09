@@ -1530,12 +1530,15 @@ qDebug("drop staffList");
                   else
                         delete ks;
                   if (data.modifiers & Qt::ControlModifier) {
+                        // apply only to this stave
+                        score()->undoChangeKeySig(staff, tick(), k);
+                        }
+                  else {
                         // apply to all staves:
                         foreach(Staff* s, score()->staves())
                               score()->undoChangeKeySig(s, tick(), k);
                         }
-                  else
-                        score()->undoChangeKeySig(staff, tick(), k);
+                        
                   break;
                   }
 
