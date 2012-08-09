@@ -83,15 +83,15 @@
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
       if (!e->generated() || e->type() == BAR_LINE) {
-            if (e->type() != LAYOUT_BREAK) {
 #if 0
+            if (e->type() != LAYOUT_BREAK) {
                   if (e->visible())
                         popup->addAction(tr("Set Invisible"))->setData("invisible");
                   else
                         popup->addAction(tr("Set Visible"))->setData("invisible");
                   popup->addAction(tr("Color..."))->setData("color");
-#endif
                   }
+#endif
             if (e->flag(ELEMENT_HAS_TAG)) {
                   popup->addSeparator();
 
@@ -152,6 +152,15 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == ARTICULATION) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Articulation Properties..."))->setData("a-props");
+            }
+      else if (e->type() == BEAM) {
+            popup->addAction(getAction("flip"));
+            }
+      else if (e->type() == STEM) {
+            popup->addAction(getAction("flip"));
+            }
+      else if (e->type() == HOOK) {
+            popup->addAction(getAction("flip"));
             }
       else if (e->type() == BEND) {
             genPropertyMenu1(e, popup);
