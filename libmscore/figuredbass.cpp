@@ -685,7 +685,10 @@ FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
       setOnNote(true);
-      setTextStyle(s->textStyle(TEXT_STYLE_FIGURED_BASS));
+      TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+                  false, false, false, ALIGN_LEFT | ALIGN_TOP);
+      st.setSizeIsSpatiumDependent(true);
+      setTextStyle(st);
       setTicks(0);
       items.clear();
       }
@@ -755,23 +758,17 @@ void FiguredBass::read(const QDomElement& de)
 //   layout
 //---------------------------------------------------------
 
-// uncomment to use stadard, built-in Text layout during editing
-//#define _USE_EDIT_TEXT_LAYOUT_
-
 void FiguredBass::layout()
       {
-      if (!styled())
-            setTextStyle(score()->textStyle(TEXT_STYLE_FIGURED_BASS));
       qreal       y;
 
+//      if(items.size()) {
+            TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+                        false, false, false, ALIGN_LEFT | ALIGN_TOP);
+            st.setSizeIsSpatiumDependent(true);
+            setTextStyle(st);
+//            }
       layoutLines();
-
-#ifdef _USE_EDIT_TEXT_LAYOUT_
-      if (_editMode) {
-            Text::layout();
-            return;
-            }
-#endif
 
       // vertical position
       y = 0;                                          // default vert. pos.
@@ -788,7 +785,6 @@ void FiguredBass::layout()
       y += point(score()->styleS(ST_figuredBassYOffset));
 
       // bounding box
-#ifndef _USE_EDIT_TEXT_LAYOUT_
       if(editMode()) {
             qreal             h, w, w1;
             QFontMetricsF     fm(textStyle().font(spatium()));
@@ -809,7 +805,6 @@ void FiguredBass::layout()
             setbbox(QRectF(0-2, 0-2, w+4, h+4));
             }
       else
-#endif
             {
             setPos(0, y);
             setbbox(QRectF(0, 0, _lineLenghts.at(0), 0));
