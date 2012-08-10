@@ -704,29 +704,29 @@ void Slur::slurPos(SlurPos* sp)
       SlurAnchor sa1 = SA_NONE;
       SlurAnchor sa2 = SA_NONE;
       if ((sc->up() == ec->up()) && !sc->beam() && !ec->beam() && (_up == sc->up())) {
-            sa1 = SA_STEM;
-            sa2 = SA_STEM;
+            if (stem1)
+                  sa1 = SA_STEM;
+            if (stem2)
+                  sa2 = SA_STEM;
             }
 
+      qreal __up = _up ? -1.0 : 1.0;
       qreal hw   = note1->headWidth();
-      if (sa1 != SA_NONE && sa2 != SA_NONE) {
-            switch (sa1) {
-                  case SA_STEM:
-                        sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
-                        sp->p1 += QPointF(0.25 * _spatium, 0.75 * _spatium);
-                        break;
-                  case SA_NONE:
-                        break;
-                  }
-            switch(sa2) {
-                  case SA_STEM:
-                        sp->p2 += ec->stemPosBeam() - ec->pagePos() + ec->stem()->p2();
-                        sp->p2 += QPointF(-0.25 * _spatium, 0.75 * _spatium);
-                        break;
-                  case SA_NONE:
-                        break;
-                  }
-            return;
+      switch (sa1) {
+            case SA_STEM:
+                  sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
+                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);
+                  break;
+            case SA_NONE:
+                  break;
+            }
+      switch(sa2) {
+            case SA_STEM:
+                  sp->p2 += ec->stemPosBeam() - ec->pagePos() + ec->stem()->p2();
+                  sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
+                  break;
+            case SA_NONE:
+                  break;
             }
 
       //
@@ -734,8 +734,6 @@ void Slur::slurPos(SlurPos* sp)
       //    horizontal: middle of note head
       //    vertical:   _spatium * .4 above/below note head
       //
-      qreal __up = _up ? -1.0 : 1.0;
-
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
       yo = note1->pos().y() + _spatium * .9 * __up;
@@ -781,7 +779,8 @@ void Slur::slurPos(SlurPos* sp)
                   }
             }
 
-      sp->p1 += QPointF(xo, yo);
+      if (sa1 == SA_NONE)
+            sp->p1 += QPointF(xo, yo);
 
       //------p2
       xo = hw * .5;
@@ -834,7 +833,8 @@ void Slur::slurPos(SlurPos* sp)
                   yo = fixArticulations(yo, ec, __up);
             }
 
-      sp->p2 += QPointF(xo, yo);
+      if (sa2 == SA_NONE)
+            sp->p2 += QPointF(xo, yo);
       }
 
 //---------------------------------------------------------
