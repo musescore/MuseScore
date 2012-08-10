@@ -91,6 +91,10 @@ enum P_ID {
       P_DENOMINATOR_STRING,
       P_SHOW_NATURALS,
       P_BREAK_HINT,
+      P_PREFIX,               // used for FiguredBassItem
+      P_DIGIT,                //    "           "
+      P_SUFFIX,               //    "           "
+      P_CONTINUATIONLINE,     //    "           "
 
       P_END
       };
