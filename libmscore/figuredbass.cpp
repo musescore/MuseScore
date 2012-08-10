@@ -36,25 +36,25 @@ const QChar FiguredBassItem::normParenthToChar[FBINumOfParenth] =
 FiguredBassItem::FiguredBassItem(Score* s, int l)
       : Element(s), ord(l)
       {
-      prefix      = suffix = FBIAccidNone;
-      digit       = FBIDigitNone;
+      _prefix     = _suffix = FBIAccidNone;
+      _digit      = FBIDigitNone;
       parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = FBIParenthNone;
-      contLine    = false;
+      _contLine   = false;
       }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
       : Element(item)
       {
       ord         = item.ord;
-      prefix      = item.prefix;
-      digit       = item.digit;
-      suffix      = item.suffix;
+      _prefix     = item._prefix;
+      _digit      = item._digit;
+      _suffix     = item._suffix;
       parenth[0]  = item.parenth[0];
       parenth[1]  = item.parenth[1];
       parenth[2]  = item.parenth[2];
       parenth[3]  = item.parenth[3];
       parenth[4]  = item.parenth[4];
-      contLine    = item.contLine;
+      _contLine   = item._contLine;
       textWidth   = item.textWidth;
       _displayText= item._displayText;
       }
@@ -88,27 +88,27 @@ bool FiguredBassItem::parse(QString& str)
             return false;
       parseParenthesis(str, 3);
       // check for a possible cont. line symbol(s)
-      contLine = false;                               // contLine
+      _contLine = false;                              // contLine
       while(str[0] == '-' || str[0] == '_') {
-            contLine = true;
+            _contLine = true;
             str.remove(0, 1);
       }
       parseParenthesis(str, 4);
 
       // remove useless parentheses
-      if(prefix == FBIAccidNone && parenth[1] == FBIParenthNone) {
+      if(_prefix == FBIAccidNone && parenth[1] == FBIParenthNone) {
             parenth[1] = parenth[0];
             parenth[0] = FBIParenthNone;
             }
-      if(digit == FBIDigitNone && parenth[2] == FBIParenthNone) {
+      if(_digit == FBIDigitNone && parenth[2] == FBIParenthNone) {
             parenth[2] = parenth[1];
             parenth[1] = FBIParenthNone;
             }
-      if(!contLine && parenth[3] == FBIParenthNone) {
+      if(!_contLine && parenth[3] == FBIParenthNone) {
             parenth[3] = parenth[4];
             parenth[4] = FBIParenthNone;
             }
-      if(suffix == FBIAccidNone && parenth[2] == FBIParenthNone) {
+      if(_suffix == FBIAccidNone && parenth[2] == FBIParenthNone) {
             parenth[2] = parenth[3];
             parenth[3] = FBIParenthNone;
             }
@@ -120,10 +120,10 @@ bool FiguredBassItem::parse(QString& str)
       // can't have BOTH prefix and suffix
       // prefix, digit, suffix and cont.line cannot be ALL empty
       // suffix cannot combine with empty digit
-      if( (prefix != FBIAccidNone && suffix != FBIAccidNone)
-            || (prefix == FBIAccidNone && digit == FBIDigitNone && suffix == FBIAccidNone && !contLine)
-            || ( (suffix == FBIAccidPlus || suffix == FBIAccidBackslash || suffix == FBIAccidSlash)
-                  && digit == FBIDigitNone) )
+      if( (_prefix != FBIAccidNone && _suffix != FBIAccidNone)
+            || (_prefix == FBIAccidNone && _digit == FBIDigitNone && _suffix == FBIAccidNone && !_contLine)
+            || ( (_suffix == FBIAccidPlus || _suffix == FBIAccidBackslash || _suffix == FBIAccidSlash)
+                  && _digit == FBIDigitNone) )
             return false;
       return true;
 }
@@ -140,7 +140,7 @@ bool FiguredBassItem::parse(QString& str)
 
 int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
       {
-      FBIAccidental *   dest        = bPrefix ? &prefix : &suffix;
+      FBIAccidental *   dest        = bPrefix ? &_prefix : &_suffix;
       bool              done        = false;
       int               size        = str.size();
       str = str.trimmed();
@@ -175,21 +175,21 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                   break;
             // '+', '\\' and '/' go into the suffix
             case '+':
-                  if(suffix != FBIAccidNone)          // cannot combine with any other accidental
+                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
                         return -1;
-                  suffix = FBIAccidPlus;
+                  _suffix = FBIAccidPlus;
                   break;
             case '\\':
-                  if(suffix != FBIAccidNone)          // cannot combine with any other accidental
+                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
                         return -1;
-                  suffix = FBIAccidBackslash;
+                  _suffix = FBIAccidBackslash;
                   break;
             case '/':
-                  if(suffix != FBIAccidNone)          // cannot combine with any other accidental
+                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
                         return -1;
-                  suffix = FBIAccidSlash;
+                  _suffix = FBIAccidSlash;
                   break;
-            default:                                  // any other char: no longer in prefix/suffix
+            default:                                 // any other char: no longer in prefix/suffix
                   done = true;
                   break;
             }
@@ -198,7 +198,7 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
             str.remove(0,1);                         // 'eat' the char and continue
             }
 
-      return size - str.size();                       // return how many chars we had read into prefix/suffix
+      return size - str.size();                      // return how many chars we had read into prefix/suffix
       }
 
 //---------------------------------------------------------
@@ -216,13 +216,13 @@ int FiguredBassItem::parseDigit(QString& str)
       int  size   = str.size();
       str         = str.trimmed();
 
-      digit = FBIDigitNone;
+      _digit = FBIDigitNone;
 
       while(str.size()) {
             // any digit acceptable, if no previous digit
             if(str[0] >= '1' && str[0] <= '9') {
-                  if(digit == FBIDigitNone) {
-                        digit = str[0].unicode() - '0';
+                  if(_digit == FBIDigitNone) {
+                        _digit = str[0].unicode() - '0';
                         str.remove(0, 1);
                         }
                   else
@@ -287,8 +287,8 @@ QString FiguredBassItem::normalizedText() const
       if(parenth[0] != FBIParenthNone)
             str.append(normParenthToChar[parenth[0]]);
 
-      if(prefix != FBIAccidNone) {
-            switch(prefix)
+      if(_prefix != FBIAccidNone) {
+            switch(_prefix)
             {
             case FBIAccidFlat:
                   str.append('b');
@@ -314,15 +314,15 @@ QString FiguredBassItem::normalizedText() const
             str.append(normParenthToChar[parenth[1]]);
 
       // digit
-      if(digit != FBIDigitNone)
-            str.append(QChar('0' + digit));
+      if(_digit != FBIDigitNone)
+            str.append(QChar('0' + _digit));
 
       if(parenth[2] != FBIParenthNone)
             str.append(normParenthToChar[parenth[2]]);
 
       // suffix
-      if(suffix != FBIAccidNone) {
-            switch(suffix)
+      if(_suffix != FBIAccidNone) {
+            switch(_suffix)
             {
             case FBIAccidFlat:
                   str.append('b');
@@ -355,7 +355,7 @@ QString FiguredBassItem::normalizedText() const
 
       if(parenth[3] != FBIParenthNone)
             str.append(normParenthToChar[parenth[3]]);
-      if(contLine)
+      if(_contLine)
             str.append('_');
       if(parenth[4] != FBIParenthNone)
             str.append(normParenthToChar[parenth[4]]);
@@ -372,14 +372,14 @@ void FiguredBassItem::write(Xml& xml) const
       xml.stag("FiguredBassItem");
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
                     .arg(parenth[0]) .arg(parenth[1]) .arg(parenth[2]) .arg(parenth[3]) .arg(parenth[4]) );
-      if(prefix != FBIAccidNone)
-            xml.tag(QString("prefix"), prefix);
-      if(digit != FBIDigitNone)
-            xml.tag(QString("digit"), digit);
-      if(suffix != FBIAccidNone)
-            xml.tag(QString("suffix"), suffix);
-      if(contLine)
-            xml.tag("continuationLine", contLine);
+      if(_prefix != FBIAccidNone)
+            xml.tag(QString("prefix"), _prefix);
+      if(_digit != FBIDigitNone)
+            xml.tag(QString("digit"), _digit);
+      if(_suffix != FBIAccidNone)
+            xml.tag(QString("suffix"), _suffix);
+      if(_contLine)
+            xml.tag("continuationLine", _contLine);
       xml.etag();
 }
 
@@ -402,13 +402,13 @@ void FiguredBassItem::read(const QDomElement& de)
                   parenth[4] = (FBIParenthesis)e.attribute("b4").toInt();
                   }
             else if(tag == "prefix")
-                  prefix = (FBIAccidental)iVal;
+                  _prefix = (FBIAccidental)iVal;
             else if(tag == "digit")
-                  digit = iVal;
+                  _digit = iVal;
             else if(tag == "suffix")
-                  suffix = (FBIAccidental)iVal;
+                  _suffix = (FBIAccidental)iVal;
             else if(tag == "continuationLine")
-                  contLine = iVal;
+                  _contLine = iVal;
             else if(!Element::readProperties(e))
                   domError(e);
             }
@@ -484,30 +484,30 @@ void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
                   // MusicXML spec states figure-number is a number
                   // MuseScore can only handle single digit
                   if (1 <= iVal && iVal <= 9)
-                        digit = iVal;
+                        _digit = iVal;
                   }
             else if (tag == "prefix")
-                  prefix = MusicXML2FBIAccidental(val);
+                  _prefix = MusicXML2FBIAccidental(val);
             else if (tag == "suffix")
-                  suffix = MusicXML2FBIAccidental(val);
+                  _suffix = MusicXML2FBIAccidental(val);
             else
                   domError(e);
             }
       // set parentheses
       if (paren) {
             // parenthesis open
-            if (prefix != FBIAccidNone)
+            if (_prefix != FBIAccidNone)
                   parenth[0] = FBIParenthRoundOpen; // before prefix
-            else if (digit != FBIDigitNone)
+            else if (_digit != FBIDigitNone)
                   parenth[1] = FBIParenthRoundOpen; // before digit
-            else if (suffix != FBIAccidNone)
+            else if (_suffix != FBIAccidNone)
                   parenth[2] = FBIParenthRoundOpen; // before suffix
             // parenthesis close
-            if (suffix != FBIAccidNone)
+            if (_suffix != FBIAccidNone)
                   parenth[3] = FBIParenthRoundClosed; // after suffix
-            else if (digit != FBIDigitNone)
+            else if (_digit != FBIDigitNone)
                   parenth[2] = FBIParenthRoundClosed; // after digit
-            else if (prefix != FBIAccidNone)
+            else if (_prefix != FBIAccidNone)
                   parenth[1] = FBIParenthRoundClosed; // after prefix
             }
       }
@@ -519,12 +519,12 @@ void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
 void FiguredBassItem::writeMusicXML(Xml& xml) const
       {
       xml.stag("figure");
-      QString strPrefix = FBIAccidental2MusicXML(prefix);
+      QString strPrefix = FBIAccidental2MusicXML(_prefix);
       if (strPrefix != "")
             xml.tag("prefix", strPrefix);
-      if (digit != FBIDigitNone)
-            xml.tag("figure-number", digit);
-      QString strSuffix = FBIAccidental2MusicXML(suffix);
+      if (_digit != FBIDigitNone)
+            xml.tag("figure-number", _digit);
+      QString strSuffix = FBIAccidental2MusicXML(_suffix);
       if (strSuffix != "")
             xml.tag("suffix", strSuffix);
       xml.etag();
@@ -536,11 +536,11 @@ void FiguredBassItem::writeMusicXML(Xml& xml) const
 
 bool FiguredBassItem::startsWithParenthesis() const
       {
-      if (prefix != FBIAccidNone)
+      if (_prefix != FBIAccidNone)
             return (parenth[0] != FBIParenthNone);
-      if (digit != FBIDigitNone)
+      if (_digit != FBIDigitNone)
             return (parenth[1] != FBIParenthNone);
-      if (suffix != FBIAccidNone)
+      if (_suffix != FBIAccidNone)
             return (parenth[2] != FBIParenthNone);
       return false;
       }
@@ -575,13 +575,13 @@ void FiguredBassItem::layout()
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[0]]);
 
       // prefix
-      if(prefix != FBIAccidNone) {
+      if(_prefix != FBIAccidNone) {
             // if no digit, the string created so far 'hangs' to the left of the note
-            if(digit == FBIDigitNone)
+            if(_digit == FBIDigitNone)
                   x1 = fm.width(str);
-            str.append(g_FBFonts.at(font).displayAccidental[prefix]);
+            str.append(g_FBFonts.at(font).displayAccidental[_prefix]);
             // if no digit, the string from here onward 'hangs' to the right of the note
-            if(digit == FBIDigitNone)
+            if(_digit == FBIDigitNone)
                   x2 = fm.width(str);
             }
 
@@ -589,16 +589,16 @@ void FiguredBassItem::layout()
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[1]]);
 
       // digit
-      if(digit != FBIDigitNone) {
+      if(_digit != FBIDigitNone) {
             // if some digit, the string created so far 'hangs' to the left of the note
             x1 = fm.width(str);
             // if suffix is a combining shape, combine it with digit
             // unless there is a parenthesis in between
-            if( (suffix == FBIAccidPlus || suffix == FBIAccidBackslash || suffix == FBIAccidSlash)
+            if( (_suffix == FBIAccidPlus || _suffix == FBIAccidBackslash || _suffix == FBIAccidSlash)
                         && parenth[2] == FBIParenthNone)
-                  str.append(g_FBFonts.at(font).displayDigit[style][digit][suffix-(FBIAccidPlus-1)]);
+                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(FBIAccidPlus-1)]);
             else
-                  str.append(g_FBFonts.at(font).displayDigit[style][digit][0]);
+                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][0]);
             // if some digit, the string from here onward 'hangs' to the right of the note
             x2 = fm.width(str);
             }
@@ -608,11 +608,11 @@ void FiguredBassItem::layout()
 
       // suffix
       // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
-      if( suffix != FBIAccidNone
-                  && ( (suffix != FBIAccidPlus && suffix != FBIAccidBackslash && suffix != FBIAccidSlash)
-                        || digit == FBIDigitNone
+      if( _suffix != FBIAccidNone
+                  && ( (_suffix != FBIAccidPlus && _suffix != FBIAccidBackslash && _suffix != FBIAccidSlash)
+                        || _digit == FBIDigitNone
                         || parenth[2] != FBIParenthNone) )
-            str.append(g_FBFonts.at(font).displayAccidental[suffix]);
+            str.append(g_FBFonts.at(font).displayAccidental[_suffix]);
 
       if(parenth[3] != FBIParenthNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[3]]);
@@ -626,7 +626,7 @@ void FiguredBassItem::layout()
       w = fm.width(str);
       textWidth = w;
       int lineLen;
-      if(contLine && (lineLen=figuredBass()->lineLength(0)) > w)
+      if(_contLine && (lineLen=figuredBass()->lineLength(0)) > w)
             w = lineLen;
       y = h * ord;
       setPos(x, y);
@@ -658,7 +658,7 @@ void FiguredBassItem::draw(QPainter* painter) const
 
       // continuation line
       qreal len = 0.0;
-      if(contLine) {
+      if(_contLine) {
             len = figuredBass()->lineLength(0);
             if(len > 0.0) {
                   qreal h = bbox().height() * 0.75;
@@ -672,6 +672,40 @@ void FiguredBassItem::draw(QPainter* painter) const
             painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
                   g_FBFonts.at(font).displayParenthesis[parenth[4]]);
             }
+      }
+
+//---------------------------------------------------------
+//   FiguredBassItem undoSet... for scripting
+//---------------------------------------------------------
+
+void FiguredBassItem::undoSetPrefix(FBIAccidental pref)
+      {
+      if(pref < FBIAccidPlus)
+            score()->undoChangeProperty(this, P_PREFIX, (int)pref);
+      }
+
+void FiguredBassItem::undoSetDigit(int digit)
+      {
+      if(digit >= 0 && digit <= 9)
+            score()->undoChangeProperty(this, P_DIGIT, digit);
+      }
+
+void FiguredBassItem::undoSetSuffix(FBIAccidental suff)
+      {
+      score()->undoChangeProperty(this, P_SUFFIX, suff);
+      }
+
+void FiguredBassItem::undoSetContinuationLine(bool val)
+      {
+      score()->undoChangeProperty(this, P_CONTINUATIONLINE, val);
+      }
+
+FiguredBassItem * FiguredBass::addItem()
+      {
+      int line = items.size();
+      FiguredBassItem fib(score(), line);
+      items.append(fib);
+      return &(items.last());
       }
 
 //---------------------------------------------------------

@@ -68,6 +68,8 @@ void MScore::init()
       qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
       qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
+      qRegisterMetaType<FiguredBassItem::FBIAccidental>("FiguredBassAccidental");
+      qRegisterMetaType<FiguredBassItem::FBIParenthesis>("FiguredBassParenthesis");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

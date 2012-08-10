@@ -44,6 +44,7 @@
 #include "libmscore/harmony.h"
 #include "libmscore/slur.h"
 #include "libmscore/notedot.h"
+#include "libmscore/figuredbass.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -181,6 +182,8 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
+            qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             //-----------virtual classes
             qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
