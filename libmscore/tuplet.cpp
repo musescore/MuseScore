@@ -23,26 +23,6 @@
 #include "stem.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static MScore::Direction defaultDirection = MScore::AUTO;
-static int defaultNumberType      = Tuplet::SHOW_NUMBER;
-static int defaultBracketType     = Tuplet::AUTO_BRACKET;
-static QPointF zeroPoint          = QPointF();
-
-Property<Tuplet> Tuplet::propertyList[] = {
-      { P_DIRECTION,    &Tuplet::pDirection,   &defaultDirection },
-      { P_NUMBER_TYPE,  &Tuplet::pNumberType,  &defaultNumberType },
-      { P_BRACKET_TYPE, &Tuplet::pBracketType, &defaultBracketType },
-      { P_NORMAL_NOTES, &Tuplet::pNormalNotes, 0                  },
-      { P_ACTUAL_NOTES, &Tuplet::pActualNotes, 0                  },
-      { P_P1,           &Tuplet::pP1,          &zeroPoint },
-      { P_P2,           &Tuplet::pP2,          &zeroPoint },
-      { P_END, 0, 0 }
-      };
-
-//---------------------------------------------------------
 //   Tuplet
 //---------------------------------------------------------
 
@@ -50,12 +30,12 @@ Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _numberType   = defaultNumberType;
-      _bracketType  = defaultBracketType;
+      _numberType   = Tuplet::SHOW_NUMBER;
+      _bracketType  = Tuplet::AUTO_BRACKET;
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      _direction    = defaultDirection;
+      _direction    = MScore::AUTO;
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -517,7 +497,16 @@ void Tuplet::write(Xml& xml) const
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
-      WRITE_PROPERTIES(Tuplet)
+
+#define WT(X)      xml.tag(X, getProperty(X), propertyDefault(X));
+      WT(P_DIRECTION);
+      WT(P_NUMBER_TYPE);
+      WT(P_BRACKET_TYPE);
+      WT(P_NORMAL_NOTES);
+      WT(P_ACTUAL_NOTES);
+      WT(P_P1);
+      WT(P_P2);
+
       xml.tag("baseNote", _baseLen.name());
 
       if (_number) {
@@ -543,8 +532,20 @@ void Tuplet::read(const QDomElement& de, QList<Tuplet*>* tuplets, const QList<Sp
             const QString& tag(e.tagName());
             const QString& val(e.text());
 
-            if (setProperty(tag, e))
-                  ;
+            if (tag == "direction")
+                  _direction = MScore::Direction(val.toInt());
+            else if (tag == "numberType")
+                  _numberType = val.toInt();
+            else if (tag == "bracketType")
+                  _bracketType = val.toInt();
+            else if (tag == "normalNotes")
+                  _ratio.setDenominator(val.toInt());
+            else if (tag == "actualNotes")
+                  _ratio.setNumerator(val.toInt());
+            else if (tag == "p1")
+                  _p1 = readPoint(e);
+            else if (tag == "p2")
+                  _p2 = readPoint(e);
             else if (tag == "baseNote")
                   _baseLen = TDuration(e.text());
             else if (tag == "Number") {
@@ -700,7 +701,7 @@ void Tuplet::toDefault()
 
       score()->undoChangeProperty(this, P_P1, QPointF());
       score()->undoChangeProperty(this, P_P2, QPointF());
-      score()->undoChangeProperty(this, P_DIRECTION, defaultDirection);
+      score()->undoChangeProperty(this, P_DIRECTION, propertyDefault(P_DIRECTION));
 
       Element::toDefault();
       layout();
@@ -744,56 +745,91 @@ void Tuplet::sortElements()
       qSort(_elements.begin(), _elements.end(), tickGreater);
       }
 
-Property<Tuplet>* Tuplet::property(P_ID id) const
-      {
-      for (int i = 0;; ++i) {
-            if (propertyList[i].id == P_END)
-                  break;
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
-      Property<Tuplet>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Tuplet*)this).*(p->data))());
+      switch(propertyId) {
+            case P_DIRECTION:
+                  return _direction;
+            case P_NUMBER_TYPE:
+                  return _numberType;
+            case P_BRACKET_TYPE:
+                  return _bracketType;
+            case P_NORMAL_NOTES:
+                  return _ratio.denominator();
+            case P_ACTUAL_NOTES:
+                  return _ratio.numerator();
+            case P_P1:
+                  return _p1;
+            case P_P2:
+                  return _p2;
+            default:
+                  break;
+            }
       return Element::getProperty(propertyId);
       }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      Property<Tuplet>* p = property(propertyId);
-      bool rv = true;
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            }
-      else
-            rv = Element::setProperty(propertyId, v);
-      score()->setLayoutAll(true);
-      return rv;
-      }
-bool Tuplet::setProperty(const QString& name, const QDomElement& e)
-      {
-      for (int i = 0;; ++i) {
-            P_ID id = propertyList[i].id;
-            if (id == P_END)
+      switch(propertyId) {
+            case P_DIRECTION:
+                  setDirection(MScore::Direction(v.toInt()));
                   break;
-            if (propertyName(id) == name) {
-                  QVariant v = ::getProperty(propertyList[i].id, e);
-                  setVariant(propertyList[i].id, ((*this).*(propertyList[i].data))(), v);
-                  setGenerated(false);
-                  return true;
-                  }
+            case P_NUMBER_TYPE:
+                  setNumberType(v.toInt());
+                  break;
+            case P_BRACKET_TYPE:
+                  setBracketType(v.toInt());
+                  break;
+            case P_NORMAL_NOTES:
+                  _ratio.setDenominator(v.toInt());
+                  break;
+            case P_ACTUAL_NOTES:
+                  _ratio.setNumerator(v.toInt());
+                  break;
+            case P_P1:
+                  _p1 = v.toPointF();
+                  break;
+            case P_P2:
+                  _p2 = v.toPointF();
+                  break;
+            default:
+                  return DurationElement::setProperty(propertyId, v);
+                  break;
             }
-      return Element::setProperty(name, e);
-      }
-QVariant  Tuplet::propertyDefault(P_ID id) const
-      {
-      Property<Tuplet>* p = property(id);
-      return getVariant(id, p->defaultVal);
+      score()->setLayoutAll(true);
+      return true;
       }
 
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Tuplet::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_DIRECTION:
+                  return MScore::AUTO;
+            case P_NUMBER_TYPE:
+                  return Tuplet::SHOW_NUMBER;
+            case P_BRACKET_TYPE:
+                  return Tuplet::AUTO_BRACKET;
+            case P_NORMAL_NOTES:
+            case P_ACTUAL_NOTES:
+                  return 1;
+            case P_P1:
+            case P_P2:
+                  return QPointF();
+            default:
+                  return DurationElement::propertyDefault(id);
+            }
+      }
 

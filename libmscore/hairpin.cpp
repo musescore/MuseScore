@@ -24,17 +24,6 @@
 #include "mscore.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static int defaultSubtype = 0;
-
-Property<Hairpin> Hairpin::propertyList[] = {
-      { P_SUBTYPE,  &Hairpin::pSubtype, &defaultSubtype },
-      };
-static const int PROPERTIES = sizeof(Hairpin::propertyList)/sizeof(*Hairpin::propertyList);
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -176,60 +165,27 @@ void Hairpin::read(const QDomElement& de)
       }
 
 //---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-Property<Hairpin>* Hairpin::property(P_ID id) const
-      {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Hairpin::getProperty(P_ID propertyId) const
+QVariant Hairpin::getProperty(P_ID id) const
       {
-      Property<Hairpin>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Hairpin*)this).*(p->data))());
-      return Element::getProperty(propertyId);
+      if (id == P_SUBTYPE)
+            return _subtype;
+      return Element::getProperty(id);
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Hairpin::setProperty(P_ID propertyId, const QVariant& v)
+bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
-      Property<Hairpin>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
+      if (id == P_SUBTYPE) {
+            _subtype = v.toInt();
             setGenerated(false);
             return true;
             }
-      return Element::setProperty(propertyId, v);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Hairpin::setProperty(const QString& name, const QDomElement& e)
-      {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            P_ID id = propertyList[i].id;
-            if (propertyName(id) == name) {
-                  QVariant v = ::getProperty(id, e);
-                  setVariant(id, ((*this).*(propertyList[i].data))(), v);
-                  setGenerated(false);
-                  return true;
-                  }
-            }
-      return Element::setProperty(name, e);
+      return Element::setProperty(id, v);
       }
 

@@ -71,18 +71,18 @@ class NoteHead : public Symbol {
 //   @@ Note
 ///  Graphic representation of a note.
 //
-//   @P pitch      int   midi pitch
-//   @P tpc        int   tonal pitch class
-//   @P line       int   notehead position
-//   @P fret       int   fret number in tablature
-//   @P string     int   string number in tablature
-//   @P subchannel int   midi subchannel (for midi articulation)
-//   @P ppitch     int   actual played midi pitch (honoring ottavas)
-//   @P ghost      bool  ghost note (guitar: death note)
-//   @P hidden     bool  hidden, not played note
-//   @P mirror     bool  mirror note head on x axis
-//   @P small      bool  small note head
-//   @P tuning     qreal tuning offset in cent
+//   @P pitch             int   midi pitch
+//   @P tpc               int   tonal pitch class
+//   @P line              int   notehead position
+//   @P fret              int   fret number in tablature
+//   @P string            int   string number in tablature
+//   @P subchannel        int   midi subchannel (for midi articulation)
+//   @P ppitch            int   actual played midi pitch (honoring ottavas)
+//   @P ghost             bool  ghost note (guitar: death note)
+//   @P hidden            bool  hidden, not played note
+//   @P mirror            bool  mirror note head on x axis
+//   @P small             bool  small note head
+//   @P tuning            qreal tuning offset in cent
 //   @P veloType          enum  OFFSET_VAL, USER_VAL
 //   @P veloOffset        int
 //   @P onTimeOffset      int
@@ -182,22 +182,7 @@ class Note : public Element {
       virtual QRectF drag(const EditData& s);
       void endDrag();
       void endEdit();
-
-      void* pPitch()             { return &_pitch;         }
-      void* pTpc()               { return &_tpc;           }
-      void* pSmall()             { return &_small;         }
-      void* pMirror()            { return &_userMirror;    }
-      void* pDotPosition()       { return &_dotPosition;   }
-      void* pOnTimeUserOffset()  { return &_onTimeUserOffset;  }
-      void* pOffTimeUserOffset() { return &_offTimeUserOffset; }
-      void* pHeadGroup()         { return &_headGroup;     }
-      void* pVeloOffset()        { return &_veloOffset;    }
-      void* pTuning()            { return &_tuning;        }
-      void* pFret()              { return &_fret;          }
-      void* pString()            { return &_string;        }
-      void* pGhost()             { return &_ghost;         }
-      void* pHeadType()          { return &_headType;      }
-      void* pVeloType()          { return &_veloType;      }
+      void writeProperty(Xml&, P_ID) const;
 
    public:
       Note(Score* s = 0);
@@ -325,7 +310,9 @@ class Note : public Element {
       const QList<NoteEvent*>& playEvents() const    { return _playEvents; }
       void setPlayEvents(const QList<NoteEvent*>& v);
 
-      PROPERTY_DECLARATIONS(Note)
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 Q_DECLARE_METATYPE(Note::NoteHeadGroup)
