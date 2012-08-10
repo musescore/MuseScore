@@ -155,10 +155,19 @@ struct FiguredBassFont {
 
 //---------------------------------------------------------
 //   @@ FiguredBass
+///   A complete figured bass indication
+//
+//    @P items    array[FiguredBassItem]  the list of individual items
+//    @P onNote   bool                    whether it is placed on a note beginning or between notes (r/o)
+//    @P ticks    int                     duration in ticks
 //---------------------------------------------------------
 
 class FiguredBass : public Text {
       Q_OBJECT
+
+//      Q_PROPERTY(QDeclarativeListProperty<FiguredBassItem> items READ qmlItems)
+      Q_PROPERTY(bool   onNote      READ onNote)
+      Q_PROPERTY(int    ticks       READ ticks  WRITE setTicks)
 
       QList<FiguredBassItem>  items;            // the individual lines of the F.B.
       QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)
@@ -197,9 +206,19 @@ class FiguredBass : public Text {
       void              writeMusicXML(Xml& xml) const;
 
       // getter /setters
-      qreal             lineLength(int idx) const {   if(_lineLenghts.size() > idx)
+//      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
+//                                                {     list->append(pItem);
+//                                                      items.append(&pItem);
+//                                                }
+//      QDeclarativeListProperty<FiguredBassItem> qmlItems()
+//                                                {     QList<FiguredBassItem*> list;
+//                                                      foreach(FiguredBassItem item, items)
+//                                                            list.append(&item);
+//                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
+//                                                }
+      qreal             lineLength(int idx) const     {   if(_lineLenghts.size() > idx)
                                                             return _lineLenghts.at(idx);
-                                                      return 0;   }
+                                                          return 0;   }
       bool              onNote() const          { return _onNote; }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return static_cast<Segment*>(parent()); }
