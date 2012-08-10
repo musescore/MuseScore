@@ -16,25 +16,13 @@
 #include "mscore.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static LayoutBreakType defaultLayoutBreak = LAYOUT_BREAK_PAGE;
-
-Property<LayoutBreak> LayoutBreak::propertyList[] = {
-      { P_LAYOUT_BREAK, &LayoutBreak::pSubtype,   0       }, // &defaultLayoutBreak },
-      { P_PAUSE,        &LayoutBreak::pPause,     0       },
-      { P_END, 0, 0 }
-      };
-
-//---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(Score* score)
    : Element(score)
       {
-      _subtype             = defaultLayoutBreak;
+      _subtype             = LayoutBreakType(propertyDefault(P_LAYOUT_BREAK).toInt());
       _pause               = score->styleD(ST_SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
@@ -51,7 +39,8 @@ void LayoutBreak::write(Xml& xml) const
       xml.stag(name());
       Element::writeProperties(xml);
 
-      WRITE_PROPERTIES(LayoutBreak)
+      xml.tag(P_LAYOUT_BREAK, getProperty(P_LAYOUT_BREAK), propertyDefault(P_LAYOUT_BREAK));
+      xml.tag(P_PAUSE,        getProperty(P_PAUSE),        propertyDefault(P_PAUSE));
 
       if (!_startWithLongNames)
             xml.tag("startWithLongNames", _startWithLongNames);
@@ -69,8 +58,10 @@ void LayoutBreak::read(const QDomElement& de)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
-            if (setProperty(tag, e))
-                  ;
+            if (tag == "subtype")
+                  setProperty(P_LAYOUT_BREAK, ::getProperty(P_LAYOUT_BREAK, e));
+            else if (tag == "pause")
+                  _pause = val.toDouble();
             else if (tag == "startWithLongNames")
                   _startWithLongNames = val.toInt();
             else if (tag == "startWithMeasureOne")
@@ -192,4 +183,58 @@ Element* LayoutBreak::drop(const DropData& data)
       return e;
       }
 
-PROPERTY_FUNCTIONS(LayoutBreak)
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant LayoutBreak::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_LAYOUT_BREAK:
+                  return _subtype;
+            case P_PAUSE:
+                  return _pause;
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_LAYOUT_BREAK:
+                  setSubtype(LayoutBreakType(v.toInt()));
+                  break;
+            case P_PAUSE:
+                  setPause(v.toDouble());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      setGenerated(false);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant LayoutBreak::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_LAYOUT_BREAK:
+                  return QVariant(); // LAYOUT_BREAK_LINE;
+            case P_PAUSE:
+                  return 0.0; // score()->styleD(ST_SectionPause);
+            default:
+                  return Element::propertyDefault(id);
+            }
+      }
+

@@ -397,11 +397,7 @@ class Element : public QObject {
       virtual QVariant getProperty(P_ID) const;
       virtual bool setProperty(P_ID, const QVariant&);
 
-      virtual bool setProperty(const QString&, const QDomElement&);
       virtual QVariant propertyDefault(P_ID) const { return 0; }
-
-      static Property<Element> propertyList[];
-      Property<Element>* property(P_ID id) const;
 
       void setVariant(P_ID, void*, const QVariant&);
       QVariant getVariant(P_ID id, void* data) const;

@@ -31,7 +31,6 @@
 #include "ottava.h"
 #include "volta.h"
 #include "excerpt.h"
-// #include "thirdparty/diff/diff_match_patch.h"
 #include "mscore.h"
 #include "stafftype.h"
 #ifdef OMR

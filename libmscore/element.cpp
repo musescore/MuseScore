@@ -172,9 +172,6 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "Ossia")
       };
 
-static bool defaultVisible = true;
-static bool defaultSelected = false;
-
 //---------------------------------------------------------
 //   DropData
 //---------------------------------------------------------
@@ -186,19 +183,6 @@ DropData::DropData()
       duration = Fraction(1,4);
       modifiers = 0;
       }
-
-//---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-Property<Element> Element::propertyList[] = {
-      { P_COLOR,    &Element::pColor,    &MScore::defaultColor },
-      { P_VISIBLE,  &Element::pVisible,  &defaultVisible       },
-      { P_SELECTED, &Element::pSelected, &defaultSelected      },
-      // not written:
-      { P_USER_OFF, &Element::pUserOff,  0 },
-      { P_END, 0, 0 }
-      };
 
 //---------------------------------------------------------
 //   LinkedElements
@@ -677,8 +661,14 @@ bool Element::readProperties(const QDomElement& e)
       const QString& tag(e.tagName());
       const QString& val(e.text());
 
-      if (setProperty(tag, e))
-            ;
+      if (tag == "color")
+            _color = readColor(e);
+      else if (tag == "visible")
+            _visible = val.toInt();
+      else if (tag == "selected")
+            _selected = val.toInt();
+      else if (tag == "userOff")
+            _userOff = readPoint(e);
       else if (tag == "lid") {
             _links = score()->links().value(val.toInt());
             if (!_links) {
@@ -1519,30 +1509,19 @@ Space& Space::operator+=(const Space& s)
       }
 
 //---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-Property<Element>* Element::property(P_ID id) const
-      {
-      for (int i = 0;;  ++i) {
-            if (propertyList[i].id == P_END)
-                  break;
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Element::getProperty(P_ID propertyId) const
       {
-      Property<Element>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Element*)this).*(p->data))());
-      return QVariant();
+      switch(propertyId) {
+            case P_COLOR:     return _color;
+            case P_VISIBLE:   return _visible;
+            case P_SELECTED:  return _selected;
+            case P_USER_OFF:  return _userOff;
+            default:
+                  return QVariant();
+            }
       }
 
 //---------------------------------------------------------
@@ -1551,145 +1530,76 @@ QVariant Element::getProperty(P_ID propertyId) const
 
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
-      Property<Element>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            score()->addRefresh(canvasBoundingRect());
-            return true;
+      switch(propertyId) {
+            case P_COLOR:
+                  _color = v.value<QColor>();
+                  break;
+            case P_VISIBLE:
+                  _visible = v.toBool();
+                  break;
+            case P_SELECTED:
+                  _selected = v.toBool();
+                  break;
+            case P_USER_OFF:
+                  _userOff = v.toPointF();
+                  break;
+            default:
+                  qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
+                  return false;
             }
+      setGenerated(false);
+      score()->addRefresh(canvasBoundingRect());
       qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
-      return false;
+      return true;
       }
 
-bool Element::setProperty(const QString& name, const QDomElement& e)
+//---------------------------------------------------------
+//   isChordRest
+//---------------------------------------------------------
+
+bool Element::isChordRest() const
       {
-      for (int i = 0;; ++i) {
-            P_ID id = propertyList[i].id;
-            if (id == P_END)
-                  break;
-            if (propertyName(id) == name) {
-                  QVariant v = ::getProperty(id, e);
-                  setVariant(id, ((*this).*(propertyList[i].data))(), v);
-                  setGenerated(false);
-                  score()->addRefresh(canvasBoundingRect());
-                  return true;
-                  }
-            }
-      return false;
+      return type() == REST || type() == CHORD;
       }
 
 //---------------------------------------------------------
-//   setVariant
+//   isDurationElement
 //---------------------------------------------------------
 
-void Element::setVariant(P_ID id, void* data, const QVariant& value)
+bool Element::isDurationElement() const
       {
-      if (id == P_VISIBLE) {
-            setVisible(value.toBool());
-            return;
-            }
-      switch(propertyType(id)) {
-            case T_BOOL:
-                  *(bool*)data = value.toBool();
-                  break;
-            case T_SUBTYPE:
-            case T_INT:
-                  *(int*)data = value.toInt();
-                  break;
-            case T_SREAL:
-                  *(qreal*)data = value.toDouble() * spatium();
-                  break;
-            case T_REAL:
-                  *(qreal*)data = value.toDouble();
-                  break;
-            case T_FRACTION:
-                  *(Fraction*)data = value.value<Fraction>();
-                  break;
-            case T_SCALE:
-            case T_POINT:
-                  *(QPointF*)data = value.toPointF();
-                  break;
-            case T_SIZE:
-                  *(QSizeF*)data = value.toSizeF();
-                  break;
-            case T_COLOR:
-                  *(QColor*)data = value.value<QColor>();
-                  break;
-            case T_STRING:
-                  *(QString*)data = value.toString();
-                  break;
-            case T_DIRECTION:
-            case T_DIRECTION_H:
-            case T_LAYOUT_BREAK:
-            case T_VALUE_TYPE:
-            case T_BEAM_MODE:
-                  *(int*)data = value.toInt();
-                  break;
-            }
+      return isChordRest() || (type() == TUPLET);
       }
 
 //---------------------------------------------------------
-//   getVariant
-//    Return QVariant from void* to property.
-//    The external representation of the property is
-//    returned, suitable for writing to xml.
+//   isSLine
 //---------------------------------------------------------
 
-QVariant Element::getVariant(P_ID id, void* data) const
+bool Element::isSLine() const
       {
-      if (data) {
-            switch(propertyType(id)) {
-                  case T_BOOL:
-                        return QVariant(*(bool*)data);
-                  case T_SUBTYPE:
-                  case T_INT:
-                  case T_DIRECTION:
-                  case T_DIRECTION_H:
-                  case T_LAYOUT_BREAK:
-                  case T_VALUE_TYPE:
-                  case T_BEAM_MODE:
-                        return QVariant(*(int*)data);
-                  case T_FRACTION:
-                        return QVariant::fromValue(*(Fraction*)data);
-                  case T_SREAL:
-                        return QVariant((*(qreal*)data) / spatium());
-                  case T_REAL:
-                        return QVariant(*(qreal*)data);
-                  case T_COLOR:
-                        return QVariant(*(QColor*)data);
-                  case T_POINT:
-                  case T_SCALE:
-                        return QVariant(*(QPointF*)data);
-                  case T_SIZE:
-                        return QVariant(*(QSizeF*)data);
-                  case T_STRING:
-                        return QVariant(*(QString*)data);
-                  }
-            }
-      return QVariant();
+      return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
+         || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
       }
 
-bool Element::isChordRest() const                   { return type() == REST || type() == CHORD;   }
-bool Element::isDurationElement() const             { return isChordRest() || (type() == TUPLET); }
-bool Element::isSLine() const {
-            return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
-               || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
-            }
-bool Element::isText() const {
-              return type()  == TEXT
-                || type() == LYRICS
-                || type() == DYNAMIC
-                || type() == FINGERING
-                || type() == HARMONY
-                || type() == MARKER
-                || type() == JUMP
-                || type() == STAFF_TEXT
-                || type() == REHEARSAL_MARK
-                || type() == INSTRUMENT_CHANGE
-                || type() == FIGURED_BASS
-                || type() == TEMPO_TEXT;
-            }
+//---------------------------------------------------------
+//   isText
+//---------------------------------------------------------
+
+bool Element::isText() const
+      {
+      return type()  == TEXT
+         || type() == LYRICS
+         || type() == DYNAMIC
+         || type() == FINGERING
+         || type() == HARMONY
+         || type() == MARKER
+         || type() == JUMP
+         || type() == STAFF_TEXT
+         || type() == REHEARSAL_MARK
+         || type() == INSTRUMENT_CHANGE
+         || type() == FIGURED_BASS
+         || type() == TEMPO_TEXT;
+      }
 
 //---------------------------------------------------------
 //   undoSetColor

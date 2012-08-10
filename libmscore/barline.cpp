@@ -22,18 +22,6 @@
 #include "stafftype.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static int defaultSubtype = 0;
-
-Property<BarLine> BarLine::propertyList[] = {
-      { P_SUBTYPE, &BarLine::pSubtype, &defaultSubtype },
-      };
-
-static const int PROPERTIES = sizeof(BarLine::propertyList)/sizeof(*BarLine::propertyList);
-
-//---------------------------------------------------------
 //   barLineNames
 //    must be synchronized with enum BarLineType
 //---------------------------------------------------------
@@ -663,43 +651,27 @@ void BarLine::remove(Element* e)
       }
 
 //---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-Property<BarLine>* BarLine::property(P_ID id) const
-      {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant BarLine::getProperty(P_ID propertyId) const
+QVariant BarLine::getProperty(P_ID id) const
       {
-      Property<BarLine>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(BarLine*)this).*(p->data))());
-      return Element::getProperty(propertyId);
+      if (id == P_SUBTYPE)
+            return _subtype;
+      return Element::getProperty(id);
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool BarLine::setProperty(P_ID propertyId, const QVariant& v)
+bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
-      Property<BarLine>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            return true;
-            }
+      if (id == P_SUBTYPE)
+            _subtype = BarLineType(v.toInt());
+      else
+            return Element::setProperty(id, v);
       score()->setLayoutAll(true);
-      return Element::setProperty(propertyId, v);
+      return true;
       }
 

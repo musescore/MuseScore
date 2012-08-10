@@ -55,42 +55,6 @@
 #include "notedot.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static bool falseVal                = false;
-static MScore::DirectionH defaultMirror     = MScore::DH_AUTO;
-static MScore::Direction defaultDotPosition = MScore::AUTO;
-static int defaultOnTimeOffset      = 0;
-static int defaultOffTimeOffset     = 0;
-static int defaultHeadGroup         = 0;
-static int defaultVeloOffset        = 0;
-static qreal defaultTuning          = 0.0;
-static int defaultFret              = -1;
-static int defaultString            = -1;
-static MScore::ValueType defaultVeloType    = MScore::OFFSET_VAL;
-static Note::NoteHeadType defaultHeadType = Note::HEAD_AUTO;
-
-Property<Note> Note::propertyList[] = {
-      { P_PITCH,          &Note::pPitch,         0 },
-      { P_TPC,            &Note::pTpc,           0 },
-      { P_SMALL,          &Note::pSmall,         &falseVal },
-      { P_MIRROR_HEAD,    &Note::pMirror,        &defaultMirror },
-      { P_DOT_POSITION,   &Note::pDotPosition,   &defaultDotPosition },
-      { P_ONTIME_OFFSET,  &Note::pOnTimeUserOffset,  &defaultOnTimeOffset },
-      { P_OFFTIME_OFFSET, &Note::pOffTimeUserOffset, &defaultOffTimeOffset },
-      { P_HEAD_GROUP,     &Note::pHeadGroup,     &defaultHeadGroup  },
-      { P_VELO_OFFSET,    &Note::pVeloOffset,    &defaultVeloOffset },
-      { P_TUNING,         &Note::pTuning,        &defaultTuning     },
-      { P_FRET,           &Note::pFret,          &defaultFret       },
-      { P_STRING,         &Note::pString,        &defaultString     },
-      { P_GHOST,          &Note::pGhost,         &falseVal          },
-      { P_HEAD_TYPE,      &Note::pHeadType,      &defaultHeadType   },
-      { P_VELO_TYPE,      &Note::pVeloType,      &defaultVeloType   },
-      { P_END,            0, 0 },
-      };
-
-//---------------------------------------------------------
 //   noteHeads
 //    note head groups
 //---------------------------------------------------------
@@ -632,7 +596,22 @@ void Note::write(Xml& xml) const
                   e->write(xml);
             xml.etag();
             }
-      WRITE_PROPERTIES(Note)
+      writeProperty(xml, P_PITCH);
+      writeProperty(xml, P_TPC);
+      writeProperty(xml, P_SMALL);
+      writeProperty(xml, P_MIRROR_HEAD);
+      writeProperty(xml, P_DOT_POSITION);
+      writeProperty(xml, P_ONTIME_OFFSET);
+      writeProperty(xml, P_OFFTIME_OFFSET);
+      writeProperty(xml, P_HEAD_GROUP);
+      writeProperty(xml, P_VELO_OFFSET);
+      writeProperty(xml, P_TUNING);
+      writeProperty(xml, P_FRET);
+      writeProperty(xml, P_STRING);
+      writeProperty(xml, P_GHOST);
+      writeProperty(xml, P_HEAD_TYPE);
+      writeProperty(xml, P_VELO_TYPE);
+
       _pitch = rpitch;
       _tpc   = rtpc;
       xml.etag();
@@ -656,8 +635,36 @@ void Note::read(const QDomElement& de)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
-            if (setProperty(tag, e))
-                  ;
+            if (tag == "pitch")
+                  _pitch = val.toInt();
+            else if (tag == "tpc")
+                  _tpc = val.toInt();
+            else if (tag == "small")
+                  setSmall(val.toInt());
+            else if (tag == "mirror")
+                  setProperty(P_MIRROR_HEAD, ::getProperty(P_MIRROR_HEAD, e));
+            else if (tag == "dotPosition")
+                  setProperty(P_DOT_POSITION, ::getProperty(P_DOT_POSITION, e));
+            else if (tag == "onTimeOffset")
+                  setOnTimeUserOffset(val.toInt());
+            else if (tag == "offTimeOffset")
+                  setOffTimeUserOffset(val.toInt());
+            else if (tag == "head")
+                  setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
+            else if (tag == "velocity")
+                  setVeloOffset(val.toInt());
+            else if (tag == "tuning")
+                  setTuning(val.toDouble());
+            else if (tag == "fret")
+                  setFret(val.toInt());
+            else if (tag == "string")
+                  setString(val.toInt());
+            else if (tag == "ghost")
+                  setGhost(val.toInt());
+            else if (tag == "headType")
+                  setProperty(P_HEAD_TYPE, ::getProperty(P_HEAD_TYPE, e));
+            else if (tag == "veloType")
+                  setProperty(P_VELO_TYPE, ::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
                   _line = val.toInt();
             else if (tag == "Tie") {
@@ -1627,4 +1634,151 @@ void Note::setPlayEvents(const QList<NoteEvent*>& v)
             _playEvents.append(new NoteEvent(*e));
       }
 
-PROPERTY_FUNCTIONS(Note)
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Note::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_PITCH:
+                  return pitch();
+            case P_TPC:
+                  return tpc();
+            case P_SMALL:
+                  return small();
+            case P_MIRROR_HEAD:
+                  return userMirror();
+            case P_DOT_POSITION:
+                  return dotPosition();
+            case P_ONTIME_OFFSET:
+                  return onTimeUserOffset();
+            case P_OFFTIME_OFFSET:
+                  return offTimeUserOffset();
+            case P_HEAD_GROUP:
+                  return headGroup();
+            case P_VELO_OFFSET:
+                  return veloOffset();
+            case P_TUNING:
+                  return tuning();
+            case P_FRET:
+                  return fret();
+            case P_STRING:
+                  return string();
+            case P_GHOST:
+                  return ghost();
+            case P_HEAD_TYPE:
+                  return headType();
+            case P_VELO_TYPE:
+                  return veloType();
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Note::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_PITCH:
+                  setPitch(v.toInt());
+                  break;
+            case P_TPC:
+                  setTpc(v.toInt());
+                  break;
+            case P_SMALL:
+                  setSmall(v.toBool());
+                  break;
+            case P_MIRROR_HEAD:
+                  setUserMirror(MScore::DirectionH(v.toInt()));
+                  break;
+            case P_DOT_POSITION:
+                  setDotPosition(MScore::Direction(v.toInt()));
+                  break;
+            case P_ONTIME_OFFSET:
+                  setOnTimeUserOffset(v.toInt());
+                  break;
+            case P_OFFTIME_OFFSET:
+                  setOffTimeUserOffset(v.toInt());
+                  break;
+            case P_HEAD_GROUP:
+                  setHeadGroup(NoteHeadGroup(v.toInt()));
+                  break;
+            case P_VELO_OFFSET:
+                  setVeloOffset(v.toInt());
+                  break;
+            case P_TUNING:
+                  setTuning(v.toDouble());
+                  break;
+            case P_FRET:
+                  setFret(v.toInt());
+                  break;
+            case P_STRING:
+                  setString(v.toInt());
+                  break;
+            case P_GHOST:
+                  setGhost(v.toBool());
+                  break;
+            case P_HEAD_TYPE:
+                  setHeadType(NoteHeadType(v.toInt()));
+                  break;
+            case P_VELO_TYPE:
+                  setVeloType(MScore::ValueType(v.toInt()));
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Note::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_SMALL:
+                  return false;
+            case P_MIRROR_HEAD:
+                  return MScore::DH_AUTO;
+            case P_DOT_POSITION:
+                  return MScore::AUTO;
+            case P_ONTIME_OFFSET:
+            case P_OFFTIME_OFFSET:
+            case P_HEAD_GROUP:
+            case P_VELO_OFFSET:
+                  return 0;
+            case P_TUNING:
+                  return 0.0;
+            case P_FRET:
+            case P_STRING:
+                  return -1;
+            case P_GHOST:
+                  return false;
+            case P_HEAD_TYPE:
+                  return Note::HEAD_AUTO;
+            case P_VELO_TYPE:
+                  return MScore::OFFSET_VAL;
+            default:
+                  break;
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   writeProperty
+//---------------------------------------------------------
+
+void Note::writeProperty(Xml& xml, P_ID id) const
+      {
+      xml.tag(id, getProperty(id), propertyDefault(id));
+      }
+

@@ -229,11 +229,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case T_COLOR:
                   tag(name, data);
                   break;
-#if 0
-            case T_FRACTION:
-                  fTag(name, *(Fraction*)data);
-                  break;
-#endif
+
             case T_DIRECTION:
                   switch(MScore::Direction(data.toInt())) {
                         case MScore::UP:
@@ -283,112 +279,6 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
             default:
                   abort();
-            }
-      }
-
-//---------------------------------------------------------
-//   tag
-//---------------------------------------------------------
-
-void Xml::tag(P_ID id, void* data, void* defaultVal)
-      {
-      const char* name = propertyName(id);
-      if (name == 0)
-            return;
-      switch(propertyType(id)) {
-            case T_BOOL:
-                  if (compareProperty<bool>(data, defaultVal))
-                        tag(name, QVariant(*(bool*)data));
-                  break;
-            case T_SUBTYPE:
-            case T_INT:
-                  if (compareProperty<int>(data, defaultVal))
-                        tag(name, QVariant(*(int*)data));
-                  break;
-            case T_SREAL:
-            case T_REAL:
-                  if (compareProperty<qreal>(data, defaultVal))
-                        tag(name, QVariant(*(qreal*)data));
-                  break;
-            case T_FRACTION:
-                  if (compareProperty<Fraction>(data, defaultVal))
-                        fTag(name, *(Fraction*)data);
-                  break;
-            case T_SCALE:
-            case T_POINT:
-                  if (compareProperty<QPointF>(data, defaultVal))
-                        tag(name, QVariant(*(QPointF*)data));
-                  break;
-            case T_SIZE:
-                  if (compareProperty<QSizeF>(data, defaultVal))
-                        tag(name, QVariant(*(QSizeF*)data));
-                  break;
-            case T_COLOR:
-                  if (compareProperty<QColor>(data, defaultVal))
-                        tag(name, QVariant(*(QColor*)data));
-                  break;
-            case T_STRING:
-                  if (compareProperty<QString>(data, defaultVal))
-                        tag(name, QVariant(*(QString*)data));
-                  break;
-
-            case T_DIRECTION:
-                  if (compareProperty<MScore::Direction>(data, defaultVal)) {
-                        switch(MScore::Direction(*(MScore::Direction*)data)) {
-                              case MScore::UP:
-                                    tag(name, QVariant("up"));
-                                    break;
-                              case MScore::DOWN:
-                                    tag(name, QVariant("down"));
-                                    break;
-                              case MScore::AUTO:
-                                    break;
-                              }
-                        }
-                  break;
-            case T_DIRECTION_H:
-                  if (compareProperty<MScore::DirectionH>(data, defaultVal)) {
-                        switch(MScore::DirectionH(*(MScore::DirectionH*)data)) {
-                              case MScore::DH_LEFT:
-                                    tag(name, QVariant("left"));
-                                    break;
-                              case MScore::DH_RIGHT:
-                                    tag(name, QVariant("right"));
-                                    break;
-                              case MScore::DH_AUTO:
-                                    break;
-                              }
-                        }
-                  break;
-            case T_LAYOUT_BREAK:
-                  if (compareProperty<LayoutBreakType>(data, defaultVal)) {
-                        switch(*(LayoutBreakType*)data) {
-                              case LAYOUT_BREAK_LINE:
-                                    tag(name, QVariant("line"));
-                                    break;
-                              case LAYOUT_BREAK_PAGE:
-                                    tag(name, QVariant("page"));
-                                    break;
-                              case LAYOUT_BREAK_SECTION:
-                                    tag(name, QVariant("section"));
-                                    break;
-                              }
-                        }
-                  break;
-            case T_VALUE_TYPE:
-                  if (compareProperty<MScore::ValueType>(data, defaultVal)) {
-                        switch(*(MScore::ValueType*)data) {
-                              case MScore::OFFSET_VAL:
-                                    tag(name, QVariant("offset"));
-                                    break;
-                              case MScore::USER_VAL:
-                                    tag(name, QVariant("user"));
-                                    break;
-                              }
-                        }
-                  break;
-            case T_BEAM_MODE:
-                  break;
             }
       }
 
