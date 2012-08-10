@@ -29,16 +29,16 @@ static QList<FiguredBassFont> g_FBFonts;
 
 // used for indexed access to parenthesis chars
 // (these is no normAccidToChar[], as accidentals may use mult. chars in normalized display):
-const QChar FiguredBassItem::normParenthToChar[FBINumOfParenth] =
+const QChar FiguredBassItem::normParenthToChar[NumOfParentheses] =
 { 0, '(', ')', '[', ']'};
 
 
 FiguredBassItem::FiguredBassItem(Score* s, int l)
       : Element(s), ord(l)
       {
-      _prefix     = _suffix = FBIAccidNone;
+      _prefix     = _suffix = ModifierNone;
       _digit      = FBIDigitNone;
-      parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = FBIParenthNone;
+      parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = ParenthesisNone;
       _contLine   = false;
       }
 
@@ -96,21 +96,21 @@ bool FiguredBassItem::parse(QString& str)
       parseParenthesis(str, 4);
 
       // remove useless parentheses
-      if(_prefix == FBIAccidNone && parenth[1] == FBIParenthNone) {
+      if(_prefix == ModifierNone && parenth[1] == ParenthesisNone) {
             parenth[1] = parenth[0];
-            parenth[0] = FBIParenthNone;
+            parenth[0] = ParenthesisNone;
             }
-      if(_digit == FBIDigitNone && parenth[2] == FBIParenthNone) {
+      if(_digit == FBIDigitNone && parenth[2] == ParenthesisNone) {
             parenth[2] = parenth[1];
-            parenth[1] = FBIParenthNone;
+            parenth[1] = ParenthesisNone;
             }
-      if(!_contLine && parenth[3] == FBIParenthNone) {
+      if(!_contLine && parenth[3] == ParenthesisNone) {
             parenth[3] = parenth[4];
-            parenth[4] = FBIParenthNone;
+            parenth[4] = ParenthesisNone;
             }
-      if(_suffix == FBIAccidNone && parenth[2] == FBIParenthNone) {
+      if(_suffix == ModifierNone && parenth[2] == ParenthesisNone) {
             parenth[2] = parenth[3];
-            parenth[3] = FBIParenthNone;
+            parenth[3] = ParenthesisNone;
             }
 
       // some checks:
@@ -120,9 +120,9 @@ bool FiguredBassItem::parse(QString& str)
       // can't have BOTH prefix and suffix
       // prefix, digit, suffix and cont.line cannot be ALL empty
       // suffix cannot combine with empty digit
-      if( (_prefix != FBIAccidNone && _suffix != FBIAccidNone)
-            || (_prefix == FBIAccidNone && _digit == FBIDigitNone && _suffix == FBIAccidNone && !_contLine)
-            || ( (_suffix == FBIAccidPlus || _suffix == FBIAccidBackslash || _suffix == FBIAccidSlash)
+      if( (_prefix != ModifierNone && _suffix != ModifierNone)
+            || (_prefix == ModifierNone && _digit == FBIDigitNone && _suffix == ModifierNone && !_contLine)
+            || ( (_suffix == ModifierPlus || _suffix == ModifierBackslash || _suffix == ModifierSlash)
                   && _digit == FBIDigitNone) )
             return false;
       return true;
@@ -140,54 +140,54 @@ bool FiguredBassItem::parse(QString& str)
 
 int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
       {
-      FBIAccidental *   dest        = bPrefix ? &_prefix : &_suffix;
-      bool              done        = false;
-      int               size        = str.size();
+      Modifier *  dest  = bPrefix ? &_prefix : &_suffix;
+      bool        done  = false;
+      int         size  = str.size();
       str = str.trimmed();
 
-      *dest             = FBIAccidNone;
+      *dest       = ModifierNone;
 
       while(str.size()) {
             switch(str.at(0).unicode())
             {
             case 'b':
-                  if(*dest != FBIAccidNone) {
-                        if(*dest == FBIAccidFlat)     // FLAT may double a previous FLAT
-                              *dest = FBIAccidDoubleFlat;
+                  if(*dest != ModifierNone) {
+                        if(*dest == ModifierFlat)     // FLAT may double a previous FLAT
+                              *dest = ModifierDoubleFlat;
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = FBIAccidFlat;
+                  *dest = ModifierFlat;
                   break;
             case 'h':
-                  if(*dest != FBIAccidNone)           // cannot combine with any other accidental
+                  if(*dest != ModifierNone)           // cannot combine with any other accidental
                         return -1;
-                  *dest = FBIAccidNatural;
+                  *dest = ModifierNatural;
                   break;
             case '#':
-                  if(*dest != FBIAccidNone) {
-                        if(*dest == FBIAccidSharp)    // SHARP may double a preivous SHARP
-                              *dest = FBIAccidDoubleSharp;
+                  if(*dest != ModifierNone) {
+                        if(*dest == ModifierSharp)    // SHARP may double a preivous SHARP
+                              *dest = ModifierDoubleSharp;
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = FBIAccidSharp;
+                  *dest = ModifierSharp;
                   break;
             // '+', '\\' and '/' go into the suffix
             case '+':
-                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
+                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
                         return -1;
-                  _suffix = FBIAccidPlus;
+                  _suffix = ModifierPlus;
                   break;
             case '\\':
-                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
+                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
                         return -1;
-                  _suffix = FBIAccidBackslash;
+                  _suffix = ModifierBackslash;
                   break;
             case '/':
-                  if(_suffix != FBIAccidNone)         // cannot combine with any other accidental
+                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
                         return -1;
-                  _suffix = FBIAccidSlash;
+                  _suffix = ModifierSlash;
                   break;
             default:                                 // any other char: no longer in prefix/suffix
                   done = true;
@@ -248,26 +248,26 @@ int FiguredBassItem::parseDigit(QString& str)
 int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
       {
       int c = str[0].unicode();
-      FBIParenthesis code = FBIParenthNone;
+      Parenthesis code = ParenthesisNone;
       switch(c)
       {
       case '(':
-            code =FBIParenthRoundOpen;
+            code =ParenthesisRoundOpen;
             break;
       case ')':
-            code =FBIParenthRoundClosed;
+            code =ParenthesisRoundClosed;
             break;
       case '[':
-            code =FBIParenthSquaredOpen;
+            code =ParenthesisSquaredOpen;
             break;
       case ']':
-            code =FBIParenthSquaredClosed;
+            code =ParenthesisSquaredClosed;
             break;
       default:
             break;
             }
       parenth[parenthIdx] = code;
-      if(code != FBIParenthNone) {
+      if(code != ParenthesisNone) {
             str.remove(0, 1);
             return 1;
             }
@@ -284,25 +284,25 @@ int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
 QString FiguredBassItem::normalizedText() const
       {
       QString str = QString();
-      if(parenth[0] != FBIParenthNone)
+      if(parenth[0] != ParenthesisNone)
             str.append(normParenthToChar[parenth[0]]);
 
-      if(_prefix != FBIAccidNone) {
+      if(_prefix != ModifierNone) {
             switch(_prefix)
             {
-            case FBIAccidFlat:
+            case ModifierFlat:
                   str.append('b');
                   break;
-            case FBIAccidNatural:
+            case ModifierNatural:
                   str.append('h');
                   break;
-            case FBIAccidSharp:
+            case ModifierSharp:
                   str.append('#');
                   break;
-            case FBIAccidDoubleFlat:
+            case ModifierDoubleFlat:
                   str.append("bb");
                   break;
-            case FBIAccidDoubleSharp:
+            case ModifierDoubleSharp:
                   str.append("##");
                   break;
             default:
@@ -310,42 +310,42 @@ QString FiguredBassItem::normalizedText() const
             }
             }
 
-      if(parenth[1] != FBIParenthNone)
+      if(parenth[1] != ParenthesisNone)
             str.append(normParenthToChar[parenth[1]]);
 
       // digit
       if(_digit != FBIDigitNone)
             str.append(QChar('0' + _digit));
 
-      if(parenth[2] != FBIParenthNone)
+      if(parenth[2] != ParenthesisNone)
             str.append(normParenthToChar[parenth[2]]);
 
       // suffix
-      if(_suffix != FBIAccidNone) {
+      if(_suffix != ModifierNone) {
             switch(_suffix)
             {
-            case FBIAccidFlat:
+            case ModifierFlat:
                   str.append('b');
                   break;
-            case FBIAccidNatural:
+            case ModifierNatural:
                   str.append('h');
                   break;
-            case FBIAccidSharp:
+            case ModifierSharp:
                   str.append('#');
                   break;
-            case FBIAccidPlus:
+            case ModifierPlus:
                   str.append('+');
                   break;
-            case FBIAccidBackslash:
+            case ModifierBackslash:
                   str.append('\\');
                   break;
-            case FBIAccidSlash:
+            case ModifierSlash:
                   str.append('/');
                   break;
-            case FBIAccidDoubleFlat:
+            case ModifierDoubleFlat:
                   str.append("bb");
                   break;
-            case FBIAccidDoubleSharp:
+            case ModifierDoubleSharp:
                   str.append("##");
                   break;
             default:
@@ -353,11 +353,11 @@ QString FiguredBassItem::normalizedText() const
             }
             }
 
-      if(parenth[3] != FBIParenthNone)
+      if(parenth[3] != ParenthesisNone)
             str.append(normParenthToChar[parenth[3]]);
       if(_contLine)
             str.append('_');
-      if(parenth[4] != FBIParenthNone)
+      if(parenth[4] != ParenthesisNone)
             str.append(normParenthToChar[parenth[4]]);
 
       return str;
@@ -372,11 +372,11 @@ void FiguredBassItem::write(Xml& xml) const
       xml.stag("FiguredBassItem");
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
                     .arg(parenth[0]) .arg(parenth[1]) .arg(parenth[2]) .arg(parenth[3]) .arg(parenth[4]) );
-      if(_prefix != FBIAccidNone)
+      if(_prefix != ModifierNone)
             xml.tag(QString("prefix"), _prefix);
       if(_digit != FBIDigitNone)
             xml.tag(QString("digit"), _digit);
-      if(_suffix != FBIAccidNone)
+      if(_suffix != ModifierNone)
             xml.tag(QString("suffix"), _suffix);
       if(_contLine)
             xml.tag("continuationLine", _contLine);
@@ -395,155 +395,24 @@ void FiguredBassItem::read(const QDomElement& de)
             int   iVal = val.toInt();
 
             if(tag == "brackets") {
-                  parenth[0] = (FBIParenthesis)e.attribute("b0").toInt();
-                  parenth[1] = (FBIParenthesis)e.attribute("b1").toInt();
-                  parenth[2] = (FBIParenthesis)e.attribute("b2").toInt();
-                  parenth[3] = (FBIParenthesis)e.attribute("b3").toInt();
-                  parenth[4] = (FBIParenthesis)e.attribute("b4").toInt();
+                  parenth[0] = (Parenthesis)e.attribute("b0").toInt();
+                  parenth[1] = (Parenthesis)e.attribute("b1").toInt();
+                  parenth[2] = (Parenthesis)e.attribute("b2").toInt();
+                  parenth[3] = (Parenthesis)e.attribute("b3").toInt();
+                  parenth[4] = (Parenthesis)e.attribute("b4").toInt();
                   }
             else if(tag == "prefix")
-                  _prefix = (FBIAccidental)iVal;
+                  _prefix = (Modifier)iVal;
             else if(tag == "digit")
                   _digit = iVal;
             else if(tag == "suffix")
-                  _suffix = (FBIAccidental)iVal;
+                  _suffix = (Modifier)iVal;
             else if(tag == "continuationLine")
                   _contLine = iVal;
             else if(!Element::readProperties(e))
                   domError(e);
             }
 }
-
-//---------------------------------------------------------
-//   Convert MusicXML prefix/suffix to FBIAccidental
-//---------------------------------------------------------
-
-// TODO add missing non-accidental types
-
-FiguredBassItem::FBIAccidental FiguredBassItem::MusicXML2FBIAccidental(const QString prefix) const
-      {
-      if (prefix == "sharp")
-            return FBIAccidSharp;
-      else if (prefix == "flat")
-            return FBIAccidFlat;
-      else if (prefix == "natural")
-            return FBIAccidNatural;
-      else if (prefix == "double-sharp")
-            return FBIAccidDoubleSharp;
-      else if (prefix == "flat-flat")
-            return FBIAccidDoubleFlat;
-      else if (prefix == "sharp-sharp")
-            return FBIAccidDoubleSharp;
-      else if (prefix == "slash")
-            return FBIAccidSlash;
-      else
-            return FBIAccidNone;
-      }
-
-//---------------------------------------------------------
-//   Convert FBIAccidental to MusicXML prefix/suffix
-//---------------------------------------------------------
-
-// TODO add missing non-accidental types
-
-QString FiguredBassItem::FBIAccidental2MusicXML(FiguredBassItem::FBIAccidental prefix) const
-      {
-      switch (prefix) {
-            case FBIAccidNone:        return "";
-            case FBIAccidDoubleFlat:  return "flat-flat";
-            case FBIAccidFlat:        return "flat";
-            case FBIAccidNatural:     return "natural";
-            case FBIAccidSharp:       return "sharp";
-            case FBIAccidDoubleSharp: return "double-sharp";
-            case FBIAccidPlus:        return ""; // TODO TBD
-            case FBIAccidBackslash:   return ""; // TODO TBD
-            case FBIAccidSlash:       return "slash";
-            case FBINumOfAccid:       return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
-            }
-      return "";
-      }
-
-//---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FiguredBassItem state based on the MusicXML <figure> node de.
-// In MusicXML, parentheses is set to "yes" or "no" for the figured-bass
-// node instead of for each individual <figure> node.
-//---------------------------------------------------------
-
-void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
-      {
-      // read the <figure> node de
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            int   iVal = val.toInt();
-            if (tag == "extend")
-                  ; // TODO
-            else if (tag == "figure-number") {
-                  // MusicXML spec states figure-number is a number
-                  // MuseScore can only handle single digit
-                  if (1 <= iVal && iVal <= 9)
-                        _digit = iVal;
-                  }
-            else if (tag == "prefix")
-                  _prefix = MusicXML2FBIAccidental(val);
-            else if (tag == "suffix")
-                  _suffix = MusicXML2FBIAccidental(val);
-            else
-                  domError(e);
-            }
-      // set parentheses
-      if (paren) {
-            // parenthesis open
-            if (_prefix != FBIAccidNone)
-                  parenth[0] = FBIParenthRoundOpen; // before prefix
-            else if (_digit != FBIDigitNone)
-                  parenth[1] = FBIParenthRoundOpen; // before digit
-            else if (_suffix != FBIAccidNone)
-                  parenth[2] = FBIParenthRoundOpen; // before suffix
-            // parenthesis close
-            if (_suffix != FBIAccidNone)
-                  parenth[3] = FBIParenthRoundClosed; // after suffix
-            else if (_digit != FBIDigitNone)
-                  parenth[2] = FBIParenthRoundClosed; // after digit
-            else if (_prefix != FBIAccidNone)
-                  parenth[1] = FBIParenthRoundClosed; // after prefix
-            }
-      }
-
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void FiguredBassItem::writeMusicXML(Xml& xml) const
-      {
-      xml.stag("figure");
-      QString strPrefix = FBIAccidental2MusicXML(_prefix);
-      if (strPrefix != "")
-            xml.tag("prefix", strPrefix);
-      if (_digit != FBIDigitNone)
-            xml.tag("figure-number", _digit);
-      QString strSuffix = FBIAccidental2MusicXML(_suffix);
-      if (strSuffix != "")
-            xml.tag("suffix", strSuffix);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   startsWithParenthesis
-//---------------------------------------------------------
-
-bool FiguredBassItem::startsWithParenthesis() const
-      {
-      if (_prefix != FBIAccidNone)
-            return (parenth[0] != FBIParenthNone);
-      if (_digit != FBIDigitNone)
-            return (parenth[1] != FBIParenthNone);
-      if (_suffix != FBIAccidNone)
-            return (parenth[2] != FBIParenthNone);
-      return false;
-      }
 
 //---------------------------------------------------------
 //   FiguredBassItem layout()
@@ -571,11 +440,11 @@ void FiguredBassItem::layout()
       int font = 0;
       int style = score()->styleI(ST_figuredBassStyle);
 
-      if(parenth[0] != FBIParenthNone)
+      if(parenth[0] != ParenthesisNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[0]]);
 
       // prefix
-      if(_prefix != FBIAccidNone) {
+      if(_prefix != ModifierNone) {
             // if no digit, the string created so far 'hangs' to the left of the note
             if(_digit == FBIDigitNone)
                   x1 = fm.width(str);
@@ -585,7 +454,7 @@ void FiguredBassItem::layout()
                   x2 = fm.width(str);
             }
 
-      if(parenth[1] != FBIParenthNone)
+      if(parenth[1] != ParenthesisNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[1]]);
 
       // digit
@@ -594,27 +463,27 @@ void FiguredBassItem::layout()
             x1 = fm.width(str);
             // if suffix is a combining shape, combine it with digit
             // unless there is a parenthesis in between
-            if( (_suffix == FBIAccidPlus || _suffix == FBIAccidBackslash || _suffix == FBIAccidSlash)
-                        && parenth[2] == FBIParenthNone)
-                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(FBIAccidPlus-1)]);
+            if( (_suffix == ModifierPlus || _suffix == ModifierBackslash || _suffix == ModifierSlash)
+                        && parenth[2] == ParenthesisNone)
+                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(ModifierPlus-1)]);
             else
                   str.append(g_FBFonts.at(font).displayDigit[style][_digit][0]);
             // if some digit, the string from here onward 'hangs' to the right of the note
             x2 = fm.width(str);
             }
 
-      if(parenth[2] != FBIParenthNone)
+      if(parenth[2] != ParenthesisNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[2]]);
 
       // suffix
       // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
-      if( _suffix != FBIAccidNone
-                  && ( (_suffix != FBIAccidPlus && _suffix != FBIAccidBackslash && _suffix != FBIAccidSlash)
+      if( _suffix != ModifierNone
+                  && ( (_suffix != ModifierPlus && _suffix != ModifierBackslash && _suffix != ModifierSlash)
                         || _digit == FBIDigitNone
-                        || parenth[2] != FBIParenthNone) )
+                        || parenth[2] != ParenthesisNone) )
             str.append(g_FBFonts.at(font).displayAccidental[_suffix]);
 
-      if(parenth[3] != FBIParenthNone)
+      if(parenth[3] != ParenthesisNone)
             str.append(g_FBFonts.at(font).displayParenthesis[parenth[3]]);
 
       setDisplayText(str);                // this text will be displayed
@@ -667,7 +536,7 @@ void FiguredBassItem::draw(QPainter* painter) const
             }
 
       // closing cont.line parenthesis
-      if(parenth[4] != FBIParenthNone) {
+      if(parenth[4] != ParenthesisNone) {
             int x = len > 0.0 ? len : textWidth;
             painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
                   g_FBFonts.at(font).displayParenthesis[parenth[4]]);
@@ -675,37 +544,231 @@ void FiguredBassItem::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   FiguredBassItem undoSet... for scripting
+//   PROPERTY METHODS
 //---------------------------------------------------------
 
-void FiguredBassItem::undoSetPrefix(FBIAccidental pref)
+QVariant FiguredBassItem::getProperty(P_ID propertyId) const
       {
-      if(pref < FBIAccidPlus)
-            score()->undoChangeProperty(this, P_PREFIX, (int)pref);
+      switch(propertyId) {
+            case P_FBPREFIX:
+                  return _prefix;
+            case P_FBDIGIT:
+                  return _digit;
+            case P_FBSUFFIX:
+                  return _suffix;
+            case P_FBCONTINUATIONLINE:
+                  return _contLine;
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      score()->addRefresh(canvasBoundingRect());
+      int   val = v.toInt();
+      switch(propertyId) {
+            case P_FBPREFIX:
+                  if(val < ModifierNone || val >= ModifierPlus)
+                        return false;
+                  _prefix = (Modifier)val;
+                  break;
+            case P_FBDIGIT:
+                  if(val < 1 || val > 9)
+                        return false;
+                  _digit = val;
+                  break;
+            case P_FBSUFFIX:
+                  if(val < ModifierNone || val >= NumOfModifiers)
+                        return false;
+                  _suffix = (Modifier)val;
+                  break;
+            case P_FBCONTINUATIONLINE:
+                  _contLine = v.toBool();
+                  break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+QVariant FiguredBassItem::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_FBPREFIX:
+            case P_FBSUFFIX:
+                  return ModifierNone;
+            case P_FBDIGIT:
+                  return FBIDigitNone;
+            case P_FBCONTINUATIONLINE:
+                  return false;
+            default:
+                  return Element::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   UNDOABLE PROPERTY SETTERS
+//---------------------------------------------------------
+
+void FiguredBassItem::undoSetPrefix(Modifier pref)
+      {
+      if(pref < ModifierPlus)
+            score()->undoChangeProperty(this, P_FBPREFIX, (int)pref);
       }
 
 void FiguredBassItem::undoSetDigit(int digit)
       {
       if(digit >= 0 && digit <= 9)
-            score()->undoChangeProperty(this, P_DIGIT, digit);
+            score()->undoChangeProperty(this, P_FBDIGIT, digit);
       }
 
-void FiguredBassItem::undoSetSuffix(FBIAccidental suff)
+void FiguredBassItem::undoSetSuffix(Modifier suff)
       {
-      score()->undoChangeProperty(this, P_SUFFIX, suff);
+      score()->undoChangeProperty(this, P_FBSUFFIX, suff);
       }
 
-void FiguredBassItem::undoSetContinuationLine(bool val)
+void FiguredBassItem::undoSetContLine(bool val)
       {
-      score()->undoChangeProperty(this, P_CONTINUATIONLINE, val);
+      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, val);
       }
 
-FiguredBassItem * FiguredBass::addItem()
+//---------------------------------------------------------
+//
+//    MusicXML I/O
+//
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+//   Convert MusicXML prefix/suffix to Modifier
+//---------------------------------------------------------
+
+// TODO add missing non-accidental types
+
+FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefix) const
       {
-      int line = items.size();
-      FiguredBassItem fib(score(), line);
-      items.append(fib);
-      return &(items.last());
+      if (prefix == "sharp")
+            return ModifierSharp;
+      else if (prefix == "flat")
+            return ModifierFlat;
+      else if (prefix == "natural")
+            return ModifierNatural;
+      else if (prefix == "double-sharp")
+            return ModifierDoubleSharp;
+      else if (prefix == "flat-flat")
+            return ModifierDoubleFlat;
+      else if (prefix == "sharp-sharp")
+            return ModifierDoubleSharp;
+      else if (prefix == "slash")
+            return ModifierSlash;
+      else
+            return ModifierNone;
+      }
+
+//---------------------------------------------------------
+//   Convert Modifier to MusicXML prefix/suffix
+//---------------------------------------------------------
+
+// TODO add missing non-accidental types
+
+QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
+      {
+      switch (prefix) {
+            case ModifierNone:        return "";
+            case ModifierDoubleFlat:  return "flat-flat";
+            case ModifierFlat:        return "flat";
+            case ModifierNatural:     return "natural";
+            case ModifierSharp:       return "sharp";
+            case ModifierDoubleSharp: return "double-sharp";
+            case ModifierPlus:        return ""; // TODO TBD
+            case ModifierBackslash:   return ""; // TODO TBD
+            case ModifierSlash:       return "slash";
+            case NumOfModifiers:      return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
+            }
+      return "";
+      }
+
+//---------------------------------------------------------
+//   Read MusicXML
+//
+// Set the FiguredBassItem state based on the MusicXML <figure> node de.
+// In MusicXML, parentheses is set to "yes" or "no" for the figured-bass
+// node instead of for each individual <figure> node.
+//---------------------------------------------------------
+
+void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
+      {
+      // read the <figure> node de
+      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            int   iVal = val.toInt();
+            if (tag == "extend")
+                  ; // TODO
+            else if (tag == "figure-number") {
+                  // MusicXML spec states figure-number is a number
+                  // MuseScore can only handle single digit
+                  if (1 <= iVal && iVal <= 9)
+                        _digit = iVal;
+                  }
+            else if (tag == "prefix")
+                  _prefix = MusicXML2Modifier(val);
+            else if (tag == "suffix")
+                  _suffix = MusicXML2Modifier(val);
+            else
+                  domError(e);
+            }
+      // set parentheses
+      if (paren) {
+            // parenthesis open
+            if (_prefix != ModifierNone)
+                  parenth[0] = ParenthesisRoundOpen; // before prefix
+            else if (_digit != FBIDigitNone)
+                  parenth[1] = ParenthesisRoundOpen; // before digit
+            else if (_suffix != ModifierNone)
+                  parenth[2] = ParenthesisRoundOpen; // before suffix
+            // parenthesis close
+            if (_suffix != ModifierNone)
+                  parenth[3] = ParenthesisRoundClosed; // after suffix
+            else if (_digit != FBIDigitNone)
+                  parenth[2] = ParenthesisRoundClosed; // after digit
+            else if (_prefix != ModifierNone)
+                  parenth[1] = ParenthesisRoundClosed; // after prefix
+            }
+      }
+
+//---------------------------------------------------------
+//   Write MusicXML
+//---------------------------------------------------------
+
+void FiguredBassItem::writeMusicXML(Xml& xml) const
+      {
+      xml.stag("figure");
+      QString strPrefix = Modifier2MusicXML(_prefix);
+      if (strPrefix != "")
+            xml.tag("prefix", strPrefix);
+      if (_digit != FBIDigitNone)
+            xml.tag("figure-number", _digit);
+      QString strSuffix = Modifier2MusicXML(_suffix);
+      if (strSuffix != "")
+            xml.tag("suffix", strSuffix);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   startsWithParenthesis
+//---------------------------------------------------------
+
+bool FiguredBassItem::startsWithParenthesis() const
+      {
+      if (_prefix != ModifierNone)
+            return (parenth[0] != ParenthesisNone);
+      if (_digit != FBIDigitNone)
+            return (parenth[1] != ParenthesisNone);
+      if (_suffix != ModifierNone)
+            return (parenth[2] != ParenthesisNone);
+      return false;
       }
 
 //---------------------------------------------------------
@@ -1028,6 +1091,49 @@ void FiguredBass::setVisible(bool flag)
       }
 
 //---------------------------------------------------------
+//   PROPERTY METHODS
+//---------------------------------------------------------
+
+QVariant FiguredBass::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            default:
+                  return Text::getProperty(propertyId);
+            }
+      }
+
+bool FiguredBass::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      score()->addRefresh(canvasBoundingRect());
+      switch(propertyId) {
+            default:
+                  return Text::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+QVariant FiguredBass::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            default:
+                  return Text::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   TEMPORARY HACK!!!
+//---------------------------------------------------------
+
+FiguredBassItem * FiguredBass::addItem()
+      {
+      int line = items.size();
+      FiguredBassItem fib(score(), line);
+      items.append(fib);
+      return &(items.last());
+      }
+
+//---------------------------------------------------------
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;
 //    the main purpose of this function is to ensure that ONLY ONE F.b. element exists for each Segment/staff;
@@ -1297,6 +1403,12 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
       }
       return false;
 }
+
+//---------------------------------------------------------
+//
+//    MusicXML I/O
+//
+//---------------------------------------------------------
 
 //---------------------------------------------------------
 //   Read MusicXML

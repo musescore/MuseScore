@@ -58,9 +58,9 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @@ FiguredBassItem
 ///   One line of a figured bass indication
 //
-//    @P prefix               the accidental before the digit; enum FBIAccidNone, FBIAccidDoubleFlat, FBIAccidFlat, FBIAccidNatural, FBIAccidSharp, FBIAccidDoubleSharp
+//    @P prefix               the accidental before the digit; enum ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp
 //    @P digit                int         the main digit (0 - 9)
-//    @P suffix               the accidental/diacritic after the digit; enum FBIAccidNone, FBIAccidDoubleFlat, FBIAccidFlat, FBIAccidNatural, FBIAccidSharp, FBIAccidDoubleSharp, FBIAccidPlus, FBIAccidBackslash, FBIAccidSlash
+//    @P suffix               the accidental/diacritic after the digit; enum ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp, ModifierPlus, ModifierBackslash, ModifierSlash
 //    @P continuationLine     bool        whether the item has a continuation line or not
 //    @P displayText          string      R/O the text displayed (depends on configured fonts)
 //    @P normalizedText       string      R/O conventional textual representation of item properties (= text used during input)
@@ -72,45 +72,45 @@ class FiguredBassItem : public Element {
       Q_OBJECT
 
    public:
-      enum FBIAccidental {
-            FBIAccidNone = 0,
-            FBIAccidDoubleFlat,
-            FBIAccidFlat,
-            FBIAccidNatural,
-            FBIAccidSharp,
-            FBIAccidDoubleSharp,
-            FBIAccidPlus,
-            FBIAccidBackslash,
-            FBIAccidSlash,
-                  FBINumOfAccid
+      enum Modifier {
+            ModifierNone = 0,
+            ModifierDoubleFlat,
+            ModifierFlat,
+            ModifierNatural,
+            ModifierSharp,
+            ModifierDoubleSharp,
+            ModifierPlus,
+            ModifierBackslash,
+            ModifierSlash,
+                  NumOfModifiers
       };
-      enum FBIParenthesis {
-            FBIParenthNone    = 0,
-            FBIParenthRoundOpen,
-            FBIParenthRoundClosed,
-            FBIParenthSquaredOpen,
-            FBIParenthSquaredClosed,
-                  FBINumOfParenth
+      enum Parenthesis {
+            ParenthesisNone = 0,
+            ParenthesisRoundOpen,
+            ParenthesisRoundClosed,
+            ParenthesisSquaredOpen,
+            ParenthesisSquaredClosed,
+                  NumOfParentheses
       };
 
    private:
-      Q_PROPERTY(FBIAccidental      prefix            READ prefix       WRITE undoSetPrefix)
-      Q_PROPERTY(int                digit             READ digit        WRITE undoSetDigit)
-      Q_PROPERTY(FBIAccidental      suffix            READ suffix       WRITE undoSetSuffix)
-      Q_PROPERTY(bool               continuationLine  READ continuationLine WRITE undoSetContinuationLine)
-      Q_PROPERTY(QString            displayText       READ displayText)
-      Q_PROPERTY(QString            normalizedText    READ normalizedText)
+      Q_PROPERTY(Modifier     prefix            READ prefix       WRITE undoSetPrefix)
+      Q_PROPERTY(int          digit             READ digit        WRITE undoSetDigit)
+      Q_PROPERTY(Modifier     suffix            READ suffix       WRITE undoSetSuffix)
+      Q_PROPERTY(bool         continuationLine  READ contLine     WRITE undoSetContLine)
+      Q_PROPERTY(QString      displayText       READ displayText)
+      Q_PROPERTY(QString      normalizedText    READ normalizedText)
 
-      static const QChar normParenthToChar[FBINumOfParenth];
+      static const QChar normParenthToChar[NumOfParentheses];
 
       QString           _displayText;           // the constructed display text (read-only)
       int               ord;                    // the line ordinal of this element in the FB stack
       // the parts making a FiguredBassItem up
-      FBIAccidental     _prefix;                // the accidental coming before the body
+      Modifier          _prefix;                // the accidental coming before the body
       int               _digit;                 // the main digit (if present)
-      FBIAccidental     _suffix;                // the accidental coming after the body
+      Modifier          _suffix;                // the accidental coming after the body
       bool              _contLine;              // wether the item has continuation line or not
-      FBIParenthesis    parenth[5];             // each of the parenthesis: before, between and after parts
+      Parenthesis       parenth[5];             // each of the parenthesis: before, between and after parts
       qreal             textWidth;              // the text width (in raster units), set during layout()
                                                 //    used by draw()
       // part parsing
@@ -120,8 +120,8 @@ class FiguredBassItem : public Element {
 
       void              setDisplayText(const QString& s)    { _displayText = s;       }
       // read / write MusicXML support
-      FiguredBassItem::FBIAccidental MusicXML2FBIAccidental(const QString prefix) const;
-      QString                        FBIAccidental2MusicXML(FiguredBassItem::FBIAccidental prefix) const;
+      FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
+      QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
    public:
       FiguredBassItem(Score * s = 0, int line = 0);
@@ -148,22 +148,24 @@ class FiguredBassItem : public Element {
       bool              parse(QString& text);
 
       // getters / setters
-      FBIAccidental     prefix() const                { return _prefix;       }
-      void              undoSetPrefix(FBIAccidental pref);
+      Modifier          prefix() const                { return _prefix;       }
+      void              undoSetPrefix(Modifier pref);
       int               digit() const                 { return _digit;        }
       void              undoSetDigit(int digit);
-      FBIAccidental     suffix() const                { return _suffix;       }
-      void              undoSetSuffix(FBIAccidental suff);
-      bool              continuationLine() const      { return _contLine;     }
-      void              undoSetContinuationLine(bool val);
+      Modifier          suffix() const                { return _suffix;       }
+      void              undoSetSuffix(Modifier suff);
+      bool              contLine() const              { return _contLine;     }
+      void              undoSetContLine(bool val);
       QString           normalizedText() const;
       QString           displayText() const           { return _displayText;  }
 
-//      PROPERTY_DECLARATIONS(FiguredBassItem)
+      virtual QVariant  getProperty(P_ID propertyId) const;
+      virtual bool      setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant  propertyDefault(P_ID) const;
 };
 
-Q_DECLARE_METATYPE(FiguredBassItem::FBIAccidental)
-Q_DECLARE_METATYPE(FiguredBassItem::FBIParenthesis)
+Q_DECLARE_METATYPE(FiguredBassItem::Modifier)
+Q_DECLARE_METATYPE(FiguredBassItem::Parenthesis)
 
 //---------------------------------------------------------
 //   FiguredBassFont
@@ -185,7 +187,6 @@ struct FiguredBassFont {
 //   @@ FiguredBass
 ///   A complete figured bass indication
 //
-//    @P items    array[FiguredBassItem]  the list of individual items
 //    @P onNote   bool                    whether it is placed on a note beginning or between notes (r/o)
 //    @P ticks    int                     duration in ticks
 //---------------------------------------------------------
@@ -237,7 +238,7 @@ class FiguredBass : public Text {
 //DEBUG
 Q_INVOKABLE FiguredBassItem* addItem();
 
-      // getter /setters
+      // getters / setters / properties
 //      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
 //                                                {     list->append(pItem);
 //                                                      items.append(&pItem);
@@ -257,7 +258,9 @@ Q_INVOKABLE FiguredBassItem* addItem();
       int               ticks() const           { return _ticks;  }
       void              setTicks(int val)       { _ticks = val;   }
 
-//      PROPERTY_DECLARATIONS(FiguredBass)
+      virtual QVariant  getProperty(P_ID propertyId) const;
+      virtual bool      setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant  propertyDefault(P_ID) const;
       };
 
 #endif
