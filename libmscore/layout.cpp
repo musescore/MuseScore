@@ -944,7 +944,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   if ((s->subtype() == Segment::SegEndBarLine) && s->element(0)) {
                         BarLine*    bl = static_cast<BarLine*>(s->element(0));
                         BarLineType ot = bl->subtype();
-                        BarLineType nt = NORMAL_BAR;
+                        BarLineType nt = m->endBarLineType();
 
                         if (m->repeatFlags() & RepeatEnd)
                               nt = END_REPEAT;
@@ -957,11 +957,12 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                               qreal w =
                                  BarLine::layoutWidth(this, nt, bl->magS())
                                  - BarLine::layoutWidth(this, ot, bl->magS());
+// printf("   barline HACK %f\n", w);
                               ww += w;
                               }
                         }
 
-// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
+// printf("%d) %f %f   %f\n", m->no()+1, m->minWidth1(), m->minWidth2(), ww);
 
                   ww *= m->userStretch() * styleD(ST_measureSpacing);
                   if (ww < minMeasureWidth)
