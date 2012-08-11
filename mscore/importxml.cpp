@@ -300,7 +300,7 @@ static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomE
  a forward, backup or note.
  */
 
-static void testingMoveTick(int& tick, int& maxtick, Fraction& typFr, Fraction& durFr, int divisions, QDomElement e)
+static void testingMoveTick(Fraction& typFr, Fraction& durFr, int divisions, QDomElement e)
       {
       if (e.tagName() == "forward") {
             for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -309,9 +309,6 @@ static void testingMoveTick(int& tick, int& maxtick, Fraction& typFr, Fraction& 
 #ifdef DEBUG_TICK
                         qDebug("forward %d", val);
 #endif
-                        tick += val;
-                        if (tick > maxtick)
-                              maxtick = tick;
 
                         bool ok;
                         val = stringToInt(ee.text(), &ok);
@@ -339,7 +336,6 @@ static void testingMoveTick(int& tick, int& maxtick, Fraction& typFr, Fraction& 
 #ifdef DEBUG_TICK
                         qDebug("backup %d", val);
 #endif
-                        tick -= val;
 
                         bool ok;
                         val = stringToInt(ee.text(), &ok);
@@ -347,10 +343,18 @@ static void testingMoveTick(int& tick, int& maxtick, Fraction& typFr, Fraction& 
                                qDebug("MusicXml-Import: bad divisions value: <%s>",
                                       qPrintable(ee.text()));
                         Fraction f(val, 4 * divisions); // note divisions = ticks / quarter note
-                        typFr -= f;
-                        typFr.reduce();
-                        durFr -= f;
-                        durFr.reduce();
+                        if (f < typFr) {
+                              typFr -= f;
+                              typFr.reduce();
+                              }
+                        else
+                              typFr = Fraction(0, 1);
+                        if (f < durFr) {
+                              durFr -= f;
+                              durFr.reduce();
+                              }
+                        else
+                              durFr = Fraction(0, 1);
                         }
                   else
                         domError(ee);
@@ -367,9 +371,6 @@ static void testingMoveTick(int& tick, int& maxtick, Fraction& typFr, Fraction& 
 #ifdef DEBUG_TICK
             qDebug("note %d", ticks);
 #endif
-            tick += ticks;
-            if (tick > maxtick)
-                  maxtick = tick;
             }
       }
 
@@ -925,6 +926,60 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 //   determineMeasureLength
 //---------------------------------------------------------
 
+static Fraction noteTypeToFraction(QString type)
+      {
+      if (type == "1024th")
+            return Fraction(1, 1024);
+      else if (type == "512th")
+            return Fraction(1, 512);
+      else if (type == "256th")
+            return Fraction(1, 256);
+      else if (type == "128th")
+            return Fraction(1, 128);
+      else if (type == "64th")
+            return Fraction(1, 64);
+      else if (type == "32nd")
+            return Fraction(1, 32);
+      else if (type == "16th")
+            return Fraction(1, 16);
+      else if (type == "eighth")
+            return Fraction(1, 8);
+      else if (type == "quarter")
+            return Fraction(1, 4);
+      else if (type == "half")
+            return Fraction(1, 2);
+      else if (type == "whole")
+            return Fraction(1, 1);
+      else if (type == "breve")
+            return Fraction(2, 1);
+      else if (type == "long")
+            return Fraction(4, 1);
+      else if (type == "maxima")
+            return Fraction(8, 1);
+      else
+            return Fraction(0, 0);
+      }
+
+
+static Fraction calculateFraction(QString type, int dots, int normalNotes, int actualNotes)
+{
+      // type
+      Fraction f = noteTypeToFraction(type);
+      if (f.isValid()) {
+            // dot(s)
+            for (int i = 0; i < dots; ++i)
+                  f += (f / (2 << i));
+            // tuplet
+            if (actualNotes > 0 && normalNotes > 0) {
+                  f *= normalNotes;
+                  f /= actualNotes;
+                  }
+            // clean up (just in case)
+            f.reduce();
+            }
+      return f;
+}
+
 /**
  Determine the length in ticks of each measure in part e.
  Return false on error.
@@ -944,9 +999,6 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       qDebug("measurelength ml size %d", ml.size());
 #endif
       int divisions = -1;
-      int tick = 0;
-      int maxtick = 0;
-      int prevmaxtick = 0;
       int measureNr = 0;
       bool result = true;
       QString beats = "";
@@ -956,13 +1008,15 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             // handle all measures in this part
             if (e.tagName() == "measure") {
-                  // current tick within this measure as fraction
+                  // current "tick" within this measure as fraction
                   // calculated using note type, backup and forward
                   Fraction noteTypeTickFr;
-                  // current tick within this measure as fraction
+                  // current "tick" within this measure as fraction
                   // calculated using note duration, backup and forward
                   Fraction noteDurationTickFr;
-                  // Fraction maxtickFr; // maximum tick within this measure as fraction
+                  // maximum "tick" within this measure as fraction
+                  Fraction maxNoteTypeTickFr;
+                  Fraction maxNoteDurationTickFr;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "attributes") {
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
@@ -1018,6 +1072,7 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                     int     duration = 0;
                                     bool    grace = false;
                                     int     normalNotes = 0;
+                                    bool    rest = false;
                                     QString type;
                                     for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                                           if (eee.tagName() == "chord")
@@ -1033,6 +1088,8 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                                 }
                                           else if (eee.tagName() == "grace")
                                                 grace = true;
+                                          else if (eee.tagName() == "rest")
+                                                rest = true;
                                           else if (eee.tagName() == "time-modification") {
                                                 for (QDomElement eeee = eee.firstChildElement(); !eeee.isNull(); eeee = eeee.nextSiblingElement()) {
                                                       if (eeee.tagName() == "actual-notes") {
@@ -1055,14 +1112,23 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                                 type = eee.text();
                                           }
                                     // calculate note duration as fraction based on type, dots, normal and actual notes
-                                    // TODO: check type is valid (TDuration silently converts invalid type to quarter)
-                                    TDuration dur(type);
-                                    dur.setDots(dots);
-                                    Fraction f1(dur.fraction());
-                                    if (actualNotes > 0 && normalNotes > 0) {
-                                          f1 *= normalNotes;
-                                          f1 /= actualNotes;
+                                    Fraction f1 = calculateFraction(type, dots, normalNotes, actualNotes);
+                                    if (!f1.isValid()) {
+                                          qDebug("time-in-fraction: f1 invalid, using duration");
+                                          f1 = Fraction(duration, 4 * divisions); // note divisions = ticks / quarter note
                                           }
+
+                                    // bug fix for rests in triplet
+                                    if (f1.isValid() && rest && normalNotes == 0 && actualNotes == 0) {
+                                          qDebug("time-in-fraction: check for rest in triplet bug: %s",
+                                                 qPrintable((Fraction(duration, 4 * divisions) / f1).print()));
+                                          if ((Fraction(duration, 4 * divisions) / f1) == Fraction(2, 3)) {
+                                                // duration is exactly 2/3 of what is expected based on type 
+                                                qDebug("time-in-fraction: rest in triplet bug found, fixing ...");
+                                                f1 = Fraction(duration, 4 * divisions);
+                                                }
+                                          }
+
 #ifdef DEBUG_TICK
                                     qDebug("time-in-fraction: note type %s dots %d norm %d act %d"
                                            " dur %d chord %d grace %d-> dt frac %s (ticks %d)",
@@ -1070,30 +1136,42 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                            chord, grace, qPrintable(f1.print()), f1.ticks());
 #endif
                                     if (!chord && !grace) {
-                                          testingMoveTick(tick, maxtick, noteTypeTickFr, noteDurationTickFr, divisions, ee);
+                                          testingMoveTick(noteTypeTickFr, noteDurationTickFr, divisions, ee);
                                           noteTypeTickFr += f1;
                                           noteTypeTickFr.reduce();
-                                          qDebug("time-in-fraction: after note type based fraction %s tick %d",
-                                                 qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks());
+                                          if (noteTypeTickFr > maxNoteTypeTickFr)
+                                                maxNoteTypeTickFr = noteTypeTickFr;
+                                          qDebug("time-in-fraction: after note type based fraction %s tick %d max fraction %s tick %d",
+                                                 qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
+                                                 qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                                           noteDurationTickFr += Fraction(duration, 4 * divisions); // note divisions = ticks / quarter note
                                           noteDurationTickFr.reduce();
-                                          qDebug("time-in-fraction: after note duration based fraction %s tick %d",
-                                                 qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks());
+                                          if (noteDurationTickFr > maxNoteDurationTickFr)
+                                                maxNoteDurationTickFr = noteDurationTickFr;
+                                          qDebug("time-in-fraction: after note duration based fraction %s tick %d max fraction %s tick %d",
+                                                 qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks(),
+                                                 qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
                                           }
                                     }
                               else if (ee.tagName() == "backup") {
-                                    testingMoveTick(tick, maxtick, noteTypeTickFr, noteDurationTickFr, divisions, ee);
+                                    testingMoveTick(noteTypeTickFr, noteDurationTickFr, divisions, ee);
                                     qDebug("time-in-fraction: after backup type based fraction %s tick %d",
                                            qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks());
                                     qDebug("time-in-fraction: after backup duration based fraction %s tick %d",
                                            qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks());
                                     }
                               else if (ee.tagName() == "forward") {
-                                    testingMoveTick(tick, maxtick, noteTypeTickFr, noteDurationTickFr, divisions, ee);
-                                    qDebug("time-in-fraction: after forward type based fraction %s tick %d",
-                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks());
-                                    qDebug("time-in-fraction: after forward duration based fraction %s tick %d",
-                                           qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks());
+                                    testingMoveTick(noteTypeTickFr, noteDurationTickFr, divisions, ee);
+                                    if (noteTypeTickFr > maxNoteTypeTickFr)
+                                          maxNoteTypeTickFr = noteTypeTickFr;
+                                    if (noteDurationTickFr > maxNoteDurationTickFr)
+                                          maxNoteDurationTickFr = noteDurationTickFr;
+                                    qDebug("time-in-fraction: after forward type based fraction %s tick %d max fraction %s tick %d",
+                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
+                                           qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
+                                    qDebug("time-in-fraction: after forward duration based fraction %s tick %d max fraction %s tick %d",
+                                           qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks(),
+                                           qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
                                     }
                               }
                         else
@@ -1101,7 +1179,10 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         } // for (QDomElement ee ....
 
                   // measure has been read, determine length
-                  int length = maxtick - prevmaxtick;
+                  qDebug("time-in-fraction: max type based fraction %s tick %d max duration based fraction %s tick %d",
+                         qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks(),
+                         qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
+                  int length = maxNoteTypeTickFr.ticks();
                   int correctedLength = length;
 #if 1 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
                   // if necessary, round up to an integral number of 1/32s,
@@ -1117,8 +1198,8 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         correctedLength = timeSigLen;
 #ifdef DEBUG_TICK
                   // debug
-                  qDebug("measurelength measure %d tick %d maxtick %d length %d corr length %d\n",
-                         measureNr + 1, tick, maxtick, length, correctedLength);
+                  qDebug("measurelength measure %d length %d corr length %d\n",
+                         measureNr + 1, length, correctedLength);
 #endif
                   length = correctedLength;
                   // store the maximum measure length
@@ -1134,8 +1215,6 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         }
 
                   // prepare for next measure
-                  prevmaxtick = maxtick;
-                  tick = maxtick;
                   measureNr++;
                   }
             }
