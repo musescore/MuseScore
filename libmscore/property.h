@@ -91,6 +91,7 @@ enum P_ID {
       P_DENOMINATOR_STRING,
       P_SHOW_NATURALS,
       P_BREAK_HINT,
+
       P_FBPREFIX,             // used for FiguredBassItem
       P_FBDIGIT,              //    "           "
       P_FBSUFFIX,             //    "           "
@@ -121,48 +122,6 @@ enum P_TYPE {
 extern QVariant getProperty(P_ID type, const QDomElement& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
-
-#if 0
-//---------------------------------------------------------
-//   template Property
-//---------------------------------------------------------
-
-template <class T>
-class Property {
-   public:
-      P_ID id;
-      void* (T::*data)();   // member function returns pointer to data
-      void* defaultVal;     // pointer to default data
-      };
-
-//---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-template <class T>
-Property<T>* property(Property<T>* list, int id)
-      {
-      for (int i = 0; ; ++i) {
-            if (list[i].id == P_END)
-                  break;
-            else if (list[i].id == id)
-                  return &list[i];
-            }
-      return 0;
-      }
-
-template <class T>
-Property<T>* property(Property<T>* list, const QString& name)
-      {
-      for (int i = 0; ; ++i) {
-            if (list[i].id == P_END)
-                  break;
-            else if (propertyName((P_ID)i) == name)
-                  return &list[i];
-            }
-      return 0;
-      }
-#endif
 
 #endif
 

@@ -25,11 +25,8 @@ class ImageStoreItem;
 class Image : public BSymbol {
       Q_OBJECT
 
-      void write(Xml& xml, P_ID id) const;
-
    protected:
       ImageStoreItem* _storeItem;
-//      QString _path;
       QString _storePath;           // the path of the img in the ImageStore
       QString _linkPath;            // the path of an external linked img
       bool _linkIsValid;            // whether _linkPath file exists or not

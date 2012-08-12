@@ -498,14 +498,13 @@ void Tuplet::write(Xml& xml) const
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
 
-#define WT(X)      xml.tag(X, getProperty(X), propertyDefault(X));
-      WT(P_DIRECTION);
-      WT(P_NUMBER_TYPE);
-      WT(P_BRACKET_TYPE);
-      WT(P_NORMAL_NOTES);
-      WT(P_ACTUAL_NOTES);
-      WT(P_P1);
-      WT(P_P2);
+      writeProperty(xml, P_DIRECTION);
+      writeProperty(xml, P_NUMBER_TYPE);
+      writeProperty(xml, P_BRACKET_TYPE);
+      writeProperty(xml, P_NORMAL_NOTES);
+      writeProperty(xml, P_ACTUAL_NOTES);
+      writeProperty(xml, P_P1);
+      writeProperty(xml, P_P2);
 
       xml.tag("baseNote", _baseLen.name());
 
@@ -699,9 +698,9 @@ void Tuplet::toDefault()
       {
       score()->addRefresh(canvasBoundingRect());
 
-      score()->undoChangeProperty(this, P_P1, QPointF());
-      score()->undoChangeProperty(this, P_P2, QPointF());
-      score()->undoChangeProperty(this, P_DIRECTION, propertyDefault(P_DIRECTION));
+      undoChangeProperty(P_P1,        QPointF());
+      undoChangeProperty(P_P2,        QPointF());
+      undoChangeProperty(P_DIRECTION, propertyDefault(P_DIRECTION));
 
       Element::toDefault();
       layout();

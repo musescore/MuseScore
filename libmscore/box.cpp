@@ -158,26 +158,17 @@ void Box::updateGrips(int* grips, QRectF* grip) const
 //   write
 //---------------------------------------------------------
 
-void Box::write(Xml& xml, P_ID id) const
-      {
-      xml.tag(id, getProperty(id), propertyDefault(id));
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
 void Box::write(Xml& xml) const
       {
       xml.stag(name());
-      write(xml, P_BOX_HEIGHT);
-      write(xml, P_BOX_WIDTH);
-      write(xml, P_TOP_GAP);
-      write(xml, P_BOTTOM_GAP);
-      write(xml, P_LEFT_MARGIN);
-      write(xml, P_RIGHT_MARGIN);
-      write(xml, P_TOP_MARGIN);
-      write(xml, P_BOTTOM_MARGIN);
+      writeProperty(xml, P_BOX_HEIGHT);
+      writeProperty(xml, P_BOX_WIDTH);
+      writeProperty(xml, P_TOP_GAP);
+      writeProperty(xml, P_BOTTOM_GAP);
+      writeProperty(xml, P_LEFT_MARGIN);
+      writeProperty(xml, P_RIGHT_MARGIN);
+      writeProperty(xml, P_TOP_MARGIN);
+      writeProperty(xml, P_BOTTOM_MARGIN);
 
       Element::writeProperties(xml);
       foreach (const Element* el, _el)

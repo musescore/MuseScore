@@ -45,8 +45,6 @@ class Box : public MeasureBase {
       bool editMode;
       qreal dragX;            // used during drag of hbox
 
-      void write(Xml& xml, P_ID id) const;
-
    public:
       Box(Score*);
       virtual void draw(QPainter*) const;

@@ -1739,6 +1739,123 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   undoSetFret
+//---------------------------------------------------------
+
+void Note::undoSetFret(int val)
+      {
+      undoChangeProperty(P_FRET, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetString
+//---------------------------------------------------------
+
+void Note::undoSetString(int val)
+      {
+      undoChangeProperty(P_STRING, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetGhost
+//---------------------------------------------------------
+
+void Note::undoSetGhost(bool val)
+      {
+      undoChangeProperty(P_GHOST, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetSmall
+//---------------------------------------------------------
+
+void Note::undoSetSmall(bool val)
+      {
+      undoChangeProperty(P_SMALL, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetTuning
+//---------------------------------------------------------
+
+void Note::undoSetTuning(qreal val)
+      {
+      undoChangeProperty(P_TUNING, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetVeloType
+//---------------------------------------------------------
+
+void Note::undoSetVeloType(MScore::ValueType val)
+      {
+      undoChangeProperty(P_VELO_TYPE, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetVeloOffset
+//---------------------------------------------------------
+
+void Note::undoSetVeloOffset(int val)
+      {
+      undoChangeProperty(P_VELO_OFFSET, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetOnTimeUserOffset
+//---------------------------------------------------------
+
+void Note::undoSetOnTimeUserOffset(int val)
+      {
+      undoChangeProperty(P_ONTIME_OFFSET, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetOffTimeUserOffset
+//---------------------------------------------------------
+
+void Note::undoSetOffTimeUserOffset(int val)
+      {
+      undoChangeProperty(P_OFFTIME_OFFSET, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetUserMirror
+//---------------------------------------------------------
+
+void Note::undoSetUserMirror(MScore::DirectionH val)
+      {
+      undoChangeProperty(P_MIRROR_HEAD, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetDotPosition
+//---------------------------------------------------------
+
+void Note::undoSetDotPosition(MScore::Direction val)
+      {
+      undoChangeProperty(P_DOT_POSITION, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetHeadGroup
+//---------------------------------------------------------
+
+void Note::undoSetHeadGroup(NoteHeadGroup val)
+      {
+      undoChangeProperty(P_HEAD_GROUP, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetHeadType
+//---------------------------------------------------------
+
+void Note::undoSetHeadType(NoteHeadType val)
+      {
+      undoChangeProperty(P_HEAD_TYPE, val);
+      }
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -1771,14 +1888,5 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   break;
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   writeProperty
-//---------------------------------------------------------
-
-void Note::writeProperty(Xml& xml, P_ID id) const
-      {
-      xml.tag(id, getProperty(id), propertyDefault(id));
       }
 

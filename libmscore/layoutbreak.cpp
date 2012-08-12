@@ -39,8 +39,8 @@ void LayoutBreak::write(Xml& xml) const
       xml.stag(name());
       Element::writeProperties(xml);
 
-      xml.tag(P_LAYOUT_BREAK, getProperty(P_LAYOUT_BREAK), propertyDefault(P_LAYOUT_BREAK));
-      xml.tag(P_PAUSE,        getProperty(P_PAUSE),        propertyDefault(P_PAUSE));
+      writeProperty(xml, P_LAYOUT_BREAK);
+      writeProperty(xml, P_PAUSE);
 
       if (!_startWithLongNames)
             xml.tag("startWithLongNames", _startWithLongNames);
