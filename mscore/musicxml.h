@@ -205,17 +205,16 @@ class MusicXml {
       Volta* lastVolta;
 
       QDomDocument* doc;
-      int tick;                                 ///< Current position in MusicXML time
+      int tick;                                 ///< Current position in MuseScore time
       int maxtick;                              ///< Maxtick of a measure, used to calculate measure len
-      int prevtick;                             ///< Previous notes tick (used to insert Jumps)
+      int prevtick;                             ///< Previous notes tick (used to insert additional notes to chord)
       int lastMeasureLen;
       int multiMeasureRestCount;                ///< Remaining measures in a multi measure rest
       bool startMultiMeasureRest;               ///< Multi measure rest started in this measure
 
-      int lastLen;                              ///< Needed for chords
       int maxLyrics;
 
-      int divisions;
+      int divisions;                            ///< Current MusicXML divisions
       QVector<Tuplet*> tuplets;                 ///< Current tuplet for each track in the current part
 
       QString composer;
