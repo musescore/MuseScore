@@ -1800,15 +1800,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 //   write
 //---------------------------------------------------------
 
-void Beam::write(Xml& xml, P_ID id) const
-      {
-      xml.tag(id, getProperty(id), propertyDefault(id));
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
 void Beam::write(Xml& xml) const
       {
       if (_elements.isEmpty())
@@ -1816,10 +1807,10 @@ void Beam::write(Xml& xml) const
       xml.stag(QString("Beam id=\"%1\"").arg(_id));
       Element::writeProperties(xml);
 
-      write(xml, P_STEM_DIRECTION);
-      write(xml, P_DISTRIBUTE);
-      write(xml, P_GROW_LEFT);
-      write(xml, P_GROW_RIGHT);
+      writeProperty(xml, P_STEM_DIRECTION);
+      writeProperty(xml, P_DISTRIBUTE);
+      writeProperty(xml, P_GROW_LEFT);
+      writeProperty(xml, P_GROW_RIGHT);
 
       int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       if (_userModified[idx]) {

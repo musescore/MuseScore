@@ -182,7 +182,6 @@ class Element : public QObject {
 
       QPointF _startDragPosition;   ///< used during drag
 
-
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -262,6 +261,7 @@ class Element : public QObject {
 
       virtual void draw(QPainter*) const {}
 
+      void writeProperty(Xml& xml, P_ID id) const;
       void writeProperties(Xml& xml) const;
       bool readProperties(const QDomElement&);
 
@@ -396,11 +396,8 @@ class Element : public QObject {
 
       virtual QVariant getProperty(P_ID) const;
       virtual bool setProperty(P_ID, const QVariant&);
-
-      virtual QVariant propertyDefault(P_ID) const { return 0; }
-
-      void setVariant(P_ID, void*, const QVariant&);
-      QVariant getVariant(P_ID id, void* data) const;
+      virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
+      void undoChangeProperty(P_ID, const QVariant&);
       };
 
 //---------------------------------------------------------

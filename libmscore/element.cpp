@@ -718,6 +718,15 @@ bool Element::readProperties(const QDomElement& e)
       }
 
 //---------------------------------------------------------
+//   writeProperty
+//---------------------------------------------------------
+
+void Element::writeProperty(Xml& xml, P_ID id) const
+      {
+      xml.tag(id, getProperty(id), propertyDefault(id));
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -1551,6 +1560,15 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
       return true;
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Element::undoChangeProperty(P_ID id, const QVariant& val)
+      {
+      score()->undoChangeProperty(this, id, val);
       }
 
 //---------------------------------------------------------

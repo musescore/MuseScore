@@ -35,7 +35,6 @@ class BarLine : public Element {
       ElementList _el;        ///< fermata or other articulations
 
       void drawDots(QPainter* painter, qreal x) const;
-      void* pSubtype() { return &_subtype; }
 
    public:
       BarLine(Score*);

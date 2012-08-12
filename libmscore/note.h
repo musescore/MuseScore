@@ -67,7 +67,7 @@ class NoteHead : public Symbol {
       virtual void write(Xml& xml) const;
       };
 
-//-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 //   @@ Note
 ///  Graphic representation of a note.
 //
@@ -93,7 +93,7 @@ class NoteHead : public Symbol {
 //   @P dotPosition       enum AUTO, UP, DOWN
 //   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
 //   @P headType          enum HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
-//-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 class Note : public Element {
    public:
@@ -109,28 +109,28 @@ class Note : public Element {
 
    private:
       Q_OBJECT
-      Q_PROPERTY(int subchannel READ subchannel WRITE setSubchannel)
-      Q_PROPERTY(int line       READ line       WRITE setLine)
-      Q_PROPERTY(int fret       READ fret       WRITE setFret)
-      Q_PROPERTY(int string     READ string     WRITE setString)
-      Q_PROPERTY(int tpc        READ tpc        WRITE undoSetTpc)
-      Q_PROPERTY(int pitch      READ pitch      WRITE undoSetPitch)
-      Q_PROPERTY(int ppitch     READ ppitch)
-      Q_PROPERTY(bool ghost     READ ghost      WRITE setGhost)
-      Q_PROPERTY(bool hidden    READ hidden     WRITE setHidden)
-      Q_PROPERTY(bool mirror    READ mirror     WRITE setMirror)
-      Q_PROPERTY(bool small     READ small      WRITE setSmall)
-      Q_PROPERTY(qreal tuning   READ tuning     WRITE setTuning)
-      Q_PROPERTY(MScore::ValueType veloType    READ veloType          WRITE setVeloType)
-      Q_PROPERTY(int veloOffset                READ veloOffset        WRITE setVeloOffset)
-      Q_PROPERTY(int onTimeOffset              READ onTimeOffset      WRITE setOnTimeOffset)
-      Q_PROPERTY(int onTimeUserOffset          READ onTimeUserOffset  WRITE setOnTimeUserOffset)
-      Q_PROPERTY(int offTimeOffset             READ offTimeOffset     WRITE setOffTimeOffset)
-      Q_PROPERTY(int offTimeUserOffset         READ offTimeUserOffset WRITE setOffTimeUserOffset)
-      Q_PROPERTY(MScore::DirectionH userMirror READ userMirror        WRITE setUserMirror)
-      Q_PROPERTY(MScore::Direction dotPosition READ dotPosition       WRITE setDotPosition)
-      Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE setHeadGroup)
-      Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE setHeadType)
+      Q_PROPERTY(int subchannel                READ subchannel)
+      Q_PROPERTY(int line                      READ line)
+      Q_PROPERTY(int fret                      READ fret              WRITE undoSetFret)
+      Q_PROPERTY(int string                    READ string            WRITE undoSetString)
+      Q_PROPERTY(int tpc                       READ tpc               WRITE undoSetTpc)
+      Q_PROPERTY(int pitch                     READ pitch             WRITE undoSetPitch)
+      Q_PROPERTY(int ppitch                    READ ppitch)
+      Q_PROPERTY(bool ghost                    READ ghost             WRITE undoSetGhost)
+      Q_PROPERTY(bool hidden                   READ hidden)
+      Q_PROPERTY(bool mirror                   READ mirror)
+      Q_PROPERTY(bool small                    READ small             WRITE undoSetSmall)
+      Q_PROPERTY(qreal tuning                  READ tuning            WRITE undoSetTuning)
+      Q_PROPERTY(MScore::ValueType veloType    READ veloType          WRITE undoSetVeloType)
+      Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
+      Q_PROPERTY(int onTimeOffset              READ onTimeOffset)
+      Q_PROPERTY(int onTimeUserOffset          READ onTimeUserOffset  WRITE undoSetOnTimeUserOffset)
+      Q_PROPERTY(int offTimeOffset             READ offTimeOffset)
+      Q_PROPERTY(int offTimeUserOffset         READ offTimeUserOffset WRITE undoSetOffTimeUserOffset)
+      Q_PROPERTY(MScore::DirectionH userMirror READ userMirror        WRITE undoSetUserMirror)
+      Q_PROPERTY(MScore::Direction dotPosition READ dotPosition       WRITE undoSetDotPosition)
+      Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
+      Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE undoSetHeadType)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
@@ -182,7 +182,6 @@ class Note : public Element {
       virtual QRectF drag(const EditData& s);
       void endDrag();
       void endEdit();
-      void writeProperty(Xml&, P_ID) const;
 
    public:
       Note(Score* s = 0);
@@ -309,6 +308,21 @@ class Note : public Element {
       QList<NoteEvent*>& playEvents()                { return _playEvents; }
       const QList<NoteEvent*>& playEvents() const    { return _playEvents; }
       void setPlayEvents(const QList<NoteEvent*>& v);
+
+      void undoSetFret(int);
+      void undoSetString(int);
+      void undoSetGhost(bool);
+      void undoSetMirror(bool);
+      void undoSetSmall(bool);
+      void undoSetTuning(qreal);
+      void undoSetVeloType(MScore::ValueType);
+      void undoSetVeloOffset(int);
+      void undoSetOnTimeUserOffset(int);
+      void undoSetOffTimeUserOffset(int);
+      void undoSetUserMirror(MScore::DirectionH);
+      void undoSetDotPosition(MScore::Direction);
+      void undoSetHeadGroup(NoteHeadGroup);
+      void undoSetHeadType(NoteHeadType);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

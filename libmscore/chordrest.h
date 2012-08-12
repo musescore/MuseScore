@@ -140,8 +140,10 @@ class ChordRest : public DurationElement {
       virtual void add(Element*);
       virtual void remove(Element*);
       void removeDeleteBeam();
+
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 #endif

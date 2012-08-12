@@ -60,7 +60,6 @@ class Beam : public Element {
       bool twoBeamedNotes();
       void computeStemLen(const QList<Chord*>& crl, qreal& py1, int beamLevels);
       bool noSlope(const QList<Chord*>& crl);
-      void write(Xml& xml, P_ID id) const;
 
    public:
       Beam(Score* s);
