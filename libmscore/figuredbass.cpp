@@ -614,8 +614,12 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
 
 void FiguredBassItem::undoSetPrefix(Modifier pref)
       {
-      if(pref < ModifierPlus)
+      if(pref < ModifierPlus) {
             score()->undoChangeProperty(this, P_FBPREFIX, (int)pref);
+            // if setting some prefix and there is a suffix already, clear suffix
+            if(pref != ModifierNone && _suffix != ModifierNone)
+                  score()->undoChangeProperty(this, P_FBSUFFIX, ModifierNone);
+            }
       }
 
 void FiguredBassItem::undoSetDigit(int digit)
@@ -627,6 +631,9 @@ void FiguredBassItem::undoSetDigit(int digit)
 void FiguredBassItem::undoSetSuffix(Modifier suff)
       {
       score()->undoChangeProperty(this, P_FBSUFFIX, suff);
+      // if setting some suffix and there is a prefix already, clear prefix
+      if(suff != ModifierNone && _prefix != ModifierNone)
+            score()->undoChangeProperty(this, P_FBPREFIX, ModifierNone);
       }
 
 void FiguredBassItem::undoSetContLine(bool val)
