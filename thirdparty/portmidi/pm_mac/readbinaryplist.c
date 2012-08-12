@@ -74,7 +74,7 @@ memory requested or calls longjmp, so callers don't have to check.
 #include <stdio.h>
 #include <sys/stat.h>
 #include "readbinaryplist.h"
-#include "Folders.h"
+#include <CoreServices/CoreServices.h>
 
 #define NO 0
 #define YES 1
