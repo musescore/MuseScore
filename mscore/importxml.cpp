@@ -230,7 +230,7 @@ static int calcTicks(QString text, int divisions)
  a forward, backup or note.
  */
 
-static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomElement e)
+static void moveTick(int& tick, int& maxtick, int divisions, QDomElement e)
       {
       if (e.tagName() == "forward") {
             for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -242,7 +242,6 @@ static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomE
                         tick += val;
                         if (tick > maxtick)
                               maxtick = tick;
-                        lastLen = val;    // ?
                         }
                   else if (ee.tagName() == "voice")
                         ;
@@ -260,7 +259,6 @@ static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomE
                         qDebug("backup %d", val);
 #endif
                         tick -= val;
-                        lastLen = val;    // ?
                         }
                   else
                         domError(ee);
@@ -282,7 +280,6 @@ static void moveTick(int& tick, int& maxtick, int& lastLen, int divisions, QDomE
 #ifdef DEBUG_TICK
                   qDebug("note %d", ticks);
 #endif
-                  lastLen = ticks; // ?
                   tick += ticks;
                   if (tick > maxtick)
                         maxtick = tick;
@@ -1914,7 +1911,6 @@ void MusicXml::initVoiceMapperAndMapVoices(QDomElement e)
       int loc_divisions = -1;
       int loc_tick      =  0;
       int loc_maxtick   =  0;
-      int loc_lastLen   =  0;
       // init
       voicelist.clear();
       // count number of chordrests on each MusicXML staff
@@ -1966,19 +1962,19 @@ void MusicXml::initVoiceMapperAndMapVoices(QDomElement e)
                                                       }
                                                 voicelist[voice].incrChordRests(staff);
                                                 }
-                                          // determine note length for voice oberlap detection
+                                          // determine note length for voice overlap detection
                                           if (!grace) {
                                                 int startTick = loc_tick; // start tick for the last note
-                                                moveTick(loc_tick, loc_maxtick, loc_lastLen, loc_divisions, ee);
+                                                moveTick(loc_tick, loc_maxtick, loc_divisions, ee);
                                                 // printf(" endtick %d\n", tick);
                                                 vod.addNote(startTick, loc_tick, voice, staff);
                                                 }
                                           }
                                     }
                               else if (ee.tagName() == "backup")
-                                    moveTick(loc_tick, loc_maxtick, loc_lastLen, loc_divisions, ee);
+                                    moveTick(loc_tick, loc_maxtick, loc_divisions, ee);
                               else if (ee.tagName() == "forward")
-                                    moveTick(loc_tick, loc_maxtick, loc_lastLen, loc_divisions, ee);
+                                    moveTick(loc_tick, loc_maxtick, loc_divisions, ee);
                               }
                         }
                   // debug vod
@@ -2266,6 +2262,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 #endif
       int staves = score->nstaves();
       int staff = score->staffIdx(part);
+      // current "tick" within this measure as fraction
+      // calculated using note type, backup and forward
+      Fraction noteTypeTickFr;
+      // maximum "tick" within this measure as fraction
+      Fraction maxNoteTypeTickFr;
 
       if (staves == 0) {
             qDebug("no staves!");
@@ -2314,13 +2315,12 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   xmlAttributes(measure, staff, e.firstChildElement());
             else if (e.tagName() == "note") {
                   xmlNote(measure, staff, part->id(), e);
-                  moveTick(tick, maxtick, lastLen, divisions, e);
 #ifdef DEBUG_TICK
                   qDebug(" after inserting note tick=%d", tick);
 #endif
                   }
             else if (e.tagName() == "backup") {
-                  moveTick(tick, maxtick, lastLen, divisions, e);
+                  moveTick(tick, maxtick, divisions, e);
                   }
             else if (e.tagName() == "direction") {
                   direction(measure, staff, e);
@@ -2357,7 +2357,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   // IMPORT_LAYOUT END
                   }
             else if (e.tagName() == "forward") {
-                  moveTick(tick, maxtick, lastLen, divisions, e);
+                  moveTick(tick, maxtick, divisions, e);
                   }
             else if (e.tagName() == "barline") {
                   QString loc = e.attribute("location", "right");
@@ -4808,6 +4808,10 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       if (s < 0 || v < 0) {
             qDebug("ImportMusicXml: too many voices (staff %d, relStaff %d, voice %d at line %d col %d)",
                    staff + 1, relStaff, voice + 1, e.lineNumber(), e.columnNumber());
+            // TODO move back to xmlMeasure
+            if (!chord && !grace)
+                  moveTick(tick, maxtick, divisions, org_e);
+            // end TODO
             return;
             }
       else {
@@ -4821,10 +4825,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       // note: relStaff is the staff number relative to the parts first staff
       //       voice is the voice number in the staff
 
-      // for notes that are part of a chord (except the first one)
-      // move tick back to the start time of the first note
-      if (chord && !grace)
-            tick -= lastLen;
+      // determine tick for note
+      int loc_tick = chord ? prevtick : tick;
+      qDebug("chord %d prevtick %d tick %d loc_tick %d", chord, prevtick, tick, loc_tick);
 
       // trk is first track of staff
       int trk = (staff + relStaff) * VOICES;
@@ -4983,7 +4986,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       //        staff, relStaff, VOICES, voice, track);
 
       // qDebug("%s at %d voice %d dur = %d, beat %d/%d div %d pitch %d ticks %d",
-      //         rest ? "Rest" : "Note", tick, voice, duration, beats, beatType,
+      //         rest ? "Rest" : "Note", loc_tick, voice, duration, beats, beatType,
       //         divisions, 0 /* pitch */, ticks);
 
       ChordRest* cr = 0;
@@ -5008,7 +5011,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   cr->setBeamMode(BEAM_NO);
             cr->setTrack(track);
             ((Rest*)cr)->setStaffMove(move);
-            Segment* s = measure->getSegment(cr, tick);
+            Segment* s = measure->getSegment(cr, loc_tick);
             //sibelius might import 2 rests at the same place, ignore the 2one
             //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if(!s->element(cr->track()))
@@ -5016,7 +5019,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             cr->setVisible(printObject == "yes");
             if (step != "" && 0 <= octave && octave <= 9) {
                   qDebug("rest step=%s oct=%d", qPrintable(step), octave);
-                  ClefType clef = cr->staff()->clef(tick);
+                  ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
                   int istep = step[0].toAscii() - 'A';
                   qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
@@ -5049,7 +5052,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // if (grace)
             //       qDebug(" grace: nrOfGraceSegsReq: %d", nrOfGraceSegsReq(pn));
             int gl = nrOfGraceSegsReq(pn);
-            cr = measure->findChord(tick, track, grace);
+            cr = measure->findChord(loc_tick, track, grace);
             if (cr == 0) {
                   Segment::SegmentType st = Segment::SegChordRest;
                   cr = new Chord(score);
@@ -5087,7 +5090,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   cr->setDots(dots);
                   cr->setDuration(cr->durationType().fraction());
                   // qDebug(" cr->tick()=%d ", cr->tick());
-                  Segment* s = measure->getSegment(st, tick, gl);
+                  Segment* s = measure->getSegment(st, loc_tick, gl);
                   s->add(cr);
                   }
             cr->setStaffMove(move);
@@ -5143,7 +5146,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // line and stem direction, while a MusicXML file contains actual.
             // the MusicXML values for each note are simply copied to the defaults
             if (unpitched) {
-                  ClefType clef = cr->staff()->clef(tick);
+                  ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
                   // int line = absoluteStaffLine(pitch) - absoluteStaffLine(po);
@@ -5174,10 +5177,15 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       // add lyrics found by xmlLyric
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
 
-      prevtick = tick; // <- LVIFIX TODO check (this may have to move or change)
+      if (!chord) // TODO: grace ??
+            prevtick = tick; // remember tick where last chordrest was inserted
+
+      // TODO move back to xmlMeasure
+      if (!chord && !grace)
+            moveTick(tick, maxtick, divisions, org_e);
 
 #ifdef DEBUG_TICK
-      qDebug(" after inserting note tick=%d", tick);
+      qDebug(" after inserting note tick=%d prevtick=%d", tick, prevtick);
 #endif
       }
 
