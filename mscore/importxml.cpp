@@ -266,8 +266,12 @@ static Fraction noteTypeToFraction(QString type)
 //   calculateFraction
 //---------------------------------------------------------
 
+/**
+ Convert note type, number of dots and actual and normal notes into a duration
+ */
+
 static Fraction calculateFraction(QString type, int dots, int normalNotes, int actualNotes)
-{
+      {
       // type
       Fraction f = noteTypeToFraction(type);
       if (f.isValid()) {
@@ -283,7 +287,7 @@ static Fraction calculateFraction(QString type, int dots, int normalNotes, int a
             f.reduce();
             }
       return f;
-}
+      }
 
 
 //---------------------------------------------------------
@@ -292,87 +296,90 @@ static Fraction calculateFraction(QString type, int dots, int normalNotes, int a
 
 /**
  Determine note duration as fraction. Prefer note type over duration.
+ Input e is the note element.
  If chord or grace, duration is 0.
  */
 
 static Fraction noteDurationAsFraction(const int divisions, const QDomElement e)
       {
-                                    int     actualNotes = 0;
-                                    bool    chord = false;
-                                    int     dots  = 0;
-                                    int     duration = 0;
-                                    bool    grace = false;
-                                    int     normalNotes = 0;
-                                    bool    rest = false;
-                                    QString type;
-                                    for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                                          if (ee.tagName() == "chord")
-                                                chord = true;
-                                          else if (ee.tagName() == "dot")
-                                                dots++;
-                                          else if (ee.tagName() == "duration") {
-                                                bool ok;
-                                                duration = stringToInt(ee.text(), &ok);
-                                                if (!ok)
-                                                      qDebug("MusicXml-Import: bad duration value: <%s>",
-                                                             qPrintable(ee.text()));
-                                                }
-                                          else if (ee.tagName() == "grace")
-                                                grace = true;
-                                          else if (ee.tagName() == "rest")
-                                                rest = true;
-                                          else if (ee.tagName() == "time-modification") {
-                                                for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                                      if (eee.tagName() == "actual-notes") {
-                                                            bool ok;
-                                                            actualNotes = stringToInt(eee.text(), &ok);
-                                                            if (!ok || divisions <= 0)
-                                                                  qDebug("MusicXml-Import: bad actual-notes value: <%s>",
-                                                                         qPrintable(eee.text()));
-                                                            }
-                                                      if (eee.tagName() == "normal-notes") {
-                                                            bool ok;
-                                                            normalNotes = stringToInt(eee.text(), &ok);
-                                                            if (!ok || divisions <= 0)
-                                                                  qDebug("MusicXml-Import: bad normal-notes value: <%s>",
-                                                                         qPrintable(eee.text()));
-                                                            }
-                                                      }
-                                                }
-                                          else if (ee.tagName() == "type")
-                                                type = ee.text();
-                                          }
+      int actualNotes = 0;
+      bool chord = false;
+      int dots  = 0;
+      int duration = 0;
+      bool grace = false;
+      int normalNotes = 0;
+      bool rest = false;
+      QString type;
+      for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+            if (ee.tagName() == "chord")
+                  chord = true;
+            else if (ee.tagName() == "dot")
+                  dots++;
+            else if (ee.tagName() == "duration") {
+                  bool ok;
+                  duration = stringToInt(ee.text(), &ok);
+                  if (!ok)
+                        qDebug("MusicXml-Import: bad duration value: <%s>",
+                               qPrintable(ee.text()));
+                  }
+            else if (ee.tagName() == "grace")
+                  grace = true;
+            else if (ee.tagName() == "rest")
+                  rest = true;
+            else if (ee.tagName() == "time-modification") {
+                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
+                        if (eee.tagName() == "actual-notes") {
+                              bool ok;
+                              actualNotes = stringToInt(eee.text(), &ok);
+                              if (!ok || divisions <= 0)
+                                    qDebug("MusicXml-Import: bad actual-notes value: <%s>",
+                                           qPrintable(eee.text()));
+                              }
+                        if (eee.tagName() == "normal-notes") {
+                              bool ok;
+                              normalNotes = stringToInt(eee.text(), &ok);
+                              if (!ok || divisions <= 0)
+                                    qDebug("MusicXml-Import: bad normal-notes value: <%s>",
+                                           qPrintable(eee.text()));
+                              }
+                        }
+                  }
+            else if (ee.tagName() == "type")
+                  type = ee.text();
+            }
 
-                                    // if chord or grace, duration is 0
-                                    if (chord || grace)
-                                          return Fraction(0, 1);
+      // if chord or grace, duration is 0
+      if (chord || grace)
+            return Fraction(0, 1);
 
-                                    // calculate note duration as fraction based on type, dots, normal and actual notes
-                                    Fraction f = calculateFraction(type, dots, normalNotes, actualNotes);
-                                    if (!f.isValid()) {
-                                          qDebug("time-in-fraction: f invalid, using duration");
-                                          f = Fraction(duration, 4 * divisions); // note divisions = ticks / quarter note
-                                          }
+      // calculate note duration as fraction based on type, dots, normal and actual notes
+      // if that does not succeed, fallback to using the <duration> element
+      // note divisions = ticks / quarter note
+      Fraction f = calculateFraction(type, dots, normalNotes, actualNotes);
+      if (!f.isValid()) {
+            qDebug("time-in-fraction: f invalid, using duration");
+            f = Fraction(duration, 4 * divisions);
+            }
 
-                                    // bug fix for rests in triplet
-                                    if (f.isValid() && rest && normalNotes == 0 && actualNotes == 0) {
-                                          qDebug("time-in-fraction: check for rest in triplet bug: %s",
-                                                 qPrintable((Fraction(duration, 4 * divisions) / f).print()));
-                                          if ((Fraction(duration, 4 * divisions) / f) == Fraction(2, 3)) {
-                                                // duration is exactly 2/3 of what is expected based on type 
-                                                qDebug("time-in-fraction: rest in triplet bug found, fixing ...");
-                                                f = Fraction(duration, 4 * divisions);
-                                                }
-                                          }
+      // bug fix for rests in triplet
+      if (f.isValid() && rest && normalNotes == 0 && actualNotes == 0) {
+            qDebug("time-in-fraction: check for rest in triplet bug: %s",
+                   qPrintable((Fraction(duration, 4 * divisions) / f).print()));
+            if ((Fraction(duration, 4 * divisions) / f) == Fraction(2, 3)) {
+                  // duration is exactly 2/3 of what is expected based on type
+                  qDebug("time-in-fraction: rest in triplet bug found, fixing ...");
+                  f = Fraction(duration, 4 * divisions);
+                  }
+            }
 
 #ifdef DEBUG_TICK
-                                    qDebug("time-in-fraction: note type %s dots %d norm %d act %d"
-                                           " dur %d chord %d grace %d-> dt frac %s (ticks %d)",
-                                           qPrintable(type), dots, normalNotes, actualNotes, duration,
-                                           chord, grace, qPrintable(f.print()), f.ticks());
+      qDebug("time-in-fraction: note type %s dots %d norm %d act %d"
+             " dur %d chord %d grace %d-> dt frac %s (ticks %d)",
+             qPrintable(type), dots, normalNotes, actualNotes, duration,
+             chord, grace, qPrintable(f.print()), f.ticks());
 #endif
 
-                                    return f;
+      return f;
       }
 
 
@@ -381,7 +388,7 @@ static Fraction noteDurationAsFraction(const int divisions, const QDomElement e)
 //---------------------------------------------------------
 
 /**
- Move tick/typFr by amount specified in the element e, which must be
+ Move tick and typFr by amount specified in the element e, which must be
  a forward, backup or note.
  */
 
@@ -397,8 +404,8 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
                         bool ok;
                         val = stringToInt(ee.text(), &ok);
                         if (!ok || divisions <= 0)
-                               qDebug("MusicXml-Import: bad divisions value: <%s>",
-                                      qPrintable(ee.text()));
+                              qDebug("MusicXml-Import: bad divisions value: <%s>",
+                                     qPrintable(ee.text()));
                         Fraction f(val, 4 * divisions); // note divisions = ticks / quarter note
                         typFr += f;
                         typFr.reduce();
@@ -424,8 +431,8 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
                         bool ok;
                         val = stringToInt(ee.text(), &ok);
                         if (!ok || divisions <= 0)
-                               qDebug("MusicXml-Import: bad divisions value: <%s>",
-                                      qPrintable(ee.text()));
+                              qDebug("MusicXml-Import: bad divisions value: <%s>",
+                                     qPrintable(ee.text()));
                         Fraction f(val, 4 * divisions); // note divisions = ticks / quarter note
                         if (f < typFr) {
                               typFr -= f;
@@ -1017,12 +1024,6 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
  */
 
 
-/*
- * TODO for debugging issue 17654, dump both
- * - the timing in fraction based on note type (and backup/restore)
- * - the timing in duration (as fraction) only
- */
-
 static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
       {
 #ifdef DEBUG_TICK
@@ -1042,12 +1043,8 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                   // current "tick" within this measure as fraction
                   // calculated using note type, backup and forward
                   Fraction noteTypeTickFr;
-                  // current "tick" within this measure as fraction
-                  // calculated using note duration, backup and forward
-                  Fraction noteDurationTickFr;
                   // maximum "tick" within this measure as fraction
                   Fraction maxNoteTypeTickFr;
-                  Fraction maxNoteDurationTickFr;
                   // dummy
                   int dummy_tick = 0;
                   int dummy_maxtick = 0;
@@ -1100,39 +1097,25 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         // (divisions must be valid)
                         if (divisions > 0) {
                               if (ee.tagName() == "note") {
-                                          moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
-                                          if (noteTypeTickFr > maxNoteTypeTickFr)
-                                                maxNoteTypeTickFr = noteTypeTickFr;
-                                          qDebug("time-in-fraction: after note type based fraction %s tick %d max fraction %s tick %d",
-                                                 qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
-                                                 qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
-                                          // noteDurationTickFr += Fraction(duration, 4 * divisions); // note divisions = ticks / quarter note
-                                          noteDurationTickFr.reduce();
-                                          if (noteDurationTickFr > maxNoteDurationTickFr)
-                                                maxNoteDurationTickFr = noteDurationTickFr;
-                                          qDebug("time-in-fraction: after note duration based fraction %s tick %d max fraction %s tick %d",
-                                                 qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks(),
-                                                 qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
+                                    moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
+                                    if (noteTypeTickFr > maxNoteTypeTickFr)
+                                          maxNoteTypeTickFr = noteTypeTickFr;
+                                    qDebug("time-in-fraction: after note type based fraction %s tick %d max fraction %s tick %d",
+                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
+                                           qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                                     }
                               else if (ee.tagName() == "backup") {
                                     moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
                                     qDebug("time-in-fraction: after backup type based fraction %s tick %d",
                                            qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks());
-                                    qDebug("time-in-fraction: after backup duration based fraction %s tick %d",
-                                           qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks());
                                     }
                               else if (ee.tagName() == "forward") {
                                     moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
                                     if (noteTypeTickFr > maxNoteTypeTickFr)
                                           maxNoteTypeTickFr = noteTypeTickFr;
-                                    if (noteDurationTickFr > maxNoteDurationTickFr)
-                                          maxNoteDurationTickFr = noteDurationTickFr;
                                     qDebug("time-in-fraction: after forward type based fraction %s tick %d max fraction %s tick %d",
                                            qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
                                            qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
-                                    qDebug("time-in-fraction: after forward duration based fraction %s tick %d max fraction %s tick %d",
-                                           qPrintable(noteDurationTickFr.print()), noteDurationTickFr.ticks(),
-                                           qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
                                     }
                               }
                         else
@@ -1140,9 +1123,8 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         } // for (QDomElement ee ....
 
                   // measure has been read, determine length
-                  qDebug("time-in-fraction: max type based fraction %s tick %d max duration based fraction %s tick %d",
-                         qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks(),
-                         qPrintable(maxNoteDurationTickFr.print()), maxNoteDurationTickFr.ticks());
+                  qDebug("time-in-fraction: max type based fraction %s tick %d",
+                         qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                   int length = maxNoteTypeTickFr.ticks();
                   int correctedLength = length;
 #if 1 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
@@ -4981,7 +4963,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             Segment* s = measure->getSegment(cr, loc_tick);
             //sibelius might import 2 rests at the same place, ignore the 2one
             //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
-            if(!s->element(cr->track()))
+            if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
             if (step != "" && 0 <= octave && octave <= 9) {
@@ -5145,79 +5127,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
 
       if (!chord)
-            prevtick = tick; // remember tick where last chordrest was inserted
+            prevtick = tick;  // remember tick where last chordrest was inserted
 
 #ifdef DEBUG_TICK
       qDebug(" after inserting note tick=%d prevtick=%d", tick, prevtick);
 #endif
       }
 
-//---------------------------------------------------------
-//   addWedge
-//---------------------------------------------------------
-
-/**
- Add a MusicXML wedge to the wedge list.
-
- Called when the wedge start is read. Stores all wedge parameters known at this time.
- */
-
-/*
-void MusicXml::addWedge(int no, int startTick, qreal rx, qreal ry, bool above, bool hasYoffset, qreal yoffset, int subType)
-      {
-      qDebug("addWedge(no %d, startTick %d, subType %d)", no, startTick, subType);
-      MusicXmlWedge wedge;
-      wedge.number = no;
-      wedge.startTick = startTick;
-      wedge.rx = rx;
-      wedge.ry = ry;
-      wedge.above = above;
-      wedge.hasYoffset = hasYoffset;
-      wedge.yoffset = yoffset;
-      wedge.subType = subType;
-
-      if (int(wedgeList.size()) > no)
-            wedgeList[no] = wedge;
-      else
-            wedgeList.push_back(wedge);
-      }
-*/
-
-//---------------------------------------------------------
-//   genWedge
-//---------------------------------------------------------
-
-/**
- Add a MusicXML wedge to the score.
-
- Called when the wedge stop is read. Wedge stop tick was unknown until this time.
- */
-
-/*
-void MusicXml::genWedge(int no, int endTick, Measure* measure, int staff)
-      {
-      qDebug("genWedge(no %d, endTick %d", no, endTick);
-      Hairpin* hp = new Hairpin(score);
-      hp->setSubtype(wedgeList[no].subType);
-      if (wedgeList[no].hasYoffset)
-            hp->setYoff(wedgeList[no].yoffset);
-      else
-            hp->setYoff(wedgeList[no].above ? -3 : 8);
-      hp->setUserOff(QPointF(wedgeList[no].rx, wedgeList[no].ry));
-      hp->setTrack(staff * VOICES);
-      // TODO LVI following fails for wedges starting in a different measure !
-      Segment* seg = measure->getSegment(Segment::SegChordRest, wedgeList[no].startTick);
-      qDebug("start seg %p", seg);
-      hp->setStartElement(seg);
-      seg->add(hp);
-      seg = measure->getSegment(Segment::SegChordRest, endTick);
-      qDebug(", stop seg %p", seg);
-      hp->setEndElement(seg);
-      seg->addSpannerBack(hp);
-      score->updateHairpin(hp);
-// qDebug("gen wedge %p staff %d, tick %d-%d", hp, staff, hp->tick(), hp->tick2());
-      }
-*/
 
 //---------------------------------------------------------
 //   xmlHarmony
