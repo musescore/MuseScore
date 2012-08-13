@@ -93,7 +93,8 @@ struct CreditWords {
       QString hAlign;
       QString vAlign;
       QString words;
-      CreditWords(double a, double b, QString c, QString d, QString e, QString f) {
+      CreditWords(double a, double b, QString c, QString d, QString e, QString f)
+            {
             defaultX = a;
             defaultY = b;
             justify  = c;
@@ -119,10 +120,10 @@ class MusicXmlCreator {
       QString _type;
       QString _text;
 
-   public:
+public:
       MusicXmlCreator(QString& tp, QString& txt) { _type = tp; _text = txt; }
-      QString crType() const                     { return _type; }
-      QString crText() const                     { return _text; }
+      QString crType() const { return _type; }
+      QString crText() const { return _text; }
       };
 
 //---------------------------------------------------------
@@ -134,24 +135,24 @@ class MusicXmlCreator {
 */
 
 class VoiceDesc {
-   public:
+public:
       VoiceDesc();
       void incrChordRests(int s);
       int numberChordRests() const;
       int numberChordRests(int s) const { return (s >= 0 && s < MAX_STAVES) ? _chordRests[s] : 0; }
       int preferredStaff() const;       ///< Determine preferred staff for this voice
-      void setStaff(int s)              { if (s >= 0) _staff = s; }
-      int staff() const                 { return _staff; }
-      void setVoice(int v)              { if (v >= 0) _voice = v; }
-      int voice() const                 { return _voice; }
-      void setVoice(int s, int v)       { if (s >= 0 && s < MAX_STAVES) _voices[s] = v; }
-      int voice(int s) const            { return (s >= 0 && s < MAX_STAVES) ? _voices[s] : -1; }
-      void setOverlap(bool b)           { _overlaps = b; }
-      bool overlaps() const             { return _overlaps; }
-      void setStaffAlloc(int s, int i)  { if (s >= 0 && s < MAX_STAVES) _staffAlloc[s] = i; }
-      int staffAlloc(int s) const       { return (s >= 0 && s < MAX_STAVES) ? _staffAlloc[s] : -1; }
+      void setStaff(int s) { if (s >= 0) _staff = s; }
+      int staff() const { return _staff; }
+      void setVoice(int v) { if (v >= 0) _voice = v; }
+      int voice() const { return _voice; }
+      void setVoice(int s, int v) { if (s >= 0 && s < MAX_STAVES) _voices[s] = v; }
+      int voice(int s) const { return (s >= 0 && s < MAX_STAVES) ? _voices[s] : -1; }
+      void setOverlap(bool b) { _overlaps = b; }
+      bool overlaps() const { return _overlaps; }
+      void setStaffAlloc(int s, int i) { if (s >= 0 && s < MAX_STAVES) _staffAlloc[s] = i; }
+      int staffAlloc(int s) const { return (s >= 0 && s < MAX_STAVES) ? _staffAlloc[s] : -1; }
       QString toString() const;
-   private:
+private:
       int _chordRests[MAX_STAVES];      ///< The number of chordrests on each MusicXML staff
       int _staff;                       ///< The MuseScore staff allocated
       int _voice;                       ///< The MuseScore voice allocated
@@ -172,9 +173,9 @@ class JumpMarkerDesc {
       Element* _el;
       const Measure* _meas;
 
-   public:
+public:
       JumpMarkerDesc(Element* el, const Measure* meas) : _el(el), _meas(meas) {}
-      Element* el() const         { return _el; }
+      Element* el() const { return _el; }
       const Measure* meas() const { return _meas; }
       };
 
@@ -205,17 +206,16 @@ class MusicXml {
       Volta* lastVolta;
 
       QDomDocument* doc;
-      int tick;                                 ///< Current position in MusicXML time
+      int tick;                                 ///< Current position in MuseScore time
       int maxtick;                              ///< Maxtick of a measure, used to calculate measure len
-      int prevtick;                             ///< Previous notes tick (used to insert Jumps)
+      int prevtick;                             ///< Previous notes tick (used to insert additional notes to chord)
       int lastMeasureLen;
       int multiMeasureRestCount;                ///< Remaining measures in a multi measure rest
       bool startMultiMeasureRest;               ///< Multi measure rest started in this measure
 
-      int lastLen;                              ///< Needed for chords
       int maxLyrics;
 
-      int divisions;
+      int divisions;                            ///< Current MusicXML divisions
       QVector<Tuplet*> tuplets;                 ///< Current tuplet for each track in the current part
 
       QString composer;
@@ -224,7 +224,6 @@ class MusicXml {
       CreditWordsList credits;
       JumpMarkerDescList jumpsMarkers;
 
-//      std::vector<MusicXmlWedge> wedgeList;
       std::vector<MusicXmlPartGroup*> partGroupList;
       QMap<Spanner*, QPair<int, int> > spanners;
 
@@ -243,8 +242,6 @@ class MusicXml {
 
       //-----------------------------
 
-//      void addWedge(int no, int startPos, qreal rx, qreal ry, bool above, bool hasYoffset, qreal yoffset, int subType);
-//      void genWedge(int no, int endPos, Measure*, int staff);
       void doCredits();
       void direction(Measure* measure, int staff, QDomElement node);
       void scorePartwise(QDomElement);
@@ -263,7 +260,7 @@ class MusicXml {
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void initVoiceMapperAndMapVoices(QDomElement e);
 
-   public:
+public:
       MusicXml(QDomDocument* d);
       void import(Score*);
       };
