@@ -1291,13 +1291,10 @@ void ExportMusicXml::timesig(TimeSig* tsig)
       {
       int st = tsig->subtype();
       Fraction ts = tsig->sig();
-      int z1 = ts.numerator();
-      int n  = ts.denominator();
-      if (st == TSIG_ALLA_BREVE) {
-            // MuseScore calls this 2+2/4, MusicXML 2/2
-            n  = 2;
-            //z2 = 0;
-            }
+      int z = ts.numerator();
+      int n = ts.denominator();
+      QString ns = tsig->numeratorString();
+
       attr.doAttr(xml, true);
       if (st == TSIG_FOUR_FOUR)
             xml.stag("time symbol=\"common\"");
@@ -1305,11 +1302,14 @@ void ExportMusicXml::timesig(TimeSig* tsig)
             xml.stag("time symbol=\"cut\"");
       else
             xml.stag("time");
-      QString z = QString("%1").arg(z1);
-      // if (z2) z += QString("+%1").arg(z2);    // TODO TS
-      // if (z3) z += QString("+%1").arg(z3);
-      // if (z4) z += QString("+%1").arg(z4);
-      xml.tag("beats", z);
+
+      QRegExp rx("^\\d+(\\+\\d+)+$"); // matches a compound numerator
+      if (rx.exactMatch(ns))
+            // if compound numerator, exported as is
+            xml.tag("beats", ns);
+      else
+            // else fall back and use the numerator as integer
+            xml.tag("beats", z);
       xml.tag("beat-type", n);
       xml.etag();
       }
