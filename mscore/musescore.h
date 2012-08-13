@@ -75,7 +75,7 @@ class WebPageDockWidget;
 class ChordList;
 class EditTempo;
 class Capella;
-class CapVoice;
+struct CapVoice;
 class Inspector;
 class OmrPanel;
 class NScrollArea;
