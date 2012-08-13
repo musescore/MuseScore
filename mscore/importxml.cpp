@@ -276,8 +276,9 @@ static Fraction calculateFraction(QString type, int dots, int normalNotes, int a
       Fraction f = noteTypeToFraction(type);
       if (f.isValid()) {
             // dot(s)
+            Fraction f_no_dots = f;
             for (int i = 0; i < dots; ++i)
-                  f += (f / (2 << i));
+                  f += (f_no_dots / (2 << i));
             // tuplet
             if (actualNotes > 0 && normalNotes > 0) {
                   f *= normalNotes;
