@@ -25,7 +25,7 @@ class Score;
 class MuseScoreView;
 class QPainter;
 class ChordRest;
-class SlurPos;
+struct SlurPos;
 
 enum {
       GRIP_START, GRIP_BEZIER1, GRIP_SHOULDER, GRIP_BEZIER2, GRIP_END, GRIP_DRAG,
