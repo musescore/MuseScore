@@ -26,7 +26,7 @@
 #include "libmscore/instrument.h"
 
 class Staff;
-struct InstrumentTemplate;
+class InstrumentTemplate;
 
 //---------------------------------------------------------
 //   EditStaff
