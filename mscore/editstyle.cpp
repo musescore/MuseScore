@@ -623,9 +623,9 @@ void EditStyle::editTextClicked(int id)
       bool styled = id < 6 ? headerStyled->isChecked() : footerStyled->isChecked();
 
       if (styled)
-            e->setPlainText(editPlainText(e->toPlainText()));
+            e->setPlainText(editPlainText(e->toPlainText(), tr("Edit Plain Text")));
       else
-            e->setHtml(editHtml(e->toHtml()));
+            e->setHtml(editHtml(e->toHtml(), tr("Edit HTML Text")));
       }
 
 //---------------------------------------------------------
