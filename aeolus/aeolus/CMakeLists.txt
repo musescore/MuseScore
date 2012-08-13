@@ -20,12 +20,19 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library (aeolus STATIC
       aeolus.cpp audio.cpp model.cpp addsynth.cpp scales.cpp
 	reverb.cpp asection.cpp division.cpp rankwave.cpp
       rngen.cpp exp2ap.cpp
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
+      ${INCS}
       )
 
 set_target_properties (

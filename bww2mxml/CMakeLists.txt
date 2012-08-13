@@ -21,7 +21,14 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library(bww STATIC
+   ${INCS}
    lexer.cpp
    parser.cpp
    symbols.cpp
@@ -30,6 +37,7 @@ add_library(bww STATIC
 
 if (NOT MINGW)
 add_executable(bww2mxml
+   ${INCS}
    lexer.cpp
    main.cpp
    mxmlwriter.cpp
