@@ -61,7 +61,7 @@ class TextEditor : public QDialog {
       void setPlainText(const QString&);
       };
 
-extern QString editPlainText(const QString& s);
-extern QString editHtml(const QString& s);
+extern QString editPlainText(const QString& s, const QString& title);
+extern QString editHtml(const QString& s, const QString& title);
 
 #endif

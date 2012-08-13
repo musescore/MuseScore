@@ -768,7 +768,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "staff-props") {
             EditStaff editStaff(e->staff(), 0);
-            connect(&editStaff, SIGNAL(instrumentChanged()), SLOT(instrumentChanged()));
+            connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
             }
       else if (cmd == "invisible")
