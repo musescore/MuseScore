@@ -49,9 +49,9 @@
       </Instrument>
 
     <Instrument id="b-flute">
-      <longName>Eb Flute</longName>
-      <shortName>Eb Fl.</shortName>
-      <description>Eb Flute</description>
+      <longName>E♭ Flute</longName>
+      <shortName>E♭ Fl.</shortName>
+      <description>E♭ Flute</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -564,9 +564,9 @@
       </Instrument>
 
     <Instrument id="bb-soprano-ocarina">
-      <longName>Bb Soprano Ocarina</longName>
-      <shortName>Bb S. Oc.</shortName>
-      <description>Bb Soprano Ocarina</description>
+      <longName>B♭ Soprano Ocarina</longName>
+      <shortName>B♭ S. Oc.</shortName>
+      <description>B♭ Soprano Ocarina</description>
       <extended>1</extended>
       <clef>G8va</clef>
       <barlineSpan>1</barlineSpan>
@@ -620,9 +620,9 @@
       </Instrument>
 
     <Instrument id="bb-alto-ocarina">
-      <longName>Bb Alto Ocarina</longName>
-      <shortName>Bb A. Oc.</shortName>
-      <description>Bb Alto Ocarina</description>
+      <longName>B♭ Alto Ocarina</longName>
+      <shortName>B♭ A. Oc.</shortName>
+      <description>B♭ Alto Ocarina</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -1201,9 +1201,9 @@
       </Instrument>
 
     <Instrument id="bb-duduk">
-      <longName>Bb Duduk</longName>
-      <shortName>Bb Du.</shortName>
-      <description>Bb Duduk</description>
+      <longName>B♭ Duduk</longName>
+      <shortName>B♭ Du.</shortName>
+      <description>B♭ Duduk</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -1301,9 +1301,9 @@
       </Instrument>
 
     <Instrument id="eb-clarinet">
-      <longName>Eb Clarinet</longName>
-      <shortName>Eb Cl.</shortName>
-      <description>Eb Clarinet</description>
+      <longName>E♭ Clarinet</longName>
+      <shortName>E♭ Cl.</shortName>
+      <description>E♭ Clarinet</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>55-94</aPitchRange>
@@ -1346,9 +1346,9 @@
       </Instrument>
 
     <Instrument id="bb-clarinet">
-      <longName>Bb Clarinet</longName>
-      <shortName>Bb Cl.</shortName>
-      <description>Bb Clarinet</description>
+      <longName>B♭ Clarinet</longName>
+      <shortName>B♭ Cl.</shortName>
+      <description>B♭ Clarinet</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>50-89</aPitchRange>
@@ -1910,9 +1910,9 @@
       </Instrument>
 
     <Instrument id="high-bb-horn">
-      <longName>High Bb Horn</longName>
-      <shortName>H. Bb Hn.</shortName>
-      <description>High Bb Horn</description>
+      <longName>High B♭ Horn</longName>
+      <shortName>H. B♭ Hn.</shortName>
+      <description>High B♭ Horn</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -1990,9 +1990,9 @@
       </Instrument>
 
     <Instrument id="eb-horn">
-      <longName>Eb Horn</longName>
-      <shortName>Eb Hn.</shortName>
-      <description>Eb Horn</description>
+      <longName>E♭ Horn</longName>
+      <shortName>E♭ Hn.</shortName>
+      <description>E♭ Horn</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2036,9 +2036,9 @@
       </Instrument>
 
     <Instrument id="low-bb-horn">
-      <longName>Low Bb Horn</longName>
-      <shortName>L. Bb Hn.</shortName>
-      <description>Low Bb Horn</description>
+      <longName>Low B♭ Horn</longName>
+      <shortName>L. B♭ Hn.</shortName>
+      <description>Low B♭ Horn</description>
       <extended>1</extended>
       <clef>F</clef>
       <barlineSpan>1</barlineSpan>
@@ -2052,9 +2052,9 @@
       </Instrument>
 
     <Instrument id="bb-piccolo-trumpet">
-      <longName>Bb Piccolo Trumpet</longName>
-      <shortName>Bb P. Tpt.</shortName>
-      <description>Bb Piccolo Trumpet</description>
+      <longName>B♭ Piccolo Trumpet</longName>
+      <shortName>B♭ P. Tpt.</shortName>
+      <description>B♭ Piccolo Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2089,9 +2089,9 @@
       </Instrument>
 
     <Instrument id="eb-trumpet">
-      <longName>Eb Trumpet</longName>
-      <shortName>Eb Tpt.</shortName>
-      <description>Eb Trumpet</description>
+      <longName>E♭ Trumpet</longName>
+      <shortName>E♭ Tpt.</shortName>
+      <description>E♭ Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2143,9 +2143,9 @@
       </Instrument>
 
     <Instrument id="bb-trumpet">
-      <longName>Bb Trumpet</longName>
-      <shortName>Bb Tpt.</shortName>
-      <description>Bb Trumpet</description>
+      <longName>B♭ Trumpet</longName>
+      <shortName>B♭ Tpt.</shortName>
+      <description>B♭ Trumpet</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>52-80</aPitchRange>
@@ -2161,9 +2161,9 @@
       </Instrument>
 
     <Instrument id="eb-bass-trumpet">
-      <longName>Eb Bass Trumpet</longName>
-      <shortName>Eb B. Tpt.</shortName>
-      <description>Eb Bass Trumpet</description>
+      <longName>E♭ Bass Trumpet</longName>
+      <shortName>E♭ B. Tpt.</shortName>
+      <description>E♭ Bass Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2180,9 +2180,9 @@
       </Instrument>
 
     <Instrument id="bb-bass-trumpet">
-      <longName>Bb Bass Trumpet</longName>
-      <shortName>Bb B. Tpt.</shortName>
-      <description>Bb Bass Trumpet</description>
+      <longName>B♭ Bass Trumpet</longName>
+      <shortName>B♭ B. Tpt.</shortName>
+      <description>B♭ Bass Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2218,9 +2218,9 @@
       </Instrument>
 
     <Instrument id="eb-baroque-trumpet">
-      <longName>Eb Baroque Trumpet</longName>
-      <shortName>Eb Bq. Tpt.</shortName>
-      <description>Eb Baroque Trumpet</description>
+      <longName>E♭ Baroque Trumpet</longName>
+      <shortName>E♭ Bq. Tpt.</shortName>
+      <description>E♭ Baroque Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2273,9 +2273,9 @@
       </Instrument>
 
     <Instrument id="bb-baroque-trumpet">
-      <longName>Bb Baroque Trumpet</longName>
-      <shortName>Bb Bq. Tpt.</shortName>
-      <description>Bb Baroque Trumpet</description>
+      <longName>B♭ Baroque Trumpet</longName>
+      <shortName>B♭ Bq. Tpt.</shortName>
+      <description>B♭ Baroque Trumpet</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2292,9 +2292,9 @@
       </Instrument>
 
     <Instrument id="eb-cornet">
-      <longName>Eb Cornet</longName>
-      <shortName>Eb Cnt.</shortName>
-      <description>Eb Cornet</description>
+      <longName>E♭ Cornet</longName>
+      <shortName>E♭ Cnt.</shortName>
+      <description>E♭ Cornet</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>57-84</aPitchRange>
@@ -2310,9 +2310,9 @@
       </Instrument>
 
     <Instrument id="bb-cornet">
-      <longName>Bb Cornet</longName>
-      <shortName>Bb Cnt.</shortName>
-      <description>Bb Cornet</description>
+      <longName>B♭ Cornet</longName>
+      <shortName>B♭ Cnt.</shortName>
+      <description>B♭ Cornet</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>52-79</aPitchRange>
@@ -2416,9 +2416,9 @@
       </Instrument>
 
     <Instrument id="eb-alto-ophicleide">
-      <longName>Eb Alto Ophicleide</longName>
-      <shortName>Eb A. Oph.</shortName>
-      <description>Eb Alto Ophicleide</description>
+      <longName>E♭ Alto Ophicleide</longName>
+      <shortName>E♭ A. Oph.</shortName>
+      <description>E♭ Alto Ophicleide</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2444,9 +2444,9 @@
       </Instrument>
 
     <Instrument id="bb-bass-ophicleide">
-      <longName>Bb Bass Ophicleide</longName>
-      <shortName>Bb B. Oph.</shortName>
-      <description>Bb Bass Ophicleide</description>
+      <longName>B♭ Bass Ophicleide</longName>
+      <shortName>B♭ B. Oph.</shortName>
+      <description>B♭ Bass Ophicleide</description>
       <extended>1</extended>
       <clef>F</clef>
       <barlineSpan>1</barlineSpan>
@@ -2458,9 +2458,9 @@
       </Instrument>
 
     <Instrument id="eb-contrabass-ophicleide">
-      <longName>Eb Contrabass Ophicleide</longName>
-      <shortName>Eb Cb. Oph.</shortName>
-      <description>Eb Contrabass Ophicleide</description>
+      <longName>E♭ Contrabass Ophicleide</longName>
+      <shortName>E♭ Cb. Oph.</shortName>
+      <description>E♭ Contrabass Ophicleide</description>
       <extended>1</extended>
       <clef>F</clef>
       <barlineSpan>1</barlineSpan>
@@ -2488,9 +2488,9 @@
       </Instrument>
 
     <Instrument id="eb-alto-horn">
-      <longName>Eb Alto Horn</longName>
-      <shortName>Eb A. Hn.</shortName>
-      <description>Eb Alto Horn</description>
+      <longName>E♭ Alto Horn</longName>
+      <shortName>E♭ A. Hn.</shortName>
+      <description>E♭ Alto Horn</description>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>45-72</aPitchRange>
@@ -2531,9 +2531,9 @@
       </Instrument>
 
     <Instrument id="eb-mellophone">
-      <longName>Eb Mellophone</longName>
-      <shortName>Eb Mph.</shortName>
-      <description>Eb Mellophone</description>
+      <longName>E♭ Mellophone</longName>
+      <shortName>E♭ Mph.</shortName>
+      <description>E♭ Mellophone</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2563,9 +2563,9 @@
       </Instrument>
 
     <Instrument id="eb-mellophonium">
-      <longName>Eb Mellophonium</longName>
-      <shortName>Eb Mpm.</shortName>
-      <description>Eb Mellophonium</description>
+      <longName>E♭ Mellophonium</longName>
+      <shortName>E♭ Mpm.</shortName>
+      <description>E♭ Mellophonium</description>
       <extended>1</extended>
       <clef>G</clef>
       <barlineSpan>1</barlineSpan>
@@ -2579,9 +2579,9 @@
       </Instrument>
 
     <Instrument id="bb-wagner-tuba">
-      <longName>Bb Wagner Tuba</longName>
-      <shortName>Bb Wag. Tu.</shortName>
-      <description>Bb Wagner Tuba</description>
+      <longName>B♭ Wagner Tuba</longName>
+      <shortName>B♭ Wag. Tu.</shortName>
+      <description>B♭ Wagner Tuba</description>
       <extended>1</extended>
       <clef>F</clef>
       <barlineSpan>1</barlineSpan>
@@ -2732,9 +2732,9 @@
       </Instrument>
 
     <Instrument id="bb-tuba">
-      <longName>Bb Tuba</longName>
-      <shortName>Bb Tu.</shortName>
-      <description>Bb Tuba</description>
+      <longName>B♭ Tuba</longName>
+      <shortName>B♭ Tu.</shortName>
+      <description>B♭ Tuba</description>
       <clef>F</clef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>28-58</aPitchRange>
