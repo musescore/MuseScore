@@ -237,9 +237,9 @@
       </Instrument>
 
     <Instrument id="bb-soprano-ocarina">
-      <longName>Bb Sopran Okarina</longName>
-      <shortName>Bb S. Ok.</shortName>
-      <description>Bb Sopran Okarina</description>
+      <longName>B Sopran Okarina</longName>
+      <shortName>B S. Ok.</shortName>
+      <description>B Sopran Okarina</description>
       </Instrument>
 
     <Instrument id="g-alto-ocarina">
@@ -261,9 +261,9 @@
       </Instrument>
 
     <Instrument id="bb-alto-ocarina">
-      <longName>Bb Alt Okarina</longName>
-      <shortName>Bb A. Ok.</shortName>
-      <description>Bb Alt Okarina</description>
+      <longName>B Alt Okarina</longName>
+      <shortName>B A. Ok.</shortName>
+      <description>B Alt Okarina</description>
       </Instrument>
 
     <Instrument id="c-bass-ocarina">
@@ -297,9 +297,9 @@
       </Instrument>
 
     <Instrument id="b-galoubet">
-      <longName>B Galoubet</longName>
-      <shortName>B Gal.</shortName>
-      <description>B Galoubet</description>
+      <longName>H Galoubet</longName>
+      <shortName>H Gal.</shortName>
+      <description>H Galoubet</description>
       </Instrument>
 
     <Instrument id="slide-whistle">
@@ -501,15 +501,15 @@
       </Instrument>
 
     <Instrument id="b-duduk">
-      <longName>B Duduk</longName>
-      <shortName>B Du.</shortName>
-      <description>B Duduk</description>
+      <longName>H Duduk</longName>
+      <shortName>H Du.</shortName>
+      <description>H Duduk</description>
       </Instrument>
 
     <Instrument id="bb-duduk">
-      <longName>Bb Duduk</longName>
-      <shortName>Bb Du.</shortName>
-      <description>Bb Duduk</description>
+      <longName>B Duduk</longName>
+      <shortName>B Du.</shortName>
+      <description>B Duduk</description>
       </Instrument>
 
     <Instrument id="a-duduk">
@@ -549,7 +549,7 @@
       </Instrument>
 
     <Instrument id="eb-clarinet">
-      <longName>Eb Klarinette</longName>
+      <longName>Es Klarinette</longName>
       <shortName>Es Kl.</shortName>
       <description>Es Klarinette</description>
       </Instrument>
@@ -795,7 +795,7 @@
     <Instrument id="high-bb-horn">
       <longName>Hohes B Horn</longName>
       <shortName>H. B Hn.</shortName>
-      <description>Hohes Bb Horn</description>
+      <description>Hohes B Horn</description>
       </Instrument>
 
     <Instrument id="a-horn">
