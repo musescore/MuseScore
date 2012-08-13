@@ -301,10 +301,20 @@ void InstrumentTemplate::read(const QDomElement& de)
 
             if (tag == "name" || tag == "longName") {               // "name" is obsolete
                   int pos = e.attribute("pos", "0").toInt();
+                  for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
+                        if((*i).pos == pos)
+                              longNames.erase(i);
+                              break;
+                        }
                   longNames.append(StaffName(val, pos));
                   }
             else if (tag == "short-name" || tag == "shortName") {   // "short-name" is obsolete
                   int pos = e.attribute("pos", "0").toInt();
+                  for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
+                        if((*i).pos == pos)
+                              shortNames.erase(i);
+                              break;
+                        }
                   shortNames.append(StaffName(val, pos));
                   }
             else if (tag == "description")
