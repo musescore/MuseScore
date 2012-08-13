@@ -14,7 +14,7 @@
       <description>Treble Flute</description>
       </Instrument>
 
-    <Instrument id="b-flute">
+    <Instrument id="eb-flute">
       <longName>E♭ Flute</longName>
       <shortName>E♭ Fl.</shortName>
       <description>E♭ Flute</description>
