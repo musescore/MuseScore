@@ -15,8 +15,16 @@ include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       )
+
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_executable(
       genManual
+      ${INCS}
       genManual.cpp
       )
 target_link_libraries(

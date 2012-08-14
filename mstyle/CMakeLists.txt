@@ -35,11 +35,18 @@ QT4_WRAP_CPP (mocs
       windowmanager.h
       )
 
+if (APPLE)
+      file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+      set(INCS "")
+endif (APPLE)
+
 add_library (
       mstyle STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${mocs}
+      ${INCS}
       mstyle.cpp colorscheme.cpp colorutils.cpp tileset.cpp stylehelper.cpp frameshadow.cpp
       animations.cpp animationdata.cpp dockseparatordata.cpp
       dockseparatorengine.cpp enabledata.cpp genericdata.cpp headerviewdata.cpp
