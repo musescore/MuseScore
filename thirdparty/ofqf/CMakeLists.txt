@@ -26,10 +26,17 @@ QT4_WRAP_CPP (mocs
       qosctypes.h
       )
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library(ofqf STATIC
    ${PROJECT_BINARY_DIR}/all.h
    ${PCH}
    ${mocs}
+   ${INCS}
    qoscclient.cpp qoscserver.cpp qosctypes.cpp
    )
 

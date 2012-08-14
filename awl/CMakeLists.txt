@@ -36,11 +36,18 @@ QT4_WRAP_CPP (mocs
       denomspinbox.h
       )
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library (
       awl STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${mocs}
+      ${INCS}
       aslider.cpp
       knob.cpp
       panknob.cpp

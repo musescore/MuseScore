@@ -25,6 +25,12 @@ set(SRC
   conv.cpp gen.cpp mod.cpp rev.cpp tuning.cpp
   )
 
+if (APPLE)
+	file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 if (SOUNDFONT3)
       set(SRC ${SRC} sfont3.cpp)
 endif (SOUNDFONT3)
@@ -33,6 +39,7 @@ add_library (fluid STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${SRC}
+      ${INCS}
       )
 set_target_properties (
       fluid

@@ -18,8 +18,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library (
   rtf2html STATIC
+  ${INCS}
   fmt_opts.cpp
   rtf2html.cpp
   rtf_keyword.cpp

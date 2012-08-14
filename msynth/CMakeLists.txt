@@ -25,10 +25,17 @@ include_directories(
       ${PROJECT_SOURCE_DIR}
       )
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library (
       msynth STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
+      ${INCS}
       synti.cpp
       )
 
