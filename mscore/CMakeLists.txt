@@ -67,6 +67,7 @@ if (OMR)
       set(OMR_MOCS omrpanel.h)
 endif (OMR)
 
+
 QT4_WRAP_CPP (mocs
       scoreview.h editinstrument.h editstyle.h edittempo.h instrdialog.h debugger.h
       musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
@@ -144,6 +145,12 @@ if (OMR)
       set(OMR_FILES omrpanel.cpp)
 endif (OMR)
 
+if (APPLE)
+	file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+	set(INCS "")
+endif (APPLE)
+
 add_executable ( ${ExecutableName}
       ${qrc_files}
       ${ui_headers}
@@ -151,6 +158,7 @@ add_executable ( ${ExecutableName}
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${resource_file}
+      ${INCS}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
       edittempo.cpp exportxml.cpp icons.cpp importbww.cpp importxml.cpp

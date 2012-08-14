@@ -34,10 +34,17 @@ add_custom_command(
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library (
       libmscore STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${mocs}
+      ${INCS}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
       articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp
