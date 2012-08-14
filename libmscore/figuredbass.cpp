@@ -558,6 +558,16 @@ QVariant FiguredBassItem::getProperty(P_ID propertyId) const
                   return _suffix;
             case P_FBCONTINUATIONLINE:
                   return _contLine;
+            case P_FBPARENTHESIS1:
+                  return parenth[0];
+            case P_FBPARENTHESIS2:
+                  return parenth[1];
+            case P_FBPARENTHESIS3:
+                  return parenth[2];
+            case P_FBPARENTHESIS4:
+                  return parenth[3];
+            case P_FBPARENTHESIS5:
+                  return parenth[4];
             default:
                   return Element::getProperty(propertyId);
             }
@@ -585,6 +595,31 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_FBCONTINUATIONLINE:
                   _contLine = v.toBool();
+                  break;
+            case P_FBPARENTHESIS1:
+                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                        return false;
+                  parenth[0] = (Parenthesis)val;
+                  break;
+            case P_FBPARENTHESIS2:
+                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                        return false;
+                  parenth[1] = (Parenthesis)val;
+                  break;
+            case P_FBPARENTHESIS3:
+                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                        return false;
+                  parenth[2] = (Parenthesis)val;
+                  break;
+            case P_FBPARENTHESIS4:
+                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                        return false;
+                  parenth[3] = (Parenthesis)val;
+                  break;
+            case P_FBPARENTHESIS5:
+                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                        return false;
+                  parenth[4] = (Parenthesis)val;
                   break;
             default:
                   return Element::setProperty(propertyId, v);
@@ -619,13 +654,16 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
             // if setting some prefix and there is a suffix already, clear suffix
             if(pref != ModifierNone && _suffix != ModifierNone)
                   score()->undoChangeProperty(this, P_FBSUFFIX, ModifierNone);
+            layout();                     // re-generate displayText
             }
       }
 
 void FiguredBassItem::undoSetDigit(int digit)
       {
-      if(digit >= 0 && digit <= 9)
+      if(digit >= 0 && digit <= 9) {
             score()->undoChangeProperty(this, P_FBDIGIT, digit);
+            layout();                     // re-generate displayText
+            }
       }
 
 void FiguredBassItem::undoSetSuffix(Modifier suff)
@@ -634,11 +672,39 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
       // if setting some suffix and there is a prefix already, clear prefix
       if(suff != ModifierNone && _prefix != ModifierNone)
             score()->undoChangeProperty(this, P_FBPREFIX, ModifierNone);
+      layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetContLine(bool val)
       {
       score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, val);
+      layout();                     // re-generate displayText
+      }
+
+void FiguredBassItem::undoSetParenth1(Parenthesis par)
+      {
+      score()->undoChangeProperty(this, P_FBPARENTHESIS1, par);
+      layout();                     // re-generate displayText
+      }
+void FiguredBassItem::undoSetParenth2(Parenthesis par)
+      {
+      score()->undoChangeProperty(this, P_FBPARENTHESIS2, par);
+      layout();                     // re-generate displayText
+      }
+void FiguredBassItem::undoSetParenth3(Parenthesis par)
+      {
+      score()->undoChangeProperty(this, P_FBPARENTHESIS3, par);
+      layout();                     // re-generate displayText
+      }
+void FiguredBassItem::undoSetParenth4(Parenthesis par)
+      {
+      score()->undoChangeProperty(this, P_FBPARENTHESIS4, par);
+      layout();                     // re-generate displayText
+      }
+void FiguredBassItem::undoSetParenth5(Parenthesis par)
+      {
+      score()->undoChangeProperty(this, P_FBPARENTHESIS5, par);
+      layout();                     // re-generate displayText
       }
 
 //---------------------------------------------------------
