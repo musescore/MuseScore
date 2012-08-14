@@ -375,6 +375,30 @@
         <voice>1</voice>
         <type>half</type>
         </note>
+      </measure>
+    <measure number="5">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>14</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+        <dot/>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
         </barline>
