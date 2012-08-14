@@ -115,7 +115,6 @@ void TextPalette::populate()
                   int idx = (row - rowOffset) * 16 + col;
                   int code = row * 16 + col + page * 256;
                   QPushButton* tb = buttons[idx];
-
                   //
                   // Font->inFont(QChar) does only work
                   // for unicode plane 0, as QChar is only
@@ -140,6 +139,7 @@ void TextPalette::populate()
                               tb->setToolTip(QString("0x%1").arg(code, 4, 16, QLatin1Char('0')));
                               }
                         tb->setIcon(codeIcon(ss, f));
+                        tb->setIconSize(QSize(25, 25));
                         sg->setId(tb, code);
                         tb->setEnabled(true);
                         }
