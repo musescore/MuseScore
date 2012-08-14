@@ -82,18 +82,16 @@ ShortcutCaptureDialog::~ShortcutCaptureDialog()
 //---------------------------------------------------------
 
 bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
-{
-    // Grab the backspace key before one of the QLineEdit widgets
-    // gets them. Otherwise Qt swallows the Backspace even if
-    // the field is read-only.
-    if (e->type() == QEvent::KeyPress
-        && static_cast<QKeyEvent*>(e)->key() == Qt::Key_Backspace)
     {
+    // Mac only, harmless on Win
+    // Grab the backspace key before one of the QLineEdit widgets gets them. 
+    // Otherwise Qt on mac swallows the Backspace even if the field is read-only.
+    if (e->type() == QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key() == Qt::Key_Backspace) {
         keyPressEvent(static_cast<QKeyEvent*>(e));
         return true;
-    }
+        }
     return false;
-}
+    }
 
 
 //---------------------------------------------------------
