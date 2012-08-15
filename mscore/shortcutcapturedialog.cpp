@@ -93,6 +93,24 @@ bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
     return false;
     }
 
+//---------------------------------------------------------
+//   extractKeycode
+//---------------------------------------------------------
+
+static int extractKeycode(QKeyEvent* e)
+      {
+      Qt::KeyboardModifiers mods = e->modifiers();
+      const int k = e->key();
+      
+      const QString displayedKey = QKeySequence(k).toString(QKeySequence::NativeText);
+      const bool hasCase = displayedKey.toUpper() != displayedKey.toLower();
+      const bool isNumpad = mods.testFlag(Qt::KeypadModifier);
+      
+      if (!(isNumpad || hasCase))
+            mods &= ~Qt::ShiftModifier;
+      
+      return k | mods;
+      }
 
 //---------------------------------------------------------
 //   keyPressEvent
@@ -109,7 +127,8 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
          || k == Qt::Key_ScrollLock || k == Qt::Key_unknown)
             return;
 
-      k += e->modifiers();
+      k = extractKeycode(e);
+      
       switch(key.count()) {
             case 0: key = QKeySequence(k); break;
             case 1: key = QKeySequence(key[0], k); break;
