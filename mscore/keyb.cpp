@@ -398,7 +398,6 @@ void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
       if (is.noteEntryMode) {
-printf("updateInputState\n");
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType()->group()) {
                   case PITCHED_STAFF:

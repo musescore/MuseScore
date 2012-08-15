@@ -2600,7 +2600,7 @@ void MuseScore::clipboardChanged()
 
 void MuseScore::changeState(ScoreState val)
       {
-      printf("MuseScore::changeState: %s\n", stateName(val));
+//      printf("MuseScore::changeState: %s\n", stateName(val));
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
 
@@ -4357,7 +4357,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                            tr("MuseScore: save style"), MScore::lastError);
                         }
                   else {
-printf("set preferences to <%s>\n", qPrintable(name));
                         QFileInfo info(name);
                         if (info.suffix().isEmpty())
                               info.setFile(info.filePath() + ".mss");
