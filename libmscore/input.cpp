@@ -76,6 +76,5 @@ ChordRest* InputState::cr() const
 void InputState::setTrack(int v)
       {
       _track = v;
-      printf("InputState: setTrack %d\n", _track);
       }
 

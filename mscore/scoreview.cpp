@@ -2994,7 +2994,6 @@ void ScoreView::startNoteEntry()
       _score->setUpdateAll();
       _score->end();
 
-printf("start note entry\n");
       const InputState is = _score->inputState();
       Staff* staff = _score->staff(is.track() / VOICES);
       switch( staff->staffType()->group()) {
