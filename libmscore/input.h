@@ -61,7 +61,7 @@ class InputState {
 
       int voice() const                   { return _track % VOICES; }
       int track() const                   { return _track;          }
-      void setTrack(int v)                { _track = v;             }
+      void setTrack(int v);
 
       bool repitchMode() const            { return _repitchMode;    }
       void setRepitchMode(bool val)       { _repitchMode = val;     }

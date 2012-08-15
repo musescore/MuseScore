@@ -39,6 +39,7 @@
 #include "preferences.h"
 #include "libmscore/segment.h"
 #include "libmscore/mscore.h"
+#include "libmscore/stafftype.h"
 
 #ifdef Q_WS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -396,7 +397,21 @@ void ScoreView::editKey(QKeyEvent* ev)
 void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
-      showDrumTools(is.drumset(), score->staff(is.track() / VOICES));
+      if (is.noteEntryMode) {
+printf("updateInputState\n");
+            Staff* staff = score->staff(is.track() / VOICES);
+            switch (staff->staffType()->group()) {
+                  case PITCHED_STAFF:
+                        changeState(STATE_NOTE_ENTRY_PITCHED);
+                        break;
+                  case TAB_STAFF:
+                        changeState(STATE_NOTE_ENTRY_TAB);
+                        break;
+                  case PERCUSSION_STAFF:
+                        changeState(STATE_NOTE_ENTRY_DRUM);
+                        break;
+                  }
+            }
 
       getAction("pad-rest")->setChecked(is.rest);
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);

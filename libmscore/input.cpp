@@ -69,4 +69,13 @@ ChordRest* InputState::cr() const
       return _segment ? static_cast<ChordRest*>(_segment->element(_track)) : 0;
       }
 
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
+
+void InputState::setTrack(int v)
+      {
+      _track = v;
+      printf("InputState: setTrack %d\n", _track);
+      }
 

@@ -77,6 +77,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/stafftype.h"
 
 #include "navigator.h"
 #include "inspector.h"
@@ -801,7 +802,6 @@ ScoreView::ScoreView(QWidget* parent)
       s->assignProperty(this, "cursor", QCursor(Qt::UpArrowCursor));
       s->addTransition(new CommandTransition("escape", states[NORMAL]));      // ->normal
       s->addTransition(new CommandTransition("note-input", states[NORMAL]));  // ->normal
-      connect(s, SIGNAL(entered()), mscore, SLOT(setNoteEntryState()));
       connect(s, SIGNAL(entered()), SLOT(startNoteEntry()));
       connect(s, SIGNAL(exited()), SLOT(endNoteEntry()));
       s->addTransition(new NoteEntryDragTransition(this));                    // mouse drag
@@ -2982,8 +2982,6 @@ void ScoreView::startNoteEntry()
       _score->setInputState(el);
       bool enable = el && (el->type() == NOTE || el->type() == REST);
       mscore->enableInputToolbar(enable);
-      if (el == 0)
-            mscore->showDrumTools(0, 0);
 
       _score->inputState().noteEntryMode = true;
       _score->moveCursor();
@@ -2995,6 +2993,21 @@ void ScoreView::startNoteEntry()
       dragElement = 0;
       _score->setUpdateAll();
       _score->end();
+
+printf("start note entry\n");
+      const InputState is = _score->inputState();
+      Staff* staff = _score->staff(is.track() / VOICES);
+      switch( staff->staffType()->group()) {
+            case PITCHED_STAFF:
+                  mscore->changeState(STATE_NOTE_ENTRY_PITCHED);
+                  break;
+            case TAB_STAFF:
+                  mscore->changeState(STATE_NOTE_ENTRY_TAB);
+                  break;
+            case PERCUSSION_STAFF:
+                  mscore->changeState(STATE_NOTE_ENTRY_DRUM);
+                  break;
+            }
       }
 
 //---------------------------------------------------------
@@ -3794,8 +3807,18 @@ qDebug("cmdEnterRest %s", qPrintable(d.name()));
 
 ScoreState ScoreView::mscoreState() const
       {
-      if (sm->configuration().contains(states[NOTE_ENTRY]))
-            return STATE_NOTE_ENTRY;
+      if (sm->configuration().contains(states[NOTE_ENTRY])) {
+            const InputState is = _score->inputState();
+            Staff* staff = _score->staff(is.track() / VOICES);
+            switch( staff->staffType()->group()) {
+                  case PITCHED_STAFF:
+                        return STATE_NOTE_ENTRY_PITCHED;
+                  case TAB_STAFF:
+                        return STATE_NOTE_ENTRY_TAB;
+                  case PERCUSSION_STAFF:
+                        return STATE_NOTE_ENTRY_DRUM;
+                  }
+            }
       if (sm->configuration().contains(states[EDIT])) {
             if (editObject && editObject->type() == LYRICS)
                   return STATE_LYRICS_EDIT;
