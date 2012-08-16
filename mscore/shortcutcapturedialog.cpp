@@ -54,7 +54,7 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
 
 void ShortcutCaptureDialog::addClicked()
       {
-      done(1);
+      done(SC_ADD);
       }
 
 //---------------------------------------------------------
@@ -63,7 +63,7 @@ void ShortcutCaptureDialog::addClicked()
 
 void ShortcutCaptureDialog::replaceClicked()
       {
-      done(2);
+      done(SC_REPLACE);
       }
 
 //---------------------------------------------------------

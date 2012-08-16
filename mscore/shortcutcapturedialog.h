@@ -53,5 +53,12 @@ class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBa
       ShortcutCaptureDialog(Shortcut* s, QMap<QString, Shortcut*> localShortcuts, QWidget* parent = 0);
       ~ShortcutCaptureDialog();
       QKeySequence getKey() const { return key; }
+
+      enum ResultType {
+            SC_CANCEL = QDialog::Rejected,
+            SC_ADD = QDialog::Accepted,
+            SC_REPLACE
+      };
+
       };
 
