@@ -104,7 +104,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       {
       Staff* staff = Score::staff(staffIdx);
 
-      if (staff->part()->instr()->drumset() || staff->useTablature())
+      if (staff->isDrumStaff() || staff->isTabStaff())
             return;
 
       int startTrack = staffIdx * VOICES;
@@ -747,7 +747,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            bool needKeysig = !staff->useTablature()
+            bool needKeysig = !staff->isTabStaff()
                && keyIdx.isValid()
                && (isFirstSystem || styleB(ST_genKeysig));
 

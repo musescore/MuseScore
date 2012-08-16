@@ -46,7 +46,7 @@ void Bend::layout()
       {
       qreal _spatium = spatium();
 
-      if (staff() && !staff()->useTablature()) {
+      if (staff() && !staff()->isTabStaff()) {
             setbbox(QRectF());
             if (!parent()) {
                   noteWidth = -_spatium*2;
@@ -154,7 +154,7 @@ void Bend::layout()
 
 void Bend::draw(QPainter* painter) const
       {
-      if (staff() && !staff()->useTablature())
+      if (staff() && !staff()->isTabStaff())
             return;
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);

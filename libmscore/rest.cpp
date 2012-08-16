@@ -62,7 +62,7 @@ Rest::Rest(Score* s, const TDuration& d)
 
 void Rest::draw(QPainter* painter) const
       {
-      if ((staff() && staff()->useTablature()) || generated())
+      if ((staff() && staff()->isTabStaff()) || generated())
             return;
       qreal _spatium = spatium();
 
@@ -306,7 +306,7 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
 
 void Rest::layout()
       {
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             // no rests for tablature
             _space.setLw(0.0);
             _space.setRw(0.0);

@@ -65,6 +65,8 @@ class InputState {
 
       bool repitchMode() const            { return _repitchMode;    }
       void setRepitchMode(bool val)       { _repitchMode = val;     }
+
+      StaffGroup staffGroup() const;
       };
 
 #endif

@@ -1265,10 +1265,10 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       //
       Staff* s    = staff(pos->staffIdx);
       qreal mag = staff(pos->staffIdx)->mag();
-      qreal lineDist = (s->useTablature() ? 1.5 * spatium() : spatium() * .5) * mag;
+      qreal lineDist = (s->isTabStaff() ? 1.5 : .5) * mag * spatium();
 
       pos->line  = lrint((pppp.y() - sstaff->bbox().y()) / lineDist);
-      if (s->useTablature()) {
+      if (s->isTabStaff()) {
             if (pos->line < -1 || pos->line > s->lines()+1)
                   return false;
             if (pos->line < 0)

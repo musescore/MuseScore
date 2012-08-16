@@ -1968,7 +1968,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             char buffer[2];
 
             // TODO: following code requires further cleanup and validation
-            if (chord->staff() && chord->staff()->useTablature()) {
+            if (chord->staff() && chord->staff()->isTabStaff()) {
                   tabpitch2xml(note->pitch(), note->tpc(), c, alter, octave);
                   buffer[0] = c;
                   buffer[1] = 0;
@@ -2205,7 +2205,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
 
             // write tablature string / fret
-            if (chord->staff() && chord->staff()->useTablature())
+            if (chord->staff() && chord->staff()->isTabStaff())
                   if (note->fret() >= 0 && note->string() >= 0) {
                         notations.tag(xml);
                         technical.tag(xml);
@@ -3920,7 +3920,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                     else
                                           xml.stag("staff-details");
                                     xml.tag("staff-lines", st->lines());
-                                    if (st->useTablature() && instrument->tablature()) {
+                                    if (st->isTabStaff() && instrument->tablature()) {
                                           QList<int> l = instrument->tablature()->stringList();
                                           for (int i = 0; i < l.size(); i++) {
                                                 char step  = ' ';
