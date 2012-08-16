@@ -125,8 +125,9 @@ static int extractKeycode(QKeyEvent* e)
       const QString displayedKey = QKeySequence(k).toString(QKeySequence::NativeText);
       const bool hasCase = displayedKey.toUpper() != displayedKey.toLower();
       const bool isNumpad = mods.testFlag(Qt::KeypadModifier);
+      const bool displaySameAsUnicode = displayedKey == e->text();
       
-      if (!isNumpad && !hasCase && !shiftAllowed.contains(k))
+      if (!isNumpad && !hasCase && (!shiftAllowed.contains(k) || displaySameAsUnicode))
             mods &= ~Qt::ShiftModifier;
       
       return k | (mods & ~Qt::KeypadModifier);
