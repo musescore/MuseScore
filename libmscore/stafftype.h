@@ -229,12 +229,17 @@ class StaffTypeTablature : public StaffType {
    public:
       StaffTypeTablature() : StaffType() { init(); }
       StaffTypeTablature(const QString& s) : StaffType(s) { init(); }
+
+      // re-implemented virtual functions
       virtual StaffGroup group() const          { return TAB_STAFF; }
       virtual StaffTypeTablature* clone() const { return new StaffTypeTablature(*this); }
       virtual const char* groupName() const     { return "tablature"; }
       virtual void read(const QDomElement& e);
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
+
+      QString     fretString(int fret, bool ghost);   // returns a string with the text for fret
+      QString     durationString(TDuration::DurationType type, int dots);
 
       // properties getters (some getters require updated metrics)
       qreal durationBoxH();
@@ -294,7 +299,8 @@ class TabDurationSymbol : public Element {
       StaffTypeTablature* _tab;
       QString             _text;
 
-      void buildText(TDuration::DurationType type, int dots);
+      void buildText(TDuration::DurationType type, int dots)
+                                                { _text = _tab->durationString(type, dots); }
 
    public:
       TabDurationSymbol(Score* s);

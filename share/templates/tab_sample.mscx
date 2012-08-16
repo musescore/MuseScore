@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
   <programVersion>2.0.0</programVersion>
-  <programRevision>5388</programRevision>
+  <programRevision>da1358d</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <SyntiSettings>
-      <s name="soundfont" val="C:/Program Files/MusicSW/soundfonts/FluidR3_GM.sf2"/>
+      <s name="soundfont" val="/home/mmg/Documents/soundfonts/FluidR3_GM.sf2"/>
       <f name="RevRoomsize" val="0.84"/>
       <f name="RevDamp" val="0.2"/>
       <f name="RevWidth" val="1"/>
@@ -20,67 +20,33 @@
     <Division>480</Division>
     <Style>
       <staffLowerBorder>0</staffLowerBorder>
-      <systemDistance>8</systemDistance>
+      <minSystemDistance>8</minSystemDistance>
+      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <bracketWidth>0.3</bracketWidth>
       <bracketDistance>0.2</bracketDistance>
-      <pageFillLimit>0.99</pageFillLimit>
+      <beamMinLen>1.32</beamMinLen>
       <showMeasureNumber>0</showMeasureNumber>
-      <smallNoteMag>0.7</smallNoteMag>
-      <graceNoteMag>0.7</graceNoteMag>
-      <smallStaffMag>0.7</smallStaffMag>
-      <evenHeaderL>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</evenHeaderL>
-      <evenHeaderC>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</evenHeaderC>
-      <evenHeaderR>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</evenHeaderR>
-      <oddHeaderL>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</oddHeaderL>
-      <oddHeaderC>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</oddHeaderC>
-      <oddHeaderR>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;freeSans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</oddHeaderR>
       <showFooter>0</showFooter>
       <evenFooterL></evenFooterL>
       <evenFooterC></evenFooterC>
       <oddFooterC></oddFooterC>
       <oddFooterR></oddFooterR>
+      <page-layout>
+        <page-height>680.315</page-height>
+        <page-width>566.929</page-width>
+        <page-margins type="even">
+          <left-margin>28.3465</left-margin>
+          <right-margin>28.3465</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>28.3465</left-margin>
+          <right-margin>28.3465</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
       <Spatium>1.7</Spatium>
       </Style>
     <StaffType idx="1" group="tablature">
@@ -89,37 +55,28 @@ p, li { white-space: pre-wrap; }
       <lineDistance>1.5</lineDistance>
       <clef>0</clef>
       <slashStyle>1</slashStyle>
+      <timesig>0</timesig>
       <durations>1</durations>
-      <durationFontName>MScoreTabulatureRenaiss</durationFontName>
+      <durationFontName>MuseScore Tab French</durationFontName>
       <durationFontSize>15</durationFontSize>
       <durationFontY>0</durationFontY>
-      <fretFontName>MScoreTabulatureRenaiss</fretFontName>
+      <fretFontName>MuseScore Tab Renaiss</fretFontName>
       <fretFontSize>10</fretFontSize>
       <fretFontY>0</fretFontY>
       <linesThrough>1</linesThrough>
-      <onLines>1</onLines>
-      <timesig>1</timesig>
+      <onLines>0</onLines>
       <upsideDown>0</upsideDown>
-      <useNumbers>1</useNumbers>
+      <useNumbers>0</useNumbers>
       </StaffType>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
-    <page-layout>
-      <page-height>198.425</page-height>
-      <page-width>850.394</page-width>
-      <page-margins type="both">
-        <left-margin>28.3465</left-margin>
-        <right-margin>28.3465</right-margin>
-        <top-margin>0</top-margin>
-        <bottom-margin>0</bottom-margin>
-        </page-margins>
-      </page-layout>
     <metaTag name="Platform">WIN</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">X11</metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Lachrimae Antiquae</metaTag>
@@ -161,13 +118,7 @@ p, li { white-space: pre-wrap; }
           <string>67</string>
           </Tablature>
         <Channel>
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="25"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="0"/>
-          <controller tick="0" channel="0" ctrl="91" value="0"/>
+          <program value="25"/>
           </Channel>
         </Instrument>
       </Part>
@@ -655,6 +606,5 @@ p, li { white-space: pre-wrap; }
           </BarLine>
         </Measure>
       </Staff>
-    <cursorTrack>0</cursorTrack>
     </Score>
   </museScore>
