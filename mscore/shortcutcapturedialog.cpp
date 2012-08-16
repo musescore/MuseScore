@@ -140,9 +140,9 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
             }
 
       // Check against conflicting shortcuts
-      bool conflict = false;
-      QString msgString;
 
+      QList<Shortcut*> conflicts;
+      
       foreach (Shortcut* ss, localShortcuts) {
             if (s == ss)
                   continue;
@@ -150,17 +150,23 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
                   continue;
             foreach(const QKeySequence& ks, ss->keys()) {
                   if (ks == key) {
-                        msgString = tr("Shortcut conflicts with ") + ss->descr();
-                        conflict = true;
+                        conflicts.append(ss);
                         break;
                         }
                   }
-            if (conflict)
-                  break;
             }
+
+      QString msgString;
+      if (!conflicts.empty()) {
+            QListIterator<Shortcut*> conflict(conflicts);
+            msgString = tr("Shortcut conflicts with ") + conflict.next()->descr();
+            while (conflict.hasNext())
+                  msgString += ", " + conflict.next()->descr();
+            }
+            
       messageLabel->setText(msgString);
-      addButton->setEnabled(conflict == false);
-      replaceButton->setEnabled(conflict == false);
+      addButton->setEnabled(conflicts.empty());
+      replaceButton->setEnabled(conflicts.empty());
       nshrtLabel->setText(key.toString(QKeySequence::NativeText));
 
       QString A = key.toString(QKeySequence::NativeText);
