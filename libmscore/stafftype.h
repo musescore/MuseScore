@@ -186,11 +186,11 @@ class StaffTypeTablature : public StaffType {
 
    protected:
       // configurable properties
-      QString     _durationFontName;      // the name of the font used for duration symbols
+//      QString     _durationFontName;      // the name of the font used for duration symbols
       qreal       _durationFontSize;      // the size (in points) for the duration symbol font
       qreal       _durationFontUserY;     // the vertical offset (spatium units) for the duration symb. font
                                           // user configurable
-      QString     _fretFontName;          // the name of the font used for fret marks
+//      QString     _fretFontName;          // the name of the font used for fret marks
       qreal       _fretFontSize;          // the size (in points) for the fret marks font
       qreal       _fretFontUserY;         // additional vert. offset of fret marks with respect to
                                           // the string line (spatium unit); user configurable
@@ -205,6 +205,7 @@ class StaffTypeTablature : public StaffType {
                                           // of a box bounding all duration symbols (raster units) internally computed:
                                           // depends upon _onString and the metrics of the duration font
       QFont       _durationFont;          // font used to draw dur. symbols; cached for efficiency
+      int         _durationFontIdx;       // the index of current dur. font in dur. font array
       qreal       _durationYOffset;       // the vertical offset to draw duration symbols with respect to the
                                           // string lines (raster units); internally computed: depends upon _onString
       bool        _durationMetricsValid;  // whether duration font metrics are valid or not
@@ -212,11 +213,16 @@ class StaffTypeTablature : public StaffType {
                                           // of a box bounding all fret characters (raster units) internally computed:
                                           // depends upon _onString, _useNumbers and the metrics of the fret font
       QFont       _fretFont;              // font used to draw fret marks; cached for efficiency
+      int         _fretFontIdx;           // the index of current fret font in fret font array
       qreal       _fretYOffset;           // the vertical offset to draw fret marks with respect to the string lines;
                                           // (raster units); internally computed: depends upon _onString, _useNumbers
                                           // and the metrics of the fret font
       bool        _fretMetricsValid;      // whether fret font metrics are valid or not
       qreal       _refDPI;                // reference value used to last compute metrics and to see if they are still valid
+
+      // the array of configured fonts
+      static QList<TablatureFretFont>     _fretFonts;
+      static QList<TablatureDurationFont> _durationFonts;
 
       void init();                        // init to reasonable defaults
 
@@ -235,14 +241,14 @@ class StaffTypeTablature : public StaffType {
       qreal durationBoxY();
 
       const QFont&  durationFont()             { return _durationFont;     }
-      const QString durationFontName() const   { return _durationFontName; }
+      const QString durationFontName() const   { return _durationFonts[_durationFontIdx].displayName; }
       qreal durationFontSize() const      { return _durationFontSize; }
       qreal durationFontUserY() const     { return _durationFontUserY;}
       qreal durationFontYOffset()         { setDurationMetrics(); return _durationYOffset + _durationFontUserY * MScore::DPI*SPATIUM20; }
       qreal fretBoxH()                    { setFretMetrics(); return _fretBoxH; }
       qreal fretBoxY()                    { setFretMetrics(); return _fretBoxY + _fretFontUserY * MScore::DPI*SPATIUM20; }
       const QFont&  fretFont()            { return _fretFont;         }
-      const QString fretFontName() const  { return _fretFontName;     }
+      const QString fretFontName() const  { return _fretFonts[_fretFontIdx].displayName; }
       qreal fretFontSize() const          { return _fretFontSize;     }
       qreal fretFontUserY() const         { return _fretFontUserY;    }
       qreal fretFontYOffset()             { setFretMetrics(); return _fretYOffset + _fretFontUserY * MScore::DPI*SPATIUM20; }
@@ -252,14 +258,10 @@ class StaffTypeTablature : public StaffType {
       bool  upsideDown() const            { return _upsideDown;       }
       bool  useNumbers() const            { return _useNumbers;       }
       // properties setters (setting some props invalidates metrics)
-      void  setDurationFontName(QString name)   { _durationFontName = name;
-                                                  _durationFont.setFamily(name);
-                                                  _durationMetricsValid = false; }
+      void  setDurationFontName(QString name);
       void  setDurationFontSize(qreal val);
       void  setDurationFontUserY(qreal val)     { _durationFontUserY = val; }
-      void  setFretFontName(QString name)       { _fretFontName = name;
-                                                  _fretFont.setFamily(name);
-                                                  _fretMetricsValid = false; }
+      void  setFretFontName(QString name);
       void  setFretFontSize(qreal val);
       void  setFretFontUserY(qreal val)   { _fretFontUserY = val;     }
       void  setGenDurations(bool val)     { _genDurations = val;      }

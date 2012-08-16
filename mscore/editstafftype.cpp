@@ -50,6 +50,14 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
+      QList<QString> fontNames = StaffTypeTablature::fontNames(false);
+      foreach(const QString& name, fontNames)   // fill fret font name combo
+            fretFontName->addItem(name);
+      fretFontName->setCurrentIndex(0);
+      fontNames = StaffTypeTablature::fontNames(true);
+      foreach(const QString& name, fontNames)   // fill duration font name combo
+            durFontName->addItem(name);
+      durFontName->setCurrentIndex(0);
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
@@ -135,10 +143,10 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
             case TAB_STAFF:
                   {
                   StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(st);
-                  if (stt->durationFontName()    != durFontName->currentFont().family()
+                  if (stt->durationFontName()    != durFontName->currentText()
                      || stt->durationFontSize() != durFontSize->value()
                      || stt->durationFontUserY()!= durY->value()
-                     || stt->fretFontName()     != fretFontName->currentFont().family()
+                     || stt->fretFontName()     != fretFontName->currentText()
                      || stt->fretFontSize()     != fretFontSize->value()
                      || stt->fretFontUserY()    != fretY->value()
                      || stt->linesThrough()     != linesThroughRadio->isChecked()
@@ -243,7 +251,7 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
       genTimesig->setChecked(st->genTimesig());
 
       // switch to stack page and set props specific to each staff group
-      QFont f = QFont();
+//      QFont f = QFont();
 
       switch(st->group()) {
             case PITCHED_STAFF:
@@ -261,9 +269,12 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                   StaffTypeTablature* tab = static_cast<StaffTypeTablature*>(st);
                   stack->setCurrentIndex(1);
                   upsideDown->setChecked(tab->upsideDown());
-                  f.setFamily(tab->fretFontName());
-                  f.setPointSizeF(tab->fretFontSize());
-                  fretFontName->setCurrentFont(f);
+//                  f.setFamily(tab->fretFontName());
+//                  f.setPointSizeF(tab->fretFontSize());
+//                  fretFontName->setCurrentFont(f);
+                  int idx = fretFontName->findText(tab->fretFontName(), Qt::MatchFixedString);
+                  if(idx == -1)     idx = 0;          // if name not found, use first name
+                  fretFontName->setCurrentIndex(idx);
                   fretFontSize->setValue(tab->fretFontSize());
                   fretY->setValue(tab->fretFontUserY());
                   numbersRadio->setChecked(tab->useNumbers());
@@ -272,9 +283,12 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                   aboveLinesRadio->setChecked(!tab->onLines());
                   linesThroughRadio->setChecked(tab->linesThrough());
                   linesBrokenRadio->setChecked(!tab->linesThrough());
-                  f.setFamily(tab->durationFontName());
-                  f.setPointSizeF(tab->durationFontSize());
-                  durFontName->setCurrentFont(f);
+//                  f.setFamily(tab->durationFontName());
+//                  f.setPointSizeF(tab->durationFontSize());
+//                  durFontName->setCurrentFont(f);
+                  idx = durFontName->findText(tab->durationFontName(), Qt::MatchFixedString);
+                  if(idx == -1)     idx = 0;          // if name not found, use first name
+                  durFontName->setCurrentIndex(idx);
                   durFontSize->setValue(tab->durationFontSize());
                   durY->setValue(tab->durationFontUserY());
                   // convert combined values of genDurations and slashStyle
@@ -364,37 +378,40 @@ void EditStaffType::nameEdited(const QString& s)
 
 void EditStaffType::presetTablatureClicked()
       {
-      QFont f = QFont();
+//      QFont f = QFont();
+      QString fretFntName;
+      QString durFntName;
 
-      // retrieve item currently selected in preset combo
-      int idx       = presetTablatureCombo->currentIndex();
+      int idx = presetTablatureCombo->currentIndex(); // retrieve item currently selected in preset combo
       blockTabPreviewSignals(true);                   // do not redraw preview for every value we change!
+      lineDistance->setValue(1.5);                    // properties common to all styles
+      showBarlines->setChecked(true);
+      fretFontSize->setValue(10);
+      fretY->setValue(0);
+      durFontSize->setValue(15);
+      durY->setValue(0);
       switch(idx)
       {
       case 0:                             // guitar
       case 1:                             // bass
             lines->setValue(idx == 0 ? 6 : 4);
-            lineDistance->setValue(1.5);
             genClef->setChecked(true);
-            showBarlines->setChecked(true);
             genTimesig->setChecked(false);
             upsideDown->setChecked(false);
-            f.setFamily("MScoreTabulatureModern");
-            f.setPointSizeF(10);
-            fretFontName->setCurrentFont(f);
-            fretFontSize->setValue(10);
-            fretY->setValue(0);
+//            f.setFamily("MScoreTabulatureModern");
+//            f.setPointSizeF(10);
+//            fretFontName->setCurrentFont(f);
+            fretFntName = "MuseScore Tab Modern";
             numbersRadio->setChecked(true);
             lettersRadio->setChecked(false);
             onLinesRadio->setChecked(true);
             aboveLinesRadio->setChecked(false);
             linesThroughRadio->setChecked(false);
             linesBrokenRadio->setChecked(true);
-            f.setFamily("MScoreTabulatureModern");
-            f.setPointSizeF(0);
-            durFontName->setCurrentFont(f);
-            durFontSize->setValue(15);
-            durY->setValue(0);
+//            f.setFamily("MScoreTabulatureModern");
+//            f.setPointSizeF(0);
+//            durFontName->setCurrentFont(f);
+            durFntName = "MuseScore Tab Modern";
             noteValues0->setChecked(false);
             noteValues1->setChecked(false);
             noteValues2->setChecked(true);
@@ -402,32 +419,35 @@ void EditStaffType::presetTablatureClicked()
       case 2:                             // Italian
       case 3:                             // French
             lines->setValue(6);
-            lineDistance->setValue(1.5);
             genClef->setChecked(false);
-            showBarlines->setChecked(true);
             genTimesig->setChecked(true);
             upsideDown->setChecked(idx == 2 ? true : false);
-            f.setFamily("MScoreTabulatureRenaiss");
-            f.setPointSizeF(10);
-            fretFontName->setCurrentFont(f);
-            fretFontSize->setValue(10);
-            fretY->setValue(0);
+//            f.setFamily("MScoreTabulatureRenaiss");
+//            f.setPointSizeF(10);
+//            fretFontName->setCurrentFont(f);
+            fretFntName = "MuseScore Tab Renaiss";
             numbersRadio->setChecked(idx == 2 ? true : false);
             lettersRadio->setChecked(idx == 2 ? false : true);
             onLinesRadio->setChecked(idx == 2 ? true : false);
             aboveLinesRadio->setChecked(idx == 2 ? false : true);
             linesThroughRadio->setChecked(true);
             linesBrokenRadio->setChecked(false);
-            f.setFamily("MScoreTabulatureRenaiss");
-            f.setPointSizeF(15);
-            durFontName->setCurrentFont(f);
-            durFontSize->setValue(15);
-            durY->setValue(0);
+//            f.setFamily("MScoreTabulatureRenaiss");
+//            f.setPointSizeF(15);
+//            durFontName->setCurrentFont(f);
+            durFntName = (idx == 2 ? "MuseScore Tab Italian" : "MuseScore Tab French");
             noteValues0->setChecked(false);
             noteValues1->setChecked(true);
             noteValues2->setChecked(false);
             break;
       }
+      // select right font name in font combos
+      idx = fretFontName->findText(fretFntName);
+      if(idx == -1)     idx = 0;
+      fretFontName->setCurrentIndex(idx);
+      idx = durFontName->findText(durFntName);
+      if(idx == -1)     idx = 0;
+      durFontName->setCurrentIndex(idx);
       updateTabPreview();
       blockTabPreviewSignals(false);
       }
