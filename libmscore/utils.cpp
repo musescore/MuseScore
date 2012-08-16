@@ -298,14 +298,9 @@ int line2pitch(int line, int clef, int key)
 
 int quantizeLen(int len, int raster)
       {
-      int rl = ((len + raster - 1) / raster) * raster;      // round up to raster
-#if 0
-      rl /= 2;
-      if (rl == 0)
-            rl = 1;
-      rl = ((len + rl - 1) / rl) * rl;
-#endif
-      return rl;
+      if (raster == 0)
+            return len;
+      return int( ((float)len/raster) + 0.5 ) * raster; //round to the closest multiple of raster
       }
 
 //---------------------------------------------------------

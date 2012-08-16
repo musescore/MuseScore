@@ -950,23 +950,29 @@ void MidiTrack::quantize(int startTick, int endTick, EventList* dst)
       // determine suitable quantization value based
       // on shortest note in measure
       //
+      int div = division;
       if (mintick <= division / 16)        // minimum duration is 1/64
-            mintick = division / 16;
+            div = division / 16;
       else if (mintick <= division / 8)
-            mintick = division / 8;
+            div = division / 8;
       else if (mintick <= division / 4)
-            mintick = division / 4;
+            div = division / 4;
       else if (mintick <= division / 2)
-            mintick = division / 2;
+            div = division / 2;
       else if (mintick <= division)
-            mintick = division;
+            div = division;
       else if (mintick <= division * 2)
-            mintick = division * 2;
+            div = division * 2;
       else if (mintick <= division * 4)
-            mintick = division * 4;
+            div = division * 4;
       else if (mintick <= division * 8)
-            mintick = division * 8;
+            div = division * 8;
 
+      if(div == (division / 16))
+             mintick = div;
+      else
+             mintick = quantizeLen(mintick, div >> 1);    //closest
+      
       if (mintick < mf->shortestNote())         // DEBUG
             mintick = mf->shortestNote();
 
@@ -978,13 +984,12 @@ void MidiTrack::quantize(int startTick, int endTick, EventList* dst)
                   break;
             Event ee(e);
             if (e.type() == ME_NOTE) {
-	            int len  = quantizeLen(e.duration(), raster);
-      	      int tick = ((e.ontime() + raster2) / raster) * raster;
-
+                  int len  = quantizeLen(e.duration(), raster);
+                  int tick = ((e.ontime() + raster2) / raster) * raster;
                   ee.setNoquantOntime(e.ontime());
                   ee.setNoquantDuration(e.duration());
-	            ee.setOntime(tick);
-      	      ee.setDuration(len);
+                  ee.setOntime(tick);
+                  ee.setDuration(len);
                   }
             dst->insert(ee);
             }
@@ -1047,7 +1052,7 @@ void MidiTrack::cleanup()
                         continue;
                         }
                   }
-		_events.insert(e);
+            _events.insert(e);
             }
       }
 
