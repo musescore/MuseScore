@@ -691,8 +691,8 @@ void InspectorNoteBase::setElement(Note* n)
       small->setChecked(note->small());
       mirrorHead->setCurrentIndex(note->userMirror());
       dotPosition->setCurrentIndex(note->dotPosition());
-      ontimeOffset->setValue(note->onTimeOffset());
-      offtimeOffset->setValue(note->offTimeOffset());
+      ontimeOffset->setValue(note->onTimeUserOffset());
+      offtimeOffset->setValue(note->offTimeUserOffset());
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;
