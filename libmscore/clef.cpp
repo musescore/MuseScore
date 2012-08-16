@@ -316,7 +316,7 @@ void Clef::layout1()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (staff() && staff()->useTablature() && !staff()->staffType()->genClef())
+      if (staff() && staff()->isTabStaff() && !staff()->staffType()->genClef())
 	      return;
       QColor color(curColor());
       foreach(Element* e, elements) {

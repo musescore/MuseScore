@@ -37,7 +37,7 @@ class Shortcut;
 class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBase
       {
       Q_OBJECT
-      private:
+
       Shortcut* s;
       void keyPressEvent(QKeyEvent* e);
       virtual bool eventFilter(QObject* o, QEvent* e);

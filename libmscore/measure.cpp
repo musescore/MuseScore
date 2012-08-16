@@ -3066,7 +3066,7 @@ void Measure::layoutX(qreal stretch)
                   continue;
             qreal distAbove;
             Staff * staff = _score->staff(staffIdx);
-            if (staff->useTablature()) {
+            if (staff->isTabStaff()) {
                   distAbove = -((StaffTypeTablature*)(staff->staffType()))->durationBoxY();
                   if (distAbove > staves[staffIdx]->distanceUp)
                      staves[staffIdx]->distanceUp = distAbove;

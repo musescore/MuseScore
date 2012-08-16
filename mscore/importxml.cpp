@@ -3464,7 +3464,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   if (number != -1)
                         staffIdx += number - 1;
                   Tablature* t;
-                  if (score->staff(staffIdx)->useTablature()) {
+                  if (score->staff(staffIdx)->isTabStaff()) {
                         t = new Tablature;
                         xmlStaffDetails(score, staff, t, e);
                         }
@@ -4491,13 +4491,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (eee.tagName() == "fingering")
                               addTextToNote(eee.text(), TEXT_STYLE_FINGERING, score, note);
                         else if (eee.tagName() == "fret") {
-                              if (note->staff()->useTablature())
+                              if (note->staff()->isTabStaff())
                                     note->setFret(eee.text().toInt());
                               }
                         else if (eee.tagName() == "pluck")
                               addTextToNote(eee.text(), TEXT_STYLE_FINGERING, score, note);
                         else if (eee.tagName() == "string") {
-                              if (note->staff()->useTablature())
+                              if (note->staff()->isTabStaff())
                                     note->setString(eee.text().toInt() - 1);
                               else
                                     addTextToNote(eee.text(), TEXT_STYLE_STRING_NUMBER, score, note);

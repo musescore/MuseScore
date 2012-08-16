@@ -1600,7 +1600,7 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       else {
             Staff* staff    = _score->staff(staffIdx);
-            double lineDist = staff->useTablature() ? 1.5 * _spatium : _spatium;
+            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
             int lines       = staff->lines();
             h               = (lines - 1) * lineDist + 4 * _spatium;
             x              -= _spatium;
@@ -4049,7 +4049,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
             Staff* staff = n->staff();
             if (staff->part()->instr()->useDrumset())
                   continue;
-            if (staff->useTablature()) {
+            if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
                   int fret = staff->part()->instr()->tablature()->fret(n->pitch(), string);
                   if (fret != -1) {

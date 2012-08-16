@@ -79,7 +79,7 @@ extern Measure* tick2measure(int tick);
 void updateNoteLines(Segment* segment, int track)
       {
       Staff* staff = segment->score()->staff(track / VOICES);
-      if (staff->part()->instr()->drumset() || staff->useTablature())
+      if (staff->part()->instr()->drumset() || staff->isTabStaff())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
             if (s->subtype() == Segment::SegClef && s->element(track))
