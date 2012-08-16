@@ -192,13 +192,15 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
 
       QString A = key.toString(QKeySequence::NativeText);
       QString B = key.toString(QKeySequence::PortableText);
-qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>\n",
+      QString C = e->text();
+      qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s><%s>\n",
       k,
       int(e->modifiers()),
       int(e->nativeVirtualKey()),
       int(e->nativeScanCode()),
       qPrintable(A),
-      qPrintable(B)
+      qPrintable(B),
+      qPrintable(C)
       );
       }
 
