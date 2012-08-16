@@ -624,6 +624,29 @@ void StaffTypeTablature::setFretFontSize(qreal val)
       }
 
 //---------------------------------------------------------
+//   fretString / durationString
+//
+//    construct the text string for a given fret / duration
+//---------------------------------------------------------
+
+QString StaffTypeTablature::fretString(int fret, bool ghost)
+      {
+      QString s = ghost ? _fretFonts[_fretFontIdx].ghostChar :
+            ( _useNumbers ?   _fretFonts[_fretFontIdx].displayDigit[fret] :
+                              _fretFonts[_fretFontIdx]. displayLetter[fret]
+            );
+      return s;
+      }
+
+QString StaffTypeTablature::durationString(TDuration::DurationType type, int dots)
+{
+      QString s = _durationFonts[_durationFontIdx].displayValue[type];
+      for(int count=0; count < dots; count++)
+            s.append(_durationFonts[_durationFontIdx].displayDot);
+      return s;
+}
+
+//---------------------------------------------------------
 //   TabDurationSymbol
 //---------------------------------------------------------
 
@@ -685,7 +708,7 @@ void TabDurationSymbol::draw(QPainter* painter) const
 //---------------------------------------------------------
 //   buildText
 //---------------------------------------------------------
-
+/*
 void TabDurationSymbol::buildText(TDuration::DurationType type, int dots)
       {
       // text string is a main symbol plus as many dots as required by chord duration
@@ -693,7 +716,7 @@ void TabDurationSymbol::buildText(TDuration::DurationType type, int dots)
       for(int count=0; count < dots; count++)
             _text.append(g_cDurationChars[STAFFTYPETAB_IDXOFDOTCHAR]);
       }
-
+*/
 //---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------

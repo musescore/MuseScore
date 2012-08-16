@@ -494,6 +494,9 @@ void Note::draw(QPainter* painter) const
             return;
       painter->setPen(curColor());
       bool tablature = staff() && staff()->isTabStaff();
+
+      // tablature
+
       if (tablature) {
             if (tieBack())
                   return;
@@ -504,9 +507,10 @@ void Note::draw(QPainter* painter) const
             painter->scale(mag, mag);
             painter->setFont(tab->fretFont());
 
-            // when using letters, "+(_fret > 8)" skips 'j'
-            QString s = _ghost ? "X" :
-                    ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
+//            // when using letters, "+(_fret > 8)" skips 'j'
+//            QString s = _ghost ? "X" :
+//                    ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
+            QString s = tab->fretString(_fret, _ghost);
 
             qreal currSpatium = spatium();
             qreal d  = currSpatium * .2;
@@ -531,7 +535,10 @@ void Note::draw(QPainter* painter) const
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
             painter->scale(imag, imag);
             }
-      else {      // if not tablature
+
+      // NOT tablature
+
+      else {
             //
             // warn if pitch extends usable range of instrument
             // by coloring the note head
@@ -1190,13 +1197,15 @@ void Note::layout()
       if (useTablature) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal mags = magS();
-            QFont f(tab->fretFontName());
+//            QFont f(tab->fretFontName());
+            QFont f = tab->fretFont();
             int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
             f.setPixelSize(size);
             QFontMetricsF fm(f);
-            // when using letters, "+(_fret > 8)" skips 'j'
-            QString s = _ghost ? "X" :
-                        ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
+//            // when using letters, "+(_fret > 8)" skips 'j'
+//            QString s = _ghost ? "X" :
+//                        ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
+            QString s = tab->fretString(_fret, _ghost);
             qreal w  = fm.width(s) * mags;
             // center string name to note head
             qreal xo = (headWidth() - w) * .5;
