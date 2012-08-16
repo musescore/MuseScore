@@ -85,7 +85,11 @@ bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
     {
     static const QSet<int> passthruKeys = QSet<int>()
           << Qt::Key_Backspace
-          << Qt::Key_Delete;
+          << Qt::Key_Delete
+          << Qt::Key_Down
+          << Qt::Key_Up
+          << Qt::Key_Right
+          << Qt::Key_Left;
 
     // Mac only, harmless on Win
     // Grab certain keys before one of the QLineEdit widgets gets them.
