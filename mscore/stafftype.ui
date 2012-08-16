@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>606</height>
+    <height>653</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -434,7 +434,7 @@
                     <widget class="QFontComboBox" name="fretFontName">
                      <property name="currentFont">
                       <font>
-                       <family>MS Shell Dlg 2</family>
+                       <family>DejaVu Sans</family>
                       </font>
                      </property>
                     </widget>
@@ -786,9 +786,6 @@
                </widget>
               </item>
              </layout>
-             <zorder>upsideDown</zorder>
-             <zorder>upsideDown</zorder>
-             <zorder>fretMarksGroup</zorder>
              <zorder></zorder>
              <zorder>fretMarksGroup</zorder>
              <zorder>durationsGroup</zorder>

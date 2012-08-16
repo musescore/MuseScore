@@ -395,10 +395,7 @@ if (APPLE)
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerifMscore.ttf
       ../fonts/FreeSans.ttf
-      ../fonts/mscore_tab_baroque.ttf
-      ../fonts/mscore_tab_modern.ttf
-      ../fonts/mscore_tab_renaiss.ttf
-      ../fonts/mscore_tab_renaiss2.ttf
+      ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
