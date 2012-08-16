@@ -129,7 +129,7 @@ static int extractKeycode(QKeyEvent* e)
       if (!isNumpad && !hasCase && !shiftAllowed.contains(k))
             mods &= ~Qt::ShiftModifier;
       
-      return k | mods;
+      return k | (mods & ~Qt::KeypadModifier);
       }
 
 //---------------------------------------------------------
