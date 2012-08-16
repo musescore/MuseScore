@@ -135,6 +135,50 @@ class StaffTypePercussion : public StaffType {
       };
 
 //---------------------------------------------------------
+//   TablatureFont
+//---------------------------------------------------------
+
+#define NUM_OF_DIGITFRETS     25
+#define NUM_OF_LETTERFRETS    18
+
+struct TablatureFretFont {
+      QString           family;                 // the family of the physical font to use
+      QString           displayName;            // the name to display to the user
+      qreal             defPitch;               // the default size of the font
+      QChar             xChar;                  // the char to use for 'x'
+      QChar             ghostChar;              // the char to use for ghost notes
+      QString           displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
+      QChar             displayLetter[NUM_OF_LETTERFRETS];  // the char to use for letter frets
+
+      bool read(const QDomElement&);
+};
+
+enum {
+      TAB_VAL_LONGA = 0,
+      TAB_VAL_BREVIS,
+      TAB_VAL_SEMIBREVIS,
+      TAB_VAL_MINIMA,
+      TAB_VAL_SEMIMINIMA,
+      TAB_VAL_FUSA,
+      TAB_VAL_SEMIFUSA,
+      TAB_VAL_32,
+      TAB_VAL_64,
+      TAB_VAL_128,
+      TAB_VAL_256,
+            NUM_OF_TAB_VALS
+};
+
+struct TablatureDurationFont {
+      QString           family;                 // the family of the physical font to use
+      QString           displayName;            // the name to display to the user
+      qreal             defPitch;               // the default size of the font
+      QChar             displayDot;             // the char to use to draw a dot
+      QChar             displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
+
+      bool read(const QDomElement&);
+};
+
+//---------------------------------------------------------
 //   StaffTypeTablature
 //---------------------------------------------------------
 
@@ -223,6 +267,12 @@ class StaffTypeTablature : public StaffType {
       void  setOnLines(bool val);
       void  setUpsideDown(bool val)       { _upsideDown = val;        }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
+
+      // static functions for font config files
+      static bool             readConfigFile(const QString& fileName);
+      static QList<QString>   fontNames(bool bDuration);
+      static bool             fontData(bool bDuration, int nIdx, QString *pFamily,
+                                    QString *pDisplayName, qreal * pSize);
 
    protected:
       void  setDurationMetrics();

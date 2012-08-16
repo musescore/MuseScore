@@ -671,3 +671,232 @@ qreal StaffTypeTablature::durationBoxY()
       return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
       }
 
+//---------------------------------------------------------
+//   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
+//---------------------------------------------------------
+
+// the array of configured fonts
+static QList<TablatureFretFont>     g_TABFontsFrets;
+static QList<TablatureDurationFont> g_TABFontsDurations;
+
+bool TablatureFretFont::read(const QDomElement &de)
+{
+      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+            const QString&    tag(e.tagName());
+            const QString&    txt(e.text());
+            if(txt.size() < 1)
+                  return false;
+            int               val = e.attribute("value").toInt();
+
+            if (tag == "family")
+                  family = txt;
+            else if(tag == "displayName")
+                  displayName = txt;
+            else if(tag == "defaultPitch")
+                  defPitch = txt.toDouble();
+            else if(tag == "mark") {
+                  QString val = e.attribute("value");
+                  if(val.size() < 1)
+                        return false;
+                  if(val == "x")
+                        xChar = txt[0];
+                  else if(val == "ghost")
+                        ghostChar = txt[0];
+                  }
+            else if(tag == "fret") {
+                  bool bLetter = e.attribute("letter").toInt();
+                  if(bLetter) {
+                        if(val >= 0 && val < NUM_OF_LETTERFRETS)
+                              displayLetter[val] = txt[0];
+                        }
+                  else {
+                        if(val >= 0 && val < NUM_OF_DIGITFRETS)
+                              displayDigit[val] = txt;
+                        }
+                  }
+            else {
+                  domError(e);
+                  return false;
+                  }
+            }
+      return true;
+}
+
+bool TablatureDurationFont::read(const QDomElement &de)
+{
+      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+            const QString&    tag(e.tagName());
+            const QString&    txt(e.text());
+            if(txt.size() < 1)
+                  return false;
+            QChar             chr = txt[0];
+
+            if (tag == "family")
+                  family = txt;
+            else if(tag == "displayName")
+                  displayName = txt;
+            else if(tag == "defaultPitch")
+                  defPitch = txt.toDouble();
+            else if(tag == "duration") {
+                  QString val = e.attribute("value");
+                  if(val.size() < 1)
+                        return false;
+                  if(val == "longa")
+                        displayValue[TAB_VAL_LONGA] = chr;
+                  else if(val == "brevis")
+                        displayValue[TAB_VAL_BREVIS] = chr;
+                  else if(val == "semibrevis")
+                        displayValue[TAB_VAL_SEMIBREVIS] = chr;
+                  else if(val == "minima")
+                        displayValue[TAB_VAL_MINIMA] = chr;
+                  else if(val == "semiminima")
+                        displayValue[TAB_VAL_SEMIMINIMA] = chr;
+                  else if(val == "fusa")
+                        displayValue[TAB_VAL_FUSA] = chr;
+                  else if(val == "semifusa")
+                        displayValue[TAB_VAL_SEMIFUSA] = chr;
+                  else if(val == "32")
+                        displayValue[TAB_VAL_32] = chr;
+                  else if(val == "64")
+                        displayValue[TAB_VAL_64] = chr;
+                  else if(val == "128")
+                        displayValue[TAB_VAL_128] = chr;
+                  else if(val == "256")
+                        displayValue[TAB_VAL_256] = chr;
+                  else if(val == "dot")
+                        displayDot = chr;
+                  }
+            else {
+                  domError(e);
+                  return false;
+                  }
+            }
+      return true;
+}
+
+//---------------------------------------------------------
+//   Read Configuration File
+//
+//    reads a configuration and appends read data to g_TABFonts
+//    resets everythings and reads the built-in config file if fileName is null or empty
+//---------------------------------------------------------
+
+bool StaffTypeTablature::readConfigFile(const QString& fileName)
+{
+      QString     path;
+
+      if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
+#ifdef Q_WS_IOS
+            {
+            extern QString resourcePath();
+            QString rpath = resourcePath();
+            path = rpath + QString("/fonts_tablature.xml");
+            }
+#else
+            path = ":/fonts/fonts_tabulature.xml";
+#endif
+            g_TABFontsDurations.clear();
+            g_TABFontsFrets.clear();
+            }
+      else
+            path = fileName;
+
+      QFileInfo fi(path);
+      QFile f(path);
+
+      if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
+            QString s = QT_TRANSLATE_NOOP("file", "cannot open tablature font description:\n%1\n%2");
+            MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
+qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
+            return false;
+            }
+      QDomDocument doc;
+      int line, column;
+      QString err;
+      if (!doc.setContent(&f, false, &err, &line, &column)) {
+            QString s = QT_TRANSLATE_NOOP("file", "error reading tablature font description %1 at line %2 column %3: %4\n");
+            MScore::lastError = s.arg(f.fileName()).arg(line).arg(column).arg(err);
+            return false;
+            }
+      docName = f.fileName();
+
+      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            if (e.tagName() == "museScore") {
+                  for (QDomElement de = e.firstChildElement(); !de.isNull();  de = de.nextSiblingElement()) {
+                        const QString& tag(de.tagName());
+                        if (tag == "fretFont") {
+                              TablatureFretFont f;
+                              if(f.read(de))
+                                    g_TABFontsFrets.append(f);
+                              else
+//                                    return false;
+                                    continue;
+                              }
+                        else if (tag == "durationFont") {
+                              TablatureDurationFont f;
+                              if(f.read(de))
+                                    g_TABFontsDurations.append(f);
+                              else
+//                                    return false;
+                                    continue;
+                              }
+                        else
+                              domError(de);
+                        }
+                  return true;
+                  }
+            }
+      return false;
+}
+
+//---------------------------------------------------------
+//   Get Font Names
+//
+//    returns a list of display names for the fonts  configured to work with Tablatures;
+//    the index of a name in the list can be used to retrieve the font data with fontData()
+//---------------------------------------------------------
+
+QList<QString> StaffTypeTablature::fontNames(bool bDuration)
+      {
+      QList<QString> names;
+      if(bDuration)
+            foreach(const TablatureDurationFont& f, g_TABFontsDurations)
+                  names.append(f.displayName);
+      else
+            foreach(const TablatureFretFont& f, g_TABFontsFrets)
+                  names.append(f.displayName);
+      return names;
+      }
+
+//---------------------------------------------------------
+//   Get Font Data
+//
+//    retrieves data about a Tablature font.
+//    returns: true if idx is valid | false if it is not
+// any of the pointer parameter can be null, if that datum is not needed
+//---------------------------------------------------------
+
+bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, QString * pDisplayName,
+            qreal * pSize)
+      {
+      if(bDuration) {
+            if(nIdx >= 0 && nIdx < g_TABFontsDurations.size()) {
+                  TablatureDurationFont f = g_TABFontsDurations.at(nIdx);
+                  if(pFamily)       *pFamily          = f.family;
+                  if(pDisplayName)  *pDisplayName     = f.displayName;
+                  if(pSize)         *pSize            = f.defPitch;
+                  return true;
+                  }
+            }
+      else {
+            if(nIdx >= 0 && nIdx < g_TABFontsFrets.size()) {
+                  TablatureFretFont f = g_TABFontsFrets.at(nIdx);
+                  if(pFamily)       *pFamily          = f.family;
+                  if(pDisplayName)  *pDisplayName     = f.displayName;
+                  if(pSize)         *pSize            = f.defPitch;
+                  return true;
+                  }
+            }
+      return false;
+      }
+

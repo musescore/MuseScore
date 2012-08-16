@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "sequencer.h"
 #include "figuredbass.h"
+#include "stafftype.h"
 #include "note.h"
 
 qreal MScore::PDPI = 1200;
@@ -132,10 +133,11 @@ void MScore::init()
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
             "gonville-20.otf",
-            "mscore_tab_baroque.ttf",
-            "mscore_tab_modern.ttf",
-            "mscore_tab_renaiss.ttf",
-            "mscore_tab_renaiss2.ttf",
+//            "mscore_tab_baroque.ttf",
+//            "mscore_tab_modern.ttf",
+//            "mscore_tab_renaiss.ttf",
+//            "mscore_tab_renaiss2.ttf",
+            "mscoreTab.ttf",
 //            "FiguredBassMHGPL.otf",
             "mscore-BC.ttf"
             };
@@ -153,6 +155,7 @@ void MScore::init()
       initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
+      StaffTypeTablature::readConfigFile(0);
       }
 
 //---------------------------------------------------------

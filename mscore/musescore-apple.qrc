@@ -20,6 +20,7 @@
       <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
       <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
+      <file alias="fonts/fonts_tabulature.xml">../fonts/fonts_tabulature.xml</file>
 
       <file alias="data/instruments.xml">../share/templates/instruments.xml</file>
       <file>data/splash.jpg</file>
