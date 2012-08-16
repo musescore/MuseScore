@@ -113,7 +113,11 @@ static int extractKeycode(QKeyEvent* e)
             << Qt::Key_Delete
             << Qt::Key_Return
             << Qt::Key_Enter
-            << Qt::Key_Escape;
+            << Qt::Key_Escape
+            << Qt::Key_PageUp
+            << Qt::Key_PageDown
+            << Qt::Key_Home
+            << Qt::Key_End;
 
       Qt::KeyboardModifiers mods = e->modifiers();
       const int k = e->key();
