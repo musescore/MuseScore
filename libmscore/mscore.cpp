@@ -151,11 +151,11 @@ void MScore::init()
                   }
             }
 #endif
+      StaffTypeTablature::readConfigFile(0);          // get TAB font config, before initStaffTypes()
       initSymbols(0);   // init emmentaler symbols
       initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
-      StaffTypeTablature::readConfigFile(0);
       }
 
 //---------------------------------------------------------

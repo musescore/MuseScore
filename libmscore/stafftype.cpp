@@ -196,6 +196,60 @@ bool StaffType::readProperties(const QDomElement& e)
       }
 
 //---------------------------------------------------------
+//   doty1
+//    get y dot position of first repeat barline dot
+//---------------------------------------------------------
+
+qreal StaffType::doty1() const
+      {
+      switch(_lines) {
+            case 1:
+                  return -_lineDistance.val() * .5;
+            case 2:
+                  return -_lineDistance.val() * .5;
+            case 3:
+                  return _lineDistance.val() * .5;
+            case 4:
+                  return _lineDistance.val() * .5;
+            case 5:
+                  return _lineDistance.val() * 1.5;
+            case 6:
+                  return _lineDistance.val() * 1.5;
+            default:
+                  qDebug("StaffType::doty1(): lines %d unsupported\n", _lines);
+                  break;
+            }
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   doty2
+//    get y dot position of second repeat barline dot
+//---------------------------------------------------------
+
+qreal StaffType::doty2() const
+      {
+      switch(_lines) {
+            case 1:
+                  return _lineDistance.val() * .5;
+            case 2:
+                  return _lineDistance.val() * 1.5;
+            case 3:
+                  return _lineDistance.val() * 1.5;
+            case 4:
+                  return _lineDistance.val() * 2.5;
+            case 5:
+                  return _lineDistance.val() * 2.5;
+            case 6:
+                  return _lineDistance.val() * 3.5;
+            default:
+                  qDebug("StaffType::doty2(): lines %d unsupported\n", _lines);
+                  break;
+            }
+      return 0.0;
+      }
+
+//---------------------------------------------------------
 //   StaffTypePitched
 //---------------------------------------------------------
 
@@ -317,13 +371,16 @@ void StaffTypePercussion::read(const QDomElement& de)
 
 #define TAB_DEFAULT_DUR_YOFFS	(-1.75)
 
+QList<TablatureFretFont>     StaffTypeTablature::_fretFonts      = QList<TablatureFretFont>();
+QList<TablatureDurationFont> StaffTypeTablature::_durationFonts  = QList<TablatureDurationFont>();
+
 void StaffTypeTablature::init()
       {
-      // set reasonable defaults for inherited members for type-specific members */
-      setDurationFontName("MScoreTabulatureModern");
+      // set reasonable defaults for type-specific members */
+      setDurationFontName(_durationFonts[0].displayName);
       setDurationFontSize(15.0);
       setDurationFontUserY(0.0);
-      setFretFontName("MScoreTabulatureModern");
+      setFretFontName(_fretFonts[0].displayName);
       setFretFontSize(10.0);
       setFretFontUserY(0.0);
       setGenDurations(false);
@@ -343,17 +400,19 @@ void StaffTypeTablature::init()
 bool StaffTypeTablature::isEqual(const StaffType& st) const
       {
       return StaffType::isEqual(st)
-         && static_cast<const StaffTypeTablature&>(st)._durationFontName   == _durationFontName
-         && static_cast<const StaffTypeTablature&>(st)._durationFontSize   == _durationFontSize
-         && static_cast<const StaffTypeTablature&>(st)._durationFontUserY  == _durationFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._fretFontName       == _fretFontName
-         && static_cast<const StaffTypeTablature&>(st)._fretFontSize       == _fretFontSize
-         && static_cast<const StaffTypeTablature&>(st)._fretFontUserY      == _fretFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._genDurations       == _genDurations
-         && static_cast<const StaffTypeTablature&>(st)._linesThrough       == _linesThrough
-         && static_cast<const StaffTypeTablature&>(st)._onLines            == _onLines
-         && static_cast<const StaffTypeTablature&>(st)._upsideDown         == _upsideDown
-         && static_cast<const StaffTypeTablature&>(st)._useNumbers         == _useNumbers
+//         && static_cast<const StaffTypeTablature&>(st)._durationFontName   == _durationFontName
+         && static_cast<const StaffTypeTablature&>(st)._durationFontIdx   == _durationFontIdx
+         && static_cast<const StaffTypeTablature&>(st)._durationFontSize  == _durationFontSize
+         && static_cast<const StaffTypeTablature&>(st)._durationFontUserY == _durationFontUserY
+//         && static_cast<const StaffTypeTablature&>(st)._fretFontName       == _fretFontName
+         && static_cast<const StaffTypeTablature&>(st)._fretFontIdx       == _fretFontIdx
+         && static_cast<const StaffTypeTablature&>(st)._fretFontSize      == _fretFontSize
+         && static_cast<const StaffTypeTablature&>(st)._fretFontUserY     == _fretFontUserY
+         && static_cast<const StaffTypeTablature&>(st)._genDurations      == _genDurations
+         && static_cast<const StaffTypeTablature&>(st)._linesThrough      == _linesThrough
+         && static_cast<const StaffTypeTablature&>(st)._onLines           == _onLines
+         && static_cast<const StaffTypeTablature&>(st)._upsideDown        == _upsideDown
+         && static_cast<const StaffTypeTablature&>(st)._useNumbers        == _useNumbers
          ;
       }
 
@@ -404,10 +463,10 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
       StaffType::writeProperties(xml);
       xml.tag("durations",        _genDurations);
-      xml.tag("durationFontName", _durationFontName);
+      xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
       xml.tag("durationFontSize", _durationFontSize);
       xml.tag("durationFontY",    _durationFontUserY);
-      xml.tag("fretFontName",     _fretFontName);
+      xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
       xml.tag("fretFontSize",     _fretFontSize);
       xml.tag("fretFontY",        _fretFontUserY);
       xml.tag("linesThrough",     _linesThrough);
@@ -499,25 +558,67 @@ void StaffTypeTablature::setFretMetrics()
 }
 
 //---------------------------------------------------------
-//   setDurationFontSize
+//   setDurationFontName / setFretFontName
+//---------------------------------------------------------
+
+void StaffTypeTablature::setDurationFontName(QString name)
+      {
+      int   idx;
+      for(idx=0; idx < _durationFonts.size(); idx++)
+            if(_durationFonts[idx].displayName == name)
+                  break;
+      if(idx >= _durationFonts.size())    idx = 0;          // if name not found, use first font
+      _durationFont.setFamily(_durationFonts[idx].family);
+      _durationFontIdx = idx;
+      _durationMetricsValid = false;
+      }
+
+void StaffTypeTablature::setFretFontName(QString name)
+      {
+      int   idx;
+      for(idx=0; idx < _fretFonts.size(); idx++)
+            if(_fretFonts[idx].displayName == name)
+                  break;
+      if(idx >= _fretFonts.size())        idx = 0;          // if name not found, use first font
+      _fretFont.setFamily(_fretFonts[idx].family);
+      _fretFontIdx = idx;
+      _fretMetricsValid = false;
+      }
+
+//---------------------------------------------------------
+//   durationBoxH / durationBoxY
+//---------------------------------------------------------
+
+qreal StaffTypeTablature::durationBoxH()
+      {
+      if (!_genDurations && !_slashStyle)
+            return 0.0;
+      setDurationMetrics();
+      return _durationBoxH;
+      }
+
+qreal StaffTypeTablature::durationBoxY()
+      {
+      if(!_genDurations && !_slashStyle)
+            return 0.0;
+      setDurationMetrics();
+      return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
+      }
+
+//---------------------------------------------------------
+//   setDurationFontSize / setFretFontSize
 //---------------------------------------------------------
 
 void StaffTypeTablature::setDurationFontSize(qreal val)
       {
       _durationFontSize = val;
-//    _durationFont.setPointSizeF(val);
       _durationFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
       _durationMetricsValid = false;
       }
 
-//---------------------------------------------------------
-//   setFretFontSize
-//---------------------------------------------------------
-
 void StaffTypeTablature::setFretFontSize(qreal val)
       {
       _fretFontSize = val;
-//    _fretFont.setPointSizeF(val);
       _fretFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
       _fretMetricsValid = false;
       }
@@ -594,90 +695,8 @@ void TabDurationSymbol::buildText(TDuration::DurationType type, int dots)
       }
 
 //---------------------------------------------------------
-//   doty1
-//    get y dot position of first repeat barline dot
-//---------------------------------------------------------
-
-qreal StaffType::doty1() const
-      {
-      switch(_lines) {
-            case 1:
-                  return -_lineDistance.val() * .5;
-            case 2:
-                  return -_lineDistance.val() * .5;
-            case 3:
-                  return _lineDistance.val() * .5;
-            case 4:
-                  return _lineDistance.val() * .5;
-            case 5:
-                  return _lineDistance.val() * 1.5;
-            case 6:
-                  return _lineDistance.val() * 1.5;
-            default:
-                  qDebug("StaffType::doty1(): lines %d unsupported\n", _lines);
-                  break;
-            }
-      return 0.0;
-      }
-
-//---------------------------------------------------------
-//   doty2
-//    get y dot position of second repeat barline dot
-//---------------------------------------------------------
-
-qreal StaffType::doty2() const
-      {
-      switch(_lines) {
-            case 1:
-                  return _lineDistance.val() * .5;
-            case 2:
-                  return _lineDistance.val() * 1.5;
-            case 3:
-                  return _lineDistance.val() * 1.5;
-            case 4:
-                  return _lineDistance.val() * 2.5;
-            case 5:
-                  return _lineDistance.val() * 2.5;
-            case 6:
-                  return _lineDistance.val() * 3.5;
-            default:
-                  qDebug("StaffType::doty2(): lines %d unsupported\n", _lines);
-                  break;
-            }
-      return 0.0;
-      }
-
-//---------------------------------------------------------
-//   durationBoxH
-//---------------------------------------------------------
-
-qreal StaffTypeTablature::durationBoxH()
-      {
-      if (!_genDurations && !_slashStyle)
-            return 0.0;
-      setDurationMetrics();
-      return _durationBoxH;
-      }
-
-//---------------------------------------------------------
-//   durationBoxY
-//---------------------------------------------------------
-
-qreal StaffTypeTablature::durationBoxY()
-      {
-      if(!_genDurations && !_slashStyle)
-            return 0.0;
-      setDurationMetrics();
-      return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
-      }
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
-
-// the array of configured fonts
-static QList<TablatureFretFont>     g_TABFontsFrets;
-static QList<TablatureDurationFont> g_TABFontsDurations;
 
 bool TablatureFretFont::read(const QDomElement &de)
 {
@@ -795,8 +814,8 @@ bool StaffTypeTablature::readConfigFile(const QString& fileName)
 #else
             path = ":/fonts/fonts_tabulature.xml";
 #endif
-            g_TABFontsDurations.clear();
-            g_TABFontsFrets.clear();
+            _durationFonts.clear();
+            _fretFonts.clear();
             }
       else
             path = fileName;
@@ -827,7 +846,7 @@ qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
                         if (tag == "fretFont") {
                               TablatureFretFont f;
                               if(f.read(de))
-                                    g_TABFontsFrets.append(f);
+                                    _fretFonts.append(f);
                               else
 //                                    return false;
                                     continue;
@@ -835,7 +854,7 @@ qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
                         else if (tag == "durationFont") {
                               TablatureDurationFont f;
                               if(f.read(de))
-                                    g_TABFontsDurations.append(f);
+                                    _durationFonts.append(f);
                               else
 //                                    return false;
                                     continue;
@@ -860,10 +879,10 @@ QList<QString> StaffTypeTablature::fontNames(bool bDuration)
       {
       QList<QString> names;
       if(bDuration)
-            foreach(const TablatureDurationFont& f, g_TABFontsDurations)
+            foreach(const TablatureDurationFont& f, _durationFonts)
                   names.append(f.displayName);
       else
-            foreach(const TablatureFretFont& f, g_TABFontsFrets)
+            foreach(const TablatureFretFont& f, _fretFonts)
                   names.append(f.displayName);
       return names;
       }
@@ -880,8 +899,8 @@ bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, Q
             qreal * pSize)
       {
       if(bDuration) {
-            if(nIdx >= 0 && nIdx < g_TABFontsDurations.size()) {
-                  TablatureDurationFont f = g_TABFontsDurations.at(nIdx);
+            if(nIdx >= 0 && nIdx < _durationFonts.size()) {
+                  TablatureDurationFont f = _durationFonts.at(nIdx);
                   if(pFamily)       *pFamily          = f.family;
                   if(pDisplayName)  *pDisplayName     = f.displayName;
                   if(pSize)         *pSize            = f.defPitch;
@@ -889,8 +908,8 @@ bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, Q
                   }
             }
       else {
-            if(nIdx >= 0 && nIdx < g_TABFontsFrets.size()) {
-                  TablatureFretFont f = g_TABFontsFrets.at(nIdx);
+            if(nIdx >= 0 && nIdx < _fretFonts.size()) {
+                  TablatureFretFont f = _fretFonts.at(nIdx);
                   if(pFamily)       *pFamily          = f.family;
                   if(pDisplayName)  *pDisplayName     = f.displayName;
                   if(pSize)         *pSize            = f.defPitch;
