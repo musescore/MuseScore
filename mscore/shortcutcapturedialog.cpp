@@ -104,6 +104,13 @@ bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
 
 static int extractKeycode(QKeyEvent* e)
       {
+      static QSet<int> shiftAllowed = QSet<int>()
+            << Qt::Key_Backspace
+            << Qt::Key_Delete
+            << Qt::Key_Return
+            << Qt::Key_Enter
+            << Qt::Key_Escape;
+
       Qt::KeyboardModifiers mods = e->modifiers();
       const int k = e->key();
       
@@ -111,7 +118,7 @@ static int extractKeycode(QKeyEvent* e)
       const bool hasCase = displayedKey.toUpper() != displayedKey.toLower();
       const bool isNumpad = mods.testFlag(Qt::KeypadModifier);
       
-      if (!(isNumpad || hasCase))
+      if (!isNumpad && !hasCase && !shiftAllowed.contains(k))
             mods &= ~Qt::ShiftModifier;
       
       return k | mods;
