@@ -1416,7 +1416,7 @@ EndChar
 StartChar: B
 Encoding: 66 66 42
 Width: 608
-Flags: HW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -4113,7 +4113,7 @@ StartChar: ordfeminine
 Encoding: 170 170 126
 Width: 556
 VWidth: 1000
-Flags: HW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -4141,7 +4141,7 @@ StartChar: P
 Encoding: 80 80 127
 Width: 1024
 VWidth: 0
-Flags: HW
+Flags: W
 LayerCount: 2
 Back
 SplineSet
