@@ -83,6 +83,8 @@ QDeclarativeListProperty<Score> QmlPlugin::scores()
 
 bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
       {
+      if(!s)
+            return false;
       return mscore->saveAs(s, true, name, ext);
       }
 
