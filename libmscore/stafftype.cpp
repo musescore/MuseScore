@@ -16,6 +16,8 @@
 #include "xml.h"
 #include "mscore.h"
 
+#define TAB_DEFAULT_LINE_SP   (1.5)
+
 QList<StaffType*> staffTypes;
 
 //---------------------------------------------------------
@@ -35,6 +37,12 @@ void initStaffTypes()
       staffTypes.append(st);
 
       StaffTypeTablature* stab = new StaffTypeTablature("Tab");
+      stab->setLines(6);
+      stab->setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
+      stab->setGenClef(true);
+      stab->setSlashStyle(false);
+      stab->setShowBarlines(true);
+      stab->setGenTimesig(false);
       staffTypes.append(stab);
 
       StaffTypePercussion* sp = new StaffTypePercussion("Percussion 5 lines");
@@ -134,9 +142,7 @@ void StaffType::write(Xml& xml, int idx) const
 void StaffType::writeProperties(Xml& xml) const
       {
       xml.tag("name", name());
-      // unconditionally save number of lines
-      // as different staff types have different default
-//      if (lines() != 5)
+      if (lines() != 5)
             xml.tag("lines", lines());
       if (lineDistance().val() != 1.0)
             xml.tag("lineDistance", lineDistance().val());
@@ -310,18 +316,10 @@ void StaffTypePercussion::read(const QDomElement& de)
 //---------------------------------------------------------
 
 #define TAB_DEFAULT_DUR_YOFFS	(-1.75)
-#define TAB_DEFAULT_LINE_SP	(1.5)
 
 void StaffTypeTablature::init()
       {
-      // set reasonable defaults for inherited members
-      setLines(6);
-      setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
-      setGenClef(true);
-      setSlashStyle(false);
-      setShowBarlines(true);
-      setGenTimesig(false);
-      // for specific members
+      // set reasonable defaults for inherited members for type-specific members */
       setDurationFontName("MScoreTabulatureModern");
       setDurationFontSize(15.0);
       setDurationFontUserY(0.0);
