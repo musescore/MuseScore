@@ -106,10 +106,15 @@ static const PropertyData propertyList[] = {
       { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
       { P_BREAK_HINT,          "",              T_BOOL   },
 
-      { P_FBPREFIX,            "",              T_INT    },
-      { P_FBDIGIT,             "",              T_INT    },
-      { P_FBSUFFIX,            "",              T_INT    },
-      { P_FBCONTINUATIONLINE,  "",              T_BOOL   },
+      { P_FBPREFIX,            "prefix",        T_INT    },
+      { P_FBDIGIT,             "digit",         T_INT    },
+      { P_FBSUFFIX,            "suffix",        T_INT    },
+      { P_FBCONTINUATIONLINE,  "continuationLine", T_BOOL},
+      { P_FBPARENTHESIS1,      "",              T_INT    },
+      { P_FBPARENTHESIS2,      "",              T_INT    },
+      { P_FBPARENTHESIS3,      "",              T_INT    },
+      { P_FBPARENTHESIS4,      "",              T_INT    },
+      { P_FBPARENTHESIS5,      "",              T_INT    },
 
       { P_END,                 "",              T_INT    }
       };

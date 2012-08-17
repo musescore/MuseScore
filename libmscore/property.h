@@ -96,6 +96,11 @@ enum P_ID {
       P_FBDIGIT,              //    "           "
       P_FBSUFFIX,             //    "           "
       P_FBCONTINUATIONLINE,   //    "           "
+      P_FBPARENTHESIS1,       //    "           "
+      P_FBPARENTHESIS2,       //    "           "
+      P_FBPARENTHESIS3,       //    "           "
+      P_FBPARENTHESIS4,       //    "           "
+      P_FBPARENTHESIS5,       //    "           "
 
       P_END
       };
