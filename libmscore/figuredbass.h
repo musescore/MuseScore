@@ -26,8 +26,9 @@ FiguredBass is rather simple: it contains only _ticks, telling the duration of t
 and a list of FiguredBassItem elements which do most of the job. It also maintains a text with the
 normalized (made uniform) version of the text, which is used during editing.
 
-Normally, a FiguredBass element is assumed to be styled with the FIGURED_BASS style and it is set
-in this way upon creation.
+Normally, a FiguredBass element is assumed to be styled with an internally maintained text style
+(based on the parameters of the general style "Figured Bass") FIGURED_BASS style and it is set
+in this way upon creation and upon layout().
 - - - -
 FiguredBassItem contains the actually f.b. info; it is made of 4 parts (in this order):
 1) prefix: one of [nothing, doubleflat, flat, natural, sharp, doublesharp]
@@ -58,10 +59,15 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @@ FiguredBassItem
 ///   One line of a figured bass indication
 //
-//    @P prefix               the accidental before the digit; enum ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp
+//    @P prefix               enum FiguredBassItem.ModifierNone, .ModifierDoubleFlat, .ModifierFlat, .ModifierNatural, .ModifierSharp, .ModifierDoubleSharp the accidental before the digit
 //    @P digit                int         the main digit (0 - 9)
-//    @P suffix               the accidental/diacritic after the digit; enum ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp, ModifierPlus, ModifierBackslash, ModifierSlash
+//    @P suffix               enum FiguredBassItem.ModifierNone, .ModifierDoubleFlat, .ModifierFlat, .ModifierNatural, .ModifierSharp, .ModifierDoubleSharp, .ModifierPlus, .ModifierBackslash, .ModifierSlash    the accidental/diacritic after the digit
 //    @P continuationLine     bool        whether the item has a continuation line or not
+//    @P parenthesis1         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis before the prefix
+//    @P parenthesis2         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the prefix / before the digit
+//    @P parenthesis3         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the digit / before the suffix
+//    @P parenthesis4         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the suffix / before the cont. line
+//    @P parenthesis5         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the cont. line
 //    @P displayText          string      R/O the text displayed (depends on configured fonts)
 //    @P normalizedText       string      R/O conventional textual representation of item properties (= text used during input)
 //---------------------------------------------------------
@@ -70,6 +76,19 @@ class FiguredBass;
 
 class FiguredBassItem : public Element {
       Q_OBJECT
+      Q_ENUMS(Modifier)
+      Q_ENUMS(Parenthesis)
+      Q_PROPERTY(Modifier     prefix            READ prefix       WRITE undoSetPrefix)
+      Q_PROPERTY(int          digit             READ digit        WRITE undoSetDigit)
+      Q_PROPERTY(Modifier     suffix            READ suffix       WRITE undoSetSuffix)
+      Q_PROPERTY(bool         continuationLine  READ contLine     WRITE undoSetContLine)
+      Q_PROPERTY(Parenthesis  parenthesis1      READ parenth1     WRITE undoSetParenth1)
+      Q_PROPERTY(Parenthesis  parenthesis2      READ parenth2     WRITE undoSetParenth2)
+      Q_PROPERTY(Parenthesis  parenthesis3      READ parenth3     WRITE undoSetParenth3)
+      Q_PROPERTY(Parenthesis  parenthesis4      READ parenth4     WRITE undoSetParenth4)
+      Q_PROPERTY(Parenthesis  parenthesis5      READ parenth5     WRITE undoSetParenth5)
+      Q_PROPERTY(QString      displayText       READ displayText)
+      Q_PROPERTY(QString      normalizedText    READ normalizedText)
 
    public:
       enum Modifier {
@@ -94,12 +113,6 @@ class FiguredBassItem : public Element {
       };
 
    private:
-      Q_PROPERTY(Modifier     prefix            READ prefix       WRITE undoSetPrefix)
-      Q_PROPERTY(int          digit             READ digit        WRITE undoSetDigit)
-      Q_PROPERTY(Modifier     suffix            READ suffix       WRITE undoSetSuffix)
-      Q_PROPERTY(bool         continuationLine  READ contLine     WRITE undoSetContLine)
-      Q_PROPERTY(QString      displayText       READ displayText)
-      Q_PROPERTY(QString      normalizedText    READ normalizedText)
 
       static const QChar normParenthToChar[NumOfParentheses];
 
@@ -156,6 +169,16 @@ class FiguredBassItem : public Element {
       void              undoSetSuffix(Modifier suff);
       bool              contLine() const              { return _contLine;     }
       void              undoSetContLine(bool val);
+      Parenthesis       parenth1()                    { return parenth[0];    }
+      Parenthesis       parenth2()                    { return parenth[1];    }
+      Parenthesis       parenth3()                    { return parenth[2];    }
+      Parenthesis       parenth4()                    { return parenth[3];    }
+      Parenthesis       parenth5()                    { return parenth[4];    }
+      void              undoSetParenth1(Parenthesis par);
+      void              undoSetParenth2(Parenthesis par);
+      void              undoSetParenth3(Parenthesis par);
+      void              undoSetParenth4(Parenthesis par);
+      void              undoSetParenth5(Parenthesis par);
       QString           normalizedText() const;
       QString           displayText() const           { return _displayText;  }
 
