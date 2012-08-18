@@ -252,7 +252,7 @@ void InstrumentsDialog::genPartList()
                   sli->staff    = s;
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
-                  if (s->useTablature())
+                  if (s->isTabStaff())
                         sli->setClef(ClefType(cs->styleI(ST_tabClef)));
                   else
                         sli->setClef(s->clef(0));
@@ -292,7 +292,7 @@ void InstrumentsDialog::on_partiturList_itemSelectionChanged()
             }
       QTreeWidgetItem* item = wi.front();
       bool flag = item != 0;
-      
+
       int count = 0; // item can be hidden
       QTreeWidgetItem* it = 0;
       QList<QTreeWidgetItem*> witems;
@@ -312,11 +312,11 @@ void InstrumentsDialog::on_partiturList_itemSelectionChanged()
                         }
                   }
             }
-            
-      bool onlyOne = (count == 1);            
+
+      bool onlyOne = (count == 1);
       bool first = (witems.first() == item);
       bool last = (witems.last() == item);
-      
+
       removeButton->setEnabled(flag && !onlyOne);
       upButton->setEnabled(flag && !onlyOne && !first);
       downButton->setEnabled(flag && !onlyOne && !last);

@@ -382,6 +382,8 @@ int Note::playTicks() const
 void Note::add(Element* e)
       {
 	e->setParent(this);
+      e->setTrack(track());
+
       switch(e->type()) {
             case NOTEDOT:
                   {
@@ -491,7 +493,7 @@ void Note::draw(QPainter* painter) const
       if (_hidden)
             return;
       painter->setPen(curColor());
-      bool tablature = staff() && staff()->useTablature();
+      bool tablature = staff() && staff()->isTabStaff();
       if (tablature) {
             if (tieBack())
                   return;
@@ -856,7 +858,7 @@ QRectF Note::drag(const EditData& data)
       QRectF bb(chord()->bbox());
 
       qreal _spatium = spatium();
-      bool tab = staff()->useTablature();
+      bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
       _lineOffset = lrint(data.pos.y() / step);
       score()->setLayout(chord()->measure());
@@ -879,7 +881,7 @@ void Note::endDrag()
       int tpc;
       int nString;
       int nFret;
-      if (staff->useTablature()) {
+      if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
             nString = _string + (static_cast<StaffTypeTablature*>(staff->staffType())->upsideDown() ?
@@ -959,7 +961,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == SLUR)
          || (type == STAFF_TEXT)
          || (type == TEMPO_TEXT)
-         || (type == BEND && (staff()->useTablature()))
+         || (type == BEND && (staff()->isTabStaff()))
          || (type == FRET_DIAGRAM));
       }
 
@@ -1040,7 +1042,7 @@ Element* Note::drop(const DropData& data)
                               foreach(Element* e, *links()) {
                                     e->score()->undoChangeProperty(e, P_HEAD_GROUP, group);
                                     Note* note = static_cast<Note*>(e);
-                                    if (note->staff() && note->staff()->useTablature()
+                                    if (note->staff() && note->staff()->isTabStaff()
                                        && group == HEAD_CROSS) {
                                           e->score()->undoChangeProperty(e, P_GHOST, true);
                                           }
@@ -1184,7 +1186,7 @@ Element* Note::drop(const DropData& data)
 
 void Note::layout()
       {
-      bool useTablature = staff() && staff()->useTablature();
+      bool useTablature = staff() && staff()->isTabStaff();
       if (useTablature) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal mags = magS();
@@ -1290,7 +1292,7 @@ bool Note::dotIsUp() const
 
 void Note::layout10(AccidentalState* as)
       {
-      if (staff()->useTablature()) {
+      if (staff()->isTabStaff()) {
             if (_accidental) {
                   delete _accidental;
                   _accidental = 0;
@@ -1338,7 +1340,7 @@ void Note::layout10(AccidentalState* as)
                   if (_accidental == 0) {
                         _accidental = new Accidental(score());
                         _accidental->setGenerated(true);
-                        _accidental->setParent(this);
+                        add(_accidental);
                         }
                   _accidental->setSubtype(acci);
                   }
@@ -1404,7 +1406,7 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       func(data, this);
       // tie segments are collected from System
-      //      if (_tieFor && !staff()->useTablature())  // no ties in tablature
+      //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
       foreach(Element* e, _el) {
             if (score()->tagIsValid(e->tag()))

@@ -78,6 +78,7 @@
 #include "pluginCreator.h"
 #include "plugins.h"
 #include "helpBrowser.h"
+#include "drumtools.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -2599,6 +2600,7 @@ void MuseScore::clipboardChanged()
 
 void MuseScore::changeState(ScoreState val)
       {
+//      printf("MuseScore::changeState: %s\n", stateName(val));
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
 
@@ -2656,6 +2658,8 @@ void MuseScore::changeState(ScoreState val)
 
       if (_sstate == STATE_FOTO)
             updateInspector();
+      if (_sstate == STATE_NOTE_ENTRY_DRUM)
+            showDrumTools(0, 0);
 
       switch(val) {
             case STATE_DISABLED:
@@ -2663,7 +2667,6 @@ void MuseScore::changeState(ScoreState val)
                   _modeText->show();
                   if (debugger)
                         debugger->hide();
-                  showDrumTools(0, 0);
                   showPianoKeyboard(false);
                   break;
             case STATE_NORMAL:
@@ -2671,8 +2674,20 @@ void MuseScore::changeState(ScoreState val)
                   if (searchDialog)
                         searchDialog->hide();
                   break;
-            case STATE_NOTE_ENTRY:
-                  _modeText->setText(tr("note entry mode"));
+            case STATE_NOTE_ENTRY_PITCHED:
+                  _modeText->setText(tr("NOTE entry mode"));
+                  _modeText->show();
+                  break;
+            case STATE_NOTE_ENTRY_DRUM:
+                  {
+                  _modeText->setText(tr("DRUM entry mode"));
+                  _modeText->show();
+                  InputState& is = cs->inputState();
+                  showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
+                  }
+                  break;
+            case STATE_NOTE_ENTRY_TAB:
+                  _modeText->setText(tr("TAB entry mode"));
                   _modeText->show();
                   break;
             case STATE_EDIT:
@@ -2723,13 +2738,14 @@ void MuseScore::changeState(ScoreState val)
                   _modeText->show();
                   break;
             default:
-                  qDebug("MuseScore::changeState: illegal state %d", val);
+                  qFatal("MuseScore::changeState: illegal state %d", val);
                   break;
             }
       if (paletteBox)
             paletteBox->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
       QAction* a = getAction("note-input");
-      a->setChecked(val == STATE_NOTE_ENTRY);
+      bool noteEntry = val == STATE_NOTE_ENTRY_PITCHED || val == STATE_NOTE_ENTRY_TAB || val == STATE_NOTE_ENTRY_DRUM;
+      a->setChecked(noteEntry);
       _sstate = val;
       }
 
@@ -3519,15 +3535,18 @@ void MuseScore::splitWindow(bool horizontal)
 const char* stateName(ScoreState s)
       {
       switch(s) {
-            case STATE_DISABLED:   return "STATE_DISABLED";
-            case STATE_NORMAL:     return "STATE_NORMAL";
-            case STATE_NOTE_ENTRY: return "STATE_NOTE_ENTRY";
-            case STATE_EDIT:       return "STATE_EDIT";
-            case STATE_LYRICS_EDIT: return "STATE_LYRICS_EDIT";
-            case STATE_PLAY:       return "STATE_PLAY";
-            case STATE_SEARCH:     return "STATE_SEARCH";
-            case STATE_FOTO:       return "STATE_FOTO";
-            default:               return "??";
+            case STATE_DISABLED:           return "STATE_DISABLED";
+            case STATE_NORMAL:             return "STATE_NORMAL";
+            case STATE_NOTE_ENTRY_PITCHED: return "STATE_NOTE_ENTRY_PITCHED";
+            case STATE_NOTE_ENTRY_DRUM:    return "STATE_NOTE_ENTRY_DRUM";
+            case STATE_NOTE_ENTRY_TAB:     return "STATE_NOTE_ENTRY_TAB";
+            case STATE_NOTE_ENTRY:         return "STATE_NOTE_ENTRY";
+            case STATE_EDIT:               return "STATE_EDIT";
+            case STATE_LYRICS_EDIT:        return "STATE_LYRICS_EDIT";
+            case STATE_PLAY:               return "STATE_PLAY";
+            case STATE_SEARCH:             return "STATE_SEARCH";
+            case STATE_FOTO:               return "STATE_FOTO";
+            default:                       return "??";
             }
       }
 
@@ -4338,7 +4357,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                            tr("MuseScore: save style"), MScore::lastError);
                         }
                   else {
-printf("set preferences to <%s>\n", qPrintable(name));
                         QFileInfo info(name);
                         if (info.suffix().isEmpty())
                               info.setFile(info.filePath() + ".mss");
@@ -4628,6 +4646,36 @@ void MuseScore::switchLayoutMode(int val)
                   cs->setLayoutMode(LayoutLine);
             cv->update();
             }
+      }
+
+//---------------------------------------------------------
+//   showDrumTools
+//---------------------------------------------------------
+
+void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
+      {
+      if (drumset) {
+            if (!_drumTools) {
+                  _drumTools = new DrumTools(this);
+                  addDockWidget(Qt::BottomDockWidgetArea, _drumTools);
+                  }
+            _drumTools->setDrumset(cs, staff, drumset);
+            _drumTools->show();
+            }
+      else {
+            if (_drumTools)
+                  _drumTools->hide();
+            }
+      }
+
+//---------------------------------------------------------
+//   updateDrumTools
+//---------------------------------------------------------
+
+void MuseScore::updateDrumTools()
+      {
+      if (_drumTools)
+            _drumTools->updateDrumset();
       }
 
 #ifndef SCRIPT_INTERFACE

@@ -1343,7 +1343,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
 
             int fret   = n->fret();
             int string = n->string();
-            if (st->useTablature()) {
+            if (st->isTabStaff()) {
                   if (pitch != n->pitch()) {
                         //
                         // as pitch has changed, calculate new
@@ -1355,7 +1355,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                         }
                   }
             undo(new ChangePitch(n, pitch, tpc, n->line()));
-            if (!st->useTablature()) {
+            if (!st->isTabStaff()) {
                   //
                   // handle ties
                   //
@@ -1829,7 +1829,7 @@ void Score::cmdMirrorNoteHead()
       foreach(Element* e, el) {
             if (e->type() == NOTE) {
                   Note* note = static_cast<Note*>(e);
-                  if (note->staff() && note->staff()->useTablature())
+                  if (note->staff() && note->staff()->isTabStaff())
                         note->score()->undoChangeProperty(e, P_GHOST, true);
                   else {
                         MScore::DirectionH d = note->userMirror();

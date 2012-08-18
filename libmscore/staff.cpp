@@ -556,26 +556,6 @@ void Staff::setSlashStyle(bool val)
       }
 
 //---------------------------------------------------------
-//   useTablature
-//---------------------------------------------------------
-
-bool Staff::useTablature() const
-      {
-      return _staffType->group() == TAB_STAFF;
-      }
-
-//---------------------------------------------------------
-//   setUseTablature
-//---------------------------------------------------------
-
-#if 0
-void Staff::setUseTablature(bool val)
-      {
-      _staffType = score()->staffTypes()[val ? TAB_STAFF_TYPE : PITCHED_STAFF_TYPE];
-      }
-#endif
-
-//---------------------------------------------------------
 //   linkTo
 //---------------------------------------------------------
 
