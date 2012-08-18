@@ -127,7 +127,7 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
       foreach (Shortcut* ss, localShortcuts) {
             if (s == ss)
                   continue;
-            if (! (s->state() & ss->state())    // no conflict if states do not overlap
+            if (! (s->state() & ss->state()))    // no conflict if states do not overlap
                   continue;
             foreach(const QKeySequence& ks, ss->keys()) {
                   if (ks == key) {
