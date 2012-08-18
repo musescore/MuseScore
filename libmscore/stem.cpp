@@ -86,7 +86,7 @@ void Stem::layout()
       QPointF p1(0.0, 0.0);
       QPointF p2(0.0, l);
       if (st) {
-            if (!st->useTablature() && chord()) {
+            if (!st->isTabStaff() && chord()) {
                   // adjust P1 for note head
                   Chord* c = chord();
                   if (c->up()) {
@@ -102,7 +102,7 @@ void Stem::layout()
                         p2.rx() = lw5;
                         }
                   }
-            else if (st->useTablature()) {
+            else if (st->isTabStaff()) {
                   p1.rx() = -lw5;
                   p2.rx() = -lw5;
                   }
@@ -145,7 +145,7 @@ void Stem::draw(QPainter* painter) const
       {
       bool useTab = false;
       Staff* st = staff();
-      if (st && st->useTablature()) {     // stems used in palette do not have a staff
+      if (st && st->isTabStaff()) {     // stems used in palette do not have a staff
             if (st->staffType()->slashStyle())
                   return;
             useTab = true;

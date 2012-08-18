@@ -255,7 +255,7 @@ void Chord::setStem(Stem* s)
 
 QPointF Chord::stemPos() const
       {
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             qreal sp = spatium();
             return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp) +
                pagePos();
@@ -271,7 +271,7 @@ QPointF Chord::stemPos() const
 
 QPointF Chord::stemPosBeam() const
       {
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             qreal sp = spatium();
             return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp) +
                pagePos();
@@ -559,7 +559,7 @@ void Chord::addLedgerLines(qreal x, int move)
 void Chord::computeUp()
       {
       // tablatures
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             _up = true;
             return;
             }
@@ -1022,7 +1022,7 @@ void Chord::layoutStem1()
       if (hasStem) {
             if (!_stem)
                   setStem(new Stem(score()));
-//            if (staff()->useTablature()) {                  // in tab, all stems are up (if present)
+//            if (staff()->isTabStaff()) {                  // in tab, all stems are up (if present)
 //                  setStemDirection(MScore::UP);
 //                  setUp(true);
 //                  }
@@ -1063,7 +1063,7 @@ void Chord::layoutStem1()
 
 void Chord::layoutStem()
       {
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             // tablatures require stems only if not stemless
             if (!staff()->staffType()->slashStyle() && _stem) {   // if tab uses stems and this chord has one
                   // in tablatures, stem/hook setup is fixed: a simple 'comb' above the staff
@@ -1259,7 +1259,7 @@ void Chord::layout()
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
@@ -1315,7 +1315,7 @@ void Chord::layout()
                         _tabDur = 0;
                         }
                   }                 // end of if(duration_symbols)
-            }                       // end of if(useTablature)
+            }                       // end of if(isTabStaff)
       else {
             //
             // NON-TABLATURE STAVES

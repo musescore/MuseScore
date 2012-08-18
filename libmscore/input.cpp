@@ -52,6 +52,17 @@ Drumset* InputState::drumset() const
       }
 
 //---------------------------------------------------------
+//   staffGroup
+//---------------------------------------------------------
+
+StaffGroup InputState::staffGroup() const
+      {
+      if (_segment == 0 || _track == -1)
+            return PITCHED_STAFF;
+      return _segment->score()->staff(_track/VOICES)->staffType()->group();
+      }
+
+//---------------------------------------------------------
 //   tick
 //---------------------------------------------------------
 
@@ -69,4 +80,12 @@ ChordRest* InputState::cr() const
       return _segment ? static_cast<ChordRest*>(_segment->element(_track)) : 0;
       }
 
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
+
+void InputState::setTrack(int v)
+      {
+      _track = v;
+      }
 

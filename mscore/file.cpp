@@ -472,7 +472,7 @@ void MuseScore::newFile()
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   Staff* staff = score->staff(staffIdx);
                   if (tick == 0) {
-                        if (!staff->useTablature()) {
+                        if (!staff->isTabStaff()) {
                               TimeSig* ts = new TimeSig(score);
                               ts->setSig(timesig);
                               ts->setSubtype(timesigType);

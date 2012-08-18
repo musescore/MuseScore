@@ -24,6 +24,7 @@
 #include "velo.h"
 #include "pitch.h"
 #include "cleflist.h"
+#include "stafftype.h"
 
 class Instrument;
 class InstrumentTemplate;
@@ -176,8 +177,10 @@ class Staff : public QObject {
 
       StaffType* staffType() const     { return _staffType;      }
       void setStaffType(StaffType* st);
+      StaffGroup staffGroup() const    { return _staffType->group(); }
+      bool isTabStaff() const          { return staffGroup() == TAB_STAFF; }
+      bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF; }
 
-      bool useTablature() const;
       bool updateKeymap() const        { return _updateKeymap;   }
       void setUpdateKeymap(bool v)     { _updateKeymap = v;      }
       VeloList& velocities()           { return _velocities;     }

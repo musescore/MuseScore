@@ -39,7 +39,8 @@ Shortcut Shortcut::sc[] = {
          ),
 
       Shortcut(
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT
+            | STATE_LYRICS_EDIT | STATE_PLAY,
          0,
          "file-open",
          QT_TRANSLATE_NOOP("action","Open..."),

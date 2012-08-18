@@ -210,7 +210,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != NOTEDOT || !staff()->useTablature()) {
+      if (type() != NOTEDOT || !staff()->isTabStaff()) {
             p->setPen(curColor());
             symbols[score()->symIdx()][_sym].draw(p, magS());
             }

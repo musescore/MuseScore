@@ -317,7 +317,7 @@ void Beam::remove(ChordRest* a)
 
 void Beam::draw(QPainter* painter) const
       {
-      if (staff()->useTablature()) {
+      if (staff()->isTabStaff()) {
             if (staff()->staffType()->slashStyle())
                   return;
             }
@@ -461,7 +461,7 @@ void Beam::layout1()
       Chord* c1 = 0;
       Chord* c2 = 0;
 
-      if (staff()->useTablature()) {
+      if (staff()->isTabStaff()) {
             //TABULATURES: all beams (and related chords) are MScore::UP at slope 0
             _up   = true;
             slope = 0.0;
@@ -1546,7 +1546,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       else
             setMag(1.0);
 
-      if (staff()->useTablature()) {
+      if (staff()->isTabStaff()) {
             qreal y = (STAFFTYPE_TAB_DEFAULTSTEMPOSY
                - STAFFTYPE_TAB_DEFAULTSTEMLEN) * _spatium;
             py1 = y;
