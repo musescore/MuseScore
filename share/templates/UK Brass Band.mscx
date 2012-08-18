@@ -1,0 +1,1494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.2</programVersion>
+  <programRevision>4964 
+</programRevision>
+  <Spatium>1.164</Spatium>
+  <Division>480</Division>
+  <Style>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="both">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="3"/>
+        </keylist>
+      <bracket type="0" span="5"/>
+      <barLineSpan>17</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Soprano Cornet</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Sop. Cnt.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>2</transposeDiatonic>
+      <transposeChromatic>3</transposeChromatic>
+      <trackName>Eb Soprano Cornet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Solo Cornet</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">B</span><span style=" font-family:'MScore1'; font-size:12pt;"></span><span style=" font-size:12pt;"> Cnt.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Cornet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Repiano Cornet</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Rep. Cnt.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Repiano Cornet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2nd Cornet</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">B</span><span style=" font-family:'MScore1'; font-size:12pt;"></span><span style=" font-size:12pt;"> Cnt.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Cornet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">3rd Cornet</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">B</span><span style=" font-family:'MScore1'; font-size:12pt;"></span><span style=" font-size:12pt;"> Cnt.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Cornet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="0" span="4"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Flugel</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Flghn.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Flugelhorn</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="3"/>
+        </keylist>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Solo Horn</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Hn.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>29</minPitchP>
+      <maxPitchP>77</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>75</maxPitchA>
+      <transposeDiatonic>-5</transposeDiatonic>
+      <transposeChromatic>-9</transposeChromatic>
+      <trackName>Horn</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="60"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="3"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1st Horn</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Hn.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>29</minPitchP>
+      <maxPitchP>77</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>75</maxPitchA>
+      <transposeDiatonic>-5</transposeDiatonic>
+      <transposeChromatic>-9</transposeChromatic>
+      <trackName>Horn</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="60"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="3"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2nd Horn</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Hn.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>29</minPitchP>
+      <maxPitchP>77</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>75</maxPitchA>
+      <transposeDiatonic>-5</transposeDiatonic>
+      <transposeChromatic>-9</transposeChromatic>
+      <trackName>Horn</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="60"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="0" span="2"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1st Baritone</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Bari</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-8</transposeDiatonic>
+      <transposeChromatic>-14</transposeChromatic>
+      <trackName>Baritone (T.C.)</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2nd Baritone</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Bari</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-8</transposeDiatonic>
+      <transposeChromatic>-14</transposeChromatic>
+      <trackName>Baritone (T.C.)</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="0" span="3"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1st Trombone</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Trb.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2nd Trombone</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Trb.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="0"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Bass Trombone</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Bs. Trb.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <trackName>Bass Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="0" span="3"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Euphonium</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Euph.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-8</transposeDiatonic>
+      <transposeChromatic>-14</transposeChromatic>
+      <trackName>Euphonium</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="58"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="3"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">E</span><span style=" font-family:'MScore1'; font-size:12pt;"></span><span style=" font-size:12pt;"> Bass</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Tba.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-12</transposeDiatonic>
+      <transposeChromatic>-21</transposeChromatic>
+      <trackName>Tuba</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="58"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">B</span><span style=" font-family:'MScore1'; font-size:12pt;"></span><span style=" font-size:12pt;"> Bass</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Tba.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <transposeDiatonic>-15</transposeDiatonic>
+      <transposeChromatic>-26</transposeChromatic>
+      <trackName>Tuba</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="58"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="0" span="2"/>
+      <barLineSpan>2</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Timpani</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Timp.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <trackName>Timpani</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="47"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="14"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Percussion</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:7.91887pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Drm.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <useDrumset>1</useDrumset>
+      <Drum pitch="35">
+        <head>0</head>
+        <line>7</line>
+        <voice>1</voice>
+        <name>Acoustic Bass Drum</name>
+        <stem>2</stem>
+        </Drum>
+      <Drum pitch="36">
+        <head>0</head>
+        <line>7</line>
+        <voice>1</voice>
+        <name>Bass Drum</name>
+        <stem>2</stem>
+        <shortcut>C</shortcut>
+        </Drum>
+      <Drum pitch="37">
+        <head>1</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Side Stick</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="38">
+        <head>0</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare (Acoustic)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="40">
+        <head>0</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare (Electric)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="41">
+        <head>0</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Tom 5</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="42">
+        <head>1</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Hi-Hat Closed</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="43">
+        <head>0</head>
+        <line>5</line>
+        <voice>1</voice>
+        <name>Tom 4</name>
+        <stem>2</stem>
+        </Drum>
+      <Drum pitch="44">
+        <head>1</head>
+        <line>9</line>
+        <voice>1</voice>
+        <name>Hi-Hat Pedal</name>
+        <stem>2</stem>
+        </Drum>
+      <Drum pitch="45">
+        <head>0</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Tom 3</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="46">
+        <head>1</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Hi-Hat Open</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="47">
+        <head>0</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Tom 2</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="48">
+        <head>0</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Tom 1</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="49">
+        <head>1</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Crash 1</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="50">
+        <head>0</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Tom</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="51">
+        <head>1</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride</name>
+        <stem>1</stem>
+        <shortcut>D</shortcut>
+        </Drum>
+      <Drum pitch="52">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>China</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="53">
+        <head>2</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="54">
+        <head>2</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Tambourine</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="55">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="56">
+        <head>3</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="57">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="59">
+        <head>1</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="63">
+        <head>1</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>open high conga</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="64">
+        <head>1</head>
+        <line>6</line>
+        <voice>0</voice>
+        <name>low conga</name>
+        <stem>1</stem>
+        </Drum>
+      <trackName>Drumset 5 lines</trackName>
+      <Channel>
+        <controller ctrl="0" value="1"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="2">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="3">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="4">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="5">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="6">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="7">
+    <Measure number="1">
+      <KeySig>
+        <subtype>3</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="2" y="-0.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="8">
+    <Measure number="1">
+      <KeySig>
+        <subtype>3</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="2" y="-0.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="9">
+    <Measure number="1">
+      <KeySig>
+        <subtype>3</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="2" y="-0.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="10">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="11">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="12">
+    <Measure number="1">
+      <KeySig>
+        <subtype>2</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="13">
+    <Measure number="1">
+      <KeySig>
+        <subtype>2</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="14">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="15">
+    <Measure number="1">
+      <KeySig>
+        <subtype>2</subtype>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="1" y="1.5"/>
+          </KeySym>
+        <KeySym>
+          <sym>32</sym>
+          <pos x="0" y="0"/>
+          </KeySym>
+        <showCourtesySig>1</showCourtesySig>
+        <showNaturals>1</showNaturals>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="16">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="17">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="18">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <Staff id="19">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>4</cursorTrack>
+  </museScore>
