@@ -129,13 +129,13 @@ Palette* MuseScore::newFramePalette()
       sp->setName(tr("Frames"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
-
+      
       static const IconAction bpa[] = {
-            { ICON_VFRAME,   "vframe" },
-            { ICON_HFRAME,   "hframe" },
-            { ICON_TFRAME,   "tframe" },
-            { ICON_FFRAME,   "fframe" },
-            { ICON_MEASURE,  "measure" },
+            { ICON_VFRAME,   "insert-vbox" },
+            { ICON_HFRAME,   "insert-hbox" },
+            { ICON_TFRAME,   "insert-textframe" },
+            { ICON_FFRAME,   "insert-fretframe" },
+            { ICON_MEASURE,  "insert-measure" },
             { -1, ""}
             };
       populateIconPalette(sp, bpa);

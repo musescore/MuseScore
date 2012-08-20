@@ -30,8 +30,8 @@ set (QT_UIC_EXECUTABLE        "${CROSSQT}/bin/uic.exe")
 set (QT_RCC_EXECUTABLE        "${CROSSQT}/bin/rcc")
 set (QT_QTCORE_LIBRARY        "mops")
 
-set (QT_WRC_EXECUTABLE        wrc.bat)
-set (QT_WINE_EXECUTABLE       wine.bat)
+set (QT_WRC_EXECUTABLE        ${CMAKE_CURRENT_LIST_DIR}/wrc.bat)
+set (QT_WINE_EXECUTABLE       ${CMAKE_CURRENT_LIST_DIR}/wine.bat)
 
 
 set (QT_INCLUDES ${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR}

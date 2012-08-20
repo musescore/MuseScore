@@ -807,7 +807,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-measure",
-         QT_TRANSLATE_NOOP("action","Insert One Measure")
+         QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         measure_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -820,13 +821,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-hbox",
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame")
+         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         hframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-textframe",
-         QT_TRANSLATE_NOOP("action","Insert Text Frame")
+         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         tframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -838,13 +841,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-fretframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame")
+         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
+         fframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-vbox",
-         QT_TRANSLATE_NOOP("action","Insert Vertical Frame")
+         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         vframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -1423,35 +1428,35 @@ Shortcut Shortcut::sc[] = {
          0,
          "play-prev-chord",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Previous chord")
+         QT_TRANSLATE_NOOP("action","Play Previous Chord")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-prev-measure",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Previous measure")
+         QT_TRANSLATE_NOOP("action","Play Previous Measure")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-next-chord",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Next chord")
+         QT_TRANSLATE_NOOP("action","Play Next Chord")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-next-measure",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Next measure")
+         QT_TRANSLATE_NOOP("action","Play Next Measure")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "seek-begin",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Player seek to begin")
+         QT_TRANSLATE_NOOP("action","Player Seek to Begin")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
@@ -1466,7 +1471,7 @@ Shortcut Shortcut::sc[] = {
          STATE_PLAY,
          0,
          "seek-end",
-         QT_TRANSLATE_NOOP("action","Player seek to end")
+         QT_TRANSLATE_NOOP("action","Player Seek to End")
          ),
       Shortcut(
          STATE_NORMAL,
@@ -1504,7 +1509,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          A_SCORE,
          "save-default-style",
-         QT_TRANSLATE_NOOP("action","Save Style As Default..."),
+         QT_TRANSLATE_NOOP("action","Save Style as Default..."),
           fileSave_ICON
          ),
       Shortcut (
@@ -2021,49 +2026,6 @@ Shortcut Shortcut::sc[] = {
          "masterpalette",
          QT_TRANSLATE_NOOP("action","Master Palette..."),
          QT_TRANSLATE_NOOP("action","Show master palette")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "vframe",
-         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
-         vframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "hframe",
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
-         0,
-         0,
-         hframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "tframe",
-         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
-         0,
-         0,
-         tframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "fframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
-         0,
-         0,
-         fframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "measure",
-         QT_TRANSLATE_NOOP("action","Insert Measure"),
-         0,
-         0,
-         measure_ICON
          ),
       Shortcut(
          STATE_NORMAL,
