@@ -666,6 +666,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
+      connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
 
       recordButtons = new QButtonGroup(this);
       recordButtons->setExclusive(false);
@@ -1826,4 +1827,73 @@ void PreferenceDialog::definePluginShortcutClicked()
       prefs->dirty = true;
       }
 
+//---------------------------------------------------------
+//   printShortcutsClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::printShortcutsClicked()
+      {
+      QPrinter printer(QPrinter::HighResolution);
+      MStyle* s = MScore::defaultStyle();
+      const PageFormat* pf = s->pageFormat();
+      printer.setPaperSize(pf->size(), QPrinter::Inch);
+
+      printer.setCreator("MuseScore Version: " VERSION);
+      printer.setFullPage(true);
+      printer.setColorMode(QPrinter::Color);
+      printer.setDocName(tr("MuseScore Shortcuts"));
+      printer.setDoubleSidedPrinting(pf->twosided());
+      printer.setOutputFormat(QPrinter::NativeFormat);
+
+      QPrintDialog pd(&printer, 0);
+      pd.setWindowTitle(tr("Print Shortcuts"));
+      if (!pd.exec())
+            return;
+      qreal dpmm = printer.logicalDpiY() / 25.4;
+      qreal ph   = printer.height();
+      qreal tm   = dpmm * 15;
+      qreal bm   = dpmm * 15;
+      qreal lm   = dpmm * 20;
+
+      QPainter p;
+      p.begin(&printer);
+      qreal y;
+      qreal lh = QFontMetricsF(p.font()).lineSpacing();
+
+      QMapIterator<QString, Shortcut*> isc(localShortcuts);
+      qreal col1Width = 0.0;
+      while (isc.hasNext()) {
+            isc.next();
+            Shortcut* s = isc.value();
+            col1Width = qMax(col1Width, QFontMetricsF(p.font()).width(s->descr()));
+            }
+
+      int idx = 0;
+      isc = QMapIterator<QString, Shortcut*>(localShortcuts);
+      while (isc.hasNext()) {
+            isc.next();
+            if (idx == 0 || y >= (ph - bm)) {
+                  y = tm;
+                  if (idx)
+                        printer.newPage();
+                  else {
+                        p.save();
+                        QFont font(p.font());
+                        font.setPointSizeF(14.0);
+                        font.setBold(true);
+                        p.setFont(font);
+                        p.drawText(lm, y, tr("MuseScore Shortcuts"));
+                        p.restore();
+                        y += QFontMetricsF(font).lineSpacing();
+                        y += 5 * dpmm;
+                        }
+                  }
+            Shortcut* s = isc.value();
+            p.drawText(lm, y, s->descr());
+            p.drawText(col1Width + lm + 5 * dpmm, y, s->keysToString());
+            y += lh;
+            ++idx;
+            }
+      p.end();
+      }
 
