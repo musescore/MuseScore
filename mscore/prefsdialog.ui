@@ -685,7 +685,7 @@
             <item>
              <widget class="Awl::ColorLabel" name="bgColorLabel">
               <property name="frameShape">
-                <set>QFrame::Box</set>
+               <enum>QFrame::Box</enum>
               </property>
              </widget>
             </item>
@@ -739,9 +739,9 @@
             </property>
             <item>
              <widget class="Awl::ColorLabel" name="fgColorLabel">
-                <property name="frameShape">
-                  <set>QFrame::Box</set>
-                </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
              </widget>
             </item>
            </layout>
@@ -2680,17 +2680,24 @@
           </widget>
          </item>
          <item>
-          <spacer>
+          <spacer name="horizontalSpacer_18">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>231</width>
+             <width>40</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="printShortcuts">
+           <property name="text">
+            <string>Print</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
