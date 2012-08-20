@@ -40,15 +40,15 @@ install(FILES
       Choir\ SATB.mscx
       Choir\ SATB\ with\ Piano.mscx
       Concert\ Band.mscx
-      Hymn.mscz
+      Hymn.mscx
       Lead\ Sheet.mscx
       Piano.mscx
       Guitar\ Tab.mscx
       carol.mscx
-      Jazz\ Lead\ Sheet.mscz
-      Jazz\ Big\ Band.mscz
-      Jazz\ Combo.mscz
-      UK\ Brass\ Band.mscz
+      Jazz\ Lead\ Sheet.mscx
+      Jazz\ Big\ Band.mscx
+      Jazz\ Combo.mscx
+      UK\ Brass\ Band.mscx
       drumset_fr.drm
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )

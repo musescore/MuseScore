@@ -1,0 +1,1784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.1</programVersion>
+  <programRevision>4611 
+</programRevision>
+  <Spatium>1</Spatium>
+  <Division>480</Division>
+  <Style>
+    <staffUpperBorder>4</staffUpperBorder>
+    <staffDistance>7</staffDistance>
+    <systemDistance>9.2</systemDistance>
+    <repeatBarTips>1</repeatBarTips>
+    <bracketDistance>0.2</bracketDistance>
+    <measureSpacing>1.41</measureSpacing>
+    <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
+    <concertPitch>1</concertPitch>
+    </Style>
+  <TextStyle name="Title">
+    <family>MuseJazz</family>
+    <size>28</size>
+    <bold>1</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>50</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Subtitle">
+    <family>MuseJazz</family>
+    <size>14</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>10</yoffset>
+    <rxoffset>50</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Composer">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>5</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>100</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Poet">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>4</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Lyrics odd lines">
+    <family>MuseJazz</family>
+    <size>10</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>7</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Lyrics even lines">
+    <family>MuseJazz</family>
+    <size>10</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>7</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Fingering">
+    <family>MuseJazz</family>
+    <size>8</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>10</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="InstrumentsLong">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>9</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="InstrumentsShort">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>9</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="InstrumentsExcerpt">
+    <family>MuseJazz</family>
+    <size>18</size>
+    <bold>1</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>4</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Dynamics">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>1</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>7.5</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Technik">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>1</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-2</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Tempo">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>1</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-4</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    <systemFlag>1</systemFlag>
+    </TextStyle>
+  <TextStyle name="Metronome">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>1</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>0</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Copyright">
+    <family>MuseJazz</family>
+    <size>9</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-10</yoffset>
+    <rxoffset>50</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Measure Number">
+    <family>MuseJazz</family>
+    <size>8</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>14</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Page Number Odd">
+    <family>MuseJazz</family>
+    <size>9</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>17</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>-10</xoffset>
+    <yoffset>-7</yoffset>
+    <rxoffset>100</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Page Number Even">
+    <family>MuseJazz</family>
+    <size>9</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>0</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>10</xoffset>
+    <yoffset>-7</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>100</ryoffset>
+    </TextStyle>
+  <TextStyle name="Translator">
+    <family>MuseJazz</family>
+    <size>11</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>2</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>6</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Tuplets">
+    <family>MuseJazz</family>
+    <size>8</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>10</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="System">
+    <family>MuseJazz</family>
+    <size>10</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>0</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-4</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    <systemFlag>1</systemFlag>
+    </TextStyle>
+  <TextStyle name="Staff">
+    <family>MuseJazz</family>
+    <size>10</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>0</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>5</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Chordname">
+    <family>MuseJazz</family>
+    <size>15</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>16</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-1</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Rehearsal Mark">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>18</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>-2</xoffset>
+    <yoffset>-4</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    <frameWidth>0.3</frameWidth>
+    <paddingWidth>0.3</paddingWidth>
+    <frameRound>10</frameRound>
+    <frameColor r="0" g="0" b="0"/>
+    <systemFlag>1</systemFlag>
+    </TextStyle>
+  <TextStyle name="Repeat Text">
+    <family>MuseJazz</family>
+    <size>13</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>18</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-2</yoffset>
+    <rxoffset>100</rxoffset>
+    <ryoffset>0</ryoffset>
+    <systemFlag>1</systemFlag>
+    </TextStyle>
+  <TextStyle name="Volta">
+    <family>MuseJazz</family>
+    <size>9</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>0</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0.1</xoffset>
+    <yoffset>-0.1</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Frame">
+    <family>MuseJazz</family>
+    <size>11</size>
+    <bold>1</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>0</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="TextLine">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>8</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="Glissando">
+    <family>MuseJazz</family>
+    <size>8</size>
+    <bold>0</bold>
+    <italic>1</italic>
+    <underline>0</underline>
+    <align>18</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <TextStyle name="String Number">
+    <family>MuseJazz</family>
+    <size>8</size>
+    <bold>0</bold>
+    <italic>0</italic>
+    <underline>0</underline>
+    <align>10</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>-5</yoffset>
+    <rxoffset>100</rxoffset>
+    <ryoffset>0</ryoffset>
+    <frameWidth>0.2</frameWidth>
+    <paddingWidth>-0.2</paddingWidth>
+    <frameRound>0</frameRound>
+    <frameColor r="0" g="0" b="0"/>
+    <circle>1</circle>
+    </TextStyle>
+  <TextStyle name="Ottava">
+    <family>MuseJazz</family>
+    <size>12</size>
+    <bold>0</bold>
+    <italic>1</italic>
+    <underline>0</underline>
+    <align>8</align>
+    <offsetType>1</offsetType>
+    <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+    <foregroundColor r="0" g="0" b="0"/>
+    <xoffset>0</xoffset>
+    <yoffset>0</yoffset>
+    <rxoffset>0</rxoffset>
+    <ryoffset>0</ryoffset>
+    </TextStyle>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>Letter</pageFormat>
+    <landscape>1</landscape>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>42.5197</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="0" span="5"/>
+      <barLineSpan>5</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Alto Sax 1</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Alto 1</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>49</minPitchP>
+      <maxPitchP>87</maxPitchP>
+      <minPitchA>49</minPitchA>
+      <maxPitchA>82</maxPitchA>
+      <transposeDiatonic>-5</transposeDiatonic>
+      <transposeChromatic>-9</transposeChromatic>
+      <trackName>Alto Saxophone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="65"/>
+        <controller ctrl="7" value="93"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Alto Sax 2</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Alto 2</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>49</minPitchP>
+      <maxPitchP>87</maxPitchP>
+      <minPitchA>49</minPitchA>
+      <maxPitchA>82</maxPitchA>
+      <transposeDiatonic>-5</transposeDiatonic>
+      <transposeChromatic>-9</transposeChromatic>
+      <trackName>Alto Saxophone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="65"/>
+        <controller ctrl="7" value="91"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tenor Sax 1</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tenor 1</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>44</minPitchP>
+      <maxPitchP>82</maxPitchP>
+      <minPitchA>44</minPitchA>
+      <maxPitchA>77</maxPitchA>
+      <transposeDiatonic>-8</transposeDiatonic>
+      <transposeChromatic>-14</transposeChromatic>
+      <trackName>Tenor Saxophone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="66"/>
+        <controller ctrl="7" value="90"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tenor Sax 2</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tenor 2</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>44</minPitchP>
+      <maxPitchP>82</maxPitchP>
+      <minPitchA>44</minPitchA>
+      <maxPitchA>77</maxPitchA>
+      <transposeDiatonic>-8</transposeDiatonic>
+      <transposeChromatic>-14</transposeChromatic>
+      <trackName>Tenor Saxophone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="66"/>
+        <controller ctrl="7" value="91"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Bari Sax</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Bari</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>36</minPitchP>
+      <maxPitchP>75</maxPitchP>
+      <minPitchA>37</minPitchA>
+      <maxPitchA>70</maxPitchA>
+      <transposeDiatonic>-12</transposeDiatonic>
+      <transposeChromatic>-21</transposeChromatic>
+      <trackName>Baritone Saxophone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="67"/>
+        <controller ctrl="7" value="89"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="0" span="4"/>
+      <barLineSpan>4</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Trumpet 1</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tpt. 1</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>52</minPitchP>
+      <maxPitchP>85</maxPitchP>
+      <minPitchA>52</minPitchA>
+      <maxPitchA>80</maxPitchA>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Trumpet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="115"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Trumpet 2</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tpt. 2</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>52</minPitchP>
+      <maxPitchP>85</maxPitchP>
+      <minPitchA>52</minPitchA>
+      <maxPitchA>80</maxPitchA>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Trumpet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="118"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="50"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Trumpet 3</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tpt. 3</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>52</minPitchP>
+      <maxPitchP>85</maxPitchP>
+      <minPitchA>52</minPitchA>
+      <maxPitchA>80</maxPitchA>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Trumpet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="114"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Trumpet 4</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:6pt;">Tpt. 4</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>52</minPitchP>
+      <maxPitchP>85</maxPitchP>
+      <minPitchA>52</minPitchA>
+      <maxPitchA>80</maxPitchA>
+      <transposeDiatonic>-1</transposeDiatonic>
+      <transposeChromatic>-2</transposeChromatic>
+      <trackName>Bb Trumpet</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="56"/>
+        <controller ctrl="7" value="115"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="mute">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="59"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="0" span="4"/>
+      <barLineSpan>4</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Trombone 1</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Tbn. 1</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>35</minPitchP>
+      <maxPitchP>74</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>70</maxPitchA>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="76"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Trombone 2</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Tbn. 2</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>35</minPitchP>
+      <maxPitchP>74</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>70</maxPitchA>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="77"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Trombone 3</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Tbn. 3</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>35</minPitchP>
+      <maxPitchP>74</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>70</maxPitchA>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="78"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Trombone 4</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Tbn. 4</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>35</minPitchP>
+      <maxPitchP>74</maxPitchP>
+      <minPitchA>35</minPitchA>
+      <maxPitchA>70</maxPitchA>
+      <trackName>Trombone</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="57"/>
+        <controller ctrl="7" value="81"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="3"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Guitar</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Gtr.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>40</minPitchP>
+      <maxPitchP>83</maxPitchP>
+      <minPitchA>40</minPitchA>
+      <maxPitchA>83</maxPitchA>
+      <trackName>Guitar</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="24"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="1" span="2"/>
+      <barLineSpan>2</barLineSpan>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Piano</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Pno.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>21</minPitchP>
+      <maxPitchP>108</maxPitchP>
+      <minPitchA>21</minPitchA>
+      <maxPitchA>108</maxPitchA>
+      <trackName>Piano</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <Instrument>
+      <minPitchP>21</minPitchP>
+      <maxPitchP>108</maxPitchP>
+      <minPitchA>21</minPitchA>
+      <maxPitchA>108</maxPitchA>
+      <trackName>Piano</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="5"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Bass</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Bass</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>23</minPitchP>
+      <maxPitchP>67</maxPitchP>
+      <minPitchA>28</minPitchA>
+      <maxPitchA>62</maxPitchA>
+      <trackName>Acoustic Bass</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="32"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="arco">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="43"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      <Channel name="tremolo">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="44"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="19"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Drums</span></p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MuseJazz'; font-size:6.80315pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:7pt;">Dr.</span></p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <useDrumset>1</useDrumset>
+      <Drum pitch="33">
+        <head>5</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Slash</name>
+        <stem>2</stem>
+        <shortcut>G</shortcut>
+        </Drum>
+      <Drum pitch="34">
+        <head>0</head>
+        <line>-1</line>
+        <voice>2</voice>
+        <name>(Accent)</name>
+        <stem>1</stem>
+        <shortcut>F</shortcut>
+        </Drum>
+      <Drum pitch="35">
+        <head>0</head>
+        <line>7</line>
+        <voice>2</voice>
+        <name>Acoustic Bass Drum</name>
+        <stem>2</stem>
+        </Drum>
+      <Drum pitch="36">
+        <head>0</head>
+        <line>7</line>
+        <voice>1</voice>
+        <name>Bass Drum</name>
+        <stem>2</stem>
+        <shortcut>B</shortcut>
+        </Drum>
+      <Drum pitch="37">
+        <head>1</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Side Stick</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="38">
+        <head>0</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare (Acoustic)</name>
+        <stem>1</stem>
+        <shortcut>D</shortcut>
+        </Drum>
+      <Drum pitch="40">
+        <head>0</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare (Electric)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="41">
+        <head>0</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Tom 5</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="42">
+        <head>1</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Hi-Hat Closed</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="43">
+        <head>0</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Tom 4</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="44">
+        <head>1</head>
+        <line>9</line>
+        <voice>1</voice>
+        <name>Hi-Hat Pedal</name>
+        <stem>2</stem>
+        <shortcut>A</shortcut>
+        </Drum>
+      <Drum pitch="45">
+        <head>0</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Tom 3</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="46">
+        <head>1</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Hi-Hat Open</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="47">
+        <head>0</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Tom 2</name>
+        <stem>1</stem>
+        <shortcut>E</shortcut>
+        </Drum>
+      <Drum pitch="48">
+        <head>0</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Tom 1</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="49">
+        <head>1</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Crash 1</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="50">
+        <head>0</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Tom</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="51">
+        <head>1</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride</name>
+        <stem>1</stem>
+        <shortcut>C</shortcut>
+        </Drum>
+      <Drum pitch="52">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>China</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="53">
+        <head>2</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="54">
+        <head>2</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Tambourine</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="55">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="56">
+        <head>3</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="57">
+        <head>1</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="59">
+        <head>1</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Ride (Bell)</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="63">
+        <head>1</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>open high conga</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="64">
+        <head>1</head>
+        <line>6</line>
+        <voice>0</voice>
+        <name>low conga</name>
+        <stem>1</stem>
+        </Drum>
+      <Drum pitch="81">
+        <head>3</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Triangle</name>
+        <stem>1</stem>
+        </Drum>
+      <trackName>Drumset 5 lines</trackName>
+      <Channel>
+        <controller ctrl="0" value="1"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Excerpt>
+    <name>Alto1</name>
+    <title>Alto 1</title>
+    <part>0</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Alto2</name>
+    <title>Alto 2</title>
+    <part>1</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Tenor1</name>
+    <title>Tenor 1</title>
+    <part>2</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Tenor2</name>
+    <title>Tenor 2</title>
+    <part>3</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Bari</name>
+    <title>Bari</title>
+    <part>4</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trumpet1</name>
+    <title>Trumpet 1</title>
+    <part>5</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trumpet2</name>
+    <title>Trumpet 2</title>
+    <part>6</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trumpet3</name>
+    <title>Trumpet 3</title>
+    <part>7</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trumpet4</name>
+    <title>Trumpet 4</title>
+    <part>8</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trombone1</name>
+    <title>Trombone 1</title>
+    <part>9</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trombone2</name>
+    <title>Trombone 2</title>
+    <part>10</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trombone3</name>
+    <title>Trombone 3</title>
+    <part>11</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Trombone4</name>
+    <title>Trombone 4</title>
+    <part>12</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Guitar</name>
+    <title>Guitar</title>
+    <part>13</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Piano</name>
+    <title>Piano</title>
+    <part>14</part>
+    <part>15</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Bass</name>
+    <title>Bass</title>
+    <part>16</part>
+    </Excerpt>
+  <Excerpt>
+    <name>Drums</name>
+    <title>Drums</title>
+    <part>17</part>
+    </Excerpt>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      </VBox>
+    </Staff>
+  <Staff id="2">
+    </Staff>
+  <Staff id="3">
+    </Staff>
+  <Staff id="4">
+    </Staff>
+  <Staff id="5">
+    </Staff>
+  <Staff id="6">
+    </Staff>
+  <Staff id="7">
+    </Staff>
+  <Staff id="8">
+    </Staff>
+  <Staff id="9">
+    </Staff>
+  <Staff id="10">
+    </Staff>
+  <Staff id="11">
+    </Staff>
+  <Staff id="12">
+    </Staff>
+  <Staff id="13">
+    </Staff>
+  <Staff id="14">
+    </Staff>
+  <Staff id="15">
+    </Staff>
+  <Staff id="16">
+    </Staff>
+  <Staff id="17">
+    </Staff>
+  <Staff id="18">
+    </Staff>
+  <cursorTrack>16</cursorTrack>
+  </museScore>

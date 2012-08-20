@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.11">
+  <MagIdx>3</MagIdx>
+  <xoff>0.423333</xoff>
+  <yoff>0.423333</yoff>
+  <Spatium>1.4224</Spatium>
+  <Division>480</Division>
+  <Style>
+    <staffUpperBorder>3</staffUpperBorder>
+    <staffLowerBorder>3</staffLowerBorder>
+    <systemDistance>5.2</systemDistance>
+    <lyricsDistance>4</lyricsDistance>
+    <lyricsMinBottomDistance>0</lyricsMinBottomDistance>
+    <systemFrameDistance>0</systemFrameDistance>
+    <frameSystemDistance>0</frameSystemDistance>
+    <bracketDistance>0.3</bracketDistance>
+    <ledgerLineWidth>0.08</ledgerLineWidth>
+    <dotNoteDistance>0.5</dotNoteDistance>
+    <pageFillLimit>0.7</pageFillLimit>
+    <showMeasureNumber>0</showMeasureNumber>
+    <smallNoteMag>0.7</smallNoteMag>
+    <graceNoteMag>0.7</graceNoteMag>
+    <smallStaffMag>0.7</smallStaffMag>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <page-height>1188</page-height>
+    <page-width>828</page-width>
+    <page-margins type="both">
+      <left-margin>56.16</left-margin>
+      <right-margin>56.16</right-margin>
+      <top-margin>56.16</top-margin>
+      <bottom-margin>113.76</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="2"/>
+      </Staff>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      </Staff>
+    <trackName>Piano</trackName>
+    <Instrument>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        </Rest>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <Staff id="2">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        </Rest>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>
