@@ -386,8 +386,6 @@ class MuseScore : public QMainWindow {
       void showMediaDialog();
       void showAlbumManager();
       void showLayerManager();
-      void gotoNextScore();
-      void gotoPreviousScore();
       void updateUndoRedo();
       void cmdAddChordName2();
       static void convertCapella(Score*, Capella* cap);

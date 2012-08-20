@@ -721,14 +721,6 @@
     <seq>Ctrl+G</seq>
     </SC>
   <SC>
-    <key>next-score</key>
-    <seq>F3</seq>
-    </SC>
-  <SC>
-    <key>prev-score</key>
-    <seq>Shift+F3</seq>
-    </SC>
-  <SC>
     <key>transpose-up</key>
     <seq>F2</seq>
     </SC>

@@ -29,7 +29,7 @@
      <item>
       <widget class="QLineEdit" name="albumName">
        <property name="toolTip">
-        <string>album name</string>
+        <string>Album Name</string>
        </property>
       </widget>
      </item>
@@ -60,7 +60,7 @@
      <item row="6" column="1">
       <widget class="QPushButton" name="remove">
        <property name="toolTip">
-        <string>remove current score</string>
+        <string>Remove Current Score</string>
        </property>
        <property name="text">
         <string>Remove Score</string>
@@ -74,7 +74,7 @@
      <item row="3" column="1">
       <widget class="QPushButton" name="down">
        <property name="toolTip">
-        <string>move current score down in list</string>
+        <string>Move Current Score Down in List</string>
        </property>
        <property name="text">
         <string>Down</string>
@@ -84,7 +84,7 @@
      <item row="2" column="1">
       <widget class="QPushButton" name="up">
        <property name="toolTip">
-        <string>move current score up in list</string>
+        <string>Move Current Score Up in List</string>
        </property>
        <property name="text">
         <string>Up</string>
@@ -101,7 +101,7 @@
      <item>
       <widget class="QPushButton" name="createNew">
        <property name="toolTip">
-        <string>create new album</string>
+        <string>Create New Album</string>
        </property>
        <property name="text">
         <string>New</string>
@@ -111,7 +111,7 @@
      <item>
       <widget class="QPushButton" name="load">
        <property name="toolTip">
-        <string>load an existing album</string>
+        <string>Load an Existing Album</string>
        </property>
        <property name="text">
          <string>Load</string>

@@ -1940,18 +1940,18 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Layers")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "next-score",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","next score")
+         QT_TRANSLATE_NOOP("action","Next Score")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "previous-score",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","previous score")
+         QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
          STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
@@ -1995,18 +1995,6 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "figured-bass",
          QT_TRANSLATE_NOOP("action","Figured Bass")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "next-score",
-         QT_TRANSLATE_NOOP("action","Next Score")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "prev-score",
-         QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
          STATE_NORMAL,

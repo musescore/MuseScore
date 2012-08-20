@@ -3804,35 +3804,6 @@ void MuseScore::loadFile(const QUrl& url)
       }
 
 //---------------------------------------------------------
-//   gotoNextScore
-//---------------------------------------------------------
-
-void MuseScore::gotoNextScore()
-      {
-      int idx = tab1->currentIndex();
-      int n   = tab1->count();
-      if (idx >= (n-1))
-            idx = 0;
-      else
-            ++idx;
-      tab1->setCurrentIndex(idx);
-      }
-
-//---------------------------------------------------------
-//   gotoPreviousScore
-//---------------------------------------------------------
-
-void MuseScore::gotoPreviousScore()
-      {
-      int idx = tab1->currentIndex();
-      if (idx == 0)
-            idx = tab1->count() -1;
-      else
-            --idx;
-      tab1->setCurrentIndex(idx);
-      }
-
-//---------------------------------------------------------
 //   collectMatch
 //---------------------------------------------------------
 
@@ -4333,9 +4304,9 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "page-settings")
             showPageSettings();
       else if (cmd == "next-score")
-            gotoNextScore();
+            changeScore(1);
       else if (cmd == "previous-score")
-            gotoPreviousScore();
+            changeScore(1);
       else if (cmd == "transpose")
             transpose();
       else if (cmd == "tuplet-dialog")
@@ -4410,10 +4381,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             addTempo();
       else if (cmd == "metronome")  // no action
             ;
-      else if (cmd == "next-score")
-            changeScore(1);
-      else if (cmd == "prev-score")
-            changeScore(-1);
       else if (cmd == "viewmode") {
             if (cs) {
                   if (cs->layoutMode() == LayoutPage) {
