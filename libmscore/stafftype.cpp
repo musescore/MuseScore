@@ -142,17 +142,19 @@ void StaffType::write(Xml& xml, int idx) const
 void StaffType::writeProperties(Xml& xml) const
       {
       xml.tag("name", name());
-      if (lines() != 5)
+      // uncontionally write properties: staff types are read back over a copy of the built-in types
+      // and properties may be different across types => each might need to be properly (re-)set
+//      if (lines() != 5)
             xml.tag("lines", lines());
-      if (lineDistance().val() != 1.0)
+//      if (lineDistance().val() != 1.0)
             xml.tag("lineDistance", lineDistance().val());
-      if (!genClef())
+//      if (!genClef())
             xml.tag("clef", genClef());
-      if (slashStyle())
+//      if (slashStyle())
             xml.tag("slashStyle", slashStyle());
-      if (!showBarlines())
+//      if (!showBarlines())
             xml.tag("barlines", showBarlines());
-      if(!genTimesig())
+//      if(!genTimesig())
             xml.tag("timesig", genTimesig());
       }
 
