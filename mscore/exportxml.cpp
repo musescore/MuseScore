@@ -2907,8 +2907,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             xml.tag("offset", offs);
       if (staff)
             xml.tag("staff", staff);
-
-      xml.tagE(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
+            
+      if(dyn->velocity() > 0)
+            xml.tagE(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
+            
       xml.etag();
       }
 
