@@ -115,6 +115,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setValues();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
+      
+      connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
 
       connect(bg, SIGNAL(buttonClicked(int)), SLOT(editTextClicked(int)));
       }
@@ -459,6 +461,7 @@ void EditStyle::setValues()
       minMeasureWidth->setValue(lstyle.value(ST_minMMRestWidth).toSpatium().val());
       hideEmptyStaves->setChecked(lstyle.value(ST_hideEmptyStaves).toBool());
       dontHideStavesInFirstSystem->setChecked(lstyle.value(ST_dontHideStavesInFirstSystem).toBool());
+      dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
 
       accidentalNoteDistance->setValue(lstyle.value(ST_accidentalNoteDistance).toSpatium().val());
       accidentalDistance->setValue(lstyle.value(ST_accidentalDistance).toSpatium().val());
