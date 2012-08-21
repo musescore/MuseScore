@@ -91,10 +91,10 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValues1,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValues2,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(durFontName,    SIGNAL(editTextChanged(QString)),   SLOT(updateTabPreview()));
+      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(fretFontName,   SIGNAL(editTextChanged(QString)),   SLOT(updateTabPreview()));
+      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
       connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updateTabPreview()));
