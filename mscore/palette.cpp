@@ -1177,7 +1177,6 @@ void Palette::read(QDomElement e)
                                           element->read(ee);
                                           if (element->type() == ICON) {
                                                 Icon* icon = static_cast<Icon*>(element);
-                                                // Shortcut* s = getShortcut(icon->action());
                                                 QIcon qicon(getAction(icon->action())->icon());
                                                 icon->setAction(icon->action(), qicon);
                                                 }
