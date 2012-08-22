@@ -191,6 +191,8 @@ void Stem::read(const QDomElement& de)
             else if (!Element::readProperties(e))
                   domError(e);
             }
+      if (_userLen < 0.0)
+            _userLen = -_userLen;
       }
 
 //---------------------------------------------------------
