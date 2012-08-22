@@ -680,8 +680,10 @@ bool Element::readProperties(const QDomElement& e)
                   }
             _links->append(this);
             }
-      else if (tag == "tick")
-            score()->curTick = score()->fileDivision(val.toInt());
+      else if (tag == "tick") {
+            if (type() != SYMBOL)   // hack for 1.2
+                  score()->curTick = score()->fileDivision(val.toInt());
+            }
       else if (tag == "offset") {         // ??obsolete -> used for volta
             qreal _spatium = spatium();
             QPointF pt(readPoint(e) * _spatium);
