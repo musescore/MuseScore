@@ -1452,8 +1452,8 @@ void Note::setTrack(int val)
 
 void Note::toDefault()
       {
-      score()->undoChangeUserOffset(this, QPointF());
-      score()->undoChangeUserOffset(chord(), QPointF());
+      score()->undoChangeProperty(this, P_USER_OFF, QPointF());
+      score()->undoChangeProperty(chord(), P_USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_STEM_DIRECTION, MScore::AUTO);
       }
 
@@ -1538,7 +1538,7 @@ void Note::endEdit()
       {
       Chord* ch = chord();
       if (ch->notes().size() == 1) {
-            score()->undoChangeUserOffset(ch, ch->userOff() + userOff());
+            score()->undoChangeProperty(ch, P_USER_OFF, ch->userOff() + userOff());
             setUserOff(QPointF());
             score()->setLayoutAll(true);
             }

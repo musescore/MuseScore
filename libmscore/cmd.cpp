@@ -1914,7 +1914,7 @@ void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
             pos.ry() -= spatium();
       else if (dir == MScore::DOWN)
             pos.ry() += spatium();
-      undoChangeUserOffset(rest, pos);
+      undoChangeProperty(rest, P_USER_OFF, pos);
       setLayoutAll(false);
       }
 

@@ -119,7 +119,6 @@ class ChordRest : public DurationElement {
       void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
 
       void layoutArticulations();
-      virtual void toDefault();
 
       const TDuration& durationType() const      { return _durationType;        }
       void setDurationType(TDuration::DurationType t);

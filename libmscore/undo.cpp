@@ -584,15 +584,6 @@ void Score::undoChangeBarLineSpan(Staff* staff, int span)
       }
 
 //---------------------------------------------------------
-//   undoChangeUserOffset
-//---------------------------------------------------------
-
-void Score::undoChangeUserOffset(Element* e, const QPointF& offset)
-      {
-      undoChangeProperty(e, P_USER_OFF, offset);
-      }
-
-//---------------------------------------------------------
 //   undoChangeDynamic
 //---------------------------------------------------------
 

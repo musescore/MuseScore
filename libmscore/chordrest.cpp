@@ -858,21 +858,6 @@ void ChordRest::setBeam(Beam* b)
       }
 
 //---------------------------------------------------------
-//   toDefault
-//---------------------------------------------------------
-
-void ChordRest::toDefault()
-      {
-      score()->undoChangeUserOffset(this, QPointF());
-      if (type() == CHORD) {
-            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
-            score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
-            }
-      else
-            score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_NO));
-      }
-
-//---------------------------------------------------------
 //   setDurationType
 //---------------------------------------------------------
 

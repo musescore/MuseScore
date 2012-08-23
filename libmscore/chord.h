@@ -204,6 +204,7 @@ class Chord : public ChordRest {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual void toDefault();
       };
 
 #endif
