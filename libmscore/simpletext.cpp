@@ -120,8 +120,8 @@ int SimpleText::alignFlags() const
             flags |= Qt::AlignVCenter;
       else if (align & ALIGN_BOTTOM)
             flags |= Qt::AlignBottom;
-      else if (flags & ALIGN_BASELINE)
-            ;
+      else if (align & ALIGN_BASELINE)
+            flags |= Qt::AlignTop;
       else
             flags |= Qt::AlignTop;
       if (_layoutToParentWidth)
@@ -158,6 +158,9 @@ void SimpleText::layout()
             drawingRect = QRectF();
             setPos(o);
             }
+      Align align = textStyle().align();
+      if (align & ALIGN_BASELINE)
+            setPos(ipos().x(), ipos().y() - baseLine());
       QFontMetricsF fm(s.fontPx(spatium()));
       setbbox(fm.boundingRect(drawingRect, alignFlags(), _text));
       if (hasFrame())
