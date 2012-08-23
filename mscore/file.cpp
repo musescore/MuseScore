@@ -1086,8 +1086,7 @@ QString MuseScore::getFotoFilename()
       if (myImages.isRelative())
             myImages.setFile(QDir::home(), preferences.myImagesPath);
       QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
+      urls.append(QUrl::fromLocalFile(QDir::homePath()));
       urls.append(QUrl::fromLocalFile(myImages.absoluteFilePath()));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
