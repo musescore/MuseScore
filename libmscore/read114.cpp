@@ -356,7 +356,11 @@ bool Score::read114(const QDomElement& de)
 
 //      searchSelectedElements();
 
-      for(Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      //
+      // remove "middle beam" flags from first ChordRest in
+      // measure
+      //
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             int tracks = nstaves() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
@@ -441,6 +445,19 @@ bool Score::read114(const QDomElement& de)
       rebuildMidiMapping();
       updateChannel();
       updateNotes();    // only for parts needed?
+
+      doLayout();
+
+      for (Segment* s = firstSegment(); s; s = s->next1()) {
+            foreach(Element* e, s->annotations()) {
+                  if (e->type() == TEMPO_TEXT) {
+                        printf("=========Tempo\n");
+                        e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
+                           e->userOff().y()));
+                        }
+                  }
+            }
+
       return true;
       }
 
