@@ -453,8 +453,7 @@ bool Beam::twoBeamedNotes()
 void Beam::layout1()
       {
       //delete old segments
-      foreach(QLineF* i, beamSegments)
-            delete i;
+      qDeleteAll(beamSegments);
       beamSegments.clear();
 
       maxDuration.setType(TDuration::V_INVALID);
@@ -1728,7 +1727,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         qreal yo   = py1 + bl * _beamDist * _grow1;
                         qreal ly1  = (x2 - x1) * slope + yo;
                         qreal ly2  = (x3 - x1) * slope + yo;
-                        beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                        if (!qIsFinite(x2) || !qIsFinite(ly1)
+                           || !qIsFinite(x3) || !qIsFinite(ly2))
+                              qDebug("bad beam segment");
+                        else
+                              beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
                         --i;
                         }
                   }

@@ -354,7 +354,39 @@ bool Score::read114(const QDomElement& de)
       spanner.clear();
       connectTies();
 
-      searchSelectedElements();
+//      searchSelectedElements();
+
+      for(Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            int tracks = nstaves() * VOICES;
+            for (int track = 0; track < tracks; ++track) {
+                  for (Segment* s = m->first(); s; s = s->next()) {
+                        if (s->subtype() != Segment::SegChordRest)
+                              continue;
+                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                        if (cr) {
+                              switch(cr->beamMode()) {
+                                    case BEAM_AUTO:
+                                    case BEAM_BEGIN:
+                                    case BEAM_END:
+                                    case BEAM_NO:
+                                          break;
+                                    case BEAM_MID:
+                                    case BEAM_BEGIN32:
+                                    case BEAM_BEGIN64:
+                                          cr->setBeamMode(BEAM_BEGIN);
+                                          break;
+                                    case BEAM_INVALID:
+                                          if (cr->type() == CHORD)
+                                                cr->setBeamMode(BEAM_AUTO);
+                                          else
+                                                cr->setBeamMode(BEAM_NO);
+                                          break;
+                                    }
+                              break;
+                              }
+                        }
+                  }
+            }
 
       _fileDivision = MScore::division;
 

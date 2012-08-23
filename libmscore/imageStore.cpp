@@ -153,7 +153,8 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
                   if (item->path() == path)
                         return item;
                   }
-            qDebug("ImageStore::getImage(): bad base name <%s>", qPrintable(s));
+            qDebug("ImageStore::getImage(%s): bad base name <%s>",
+               qPrintable(path), qPrintable(s));
             return 0;
             }
       QByteArray hash(16, 0);
