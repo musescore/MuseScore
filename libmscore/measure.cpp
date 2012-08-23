@@ -123,8 +123,8 @@ Measure::Measure(Score* s)
             staves.push_back(s);
             }
 
-      _minWidth1             = 0.0;
-      _minWidth2             = 0.0;
+      _minWidthNoSysHdr      = 0.0;
+      _minWidthWSysHdr       = 0.0;
 
       _no                    = 0;
       _noOffset              = 0;
@@ -157,8 +157,8 @@ Measure::Measure(const Measure& m)
       foreach(MStaff* ms, m.staves)
             staves.append(new MStaff(*ms));
 
-      _minWidth1             = m._minWidth1;
-      _minWidth2             = m._minWidth2;
+      _minWidthNoSysHdr      = m._minWidthNoSysHdr;
+      _minWidthWSysHdr       = m._minWidthWSysHdr;
 
       _no                    = m._no;
       _noOffset              = m._noOffset;
@@ -2809,8 +2809,8 @@ void Space::max(const Space& s)
 
 void Measure::setDirty()
       {
-      _minWidth1 = 0.0;
-      _minWidth2 = 0.0;
+      _minWidthNoSysHdr = 0.0;
+      _minWidthWSysHdr = 0.0;
       }
 
 //---------------------------------------------------------
@@ -2822,17 +2822,21 @@ void Measure::setDirty()
 
 bool Measure::systemHeader() const
       {
-      Segment* s = first();
-      return s && (s->subtype() == Segment::SegClef) && s->element(0) && s->element(0)->generated();
+//      Segment* s = first();
+//      return s && (s->subtype() == Segment::SegClef) && s->element(0) && s->element(0)->generated();
+      // relying on clef segment may be wrong if staves are all TAB's, as TAB's can be clef-less;
+      // trying another way:
+      System * sys = system();
+      return sys && (sys->measures().first() == this);
       }
 
 //---------------------------------------------------------
-//   minWidth1
+//   minWidthNoSysHdr
 //---------------------------------------------------------
 
-qreal Measure::minWidth1() const
+qreal Measure::minWidthNoSysHdr() const
       {
-      if (_minWidth1 == 0.0) {
+      if (_minWidthNoSysHdr == 0.0) {
             Segment* s = first();
             if (s->subtype() == Segment::SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
                   s = s->next();
@@ -2841,20 +2845,20 @@ qreal Measure::minWidth1() const
                   if (s->subtype() == Segment::SegStartRepeatBarLine && s->next())
                         s = s->next();
                   }
-            _minWidth1 = score()->computeMinWidth(s);
+            _minWidthNoSysHdr = score()->computeMinWidth(s);
             }
-      return _minWidth1;
+      return _minWidthNoSysHdr;
       }
 
 //---------------------------------------------------------
-//   minWidth2
+//   minWidthWSysHdr
 //---------------------------------------------------------
 
-qreal Measure::minWidth2() const
+qreal Measure::minWidthWSysHdr() const
       {
-      if (_minWidth2 == 0.0)
-            _minWidth2 = score()->computeMinWidth(first());
-      return _minWidth2;
+      if (_minWidthWSysHdr == 0.0)
+            _minWidthWSysHdr = score()->computeMinWidth(first());
+      return _minWidthWSysHdr;
       }
 
 //-----------------------------------------------------------------------------
@@ -3224,7 +3228,7 @@ void Measure::layoutX(qreal stretch)
 
 void Measure::layoutStage1()
       {
-      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
+      (systemHeader() ? _minWidthWSysHdr : _minWidthNoSysHdr) = 0.0;
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             setBreakMMRest(false);
             if (score()->styleB(ST_createMultiMeasureRests)) {
@@ -3376,8 +3380,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
       m->_playbackCount         = _playbackCount;
       m->_endBarLineColor       = _endBarLineColor;
 
-      m->_minWidth1             = _minWidth1;
-      m->_minWidth2             = _minWidth2;
+      m->_minWidthNoSysHdr      = _minWidthNoSysHdr;
+      m->_minWidthWSysHdr       = _minWidthWSysHdr;
 
       m->setTick(tick());
       m->setLineBreak(lineBreak());

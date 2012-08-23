@@ -101,8 +101,8 @@ class Measure : public MeasureBase {
 
       qreal _userStretch;
 
-      mutable qreal _minWidth1;     ///< minimal measure width without system header
-      mutable qreal _minWidth2;     ///< minimal measure width with system header
+      mutable qreal _minWidthNoSysHdr;     ///< minimal measure width without system header
+      mutable qreal _minWidthWSysHdr;     ///< minimal measure width with system header
 
       bool _irregular;              ///< Irregular measure, do not count
       bool _breakMultiMeasureRest;  ///< set by user
@@ -168,10 +168,10 @@ class Measure : public MeasureBase {
       virtual qreal userDistanceUp(int i) const;
       virtual qreal userDistanceDown(int i) const;
 
-      qreal minWidth1() const;
-      qreal minWidth2() const;
-      void setMinWidth1(qreal w)           { _minWidth1 = w;      }
-      void setMinWidth2(qreal w)           { _minWidth2 = w;      }
+      qreal minWidthNoSysHdr() const;
+      qreal minWidthWSysHdr() const;
+      void setminWidthNoSysHdr(qreal w)    { _minWidthNoSysHdr = w; }
+      void setminWidthWSysHdr(qreal w)     { _minWidthWSysHdr = w;  }
       bool systemHeader() const;
       void setDirty();
 
