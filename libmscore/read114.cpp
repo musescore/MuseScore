@@ -28,6 +28,7 @@
 #include "text.h"
 #include "part.h"
 #include "sig.h"
+#include "box.h"
 
 //---------------------------------------------------------
 //   read114
@@ -391,6 +392,14 @@ bool Score::read114(const QDomElement& de)
                         }
                   }
             }
+      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+            if (mb->type() == VBOX) {
+                  Box* b  = static_cast<Box*>(mb);
+                  qreal y = point(styleS(ST_frameSystemDistance));
+                  y       += point(styleS(ST_staffUpperBorder));
+                  b->setBottomGap(y);
+                  }
+            }
 
       _fileDivision = MScore::division;
 
@@ -432,7 +441,7 @@ bool Score::read114(const QDomElement& de)
       foreach(const SyntiParameter& sp, _syntiState) {
             if (sp.name() == "soundfont") {
                   QFileInfo fi(sp.sval());
-                  if(fi.exists())
+                  if (fi.exists())
                         hasSoundfont = true;
                   }
             }
@@ -448,10 +457,13 @@ bool Score::read114(const QDomElement& de)
 
       doLayout();
 
+      //
+      // move some elements
+      //
       for (Segment* s = firstSegment(); s; s = s->next1()) {
-            foreach(Element* e, s->annotations()) {
+            foreach (Element* e, s->annotations()) {
                   if (e->type() == TEMPO_TEXT) {
-                        printf("=========Tempo\n");
+                        // reparent from measure to segment
                         e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
                            e->userOff().y()));
                         }
