@@ -691,9 +691,11 @@ bool Element::readProperties(const QDomElement& e)
             _readPos = QPointF();
             }
       else if (tag == "pos") {
-            qreal _spatium = spatium();
-            setUserOff(QPointF());
-            _readPos = readPoint(e) * _spatium;
+            if (type() != TEXT) {   // hack for 1.2
+                  qreal _spatium = spatium();
+                  setUserOff(QPointF());
+                  _readPos = readPoint(e) * _spatium;
+                  }
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + val.toInt());

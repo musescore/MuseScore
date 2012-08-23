@@ -1,0 +1,9 @@
+
+Compatibility with 1.2 scores
+
+- In 1.2 beams cannot span measures. "Begin Beam" markings are ignored.
+  In 2.0 the marking is honored.
+  Bug: the current implementation does not handle beams spanning pages.
+       The resulting layout is undefined.
+
+
