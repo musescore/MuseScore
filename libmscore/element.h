@@ -168,10 +168,10 @@ class Element : public QObject {
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
 
-      void* pColor()    { return &_color;    }
-      void* pSelected() { return &_selected; }
-      void* pVisible()  { return &_visible;  }
-      void* pUserOff()  { return &_userOff;  }
+//      void* pColor()    { return &_color;    }
+//      void* pSelected() { return &_selected; }
+//      void* pVisible()  { return &_visible;  }
+//      void* pUserOff()  { return &_userOff;  }
 
    protected:
 
