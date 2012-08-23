@@ -47,13 +47,13 @@ void HairpinSegment::layout()
             switch (subtype()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_BEGIN:
-                        l1 = QLineF(.0, .0, len, h1);
-                        l2 = QLineF(.0, .0, len, - h1);
+                        l1.setLine(.0, .0, len, h1);
+                        l2.setLine(.0, .0, len, - h1);
                         break;
                   case SEGMENT_MIDDLE:
                   case SEGMENT_END:
-                        l1 = QLineF(.0,  h2, len, h1);
-                        l2 = QLineF(.0, -h2, len, - h1);
+                        l1.setLine(.0,  h2, len, h1);
+                        l2.setLine(.0, -h2, len, - h1);
                         break;
                   }
             }
@@ -62,13 +62,13 @@ void HairpinSegment::layout()
             switch(subtype()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_END:
-                        l1 = QLineF(.0,  h1, len, 0.0);
-                        l2 = QLineF(.0, -h1, len, 0.0);
+                        l1.setLine(.0,  h1, len, 0.0);
+                        l2.setLine(.0, -h1, len, 0.0);
                         break;
                   case SEGMENT_BEGIN:
                   case SEGMENT_MIDDLE:
-                        l1 = QLineF(.0,  h1, len, + h2);
-                        l2 = QLineF(.0, -h1, len, - h2);
+                        l1.setLine(.0,  h1, len, + h2);
+                        l2.setLine(.0, -h1, len, - h2);
                         break;
                   }
             }
@@ -88,8 +88,8 @@ void HairpinSegment::draw(QPainter* painter) const
       {
       QPen pen(curColor(), point(score()->styleS(ST_hairpinWidth)));
       painter->setPen(pen);
-      painter->drawLine(QLineF(l1.x1(), l1.y1(), l1.x2(), l1.y2()));
-      painter->drawLine(QLineF(l2.x1(), l2.y1(), l2.x2(), l2.y2()));
+      painter->drawLine(l1);
+      painter->drawLine(l2);
       }
 
 //---------------------------------------------------------

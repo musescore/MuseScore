@@ -29,6 +29,7 @@
 #include "part.h"
 #include "sig.h"
 #include "box.h"
+#include "dynamic.h"
 
 //---------------------------------------------------------
 //   read114
@@ -466,6 +467,16 @@ bool Score::read114(const QDomElement& de)
                         // reparent from measure to segment
                         e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
                            e->userOff().y()));
+                        }
+                  else if (e->type() == DYNAMIC) {
+                        // reparent from measure to segment
+                        Dynamic* d = static_cast<Dynamic*>(e);
+                        qreal dy   = d->height() - d->baseLine();
+                        e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
+                           e->userOff().y() + dy));
+
+                        // printf("Dynamic h %f  bl %f  d %f\n",
+                        //      d->height(), d->baseLine(), dy);
                         }
                   }
             }

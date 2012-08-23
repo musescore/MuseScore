@@ -303,7 +303,7 @@ void InspectorElementElement::apply()
             score->startCmd();
             QPointF o(offsetX->value() * _spatium, offsetY->value() * _spatium);
             if (o != e->pos())
-                  score->undoChangeUserOffset(e, o - e->ipos());
+                  score->undoChangeProperty(e, P_USER_OFF, o - e->ipos());
             if (e->color() != color->color())
                   score->undoChangeProperty(e, P_COLOR, color->color());
             if (e->visible() != visible->isChecked())
@@ -462,7 +462,7 @@ void InspectorArticulation::apply()
 
       score->startCmd();
       if (o != a->pos())
-            score->undoChangeUserOffset(a, o - a->ipos());
+            score->undoChangeProperty(a, P_USER_OFF, o - a->ipos());
       if (anchor != a->anchor())
             score->undoChangeProperty(a, P_ARTICULATION_ANCHOR, int(anchor));
       if (d != a->direction())

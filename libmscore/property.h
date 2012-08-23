@@ -33,6 +33,7 @@ enum P_ID {
       P_TPC,
       P_HEAD_TYPE,
       P_HEAD_GROUP,
+
       P_VELO_TYPE,
       P_VELO_OFFSET,
       P_ARTICULATION_ANCHOR,
@@ -43,6 +44,7 @@ enum P_ID {
       P_LEADING_SPACE,
       P_TRAILING_SPACE,
       P_DISTRIBUTE,
+
       P_MIRROR_HEAD,
       P_DOT_POSITION,
       P_ONTIME_OFFSET,
@@ -53,6 +55,7 @@ enum P_ID {
       P_USER_OFF,
       P_FRET,
       P_STRING,
+
       P_GHOST,
       P_TIMESIG_NOMINAL,
       P_TIMESIG_ACTUAL,
@@ -63,6 +66,7 @@ enum P_ID {
       P_P1,
       P_P2,
       P_GROW_LEFT,
+
       P_GROW_RIGHT,
       P_BOX_HEIGHT,
       P_BOX_WIDTH,
@@ -73,6 +77,7 @@ enum P_ID {
       P_TOP_MARGIN,
       P_BOTTOM_MARGIN,
       P_LAYOUT_BREAK,
+
       P_AUTOSCALE,
       P_SIZE,
       P_SCALE,
@@ -83,6 +88,7 @@ enum P_ID {
       P_BEAM_POS,
       P_BEAM_MODE,
       P_USER_LEN,       // used for stems
+
       P_SPACE,          // used for spacer
       P_TEMPO,
       P_TEMPO_FOLLOW_TEXT,

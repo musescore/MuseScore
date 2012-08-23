@@ -950,7 +950,7 @@ void SlurTie::undoSetSlurDirection(MScore::Direction d)
 
 void SlurTie::toDefault()
       {
-      score()->undoChangeUserOffset(this, QPointF());
+      score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -988,7 +988,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
 
 void SlurSegment::toDefault()
       {
-      score()->undoChangeUserOffset(this, QPointF());
+      score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undo(new ChangeSlurOffsets(this, QPointF(), QPointF(), QPointF(), QPointF()));
       for (int i = 0; i < SLUR_GRIPS; ++i)
             ups[i].off = QPointF();

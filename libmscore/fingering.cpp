@@ -68,5 +68,5 @@ void Fingering::toDefault()
       score()->layoutFingering(this);
       QPointF no(userOff());
       setUserOff(o);
-      score()->undoChangeUserOffset(this, no);
+      score()->undoChangeProperty(this, P_USER_OFF, no);
       }

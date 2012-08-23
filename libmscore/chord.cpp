@@ -1963,3 +1963,16 @@ QPointF Chord::layoutArticulation(Articulation* a)
       a->adjustReadPos();
       return QPointF(x, y);
       }
+
+//---------------------------------------------------------
+//   toDefault
+//---------------------------------------------------------
+
+void Chord::toDefault()
+      {
+      score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
+      score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
+      ChordRest::toDefault();
+      }
+
+

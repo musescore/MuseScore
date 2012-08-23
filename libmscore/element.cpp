@@ -409,7 +409,7 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::toDefault()
       {
       if (!_userOff.isNull())
-            score()->undoChangeUserOffset(this, QPointF());
+            score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -886,6 +886,10 @@ void StaffLines::draw(QPainter* painter) const
             y = _pos.y() + (lines+1) * dist;
             painter->drawLine(QLineF(x1, y, x2, y));
             y = _pos.y() + (lines+2) * dist;
+            painter->drawLine(QLineF(x1, y, x2, y));
+            y = _pos.y() + (lines+3) * dist;
+            painter->drawLine(QLineF(x1, y, x2, y));
+            y = _pos.y() + (lines+4) * dist;
             painter->drawLine(QLineF(x1, y, x2, y));
             }
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
@@ -1562,7 +1566,6 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             }
       setGenerated(false);
       score()->addRefresh(canvasBoundingRect());
-      qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
       return true;
       }
 
