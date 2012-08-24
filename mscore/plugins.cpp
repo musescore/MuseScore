@@ -171,6 +171,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
+            qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
             qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
