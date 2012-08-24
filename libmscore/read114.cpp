@@ -396,8 +396,7 @@ bool Score::read114(const QDomElement& de)
       for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
             if (mb->type() == VBOX) {
                   Box* b  = static_cast<Box*>(mb);
-                  qreal y = point(styleS(ST_frameSystemDistance));
-                  y       += point(styleS(ST_staffUpperBorder));
+                  qreal y = point(styleS(ST_staffUpperBorder));
                   b->setBottomGap(y);
                   }
             }

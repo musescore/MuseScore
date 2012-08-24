@@ -58,6 +58,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/notedot.h"
 #include "libmscore/spacer.h"
+#include "libmscore/box.h"
 
 extern bool useFactorySettings;
 
@@ -554,6 +555,11 @@ void Debugger::updateElement(Element* el)
                   case ACCIDENTAL:    ew = new AccidentalView;    break;
                   case ARTICULATION:  ew = new ArticulationView;  break;
                   case STEM:          ew = new StemView;          break;
+                  case VBOX:
+                  case HBOX:
+                  case FBOX:
+                  case TBOX:          ew = new BoxView;           break;
+
                   case FINGERING:
                   case MARKER:
                   case JUMP:
@@ -2453,5 +2459,37 @@ void StemView::setElement(Element* e)
 
       stem.len->setValue(s->stemLen() - s->userLen());
       stem.userLen->setValue(s->userLen());
+      }
+
+//---------------------------------------------------------
+//   BoxView
+//---------------------------------------------------------
+
+BoxView::BoxView()
+   : ShowElementBase()
+      {
+      QWidget* w = new QWidget;
+      box.setupUi(w);
+      layout->addWidget(w);
+      layout->addStretch(10);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void BoxView::setElement(Element* e)
+      {
+      Box* b = static_cast<Box*>(e);
+      ShowElementBase::setElement(e);
+
+      box.width->setValue(b->boxWidth().val());
+      box.height->setValue(b->boxHeight().val());
+      box.topGap->setValue(b->topGap());
+      box.bottomGap->setValue(b->bottomGap());
+      box.topMargin->setValue(b->topMargin());
+      box.bottomMargin->setValue(b->bottomMargin());
+      box.leftMargin->setValue(b->leftMargin());
+      box.rightMargin->setValue(b->rightMargin());
       }
 

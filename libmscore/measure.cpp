@@ -3224,7 +3224,9 @@ void Measure::layoutX(qreal stretch)
 
 void Measure::layoutStage1()
       {
-      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
+//      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
+      setDirty();
+
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             setBreakMMRest(false);
             if (score()->styleB(ST_createMultiMeasureRests)) {

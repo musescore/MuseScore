@@ -50,6 +50,7 @@
 #include "ui_keysig.h"
 #include "ui_rest.h"
 #include "ui_stem.h"
+#include "ui_box.h"
 
 #include "globals.h"
 #include "libmscore/mscore.h"
@@ -650,6 +651,20 @@ class StemView : public ShowElementBase {
 
    public:
       StemView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   BoxView
+//---------------------------------------------------------
+
+class BoxView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::BoxBase box;
+
+   public:
+      BoxView();
       virtual void setElement(Element*);
       };
 
