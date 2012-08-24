@@ -1566,24 +1566,35 @@ void Note::updateAccidental(AccidentalState* as)
                   case ACC_NATURAL:
                   case ACC_SHARP:
                   case ACC_SHARP2:
-                        if (_tpc<6)
+                        if (_tpc < 6)
                               newUserAcc = ACC_FLAT2;
-                        else if (_tpc<13)
+                        else if (_tpc < 13)
                               newUserAcc = ACC_FLAT;
-                        else if (_tpc<20)
+                        else if (_tpc < 20)
                               newUserAcc = ACC_NATURAL;
-                        else if (_tpc<27)
+                        else if (_tpc < 27)
                               newUserAcc = ACC_SHARP;
                         else
                               newUserAcc = ACC_SHARP2;
+                        
+                        if (_accidental->subtype() != newUserAcc)
+                              acci = ACC_NONE; // don't use this any more
+                        else {
+                              acci = newUserAcc; // keep it
+                              // if the key signature is changed:
+                              AccidentalVal accVal = tpc2alter(_tpc);
+                              if ((accVal != as->accidentalVal(int(_line)))
+                                  || hidden() || as->tieContext(int(_line)))
+                                    as->setAccidentalVal(int(_line), 
+                                                         accVal, _tieBack != 0);
+                              }
                         break;
                   default:
                         // keep it
-                        newUserAcc = _accidental->subtype();
+                        acci = _accidental->subtype();
                   }
-            acci = newUserAcc;
             }
-      else  {
+      if (acci == ACC_NONE)  {
             AccidentalVal accVal = tpc2alter(_tpc);
             if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                   as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
