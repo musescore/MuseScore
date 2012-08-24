@@ -62,7 +62,7 @@ class Accidental : public Element {
       AccidentalRole _role;
 
    public:
-      Accidental(Score* s);
+      Accidental(Score* s = 0);
       virtual Accidental* clone() const     { return new Accidental(*this); }
       virtual ElementType type() const      { return ACCIDENTAL; }
 
