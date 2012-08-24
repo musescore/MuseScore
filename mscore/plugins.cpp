@@ -45,6 +45,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/notedot.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/accidental.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
