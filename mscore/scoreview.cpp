@@ -4891,6 +4891,15 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             }
       Position pos;
       pos.segment   = is.segment();
+      
+      if(addFlag) {
+            Element* el = score()->selection().element();
+            if (el && el->type() == NOTE) {
+                 ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
+                 if (cr) pos.segment = cr->segment();
+                 }
+            } 
+      
       pos.staffIdx  = is.track() / VOICES;
       ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(octave * 7 + note, clef);
