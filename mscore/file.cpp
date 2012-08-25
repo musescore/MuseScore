@@ -454,10 +454,10 @@ void MuseScore::newFile()
                         m->setIrregular(true);        // dont count pickup measure
                         m->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
-                  else if (i == (measures - 1)) {
+                  /*else if (i == (measures - 1)) {
                         // last measure is shorter
                         m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
-                        }
+                        }*/
                   }
             m->setEndBarLineType(i == (measures - 1) ? END_BAR : NORMAL_BAR, false);
             }
