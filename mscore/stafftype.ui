@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>606</height>
+    <height>670</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -431,13 +431,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QFontComboBox" name="fretFontName">
-                     <property name="currentFont">
-                      <font>
-                       <family>MS Shell Dlg 2</family>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QComboBox" name="fretFontName"/>
                    </item>
                    <item>
                     <widget class="QLabel" name="fretFontSizeLabel">
@@ -718,7 +712,19 @@
                     <item>
                      <widget class="QRadioButton" name="noteValues2">
                       <property name="text">
-                       <string>Stems and beams</string>
+                       <string>Stems and beams
+(above)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="noteValues3">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="text">
+                       <string>Stems and beams
+(below)</string>
                       </property>
                      </widget>
                     </item>
@@ -735,7 +741,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QFontComboBox" name="durFontName"/>
+                    <widget class="QComboBox" name="durFontName"/>
                    </item>
                    <item>
                     <widget class="QLabel" name="durFontSizeLabel">
@@ -786,9 +792,6 @@
                </widget>
               </item>
              </layout>
-             <zorder>upsideDown</zorder>
-             <zorder>upsideDown</zorder>
-             <zorder>fretMarksGroup</zorder>
              <zorder></zorder>
              <zorder>fretMarksGroup</zorder>
              <zorder>durationsGroup</zorder>
@@ -982,10 +985,18 @@
   <tabstop>name</tabstop>
   <tabstop>lines</tabstop>
   <tabstop>lineDistance</tabstop>
+  <tabstop>genClef</tabstop>
+  <tabstop>genTimesig</tabstop>
+  <tabstop>showBarlines</tabstop>
+  <tabstop>showLedgerLinesPitched</tabstop>
+  <tabstop>genKeysigPitched</tabstop>
+  <tabstop>stemlessPitched</tabstop>
   <tabstop>newTypePitched</tabstop>
   <tabstop>presetTablatureCombo</tabstop>
   <tabstop>presetTablature</tabstop>
+  <tabstop>pushFullConfig</tabstop>
   <tabstop>upsideDown</tabstop>
+  <tabstop>pushQuickConfig</tabstop>
   <tabstop>fretFontName</tabstop>
   <tabstop>fretFontSize</tabstop>
   <tabstop>fretY</tabstop>
@@ -998,10 +1009,14 @@
   <tabstop>noteValues0</tabstop>
   <tabstop>noteValues1</tabstop>
   <tabstop>noteValues2</tabstop>
+  <tabstop>noteValues3</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
   <tabstop>newTypeTablature</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
+  <tabstop>genKeysigPercussion</tabstop>
+  <tabstop>stemlessPercussion</tabstop>
   <tabstop>newTypePercussion</tabstop>
   <tabstop>save</tabstop>
   <tabstop>load</tabstop>

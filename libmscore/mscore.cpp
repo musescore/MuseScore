@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "sequencer.h"
 #include "figuredbass.h"
+#include "stafftype.h"
 #include "note.h"
 
 qreal MScore::PDPI = 1200;
@@ -132,10 +133,11 @@ void MScore::init()
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
             "gonville-20.otf",
-            "mscore_tab_baroque.ttf",
-            "mscore_tab_modern.ttf",
-            "mscore_tab_renaiss.ttf",
-            "mscore_tab_renaiss2.ttf",
+//            "mscore_tab_baroque.ttf",
+//            "mscore_tab_modern.ttf",
+//            "mscore_tab_renaiss.ttf",
+//            "mscore_tab_renaiss2.ttf",
+            "mscoreTab.ttf",
 //            "FiguredBassMHGPL.otf",
             "mscore-BC.ttf"
             };
@@ -149,6 +151,7 @@ void MScore::init()
                   }
             }
 #endif
+      StaffTypeTablature::readConfigFile(0);          // get TAB font config, before initStaffTypes()
       initSymbols(0);   // init emmentaler symbols
       initStaffTypes();
       initDrumset();
