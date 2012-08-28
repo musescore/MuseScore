@@ -27,12 +27,13 @@ class Segment;
 //---------------------------------------------------------
 
 class InputState {
-      TDuration _duration;    // currently duration
-      int _drumNote;
-      Drumset* _drumset;
-      int _track;
-      Segment* _segment;      // current segment
-      bool _repitchMode;
+      TDuration   _duration;        // currently duration
+      int         _drumNote;
+      Drumset*    _drumset;
+      int         _track;
+      Segment*    _segment;         // current segment
+      int         _string;          // visual string selected for input (TAB staves only)
+      bool        _repitchMode;
 
    public:
       bool rest;              // rest mode
@@ -62,6 +63,9 @@ class InputState {
       int voice() const                   { return _track % VOICES; }
       int track() const                   { return _track;          }
       void setTrack(int v);
+
+      int string() const                  { return _string;             }
+      void setString(int val)             { _string = val;              }
 
       bool repitchMode() const            { return _repitchMode;    }
       void setRepitchMode(bool val)       { _repitchMode = val;     }

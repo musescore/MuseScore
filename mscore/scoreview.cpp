@@ -1600,11 +1600,22 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       else {
             Staff* staff    = _score->staff(staffIdx);
-            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
+//            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
+            double lineDist = staff->staffType()->lineDistance().val() * _spatium;
             int lines       = staff->lines();
-            h               = (lines - 1) * lineDist + 4 * _spatium;
+            int strg        = _score->inputState().string();
             x              -= _spatium;
-            y              -= 2.0 * _spatium;
+            // if on a TAB staff and InputState::_string makes sense,
+            // draw cursor around single string
+            if(staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
+                  h         = lineDist * 1.5;         // 1 space above strg for letters and 1/2 sp. below strg for numbers
+                  y        += lineDist * (strg-1);    // star 1 sp. above strg to include letter position
+                  }
+            // otherwise, draw cursor across whole staff
+            else {
+                  h         = (lines - 1) * lineDist + 4 * _spatium;
+                  y        -= 2.0 * _spatium;
+                  }
             }
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
@@ -2931,6 +2942,20 @@ void ScoreView::cmd(const QAction* a)
             _score->endCmd();
             mscore->endCmd();
             }
+      else if(cmd == "string-above") {
+            int   strg = _score->inputState().string();
+            if(strg > 0)
+                  _score->inputState().setString(strg-1);
+            }
+      else if(cmd == "string-below") {
+            InputState  is          = _score->inputState();
+            int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
+            int         strg        = is.string();
+            //part(is.track() / VOICES)->instr(is.tick())->tablature();
+            if(strg < maxStrg)
+//                  is.setString(strg+1);
+                  _score->inputState().setString(strg+1);
+            }
       else
             _score->cmd(a);
       _score->processMidiInput();
@@ -2984,8 +3009,8 @@ void ScoreView::startNoteEntry()
       mscore->enableInputToolbar(enable);
 
       _score->inputState().noteEntryMode = true;
-      _score->moveCursor();
-      setCursorOn(true);
+//      _score->moveCursor();
+//      setCursorOn(true);
       _score->inputState().rest = false;
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
@@ -3001,12 +3026,24 @@ void ScoreView::startNoteEntry()
                   mscore->changeState(STATE_NOTE_ENTRY_PITCHED);
                   break;
             case TAB_STAFF:
+            {
                   mscore->changeState(STATE_NOTE_ENTRY_TAB);
+                  // if entering note entry with a note selected and the note has a string
+                  // set InputState::_string to note visual string
+                  Note* note = static_cast<Note*>(el);
+                  int   strg = note->string();
+                  strg = (static_cast<StaffTypeTablature*>(staff->staffType()))->physStringToVisual(strg);
+                  _score->inputState().setString(strg);
                   break;
+            }
             case PERCUSSION_STAFF:
                   mscore->changeState(STATE_NOTE_ENTRY_DRUM);
                   break;
             }
+
+      // set cursor after setting the stafftype-dependent state
+      _score->moveCursor();
+      setCursorOn(true);
       }
 
 //---------------------------------------------------------
