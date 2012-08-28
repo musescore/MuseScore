@@ -631,7 +631,7 @@ void StaffTypeTablature::setFretFontSize(qreal val)
 //    construct the text string for a given fret / duration
 //---------------------------------------------------------
 
-QString StaffTypeTablature::fretString(int fret, bool ghost)
+QString StaffTypeTablature::fretString(int fret, bool ghost) const
       {
       QString s = ghost ? _fretFonts[_fretFontIdx].ghostChar :
             ( _useNumbers ?   _fretFonts[_fretFontIdx].displayDigit[fret] :
@@ -640,12 +640,38 @@ QString StaffTypeTablature::fretString(int fret, bool ghost)
       return s;
       }
 
-QString StaffTypeTablature::durationString(TDuration::DurationType type, int dots)
+QString StaffTypeTablature::durationString(TDuration::DurationType type, int dots) const
 {
       QString s = _durationFonts[_durationFontIdx].displayValue[type];
       for(int count=0; count < dots; count++)
             s.append(_durationFonts[_durationFontIdx].displayDot);
       return s;
+}
+
+//---------------------------------------------------------
+//   physStringToVisual / VisualStringToPhys
+//
+//    returns the string ordinal in visual order (top to down) from a string ordinal in physical order
+//    or viceversa: manage upsideDown
+//
+//    (The 2 functions are at the moment almost identical; support for unfrettted strings will
+//    introduce more differences)
+//---------------------------------------------------------
+
+int StaffTypeTablature::physStringToVisual(int strg) const
+{
+      if(strg <= STRING_NONE)       // if no physical string, return topmost visual string
+            return 0;
+      // if TAB upside down, reverse string number
+      return (_upsideDown ? _lines - 1 - strg : strg);
+}
+
+int StaffTypeTablature::VisualStringToPhys(int strg) const
+{
+      if(strg <= VISUAL_STRING_NONE) // if no visual string, return topmost physical string
+            return 0;
+      // if TAB upside down, reverse string number
+      return (_upsideDown ? _lines - 1 - strg : strg);
 }
 
 //---------------------------------------------------------

@@ -1267,7 +1267,8 @@ void Chord::layout()
             qreal lineDist = tab->lineDistance().val();
             foreach(Note* note, _notes) {
                   note->layout();
-                  note->setPos(0.0, _spatium * (tab->upsideDown() ? tab->lines()-note->string()-1 : note->string()) * lineDist);
+//                  note->setPos(0.0, _spatium * (tab->upsideDown() ? tab->lines()-note->string()-1 : note->string()) * lineDist);
+                  note->setPos(0.0, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
             // if tab type is stemless or duration longer than crochet

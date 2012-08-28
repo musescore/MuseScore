@@ -675,10 +675,10 @@ void Score::putNote(const Position& p, bool replace)
                         return;
                   Tablature* neck = instr->tablature();
                   StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
-                  // if tablature is upside down, 'flip' string number
-                  int string = tab->upsideDown() ? (tab->lines() - line - 1) : line;
+                  int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
+                  _is.setString(line);
                   // check the chord does not already contains a note on the same string
                   ChordRest* cr = _is.cr();
                   if(cr != 0 && cr->type() == CHORD)
