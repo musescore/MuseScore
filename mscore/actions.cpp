@@ -2096,84 +2096,84 @@ Shortcut Shortcut::sc[] = {
          0,
          "string-above",
          QT_TRANSLATE_NOOP("action","String above (TAB)"),
-         QT_TRANSLATE_NOOP("action","Move note entry cursor to string above (TAB only)")
+         QT_TRANSLATE_NOOP("action","Select string above (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "string-below",
          QT_TRANSLATE_NOOP("action","String below (TAB)"),
-         QT_TRANSLATE_NOOP("action","Move note entry cursor to string below (TAB only)")
+         QT_TRANSLATE_NOOP("action","Select string below (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-0",
          QT_TRANSLATE_NOOP("action","Fret 0 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 0 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 0 on current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-1",
          QT_TRANSLATE_NOOP("action","Fret 1 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 1 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 1 on current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-2",
          QT_TRANSLATE_NOOP("action","Fret 2 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 2 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 2 on current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-3",
          QT_TRANSLATE_NOOP("action","Fret 3 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 3 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 3 on current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-4",
          QT_TRANSLATE_NOOP("action","Fret 4 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 4 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 4 of current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-5",
          QT_TRANSLATE_NOOP("action","Fret 5 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 5 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 5 of current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-6",
          QT_TRANSLATE_NOOP("action","Fret 6 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 6 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 6 of current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-7",
          QT_TRANSLATE_NOOP("action","Fret 7 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 7 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 7 of current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-8",
          QT_TRANSLATE_NOOP("action","Fret 8 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 8 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 8 of current string (TAB only)")
          ),
       Shortcut(
          /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
          0,
          "fret-9",
          QT_TRANSLATE_NOOP("action","Fret 9 (TAB)"),
-         QT_TRANSLATE_NOOP("action","Add a note on fret 9 of current string (TAB only)")
+         QT_TRANSLATE_NOOP("action","Add fret 9 of current string (TAB only)")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

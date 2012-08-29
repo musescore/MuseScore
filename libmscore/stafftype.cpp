@@ -660,7 +660,7 @@ QString StaffTypeTablature::durationString(TDuration::DurationType type, int dot
 
 int StaffTypeTablature::physStringToVisual(int strg) const
 {
-      if(strg <= STRING_NONE)       // if no physical string, return topmost visual string
+      if(strg <= STRING_NONE || strg >= _lines)             // if no physical string, return topmost visual string
             return 0;
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
@@ -668,7 +668,7 @@ int StaffTypeTablature::physStringToVisual(int strg) const
 
 int StaffTypeTablature::VisualStringToPhys(int strg) const
 {
-      if(strg <= VISUAL_STRING_NONE) // if no visual string, return topmost physical string
+      if(strg <= VISUAL_STRING_NONE || strg >= _lines)      // if no visual string, return topmost physical string
             return 0;
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
