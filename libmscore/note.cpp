@@ -102,8 +102,8 @@ NoteVal::NoteVal()
       {
       pitch     = -1;
       tpc       = INVALID_TPC,
-      fret      = -1;
-      string    = -1;
+      fret      = FRET_NONE;
+      string    = STRING_NONE;
       headGroup = 0;
       }
 

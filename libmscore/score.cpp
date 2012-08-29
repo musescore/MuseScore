@@ -1194,6 +1194,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       if (measure == 0)
             return false;
 
+      pos->fret = FRET_NONE;
       //
       //    search staff
       //
