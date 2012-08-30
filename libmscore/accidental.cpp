@@ -288,6 +288,8 @@ void Accidental::layout()
             }
 
       qreal m = magS();
+      if (_small)
+            m *= score()->styleD(ST_smallNoteMag);
       QPointF pos;
       if (_hasBracket) {
             SymElement e(leftparenSym, 0.0);
