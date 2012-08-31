@@ -1518,8 +1518,6 @@ void PreferenceDialog::selectSoundFont()
       QStringList s = mscore->getSoundFont(soundFont->text());
       if(s.size() > 0)
             soundFont->setText(s.front());
-      else
-            soundFont->setText(QString());
       }
 
 //---------------------------------------------------------
