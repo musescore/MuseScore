@@ -79,6 +79,7 @@
 #include "plugins.h"
 #include "helpBrowser.h"
 #include "drumtools.h"
+#include "editstafftype.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -748,8 +749,11 @@ MuseScore::MuseScore()
       menuVoices->addAction(getAction("voice-x24"));
       menuVoices->addAction(getAction("voice-x34"));
       menuEdit->addMenu(menuVoices);
-
       menuEdit->addSeparator();
+
+      menuEdit->addAction(getAction("staff-types"));
+      menuEdit->addSeparator();
+
       menuEdit->addAction(getAction("debugger"));
       menuEdit->addSeparator();
 
@@ -2447,6 +2451,7 @@ int main(int argc, char* av[])
       mscore->setUnifiedTitleAndToolBarOnMac(false);
 #endif
 
+      mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
 
       if (sc)
@@ -4391,6 +4396,18 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         cs->setLayoutMode(LayoutPage);
                         viewModeCombo->setCurrentIndex(0);
                         }
+                  }
+            }
+      else if(cmd == "staff-types") {
+            Staff * staff = cs->staff(0);
+            EditStaffType* est = new EditStaffType(this, staff);
+            if (est->exec() && est->isModified()) {
+                  Score* score = cs;
+                  score->startCmd();
+                  QList<StaffType*> tl = est->getStaffTypes();
+                  score->replaceStaffTypes(tl);
+                  score->setLayoutAll(true);
+                  score->endCmd();
                   }
             }
       else {
