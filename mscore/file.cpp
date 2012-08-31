@@ -296,7 +296,15 @@ void MuseScore::saveFile()
             QString f1 = tr("Compressed MuseScore File (*.mscz)");
             QString f2 = tr("MuseScore File (*.mscx)");
 
-            QString fname   = name + ".mscz";
+            QSettings settings;
+            if (mscore->lastSaveDirectory.isEmpty())
+                  mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
+            QString saveDirectory = mscore->lastSaveDirectory;
+
+            if (saveDirectory.isEmpty())
+                  saveDirectory = preferences.myScoresPath;
+
+            QString fname   = QString("%1/%2.mscz").arg(saveDirectory).arg(name);
             QString filter = f1 + ";;" + f2;
             fn = mscore->getSaveScoreName(
                tr("MuseScore: Save Score"),
@@ -307,6 +315,9 @@ void MuseScore::saveFile()
             if (fn.isEmpty())
                   return;
             cs->fileInfo()->setFile(fn);
+            
+            mscore->lastSaveDirectory = cs->fileInfo()->absolutePath();
+            
             updateRecentScores(cs);
             cs->setCreated(false);
             writeSessionFile(false);
@@ -671,7 +682,12 @@ QString MuseScore::getSaveScoreName(const QString& title,
 
 QString MuseScore::getSaveScoreName(const QString& title,
    QString& name, const QString& filter, QString* selectedFilter, bool selectFolder)
-      {
+      {      
+      QFileInfo myName(name);
+      if (myName.isRelative())
+            myName.setFile(QDir::home(), name);
+      name = myName.absoluteFilePath();
+
       if (preferences.nativeDialogs) {
           if (!selectFolder) {
                 QString fn = QFileDialog::getSaveFileName(this,
@@ -755,34 +771,35 @@ void MuseScore::saveScoreDialogFilterSelected(const QString& s)
 
 QString MuseScore::getStyleFilename(bool open, const QString& title)
       {
-      QString currentPath = QDir::currentPath();
+      QFileInfo myStyles(preferences.myStylesPath);
+      if (myStyles.isRelative())
+            myStyles.setFile(QDir::home(), preferences.myStylesPath);
+      QString defaultPath = myStyles.absoluteFilePath();
+      
       if (preferences.nativeDialogs) {
             QString fn;
             if (open) {
                   fn = QFileDialog::getOpenFileName(
                      this, tr("MuseScore: Load Style"),
-                     currentPath,
+                     defaultPath,
                      tr("MuseScore Styles (*.mss);;" "All Files (*)")
                      );
                   }
             else {
                   fn = QFileDialog::getSaveFileName(
                      this, tr("MuseScore: Save Style"),
-                     currentPath,
+                     defaultPath,
                      tr("MuseScore Style File (*.mss)")
                      );
                   }
             return fn;
             }
 
-      QFileInfo myStyles(preferences.myStylesPath);
-      if (myStyles.isRelative())
-            myStyles.setFile(QDir::home(), preferences.myStylesPath);
       QFileDialog* dialog;
       QList<QUrl> urls;
       QString home = QDir::homePath();
       urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myStyles.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
       if (open) {
@@ -792,7 +809,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
                   loadStyleDialog->setOption(QFileDialog::DontUseNativeDialog, true);
                   loadStyleDialog->setWindowTitle(title.isEmpty() ? tr("MuseScore: Load Style") : title);
                   loadStyleDialog->setNameFilter(tr("MuseScore Style File (*.mss)"));
-                  loadStyleDialog->setDirectory(currentPath);
+                  loadStyleDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   loadStyleDialog->restoreState(settings.value("loadStyleDialog").toByteArray());
@@ -810,7 +827,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
                   saveStyleDialog->setOption(QFileDialog::DontUseNativeDialog, true);
                   saveStyleDialog->setWindowTitle(title.isEmpty() ? tr("MuseScore: Save Style") : title);
                   saveStyleDialog->setNameFilter(tr("MuseScore Style File (*.mss)"));
-                  saveStyleDialog->setDirectory(currentPath);
+                  saveStyleDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   saveStyleDialog->restoreState(settings.value("saveStyleDialog").toByteArray());
@@ -836,11 +853,17 @@ QStringList MuseScore::getSoundFont(const QString& d)
       {
       QString filter = tr("SoundFont Files (*.sf2 *.SF2);;All (*)");
 
+      QFileInfo mySoundFonts(preferences.mySoundFontsPath);
+      if (mySoundFonts.isRelative())
+            mySoundFonts.setFile(QDir::home(), preferences.mySoundFontsPath);
+
+      QString defaultPath = d.isEmpty() ? mySoundFonts.absoluteFilePath() : d;
+
       if (preferences.nativeDialogs) {
              QStringList s = QFileDialog::getOpenFileNames(
                mscore,
                MuseScore::tr("Choose Synthesizer SoundFont"),
-               d,
+               defaultPath,
                filter
                );
             return s;
@@ -852,7 +875,7 @@ QStringList MuseScore::getSoundFont(const QString& d)
             loadSoundFontDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadSoundFontDialog->setWindowTitle(tr("MuseScore: Choose Synthesizer SoundFont"));
             loadSoundFontDialog->setNameFilter(filter);
-            loadSoundFontDialog->setDirectory(d);
+            loadSoundFontDialog->setDirectory(defaultPath);
 
             QSettings settings;
             loadSoundFontDialog->restoreState(settings.value("loadSoundFontDialog").toByteArray());
@@ -862,10 +885,6 @@ QStringList MuseScore::getSoundFont(const QString& d)
       //
       // setup side bar urls
       //
-      QFileInfo mySoundFonts(preferences.mySoundFontsPath);
-      if (mySoundFonts.isRelative())
-            mySoundFonts.setFile(QDir::home(), preferences.mySoundFontsPath);
-
       QList<QUrl> urls;
       QString home = QDir::homePath();
       urls.append(QUrl::fromLocalFile(home));
@@ -890,35 +909,36 @@ QString MuseScore::getChordStyleFilename(bool open)
       QString filter = tr("MuseScore Chord Style File (*.xml)");
       if (open)
             filter.append(tr(";;All Files (*)"));
-
-      QString currentPath = QDir::currentPath();
+            
+      QFileInfo myStyles(preferences.myStylesPath);
+      if (myStyles.isRelative())
+            myStyles.setFile(QDir::home(), preferences.myStylesPath);
+      QString defaultPath = myStyles.absoluteFilePath();
+      
       if (preferences.nativeDialogs) {
             QString fn;
             if (open) {
                   fn = QFileDialog::getOpenFileName(
                      this, tr("MuseScore: Load Chord Style"),
-                     QString(currentPath),
+                     defaultPath,
                      filter
                      );
                   }
             else {
                   fn = QFileDialog::getSaveFileName(
                      this, tr("MuseScore: Save Chord Style"),
-                     QString(currentPath),
+                     defaultPath,
                      filter
                      );
                   }
             return fn;
             }
 
-      QFileInfo myStyles(preferences.myStylesPath);
-      if (myStyles.isRelative())
-            myStyles.setFile(QDir::home(), preferences.myStylesPath);
       QFileDialog* dialog;
       QList<QUrl> urls;
       QString home = QDir::homePath();
       urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myStyles.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
       QSettings settings;
@@ -929,7 +949,7 @@ QString MuseScore::getChordStyleFilename(bool open)
                   loadChordStyleDialog->setOption(QFileDialog::DontUseNativeDialog, true);
                   loadChordStyleDialog->setWindowTitle(tr("MuseScore: Load Chord Style"));
                   loadChordStyleDialog->setNameFilter(filter);
-                  loadChordStyleDialog->setDirectory(currentPath);
+                  loadChordStyleDialog->setDirectory(defaultPath);
 
                   loadChordStyleDialog->restoreState(settings.value("loadChordStyleDialog").toByteArray());
                   loadChordStyleDialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -947,7 +967,7 @@ QString MuseScore::getChordStyleFilename(bool open)
                   saveChordStyleDialog->setOption(QFileDialog::DontUseNativeDialog, true);
                   saveChordStyleDialog->setWindowTitle(tr("MuseScore: Save Style"));
                   saveChordStyleDialog->setNameFilter(filter);
-                  saveChordStyleDialog->setDirectory(currentPath);
+                  saveChordStyleDialog->setDirectory(defaultPath);
 
                   saveChordStyleDialog->restoreState(settings.value("saveChordStyleDialog").toByteArray());
                   saveChordStyleDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -970,12 +990,12 @@ QString MuseScore::getChordStyleFilename(bool open)
 QString MuseScore::getScanFile(const QString& d)
       {
       QString filter = tr("PDF Scan File (*.pdf);;All (*)");
-
+      QString defaultPath = d.isEmpty() ? QDir::homePath() : d;
       if (preferences.nativeDialogs) {
             QString s = QFileDialog::getOpenFileName(
                mscore,
                MuseScore::tr("Choose PDF Scan"),
-               d,
+               defaultPath,
                filter
                );
             return s;
@@ -987,7 +1007,7 @@ QString MuseScore::getScanFile(const QString& d)
             loadScanDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadScanDialog->setWindowTitle(tr("MuseScore: Choose PDF Scan"));
             loadScanDialog->setNameFilter(filter);
-            loadScanDialog->setDirectory(d);
+            loadScanDialog->setDirectory(defaultPath);
 
             QSettings settings;
             loadScanDialog->restoreState(settings.value("loadScanDialog").toByteArray());
@@ -1017,12 +1037,12 @@ QString MuseScore::getScanFile(const QString& d)
 QString MuseScore::getAudioFile(const QString& d)
       {
       QString filter = tr("OGG Audio File (*.ogg);;All (*)");
-
+      QString defaultPath = d.isEmpty() ? QDir::homePath() : d;
       if (preferences.nativeDialogs) {
             QString s = QFileDialog::getOpenFileName(
                mscore,
                MuseScore::tr("Choose Audio File"),
-               d,
+               defaultPath,
                filter
                );
             return s;
@@ -1034,7 +1054,7 @@ QString MuseScore::getAudioFile(const QString& d)
             loadAudioDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadAudioDialog->setWindowTitle(tr("MuseScore: Choose OGG Audio File"));
             loadAudioDialog->setNameFilter(filter);
-            loadAudioDialog->setDirectory(d);
+            loadAudioDialog->setDirectory(defaultPath);
 
             QSettings settings;
             loadAudioDialog->restoreState(settings.value("loadAudioDialog").toByteArray());
@@ -1070,24 +1090,27 @@ QString MuseScore::getFotoFilename()
          tr("Scalable Vector Graphic (*.svg);;");
 
       QString title       = tr("MuseScore: Save Image");
-      QString currentPath = QDir::currentPath();
+      
+      QFileInfo myImages(preferences.myImagesPath);
+      if (myImages.isRelative())
+            myImages.setFile(QDir::home(), preferences.myImagesPath);
+      QString defaultPath = myImages.absoluteFilePath();
+      
       if (preferences.nativeDialogs) {
             QString fn;
             fn = QFileDialog::getSaveFileName(
                this,
                title,
-               currentPath,
+               defaultPath,
                filter
                );
             return fn;
             }
 
-      QFileInfo myImages(preferences.myImagesPath);
-      if (myImages.isRelative())
-            myImages.setFile(QDir::home(), preferences.myImagesPath);
+
       QList<QUrl> urls;
       urls.append(QUrl::fromLocalFile(QDir::homePath()));
-      urls.append(QUrl::fromLocalFile(myImages.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
       if (saveImageDialog == 0) {
@@ -1098,7 +1121,7 @@ QString MuseScore::getFotoFilename()
             saveImageDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             saveImageDialog->setWindowTitle(title);
             saveImageDialog->setNameFilter(filter);
-            saveImageDialog->setDirectory(currentPath);
+            saveImageDialog->setDirectory(defaultPath);
 
             QSettings settings;
             saveImageDialog->restoreState(settings.value("saveImageDialog").toByteArray());
@@ -1138,29 +1161,30 @@ QString MuseScore::getPaletteFilename(bool open)
             dir.mkpath(path);
             }
 
-      QString currentPath(QDir::currentPath());
+      QFileInfo myPalettes(dataPath + "/profiles");
+      QString defaultPath = myPalettes.absoluteFilePath();
+      
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
-                  fn = QFileDialog::getOpenFileName(this, title, currentPath, filter);
+                  fn = QFileDialog::getOpenFileName(this, title, defaultPath, filter);
             else
-                  fn = QFileDialog::getSaveFileName(this, title, currentPath, filter);
+                  fn = QFileDialog::getSaveFileName(this, title, defaultPath, filter);
             return fn;
             }
 
-      QFileInfo myPalettes(dataPath + "/profiles");
       QFileDialog* dialog;
       QList<QUrl> urls;
       urls.append(QUrl::fromLocalFile(QDir::homePath()));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      urls.append(QUrl::fromLocalFile(myPalettes.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
 
       if (open) {
             if (loadPaletteDialog == 0) {
                   loadPaletteDialog = new QFileDialog(this);
                   loadPaletteDialog->setFileMode(QFileDialog::ExistingFile);
                   loadPaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  loadPaletteDialog->setDirectory(myPalettes.absoluteFilePath());
+                  loadPaletteDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   loadPaletteDialog->restoreState(settings.value("loadPaletteDialog").toByteArray());
@@ -1176,7 +1200,7 @@ QString MuseScore::getPaletteFilename(bool open)
                   savePaletteDialog->setFileMode(QFileDialog::AnyFile);
                   savePaletteDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
                   savePaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  savePaletteDialog->setDirectory(myPalettes.absoluteFilePath());
+                  savePaletteDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   savePaletteDialog->restoreState(settings.value("savePaletteDialog").toByteArray());
@@ -1214,24 +1238,25 @@ QString MuseScore::getPluginFilename(bool open)
             filter = tr("MuseScore Plugin File (*.qml)");
             }
 
-      QString currentPath(QDir::currentPath());
+      QFileInfo myPlugins(preferences.myPluginsPath);
+      if (myPlugins.isRelative())
+            myPlugins.setFile(QDir::home(), preferences.myPluginsPath);
+      QString defaultPath = myPlugins.absoluteFilePath();
+      
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
-                  fn = QFileDialog::getOpenFileName(this, title, currentPath, filter);
+                  fn = QFileDialog::getOpenFileName(this, title, defaultPath, filter);
             else
-                  fn = QFileDialog::getSaveFileName(this, title, currentPath, filter);
+                  fn = QFileDialog::getSaveFileName(this, title, defaultPath, filter);
             return fn;
             }
 
-      QFileInfo myStyles(preferences.myPluginsPath);
-      if (myStyles.isRelative())
-            myStyles.setFile(QDir::home(), preferences.myPluginsPath);
       QFileDialog* dialog;
       QList<QUrl> urls;
       QString home = QDir::homePath();
       urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myStyles.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
       if (open) {
@@ -1239,7 +1264,7 @@ QString MuseScore::getPluginFilename(bool open)
                   loadPluginDialog = new QFileDialog(this);
                   loadPluginDialog->setFileMode(QFileDialog::ExistingFile);
                   loadPluginDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  loadPluginDialog->setDirectory(currentPath);
+                  loadPluginDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   loadPluginDialog->restoreState(settings.value("loadPluginDialog").toByteArray());
@@ -1255,7 +1280,7 @@ QString MuseScore::getPluginFilename(bool open)
                   savePluginDialog->setFileMode(QFileDialog::AnyFile);
                   savePluginDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
                   savePluginDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  savePluginDialog->setDirectory(currentPath);
+                  savePluginDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   savePluginDialog->restoreState(settings.value("savePluginDialog").toByteArray());
@@ -1292,25 +1317,27 @@ QString MuseScore::getDrumsetFilename(bool open)
             title  = tr("MuseScore: Save Drumset");
             filter = tr("MuseScore Drumset File (*.drm)");
             }
-
-      QString currentPath(QDir::currentPath());
-      if (preferences.nativeDialogs) {
-            QString fn;
-            if (open)
-                  fn = QFileDialog::getOpenFileName(this, title, currentPath, filter);
-            else
-                  fn = QFileDialog::getSaveFileName(this, title, currentPath, filter);
-            return fn;
-            }
-
+      
       QFileInfo myStyles(preferences.myStylesPath);
       if (myStyles.isRelative())
             myStyles.setFile(QDir::home(), preferences.myStylesPath);
+      QString defaultPath  = myStyles.absoluteFilePath();
+      
+      if (preferences.nativeDialogs) {
+            QString fn;
+            if (open)
+                  fn = QFileDialog::getOpenFileName(this, title, defaultPath, filter);
+            else
+                  fn = QFileDialog::getSaveFileName(this, title, defaultPath, filter);
+            return fn;
+            }
+
+
       QFileDialog* dialog;
       QList<QUrl> urls;
       QString home = QDir::homePath();
       urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myStyles.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(defaultPath));
       urls.append(QUrl::fromLocalFile(QDir::currentPath()));
 
       if (open) {
@@ -1318,7 +1345,7 @@ QString MuseScore::getDrumsetFilename(bool open)
                   loadDrumsetDialog = new QFileDialog(this);
                   loadDrumsetDialog->setFileMode(QFileDialog::ExistingFile);
                   loadDrumsetDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  loadDrumsetDialog->setDirectory(currentPath);
+                  loadDrumsetDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   loadDrumsetDialog->restoreState(settings.value("loadDrumsetDialog").toByteArray());
@@ -1334,7 +1361,7 @@ QString MuseScore::getDrumsetFilename(bool open)
                   saveDrumsetDialog->setFileMode(QFileDialog::AnyFile);
                   saveDrumsetDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
                   saveDrumsetDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  saveDrumsetDialog->setDirectory(currentPath);
+                  saveDrumsetDialog->setDirectory(defaultPath);
 
                   QSettings settings;
                   saveDrumsetDialog->restoreState(settings.value("saveDrumsetDialog").toByteArray());
@@ -1451,7 +1478,7 @@ bool MuseScore::exportFile()
             }
 
       QString selectedFilter;
-      QString name   = QString("%1.mscx").arg(cs->name());
+      QString name   = QString("%1/%2.mscx").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter, &selectedFilter);
       if (fn.isEmpty())
@@ -1523,9 +1550,8 @@ bool MuseScore::exportParts()
           }
 
       QString selectedFilter;
-      QString name = QString("");
       QString filter = fl.join(";;");
-      QString fn = getSaveScoreName(saveDialogTitle, name, filter, &selectedFilter, true);
+      QString fn = getSaveScoreName(saveDialogTitle, saveDirectory, filter, &selectedFilter, true);
       if (fn.isEmpty())
           return false;
 
@@ -1876,7 +1902,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
             saveDirectory = preferences.myScoresPath;
 
       QString selectedFilter;
-      QString name   = QString("%1.mscz").arg(cs->name());
+      QString name   = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter, &selectedFilter);
       if (fn.isEmpty())
@@ -1923,8 +1949,6 @@ bool MuseScore::saveSelection(Score* cs)
       QString saveDialogTitle = tr("MuseScore: Save Selection");
 
       QSettings settings;
-      if (mscore->lastSaveCopyDirectory.isEmpty())
-            mscore->lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.myScoresPath).toString();
       if (mscore->lastSaveDirectory.isEmpty())
             mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
       QString saveDirectory = mscore->lastSaveDirectory;
@@ -1933,7 +1957,7 @@ bool MuseScore::saveSelection(Score* cs)
             saveDirectory = preferences.myScoresPath;
 
       QString selectedFilter;
-      QString name   = QString("%1.mscz").arg(cs->name());
+      QString name   = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter, &selectedFilter);
       if (fn.isEmpty())
