@@ -32,7 +32,7 @@
 #include "libmscore/stafftype.h"
 #include "selinstrument.h"
 #include "texteditor.h"
-#include "editstafftype.h"
+//#include "editstafftype.h"
 #include "editpitch.h"
 #include "editstringdata.h"
 #include "libmscore/tablature.h"
@@ -69,7 +69,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument, SIGNAL(clicked()), SLOT(showInstrumentDialog()));
-      connect(editStaffType,    SIGNAL(clicked()), SLOT(showEditStaffType()));
+//      connect(editStaffType,    SIGNAL(clicked()), SLOT(showEditStaffType()));
       connect(editShortName,    SIGNAL(clicked()), SLOT(editShortNameClicked()));
       connect(editLongName,     SIGNAL(clicked()), SLOT(editLongNameClicked()));
       connect(minPitchASelect,  SIGNAL(clicked()), SLOT(minPitchAClicked()));
@@ -252,7 +252,7 @@ void EditStaff::showInstrumentDialog()
 //---------------------------------------------------------
 //   showEditStaffType
 //---------------------------------------------------------
-
+/*
 void EditStaff::showEditStaffType()
       {
       EditStaffType* est = new EditStaffType(this, staff);
@@ -274,7 +274,7 @@ void EditStaff::showEditStaffType()
             staffType->setCurrentIndex(curIdx);
             }
       }
-
+*/
 //---------------------------------------------------------
 //   editShortNameClicked
 //---------------------------------------------------------

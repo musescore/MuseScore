@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>680</width>
-    <height>339</height>
+    <height>426</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -111,13 +111,6 @@
       </item>
       <item>
        <widget class="QComboBox" name="staffType"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="editStaffType">
-        <property name="text">
-         <string>Edit...</string>
-        </property>
-       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_4">
