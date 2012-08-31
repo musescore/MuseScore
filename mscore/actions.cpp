@@ -2051,6 +2051,14 @@ Shortcut Shortcut::sc[] = {
          "unset-visible",
          QT_TRANSLATE_NOOP("action","set unvisible")
          ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "staff-types",
+         QT_TRANSLATE_NOOP("action","Staff Types..."),
+         QT_TRANSLATE_NOOP("action","Staff type editor"),
+         QT_TRANSLATE_NOOP("action","Show staff type editor")
+         ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
