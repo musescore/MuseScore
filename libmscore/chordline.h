@@ -21,7 +21,8 @@ class QPainter;
 
 // subtypes:
 enum ChordLineType {
-      CHORDLINE_NOTYPE, CHORDLINE_FALL, CHORDLINE_DOIT
+      CHORDLINE_NOTYPE, CHORDLINE_FALL, CHORDLINE_DOIT,
+      CHORDLINE_PLOP, CHORDLINE_SCOOP
       };
 
 //---------------------------------------------------------
