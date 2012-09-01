@@ -2552,35 +2552,15 @@ static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYof
       float offs = 0.0;
       if (hasYoff) offs = yoff;
       else {
+            // MuseScore 1.x compatible offsets
             if (pl == "above")
-                  offs = 0;
+                  offs = -5;
             else if (pl == "below")
-                  offs = 10;
+                  offs = 9;
             else
                   qDebug("setSLinePlacement invalid placement '%s'", qPrintable(pl));
             }
-
-      // there is no line segment without calling layout();
-      // layout() only works after SLine is inserted in the score.
-      //      LineSegment* ls = (LineSegment*)sli->spannerSegments().front();
-      //      ls->setUserOff(QPointF(0, offs * s));
-      // alternative:
-
-      // sli->setUserOff(QPointF(0, offs * s));
-
-      // alternative:
-      /*
-      // TODO is this necessary ?
-      foreach(SpannerSegment* seg, sli->spannerSegments())
-            delete seg;
-      sli->spannerSegments().clear();
-      // end TODO is this necessary ?
-      */
-      LineSegment* ls = sli->createLineSegment();
-      // ls->setUserOff(QPointF());
-      ls->setReadPos(QPointF(0, offs * s));
-      sli->add(ls);
-
+      sli->setYoff(offs);
       qDebug(" -> offs*s=%g", offs * s);
       }
 
@@ -3032,16 +3012,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               pedal = new Pedal(score);
                               pedal->setTrack((staff + rstaff) * VOICES);
                               if (placement == "") placement = "below";
-                              /* original:
                               setSLinePlacement(pedal,
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);
-                              */
-                              // TODO LVIFIX: following is a hack, as it overrules the MusicXML offset:
-                              // but for the time being it places pedal marks at a reasonable location
-                              setSLinePlacement(pedal,
-                                                score->spatium(), placement,
-                                                true, 0);
                               spanners[pedal] = QPair<int, int>(tick, -1);
                               qDebug("wedge pedal=%p inserted at first tick %d", pedal, tick);
                               }
