@@ -30,6 +30,7 @@ InputState::InputState() :
    _drumset(0),
    _track(0),
    _segment(0),
+   _string(VISUAL_STRING_NONE),
    _repitchMode(false),
    rest(false),
    pitch(72),

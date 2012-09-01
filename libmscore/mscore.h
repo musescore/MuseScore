@@ -59,6 +59,10 @@ static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
 static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 
+static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
+static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
+static const int  FRET_NONE               = -1;       // no ordinal for a fret
+
 //---------------------------------------------------------
 //   ElementType
 //    The value of this enum determines the "stacking order"

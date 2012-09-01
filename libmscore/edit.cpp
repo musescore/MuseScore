@@ -348,7 +348,7 @@ qDebug(" create duration list from %d/%d", ff.numerator(), ff.denominator());
       }
 
 //---------------------------------------------------------
-//   addNote
+//   addNote from pitch
 //---------------------------------------------------------
 
 Note* Score::addNote(Chord* chord, int pitch)
@@ -358,6 +358,23 @@ Note* Score::addNote(Chord* chord, int pitch)
       note->setTrack(chord->track());
       note->setPitch(pitch);
       note->setTpcFromPitch();
+      undoAddElement(note);
+      select(note, SELECT_SINGLE, 0);
+      return note;
+      }
+
+//---------------------------------------------------------
+//   addNote from NoteVal
+//---------------------------------------------------------
+
+Note* Score::addNote(Chord* chord, NoteVal& noteVal)
+      {
+      Note* note = new Note(this);
+      note->setParent(chord);
+      note->setTrack(chord->track());
+      note->setNval(noteVal);
+      if(note->tpc() == INVALID_TPC)
+            note->setTpcFromPitch();
       undoAddElement(note);
       select(note, SELECT_SINGLE, 0);
       return note;
@@ -675,8 +692,7 @@ void Score::putNote(const Position& p, bool replace)
                         return;
                   Tablature* neck = instr->tablature();
                   StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
-                  // if tablature is upside down, 'flip' string number
-                  int string = tab->upsideDown() ? (tab->lines() - line - 1) : line;
+                  int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
                   // check the chord does not already contains a note on the same string
@@ -686,9 +702,14 @@ void Score::putNote(const Position& p, bool replace)
                               if(note->string() == string)  // if line is the same
                                     return;                 // do nothing
                   // build a default NoteVal for that line
-                  nval.pitch     = neck->getPitch(string, 0);
-                  nval.fret      = 0;
-                  nval.string    = string;
+                  nval.string = string;
+                  if(p.fret != FRET_NONE)
+                        nval.fret = p.fret;
+                  else {
+                        _is.setString(line);
+                        nval.fret = 0;
+                        }
+                  nval.pitch = neck->getPitch(string, nval.fret);
                   break;
                   }
 
@@ -744,14 +765,16 @@ void Score::putNote(const Position& p, bool replace)
                   }
             }
       if (addToChord && cr->type() == CHORD)
-            addNote(static_cast<Chord*>(cr), nval.pitch);
+//            addNote(static_cast<Chord*>(cr), nval.pitch);
+            addNote(static_cast<Chord*>(cr), nval);
       else {
             // replace chord
             if (_is.rest)
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
             }
-      moveToNextInputPos();
+      if(!st->isTabStaff())
+            moveToNextInputPos();
       }
 
 //---------------------------------------------------------
