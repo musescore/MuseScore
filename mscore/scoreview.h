@@ -238,7 +238,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassEndEdit();
       void cmdInsertNote(int note);
       void cmdAddPitch(int note, bool addFlag);
-      void cmdAddPitch1(int, bool, int step);
+//      void cmdAddPitch1(int, bool, int step);
+      void cmdAddFret(int fret);
       void cmdAddChordName();
       void cmdAddText(int style);
       void cmdEnterRest(const TDuration&);

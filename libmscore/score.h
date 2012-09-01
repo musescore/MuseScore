@@ -170,6 +170,7 @@ struct Position {
       Segment* segment;
       int staffIdx;
       int line;
+      int fret;
       QPointF pos;
       };
 
@@ -518,6 +519,7 @@ class Score : public QObject {
       void cmdAddBSymbol(BSymbol*, const QPointF&, const QPointF&);
 
       Note* addNote(Chord*, int pitch);
+      Note* addNote(Chord*, NoteVal &noteVal);
 
       void deleteItem(Element*);
       void cmdDeleteSelectedMeasures();
