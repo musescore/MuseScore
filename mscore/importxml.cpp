@@ -2566,7 +2566,20 @@ static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYof
       //      ls->setUserOff(QPointF(0, offs * s));
       // alternative:
 
-      sli->setUserOff(QPointF(0, offs * s));
+      // sli->setUserOff(QPointF(0, offs * s));
+
+      // alternative:
+      /*
+      // TODO is this necessary ?
+      foreach(SpannerSegment* seg, sli->spannerSegments())
+            delete seg;
+      sli->spannerSegments().clear();
+      // end TODO is this necessary ?
+      */
+      LineSegment* ls = sli->createLineSegment();
+      // ls->setUserOff(QPointF());
+      ls->setReadPos(QPointF(0, offs * s));
+      sli->add(ls);
 
       qDebug(" -> offs*s=%g", offs * s);
       }
