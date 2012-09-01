@@ -238,8 +238,11 @@ class StaffTypeTablature : public StaffType {
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
 
-      QString     fretString(int fret, bool ghost);   // returns a string with the text for fret
-      QString     durationString(TDuration::DurationType type, int dots);
+      QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
+      QString     durationString(TDuration::DurationType type, int dots) const;
+      // functions to cope with tabulature visal order (top down or upside down)
+      int         physStringToVisual(int strg) const;       // return the string in visual order from physical string
+      int         VisualStringToPhys(int strg) const;       // return the string in physical order from visual string
 
       // properties getters (some getters require updated metrics)
       qreal durationBoxH();

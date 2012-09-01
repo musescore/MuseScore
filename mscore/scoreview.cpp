@@ -1600,11 +1600,22 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       else {
             Staff* staff    = _score->staff(staffIdx);
-            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
+//            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
+            double lineDist = staff->staffType()->lineDistance().val() * _spatium;
             int lines       = staff->lines();
-            h               = (lines - 1) * lineDist + 4 * _spatium;
+            int strg        = _score->inputState().string();
             x              -= _spatium;
-            y              -= 2.0 * _spatium;
+            // if on a TAB staff and InputState::_string makes sense,
+            // draw cursor around single string
+            if(staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
+                  h         = lineDist * 1.5;         // 1 space above strg for letters and 1/2 sp. below strg for numbers
+                  y        += lineDist * (strg-1);    // star 1 sp. above strg to include letter position
+                  }
+            // otherwise, draw cursor across whole staff
+            else {
+                  h         = (lines - 1) * lineDist + 4 * _spatium;
+                  y        -= 2.0 * _spatium;
+                  }
             }
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
@@ -2931,6 +2942,42 @@ void ScoreView::cmd(const QAction* a)
             _score->endCmd();
             mscore->endCmd();
             }
+
+      // STATE_NOTE_ENTRY_TAB actions
+
+      else if(cmd == "string-above") {
+            int   strg = _score->inputState().string();
+            if(strg > 0)
+                  _score->inputState().setString(strg-1);
+            }
+      else if(cmd == "string-below") {
+            InputState  is          = _score->inputState();
+            int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
+            int         strg        = is.string();
+            if(strg < maxStrg)
+                  _score->inputState().setString(strg+1);
+            }
+      else if(cmd == "fret-0")
+            cmdAddFret(0);
+      else if(cmd == "fret-1")
+            cmdAddFret(1);
+      else if(cmd == "fret-2")
+            cmdAddFret(2);
+      else if(cmd == "fret-3")
+            cmdAddFret(3);
+      else if(cmd == "fret-4")
+            cmdAddFret(4);
+      else if(cmd == "fret-5")
+            cmdAddFret(5);
+      else if(cmd == "fret-6")
+            cmdAddFret(6);
+      else if(cmd == "fret-7")
+            cmdAddFret(7);
+      else if(cmd == "fret-8")
+            cmdAddFret(8);
+      else if(cmd == "fret-9")
+            cmdAddFret(9);
+
       else
             _score->cmd(a);
       _score->processMidiInput();
@@ -2984,8 +3031,8 @@ void ScoreView::startNoteEntry()
       mscore->enableInputToolbar(enable);
 
       _score->inputState().noteEntryMode = true;
-      _score->moveCursor();
-      setCursorOn(true);
+//      _score->moveCursor();
+//      setCursorOn(true);
       _score->inputState().rest = false;
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
@@ -3001,12 +3048,26 @@ void ScoreView::startNoteEntry()
                   mscore->changeState(STATE_NOTE_ENTRY_PITCHED);
                   break;
             case TAB_STAFF:
+            {
                   mscore->changeState(STATE_NOTE_ENTRY_TAB);
+                  int strg = 0;                 // assume topmost string as current string
+                  // if entering note entry with a note selected and the note has a string
+                  // set InputState::_string to note visual string
+                  if(el->type() == NOTE) {
+                        strg = (static_cast<Note*>(el))->string();
+                        strg = (static_cast<StaffTypeTablature*>(staff->staffType()))->physStringToVisual(strg);
+                        }
+                  _score->inputState().setString(strg);
                   break;
+            }
             case PERCUSSION_STAFF:
                   mscore->changeState(STATE_NOTE_ENTRY_DRUM);
                   break;
             }
+
+      // set cursor after setting the stafftype-dependent state
+      _score->moveCursor();
+      setCursorOn(true);
       }
 
 //---------------------------------------------------------
@@ -4905,6 +4966,44 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       pos.line      = relStep(octave * 7 + note, clef);
 
       score()->putNote(pos, !addFlag);
+      _score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   cmdAddFret
+///   insert note with given fret on current string
+//---------------------------------------------------------
+
+void ScoreView::cmdAddFret(int fret)
+      {
+      if(mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
+            return;
+      InputState& is = _score->inputState();
+      if (is.track() == -1)                     // invalid state
+            return;
+      if (is.segment() == 0 || is.cr() == 0) {
+            qDebug("cannot enter notes here (no chord rest at current position)");
+            return;
+            }
+
+      _score->startCmd();
+      Position pos;
+      pos.segment   = is.segment();
+/* frets are always put at cursor position, never at selected note position
+      if(addFlag)
+            {
+            Element* el = score()->selection().element();
+            if (el && el->type() == NOTE) {
+                 ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
+                 if (cr) pos.segment = cr->segment();
+                 }
+            }
+*/
+      pos.staffIdx  = is.track() / VOICES;
+      pos.line      = is.string();
+      pos.fret      = fret;
+
+      score()->putNote(pos, false);
       _score->endCmd();
       }
 
