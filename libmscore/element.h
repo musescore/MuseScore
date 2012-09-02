@@ -451,6 +451,9 @@ class Line : public Element {
 
       Spatium _width;
       Spatium _len;
+      int _z;                     ///< stacking order when drawing or selecting;
+                                  ///< elements are drawn from high number to low number;
+                                  ///< default is type() * 100;
 
    protected:
       bool vertical;
@@ -473,6 +476,8 @@ class Line : public Element {
       Spatium lineWidth()  const { return _width; }
       void setLen(Spatium);
       void setLineWidth(Spatium);
+      virtual int z() const               { return _z; }
+      void setZ(int val)                  { _z = val;  }
       };
 
 //---------------------------------------------------------

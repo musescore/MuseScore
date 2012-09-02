@@ -937,6 +937,7 @@ void Chord::setTrack(int val)
 LedgerLine::LedgerLine(Score* s)
    : Line(s, false)
       {
+      setZ(NOTE * 100 - 50);
       setSelectable(false);
       }
 
