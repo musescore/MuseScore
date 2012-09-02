@@ -100,6 +100,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/tablature.h"
 #include "libmscore/drumset.h"
+#include "libmscore/beam.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -482,6 +483,7 @@ MusicXml::MusicXml(QDomDocument* d)
       doc(d),
       maxLyrics(0),
       beamMode(BEAM_NO),
+      beam(0),
       pageWidth(0),
       pageHeight(0)
       {
@@ -3013,8 +3015,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               pedal->setTrack((staff + rstaff) * VOICES);
                               if (placement == "") placement = "below";
                               setSLinePlacement(pedal,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                                                score->spatium(), placement,
+                                                hasYoffset, yoffset);
                               spanners[pedal] = QPair<int, int>(tick, -1);
                               qDebug("wedge pedal=%p inserted at first tick %d", pedal, tick);
                               }
@@ -4661,6 +4663,25 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 //   xmlNote
 //---------------------------------------------------------
 
+static void handleBeam(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
+      {
+      if (!cr) return;
+      if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
+            // create a new beam
+            beam = new Beam(cr->score());
+            beam->setTrack(cr->track());
+            beam->setBeamDirection(sd);
+            beam->setParent(0); // ??
+            cr->score()->beams.prepend(beam);
+            }
+      if (beam) beam->add(cr);
+      if (bm == BEAM_END) {
+            // terminate the currect beam
+            beam = 0;
+            }
+      }
+
+
 /**
  Read a MusicXML note.
 
@@ -5080,6 +5101,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             if (!grace && bm != BEAM_AUTO)
                   beamMode = bm;
             ((Chord*)cr)->setStemDirection(sd);
+            // handle beam if necessary
+            if (!chord && !grace)
+                  handleBeam(cr, bm, sd, beam);
 
             note->setVisible(printObject == "yes");
 

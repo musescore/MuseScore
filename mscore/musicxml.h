@@ -48,6 +48,7 @@ class Hairpin;
 class Spanner;
 class Lyrics;
 class ChordRest;
+class Beam;
 
 //---------------------------------------------------------
 //   MusicXmlWedge
@@ -234,6 +235,7 @@ class MusicXml {
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
       BeamMode beamMode;                         ///< Current beam mode
+      Beam* beam;                                ///< Current beam mode
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults
