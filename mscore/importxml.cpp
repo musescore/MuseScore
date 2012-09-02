@@ -4659,28 +4659,36 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 
       }
 
+
 //---------------------------------------------------------
-//   xmlNote
+//   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeam(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
       {
       if (!cr) return;
+      // create a new beam
+      // currently only required when stem direction is explicit
       if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
-            // create a new beam
             beam = new Beam(cr->score());
             beam->setTrack(cr->track());
             beam->setBeamDirection(sd);
-            beam->setParent(0); // ??
             cr->score()->beams.prepend(beam);
             }
+      // add ChordRest to beam
       if (beam) beam->add(cr);
+      // if no beam, set stem direction on chord itself
+      if (!beam) static_cast<Chord*>(cr)->setStemDirection(sd);
+      // terminate the currect beam
       if (bm == BEAM_END) {
-            // terminate the currect beam
             beam = 0;
             }
       }
 
+
+//---------------------------------------------------------
+//   xmlNote
+//---------------------------------------------------------
 
 /**
  Read a MusicXML note.
@@ -4973,7 +4981,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             else
                   cr->setBeamMode(BEAM_NO);
             cr->setTrack(track);
-            ((Rest*)cr)->setStaffMove(move);
+            static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
             //sibelius might import 2 rests at the same place, ignore the 2one
             //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
@@ -5074,7 +5082,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   xmlSetPitch(note, c, alter, octave, ottava, track);
             cr->add(note);
 
-            ((Chord*)cr)->setNoStem(noStem);
+            static_cast<Chord*>(cr)->setNoStem(noStem);
 
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
@@ -5094,16 +5102,14 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // || accidental == 25)
             // note->setAccidentalType(accidental);
 
-            if (cr->beamMode() == BEAM_NO)
-                  cr->setBeamMode(bm);
             // remember beam mode last non-grace note
             // bm == BEAM_AUTO means no <beam> was found
             if (!grace && bm != BEAM_AUTO)
                   beamMode = bm;
-            ((Chord*)cr)->setStemDirection(sd);
-            // handle beam if necessary
+
+            // handle beam
             if (!chord && !grace)
-                  handleBeam(cr, bm, sd, beam);
+                  handleBeamAndStemDir(cr, bm, sd, beam);
 
             note->setVisible(printObject == "yes");
 
