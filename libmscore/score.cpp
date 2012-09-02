@@ -3033,7 +3033,6 @@ void Score::lassoSelectEnd()
       Segment* endSegment   = 0;
       int startStaff        = 0x7fffffff;
       int endStaff          = 0;
-      int endTrack          = 0;
 
       if (_selection.elements().isEmpty()) {
             _selection.setState(SEL_NONE);
@@ -3052,7 +3051,6 @@ void Score::lassoSelectEnd()
                   startSegment = seg;
             if ((endSegment == 0) || (*seg > *endSegment)) {
                   endSegment = seg;
-                  endTrack = e->track();
                   }
             int idx = e->staffIdx();
             if (idx < startStaff)
@@ -3061,7 +3059,7 @@ void Score::lassoSelectEnd()
                   endStaff = idx;
             }
       if (noteRestCount > 0) {
-            endSegment = endSegment->nextCR(endTrack);
+            endSegment = endSegment->nextCR(endStaff * VOICES);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
             if (_selection.state() != SEL_RANGE)
                   _selection.setState(SEL_RANGE);
