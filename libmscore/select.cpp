@@ -271,18 +271,22 @@ void Selection::updateSelectedElements()
                               }
                         }
                   }
+            // for each measure of the score, check if it contains spanners within our selection
+            // TODO: shouldn't it stop after _endSegment?
             for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
                   foreach(Spanner* sp, m->spannerFor()) {
+                        // ignore spanners belonging to other tracks
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
+                        // if spanner ends between _startSegment and _endSegment, select it
                         if (sp->endElement()->type() == SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < _endSegment->tick())
                                     _el.append(sp);
                               }
                         else if (sp->endElement()->type() == MEASURE) {
                               Measure* s2 = static_cast<Measure*>(sp->endElement());
-                              if (s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < _endSegment->tick())
                                     _el.append(sp);
                               }
                         else {
