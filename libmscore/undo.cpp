@@ -323,15 +323,6 @@ void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st)
       }
 
 //---------------------------------------------------------
-//   undoInsertTime
-//---------------------------------------------------------
-
-void Score::undoInsertTime(int tick, int len)
-      {
-      undo(new InsertTime(this, tick, len));
-      }
-
-//---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
 
@@ -1772,24 +1763,8 @@ void ChangeMeasureLen::flip()
             }
       measure->setLen(len);
       measure->score()->addLayoutFlags(LAYOUT_FIX_TICKS);
+//      measure->score()->fixTicks();
       len = oLen;
-      }
-
-//---------------------------------------------------------
-//   InsertTime
-//---------------------------------------------------------
-
-InsertTime::InsertTime(Score* s, int t, int l)
-      {
-      score = s;
-      tick  = t;
-      len   = l;
-      }
-
-void InsertTime::flip()
-      {
-      score->insertTime(tick, len);
-      len = -len;
       }
 
 //---------------------------------------------------------

@@ -471,34 +471,6 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
       }
 
 //---------------------------------------------------------
-//   insertTime
-//---------------------------------------------------------
-
-void Score::insertTime(int /*tick*/, int /*len*/)
-      {
-#if 0
-      if (len < 0) {
-            //
-            // remove time
-            //
-            len = -len;
-            tempomap()->removeTime(tick, len);
-            foreach(Staff* staff, _staves)
-                  staff->keymap()->removeTime(tick, len);
-            }
-      else {
-            //
-            // insert time
-            //
-            tempomap()->insertTime(tick, len);
-            foreach(Staff* staff, _staves)
-                  staff->keymap()->insertTime(tick, len);
-            }
-      addLayoutFlags(LAYOUT_FIX_TICKS);
-#endif
-      }
-
-//---------------------------------------------------------
 //    fixTicks
 //    update:
 //      - measure ticks

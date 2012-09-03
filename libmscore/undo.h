@@ -385,23 +385,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   InsertTime
-//---------------------------------------------------------
-
-class InsertTime : public UndoCommand {
-      Score* score;
-      int tick;
-      int len;
-      void flip();
-
-   public:
-      InsertTime(Score*, int tick, int len);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("InsertTime");
-      };
-
-//---------------------------------------------------------
 //   ChangeRepeatFlags
 //---------------------------------------------------------
 

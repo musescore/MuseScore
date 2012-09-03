@@ -456,7 +456,6 @@ class Score : public QObject {
       void undoAddCR(ChordRest* element, Measure*, int tick);
       void undoRemoveElement(Element* element);
       void undoChangeElement(Element* oldElement, Element* newElement);
-      void undoInsertTime(int tick, int len);
       void undoChangeRepeatFlags(Measure*, int);
       void undoChangeVoltaEnding(Volta* volta, const QList<int>& l);
       void undoChangeVoltaText(Volta* volta, const QString& s);
@@ -639,8 +638,6 @@ class Score : public QObject {
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
-      void insertTime(int tick, int len);
-      void cmdRemoveTime(int tick, int len);
       int playPos() const                      { return _playPos;    }
       void setPlayPos(int val)                 { _playPos = val;     }
 

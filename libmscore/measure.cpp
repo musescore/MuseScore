@@ -1766,10 +1766,7 @@ void Measure::adjustToLen(Fraction nf)
                   if (e->type() == SLUR)
                         score()->undoRemoveElement(e);
                   }
-            score()->cmdRemoveTime(tick() + nl, -diff);
             }
-      else
-            score()->undoInsertTime(tick() + ol, diff);
       }
 
 //---------------------------------------------------------
