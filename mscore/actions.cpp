@@ -2175,6 +2175,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Fret 9 (TAB)"),
          QT_TRANSLATE_NOOP("action","Add fret 9 of current string (TAB only)")
          ),
+    Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "staff-types",
+         QT_TRANSLATE_NOOP("action","Staff Types..."),
+         QT_TRANSLATE_NOOP("action","Staff type editor"),
+         QT_TRANSLATE_NOOP("action","Show staff type editor")
+         ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
