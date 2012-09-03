@@ -52,7 +52,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void editDrumsetClicked();
       void editStringDataClicked();
       void showInstrumentDialog();
-      void showEditStaffType();
       void editShortNameClicked();
       void editLongNameClicked();
       void minPitchAClicked();
