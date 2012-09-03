@@ -430,7 +430,12 @@ void Staff::read(const QDomElement& de)
                   // if this is an excerpt, link staff to parentScore()
                   //
                   if (score()->parentScore()) {
-                        linkTo(score()->parentScore()->staff(v));
+                        Staff* st = score()->parentScore()->staff(v);
+                        if (st)
+                              linkTo(st);
+                        else {
+                              printf("staff %d not found in parent\n", v);
+                              }
                         }
                   else {
                         int idx = score()->staffIdx(this);

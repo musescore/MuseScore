@@ -1122,7 +1122,6 @@ printf("setRest %p %d %d/%d\n", rest, chord->durationType().type(), chord->durat
                   {
                   Measure* measure = static_cast<Measure*>(el);
                   undo(new RemoveElement(measure));
-                  cmdRemoveTime(measure->tick(), measure->ticks());
                   }
                   break;
 
@@ -1159,15 +1158,6 @@ printf("setRest %p %d %d/%d\n", rest, chord->durationType().type(), chord->durat
                   undoRemoveElement(el);
                   break;
             }
-      }
-
-//---------------------------------------------------------
-//   cmdRemoveTime
-//---------------------------------------------------------
-
-void Score::cmdRemoveTime(int tick, int len)
-      {
-      undoInsertTime(tick, -len);
       }
 
 //---------------------------------------------------------
@@ -1642,7 +1632,6 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure,
                         }
 
                   Fraction f = score->sigmap()->timesig(tick).nominal();
-      	      int ticks  = f.ticks();
 
                   Measure* m = static_cast<Measure*>(mb);
                   m->setTimesig(f);
@@ -1687,7 +1676,6 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure,
                         }
 
                   undo(new InsertMeasure(m, im));
-                  undoInsertTime(tick, ticks);
 
                   //
                   // if measure is inserted at tick zero,
