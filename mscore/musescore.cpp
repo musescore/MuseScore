@@ -1823,8 +1823,11 @@ void MuseScore::removeTab()
 void MuseScore::removeTab(int i)
       {
       Score* score = scoreList.value(i);
+      
       if (score == 0)
             return;
+
+      QString tmpName = score->tmpName();
 
       if (checkDirty(score))
             return;
@@ -1855,8 +1858,8 @@ void MuseScore::removeTab(int i)
             setCurrentScoreView((firstTab ? tab1 : tab2)->view());
             }
       writeSessionFile(false);
-      if (!score->tmpName().isEmpty()) {
-            QFile f(score->tmpName());
+      if (!tmpName.isEmpty()) {
+            QFile f(tmpName);
             f.remove();
             }
       delete score;
