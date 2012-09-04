@@ -108,7 +108,10 @@ void TimeSigMap::normalize()
             bar  = e.bar();
             tick = i->first;
             tm   = ticks_measure(e.timesig());
+printf("TimeMap: %d - nom %d/%d  act %d/%d\n", tick, e.nominal().numerator(), e.nominal().denominator(),
+      e.timesig().numerator(), e.timesig().denominator());
             }
+printf("\n");
       }
 
 //---------------------------------------------------------
