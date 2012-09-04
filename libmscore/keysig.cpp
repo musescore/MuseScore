@@ -90,6 +90,13 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
+      if(staff() && staff()->isTabStaff()) {     // no key sigs on TAB staves
+            foreach(KeySym* ks, keySymbols)
+                  delete ks;
+            keySymbols.clear();
+            return;
+            }
+
       if (isCustom()) {
             foreach(KeySym* ks, keySymbols) {
                   ks->pos = ks->spos * _spatium;
