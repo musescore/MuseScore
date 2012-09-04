@@ -216,7 +216,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <bracket type="start" number="1" line-end="none" line-type="solid"/>
           </direction-type>
@@ -241,7 +241,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <bracket type="stop" number="1" line-end="none"/>
           </direction-type>
