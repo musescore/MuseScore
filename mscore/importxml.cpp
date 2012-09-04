@@ -100,6 +100,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/tablature.h"
 #include "libmscore/drumset.h"
+#include "libmscore/beam.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -482,6 +483,7 @@ MusicXml::MusicXml(QDomDocument* d)
       doc(d),
       maxLyrics(0),
       beamMode(BEAM_NO),
+      beam(0),
       pageWidth(0),
       pageHeight(0)
       {
@@ -2552,22 +2554,15 @@ static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYof
       float offs = 0.0;
       if (hasYoff) offs = yoff;
       else {
+            // MuseScore 1.x compatible offsets
             if (pl == "above")
-                  offs = 0;
+                  offs = -5;
             else if (pl == "below")
-                  offs = 10;
+                  offs = 9;
             else
                   qDebug("setSLinePlacement invalid placement '%s'", qPrintable(pl));
             }
-
-      // there is no line segment without calling layout();
-      // layout() only works after SLine is inserted in the score.
-      //      LineSegment* ls = (LineSegment*)sli->spannerSegments().front();
-      //      ls->setUserOff(QPointF(0, offs * s));
-      // alternative:
-
-      sli->setUserOff(QPointF(0, offs * s));
-
+      sli->setYoff(offs);
       qDebug(" -> offs*s=%g", offs * s);
       }
 
@@ -3019,16 +3014,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               pedal = new Pedal(score);
                               pedal->setTrack((staff + rstaff) * VOICES);
                               if (placement == "") placement = "below";
-                              /* original:
-                              setSLinePlacement(pedal,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
-                              */
-                              // TODO LVIFIX: following is a hack, as it overrules the MusicXML offset:
-                              // but for the time being it places pedal marks at a reasonable location
                               setSLinePlacement(pedal,
                                                 score->spatium(), placement,
-                                                true, 0);
+                                                hasYoffset, yoffset);
                               spanners[pedal] = QPair<int, int>(tick, -1);
                               qDebug("wedge pedal=%p inserted at first tick %d", pedal, tick);
                               }
@@ -4671,6 +4659,33 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 
       }
 
+
+//---------------------------------------------------------
+//   handleBeamAndStemDir
+//---------------------------------------------------------
+
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
+      {
+      if (!cr) return;
+      // create a new beam
+      // currently only required when stem direction is explicit
+      if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
+            beam = new Beam(cr->score());
+            beam->setTrack(cr->track());
+            beam->setBeamDirection(sd);
+            cr->score()->beams.prepend(beam);
+            }
+      // add ChordRest to beam
+      if (beam) beam->add(cr);
+      // if no beam, set stem direction on chord itself
+      if (!beam) static_cast<Chord*>(cr)->setStemDirection(sd);
+      // terminate the currect beam
+      if (bm == BEAM_END) {
+            beam = 0;
+            }
+      }
+
+
 //---------------------------------------------------------
 //   xmlNote
 //---------------------------------------------------------
@@ -4966,7 +4981,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             else
                   cr->setBeamMode(BEAM_NO);
             cr->setTrack(track);
-            ((Rest*)cr)->setStaffMove(move);
+            static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
             //sibelius might import 2 rests at the same place, ignore the 2one
             //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
@@ -5067,7 +5082,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   xmlSetPitch(note, c, alter, octave, ottava, track);
             cr->add(note);
 
-            ((Chord*)cr)->setNoStem(noStem);
+            static_cast<Chord*>(cr)->setNoStem(noStem);
 
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
@@ -5087,13 +5102,14 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // || accidental == 25)
             // note->setAccidentalType(accidental);
 
-            if (cr->beamMode() == BEAM_NO)
-                  cr->setBeamMode(bm);
             // remember beam mode last non-grace note
             // bm == BEAM_AUTO means no <beam> was found
             if (!grace && bm != BEAM_AUTO)
                   beamMode = bm;
-            ((Chord*)cr)->setStemDirection(sd);
+
+            // handle beam
+            if (!chord && !grace)
+                  handleBeamAndStemDir(cr, bm, sd, beam);
 
             note->setVisible(printObject == "yes");
 

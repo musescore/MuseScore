@@ -2857,9 +2857,9 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             bracket[n] = tl;
             }
 
-      if (p.x() != 0)
+      if (preferences.musicxmlExportLayout && p.x() != 0)
             rest += QString(" default-x=\"%1\"").arg(p.x() * 10 / tl->spatium());
-      if (p.y() != 0)
+      if (preferences.musicxmlExportLayout && p.y() != 0)
             rest += QString(" default-y=\"%1\"").arg(p.y() * -10 / tl->spatium());
 
       directionTag(xml, attr, tl);
