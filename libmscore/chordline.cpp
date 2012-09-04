@@ -53,6 +53,14 @@ void ChordLine::setSubtype(ChordLineType st)
                   x2 = 2;
                   y2 = 2;
                   break;
+            case CHORDLINE_PLOP:
+                  x2 = -2;
+                  y2 = -2;
+                  break;
+            case CHORDLINE_SCOOP:
+                  x2 = -2;
+                  y2 = 2;
+                  break;
             default:
             case CHORDLINE_DOIT:
                   x2 = 2;
@@ -61,7 +69,12 @@ void ChordLine::setSubtype(ChordLineType st)
             }
       if (st) {
             path = QPainterPath();
-            path.cubicTo(x2/2, 0.0, x2, y2/2, x2, y2);
+            // chordlines to the right of the note
+            if (st == CHORDLINE_FALL || st == CHORDLINE_DOIT)
+                  path.cubicTo(x2/2, 0.0, x2, y2/2, x2, y2);
+            // chordlines to the left of the note
+            if (st == CHORDLINE_PLOP || st == CHORDLINE_SCOOP)
+                  path.cubicTo(0.0, y2/2, x2/2, y2, x2, y2);
             }
       _subtype = st;
       }
@@ -76,7 +89,14 @@ void ChordLine::layout()
       if (parent()) {
             Note* note = chord()->upNote();
             QPointF p(note->pos());
-            setPos(p.x() + note->headWidth() + _spatium * .2, p.y());
+            // chordlines to the right of the note
+            if (_subtype == CHORDLINE_FALL || _subtype == CHORDLINE_DOIT)
+                  setPos(p.x() + note->headWidth() + _spatium * .2, p.y());
+            // chordlines to the left of the note
+            if (_subtype == CHORDLINE_PLOP)
+                  setPos(p.x() + note->headWidth() * .25, p.y() - note->headHeight() * .75);
+            if (_subtype == CHORDLINE_SCOOP)
+                  setPos(p.x() + note->headWidth() * .25, p.y() + note->headHeight() * .75);
             }
       else
             setPos(0.0, 0.0);
