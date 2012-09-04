@@ -395,6 +395,8 @@ Palette* MuseScore::newFallDoitPalette()
       const char* scorelineNames[] = {
             QT_TR_NOOP("fall"),
             QT_TR_NOOP("doit"),
+            QT_TR_NOOP("plop"),
+            QT_TR_NOOP("scoop"),
             };
 
       ChordLine* cl = new ChordLine(gscore);
@@ -404,6 +406,14 @@ Palette* MuseScore::newFallDoitPalette()
       cl = new ChordLine(gscore);
       cl->setSubtype(CHORDLINE_DOIT);
       sp->append(cl, tr(scorelineNames[1]));
+
+      cl = new ChordLine(gscore);
+      cl->setSubtype(CHORDLINE_PLOP);
+      sp->append(cl, tr(scorelineNames[2]));
+
+      cl = new ChordLine(gscore);
+      cl->setSubtype(CHORDLINE_SCOOP);
+      sp->append(cl, tr(scorelineNames[3]));
       return sp;
       }
 
