@@ -1762,8 +1762,8 @@ void ChangeMeasureLen::flip()
             segment->setTick(endTick);
             }
       measure->setLen(len);
-      measure->score()->addLayoutFlags(LAYOUT_FIX_TICKS);
-//      measure->score()->fixTicks();
+//      measure->score()->addLayoutFlags(LAYOUT_FIX_TICKS); // we need to fix tick immediately!
+      measure->score()->fixTicks();
       len = oLen;
       }
 
