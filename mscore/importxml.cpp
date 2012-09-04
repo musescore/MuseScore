@@ -4440,7 +4440,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (eee.tagName() == "caesura")
                               breath = 3;
                         else if (eee.tagName() == "doit"
-                                 || eee.tagName() == "falloff")
+                                 || eee.tagName() == "falloff"
+                                 || eee.tagName() == "plop"
+                                 || eee.tagName() == "scoop")
                               chordLineType = eee.tagName();
                         else if (eee.tagName() == "strong-accent") {
                               QString strongAccentType = eee.attribute(QString("type"));
@@ -4649,6 +4651,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   cl->setSubtype(CHORDLINE_FALL);
             if (chordLineType == "doit")
                   cl->setSubtype(CHORDLINE_DOIT);
+            if (chordLineType == "plop")
+                  cl->setSubtype(CHORDLINE_PLOP);
+            if (chordLineType == "scoop")
+                  cl->setSubtype(CHORDLINE_SCOOP);
             note->chord()->add(cl);
             }
 

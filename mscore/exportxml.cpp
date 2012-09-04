@@ -1666,6 +1666,12 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                         case CHORDLINE_DOIT:
                               subtype = "doit";
                               break;
+                        case CHORDLINE_PLOP:
+                              subtype = "plop";
+                              break;
+                        case CHORDLINE_SCOOP:
+                              subtype = "scoop";
+                              break;
                         default:
                               qDebug("unknown ChordLine subtype %d", cl->subtype());
                         }
