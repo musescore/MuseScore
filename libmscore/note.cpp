@@ -1564,9 +1564,46 @@ void Note::updateAccidental(AccidentalState* as)
       // calculate accidental
 
       AccidentalType acci = ACC_NONE;
-      if (_accidental && _accidental->role() == ACC_USER)
-            acci = _accidental->subtype();
-      else  {
+      if (_accidental && _accidental->role() == ACC_USER) {
+            // check if user accidental fits tpc
+            // in case tpc was changed
+
+            AccidentalType newUserAcc;
+            switch (_accidental->subtype()) {
+                  case ACC_FLAT2:
+                  case ACC_FLAT:
+                  case ACC_NATURAL:
+                  case ACC_SHARP:
+                  case ACC_SHARP2:
+                        if (_tpc < 6)
+                              newUserAcc = ACC_FLAT2;
+                        else if (_tpc < 13)
+                              newUserAcc = ACC_FLAT;
+                        else if (_tpc < 20)
+                              newUserAcc = ACC_NATURAL;
+                        else if (_tpc < 27)
+                              newUserAcc = ACC_SHARP;
+                        else
+                              newUserAcc = ACC_SHARP2;
+                        
+                        if (_accidental->subtype() != newUserAcc)
+                              acci = ACC_NONE; // don't use this any more
+                        else {
+                              acci = newUserAcc; // keep it
+                              // if the key signature is changed:
+                              AccidentalVal accVal = tpc2alter(_tpc);
+                              if ((accVal != as->accidentalVal(int(_line)))
+                                  || hidden() || as->tieContext(int(_line)))
+                                    as->setAccidentalVal(int(_line), 
+                                                         accVal, _tieBack != 0);
+                              }
+                        break;
+                  default:
+                        // keep it
+                        acci = _accidental->subtype();
+                  }
+            }
+      if (acci == ACC_NONE)  {
             AccidentalVal accVal = tpc2alter(_tpc);
             if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                   as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
