@@ -117,7 +117,7 @@ void Score::endCmd()
 
       bool noUndo = undo()->current()->childCount() <= 1;
       if (!noUndo)
-            setDirty(!noUndo);
+            setDirty(true);
       undo()->endMacro(noUndo);
       end();      // DEBUG
       }
@@ -1988,7 +1988,7 @@ void Score::cmd(const QAction* a)
             addArticulation(Articulation_Staccato);
 	else if (cmd == "add-tenuto")
             addArticulation(Articulation_Tenuto);
-  else if (cmd == "add-marcato")
+      else if (cmd == "add-marcato")
             addArticulation(Articulation_Marcato);
 	else if (cmd == "add-trill")
             addArticulation(Articulation_Trill);
