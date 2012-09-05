@@ -1952,9 +1952,19 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             QPointF pt      = ss->pagePos();
             double y        = pt.y();
             SysStaff* ss1   = system2->staff(staffStart);
-            SysStaff* ss2   = system2->staff(staffEnd - 1);
-            double y1       = ss1->y() - 2 * _spatium + y;
-            double y2       = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
+
+            // find last visible staff:
+            int lastStaff = 0;
+            for (int i = staffEnd-1; i >= 0; --i) {
+                  if (score()->staff(i)->show()) {
+                        lastStaff = i;
+                        break;
+                        }
+                  }
+            SysStaff* ss2 = system2->staff(lastStaff);
+
+            double y1 = ss1->y() - 2 * _spatium + y;
+            double y2 = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
 
             // drag vertical start line
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
@@ -1981,7 +1991,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         x1  = x2 - 2 * _spatium;
                   y   = pt.y();
                   ss1 = system2->staff(staffStart);
-                  ss2 = system2->staff(staffEnd - 1);
+                  ss2 = system2->staff(lastStaff);
                   y1  = ss1->y() - 2 * _spatium + y;
                   y2  = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
                   p.drawLine(QLineF(x1, y1, x2, y1).translated(system2->page()->pos()));
@@ -4952,15 +4962,15 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             }
       Position pos;
       pos.segment   = is.segment();
-      
+
       if(addFlag) {
             Element* el = score()->selection().element();
             if (el && el->type() == NOTE) {
                  ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
                  if (cr) pos.segment = cr->segment();
                  }
-            } 
-      
+            }
+
       pos.staffIdx  = is.track() / VOICES;
       ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(octave * 7 + note, clef);
