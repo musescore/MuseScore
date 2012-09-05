@@ -972,7 +972,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             // collect at least one measure
             if (!system->measures().isEmpty() && (minWidth + ww > systemWidth)) {
-                  undoChangeProperty(curMeasure->prev(), P_BREAK_HINT, true);
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
@@ -999,17 +998,24 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             if ((n && system->measures().size() >= n)
                || continueFlag || pbreak || (nt == VBOX || nt == TBOX || nt == FBOX)) {
                   system->setPageBreak(curMeasure->pageBreak());
-                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
                   curMeasure = nextMeasure;
                   break;
                   }
             if (minWidth + minMeasureWidth > systemWidth) {
-                  undoChangeProperty(curMeasure, P_BREAK_HINT, true);
                   curMeasure = nextMeasure;
                   break;                                  // next measure will not fit
                   }
-            undoChangeProperty(curMeasure, P_BREAK_HINT, false);
             curMeasure = nextMeasure;
+            }
+
+      //
+      // remember line breaks in list of measures
+      //
+      int n = system->measures().size() - 1;
+      if (n >= 0) {
+            for (int i = 0; i < n; ++i)
+                  undoChangeProperty(system->measure(i), P_BREAK_HINT, false);
+            undoChangeProperty(system->measures().last(), P_BREAK_HINT, true);
             }
 
       if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)

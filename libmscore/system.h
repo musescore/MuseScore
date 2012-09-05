@@ -150,6 +150,7 @@ class System : public Element {
       int snapNote(int tick, const QPointF p, int staff) const;
 
       QList<MeasureBase*>& measures()        { return ml; }
+      MeasureBase* measure(int idx)          { return ml[idx]; }
       Measure* firstMeasure() const;
       Measure* lastMeasure() const;
 
