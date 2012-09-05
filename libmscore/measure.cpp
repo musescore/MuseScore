@@ -2150,9 +2150,16 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   timeStretch = ts->stretch();
                   _timesig    = ts->sig();
                   if (timeStretch == Fraction(1,1)) {
-                        if (!irregular)
+                        // if len is not irregular, set _len to time sig and store new time sig
+                        if (!irregular) {
                               _len = _timesig * timeStretch;
-                        score()->sigmap()->add(tick(), SigEvent(_timesig));
+                              score()->sigmap()->add(tick(), SigEvent(_timesig));
+                              }
+                        // if len is irregular, update stored time sigs with new nominal value
+                        else {
+                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                              }
                         }
                   }
             else if (tag == "KeySig") {
