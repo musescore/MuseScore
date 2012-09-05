@@ -105,8 +105,8 @@ static const PropertyData propertyList[] = {
       { P_DENOMINATOR_STRING,  "textD",         T_STRING },
       { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
       { P_BREAK_HINT,          "",              T_BOOL   },
-
       { P_FBPREFIX,            "prefix",        T_INT    },
+
       { P_FBDIGIT,             "digit",         T_INT    },
       { P_FBSUFFIX,            "suffix",        T_INT    },
       { P_FBCONTINUATIONLINE,  "continuationLine", T_BOOL},

@@ -1356,6 +1356,7 @@ class ChangeProperty : public UndoCommand {
          : element(e), id(i), property(v) {}
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
+      P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty");
       };
 

@@ -196,18 +196,17 @@ void UndoStack::endMacro(bool rollback)
             qDebug("UndoStack:endMacro(): not active");
             return;
             }
-      if (rollback) {
+      if (rollback)
             delete curCmd;
-            curCmd = 0;
-            return;
+      else {
+            while (list.size() > curIdx) {
+                  UndoCommand* cmd = list.takeLast();
+                  delete cmd;
+                  }
+            list.append(curCmd);
+            ++curIdx;
             }
-      while (list.size() > curIdx) {
-            UndoCommand* cmd = list.takeLast();
-            delete cmd;
-            }
-      list.append(curCmd);
       curCmd = 0;
-      ++curIdx;
       }
 
 //---------------------------------------------------------
@@ -225,7 +224,13 @@ void UndoStack::push(UndoCommand* cmd)
             return;
             }
 #ifdef DEBUG_UNDO
-      qDebug("UndoStack::push <%s> %p", cmd->name(), cmd);
+      if (strcmp(cmd->name(), "ChangeProperty") == 0) {
+            ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
+            qDebug("UndoStack::push <%s> %p id %d", cmd->name(), cmd, int(cp->getId()));
+            }
+      else {
+            qDebug("UndoStack::push <%s> %p", cmd->name(), cmd);
+            }
 #endif
       curCmd->appendChild(cmd);
       cmd->redo();
@@ -319,7 +324,8 @@ void SaveState::redo()
 
 void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st)
       {
-      undo(new ChangeProperty(e, t, st));
+      if (e->getProperty(t) != st)
+            undo(new ChangeProperty(e, t, st));
       }
 
 //---------------------------------------------------------
