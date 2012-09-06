@@ -186,11 +186,10 @@ class StaffTypeTablature : public StaffType {
 
    protected:
       // configurable properties
-//      QString     _durationFontName;      // the name of the font used for duration symbols
+      bool        _durationsBelow;        // durations are drawn below the staff (stem-and-beam durations only)
       qreal       _durationFontSize;      // the size (in points) for the duration symbol font
       qreal       _durationFontUserY;     // the vertical offset (spatium units) for the duration symb. font
                                           // user configurable
-//      QString     _fretFontName;          // the name of the font used for fret marks
       qreal       _fretFontSize;          // the size (in points) for the fret marks font
       qreal       _fretFontUserY;         // additional vert. offset of fret marks with respect to
                                           // the string line (spatium unit); user configurable
@@ -248,6 +247,7 @@ class StaffTypeTablature : public StaffType {
       qreal durationBoxH();
       qreal durationBoxY();
 
+      bool  durationBelow() const         { return _durationsBelow;   }
       const QFont&  durationFont()             { return _durationFont;     }
       const QString durationFontName() const   { return _durationFonts[_durationFontIdx].displayName; }
       qreal durationFontSize() const      { return _durationFontSize; }
@@ -266,6 +266,7 @@ class StaffTypeTablature : public StaffType {
       bool  upsideDown() const            { return _upsideDown;       }
       bool  useNumbers() const            { return _useNumbers;       }
       // properties setters (setting some props invalidates metrics)
+      void  setDurationBelow(bool val)    { _durationsBelow = val;    }
       void  setDurationFontName(QString name);
       void  setDurationFontSize(qreal val);
       void  setDurationFontUserY(qreal val)     { _durationFontUserY = val; }

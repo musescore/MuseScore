@@ -37,12 +37,6 @@ void initStaffTypes()
       staffTypes.append(st);
 
       StaffTypeTablature* stab = new StaffTypeTablature("Tab");
-      stab->setLines(6);
-      stab->setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
-      stab->setGenClef(true);
-      stab->setSlashStyle(false);
-      stab->setShowBarlines(true);
-      stab->setGenTimesig(false);
       staffTypes.append(stab);
 
       StaffTypePercussion* sp = new StaffTypePercussion("Percussion 5 lines");
@@ -379,6 +373,7 @@ QList<TablatureDurationFont> StaffTypeTablature::_durationFonts  = QList<Tablatu
 void StaffTypeTablature::init()
       {
       // set reasonable defaults for type-specific members */
+      setDurationBelow(true);
       setDurationFontName(_durationFonts[0].displayName);
       setDurationFontSize(15.0);
       setDurationFontUserY(0.0);
@@ -386,6 +381,9 @@ void StaffTypeTablature::init()
       setFretFontSize(10.0);
       setFretFontUserY(0.0);
       setGenDurations(false);
+      setGenTimesig(false);
+      setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
+      setLines(6);
       setLinesThrough(false);
       setOnLines(true);
       setUpsideDown(false);
@@ -430,6 +428,8 @@ void StaffTypeTablature::read(const QDomElement& de)
 
             if (tag == "durations")
                   setGenDurations(val.toInt() != 0);
+            else if (tag == "durationBelow")
+                  setDurationBelow(val.toInt() != 0);
             else if (tag == "durationFontName")
                   setDurationFontName(e.text());
             else if (tag == "durationFontSize")
@@ -465,6 +465,7 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
       StaffType::writeProperties(xml);
       xml.tag("durations",        _genDurations);
+      xml.tag("durationBelow",      _durationsBelow);
       xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
       xml.tag("durationFontSize", _durationFontSize);
       xml.tag("durationFontY",    _durationFontUserY);
