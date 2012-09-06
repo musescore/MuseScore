@@ -315,9 +315,9 @@ void MuseScore::saveFile()
             if (fn.isEmpty())
                   return;
             cs->fileInfo()->setFile(fn);
-            
+
             mscore->lastSaveDirectory = cs->fileInfo()->absolutePath();
-            
+
             updateRecentScores(cs);
             cs->setCreated(false);
             writeSessionFile(false);
@@ -485,9 +485,8 @@ void MuseScore::newFile()
                   if (tick == 0) {
                         if (!staff->isTabStaff()) {
                               TimeSig* ts = new TimeSig(score);
-                              ts->setSig(timesig);
-                              ts->setSubtype(timesigType);
                               ts->setTrack(staffIdx * VOICES);
+                              ts->setSig(timesig, timesigType);
                               Segment* s = measure->getSegment(ts, 0);
                               s->add(ts);
                               }
@@ -682,7 +681,7 @@ QString MuseScore::getSaveScoreName(const QString& title,
 
 QString MuseScore::getSaveScoreName(const QString& title,
    QString& name, const QString& filter, QString* selectedFilter, bool selectFolder)
-      {      
+      {
       QFileInfo myName(name);
       if (myName.isRelative())
             myName.setFile(QDir::home(), name);
@@ -775,7 +774,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
       if (myStyles.isRelative())
             myStyles.setFile(QDir::home(), preferences.myStylesPath);
       QString defaultPath = myStyles.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             if (open) {
@@ -909,12 +908,12 @@ QString MuseScore::getChordStyleFilename(bool open)
       QString filter = tr("MuseScore Chord Style File (*.xml)");
       if (open)
             filter.append(tr(";;All Files (*)"));
-            
+
       QFileInfo myStyles(preferences.myStylesPath);
       if (myStyles.isRelative())
             myStyles.setFile(QDir::home(), preferences.myStylesPath);
       QString defaultPath = myStyles.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             if (open) {
@@ -1090,12 +1089,12 @@ QString MuseScore::getFotoFilename()
          tr("Scalable Vector Graphic (*.svg);;");
 
       QString title       = tr("MuseScore: Save Image");
-      
+
       QFileInfo myImages(preferences.myImagesPath);
       if (myImages.isRelative())
             myImages.setFile(QDir::home(), preferences.myImagesPath);
       QString defaultPath = myImages.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             fn = QFileDialog::getSaveFileName(
@@ -1163,7 +1162,7 @@ QString MuseScore::getPaletteFilename(bool open)
 
       QFileInfo myPalettes(dataPath + "/profiles");
       QString defaultPath = myPalettes.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
@@ -1242,7 +1241,7 @@ QString MuseScore::getPluginFilename(bool open)
       if (myPlugins.isRelative())
             myPlugins.setFile(QDir::home(), preferences.myPluginsPath);
       QString defaultPath = myPlugins.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
@@ -1317,12 +1316,12 @@ QString MuseScore::getDrumsetFilename(bool open)
             title  = tr("MuseScore: Save Drumset");
             filter = tr("MuseScore Drumset File (*.drm)");
             }
-      
+
       QFileInfo myStyles(preferences.myStylesPath);
       if (myStyles.isRelative())
             myStyles.setFile(QDir::home(), preferences.myStylesPath);
       QString defaultPath  = myStyles.absoluteFilePath();
-      
+
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)

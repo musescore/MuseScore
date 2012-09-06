@@ -2584,9 +2584,8 @@ void ChangeTimesig::flip()
       Fraction f2    = timesig->stretch();
       TimeSigType st = timesig->subtype();
       // setSubType() must come first, as it also calls setSig() with its own parameters
-      timesig->setSubtype(subtype);
       timesig->setShowCourtesySig(showCourtesy);
-      timesig->setSig(sig);
+      timesig->setSig(sig, subtype);
       timesig->setStretch(stretch);
       showCourtesy = sc;
       sig          = f1;

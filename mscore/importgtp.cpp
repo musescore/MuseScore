@@ -394,8 +394,9 @@ void GuitarPro::createMeasures()
                         StaffType* staffType = staff->staffType();
 qDebug("staff %d group %d timesig %d\n", staffIdx, int(staffType->group()), staffType->genTimesig());
                         if (staffType->genTimesig()) {
-                              TimeSig* t = new TimeSig(score, nts);
+                              TimeSig* t = new TimeSig(score);
                               t->setTrack(staffIdx * VOICES);
+                              t->setSig(nts);
                               Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                               s->add(t);
                               }
@@ -513,8 +514,9 @@ void GuitarPro1::read(QFile* fp)
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
@@ -733,8 +735,9 @@ qDebug("BeginRepeat=============================================\n");
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
@@ -1203,8 +1206,9 @@ qDebug("BeginRepeat=============================================\n");
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }

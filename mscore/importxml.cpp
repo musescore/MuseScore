@@ -3502,14 +3502,13 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   int staves = part->nstaves();
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);
-                        timesig->setSubtype(st);
-                        timesig->setSig(Fraction(bts, btp));
+                        timesig->setTrack((staff + i) * VOICES);
+                        timesig->setSig(Fraction(bts, btp), st);
                         // handle simple compound time signature
                         if (beats.contains(QChar('+'))) {
                               timesig->setNumeratorString(beats);
                               timesig->setDenominatorString(beatType);
                               }
-                        timesig->setTrack((staff + i) * VOICES);
                         Segment* s = measure->getSegment(timesig, tick);
                         s->add(timesig);
                         }

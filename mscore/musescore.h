@@ -626,6 +626,7 @@ class MuseScore : public QMainWindow {
       void loadFiles();
 
       static Palette* newTextPalette();
+      static Palette* newTimePalette();
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
       static Palette* newBeamPalette();

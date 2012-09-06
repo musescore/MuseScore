@@ -581,8 +581,7 @@ printf("insert local timesig\n");
                   nsig = new TimeSig(this);
                   nsig->setTrack(staffIdx * VOICES);
                   nsig->setParent(seg);
-                  nsig->setSubtype(ts->subtype());
-                  nsig->setSig(ts->sig());
+                  nsig->setSig(ts->sig(), ts->subtype());
                   undoAddElement(nsig);
                   }
             else {

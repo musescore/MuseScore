@@ -129,7 +129,7 @@ Palette* MuseScore::newFramePalette()
       sp->setName(tr("Frames"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
-      
+
       static const IconAction bpa[] = {
             { ICON_VFRAME,   "insert-vbox" },
             { ICON_HFRAME,   "insert-hbox" },
@@ -845,6 +845,48 @@ Palette* MuseScore::newTextPalette()
       }
 
 //---------------------------------------------------------
+//   newTimePalette
+//    create default time signature palette
+//---------------------------------------------------------
+
+Palette* MuseScore::newTimePalette()
+      {
+      struct TS {
+            int numerator;
+            int denominator;
+            TimeSigType type;
+            QString name;
+            };
+
+      TS tsList[] = {
+            { 2,  4, TSIG_NORMAL, "2/4" },
+            { 3,  4, TSIG_NORMAL, "3/4" },
+            { 4,  4, TSIG_NORMAL, "4/4" },
+            { 5,  4, TSIG_NORMAL, "5/4" },
+            { 6,  4, TSIG_NORMAL, "6/4" },
+            { 3,  8, TSIG_NORMAL, "3/8" },
+            { 6,  8, TSIG_NORMAL, "6/8" },
+            { 9,  8, TSIG_NORMAL, "9/8" },
+            { 12, 8, TSIG_NORMAL, "12/8" },
+            { 4,  4, TSIG_FOUR_FOUR,  tr("4/4 common time") },
+            { 2,  2, TSIG_ALLA_BREVE, tr("2/2 alla breve") }
+            };
+
+      Palette* sp = new Palette;
+      sp->setName(tr("Time Signatures"));
+      sp->setMag(.8);
+      sp->setGrid(42, 38);
+
+      for (unsigned i = 0; i < sizeof(tsList)/sizeof(*tsList); ++i) {
+            TimeSig* ts;
+            ts = new TimeSig(gscore);
+            ts->setSig(Fraction(tsList[i].numerator, tsList[i].denominator), tsList[i].type);
+            sp->append(ts, tsList[i].name);
+            }
+      return sp;
+      }
+
+//---------------------------------------------------------
 //   populatePalette
 //---------------------------------------------------------
 
@@ -853,35 +895,7 @@ void MuseScore::populatePalette()
       paletteBox->addPalette(newGraceNotePalette());
       paletteBox->addPalette(newClefsPalette());
       paletteBox->addPalette(newKeySigPalette());
-
-      //-----------------------------------
-      //    Time
-      //-----------------------------------
-
-      Palette* sp = new Palette;
-      sp->setName(tr("Time Signatures"));
-      sp->setMag(.8);
-      sp->setGrid(42, 38);
-
-      TimeSig* ts;
-      ts = new TimeSig(gscore);
-      ts->setSig(Fraction(2, 2));
-      sp->append(ts, "2/2");
-
-      sp->append(new TimeSig(gscore,  Fraction(2, 4)), "2/4");
-      sp->append(new TimeSig(gscore,  Fraction(3, 4)), "3/4");
-      sp->append(new TimeSig(gscore,  Fraction(4, 4)), "4/4");
-      sp->append(new TimeSig(gscore,  Fraction(5, 4)), "5/4");
-      sp->append(new TimeSig(gscore,  Fraction(6, 4)), "6/4");
-      sp->append(new TimeSig(gscore,  Fraction(3, 8)), "3/8");
-      sp->append(new TimeSig(gscore,  Fraction(6, 8)), "6/8");
-      sp->append(new TimeSig(gscore,  Fraction(9, 8)), "9/8");
-      sp->append(new TimeSig(gscore, Fraction(12, 8)), "12/8");
-
-      sp->append(new TimeSig(gscore, TSIG_FOUR_FOUR),  tr("4/4 common time"));
-      sp->append(new TimeSig(gscore, TSIG_ALLA_BREVE), tr("2/2 alla breve"));
-      paletteBox->addPalette(sp);
-
+      paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette());
       paletteBox->addPalette(newLinesPalette());
       paletteBox->addPalette(newArpeggioPalette());
@@ -935,7 +949,7 @@ void MuseScore::populatePalette()
       //    Symbols
       //-----------------------------------
 
-      sp = new Palette;
+      Palette* sp = new Palette;
       sp->setName(tr("Symbols"));
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
