@@ -883,7 +883,6 @@ qreal Score::cautionaryWidth(Measure* m)
       // locate a time sig. in the next measure and, if found,
       // check if it has caut. sig. turned off
 
-      qreal _spatium = spatium();
       TimeSig* ts;
       Segment* tss         = nm->findSegment(Segment::SegTimeSig, tick);
       bool showCourtesySig = tss && styleB(ST_genCourtesyTimesig);
