@@ -82,8 +82,8 @@ enum ElementType {
       BRACKET,
       ARPEGGIO,
       ACCIDENTAL,
-      STEM,
-      NOTE,
+      STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
+      NOTE,             // and this requires stems to be drawn before notes
       CLEF,
       KEYSIG,
       TIMESIG,
