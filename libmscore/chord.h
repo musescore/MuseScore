@@ -152,6 +152,8 @@ class Chord : public ChordRest {
       Note* downNote() const                 { return _notes.front(); }
       virtual int upLine() const;
       virtual int downLine() const;
+      virtual int upString() const;
+      virtual int downString() const;
 
       Note* findNote(int pitch) const;
 

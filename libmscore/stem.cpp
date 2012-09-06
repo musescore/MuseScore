@@ -86,7 +86,13 @@ void Stem::layout()
       QPointF p1(0.0, 0.0);
       QPointF p2(0.0, l);
       if (st) {
-            if (!st->isTabStaff() && chord()) {
+            // if TAB, use simplified positioning
+            if (st->isTabStaff()) {
+                  p1.rx() = -lw5;
+                  p2.rx() = -lw5;
+                  }
+            // for any other staff type, use standard positioning
+            else if (chord()) {
                   // adjust P1 for note head
                   Chord* c = chord();
                   if (c->up()) {
@@ -101,10 +107,6 @@ void Stem::layout()
                         p1.rx() = lw5;
                         p2.rx() = lw5;
                         }
-                  }
-            else if (st->isTabStaff()) {
-                  p1.rx() = -lw5;
-                  p2.rx() = -lw5;
                   }
             }
       line.setP1(p1);
