@@ -1114,30 +1114,19 @@ void Chord::layoutStem()
       //
       if (staff() && staff()->isTabStaff()) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
-
             // require stems only if not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
-                  qreal sp          = spatium();
-                  qreal linDist     = tab->lineDistance().val();
-                  int   hookIdx;
-                  int   startLine;
-                  // process stems: stems below
-                  if (tab->durationBelow()) {
-                        startLine = upString();
-                        QPointF pos(STAFFTYPE_TAB_DEFAULTSTEMPOSX * sp, startLine * linDist * sp);
-                        _stem->setPos(pos);
-                        // total TAB height + room for beams/hooks
-                        qreal stemLen = (tab->lines()-1 - startLine) * linDist + STAFFTYPE_TAB_DEFAULTSTEMLEN;
-                        _stem->setLen(stemLen * sp);
-                        hookIdx = -durationType().hooks();
-                        }
-                  // stems above: setup is fixed: a simple 'comb' above the staff
-                  else {
-                        _stem->setLen(STAFFTYPE_TAB_DEFAULTSTEMLEN*sp);
-                        _stem->setPos(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp);
-                        hookIdx = durationType().hooks();
-                        }
+                  // process stems:
+                  QPointF  pos      = stemPos() - pagePos();
+                  qreal    stemLen  = tab->durationBelow() ?
+                              (tab->lines()-1 - upString()) * tab->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMLEN :
+                              STAFFTYPE_TAB_DEFAULTSTEMLEN;
+                  _stem->setPos(pos);
+                  _stem->setLen(stemLen * spatium());
                   // process hook
+                  int   hookIdx = durationType().hooks();
+                  if (tab->durationBelow())
+                        hookIdx = -hookIdx;
                   if (hookIdx) {
                         _hook->setSubtype(hookIdx);
                         _hook->setPos(_stem->hookPos());
