@@ -1696,9 +1696,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // create segment
                               x3 = cr2->stemPos().x() - canvPos.x();
 
-                              if (cr1->up())
+                              if (staff()->isTabStaff() || cr1->up())
                                     x2 -= stemWidth;
-                              if (!cr2->up())
+//                              if ( !(staff()->isTabStaff() || cr2->up()) )
+                              else
                                     x3 += stemWidth;
                               }
                         else {
