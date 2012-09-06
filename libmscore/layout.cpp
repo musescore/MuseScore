@@ -747,8 +747,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            bool needKeysig = !staff->isTabStaff()
-               && keyIdx.isValid()
+            bool needKeysig = /* !staff->isTabStaff()       // keep key sigs in TABs: TABs themselves should hide them
+               && */ keyIdx.isValid()
                && (isFirstSystem || styleB(ST_genKeysig));
 
             if (needKeysig && !keysig) {
