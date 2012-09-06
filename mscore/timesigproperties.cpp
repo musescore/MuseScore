@@ -62,25 +62,18 @@ void TimeSigProperties::accept()
       if (nText->text() != timesig->denominatorString())
             timesig->setDenominatorString(nText->text());
 
-//      timesig->setSig(Fraction(zNominal->value(), nNominal->value()));
-//      timesig->setActualSig(Fraction(zActual->value(), nActual->value()));
+      TimeSigType ts = TSIG_NORMAL;
       if (textButton->isChecked())
-            timesig->setSubtype(TSIG_NORMAL);
-      else if (fourfourButton->isChecked()) {
-            timesig->setSubtype(TSIG_FOUR_FOUR);
-            qDebug("fourfour\n");
-            }
-      else if (allaBreveButton->isChecked()) {
-            timesig->setSubtype(TSIG_ALLA_BREVE);
-            qDebug("alla breve\n");
-            }
-      // setSig() and setActualSig must be AFTER setSubType()
-      // as setSubType() also reset sig
+            ts = TSIG_NORMAL;
+      else if (fourfourButton->isChecked())
+            ts = TSIG_FOUR_FOUR;
+      else if (allaBreveButton->isChecked())
+            ts = TSIG_ALLA_BREVE;
+
       Fraction actual(zActual->value(), nActual->value());
       Fraction nominal(zActual->value(), nActual->value());
-      Fraction stretch = nominal / actual;
-      timesig->setSig(actual);
-      timesig->setStretch(stretch);
+      timesig->setSig(actual, ts);
+      timesig->setStretch(nominal / actual);
       QDialog::accept();
       }
 

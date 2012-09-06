@@ -752,9 +752,8 @@ void OveToMScore::convertSignatures(){
 				}
 
 					TimeSig* ts = new TimeSig(score_);
-					ts->setSig(Fraction(tt.numerator_, tt.denominator_));
 					ts->setTrack(staffIdx * VOICES);
-					ts->setSubtype(subtype);
+					ts->setSig(Fraction(tt.numerator_, tt.denominator_), subtype);
 
 					Segment* seg = measure->getSegment(ts, tt.tick_);
 					seg->add(ts);

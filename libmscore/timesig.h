@@ -24,8 +24,8 @@ class QPainter;
 
 enum TimeSigType {
       TSIG_NORMAL,            // use sz/sn text
-      TSIG_FOUR_FOUR,         // common time
-      TSIG_ALLA_BREVE         // cut time
+      TSIG_FOUR_FOUR,         // common time (4/4)
+      TSIG_ALLA_BREVE         // cut time (2/2)
       };
 
 //---------------------------------------------------------------------------------------
@@ -62,8 +62,6 @@ class TimeSig : public Element {
 
    public:
       TimeSig(Score* = 0);
-      TimeSig(Score* s, TimeSigType st);
-      TimeSig(Score* s, const Fraction& f);
 
       QString ssig() const;
       void setSSig(const QString&);
@@ -71,17 +69,16 @@ class TimeSig : public Element {
       TimeSig* clone() const             { return new TimeSig(*this); }
       ElementType type() const           { return TIMESIG; }
 
-      void setSubtype(TimeSigType val);
       TimeSigType subtype() const        { return _subtype; }
 
       void draw(QPainter*) const;
       void write(Xml& xml) const;
       void read(const QDomElement&);
-      void layout();
+      void layout1();
       Space space() const;
 
       Fraction sig() const               { return _sig; }
-      void setSig(const Fraction& f)     { _sig = f;    }
+      void setSig(const Fraction& f, TimeSigType st = TSIG_NORMAL);
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 

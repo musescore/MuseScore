@@ -866,6 +866,136 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
       }
 
 //---------------------------------------------------------
+//   cautionaryWidth
+//---------------------------------------------------------
+
+qreal Score::cautionaryWidth(Measure* m)
+      {
+      qreal w = 0.0;
+      if (m == 0)
+            return w;
+      Measure* nm = m ? m->nextMeasure() : 0;
+      if (nm == 0 || (m->sectionBreak() && _layoutMode != LayoutFloat))
+            return w;
+
+      int tick = m->tick() + m->ticks();
+
+      // locate a time sig. in the next measure and, if found,
+      // check if it has caut. sig. turned off
+
+      qreal _spatium = spatium();
+      TimeSig* ts;
+      Segment* tss         = nm->findSegment(Segment::SegTimeSig, tick);
+      bool showCourtesySig = tss && styleB(ST_genCourtesyTimesig);
+      if (showCourtesySig) {
+            ts = static_cast<TimeSig*>(tss->element(0));
+            if (ts && !ts->showCourtesySig())
+                  showCourtesySig = false;     // this key change has court. sig turned off
+            }
+      Segment* s = m->findSegment(Segment::SegTimeSigAnnounce, tick);
+
+      if (showCourtesySig && (s == 0))
+            w += ts->space().width();
+      else if (!showCourtesySig && s)
+            w -= ts->space().width();
+
+#if 0
+      // courtesy key signatures
+      bool hasCourtesyKeysig = false;
+      int n                  = _staves.size();
+      for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+            int track       = staffIdx * VOICES;
+            Staff* staff    = _staves[staffIdx];
+            showCourtesySig = false;
+
+            KeySigEvent key1 = staff->key(tick - 1);
+            KeySigEvent key2 = staff->key(tick);
+            if (styleB(ST_genCourtesyKeysig) && (key1 != key2)) {
+                  // locate a key sig. in next measure and, if found,
+                  // check if it has court. sig turned off
+                  s = nm->findSegment(Segment::SegKeySig, tick);
+                  showCourtesySig = true;	// assume this key change has court. sig turned on
+                  if (s) {
+                        KeySig* ks = static_cast<KeySig*>(s->element(track));
+                        if (ks && !ks->showCourtesy())
+                              showCourtesySig = false;     // this key change has court. sig turned off
+                        }
+
+                  if (showCourtesySig) {
+                        hasCourtesyKeysig = true;
+                        s  = m->undoGetSegment(Segment::SegKeySigAnnounce, tick);
+                        KeySig* ks = static_cast<KeySig*>(s->element(track));
+                        KeySigEvent ksv(key2);
+                        ksv.setNaturalType(key1.accidentalType());
+
+                        if (!ks) {
+                              ks = new KeySig(this);
+                              ks->setKeySigEvent(ksv);
+                              ks->setTrack(track);
+                              ks->setGenerated(true);
+                              ks->setMag(staff->mag());
+                              ks->setParent(s);
+                              undoAddElement(ks);
+                              }
+                        else if (ks->keySigEvent() != ksv) {
+                              undo(new ChangeKeySig(ks, ksv,
+                                 ks->showCourtesy(), ks->showNaturals()));
+                              }
+                        // change bar line to qreal bar line
+                        m->setEndBarLineType(DOUBLE_BAR, true);
+                        }
+                  }
+            if (!showCourtesySig) {
+                  // remove any existent courtesy key signature
+                  Segment* s = m->findSegment(Segment::SegKeySigAnnounce, tick);
+                  if (s && s->element(track))
+                        undoRemoveElement(s->element(track));
+                  }
+            }
+
+      // courtesy clefs
+      // no courtesy clef if this measure is the end of a repeat
+
+      bool showCourtesyClef = styleB(ST_genCourtesyClef);
+      if (showCourtesyClef && !(m->repeatFlags() & RepeatEnd)) {
+            Clef* c;
+            int n = _staves.size();
+            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                  Staff* staff = _staves[staffIdx];
+                  ClefType c1 = staff->clef(tick - 1);
+                  ClefType c2 = staff->clef(tick);
+                  if (c1 != c2) {
+                        // locate a clef in next measure and, if found,
+                        // check if it has court. sig turned off
+                        s = nm->findSegment(Segment::SegClef, tick);
+                        showCourtesySig = true;	// assume this clef change has court. sig turned on
+                        if (s) {
+                              c = static_cast<Clef*>(s->element(staffIdx*VOICES));
+                              if (c && !c->showCourtesy())
+                                    continue;   // this key change has court. sig turned off
+                              }
+
+                        s = m->undoGetSegment(Segment::SegClef, tick);
+                        int track = staffIdx * VOICES;
+                        if (!s->element(track)) {
+                              c = new Clef(this);
+                              c->setClefType(c2);
+                              c->setTrack(track);
+                              c->setGenerated(true);
+                              c->setSmall(true);
+                              c->setMag(staff->mag());
+                              c->setParent(s);
+                              undoAddElement(c);
+                              }
+                        }
+                  }
+            }
+#endif
+
+      return w;
+      }
+
+//---------------------------------------------------------
 //   layoutSystem
 //    return true if line continues
 //---------------------------------------------------------
@@ -892,6 +1022,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       Measure* firstMeasure = 0;
       Measure* lastMeasure  = 0;
 
+      qreal measureSpacing = styleD(ST_measureSpacing);
+
       for (; curMeasure;) {
             MeasureBase* nextMeasure;
             if (curMeasure->type() == MEASURE) {
@@ -910,6 +1042,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
             qreal ww = 0.0;
+
+            qreal cautionaryW = 0.0;
 
             if (curMeasure->type() == HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -957,29 +1091,29 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                               qreal w =
                                  BarLine::layoutWidth(this, nt, bl->magS())
                                  - BarLine::layoutWidth(this, ot, bl->magS());
-// printf("   barline HACK %f\n", w);
                               ww += w;
                               }
                         }
+                  qreal stretch = m->userStretch() * measureSpacing;
+                  cautionaryW   = cautionaryWidth(m) * stretch;
+                  ww           *= stretch;
 
-// printf("%d) %f %f   %f\n", m->no()+1, m->minWidth1(), m->minWidth2(), ww);
-
-                  ww *= m->userStretch() * styleD(ST_measureSpacing);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
                   }
 
             // collect at least one measure
-            if (!system->measures().isEmpty() && (minWidth + ww > systemWidth)) {
+            bool empty = system->measures().isEmpty();
+            if (!empty && (minWidth + ww + cautionaryW  > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
             if (curMeasure->type() == MEASURE)
                   lastMeasure = static_cast<Measure*>(curMeasure);
-            minWidth += ww;
 
             system->measures().append(curMeasure);
+
             ElementType nt = curMeasure->next() ? curMeasure->next()->type() : INVALID;
             int n = styleI(ST_FixMeasureNumbers);
             bool pbreak;
@@ -1001,11 +1135,11 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   curMeasure = nextMeasure;
                   break;
                   }
-            if (minWidth + minMeasureWidth > systemWidth) {
-                  curMeasure = nextMeasure;
-                  break;                                  // next measure will not fit
-                  }
             curMeasure = nextMeasure;
+            if (minWidth + minMeasureWidth > systemWidth)
+                  break;      // next measure will not fit
+
+            minWidth += ww;
             }
 
       //

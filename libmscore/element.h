@@ -67,6 +67,7 @@ class Space {
       qreal rw() const             { return _rw; }
       qreal& rLw()                 { return _lw; }
       qreal& rRw()                 { return _rw; }
+      qreal width() const          { return _lw + _rw; }
       void setLw(qreal e)          { _lw = e; }
       void setRw(qreal m)          { _rw = m; }
       void max(const Space& s);

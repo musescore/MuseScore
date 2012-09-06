@@ -368,10 +368,6 @@ void System::layout2()
                   }
             }
 
-//      qreal staffY[nstaves];
-//      for (int i = 0; i < nstaves; ++i)
-//            staffY[i] = staff(i)->bbox().y();
-
       if (barLine) {
             barLine->setLen(Spatium(systemHeight / _spatium));
             barLine->layout();

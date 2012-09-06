@@ -2985,7 +2985,7 @@ void Measure::layoutX(qreal stretch)
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
-                              if (pSeg->subtype() == Segment::SegClef)
+                              if (pt == Segment::SegClef)
                                     minDistance = score()->styleP(ST_clefBarlineDistance);
                               else
                                     stretchDistance = score()->styleP(ST_noteBarDistance);

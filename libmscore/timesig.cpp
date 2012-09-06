@@ -22,6 +22,10 @@
 
 //---------------------------------------------------------
 //   TimeSig
+//    Constructs an invalid time signature element.
+//    After construction first call setTrack() then
+//    call setSig().
+//    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Score* s)
@@ -30,53 +34,32 @@ TimeSig::TimeSig(Score* s)
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesySig = true;
       customText = false;
-      _stretch.set(1,1);
-      setSubtype(TSIG_NORMAL);
-      }
-
-TimeSig::TimeSig(Score* s, TimeSigType st)
-  : Element(s)
-      {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _showCourtesySig = true;
-      _stretch.set(1,1);
+      _stretch.set(1, 1);
+      _sig.set(0, 1);               // initialize to invalid
+      _subtype   = TSIG_NORMAL;
       customText = false;
-      setSubtype(st);
-      }
-
-TimeSig::TimeSig(Score* s, const Fraction& f)
-   : Element(s)
-      {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _showCourtesySig = true;
-      _stretch.set(1,1);
-      customText = false;
-      setSig(f);
-      setSubtype(TSIG_NORMAL);
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setSig
 //---------------------------------------------------------
 
-void TimeSig::setSubtype(TimeSigType st)
+void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
-      switch (st) {
-            case TSIG_NORMAL:
-                  break;
-            case TSIG_FOUR_FOUR:
-                  setSig(Fraction(4, 4));
-                  customText = false;
-                  break;
-            case TSIG_ALLA_BREVE:
-                  setSig(Fraction(2, 2));
-                  customText = false;
-                  break;
-            default:
-                  qDebug("illegal TimeSig subtype 0x%x\n", st);
-                  break;
+      if (_sig != f) {
+            customText = false;
+            _sig       = f;
+            }
+      if (st == TSIG_FOUR_FOUR) {
+            _sig.set(4, 4);
+            customText = false;
+            }
+      else if (st == TSIG_ALLA_BREVE) {
+            _sig.set(2, 2);
+            customText = false;
             }
       _subtype = st;
+      layout1();
       }
 
 //---------------------------------------------------------
@@ -193,10 +176,10 @@ void TimeSig::read(const QDomElement& de)
                              ((i >> 24) & 0x3f)
                            + ((i >> 18) & 0x3f)
                            + ((i >> 12) & 0x3f)
-                           + ((i >>  6) & 0x3f), i & 0x3f));
-                        i = TSIG_NORMAL;
+                           + ((i >>  6) & 0x3f), i & 0x3f), TSIG_NORMAL);
                         }
-                  setSubtype(i);
+                  else
+                        _subtype = i;
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesySig = val.toInt();
@@ -219,29 +202,31 @@ void TimeSig::read(const QDomElement& de)
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
             if (subtype() == 0x40000104)
-                  setSubtype(TSIG_FOUR_FOUR);
+                  _subtype = TSIG_FOUR_FOUR;
             else if (subtype() == 0x40002084)
-                  setSubtype(TSIG_ALLA_BREVE);
+                  _subtype = TSIG_ALLA_BREVE;
             else
-                  setSubtype(TSIG_NORMAL);
+                  _subtype = TSIG_NORMAL;
             }
+      layout1();
       }
 
 //---------------------------------------------------------
-//   layout
+//   layout1
 //---------------------------------------------------------
 
-void TimeSig::layout()
+void TimeSig::layout1()
       {
       qreal _spatium = spatium();
 
       setbbox(QRectF());                 // prepare for an empty time signature
-      pz = QPointF(0.0, 0.0);
-      pn = QPointF(0.0, 0.0);
+      pz = QPointF();
+      pn = QPointF();
 
-      int st            = subtype();
       qreal lineDist    = 1.0;            // assume dimensions a standard staff
       int    numOfLines = 5;
+      TimeSigType st    = subtype();
+
       if (staff()) {
             StaffType* staffType = staff()->staffType();
             numOfLines  = staff()->staffType()->lines();
@@ -250,15 +235,17 @@ void TimeSig::layout()
             // if tablature, but without time sig, set empty symbol
             if ((staffType->group() == TAB_STAFF) &&
                !(static_cast<StaffTypeTablature*>(staffType)->genTimesig())) {
-                  st = 0;
+                  st = TSIG_NORMAL;
                   }
             }
 
       // if some symbol
       // compute vert. displacement to center in the staff height
       // determine middle staff position:
+
       qreal yoff = _spatium * (numOfLines-1) *.5 * lineDist;
       qreal mag  = magS();
+
       // C and Ccut are placed at the middle of the staff: use yoff directly
       if (st ==  TSIG_FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
@@ -351,6 +338,7 @@ void TimeSig::setFrom(const TimeSig* ts)
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
       customText         = ts->customText;
+      layout1();
       }
 
 //---------------------------------------------------------
