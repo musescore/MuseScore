@@ -300,8 +300,8 @@ QPointF Chord::stemPos() const
       if (staff() && staff()->isTabStaff()) {
             qreal                   sp    = spatium();
             StaffTypeTablature*     tab   = static_cast<StaffTypeTablature*>( staff()->staffType() );
-            qreal                   y     = ( tab->durationBelow() ?
-                      upString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY);
+            qreal                   y     = ( tab->stemsDown() ?
+                      upString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP);
 
             return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, y*sp) + pagePos();
             }
@@ -319,8 +319,8 @@ QPointF Chord::stemPosBeam() const
       if (staff() && staff()->isTabStaff()) {
             qreal                   sp    = spatium();
             StaffTypeTablature*     tab   = static_cast<StaffTypeTablature*>( staff()->staffType() );
-            qreal                   y     = ( tab->durationBelow() ?
-                      downString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY);
+            qreal                   y     = ( tab->stemsDown() ?
+                      downString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP);
 
             return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, y*sp) + pagePos();
             }
@@ -609,7 +609,7 @@ void Chord::computeUp()
       {
       // tablatures
       if (staff() && staff()->isTabStaff()) {
-            _up = !((StaffTypeTablature*)staff()->staffType())->durationBelow();
+            _up = !((StaffTypeTablature*)staff()->staffType())->stemsDown();
             return;
             }
       // pitched staves
@@ -1118,14 +1118,14 @@ void Chord::layoutStem()
             if (!tab->slashStyle() && _stem) {
                   // process stems:
                   QPointF  pos      = stemPos() - pagePos();
-                  qreal    stemLen  = tab->durationBelow() ?
-                              (tab->lines()-1 - upString()) * tab->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMLEN :
-                              STAFFTYPE_TAB_DEFAULTSTEMLEN;
+                  qreal    stemLen  = tab->stemsDown() ?
+                              (tab->lines()-1 - upString()) * tab->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN :
+                              STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
                   _stem->setPos(pos);
                   _stem->setLen(stemLen * spatium());
                   // process hook
                   int   hookIdx = durationType().hooks();
-                  if (tab->durationBelow())
+                  if (tab->stemsDown())
                         hookIdx = -hookIdx;
                   if (hookIdx) {
                         _hook->setSubtype(hookIdx);

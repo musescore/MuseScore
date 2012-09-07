@@ -19,10 +19,12 @@
 #include "mscore.h"
 #include "durationtype.h"
 
-#define STAFFTYPE_TAB_DEFAULTSTEMLEN      3.0
-#define STAFFTYPE_TAB_DEFAULTSTEMDIST     1.0
+#define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
+#define STAFFTYPE_TAB_DEFAULTSTEMDIST_UP  1.0
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
-#define STAFFTYPE_TAB_DEFAULTSTEMPOSY     -STAFFTYPE_TAB_DEFAULTSTEMDIST
+#define STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP  -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
+#define STAFFTYPE_TAB_DEFAULTSTEMLEN_DN   3.0
+#define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
 
 class Staff;
 class Xml;
@@ -186,7 +188,6 @@ class StaffTypeTablature : public StaffType {
 
    protected:
       // configurable properties
-      bool        _durationsBelow;        // durations are drawn below the staff (stem-and-beam durations only)
       qreal       _durationFontSize;      // the size (in points) for the duration symbol font
       qreal       _durationFontUserY;     // the vertical offset (spatium units) for the duration symb. font
                                           // user configurable
@@ -196,6 +197,7 @@ class StaffTypeTablature : public StaffType {
       bool        _genDurations;          // whether duration symbols are drawn or not
       bool        _linesThrough;          // whether lines for strings and stems may pass through fret marks or not
       bool        _onLines;               // whether fret marks are drawn on the string lines or between them
+      bool        _stemsDown;             // stems are drawn downward (stem-and-beam durations only)
       bool        _upsideDown;            // whether lines are drwan with highest string at top (false) or at bottom (true)
       bool        _useNumbers;            // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
@@ -247,7 +249,6 @@ class StaffTypeTablature : public StaffType {
       qreal durationBoxH();
       qreal durationBoxY();
 
-      bool  durationBelow() const         { return _durationsBelow;   }
       const QFont&  durationFont()             { return _durationFont;     }
       const QString durationFontName() const   { return _durationFonts[_durationFontIdx].displayName; }
       qreal durationFontSize() const      { return _durationFontSize; }
@@ -263,10 +264,10 @@ class StaffTypeTablature : public StaffType {
       bool  genDurations() const          { return _genDurations;     }
       bool  linesThrough() const          { return _linesThrough;     }
       bool  onLines() const               { return _onLines;          }
+      bool  stemsDown() const             { return _stemsDown;        }
       bool  upsideDown() const            { return _upsideDown;       }
       bool  useNumbers() const            { return _useNumbers;       }
       // properties setters (setting some props invalidates metrics)
-      void  setDurationBelow(bool val)    { _durationsBelow = val;    }
       void  setDurationFontName(QString name);
       void  setDurationFontSize(qreal val);
       void  setDurationFontUserY(qreal val)     { _durationFontUserY = val; }
@@ -276,6 +277,7 @@ class StaffTypeTablature : public StaffType {
       void  setGenDurations(bool val)     { _genDurations = val;      }
       void  setLinesThrough(bool val)     { _linesThrough = val;      }
       void  setOnLines(bool val);
+      void  setStemsDown(bool val)        { _stemsDown = val;         }
       void  setUpsideDown(bool val)       { _upsideDown = val;        }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
 
