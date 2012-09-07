@@ -373,7 +373,6 @@ QList<TablatureDurationFont> StaffTypeTablature::_durationFonts  = QList<Tablatu
 void StaffTypeTablature::init()
       {
       // set reasonable defaults for type-specific members */
-      setDurationBelow(true);
       setDurationFontName(_durationFonts[0].displayName);
       setDurationFontSize(15.0);
       setDurationFontUserY(0.0);
@@ -386,6 +385,7 @@ void StaffTypeTablature::init()
       setLines(6);
       setLinesThrough(false);
       setOnLines(true);
+      setStemsDown(true);
       setUpsideDown(false);
       setUseNumbers(true);
       // internal
@@ -428,8 +428,6 @@ void StaffTypeTablature::read(const QDomElement& de)
 
             if (tag == "durations")
                   setGenDurations(val.toInt() != 0);
-            else if (tag == "durationBelow")
-                  setDurationBelow(val.toInt() != 0);
             else if (tag == "durationFontName")
                   setDurationFontName(e.text());
             else if (tag == "durationFontSize")
@@ -446,6 +444,8 @@ void StaffTypeTablature::read(const QDomElement& de)
                   setLinesThrough(val.toInt() != 0);
             else if (tag == "onLines")
                   setOnLines(val.toInt() != 0);
+            else if (tag == "stemsDown")
+                  setStemsDown(val.toInt() != 0);
             else if (tag == "upsideDown")
                   setUpsideDown(val.toInt() != 0);
             else if (tag == "useNumbers")
@@ -465,7 +465,6 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
       StaffType::writeProperties(xml);
       xml.tag("durations",        _genDurations);
-      xml.tag("durationBelow",      _durationsBelow);
       xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
       xml.tag("durationFontSize", _durationFontSize);
       xml.tag("durationFontY",    _durationFontUserY);
@@ -474,6 +473,7 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.tag("fretFontY",        _fretFontUserY);
       xml.tag("linesThrough",     _linesThrough);
       xml.tag("onLines",          _onLines);
+      xml.tag("stemsDown",        _stemsDown);
       xml.tag("upsideDown",       _upsideDown);
       xml.tag("useNumbers",       _useNumbers);
       xml.etag();

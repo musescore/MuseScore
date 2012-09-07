@@ -464,7 +464,7 @@ void Beam::layout1()
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !((StaffTypeTablature*)staff()->staffType())->durationBelow();
+            _up   = !((StaffTypeTablature*)staff()->staffType())->stemsDown();
             slope = 0.0;
             cross = isGrace = false;
             foreach(ChordRest* cr, _elements) {
@@ -1549,14 +1549,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       if (staff()->isTabStaff()) {
             qreal y;
-            if( ((StaffTypeTablature*)staff()->staffType())->durationBelow() ) {
+            if( ((StaffTypeTablature*)staff()->staffType())->stemsDown() ) {
                   _up   = false;
                   y     = (staff()->staffType()->lines() - 1) * staff()->staffType()->lineDistance().val()
-                              + STAFFTYPE_TAB_DEFAULTSTEMLEN;
+                              + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN;
                   }
             else {
                   _up   = true;
-                  y     = STAFFTYPE_TAB_DEFAULTSTEMPOSY - STAFFTYPE_TAB_DEFAULTSTEMLEN;
+                  y     = STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
                   }
             y *= _spatium;
             py1 = y;

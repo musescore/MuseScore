@@ -199,14 +199,14 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
                         StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(st);
                         stt->setSlashStyle(true);                 // assume no note values
                         stt->setGenDurations(false);
-                        stt->setDurationBelow(false);
+                        stt->setStemsDown(false);
                         if (noteValues1->isChecked())
                               stt->setGenDurations(true);
                         if (noteValues2->isChecked())
                               stt->setSlashStyle(false);
                         if (noteValues3->isChecked()) {
                               stt->setSlashStyle(false);
-                              stt->setDurationBelow(true);
+                              stt->setStemsDown(true);
                               }
                         stt->setDurationFontName(durFontName->currentText());
                         stt->setDurationFontSize(durFontSize->value());
@@ -315,8 +315,8 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                         else {
                               noteValues0->setChecked(false);
                               noteValues1->setChecked(false);
-                              noteValues2->setChecked( !(tab->durationBelow()) );
-                              noteValues3->setChecked(tab->durationBelow());
+                              noteValues2->setChecked( !(tab->stemsDown()) );
+                              noteValues3->setChecked(tab->stemsDown());
                               }
                         }
                   updateTabPreview();
@@ -526,11 +526,11 @@ void EditStaffType::updateTabPreview()
             stt->setGenDurations(true);
       if (noteValues2->isChecked()) {
             stt->setSlashStyle(false);
-            stt->setDurationBelow(false);
+            stt->setStemsDown(false);
             }
       if (noteValues3->isChecked()) {
             stt->setSlashStyle(false);
-            stt->setDurationBelow(true);
+            stt->setStemsDown(true);
             }
       stt->setDurationFontName(durFontName->currentText());
       stt->setDurationFontSize(durFontSize->value());

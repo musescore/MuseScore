@@ -161,8 +161,13 @@ void Stem::draw(QPainter* painter) const
       // TODO: adjust bounding rectangle in layout()
       if (useTab) {
             int nDots = chord()->dots();
-            if (nDots > 0)
-                  symbols[score()->symIdx()][dotSym].draw(painter, magS(), QPointF(spatium(), stemLen()), nDots);
+            if (nDots > 0) {
+                  qreal sp = spatium();
+                  qreal y = stemLen() - ( ((StaffTypeTablature*)st->staffType())->stemsDown() ?
+                              (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
+                  symbols[score()->symIdx()][dotSym].draw(painter, magS(),
+                              QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
+                  }
             }
       }
 
