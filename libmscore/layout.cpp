@@ -867,6 +867,10 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
 
 //---------------------------------------------------------
 //   cautionaryWidth
+//    Compute the width difference of actual measure m
+//    and the width of m if it were the last measure in a
+//    staff. The reason for any difference are courtesy
+//    time signatures and key signatures.
 //---------------------------------------------------------
 
 qreal Score::cautionaryWidth(Measure* m)
@@ -883,114 +887,47 @@ qreal Score::cautionaryWidth(Measure* m)
       // locate a time sig. in the next measure and, if found,
       // check if it has caut. sig. turned off
 
-      TimeSig* ts;
-      Segment* tss         = nm->findSegment(Segment::SegTimeSig, tick);
-      bool showCourtesySig = tss && styleB(ST_genCourtesyTimesig);
-      if (showCourtesySig) {
-            ts = static_cast<TimeSig*>(tss->element(0));
+      Segment* ns       = nm->findSegment(Segment::SegTimeSig, tick);
+      TimeSig* ts       = 0;
+      bool showCourtesy = styleB(ST_genCourtesyTimesig) && ns;
+      if (showCourtesy) {
+            ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && !ts->showCourtesySig())
-                  showCourtesySig = false;     // this key change has court. sig turned off
+                  showCourtesy = false;     // this key change has court. sig turned off
             }
       Segment* s = m->findSegment(Segment::SegTimeSigAnnounce, tick);
 
-      if (showCourtesySig && (s == 0))
+      if (showCourtesy && !s)
             w += ts->space().width();
-      else if (!showCourtesySig && s)
-            w -= ts->space().width();
+      else if (!showCourtesy && s && s->element(0))
+            w -= static_cast<TimeSig*>(s->element(0))->space().width();
 
-#if 0
       // courtesy key signatures
-      bool hasCourtesyKeysig = false;
-      int n                  = _staves.size();
+      qreal wwMin = 0.0;
+      qreal wwMax = 0.0;
+      int n = _staves.size();
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-            int track       = staffIdx * VOICES;
-            Staff* staff    = _staves[staffIdx];
-            showCourtesySig = false;
+            int track        = staffIdx * VOICES;
+            ns               = nm->findSegment(Segment::SegKeySig, tick);
+            KeySig* ks       = 0;
 
-            KeySigEvent key1 = staff->key(tick - 1);
-            KeySigEvent key2 = staff->key(tick);
-            if (styleB(ST_genCourtesyKeysig) && (key1 != key2)) {
-                  // locate a key sig. in next measure and, if found,
-                  // check if it has court. sig turned off
-                  s = nm->findSegment(Segment::SegKeySig, tick);
-                  showCourtesySig = true;	// assume this key change has court. sig turned on
-                  if (s) {
-                        KeySig* ks = static_cast<KeySig*>(s->element(track));
-                        if (ks && !ks->showCourtesy())
-                              showCourtesySig = false;     // this key change has court. sig turned off
-                        }
-
-                  if (showCourtesySig) {
-                        hasCourtesyKeysig = true;
-                        s  = m->undoGetSegment(Segment::SegKeySigAnnounce, tick);
-                        KeySig* ks = static_cast<KeySig*>(s->element(track));
-                        KeySigEvent ksv(key2);
-                        ksv.setNaturalType(key1.accidentalType());
-
-                        if (!ks) {
-                              ks = new KeySig(this);
-                              ks->setKeySigEvent(ksv);
-                              ks->setTrack(track);
-                              ks->setGenerated(true);
-                              ks->setMag(staff->mag());
-                              ks->setParent(s);
-                              undoAddElement(ks);
-                              }
-                        else if (ks->keySigEvent() != ksv) {
-                              undo(new ChangeKeySig(ks, ksv,
-                                 ks->showCourtesy(), ks->showNaturals()));
-                              }
-                        // change bar line to qreal bar line
-                        m->setEndBarLineType(DOUBLE_BAR, true);
-                        }
+            showCourtesy = styleB(ST_genCourtesyKeysig) && ns;
+            if (showCourtesy) {
+                  ks = static_cast<KeySig*>(ns->element(track));
+                  if (ks && !ks->showCourtesy())
+                        showCourtesy = false;
                   }
-            if (!showCourtesySig) {
-                  // remove any existent courtesy key signature
-                  Segment* s = m->findSegment(Segment::SegKeySigAnnounce, tick);
-                  if (s && s->element(track))
-                        undoRemoveElement(s->element(track));
-                  }
+            Segment* s = m->findSegment(Segment::SegKeySigAnnounce, tick);
+
+            if (showCourtesy && !s)
+                  wwMax = qMax(wwMax, ks->space().width());
+            else if (!showCourtesy && s && s->element(track))
+                  wwMin = qMin(wwMin, -static_cast<KeySig*>(s->element(track))->space().width());
             }
-
-      // courtesy clefs
-      // no courtesy clef if this measure is the end of a repeat
-
-      bool showCourtesyClef = styleB(ST_genCourtesyClef);
-      if (showCourtesyClef && !(m->repeatFlags() & RepeatEnd)) {
-            Clef* c;
-            int n = _staves.size();
-            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-                  Staff* staff = _staves[staffIdx];
-                  ClefType c1 = staff->clef(tick - 1);
-                  ClefType c2 = staff->clef(tick);
-                  if (c1 != c2) {
-                        // locate a clef in next measure and, if found,
-                        // check if it has court. sig turned off
-                        s = nm->findSegment(Segment::SegClef, tick);
-                        showCourtesySig = true;	// assume this clef change has court. sig turned on
-                        if (s) {
-                              c = static_cast<Clef*>(s->element(staffIdx*VOICES));
-                              if (c && !c->showCourtesy())
-                                    continue;   // this key change has court. sig turned off
-                              }
-
-                        s = m->undoGetSegment(Segment::SegClef, tick);
-                        int track = staffIdx * VOICES;
-                        if (!s->element(track)) {
-                              c = new Clef(this);
-                              c->setClefType(c2);
-                              c->setTrack(track);
-                              c->setGenerated(true);
-                              c->setSmall(true);
-                              c->setMag(staff->mag());
-                              c->setParent(s);
-                              undoAddElement(c);
-                              }
-                        }
-                  }
-            }
-#endif
-
+      if (wwMax > 0.0)
+            w += wwMax;
+      else
+            w += wwMin;
       return w;
       }
 
