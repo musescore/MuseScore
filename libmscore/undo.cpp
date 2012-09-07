@@ -1647,10 +1647,13 @@ void ChangeElement::flip()
             oldElement->parent()->change(oldElement, newElement);
             }
 
-      qSwap(oldElement, newElement);
-
-      if (newElement->type() == KEYSIG)
-            newElement->staff()->setUpdateKeymap(true);
+      if (newElement->type() == KEYSIG) {
+            //newElement->staff()->setUpdateKeymap(true);
+            KeySig* ks   = static_cast<KeySig*>(newElement);
+            Staff* staff = newElement->staff();
+            staff->removeKey(ks->segment()->tick());
+            staff->setKey(ks->segment()->tick(),ks->keySigEvent());
+            }
       else if (newElement->type() == DYNAMIC)
             newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
       else if (newElement->type() == TEMPO_TEXT) {
@@ -1665,6 +1668,9 @@ void ChangeElement::flip()
             if (ns->system())
                   ns->system()->add(ns);
             }
+
+      qSwap(oldElement, newElement);
+
       score->setLayoutAll(true);
       }
 
@@ -1735,7 +1741,8 @@ void ChangeKeySig::flip()
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
       keysig->setShowNaturals(showNaturals);
-//      keysig->staff()->setKey(keysig->segment()->tick(), ks);
+      keysig->staff()->removeKey(keysig->segment()->tick());
+      keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
       showCourtesy = sc;
       showNaturals = sn;
