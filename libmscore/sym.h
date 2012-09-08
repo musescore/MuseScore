@@ -44,48 +44,6 @@ struct SymCode {
 
 extern QMap<const char*, SymCode*> charReplaceMap;
 
-extern SymCode pSymbols[];
-
-//---------------------------------------------------------
-//   Sym
-//---------------------------------------------------------
-
-class Sym {
-      int _code;
-      int fontId;
-      const char* _name;
-      qreal w;
-      QRectF _bbox;
-      QPointF _attach;
-#ifdef USE_GLYPHS
-      QGlyphRun glyphs;       // cached values
-      void genGlyphs(const QFont& font);
-#endif
-
-   public:
-      Sym() { _code = 0; }
-      Sym(const char* name, int c, int fid, qreal x=0.0, qreal y=0.0);
-      Sym(const char* name, int c, int fid, const QPointF&, const QRectF&);
-
-      QFont font() const                   { return fontId2font(fontId); }
-      const char* name() const             { return _name;               }
-      void setName(const char* s)          { _name = s;                  }
-      const QRectF bbox(qreal mag) const;
-      qreal height(qreal mag) const        { return _bbox.height() * mag; }
-      qreal width(qreal mag) const         { return w * mag;  }
-      QPointF attach(qreal mag) const      { return _attach * mag;   }
-      int code() const                     { return _code;    }
-      int getFontId() const                { return fontId;   }
-      int setFontId(int v)                 { return fontId = v;   }
-      void draw(QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
-      void draw(QPainter* painter, qreal mag, const QPointF& pos, int n) const;
-      void setAttach(const QPointF& r)     { _attach = r; }
-      bool isValid() const                 { return _code != 0; }
-      QRectF getBbox() const               { return _bbox; }
-      QPointF getAttach() const            { return _attach; }
-      QString toString() const;
-      };
-
 //---------------------------------------------------------
 //   SymId
 //---------------------------------------------------------
@@ -215,6 +173,15 @@ enum SymId {
       s1solHeadSym,
       s2solHeadSym,
 
+      open01arrowHeadSym,
+      open0M1arrowHeadSym,
+      open11arrowHeadSym,
+      open1M1arrowHeadSym,
+      close01arrowHeadSym,
+      close0M1arrowHeadSym,
+      close11arrowHeadSym,
+      close1M1arrowHeadSym,
+
       ufermataSym,
       dfermataSym,
 
@@ -257,6 +224,8 @@ enum SymId {
 
       rcommaSym,
       lcommaSym,
+      lvarcommaSym,
+      rvarcommaSym,
 
       arpeggioSym,
       trillelementSym,
@@ -326,19 +295,16 @@ enum SymId {
       letterrSym,
       lettersSym,
       letterzSym,
+
       letterTSym,
       letterSSym,
       letterPSym,
 
       plusSym,
-
-//      note2Sym,
-      note4Sym,
-//      note8Sym,
-//      note16Sym,
-//      note32Sym,
-//      note64Sym,
-//      dotdotSym,
+      commaSym,
+      hyphenSym,
+      periodSym,
+      spaceSym,
 
       longaupaltSym,
       longadownaltSym,
@@ -351,6 +317,53 @@ enum SymId {
 
       tabclef2Sym,
       lastSym
+      };
+
+//---------------------------------------------------------
+//   Sym
+//---------------------------------------------------------
+
+class Sym {
+      int _code;
+      int fontId;
+      qreal w;
+      QRectF _bbox;
+      QPointF _attach;
+
+#ifdef USE_GLYPHS
+      QGlyphRun glyphs;       // cached values
+      void genGlyphs(const QFont& font);
+#endif
+
+      static QVector<const char*> symNames;
+      static QVector<QString> symUserNames;
+      static QHash<QString, SymId> lnhash;
+
+   public:
+      Sym() { _code = -1; }
+      Sym(int c, int fid, qreal x=0.0, qreal y=0.0);
+      Sym(int c, int fid, const QPointF&, const QRectF&);
+
+      QFont font() const                   { return fontId2font(fontId); }
+      const QRectF bbox(qreal mag) const;
+      qreal height(qreal mag) const        { return _bbox.height() * mag; }
+      qreal width(qreal mag) const         { return w * mag;  }
+      QPointF attach(qreal mag) const      { return _attach * mag;   }
+      int code() const                     { return _code;    }
+      int getFontId() const                { return fontId;   }
+      int setFontId(int v)                 { return fontId = v;   }
+      void draw(QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(QPainter* painter, qreal mag, const QPointF& pos, int n) const;
+      void setAttach(const QPointF& r)     { _attach = r; }
+      bool isValid() const                 { return _code != 0; }
+      QRectF getBbox() const               { return _bbox; }
+      QPointF getAttach() const            { return _attach; }
+      QString toString() const;
+
+      static SymId name2id(const QString& s) { return lnhash[s];        }
+      static const char* id2name(SymId id)   { return symNames[id];     }
+      static QString id2userName(SymId id)   { return symUserNames[id]; }
+      static void init();
       };
 
 extern QVector<Sym> symbols[2];

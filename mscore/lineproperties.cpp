@@ -205,14 +205,14 @@ void LineProperties::accept()
       else
             tl->setContinueText(0);
 
-      int sym = beginSymbol->itemData(beginSymbol->currentIndex()).toInt();
-      tl->setBeginSymbol(beginSymbolRb->isChecked() ? sym : -1);
+      SymId sym = SymId(beginSymbol->itemData(beginSymbol->currentIndex()).toInt());
+      tl->setBeginSymbol(beginSymbolRb->isChecked() ? sym : noSym);
 
-      sym = continueSymbol->itemData(continueSymbol->currentIndex()).toInt();
-      tl->setContinueSymbol(continueSymbolRb->isChecked() ? sym : -1);
+      sym = SymId(continueSymbol->itemData(continueSymbol->currentIndex()).toInt());
+      tl->setContinueSymbol(continueSymbolRb->isChecked() ? sym : noSym);
 
-      sym = endSymbol->itemData(endSymbol->currentIndex()).toInt();
-      tl->setEndSymbol(endSymbolRb->isChecked() ? sym : -1);
+      sym = SymId(endSymbol->itemData(endSymbol->currentIndex()).toInt());
+      tl->setEndSymbol(endSymbolRb->isChecked() ? sym : noSym);
 
       Placement p = PLACE_ABOVE;
       switch(beginTextPlace->currentIndex()) {

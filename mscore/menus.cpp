@@ -459,12 +459,12 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
-            int sym = noteHeads[0][i][1];
+            SymId sym = noteHeads[0][i][1];
             if (i == Note::HEAD_BREVIS_ALT)
                   sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
-            sp->append(nh, qApp->translate("symbol", symbols[0][sym].name()));
+            sp->append(nh, qApp->translate("symbol", Sym::id2name(sym)));
             }
       return sp;
       }
@@ -714,7 +714,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(-1);
+      pedal->setBeginSymbol(noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       pedal->setEndHookType(HOOK_45);
@@ -722,7 +722,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(-1);
+      pedal->setBeginSymbol(noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       sp->append(pedal, qApp->translate("lines", "Pedal"));

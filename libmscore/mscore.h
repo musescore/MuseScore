@@ -14,8 +14,8 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#define MSC_VERSION     "1.24"
-static const int MSCVERSION = 124;
+#define MSC_VERSION     "1.25"
+static const int MSCVERSION = 125;
 
 // History:
 //      1.3   added staff->_barLineSpan
@@ -42,6 +42,7 @@ static const int MSCVERSION = 124;
 //    1.22  timesig changed
 //    1.23  measure property for actual length
 //    1.24  default image size is spatium dependent
+//    1.25  symbol numbers in TextLine() replaced by symbol names
 
 
 class MStyle;

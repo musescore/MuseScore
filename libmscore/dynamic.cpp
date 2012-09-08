@@ -154,13 +154,13 @@ void Dynamic::setSubtype(const QString& tag)
       for (int i = 1; i < n; ++i) {
             if (dynList[i].tag == tag) {
                   _subtype = i;
-//                  setTextStyleType(TEXT_STYLE_DYNAMICS2);
+                  setTextStyleType(TEXT_STYLE_DYNAMICS2);
                   setText(dynList[i].tag);
                   return;
                   }
             }
       _subtype = 0;
-//      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      setTextStyleType(TEXT_STYLE_DYNAMICS);
       setText(tag);
       }
 

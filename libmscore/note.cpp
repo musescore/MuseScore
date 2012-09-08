@@ -59,21 +59,21 @@
 //    note head groups
 //---------------------------------------------------------
 
-const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
+const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       {     // down stem
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadSym        },
       { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
       { wholediamondheadSym,  halfdiamondheadSym,  diamondheadSym,    wholediamondheadSym  },
       { s0triangleHeadSym,    d1triangleHeadSym,   d2triangleHeadSym, s0triangleHeadSym    },
-      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       -1                   },
+      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       noSym                },
       { wholeslashheadSym,    halfslashheadSym,    quartslashheadSym, wholeslashheadSym    },
       { xcircledheadSym,      xcircledheadSym,     xcircledheadSym,   xcircledheadSym      },
-      { s0doHeadSym,          d1doHeadSym,         d2doHeadSym,       -1                   },
-      { s0reHeadSym,          d1reHeadSym,         d2reHeadSym,       -1                   },
-      { d0faHeadSym,          d1faHeadSym,         d2faHeadSym,       -1                   },
-      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       -1                   },
-      { s0tiHeadSym,          d1tiHeadSym,         d2tiHeadSym,       -1                   },
-      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      -1                   },
+      { s0doHeadSym,          d1doHeadSym,         d2doHeadSym,       noSym                },
+      { s0reHeadSym,          d1reHeadSym,         d2reHeadSym,       noSym                },
+      { d0faHeadSym,          d1faHeadSym,         d2faHeadSym,       noSym                },
+      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       noSym                },
+      { s0tiHeadSym,          d1tiHeadSym,         d2tiHeadSym,       noSym                },
+      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      noSym                },
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadaltSym     },
       },
       {     // up stem
@@ -81,15 +81,15 @@ const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
       { wholediamondheadSym,  halfdiamondheadSym,  diamondheadSym,    wholediamondheadSym  },
       { s0triangleHeadSym,    u1triangleHeadSym,   u2triangleHeadSym, s0triangleHeadSym    },
-      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       -1                   },
+      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       noSym                },
       { wholeslashheadSym,    halfslashheadSym,    quartslashheadSym, wholeslashheadSym    },
       { xcircledheadSym,      xcircledheadSym,     xcircledheadSym,   xcircledheadSym      },
-      { s0doHeadSym,          u1doHeadSym,         u2doHeadSym,       -1                   },
-      { s0reHeadSym,          u1reHeadSym,         u2reHeadSym,       -1                   },
-      { u0faHeadSym,          u1faHeadSym,         u2faHeadSym,       -1                   },
-      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       -1                   },
-      { s0tiHeadSym,          u1tiHeadSym,         u2tiHeadSym,       -1                   },
-      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      -1                   },
+      { s0doHeadSym,          u1doHeadSym,         u2doHeadSym,       noSym                },
+      { s0reHeadSym,          u1reHeadSym,         u2reHeadSym,       noSym                },
+      { u0faHeadSym,          u1faHeadSym,         u2faHeadSym,       noSym                },
+      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       noSym                },
+      { s0tiHeadSym,          u1tiHeadSym,         u2tiHeadSym,       noSym                },
+      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      noSym                },
       { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadaltSym     },
       }
       };
@@ -123,7 +123,7 @@ Sym* noteHeadSym(bool up, int group, int type)
 void NoteHead::write(Xml& xml) const
       {
       xml.stag("NoteHead");
-      xml.tag("name", symbols[0][_sym].name());
+      xml.tag("name", Sym::id2name(_sym));
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -1585,7 +1585,7 @@ void Note::updateAccidental(AccidentalState* as)
                               newUserAcc = ACC_SHARP;
                         else
                               newUserAcc = ACC_SHARP2;
-                        
+
                         if (_accidental->subtype() != newUserAcc)
                               acci = ACC_NONE; // don't use this any more
                         else {
@@ -1594,7 +1594,7 @@ void Note::updateAccidental(AccidentalState* as)
                               AccidentalVal accVal = tpc2alter(_tpc);
                               if ((accVal != as->accidentalVal(int(_line)))
                                   || hidden() || as->tieContext(int(_line)))
-                                    as->setAccidentalVal(int(_line), 
+                                    as->setAccidentalVal(int(_line),
                                                          accVal, _tieBack != 0);
                               }
                         break;

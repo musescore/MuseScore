@@ -333,7 +333,7 @@ Q_DECLARE_METATYPE(Note::NoteHeadGroup)
 Q_DECLARE_METATYPE(Note::NoteHeadType)
 
 extern Sym* noteHeadSym(bool up, int group, int n);
-extern const int noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES];
+extern const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES];
 
 #endif
 

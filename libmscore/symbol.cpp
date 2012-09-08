@@ -158,11 +158,11 @@ QRectF BSymbol::drag(const EditData& data)
 Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
-      _sym = 0;
+      _sym = noSym;
       setZ(SYMBOL * 100);
       }
 
-Symbol::Symbol(Score* s, int sy)
+Symbol::Symbol(Score* s, SymId sy)
    : BSymbol(s)
       {
       _sym = sy;
@@ -223,7 +223,7 @@ void Symbol::draw(QPainter* p) const
 void Symbol::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("name", symbols[score()->symIdx()][_sym].name());
+      xml.tag("name", Sym::id2name(_sym));
       Element::writeProperties(xml);
       foreach(const Element* e, leafs())
             e->write(xml);
@@ -237,22 +237,16 @@ void Symbol::write(Xml& xml) const
 void Symbol::read(const QDomElement& de)
       {
       QPointF pos;
-      int s = -1;
+      SymId s = noSym;
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "name") {
-                  for (int i = 0; i < symbols[0].size(); ++i) {
-                        if (val == symbols[0][i].name()) {
-                              s = i;
-                              break;
-                              }
-                        }
-                  if (s == -1) {
+                  s = Sym::name2id(val);
+                  if (s == noSym) {
                         qDebug("unknown symbol <%s>, symbols %d\n",
                            qPrintable(val), symbols[0].size());
-                        s = 0;
                         }
                   }
             else if (tag == "Symbol") {
@@ -292,10 +286,8 @@ void Symbol::read(const QDomElement& de)
             else if (!Element::readProperties(e))
                   domError(e);
             }
-      if (s == -1) {
+      if (s == noSym)
             qDebug("unknown symbol\n");
-            s = 0;
-            }
       setPos(pos);
       setSym(s);
       }
