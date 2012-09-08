@@ -1643,9 +1643,9 @@ void Note::updateAccidental(AccidentalState* as)
 
       if (_accidental && _accidental->role() == ACC_USER) {
             accRole = ACC_USER;
+
             // check if user accidental fits tpc
             // in case tpc was changed
-
             AccidentalType newUserAcc;
             AccidentalVal accVal = tpc2alter(_tpc);
             switch (_accidental->subtype()) {
@@ -1674,10 +1674,10 @@ void Note::updateAccidental(AccidentalState* as)
                               acci = ACC_NONE;
                               }
                         else 
-                              acci = newUserAcc; // keep it
+                              acci = ACC_NONE; // force recalculation of as
                         break;
                   default:
-                        // keep it
+                        // keep it as it is
                         acci = _accidental->subtype();
                   }
             }
@@ -1701,6 +1701,7 @@ void Note::updateAccidental(AccidentalState* as)
                   a->setSubtype(acci);
                   score()->undoAddElement(a);
                   }
+
             else if (_accidental->subtype() != acci
                      || _accidental->role() != accRole) {
                   Accidental* a = new Accidental(score());
