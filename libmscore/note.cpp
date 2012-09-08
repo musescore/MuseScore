@@ -1640,6 +1640,7 @@ void Note::updateAccidental(AccidentalState* as)
 
       AccidentalType acci = ACC_NONE;
       AccidentalRole accRole = ACC_AUTO;
+
       if (_accidental && _accidental->role() == ACC_USER) {
             accRole = ACC_USER;
             // check if user accidental fits tpc
