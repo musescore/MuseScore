@@ -128,7 +128,7 @@
     </chord>
   <chord id="18">
     <name>mMaj7</name>
-    <xml>minor-major</xml>
+    <xml>major-minor</xml>
     <voicing>C Eb G B</voicing>
     </chord>
   <chord id="19">
@@ -1036,7 +1036,7 @@
     </chord>
   <chord id="195">
     <name>Tristan</name>
-    <xml>tristan</xml>
+    <xml>Tristan</xml>
     <voicing>C F# A# D</voicing>
     </chord>
   <chord id="196">
