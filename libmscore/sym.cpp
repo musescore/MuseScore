@@ -24,18 +24,21 @@ static bool symbolsInitialized[2] = { false, false };
 QMap<const char*, SymCode*> charReplaceMap;
 
 static QReadWriteLock gLock;
+QHash<QString, SymId> Sym::lnhash;
+QVector<const char*> Sym::symNames;
+QVector<QString> Sym::symUserNames;
 
 //---------------------------------------------------------
 //   SymbolNames
 //---------------------------------------------------------
 
 struct SymbolNames {
-      int msIndex;
+      SymId msIndex;
       const char* mname;      // user visible name
-      const char* name;
+      const char* name;       // xml symbol name
       };
 
-SymbolNames lilypondNames[] = {
+static SymbolNames lilypondNames[] = {
       { wholerestSym,         QT_TRANSLATE_NOOP("symbol", "whole rest"),           "rests.0" },
       { halfrestSym,          QT_TRANSLATE_NOOP("symbol", "half rest"),            "rests.1" },
       { outsidewholerestSym,  QT_TRANSLATE_NOOP("symbol", "outside whole rest"),   "rests.0o" },
@@ -76,21 +79,21 @@ SymbolNames lilypondNames[] = {
       { flatflatslashSym,     QT_TRANSLATE_NOOP("symbol", "flat flat slash"),      "accidentals.flatflat.slash" },
       { sharpsharpSym,        QT_TRANSLATE_NOOP("symbol", "sharp sharp"),          "accidentals.doublesharp" },
       { soriSym,              QT_TRANSLATE_NOOP("symbol", "sori"),                 "accidentals.sori" },
-      { koronSym,             QT_TRANSLATE_NOOP("symbol", "koron"),                 "accidentals.koron" },
+      { koronSym,             QT_TRANSLATE_NOOP("symbol", "koron"),                "accidentals.koron" },
 
       { rightparenSym,        QT_TRANSLATE_NOOP("symbol", "right parenthesis"),    "accidentals.rightparen" },
-      { leftparenSym,         QT_TRANSLATE_NOOP("symbol", "left parenthesis"),     "accidentals.leftparen" },
+      { leftparenSym,         QT_TRANSLATE_NOOP("symbol", "left parenthesis"),     "accidentals.leftparen"  },
 
-      { -1,                   "",                                                  "arrowheads.open.01" },
-      { -1,                   "",                                                  "arrowheads.open.0M1" },
-      { -1,                   "",                                                  "arrowheads.open.11" },
-      { -1,                   "",                                                  "arrowheads.open.1M1" },
-      { -1,                   "",                                                  "arrowheads.close.01" },
-      { -1,                   "",                                                  "arrowheads.close.0M1" },
-      { -1,                   "",                                                  "arrowheads.close.11" },
-      { -1,                   "",                                                  "arrowheads.close.1M1" },
+      { open01arrowHeadSym,   QT_TRANSLATE_NOOP("symbol", "open arrowhead 01"),    "arrowheads.open.01"   },
+      { open0M1arrowHeadSym,  QT_TRANSLATE_NOOP("symbol", "open arrowhead 0M1"),   "arrowheads.open.0M1"  },
+      { open11arrowHeadSym,   QT_TRANSLATE_NOOP("symbol", "open arrowhead 11"),    "arrowheads.open.11"   },
+      { open1M1arrowHeadSym,  QT_TRANSLATE_NOOP("symbol", "open arrowhead 1M1"),   "arrowheads.open.1M1"  },
+      { close01arrowHeadSym,  QT_TRANSLATE_NOOP("symbol", "close arrowhead 01"),   "arrowheads.close.01"  },
+      { close0M1arrowHeadSym, QT_TRANSLATE_NOOP("symbol", "close arrowhead 0M1"),  "arrowheads.close.0M1" },
+      { close11arrowHeadSym,  QT_TRANSLATE_NOOP("symbol", "close arrowhead 11"),   "arrowheads.close.11"  },
+      { close1M1arrowHeadSym, QT_TRANSLATE_NOOP("symbol", "close arrowhead 1M1"),  "arrowheads.close.1M1" },
 
-      { dotSym,               QT_TRANSLATE_NOOP("symbol", "dot"),                  "dots.dot" },
+      { dotSym,               QT_TRANSLATE_NOOP("symbol", "dot"),                  "dots.dot"      },
       { longaupSym,           QT_TRANSLATE_NOOP("symbol", "longa up"),             "noteheads.uM2" },
       { longadownSym,         QT_TRANSLATE_NOOP("symbol", "longa down"),           "noteheads.dM2" },
       { brevisheadSym,        QT_TRANSLATE_NOOP("symbol", "brevis head"),          "noteheads.sM1" },
@@ -184,8 +187,8 @@ SymbolNames lilypondNames[] = {
       { varcodaSym,           QT_TRANSLATE_NOOP("symbol", "varied coda"),          "scripts.varcoda"     },
       { rcommaSym,            QT_TRANSLATE_NOOP("symbol", "rcomma"),               "scripts.rcomma"      },
       { lcommaSym,            QT_TRANSLATE_NOOP("symbol", "lcomma"),               "scripts.lcomma"      },
-      { -1,                   "",                                                  "scripts.rvarcomma" },
-      { -1,                   "",                                                  "scripts.lvarcomma" },
+      { rvarcommaSym,         QT_TRANSLATE_NOOP("symbol", "rcomma variation"),     "scripts.rvarcomma" },
+      { lvarcommaSym,         QT_TRANSLATE_NOOP("symbol", "lcomma variation"),     "scripts.lvarcomma" },
       { arpeggioSym,          QT_TRANSLATE_NOOP("symbol", "arpeggio"),             "scripts.arpeggio" },
       { trillelementSym,      QT_TRANSLATE_NOOP("symbol", "trillelement"),         "scripts.trill_element" },
       { arpeggioarrowdownSym, QT_TRANSLATE_NOOP("symbol", "arpeggio arrow down"),  "scripts.arpeggio.arrow.M1" },
@@ -249,12 +252,10 @@ SymbolNames lilypondNames[] = {
       { accDiscantSym,        QT_TRANSLATE_NOOP("symbol", "accordeon discant"),    "accordion.accDiscant"   },
       { accpushSym,           QT_TRANSLATE_NOOP("symbol", "accordeon push"),       "accordion.push"         },
       { accpullSym,           QT_TRANSLATE_NOOP("symbol", "accordeon pull"),       "accordion.pull"         },
-      { -1,                   "",                                                  "left up"               },
-      { -1,                   "",                                                  "left down"             },
-      { -1,                   "",                                                  "plus"                  },
-      { -1,                   "",                                                  "comma"                 },
-      { -1,                   "",                                                  "hyphen"                },
-      { -1,                   "",                                                  "period"                },
+      { plusSym,              QT_TRANSLATE_NOOP("symbol", "plus"),                 "plus"                  },
+      { commaSym,             QT_TRANSLATE_NOOP("symbol", "comma"),                "comma"                 },
+      { hyphenSym,            QT_TRANSLATE_NOOP("symbol", "hyphen"),               "hyphen"                },
+      { periodSym,            QT_TRANSLATE_NOOP("symblo", "period"),               "period"                },
       { zeroSym,              QT_TRANSLATE_NOOP("symbol", "zero"),                 "zero" },
       { oneSym,               QT_TRANSLATE_NOOP("symbol", "one"),                  "one" },
       { twoSym,               QT_TRANSLATE_NOOP("symbol", "two"),                  "two" },
@@ -266,7 +267,7 @@ SymbolNames lilypondNames[] = {
       { eightSym,             QT_TRANSLATE_NOOP("symbol", "eight"),                "eight" },
       { nineSym,              QT_TRANSLATE_NOOP("symbol", "nine"),                 "nine" },
       { plusSym,              QT_TRANSLATE_NOOP("symbol", "plus"),                 "plus" },
-      { -1,                   "",                                                  "space" },
+      { spaceSym,             QT_TRANSLATE_NOOP("symbol", "space"),                "space" },
       { letterzSym,           QT_TRANSLATE_NOOP("symbol", "z"),                    "z" },
       { letterfSym,           QT_TRANSLATE_NOOP("symbol", "f"),                    "f" },
       { lettersSym,           QT_TRANSLATE_NOOP("symbol", "s"),                    "s" },
@@ -283,112 +284,8 @@ SymbolNames lilypondNames[] = {
       { tabclef2Sym,          QT_TRANSLATE_NOOP("symbol", "tab2 clef"),            "clefs.tab2" },
       };
 
-SymCode pSymbols[] = {
-      SymCode(0xe10e, 1),    //natural
-      SymCode(0xe10c, 1),    // sharp
-      SymCode(0xe10d, 1),    // flat
-      SymCode(0xe104, 1),    // note2_Sym
-
-//      SymCode(0xe105, 1),    // note4_Sym
-      SymCode(0x1d15f, 1),    // note4_Sym
-
-      SymCode(0xe106, 1),    // note8_Sym
-
-      SymCode(0xe107, 1),    // note16_Sym
-      SymCode(0xe108, 1),    // note32_Sym
-      SymCode(0xe109, 1),    // note64_Sym
-      SymCode(0xe10a, 1),    // dot
-      SymCode(0xe10b, 1),    // dotdot
-      SymCode(0xe167, 1),    // coda
-      SymCode(0xe168, 1),    // varcoda
-      SymCode(0xe169, 1),    // segno
-
-      SymCode(0, 0),
+static SymCode pSymbols[] = {
       SymCode(0xa9,   -1, "(C)", SYMBOL_COPYRIGHT),
-      SymCode(0x00c0, -1),
-      SymCode(0x00c1, -1),
-      SymCode(0x00c2, -1),
-      SymCode(0x00c3, -1),
-      SymCode(0x00c4, -1),
-      SymCode(0x00c5, -1),
-      SymCode(0x00c6, -1),
-      SymCode(0x00c7, -1),
-      SymCode(0x00c8, -1),
-      SymCode(0x00c9, -1),
-      SymCode(0x00ca, -1),
-      SymCode(0x00cb, -1),
-      SymCode(0x00cc, -1),
-      SymCode(0x00cd, -1),
-      SymCode(0x00ce, -1),
-      SymCode(0x00cf, -1),
-
-      SymCode(0x00d0, -1),
-      SymCode(0x00d1, -1),
-      SymCode(0x00d2, -1),
-      SymCode(0x00d3, -1),
-      SymCode(0x00d4, -1),
-      SymCode(0x00d5, -1),
-      SymCode(0x00d6, -1),
-      SymCode(0x00d7, -1),
-      SymCode(0x00d8, -1),
-      SymCode(0x00d9, -1),
-      SymCode(0x00da, -1),
-      SymCode(0x00db, -1),
-      SymCode(0x00dc, -1),
-      SymCode(0x00dd, -1),
-      SymCode(0x00de, -1),
-      SymCode(0x00df, -1),
-
-      //capital letters esperanto
-      SymCode(0x0108, -1),
-      SymCode(0x011c, -1),
-      SymCode(0x0124, -1),
-      SymCode(0x0134, -1),
-      SymCode(0x015c, -1),
-      SymCode(0x016c, -1),
-
-      SymCode(0x00e0, -1),
-      SymCode(0x00e1, -1),
-      SymCode(0x00e2, -1),
-      SymCode(0x00e3, -1),
-      SymCode(0x00e4, -1),
-      SymCode(0x00e5, -1),
-      SymCode(0x00e6, -1),
-      SymCode(0x00e7, -1),
-      SymCode(0x00e8, -1),
-      SymCode(0x00e9, -1),
-      SymCode(0x00ea, -1),
-      SymCode(0x00eb, -1),
-      SymCode(0x00ec, -1),
-      SymCode(0x00ed, -1),
-      SymCode(0x00ee, -1),
-      SymCode(0x00ef, -1),
-
-      SymCode(0x00f0, -1),
-      SymCode(0x00f1, -1),
-      SymCode(0x00f2, -1),
-      SymCode(0x00f3, -1),
-      SymCode(0x00f4, -1),
-      SymCode(0x00f5, -1),
-      SymCode(0x00f6, -1),
-      SymCode(0x00f7, -1),
-      SymCode(0x00f8, -1),
-      SymCode(0x00f9, -1),
-      SymCode(0x00fa, -1),
-      SymCode(0x00fb, -1),
-      SymCode(0x00fc, -1),
-      SymCode(0x00fd, -1),
-      SymCode(0x00fe, -1),
-      SymCode(0x00ff, -1),
-      //small letters esperanto
-      SymCode(0x0109, -1),
-      SymCode(0x011d, -1),
-      SymCode(0x0125, -1),
-      SymCode(0x0135, -1),
-      SymCode(0x015d, -1),
-      SymCode(0x016d, -1),
-
-
       SymCode(0x00BC, -1, "1/4", SYMBOL_FRACTION),
       SymCode(0x00BD, -1, "1/2", SYMBOL_FRACTION),
       SymCode(0x00BE, -1, "3/4", SYMBOL_FRACTION),
@@ -404,11 +301,6 @@ SymCode pSymbols[] = {
       SymCode(0x215C, -1, "3/8", SYMBOL_FRACTION),
       SymCode(0x215D, -1, "5/8", SYMBOL_FRACTION),
       SymCode(0x215E, -1, "7/8", SYMBOL_FRACTION),
-
-      // SymCode(0x203F, -1),    // curved ligature to connect two syllables
-      SymCode(0x35c, -1),    // curved ligature to connect two syllables
-      SymCode(0x361, -1),    // curved ligature (top)
-
       SymCode(-1, -1)    // indicates end
       };
 
@@ -473,13 +365,13 @@ void Sym::genGlyphs(const QFont& font)
 //   Sym
 //---------------------------------------------------------
 
-Sym::Sym(const char* name, int c, int fid, qreal ax, qreal ay)
-   : _code(c), fontId(fid), _name(name), _attach(ax * MScore::DPI/PPI, ay * MScore::DPI/PPI)
+Sym::Sym(int c, int fid, qreal ax, qreal ay)
+   : _code(c), fontId(fid), _attach(ax * MScore::DPI/PPI, ay * MScore::DPI/PPI)
       {
       QFont _font(fontId2font(fontId));
       QFontMetricsF fm(_font);
       if (!fm.inFont(_code)) {
-            qDebug("Sym: character 0x%x(%d) <%s> are not in font <%s>\n", c, c, _name, qPrintable(_font.family()));
+            qDebug("Sym: character 0x%x(%d) are not in font <%s>\n", c, c, qPrintable(_font.family()));
             return;
             }
       w     = fm.width(_code);
@@ -489,8 +381,8 @@ Sym::Sym(const char* name, int c, int fid, qreal ax, qreal ay)
 #endif
       }
 
-Sym::Sym(const char* name, int c, int fid, const QPointF& a, const QRectF& b)
-   : _code(c), fontId(fid), _name(name)
+Sym::Sym(int c, int fid, const QPointF& a, const QRectF& b)
+   : _code(c), fontId(fid)
       {
       qreal ds = MScore::DPI/PPI;
       _bbox.setRect(b.x() * ds, b.y() * ds, b.width() * ds, b.height() * ds);
@@ -647,6 +539,41 @@ QString symToHtml(const Sym& s1, const Sym& s2, int leftMargin)
       "</data>").arg(family).arg(size).arg(leftMargin).arg(s1.code()).arg(s2.code());
       }
 
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void Sym::init()
+      {
+      symNames     = QVector<const char*>(lastSym);
+      symUserNames = QVector<QString>(lastSym);
+
+      for (unsigned int i = 0; i < sizeof(lilypondNames)/sizeof(*lilypondNames); ++i) {
+            SymId id = lilypondNames[i].msIndex;
+            lnhash[QString(lilypondNames[i].name)] = id;
+            if (id != noSym) {
+                  symNames[id]     = lilypondNames[i].name;
+                  symUserNames[id] = lilypondNames[i].mname;
+                  }
+            }
+
+// #define MT(a) QT_TRANSLATE_NOOP("symbol", a)
+
+      symNames[clefEightSym] = "clef eight";
+      symNames[clefOneSym]   = "clef one";
+      symNames[clefFiveSym]  = "clef five";
+      symNames[letterTSym]   = "T";
+      symNames[letterSSym]   = "S";
+      symNames[letterPSym]   = "P";
+
+      for (unsigned i = 0; pSymbols[i].code != -1; ++i) {
+            if (pSymbols[i].code == 0 || pSymbols[i].text == 0)
+                  continue;
+            charReplaceMap.insert(pSymbols[i].text, &pSymbols[i]);
+            }
+      }
+
 //---------------------------------------------------------
 //   initSymbols
 //---------------------------------------------------------
@@ -658,32 +585,12 @@ void initSymbols(int idx)
       symbolsInitialized[idx] = true;
       symbols[idx] = QVector<Sym>(lastSym);
 
-#define MT(a) QT_TRANSLATE_NOOP("symbol", a)
-      symbols[idx][clefEightSym] = Sym(MT("clef eight"), 0x38, 2);
-      symbols[idx][clefOneSym]   = Sym(MT("clef one"),   0x31, 2);
-      symbols[idx][clefFiveSym]  = Sym(MT("clef five"),  0x35, 2);
-      symbols[idx][letterfSym]   = Sym(MT("f"),          0x66, 1);
-      symbols[idx][lettermSym]   = Sym(MT("m"),          0x6d, 1);
-      symbols[idx][letterpSym]   = Sym(MT("p"),          0x70, 1);
-      symbols[idx][letterrSym]   = Sym(MT("r"),          0x72, 1);
-      symbols[idx][lettersSym]   = Sym(MT("s"),          0x73, 1);
-      symbols[idx][letterzSym]   = Sym(MT("z"),          0x7a, 1);
-      symbols[idx][letterTSym]   = Sym(MT("T"),          'T', 2);
-      symbols[idx][letterSSym]   = Sym(MT("S"),          'S', 2);
-      symbols[idx][letterPSym]   = Sym(MT("P"),          'P', 2);
-      // used for GUI:
-//      symbols[idx][note2Sym]     = Sym(MT("note 1/4"),   0xe104, 1);
-      symbols[idx][note4Sym]     = Sym(MT("note 1/4"),   0xe104, 1); // 0x1d15f, 1);
-//      symbols[idx][note8Sym]     = Sym(MT("note 1/8"),   0xe106, 1);
-//      symbols[idx][note16Sym]    = Sym(MT("note 1/16"),  0xe107, 1);
-//      symbols[idx][note32Sym]    = Sym(MT("note 1/32"),  0xe108, 1);
-//      symbols[idx][note64Sym]    = Sym(MT("note 1/64"),  0xe109, 1);
-//      symbols[idx][dotdotSym]    = Sym(MT("dot dot"),    0xe10b, 1);
-#undef MT
-
-      QHash<QString, int> lnhash;
-      for (unsigned int i = 0; i < sizeof(lilypondNames)/sizeof(*lilypondNames); ++i)
-            lnhash[QString(lilypondNames[i].name)] = lilypondNames[i].msIndex;
+      symbols[idx][clefEightSym] = Sym(0x38, 2);
+      symbols[idx][clefOneSym]   = Sym(0x31, 2);
+      symbols[idx][clefFiveSym]  = Sym(0x35, 2);
+      symbols[idx][letterTSym]   = Sym('T',  2);
+      symbols[idx][letterSSym]   = Sym('S',  2);
+      symbols[idx][letterPSym]   = Sym('P',  2);
 
       QString path;
 #ifdef Q_WS_IOS
@@ -744,12 +651,12 @@ void initSymbols(int idx)
                                     }
                               if (code == -1)
                                     qDebug("no code for glyph <%s>\n", qPrintable(name));
-                              int idx1 = lnhash[name];
-                              if (idx1 > 0)
-                                    symbols[idx][idx1] = Sym(strdup(qPrintable(name)), code, fid, p, b);
-                              else { // if (idx == 0)
-//                                    qDebug("symbol <%s> for symbol set %d not found in %s\n",
-//                                       qPrintable(name), idx, qPrintable(path));
+                              SymId idx1 = Sym::name2id(name);
+                              if (idx1 != noSym)
+                                    symbols[idx][idx1] = Sym(code, fid, p, b);
+                              else {
+                                    qDebug("symbol <%s> for symbol set %d not found in %s",
+                                       qPrintable(name), idx, qPrintable(path));
                                     }
                               }
                         else
@@ -759,18 +666,10 @@ void initSymbols(int idx)
             else
                   domError(e);
             }
-
-      for (unsigned int i = 0; i < sizeof(lilypondNames)/sizeof(*lilypondNames); ++i) {
-            int idx1 = lilypondNames[i].msIndex;
-            if (idx1 != -1)
-                  symbols[idx][idx1].setName(lilypondNames[i].mname);
-            }
-      if (charReplaceMap.isEmpty()) {
-            for (unsigned i = 0; pSymbols[i].code != -1; ++i) {
-                  if (pSymbols[i].code == 0 || pSymbols[i].text == 0)
-                        continue;
-                  charReplaceMap.insert(pSymbols[i].text, &pSymbols[i]);
-                  }
+      for (int i = 0; i < lastSym; ++i) {
+            Sym* sym = &symbols[idx][i];
+            if (sym->code() == -1)
+                  qDebug("no code for symbol %s", Sym::id2name(SymId(i)));
             }
       }
 

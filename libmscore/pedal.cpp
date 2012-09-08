@@ -41,7 +41,7 @@ Pedal::Pedal(Score* s)
 void Pedal::read(const QDomElement& e)
       {
       if (score()->mscVersion() >= 110) {
-            setBeginSymbol(-1);
+            setBeginSymbol(noSym);
             setEndHook(false);
             }
       TextLine::read(e);

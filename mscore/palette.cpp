@@ -402,13 +402,13 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
       return add(cells.size() - 1, s, name, tag, mag);
       }
 
-PaletteCell* Palette::append(int symIdx)
+PaletteCell* Palette::append(SymId symIdx)
       {
       if (!symbols[0][symIdx].isValid())
             return 0;
       Symbol* s = new Symbol(gscore);
       s->setSym(symIdx);
-      return append(s, qApp->translate("symbol", ::symbols[0][symIdx].name()));
+      return append(s, qApp->translate("symbol", Sym::id2name(symIdx)));
       }
 
 //---------------------------------------------------------

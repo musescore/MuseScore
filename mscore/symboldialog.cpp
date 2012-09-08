@@ -35,7 +35,7 @@ void SymbolDialog::createSymbolPalette()
       {
       sp = new Palette();
       for (int i = 0; i < lastSym; ++i)
-            sp->append(i);
+            sp->append(SymId(i));
       }
 
 //---------------------------------------------------------
