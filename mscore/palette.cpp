@@ -408,7 +408,7 @@ PaletteCell* Palette::append(SymId symIdx)
             return 0;
       Symbol* s = new Symbol(gscore);
       s->setSym(symIdx);
-      return append(s, qApp->translate("symbol", Sym::id2userName(symIdx)));
+      return append(s, Sym::id2userName(symIdx));
       }
 
 //---------------------------------------------------------
