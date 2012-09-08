@@ -306,12 +306,12 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string comment="tablatture type">Guitar (modern)</string>
+                  <string comment="tablatture type">6 strings (guitar)</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string comment="tablature type">Bass (modern)</string>
+                  <string comment="tablature type">4 strings (bass, hukelele)</string>
                  </property>
                 </item>
                 <item>
@@ -322,6 +322,11 @@
                 <item>
                  <property name="text">
                   <string comment="tablature type">French (historic)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Custom</string>
                  </property>
                 </item>
                </widget>
@@ -792,9 +797,6 @@
                </widget>
               </item>
              </layout>
-             <zorder></zorder>
-             <zorder>fretMarksGroup</zorder>
-             <zorder>durationsGroup</zorder>
             </widget>
            </item>
            <item>
