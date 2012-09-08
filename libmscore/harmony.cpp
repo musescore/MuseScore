@@ -480,8 +480,9 @@ const ChordDescription* Harmony::fromXml(const QString& kind,  const QList<HDegr
       ChordList* cl = score()->style()->chordList();
       foreach(const ChordDescription* cd, *cl) {
             QString k     = cd->xmlKind;
+            QString lowerCaseK = k.toLower(); // required for xmlKind Tristan
             QStringList d = cd->xmlDegrees;
-            if ((lowerCaseKind == k) && (d == degrees)) {
+            if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
 //                  qDebug("harmony found in db: %s %s -> %d\n", qPrintable(kind), qPrintable(degrees), cd->id);
                   return cd;
                   }
