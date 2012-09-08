@@ -15,6 +15,7 @@
 #define __SYMBOL_H__
 
 #include "bsymbol.h"
+#include "sym.h"
 
 class Segment;
 class QPainter;
@@ -28,11 +29,11 @@ class Symbol : public BSymbol {
       Q_OBJECT
 
    protected:
-      int _sym;
+      SymId _sym;
 
    public:
       Symbol(Score* s);
-      Symbol(Score* s, int sy);
+      Symbol(Score* s, SymId sy);
       Symbol(const Symbol&);
 
       Symbol &operator=(const Symbol&);
@@ -40,8 +41,8 @@ class Symbol : public BSymbol {
       virtual Symbol* clone() const     { return new Symbol(*this); }
       virtual ElementType type() const  { return SYMBOL; }
 
-      void setSym(int s) { _sym  = s;    }
-      int sym() const    { return _sym;  }
+      void setSym(SymId s) { _sym  = s;    }
+      SymId sym() const    { return _sym;  }
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;

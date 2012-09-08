@@ -61,6 +61,8 @@ extern void initDrumset();
 
 void MScore::init()
       {
+      Sym::init();
+
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<MScore::ElementType>("ElementType");
       qRegisterMetaType<MScore::ValueType>("ValueType");
@@ -133,12 +135,7 @@ void MScore::init()
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
             "gonville-20.otf",
-//            "mscore_tab_baroque.ttf",
-//            "mscore_tab_modern.ttf",
-//            "mscore_tab_renaiss.ttf",
-//            "mscore_tab_renaiss2.ttf",
             "mscoreTab.ttf",
-//            "FiguredBassMHGPL.otf",
             "mscore-BC.ttf"
             };
 

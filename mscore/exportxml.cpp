@@ -2913,10 +2913,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             xml.tag("offset", offs);
       if (staff)
             xml.tag("staff", staff);
-            
+
       if(dyn->velocity() > 0)
             xml.tagE(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
-            
+
       xml.etag();
       }
 
@@ -2929,7 +2929,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 
 void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       {
-      QString name = symbols[score->symIdx()][sym->sym()].name();
+      QString name = Sym::id2name(sym->sym());
       const char* mxmlName = "";
       if (name == "pedal ped")
             mxmlName = "pedal type=\"start\"";

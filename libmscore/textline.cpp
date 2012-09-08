@@ -269,9 +269,9 @@ TextLine::TextLine(Score* s)
       _lineColor         = Qt::black;
       _mxmlOff2          = 0;
 
-      _beginSymbol       = -1;
-      _continueSymbol    = -1;
-      _endSymbol         = -1;
+      _beginSymbol       = noSym;
+      _continueSymbol    = noSym;
+      _endSymbol         = noSym;
       _sp                = 0;
       }
 
@@ -429,15 +429,15 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
             xml.etag();
             }
       if (_beginSymbol != -1) {
-            xml.tag("beginSymbol", _beginSymbol);   // symbols[_symbol].name();
+            xml.tag("beginSymbol", Sym::id2name(_beginSymbol));
             xml.tag("beginSymbolOffset", _beginSymbolOffset);
             }
       if (_continueSymbol != -1) {
-            xml.tag("continueSymbol", _continueSymbol);
+            xml.tag("continueSymbol", Sym::id2name(_continueSymbol));
             xml.tag("continueSymbolOffset", _continueSymbolOffset);
             }
       if (_endSymbol != -1) {
-            xml.tag("endSymbol", _endSymbol);
+            xml.tag("endSymbol", Sym::id2name(_endSymbol));
             xml.tag("endSymbolOffset", _endSymbolOffset);
             }
       }
@@ -466,11 +466,11 @@ bool TextLine::readProperties(const QDomElement& e)
       else if (tag == "hookUp")           // obsolete
             _endHookHeight *= qreal(-1.0);
       else if (tag == "beginSymbol" || tag == "symbol")     // "symbol" is obsolete
-            _beginSymbol = text.toInt();
+            _beginSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "continueSymbol")
-            _continueSymbol = text.toInt();
+            _continueSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "endSymbol")
-            _endSymbol = text.toInt();
+            _endSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "beginSymbolOffset")
             _beginSymbolOffset = readPoint(e);
       else if (tag == "continueSymbolOffset")

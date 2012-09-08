@@ -1520,7 +1520,7 @@ void ExportLy::handleElement(Element* el)
 			{
 			    cout << "symbol in anchorlist tick: " << anchors[i].tick << "  \n";
 			    sym = (Symbol*) instruction;
-			    name = symbols[0][sym->sym()].name();
+			    name = Sym::id2name(sym->sym());
 			    writeSymbol(name);
 			    break;
 			}
@@ -2922,7 +2922,7 @@ bool ExportLy::findNoteSymbol(Note* n, QString& symbolname)
       foreach(const Element* symbol, n->el()) {
             if (symbol->type() == SYMBOL) {
                   const Symbol* symb = static_cast<const Symbol*>(symbol);
-                  symbolname = symbols[0][symb->sym()].name();
+                  symbolname = Sym::id2name(symb->sym());
                   return true; // what about more symbols connected to one note? Return array of names?
                   }
             }
