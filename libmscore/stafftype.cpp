@@ -85,8 +85,19 @@ StaffType::StaffType(const QString& s)
 
 bool StaffType::isEqual(const StaffType& st) const
       {
+      return isSameStructure(st)
+         && st._name == _name;
+      }
+
+//---------------------------------------------------------
+//   isSameStructure
+//
+//    smae as isEqual, but ignores name
+//---------------------------------------------------------
+
+bool StaffType::isSameStructure(const StaffType& st) const
+      {
       return st.group() == group()
-         && st._name         == _name
          && st._lines        == _lines
          && st._stepOffset   == _stepOffset
          && st._lineDistance == _lineDistance
@@ -400,11 +411,9 @@ void StaffTypeTablature::init()
 bool StaffTypeTablature::isEqual(const StaffType& st) const
       {
       return StaffType::isEqual(st)
-//         && static_cast<const StaffTypeTablature&>(st)._durationFontName   == _durationFontName
          && static_cast<const StaffTypeTablature&>(st)._durationFontIdx   == _durationFontIdx
          && static_cast<const StaffTypeTablature&>(st)._durationFontSize  == _durationFontSize
          && static_cast<const StaffTypeTablature&>(st)._durationFontUserY == _durationFontUserY
-//         && static_cast<const StaffTypeTablature&>(st)._fretFontName       == _fretFontName
          && static_cast<const StaffTypeTablature&>(st)._fretFontIdx       == _fretFontIdx
          && static_cast<const StaffTypeTablature&>(st)._fretFontSize      == _fretFontSize
          && static_cast<const StaffTypeTablature&>(st)._fretFontUserY     == _fretFontUserY
@@ -413,6 +422,23 @@ bool StaffTypeTablature::isEqual(const StaffType& st) const
          && static_cast<const StaffTypeTablature&>(st)._onLines           == _onLines
          && static_cast<const StaffTypeTablature&>(st)._upsideDown        == _upsideDown
          && static_cast<const StaffTypeTablature&>(st)._useNumbers        == _useNumbers
+         ;
+      }
+
+//---------------------------------------------------------
+//   isSameStructure
+//
+//    same as isEqual, but ignores name and font data
+//---------------------------------------------------------
+
+bool StaffTypeTablature::isSameStructure(const StaffTypeTablature& stt) const
+      {
+      return StaffType::isSameStructure(static_cast<const StaffType&>(stt))
+         && stt._genDurations == _genDurations
+         && stt._linesThrough == _linesThrough
+         && stt._onLines      == _onLines
+         && stt._upsideDown   == _upsideDown
+         && stt._useNumbers   == _useNumbers
          ;
       }
 
@@ -900,7 +926,6 @@ qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
                               if(f.read(de))
                                     _fretFonts.append(f);
                               else
-//                                    return false;
                                     continue;
                               }
                         else if (tag == "durationFont") {
@@ -908,7 +933,6 @@ qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
                               if(f.read(de))
                                     _durationFonts.append(f);
                               else
-//                                    return false;
                                     continue;
                               }
                         else

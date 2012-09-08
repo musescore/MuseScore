@@ -57,6 +57,7 @@ class StaffType {
       virtual StaffType* clone() const = 0;
       virtual const char* groupName() const = 0;
       virtual bool isEqual(const StaffType&) const;
+      virtual bool isSameStructure(const StaffType&) const;
       void setLines(int val);
       int lines() const                        { return _lines;           }
       void setStepOffset(int v)                { _stepOffset = v;         }
@@ -230,6 +231,33 @@ class StaffTypeTablature : public StaffType {
    public:
       StaffTypeTablature() : StaffType() { init(); }
       StaffTypeTablature(const QString& s) : StaffType(s) { init(); }
+      StaffTypeTablature(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimesig,
+            const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
+            const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+            bool linesThrough, bool onLines, bool upsideDown, bool useNumbers)
+            {
+            setName(name);
+            setLines(lines);
+            setLineDistance(Spatium(lineDist));
+            setGenClef(genClef);
+            setShowBarlines(showBarLines);
+            setSlashStyle(stemless);
+            setGenTimesig(genTimesig);
+            setDurationFontName(durFontName);
+            setDurationFontSize(durFontSize);
+            setDurationFontUserY(durFontUserY);
+            setGenDurations(genDur);
+            setFretFontName(fretFontName);
+            setFretFontSize(fretFontSize);
+            setFretFontUserY(fretFontUserY);
+            setLinesThrough(linesThrough);
+            setOnLines(onLines);
+            setUpsideDown(upsideDown);
+            setUseNumbers(useNumbers);
+            }
+
+      // internally managed variables
 
       // re-implemented virtual functions
       virtual StaffGroup group() const          { return TAB_STAFF; }
@@ -238,6 +266,7 @@ class StaffTypeTablature : public StaffType {
       virtual void read(const QDomElement& e);
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
+      bool        isSameStructure(const StaffTypeTablature& stt) const;
 
       QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString     durationString(TDuration::DurationType type, int dots) const;
