@@ -235,7 +235,7 @@ class StaffTypeTablature : public StaffType {
             bool showBarLines, bool stemless, bool genTimesig,
             const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
             const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
-            bool linesThrough, bool onLines, bool upsideDown, bool useNumbers)
+            bool linesThrough, bool onLines, bool stemsDown, bool upsideDown, bool useNumbers)
             {
             setName(name);
             setLines(lines);
@@ -252,6 +252,7 @@ class StaffTypeTablature : public StaffType {
             setFretFontSize(fretFontSize);
             setFretFontUserY(fretFontUserY);
             setLinesThrough(linesThrough);
+            setStemsDown(stemsDown);
             setOnLines(onLines);
             setUpsideDown(upsideDown);
             setUseNumbers(useNumbers);
