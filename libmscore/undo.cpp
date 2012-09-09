@@ -1202,6 +1202,15 @@ void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
       }
 
 //---------------------------------------------------------
+//   undoChangeTransposingState
+//---------------------------------------------------------
+
+void Score::undoChangeTransposingState(bool newState)
+      {
+      undo(new ChangeTransposingState(this,newState));
+      }
+
+//---------------------------------------------------------
 //   AddElement
 //---------------------------------------------------------
 
@@ -3091,3 +3100,24 @@ void ChangeMetaText::flip()
       text = s;
       }
 
+//---------------------------------------------------------
+//   ChangeTransposingState
+//---------------------------------------------------------
+
+ChangeTransposingState::ChangeTransposingState(Score *s,bool newState)
+      {
+      score = s;
+      _prevState = s->transposing();
+      _newState  = newState;
+      }
+
+//---------------------------------------------------------
+//   ChangeTransposingState:flip
+//---------------------------------------------------------
+
+void ChangeTransposingState::flip()
+      {
+      score->setTransposing(_newState);
+      _newState  = _prevState;
+      _prevState = score->transposing();
+      }

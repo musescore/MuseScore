@@ -492,6 +492,8 @@ class Score : public QObject {
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
 
+      void undoChangeTransposingState(bool newState);
+
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);

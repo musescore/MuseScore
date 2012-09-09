@@ -1378,5 +1378,23 @@ class ChangeMetaText : public UndoCommand {
       UNDO_NAME("ChangeMetaText");
       };
 
+//---------------------------------------------------------
+//   ChangeTransposingState
+//---------------------------------------------------------
+
+class ChangeTransposingState : public UndoCommand {
+      Score* score;
+      bool _newState;
+      bool _prevState;
+
+      void flip();
+
+   public:
+      ChangeTransposingState(Score *s,bool newState);
+      virtual void undo() { flip(); }
+      virtual void redo() { flip(); }
+      UNDO_NAME("ChangeTransposingState");
+      };
+
 #endif
 

@@ -1704,7 +1704,9 @@ void Note::updateAccidental(AccidentalState* as)
 
             else if (_accidental->subtype() != acci
                      || _accidental->role() != accRole) {
-                  Accidental* a = new Accidental(score());
+                  //Accidental* a = new Accidental(score());
+                  // keep other properties of accidental (small, bracket...)
+                  Accidental* a = _accidental->clone();
                   a->setParent(this);
                   a->setSubtype(acci);
                   a->setRole(accRole);
