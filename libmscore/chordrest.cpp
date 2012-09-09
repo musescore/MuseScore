@@ -113,6 +113,8 @@ ChordRest::~ChordRest()
             delete a;
       foreach(Lyrics* l, _lyricsList)
             delete l;
+      if(_tabDur)
+            delete _tabDur;
       }
 
 //---------------------------------------------------------
