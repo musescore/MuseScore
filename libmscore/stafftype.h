@@ -315,6 +315,7 @@ class TabDurationSymbol : public Element {
       virtual TabDurationSymbol* clone() const  { return new TabDurationSymbol(*this); }
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const           { return false; }
+      virtual void layout();
       virtual ElementType type() const          { return TAB_DURATION_SYMBOL; }
 
       void  setDuration(TDuration::DurationType type, int dots) { buildText(type, dots); }
