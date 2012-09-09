@@ -49,11 +49,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
             }
 
       // init tab presets
-      //                                                                          clef   bars stemless time  durations                      size off genDur frets                            size off thru  onLin  upsDn  nums
-      _tabPresets[TAB_PRESET_GUITAR]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, true,  false, true);
-      _tabPresets[TAB_PRESET_BASS]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, true,  false, true);
-      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  true,  true,  true);
-      _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  false, false, false);
+      //                                                                          clef   bars stemless time  durations                      size off genDur frets                            size off thru  onLin  stmDn  upsDn  nums
+      _tabPresets[TAB_PRESET_GUITAR]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, true,  true,  false, true);
+      _tabPresets[TAB_PRESET_BASS]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, true,  true,  false, true);
+      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  true,  false, true,  true);
+      _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  false, false, false, false);
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
       QList<QString> fontNames = StaffTypeTablature::fontNames(false);
@@ -86,7 +86,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(newTypeTablature,     SIGNAL(clicked()),            SLOT(createNewType()));
       connect(newTypePercussion,    SIGNAL(clicked()),            SLOT(createNewType()));
       connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
-      connect(presetTablature,      SIGNAL(clicked()),            SLOT(presetTablatureClicked()));
+      connect(presetTablatureCombo, SIGNAL(currentIndexChanged(int)), SLOT(presetTablatureChanged(int)));
 
       if (ci)
             staffTypeList->setCurrentItem(ci);
@@ -335,7 +335,7 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       linesThroughRadio->setChecked(stt->linesThrough());
       linesBrokenRadio->setChecked(!stt->linesThrough());
       idx = durFontName->findText(stt->durationFontName(), Qt::MatchFixedString);
-      if(idx == -1)     idx = 0;          // if name not found, use firstt name
+      if(idx == -1)     idx = 0;          // if name not found, use first name
       durFontName->setCurrentIndex(idx);
       durFontSize->setValue(stt->durationFontSize());
       durY->setValue(stt->durationFontUserY());
@@ -345,17 +345,20 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
             noteValues0->setChecked(false);
             noteValues1->setChecked(true);
             noteValues2->setChecked(false);
+            noteValues3->setChecked(false);
             }
       else {
             if(stt->slashStyle()) {
                   noteValues0->setChecked(true);
                   noteValues1->setChecked(false);
                   noteValues2->setChecked(false);
+                  noteValues3->setChecked(false);
                   }
             else {
                   noteValues0->setChecked(false);
                   noteValues1->setChecked(false);
-                  noteValues2->setChecked(true);
+                  noteValues2->setChecked(!stt->stemsDown());
+                  noteValues3->setChecked(stt->stemsDown());
                   }
             }
       updateTabPreview();
@@ -410,9 +413,8 @@ void EditStaffType::nameEdited(const QString& s)
 //   Tabulature preset clicked
 //---------------------------------------------------------
 
-void EditStaffType::presetTablatureClicked()
+void EditStaffType::presetTablatureChanged(int idx)
       {
-      int idx = presetTablatureCombo->currentIndex(); // retrieve item currently selected in preset combo
       if(idx < TAB_PRESETS) {
             blockTabPreviewSignals(true);             // do not redraw preview for every value we change!
             setDlgFromTab(_tabPresets[idx]);
@@ -472,18 +474,18 @@ void EditStaffType::updateTabPreview()
             return;
       StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(tabPreview->score()->staffTypes()[1]);
 //      stt->setName(o->text());
-//      stt->setLines(lines->value());          // do not change num of lines: sample requires 6 lines
+      stt->setLines(lines->value());
       stt->setLineDistance(Spatium(lineDistance->value()));
       stt->setShowBarlines(showBarlines->isChecked());
       stt->setGenClef(genClef->isChecked());
       stt->setGenTimesig(genTimesig->isChecked());
       stt->setSlashStyle(true);                 // assume no note values
-      stt->setGenDurations(false);
+      stt->setGenDurations(false);              //    "     "
+      stt->setStemsDown(false);
       if (noteValues1->isChecked())
             stt->setGenDurations(true);
       if (noteValues2->isChecked()) {
             stt->setSlashStyle(false);
-            stt->setStemsDown(false);
             }
       if (noteValues3->isChecked()) {
             stt->setSlashStyle(false);

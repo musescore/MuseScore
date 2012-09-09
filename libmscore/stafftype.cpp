@@ -92,7 +92,7 @@ bool StaffType::isEqual(const StaffType& st) const
 //---------------------------------------------------------
 //   isSameStructure
 //
-//    smae as isEqual, but ignores name
+//    same as isEqual, but ignores name
 //---------------------------------------------------------
 
 bool StaffType::isSameStructure(const StaffType& st) const
@@ -420,6 +420,7 @@ bool StaffTypeTablature::isEqual(const StaffType& st) const
          && static_cast<const StaffTypeTablature&>(st)._genDurations      == _genDurations
          && static_cast<const StaffTypeTablature&>(st)._linesThrough      == _linesThrough
          && static_cast<const StaffTypeTablature&>(st)._onLines           == _onLines
+         && static_cast<const StaffTypeTablature&>(st)._stemsDown         == _stemsDown
          && static_cast<const StaffTypeTablature&>(st)._upsideDown        == _upsideDown
          && static_cast<const StaffTypeTablature&>(st)._useNumbers        == _useNumbers
          ;
@@ -437,6 +438,7 @@ bool StaffTypeTablature::isSameStructure(const StaffTypeTablature& stt) const
          && stt._genDurations == _genDurations
          && stt._linesThrough == _linesThrough
          && stt._onLines      == _onLines
+         && stt._stemsDown    == _stemsDown
          && stt._upsideDown   == _upsideDown
          && stt._useNumbers   == _useNumbers
          ;
