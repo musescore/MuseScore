@@ -313,6 +313,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                _selection.tickStart(), _selection.tickEnd(), interval);
             }
       undoChangeTransposingState(false);
+      cmdUpdateNotes();
       setLayoutAll(true);
       }
 

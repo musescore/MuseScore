@@ -1647,6 +1647,7 @@ void Note::updateAccidental(AccidentalState* as)
             // check if user accidental fits tpc
             // in case tpc was changed
 
+            AccidentalVal accVal = tpc2alter(_tpc);
             AccidentalType newUserAcc;
             switch (_accidental->subtype()) {
                   case ACC_FLAT2:
@@ -1671,10 +1672,10 @@ void Note::updateAccidental(AccidentalState* as)
                               if (!score()->transposing())
                                     accRole = ACC_AUTO;
 
-                              acci = ACC_NONE;
+                              acci = ACC_NONE;  // force recalculation of as
                               }
                         else 
-                              acci = ACC_NONE; // force recalculation of as
+                              acci = newUserAcc;
                         break;
                   default:
                         // keep it
