@@ -303,6 +303,8 @@ void Score::init()
       _mscVersion     = MSCVERSION;
       _created        = false;
 
+      _transposing    = false;
+
       _updateAll      = true;
       _layoutAll      = true;
       layoutFlags     = 0;

@@ -1639,11 +1639,14 @@ void Note::updateAccidental(AccidentalState* as)
       // calculate accidental
 
       AccidentalType acci = ACC_NONE;
+      AccidentalRole accRole = ACC_AUTO;
       if (_accidental && _accidental->role() == ACC_USER) {
+            accRole = ACC_USER;
             // check if user accidental fits tpc
             // in case tpc was changed
 
             AccidentalType newUserAcc;
+            AccidentalVal accVal = tpc2alter(_tpc);
             switch (_accidental->subtype()) {
                   case ACC_FLAT2:
                   case ACC_FLAT:
@@ -1661,17 +1664,16 @@ void Note::updateAccidental(AccidentalState* as)
                         else
                               newUserAcc = ACC_SHARP2;
 
-                        if (_accidental->subtype() != newUserAcc)
-                              acci = ACC_NONE; // don't use this any more
-                        else {
-                              acci = newUserAcc; // keep it
-                              // if the key signature is changed:
-                              AccidentalVal accVal = tpc2alter(_tpc);
-                              if ((accVal != as->accidentalVal(int(_line)))
-                                  || hidden() || as->tieContext(int(_line)))
-                                    as->setAccidentalVal(int(_line),
-                                                         accVal, _tieBack != 0);
+                        if (accVal != as->accidentalVal(int(_line))) {
+                              // this is a needed accidental and thus
+                              // needs to be ACC_AUTO unless transposing
+                              if (!score()->transposing())
+                                    accRole = ACC_AUTO;
+
+                              acci = ACC_NONE;
                               }
+                        else 
+                              acci = newUserAcc; // keep it
                         break;
                   default:
                         // keep it
@@ -1698,10 +1700,12 @@ void Note::updateAccidental(AccidentalState* as)
                   a->setSubtype(acci);
                   score()->undoAddElement(a);
                   }
-            else if (_accidental->subtype() != acci) {
+            else if (_accidental->subtype() != acci
+                     || _accidental->role() != accRole) {
                   Accidental* a = new Accidental(score());
                   a->setParent(this);
                   a->setSubtype(acci);
+                  a->setRole(accRole);
                   score()->undoChangeElement(_accidental, a);
                   }
             }
