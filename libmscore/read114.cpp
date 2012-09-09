@@ -33,7 +33,7 @@
 
 static SymId resolveSymCompatibility(SymId i, QString programVersion)
       {
-      if(programVersion < "10100" && !programVersion.isEmpty())
+      if(!programVersion.isEmpty() && programVersion < "1.1")
           i = SymId(i + 5);
       switch(i) {
             case 197:
