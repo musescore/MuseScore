@@ -91,6 +91,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValues1,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValues2,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(noteValues3,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
@@ -198,10 +199,15 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
                         StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(st);
                         stt->setSlashStyle(true);                 // assume no note values
                         stt->setGenDurations(false);
+                        stt->setStemsDown(false);
                         if (noteValues1->isChecked())
                               stt->setGenDurations(true);
                         if (noteValues2->isChecked())
                               stt->setSlashStyle(false);
+                        if (noteValues3->isChecked()) {
+                              stt->setSlashStyle(false);
+                              stt->setStemsDown(true);
+                              }
                         stt->setDurationFontName(durFontName->currentText());
                         stt->setDurationFontSize(durFontSize->value());
                         stt->setDurationFontUserY(durY->value());
@@ -297,17 +303,20 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                         noteValues0->setChecked(false);
                         noteValues1->setChecked(true);
                         noteValues2->setChecked(false);
+                        noteValues3->setChecked(false);
                         }
                   else {
                         if(tab->slashStyle()) {
                               noteValues0->setChecked(true);
                               noteValues1->setChecked(false);
                               noteValues2->setChecked(false);
+                              noteValues3->setChecked(false);
                               }
                         else {
                               noteValues0->setChecked(false);
                               noteValues1->setChecked(false);
-                              noteValues2->setChecked(true);
+                              noteValues2->setChecked( !(tab->stemsDown()) );
+                              noteValues3->setChecked(tab->stemsDown());
                               }
                         }
                   updateTabPreview();
@@ -414,7 +423,8 @@ void EditStaffType::presetTablatureClicked()
             durFntName = "MuseScore Tab Modern";
             noteValues0->setChecked(false);
             noteValues1->setChecked(false);
-            noteValues2->setChecked(true);
+            noteValues2->setChecked(false);
+            noteValues3->setChecked(true);
             break;
       case 2:                             // Italian
       case 3:                             // French
@@ -439,6 +449,7 @@ void EditStaffType::presetTablatureClicked()
             noteValues0->setChecked(false);
             noteValues1->setChecked(true);
             noteValues2->setChecked(false);
+            noteValues3->setChecked(false);
             break;
       }
       // select right font name in font combos
@@ -480,6 +491,7 @@ void EditStaffType::blockTabPreviewSignals(bool block)
       genTimesig->blockSignals(block);
       noteValues1->blockSignals(block);
       noteValues2->blockSignals(block);
+      noteValues3->blockSignals(block);
       durFontName->blockSignals(block);
       durFontSize->blockSignals(block);
       durY->blockSignals(block);
@@ -512,8 +524,14 @@ void EditStaffType::updateTabPreview()
       stt->setGenDurations(false);
       if (noteValues1->isChecked())
             stt->setGenDurations(true);
-      if (noteValues2->isChecked())
+      if (noteValues2->isChecked()) {
             stt->setSlashStyle(false);
+            stt->setStemsDown(false);
+            }
+      if (noteValues3->isChecked()) {
+            stt->setSlashStyle(false);
+            stt->setStemsDown(true);
+            }
       stt->setDurationFontName(durFontName->currentText());
       stt->setDurationFontSize(durFontSize->value());
       stt->setDurationFontUserY(durY->value());

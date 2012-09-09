@@ -461,8 +461,10 @@ void Beam::layout1()
       Chord* c2 = 0;
 
       if (staff()->isTabStaff()) {
-            //TABULATURES: all beams (and related chords) are MScore::UP at slope 0
-            _up   = true;
+            //TABULATURES: all beams (and related chords) are:
+            //    UP or DOWN according to TAB duration position
+            //    slope 0
+            _up   = !((StaffTypeTablature*)staff()->staffType())->stemsDown();
             slope = 0.0;
             cross = isGrace = false;
             foreach(ChordRest* cr, _elements) {
@@ -1546,11 +1548,19 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             setMag(1.0);
 
       if (staff()->isTabStaff()) {
-            qreal y = (STAFFTYPE_TAB_DEFAULTSTEMPOSY
-               - STAFFTYPE_TAB_DEFAULTSTEMLEN) * _spatium;
+            qreal y;
+            if( ((StaffTypeTablature*)staff()->staffType())->stemsDown() ) {
+                  _up   = false;
+                  y     = (staff()->staffType()->lines() - 1) * staff()->staffType()->lineDistance().val()
+                              + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN;
+                  }
+            else {
+                  _up   = true;
+                  y     = STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
+                  }
+            y *= _spatium;
             py1 = y;
             py2 = y;
-            _up = true;
             }
       else {
             //
@@ -1686,9 +1696,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // create segment
                               x3 = cr2->stemPos().x() - canvPos.x();
 
-                              if (cr1->up())
+                              if (staff()->isTabStaff() || cr1->up())
                                     x2 -= stemWidth;
-                              if (!cr2->up())
+//                              if ( !(staff()->isTabStaff() || cr2->up()) )
+                              else
                                     x3 += stemWidth;
                               }
                         else {
