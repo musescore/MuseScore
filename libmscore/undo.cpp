@@ -1573,7 +1573,7 @@ ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l/*, int f, int 
 //      string = s;
       }
 
-void ChangePitch::flip()
+void ChangePitch::flip(bool redo)
       {
       int f_pitch                 = note->pitch();
       int f_tpc                   = note->tpc();
@@ -1588,12 +1588,18 @@ void ChangePitch::flip()
             }
       if (f_line != line)
             note->setLine(line);
+      
+      Score* score = note->score();
+      if ((f_tpc != tpc) && (!score->transposing()) && (redo)) {
+            // remove a user accidental if present
+            if (note->accidental() && (note->accidental()->role() == ACC_USER))
+                  score->undoRemoveElement(note->accidental());
+            }
 
       pitch          = f_pitch;
       tpc            = f_tpc;
       line           = f_line;
 
-      Score* score = note->score();
       if(updateAccid) {
             Chord* chord = note->chord();
             Measure* measure = chord->segment()->measure();
