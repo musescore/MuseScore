@@ -1324,7 +1324,6 @@ void Chord::layout()
             qreal lineDist = tab->lineDistance().val();
             foreach(Note* note, _notes) {
                   note->layout();
-//                  note->setPos(0.0, _spatium * (tab->upsideDown() ? tab->lines()-note->string()-1 : note->string()) * lineDist);
                   note->setPos(0.0, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
@@ -1367,6 +1366,7 @@ void Chord::layout()
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
                         // needed?        _tabDur->setTrack(track());
+                        _tabDur->layout();
                         }
                   else {                    // symbol not needed: if exists, delete
                         delete _tabDur;
@@ -1547,6 +1547,8 @@ const QRectF& Chord::bbox() const
             bb |= _stemSlash->bbox().translated(_stemSlash->pos());
       if (_tremolo)
             bb |= _tremolo->bbox().translated(_tremolo->pos());
+      if(staff()->isTabStaff() && _tabDur)
+            bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
       return Element::bbox();
       }
