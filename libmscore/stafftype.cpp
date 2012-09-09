@@ -37,12 +37,6 @@ void initStaffTypes()
       staffTypes.append(st);
 
       StaffTypeTablature* stab = new StaffTypeTablature("Tab");
-      stab->setLines(6);
-      stab->setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
-      stab->setGenClef(true);
-      stab->setSlashStyle(false);
-      stab->setShowBarlines(true);
-      stab->setGenTimesig(false);
       staffTypes.append(stab);
 
       StaffTypePercussion* sp = new StaffTypePercussion("Percussion 5 lines");
@@ -386,8 +380,12 @@ void StaffTypeTablature::init()
       setFretFontSize(10.0);
       setFretFontUserY(0.0);
       setGenDurations(false);
+      setGenTimesig(false);
+      setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
+      setLines(6);
       setLinesThrough(false);
       setOnLines(true);
+      setStemsDown(true);
       setUpsideDown(false);
       setUseNumbers(true);
       // internal
@@ -446,6 +444,8 @@ void StaffTypeTablature::read(const QDomElement& de)
                   setLinesThrough(val.toInt() != 0);
             else if (tag == "onLines")
                   setOnLines(val.toInt() != 0);
+            else if (tag == "stemsDown")
+                  setStemsDown(val.toInt() != 0);
             else if (tag == "upsideDown")
                   setUpsideDown(val.toInt() != 0);
             else if (tag == "useNumbers")
@@ -473,6 +473,7 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       xml.tag("fretFontY",        _fretFontUserY);
       xml.tag("linesThrough",     _linesThrough);
       xml.tag("onLines",          _onLines);
+      xml.tag("stemsDown",        _stemsDown);
       xml.tag("upsideDown",       _upsideDown);
       xml.tag("useNumbers",       _useNumbers);
       xml.etag();

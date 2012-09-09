@@ -1237,8 +1237,9 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       // TODO: restrict to reasonable values (pitch 0-127)
       //
       Staff* s    = staff(pos->staffIdx);
-      qreal mag = staff(pos->staffIdx)->mag();
-      qreal lineDist = (s->isTabStaff() ? 1.5 : .5) * mag * spatium();
+      qreal mag   = s->mag();
+      // in TABs, step from one string to another; in other staves, step on and between lines
+      qreal lineDist = s->staffType()->lineDistance().val() * (s->isTabStaff() ? 1 : .5) * mag * spatium();
 
       pos->line  = lrint((pppp.y() - sstaff->bbox().y()) / lineDist);
       if (s->isTabStaff()) {
