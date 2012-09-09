@@ -707,15 +707,15 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
-/*
+
 void TabDurationSymbol::layout()
       {
       QFontMetricsF fm(_tab->durationFont());
       qreal mags = magS();
       qreal w = fm.width(_text);
-      _bbox = QRectF(0.0, _tab->durationBoxY() * mags, w * mags, _tab->durationBoxH() * mags);
+      setbbox(QRectF(0.0, _tab->durationBoxY() * mags, w * mags, _tab->durationBoxH() * mags) );
       }
-*/
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
