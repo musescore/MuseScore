@@ -31,6 +31,26 @@
 #include "box.h"
 #include "dynamic.h"
 
+static SymId resolveSymCompatibility(SymId i, QString programVersion)
+      {
+      if(programVersion < "10100" && !programVersion.isEmpty())
+          i = SymId(i + 5);
+      switch(i) {
+            case 197:
+                  return pedalPedSym;
+            case 191:
+                  return pedalasteriskSym;
+            case 193:
+                  return pedaldotSym;
+            case 192:
+                  return pedaldashSym;
+            case 139:
+                  return trillSym;
+            default:
+                  return noSym;
+            }
+      }
+
 //---------------------------------------------------------
 //   read114
 //    import old version 1.2 files
@@ -271,6 +291,17 @@ bool Score::read114(const QDomElement& de)
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->setTrack(0);
                   s->read(ee);
+                  
+                 if ((tag == "Ottava")
+                  || (tag == "TextLine")
+                  || (tag == "Volta")
+                  || (tag == "Pedal")) {
+                      TextLine* tl = static_cast<TextLine*>(s);
+                      tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
+                      tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
+                      tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
+                      }
+                    
                   int tick2 = s->__tick2();
                   Segment* s1 = tick2segment(curTick);
                   Segment* s2 = tick2segment(tick2);
@@ -472,5 +503,3 @@ bool Score::read114(const QDomElement& de)
 
       return true;
       }
-
-
