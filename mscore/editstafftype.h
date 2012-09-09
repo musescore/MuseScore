@@ -66,7 +66,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void typeChanged(QListWidgetItem*, QListWidgetItem*);
       void createNewType();
       void nameEdited(const QString&);
-      void presetTablatureClicked();
+      void presetTablatureChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
       void updateTabPreview();
