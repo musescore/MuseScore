@@ -720,7 +720,7 @@
                     <item>
                      <widget class="QRadioButton" name="noteValues3">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="text">
                        <string>Stems and beams
