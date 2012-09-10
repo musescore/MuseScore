@@ -438,6 +438,14 @@ bool Text::readProperties(const QDomElement& e)
             }
       else if (tag == "subtype")          // obsolete
             ;
+      else if (tag == "frameWidth") {           // obsolete
+            qreal spMM = spatium() / MScore::DPMM;
+            setFrameWidth(Spatium(val.toDouble() / spMM));
+            }
+      else if (tag == "paddingWidth") {          // obsolete
+            qreal spMM = spatium() / MScore::DPMM;
+            setPaddingWidth(Spatium(val.toDouble() / spMM));
+            }
       else if (_textStyle.readProperties(e))
             ;
       else if (!Element::readProperties(e))
@@ -1066,7 +1074,7 @@ qreal Text::yoff() const
 //   setFrameWidth
 //---------------------------------------------------------
 
-void Text::setFrameWidth(qreal val)
+void Text::setFrameWidth(Spatium val)
       {
       _textStyle.setFrameWidth(val);
       }
@@ -1075,7 +1083,7 @@ void Text::setFrameWidth(qreal val)
 //   setPaddingWidth
 //---------------------------------------------------------
 
-void Text::setPaddingWidth(qreal val)
+void Text::setPaddingWidth(Spatium val)
       {
       _textStyle.setPaddingWidth(val);
       }

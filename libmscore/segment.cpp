@@ -478,8 +478,9 @@ void Segment::add(Element* el)
             case CHORD:
             case REST:
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %d track %d\n",
-                           el->name(), _elist[track]->name(), tick(), track);
+                        qDebug("Segment::add(%s) there is already an %s at %s track %d",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), track);
                         // abort();
                         return;
                         }

@@ -62,8 +62,8 @@ class Text : public SimpleText {
 
       bool sizeIsSpatiumDependent() const;
       void setSizeIsSpatiumDependent(int v);
-      void setFrameWidth(qreal val);
-      void setPaddingWidth(qreal val);
+      void setFrameWidth(Spatium val);
+      void setPaddingWidth(Spatium val);
       void setFrameColor(const QColor& val);
       void setFrameRound(int val);
       void setCircle(bool val);

@@ -275,12 +275,12 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "Tempo"), ff, 12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
-         true, .0, .0, 0, Qt::black, false, true));
+         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
 #else
       AS(TextStyle(
          TR( "Tempo"), ff, 12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
-         true, .0, .0, 0, Qt::black, false, true));
+         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
 #endif
       AS(TextStyle(
          TR( "Metronome"), ff, 12, true, false, false, ALIGN_LEFT));
@@ -300,7 +300,7 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "System"), ff,  10, false, false, false,
          ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true,
-         0.0, 0.0, 25, Qt::black, false, true));
+         Spatium(0.0), Spatium(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Staff"), ff,  10, false, false, false,
@@ -313,22 +313,22 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, QPointF(), true,
-         0.3, 1.0, 20, Qt::black, false, true));
+         MMSP(0.3), MMSP(1.0), 20, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Repeat Text Left"), ff,  12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(), true,
-         0.0, 0.0, 25, Qt::black, false, true));
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Repeat Text Right"), ff,  12, false, false, false,
          ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
-         0.0, 0.0, 25, Qt::black, false, true));
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
-         0.0, 0.0, 25, Qt::black, false, true));
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Volta"), ff, 11, true, false, false,
@@ -347,7 +347,8 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "String Number"), ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true, 0.2, -0.2, 0, Qt::black, true, false));
+         ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true,
+         MMSP(0.2), MMSP(-0.2), 0, Qt::black, true, false));
 
       AS(TextStyle(
          TR( "Ottava"), ff, 12, false, true, false,
@@ -640,7 +641,7 @@ TextStyle::TextStyle(
    Align _align,
    const QPointF& _off, OffsetType _ot, const QPointF& _roff,
    bool sd,
-   qreal fw, qreal pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
       {
       d = new TextStyleData(_name, _family, _size,
@@ -655,6 +656,11 @@ TextStyle::TextStyle(const TextStyle& s)
 TextStyle::~TextStyle()
       {
       }
+
+//---------------------------------------------------------
+//   TextStyle::operator=
+//---------------------------------------------------------
+
 TextStyle& TextStyle::operator=(const TextStyle& s)
       {
       d = s.d;
@@ -674,8 +680,10 @@ TextStyleData::TextStyleData()
       underline              = false;
       hasFrame               = false;
       sizeIsSpatiumDependent = false;
-      frameWidth             = 0.35;
-      paddingWidth           = 0.0;
+      frameWidth             = Spatium(0);
+      paddingWidth           = Spatium(0);
+      frameWidthMM           = 0.0;
+      paddingWidthMM         = 0.0;
       frameRound             = 25;
       frameColor             = MScore::defaultColor;
       circle                 = false;
@@ -690,7 +698,7 @@ TextStyleData::TextStyleData(
    Align _align,
    const QPointF& _off, OffsetType _ot, const QPointF& _roff,
    bool sd,
-   qreal fw, qreal pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
    :
    ElementLayout(_align, _off, _ot, _roff),
@@ -700,7 +708,7 @@ TextStyleData::TextStyleData(
    frameRound(fr), frameColor(co), circle(_circle), systemFlag(_systemFlag),
    foregroundColor(fg), backgroundColor(bg)
       {
-      hasFrame = (fw != 0.0) | (bg.alpha() != 0);
+      hasFrame = (fw.val() != 0.0) | (bg.alpha() != 0);
       family = _family;
       }
 
@@ -812,10 +820,10 @@ void TextStyleData::writeProperties(Xml& xml) const
             xml.tag("backgroundColor", backgroundColor);
 
       if (hasFrame) {
-            xml.tag("frameWidth", frameWidth);
-            xml.tag("paddingWidth", paddingWidth);
-            xml.tag("frameRound", frameRound);
-            xml.tag("frameColor", frameColor);
+            xml.tag("frameWidthS",   frameWidth.val());
+            xml.tag("paddingWidthS", paddingWidth.val());
+            xml.tag("frameRound",   frameRound);
+            xml.tag("frameColor",   frameColor);
             if (circle)
                   xml.tag("circle", circle);
             }
@@ -829,7 +837,7 @@ void TextStyleData::writeProperties(Xml& xml) const
 
 void TextStyleData::read(const QDomElement& de)
       {
-      frameWidth = 0.0;
+      frameWidth = Spatium(0.0);
       name = de.attribute("name");
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -869,13 +877,19 @@ bool TextStyleData::readProperties(const QDomElement& e)
       else if (tag == "sizeIsSpatiumDependent")
             sizeIsSpatiumDependent = val.toDouble();
       else if (tag == "frameWidth") {
-            frameWidth = val.toDouble();
             hasFrame = true;
+            frameWidthMM = val.toDouble();
+            }
+      else if (tag == "frameWidthS") {
+            hasFrame = true;
+            frameWidth = Spatium(val.toDouble());
             }
       else if (tag == "frame")      // obsolete
             hasFrame = i;
-      else if (tag == "paddingWidth")
-            paddingWidth = val.toDouble();
+      else if (tag == "paddingWidth")          // obsolete
+            paddingWidthMM = val.toDouble();
+      else if (tag == "paddingWidthS")
+            paddingWidth = Spatium(val.toDouble());
       else if (tag == "frameRound")
             frameRound = i;
       else if (tag == "frameColor")
@@ -977,6 +991,20 @@ void StyleData::load(const QDomElement& de)
                               }
                         }
                   }
+            }
+      //
+      //  Compatibility with old scores/styles:
+      //  translate old frameWidthMM and paddingWidthMM
+      //  into spatium units
+      //
+      int n = _textStyles.size();
+      qreal spMM = _spatium / MScore::DPMM;
+      for (int i = 0; i < n; ++i) {
+            TextStyle* s = &_textStyles[i];
+            if (s->frameWidthMM() != 0.0)
+                  s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
+            if (s->paddingWidthMM() != 0.0)
+                  s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
             }
       }
 
@@ -1090,6 +1118,10 @@ const TextStyle& StyleData::textStyle(int idx) const
       return _textStyles[idx];
       }
 
+//---------------------------------------------------------
+//   StyleVal
+//---------------------------------------------------------
+
 StyleVal::StyleVal(StyleIdx t, Spatium val)
       {
       idx  = t;
@@ -1178,20 +1210,36 @@ StyleVal MStyle::value(StyleIdx idx) const
       return d->_values[idx];
       }
 
+//---------------------------------------------------------
+//   isDefault
+//---------------------------------------------------------
+
 bool MStyle::isDefault(StyleIdx idx) const
       {
       return d->isDefault(idx);
       }
+
+//---------------------------------------------------------
+//   chordDescription
+//---------------------------------------------------------
 
 const ChordDescription* MStyle::chordDescription(int id) const
       {
       return d->chordDescription(id);
       }
 
+//---------------------------------------------------------
+//   chordList
+//---------------------------------------------------------
+
 ChordList* MStyle::chordList() const
       {
       return d->chordList();
       }
+
+//---------------------------------------------------------
+//   setChordList
+//---------------------------------------------------------
 
 void MStyle::setChordList(ChordList* cl)
       {
@@ -1242,33 +1290,30 @@ void StyleData::setTextStyle(const TextStyle& ts)
       _textStyles.append(ts);
       }
 
-QString TextStyle::name() const                           { return d->name; }
-QString TextStyle::family() const                         { return d->family; }
-qreal TextStyle::size() const                             { return d->size; }
-bool TextStyle::bold() const                              { return d->bold; }
-bool TextStyle::italic() const                            { return d->italic; }
-bool TextStyle::underline() const                         { return d->underline; }
-bool TextStyle::hasFrame() const                          { return d->hasFrame; }
-Align TextStyle::align() const                            { return d->align(); }
-
 //---------------------------------------------------------
-//   offset
+//   TextStyle method wrappers
 //---------------------------------------------------------
 
-const QPointF& TextStyle::offset() const
-      {
-      return d->offset();
-      }
-
-QPointF TextStyle::offset(qreal spatium) const
-      {
-      return d->offset(spatium);
-      }
-
+QString TextStyle::name() const                          {  return d->name;    }
+QString TextStyle::family() const                        {  return d->family;  }
+qreal TextStyle::size() const                            {  return d->size;    }
+bool TextStyle::bold() const                             {  return d->bold;    }
+bool TextStyle::italic() const                           { return d->italic; }
+bool TextStyle::underline() const                        { return d->underline; }
+bool TextStyle::hasFrame() const                         { return d->hasFrame; }
+Align TextStyle::align() const                           { return d->align(); }
+const QPointF& TextStyle::offset() const                 { return d->offset(); }
+QPointF TextStyle::offset(qreal spatium) const           { return d->offset(spatium); }
 OffsetType TextStyle::offsetType() const                 { return d->offsetType(); }
 bool TextStyle::sizeIsSpatiumDependent() const           { return d->sizeIsSpatiumDependent; }
-qreal TextStyle::frameWidth()  const                     { return d->frameWidth; }
-qreal TextStyle::paddingWidth() const                    { return d->paddingWidth; }
+
+Spatium TextStyle::frameWidth()  const                   { return d->frameWidth; }
+Spatium TextStyle::paddingWidth() const                  { return d->paddingWidth; }
+qreal TextStyle::frameWidthMM()  const                   { return d->frameWidthMM; }
+qreal TextStyle::paddingWidthMM() const                  { return d->paddingWidthMM; }
+void TextStyle::setFrameWidth(Spatium v)                 { d->frameWidth = v; }
+void TextStyle::setPaddingWidth(Spatium v)               { d->paddingWidth = v; }
+
 int TextStyle::frameRound() const                        { return d->frameRound; }
 QColor TextStyle::frameColor() const                     { return d->frameColor; }
 bool TextStyle::circle() const                           { return d->circle;     }
@@ -1289,8 +1334,6 @@ void TextStyle::setOffsetType(OffsetType v)              { d->setOffsetType(v); 
 void TextStyle::setRxoff(qreal v)                        { d->setRxoff(v); }
 void TextStyle::setRyoff(qreal v)                        { d->setRyoff(v); }
 void TextStyle::setSizeIsSpatiumDependent(bool v)        { d->sizeIsSpatiumDependent = v; }
-void TextStyle::setFrameWidth(qreal v)                   { d->frameWidth = v; }
-void TextStyle::setPaddingWidth(qreal v)                 { d->paddingWidth = v; }
 void TextStyle::setFrameRound(int v)                     { d->frameRound = v; }
 void TextStyle::setFrameColor(const QColor& v)           { d->frameColor = v; }
 void TextStyle::setCircle(bool v)                        { d->circle = v;     }
@@ -1304,20 +1347,11 @@ QFont TextStyle::fontPx(qreal spatium) const             { return d->fontPx(spat
 QRectF TextStyle::bbox(qreal sp, const QString& s) const { return d->bbox(sp, s); }
 QFontMetricsF TextStyle::fontMetrics(qreal space) const  { return d->fontMetrics(space); }
 bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(*s.d); }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void TextStyle::layout(Element* e) const
-      {
-      d->layout(e);
-      }
-
-void TextStyle::writeProperties(Xml& xml) const           { d->writeProperties(xml); }
-const QPointF& TextStyle::reloff() const                  { return d->reloff();      }
-void TextStyle::setReloff(const QPointF& p)               { setRxoff(p.x()), setRyoff(p.y()); }
-bool TextStyle::readProperties(const QDomElement& v)      { return d->readProperties(v); }
+void TextStyle::layout(Element* e) const                 { d->layout(e); }
+void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xml); }
+const QPointF& TextStyle::reloff() const                 { return d->reloff();      }
+void TextStyle::setReloff(const QPointF& p)              { setRxoff(p.x()), setRyoff(p.y()); }
+bool TextStyle::readProperties(const QDomElement& v)     { return d->readProperties(v); }
 
 //---------------------------------------------------------
 //   setFont

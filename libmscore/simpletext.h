@@ -69,10 +69,10 @@ class SimpleText : public Element {
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
-      qreal frameWidth() const;
+      Spatium frameWidth() const;
       QColor backgroundColor() const;
       bool hasFrame() const;
-      qreal paddingWidth() const;
+      Spatium paddingWidth() const;
       QColor frameColor() const;
       int frameRound() const;
       bool circle() const;
