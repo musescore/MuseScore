@@ -1221,7 +1221,7 @@ void AddElement::undo()
             Measure* m2 = tie->endNote()->chord()->measure();
 
             if (m1 != m2)
-                  tie->score()->updateNotes();
+                  tie->score()->cmdUpdateNotes();
             else
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
             }
@@ -1243,7 +1243,7 @@ void AddElement::redo()
             Measure* m2 = tie->endNote() ? tie->endNote()->chord()->measure() : 0;
 
             if (m2 && (m1 != m2))
-                  tie->score()->updateNotes();
+                  tie->score()->cmdUpdateNotes();
             else
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
             }
