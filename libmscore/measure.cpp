@@ -744,12 +744,9 @@ Segment* Measure::getSegment(Element* e, int tick)
 
 //---------------------------------------------------------
 //   getSegment
+///   Get a segment of type \a st at tick position \a t.
+///   If the segment does not exist, it is created.
 //---------------------------------------------------------
-
-/**
- Get a segment of type \a st at tick position \a t.
- If the segment does not exist, it is created.
-*/
 
 Segment* Measure::getSegment(Segment::SegmentType st, int t)
       {
@@ -779,6 +776,7 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t)
 Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
       {
 // qDebug("Measure::getSegment(st=%d, t=%d, gl=%d)", st, t, gl);
+
       if (st != Segment::SegChordRest && st != Segment::SegGrace) {
             qDebug("Measure::getSegment(st=%d, t=%d, gl=%d): incorrect segment type", st, t, gl);
             return 0;
@@ -788,10 +786,15 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
       // find the first segment at tick >= t
       for (s = first(); s && s->tick() < t; s = s->next())
             ;
+      if (s == 0) {
+            s = new Segment(this, Segment::SegChordRest, t);
+// qDebug("   create cr segment %p", s);
+            add(s);
+            }
 
       // find the first SegChordRest segment at tick = t
       // while counting the SegGrace segments
-      int nGraces = 0;
+      int nGraces  = 0;
       Segment* sCr = 0;
       for (Segment* ss = s; ss && ss->tick() == t; ss = ss->next()) {
             if (ss->subtype() == Segment::SegGrace)
@@ -801,68 +804,25 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
                   break;
                   }
             }
+// qDebug("   nGraces %d  sCr %p s %p %s", nGraces, sCr, s, s->subTypeName());
 
-//      qDebug("s=%p sCr=%p nGr=%d", s, sCr, nGraces);
-//      qDebug("segment list");
-//      for (Segment* s = first(); s; s = s->next())
-//            qDebug("  %d: %d", s->tick(), s->subtype());
-
-      if (gl == 0) {
-            if (sCr)
-                  return sCr;
-            // no SegChordRest at tick = t, must create it
-//            qDebug("creating SegChordRest at tick=%d", t);
-            s = new Segment(this, Segment::SegChordRest, t);
-            add(s);
-            return s;
+      for (; nGraces < gl; ++nGraces) {
+            Segment* ps = new Segment(this, Segment::SegGrace, t);
+// qDebug("   create grace segment %p", ps);
+            _segments.insert(ps, s);
+            s = ps;
+            setDirty();
             }
 
-      if (gl > 0) {
-            if (gl <= nGraces) {
-//                  qDebug("grace segment %d already exist, returning it", gl);
-                  int graces = 0;
-                  // for (Segment* ss = last(); ss && ss->tick() <= t; ss = ss->prev()) {
-                  for (Segment* ss = last(); ss && ss->tick() >= t; ss = ss->prev()) {
-                        if (ss->tick() > t)
-                              continue;
-                        if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
-                              graces++;
-                        if (gl == graces)
-                              return ss;
-                        }
-                  return 0; // should not be reached
-                  }
-            else {
-//                  qDebug("creating SegGrace at tick=%d and level=%d", t, gl);
-                  Segment* prevs = 0; // last segment inserted
-                  // insert the first grace segment
-                  if (nGraces == 0) {
-                        ++nGraces;
-                        s = new Segment(this, Segment::SegGrace, t);
-//                        qDebug("... creating SegGrace %p at tick=%d and level=%d", s, t, nGraces);
-                        add(s);
-                        prevs = s;
-                        // return s;
-                        }
-                  // find the first grace segment at t
-                  for (Segment* ss = last(); ss && ss->tick() <= t; ss = ss->prev()) {
-                        if (ss->subtype() == Segment::SegGrace && ss->tick() == t)
-                              prevs = ss;
-                        }
-
-                  // add the missing grace segments before the one already present
-                  while (nGraces < gl) {
-                        ++nGraces;
-                        s = new Segment(this, Segment::SegGrace, t);
-//                        qDebug("... creating SegGrace %p at tick=%d and level=%d", s, t, nGraces);
-                        _segments.insert(s, prevs);
-                        prevs = s;
-                        }
-                  setDirty();
-                  return s;
+      int graces = 0;
+      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
+            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
+                  graces++;
+            if (gl == graces) {
+                  qDebug("   return %p", ss);
+                  return ss;
                   }
             }
-
       return 0; // should not be reached
       }
 
@@ -2463,7 +2423,6 @@ bool Measure::setStartRepeatBarLine(bool val)
                   bl->setSubtype(START_REPEAT);
                   if (s == 0) {
                         if (score()->undoRedo()) {
-                              printf("Measure %d) setStartRepeatBarLine %d\n", no()+1, val);
                               return false;
                               }
                         s = undoGetSegment(Segment::SegStartRepeatBarLine, tick());

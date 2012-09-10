@@ -421,15 +421,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
 
 //---------------------------------------------------------
 //   cloneStaff
+//    srcStaff and dstStaff are in the same score
 //---------------------------------------------------------
 
 void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
-printf("clone staff=== %p %p\n", srcStaff, dstStaff);
       Score* score = srcStaff->score();
-//      dstStaff->linkTo(srcStaff);
 
-//      int tracks = score->nstaves() * VOICES;
       SlurMap slurMap;
       TieMap tieMap;
 
@@ -458,10 +456,8 @@ printf("clone staff=== %p %p\n", srcStaff, dstStaff);
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
                               Tuplet* ot     = ocr->tuplet();
                               if (ot) {
-printf("tuplet\n");
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-printf("  create tuplet\n");
                                           nt = new Tuplet(*ot);
                                           nt->clear();
                                           nt->setTrack(dstTrack);
