@@ -478,10 +478,15 @@ void Segment::add(Element* el)
             case CHORD:
             case REST:
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s track %d",
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d",
                            el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), track);
-                        // abort();
+                           score()->sigmap()->pos(tick()), tick(), track);
+                        ChordRest* cr = static_cast<ChordRest*>(el);
+                        ChordRest* cr1  = static_cast<ChordRest*>(_elist[track]);
+                        qDebug("   %d/%d -> %d/%d",
+                           cr->duration().numerator(), cr->duration().denominator(),
+                           cr1->duration().numerator(), cr1->duration().denominator());
+                        abort();
                         return;
                         }
                   if (track % VOICES)
