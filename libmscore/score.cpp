@@ -3227,8 +3227,9 @@ int Score::linkId()
 
 void Score::linkId(int val)
       {
-      if (val > rootScore()->_linkId)
-            rootScore()->_linkId = val;
+      Score* s = rootScore();
+      if (val > s->_linkId)
+            s->_linkId = val;
       }
 
 //---------------------------------------------------------

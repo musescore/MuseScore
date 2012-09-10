@@ -670,14 +670,21 @@ bool Element::readProperties(const QDomElement& e)
       else if (tag == "userOff")
             _userOff = readPoint(e);
       else if (tag == "lid") {
-            _links = score()->links().value(val.toInt());
+            int id = val.toInt();
+            _links = score()->links().value(id);
             if (!_links) {
-                  int i = val.toInt();
                   if (score()->parentScore())   // DEBUG
-                        qDebug("---link %d not found (%d)\n", i, score()->links().size());
-                  _links = new LinkedElements(score(), i);
-                  score()->links().insert(i, _links);
+                        qDebug("---link %d not found (%d)\n", id, score()->links().size());
+                  _links = new LinkedElements(score(), id);
+                  score()->links().insert(id, _links);
                   }
+#ifndef NDEBUG
+            else {
+                  foreach(Element* e, _links) {
+                        Q_ASSERT(e->type() == type());
+                        }
+                  }
+#endif
             _links->append(this);
             }
       else if (tag == "tick") {

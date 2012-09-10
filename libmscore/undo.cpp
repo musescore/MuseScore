@@ -343,35 +343,23 @@ void Score::undoChangeElement(Element* oldElement, Element* newElement)
 
 void Score::undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret, int string*/)
       {
-      QList<Staff*> staffList;
-      Staff* ostaff = note->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
-      Chord* chord = note->chord();
+      Chord* chord  = note->chord();
       int noteIndex = chord->notes().indexOf(note);
-      Segment* segment = chord->segment();
-      Measure* measure = segment->measure();
-      foreach(Staff* staff, staffList) {
-            Score* score = staff->score();
-            Measure* m;
-            Segment* s;
-            if (score == this) {
-                  m = measure;
-                  s = segment;
+
+      Q_ASSERT(noteIndex >= 0);
+
+      LinkedElements* l = chord->links();
+      if (l) {
+            foreach(Element* e, *l) {
+                  Chord* c = static_cast<Chord*>(e);
+                  Q_ASSERT(c->type() == CHORD);
+                  Q_ASSERT(c->notes().size() > noteIndex);
+                  Note* n  = c->notes().at(noteIndex);
+                  undo(new ChangePitch(n, pitch, tpc, line));
                   }
-            else {
-                  m = score->tick2measure(measure->tick());
-                  s = m->findSegment(segment->subtype(), segment->tick());
-                  }
-            int staffIdx = score->staffIdx(staff);
-            Chord* c     = static_cast<Chord*>(s->element(staffIdx * VOICES + chord->voice()));
-            Note* n      = c->notes().at(noteIndex);
-            undo(new ChangePitch(n, pitch, tpc, line/*, fret, string*/));
             }
+      else
+            undo(new ChangePitch(note, pitch, tpc, line));
       }
 
 //---------------------------------------------------------
