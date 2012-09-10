@@ -919,7 +919,7 @@ qreal Score::cautionaryWidth(Measure* m)
                   }
             Segment* s = m->findSegment(Segment::SegKeySigAnnounce, tick);
 
-            if (showCourtesy && !s)
+            if (showCourtesy && !s && ks)
                   wwMax = qMax(wwMax, ks->space().width());
             else if (!showCourtesy && s && s->element(track))
                   wwMin = qMin(wwMin, -static_cast<KeySig*>(s->element(track))->space().width());
