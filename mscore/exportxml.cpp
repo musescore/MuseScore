@@ -4221,7 +4221,7 @@ void ExportMusicXml::harmony(Harmony const* const h)
             if (rx > 0) {
                   relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
                   }
-            if (h->frameWidth() > 0.0)
+            if (h->hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
                   xml.stag(QString("harmony print-frame=\"no\"").append(relative));

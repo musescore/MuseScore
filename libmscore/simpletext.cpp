@@ -68,8 +68,8 @@ void SimpleText::drawFrame(QPainter* painter) const
             color = Qt::gray;
       else if (selected())
             color = Qt::blue;
-      if (frameWidth() != 0.0) {
-            QPen pen(color, frameWidth() * MScore::DPMM);
+      if (frameWidth().val() != 0.0) {
+            QPen pen(color, frameWidth().val() * spatium());
             painter->setPen(pen);
             }
       else
@@ -184,9 +184,10 @@ void SimpleText::layoutFrame()
                   frame.setWidth(frame.height());
                   }
             }
-      qreal w = (paddingWidth() + frameWidth() * .5) * MScore::DPMM;
+      qreal _spatium = spatium();
+      qreal w = (paddingWidth() + frameWidth() * .5).val() * _spatium;
       frame.adjust(-w, -w, w, w);
-      w = frameWidth() * MScore::DPMM;
+      w = frameWidth().val() * _spatium;
       setbbox(frame.adjusted(-w, -w, w, w));
       }
 
@@ -221,7 +222,7 @@ qreal SimpleText::baseLine() const
 //   frameWidth
 //---------------------------------------------------------
 
-qreal SimpleText::frameWidth() const
+Spatium SimpleText::frameWidth() const
       {
       return textStyle().frameWidth();
       }
@@ -239,7 +240,7 @@ bool SimpleText::hasFrame() const
 //   paddingWidth
 //---------------------------------------------------------
 
-qreal SimpleText::paddingWidth() const
+Spatium SimpleText::paddingWidth() const
       {
       return textStyle().paddingWidth();
       }

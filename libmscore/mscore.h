@@ -43,6 +43,7 @@ static const int MSCVERSION = 125;
 //    1.23  measure property for actual length
 //    1.24  default image size is spatium dependent
 //    1.25  symbol numbers in TextLine() replaced by symbol names
+//          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
 
 
 class MStyle;
@@ -55,6 +56,7 @@ static const qreal INCH = 25.4;
 static const qreal PPI  = 72.0;           // printer points per inch
 static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in inch
 static const int MAX_STAVES = 4;
+#define MMSP(x)  Spatium((x) * .1)
 
 static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
