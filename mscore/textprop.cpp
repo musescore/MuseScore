@@ -178,9 +178,9 @@ void TextProp::setTextStyle(const TextStyle& s)
 
       frameColor->setColor(s.frameColor());
       bgColor->setColor(s.backgroundColor());
-      frameWidth->setValue(s.frameWidth());
+      frameWidth->setValue(s.frameWidth().val());
       frame->setChecked(s.hasFrame());
-      paddingWidth->setValue(s.paddingWidth());
+      paddingWidth->setValue(s.paddingWidth().val());
       frameRound->setValue(s.frameRound());
       circleButton->setChecked(s.circle());
       boxButton->setChecked(!s.circle());
@@ -209,8 +209,8 @@ TextStyle TextProp::textStyle() const
       s.setRyoff(ryOffset->value());
       s.setFrameColor(frameColor->color());
       s.setBackgroundColor(bgColor->color());
-      s.setFrameWidth(frameWidth->value());
-      s.setPaddingWidth(paddingWidth->value());
+      s.setFrameWidth(Spatium(frameWidth->value()));
+      s.setPaddingWidth(Spatium(paddingWidth->value()));
       s.setCircle(circleButton->isChecked());
       s.setFrameRound(frameRound->value());
       s.setHasFrame(frame->isChecked());
