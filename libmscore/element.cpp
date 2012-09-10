@@ -680,7 +680,7 @@ bool Element::readProperties(const QDomElement& e)
                   }
 #ifndef NDEBUG
             else {
-                  foreach(Element* e, _links) {
+                  foreach(Element* e, *_links) {
                         Q_ASSERT(e->type() == type());
                         }
                   }
