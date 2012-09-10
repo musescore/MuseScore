@@ -239,7 +239,18 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
-                              Segment* ns = nm->getSegment(oseg->subtype(), oseg->tick());
+                              Segment* ns;
+                              if (oseg->subtype() == Segment::SegGrace) {
+                                    int gl = 0;
+                                    for (Segment* ms = oseg->next(); ms; ms = ms->next()) {
+                                          ++gl;
+                                          if (ms->subtype() != Segment::SegGrace)
+                                                break;
+                                          }
+                                    ns = nm->getSegment(oseg->subtype(), oseg->tick(), gl);
+                                    }
+                              else
+                                    ns = nm->getSegment(oseg->subtype(), oseg->tick());
 
                               foreach(Spanner* spanner, oseg->spannerFor()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
@@ -306,7 +317,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               else
                                     ne = oe->linkedClone();
                               ne->setTrack(track);
-                              ne->scanElements(score, localSetScore);
+                              ne->scanElements(score, localSetScore);   //necessary?
                               ne->setScore(score);
                               if (oe->isChordRest()) {
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
