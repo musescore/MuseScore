@@ -509,7 +509,7 @@ void Debugger::updateElement(Element* el)
       for (int i = 0;; ++i) {
             QTreeWidgetItem* item = list->topLevelItem(i);
             if (item == 0) {
-                  qDebug("Debugger::Element not found %s %p\n", el->name(), el);
+                  qDebug("Debugger::Element not found %s %p", el->name(), el);
                   break;
                   }
             ElementItem* ei = (ElementItem*)item;
@@ -1631,7 +1631,6 @@ void ShowElementBase::setElement(Element* e)
       eb.address->setText(QString("%1").arg((unsigned long)e, 0, 16));
       eb.score->setText(QString("%1").arg((unsigned long)(e->score()), 0, 16));
 
-//      eb.subtype->setValue(e->subtype());
       eb.selected->setChecked(e->selected());
       eb.selectable->setChecked(e->selectable());
       eb.droptarget->setChecked(e->dropTarget());
@@ -1713,9 +1712,9 @@ void ShowElementBase::parentClicked()
 
 void ShowElementBase::linkClicked()
       {
-      qDebug("linkClicked\n");
+      qDebug("linkClicked");
       foreach(Element* e, *el->links()) {
-            qDebug("  element <%p> <%p>\n", e->score(), e);
+            qDebug("  element <%p> <%p>", e->score(), e);
             if (e != el) {
                   emit elementChanged(e);
                   break;
