@@ -366,7 +366,8 @@ void LineSegment::editDrag(const EditData& ed)
                   setUserOff(userOff() + deltaMove);
                   break;
             }
-      layout();
+      line()->layout();
+      score()->setUpdateAll(true);
       }
 
 //---------------------------------------------------------

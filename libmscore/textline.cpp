@@ -62,7 +62,7 @@ void TextLineSegment::setSelected(bool f)
 
 void TextLineSegment::draw(QPainter* painter) const
       {
-      TextLine* tl    = textLine();
+      TextLine* tl   = textLine();
       qreal _spatium = spatium();
 
       qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
@@ -127,6 +127,7 @@ void TextLineSegment::draw(QPainter* painter) const
             pp1.rx() += fabs(tl->beginHookHeight().val() * _spatium * .4);
       if (tl->endHook() && tl->endHookType() == HOOK_45)
             pp2.rx() -= fabs(tl->endHookHeight().val() * _spatium * .4);
+
       painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
       if (tl->beginHook()) {
@@ -155,7 +156,7 @@ void TextLineSegment::draw(QPainter* painter) const
 
 void TextLineSegment::layout()
       {
-      TextLine* tl = static_cast<TextLine*>(line());
+      TextLine* tl = textLine();
       if (!tl->diagonal())
             _userOff2.setY(0);
       switch (subtype()) {
