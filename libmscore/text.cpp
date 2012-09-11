@@ -434,6 +434,23 @@ bool Text::readProperties(const QDomElement& e)
             setText(val);
       else if (tag == "html-data") {
             QString s = Xml::htmlToString(e.firstChildElement());
+            if(score()->mscVersion() <= 114) {
+                  s.replace("MScore1", "FreeSerifMscore");
+                  s.replace(QChar(0xe10e), QChar(0x266e));    //natural
+                  s.replace(QChar(0xe10c), QChar(0x266f));    // sharp
+                  s.replace(QChar(0xe10d), QChar(0x266d));    // flat
+                  s.replace(QChar(0xe104), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5e))),    // note2_Sym
+                  s.replace(QChar(0xe105), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)));    // note4_Sym
+                  s.replace(QChar(0xe106), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd60)));    // note8_Sym
+                  s.replace(QChar(0xe107), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd61)));    // note16_Sym
+                  s.replace(QChar(0xe108), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd62)));    // note32_Sym
+                  s.replace(QChar(0xe109), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd63)));    // note64_Sym
+                  s.replace(QChar(0xe10a), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd6d)));    // dot
+                  s.replace(QChar(0xe10b), QString("%1%2%3%4").arg(QChar(0xd834)).arg(QChar(0xdd6d)).arg(QChar(0xd834)).arg(QChar(0xdd6d)));    // dotdot
+                  s.replace(QChar(0xe167), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0b)));    // coda
+                  s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
+                  s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
+                  } 
             setHtml(s);
             }
       else if (tag == "subtype")          // obsolete
