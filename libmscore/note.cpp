@@ -1327,7 +1327,7 @@ void Note::layout10(AccidentalState* as)
                         int ntpc = pitch2tpc2(_pitch, acci == ACC_SHARP);
                         if (ntpc != _tpc) {
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
-                              setColor(QColor(255, 0, 0));
+//                              setColor(QColor(255, 0, 0));
                               _tpc = ntpc;
                               _line = absStep(_tpc, _pitch);
                               }

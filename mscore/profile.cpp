@@ -272,13 +272,13 @@ void Profile::write()
 
 void Profile::read()
       {
-      QZipReader f(_path);
-      if (!f.exists()) {
+      if (_path.isEmpty() || !QFile(_path).exists()) {
             PaletteBox* paletteBox = mscore->getPaletteBox();
             paletteBox->clear();
             mscore->populatePalette();
             return;
             }
+      QZipReader f(_path);
       QByteArray ba = f.fileData("META-INF/container.xml");
       QDomDocument doc;
       int line, column;
