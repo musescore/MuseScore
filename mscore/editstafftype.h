@@ -29,6 +29,7 @@
 class Navigator;
 class ScoreView;
 class StaffType;
+class StaffTypeTablature;
 class Staff;
 
 //---------------------------------------------------------
@@ -46,15 +47,26 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
 #else
       ScoreView* tabPreview;
 #endif
+      enum {
+            TAB_PRESET_GUITAR = 0,
+            TAB_PRESET_BASS,
+            TAB_PRESET_ITALIAN,
+            TAB_PRESET_FRENCH,
+            TAB_PRESET_CUSTOM,                  // custom preset has no effect
+                  TAB_PRESETS = TAB_PRESET_CUSTOM
+      };
+      const StaffTypeTablature* _tabPresets[TAB_PRESETS];
 
       void blockTabPreviewSignals(bool block);
       void saveCurrent(QListWidgetItem*);
+      void setDlgFromTab(const StaffTypeTablature* stt);
+      void setTabFromDlg(StaffTypeTablature* stt);
 
    private slots:
       void typeChanged(QListWidgetItem*, QListWidgetItem*);
       void createNewType();
       void nameEdited(const QString&);
-      void presetTablatureClicked();
+      void presetTablatureChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
       void updateTabPreview();
@@ -64,6 +76,7 @@ public slots:
 
    public:
       EditStaffType(QWidget* parent, Staff*);
+      ~EditStaffType();
       bool isModified() const                 { return modified;   }
       QList<StaffType*> getStaffTypes() const { return staffTypes; }
       };

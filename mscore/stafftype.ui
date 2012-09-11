@@ -306,12 +306,12 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string comment="tablatture type">Guitar (modern)</string>
+                  <string comment="tablatture type">6 strings (guitar)</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string comment="tablature type">Bass (modern)</string>
+                  <string comment="tablature type">4 strings (bass, ukulele)</string>
                  </property>
                 </item>
                 <item>
@@ -324,16 +324,11 @@
                   <string comment="tablature type">French (historic)</string>
                  </property>
                 </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="presetTablature">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Set</string>
-                </property>
+                <item>
+                 <property name="text">
+                  <string>Custom</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -792,9 +787,6 @@
                </widget>
               </item>
              </layout>
-             <zorder></zorder>
-             <zorder>fretMarksGroup</zorder>
-             <zorder>durationsGroup</zorder>
             </widget>
            </item>
            <item>
@@ -993,7 +985,6 @@
   <tabstop>stemlessPitched</tabstop>
   <tabstop>newTypePitched</tabstop>
   <tabstop>presetTablatureCombo</tabstop>
-  <tabstop>presetTablature</tabstop>
   <tabstop>pushFullConfig</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>pushQuickConfig</tabstop>
