@@ -556,7 +556,7 @@ Palette* MuseScore::newArpeggioPalette()
       sp->setGrid(27, 60);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < 6; ++i) {
             Arpeggio* a = new Arpeggio(gscore);
             a->setSubtype(ArpeggioType(i));
             sp->append(a, tr("Arpeggio"));
