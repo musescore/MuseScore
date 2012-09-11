@@ -98,6 +98,10 @@ void Arpeggio::layout()
             default:
                   setbbox(QRectF(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1));
                   return;
+            case ARP_UP_STRAIGHT:
+            case ARP_DOWN_STRAIGHT:
+                  setbbox(QRectF(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1));
+                  return;
             case ARP_BRACKET:
                   {
                   qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
@@ -119,6 +123,7 @@ void Arpeggio::draw(QPainter* p) const
       p->setPen(curColor());
       qreal y1 = _spatium - _userLen1.val() * _spatium;
       qreal y2 = _height + (_userLen2.val() + .5) * _spatium;
+      qreal x1;
       switch (subtype()) {
             case ARP_NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
@@ -136,6 +141,29 @@ void Arpeggio::draw(QPainter* p) const
                         symbols[score()->symIdx()][arpeggioSym].draw(p, 1.0, QPointF(0.0, y));
                   symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, 1.0, QPointF(0.0, y));
                   }
+                  break;
+            case ARP_UP_STRAIGHT:
+                  y1-= _spatium * .5;
+                  x1 = _spatium * .5;
+                  symbols[score()->symIdx()][close11arrowHeadSym].draw(p, 1.0, QPointF(x1, y1 - (_spatium * .5)));
+                  p->save();
+                  p->setPen(QPen(curColor(),
+                     score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
+                     Qt::SolidLine, Qt::RoundCap));
+                  p->drawLine(QLineF(x1, y1, x1, y2));
+                  p->restore();
+                  break;
+            case ARP_DOWN_STRAIGHT:
+                  y1-= _spatium;
+                  y2-= _spatium * .5;
+                  x1 = _spatium * .5;
+                  symbols[score()->symIdx()][close1M1arrowHeadSym].draw(p, 1.0, QPointF(x1, y2 + (_spatium * .5)));
+                  p->save();
+                  p->setPen(QPen(curColor(),
+                     score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
+                     Qt::SolidLine, Qt::RoundCap));
+                  p->drawLine(QLineF(x1, y1, x1, y2));
+                  p->restore();
                   break;
             case ARP_BRACKET:
                   {
