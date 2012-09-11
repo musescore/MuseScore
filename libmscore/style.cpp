@@ -313,7 +313,7 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, QPointF(), true,
-         MMSP(0.3), MMSP(1.0), 20, Qt::black, false, true));
+         Spatium(0.2), Spatium(.5), 20, Qt::black, false, true));
 
       AS(TextStyle(
          TR( "Repeat Text Left"), ff,  12, false, false, false,
@@ -348,7 +348,7 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "String Number"), ff,  8, false, false, false,
          ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true,
-         MMSP(0.2), MMSP(-0.2), 0, Qt::black, true, false));
+         Spatium(0.1), Spatium(-0.2), 0, Qt::black, true, false));
 
       AS(TextStyle(
          TR( "Ottava"), ff, 12, false, true, false,
@@ -708,8 +708,10 @@ TextStyleData::TextStyleData(
    frameRound(fr), frameColor(co), circle(_circle), systemFlag(_systemFlag),
    foregroundColor(fg), backgroundColor(bg)
       {
-      hasFrame = (fw.val() != 0.0) | (bg.alpha() != 0);
-      family = _family;
+      hasFrame       = (fw.val() != 0.0) || (bg.alpha() != 0);
+      family         = _family;
+      frameWidthMM   = 0.0;
+      paddingWidthMM = 0.0;
       }
 
 //---------------------------------------------------------

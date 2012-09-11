@@ -1305,13 +1305,14 @@ void ScoreView::startEdit()
       if (!score()->undo()->active())
             score()->startCmd();
 
-      if (origEditObject->isSegment()) {
+      if (origEditObject->isSegment()) {        // if spanner segment
             SpannerSegment* ss = (SpannerSegment*)origEditObject;
             Spanner* spanner   = ss->spanner();
             Spanner* clone     = static_cast<Spanner*>(spanner->clone());
             clone->setLinks(spanner->links());
             int idx            = spanner->spannerSegments().indexOf(ss);
             editObject         = clone->spannerSegments()[idx];
+
             editObject->startEdit(this, startMove);
             _score->undoChangeElement(spanner, clone);
             }
@@ -3309,6 +3310,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             updateGrips();
             startMove = p;
             }
+      _score->rebuildBspTree();     // DEBUG
       _score->update();
       }
 
