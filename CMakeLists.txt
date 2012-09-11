@@ -474,7 +474,7 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    )
 
 add_custom_target(install_plugins_manual
-   COMMAND ${PROJECT_BINARY_DIR}/manual/genManual ${PROJECT_SOURCE_DIR} /usr/local/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+   COMMAND ${PROJECT_BINARY_DIR}/manual/genManual ${PROJECT_SOURCE_DIR} ${CMAKE_INSTALL_PREFIX}/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
    )
 
 install(CODE "execute_process(COMMAND make install_plugins_manual)")
