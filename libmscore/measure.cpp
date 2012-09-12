@@ -781,11 +781,16 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
             qDebug("Measure::getSegment(st=%d, t=%d, gl=%d): incorrect segment type", st, t, gl);
             return 0;
             }
-      Segment* s;
+      Segment* s = 0;
 
       // find the first segment at tick >= t
-      for (s = first(); s && s->tick() < t; s = s->next())
-            ;
+      for (Segment* ss = s; ss && ss->tick() <= t; ss = ss->next()) {
+          if (ss->subtype() == Segment::SegChordRest && ss->tick() == t) {
+              s = ss;
+              break;
+          }
+      }
+
       if (s == 0) {
             s = new Segment(this, Segment::SegChordRest, t);
 // qDebug("   create cr segment %p", s);
