@@ -329,7 +329,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             LinkedStaves* l = staff(staffIdx)->linkedStaves();
 
             for (iKeyList ke = km->lower_bound(tickStart);
-                 ke != km->lower_bound(tickEnd); ++ke) {
+                  ke != km->lower_bound(tickEnd); ++ke) {
                   KeySigEvent oKey  = ke->second;
                   int tick  = ke->first;
                   int nKeyType = transposeKey(oKey.accidentalType(), interval);
@@ -354,7 +354,6 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   if (s->tick() >= tickEnd)
                         break;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-
                   if (ks) {
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
