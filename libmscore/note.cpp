@@ -53,6 +53,7 @@
 #include "page.h"
 #include "icon.h"
 #include "notedot.h"
+#include "spanner.h"
 
 //---------------------------------------------------------
 //   noteHeads
@@ -376,6 +377,43 @@ int Note::playTicks() const
       }
 
 //---------------------------------------------------------
+//   addSpanner
+//---------------------------------------------------------
+
+void Note::addSpanner(Spanner* l)
+      {
+      Element* e = l->endElement();
+      if (e)
+            static_cast<Note*>(e)->addSpannerBack(l);
+      _spannerFor.append(l);
+      foreach(SpannerSegment* ss, l->spannerSegments()) {
+            Q_ASSERT(ss->spanner() == l);
+            if (ss->system())
+                  ss->system()->add(ss);
+            }
+      }
+
+//---------------------------------------------------------
+//   removeSpanner
+//---------------------------------------------------------
+
+void Note::removeSpanner(Spanner* l)
+      {
+      if (!static_cast<Note*>(l->endElement())->removeSpannerBack(l)) {
+            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p, size %d", this, l->name(), l, _spannerFor.size());
+            // abort();
+            }
+      if (!_spannerFor.removeOne(l)) {
+            qDebug("Note(%p): cannot remove spannerFor %s %p, size %d", this, l->name(), l, _spannerFor.size());
+            // abort();
+            }
+      foreach(SpannerSegment* ss, l->spannerSegments()) {
+            if (ss->system())
+                  ss->system()->remove(ss);
+            }
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -384,6 +422,7 @@ void Note::add(Element* e)
 	e->setParent(this);
       e->setTrack(track());
 
+printf("Note::add %s\n", e->name());
       switch(e->type()) {
             case NOTEDOT:
                   {
@@ -414,6 +453,9 @@ void Note::add(Element* e)
                   break;
             case ACCIDENTAL:
                   _accidental = static_cast<Accidental*>(e);
+                  break;
+            case TEXTLINE:
+                  addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
                   qDebug("Note::add() not impl. %s\n", e->name());
@@ -461,6 +503,10 @@ void Note::remove(Element* e)
 
             case ACCIDENTAL:
                   _accidental = 0;
+                  break;
+
+            case TEXTLINE:
+                  removeSpanner(static_cast<Spanner*>(e));
                   break;
 
             default:
@@ -621,6 +667,13 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_HEAD_TYPE);
       writeProperty(xml, P_VELO_TYPE);
 
+      foreach(Spanner* e, _spannerFor) {
+            e->setId(++xml.spannerId);
+            e->write(xml);
+            }
+      foreach(Spanner* e, _spannerBack) {
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
+            }
       _pitch = rpitch;
       _tpc   = rtpc;
       xml.etag();
@@ -836,6 +889,26 @@ void Note::read(const QDomElement& de)
                         else
                               domError(ee);
                         }
+                  }
+            else if (tag == "endSpanner") {
+                  int id = e.attribute("id").toInt();
+                  Spanner* e = score()->findSpanner(id);
+                  if (e) {
+                        e->setEndElement(this);
+                        _spannerBack.append(e);
+                        }
+                  else
+                        qDebug("Measure::read(): cannot find spanner %d", id);
+                  }
+            else if (tag == "TextLine") {
+                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+                  sp->setTrack(track());
+                  sp->read(e);
+                  sp->setAnchor(Spanner::ANCHOR_NOTE);
+                  sp->setStartElement(this);
+                  _spannerFor.append(sp);
+                  sp->setParent(this);
+                  score()->spanner.append(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   ; // _onTimeType = readValueType(e);
@@ -1421,6 +1494,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
+      foreach(Spanner* s, _spannerFor)
+            s->scanElements(data, func, all);
       if (!dragMode && _accidental)
             func(data, _accidental);
       if (chord()) {

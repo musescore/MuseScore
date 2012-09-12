@@ -2428,6 +2428,8 @@ void ScoreView::cmd(const QAction* a)
             sm->postEvent(new CommandEvent(cmd));
       else if (cmd == "add-slur")
             cmdAddSlur();
+      else if (cmd == "add-noteline")
+            cmdAddNoteLine();
       else if (cmd == "note-c")
             cmdAddPitch(0, false);
       else if (cmd == "note-d")
@@ -3802,6 +3804,51 @@ void ScoreView::cmdAddSlur()
                   lastNote = 0;
             cmdAddSlur(firstNote, lastNote);
             }
+      }
+
+//---------------------------------------------------------
+//   cmdAddNoteLine
+//---------------------------------------------------------
+
+void ScoreView::cmdAddNoteLine()
+      {
+      Note* firstNote = 0;
+      Note* lastNote  = 0;
+      if (_score->selection().state() == SEL_RANGE) {
+            int startTrack = _score->selection().staffStart() * VOICES;
+            int endTrack   = _score->selection().staffEnd() * VOICES;
+            for (int track = startTrack; track < endTrack; ++track) {
+                  QList<Note*> nl = _score->selection().noteList(track);
+                  foreach(Note* n, nl) {
+                        if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+                              firstNote = n;
+                        if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
+                              lastNote = n;
+                        }
+                  }
+            }
+      else {
+            QList<Note*> nl = _score->selection().noteList();
+            foreach(Note* n, nl) {
+                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
+                        firstNote = n;
+                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
+                        lastNote = n;
+                  }
+            }
+      if (!firstNote || !lastNote) {
+            qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
+            return;
+            }
+      TextLine* tl = new TextLine(_score);
+      tl->setParent(firstNote);
+      tl->setStartElement(firstNote);
+      tl->setEndElement(lastNote);
+      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      _score->startCmd();
+      _score->undoAddElement(tl);
+      _score->endCmd();
+      mscore->endCmd();
       }
 
 //---------------------------------------------------------
