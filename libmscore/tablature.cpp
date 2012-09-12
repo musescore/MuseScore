@@ -156,8 +156,8 @@ int Tablature::fret(int pitch, int string) const
 
 void Tablature::fretChord(Chord * chord) const
       {
-      int nFret, nNewFret, nTempFret;
-      int nString, nNewString, nTempString;
+      int   nFret, nNewFret, nTempFret;
+      int   nString, nNewString, nTempString;
 
       if(bFretting)
             return;
@@ -174,8 +174,8 @@ void Tablature::fretChord(Chord * chord) const
 
       // scan chord notes from highest, matching with strings from the highest
       foreach(Note * note, sortedNotes) {
-            nString = nNewString    = note->string();
-            nFret   = nNewFret      = note->fret();
+            nString     = nNewString    = note->string();
+            nFret       = nNewFret      = note->fret();
             note->setFretConflict(false);       // assume no conflicts on this note
             // if no fretting yet or current fretting is no longer valid
             if (nString == -1 || nFret == -1 || getPitch(nString, nFret) != note->pitch()) {
@@ -184,9 +184,11 @@ void Tablature::fretChord(Chord * chord) const
                         // no way to fit this note in this tab:
                         // mark as fretting conflict
                         note->setFretConflict(true);
-//                        // store pitch change without affecting chord context
-//                        chord->score()->undo(new ChangePitch(note, note->pitch(), note->tpc(),
-//                           note->line(), nNewFret, nNewString));
+                        // store fretting change without affecting chord context
+                        if (nFret != nNewFret)
+                              note->score()->undoChangeProperty(note, P_FRET, nNewFret);
+                        if (nString != nNewString)
+                              note->score()->undoChangeProperty(note, P_STRING, nNewString);
                         continue;
                         }
 
