@@ -194,6 +194,7 @@ add_executable ( ${ExecutableName}
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
+      editelement.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

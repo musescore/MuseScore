@@ -367,7 +367,7 @@ void LineSegment::editDrag(const EditData& ed)
                   break;
             }
       line()->layout();
-      score()->setUpdateAll(true);
+//      score()->setUpdateAll(true);
       }
 
 //---------------------------------------------------------
