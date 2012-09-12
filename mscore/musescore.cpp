@@ -720,19 +720,19 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("redo"));
 
       menuEdit->addSeparator();
-
       menuEdit->addAction(getAction("cut"));
       menuEdit->addAction(getAction("copy"));
       a = getAction("paste");
       a->setEnabled(false);
       menuEdit->addAction(a);
       selectionChanged(SEL_NONE);
+
       menuEdit->addSeparator();
       menuEdit->addAction(getAction("select-all"));
       menuEdit->addAction(getAction("select-section"));
       menuEdit->addAction(getAction("find"));
-      menuEdit->addSeparator();
 
+      menuEdit->addSeparator();
       QMenu* menuMeasure = new QMenu(tr("&Measure"));
       menuMeasure->addAction(getAction("delete-measures"));
       menuMeasure->addAction(getAction("split-measure"));
@@ -740,7 +740,6 @@ MuseScore::MuseScore()
       menuEdit->addMenu(menuMeasure);
 
       menuEdit->addSeparator();
-
       QMenu* menuVoices = new QMenu(tr("&Voices"));
       menuVoices->addAction(getAction("voice-x12"));
       menuVoices->addAction(getAction("voice-x13"));
@@ -749,14 +748,14 @@ MuseScore::MuseScore()
       menuVoices->addAction(getAction("voice-x24"));
       menuVoices->addAction(getAction("voice-x34"));
       menuEdit->addMenu(menuVoices);
-      menuEdit->addSeparator();
 
+      menuEdit->addSeparator();
       menuEdit->addAction(getAction("staff-types"));
-      menuEdit->addSeparator();
 
+      menuEdit->addSeparator();
       menuEdit->addAction(getAction("debugger"));
-      menuEdit->addSeparator();
 
+      menuEdit->addSeparator();
       menuProfiles = new QMenu(tr("Pr&ofiles"));
       connect(menuProfiles, SIGNAL(aboutToShow()), SLOT(showProfileMenu()));
       menuEdit->addMenu(menuProfiles);
@@ -1823,7 +1822,7 @@ void MuseScore::removeTab()
 void MuseScore::removeTab(int i)
       {
       Score* score = scoreList.value(i);
-      
+
       if (score == 0)
             return;
 

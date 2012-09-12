@@ -370,6 +370,11 @@ void Debugger::updateList(Score* s)
                                                       foreach(Element* el1, tie->spannerSegments())
                                                             new ElementItem(ti, el1);
                                                       }
+                                                foreach(Spanner* s, note->spannerFor()) {
+                                                      ElementItem* si = new ElementItem(ni, s);
+                                                      foreach(Element* ls, s->spannerSegments())
+                                                            new ElementItem(si, ls);
+                                                      }
                                                 }
                                           foreach(Element* e, chord->el())
                                                 new ElementItem(sei, e);

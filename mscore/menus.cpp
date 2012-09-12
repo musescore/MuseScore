@@ -1017,6 +1017,11 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("lyrics"));
       text->addAction(getAction("tempo"));
 
+      popup->addSeparator();
+      popup->addAction(getAction("add-slur"));
+      popup->addAction(getAction("add-hairpin"));
+      popup->addAction(getAction("add-hairpin-reverse"));
+      popup->addAction(getAction("add-noteline"));
       return popup;
       }
 

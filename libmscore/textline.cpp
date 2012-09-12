@@ -499,7 +499,7 @@ bool TextLine::readProperties(const QDomElement& e)
             _continueText->read(e);
             }
       else if (!SLine::readProperties(e)) {
-            printf(" ==readSLineProps: failed\n");
+            qDebug(" ==readSLineProps: failed");
             return false;
             }
       return true;

@@ -1471,7 +1471,9 @@ void Score::add(Element* el)
                   }
                   break;
             case SLUR:
+            case TEXTLINE:
                   break;
+
             default:
                   qDebug("Score::add() invalid element <%s>\n", el->name());
                   delete el;
@@ -1501,6 +1503,7 @@ void Score::remove(Element* el)
                   }
                   break;
             case SLUR:
+            case TEXTLINE:
                   break;
             default:
                   qDebug("Score::remove(): invalid element %s\n", el->name());
