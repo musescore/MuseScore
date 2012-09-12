@@ -291,7 +291,7 @@ bool Score::read114(const QDomElement& de)
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->setTrack(0);
                   s->read(ee);
-                  
+
                  if ((tag == "Ottava")
                   || (tag == "TextLine")
                   || (tag == "Volta")
@@ -301,7 +301,7 @@ bool Score::read114(const QDomElement& de)
                       tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
                       tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                       }
-                    
+
                   int tick2 = s->__tick2();
                   Segment* s1 = tick2segment(curTick);
                   Segment* s2 = tick2segment(tick2);
@@ -312,7 +312,7 @@ bool Score::read114(const QDomElement& de)
                         }
                   if (s->type() == VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
-                        volta->setAnchor(ANCHOR_MEASURE);
+                        volta->setAnchor(Spanner::ANCHOR_MEASURE);
                         volta->setStartMeasure(s1->measure());
                         Measure* m2 = s2->measure();
                         if (s2->tick() == m2->tick())

@@ -53,24 +53,33 @@ class SpannerSegment : public Element {
       virtual bool isEdited(SpannerSegment*) const = 0;
       };
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------------------
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
 //
 //    @P startElement Element*
 //    @P endElement Element*
-//---------------------------------------------------------
+//    @P anchor     Anchor ANCHOR_SEGMENT ANCHOR_MEASURE ANCHOR_CHORD ANCHOR_NOTE
+//----------------------------------------------------------------------------------
 
 class Spanner : public Element {
       Q_OBJECT
-      Q_PROPERTY(Element* startElement READ startElement WRITE setStartElement)
-      Q_PROPERTY(Element* endElement READ endElement WRITE setEndElement)
+      Q_ENUMS(Anchor)
 
-      Element* _startElement;       // can be ChordRest, Segment or Measure
+   public:
+      enum Anchor {
+            ANCHOR_SEGMENT, ANCHOR_MEASURE, ANCHOR_CHORD, ANCHOR_NOTE
+            };
+   private:
+      Q_PROPERTY(Element* startElement READ startElement WRITE setStartElement)
+      Q_PROPERTY(Element* endElement   READ endElement   WRITE setEndElement)
+      Q_PROPERTY(Anchor   anchor       READ anchor       WRITE setAnchor)
+
+      Element* _startElement;       // can be Note, ChordRest, Segment or Measure
       Element* _endElement;         // depending on anchor
 
       Anchor _anchor;    // enum { ANCHOR_SEGMENT, ANCHOR_MEASURE,
-                         //    ANCHOR_CHORD, ANCHOR_NOTE};
+                         //        ANCHOR_CHORD, ANCHOR_NOTE};
 
       QList<SpannerSegment*> segments;
 
@@ -125,5 +134,7 @@ class Spanner : public Element {
       bool removeSpannerBack();
       void addSpannerBack();
       };
+
+Q_DECLARE_METATYPE(Spanner::Anchor)
 #endif
 
