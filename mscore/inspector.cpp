@@ -107,7 +107,7 @@ void Inspector::reset()
 void Inspector::setElement(Element* e)
       {
       if (e == 0 || _element == 0 || (e->type() != _element->type())) {
-            delete ie;
+            ie->deleteLater();
             ie = 0;
             _element = e;
 
@@ -144,7 +144,7 @@ void Inspector::setElement(Element* e)
 
 void Inspector::setElementList(const QList<Element*>& el)
       {
-      delete ie;
+      ie->deleteLater();
       ie = new InspectorGroupElement(this);
       layout->insertWidget(0, ie);
       _element = 0;
