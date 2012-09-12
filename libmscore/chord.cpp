@@ -300,8 +300,13 @@ QPointF Chord::stemPos() const
       if (staff() && staff()->isTabStaff()) {
             qreal                   sp    = spatium();
             StaffTypeTablature*     tab   = static_cast<StaffTypeTablature*>( staff()->staffType() );
-            qreal                   y     = ( tab->stemsDown() ?
-                      upString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP);
+            qreal                   lineDist = tab->lineDistance().val();
+            qreal                   y;
+            if (tab->stemsDown())
+                  y = tab->stemThrough() ? upString() * lineDist :
+                        (tab->lines()-1)*lineDist + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN;
+            else
+                  y = tab->stemThrough() ? downString()*lineDist : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP;
 
             return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, y*sp) + pagePos();
             }
@@ -1117,10 +1122,15 @@ void Chord::layoutStem()
             // require stems only if not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
                   // process stems:
+                  qreal    lineDist = tab->lineDistance().val();
                   QPointF  pos      = stemPos() - pagePos();
-                  qreal    stemLen  = tab->stemsDown() ?
-                              (tab->lines()-1 - upString()) * tab->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN :
-                              STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
+                  qreal    stemLen;
+                  if (tab->stemThrough())
+                        stemLen = tab->stemsDown() ?
+                              STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN + (tab->lines()-1 - upString()) * lineDist :
+                              STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP + downString() * lineDist;
+                  else
+                        stemLen = tab->stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN: STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
                   _stem->setPos(pos);
                   _stem->setLen(stemLen * spatium());
                   // process hook
