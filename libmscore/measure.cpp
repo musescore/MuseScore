@@ -2029,7 +2029,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   int id = e.attribute("id").toInt();
                   Spanner* e = score()->findSpanner(id);
                   if (e) {
-                        if (e->anchor() == ANCHOR_MEASURE) {
+                        if (e->anchor() == Spanner::ANCHOR_MEASURE) {
                               e->setEndElement(this);
                               addSpannerBack(e);
                               }
@@ -2064,7 +2064,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   sp->setTrack(staffIdx * VOICES);
                   sp->read(e);
                   segment = getSegment(Segment::SegChordRest, score()->curTick);
-                  if (sp->anchor() == ANCHOR_SEGMENT) {
+                  if (sp->anchor() == Spanner::ANCHOR_SEGMENT) {
                         sp->setStartElement(segment);
                         segment->add(sp);
                         }

@@ -267,9 +267,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     nspanner->setScore(score);
                                     nspanner->setParent(ns);
                                     nspanner->setTrack(track == -1 ? 0 : track);
-                                    if (spanner->anchor() == ANCHOR_SEGMENT)
+                                    if (spanner->anchor() == Spanner::ANCHOR_SEGMENT)
                                           nspanner->setStartElement(ns);
-                                    else //spanner->anchor() == ANCHOR_MEASURE
+                                    else //spanner->anchor() == Spanner::ANCHOR_MEASURE
                                           nspanner->setStartElement(nm);
                                     ns->addSpannerFor(nspanner);
                                     spannerMap.add(spanner, nspanner);
@@ -279,9 +279,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           continue;
                                     Spanner* nspanner = spannerMap.findNew(spanner);
                                     if (nspanner) {
-                                          if (spanner->anchor() == ANCHOR_SEGMENT)
+                                          if (spanner->anchor() == Spanner::ANCHOR_SEGMENT)
                                                 nspanner->setEndElement(ns);
-                                          else //spanner->anchor() == ANCHOR_MEASURE
+                                          else //spanner->anchor() == Spanner::ANCHOR_MEASURE
                                                 nspanner->setEndElement(nm);
                                           ns->addSpannerBack(nspanner);
                                           }

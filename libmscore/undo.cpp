@@ -2971,7 +2971,7 @@ void ChangeSpannerAnchor::flip()
 //         spanner->endElement(), endElement);
 
       switch(spanner->anchor()) {
-            case ANCHOR_CHORD:
+            case Spanner::ANCHOR_CHORD:
                   {
                   Q_ASSERT(spanner->type() == SLUR);
                   Slur* slur = static_cast<Slur*>(spanner);
@@ -2985,7 +2985,7 @@ void ChangeSpannerAnchor::flip()
                   }
                   break;
 
-            case ANCHOR_MEASURE:
+            case Spanner::ANCHOR_MEASURE:
                   Q_ASSERT(spanner->startElement()->type() == MEASURE);
                   static_cast<Measure*>(spanner->startElement())->removeSpannerFor(spanner);
                   spanner->setStartElement(startElement);
@@ -2997,7 +2997,7 @@ void ChangeSpannerAnchor::flip()
                   static_cast<Measure*>(endElement)->addSpannerBack(spanner);
                   break;
 
-            case ANCHOR_SEGMENT:
+            case Spanner::ANCHOR_SEGMENT:
                   Q_ASSERT(spanner->startElement()->type() == SEGMENT);
                   static_cast<Segment*>(spanner->startElement())->removeSpannerFor(spanner);
                   spanner->setStartElement(startElement);

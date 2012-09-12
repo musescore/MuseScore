@@ -211,7 +211,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       SpannerSegmentType st = subtype();
       int track   = l->track();
 
-      if (l->anchor() == ANCHOR_SEGMENT) {
+      if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
             Segment* s1 = static_cast<Segment*>(l->startElement());
             Segment* s2 = static_cast<Segment*>(l->endElement());
 
@@ -419,7 +419,7 @@ QPointF SLine::linePos(int grip, System** sys)
 
       qreal x = 0.0;
 
-      if (anchor() == ANCHOR_SEGMENT) {
+      if (anchor() == Spanner::ANCHOR_SEGMENT) {
             Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
             Measure* m   = seg->measure();
             *sys         = m->system();
@@ -593,7 +593,7 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
       Element::writeProperties(xml);
       if (_diagonal && (proto == 0 || proto->diagonal() != _diagonal))
             xml.tag("diagonal", _diagonal);
-      if (anchor() != ANCHOR_SEGMENT && (proto == 0 || proto->anchor() != anchor()))
+      if (anchor() != Spanner::ANCHOR_SEGMENT && (proto == 0 || proto->anchor() != anchor()))
             xml.tag("anchor", anchor());
       if (score() == gscore) {
             // when used as icon
