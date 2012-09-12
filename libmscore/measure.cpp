@@ -599,6 +599,13 @@ void Measure::layout2()
                         ChordRest* cr = static_cast<ChordRest*>(el);
                         foreach(Spanner* sp, static_cast<ChordRest*>(el)->spannerFor())
                               sp->layout();
+                        if (cr->type() == CHORD) {
+                              Chord* c = static_cast<Chord*>(cr);
+                              foreach(const Note* note, c->notes()) {
+                                    foreach(Spanner* sp, note->spannerFor())
+                                          sp->layout();
+                                    }
+                              }
                         DurationElement* de = cr;
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
                               de->tuplet()->layout();
@@ -2008,7 +2015,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
 
                   score()->curTick += ts.ticks();
                   }
-            else if (tag == "Note") {
+            else if (tag == "Note") {                 // obsolete
                   Chord* chord = new Chord(score());
                   chord->setTrack(score()->curTrack);
                   chord->readNote(e, &tuplets, &score()->spanner);

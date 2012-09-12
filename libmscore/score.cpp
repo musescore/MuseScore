@@ -1989,6 +1989,19 @@ Spanner* Score::findSpanner(int id) const
                   if (e->id() == id)
                         return e;
                   }
+            int tracks = _staves.size() * VOICES;
+            for (int track = 0; track < tracks; ++track) {
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  if (cr && cr->type() == CHORD) {
+                        Chord* c = static_cast<Chord*>(cr);
+                        foreach(const Note* note, c->notes()) {
+                              foreach(Spanner* e, note->spannerFor()) {
+                                    if (e->id() == id)
+                                          return e;
+                                    }
+                              }
+                        }
+                  }
             }
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             foreach(Spanner* e, m->spannerFor()) {
@@ -1996,7 +2009,7 @@ Spanner* Score::findSpanner(int id) const
                         return e;
                   }
             }
-      qDebug("Score::findSpanner() id %d not found\n", id);
+      qDebug("Score::findSpanner(%d): not found", id);
       return 0;
       }
 

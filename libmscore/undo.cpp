@@ -946,33 +946,48 @@ void Score::undoAddElement(Element* element)
                || element->type() == OTTAVA
                || element->type() == TRILL
                || element->type() == TEXTLINE
+               || element->type() == VOLTA
                ) {
-                  SLine* hp      = static_cast<SLine*>(element);
-                  Segment* s1    = static_cast<Segment*>(hp->startElement());
-                  Segment* s2    = static_cast<Segment*>(hp->endElement());
-                  Measure* m1    = s1->measure();
-                  Measure* m2    = s2->measure();
-                  Measure* nm1   = score->tick2measure(m1->tick());
-                  Measure* nm2   = score->tick2measure(m2->tick());
-                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
-                  Segment* ns2   = nm2->findSegment(s2->subtype(), s2->tick());
-                  SLine* nhp     = static_cast<SLine*>(ne);
-                  nhp->setStartElement(ns1);
-                  nhp->setEndElement(ns2);
-                  nhp->setParent(ns1);
+                  SLine* hp  = static_cast<SLine*>(element);
+                  SLine* nhp = static_cast<SLine*>(ne);
+                  Element* e1;
+                  Element* e2;
+                  switch(hp->anchor()) {
+                        case Spanner::ANCHOR_SEGMENT:
+                              {
+                              Segment* s1  = static_cast<Segment*>(hp->startElement());
+                              Segment* s2  = static_cast<Segment*>(hp->endElement());
+                              Measure* m1  = s1->measure();
+                              Measure* m2  = s2->measure();
+                              Measure* nm1 = score->tick2measure(m1->tick());
+                              Measure* nm2 = score->tick2measure(m2->tick());
+                              e1           = nm1->findSegment(s1->subtype(), s1->tick());
+                              e2           = nm2->findSegment(s2->subtype(), s2->tick());
+                              }
+                              break;
+                        case Spanner::ANCHOR_MEASURE:
+                              {
+                              Measure* m1 = static_cast<Measure*>(hp->startElement());
+                              Measure* m2 = static_cast<Measure*>(hp->endElement());
+                              e1          = score->tick2measure(m1->tick());
+                              e2          = score->tick2measure(m2->tick());
+                              }
+                              break;
+                        case Spanner::ANCHOR_NOTE:
+                              {
+                              Note* n1 = static_cast<Note*>(hp->startElement());
+                              Note* n2 = static_cast<Note*>(hp->endElement());
+                              e1       = n1;          // TODO: parts
+                              e2       = n2;
+                              }
+                              break;
+                        default:
+                              abort();
+                        }
+                  nhp->setStartElement(e1);
+                  nhp->setEndElement(e2);
+                  nhp->setParent(e1);
                   undo(new AddElement(nhp));
-                  }
-            else if (element->type() == VOLTA) {
-                  Volta* v       = static_cast<Volta*>(element);
-                  Measure* m1    = v->startMeasure();
-                  Measure* m2    = v->endMeasure();
-                  Measure* nm1   = score->tick2measure(m1->tick());
-                  Measure* nm2   = score->tick2measure(m2->tick());
-                  Volta* nv      = static_cast<Volta*>(ne);
-                  nv->setStartElement(nm1);
-                  nv->setEndElement(nm2);
-                  nv->setParent(nm1);
-                  undo(new AddElement(nv));
                   }
             else if (element->type() == NOTE) {
                   Note* note       = static_cast<Note*>(element);

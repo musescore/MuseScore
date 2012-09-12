@@ -35,7 +35,7 @@ class QPainter;
 class AccidentalState;
 class Accidental;
 class NoteDot;
-class Note;
+class Spanner;
 
 //---------------------------------------------------------
 //   NoteVal
@@ -177,10 +177,19 @@ class Note : public Element {
       QList<NoteEvent*> _playEvents;
 
       int _lineOffset;        ///< Used during mouse dragging.
+      QList<Spanner*> _spannerFor;
+      QList<Spanner*> _spannerBack;
 
       virtual QRectF drag(const EditData& s);
       void endDrag();
       void endEdit();
+      void addSpanner(Spanner*);
+      void removeSpanner(Spanner*);
+
+      void addSpannerBack(Spanner* e)            { _spannerBack.append(e);     }
+      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
+      void addSpannerFor(Spanner* e)             { _spannerFor.append(e);      }
+      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e); }
 
    public:
       Note(Score* s = 0);
@@ -307,6 +316,9 @@ class Note : public Element {
       QList<NoteEvent*>& playEvents()                { return _playEvents; }
       const QList<NoteEvent*>& playEvents() const    { return _playEvents; }
       void setPlayEvents(const QList<NoteEvent*>& v);
+
+      QList<Spanner*> spannerFor() const        { return _spannerFor;         }
+      QList<Spanner*> spannerBack() const       { return _spannerBack;        }
 
       void undoSetFret(int);
       void undoSetString(int);

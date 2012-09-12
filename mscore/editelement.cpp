@@ -68,6 +68,7 @@ void ScoreView::startEdit()
       setFocus();
       if (!score()->undo()->active())
             score()->startCmd();
+      score()->deselectAll();
 
       if (origEditObject->isSegment()) {        // if spanner segment
             SpannerSegment* ss = (SpannerSegment*)origEditObject;
@@ -225,7 +226,7 @@ void ScoreView::endEdit()
             figuredBassEndEdit();
       _score->endCmd();
       mscore->endCmd();
-      _score->deselect(origEditObject);
+//      _score->deselect(origEditObject);
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
             _score->select(curElement);

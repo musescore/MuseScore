@@ -788,13 +788,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "add-slur",
-         QT_TRANSLATE_NOOP("action","Add slur")
+         QT_TRANSLATE_NOOP("action","Slur"),
+         QT_TRANSLATE_NOOP("action","Add Slur")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "add-hairpin",
-         QT_TRANSLATE_NOOP("action","Crescendo")
+         QT_TRANSLATE_NOOP("action","Crescendo"),
+         QT_TRANSLATE_NOOP("action","Add Crescendo")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -2182,6 +2184,12 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Staff Types..."),
          QT_TRANSLATE_NOOP("action","Staff type editor"),
          QT_TRANSLATE_NOOP("action","Show staff type editor")
+         ),
+    Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "add-noteline",
+         QT_TRANSLATE_NOOP("action","Note anchored Textline")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

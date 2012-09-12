@@ -20,6 +20,7 @@
 #include "system.h"
 #include "utils.h"
 #include "barline.h"
+#include "chord.h"
 
 enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE };
 
@@ -95,6 +96,13 @@ bool LineSegment::isEdited(SpannerSegment* ss) const
 void LineSegment::updateGrips(int* grips, QRectF* grip) const
       {
       *grips = 3;
+/*      if (line()->anchor() == Spanner::ANCHOR_NOTE) {
+            grip[0].translate(pos());
+            grip[1].translate(pos2());
+            grip[2].translate(pos2() * .5);
+            return;
+            }
+      */
       QPointF pp(pagePos());
       QPointF pp1(pp);
       QPointF pp2(pos2() + pp);
@@ -416,51 +424,72 @@ SLine::SLine(const SLine& s)
 QPointF SLine::linePos(int grip, System** sys)
       {
       qreal _spatium = spatium();
-
       qreal x = 0.0;
 
-      if (anchor() == Spanner::ANCHOR_SEGMENT) {
-            Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
-            Measure* m   = seg->measure();
-            *sys         = m->system();
-            if (*sys == 0)
-                  return QPointF(x, 0.0);
-            x            = seg->pos().x() + m->pos().x();
-            if (grip == GRIP_LINE_END) {
-                  if (((*sys)->firstMeasure() == m) && (seg->tick() == m->tick())) {
-                        m = m->prevMeasure();
-                        if (m) {
-                              *sys = m->system();
-                              x = m->pos().x() + m->width();
-                              }
-                        }
-                  }
-            }
-      else {
-            // anchor() == ANCHOR_MEASURE
-            Measure* m;
-            if (grip == GRIP_LINE_START) {
-                  m = static_cast<Measure*>(startElement());
-                  x = m->pos().x();
-                  }
-            else {
-                  m = static_cast<Measure*>(endElement());
-                  x = m->pos().x() + m->bbox().right();
-                  if (type() == VOLTA) {
-                        Segment* seg = m->last();
-                        if (seg->subtype() == Segment::SegEndBarLine) {
-                              Element* e = seg->element(0);
-                              if (e && e->type() == BAR_LINE) {
-                                    if (static_cast<BarLine*>(e)->subtype() == START_REPEAT)
-                                          x -= e->width() - _spatium * .5;
-                                    else
-                                          x -= _spatium * .5;
+      switch(anchor()) {
+            case Spanner::ANCHOR_SEGMENT:
+                  {
+                  Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
+                  Measure* m   = seg->measure();
+                  *sys         = m->system();
+                  if (*sys == 0)
+                        return QPointF(x, 0.0);
+                  x = seg->pos().x() + m->pos().x();
+                  if (grip == GRIP_LINE_END) {
+                        if (((*sys)->firstMeasure() == m) && (seg->tick() == m->tick())) {
+                              m = m->prevMeasure();
+                              if (m) {
+                                    *sys = m->system();
+                                    x = m->pos().x() + m->width();
                                     }
                               }
                         }
                   }
-            *sys = m->system();
+                  break;
+
+            case Spanner::ANCHOR_MEASURE:
+                  {
+                  // anchor() == ANCHOR_MEASURE
+                  Measure* m;
+                  if (grip == GRIP_LINE_START) {
+                        m = static_cast<Measure*>(startElement());
+                        x = m->pos().x();
+                        }
+                  else {
+                        m = static_cast<Measure*>(endElement());
+                        x = m->pos().x() + m->bbox().right();
+                        if (type() == VOLTA) {
+                              Segment* seg = m->last();
+                              if (seg->subtype() == Segment::SegEndBarLine) {
+                                    Element* e = seg->element(0);
+                                    if (e && e->type() == BAR_LINE) {
+                                          if (static_cast<BarLine*>(e)->subtype() == START_REPEAT)
+                                                x -= e->width() - _spatium * .5;
+                                          else
+                                                x -= _spatium * .5;
+                                          }
+                                    }
+                              }
+                        }
+                  *sys = m->system();
+                  }
+                  break;
+
+            case Spanner::ANCHOR_NOTE:
+                  {
+                  System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
+                  *sys = s;
+                  if (grip == GRIP_LINE_START)
+                        return startElement()->pagePos() - s->pagePos();
+                  else
+                        return endElement()->pagePos() - s->pagePos();
+                  }
+
+            case Spanner::ANCHOR_CHORD:
+                  qDebug("Sline::linePos(): anchor not implemented\n");
+                  break;
             }
+
       //DEBUG:
       if ((*sys)->staves()->isEmpty())
             return QPointF(x, 0.0);
@@ -494,7 +523,22 @@ void SLine::layout()
             qDebug("   start %p   end %p", startElement(), endElement());
             return;
             }
-
+#if 0
+      if (anchor() == Spanner::ANCHOR_NOTE) {
+            QPointF p1 = startElement()->pagePos();
+            QPointF p2 = endElement()->pagePos();
+            if (spannerSegments().isEmpty())
+                  add(createLineSegment());
+            LineSegment* seg = segmentAt(0);
+            seg->setSubtype(SEGMENT_SINGLE);
+            seg->setSystem(static_cast<Note*>(startElement())->chord()->segment()->system());
+            seg->setPos2(p2-p1);
+            seg->setPos(p1 - seg->system()->pagePos());
+            seg->layout();
+            seg->adjustReadPos();
+            return;
+            }
+#endif
       System* s1;
       System* s2;
       QPointF p1 = linePos(GRIP_LINE_START, &s1);
@@ -557,7 +601,8 @@ void SLine::layout()
                   // single segment
                   seg->setSubtype(SEGMENT_SINGLE);
                   seg->setPos(p1);
-                  seg->setPos2(QPointF(p2.x() - p1.x(), 0.0));
+                  // seg->setPos2(QPointF(p2.x() - p1.x(), 0.0));
+                  seg->setPos2(p2 - p1);
                   }
             else if (i == sysIdx1) {
                   // start segment
