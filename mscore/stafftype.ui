@@ -685,6 +685,12 @@
                     </property>
                     <item>
                      <widget class="QLabel" name="durSymLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Shown as:</string>
                       </property>
@@ -692,6 +698,12 @@
                     </item>
                     <item>
                      <widget class="QRadioButton" name="noteValues0">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>None</string>
                       </property>
@@ -699,6 +711,12 @@
                     </item>
                     <item>
                      <widget class="QRadioButton" name="noteValues1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Note Symbols</string>
                       </property>
@@ -710,6 +728,19 @@
                        <string>Stems and beams</string>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_13">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </widget>
@@ -850,6 +881,12 @@
                     </property>
                     <item>
                      <widget class="QLabel" name="minimLabels">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Half notes:</string>
                       </property>
@@ -860,6 +897,12 @@
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>None</string>
                       </property>
@@ -869,6 +912,12 @@
                      <widget class="QRadioButton" name="minimShortRadio">
                       <property name="enabled">
                        <bool>false</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
                       </property>
                       <property name="text">
                        <string>As short stem</string>
@@ -884,6 +933,19 @@
                        <string>As slashed stem</string>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_14">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </widget>
