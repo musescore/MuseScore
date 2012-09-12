@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: scoreview.cpp 5648 2012-05-19 13:22:21Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -97,7 +96,6 @@ enum {
 #endif
 
 static const QEvent::Type CloneDrag = QEvent::Type(QEvent::User + 1);
-extern TextPalette* textPalette;
 
 //---------------------------------------------------------
 //   CloneEvent
@@ -1264,211 +1262,6 @@ void ScoreView::dataChanged(const QRectF& r)
 void ScoreView::updateAll()
       {
       update();
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void ScoreView::startEdit(Element* e)
-      {
-      if (e->type() == TBOX)
-            e = static_cast<TBox*>(e)->getText();
-      origEditObject = e;
-      sm->postEvent(new CommandEvent("edit"));
-      _score->end();
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void ScoreView::startEdit(Element* element, int startGrip)
-      {
-      origEditObject = element;
-      startEdit();
-      if (startGrip == -1)
-            curGrip = grips-1;
-      else if (startGrip >= 0)
-            curGrip = startGrip;
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void ScoreView::startEdit()
-      {
-      score()->setLayoutAll(false);
-      curElement  = 0;
-      setFocus();
-      if (!score()->undo()->active())
-            score()->startCmd();
-
-      if (origEditObject->isSegment()) {        // if spanner segment
-            SpannerSegment* ss = (SpannerSegment*)origEditObject;
-            Spanner* spanner   = ss->spanner();
-            Spanner* clone     = static_cast<Spanner*>(spanner->clone());
-            clone->setLinks(spanner->links());
-            int idx            = spanner->spannerSegments().indexOf(ss);
-            editObject         = clone->spannerSegments()[idx];
-
-            editObject->startEdit(this, startMove);
-            _score->undoChangeElement(spanner, clone);
-            }
-      else {
-            foreach(Element* e, origEditObject->linkList()) {
-                  Element* ce = e->clone();
-                  if (e == origEditObject) {
-                        editObject = ce;
-                        editObject->setSelected(true);
-                        }
-                  _score->undoChangeElement(e, ce);
-                  }
-            editObject->layout();
-            editObject->startEdit(this, startMove);
-            }
-      mscore->setEditState(editObject);
-      if (origEditObject->isText()) {
-            Text* t = static_cast<Text*>(editObject);
-            mscore->textTools()->setText(t);
-            mscore->textTools()->updateTools();
-            mscore->textTools()->show();
-            }
-      else {
-            mscore->editTools()->setElement(editObject);
-            mscore->editTools()->updateTools();
-            mscore->editTools()->show();
-            }
-      curGrip = -1;
-      updateGrips();
-      score()->end();
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void ScoreView::endEdit()
-      {
-      mscore->editTools()->hide();
-      mscore->textTools()->hide();
-
-      setDropTarget(0);
-      if (!editObject) {
-            origEditObject = 0;
-            return;
-            }
-
-      _score->addRefresh(editObject->canvasBoundingRect());
-      for (int i = 0; i < grips; ++i)
-            score()->addRefresh(grip[i]);
-
-      editObject->endEdit();
-      if (mscore->getInspector())
-            mscore->getInspector()->setElement(0);
-
-      if (editObject->isText()) {
-            if (textPalette) {
-                  textPalette->hide();
-                  mscore->textTools()->kbAction()->setChecked(false);
-                  }
-            }
-      else if (editObject->isSegment()) {
-            Spanner* spanner  = static_cast<SpannerSegment*>(editObject)->spanner();
-            Spanner* original = static_cast<SpannerSegment*>(origEditObject)->spanner();
-
-            bool colorChanged = editObject->color() != origEditObject->color();
-            if (!spanner->isEdited(original) && !colorChanged) {
-                  UndoStack* undo = _score->undo();
-                  undo->current()->unwind();
-                  _score->select(editObject);
-                  _score->addRefresh(editObject->canvasBoundingRect());
-                  _score->addRefresh(origEditObject->canvasBoundingRect());
-                  _score->deselect(editObject);
-                  _score->select(origEditObject);
-                  delete spanner;
-                  origEditObject = 0;
-                  editObject = 0;
-                  grips = 0;
-                  _score->endCmd();
-                  mscore->endCmd();
-                  return;
-                  }
-            // handle linked elements
-            LinkedElements* le = original->links();
-            Element* se = spanner->startElement();
-            Element* ee = spanner->endElement();
-            if (le && (se != original->startElement() || ee != original->endElement())) {
-                  //
-                  // apply anchor changes
-                  // to linked elements
-                  //
-                  foreach(Element* e, *le) {
-                        if (e == spanner)
-                              continue;
-                        Spanner* lspanner = static_cast<Spanner*>(e);
-                        Element* lse = 0;
-                        Element* lee = 0;
-                        Score* sc = lspanner->score();
-
-                        if (se->type() == NOTE || se->type() == CHORD) {
-                              foreach(Element* e, *se->links()) {
-                                    if (e->score() == sc && e->staffIdx() == se->staffIdx()) {
-                                          lse = e;
-                                          break;
-                                          }
-                                    }
-                              foreach(Element* e, *ee->links()) {
-                                    if (e->score() == sc && e->staffIdx() == ee->staffIdx()) {
-                                          lee = e;
-                                          break;
-                                          }
-                                    }
-                              }
-                        else if (se->type() == SEGMENT) {
-                              int tick   = static_cast<Segment*>(se)->tick();
-                              Measure* m = sc->tick2measure(tick);
-                              lse        = m->findSegment(Segment::SegChordRest, tick);
-
-                              int tick2  = static_cast<Segment*>(ee)->tick();
-                              m          = sc->tick2measure(tick2);
-                              lee        = m->findSegment(Segment::SegChordRest, tick2);
-                              }
-                        else if (se->type() == MEASURE) {
-                              Measure* measure = static_cast<Measure*>(se);
-                              int tick         = measure->tick();
-                              lse              = sc->tick2measure(tick);
-
-                              measure          = static_cast<Measure*>(ee);
-                              tick             = measure->tick();
-                              lee              = sc->tick2measure(tick);
-                              }
-                        Q_ASSERT(lse && lee);
-                        score()->undo(new ChangeSpannerAnchor(lspanner, lse, lee));
-                        }
-                  }
-            }
-      _score->addRefresh(editObject->canvasBoundingRect());
-
-      int tp = editObject->type();
-      if (tp == LYRICS)
-            lyricsEndEdit();
-      else if (tp == HARMONY)
-            harmonyEndEdit();
-      else if (tp == FIGURED_BASS)
-            figuredBassEndEdit();
-      _score->endCmd();
-      mscore->endCmd();
-      _score->deselect(origEditObject);
-      if (dragElement && (dragElement != editObject)) {
-            curElement = dragElement;
-            _score->select(curElement);
-            _score->end();
-            }
-      editObject     = 0;
-      origEditObject = 0;
-      grips          = 0;
       }
 
 //---------------------------------------------------------
@@ -3268,50 +3061,6 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       {
       seq->stopNoteTimer();
       QWidget::mouseReleaseEvent(event);
-      }
-
-//---------------------------------------------------------
-//   endDragEdit
-//---------------------------------------------------------
-
-void ScoreView::endDragEdit()
-      {
-      _score->addRefresh(editObject->canvasBoundingRect());
-      editObject->endEditDrag();
-      updateGrips();
-      // setDropTarget(0); // this also resets dropRectangle and dropAnchor
-      _score->addRefresh(editObject->canvasBoundingRect());
-      _score->end();
-      }
-
-//---------------------------------------------------------
-//   doDragEdit
-//---------------------------------------------------------
-
-void ScoreView::doDragEdit(QMouseEvent* ev)
-      {
-      QPointF p     = toLogical(ev->pos());
-      QPointF delta = p - startMove;
-      _score->setLayoutAll(false);
-      score()->addRefresh(editObject->canvasBoundingRect());
-      if (editObject->isText()) {
-            Text* text = static_cast<Text*>(editObject);
-            text->dragTo(p);
-            }
-      else {
-            EditData ed;
-            ed.view    = this;
-            ed.curGrip = curGrip;
-            ed.delta   = delta;
-            ed.pos     = p;
-            ed.hRaster = false;
-            ed.vRaster = false;
-            editObject->editDrag(ed);
-            updateGrips();
-            startMove = p;
-            }
-      _score->rebuildBspTree();     // DEBUG
-      _score->update();
       }
 
 //---------------------------------------------------------
