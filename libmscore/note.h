@@ -34,7 +34,6 @@ class Bend;
 class QPainter;
 class AccidentalState;
 class Accidental;
-class Spanner;
 class NoteDot;
 class Note;
 

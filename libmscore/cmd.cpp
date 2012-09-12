@@ -239,7 +239,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /
       int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
       spanner->setTrack(track);
 
-      if (spanner->anchor() == ANCHOR_SEGMENT) {
+      if (spanner->anchor() == Spanner::ANCHOR_SEGMENT) {
             spanner->setStartElement(segment);
             spanner->setParent(segment);
 
