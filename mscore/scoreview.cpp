@@ -3845,6 +3845,7 @@ void ScoreView::cmdAddNoteLine()
       tl->setStartElement(firstNote);
       tl->setEndElement(lastNote);
       tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setDiagonal(true);
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();
