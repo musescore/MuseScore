@@ -329,7 +329,7 @@
      </item>
      <item row="1" column="9">
       <property name="text">
-       <string>A 8</string>
+       <string>A 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
