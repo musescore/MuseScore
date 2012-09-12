@@ -185,7 +185,7 @@ void SimpleText::layoutFrame()
                   }
             }
       qreal _spatium = spatium();
-      qreal w = (paddingWidth() + frameWidth() * .5).val() * _spatium;
+      qreal w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
       frame.adjust(-w, -w, w, w);
       w = frameWidth().val() * _spatium;
       setbbox(frame.adjusted(-w, -w, w, w));
