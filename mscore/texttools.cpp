@@ -250,7 +250,7 @@ void TextTools::updateTools()
 
 void TextTools::updateText()
       {
-      if (_textElement->type() == LYRICS) {
+      if (_textElement->type() == Element::LYRICS) {
             _textElement->score()->setLayoutAll(true);
             _textElement->score()->end();
             }

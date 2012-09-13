@@ -56,7 +56,7 @@ void ScoreView::editCmd(const QString& cmd)
       if (!editObject)
             return;
 
-      if (editObject->type() == LYRICS) {
+      if (editObject->type() == Element::LYRICS) {
             if (cmd == "next-lyric")
                   lyricsTab(false, true, false);
             else if (cmd == "prev-lyric")
@@ -230,7 +230,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       if (!editObject)
             return;
 
-      if (editObject->type() == LYRICS /*|| editObject->type() == FIGURED_BASS*/) {
+      if (editObject->type() == Element::LYRICS) {
             int found = false;
 		if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   // TODO: shift+tab events are filtered by qt
@@ -286,14 +286,14 @@ void ScoreView::editKey(QKeyEvent* ev)
                   return;
                   }
             }
-      if (editObject->type() == HARMONY) {
+      if (editObject->type() == Element::HARMONY) {
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   chordTab(modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
             }
-      if (editObject->type() == FIGURED_BASS) {
+      if (editObject->type() == Element::FIGURED_BASS) {
             int found = false;
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
@@ -332,7 +332,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       qreal _spatium = editObject->spatium();
 
       qreal xval, yval;
-      if (editObject->type() == BEAM) {
+      if (editObject->type() == Element::BEAM) {
             xval = 0.25 * _spatium;
             if (modifiers & Qt::ControlModifier)
                   xval = _spatium;

@@ -408,7 +408,7 @@ void MuseScore::newFile()
 
             int m = 0;
             for (Measure* mb = score->firstMeasure(); mb; mb = mb->nextMeasure()) {
-                  if (mb->type() == MEASURE)
+                  if (mb->type() == Element::MEASURE)
                         ++m;
                   }
             //
@@ -476,7 +476,7 @@ void MuseScore::newFile()
       int tick = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
             mb->setTick(tick);
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
             int ticks = measure->ticks();
@@ -568,7 +568,7 @@ void MuseScore::newFile()
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
-            if (measure->type() != VBOX) {
+            if (measure->type() != Element::VBOX) {
                   MeasureBase* nm = new VBox(score);
                   nm->setTick(0);
                   nm->setNext(measure);

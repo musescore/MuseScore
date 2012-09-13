@@ -151,9 +151,9 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.tickDiff = xml.curTick;
             xml.curTrack = staffIdx * VOICES;
             for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
-                  if (m->type() == MEASURE || staffIdx == 0)
+                  if (m->type() == Element::MEASURE || staffIdx == 0)
                         m->write(xml, staffIdx, staffIdx == staffStart);
-                  if (m->type() == MEASURE)
+                  if (m->type() == Element::MEASURE)
                         xml.curTick = m->tick() + m->ticks();
                   }
             xml.etag();
@@ -206,7 +206,7 @@ void Score::readStaff(const QDomElement& de)
                         }
                   else {
                         while (mb) {
-                              if (mb->type() != MEASURE) {
+                              if (mb->type() != Element::MEASURE) {
                                     mb = mb->next();
                                     }
                               else {
@@ -987,7 +987,7 @@ bool Score::read(const QDomElement& de)
 
       // check slurs
       foreach(Spanner* s, spanner) {
-            if (s->type() != SLUR)
+            if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);
 
@@ -1281,7 +1281,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
 
                   if (e->generated()) {
                         if ((xml.curTick - xml.tickDiff) == 0) {
-                              if (e->type() == CLEF) {
+                              if (e->type() == Element::CLEF) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();

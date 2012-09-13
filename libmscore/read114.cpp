@@ -310,7 +310,7 @@ bool Score::read114(const QDomElement& de)
                            s->name(), s->__tick1(), tick2);
                         continue;
                         }
-                  if (s->type() == VOLTA) {
+                  if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
                         volta->setAnchor(Spanner::ANCHOR_MEASURE);
                         volta->setStartMeasure(s1->measure());
@@ -331,7 +331,7 @@ bool Score::read114(const QDomElement& de)
                         s->setEndElement(s2);
                         s1->add(s);
                         }
-                  if (s->type() == OTTAVA) {
+                  if (s->type() == Element::OTTAVA) {
                         // fix ottava position
                         Ottava* volta = static_cast<Ottava*>(s);
                         int n = volta->spannerSegments().size();
@@ -346,7 +346,7 @@ bool Score::read114(const QDomElement& de)
 
       // check slurs
       foreach(Spanner* s, spanner) {
-            if (s->type() != SLUR)
+            if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);
 
@@ -413,7 +413,7 @@ bool Score::read114(const QDomElement& de)
                                           cr->setBeamMode(BEAM_BEGIN);
                                           break;
                                     case BEAM_INVALID:
-                                          if (cr->type() == CHORD)
+                                          if (cr->type() == Element::CHORD)
                                                 cr->setBeamMode(BEAM_AUTO);
                                           else
                                                 cr->setBeamMode(BEAM_NO);
@@ -425,7 +425,7 @@ bool Score::read114(const QDomElement& de)
                   }
             }
       for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
-            if (mb->type() == VBOX) {
+            if (mb->type() == Element::VBOX) {
                   Box* b  = static_cast<Box*>(mb);
                   qreal y = point(styleS(ST_staffUpperBorder));
                   b->setBottomGap(y);
@@ -493,7 +493,7 @@ bool Score::read114(const QDomElement& de)
       //
       for (Segment* s = firstSegment(); s; s = s->next1()) {
             foreach (Element* e, s->annotations()) {
-                  if (e->type() == TEMPO_TEXT) {
+                  if (e->type() == Element::TEMPO_TEXT) {
                         // reparent from measure to segment
                         e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
                            e->userOff().y()));

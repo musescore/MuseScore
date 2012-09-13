@@ -53,6 +53,7 @@
 #include "ui_box.h"
 
 #include "globals.h"
+#include "libmscore/element.h"
 #include "libmscore/mscore.h"
 
 class ShowElementBase;
@@ -75,7 +76,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       QStack<Element*>backStack;
       QStack<Element*>forwardStack;
 
-      ShowElementBase* elementViews[MAXTYPE];
+      ShowElementBase* elementViews[Element::MAXTYPE];
 
       bool searchElement(QTreeWidgetItem* pi, Element* el);
       void addSymbol(ElementItem* parent, BSymbol* bs);

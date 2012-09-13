@@ -95,10 +95,11 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "StemSlash"),
       QT_TRANSLATE_NOOP("elementName", "Line"),
       QT_TRANSLATE_NOOP("elementName", "Bracket"),
+
       QT_TRANSLATE_NOOP("elementName", "Arpeggio"),
       QT_TRANSLATE_NOOP("elementName", "Accidental"),
       QT_TRANSLATE_NOOP("elementName", "Note"),
-      QT_TRANSLATE_NOOP("elementName", "Stem"),             // 10
+      QT_TRANSLATE_NOOP("elementName", "Stem"),
       QT_TRANSLATE_NOOP("elementName", "Clef"),
       QT_TRANSLATE_NOOP("elementName", "KeySig"),
       QT_TRANSLATE_NOOP("elementName", "TimeSig"),
@@ -108,7 +109,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "RepeatMeasure"),
       QT_TRANSLATE_NOOP("elementName", "Image"),
       QT_TRANSLATE_NOOP("elementName", "Tie"),
-      QT_TRANSLATE_NOOP("elementName", "Articulation"),     // 20
+      QT_TRANSLATE_NOOP("elementName", "Articulation"),
       QT_TRANSLATE_NOOP("elementName", "ChordLine"),
       QT_TRANSLATE_NOOP("elementName", "Dynamic"),
       QT_TRANSLATE_NOOP("elementName", "Beam"),
@@ -1194,7 +1195,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType Element::readType(QDomElement& e, QPointF* dragOffset, Fraction* duration)
+Element::ElementType Element::readType(QDomElement& e, QPointF* dragOffset, Fraction* duration)
       {
       ElementType type = INVALID;
 
@@ -1460,7 +1461,7 @@ const char* Element::name(ElementType type)
 //   name2type
 //---------------------------------------------------------
 
-ElementType Element::name2type(const QString& s)
+Element::ElementType Element::name2type(const QString& s)
       {
       for (int i = 0; i < MAXTYPE; ++i) {
             if (s == elementNames[i])

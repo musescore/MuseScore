@@ -55,7 +55,7 @@ void SelectDialog::setPattern(ElementPattern* p)
       p->system  = 0;
       if (sameSystem->isChecked()) {
             do {
-                  if (e->type() == SYSTEM) {
+                  if (e->type() == Element::SYSTEM) {
                         p->system = static_cast<const System*>(e);
                         break;
                         }

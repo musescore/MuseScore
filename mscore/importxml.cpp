@@ -2103,14 +2103,14 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   seg1->add(sp);
                   sp->setEndElement(seg2);
                   seg2->addSpannerBack(sp);
-                  if (sp->type() == OTTAVA) {
+                  if (sp->type() == Element::OTTAVA) {
                         Ottava* o = static_cast<Ottava*>(sp);
                         int shift = o->pitchShift();
                         Staff* st = o->staff();
                         st->pitchOffsets().setPitchOffset(tick1, shift);
                         st->pitchOffsets().setPitchOffset(tick2, 0);
                         }
-                  else if (sp->type() == HAIRPIN) {
+                  else if (sp->type() == Element::HAIRPIN) {
                         Hairpin* hp = static_cast<Hairpin*>(sp);
                         score->updateHairpin(hp);
                         }
@@ -2177,7 +2177,7 @@ static void fixupFiguredBass(Part* part, Measure* measure)
       for (Segment* seg = measure->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest)) {
             qDebug("fixupFiguredBass measure %p segment %p", measure, seg);
             foreach(Element* e, seg->annotations()) {
-                  if (e->type() == FIGURED_BASS) {
+                  if (e->type() == Element::FIGURED_BASS) {
                         FiguredBass* fb = static_cast<FiguredBass*>(e);
                         if (fb->ticks() <= 0) {
                               qDebug("fixupFiguredBass fb %p ticks %d track %d", fb, fb->ticks(), fb->track());
@@ -2185,7 +2185,7 @@ static void fixupFiguredBass(Part* part, Measure* measure)
                               // Find chord to attach to in same staff and copy ticks
                               for (int tr = fb->track(); tr < fb->track() + VOICES; ++tr) {
                                     Element* el = seg->element(tr);
-                                    if (el && el->type() == CHORD) {
+                                    if (el && el->type() == Element::CHORD) {
                                           // found chord
                                           Chord* ch = static_cast<Chord*>(el);
                                           qDebug("fixupFiguredBass chord %p track %d ticks %d",
@@ -2230,7 +2230,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       Measure* measure = 0;
       Measure* lastMeasure = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* m = (Measure*)mb;
             lastMeasure = m;
@@ -3781,7 +3781,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       int elemCount   = 0; // number of tuplet elements handled
 
       foreach (DurationElement* de, t->elements()) {
-            if (de->type() == CHORD || de->type() == REST) {
+            if (de->type() == Element::CHORD || de->type() == Element::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
                         // first note: init variables
@@ -4042,7 +4042,7 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
                   foreach (DurationElement* de, tuplet->elements()) {
-                        if (de->type() == CHORD || de->type() == REST) {
+                        if (de->type() == Element::CHORD || de->type() == Element::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
                         }

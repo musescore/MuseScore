@@ -124,7 +124,7 @@ struct EditData {
 ///   The Element class is the virtual base class of all
 ///   score layout elements.
 //
-//      @P type      int         element type
+//      @P type      ElementType element type
 //      @P parent    Element*    parent in drawing hierarchy
 //      @P track     int
 //      @P color     QColor      foreground color
@@ -137,17 +137,119 @@ struct EditData {
 
 class Element : public QObject {
       Q_OBJECT
-      Q_PROPERTY(int type        READ type)
-      Q_PROPERTY(Element* parent READ parent    WRITE setParent)
-      Q_PROPERTY(int track       READ track     WRITE setTrack)
-      Q_PROPERTY(QColor color    READ color     WRITE undoSetColor)
-      Q_PROPERTY(bool visible    READ visible   WRITE setVisible)
-      Q_PROPERTY(bool generated  READ generated WRITE setGenerated)
-      Q_PROPERTY(bool selected   READ selected  WRITE setSelected)
-      Q_PROPERTY(QPointF pos     READ pos       WRITE setPos)
-      Q_PROPERTY(QPointF pagePos READ pagePos )
-      Q_PROPERTY(QPointF userOff READ userOff   WRITE setUserOff)
-      Q_PROPERTY(QRectF  bbox    READ bbox )
+      Q_ENUMS(ElementType)
+
+   public:
+      //-------------------------------------------------------------------
+      //    The value of this enum determines the "stacking order"
+      //    of elements on the canvas.
+      //   Note: keep in sync with array elementNames[] in element.cpp
+      //-------------------------------------------------------------------
+
+       enum ElementType {
+            INVALID = 0,
+            SYMBOL,
+            TEXT,
+            INSTRUMENT_NAME,
+            SLUR_SEGMENT,
+            STAFF_LINES,
+            BAR_LINE,
+            STEM_SLASH,
+            LINE,
+            BRACKET,
+
+            ARPEGGIO,
+            ACCIDENTAL,
+            STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
+            NOTE,             // and this requires stems to be drawn before notes
+            CLEF,
+            KEYSIG,
+            TIMESIG,
+            REST,
+            BREATH,
+            GLISSANDO,
+
+            REPEAT_MEASURE,
+            IMAGE,
+            TIE,
+            ARTICULATION,
+            CHORDLINE,
+            DYNAMIC,
+            BEAM,
+            HOOK,
+            LYRICS,
+            FIGURED_BASS,
+
+            MARKER,
+            JUMP,
+            FINGERING,
+            TUPLET,
+            TEMPO_TEXT,
+            STAFF_TEXT,
+            REHEARSAL_MARK,
+            INSTRUMENT_CHANGE,
+            HARMONY,
+            FRET_DIAGRAM,
+            BEND,
+            TREMOLOBAR,
+            VOLTA,
+            HAIRPIN_SEGMENT,
+            OTTAVA_SEGMENT,
+            TRILL_SEGMENT,
+            TEXTLINE_SEGMENT,
+            VOLTA_SEGMENT,
+            LAYOUT_BREAK,
+            SPACER,
+            STAFF_STATE,
+            LEDGER_LINE,
+            NOTEHEAD,
+            NOTEDOT,
+            TREMOLO,
+            MEASURE,
+            SELECTION,
+            LASSO,
+            SHADOW_NOTE,
+            RUBBERBAND,
+            TAB_DURATION_SYMBOL,
+            FSYMBOL,
+            PAGE,
+            HAIRPIN,
+            OTTAVA,
+            PEDAL,
+            TRILL,
+            TEXTLINE,
+            SEGMENT,
+            SYSTEM,
+            COMPOUND,
+            CHORD,
+            SLUR,
+            ELEMENT,
+            ELEMENT_LIST,
+            STAFF_LIST,
+            MEASURE_LIST,
+            LAYOUT,
+            HBOX,
+            VBOX,
+            TBOX,
+            FBOX,
+            ACCIDENTAL_BRACKET,
+            ICON,
+            OSSIA,
+
+            MAXTYPE
+            };
+   private:
+      Q_PROPERTY(ElementType type READ type)
+      Q_PROPERTY(Element* parent  READ parent    WRITE setParent)
+      Q_PROPERTY(int track        READ track     WRITE setTrack)
+      Q_PROPERTY(QColor color     READ color     WRITE undoSetColor)
+      Q_PROPERTY(bool visible     READ visible   WRITE setVisible)
+      Q_PROPERTY(bool generated   READ generated WRITE setGenerated)
+      Q_PROPERTY(bool selected    READ selected  WRITE setSelected)
+      Q_PROPERTY(QPointF pos      READ pos       WRITE setPos)
+      Q_PROPERTY(QPointF pagePos  READ pagePos )
+      Q_PROPERTY(QPointF userOff  READ userOff   WRITE setUserOff)
+      Q_PROPERTY(QRectF  bbox     READ bbox )
 
       LinkedElements* _links;
       Element* _parent;
@@ -170,11 +272,6 @@ class Element : public QObject {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
-//      void* pColor()    { return &_color;    }
-//      void* pSelected() { return &_selected; }
-//      void* pVisible()  { return &_visible;  }
-//      void* pUserOff()  { return &_userOff;  }
 
    protected:
 
@@ -530,6 +627,8 @@ class RubberBand : public Element {
 
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
+
+Q_DECLARE_METATYPE(Element::ElementType)
 
 #endif
 

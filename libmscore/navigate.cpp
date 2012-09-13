@@ -87,13 +87,13 @@ static bool noteLessThan(const Note* n1, const Note* n2)
 Note* Score::upAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == REST) {
+      if (element->type() == Element::REST) {
             if (_is.track() <= 0)
                   return 0;
             _is.setTrack(_is.track() - 1);
             re = searchNote(static_cast<Rest*>(element)->tick(), _is.track());
             }
-      else if (element->type() == NOTE) {
+      else if (element->type() == Element::NOTE) {
             // find segment
             Chord* chord     = static_cast<Note*>(element)->chord();
             Segment* segment = chord->segment();
@@ -103,7 +103,7 @@ Note* Score::upAlt(Element* element)
             int tracks = nstaves() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   Element* el = segment->element(track);
-                  if (!el || el->type() != CHORD)
+                  if (!el || el->type() != Element::CHORD)
                         continue;
                   rnl.append(static_cast<Chord*>(el)->notes());
                   qSort(rnl.begin(), rnl.end(), noteLessThan);
@@ -115,7 +115,7 @@ Note* Score::upAlt(Element* element)
             }
       if (re == 0)
             return 0;
-      if (re->type() == CHORD)
+      if (re->type() == Element::CHORD)
             re = ((Chord*)re)->notes().front();
       return (Note*)re;
       }
@@ -140,13 +140,13 @@ Note* Score::downAlt(Element* element)
       {
       Element* re = 0;
       int staves = nstaves();
-      if (element->type() == REST) {
+      if (element->type() == Element::REST) {
             if ((_is.track() + 1) >= staves * VOICES)
                   return 0;
             _is.setTrack(_is.track() + 1);
             re = searchNote(static_cast<Rest*>(element)->tick(), _is.track());
             }
-      else if (element->type() == NOTE) {
+      else if (element->type() == Element::NOTE) {
             // find segment
             Chord* chord     = static_cast<Note*>(element)->chord();
             Segment* segment = chord->segment();
@@ -156,7 +156,7 @@ Note* Score::downAlt(Element* element)
             int tracks = nstaves() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   Element* el = segment->element(track);
-                  if (!el || el->type() != CHORD)
+                  if (!el || el->type() != Element::CHORD)
                         continue;
                   rnl.append(static_cast<Chord*>(el)->notes());
                   qSort(rnl.begin(), rnl.end(), noteLessThan);
@@ -169,7 +169,7 @@ Note* Score::downAlt(Element* element)
 
       if (re == 0)
             return 0;
-      if (re->type() == CHORD)
+      if (re->type() == Element::CHORD)
             re = static_cast<Chord*>(re)->notes().back();
       return (Note*)re;
       }
@@ -199,7 +199,7 @@ ChordRest* Score::upStaff(ChordRest* cr)
             Element* el = segment->element(track);
             if (!el)
                   continue;
-            if (el->type() == NOTE)
+            if (el->type() == Element::NOTE)
                   el = static_cast<Note*>(el)->chord();
             if (el->isChordRest())
                   return static_cast<ChordRest*>(el);
@@ -223,7 +223,7 @@ ChordRest* Score::downStaff(ChordRest* cr)
             Element* el = segment->element(track);
             if (!el)
                   continue;
-            if (el->type() == NOTE)
+            if (el->type() == Element::NOTE)
                   el = static_cast<Note*>(el)->chord();
             if (el->isChordRest())
                   return static_cast<ChordRest*>(el);
@@ -241,7 +241,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
             return 0;
 
       MeasureBase* mb = element->measure()->next();
-      while (mb && ((mb->type() != MEASURE) || (mb->type() == MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
+      while (mb && ((mb->type() != Element::MEASURE) || (mb->type() == Element::MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
             mb = mb->next();
 
       Measure* measure = static_cast<Measure*>(mb);
@@ -290,7 +290,7 @@ ChordRest* Score::prevMeasure(ChordRest* element)
             return 0;
 
       MeasureBase* mb = element->measure()->prev();
-      while (mb && ((mb->type() != MEASURE) || (mb->type() == MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
+      while (mb && ((mb->type() != Element::MEASURE) || (mb->type() == Element::MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
             mb = mb->prev();
 
       Measure* measure = static_cast<Measure*>(mb);

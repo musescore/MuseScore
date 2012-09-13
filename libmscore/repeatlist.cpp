@@ -28,7 +28,7 @@ Volta* Score::searchVolta(int tick) const
       {
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             foreach(Spanner* e, m->spannerFor()) {
-                  if (e->type() != VOLTA)
+                  if (e->type() != Element::VOLTA)
                         continue;
                   Volta* volta = static_cast<Volta*>(e);
                   int tick1 = volta->startMeasure()->tick();
@@ -58,7 +58,7 @@ Measure* Score::searchLabel(const QString& s)
             }
       for (Segment* segment = firstMeasure()->first(); segment; segment = segment->next1()) {
             foreach(const Element* e, segment->annotations()) {
-                  if (e->type() == MARKER) {
+                  if (e->type() == Element::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s) {
 // qDebug("   found %p\n", segment->measure());
@@ -306,7 +306,7 @@ void RepeatList::unwind()
                         Jump* s = 0;
                         for (Segment* seg = m->first(); seg; seg = seg->next()) {
                               foreach(Element* e, seg->annotations()) {
-                                    if (e->type() == JUMP) {
+                                    if (e->type() == Element::JUMP) {
                                           s = static_cast<Jump*>(e);
                                           break;
                                           }
