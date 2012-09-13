@@ -269,6 +269,11 @@ class Score : public QObject {
       bool _created;          ///< file is never saved, has generated name
       QString _tmpName;       ///< auto saved with this name if not empty
 
+      // this is used to tell Note::updateAccidentals() not to change
+      // the role of ACC_USER accidentals while transposing a score
+      // when also transposing key signatures
+      bool _transposing;
+
       // the following variables are reset on startCmd()
       //   modified during cmd processing and used in endCmd() to
       //   determine what to layout and what to repaint:
@@ -486,6 +491,8 @@ class Score : public QObject {
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
+
+      void undoChangeTransposingState(bool newState);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
@@ -864,6 +871,9 @@ class Score : public QObject {
 
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm);
+
+      void setTransposing(bool val)   { _transposing = val; }
+      bool transposing() const        { return _transposing; }
 
       QReadWriteLock* layoutLock() { return &_layoutLock; }
       void doLayoutSystems();

@@ -284,6 +284,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
       int startTrack = _selection.staffStart() * VOICES;
       int endTrack   = _selection.staffEnd() * VOICES;
 
+      undoChangeTransposingState(true);
       for (Segment* segment = _selection.startSegment(); segment && segment != _selection.endSegment(); segment = segment->next1()) {
             for (int st = startTrack; st < endTrack; ++st) {
                   if (staff(st/VOICES)->staffType()->group() == PERCUSSION_STAFF)
@@ -311,6 +312,8 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
             transposeKeys(_selection.staffStart(), _selection.staffEnd(),
                _selection.tickStart(), _selection.tickEnd(), interval);
             }
+      undoChangeTransposingState(false);
+      cmdUpdateNotes();
       setLayoutAll(true);
       }
 

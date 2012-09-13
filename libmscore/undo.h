@@ -309,12 +309,12 @@ class ChangePitch : public UndoCommand {
       int pitch;
       int tpc;
       int line;
-      void flip();
+      void flip(bool redo);
 
    public:
       ChangePitch(Note* note, int pitch, int tpc, int l/*, int f, int string*/);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
+      virtual void undo() { flip(false); }
+      virtual void redo() { flip(true); }
       UNDO_NAME("ChangePitch");
       };
 
@@ -1376,6 +1376,24 @@ class ChangeMetaText : public UndoCommand {
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeMetaText");
+      };
+
+//---------------------------------------------------------
+//   ChangeTransposingState
+//---------------------------------------------------------
+
+class ChangeTransposingState : public UndoCommand {
+      Score* score;
+      bool _newState;
+      bool _prevState;
+
+      void flip();
+
+   public:
+      ChangeTransposingState(Score *s,bool newState);
+      virtual void undo() { flip(); }
+      virtual void redo() { flip(); }
+      UNDO_NAME("ChangeTransposingState");
       };
 
 #endif

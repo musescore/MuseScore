@@ -1202,6 +1202,15 @@ void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
       }
 
 //---------------------------------------------------------
+//   undoChangeTransposingState
+//---------------------------------------------------------
+
+void Score::undoChangeTransposingState(bool newState)
+      {
+      undo(new ChangeTransposingState(this,newState));
+      }
+
+//---------------------------------------------------------
 //   AddElement
 //---------------------------------------------------------
 
@@ -1573,7 +1582,7 @@ ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l/*, int f, int 
 //      string = s;
       }
 
-void ChangePitch::flip()
+void ChangePitch::flip(bool redo)
       {
       int f_pitch                 = note->pitch();
       int f_tpc                   = note->tpc();
@@ -1588,12 +1597,18 @@ void ChangePitch::flip()
             }
       if (f_line != line)
             note->setLine(line);
+      
+      Score* score = note->score();
+      if ((f_tpc != tpc) && (!score->transposing()) && (redo)) {
+            // remove a user accidental if present
+            if (note->accidental() && (note->accidental()->role() == ACC_USER))
+                  score->undoRemoveElement(note->accidental());
+            }
 
       pitch          = f_pitch;
       tpc            = f_tpc;
       line           = f_line;
 
-      Score* score = note->score();
       if(updateAccid) {
             Chord* chord = note->chord();
             Measure* measure = chord->segment()->measure();
@@ -1647,10 +1662,13 @@ void ChangeElement::flip()
             oldElement->parent()->change(oldElement, newElement);
             }
 
-      qSwap(oldElement, newElement);
-
-      if (newElement->type() == KEYSIG)
-            newElement->staff()->setUpdateKeymap(true);
+      if (newElement->type() == KEYSIG) {
+            //newElement->staff()->setUpdateKeymap(true);
+            KeySig* ks   = static_cast<KeySig*>(newElement);
+            Staff* staff = newElement->staff();
+            staff->removeKey(ks->segment()->tick());
+            staff->setKey(ks->segment()->tick(),ks->keySigEvent());
+            }
       else if (newElement->type() == DYNAMIC)
             newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
       else if (newElement->type() == TEMPO_TEXT) {
@@ -1665,6 +1683,9 @@ void ChangeElement::flip()
             if (ns->system())
                   ns->system()->add(ns);
             }
+
+      qSwap(oldElement, newElement);
+
       score->setLayoutAll(true);
       }
 
@@ -1735,7 +1756,8 @@ void ChangeKeySig::flip()
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
       keysig->setShowNaturals(showNaturals);
-//      keysig->staff()->setKey(keysig->segment()->tick(), ks);
+      keysig->staff()->removeKey(keysig->segment()->tick());
+      keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
       showCourtesy = sc;
       showNaturals = sn;
@@ -3078,3 +3100,24 @@ void ChangeMetaText::flip()
       text = s;
       }
 
+//---------------------------------------------------------
+//   ChangeTransposingState
+//---------------------------------------------------------
+
+ChangeTransposingState::ChangeTransposingState(Score *s,bool newState)
+      {
+      score = s;
+      _prevState = s->transposing();
+      _newState  = newState;
+      }
+
+//---------------------------------------------------------
+//   ChangeTransposingState:flip
+//---------------------------------------------------------
+
+void ChangeTransposingState::flip()
+      {
+      score->setTransposing(_newState);
+      _newState  = _prevState;
+      _prevState = score->transposing();
+      }

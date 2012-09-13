@@ -303,6 +303,8 @@ void Score::init()
       _mscVersion     = MSCVERSION;
       _created        = false;
 
+      _transposing    = false;
+
       _updateAll      = true;
       _layoutAll      = true;
       layoutFlags     = 0;
@@ -2526,6 +2528,12 @@ void Score::sortStaves(QList<int>& dst)
 void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
       {
       undo(new ChangeConcertPitch(this, flag));
+      
+      // change transposing state of root score and all parts
+      QList<Excerpt*> excerpts=rootScore()->excerpts();
+      rootScore()->undoChangeTransposingState(true);
+      foreach(Excerpt *e, excerpts)
+            e->score()->undoChangeTransposingState(true);
 
       foreach(Staff* staff, _staves) {
             if (staff->staffType()->group() == PERCUSSION_STAFF)
@@ -2546,6 +2554,9 @@ void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
                   clef->setClefType(flag ? clef->concertClef() : clef->transposingClef());
                   }
             }
+      rootScore()->undoChangeTransposingState(false);
+      foreach(Excerpt *e, excerpts)
+            e->score()->undoChangeTransposingState(false);
       }
 
 //---------------------------------------------------------
