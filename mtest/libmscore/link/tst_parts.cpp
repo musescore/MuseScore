@@ -159,7 +159,7 @@ void TestParts::appendMeasure()
       createParts(score);
 
       score->startCmd();
-      score->insertMeasure(MEASURE, 0);
+      score->insertMeasure(Element::MEASURE, 0);
       score->endCmd();
 
       QVERIFY(saveCompareScore(score, "part2-3.mscx", DIR + "part2-3o.mscx"));
@@ -184,7 +184,7 @@ void TestParts::insertMeasure()
 
       score->startCmd();
       Measure* m = score->firstMeasure();
-      score->insertMeasure(MEASURE, m);
+      score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
 
       //QVERIFY(saveCompareScore(score, "part2-5.mscx", DIR + "part2-5o.mscx"));
@@ -450,7 +450,7 @@ Score* TestParts::doRemoveFingering()
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == FINGERING) {
+            if (e->type() == Element::FINGERING) {
                   fingering = e;
                   break;
                   }
@@ -585,7 +585,7 @@ Score* TestParts::doRemoveSymbol()
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == SYMBOL) {
+            if (e->type() == Element::SYMBOL) {
                   fingering = e;
                   break;
                   }
