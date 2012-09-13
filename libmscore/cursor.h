@@ -52,6 +52,7 @@ class Cursor : public QObject {
       Q_PROPERTY(Segment* segment READ segment)
 
       Q_PROPERTY(int tick         READ tick)
+      Q_PROPERTY(int time         READ time)
       Q_PROPERTY(Score* score     READ score    WRITE setScore)
 
       Score* _score;
