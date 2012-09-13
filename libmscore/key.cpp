@@ -224,14 +224,14 @@ void KeyList::read(const QDomElement& de, Score* cs)
 //---------------------------------------------------------
 
 int transposeKey(int key, const Interval& interval)
-{
+      {
       int tpc = key+14;
       tpc = transposeTpc(tpc, interval, false);
       // check for valid key sigs
       if (tpc > 21) tpc-=12; // no more than 7 sharps in keysig
       if (tpc < 7) tpc+=12; // no more than 7 flats in keysig
       return (tpc-14);
-}
+      }
 
 //---------------------------------------------------------
 //   initFromSubtype
