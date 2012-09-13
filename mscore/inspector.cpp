@@ -114,22 +114,22 @@ void Inspector::setElement(Element* e)
             if (_element == 0)
                   return;
             switch(_element->type()) {
-                  case FBOX:
-                  case TBOX:
-                  case VBOX:         ie = new InspectorVBox(this); break;
-                  case HBOX:         ie = new InspectorHBox(this); break;
-                  case ARTICULATION: ie = new InspectorArticulation(this); break;
-                  case SPACER:       ie = new InspectorSpacer(this); break;
-                  case NOTE:         ie = new InspectorNote(this); break;
-                  case REST:         ie = new InspectorRest(this); break;
+                  case Element::FBOX:
+                  case Element::TBOX:
+                  case Element::VBOX:         ie = new InspectorVBox(this); break;
+                  case Element::HBOX:         ie = new InspectorHBox(this); break;
+                  case Element::ARTICULATION: ie = new InspectorArticulation(this); break;
+                  case Element::SPACER:       ie = new InspectorSpacer(this); break;
+                  case Element::NOTE:         ie = new InspectorNote(this); break;
+                  case Element::REST:         ie = new InspectorRest(this); break;
 
-                  case CLEF:         ie = new InspectorClef(this); break;
-                  case TIMESIG:      ie = new InspectorTimeSig(this); break;
-                  case KEYSIG:       ie = new InspectorKeySig(this); break;
+                  case Element::CLEF:         ie = new InspectorClef(this); break;
+                  case Element::TIMESIG:      ie = new InspectorTimeSig(this); break;
+                  case Element::KEYSIG:       ie = new InspectorKeySig(this); break;
 
-                  case BEAM:         ie = new InspectorBeam(this); break;
-                  case IMAGE:        ie = new InspectorImage(this); break;
-                  case LASSO:        ie = new InspectorLasso(this); break;
+                  case Element::BEAM:         ie = new InspectorBeam(this); break;
+                  case Element::IMAGE:        ie = new InspectorImage(this); break;
+                  case Element::LASSO:        ie = new InspectorLasso(this); break;
                   default:           ie = new InspectorElement(this); break;
                   }
             layout->insertWidget(0, ie);

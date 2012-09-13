@@ -65,7 +65,7 @@ void MScore::init()
       Sym::init();
 
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<MScore::ElementType>("ElementType");
+      qRegisterMetaType<Element::ElementType>("ElementType");
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");

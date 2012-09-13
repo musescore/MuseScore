@@ -193,7 +193,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
       else
             _last = lm;
       for (MeasureBase* mb = fm;;) {
-            if (mb->type() == MEASURE) {
+            if (mb->type() == Measure::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
@@ -251,7 +251,8 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
             _last = nb;
       if (ob == _first)
             _first = nb;
-      if (nb->type() == HBOX || nb->type() == VBOX || nb->type() == TBOX || nb->type() == FBOX)
+      if (nb->type() == Element::HBOX || nb->type() == Element::VBOX
+         || nb->type() == Element::TBOX || nb->type() == Element::FBOX)
             nb->setSystem(ob->system());
       foreach(Element* e, *nb->el())
             e->setParent(nb);
@@ -504,7 +505,7 @@ void Score::fixTicks()
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE) {
+            if (mb->type() != Element::MEASURE) {
                   mb->setTick(tick);
                   continue;
                   }
@@ -512,7 +513,7 @@ void Score::fixTicks()
             if (!parentScore()) {
                   for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
                         foreach(Element* e, s->annotations()) {
-                              if (e->type() == TEMPO_TEXT) {
+                              if (e->type() == Element::TEMPO_TEXT) {
                                     const TempoText* tt = static_cast<const TempoText*>(e);
                                     setTempo(tt->segment(), tt->tempo());
                                     }
@@ -779,7 +780,7 @@ void Score::spell()
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
-                        if (e && e->type() == CHORD)
+                        if (e && e->type() == Element::CHORD)
                               notes.append(static_cast<Chord*>(e)->notes());
                         }
                   }
@@ -796,7 +797,7 @@ void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* 
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
-                        if (e && e->type() == CHORD)
+                        if (e && e->type() == Element::CHORD)
                               notes.append(static_cast<Chord*>(e)->notes());
                         }
                   }
@@ -823,7 +824,7 @@ Note* prevNote(Note* n)
             if (seg->subtype() == Segment::SegChordRest) {
                   for (int track = startTrack; track >= endTrack; --track) {
                         Element* e = seg->element(track);
-                        if (e && e->type() == CHORD)
+                        if (e && e->type() == Element::CHORD)
                               return static_cast<Chord*>(e)->upNote();
                         }
                   }
@@ -853,7 +854,7 @@ Note* nextNote(Note* n)
             if (seg->subtype() == Segment::SegChordRest) {
                   for (int track = startTrack; track < endTrack; ++track) {
                         Element* e = seg->element(track);
-                        if (e && e->type() == CHORD) {
+                        if (e && e->type() == Element::CHORD) {
                               return ((Chord*)e)->downNote();
                               }
                         }
@@ -1085,7 +1086,7 @@ Measure* Score::searchMeasure(const QPointF& p) const
       foreach(System* system, systems) {
             qreal x = p.x() - system->canvasPos().x();
             foreach(MeasureBase* mb, system->measures()) {
-                  if (mb->type() != MEASURE)
+                  if (mb->type() != Element::MEASURE)
                         continue;
                   if (x < (mb->x() + mb->bbox().width()))
                         return static_cast<Measure*>(mb);
@@ -1373,20 +1374,20 @@ void Score::addElement(Element* element)
                this, element, element->name(), element->parent(),
                element->parent() ? element->parent()->name() : "");
             }
-      if (element->parent() && element->parent()->type() == SEGMENT)
+      if (element->parent() && element->parent()->type() == Element::SEGMENT)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
 
-      ElementType et = element->type();
-      if (et == TREMOLO) {
+      Element::ElementType et = element->type();
+      if (et == Element::TREMOLO) {
             Chord* chord = static_cast<Chord*>(element->parent());
             setLayout(chord->measure());
             }
 
-      else if (et == MEASURE
-         || (et == HBOX && element->parent()->type() != VBOX)
-         || et == VBOX
-         || et == TBOX
-         || et == FBOX
+      else if (et == Element::MEASURE
+         || (et == Element::HBOX && element->parent()->type() != Element::VBOX)
+         || et == Element::VBOX
+         || et == Element::TBOX
+         || et == Element::FBOX
          ) {
             add(element);
             addLayoutFlags(LAYOUT_FIX_TICKS);
@@ -1399,10 +1400,10 @@ void Score::addElement(Element* element)
             element->parent()->add(element);
 
       switch(et) {
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
+            case Element::VOLTA:
+            case Element::TRILL:
+            case Element::PEDAL:
+            case Element::TEXTLINE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
@@ -1413,7 +1414,7 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case SLUR:
+            case Element::SLUR:
                   {
                   Slur* slur = static_cast<Slur*>(element);
                   foreach(SpannerSegment* ss, slur->spannerSegments()) {
@@ -1428,7 +1429,7 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case OTTAVA:
+            case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
                   foreach(SpannerSegment* ss, o->spannerSegments()) {
@@ -1449,18 +1450,18 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case DYNAMIC:
+            case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
-            case CLEF:
+            case Element::CLEF:
                   {
                   Clef* clef       = static_cast<Clef*>(element);
                   Segment* segment = clef->segment();
                   updateNoteLines(segment, clef->track());
                   }
                   break;
-            case KEYSIG:
+            case Element::KEYSIG:
                   {
                   KeySig* ks = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
@@ -1469,13 +1470,13 @@ void Score::addElement(Element* element)
                         staff->setKey(ks->segment()->tick(), keySigEvent);
                   }
                   break;
-            case TEMPO_TEXT:
+            case Element::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(element);
                   setTempo(tt->segment(), tt->tempo());
                   }
                   break;
-            case INSTRUMENT_CHANGE:
+            case Element::INSTRUMENT_CHANGE:
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   break;
@@ -1503,29 +1504,29 @@ void Score::removeElement(Element* element)
             qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
-      if (element->parent() && element->parent()->type() == SEGMENT)
+      if (element->parent() && element->parent()->type() == Element::SEGMENT)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static
 
-      ElementType et = element->type();
-      if (et == TREMOLO) {
+      Element::ElementType et = element->type();
+      if (et == Element::TREMOLO) {
             Chord* chord = static_cast<Chord*>(element->parent());
             setLayout(chord->measure());
             }
-      else if (et == MEASURE
-         || (et == HBOX && parent->type() != VBOX)
-         || et == VBOX
-         || et == TBOX
-         || et == FBOX
+      else if (et == Element::MEASURE
+         || (et == Element::HBOX && parent->type() != Element::VBOX)
+         || et == Element::VBOX
+         || et == Element::TBOX
+         || et == Element::FBOX
             ) {
             remove(element);
             addLayoutFlags(LAYOUT_FIX_TICKS);
             return;
             }
 
-      if (et == BEAM)          // beam parent does not survive layout
+      if (et == Element::BEAM)          // beam parent does not survive layout
             element->setParent(0);
 
       if (parent)
@@ -1534,7 +1535,7 @@ void Score::removeElement(Element* element)
             remove(element);
 
       switch(et) {
-            case SLUR:
+            case Element::SLUR:
                   {
                   Slur* slur = static_cast<Slur*>(element);
                   foreach(SpannerSegment* ss, slur->spannerSegments()) {
@@ -1547,12 +1548,12 @@ void Score::removeElement(Element* element)
                   }
                   break;
 
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
-//            case HAIRPIN:
-//            case TIE:
+            case Element::VOLTA:
+            case Element::TRILL:
+            case Element::PEDAL:
+            case Element::TEXTLINE:
+//            case Element::HAIRPIN:
+//            case Element::TIE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
@@ -1562,7 +1563,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
 
-            case OTTAVA:
+            case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
                   foreach(SpannerSegment* ss, o->spannerSegments()) {
@@ -1579,13 +1580,13 @@ void Score::removeElement(Element* element)
                   }
                   break;
 
-            case DYNAMIC:
+            case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
-            case CHORD:
-            case REST:
+            case Element::CHORD:
+            case Element::REST:
                   {
                   ChordRest* cr = static_cast<ChordRest*>(element);
                   if (cr->beam())
@@ -1593,13 +1594,13 @@ void Score::removeElement(Element* element)
                   // cr->setBeam(0);
                   }
                   break;
-            case CLEF:
+            case Element::CLEF:
                   {
                   Clef* clef = static_cast<Clef*>(element);
                   updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
-            case KEYSIG:
+            case Element::KEYSIG:
                   {
                   KeySig* ks    = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
@@ -1607,14 +1608,14 @@ void Score::removeElement(Element* element)
                         staff->removeKey(ks->segment()->tick());
                   }
                   break;
-            case TEMPO_TEXT:
+            case Element::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(element);
                   int tick = tt->segment()->tick();
                   tempomap()->delTempo(tick);
                   }
                   break;
-            case INSTRUMENT_CHANGE:
+            case Element::INSTRUMENT_CHANGE:
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   break;
@@ -1631,7 +1632,7 @@ void Score::removeElement(Element* element)
 Measure* Score::firstMeasure() const
       {
       MeasureBase* mb = _measures.first();
-      while (mb && mb->type() != MEASURE)
+      while (mb && mb->type() != Element::MEASURE)
             mb = mb->next();
       return static_cast<Measure*>(mb);
       }
@@ -1673,7 +1674,7 @@ MeasureBase* Score::measure(int idx) const
 Measure* Score::lastMeasure() const
       {
       MeasureBase* mb = _measures.last();
-      while (mb && mb->type() != MEASURE)
+      while (mb && mb->type() != Element::MEASURE)
             mb = mb->prev();
       return static_cast<Measure*>(mb);
       }
@@ -1827,7 +1828,7 @@ Text* Score::getText(int /*subtype*/)
       MeasureBase* m = measures()->first();
       if (m) {
             foreach(Element* e, *m->el()) {
-                  if (e->type() == TEXT && static_cast<Text*>(e)->subtype() == subtype)
+                  if (e->type() == Element::TEXT && static_cast<Text*>(e)->subtype() == subtype)
                         return static_cast<Text*>(e);
                   }
             }
@@ -1992,7 +1993,7 @@ Spanner* Score::findSpanner(int id) const
             int tracks = _staves.size() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && cr->type() == CHORD) {
+                  if (cr && cr->type() == Element::CHORD) {
                         Chord* c = static_cast<Chord*>(cr);
                         foreach(const Note* note, c->notes()) {
                               foreach(Spanner* e, note->spannerFor()) {
@@ -2187,7 +2188,7 @@ bool Score::appendScore(Score* score)
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
             MeasureBase* nmb;
-            if (mb->type() == MEASURE)
+            if (mb->type() == Element::MEASURE)
                   nmb = static_cast<Measure*>(mb)->cloneMeasure(this, &tieMap, &spannerMap);
             else
                   nmb = mb->clone();
@@ -2257,7 +2258,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       for (Segment* s = firstSegment(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(strack + voice));
-                  if (cr == 0 || cr->type() == REST)
+                  if (cr == 0 || cr->type() == Element::REST)
                         continue;
                   Chord* c = static_cast<Chord*>(cr);
                   QList<Note*> removeNotes;
@@ -2265,7 +2266,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         if (note->pitch() >= splitPoint)
                               continue;
                         Chord* chord = static_cast<Chord*>(s->element(dtrack + voice));
-                        if (chord && (chord->type() != CHORD))
+                        if (chord && (chord->type() != Element::CHORD))
                               abort();
                         if (chord == 0) {
                               chord = new Chord(*c);
@@ -2512,7 +2513,7 @@ void Score::sortStaves(QList<int>& dst)
       _staves = dl;
 
       for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* m = static_cast<Measure*>(mb);
             m->sortStaves(dst);
@@ -2626,7 +2627,7 @@ void Score::padToggle(int n)
 
       //do not allow to add a dot on a full measure rest
       Element* e = selection().element();
-      if (e && e->type() == REST) {
+      if (e && e->type() == Element::REST) {
             Rest* r = static_cast<Rest*>(e);
             TDuration d = r->durationType();
             if (d.type() == TDuration::V_MEASURE) {
@@ -2636,13 +2637,13 @@ void Score::padToggle(int n)
             }
 
       Element* el = selection().element();
-      if (el->type() == NOTE)
+      if (el->type() == Element::NOTE)
             el = el->parent();
       if (!el->isChordRest())
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
-      if (cr->type() == CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2663,12 +2664,12 @@ void Score::setInputState(Element* e)
 
       if (e == 0)
             return;
-      if (e && e->type() == CHORD)
+      if (e && e->type() == Element::CHORD)
             e = static_cast<Chord*>(e)->upNote();
 
       _is.setDrumNote(-1);
 //      _is.setDrumset(0);
-      if (e->type() == NOTE) {
+      if (e->type() == Element::NOTE) {
             Note* note    = static_cast<Note*>(e);
             Chord* chord  = note->chord();
             _is.setDuration(chord->durationType());
@@ -2678,7 +2679,7 @@ void Score::setInputState(Element* e)
             _is.noteType  = note->noteType();
             _is.beamMode  = chord->beamMode();
             }
-      else if (e->type() == REST) {
+      else if (e->type() == Element::REST) {
             Rest* rest   = static_cast<Rest*>(e);
             if (rest->durationType().type() == TDuration::V_MEASURE)
                   _is.setDuration(TDuration::V_QUARTER);
@@ -2698,10 +2699,10 @@ void Score::setInputState(Element* e)
             _is.noteType = NOTE_NORMAL;
 */
             }
-      if (e->type() == NOTE || e->type() == REST) {
+      if (e->type() == Element::NOTE || e->type() == Element::REST) {
             const Instrument* instr   = e->staff()->part()->instr();
             if (instr->useDrumset()) {
-                  if (e->type() == NOTE)
+                  if (e->type() == Element::NOTE)
                         _is.setDrumNote(static_cast<Note*>(e)->pitch());
                   else
                         _is.setDrumNote(-1);
@@ -2728,9 +2729,9 @@ void Score::deselect(Element* el)
 
 void Score::select(Element* e, SelectType type, int staffIdx)
       {
-      if (e && (e->type() == NOTE || e->type() == REST)) {
+      if (e && (e->type() == Element::NOTE || e->type() == Element::REST)) {
             Element* ee = e;
-            if (ee->type() == NOTE)
+            if (ee->type() == Element::NOTE)
                   ee = ee->parent();
             setPlayPos(static_cast<ChordRest*>(ee)->segment()->tick());
             }
@@ -2747,7 +2748,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   _updateAll = true;
                   }
             else {
-                  if (e->type() == MEASURE) {
+                  if (e->type() == Element::MEASURE) {
                         select(e, SELECT_RANGE, staffIdx);
                         return;
                         }
@@ -2755,16 +2756,16 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   _selection.add(e);
                   _is.setTrack(e->track());
                   selState = SEL_LIST;
-                  if (e->type() == NOTE)
+                  if (e->type() == Element::NOTE)
                         e = e->parent();
-                  if (e->type() == REST || e->type() == CHORD)
+                  if (e->type() == Element::REST || e->type() == Element::CHORD)
                         _is.setSegment(static_cast<ChordRest*>(e)->segment());
                   }
             _selection.setActiveSegment(0);
             _selection.setActiveTrack(0);
             }
       else if (type == SELECT_ADD) {
-            if (e->type() == MEASURE) {
+            if (e->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
                   int etick = tick + m->ticks();
@@ -2801,7 +2802,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
       else if (type == SELECT_RANGE) {
             bool activeIsFirst = false;
             int activeTrack = e->track();
-            if (e->type() == MEASURE) {
+            if (e->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
                   int etick = tick + m->ticks();
@@ -2842,7 +2843,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         if (oe->isChordRest())
                               ticks = static_cast<ChordRest*>(oe)->actualTicks();
                         int oetick = 0;
-                        if (oe->parent()->type() == SEGMENT)
+                        if (oe->parent()->type() == Element::SEGMENT)
                               oetick = static_cast<Segment*>(oe->parent())->tick();
                         if (tick < oetick)
                               seg = m->first();
@@ -2873,8 +2874,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         return;
                         }
                   }
-            else if (e->type() == NOTE || e->type() == REST || e->type() == CHORD) {
-                  if (e->type() == NOTE)
+            else if (e->type() == Element::NOTE || e->type() == Element::REST || e->type() == Element::CHORD) {
+                  if (e->type() == Element::NOTE)
                         e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
 
@@ -2887,8 +2888,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         }
                   else if (_selection.isSingle()) {
                         Element* oe = _selection.element();
-                        if (oe && (oe->type() == NOTE || oe->type() == REST)) {
-                              if (oe->type() == NOTE)
+                        if (oe && (oe->type() == Element::NOTE || oe->type() == Element::REST)) {
+                              if (oe->type() == Element::NOTE)
                                     oe = oe->parent();
                               ChordRest* ocr = static_cast<ChordRest*>(oe);
                               _selection.setStaffStart(oe->staffIdx());
@@ -3001,7 +3002,7 @@ void Score::lassoSelect(const QRectF& bbox)
                   const Element* e = el.at(i);
                   e->itemDiscovered = 0;
                   if (frr.contains(e->abbox())) {
-                        if (e->type() != MEASURE && e->selectable())
+                        if (e->type() != Element::MEASURE && e->selectable())
                               select(const_cast<Element*>(e), SELECT_ADD, 0);
                         }
                   }
@@ -3027,10 +3028,10 @@ void Score::lassoSelectEnd()
       _selection.setState(SEL_LIST);
 
       foreach(const Element* e, _selection.elements()) {
-            if (e->type() != NOTE && e->type() != REST)
+            if (e->type() != Element::NOTE && e->type() != Element::REST)
                   continue;
             ++noteRestCount;
-            if (e->type() == NOTE)
+            if (e->type() == Element::NOTE)
                   e = e->parent();
             Segment* seg = static_cast<const ChordRest*>(e)->segment();
             if ((startSegment == 0) || (*seg < *startSegment))
@@ -3166,7 +3167,7 @@ void Score::cmdSelectAll()
       if (mb) {   // check for empty score
             _selection.setState(SEL_RANGE);
             int tick = mb->tick();
-            if (mb->type() == MEASURE)
+            if (mb->type() == Element::MEASURE)
                   tick += static_cast<Measure*>(mb)->ticks();
             Segment* s1 = tick2segment(0);
             Segment* s2 = tick2segment(tick);
@@ -3198,9 +3199,9 @@ void Score::cmdSelectSection()
                   break;
             em = em->next();
             }
-      while (sm && sm->type() != MEASURE)
+      while (sm && sm->type() != Element::MEASURE)
             sm = sm->next();
-      while (em && em->type() != MEASURE)
+      while (em && em->type() != Element::MEASURE)
             em = em->next();
       if (sm == 0 || em == 0)
             return;
@@ -3340,7 +3341,7 @@ void Score::appendPart(const QString& name)
 void Score::appendMeasures(int n)
       {
       for (int i = 0; i < n; ++i)
-            insertMeasure(MEASURE, 0, false);
+            insertMeasure(Element::MEASURE, 0, false);
       }
 
 //---------------------------------------------------------
@@ -3350,8 +3351,8 @@ void Score::appendMeasures(int n)
 void Score::addText(const QString& type, const QString& txt)
       {
       MeasureBase* measure = first();
-      if (measure == 0 || measure->type() != VBOX) {
-            insertMeasure(VBOX, measure);
+      if (measure == 0 || measure->type() != Element::VBOX) {
+            insertMeasure(Element::VBOX, measure);
             measure = first();
             }
       Text* text = new Text(this);

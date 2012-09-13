@@ -29,7 +29,7 @@
 static void cleanupTuplet(Tuplet* t)
       {
       foreach(DurationElement* e, t->elements()) {
-            if (e->type() == TUPLET)
+            if (e->type() == Element::TUPLET)
                   cleanupTuplet(static_cast<Tuplet*>(e));
             delete e;
             }
@@ -52,7 +52,7 @@ TrackList::~TrackList()
                         delete el;
                   delete e;
                   }
-            else if (e->type() == TUPLET) {
+            else if (e->type() == Element::TUPLET) {
                   Tuplet* t = static_cast<Tuplet*>(e);
                   cleanupTuplet(t);
                   }
@@ -118,7 +118,7 @@ void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
             Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
             newSpanner->setTrack(track);
             map->insert(oldSpanner, newSpanner);
-            if (newSpanner->type() == SLUR) {
+            if (newSpanner->type() == Element::SLUR) {
                   dst->addSpannerFor(newSpanner);
                   newSpanner->setStartElement(dst);
                   }
@@ -137,7 +137,7 @@ void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
       foreach(Spanner* oldSpanner, src->spannerBack()) {
             Spanner* newSpanner = map->value(oldSpanner);
             if (newSpanner) {
-                  if (newSpanner->type() == SLUR) {
+                  if (newSpanner->type() == Element::SLUR) {
                         dst->addSpannerBack(newSpanner);
                         newSpanner->setEndElement(dst);
                         }
@@ -150,7 +150,7 @@ void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
             else {
                   int stick = oldSpanner->startTick();
                   if (stick < range()->first()->tick()) {
-                        if (oldSpanner->type() == SLUR) {
+                        if (oldSpanner->type() == Element::SLUR) {
                               dst->addSpannerBack(oldSpanner);
                               oldSpanner->setEndElement(dst);
                               }
@@ -186,7 +186,8 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
             Fraction d = static_cast<DurationElement*>(e)->duration();
             _duration += d;
 
-            bool accumulateRest = e->type() == REST && !isEmpty() && back()->type() == REST;
+            bool accumulateRest = e->type() == Element::REST && !isEmpty()
+               && back()->type() == Element::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
             if (s && s->spannerFor().isEmpty() && s->spannerBack().isEmpty()) {
@@ -199,7 +200,7 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
             else {
                   Element* element = e->clone();
                   QList<Element*>::append(element);
-                  if (e->type() == TUPLET) {
+                  if (e->type() == Element::TUPLET) {
                         Tuplet* srcTuplet = static_cast<Tuplet*>(e);
                         Tuplet* dstTuplet = static_cast<Tuplet*>(element);
 
@@ -230,7 +231,7 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
 
 void TrackList::appendGap(const Fraction& d)
       {
-      if (!isEmpty() && (back()->type() == REST)) {
+      if (!isEmpty() && (back()->type() == Element::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
             dd          += d;
@@ -271,7 +272,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                               DurationElement* nde = tuplet;
                               while (nde) {
                                     nde = tuplet->elements().back();
-                                    if (nde->type() != TUPLET)
+                                    if (nde->type() != Element::TUPLET)
                                           break;
                                     }
                               s = static_cast<ChordRest*>(nde)->segment();
@@ -281,10 +282,10 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                               appendGap(Fraction::fromTicks(gap));
                         append(de, map);
                         // add duration to ticks if not grace note
-                        if (!(de->type() == CHORD && static_cast<Chord*>(de)->isGrace()))
+                        if (!(de->type() == Element::CHORD && static_cast<Chord*>(de)->isGrace()))
                               tick += de->duration().ticks();;
                         }
-                  else if (e->type() == BAR_LINE)
+                  else if (e->type() == Element::BAR_LINE)
                         ;
                   else
                         append(e, map);
@@ -302,7 +303,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
       int n = size();
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
-            if (e->type() != CHORD)
+            if (e->type() != Element::CHORD)
                   continue;
             Chord* chord = static_cast<Chord*>(e);
             foreach(Note* n1, chord->notes()) {
@@ -311,7 +312,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                         continue;
                   for (int k = i+1; k < n; ++k) {
                         Element* ee = at(k);
-                        if (ee->type() != CHORD)
+                        if (ee->type() != Element::CHORD)
                               continue;
                         Chord* c2 = static_cast<Chord*>(ee);
                         bool found = false;
@@ -343,7 +344,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
             if (e->isChordRest()) {
                   Element* ne = e->clone();
                   Segment::SegmentType st;
-                  if (ne->type() == CHORD && static_cast<Chord*>(ne)->noteType() != NOTE_NORMAL)
+                  if (ne->type() == Element::CHORD && static_cast<Chord*>(ne)->noteType() != NOTE_NORMAL)
                         st = Segment::SegGrace;
                   else
                         st = Segment::SegChordRest;
@@ -376,10 +377,10 @@ bool TrackList::canWrite(const Fraction& measureLen) const
             Element* e = at(i);
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
-                  if (duration > rest && e->type() == TUPLET)
+                  if (duration > rest && e->type() == Element::TUPLET)
                         return false;
                   while (!duration.isZero()) {
-                        if (e->type() == REST && duration >= rest && rest == measureLen) {
+                        if (e->type() == Element::REST && duration >= rest && rest == measureLen) {
                               duration -= rest;
                               pos = measureLen;
                               }
@@ -418,7 +419,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
 
-                  if (e->type() == CHORD && static_cast<Chord*>(e)->isGrace()) {
+                  if (e->type() == Element::CHORD && static_cast<Chord*>(e)->isGrace()) {
                         segment = m->getSegment(Segment::SegGrace, m->tick() + pos.ticks());
                         Element* element = e->clone();
                         element->setTrack(track);
@@ -427,7 +428,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                            static_cast<Chord*>(element), segment, map);
                         continue;
                         }
-                  if (duration > rest && e->type() == TUPLET) {
+                  if (duration > rest && e->type() == Element::TUPLET) {
                         // cannot split tuplet
                         qDebug("TrackList::write: cannot split tuplet\n");
                         return false;
@@ -439,7 +440,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                   bool firstCRinSplit = true;
                   while (duration.numerator() > 0) {
                         // handle full measure rest
-                        if (e->type() == REST
+                        if (e->type() == Element::REST
                            && (duration >= rest || e == back())
                            && rest == m->len())
                               {
@@ -465,7 +466,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                         else {
                               Fraction d = qMin(rest, duration);
                               ChordRest* dst;
-                              if (e->type() == REST) {
+                              if (e->type() == Element::REST) {
                                     segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     dst = r;
@@ -475,7 +476,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     rest -= d;
                                     pos += d;
                                     }
-                              else if (e->type() == CHORD) {
+                              else if (e->type() == Element::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
                                     dst = c;
@@ -497,7 +498,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                           note->setTieBack(0);
                                           }
                                     }
-                              else if (e->type() == TUPLET) {
+                              else if (e->type() == Element::TUPLET) {
                                     writeTuplet(static_cast<Tuplet*>(e), m, m->tick() + pos.ticks());
                                     duration -= d;
                                     rest     -= d;
@@ -520,10 +521,10 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                         firstCRinSplit = false;
                         }
                   }
-            else if (e->type() == KEYSIG) {
+            else if (e->type() == Element::KEYSIG) {
                   // keysig has to be at start of measure
                   }
-            else if (e->type() == BAR_LINE)
+            else if (e->type() == Element::BAR_LINE)
                   ;
             else {
                   if (m == 0)
@@ -541,7 +542,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
       //
       for (Segment* s = measure->first(); s; s = s->next1()) {
             Element* el = s->element(track);
-            if (el == 0 || el->type() != CHORD)
+            if (el == 0 || el->type() != Element::CHORD)
                   continue;
             foreach(Note* n, static_cast<Chord*>(el)->notes()) {
                   Tie* tie = n->tieFor();

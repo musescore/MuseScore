@@ -59,7 +59,8 @@ Element* MTest::writeReadElement(Element* element)
       //
       // read element
       //
-//      printf("%s\n", buffer.buffer().data());
+printf("===read <%s>===\n", element->name());
+printf("%s\n", buffer.buffer().data());
 
       QDomDocument doc;
       int line, column;
@@ -73,7 +74,9 @@ Element* MTest::writeReadElement(Element* element)
       docName = "--";
       QDomElement e = doc.documentElement();
       QString tag(e.tagName());
+      printf("   ===found element <%s>\n", qPrintable(e.tagName()));
       element = Element::name2Element(e.tagName(), score);
+      printf("   ===found element <%s>-><%s>\n", qPrintable(e.tagName()), element->name());
       element->read(e);
       return element;
       }

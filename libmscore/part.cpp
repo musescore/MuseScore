@@ -220,7 +220,7 @@ void Part::setStaves(int n)
             _staves.push_back(staff);
             _score->staves().insert(staffIdx, staff);
             for (MeasureBase* mb = _score->first(); mb; mb = mb->next()) {
-                  if (mb->type() != MEASURE)
+                  if (mb->type() != Element::MEASURE)
                         continue;
                   Measure* m = static_cast<Measure*>(mb);
                   m->insertStaff(staff, staffIdx);

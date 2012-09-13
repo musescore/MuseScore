@@ -1888,7 +1888,7 @@ qDebug("readCapVoice 2\n");
 //   to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                               s->setHtml(ss);
                               MeasureBase* measure = score->measures()->first();
-                              if (measure->type() != VBOX) {
+                              if (measure->type() != Element::VBOX) {
                                     MeasureBase* mb = new VBox(score);
                                     mb->setTick(0);
                                     score->addMeasure(mb, measure);
@@ -2048,7 +2048,7 @@ qDebug("==================convert-capella\n");
       if (cap->topDist) {
             VBox* mb = 0;
             MeasureBaseList* mbl = score->measures();
-            if (mbl->size() && mbl->first()->type() == VBOX)
+            if (mbl->size() && mbl->first()->type() == Element::VBOX)
                   mb = static_cast<VBox*>(mbl->first());
             else {
                   VBox* vb = new VBox(score);
