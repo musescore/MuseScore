@@ -36,9 +36,10 @@ class Measure;
 //   @P track    int          current track
 //   @P staffIdx int          current staff (track * 4)
 //   @P voice    int          current voice (track % 4)
-//   @P element  Element*     current element at track
-//   @P segment  Segment*     current segment
-//   @P tick     int          midi tick position
+//   @P element  Element*     current element at track, read only
+//   @P segment  Segment*     current segment, read only
+//   @P tick     int          midi tick position, read only
+//   @P time     double       time at tick position, read only
 //   @P score    Score*       associated score
 //---------------------------------------------------------
 
@@ -52,7 +53,7 @@ class Cursor : public QObject {
       Q_PROPERTY(Segment* segment READ segment)
 
       Q_PROPERTY(int tick         READ tick)
-      Q_PROPERTY(int time         READ time)
+      Q_PROPERTY(double time      READ time)
       Q_PROPERTY(Score* score     READ score    WRITE setScore)
 
       Score* _score;
