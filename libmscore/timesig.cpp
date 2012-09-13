@@ -266,7 +266,7 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
-            QFontMetricsF fm(fontId2font(0));
+            QFontMetricsF fm(fontId2font(symIdx2fontId(score()->symIdx())));
             QRectF rz = fm.tightBoundingRect(_numeratorString);   // get 'tight' bounding boxes for strings
             QRectF rn = fm.tightBoundingRect(_denominatorString);
 
@@ -305,7 +305,7 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      QFont font = fontId2font(0);
+      QFont font = fontId2font(symIdx2fontId(score()->symIdx()));
       font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
       painter->setFont(font);
       qreal mag  = spatium() / (MScore::DPI * SPATIUM20);
