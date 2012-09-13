@@ -98,8 +98,8 @@ static const char* elementNames[] = {
 
       QT_TRANSLATE_NOOP("elementName", "Arpeggio"),
       QT_TRANSLATE_NOOP("elementName", "Accidental"),
-      QT_TRANSLATE_NOOP("elementName", "Note"),
       QT_TRANSLATE_NOOP("elementName", "Stem"),
+      QT_TRANSLATE_NOOP("elementName", "Note"),
       QT_TRANSLATE_NOOP("elementName", "Clef"),
       QT_TRANSLATE_NOOP("elementName", "KeySig"),
       QT_TRANSLATE_NOOP("elementName", "TimeSig"),
