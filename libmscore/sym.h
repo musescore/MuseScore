@@ -20,6 +20,7 @@ class QPainter;
 class TextStyle;
 
 extern void initSymbols(int);
+extern int symIdx2fontId(int symIdx); 
 extern QFont fontId2font(int id);
 
 enum SymbolType {
