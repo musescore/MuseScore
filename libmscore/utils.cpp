@@ -42,7 +42,7 @@ QRectF handleRect(const QPointF& pos)
 Measure* Score::tick2measure(int tick) const
       {
       for (MeasureBase* mb = first(); mb;) {
-            if (mb->type() != MEASURE) {
+            if (mb->type() != Element::MEASURE) {
                   mb = mb->next();
                   continue;
                   }
@@ -54,7 +54,7 @@ Measure* Score::tick2measure(int tick) const
             // hack:
             MeasureBase* nmb;
             for (nmb = mb->next(); nmb; nmb = nmb->next()) {
-                  if (nmb->type() == MEASURE)
+                  if (nmb->type() == Element::MEASURE)
                         break;
                   }
             if (nmb == 0)
@@ -611,7 +611,7 @@ Note* searchTieNote(Note* note)
                   break;
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0 || cr->type() != CHORD)
+                  if (cr == 0 || cr->type() != Element::CHORD)
                         continue;
                   int staffIdx = cr->staffIdx() + cr->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?

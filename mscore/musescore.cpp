@@ -152,7 +152,7 @@ void InsertMeasuresDialog::accept()
       {
 	int n = insmeasures->value();
 	if (mscore->currentScore())
-            mscore->currentScoreView()->cmdInsertMeasures(n, MEASURE);
+            mscore->currentScoreView()->cmdInsertMeasures(n, Element::MEASURE);
 	done(1);
       }
 
@@ -1638,7 +1638,7 @@ void MeasuresDialog::accept()
 	{
 	int n = measures->value();
       if (mscore->currentScore())
-            mscore->currentScoreView()->cmdAppendMeasures(n, MEASURE);
+            mscore->currentScoreView()->cmdAppendMeasures(n, Element::MEASURE);
       done(1);
 	}
 
@@ -2860,11 +2860,11 @@ void MuseScore::readSettings()
 void MuseScore::play(Element* e) const
       {
       if (mscore->playEnabled()) {
-            if (e->type() == NOTE) {
+            if (e->type() == Element::NOTE) {
                   Note* note = static_cast<Note*>(e);
                   play(e, note->ppitch());
                   }
-            else if (e->type() == CHORD) {
+            else if (e->type() == Element::CHORD) {
                   seq->stopNotes();
                   Chord* c = static_cast<Chord*>(e);
                   Part* part = c->staff()->part();
@@ -2881,7 +2881,7 @@ void MuseScore::play(Element* e) const
 
 void MuseScore::play(Element* e, int pitch) const
       {
-      if (mscore->playEnabled() && e->type() == NOTE) {
+      if (mscore->playEnabled() && e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
             Part* part = note->staff()->part();
             int tick = note->chord()->segment() ? note->chord()->segment()->tick() : 0;
@@ -3825,14 +3825,14 @@ static void collectMatch(void* data, Element* e)
             return;
       if ((p->staff != -1) && (p->staff != e->staffIdx()))
             return;
-      if (e->type() == CHORD || e->type() == REST || e->type() == NOTE || e->type() == LYRICS) {
+      if (e->type() == Element::CHORD || e->type() == Element::REST || e->type() == Element::NOTE || e->type() == Element::LYRICS) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
       if (p->system) {
             Element* ee = e;
             do {
-                  if (ee->type() == SYSTEM) {
+                  if (ee->type() == Element::SYSTEM) {
                         if (p->system != ee)
                               return;
                         break;
@@ -3849,7 +3849,7 @@ static void collectMatch(void* data, Element* e)
 
 void MuseScore::selectSimilar(Element* e, bool sameStaff)
       {
-      ElementType type = e->type();
+      Element::ElementType type = e->type();
 //TODO      int subtype      = e->subtype();
 
       ElementPattern pattern;
@@ -4098,7 +4098,7 @@ void MuseScore::endCmd()
 
             if (e == 0 && cs->inputState().noteEntryMode)
                   e = cs->inputState().cr();
-            enableInput = e && (e->type() == NOTE || e->isChordRest());
+            enableInput = e && (e->type() == Element::NOTE || e->isChordRest());
             cs->end();
             }
       else {
@@ -4436,7 +4436,7 @@ void MuseScore::cmdAddChordName2()
       if (!cr)
             return;
       int rootTpc = 14;
-      if (cr->type() == CHORD) {
+      if (cr->type() == Element::CHORD) {
             Chord* chord = static_cast<Chord*>(cr);
             rootTpc = chord->downNote()->tpc();
             }
@@ -4444,7 +4444,7 @@ void MuseScore::cmdAddChordName2()
       Segment* segment = cr->segment();
 
       foreach(Element* e, segment->annotations()) {
-            if (e->type() == HARMONY && (e->track() == cr->track())) {
+            if (e->type() == Element::HARMONY && (e->track() == cr->track())) {
                   s = static_cast<Harmony*>(e);
                   break;
                   }

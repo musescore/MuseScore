@@ -36,7 +36,7 @@ extern TextPalette* textPalette;
 
 void ScoreView::startEdit(Element* e)
       {
-      if (e->type() == TBOX)
+      if (e->type() == Element::TBOX)
             e = static_cast<TBox*>(e)->getText();
       origEditObject = e;
       sm->postEvent(new CommandEvent("edit"));
@@ -178,7 +178,7 @@ void ScoreView::endEdit()
                         Element* lee = 0;
                         Score* sc = lspanner->score();
 
-                        if (se->type() == NOTE || se->type() == CHORD) {
+                        if (se->type() == Element::NOTE || se->type() == Element::CHORD) {
                               foreach(Element* e, *se->links()) {
                                     if (e->score() == sc && e->staffIdx() == se->staffIdx()) {
                                           lse = e;
@@ -192,7 +192,7 @@ void ScoreView::endEdit()
                                           }
                                     }
                               }
-                        else if (se->type() == SEGMENT) {
+                        else if (se->type() == Element::SEGMENT) {
                               int tick   = static_cast<Segment*>(se)->tick();
                               Measure* m = sc->tick2measure(tick);
                               lse        = m->findSegment(Segment::SegChordRest, tick);
@@ -201,7 +201,7 @@ void ScoreView::endEdit()
                               m          = sc->tick2measure(tick2);
                               lee        = m->findSegment(Segment::SegChordRest, tick2);
                               }
-                        else if (se->type() == MEASURE) {
+                        else if (se->type() == Element::MEASURE) {
                               Measure* measure = static_cast<Measure*>(se);
                               int tick         = measure->tick();
                               lse              = sc->tick2measure(tick);
@@ -218,11 +218,11 @@ void ScoreView::endEdit()
       _score->addRefresh(editObject->canvasBoundingRect());
 
       int tp = editObject->type();
-      if (tp == LYRICS)
+      if (tp == Element::LYRICS)
             lyricsEndEdit();
-      else if (tp == HARMONY)
+      else if (tp == Element::HARMONY)
             harmonyEndEdit();
-      else if (tp == FIGURED_BASS)
+      else if (tp == Element::FIGURED_BASS)
             figuredBassEndEdit();
       _score->endCmd();
       mscore->endCmd();

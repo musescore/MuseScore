@@ -422,7 +422,6 @@ void Note::add(Element* e)
 	e->setParent(this);
       e->setTrack(track());
 
-printf("Note::add %s\n", e->name());
       switch(e->type()) {
             case NOTEDOT:
                   {
@@ -697,6 +696,7 @@ void Note::read(const QDomElement& de)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
+printf("note read <%s> <%s>\n", qPrintable(tag), qPrintable(val));
             if (tag == "pitch")
                   _pitch = val.toInt();
             else if (tag == "tpc")

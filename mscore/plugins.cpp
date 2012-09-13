@@ -407,12 +407,12 @@ void MuseScore::pluginTriggered(int idx)
 //   newElement
 //---------------------------------------------------------
 
-Element* QmlPlugin::newElement(int t)
+Element* QmlPlugin::newElement(Element::ElementType t)
       {
       Score* score = curScore();
       if (score == 0)
             return 0;
-      return Element::create(ElementType(t), score);
+      return Element::create(t, score);
       }
 
 //---------------------------------------------------------

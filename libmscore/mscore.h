@@ -14,8 +14,8 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#define MSC_VERSION     "1.25"
-static const int MSCVERSION = 125;
+#define MSC_VERSION     "1.24"
+static const int MSCVERSION = 124;
 
 // History:
 //      1.3   added staff->_barLineSpan
@@ -42,7 +42,7 @@ static const int MSCVERSION = 125;
 //    1.22  timesig changed
 //    1.23  measure property for actual length
 //    1.24  default image size is spatium dependent
-//    1.25  symbol numbers in TextLine() replaced by symbol names
+//      -   symbol numbers in TextLine() replaced by symbol names
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
 
 
@@ -65,107 +65,6 @@ static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
-
-//---------------------------------------------------------
-//   ElementType
-//    The value of this enum determines the "stacking order"
-//    of elements on the canvas.
-//---------------------------------------------------------
-
-enum ElementType {
-      INVALID = 0,
-      SYMBOL  = 1,
-      TEXT,
-      INSTRUMENT_NAME,
-      SLUR_SEGMENT,
-      STAFF_LINES,
-      BAR_LINE,
-      STEM_SLASH,
-      LINE,
-      BRACKET,
-      ARPEGGIO,
-      ACCIDENTAL,
-      STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
-      NOTE,             // and this requires stems to be drawn before notes
-      CLEF,
-      KEYSIG,
-      TIMESIG,
-      REST,
-      BREATH,
-      GLISSANDO,
-      REPEAT_MEASURE,
-      IMAGE,
-/*19*/TIE,
-      ARTICULATION,
-      CHORDLINE,
-      DYNAMIC,
-      BEAM,
-      HOOK,
-      LYRICS,
-      FIGURED_BASS,
-      MARKER,
-      JUMP,
-      FINGERING,
-      TUPLET,
-/*30*/TEMPO_TEXT,
-      STAFF_TEXT,
-      REHEARSAL_MARK,
-      INSTRUMENT_CHANGE,
-      HARMONY,
-      FRET_DIAGRAM,
-      BEND,
-      TREMOLOBAR,
-      VOLTA,
-      HAIRPIN_SEGMENT,
-      OTTAVA_SEGMENT,
-      TRILL_SEGMENT,
-      TEXTLINE_SEGMENT,
-      VOLTA_SEGMENT,
-      LAYOUT_BREAK,
-      SPACER,
-      STAFF_STATE,
-      LEDGER_LINE,
-      NOTEHEAD,
-      NOTEDOT,
-      TREMOLO,
-      MEASURE,
-      SELECTION,
-      LASSO,
-      SHADOW_NOTE,
-      RUBBERBAND,
-      TAB_DURATION_SYMBOL,
-      FSYMBOL,
-      PAGE,
-
-      // not drawable elements:
-      HAIRPIN,
-      OTTAVA,
-      PEDAL,
-      TRILL,
-      TEXTLINE,
-      SEGMENT,
-      SYSTEM,
-      COMPOUND,
-      CHORD,
-      SLUR,
-
-      // special types for drag& drop:
-      ELEMENT,
-      ELEMENT_LIST,
-      STAFF_LIST,
-      MEASURE_LIST,
-      LAYOUT,
-
-      HBOX,
-      VBOX,
-      TBOX,
-      FBOX,
-      ACCIDENTAL_BRACKET,
-      ICON,
-      OSSIA,
-
-      MAXTYPE
-      };
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -491,7 +390,6 @@ enum {
 
 class MScore : public QObject {
       Q_OBJECT
-      Q_ENUMS(ElementType)
       Q_ENUMS(ValueType)
       Q_ENUMS(Direction)
       Q_ENUMS(DirectionH)
@@ -505,96 +403,6 @@ class MScore : public QObject {
       static int _hRaster, _vRaster;
 
    public:
-       enum ElementType {
-            INVALID = 0,
-            SYMBOL  = 1,
-            TEXT,
-            INSTRUMENT_NAME,
-            SLUR_SEGMENT,
-            STAFF_LINES,
-            BAR_LINE,
-            STEM_SLASH,
-            LINE,
-            BRACKET,
-            ARPEGGIO,
-            ACCIDENTAL,
-            NOTE,
-            STEM,
-            CLEF,
-            KEYSIG,
-            TIMESIG,
-            REST,
-            BREATH,
-            GLISSANDO,
-            REPEAT_MEASURE,
-            IMAGE,
-            TIE,
-            ARTICULATION,
-            CHORDLINE,
-            DYNAMIC,
-            BEAM,
-            HOOK,
-            LYRICS,
-            FIGURED_BASS,
-            MARKER,
-            JUMP,
-            FINGERING,
-            TUPLET,
-            TEMPO_TEXT,
-            STAFF_TEXT,
-            REHEARSAL_MARK,
-            INSTRUMENT_CHANGE,
-            HARMONY,
-            FRET_DIAGRAM,
-            BEND,
-            TREMOLOBAR,
-            VOLTA,
-            HAIRPIN_SEGMENT,
-            OTTAVA_SEGMENT,
-            TRILL_SEGMENT,
-            TEXTLINE_SEGMENT,
-            VOLTA_SEGMENT,
-            LAYOUT_BREAK,
-            SPACER,
-            STAFF_STATE,
-            LEDGER_LINE,
-            NOTEHEAD,
-            NOTEDOT,
-            TREMOLO,
-            MEASURE,
-            SELECTION,
-            LASSO,
-            SHADOW_NOTE,
-            RUBBERBAND,
-            TAB_DURATION_SYMBOL,
-            FSYMBOL,
-            PAGE,
-            HAIRPIN,
-            OTTAVA,
-            PEDAL,
-            TRILL,
-            TEXTLINE,
-            SEGMENT,
-            SYSTEM,
-            COMPOUND,
-            CHORD,
-            SLUR,
-            ELEMENT,
-            ELEMENT_LIST,
-            STAFF_LIST,
-            MEASURE_LIST,
-            LAYOUT,
-            HBOX,
-            VBOX,
-            TBOX,
-            FBOX,
-            ACCIDENTAL_BRACKET,
-            ICON,
-            OSSIA,
-
-            MAXTYPE
-            };
-
       enum ValueType  { OFFSET_VAL, USER_VAL };
       enum Direction  { AUTO, UP, DOWN };
       enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
@@ -637,7 +445,6 @@ class MScore : public QObject {
       static bool debugMode;
       };
 
-Q_DECLARE_METATYPE(MScore::ElementType)
 Q_DECLARE_METATYPE(MScore::ValueType)
 Q_DECLARE_METATYPE(MScore::Direction)
 Q_DECLARE_METATYPE(MScore::DirectionH)

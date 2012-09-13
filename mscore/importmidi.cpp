@@ -715,7 +715,7 @@ void MidiFile::processMeta(Score* cs, MidiTrack* track, const Event& mm)
                   text->setText((const char*)(mm.data()));
 
                   MeasureBase* measure = cs->first();
-                  if (measure->type() != VBOX) {
+                  if (measure->type() != Element::VBOX) {
                         measure = new VBox(cs);
                         measure->setTick(0);
                         measure->setNext(cs->first());

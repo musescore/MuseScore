@@ -691,7 +691,7 @@ void MuseScore::editInstrList()
                               int sidx = staff->idx();
                               int eidx = sidx + 1;
                               for (MeasureBase* mb = cs->measures()->first(); mb; mb = mb->next()) {
-                                    if (mb->type() != MEASURE)
+                                    if (mb->type() != Element::MEASURE)
                                           continue;
                                     Measure* m = (Measure*)mb;
                                     m->cmdRemoveStaves(sidx, eidx);
@@ -798,7 +798,7 @@ void MuseScore::editInstrList()
       // there should be at least one measure
       //
       if (cs->measures()->size() == 0)
-            cs->insertMeasure(MEASURE, 0, false);
+            cs->insertMeasure(Element::MEASURE, 0, false);
 
       cs->setLayoutAll(true);
       cs->endCmd();

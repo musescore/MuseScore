@@ -60,7 +60,7 @@ void Score::updateChannel()
             return;
       for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             foreach(const Element* e, s->annotations()) {
-                  if (e->type() != STAFF_TEXT)
+                  if (e->type() != Element::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
                   for (int voice = 0; voice < VOICES; ++voice) {
@@ -83,7 +83,7 @@ void Score::updateChannel()
                         if (!s->element(track))
                               continue;
                         Element* e = s->element(track);
-                        if (e->type() != CHORD)
+                        if (e->type() != Element::CHORD)
                               continue;
                         Chord* c = static_cast<Chord*>(e);
                         int channel = st->channel(c->tick(), c->voice());
@@ -251,7 +251,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         continue;
                         }
                   Element* cr = seg->element(track);
-                  if (cr && cr->type() == CHORD) {
+                  if (cr && cr->type() == Element::CHORD) {
                         Chord* chord = static_cast<Chord*>(cr);
                         Staff* staff = chord->staff();
                         int velocity = staff->velocities().velo(seg->tick());
@@ -282,7 +282,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                     while (seg2 && !seg2->element(track))
                                           seg2 = seg2->next(st);
                                     ChordRest* cr = static_cast<ChordRest*>(seg2->element(track));
-                                    if (cr && cr->type() == CHORD) {
+                                    if (cr && cr->type() == Element::CHORD) {
                                           Chord* c2 = static_cast<Chord*>(cr);
                                           int tick = chord->tick() + tickOffset;
                                           for (int i = 0; i < repeats; ++i) {
@@ -323,7 +323,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             // int tick = s->tick();
             foreach(Element* e, s->annotations()) {
-                  if (e->type() != STAFF_TEXT
+                  if (e->type() != Element::STAFF_TEXT
                      || e->staffIdx() < firstStaffIdx
                      || e->staffIdx() >= nextStaffIdx)
                         continue;
@@ -378,7 +378,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
             foreach(Spanner* e, s->spannerFor()) {
                   if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
-                  if (e->type() == PEDAL) {
+                  if (e->type() == Element::PEDAL) {
                         Segment* s1 = static_cast<Segment*>(e->startElement());
                         Segment* s2 = static_cast<Segment*>(e->endElement());
                         Staff* staff = e->staff();
@@ -612,7 +612,7 @@ void Score::updateVelo()
                   foreach(const Element* e, s->annotations()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
-                        if (e->type() != DYNAMIC)
+                        if (e->type() != Element::DYNAMIC)
                               continue;
                         const Dynamic* d = static_cast<const Dynamic*>(e);
                         int v            = d->velocity();
@@ -641,7 +641,7 @@ void Score::updateVelo()
                   foreach(Element* e, s->spannerFor()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
-                        if (e->type() == HAIRPIN) {
+                        if (e->type() == Element::HAIRPIN) {
                               Hairpin* h = static_cast<Hairpin*>(e);
                               updateHairpin(h);
                               }

@@ -82,9 +82,9 @@
 
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
-      if (!e->generated() || e->type() == BAR_LINE) {
+      if (!e->generated() || e->type() == Element::BAR_LINE) {
 #if 0
-            if (e->type() != LAYOUT_BREAK) {
+            if (e->type() != Element::LAYOUT_BREAK) {
                   if (e->visible())
                         popup->addAction(tr("Set Invisible"))->setData("invisible");
                   else
@@ -146,37 +146,37 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
 
 void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       {
-      if (e->type() == BAR_LINE) {
+      if (e->type() == Element::BAR_LINE) {
             genPropertyMenu1(e, popup);
             }
-      else if (e->type() == ARTICULATION) {
+      else if (e->type() == Element::ARTICULATION) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Articulation Properties..."))->setData("a-props");
             }
-      else if (e->type() == BEAM) {
+      else if (e->type() == Element::BEAM) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == STEM) {
+      else if (e->type() == Element::STEM) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == HOOK) {
+      else if (e->type() == Element::HOOK) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == BEND) {
+      else if (e->type() == Element::BEND) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Bend Properties..."))->setData("b-props");
             }
-      else if (e->type() == TREMOLOBAR) {
+      else if (e->type() == Element::TREMOLOBAR) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("TremoloBar Properties..."))->setData("tr-props");
             }
-      else if (e->type() == HBOX) {
+      else if (e->type() == Element::HBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             textMenu->addAction(getAction("frame-text"));
             textMenu->addAction(getAction("picture"));
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == VBOX) {
+      else if (e->type() == Element::VBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             textMenu->addAction(getAction("frame-text"));
             textMenu->addAction(getAction("title-text"));
@@ -187,18 +187,18 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             textMenu->addAction(getAction("picture"));
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == TBOX) {
+      else if (e->type() == Element::TBOX) {
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == TUPLET) {
+      else if (e->type() == Element::TUPLET) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
             }
-      else if (e->type() == VOLTA_SEGMENT) {
+      else if (e->type() == Element::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Volta Properties..."))->setData("v-props");
             }
-      else if (e->type() == TIMESIG) {
+      else if (e->type() == Element::TIMESIG) {
             genPropertyMenu1(e, popup);
             TimeSig* ts = static_cast<TimeSig*>(e);
             int _track = ts->track();
@@ -214,7 +214,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addSeparator();
             popup->addAction(tr("Time Signature Properties..."))->setData("ts-props");
             }
-      else if (e->type() == ACCIDENTAL) {
+      else if (e->type() == Element::ACCIDENTAL) {
             Accidental* acc = static_cast<Accidental*>(e);
             genPropertyMenu1(e, popup);
             QAction* a = popup->addAction(QT_TRANSLATE_NOOP("Properties", "small"));
@@ -222,7 +222,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a->setChecked(acc->small());
             a->setData("smallAcc");
             }
-      else if (e->type() == CLEF) {
+      else if (e->type() == Element::CLEF) {
             genPropertyMenu1(e, popup);
             // if the clef is not generated (= not courtesy) add the specific menu item
             if (!e->generated()) {
@@ -232,7 +232,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                         a->setData("clef-courtesy");
                   }
             }
-      else if (e->type() == DYNAMIC) {
+      else if (e->type() == Element::DYNAMIC) {
             popup->addSeparator();
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
@@ -241,26 +241,26 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("MIDI Properties..."))->setData("d-dynamics");
             popup->addAction(tr("Text Properties..."))->setData("d-props");
             }
-      else if (e->type() == TEXTLINE_SEGMENT || e->type() == OTTAVA_SEGMENT) {
+      else if (e->type() == Element::TEXTLINE_SEGMENT || e->type() == Element::OTTAVA_SEGMENT) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Line Properties..."))->setData("l-props");
             }
-      else if (e->type() == STAFF_TEXT) {
+      else if (e->type() == Element::STAFF_TEXT) {
             genPropertyMenuText(e, popup);
             popup->addAction(tr("Staff Text Properties..."))->setData("st-props");
             }
-      else if (e->type() == TEXT || e->type() == FINGERING || e->type() == LYRICS) {
+      else if (e->type() == Element::TEXT || e->type() == Element::FINGERING || e->type() == Element::LYRICS) {
             genPropertyMenuText(e, popup);
             }
-      else if (e->type() == TEMPO_TEXT) {
+      else if (e->type() == Element::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Tempo Properties..."))->setData("tempo-props");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
-      else if (e->type() == KEYSIG) {
+      else if (e->type() == Element::KEYSIG) {
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
             if (!e->generated()) {
@@ -274,15 +274,15 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-naturals");
                   }
             }
-      else if (e->type() == STAFF_STATE && static_cast<StaffState*>(e)->subtype() == STAFF_STATE_INSTRUMENT) {
+      else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->subtype() == STAFF_STATE_INSTRUMENT) {
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
-      else if (e->type() == SLUR_SEGMENT) {
+      else if (e->type() == Element::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Edit Mode"))->setData("edit");
             popup->addAction(tr("Slur Properties..."))->setData("slur-props");
             }
-      else if (e->type() == REST) {
+      else if (e->type() == Element::REST) {
             Rest* rest = static_cast<Rest*>(e);
             genPropertyMenu1(e, popup);
             if (rest->tuplet()) {
@@ -292,7 +292,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
                   }
             }
-      else if (e->type() == NOTE) {
+      else if (e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
 
             QAction* b = popup->actions()[0];
@@ -320,22 +320,22 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
-      else if (e->type() == MARKER) {
+      else if (e->type() == Element::MARKER) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Marker Properties..."))->setData("marker-props");
             }
-      else if (e->type() == JUMP) {
+      else if (e->type() == Element::JUMP) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Jump Properties..."))->setData("jump-props");
             }
-      else if (e->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() == LAYOUT_BREAK_SECTION) {
+      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() == LAYOUT_BREAK_SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
             }
-      else if (e->type() == INSTRUMENT_CHANGE) {
+      else if (e->type() == Element::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
-      else if (e->type() == FRET_DIAGRAM) {
+      else if (e->type() == Element::FRET_DIAGRAM) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
@@ -343,11 +343,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Color..."))->setData("color");
             popup->addAction(tr("Fret Diagram Properties..."))->setData("fret-props");
             }
-      else if (e->type() == GLISSANDO) {
+      else if (e->type() == Element::GLISSANDO) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
             }
-      else if (e->type() == HAIRPIN_SEGMENT) {
+      else if (e->type() == Element::HAIRPIN_SEGMENT) {
             QAction* a = popup->addSeparator();
             a->setText(tr("Dynamics"));
             if (e->visible())
@@ -357,13 +357,13 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a->setData("invisible");
             popup->addAction(tr("Hairpin Properties..."))->setData("hp-props");
             }
-      else if (e->type() == HARMONY) {
+      else if (e->type() == Element::HARMONY) {
             genPropertyMenu1(e, popup);
             popup->addSeparator();
             popup->addAction(tr("Harmony Properties..."))->setData("ha-props");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
-      else if (e->type() == INSTRUMENT_NAME) {
+      else if (e->type() == Element::INSTRUMENT_NAME) {
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
             }
       else
@@ -461,7 +461,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "tuplet-props") {
             Tuplet* tuplet;
             QList<Element*> el;
-            if (e->type() == NOTE) {
+            if (e->type() == Element::NOTE) {
                   tuplet = static_cast<Note*>(e)->chord()->tuplet();
                   el.append(tuplet);
                   }
@@ -478,7 +478,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   int bracketType = vp.bracketType();
                   int numberType  = vp.numberType();
                   foreach(Element* e, el) {
-                        if (e->type() == TUPLET) {
+                        if (e->type() == Element::TUPLET) {
                               Tuplet* tuplet = static_cast<Tuplet*>(e);
                               if (bracketType != tuplet->bracketType())
                                     score()->undoChangeProperty(tuplet, P_BRACKET_TYPE, bracketType);
@@ -664,7 +664,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "tupletDelete") {
             foreach(Element* e, score()->selection().elements()) {
-                  if (e->type() == REST) {
+                  if (e->type() == Element::REST) {
                         Rest* r = static_cast<Rest*>(e);
                         if (r->tuplet())
                               score()->cmdDeleteTuplet(r->tuplet(), true);
