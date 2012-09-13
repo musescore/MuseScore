@@ -513,7 +513,7 @@ bool FileIO::write(const QString& data)
       return true;
       }
 
-bool FileIO::remove(const QString& data)
+bool FileIO::remove()
       {
       if (mSource.isEmpty())
             return false;
