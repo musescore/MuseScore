@@ -145,7 +145,9 @@ class Element : public QObject {
       Q_PROPERTY(bool generated  READ generated WRITE setGenerated)
       Q_PROPERTY(bool selected   READ selected  WRITE setSelected)
       Q_PROPERTY(QPointF pos     READ pos       WRITE setPos)
+      Q_PROPERTY(QPointF pagePos READ pagePos )
       Q_PROPERTY(QPointF userOff READ userOff   WRITE setUserOff)
+      Q_PROPERTY(QRectF  bbox    READ bbox )
 
       LinkedElements* _links;
       Element* _parent;
