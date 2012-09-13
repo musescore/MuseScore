@@ -66,7 +66,7 @@ void TestMeasure::insertMeasureMiddle()
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(MEASURE, m);
+      score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-1.mscx", DIR + "measure1-1o.mscx"));
       delete score;
@@ -85,7 +85,7 @@ void TestMeasure::insertMeasureBegin()
 
       Measure* m = score->firstMeasure();
       score->startCmd();
-      score->insertMeasure(MEASURE, m);
+      score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-2.mscx", DIR + "measure1-2o.mscx"));
       delete score;
@@ -103,7 +103,7 @@ void TestMeasure::insertMeasureEnd()
             e->score()->doLayout();
 
       score->startCmd();
-      score->insertMeasure(MEASURE, 0);
+      score->insertMeasure(Element::MEASURE, 0);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-3.mscx", DIR + "measure1-3o.mscx"));
       delete score;
