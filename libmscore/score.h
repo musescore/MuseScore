@@ -216,6 +216,7 @@ class Score : public QObject {
       Q_PROPERTY(QString name READ name WRITE setName)
       Q_PROPERTY(int nstaves  READ nstaves)
       Q_PROPERTY(int ntracks  READ ntracks)
+      Q_PROPERTY(int npages   READ npages)
 
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
@@ -442,6 +443,7 @@ class Score : public QObject {
       const QList<Staff*>& staves() const    { return _staves; }
       int nstaves() const                    { return _staves.size(); }
       int ntracks() const                    { return _staves.size() * VOICES; }
+      int npages() const                     { return _pages.size(); }
 
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
@@ -717,7 +719,7 @@ class Score : public QObject {
       RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
-      void updateRepeatList(bool expandRepeats);
+      Q_INVOKABLE void updateRepeatList(bool expandRepeats);
 
       void nextInputPos(ChordRest* cr, bool);
       void cmdMirrorNoteHead();

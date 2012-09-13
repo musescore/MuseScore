@@ -340,6 +340,11 @@ void MuseScore::unloadPlugins()
 bool MuseScore::loadPlugin(const QString& filename)
       {
       bool result = false;
+      
+      if (!pluginMapper) {
+            pluginMapper = new QSignalMapper(this);
+            connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
+            }
 
       QDir pluginDir(mscoreGlobalShare + "plugins");
       if (MScore::debugMode)
@@ -349,7 +354,11 @@ bool MuseScore::loadPlugin(const QString& filename)
             QFileInfo fi(pluginDir, filename);
             if (fi.exists()) {
                   QString path(fi.filePath());
-//TODO                  registerPlugin(path);
+                  PluginDescription* p = new PluginDescription;
+                  p->path = path;
+                  p->load = false;
+                  collectPluginMetaInformation(p);
+                  registerPlugin(p);
                   result = true;
                   }
             }
