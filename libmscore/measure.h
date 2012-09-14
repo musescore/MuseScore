@@ -230,7 +230,7 @@ class Measure : public MeasureBase {
       Segment* undoGetSegment(Segment::SegmentType st, int tick);
       Segment* getSegment(Element* el, int tick);
       Segment* getSegment(Segment::SegmentType st, int tick);
-      Segment* getSegment(Segment::SegmentType st, int tick, int gl);
+      Segment* getGraceSegment(int tick, int gl);
       Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();
