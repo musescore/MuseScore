@@ -69,6 +69,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void presetTablatureChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
+      void on_tabStemsToggled(bool checked);
       void updateTabPreview();
 
 public slots:
