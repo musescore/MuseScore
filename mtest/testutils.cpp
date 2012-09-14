@@ -66,8 +66,8 @@ Element* MTest::writeReadElement(Element* element)
       int line, column;
       QString err;
       if (!doc.setContent(buffer.buffer(), &err, &line, &column)) {
-            printf("writeReadElement: error reading paste data at line %d column %d: %s\n",
-               line, column, qPrintable(err));
+            printf("writeReadElement(%s): error reading data at line %d column %d: %s\n",
+               element->name(), line, column, qPrintable(err));
             printf("%s\n", buffer.buffer().data());
             return 0;
             }
@@ -224,6 +224,6 @@ void MTest::initMTest()
 
       root = TESTROOT "/mtest";
       loadInstrumentTemplates(":/instruments.xml");
-      score = new Score(mscore->baseStyle());
+      score = readScore("/test.mscx");
       }
 
