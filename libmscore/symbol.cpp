@@ -158,7 +158,7 @@ QRectF BSymbol::drag(const EditData& data)
 Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
-      _sym = noSym;
+      _sym = sharpSym;        // arbitrary valid default
       setZ(SYMBOL * 100);
       }
 

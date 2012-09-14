@@ -627,7 +627,7 @@ void Note::write(Xml& xml) const
       if (_accidental)
             _accidental->write(xml);
       _el.write(xml);
-      int dots = chord()->dots();
+      int dots = chord() ? chord()->dots() : 0;
       if (dots) {
             bool hasUserModifiedDots = false;
             for (int i = 0; i < dots; ++i) {

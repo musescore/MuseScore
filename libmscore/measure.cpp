@@ -1799,7 +1799,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       score()->writeSegments(xml, this, track, track+VOICES, first(), last()->next1(), writeSystemElements);
       xml.etag();
       }
-
+#if 0
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -1848,7 +1848,7 @@ void Measure::write(Xml& xml) const
             }
       xml.etag();
       }
-
+#endif
 //---------------------------------------------------------
 //   Measure::read
 //---------------------------------------------------------
@@ -1862,8 +1862,8 @@ void Measure::read(const QDomElement& de, int staffIdx)
       bool irregular;
 
       for (int n = staves.size(); n <= staffIdx; ++n) {
-            MStaff* s    = new MStaff;
             Staff* staff = score()->staff(n);
+            MStaff* s    = new MStaff;
             s->lines     = new StaffLines(score());
             s->lines->setParent(this);
             s->lines->setTrack(n * VOICES);

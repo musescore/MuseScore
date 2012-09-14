@@ -11,8 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      hairpin note midi compat link measure beam split join
-      timesig layout element
-      )
+set(TARGET tst_element)
+
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

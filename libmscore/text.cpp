@@ -309,8 +309,6 @@ void Text::draw(QPainter* painter) const
 
 void Text::write(Xml& xml) const
       {
-      if (isEmpty())
-            return;
       xml.stag(name());
       writeProperties(xml, true);
       xml.etag();
@@ -450,7 +448,7 @@ bool Text::readProperties(const QDomElement& e)
                   s.replace(QChar(0xe167), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0b)));    // coda
                   s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
-                  } 
+                  }
             setHtml(s);
             }
       else if (tag == "subtype")          // obsolete

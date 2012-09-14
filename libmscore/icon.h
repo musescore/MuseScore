@@ -36,7 +36,7 @@ class Icon : public Element {
       QIcon _icon;
 
    public:
-      Icon(Score* s) : Element(s) {}
+      Icon(Score* s) : Element(s), _subtype(0), _action(0) { }
       virtual Icon* clone() const        { return new Icon(*this);   }
       virtual ElementType type() const   { return ICON;              }
       int subtype() const                { return _subtype;          }
