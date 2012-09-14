@@ -247,7 +247,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           if (ms->subtype() != Segment::SegGrace)
                                                 break;
                                           }
-                                    ns = nm->getSegment(oseg->subtype(), oseg->tick(), gl);
+                                    ns = nm->getGraceSegment(oseg->tick(), gl);
                                     }
                               else
                                     ns = nm->getSegment(oseg->subtype(), oseg->tick());

@@ -770,7 +770,7 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t)
 //---------------------------------------------------------
 
 /**
- Get a segment of type \a st at tick position \a t and grace level \a gl.
+ Get a grace segment at tick position \a t and grace level \a gl.
  Grace level is 0 for a normal chord, 1 for the grace note closest
  to the normal chord, etc.
  If the segment does not exist, it is created.
@@ -780,27 +780,21 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t)
 // when looking for a SegGrace, first search for a SegChordRest at t,
 // then search backwards for gl SegGraces
 
-Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
+Segment* Measure::getGraceSegment(int t, int gl)
       {
-// qDebug("Measure::getSegment(st=%d, t=%d, gl=%d)", st, t, gl);
-
-      if (st != Segment::SegChordRest && st != Segment::SegGrace) {
-            qDebug("Measure::getSegment(st=%d, t=%d, gl=%d): incorrect segment type", st, t, gl);
-            return 0;
-            }
       Segment* s;
 
       // find the first segment at tick >= t
-      for (s = first(); s && s->tick() < t; s = s->next())
+      for (s = first(Segment::SegChordRest); s && s->tick() < t; s = s->next(Segment::SegChordRest))
             ;
       if (s == 0) {
             s = new Segment(this, Segment::SegChordRest, t);
-// qDebug("   create cr segment %p", s);
             add(s);
             }
 
       // find the first SegChordRest segment at tick = t
       // while counting the SegGrace segments
+
       int nGraces  = 0;
       Segment* sCr = 0;
       for (Segment* ss = s; ss && ss->tick() == t; ss = ss->next()) {
@@ -811,11 +805,8 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
                   break;
                   }
             }
-// qDebug("   nGraces %d  sCr %p s %p %s", nGraces, sCr, s, s->subTypeName());
-
       for (; nGraces < gl; ++nGraces) {
             Segment* ps = new Segment(this, Segment::SegGrace, t);
-// qDebug("   create grace segment %p", ps);
             _segments.insert(ps, s);
             s = ps;
             setDirty();
@@ -825,10 +816,8 @@ Segment* Measure::getSegment(Segment::SegmentType st, int t, int gl)
       for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
             if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
                   graces++;
-            if (gl == graces) {
-                  qDebug("   return %p", ss);
+            if (gl == graces)
                   return ss;
-                  }
             }
       return 0; // should not be reached
       }
