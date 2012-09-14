@@ -123,7 +123,7 @@ void UpdateChecker::check(QString rev, bool m)
         release = "nightly";
     }
 //    qDebug("release type: %s\n", release.toAscii().constData());
-    if(!os.isEmpty() && !release.isEmpty()){
+    if(!os.isEmpty() && !release.isEmpty() && release != "nightly"){
         revision =  rev;
         manager->get(QNetworkRequest(QUrl("http://update.musescore.org/update_"+os +"_" + release +".xml")));
     }
