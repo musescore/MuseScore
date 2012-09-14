@@ -1363,19 +1363,21 @@ void Chord::layout()
                   //
                   // check duration of prev. CR segm
                   ChordRest * prevCR = prevChordRest(this);
-                  // if no previous CR or duration type and/or number of dots is different from current CR
+                  // if no previous CR
+                  // OR duration type and/or number of dots is different from current CR
+                  // OR previous CR is a rest
                   // set a duration symbol (trying to re-use existing symbols where existing to minimize
                   // symbol creation and deletion)
                   if (prevCR == 0 || prevCR->durationType().type() != durationType().type()
-                     || prevCR->dots() != dots()) {
-                        // symbol needed; if not exist, create
-                        // if exists, update duration
+                        || prevCR->dots() != dots()
+                        || prevCR->type() == REST) {
+                        // symbol needed; if not exist, create; if exists, update duration
                         if (!_tabDur)
                               _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-                        // needed?        _tabDur->setTrack(track());
+// needed?              _tabDur->setTrack(track());
                         _tabDur->layout();
                         }
                   else {                    // symbol not needed: if exists, delete

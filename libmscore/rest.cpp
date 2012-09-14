@@ -62,7 +62,11 @@ Rest::Rest(Score* s, const TDuration& d)
 
 void Rest::draw(QPainter* painter) const
       {
-      if ((staff() && staff()->isTabStaff()) || generated())
+      if ( (staff() && staff()->isTabStaff()
+            // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
+            && ( !((StaffTypeTablature*)staff()->staffType())->showRests()
+                  || ((StaffTypeTablature*)staff()->staffType())->genDurations()) )
+            || generated())
             return;
       qreal _spatium = spatium();
 
@@ -264,7 +268,7 @@ void Rest::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>*
 
 int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
       {
-      *yoffset = 2;
+      *yoffset = 2 * (staff() ? staff()->staffType()->lineDistance().val() : 1.0);
       switch(type) {
             case TDuration::V_LONG:
                   return longarestSym;
@@ -307,11 +311,41 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
 void Rest::layout()
       {
       if (staff() && staff()->isTabStaff()) {
-            // no rests for tablature
-            _space.setLw(0.0);
-            _space.setRw(0.0);
-            return;
+            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            // if rests are not to be shown, reset width and do nothing
+            if (!tab->showRests()) {
+                  // no rests for tablature
+                  _space.setLw(0.0);
+                  _space.setRw(0.0);
+                  if(_tabDur) {
+                        delete _tabDur;
+                        _tabDur = 0;
+                        }
+                  return;
+                  }
+            // if rests are shown and note values are shown as duration symbols
+            if(tab->genDurations()) {
+                  // symbol needed; if not exist, create, if exists, update duration
+                  if (!_tabDur)
+                        _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
+                  else
+                        _tabDur->setDuration(durationType().type(), dots());
+                  _tabDur->setParent(this);
+// needed?        _tabDur->setTrack(track());
+                  _tabDur->layout();
+                  setbbox(_tabDur->bbox());
+                  setPos(0.0, 0.0);             // no rest is drawn: reset any position might be set for it
+                  _space.setLw(0.0);
+                  _space.setRw(width());
+                  return;
+                  }
+            // if rests but no duration symbols, delete any dur. symbol and chain into standard staff mngmt
+            if(_tabDur) {
+                  delete _tabDur;
+                  _tabDur = 0;
+                  }
             }
+
       switch(durationType().type()) {
             case TDuration::V_64TH:
             case TDuration::V_32ND:
