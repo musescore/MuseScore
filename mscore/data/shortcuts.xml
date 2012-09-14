@@ -2,7 +2,7 @@
 <Shortcuts>
   <SC>
     <key>plugin-creator</key>
-    <seq>Shift+P</seq>
+    <seq>Ctrl+Shift+P</seq>
     </SC>
   <SC>
     <key>local-help</key>
