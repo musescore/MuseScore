@@ -21,9 +21,11 @@
 
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
 #define STAFFTYPE_TAB_DEFAULTSTEMDIST_UP  1.0
-#define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP  -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_DN   3.0
+#define STAFFTYPE_TAB_DEFAULTSTEMDIST_DN  1.0
+#define STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN  STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
+#define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
 
 class Staff;
@@ -171,6 +173,12 @@ enum {
             NUM_OF_TAB_VALS
 };
 
+enum TablatureMinimStyle {
+      TAB_MINIM_NONE = 0,                       // do not draw half notes at all
+      TAB_MINIM_SHORTER,                        // draw half notes with a shorter stem
+      TAB_MINIM_SLASHED                         // draw half notes with stem with two slashes
+};
+
 struct TablatureDurationFont {
       QString           family;                 // the family of the physical font to use
       QString           displayName;            // the name to display to the user
@@ -197,8 +205,11 @@ class StaffTypeTablature : public StaffType {
                                           // the string line (spatium unit); user configurable
       bool        _genDurations;          // whether duration symbols are drawn or not
       bool        _linesThrough;          // whether lines for strings and stems may pass through fret marks or not
+      TablatureMinimStyle _minimStyle;    // how to draw minim stems (stem-and-beam durations only)
       bool        _onLines;               // whether fret marks are drawn on the string lines or between them
+      bool        _showRests;             // whether to draw rests or not
       bool        _stemsDown;             // stems are drawn downward (stem-and-beam durations only)
+      bool        _stemsThrough;          // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
       bool        _upsideDown;            // whether lines are drwan with highest string at top (false) or at bottom (true)
       bool        _useNumbers;            // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
@@ -235,7 +246,8 @@ class StaffTypeTablature : public StaffType {
             bool showBarLines, bool stemless, bool genTimesig,
             const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
             const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
-            bool linesThrough, bool onLines, bool stemsDown, bool upsideDown, bool useNumbers)
+            bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
+            bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers)
             {
             setName(name);
             setLines(lines);
@@ -252,8 +264,11 @@ class StaffTypeTablature : public StaffType {
             setFretFontSize(fretFontSize);
             setFretFontUserY(fretFontUserY);
             setLinesThrough(linesThrough);
-            setStemsDown(stemsDown);
+            setMinimStyle(minimStyle);
             setOnLines(onLines);
+            setShowRests(showRests);
+            setStemsDown(stemsDown);
+            setStemsThrough(stemThrough);
             setUpsideDown(upsideDown);
             setUseNumbers(useNumbers);
             }
@@ -281,34 +296,40 @@ class StaffTypeTablature : public StaffType {
 
       const QFont&  durationFont()             { return _durationFont;     }
       const QString durationFontName() const   { return _durationFonts[_durationFontIdx].displayName; }
-      qreal durationFontSize() const      { return _durationFontSize; }
-      qreal durationFontUserY() const     { return _durationFontUserY;}
+      qreal durationFontSize() const      { return _durationFontSize;   }
+      qreal durationFontUserY() const     { return _durationFontUserY;  }
       qreal durationFontYOffset()         { setDurationMetrics(); return _durationYOffset + _durationFontUserY * MScore::DPI*SPATIUM20; }
       qreal fretBoxH()                    { setFretMetrics(); return _fretBoxH; }
       qreal fretBoxY()                    { setFretMetrics(); return _fretBoxY + _fretFontUserY * MScore::DPI*SPATIUM20; }
-      const QFont&  fretFont()            { return _fretFont;         }
+      const QFont&  fretFont()            { return _fretFont;           }
       const QString fretFontName() const  { return _fretFonts[_fretFontIdx].displayName; }
-      qreal fretFontSize() const          { return _fretFontSize;     }
-      qreal fretFontUserY() const         { return _fretFontUserY;    }
+      qreal fretFontSize() const          { return _fretFontSize;       }
+      qreal fretFontUserY() const         { return _fretFontUserY;      }
       qreal fretFontYOffset()             { setFretMetrics(); return _fretYOffset + _fretFontUserY * MScore::DPI*SPATIUM20; }
-      bool  genDurations() const          { return _genDurations;     }
-      bool  linesThrough() const          { return _linesThrough;     }
-      bool  onLines() const               { return _onLines;          }
-      bool  stemsDown() const             { return _stemsDown;        }
-      bool  upsideDown() const            { return _upsideDown;       }
-      bool  useNumbers() const            { return _useNumbers;       }
+      bool  genDurations() const          { return _genDurations;       }
+      bool  linesThrough() const          { return _linesThrough;       }
+      TablatureMinimStyle minimStyle () const   { return _minimStyle;   }
+      bool  onLines() const               { return _onLines;            }
+      bool  showRests() const             { return _showRests;          }
+      bool  stemsDown() const             { return _stemsDown;          }
+      bool  stemThrough() const           { return _stemsThrough;       }
+      bool  upsideDown() const            { return _upsideDown;         }
+      bool  useNumbers() const            { return _useNumbers;         }
       // properties setters (setting some props invalidates metrics)
       void  setDurationFontName(QString name);
       void  setDurationFontSize(qreal val);
       void  setDurationFontUserY(qreal val)     { _durationFontUserY = val; }
       void  setFretFontName(QString name);
       void  setFretFontSize(qreal val);
-      void  setFretFontUserY(qreal val)   { _fretFontUserY = val;     }
-      void  setGenDurations(bool val)     { _genDurations = val;      }
-      void  setLinesThrough(bool val)     { _linesThrough = val;      }
+      void  setFretFontUserY(qreal val)   { _fretFontUserY = val;       }
+      void  setGenDurations(bool val)     { _genDurations = val;        }
+      void  setLinesThrough(bool val)     { _linesThrough = val;        }
+      void  setMinimStyle(TablatureMinimStyle val)    { _minimStyle = val;    }
       void  setOnLines(bool val);
-      void  setStemsDown(bool val)        { _stemsDown = val;         }
-      void  setUpsideDown(bool val)       { _upsideDown = val;        }
+      void  setShowRests(bool val)        { _showRests = val;           }
+      void  setStemsDown(bool val)        { _stemsDown = val;           }
+      void  setStemsThrough(bool val)     { _stemsThrough = val;        }
+      void  setUpsideDown(bool val)       { _upsideDown = val;          }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
 
       // static functions for font config files

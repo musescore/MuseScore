@@ -395,8 +395,11 @@ void StaffTypeTablature::init()
       setLineDistance(Spatium(TAB_DEFAULT_LINE_SP));
       setLines(6);
       setLinesThrough(false);
+      setMinimStyle(TAB_MINIM_NONE);
       setOnLines(true);
+      setShowRests(false);
       setStemsDown(true);
+      setStemsThrough(true);
       setUpsideDown(false);
       setUseNumbers(true);
       // internal
@@ -411,18 +414,21 @@ void StaffTypeTablature::init()
 bool StaffTypeTablature::isEqual(const StaffType& st) const
       {
       return StaffType::isEqual(st)
-         && static_cast<const StaffTypeTablature&>(st)._durationFontIdx   == _durationFontIdx
-         && static_cast<const StaffTypeTablature&>(st)._durationFontSize  == _durationFontSize
-         && static_cast<const StaffTypeTablature&>(st)._durationFontUserY == _durationFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._fretFontIdx       == _fretFontIdx
-         && static_cast<const StaffTypeTablature&>(st)._fretFontSize      == _fretFontSize
-         && static_cast<const StaffTypeTablature&>(st)._fretFontUserY     == _fretFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._genDurations      == _genDurations
-         && static_cast<const StaffTypeTablature&>(st)._linesThrough      == _linesThrough
-         && static_cast<const StaffTypeTablature&>(st)._onLines           == _onLines
-         && static_cast<const StaffTypeTablature&>(st)._stemsDown         == _stemsDown
-         && static_cast<const StaffTypeTablature&>(st)._upsideDown        == _upsideDown
-         && static_cast<const StaffTypeTablature&>(st)._useNumbers        == _useNumbers
+         && static_cast<const StaffTypeTablature&>(st)._durationFontIdx       == _durationFontIdx
+         && static_cast<const StaffTypeTablature&>(st)._durationFontSize      == _durationFontSize
+         && static_cast<const StaffTypeTablature&>(st)._durationFontUserY     == _durationFontUserY
+         && static_cast<const StaffTypeTablature&>(st)._fretFontIdx           == _fretFontIdx
+         && static_cast<const StaffTypeTablature&>(st)._fretFontSize          == _fretFontSize
+         && static_cast<const StaffTypeTablature&>(st)._fretFontUserY         == _fretFontUserY
+         && static_cast<const StaffTypeTablature&>(st)._genDurations          == _genDurations
+         && static_cast<const StaffTypeTablature&>(st)._linesThrough          == _linesThrough
+         && static_cast<const StaffTypeTablature&>(st)._minimStyle            == _minimStyle
+         && static_cast<const StaffTypeTablature&>(st)._onLines               == _onLines
+         && static_cast<const StaffTypeTablature&>(st)._showRests             == _showRests
+         && static_cast<const StaffTypeTablature&>(st)._stemsDown             == _stemsDown
+         && static_cast<const StaffTypeTablature&>(st)._stemsThrough          == _stemsThrough
+         && static_cast<const StaffTypeTablature&>(st)._upsideDown            == _upsideDown
+         && static_cast<const StaffTypeTablature&>(st)._useNumbers            == _useNumbers
          ;
       }
 
@@ -437,8 +443,11 @@ bool StaffTypeTablature::isSameStructure(const StaffTypeTablature& stt) const
       return StaffType::isSameStructure(static_cast<const StaffType&>(stt))
          && stt._genDurations == _genDurations
          && stt._linesThrough == _linesThrough
+         && stt._minimStyle   == _minimStyle
          && stt._onLines      == _onLines
+         && stt._showRests    == _showRests
          && stt._stemsDown    == _stemsDown
+         && stt._stemsThrough == _stemsThrough
          && stt._upsideDown   == _upsideDown
          && stt._useNumbers   == _useNumbers
          ;
@@ -470,10 +479,16 @@ void StaffTypeTablature::read(const QDomElement& de)
                   setFretFontUserY(val.toDouble());
             else if (tag == "linesThrough")
                   setLinesThrough(val.toInt() != 0);
+            else if (tag == "minimStyle")
+                  setMinimStyle( (TablatureMinimStyle) val.toInt() );
             else if (tag == "onLines")
                   setOnLines(val.toInt() != 0);
+            else if (tag == "showRests")
+                  setShowRests(val.toInt() != 0);
             else if (tag == "stemsDown")
                   setStemsDown(val.toInt() != 0);
+            else if (tag == "stemsThrough")
+                  setStemsThrough(val.toInt() != 0);
             else if (tag == "upsideDown")
                   setUpsideDown(val.toInt() != 0);
             else if (tag == "useNumbers")
@@ -492,18 +507,21 @@ void StaffTypeTablature::write(Xml& xml, int idx) const
       {
       xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
       StaffType::writeProperties(xml);
-      xml.tag("durations",        _genDurations);
-      xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
-      xml.tag("durationFontSize", _durationFontSize);
-      xml.tag("durationFontY",    _durationFontUserY);
-      xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
-      xml.tag("fretFontSize",     _fretFontSize);
-      xml.tag("fretFontY",        _fretFontUserY);
-      xml.tag("linesThrough",     _linesThrough);
-      xml.tag("onLines",          _onLines);
-      xml.tag("stemsDown",        _stemsDown);
-      xml.tag("upsideDown",       _upsideDown);
-      xml.tag("useNumbers",       _useNumbers);
+      xml.tag("durations",          _genDurations);
+      xml.tag("durationFontName",   _durationFonts[_durationFontIdx].displayName);
+      xml.tag("durationFontSize",   _durationFontSize);
+      xml.tag("durationFontY",      _durationFontUserY);
+      xml.tag("fretFontName",       _fretFonts[_fretFontIdx].displayName);
+      xml.tag("fretFontSize",       _fretFontSize);
+      xml.tag("fretFontY",          _fretFontUserY);
+      xml.tag("linesThrough",       _linesThrough);
+      xml.tag("minimStyle",         _minimStyle);
+      xml.tag("onLines",            _onLines);
+      xml.tag("showRests",          _showRests);
+      xml.tag("stemsDown",          _stemsDown);
+      xml.tag("stemsThrough",       _stemsThrough);
+      xml.tag("upsideDown",         _upsideDown);
+      xml.tag("useNumbers",         _useNumbers);
       xml.etag();
       }
 
