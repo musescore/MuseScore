@@ -626,7 +626,8 @@ bool Element::intersects(const QRectF& rr) const
 
 void Element::writeProperties(Xml& xml) const
       {
-      if (_links && (_links->size() > 1))
+      //copy paste should not keep links
+      if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
             if (type() == VOLTA_SEGMENT)
