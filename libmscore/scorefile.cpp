@@ -753,31 +753,33 @@ bool Score::read1(const QDomElement& de)
                   const QString& version = e.attribute("version");
                   QStringList sl = version.split('.');
                   _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
+
+                  QString message;
                   if (_mscVersion > MSCVERSION) {
                         // incompatible version
-                        QString message = QT_TRANSLATE_NOOP("file", "Unable to open this score:<br>It was saved using a newer version of MuseScore.<br>Visit the <a href=\"http://musescore.org\">MuseScore website</a> to obtain the latest version.");
-                        QMessageBox msgBox;
-                        msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore"));
-                        msgBox.setText(message);
-                        msgBox.setTextFormat(Qt::RichText);
-                        msgBox.setIcon(QMessageBox::Critical);
-                        msgBox.exec();
-                        return false;
+                        message = QT_TRANSLATE_NOOP("file", "Unable to open this score:<br>It was saved using a newer version of MuseScore.<br>Visit the <a href=\"http://musescore.org\">MuseScore website</a> to obtain the latest version.");
                         }
-                  if (_mscVersion < 114) {
+                  else if (_mscVersion < 114) {
                         // incompatible version
-                        QString message = QT_TRANSLATE_NOOP("file",
+                        message = QT_TRANSLATE_NOOP("file",
                            "Unable to open this score reliably:<br>"
                            "It was last saved with version 0.9.5 or older.<br>"
                            "You can convert this score by opening and then saving with"
                             " MuseScore version 1.x</a>");
+                        }
+                  if (!message.isEmpty()) {
                         QMessageBox msgBox;
                         msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore"));
                         msgBox.setText(message);
                         msgBox.setTextFormat(Qt::RichText);
                         msgBox.setIcon(QMessageBox::Warning);
-                        msgBox.exec();
+                        msgBox.setStandardButtons(
+                           QMessageBox::Cancel | QMessageBox::Ignore
+                           );
+                        if (msgBox.exec() == QMessageBox::Cancel)
+                              return false;
                         }
+
                   if (_mscVersion <= 114)
                         return read114(e);
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
