@@ -1548,15 +1548,16 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             setMag(1.0);
 
       if (staff()->isTabStaff()) {
-            qreal y;
-            if( ((StaffTypeTablature*)staff()->staffType())->stemsDown() ) {
+            qreal y;                // vert. pos. of beam, relative to staff (top line = 0)
+            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            if(tab->stemsDown()) {
                   _up   = false;
-                  y     = (staff()->staffType()->lines() - 1) * staff()->staffType()->lineDistance().val()
-                              + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN;
+                  y     = (tab->lines() - 1) * tab->lineDistance().val()
+                              + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN;
                   }
             else {
                   _up   = true;
-                  y     = STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
+                  y     = -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
                   }
             y *= _spatium;
             py1 = y;
