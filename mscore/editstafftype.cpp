@@ -52,7 +52,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       //                                                                          clef   bars stemless time  durations                      size off genDur frets                            size off thru  minim style    onLin  rests  stmDn  stmThr upsDn  nums
       _tabPresets[TAB_PRESET_GUITAR]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,true,  false, true,  true,  false, true);
       _tabPresets[TAB_PRESET_BASS]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,true,  false, true,  true,  false, true);
-      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,true,  false, false, false, true,  true);
+      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,true,  true,  false, false, true,  true);
       _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,false, false, false, false, false, false);
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
@@ -334,16 +334,17 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       durFontName->setCurrentIndex(idx);
       durFontSize->setValue(stt->durationFontSize());
       durY->setValue(stt->durationFontUserY());
-      // convert combined values of genDurations and slashStyle
-      // into noteValuesx radio buttons
-      // if stems-and-beams, there are more controls to set
-      stemAboveRadio->setChecked(true);         // be sure additional stems-and-beams controls are initialized
-      stemBelowRadio->setChecked(false);
-      stemBesideRadio->setChecked(true);
-      stemThroughRadio->setChecked(false);
-      minimNoneRadio->setChecked(true);
-      minimShortRadio->setChecked(false);
-      minimSlashedRadio->setChecked(false);
+      // convert combined values of genDurations and slashStyle into noteValuesx radio buttons
+      // Sbove/Below, Beside/Through and minim are only used if stems-and-beams
+      // but set them from stt values anyway, to ensure preset matching
+      stemAboveRadio->setChecked(!stt->stemsDown());
+      stemBelowRadio->setChecked(stt->stemsDown());
+      stemBesideRadio->setChecked(!stt->stemThrough());
+      stemThroughRadio->setChecked(stt->stemThrough());
+      TablatureMinimStyle minimStyle = stt->minimStyle();
+      minimNoneRadio->setChecked(minimStyle == TAB_MINIM_NONE);
+      minimShortRadio->setChecked(minimStyle == TAB_MINIM_SHORTER);
+      minimSlashedRadio->setChecked(minimStyle == TAB_MINIM_SLASHED);
       if(stt->genDurations()) {
             noteValues0->setChecked(false);
             noteValues1->setChecked(true);
@@ -359,15 +360,6 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
                   noteValues0->setChecked(false);
                   noteValues1->setChecked(false);
                   noteValues2->setChecked(true);
-                  // the following controls are only set if note values are stems-and-beams style
-                  stemAboveRadio->setChecked(!stt->stemsDown());
-                  stemBelowRadio->setChecked(stt->stemsDown());
-                  stemBesideRadio->setChecked(!stt->stemThrough());
-                  stemThroughRadio->setChecked(stt->stemThrough());
-                  TablatureMinimStyle minimStyle = stt->minimStyle();
-                  minimNoneRadio->setChecked(minimStyle == TAB_MINIM_NONE);
-                  minimShortRadio->setChecked(minimStyle == TAB_MINIM_SHORTER);
-                  minimSlashedRadio->setChecked(minimStyle == TAB_MINIM_SLASHED);
                   }
             }
       showRests->setChecked(stt->showRests());
@@ -402,15 +394,14 @@ void EditStaffType::setTabFromDlg(StaffTypeTablature * stt)
       stt->setUpsideDown(upsideDown->isChecked());
       stt->setUseNumbers(numbersRadio->isChecked());
       //note values
+      stt->setStemsDown(stemBelowRadio->isChecked());
+      stt->setStemsThrough(stemThroughRadio->isChecked());
       stt->setSlashStyle(true);                 // assume no note values
       stt->setGenDurations(false);              //    "     "
-      stt->setStemsDown(false);
       if (noteValues1->isChecked())
             stt->setGenDurations(true);
       if (noteValues2->isChecked()) {
             stt->setSlashStyle(false);
-            stt->setStemsDown(stemBelowRadio->isChecked());
-            stt->setStemsThrough(stemThroughRadio->isChecked());
             }
 }
 
