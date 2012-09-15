@@ -385,7 +385,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF pp2 = ss->ups[GRIP_END].p   + ss->ups[GRIP_END].off   * _spatium;
 
       QPointF p2 = pp2 - pp1;
-      if (p2.x() == 0.0) {
+      if ((p2.x() == 0.0) && (p2.y() == 0)) {
             qDebug("zero slur");
             Measure* m1 = startChord()->segment()->measure();
             Measure* m2 = endChord()->segment()->measure();
