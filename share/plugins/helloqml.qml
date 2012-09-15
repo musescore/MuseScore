@@ -25,10 +25,10 @@ MuseScore {
                   while (segment) {
                         console.log("  segment");
                         console.log(segment.type);
-                        if (segment.type == MScore.SEGMENT)
+                        if (segment.type == Element.SEGMENT)
                               console.log(" ---hello segment");
                         else {
-                              console.log(MScore.SEGMENT);
+                              console.log(Element.SEGMENT);
                               }
 
                         var element;
