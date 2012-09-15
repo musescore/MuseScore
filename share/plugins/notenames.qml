@@ -28,8 +28,8 @@ MuseScore {
             var names = ["C", "Cis", "D", "Dis", "E", "F", "Fis", "G", "Gis", "A", "Ais", "B" ];
 
             while (cursor.segment) {
-                  if (cursor.element.type == MScore.CHORD) {
-                        var text  = newElement(MScore.STAFF_TEXT);
+                  if (cursor.element.type == Element.CHORD) {
+                        var text  = newElement(Element.STAFF_TEXT);
                         text.text = names[cursor.element.notes[0].pitch % 12];
                         cursor.add(text);
                         }
