@@ -1139,7 +1139,7 @@ void Chord::layoutStem()
                         hookIdx = -hookIdx;
                   if (hookIdx) {
                         _hook->setSubtype(hookIdx);
-                        _hook->setPos(_stem->hookPos());
+                        _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
                         _hook->setMag(mag()*score()->styleD(ST_smallNoteMag));
                         _hook->adjustReadPos();
                         }
@@ -1325,11 +1325,13 @@ void Chord::layout()
       Note*  upnote    = upNote();
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+      bool  useTab      = false;
 
       if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
+            useTab = true;
             StaffTypeTablature * tab = (StaffTypeTablature*)staff()->staffType();
             qreal lineDist = tab->lineDistance().val();
             foreach(Note* note, _notes) {
@@ -1507,7 +1509,7 @@ void Chord::layout()
 
       if (_hook) {
             _hook->layout();
-            if (up())
+            if (up() && !useTab)
                   rrr += _hook->width() + minNoteDistance;
             }
 
