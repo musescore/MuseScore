@@ -187,6 +187,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
             //-----------virtual classes
@@ -410,6 +411,7 @@ void MuseScore::pluginTriggered(int idx)
 
 Element* QmlPlugin::newElement(Element::ElementType t)
       {
+qDebug("newElement %d score %p", int(t), curScore());
       Score* score = curScore();
       if (score == 0)
             return 0;
