@@ -245,6 +245,16 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
       QPointF delta = p - startMove;
+      
+      if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
+            p.setX(0.0);
+            delta.setX(0.0);
+            }
+      else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
+            p.setY(0.0);
+            delta.setY(0.0);
+            }
+      
       _score->setLayoutAll(false);
       score()->addRefresh(editObject->canvasBoundingRect());
       if (editObject->isText()) {
