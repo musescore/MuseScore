@@ -357,9 +357,10 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
 
 void LineSegment::editDrag(const EditData& ed)
       {
-// Only for resizing according to the diagonal properties
+      // Only for resizing according to the diagonal properties
       QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
-// Only for moving, no y limitaion
+
+      // Only for moving, no y limitaion
       QPointF deltaMove(ed.delta.x(), ed.delta.y());
 
       switch(ed.curGrip) {
@@ -374,8 +375,31 @@ void LineSegment::editDrag(const EditData& ed)
                   setUserOff(userOff() + deltaMove);
                   break;
             }
+      if ((line()->anchor() == Spanner::ANCHOR_NOTE)
+         && (ed.curGrip == GRIP_LINE_START || ed.curGrip == GRIP_LINE_END)) {
+            //
+            // if we touch a different note, change anchor
+            //
+            Element* e = ed.view->elementNear(ed.pos);
+            if (e && e->type() == NOTE) {
+                  SLine* l = line();
+                  if (ed.curGrip == GRIP_LINE_END && e != line()->endElement()) {
+                        qDebug("LineSegment: move end anchor");
+                        Note* noteOld = static_cast<Note*>(l->endElement());
+                        Note* noteNew = static_cast<Note*>(e);
+
+                        noteOld->removeSpannerBack(l);
+                        noteNew->addSpannerBack(l);
+                        l->setEndElement(noteNew);
+
+                        _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
+                        }
+                  else if (ed.curGrip == GRIP_LINE_START && e != l->startElement()) {
+                        qDebug("LineSegment: move start anchor (not impl.)");
+                        }
+                  }
+            }
       line()->layout();
-//      score()->setUpdateAll(true);
       }
 
 //---------------------------------------------------------
@@ -523,22 +547,7 @@ void SLine::layout()
             qDebug("   start %p   end %p", startElement(), endElement());
             return;
             }
-#if 0
-      if (anchor() == Spanner::ANCHOR_NOTE) {
-            QPointF p1 = startElement()->pagePos();
-            QPointF p2 = endElement()->pagePos();
-            if (spannerSegments().isEmpty())
-                  add(createLineSegment());
-            LineSegment* seg = segmentAt(0);
-            seg->setSubtype(SEGMENT_SINGLE);
-            seg->setSystem(static_cast<Note*>(startElement())->chord()->segment()->system());
-            seg->setPos2(p2-p1);
-            seg->setPos(p1 - seg->system()->pagePos());
-            seg->layout();
-            seg->adjustReadPos();
-            return;
-            }
-#endif
+
       System* s1;
       System* s2;
       QPointF p1 = linePos(GRIP_LINE_START, &s1);

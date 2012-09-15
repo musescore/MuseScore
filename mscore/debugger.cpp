@@ -552,6 +552,8 @@ void Debugger::updateElement(Element* el)
                   case Element::TIE:           ew = new TieView;           break;
                   case Element::VOLTA:         ew = new VoltaView;         break;
                   case Element::VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
+                  case Element::TEXTLINE:         ew = new TextLineView;         break;
+                  case Element::TEXTLINE_SEGMENT: ew = new TextLineSegmentView;  break;
                   case Element::LYRICS:        ew = new LyricsView;        break;
                   case Element::BEAM:          ew = new BeamView;          break;
                   case Element::TREMOLO:       ew = new TremoloView;       break;
@@ -2496,4 +2498,160 @@ void BoxView::setElement(Element* e)
       box.leftMargin->setValue(b->leftMargin());
       box.rightMargin->setValue(b->rightMargin());
       }
+
+//---------------------------------------------------------
+//   segmentClicked
+//---------------------------------------------------------
+
+void TextLineView::segmentClicked(QTreeWidgetItem* item)
+      {
+      Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
+      emit elementChanged(e);
+      }
+
+//---------------------------------------------------------
+//   beginTextClicked
+//---------------------------------------------------------
+
+void TextLineView::beginTextClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->beginText());
+      }
+
+//---------------------------------------------------------
+//   continueTextClicked
+//---------------------------------------------------------
+
+void TextLineView::continueTextClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->continueText());
+      }
+
+//---------------------------------------------------------
+//   TextLineView
+//---------------------------------------------------------
+
+TextLineView::TextLineView()
+   : ShowElementBase()
+      {
+      QWidget* spanner = new QWidget;
+      sp.setupUi(spanner);
+      layout->addWidget(spanner);
+
+      // SLineBase
+      QWidget* w = new QWidget;
+      lb.setupUi(w);
+      layout->addWidget(w);
+
+      // TextLineBase
+      w = new QWidget;
+      tlb.setupUi(w);
+      layout->addWidget(w);
+
+      layout->addStretch(10);
+      connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
+      connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
+      connect(sp.startElement,  SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement,    SIGNAL(clicked()), SLOT(endClicked()));
+      connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void TextLineView::setElement(Element* e)
+      {
+      Volta* volta = (Volta*)e;
+      ShowElementBase::setElement(e);
+
+      tlb.lineWidth->setValue(volta->lineWidth().val());
+//      lb.anchor->setCurrentIndex(int(volta->anchor()));
+      lb.diagonal->setChecked(volta->diagonal());
+//      lb.leftElement->setText(QString("%1").arg((unsigned long)volta->startElement(), 8, 16));
+//      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
+
+      sp.segments->clear();
+      const QList<SpannerSegment*>& el = volta->spannerSegments();
+      foreach(const SpannerSegment* e, el) {
+            QListWidgetItem* item = new QListWidgetItem;
+            item->setText(QString("%1").arg((unsigned long)e, 8, 16));
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)e));
+            sp.segments->addItem(item);
+            }
+
+      sp.startElement->setEnabled(volta->startElement() != 0);
+      sp.endElement->setEnabled(volta->endElement() != 0);
+      sp.anchor->setCurrentIndex(int(volta->anchor()));
+
+      tlb.beginText->setEnabled(volta->beginText());
+      tlb.continueText->setEnabled(volta->continueText());
+      }
+
+//---------------------------------------------------------
+//   leftElementClicked
+//---------------------------------------------------------
+
+void TextLineView::leftElementClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   rightElementClicked
+//---------------------------------------------------------
+
+void TextLineView::rightElementClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->endElement());
+      }
+
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void TextLineView::startClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void TextLineView::endClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      }
+
+
+//---------------------------------------------------------
+//   TextLineSegmentView
+//---------------------------------------------------------
+
+TextLineSegmentView::TextLineSegmentView()
+   : ShowElementBase()
+      {
+      QWidget* w = new QWidget;
+      lb.setupUi(w);
+      layout->addWidget(w);
+      layout->addStretch(10);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void TextLineSegmentView::setElement(Element* e)
+      {
+      VoltaSegment* vs = (VoltaSegment*)e;
+      ShowElementBase::setElement(e);
+
+      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.pos2x->setValue(vs->pos2().x());
+      lb.pos2y->setValue(vs->pos2().y());
+      lb.offset2x->setValue(vs->userOff2().x());
+      lb.offset2y->setValue(vs->userOff2().y());
+      }
+
 

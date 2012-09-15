@@ -490,6 +490,45 @@ class VoltaSegmentView : public ShowElementBase {
       };
 
 //---------------------------------------------------------
+//   TextLineView
+//---------------------------------------------------------
+
+class TextLineView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::TextLineBase tlb;
+      Ui::SLineBase lb;
+      Ui::SpannerBase sp;
+
+   private slots:
+      void segmentClicked(QTreeWidgetItem* item);
+      void beginTextClicked();
+      void continueTextClicked();
+      void leftElementClicked();
+      void rightElementClicked();
+      void startClicked();
+      void endClicked();
+
+   public:
+      TextLineView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   TextLineSegmentView
+//---------------------------------------------------------
+
+class TextLineSegmentView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::LineSegmentBase lb;
+
+   public:
+      TextLineSegmentView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
 //   LineSegmentView
 //---------------------------------------------------------
 

@@ -292,6 +292,7 @@ void Chorus::triangle(int *buf, int len, int depth)
 //    chorus parameter names, sync with fluid.h
 //---------------------------------------------------------
 
+#if 0
 static const char* pNames[] = {
       "CHORUS_TYPE",
       "CHORUS_SPEED",
@@ -299,6 +300,7 @@ static const char* pNames[] = {
       "CHORUS_BLOCKS",
       "CHORUS_GAIN"
       };
+#endif
 
 //---------------------------------------------------------
 //   setParameter
