@@ -186,11 +186,6 @@ class Note : public Element {
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
 
-      void addSpannerBack(Spanner* e)            { _spannerBack.append(e);     }
-      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)             { _spannerFor.append(e);      }
-      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e); }
-
    public:
       Note(Score* s = 0);
       Note(const Note&);
@@ -319,6 +314,10 @@ class Note : public Element {
 
       QList<Spanner*> spannerFor() const        { return _spannerFor;         }
       QList<Spanner*> spannerBack() const       { return _spannerBack;        }
+      void addSpannerBack(Spanner* e)           { _spannerBack.append(e);     }
+      bool removeSpannerBack(Spanner* e)        { return _spannerBack.removeOne(e); }
+      void addSpannerFor(Spanner* e)            { _spannerFor.append(e);      }
+      bool removeSpannerFor(Spanner* e)         { return _spannerFor.removeOne(e); }
 
       void undoSetFret(int);
       void undoSetString(int);

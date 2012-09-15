@@ -29,8 +29,15 @@ MuseScore {
 
             while (cursor.segment) {
                   if (cursor.element.type == Element.CHORD) {
-                        var text  = newElement(Element.STAFF_TEXT);
-                        text.text = names[cursor.element.notes[0].pitch % 12];
+                        var id  = Element.STAFF_TEXT;
+                        var text  = newElement(id);
+                        console.log("======after newElement " + Element.STAFF_TEXT + " " + id);
+                        var chord  = cursor.element;
+                        var note  = chord.notes[0];
+                        var pitch = note.pitch;
+                        console.log(text);
+                        text.text = names[pitch % 12];
+                        console.log(text.text);
                         cursor.add(text);
                         }
                   cursor.next();
