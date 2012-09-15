@@ -268,7 +268,7 @@ void Rest::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>*
 
 int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
       {
-      *yoffset = 2 * (staff() ? staff()->staffType()->lineDistance().val() : 1.0);
+      *yoffset = 2;
       switch(type) {
             case TDuration::V_LONG:
                   return longarestSym;
@@ -312,19 +312,8 @@ void Rest::layout()
       {
       if (staff() && staff()->isTabStaff()) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
-            // if rests are not to be shown, reset width and do nothing
-            if (!tab->showRests()) {
-                  // no rests for tablature
-                  _space.setLw(0.0);
-                  _space.setRw(0.0);
-                  if(_tabDur) {
-                        delete _tabDur;
-                        _tabDur = 0;
-                        }
-                  return;
-                  }
             // if rests are shown and note values are shown as duration symbols
-            if(tab->genDurations()) {
+            if(tab->showRests() &&tab->genDurations()) {
                   // symbol needed; if not exist, create, if exists, update duration
                   if (!_tabDur)
                         _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
@@ -339,7 +328,9 @@ void Rest::layout()
                   _space.setRw(width());
                   return;
                   }
-            // if rests but no duration symbols, delete any dur. symbol and chain into standard staff mngmt
+            // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
+            // this is to ensure horiz space is reserved for rest, even if they are not diplayed
+            // Rest::draw() will skip their drawing, if not needed
             if(_tabDur) {
                   delete _tabDur;
                   _tabDur = 0;
@@ -364,6 +355,7 @@ void Rest::layout()
       if (staff())
             stepOffset = staff()->staffType()->stepOffset();
       int line        = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
+      qreal lineDist    = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
       int lineOffset  = 0;
 
       int lines = staff() ? staff()->lines() : 5;
@@ -440,7 +432,7 @@ void Rest::layout()
       int yo;
       _sym = getSymbol(durationType().type(), line + lineOffset/2, lines, &yo);
       layoutArticulations();
-      rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * _spatium;
+      rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * lineDist * _spatium;
 
       Spatium rs;
       if (dots()) {
