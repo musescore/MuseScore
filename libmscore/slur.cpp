@@ -420,9 +420,10 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
                   shoulderW = 0.6;
             }
 
+      shoulderH -= p6o.y();
+
       if (!up())
             shoulderH = -shoulderH;
-//      shoulderH -= p6o.y();
 
       qreal c    = p2.x();
       qreal c1   = (c - c * shoulderW) * .5 + p6o.x();
@@ -441,8 +442,11 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p3o = p6o + t.map(ss->ups[GRIP_BEZIER1].off * _spatium);
       QPointF p4o = p6o + t.map(ss->ups[GRIP_BEZIER2].off * _spatium);
 
-//??      ss->ups[GRIP_BEZIER1].off = t.inverted().map(p3o) / _spatium;
-//??      ss->ups[GRIP_BEZIER2].off = t.inverted().map(p4o) / _spatium;
+      if(!p6o.isNull()) {
+            QPointF p6i = t.inverted().map(p6o) / _spatium;
+            ss->ups[GRIP_BEZIER1].off += p6i ;
+            ss->ups[GRIP_BEZIER2].off += p6i;
+            }
 
       //-----------------------------------calculate p6
       QPointF pp3  = p3 + p3o;
@@ -455,7 +459,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p6  = QPointF(t.map(ppp4).x() * .5, 0.0);
 
       t.rotateRadians(2 * r2);
-      p6 = t.map(p6) + pp3; //  - p6o;
+      p6 = t.map(p6) + pp3 - p6o;
       //-----------------------------------
 
       ss->path = QPainterPath();
@@ -525,6 +529,8 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       shoulderH *= _spatium;
       shoulderW = .6;
 
+      shoulderH -= p6o.y();
+ 
       if (!up())
             shoulderH = -shoulderH;
 
@@ -542,8 +548,12 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
 
       QPointF p3o = p6o + t.map(ss->ups[GRIP_BEZIER1].off * _spatium);
       QPointF p4o = p6o + t.map(ss->ups[GRIP_BEZIER2].off * _spatium);
-//      ss->ups[GRIP_BEZIER1].off = t.inverted().map(p3o) / _spatium;
-//      ss->ups[GRIP_BEZIER2].off = t.inverted().map(p4o) / _spatium;
+
+      if(!p6o.isNull()) {
+            QPointF p6i = t.inverted().map(p6o) / _spatium;
+            ss->ups[GRIP_BEZIER1].off += p6i ;
+            ss->ups[GRIP_BEZIER2].off += p6i;
+            }
 
       //-----------------------------------calculate p6
       QPointF pp3  = p3 + p3o;
@@ -556,7 +566,7 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p6  = QPointF(t.map(ppp4).x() * .5, 0.0);
 
       t.rotateRadians(2 * r2);
-      p6 = t.map(p6) + pp3; //  - p6o;
+      p6 = t.map(p6) + pp3 - p6o;
       //-----------------------------------
 
       ss->path = QPainterPath();
