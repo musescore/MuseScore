@@ -187,9 +187,10 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+            qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
+               "Element", tr("you cannot create an element"));
             //-----------virtual classes
-            qmlRegisterType<Element>();
+//            qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
@@ -340,7 +341,7 @@ void MuseScore::unloadPlugins()
 bool MuseScore::loadPlugin(const QString& filename)
       {
       bool result = false;
-      
+
       if (!pluginMapper) {
             pluginMapper = new QSignalMapper(this);
             connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
