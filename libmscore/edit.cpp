@@ -694,17 +694,17 @@ void Score::putNote(const Position& p, bool replace)
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
-                  // check the chord does not already contains a note on the same string
+                  // check the chord already contains a note on the same string
                   ChordRest* cr = _is.cr();
                   if(cr != 0 && cr->type() == Element::CHORD)
                         foreach(Note * note, static_cast<Chord*>(cr)->notes())
-                              if(note->string() == string)  // if line is the same
-                                    return;                 // do nothing
+                              if(note->string() == string)        // if string is the same
+                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
                   // build a default NoteVal for that line
                   nval.string = string;
-                  if(p.fret != FRET_NONE)
+                  if(p.fret != FRET_NONE)       // if a fret is given, use it
                         nval.fret = p.fret;
-                  else {
+                  else {                        // if no fret, use 0 as default
                         _is.setString(line);
                         nval.fret = 0;
                         }
@@ -752,13 +752,15 @@ void Score::putNote(const Position& p, bool replace)
                && (cr->type() == Element::CHORD)
                && !_is.rest)
                   {
-                  Chord* chord = static_cast<Chord*>(cr);
-                  note = chord->findNote(nval.pitch);
-                  if (note) {
-                        // remove note from chord
-                        if (chord->notes().size() > 1)
-                              undoRemoveElement(note);
-                        return;
+                  if (!st->isTabStaff()) {            // unless staff is TAB
+                        // if a note with the same pitch already exists in the chord, remove it
+                        Chord* chord = static_cast<Chord*>(cr);
+                        note = chord->findNote(nval.pitch);
+                        if (note) {
+                              if (chord->notes().size() > 1)
+                                    undoRemoveElement(note);
+                              return;
+                              }
                         }
                   addToChord = true;
                   }
