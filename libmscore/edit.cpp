@@ -694,16 +694,6 @@ void Score::putNote(const Position& p, bool replace)
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
-//                  // check the chord already contains a note on the same string
-//                  ChordRest* cr = _is.cr();
-//                  if(cr != 0 && cr->type() == Element::CHORD)
-//                        foreach(Note * note, static_cast<Chord*>(cr)->notes())
-//                              if(note->string() == string) {      // if string is the same
-////                                    note->undoChangeProperty(P_PITCH, neck->getPitch(string, nval.fret));
-////                                    note->undoChangeProperty(P_FRET, p.fret);
-////                                    return;
-//                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
-//                                    }
                   // build a default NoteVal for that line
                   nval.string = string;
                   if(p.fret != FRET_NONE)       // if a fret is given, use it
@@ -766,7 +756,6 @@ void Score::putNote(const Position& p, bool replace)
                                     note->undoChangeProperty(P_PITCH, nval.pitch);
                                     note->undoChangeProperty(P_FRET, nval.fret);
                                     return;
-//                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
                                     }
                         }
                   else {                        // not TAB
