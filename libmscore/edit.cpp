@@ -694,12 +694,16 @@ void Score::putNote(const Position& p, bool replace)
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
-                  // check the chord already contains a note on the same string
-                  ChordRest* cr = _is.cr();
-                  if(cr != 0 && cr->type() == Element::CHORD)
-                        foreach(Note * note, static_cast<Chord*>(cr)->notes())
-                              if(note->string() == string)        // if string is the same
-                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
+//                  // check the chord already contains a note on the same string
+//                  ChordRest* cr = _is.cr();
+//                  if(cr != 0 && cr->type() == Element::CHORD)
+//                        foreach(Note * note, static_cast<Chord*>(cr)->notes())
+//                              if(note->string() == string) {      // if string is the same
+////                                    note->undoChangeProperty(P_PITCH, neck->getPitch(string, nval.fret));
+////                                    note->undoChangeProperty(P_FRET, p.fret);
+////                                    return;
+//                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
+//                                    }
                   // build a default NoteVal for that line
                   nval.string = string;
                   if(p.fret != FRET_NONE)       // if a fret is given, use it
@@ -729,6 +733,7 @@ void Score::putNote(const Position& p, bool replace)
       bool addToChord = false;
 
       if (cr) {
+            // retrieve total duration of current chord
             TDuration d = cr->durationType();
             Note* note = 0;
             if (cr->type() == Element::CHORD) {
@@ -747,12 +752,24 @@ void Score::putNote(const Position& p, bool replace)
                   else
                         qDebug("note not found: %d!", nval.pitch);
                   }
+            // if not in replace mode AND chord duration == input duration AND not rest input
+            // we need to add to current chord (otherwise, we will need to replace it or create a new onw)
             if (!replace
                && (d == _is.duration())
                && (cr->type() == Element::CHORD)
                && !_is.rest)
                   {
-                  if (!st->isTabStaff()) {            // unless staff is TAB
+                  if (st->isTabStaff()) {      // TAB
+                        // if a note on same string already exists, update to new pitch/fret
+                        foreach(Note * note, static_cast<Chord*>(cr)->notes())
+                              if(note->string() == nval.string) { // if string is the same
+                                    note->undoChangeProperty(P_PITCH, nval.pitch);
+                                    note->undoChangeProperty(P_FRET, nval.fret);
+                                    return;
+//                                    undoRemoveElement(note);      // remove note (to be replaced by the new note)
+                                    }
+                        }
+                  else {                        // not TAB
                         // if a note with the same pitch already exists in the chord, remove it
                         Chord* chord = static_cast<Chord*>(cr);
                         note = chord->findNote(nval.pitch);
@@ -762,13 +779,14 @@ void Score::putNote(const Position& p, bool replace)
                               return;
                               }
                         }
-                  addToChord = true;
+                  addToChord = true;            // if no special case, add note to chord
                   }
             }
+      // if adding, add!
       if (addToChord && cr->type() == Element::CHORD)
             addNote(static_cast<Chord*>(cr), nval);
+      // if not adding, replace current chord (or create a new one)
       else {
-            // replace chord
             if (_is.rest)
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);

@@ -148,8 +148,8 @@ class Chord : public ChordRest {
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 
-      Note* upNote() const                   { return _notes.back(); }
-      Note* downNote() const                 { return _notes.front(); }
+      Note* upNote() const                   { return _notes.size() ? _notes.back() : 0; }
+      Note* downNote() const                 { return _notes.size() ? _notes.front(): 0; }
       virtual int upLine() const;
       virtual int downLine() const;
       virtual int upString() const;
