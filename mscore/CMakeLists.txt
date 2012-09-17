@@ -60,7 +60,7 @@ QT4_WRAP_UI (ui_headers
       inspector_segment.ui inspector_beam.ui inspector_note.ui
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
-      inspector_volta.ui inspector_ottava.ui
+      inspector_volta.ui inspector_ottava.ui inspector_trill.ui
       box.ui
       ${SCRIPT_UI}
       )
@@ -92,7 +92,7 @@ QT4_WRAP_CPP (mocs
       editstringdata.h editraster.h mediadialog.h chordeditor.h chordview.h album.h layer.h
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
-      inspectorLasso.h inspectorVolta.h inspectorOttava.h
+      inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -195,7 +195,7 @@ add_executable ( ${ExecutableName}
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
-      editelement.cpp inspectorVolta.cpp inspectorOttava.cpp
+      editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

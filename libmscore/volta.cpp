@@ -189,7 +189,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
                   setSubtype(VoltaType(val.toInt()));
                   break;
             default:
-                  if (!Element::setProperty(propertyId, val))
+                  if (!TextLine::setProperty(propertyId, val))
                         return false;
                   break;
             }
@@ -208,7 +208,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
             case P_VOLTA_TYPE:
                   return 0;
             default:
-                  break;
+                  return TextLine::propertyDefault(propertyId);
             }
       return QVariant();
       }
