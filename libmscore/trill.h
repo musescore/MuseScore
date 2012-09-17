@@ -20,12 +20,6 @@ class Trill;
 class Accidental;
 class QPainter;
 
-
-// subtypes:
-enum TrillType {
-      TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
-      };
-
 //---------------------------------------------------------
 //   @@ TrillSegment
 //---------------------------------------------------------
@@ -47,11 +41,20 @@ class TrillSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Trill
+//   @P subtype   enum TrillType TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
 //---------------------------------------------------------
 
 class Trill : public SLine {
       Q_OBJECT
+      Q_ENUMS(TrillType)
 
+   public:
+      enum TrillType {
+            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
+            };
+
+   private:
+      Q_PROPERTY(TrillType subtype READ subtype WRITE undoSetSubtype)
       TrillType _subtype;
       ElementList _el;        // accidentals etc.
 
@@ -68,13 +71,19 @@ class Trill : public SLine {
       virtual void read(const QDomElement&);
 
       void setSubtype(const QString& s);
+      void undoSetSubtype(TrillType val);
       void setSubtype(TrillType tt)     { _subtype = tt; }
       TrillType subtype() const         { return _subtype; }
       QString subtypeName() const;
 
       Segment* segment() const          { return (Segment*)parent(); }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
+Q_DECLARE_METATYPE(Trill::TrillType)
 #endif
 

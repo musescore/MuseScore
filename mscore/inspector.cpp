@@ -18,6 +18,7 @@
 #include "inspectorGroupElement.h"
 #include "inspectorVolta.h"
 #include "inspectorOttava.h"
+#include "inspectorTrill.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -160,6 +161,9 @@ void Inspector::setElement(Element* e)
                         break;
                   case Element::OTTAVA_SEGMENT:
                         ie = new InspectorOttava(this);
+                        break;
+                  case Element::TRILL_SEGMENT:
+                        ie = new InspectorTrill(this);
                         break;
                   default:
                         ie = new InspectorElement(this);
