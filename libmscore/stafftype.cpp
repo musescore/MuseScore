@@ -17,6 +17,7 @@
 #include "mscore.h"
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
+#define TAB_RESTSYMBDISPL     2.0
 
 QList<StaffType*> staffTypes;
 
@@ -759,7 +760,11 @@ void TabDurationSymbol::layout()
       QFontMetricsF fm(_tab->durationFont());
       qreal mags = magS();
       qreal w = fm.width(_text);
-      setbbox(QRectF(0.0, _tab->durationBoxY() * mags, w * mags, _tab->durationBoxH() * mags) );
+      qreal y = _tab->durationBoxY();
+      // with rests, move symbol down by half its displacement from staff
+      if(parent() && parent()->type() == REST)
+            y += TAB_RESTSYMBDISPL * spatium();
+      setbbox(QRectF(0.0, y * mags, w * mags, _tab->durationBoxH() * mags) );
       }
 
 //---------------------------------------------------------
@@ -776,7 +781,10 @@ void TabDurationSymbol::draw(QPainter* painter) const
       painter->setPen(curColor());
       painter->scale(mag, mag);
       painter->setFont(_tab->durationFont());
-      painter->drawText(QPointF(0.0, _tab->durationFontYOffset()), _text);
+      qreal y = _tab->durationFontYOffset();
+      if(parent() && parent()->type() == REST)
+            y += TAB_RESTSYMBDISPL * spatium();
+      painter->drawText(QPointF(0.0, y), _text);
       painter->scale(imag, imag);
       }
 
