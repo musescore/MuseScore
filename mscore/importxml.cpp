@@ -2421,7 +2421,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
-                                                lastVolta->setSubtype(VOLTA_CLOSED);
+                                                lastVolta->setSubtype(Volta::VOLTA_CLOSED);
                                                 lastVolta->setEndElement(measure);
                                                 measure->addSpannerBack(lastVolta);
                                                 lastVolta = 0;
@@ -2432,7 +2432,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           }
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
-                                                lastVolta->setSubtype(VOLTA_OPEN);
+                                                lastVolta->setSubtype(Volta::VOLTA_OPEN);
                                                 lastVolta->setEndElement(measure);
                                                 measure->addSpannerBack(lastVolta);
                                                 lastVolta = 0;

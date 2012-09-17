@@ -2141,7 +2141,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
                         s1->add(volta);
                         }
 
-			volta->setSubtype(VOLTA_CLOSED);
+			volta->setSubtype(Volta::VOLTA_CLOSED);
 			volta->setText(ending->getText());
 
 			volta->endings().clear();

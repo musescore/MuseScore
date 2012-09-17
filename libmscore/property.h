@@ -98,8 +98,8 @@ enum P_ID {
       P_SHOW_NATURALS,
       P_BREAK_HINT,
       P_FBPREFIX,             // used for FiguredBassItem
-      P_FBDIGIT,              //    "           "
 
+      P_FBDIGIT,              //    "           "
       P_FBSUFFIX,             //    "           "
       P_FBCONTINUATIONLINE,   //    "           "
       P_FBPARENTHESIS1,       //    "           "
@@ -107,6 +107,7 @@ enum P_ID {
       P_FBPARENTHESIS3,       //    "           "
       P_FBPARENTHESIS4,       //    "           "
       P_FBPARENTHESIS5,       //    "           "
+      P_VOLTA_TYPE,
 
       P_END
       };
