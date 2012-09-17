@@ -17,6 +17,7 @@
 #include "inspectorLasso.h"
 #include "inspectorGroupElement.h"
 #include "inspectorVolta.h"
+#include "inspectorOttava.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -156,6 +157,9 @@ void Inspector::setElement(Element* e)
                         break;
                   case Element::VOLTA_SEGMENT:
                         ie = new InspectorVolta(this);
+                        break;
+                  case Element::OTTAVA_SEGMENT:
+                        ie = new InspectorOttava(this);
                         break;
                   default:
                         ie = new InspectorElement(this);

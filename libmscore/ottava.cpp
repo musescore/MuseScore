@@ -29,7 +29,8 @@
 Ottava::Ottava(Score* s)
    : TextLine(s)
       {
-      setSubtype(0);
+      _subtype = OttavaType(-1);
+      setSubtype(OTTAVA_8VA);
       setYoff(s->styleS(ST_ottavaY).val());
       }
 
@@ -41,15 +42,17 @@ void Ottava::layout()
       {
       setPos(0.0, 0.0);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
-      SLine::layout();
+      TextLine::layout();
       }
 
 //---------------------------------------------------------
 //   setSubtype
 //---------------------------------------------------------
 
-void Ottava::setSubtype(int val)
+void Ottava::setSubtype(OttavaType val)
       {
+      if (val == _subtype)
+            return;
       setEndHook(true);
       _subtype = val;
 
@@ -58,30 +61,34 @@ void Ottava::setSubtype(int val)
       const TextStyle& ts = score()->textStyle(TEXT_STYLE_OTTAVA);
 
       switch(val) {
-            case 0:
+            case OTTAVA_8VA:
                   setBeginText("8va", ts);
                   setContinueText("(8va)", ts);
                   setEndHookHeight(hook);
                   _pitchShift = 12;
                   break;
-            case 1:
+            case OTTAVA_15MA:
                   setBeginText("15ma", ts);
                   setContinueText("(15ma)", ts);
                   setEndHookHeight(hook);
                   _pitchShift = 24;
                   break;
-            case 2:
+            case OTTAVA_8VB:
                   setBeginText("8vb", ts);
                   setContinueText("(8vb)", ts);
                   _pitchShift = -12;
                   setEndHookHeight(-hook);
                   break;
-            case 3:
+            case OTTAVA_15MB:
                   setBeginText("15mb", ts);
                   setContinueText("(15mb)", ts);
                   _pitchShift = -24;
                   setEndHookHeight(-hook);
                   break;
+            }
+      foreach(SpannerSegment* s, spannerSegments()) {
+            OttavaSegment* os = static_cast<OttavaSegment*>(s);
+            os->clearText();
             }
       }
 
@@ -141,10 +148,69 @@ void Ottava::read(const QDomElement& de)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             if (tag == "subtype")
-                  setSubtype(e.text().toInt());
+                  setSubtype(OttavaType(e.text().toInt()));
             else if (!TextLine::readProperties(e))
                   domError(e);
             }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Ottava::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_OTTAVA_TYPE:
+                  return subtype();
+            default:
+                  break;
+            }
+      return TextLine::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case P_OTTAVA_TYPE:
+printf("setOttava property %d\n", val.toInt());
+                  setSubtype(OttavaType(val.toInt()));
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, val))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Ottava::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_OTTAVA_TYPE:
+                  return 0;
+            default:
+                  break;
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   undoSetSubtype
+//---------------------------------------------------------
+
+void Ottava::undoSetSubtype(OttavaType val)
+      {
+      score()->undoChangeProperty(this, P_OTTAVA_TYPE, val);
       }
 
 
