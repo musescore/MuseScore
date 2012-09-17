@@ -60,7 +60,7 @@ class StaffType {
       virtual const char* groupName() const = 0;
       virtual bool isEqual(const StaffType&) const;
       virtual bool isSameStructure(const StaffType&) const;
-      void setLines(int val);
+      virtual void setLines(int val);
       int lines() const                        { return _lines;           }
       void setStepOffset(int v)                { _stepOffset = v;         }
       int stepOffset() const                   { return _stepOffset;      }
@@ -323,6 +323,7 @@ class StaffTypeTablature : public StaffType {
       void  setFretFontSize(qreal val);
       void  setFretFontUserY(qreal val)   { _fretFontUserY = val;       }
       void  setGenDurations(bool val)     { _genDurations = val;        }
+      virtual void setLines(int val)      { _lines = val; _stepOffset = (val / 2 - 2) * 2; }
       void  setLinesThrough(bool val)     { _linesThrough = val;        }
       void  setMinimStyle(TablatureMinimStyle val)    { _minimStyle = val;    }
       void  setOnLines(bool val);
