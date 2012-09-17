@@ -3260,10 +3260,10 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         else {
                               ottava = new Ottava(score);
                               ottava->setTrack((staff + rstaff) * VOICES);
-                              if (type == "down" && ottavasize ==  8) ottava->setSubtype(0);
-                              if (type == "down" && ottavasize == 15) ottava->setSubtype(1);
-                              if (type ==   "up" && ottavasize ==  8) ottava->setSubtype(2);
-                              if (type ==   "up" && ottavasize == 15) ottava->setSubtype(3);
+                              if (type == "down" && ottavasize ==  8) ottava->setSubtype(Ottava::OTTAVA_8VA);
+                              if (type == "down" && ottavasize == 15) ottava->setSubtype(Ottava::OTTAVA_15MA);
+                              if (type ==   "up" && ottavasize ==  8) ottava->setSubtype(Ottava::OTTAVA_8VB);
+                              if (type ==   "up" && ottavasize == 15) ottava->setSubtype(Ottava::OTTAVA_15MB);
                               if (placement == "") placement = "above";  // set default
                               setSLinePlacement(ottava,
                                                 score->spatium(), placement,

@@ -20,6 +20,7 @@
 #include "note.h"
 #include "spanner.h"
 #include "volta.h"
+#include "ottava.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -77,6 +78,7 @@ void MScore::init()
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
       qRegisterMetaType<Volta::VoltaType>("VoltaType");
+      qRegisterMetaType<Ottava::OttavaType>("OttavaType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
