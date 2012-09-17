@@ -185,13 +185,15 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
             case P_VOLTA_TYPE:
-                  _subtype = VoltaType(val.toInt());
+                  setSubtype(VoltaType(val.toInt()));
                   break;
             default:
                   if (!Element::setProperty(propertyId, val))
                         return false;
                   break;
             }
+      layout();
+      score()->addRefresh(pageBoundingRect());
       return true;
       }
 
@@ -218,3 +220,4 @@ void Volta::undoSetSubtype(VoltaType val)
       {
       score()->undoChangeProperty(this, P_VOLTA_TYPE, val);
       }
+

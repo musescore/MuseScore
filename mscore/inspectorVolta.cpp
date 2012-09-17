@@ -28,6 +28,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
       QWidget* w = new QWidget;
       iVolta.setupUi(w);
       layout->addWidget(w);
+      connect(iVolta.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       }
 
 //---------------------------------------------------------
@@ -39,7 +40,10 @@ void InspectorVolta::setElement(Element* e)
       VoltaSegment* voltaSegment = static_cast<VoltaSegment*>(e);
       iElement->setElement(voltaSegment);
       Volta* volta = voltaSegment->volta();
+
+      iVolta.subtype->blockSignals(true);
       iVolta.subtype->setCurrentIndex(int(volta->subtype()));
+      iVolta.subtype->blockSignals(false);
       }
 
 //---------------------------------------------------------
