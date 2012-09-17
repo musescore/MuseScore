@@ -648,7 +648,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(gabel1, qApp->translate("lines", "Diminuendo"));
 
       Volta* volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("1.");
       QList<int> il;
@@ -657,7 +657,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Prima volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();
@@ -666,7 +666,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Seconda volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("3.");
       il.clear();
@@ -675,7 +675,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Terza volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_OPEN);
+      volta->setSubtype(Volta::VOLTA_OPEN);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();

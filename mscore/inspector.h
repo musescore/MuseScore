@@ -23,6 +23,7 @@
 #include "ui_inspector_segment.h"
 #include "ui_inspector_note.h"
 #include "ui_inspector_chord.h"
+#include "ui_inspector_volta.h"
 
 class Element;
 class Note;

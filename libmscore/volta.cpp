@@ -162,3 +162,59 @@ bool Volta::hasEnding(int repeat) const
       return false;
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Volta::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_VOLTA_TYPE:
+                  return subtype();
+            default:
+                  break;
+            }
+      return TextLine::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Volta::setProperty(P_ID propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case P_VOLTA_TYPE:
+                  _subtype = VoltaType(val.toInt());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, val))
+                        return false;
+                  break;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Volta::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_VOLTA_TYPE:
+                  return 0;
+            default:
+                  break;
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   undoSetSubtype
+//---------------------------------------------------------
+
+void Volta::undoSetSubtype(VoltaType val)
+      {
+      score()->undoChangeProperty(this, P_VOLTA_TYPE, val);
+      }

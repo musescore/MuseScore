@@ -19,6 +19,7 @@
 #include "stafftype.h"
 #include "note.h"
 #include "spanner.h"
+#include "volta.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -75,6 +76,7 @@ void MScore::init()
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
+      qRegisterMetaType<Volta::VoltaType>("VoltaType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
