@@ -684,22 +684,22 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Seconda volta 2"));
 
       Ottava* ottava = new Ottava(gscore);
-      ottava->setSubtype(0);
+      ottava->setSubtype(Ottava::OTTAVA_8VA);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "8va"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(1);
+      ottava->setSubtype(Ottava::OTTAVA_15MA);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "15ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(2);
+      ottava->setSubtype(Ottava::OTTAVA_8VB);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "8vb"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(3);
+      ottava->setSubtype(Ottava::OTTAVA_15MB);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "15mb"));
 

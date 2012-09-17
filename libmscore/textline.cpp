@@ -521,7 +521,6 @@ LineSegment* TextLine::createLineSegment()
 
 void TextLine::layout()
       {
-//      setPos(0.0, 0.0);
       if (_beginText)
             _beginText->layout();
       if (_continueText)

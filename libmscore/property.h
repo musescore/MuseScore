@@ -108,6 +108,7 @@ enum P_ID {
       P_FBPARENTHESIS4,       //    "           "
       P_FBPARENTHESIS5,       //    "           "
       P_VOLTA_TYPE,
+      P_OTTAVA_TYPE,
 
       P_END
       };

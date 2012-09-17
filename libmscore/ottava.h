@@ -46,12 +46,24 @@ class OttavaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Ottava
+//   @P subtype   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
       Q_OBJECT
+      Q_ENUMS(OttavaType)
 
-      int _subtype;
+   public:
+      enum OttavaType {
+            OTTAVA_8VA,
+            OTTAVA_15MA,
+            OTTAVA_8VB,
+            OTTAVA_15MB
+            };
+
+   private:
+      Q_PROPERTY(OttavaType subtype READ subtype WRITE undoSetSubtype)
+      OttavaType _subtype;
 
    protected:
       QString text;
@@ -64,15 +76,23 @@ class Ottava : public TextLine {
       Ottava(Score* s);
       virtual Ottava* clone() const    { return new Ottava(*this); }
       virtual ElementType type() const { return OTTAVA; }
-      void setSubtype(int val);
-      int subtype() const { return _subtype; }
+
+      void setSubtype(OttavaType val);
+      OttavaType subtype() const { return _subtype; }
+      void undoSetSubtype(OttavaType val);
+
       virtual LineSegment* createLineSegment();
       virtual void layout();
       int pitchShift() const { return _pitchShift; }
       virtual void endEdit();
       virtual void write(Xml& xml) const;
       virtual void read(const QDomElement& de);
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
+Q_DECLARE_METATYPE(Ottava::OttavaType)
 #endif
 

@@ -183,6 +183,7 @@ QVariant Volta::getProperty(P_ID propertyId) const
 
 bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       {
+      score()->addRefresh(pageBoundingRect());
       switch(propertyId) {
             case P_VOLTA_TYPE:
                   setSubtype(VoltaType(val.toInt()));
