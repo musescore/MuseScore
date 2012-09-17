@@ -1139,7 +1139,7 @@ void Chord::layoutStem()
                         hookIdx = -hookIdx;
                   if (hookIdx) {
                         _hook->setSubtype(hookIdx);
-                        _hook->setPos(_stem->hookPos());
+                        _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
                         _hook->setMag(mag()*score()->styleD(ST_smallNoteMag));
                         _hook->adjustReadPos();
                         }
@@ -1325,11 +1325,13 @@ void Chord::layout()
       Note*  upnote    = upNote();
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+      bool  useTab      = false;
 
       if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
+            useTab = true;
             StaffTypeTablature * tab = (StaffTypeTablature*)staff()->staffType();
             qreal lineDist = tab->lineDistance().val();
             foreach(Note* note, _notes) {
@@ -1363,19 +1365,21 @@ void Chord::layout()
                   //
                   // check duration of prev. CR segm
                   ChordRest * prevCR = prevChordRest(this);
-                  // if no previous CR or duration type and/or number of dots is different from current CR
+                  // if no previous CR
+                  // OR duration type and/or number of dots is different from current CR
+                  // OR previous CR is a rest
                   // set a duration symbol (trying to re-use existing symbols where existing to minimize
                   // symbol creation and deletion)
                   if (prevCR == 0 || prevCR->durationType().type() != durationType().type()
-                     || prevCR->dots() != dots()) {
-                        // symbol needed; if not exist, create
-                        // if exists, update duration
+                        || prevCR->dots() != dots()
+                        || prevCR->type() == REST) {
+                        // symbol needed; if not exist, create; if exists, update duration
                         if (!_tabDur)
                               _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-                        // needed?        _tabDur->setTrack(track());
+// needed?              _tabDur->setTrack(track());
                         _tabDur->layout();
                         }
                   else {                    // symbol not needed: if exists, delete
@@ -1505,7 +1509,7 @@ void Chord::layout()
 
       if (_hook) {
             _hook->layout();
-            if (up())
+            if (up() && !useTab)
                   rrr += _hook->width() + minNoteDistance;
             }
 
