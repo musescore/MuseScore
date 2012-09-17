@@ -63,12 +63,12 @@ void ScoreView::startEdit(Element* element, int startGrip)
 
 void ScoreView::startEdit()
       {
-      score()->setLayoutAll(false);
+      _score->setLayoutAll(false);
       curElement  = 0;
       setFocus();
-      if (!score()->undo()->active())
-            score()->startCmd();
-      score()->deselectAll();
+      if (!_score->undo()->active())
+            _score->startCmd();
+      _score->deselectAll();
 
       if (origEditObject->isSegment()) {        // if spanner segment
             SpannerSegment* ss = (SpannerSegment*)origEditObject;
@@ -108,7 +108,7 @@ void ScoreView::startEdit()
       curGrip = -1;
       updateGrips();
       _score->rebuildBspTree();     // we replaced elements
-      score()->end();
+      _score->end();
       }
 
 //---------------------------------------------------------
@@ -226,6 +226,7 @@ void ScoreView::endEdit()
             figuredBassEndEdit();
       _score->endCmd();
       mscore->endCmd();
+
 //      _score->deselect(origEditObject);
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
@@ -245,7 +246,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
       QPointF delta = p - startMove;
-      
+
       if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
             p.setX(0.0);
             delta.setX(0.0);
@@ -254,7 +255,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             p.setY(0.0);
             delta.setY(0.0);
             }
-      
+
       _score->setLayoutAll(false);
       score()->addRefresh(editObject->canvasBoundingRect());
       if (editObject->isText()) {

@@ -107,7 +107,8 @@ void Inspector::reset()
 void Inspector::setElement(Element* e)
       {
       if (e == 0 || _element == 0 || (e->type() != _element->type())) {
-            ie->deleteLater();
+            if (ie)
+                  ie->deleteLater();
             ie = 0;
             _element = e;
 
@@ -130,7 +131,9 @@ void Inspector::setElement(Element* e)
                   case Element::BEAM:         ie = new InspectorBeam(this); break;
                   case Element::IMAGE:        ie = new InspectorImage(this); break;
                   case Element::LASSO:        ie = new InspectorLasso(this); break;
-                  default:           ie = new InspectorElement(this); break;
+                  default:
+                        ie = new InspectorElement(this);
+                        break;
                   }
             layout->insertWidget(0, ie);
             }
