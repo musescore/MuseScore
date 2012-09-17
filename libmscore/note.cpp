@@ -1493,8 +1493,9 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-      foreach(Spanner* s, _spannerFor)
-            s->scanElements(data, func, all);
+//      foreach(Spanner* s, _spannerFor)              scanned in System()
+//            s->scanElements(data, func, all);
+
       if (!dragMode && _accidental)
             func(data, _accidental);
       if (chord()) {
