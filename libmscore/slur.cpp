@@ -385,7 +385,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF pp2 = ss->ups[GRIP_END].p   + ss->ups[GRIP_END].off   * _spatium;
 
       QPointF p2 = pp2 - pp1;
-      if ((p2.x() == 0.0) && (p2.y() == 0)) {
+      if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
             qDebug("zero slur");
             Measure* m1 = startChord()->segment()->measure();
             Measure* m2 = endChord()->segment()->measure();
@@ -684,36 +684,37 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      if ((e1->type() != CHORD) || (e2->type() != CHORD)) {
-            sp->p1 = e1->pagePos();
-            sp->p2 = e2->pagePos();
-            sp->p1.rx() += e1->width();
-            sp->p2.rx() += e2->width();
-            sp->system1 = static_cast<ChordRest*>(e1)->measure()->system();
-            sp->system2 = static_cast<ChordRest*>(e2)->measure()->system();
-            return;
+      ChordRest* scr   = static_cast<ChordRest*>(e1);
+      ChordRest* ecr   = static_cast<ChordRest*>(e2);
+      Chord* sc   = 0;
+      Note* note1 = 0;
+      if(e1->type() == CHORD) {
+            sc = static_cast<Chord*>(e1);
+            note1 = _up ? sc->upNote() : sc->downNote();
             }
-      Chord* sc   = static_cast<Chord*>(e1);
-      Chord* ec   = static_cast<Chord*>(e2);
-      Note* note1 = _up ? sc->upNote() : sc->downNote();
-      Note* note2 = _up ? ec->upNote() : ec->downNote();
+      Chord* ec = 0;
+      Note* note2 = 0;
+      if(e2->type() == CHORD) {
+            ec   = static_cast<Chord*>(e2);
+            note2 = _up ? ec->upNote() : ec->downNote();
+            }
 
-      sp->system1 = sc->measure()->system();
-      sp->system2 = ec->measure()->system();
-      sp->p1      = sc->pagePos() - sp->system1->pagePos();
-      sp->p2      = ec->pagePos() - sp->system2->pagePos();
+      sp->system1 = scr->measure()->system();
+      sp->system2 = ecr->measure()->system();
+      sp->p1      = scr->pagePos() - sp->system1->pagePos();
+      sp->p2      = ecr->pagePos() - sp->system2->pagePos();
 
       qreal xo, yo;
 
-      Stem* stem1 = sc->stem();
-      Stem* stem2 = ec->stem();
+      Stem* stem1 = sc?sc->stem():0;
+      Stem* stem2 = ec?ec->stem():0;
 
       enum SlurAnchor {
             SA_NONE, SA_STEM
             };
       SlurAnchor sa1 = SA_NONE;
       SlurAnchor sa2 = SA_NONE;
-      if ((sc->up() == ec->up()) && !sc->beam() && !ec->beam() && (_up == sc->up())) {
+      if ((scr->up() == ecr->up()) && !scr->beam() && !ecr->beam() && (_up == scr->up())) {
             if (stem1)
                   sa1 = SA_STEM;
             if (stem2)
@@ -721,9 +722,9 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
-      qreal hw   = note1->headWidth();
+      qreal hw   = note1?note1->headWidth():e1->width();
       switch (sa1) {
-            case SA_STEM:
+            case SA_STEM: //sc can't be null
                   sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
                   sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);
                   break;
@@ -731,7 +732,7 @@ void Slur::slurPos(SlurPos* sp)
                   break;
             }
       switch(sa2) {
-            case SA_STEM:
+            case SA_STEM: //ec can't be null
                   sp->p2 += ec->stemPosBeam() - ec->pagePos() + ec->stem()->p2();
                   sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
                   break;
@@ -746,10 +747,16 @@ void Slur::slurPos(SlurPos* sp)
       //
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
-      yo = note1->pos().y() + _spatium * .9 * __up;
+      if (note1)
+            yo = note1->pos().y();
+      else if(_up)
+            yo = e1->bbox().top();
+      else 
+            yo = e1->bbox().top() + e1->height();
+      yo += _spatium * .9 * __up;
       xo = hw * .5;
 
-      if (stem1) {
+      if (stem1) { //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                   qreal sh = stem1->height() + _spatium;
@@ -764,10 +771,12 @@ void Slur::slurPos(SlurPos* sp)
                   // handle case: stem up   - stem down
                   //              stem down - stem up
                   //
-                  if ((sc->up() != ec->up()) && (sc->up() == _up)) {
+                  if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
                         Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
-                        Note* n2  = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = n2->pos().y() - n1->pos().y();
+                        Note* n2  = 0;
+                        if(ec)
+                              n2 = ec->up() ? ec->downNote() : ec->upNote();
+                        qreal yd  = (n2?n2->pos().y():e2->pos().y()) - n1->pos().y();
 
                         yd *= .5;
 
@@ -794,16 +803,22 @@ void Slur::slurPos(SlurPos* sp)
 
       //------p2
       xo = hw * .5;
-      yo = note2->pos().y() + _spatium * .9 * __up;
+      if (note2)
+            yo = note2->pos().y();
+      else if(_up)
+            yo = e2->bbox().top();
+      else 
+            yo = e2->bbox().top() + e2->height();
+      yo += _spatium * .9 * __up;
 
-      if (stem2) {
+      if (stem2) { //ec can't be null
             Beam* beam2 = ec->beam();
-            if ((stemPos && (sc->up() == ec->up()))
+            if ((stemPos && (scr->up() == ec->up()))
                || (beam2
                  && (!beam2->elements().isEmpty())
                  && (beam2->elements().front() != ec)
                  && (ec->up() == _up)
-                 && (sc->noteType() == NOTE_NORMAL)
+                 && sc && (sc->noteType() == NOTE_NORMAL)
                  )
                   ) {
                   qreal sh = stem2->height() + _spatium;
@@ -819,10 +834,12 @@ void Slur::slurPos(SlurPos* sp)
             // handle case: stem up   - stem down
             //              stem down - stem up
             //
-            if ((sc->up() != ec->up()) && (ec->up() == _up)) {
-                  Note* n1 = sc->up() ? sc->downNote() : sc->upNote();
+            if ((scr->up() != ec->up()) && (ec->up() == _up)) {
+                  Note* n1 = 0;
+                  if(sc)
+                        sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->pos().y() - n1->pos().y();
+                  qreal yd = n2->pos().y() - (n1?n1->pos().y():e1->pos().y());
 
                   yd *= .5;
 
