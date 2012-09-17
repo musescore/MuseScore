@@ -118,6 +118,8 @@ static const PropertyData propertyList[] = {
       { P_VOLTA_TYPE,          "",              T_INT    },
       { P_OTTAVA_TYPE,         "",              T_INT    },
 
+      { P_TRILL_TYPE,          "",              T_INT    },
+
       { P_END,                 "",              T_INT    }
       };
 

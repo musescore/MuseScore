@@ -177,11 +177,10 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
             case P_OTTAVA_TYPE:
-printf("setOttava property %d\n", val.toInt());
                   setSubtype(OttavaType(val.toInt()));
                   break;
             default:
-                  if (!Element::setProperty(propertyId, val))
+                  if (!TextLine::setProperty(propertyId, val))
                         return false;
                   break;
             }
@@ -199,7 +198,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_OTTAVA_TYPE:
                   return 0;
             default:
-                  break;
+                  return TextLine::propertyDefault(propertyId);
             }
       return QVariant();
       }

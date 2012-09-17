@@ -110,6 +110,8 @@ enum P_ID {
       P_VOLTA_TYPE,
       P_OTTAVA_TYPE,
 
+      P_TRILL_TYPE,
+
       P_END
       };
 
