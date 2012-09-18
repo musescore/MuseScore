@@ -572,7 +572,7 @@ void Score::undoChangeBarLineSpan(Staff* staff, int span)
 //   undoChangeDynamic
 //---------------------------------------------------------
 
-void Score::undoChangeDynamic(Dynamic* e, int velocity, DynamicType type)
+void Score::undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type)
       {
       undo(new ChangeDynamic(e, velocity, type));
       }
@@ -1915,7 +1915,7 @@ void ChangeSlurOffsets::flip()
 //   ChangeDynamic
 //---------------------------------------------------------
 
-ChangeDynamic::ChangeDynamic(Dynamic* d, int v, DynamicType dt)
+ChangeDynamic::ChangeDynamic(Dynamic* d, int v, Element::DynamicType dt)
       {
       dynamic  = d;
       velocity = v;
@@ -1925,7 +1925,7 @@ ChangeDynamic::ChangeDynamic(Dynamic* d, int v, DynamicType dt)
 void ChangeDynamic::flip()
       {
       int v = dynamic->velocity();
-      DynamicType t = dynamic->dynType();
+      Element::DynamicType t = dynamic->dynType();
       dynamic->setVelocity(velocity);
       dynamic->setDynType(dynType);
       dynType  = t;
@@ -2675,7 +2675,7 @@ void ChangeImage::flip()
 void ChangeHairpin::flip()
       {
       int vc        = hairpin->veloChange();
-      DynamicType t = hairpin->dynType();
+      Element::DynamicType t = hairpin->dynType();
       bool dg       = hairpin->diagonal();
       hairpin->setVeloChange(veloChange);
       hairpin->setDynType(dynType);

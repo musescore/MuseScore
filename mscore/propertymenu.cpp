@@ -571,12 +571,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "d-dynamics") {
             Dynamic* dynamic = static_cast<Dynamic*>(e);
             int oldVelo    = dynamic->velocity();
-            DynamicType ot = dynamic->dynType();
+            Element::DynamicType ot = dynamic->dynType();
             DynamicProperties dp(dynamic);
             int rv = dp.exec();
             if (rv) {
                   int newVelo    = dynamic->velocity();
-                  DynamicType nt = dynamic->dynType();
+                  Element::DynamicType nt = dynamic->dynType();
                   dynamic->setVelocity(oldVelo);
                   dynamic->setDynType(ot);
                   score()->undoChangeDynamic(dynamic, newVelo, nt);
@@ -747,7 +747,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = dp.exec();
 
             int vo = dp.changeVelo();
-            DynamicType dt = dp.dynamicType();
+            Element::DynamicType dt = dp.dynamicType();
             if (rv && ((vo != hp->veloChange())
                || (dt != hp->dynType())
                || (dp.allowDiagonal() != hp->diagonal())

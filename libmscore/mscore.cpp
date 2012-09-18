@@ -81,6 +81,7 @@ void MScore::init()
       qRegisterMetaType<Volta::VoltaType>("VoltaType");
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
+      qRegisterMetaType<Element::DynamicType>("DynamicType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

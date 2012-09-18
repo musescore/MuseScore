@@ -41,14 +41,22 @@ class HairpinSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//
-//    subtype: 0 = crescendo,  1 = decrescendo
+//   @P subtype enum HairpinType CRESCENDO, DECRESCENDO
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
       Q_OBJECT
+      Q_ENUMS(HairpinType)
 
-      int _subtype;
+   public:
+      enum HairpinType { CRESCENDO, DECRESCENDO };
+
+   private:
+      Q_PROPERTY(HairpinType subtype     READ subtype     WRITE undoSetSubtype)
+      Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
+      Q_PROPERTY(DynamicType dynamicType READ dynamicType WRITE undoSetDynamicType)
+
+      HairpinType _subtype;
       int _veloChange;
       DynamicType _dynType;
 
@@ -56,15 +64,23 @@ class Hairpin : public SLine {
       Hairpin(Score* s);
       virtual Hairpin* clone() const   { return new Hairpin(*this); }
       virtual ElementType type() const { return HAIRPIN;  }
-      int subtype() const              { return _subtype; }
-      void setSubtype(int val)         { _subtype = val;  }
+
+      HairpinType subtype() const      { return _subtype; }
+      void setSubtype(HairpinType val) { _subtype = val;  }
+      void undoSetSubtype(HairpinType);
+
       Segment* segment() const         { return (Segment*)parent(); }
       virtual void layout();
       virtual LineSegment* createLineSegment();
+
       int veloChange() const           { return _veloChange; }
       void setVeloChange(int v)        { _veloChange = v;    }
+      void undoSetVeloChange(int v);
+
       DynamicType dynType() const      { return _dynType; }
       void setDynType(DynamicType t)   { _dynType = t;    }
+      void undoSetDynType(DynamicType t);
+
       virtual void write(Xml&) const;
       virtual void read(const QDomElement&);
 

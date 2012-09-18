@@ -140,6 +140,7 @@ struct EditData {
 class Element : public QObject {
       Q_OBJECT
       Q_ENUMS(ElementType)
+      Q_ENUMS(DynamicType)
 
    public:
       //-------------------------------------------------------------------
@@ -240,6 +241,15 @@ class Element : public QObject {
 
             MAXTYPE
             };
+
+      //---------------------------------------------------------
+      //   DynamicType
+      //---------------------------------------------------------
+
+      enum DynamicType {
+            DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+            };
+
    private:
       Q_PROPERTY(ElementType type READ type)
       Q_PROPERTY(Element* parent  READ parent    WRITE setParent)
@@ -631,6 +641,7 @@ extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
 Q_DECLARE_METATYPE(Element::ElementType)
+Q_DECLARE_METATYPE(Element::DynamicType)
 
 #endif
 

@@ -18,6 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "libmscore/element.h"
 #include "libmscore/dynamic.h"
 #include "dynamicprop.h"
 
@@ -32,9 +33,9 @@ DynamicProperties::DynamicProperties(Dynamic* d, QWidget* parent)
       dynamic = d;
       velocity->setValue(dynamic->velocity());
       switch(dynamic->dynType()) {
-            case DYNAMIC_STAFF:     staffButton->setChecked(true); break;
-            case DYNAMIC_PART:      partButton->setChecked(true); break;
-            case DYNAMIC_SYSTEM:    systemButton->setChecked(true); break;
+            case Element::DYNAMIC_STAFF:     staffButton->setChecked(true); break;
+            case Element::DYNAMIC_PART:      partButton->setChecked(true); break;
+            case Element::DYNAMIC_SYSTEM:    systemButton->setChecked(true); break;
             }
       }
 
@@ -46,11 +47,11 @@ void DynamicProperties::accept()
       {
       dynamic->setVelocity(velocity->value());
       if (staffButton->isChecked())
-            dynamic->setDynType(DYNAMIC_STAFF);
+            dynamic->setDynType(Element::DYNAMIC_STAFF);
       else if (partButton->isChecked())
-            dynamic->setDynType(DYNAMIC_PART);
+            dynamic->setDynType(Element::DYNAMIC_PART);
       else if (systemButton->isChecked())
-            dynamic->setDynType(DYNAMIC_SYSTEM);
+            dynamic->setDynType(Element::DYNAMIC_SYSTEM);
       QDialog::accept();
       }
 
