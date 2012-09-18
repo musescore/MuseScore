@@ -13,6 +13,7 @@
 
 #ifndef __HAIRPIN_H__
 
+#include "element.h"
 #include "line.h"
 #include "mscore.h"
 
@@ -54,7 +55,7 @@ class Hairpin : public SLine {
    private:
       Q_PROPERTY(HairpinType subtype     READ subtype     WRITE undoSetSubtype)
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(DynamicType dynamicType READ dynamicType WRITE undoSetDynamicType)
+      Q_PROPERTY(Element::DynamicType dynType READ dynType WRITE undoSetDynType)
 
       HairpinType _subtype;
       int _veloChange;
