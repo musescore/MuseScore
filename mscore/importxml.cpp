@@ -3083,7 +3083,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else {
                         hairpin = new Hairpin(score);
-                        hairpin->setSubtype(type == "crescendo" ? 0 : 1);
+                        hairpin->setSubtype(type == "crescendo"
+                           ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
                         if (hasYoffset)
                               hairpin->setYoff(yoffset);
                         else

@@ -111,6 +111,9 @@ enum P_ID {
       P_OTTAVA_TYPE,
 
       P_TRILL_TYPE,
+      P_HAIRPIN_TYPE,
+      P_VELO_CHANGE,
+      P_DYNAMIC_TYPE,
 
       P_END
       };

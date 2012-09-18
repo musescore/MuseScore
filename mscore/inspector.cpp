@@ -19,6 +19,7 @@
 #include "inspectorVolta.h"
 #include "inspectorOttava.h"
 #include "inspectorTrill.h"
+#include "inspectorHairpin.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -164,6 +165,9 @@ void Inspector::setElement(Element* e)
                         break;
                   case Element::TRILL_SEGMENT:
                         ie = new InspectorTrill(this);
+                        break;
+                  case Element::HAIRPIN_SEGMENT:
+                        ie = new InspectorHairpin(this);
                         break;
                   default:
                         ie = new InspectorElement(this);

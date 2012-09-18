@@ -638,12 +638,12 @@ Palette* MuseScore::newLinesPalette()
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setSubtype(0);
+      gabel0->setSubtype(Hairpin::CRESCENDO);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setSubtype(1);
+      gabel1->setSubtype(Hairpin::DECRESCENDO);
       gabel1->setLen(w);
       sp->append(gabel1, qApp->translate("lines", "Diminuendo"));
 
