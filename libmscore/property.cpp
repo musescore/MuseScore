@@ -119,6 +119,9 @@ static const PropertyData propertyList[] = {
       { P_OTTAVA_TYPE,         "",              T_INT    },
 
       { P_TRILL_TYPE,          "",              T_INT    },
+      { P_HAIRPIN_TYPE,        "",              T_INT    },
+      { P_VELO_CHANGE,         "",              T_INT    },
+      { P_DYNAMIC_TYPE,        "",              T_INT    },
 
       { P_END,                 "",              T_INT    }
       };

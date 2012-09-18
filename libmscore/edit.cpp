@@ -893,7 +893,7 @@ void Score::cmdAddHairpin(bool decrescendo)
             return;
 
       Hairpin* pin = new Hairpin(this);
-      pin->setSubtype(decrescendo ? 1 : 0);
+      pin->setSubtype(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
       pin->setTrack(cr1->track());
       pin->setStartElement(cr1->segment());
       pin->setEndElement(cr2->segment());
