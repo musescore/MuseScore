@@ -248,10 +248,10 @@ void Symbol::read(const QDomElement& de)
                         // if symbol name not found, fall back to mnames
                         s = Sym::userName2id(val);
                         if (s == noSym) {
-                              qDebug("unknown symbol <%s> (%d symbols), defaulting to diamond head\n",
+                              qDebug("unknown symbol <%s> (%d symbols), falling back to default symbol\n",
                                  qPrintable(val), symbols[0].size());
                               // set a default symbol, or layout() will crash
-                              s = diamondheadSym;
+                              s = s1miHeadSym;
                               }
                         }
                   }
