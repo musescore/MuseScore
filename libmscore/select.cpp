@@ -273,7 +273,8 @@ void Selection::updateSelectedElements()
                   }
             // for each measure in the selection, check if it contains spanners within our selection
             Measure* sm = _startSegment->measure();
-            Measure* em = _endSegment->measure()->nextMeasure();
+            Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
+            int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
             for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
                   foreach(Spanner* sp, m->spannerFor()) {
                         // ignore spanners belonging to other tracks
@@ -282,12 +283,12 @@ void Selection::updateSelectedElements()
                         // if spanner ends between _startSegment and _endSegment, select it
                         if (sp->endElement()->type() == Element::SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
                               }
                         else if (sp->endElement()->type() == Element::MEASURE) {
                               Measure* s2 = static_cast<Measure*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
                               }
                         else {
