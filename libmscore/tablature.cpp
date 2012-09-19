@@ -169,8 +169,16 @@ void Tablature::fretChord(Chord * chord) const
             bUsed[nString] = false;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
       QMap<int, Note *> sortedNotes;
-      foreach(Note * note, chord->notes())
-            sortedNotes.insert(note->string()*1000 - note->pitch(), note);
+      int   idx = 0;
+      int   key;
+      foreach(Note * note, chord->notes()) {
+            key = note->string()*100000;
+            if(key < 0)                         // in case string is -1
+                  key = -key;
+            key -= note->pitch() * 100 + idx;  // disambiguate notes of equal pitch
+            sortedNotes.insert(key, note);
+            idx++;
+            }
 
       // scan chord notes from highest, matching with strings from the highest
       foreach(Note * note, sortedNotes) {
