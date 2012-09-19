@@ -245,8 +245,14 @@ void Symbol::read(const QDomElement& de)
             if (tag == "name") {
                   s = Sym::name2id(val);
                   if (s == noSym) {
-                        qDebug("unknown symbol <%s>, symbols %d\n",
-                           qPrintable(val), symbols[0].size());
+                        // if symbol name not found, fall back to mnames
+                        s = Sym::userName2id(val);
+                        if (s == noSym) {
+                              qDebug("unknown symbol <%s> (%d symbols), defaulting to diamond head\n",
+                                 qPrintable(val), symbols[0].size());
+                              // set a default symbol, or layout() will crash
+                              s = diamondheadSym;
+                              }
                         }
                   }
             else if (tag == "Symbol") {
