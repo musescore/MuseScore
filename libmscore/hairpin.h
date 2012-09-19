@@ -43,6 +43,8 @@ class HairpinSegment : public LineSegment {
 //---------------------------------------------------------
 //   @@ Hairpin
 //   @P subtype enum HairpinType CRESCENDO, DECRESCENDO
+//   @P veloChange int
+//   @P dynType    enum Element::DynamicType
 //---------------------------------------------------------
 
 class Hairpin : public SLine {

@@ -1413,7 +1413,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 
 			cr = measure->findChord(tick, noteTrack, graceLevel);
 			if (cr == 0) {
-				Segment::SegmentType st = Segment::SegChordRest;
+				// Segment::SegmentType st = Segment::SegChordRest;
 
 				cr = new Chord(score_);
 				cr->setTrack(noteTrack);
@@ -1437,7 +1437,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 						cr->setDurationType(TDuration::V_EIGHT);
 					}
 
-					st = Segment::SegGrace;
+					// st = Segment::SegGrace;
 				} else {
 					TDuration duration = OveNoteType_To_Duration(container->getNoteType());
 					duration.setDots(container->getDot());
