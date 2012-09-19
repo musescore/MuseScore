@@ -40,6 +40,7 @@ Tremolo::Tremolo(Score* score)
 void Tremolo::draw(QPainter* painter) const
       {
       painter->setBrush(QBrush(curColor()));
+      painter->setPen(Qt::NoPen);
       painter->drawPath(path);
       if ((parent() == 0) && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
