@@ -5025,7 +5025,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             int gl = nrOfGraceSegsReq(pn);
             cr = measure->findChord(loc_tick, track, grace);
             if (cr == 0) {
-                  Segment::SegmentType st = Segment::SegChordRest;
+                  // Segment::SegmentType st = Segment::SegChordRest;
                   cr = new Chord(score);
                   cr->setBeamMode(bm);
                   cr->setTrack(track);
@@ -5051,7 +5051,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                               }
                         else
                               cr->setDurationType(TDuration::V_EIGHT);
-                        st = Segment::SegGrace;
+                        // st = Segment::SegGrace;
                         }
                   else {
                         if (durationType.type() == TDuration::V_INVALID)

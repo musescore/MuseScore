@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>68</height>
+    <height>125</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,13 +45,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Subtype:</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1" colspan="2">
       <widget class="QComboBox" name="subtype">
        <item>
@@ -64,6 +57,77 @@
          <string>decrescendo</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Subtype:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Dynamic Type:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Velo. change:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="dynType">
+       <item>
+        <property name="text">
+         <string>Staff</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Part</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>SYstem</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="veloChange"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="resetDynType">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetVeloChange">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
       </widget>
      </item>
     </layout>
