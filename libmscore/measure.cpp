@@ -2370,8 +2370,10 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         continue;
                   e->scanElements(data, func, all);
                   }
-            foreach(Element* e, s->annotations())
-                  e->scanElements(data,  func, all);
+            foreach(Element* e, s->annotations()) {
+                  if (all || visible(e->staffIdx()))
+                        e->scanElements(data,  func, all);
+                  }
             }
       if (noText())
             func(data, noText());
