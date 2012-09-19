@@ -1100,6 +1100,7 @@ void Score::upDown(bool up, UpDownMode mode)
             int newPitch = 0;
             int string = oNote->string();
             int fret   = oNote->fret();
+            Tablature* tab;
 
             switch(oNote->staff()->staffType()->group()) {
                   case PERCUSSION_STAFF:
@@ -1111,23 +1112,16 @@ void Score::upDown(bool up, UpDownMode mode)
                         break;
                   case TAB_STAFF:
                         {
-                        Tablature* tab = part->instr()->tablature();
+                        tab = part->instr()->tablature();
                         switch(mode) {
                               case UP_DOWN_OCTAVE:          // move same note to next string, if possible
                                     {
+                                    StaffTypeTablature * stt = static_cast<StaffTypeTablature*>(oNote->staff()->staffType());
+                                    string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
-//                                    if (string < 0)
-//                                          string = 0;
-//                                    else if (string >= tab->strings())
-//                                          string = tab->strings() - 1;
-//                                    fret = 0;
-//                                    newPitch      = tab->getPitch(string, fret);
-//                                    Chord* chord  = oNote->chord();
-//                                    Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
-//                                    KeySigEvent ks = estaff->key(chord->tick());
-//                                    newTpc         = pitch2tpc(newPitch, ks.accidentalType());
                                     if(string < 0 || string >= tab->strings())
                                           return;           // no next string to move to
+                                    string = stt->VisualStringToPhys(string);
                                     fret = tab->fret(pitch, string);
                                     if(fret == -1)          // can't have that note on that string
                                           return;
@@ -1153,12 +1147,8 @@ void Score::upDown(bool up, UpDownMode mode)
                                           fret = 0;
                                     else if (fret >= tab->frets())
                                           fret = tab->frets() - 1;
-                                    newPitch      = tab->getPitch(string, fret);
-//                                    Chord* chord  = oNote->chord();
-//                                    Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
-//                                    KeySigEvent ks = estaff->key(chord->tick());
-//                                    newTpc         = pitch2tpc(newPitch, ks.accidentalType());
-                                    newTpc = pitch2tpc2(newPitch, up);
+                                    newPitch    = tab->getPitch(string, fret);
+                                    newTpc      = pitch2tpc2(newPitch, up);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_FRET, fret);
@@ -1212,10 +1202,17 @@ void Score::upDown(bool up, UpDownMode mode)
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
             else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
-                  if (oNote->string() != string)
+                  bool refret = false;
+                  if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_STRING, string);
-                  if (oNote->fret() != fret)
+                        refret = true;
+                        }
+                  if (oNote->fret() != fret) {
                         undoChangeProperty(oNote, P_FRET, fret);
+                        refret = true;
+                        }
+                  if (refret)
+                        tab->fretChord(oNote->chord());
                   }
 
             // play new note with velocity 80 for 0.3 sec:

@@ -136,10 +136,10 @@ int Tablature::fret(int pitch, int string) const
       int strings = stringTable.size();
 
       if (string < 0 || string >= strings)
-            return -1;
+            return FRET_NONE;
       int fret = pitch - stringTable[strings - string - 1];
       if (fret < 0 || fret >= _frets)
-            return -1;
+            return FRET_NONE;
       return fret;
       }
 
@@ -178,7 +178,7 @@ void Tablature::fretChord(Chord * chord) const
             nFret       = nNewFret      = note->fret();
             note->setFretConflict(false);       // assume no conflicts on this note
             // if no fretting yet or current fretting is no longer valid
-            if (nString == -1 || nFret == -1 || getPitch(nString, nFret) != note->pitch()) {
+            if (nString == STRING_NONE || nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()) {
                   // get a new fretting
                   if(!convertPitch(note->pitch(), &nNewString, &nNewFret) ) {
                         // no way to fit this note in this tab:
@@ -197,7 +197,7 @@ void Tablature::fretChord(Chord * chord) const
                         // if same string...
                         if(note2 != note && note2->string() == nNewString) {
                               // ...attempt to fret this note on its old string
-                              if( (nTempFret=fret(note->pitch(), nString)) != -1) {
+                              if( (nTempFret=fret(note->pitch(), nString)) != FRET_NONE) {
                                     nNewFret   = nTempFret;
                                     nNewString = nString;
                                     }
@@ -212,7 +212,7 @@ void Tablature::fretChord(Chord * chord) const
                   for(nTempString=0; nTempString < strings(); nTempString++) {
                         if(bUsed[nTempString])
                               continue;
-                        if( (nTempFret=fret(note->pitch(), nTempString)) != -1) {
+                        if( (nTempFret=fret(note->pitch(), nTempString)) != FRET_NONE) {
                               // suitable string found
                               nNewFret    = nTempFret;
                               nNewString  = nTempString;
