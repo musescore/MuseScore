@@ -2463,66 +2463,70 @@ bool Measure::createEndBarLines()
       {
       bool changed = false;
       int nstaves  = score()->nstaves();
-      Segment* seg = findSegment(Segment::SegEndBarLine, tick() + ticks());
+      Segment* seg = undoGetSegment(Segment::SegEndBarLine, tick() + ticks());
 
-      for (int staffIdx = 0; staffIdx < nstaves;) {
+      BarLine* bl = 0;
+      int span    = 0;
+      int aspan   = 0;    // actual span
+
+      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
-            int span     = staff->barLineSpan();
-            if (staffIdx + span > score()->nstaves())
-                  span = score()->nstaves() - staffIdx;
-            BarLine* bl  = 0;
-            int aspan = 0;
-            for (int i = 0; i < span; ++i) {
-                  int track = (staffIdx + i) * VOICES;
-                  SysStaff* s  = system()->staff(staffIdx + i);
-                  if (!s->show()) {
-                        BarLine* bl1 = seg ? static_cast<BarLine*>(seg->element(track)) : 0;
-                        if (bl1) {
-                              score()->undoRemoveElement(bl1);
-                              changed = true;
-                              }
-                        continue;
+            int track = staffIdx * VOICES;
+            BarLine* cbl = static_cast<BarLine*>(seg->element(track));
+            if (span == 0) {
+                  span = staff->barLineSpan();
+                  if ((staffIdx + span) > nstaves)
+                        span = nstaves - staffIdx;
+                  bl = 0;
+                  }
+            if (staff->show() && span) {
+                  //
+                  // there should be a barline in this staff
+                  //
+                  BarLineType et = _multiMeasure > 0 ? _mmEndBarLineType : _endBarLineType;
+                  if (!bl) {
+                        bl = cbl;
+                        aspan = 0;
                         }
-                  if (bl == 0) {
-                        bl = seg ? static_cast<BarLine*>(seg->element(track)) : 0;
-                        BarLineType et = _multiMeasure > 0 ? _mmEndBarLineType : _endBarLineType;
-                        if (bl == 0) {
-                              bl = new BarLine(score());
-                              bl->setVisible(_endBarLineVisible);
-                              bl->setColor(_endBarLineColor);
-                              bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
-                              bl->setSubtype(et);
-                              seg = undoGetSegment(Segment::SegEndBarLine, tick() + ticks());
-                              bl->setParent(seg);
-                              bl->setTrack(track);
-                              score()->undoAddElement(bl);
-                              changed = true;
-                              }
-                        else if (bl->subtype() != et) {
+                  if (!bl) {
+                        bl = new BarLine(score());
+                        bl->setVisible(_endBarLineVisible);
+                        bl->setColor(_endBarLineColor);
+                        bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
+                        bl->setSubtype(et);
+                        bl->setParent(seg);
+                        bl->setTrack(track);
+                        score()->undoAddElement(bl);
+                        changed = true;
+                        }
+                  else {
+                        if (bl->subtype() != et) {
                               score()->undoChangeProperty(bl, P_SUBTYPE, et);
                               bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
                               changed = true;
                               }
-                        aspan = 0;
-                        }
-                  else {
-                        // remove unecessary barlines
-                        BarLine* bl1 = seg ? static_cast<BarLine*>(seg->element(track)) : 0;
-                        if (bl1) {
-                              score()->undoRemoveElement(bl1);
+                        if (cbl && cbl != bl) {
+                              score()->undoRemoveElement(cbl);
                               changed = true;
                               }
                         }
-                  ++aspan;
                   }
-            if (bl)
-                  bl->setSpan(aspan);
-
-            // TODO: remove BarLine if span is zero ?
-
-            staffIdx += (span ? span : 1);
+            else {
+                  // there should be no barline in this staff
+                  if (cbl) {
+                        score()->undoRemoveElement(cbl);
+                        changed = true;
+                        }
+                  }
+            if (span) {
+                  if (bl) {
+                        ++aspan;
+                        if (staff->show())            // update only if visible
+                              bl->setSpan(aspan);
+                        }
+                  --span;
+                  }
             }
-
       return changed;
       }
 
