@@ -295,8 +295,11 @@ static bool clefsGreater(const Clef* a, const Clef* b)
 
 void Staff::addClef(Clef* clef)
       {
-      if (clef->generated())
+      if (clef->generated()) {
+            if (clef->segment()->tick() == 0)
+                  _initialClef._concertClef = clef->clefType();
             return;
+            }
       if (clef->segment()->measure() == 0)
             abort();
       int tick = 0;
@@ -402,16 +405,10 @@ void Staff::read(const QDomElement& de)
                   if (st)
                         _staffType = st;
                   }
-            else if (tag == "lines")
-                  ;                       // obsolete: setLines(v);
             else if (tag == "small")
                   setSmall(val.toInt());
             else if (tag == "invisible")
                   setInvisible(val.toInt());
-            else if (tag == "slashStyle")
-                  ;                       // obsolete: setSlashStyle(v);
-            else if (tag == "cleflist")
-                  _clefList.read(e, _score);
             else if (tag == "keylist")
                   _keymap->read(e, _score);
             else if (tag == "bracket") {
@@ -434,7 +431,7 @@ void Staff::read(const QDomElement& de)
                         if (st)
                               linkTo(st);
                         else {
-                              printf("staff %d not found in parent\n", v);
+                              qDebug("staff %d not found in parent", v);
                               }
                         }
                   else {
@@ -637,7 +634,6 @@ void Staff::setStaffType(StaffType* st)
       StaffGroup csg = clefTable[ct].staffGroup;
 
       if (_staffType->group() != csg) {
-//            _clefList->clear();
             switch(_staffType->group()) {
                   case TAB_STAFF:        ct = ClefType(score()->styleI(ST_tabClef)); break;
                   case PITCHED_STAFF:    ct = CLEF_G; break;      // TODO: use preferred clef for instrument

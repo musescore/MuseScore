@@ -22,6 +22,7 @@ class Xml;
 class Staff;
 class Score;
 class InstrumentTemplate;
+class ClefList;
 
 //---------------------------------------------------------
 //   @@ Part
@@ -30,9 +31,9 @@ class InstrumentTemplate;
 
 class Part : public QObject {
       Q_OBJECT
-      
+
       Q_PROPERTY(QString partName READ partName)
-      
+
       Score* _score;
 
       QString _partName;           ///< used in tracklist (mixer)
@@ -47,6 +48,7 @@ class Part : public QObject {
       void initFromInstrTemplate(const InstrumentTemplate*);
 
       void read(const QDomElement&);
+      void read114(const QDomElement&, QList<ClefList*>&);
       void write(Xml& xml) const;
       int nstaves() const                       { return _staves.size(); }
       QList<Staff*>* staves()                   { return &_staves; }

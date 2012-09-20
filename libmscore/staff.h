@@ -86,12 +86,11 @@ class Staff : public QObject {
 
       Score* _score;
       Part* _part;
-      int _rstaff;            ///< Index in Part.
+      int _rstaff;                  ///< Index in Part.
 
-      ClefList _clefList;           // for backward compatibility
       ClefTypeList _initialClef;    // used by new score wizard
-
       QList<Clef*> clefs;
+
       QList<TimeSig*> timesigs;
 
       KeyList* _keymap;
@@ -99,9 +98,9 @@ class Staff : public QObject {
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
       bool _small;
       bool _invisible;
-      qreal _userDist;        ///< user edited extra distance
-
       bool _updateKeymap;
+
+      qreal _userDist;        ///< user edited extra distance
 
       StaffType* _staffType;
 
@@ -124,6 +123,7 @@ class Staff : public QObject {
       int idx() const;
       void setRstaff(int n)          { _rstaff = n;    }
       void read(const QDomElement&);
+      void read114(const QDomElement&, ClefList&);
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
@@ -190,7 +190,6 @@ class Staff : public QObject {
       void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }
       void linkTo(Staff* staff);
       bool primaryStaff() const;
-      ClefList* clefList()          { return &_clefList; }   // for backward compatibility
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;  }
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);

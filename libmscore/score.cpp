@@ -1456,9 +1456,8 @@ void Score::addElement(Element* element)
                   break;
             case Element::CLEF:
                   {
-                  Clef* clef       = static_cast<Clef*>(element);
-                  Segment* segment = clef->segment();
-                  updateNoteLines(segment, clef->track());
+                  Clef* clef = static_cast<Clef*>(element);
+                  updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
             case Element::KEYSIG:
