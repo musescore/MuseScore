@@ -79,14 +79,14 @@ extern Measure* tick2measure(int tick);
 void updateNoteLines(Segment* segment, int track)
       {
       Staff* staff = segment->score()->staff(track / VOICES);
-      if (staff->part()->instr()->drumset() || staff->isTabStaff())
+      if (staff->isDrumStaff() || staff->isTabStaff())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if (s->subtype() == Segment::SegClef && s->element(track))
+            if (s->subtype() == Segment::SegClef && s->element(track) && !s->element(track)->generated())
                   break;
             if (s->subtype() != Segment::SegChordRest)
                   continue;
-            for (int t = track; t < track+VOICES; ++t) {
+            for (int t = track; t < track + VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
                   if (chord && chord->type() == Element::CHORD) {
                         foreach(Note* note, chord->notes()) {
@@ -406,7 +406,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   qDebug("  addElement");
                   undo(new AddElement(nks));
                   }
-            score->cmdUpdateNotes();
+            updateNoteLines(s, track);
             }
       }
 
@@ -503,7 +503,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   clef->setParent(segment);
                   score->undo(new AddElement(clef));
                   }
-//            score->cmdUpdateNotes();
             }
       }
 
@@ -2935,6 +2934,7 @@ void ChangeClefType::flip()
       clef->setConcertClef(concertClef);
       clef->setTransposingClef(transposingClef);
       clef->setClefType(clef->score()->concertPitch() ? concertClef : transposingClef);
+      clef->staff()->addClef(clef);
 
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
@@ -2942,7 +2942,6 @@ void ChangeClefType::flip()
 
       concertClef     = ocl;
       transposingClef = otc;
-      clef->score()->cmdUpdateNotes();
       }
 
 //---------------------------------------------------------

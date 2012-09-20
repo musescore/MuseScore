@@ -1209,7 +1209,7 @@ class ChangeInstrument : public UndoCommand {
       UNDO_NAME("ChangeInstrument");
       };
 
-extern void updateNoteLines(Segment* segment, int track);
+extern void updateNoteLines(Segment*, int track);
 
 //---------------------------------------------------------
 //   ChangeBoxProperties
