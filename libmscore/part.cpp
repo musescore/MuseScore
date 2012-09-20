@@ -72,39 +72,12 @@ void Part::read(const QDomElement& de)
                   staff->read(e);
                   ++rstaff;
                   }
-            else if (tag == "Instrument") {
+            else if (tag == "Instrument")
                   instr(0)->read(e);
-                  }
-            else if (tag == "name") {
-                  if (_score->mscVersion() <= 101)
-                        instr(0)->setLongName(QTextDocumentFragment::fromHtml(val));
-                  else if (_score->mscVersion() <= 110)
-                        instr(0)->setLongName(QTextDocumentFragment::fromHtml(Xml::htmlToString(e.firstChildElement())));
-                  else if (_score->mscVersion() < 120) {
-                        Text* t = new Text(score());
-                        t->read(e);
-                        instr(0)->setLongName(t->getFragment());
-                        delete t;
-                        }
-                  else {
-                        instr(0)->setLongName(QTextDocumentFragment::fromHtml(val));
-                        }
-                  }
-            else if (tag == "shortName") {
-                  if (_score->mscVersion() <= 101)
-                        instr(0)->setShortName(QTextDocumentFragment::fromHtml(val));
-                  else if (_score->mscVersion() <= 110)
-                        instr(0)->setShortName(QTextDocumentFragment::fromHtml(Xml::htmlToString(e.firstChildElement())));
-                  else if (_score->mscVersion() < 120) {
-                        Text* t = new Text(score());
-                        t->read(e);
-                        instr(0)->setShortName(t->getFragment());
-                        delete t;
-                        }
-                  else {
-                        instr(0)->setShortName(QTextDocumentFragment::fromHtml(val));
-                        }
-                  }
+            else if (tag == "name")
+                  instr(0)->setLongName(QTextDocumentFragment::fromHtml(val));
+            else if (tag == "shortName")
+                  instr(0)->setShortName(QTextDocumentFragment::fromHtml(val));
             else if (tag == "trackName")
                   _partName = val;
             else if (tag == "show")
@@ -114,13 +87,6 @@ void Part::read(const QDomElement& de)
             }
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();
-
-      // for compatibility with old scores:
-      if(score()->mscVersion() <= 114 && instr(0)->useDrumset()) {
-            foreach(Staff* staff, _staves) {
-                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -138,56 +104,6 @@ void Part::write(Xml& xml) const
       instr(0)->write(xml);
       xml.etag();
       }
-
-//---------------------------------------------------------
-//   parseInstrName
-//---------------------------------------------------------
-
-#if 0
-static QTextDocumentFragment parseInstrName(const QString& name)
-      {
-      if (name.isEmpty())
-            return QTextDocumentFragment();
-      QTextDocument doc;
-      QTextCursor cursor(&doc);
-      QTextCharFormat f = cursor.charFormat();
-      QTextCharFormat sf(f);
-
-      QFont font("MScore1-test");
-      sf.setFont(font);
-
-      QDomDocument dom;
-      int line, column;
-      QString err;
-      if (!dom.setContent(name, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("parse instrument name: %s\n", qPrintable(error));
-            qDebug("   data:<%s>\n", qPrintable(name));
-            return QTextDocumentFragment();
-            }
-
-      for (QDomNode e = dom.documentElement(); !e.isNull(); e = e.nextSibling()) {
-            for (QDomNode ee = e.firstChild(); !ee.isNull(); ee = ee.nextSibling()) {
-                  QDomElement de1 = ee.toElement();
-                  QString tag(de1.tagName());
-                  if (tag == "symbol") {
-                        QString name = de1.attribute(QString("name"));
-                        if (name == "flat")
-                              cursor.insertText(QString(0xe10d), sf);
-                        else if (name == "sharp")
-                              cursor.insertText(QString(0xe10c), sf);
-                        }
-                  QDomText t = ee.toText();
-                  if (!t.isNull())
-                        cursor.insertText(t.data(), f);
-                  }
-            }
-      return QTextDocumentFragment(&doc);
-      }
-#endif
 
 //---------------------------------------------------------
 //   setLongNames
