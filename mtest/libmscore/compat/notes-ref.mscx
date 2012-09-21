@@ -71,6 +71,7 @@ p, li { white-space: pre-wrap; }
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <bottomGap>58.337</bottomGap>
         <Text>
           <halign>center</halign>
           <valign>top</valign>
