@@ -541,24 +541,14 @@ void StaffTypeTablature::setOnLines(bool val)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
-static QString    g_strNumbers("0123456789");
-static QString    g_strLetters("abcdefghiklmnopq");
-// used both to generate duration symbols and to compute duration metrics:
-static QChar g_cDurationChars[] = { 0xE0FF, 0xE100, 0xE101, 0xE102, 0xE103, 0xE104,
-//                                   Longa  Brevis   Whole   Half   Quarter  1/8
-                                    0xE105, 0xE106, 0xE107, 0xE108, 0xE109, 0xE10B, ' ', ' '};
-//                                   1\16    1\32    1\64    1\128   1\256   dot
-#define STAFFTYPETAB_NUMOFDURCHARS  12    /* how many used chars there are in g_cDurationChar[] */
-#define STAFFTYPETAB_IDXOFDOTCHAR   11    /* the offset of the dot char in g_cDurationChars[] */
-
-
 void StaffTypeTablature::setDurationMetrics()
 {
       if (_durationMetricsValid && _refDPI == MScore::DPI)           // metrics are still valid
             return;
 
       QFontMetricsF fm(durationFont());
-      QRectF bb( fm.tightBoundingRect(QString(g_cDurationChars, STAFFTYPETAB_NUMOFDURCHARS)) );
+      QString txt(_durationFonts[_durationFontIdx].displayValue, NUM_OF_TAB_VALS);
+      QRectF bb( fm.tightBoundingRect(txt) );
       // move symbols so that the lowest margin 'sits' on the base line:
       // move down by the whole part above (negative) the base line
       // ( -bb.y() ) then up by the whole height ( -bb.height()/2 )
@@ -579,19 +569,26 @@ void StaffTypeTablature::setFretMetrics()
             return;
 
       QFontMetricsF fm(fretFont());
-      // compute total height of used characters
-      QRectF bb(fm.tightBoundingRect(_useNumbers ? g_strNumbers : g_strLetters));
+      QRectF bb;
       // compute vertical displacement
       if(_useNumbers) {
+            // compute total height of used characters
+            QString txt = QString();
+            for (int idx = 0; idx < 10; idx++)  // use only first 10 digits
+                  txt.append(_fretFonts[_fretFontIdx].displayDigit[idx]);
+            bb = fm.tightBoundingRect(txt);
             // for numbers: centre on '0': move down by the whole part above (negative)
             // the base line ( -bb.y() ) then up by half the whole height ( -bb.height()/2 )
-            QRectF bx( fm.tightBoundingRect("0") );
+            QRectF bx( fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayDigit[0]) );
             _fretYOffset = -(bx.y() + bx.height()/2.0);
             // _fretYOffset = -(bb.y() + bb.height()/2.0);  // <- using bbox of all chars
             }
       else {
+            // compute total height of used characters
+            QString txt(_fretFonts[_fretFontIdx].displayLetter, NUM_OF_LETTERFRETS);
+            bb = fm.tightBoundingRect(txt);
             // for letters: centre on the 'a' ascender, by moving down half of the part above the base line in bx
-            QRectF bx( fm.tightBoundingRect("a") );
+            QRectF bx( fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayLetter[0]) );
             _fretYOffset = -bx.y() / 2.0;
             }
       // if on string, we are done; if between strings, raise by half line distance
