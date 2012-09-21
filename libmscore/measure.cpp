@@ -1779,7 +1779,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   }
             }
       foreach (const Element* el, _el) {
-            if ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements)) {
+            if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements))) {
                   el->write(xml);
                   }
             }
@@ -2142,8 +2142,14 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   Text* t = new Text(score());
                   t->setTrack(score()->curTrack);
                   t->read(e);
-                  segment = getSegment(Segment::SegChordRest, score()->curTick);
-                  segment->add(t);
+                  //previous versions stored measure number, delete it
+                  if(t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER) {
+                        delete t;
+                      }
+                  else {
+                        segment = getSegment(Segment::SegChordRest, score()->curTick);
+                        segment->add(t);
+                        }
                   }
 
             //----------------------------------------------------
