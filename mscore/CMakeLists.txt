@@ -261,7 +261,7 @@ if (MINGW)
       )
 
    if (HAS_AUDIOFILE)
-      target_link_libraries(mscore libsndfile-1)
+      target_link_libraries(mscore sndfile-1)
    endif (HAS_AUDIOFILE)
 
    if (OGGVORBIS)
