@@ -4398,6 +4398,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         cs->setLayoutMode(LayoutPage);
                         viewModeCombo->setCurrentIndex(0);
                         }
+                  cs->doLayout();
+                  cs->setUpdateAll(true);
                   }
             }
       else if(cmd == "staff-types") {
@@ -4630,6 +4632,8 @@ void MuseScore::switchLayoutMode(int val)
                   cs->setLayoutMode(LayoutPage);
             else
                   cs->setLayoutMode(LayoutLine);
+            cs->doLayout();
+            cs->setUpdateAll(true);
             cv->update();
             }
       }
