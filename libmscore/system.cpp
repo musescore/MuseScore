@@ -409,7 +409,7 @@ void System::layout2()
       foreach(Part* p, score()->parts()) {
             SysStaff* s = staff(staffIdx);
             int nstaves = p->nstaves();
-            foreach(InstrumentName* t, s->instrumentNames) {
+            foreach (InstrumentName* t, s->instrumentNames) {
                   //
                   // override Text->layout()
                   //
@@ -497,7 +497,7 @@ void System::setInstrumentNames(bool longName)
             const QList<StaffNameDoc>& names = longName? part->longNames(tick) : part->shortNames(tick);
 
             int idx = 0;
-            foreach(StaffNameDoc sn, names) {
+            foreach(const StaffNameDoc& sn, names) {
                   InstrumentName* iname = staff->instrumentNames.value(idx);
 
                   if (iname == 0) {
@@ -505,14 +505,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        if (longName) {
-                              iname->setSubtype(INSTRUMENT_NAME_LONG);
-                              iname->setTextStyle(score()->textStyle(TEXT_STYLE_INSTRUMENT_LONG));
-                              }
-                        else {
-                              iname->setSubtype(INSTRUMENT_NAME_SHORT);
-                              iname->setTextStyle(score()->textStyle(TEXT_STYLE_INSTRUMENT_SHORT));
-                              }
+                        iname->setSubtype(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
 //                        if (score()->undoRedo())
 //                              qFatal("System::setInstrumentNames <%s> in undo/redo",
 //                                 qPrintable(sn.name.toPlainText()));
@@ -958,7 +951,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   if (b)
                         func(data, b);
                   }
-            foreach(InstrumentName* t, st->instrumentNames)
+            foreach (InstrumentName* t, st->instrumentNames)
                   func(data, t);
             ++idx;
             }
@@ -1012,3 +1005,4 @@ void System::read(const QDomElement& de)
                   domError(e);
             }
       }
+
