@@ -47,7 +47,7 @@
 
 #include <zlib.h>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) or defined(Q_OS_ANDROID)
 #  undef S_IFREG
 #  define S_IFREG 0100000
 #  ifndef S_IFDIR

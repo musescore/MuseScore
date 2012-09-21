@@ -2746,18 +2746,26 @@ bool Measure::isEmpty() const
       if (_irregular)
             return false;
       int n = 0;
-      for (const Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() == Segment::SegChordRest) {
-                  int tracks = staves.size() * VOICES;
-                  for (int track = 0; track < tracks; ++track) {
-                        if (s->element(track) && s->element(track)->type() != REST)
-                              return false;
+      int tracks = staves.size() * VOICES;
+      static const Segment::SegmentType st = Segment::SegChordRest;
+      for (const Segment* s = first(st); s; s = s->next(st)) {
+            bool restFound = false;
+            for (int track = 0; track < tracks; ++track) {
+                  if ((track % VOICES) == 0 && !score()->staff(track/VOICES)->show()) {
+                        track += VOICES-1;
+                        continue;
                         }
-                  // measure is not empty if there is more than one rest
-                  if (n > 0)
-                        return false;
-                  ++n;
+                  if (s->element(track))  {
+                        if (s->element(track)->type() != REST)
+                              return false;
+                        restFound = true;
+                        }
                   }
+            if (restFound)
+                  ++n;
+            // measure is not empty if there is more than one rest
+            if (n > 1)
+                  return false;
             }
       return true;
       }
