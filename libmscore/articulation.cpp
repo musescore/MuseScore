@@ -179,6 +179,7 @@ Articulation::Articulation(Score* s)
       _direction = MScore::AUTO;
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setSubtype(Articulation_Fermata);
       }
 
 //---------------------------------------------------------
