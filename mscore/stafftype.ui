@@ -895,7 +895,7 @@
                     <item>
                      <widget class="QRadioButton" name="minimNoneRadio">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="minimumSize">
                        <size>
@@ -911,7 +911,7 @@
                     <item>
                      <widget class="QRadioButton" name="minimShortRadio">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="minimumSize">
                        <size>
@@ -927,7 +927,7 @@
                     <item>
                      <widget class="QRadioButton" name="minimSlashedRadio">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="text">
                        <string>As slashed stem</string>
