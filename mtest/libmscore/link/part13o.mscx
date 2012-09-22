@@ -164,7 +164,7 @@ p, li { white-space: pre-wrap; }
           <Note>
             <lid>5</lid>
             <Fingering>
-              <lid>81</lid>
+              <lid>82</lid>
               <pos x="0.658089" y="-1.50001"/>
               <style>Fingering</style>
               <text>3</text>
@@ -809,7 +809,7 @@ p, li { white-space: pre-wrap; }
             <Note>
               <lid>5</lid>
               <Fingering>
-                <lid>81</lid>
+                <lid>82</lid>
                 <pos x="0.658089" y="-1.50001"/>
                 <style></style>
                 <text>3</text>

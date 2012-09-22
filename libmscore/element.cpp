@@ -197,7 +197,7 @@ LinkedElements::LinkedElements(Score* score)
 LinkedElements::LinkedElements(Score* score, int id)
       {
       _lid = id;
-      score->linkId(id);
+      score->linkId(id);      // remember used id
       }
 
 //---------------------------------------------------------
