@@ -483,6 +483,14 @@ void System::setInstrumentNames(bool longName)
       {
       if (isVbox())                 // ignore vbox
             return;
+      if (!score()->showInstrumentNames()) {
+            for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                  SysStaff* staff = _staves[staffIdx];
+                  foreach(InstrumentName* t, staff->instrumentNames)
+                        score()->undoRemoveElement(t);
+                  }
+            return;
+            }
       int tick = ml.isEmpty() ? 0 : ml.front()->tick();
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             SysStaff* staff = _staves[staffIdx];
@@ -506,9 +514,6 @@ void System::setInstrumentNames(bool longName)
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
                         iname->setSubtype(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
-//                        if (score()->undoRedo())
-//                              qFatal("System::setInstrumentNames <%s> in undo/redo",
-//                                 qPrintable(sn.name.toPlainText()));
                         score()->undoAddElement(iname);
                         }
                   iname->setText(sn.name);
