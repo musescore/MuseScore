@@ -19,6 +19,7 @@
 #include "mscore.h"
 #include "durationtype.h"
 
+// all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
 #define STAFFTYPE_TAB_DEFAULTSTEMDIST_UP  1.0
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP  -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
@@ -27,6 +28,17 @@
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN  STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
+
+#define STAFFTYPE_TAB_SLASH_WIDTH         1.2   /* X width of half note slash */
+#define STAFFTYPE_TAB_SLASH_SLANTY        0.8   /* the Y coord of the slash slant */
+#define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
+#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next */
+// the total height of a double slash
+#define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL+STAFFTYPE_TAB_SLASH_SLANTY)
+// the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_2STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP-STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
+// the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_2STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
 
 class Chord;
 class Staff;
