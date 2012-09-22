@@ -50,6 +50,8 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       enum {
             TAB_PRESET_GUITAR = 0,
             TAB_PRESET_BASS,
+            TAB_PRESET_UKULELE,
+            TAB_PRESET_BANDURRIA,
             TAB_PRESET_ITALIAN,
             TAB_PRESET_FRENCH,
             TAB_PRESET_CUSTOM,                  // custom preset has no effect
