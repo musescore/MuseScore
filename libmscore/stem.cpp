@@ -175,10 +175,10 @@ void Stem::draw(QPainter* painter) const
                               -_len + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp;
                   int lines = 2;
                   for (int i = 0; i < lines; ++i) {
-                        path.moveTo( wdt*0.5, y);           // top-right corner
-                        path.lineTo( wdt*0.5, y+thk);       // bottom-right corner
-                        path.lineTo(-wdt*0.5, y+thk+sln);   // bottom-left corner
-                        path.lineTo(-wdt*0.5, y+sln);       // top-left corner
+                        path.moveTo( wdt*0.5-lw, y);        // top-right corner
+                        path.lineTo( wdt*0.5-lw, y+thk);    // bottom-right corner
+                        path.lineTo(-wdt*0.5,    y+thk+sln);// bottom-left corner
+                        path.lineTo(-wdt*0.5,    y+sln);    // top-left corner
                         path.closeSubpath();
                         y += displ;
                         }

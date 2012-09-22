@@ -306,12 +306,22 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string comment="tablatture type">6 strings (guitar)</string>
+                  <string comment="tablatture type">6 strings (generic guitar)</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string comment="tablature type">4 strings (bass, ukulele)</string>
+                  <string comment="tablature type">4 strings (generic bass)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>ukulele</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>bandurria</string>
                  </property>
                 </item>
                 <item>
