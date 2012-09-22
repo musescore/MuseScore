@@ -3235,14 +3235,15 @@ void Score::setLayoutMode(LayoutMode lm)
 
 int Score::linkId()
       {
-      return rootScore()->_linkId++;
+      return (rootScore()->_linkId)++;
       }
 
+// val is a used link id
 void Score::linkId(int val)
       {
       Score* s = rootScore();
-      if (val > s->_linkId)
-            s->_linkId = val;
+      if (val >= s->_linkId)
+            s->_linkId = val + 1;   // update unused link id
       }
 
 //---------------------------------------------------------
