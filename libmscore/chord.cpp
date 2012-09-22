@@ -298,17 +298,7 @@ void Chord::setStem(Stem* s)
 QPointF Chord::stemPos() const
       {
       if (staff() && staff()->isTabStaff()) {
-            qreal                   sp    = spatium();
-            StaffTypeTablature*     tab   = static_cast<StaffTypeTablature*>( staff()->staffType() );
-            qreal                   lineDist = tab->lineDistance().val();
-            qreal                   y;
-            if (tab->stemsDown())
-                  y = tab->stemThrough() ? upString() * lineDist :
-                        (tab->lines()-1)*lineDist + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN;
-            else
-                  y = tab->stemThrough() ? downString()*lineDist : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP;
-
-            return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, y*sp) + pagePos();
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium()) + pagePos();
             }
       return (_up ? downNote() : upNote())->stemPos(_up);
       }
@@ -322,12 +312,7 @@ QPointF Chord::stemPos() const
 QPointF Chord::stemPosBeam() const
       {
       if (staff() && staff()->isTabStaff()) {
-            qreal                   sp    = spatium();
-            StaffTypeTablature*     tab   = static_cast<StaffTypeTablature*>( staff()->staffType() );
-            qreal                   y     = ( tab->stemsDown() ?
-                      downString() * tab->lineDistance().val() : STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP);
-
-            return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, y*sp) + pagePos();
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * spatium()) + pagePos();
             }
 
       return (_up ? upNote() : downNote())->stemPos(_up);
@@ -1121,18 +1106,9 @@ void Chord::layoutStem()
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             // require stems only if not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
-                  // process stems:
-                  qreal    lineDist = tab->lineDistance().val();
-                  QPointF  pos      = stemPos() - pagePos();
-                  qreal    stemLen;
-                  if (tab->stemThrough())
-                        stemLen = tab->stemsDown() ?
-                              STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN + (tab->lines()-1 - upString()) * lineDist :
-                              STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP + downString() * lineDist;
-                  else
-                        stemLen = tab->stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN: STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
-                  _stem->setPos(pos);
-                  _stem->setLen(stemLen * spatium());
+                  // process stem:
+                  _stem->setPos(tab->chordStemPos(this) * spatium());
+                  _stem->setLen(tab->chordStemLength(this) * spatium());
                   // process hook
                   int   hookIdx = durationType().hooks();
                   if (tab->stemsDown())
@@ -1339,14 +1315,18 @@ void Chord::layout()
                   note->setPos(0.0, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
-            // if tab type is stemless or duration longer than crochet
+            // if tab type is stemless or duration longer than half (if halves have stems) or duration longer than crochet
             // remove stems
-            if (tab->slashStyle() || durationType().type() < TDuration::V_QUARTER) {
+            if (tab->slashStyle() || durationType().type() <
+                        (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
                   delete _stem;
                   delete _hook;
                   _stem = 0;
                   _hook = 0;
                   }
+            // if stem is required but missing, add it
+            else if(/*durationType().hasStem() &&*/ _stem == 0)
+                  setStem(new Stem(score()));
             // unconditionally delete grace slashes
             delete _stemSlash;
             _stemSlash = 0;
@@ -1379,7 +1359,6 @@ void Chord::layout()
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-// needed?              _tabDur->setTrack(track());
                         _tabDur->layout();
                         }
                   else {                    // symbol not needed: if exists, delete
