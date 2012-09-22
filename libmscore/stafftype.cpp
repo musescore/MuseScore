@@ -15,6 +15,7 @@
 #include "staff.h"
 #include "xml.h"
 #include "mscore.h"
+#include "chord.h"
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
@@ -668,6 +669,75 @@ void StaffTypeTablature::setFretFontSize(qreal val)
       _fretFontSize = val;
       _fretFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
       _fretMetricsValid = false;
+      }
+
+//---------------------------------------------------------
+//   chordStemPos / chordStemPosBeam / chordStemLength
+//
+//    computes the stem data for the given chord, according to TAB settings
+//    NOTE: unit: spatium, position: relative to chord (DIFFERENT from Chord own functions)
+//
+//   chordStemPos
+//          return position of note at other side of beam
+//---------------------------------------------------------
+
+QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
+      {
+      qreal y;
+      qreal delta =                             // displacement for half note stems (if used)
+            // if half notes have not a short stem OR not a half note => 0
+            (minimStyle() != TAB_MINIM_SHORTER || chord->durationType().type() != TDuration::V_HALF) ?
+            0.0 :
+            // if stems are up, displace of half stem length down (positive)
+            // if stems are down, displace of half stem length up (negative)
+            (stemsDown() ?
+                  STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP) * 0.5;
+
+      // if stems are through staff, stem goes from fartest note string
+      if (stemThrough())
+            y = (stemsDown() ? chord->upString() : chord->downString()) * _lineDistance.val();
+      else
+      // if stems beside staff, position are fixed, but take into account delta
+            y = (stemsDown() ? (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN :
+                  STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP) + delta;
+
+      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+      }
+
+//---------------------------------------------------------
+//   chordStemPosBeam
+//          return position of note at beam side of stem
+//---------------------------------------------------------
+
+QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
+      {
+      qreal y = ( stemsDown() ? chord->downString() : chord->upString() ) * _lineDistance.val();
+
+      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+      }
+
+//---------------------------------------------------------
+//   chordStemLength
+//          return length of stem
+//---------------------------------------------------------
+
+qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
+      {
+      qreal    stemLen;
+      // if stems are through staff, length is from fartest note to a fixed point aboe/below staff
+      if (stemThrough())
+            stemLen = stemsDown() ?
+                  STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
+                        + (_lines-1 - chord->upString()) * _lineDistance.val() :
+                  STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
+                        + chord->downString() * _lineDistance.val();
+      // if stems beside staff, length is fixed, but take into account shorter half note stems
+      else {
+            bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::V_HALF);
+            stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
+                        * (shrt ? 0.5 : 1.0);
+      }
+      return stemLen;
       }
 
 //---------------------------------------------------------
