@@ -79,13 +79,13 @@ class Space {
 //---------------------------------------------------------
 
 class LinkedElements : public QList<Element*> {
-      int _lid;                     // unique id for every linked list
+      int _lid;         // unique id for every linked list
 
    public:
       LinkedElements(Score*);
       LinkedElements(Score*, int id);
       void setLid(Score*, int val);
-      int lid() const                         { return _lid;                }
+      int lid() const   { return _lid;    }
       };
 
 //---------------------------------------------------------
