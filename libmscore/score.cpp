@@ -3227,8 +3227,6 @@ void Score::undo(UndoCommand* cmd) const
 void Score::setLayoutMode(LayoutMode lm)
       {
       _layoutMode = lm;
-//      doLayout();
-      setUpdateAll(true);
       }
 
 //---------------------------------------------------------
