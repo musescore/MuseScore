@@ -144,7 +144,7 @@ class StaffTypePercussion : public StaffType {
 //---------------------------------------------------------
 
 #define NUM_OF_DIGITFRETS     25
-#define NUM_OF_LETTERFRETS    18
+#define NUM_OF_LETTERFRETS    17
 
 struct TablatureFretFont {
       QString           family;                 // the family of the physical font to use

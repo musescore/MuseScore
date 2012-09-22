@@ -543,26 +543,20 @@ void Note::draw(QPainter* painter) const
       // tablature
 
       if (tablature) {
-            if (tieBack())
-                  return;
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            if (tieBack() && tab->slashStyle())
+                  return;
             qreal mag = magS();
             qreal imag = 1.0 / mag;
-
             painter->scale(mag, mag);
             painter->setFont(tab->fretFont());
 
-//            // when using letters, "+(_fret > 8)" skips 'j'
-//            QString s = _ghost ? "X" :
-//                    ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
             QString s = tab->fretString(_fret, _ghost);
-
-            qreal currSpatium = spatium();
-            qreal d  = currSpatium * .2;
-            QRectF bb = bbox().adjusted(-d, 2*d, d, -2*d);
 
             // draw background, if required
             if (!tab->linesThrough() || fretConflict()) {
+                  qreal d  = spatium() * .1;
+                  QRectF bb = bbox().adjusted(-d, -d, d, d);
                   // we do not know which viewer did this draw() call
                   // so update all:
                   foreach(MuseScoreView* view, score()->getViewer())
