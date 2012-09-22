@@ -33,6 +33,7 @@ Fingering::Fingering(Score* s)
 void Fingering::layout()
       {
       Text::layout();
+      setPos(QPointF());
       }
 
 //---------------------------------------------------------
@@ -70,3 +71,4 @@ void Fingering::toDefault()
       setUserOff(o);
       score()->undoChangeProperty(this, P_USER_OFF, no);
       }
+
