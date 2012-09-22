@@ -313,11 +313,13 @@ void Score::init()
       _instrumentsChanged = false;
       _selectionChanged   = false;
 
-      keyState        = 0;
-      _showInvisible  = true;
-      _showUnprintable = true;
-      _showFrames     = true;
-      _showPageborders = false;
+      keyState             = 0;
+      _showInvisible       = true;
+      _showUnprintable     = true;
+      _showFrames          = true;
+      _showPageborders     = false;
+      _showInstrumentNames = true;
+
       _printing       = false;
       _playlistDirty  = false;
       _autosaveDirty  = false;

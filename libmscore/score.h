@@ -227,7 +227,6 @@ class Score : public QObject {
       QDate _creationDate;
       QString _mscoreVersion;
       int _mscoreRevision;
-      bool _testMode;               // prepare for regression tests
 
       Revisions* _revisions;
       QList<Excerpt*> _excerpts;
@@ -262,9 +261,7 @@ class Score : public QObject {
       TempoMap* _tempomap;
 
       InputState _is;
-
       MStyle _style;
-
       QList<StaffType*> _staffTypes;
 
       QFileInfo info;
@@ -276,10 +273,14 @@ class Score : public QObject {
       //   determine what to layout and what to repaint:
 
       QRectF refresh;
-      bool _updateAll;
       Measure* startLayout;   ///< start a relayout at this measure
-      bool _layoutAll;        ///< do a complete relayout
       LayoutFlags layoutFlags;
+
+      bool _testMode;               // prepare for regression tests
+
+      bool _updateAll;
+      bool _layoutAll;        ///< do a complete relayout
+
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
 
@@ -287,17 +288,11 @@ class Score : public QObject {
       bool _instrumentsChanged;
       bool _selectionChanged;
 
-      LayoutMode _layoutMode;
-
-      Qt::KeyboardModifiers keyState;
-
       bool _showInvisible;
       bool _showUnprintable;
       bool _showFrames;
       bool _showPageborders;
-
-      QList<Part*> _parts;
-      QList<Staff*> _staves;
+      bool _showInstrumentNames;
 
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
@@ -306,6 +301,14 @@ class Score : public QObject {
       bool _saved;      ///< True if project was already saved; only on first
                         ///< save a backup file will be created, subsequent
                         ///< saves will not overwrite the backup file.
+
+      LayoutMode _layoutMode;
+
+      Qt::KeyboardModifiers keyState;
+
+      QList<Part*> _parts;
+      QList<Staff*> _staves;
+
       int _playPos;     ///< sequencer seek position
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
@@ -557,14 +560,16 @@ class Score : public QObject {
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
 
-      bool showInvisible() const   { return _showInvisible; }
-      bool showUnprintable() const { return _showUnprintable; }
-      bool showFrames() const      { return _showFrames; }
-      bool showPageborders() const { return _showPageborders; }
+      bool showInvisible() const       { return _showInvisible; }
+      bool showUnprintable() const     { return _showUnprintable; }
+      bool showFrames() const          { return _showFrames; }
+      bool showPageborders() const     { return _showPageborders; }
+      bool showInstrumentNames() const { return _showInstrumentNames; }
       void setShowInvisible(bool v);
       void setShowUnprintable(bool v);
       void setShowFrames(bool v);
       void setShowPageborders(bool v);
+      void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
 
       bool loadMsc(QString name);
       bool loadCompressedMsc(QString name);
