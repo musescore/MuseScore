@@ -164,7 +164,7 @@ p, li { white-space: pre-wrap; }
           <Note>
             <lid>5</lid>
             <Symbol>
-              <name>accordeon discant</name>
+              <name>accordion.accDiscant</name>
               <lid>81</lid>
               </Symbol>
             <pitch>74</pitch>
@@ -807,7 +807,7 @@ p, li { white-space: pre-wrap; }
             <Note>
               <lid>5</lid>
               <Symbol>
-                <name>accordeon discant</name>
+                <name>accordion.accDiscant</name>
                 <lid>81</lid>
                 </Symbol>
               <pitch>74</pitch>
