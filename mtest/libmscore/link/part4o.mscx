@@ -170,7 +170,7 @@ p, li { white-space: pre-wrap; }
         <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
-          <lid>81</lid>
+          <lid>82</lid>
           </Breath>
         <tick>960</tick>
         <Chord>
@@ -678,7 +678,7 @@ p, li { white-space: pre-wrap; }
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>82</lid>
+          <lid>81</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -815,7 +815,7 @@ p, li { white-space: pre-wrap; }
           <tick>480</tick>
           <Breath>
             <subtype>0</subtype>
-            <lid>81</lid>
+            <lid>82</lid>
             </Breath>
           <tick>960</tick>
           <Chord>
@@ -1425,7 +1425,7 @@ p, li { white-space: pre-wrap; }
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>82</lid>
+            <lid>81</lid>
             </BarLine>
           </Measure>
         </Staff>

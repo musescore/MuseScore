@@ -165,7 +165,7 @@ p, li { white-space: pre-wrap; }
             <lid>5</lid>
             <Symbol>
               <name>accordion.accDiscant</name>
-              <lid>81</lid>
+              <lid>82</lid>
               </Symbol>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -808,7 +808,7 @@ p, li { white-space: pre-wrap; }
               <lid>5</lid>
               <Symbol>
                 <name>accordion.accDiscant</name>
-                <lid>81</lid>
+                <lid>82</lid>
                 </Symbol>
               <pitch>74</pitch>
               <tpc>16</tpc>
