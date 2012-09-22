@@ -672,6 +672,7 @@ p, li { white-space: pre-wrap; }
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
+          <lid>81</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -1412,6 +1413,7 @@ p, li { white-space: pre-wrap; }
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <lid>81</lid>
             </BarLine>
           </Measure>
         </Staff>
