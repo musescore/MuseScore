@@ -1718,17 +1718,29 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             //
             // fill measure with rest
             //
-            // TODO: this does not work if the part has unlinked staves!
-            //
-            Score* root = rootScore();
-            int n = root->nstaves();
-            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+            Score*      root = rootScore();
+            Measure*    m = static_cast<Measure*>(omb);
+            int         n = root->nstaves();
+            bool        staffDone[n];
+            int         stIdx;
+            for (stIdx = 0; stIdx < n; ++stIdx) // no staff done yet
+                  staffDone[stIdx] = false;
+            for (stIdx = 0; stIdx < n; ++stIdx) {
+                  if(staffDone[stIdx])          // if rest already added to this staff, skip it
+                        continue;
+                  // add rest to this staff and to all the staves linked to it
                   Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
-                  Measure* m = static_cast<Measure*>(omb);
                   rest->setDuration(m->len());
-                  rest->setTrack(staffIdx * VOICES);
+                  rest->setTrack(stIdx * VOICES);
                   undoAddCR(rest, m, m->tick());
-            	}
+                  // mark this staff and all staves linked to it as done
+                  staffDone[stIdx] = true;
+                  Staff* staff = root->staff(stIdx);
+                  LinkedStaves* linkStaves = staff->linkedStaves();
+                  if (linkStaves)
+                        foreach(Staff* linkedStaff, linkStaves->staves())
+                              staffDone[root->staffIdx(linkedStaff)] = true;
+                  }
             }
       return omb;
       }
