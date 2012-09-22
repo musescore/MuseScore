@@ -920,8 +920,10 @@ void ScoreView::setScore(Score* s)
             shadowNote->setScore(_score);
       lasso->setScore(s);
       _foto->setScore(s);
-      if (s)
+      if (s) {
             s->setLayoutMode(LayoutPage);
+            s->doLayout();
+            }
       }
 
 //---------------------------------------------------------
