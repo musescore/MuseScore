@@ -569,12 +569,12 @@ void Sym::init()
 
 // #define MT(a) QT_TRANSLATE_NOOP("symbol", a)
 
-      symNames[clefEightSym] = "clef eight";
-      symNames[clefOneSym]   = "clef one";
-      symNames[clefFiveSym]  = "clef five";
-      symNames[letterTSym]   = "T";
-      symNames[letterSSym]   = "S";
-      symNames[letterPSym]   = "P";
+      symUserNames[clefEightSym]    = symNames[clefEightSym]  = "clef eight";
+      symUserNames[clefOneSym]      = symNames[clefOneSym]    = "clef one";
+      symUserNames[clefFiveSym]     = symNames[clefFiveSym]   = "clef five";
+      symUserNames[letterTSym]      = symNames[letterTSym]    = "T";
+      symUserNames[letterSSym]      = symNames[letterSSym]    = "S";
+      symUserNames[letterPSym]      = symNames[letterPSym]    = "P";
 
       for (unsigned i = 0; pSymbols[i].code != -1; ++i) {
             if (pSymbols[i].code == 0 || pSymbols[i].text == 0)
