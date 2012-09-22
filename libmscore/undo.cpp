@@ -772,33 +772,6 @@ void Score::undoAddElement(Element* element)
                   }
             return;
             }
-#if 0
-      if (element->systemFlag() && (et == Element::TEXT
-         || et == Element::STAFF_TEXT
-         || et == Element::STAFF_STATE
-         || et == Element::INSTRUMENT_CHANGE
-         || et == Element::REHEARSAL_MARK)
-            ) {
-            Element* parent       = element->parent();
-            LinkedElements* links = parent->links();
-            if (links == 0) {
-                  undo(new AddElement(element));
-                  if (element->type() == Element::FINGERING)
-                        element->score()->layoutFingering(static_cast<Fingering*>(element));
-                  return;
-                  }
-            foreach(Element* e, *links) {
-                  Element* ne = (e == parent) ? element : element->linkedClone();
-                  ne->setScore(e->score());
-                  ne->setSelected(false);
-                  ne->setParent(e);
-                  undo(new AddElement(ne));
-                  if (ne->type() == Element::FINGERING)
-                        e->score()->layoutFingering(static_cast<Fingering*>(ne));
-                  }
-            return;
-            }
-#endif
 
       if (ostaff == 0 || (et != Element::ARTICULATION
          && et != Element::SLUR
