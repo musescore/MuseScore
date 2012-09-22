@@ -28,6 +28,7 @@
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
 
+class Chord;
 class Staff;
 class Xml;
 class QPainter;
@@ -273,8 +274,6 @@ class StaffTypeTablature : public StaffType {
             setUseNumbers(useNumbers);
             }
 
-      // internally managed variables
-
       // re-implemented virtual functions
       virtual StaffGroup group() const          { return TAB_STAFF; }
       virtual StaffTypeTablature* clone() const { return new StaffTypeTablature(*this); }
@@ -286,7 +285,7 @@ class StaffTypeTablature : public StaffType {
 
       QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString     durationString(TDuration::DurationType type, int dots) const;
-      // functions to cope with tabulature visal order (top down or upside down)
+      // functions to cope with tabulature visual order (top down or upside down)
       int         physStringToVisual(int strg) const;       // return the string in visual order from physical string
       int         VisualStringToPhys(int strg) const;       // return the string in physical order from visual string
 
@@ -332,6 +331,11 @@ class StaffTypeTablature : public StaffType {
       void  setStemsThrough(bool val)     { _stemsThrough = val;        }
       void  setUpsideDown(bool val)       { _upsideDown = val;          }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
+
+      // utility functions for tab specially managed elements
+      QPointF     chordStemPos(const Chord * chord) const;
+      QPointF     chordStemPosBeam(const  Chord * chord) const;
+      qreal       chordStemLength(const Chord *chord) const;
 
       // static functions for font config files
       static bool             readConfigFile(const QString& fileName);
