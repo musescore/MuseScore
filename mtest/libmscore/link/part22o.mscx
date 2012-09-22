@@ -794,7 +794,7 @@ p, li { white-space: pre-wrap; }
             <Note>
               <lid>3</lid>
               <Symbol>
-                <name>accordeon stdbase</name>
+                <name>accordion.accStdbase</name>
                 </Symbol>
               <pitch>72</pitch>
               <tpc>14</tpc>

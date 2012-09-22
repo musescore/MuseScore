@@ -70,7 +70,6 @@ Dynamic::Dynamic(Score* s)
       _velocity = -1;
       _dynType  = DYNAMIC_PART;
       setSubtype(0);
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -141,6 +140,7 @@ void Dynamic::read(const QDomElement& de)
 
 void Dynamic::setSubtype(int idx)
       {
+      setTextStyleType(idx == 0 ? TEXT_STYLE_DYNAMICS : TEXT_STYLE_DYNAMICS2);
       _subtype = idx;
       }
 
@@ -153,14 +153,12 @@ void Dynamic::setSubtype(const QString& tag)
       int n = sizeof(dynList)/sizeof(*dynList);
       for (int i = 1; i < n; ++i) {
             if (dynList[i].tag == tag) {
-                  _subtype = i;
-                  setTextStyleType(TEXT_STYLE_DYNAMICS2);
-                  setText(dynList[i].tag);
+                  setSubtype(i);
+                  setText(tag);
                   return;
                   }
             }
-      _subtype = 0;
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      setSubtype(0);
       setText(tag);
       }
 

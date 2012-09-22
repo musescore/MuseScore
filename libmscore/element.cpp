@@ -683,7 +683,10 @@ bool Element::readProperties(const QDomElement& e)
 #ifndef NDEBUG
             else {
                   foreach(Element* e, *_links) {
-                        Q_ASSERT(e->type() == type());
+                        if (e->type() != type()) {
+                              qFatal("link %s(%d) type mismatch %s linked to %s",
+                                 qPrintable(val), id, e->name(), name());
+                              }
                         }
                   }
 #endif
@@ -700,7 +703,7 @@ bool Element::readProperties(const QDomElement& e)
             _readPos = QPointF();
             }
       else if (tag == "pos") {
-            if (type() != TEXT && type() != DYNAMIC) {   // hack for 1.2
+            if (score()->mscVersion() > 114 || (type() != TEXT && type() != DYNAMIC)) {
                   qreal _spatium = spatium();
                   setUserOff(QPointF());
                   _readPos = readPoint(e) * _spatium;
@@ -710,13 +713,6 @@ bool Element::readProperties(const QDomElement& e)
             setTrack((_track/VOICES)*VOICES + val.toInt());
       else if (tag == "track")
             setTrack(val.toInt());
-/*      else if (tag == "systemFlag") {
-            int i = val.toInt();
-            setFlag(ELEMENT_SYSTEM_FLAG, i);
-            if (i)
-                  _track = 0;
-            }
-*/
       else if (tag == "tag") {
             for (int i = 1; i < MAX_TAGS; i++) {
                   if (score()->layerTags()[i] == val) {
