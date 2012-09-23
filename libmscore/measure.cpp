@@ -3040,15 +3040,30 @@ void Measure::layoutX(qreal stretch)
                   ticksList[segmentIdx] = 0;
             }
 
+      //---------------------------------------------------
+      // TAB: compute distance above and below
+      //---------------------------------------------------
+
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             if (!score()->staff(staffIdx)->show())
                   continue;
-            qreal distAbove;
+            qreal distAbove = 0.0;
+            qreal distBelow = 0.0;
             Staff * staff = _score->staff(staffIdx);
             if (staff->isTabStaff()) {
-                  distAbove = -((StaffTypeTablature*)(staff->staffType()))->durationBoxY();
+                  StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(staff->staffType());
+                  if (stt->slashStyle())        // if no stems
+                        distAbove = stt->genDurations() ? -stt->durationBoxY() : 0.0;
+                  else {                        // if stems
+                        if (stt->stemsDown())
+                              distBelow = (STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP)*_spatium;
+                        else
+                              distAbove = (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN)*_spatium;
+                        }
                   if (distAbove > staves[staffIdx]->distanceUp)
                      staves[staffIdx]->distanceUp = distAbove;
+                  if (distBelow > staves[staffIdx]->distanceDown)
+                     staves[staffIdx]->distanceDown = distBelow;
                   }
             }
       qreal segmentWidth = 0.0;
