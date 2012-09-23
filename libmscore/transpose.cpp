@@ -326,6 +326,8 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   continue;
 
             KeyList* km = staff(staffIdx)->keymap();
+            LinkedStaves* l = staff(staffIdx)->linkedStaves();
+
             for (iKeyList ke = km->lower_bound(tickStart);
                   ke != km->lower_bound(tickEnd); ++ke) {
                   KeySigEvent oKey  = ke->second;
@@ -333,8 +335,16 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   int nKeyType = transposeKey(oKey.accidentalType(), interval);
                   KeySigEvent nKey;
                   nKey.setAccidentalType(nKeyType);
-                  (*km)[tick] = nKey;
-                  // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
+                  if (l) {
+                        foreach(Staff* curStaff, l->staves()) { 
+                              KeyList* curKm = curStaff->keymap();
+                              (*curKm)[tick] = nKey;
+                              }
+                        }
+                  else {
+                        (*km)[tick] = nKey;
+                        // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
+                        }
                   }
             for (Segment* s = firstSegment(); s; s = s->next1()) {
                   if (s->subtype() != Segment::SegKeySig)
@@ -348,8 +358,21 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesy(),
-                           ks->showNaturals()));
+
+                        // change KeySig in all parts
+                        if(ks->links()) {
+                              LinkedElements* l = ks->links();
+                              foreach(Element* e, *l) {
+                                    KeySig* eks = static_cast<KeySig*>(e);
+                                    _undo->push(new ChangeKeySig(eks, key, 
+                                                         eks->showCourtesy(),
+                                                         eks->showNaturals()));
+                                    }
+                              }    
+                        else
+                              _undo->push(new ChangeKeySig(ks, key, 
+                                                         ks->showCourtesy(),
+                                                         ks->showNaturals()));
                         }
                   }
             }

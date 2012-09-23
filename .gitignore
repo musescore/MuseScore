@@ -13,3 +13,4 @@ share/manual/de
 Doc
 DocLib
 build.qt5
+*.sfd~
