@@ -310,6 +310,7 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
 
 void Rest::layout()
       {
+      rxpos() = 0.0;
       if (staff() && staff()->isTabStaff()) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             // if rests are shown and note values are shown as duration symbols
@@ -351,12 +352,12 @@ void Rest::layout()
                   break;
             }
       qreal _spatium = spatium();
-      int stepOffset     = 0;
+      int stepOffset = 0;
       if (staff())
             stepOffset = staff()->staffType()->stepOffset();
-      int line        = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
-      qreal lineDist    = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
-      int lineOffset  = 0;
+      int line       = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
+      qreal lineDist = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
+      int lineOffset = 0;
 
       int lines = staff() ? staff()->lines() : 5;
       if (segment() && measure() && measure()->mstaff(staffIdx())->hasVoices) {
