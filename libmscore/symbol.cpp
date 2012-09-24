@@ -27,6 +27,13 @@
 //   BSymbol
 //---------------------------------------------------------
 
+BSymbol::BSymbol(Score* s)
+   : Element(s)
+      {
+      _z = SYMBOL * 100;
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      }
+
 BSymbol::BSymbol(const BSymbol& s)
    : Element(s), ElementLayout(s)
       {
