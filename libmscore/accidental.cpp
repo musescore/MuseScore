@@ -400,8 +400,8 @@ Element* Accidental::drop(const DropData& data)
       Element* e = data.element;
       switch(e->type()) {
             case ACCIDENTAL_BRACKET:
-                  _hasBracket = true;     // TODO: make undoable
-                  // score()->changeAccidental(note(), subtype() | 0x8000);
+                  if (!_hasBracket)
+                        undoSetHasBracket(true);
                   break;
 
             default:
@@ -450,11 +450,17 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SMALL:              _small = v.toBool(); break;
-            case P_ACCIDENTAL_BRACKET: _hasBracket = v.toBool(); break;
+            case P_SMALL:
+                  _small = v.toBool();
+                  break;
+            case P_ACCIDENTAL_BRACKET:
+                  _hasBracket = v.toBool();
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
+      layout();
+      score()->setLayoutAll(true);  // spacing changes
       return true;
       }
 
