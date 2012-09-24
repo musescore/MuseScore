@@ -898,8 +898,10 @@ void ChordRest::setTrack(int val)
             }
       if (_beam)
             _beam->setTrack(val);
-      foreach(Lyrics* l, _lyricsList)
-            l->setTrack(val);
+      foreach(Lyrics* l, _lyricsList) {
+            if (l)
+                  l->setTrack(val);
+            }
       if (tuplet())
             tuplet()->setTrack(val);
       }
