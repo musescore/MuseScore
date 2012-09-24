@@ -28,9 +28,10 @@
 Bracket::Bracket(Score* s)
    : Element(s)
       {
+      _subtype = BRACKET_AKKOLADE;
       h2       = 3.5 * spatium();
+      _column  = 0;
       _span    = 1;
-      _column   = 0;
       yoff     = 0.0;
       setGenerated(true);     // brackets are not saved
       }
