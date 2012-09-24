@@ -250,6 +250,11 @@ void Box::read(const QDomElement& de)
                         add(image);
                         }
                   }
+            else if (tag == "FretDiagram") {
+                  FretDiagram* f = new FretDiagram(score());
+                  f->read(e);
+                  add(f);
+                  }
             else if (tag == "LayoutBreak") {
                   LayoutBreak* lb = new LayoutBreak(score());
                   lb->read(e);
@@ -610,7 +615,7 @@ void VBox::setGrip(int, const QPointF& pt)
 
 void FBox::layout()
       {
-      setPos(QPointF());      // !?
+//      setPos(QPointF());      // !?
       setbbox(QRectF(0.0, 0.0, system()->width(), point(boxHeight())));
       Box::layout();
       }
@@ -624,8 +629,8 @@ void FBox::add(Element* e)
       {
       e->setParent(this);
       if (e->type() == FRET_DIAGRAM) {
-            FretDiagram* fd = static_cast<FretDiagram*>(e);
-            fd->setFlag(ELEMENT_MOVABLE, false);
+//            FretDiagram* fd = static_cast<FretDiagram*>(e);
+//            fd->setFlag(ELEMENT_MOVABLE, false);
             }
       else {
             qDebug("FBox::add: element not allowed\n");
