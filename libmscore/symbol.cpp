@@ -366,6 +366,7 @@ QPointF BSymbol::canvasPos() const
 FSymbol::FSymbol(Score* s)
   : Element(s)
       {
+      _code = 0;
       _font.setStyleStrategy(QFont::NoFontMerging);
       }
 

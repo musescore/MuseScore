@@ -26,6 +26,7 @@
 Glissando::Glissando(Score* s)
   : Element(s)
       {
+      _subtype = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _text = "gliss.";
       _showText = true;
