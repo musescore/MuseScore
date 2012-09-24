@@ -124,7 +124,6 @@ void ScoreView::endDrag()
       if (dragElement->type() == Element::MEASURE) {
             qreal userDist = dragStaff->userDist();
             dragStaff->setUserDist(staffUserDist);
-            printf("endDrag measure: %f -> %f\n", dragStaff->userDist(), userDist);
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));
             }
       else {
