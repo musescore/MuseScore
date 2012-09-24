@@ -68,6 +68,8 @@ Clef::Clef(Score* s)
       _clefTypes._concertClef     = CLEF_G;
       _clefTypes._transposingClef = CLEF_G;
       curClefType                 = CLEF_G;
+      curLines                    = -1;
+      curLineDist                 = 1.0;
       }
 
 Clef::Clef(const Clef& c)
@@ -77,7 +79,9 @@ Clef::Clef(const Clef& c)
       _showPreviousClef = c._showPreviousClef;
       _small            = c._small;
       _clefTypes        = c._clefTypes;
-      curClefType       = CLEF_G;
+      curClefType       = c.curClefType;
+      curLines          = c.curLines;
+      curLineDist       = c.curLineDist;
       }
 
 //---------------------------------------------------------
