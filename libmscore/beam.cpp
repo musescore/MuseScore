@@ -231,6 +231,7 @@ Beam::Beam(const Beam& b)
             beamSegments.append(new QLineF(*bs));
       _direction       = b._direction;
       _up              = b._up;
+      _distribute      = b._distribute;
       _userModified[0] = b._userModified[0];
       _userModified[1] = b._userModified[1];
       _grow1           = b._grow1;
