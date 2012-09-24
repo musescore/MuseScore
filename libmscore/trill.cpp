@@ -165,10 +165,8 @@ void Trill::add(Element* e)
 
 void Trill::remove(Element* e)
       {
-      if (!_el.remove(e)) {
-            printf("Trill remove %s\n", e->name());
+      if (!_el.remove(e))
             Spanner::remove(e);
-            }
       }
 
 //---------------------------------------------------------
