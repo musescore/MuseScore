@@ -112,8 +112,6 @@ class Accidental : public Element {
 class AccidentalBracket : public Compound {
       Q_OBJECT
 
-      int _subtype;
-
    public:
       AccidentalBracket(Score*);
       virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }

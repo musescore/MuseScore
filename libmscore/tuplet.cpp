@@ -768,7 +768,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
             default:
                   break;
             }
-      return Element::getProperty(propertyId);
+      return DurationElement::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
