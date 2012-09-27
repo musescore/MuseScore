@@ -707,7 +707,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues0">
+                     <widget class="QRadioButton" name="noteValuesNone">
                       <property name="minimumSize">
                        <size>
                         <width>110</width>
@@ -720,7 +720,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues1">
+                     <widget class="QRadioButton" name="noteValuesSymb">
                       <property name="minimumSize">
                        <size>
                         <width>120</width>
@@ -733,7 +733,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues2">
+                     <widget class="QRadioButton" name="noteValuesStems">
                       <property name="text">
                        <string>Stems and beams</string>
                       </property>
@@ -1258,9 +1258,9 @@
   <tabstop>aboveLinesRadio</tabstop>
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
-  <tabstop>noteValues0</tabstop>
-  <tabstop>noteValues1</tabstop>
-  <tabstop>noteValues2</tabstop>
+  <tabstop>noteValuesNone</tabstop>
+  <tabstop>noteValuesSymb</tabstop>
+  <tabstop>noteValuesStems</tabstop>
   <tabstop>stemAboveRadio</tabstop>
   <tabstop>stemBelowRadio</tabstop>
   <tabstop>stemBesideRadio</tabstop>
