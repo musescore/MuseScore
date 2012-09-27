@@ -40,7 +40,7 @@
  */
 
 #include "config.h"
-#include "musescore.h"
+// #include "musescore.h"
 #include "musicxml.h"
 #include "file.h"
 #include "libmscore/score.h"
@@ -489,6 +489,58 @@ MusicXml::MusicXml(QDomDocument* d)
       {
       }
 
+// TODO: should probably remove class loadfile
+//---------------------------------------------------------
+//   LoadFile
+//---------------------------------------------------------
+
+class LoadFile {
+      QString _name;
+
+   protected:
+      QString error;
+
+   public:
+      LoadFile() {}
+      virtual ~LoadFile() {}
+      virtual bool loader(QFile* f) = 0;        // return false on error
+      bool load(const QString& name);           // return false on error
+      QString name() const { return _name; }
+      };
+
+//---------------------------------------------------------
+//   load
+///   Load file \a name.
+///   Display message box with error if loading fails.
+///   Return true if OK and false on error.
+//---------------------------------------------------------
+
+bool LoadFile::load(const QString& name)
+      {
+      if (name.isEmpty())
+            return false;
+
+      QFile fp(name);
+      if (!fp.open(QIODevice::ReadOnly)) {
+            QMessageBox::warning(0,
+               QWidget::tr("MuseScore: file not found:"),
+               name,
+               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+            return false;
+            }
+      if (!loader(&fp)) {
+            QMessageBox::warning(0,
+               QWidget::tr("MuseScore: load failed:"),
+               error,
+               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+            fp.close();
+            return false;
+            }
+      fp.close();
+      return true;
+      }
+// end TODO: should probably remove class loadfile
+
 //---------------------------------------------------------
 //   LoadMusicXml
 //---------------------------------------------------------
@@ -707,9 +759,9 @@ bool LoadCompressedMusicXml::loader(QFile* qf)
  Import MusicXML file \a name into the Score.
  */
 
-bool MuseScore::importMusicXml(Score* score, const QString& name)
+bool importMusicXml(Score* score, const QString& name)
       {
-      qDebug("MuseScore::importMusicXml(%p, %s)", score, qPrintable(name));
+      qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
 
       // initialize the schema
       QXmlSchema schema;
@@ -719,7 +771,7 @@ bool MuseScore::importMusicXml(Score* score, const QString& name)
       // open the MusicXML file
       QFile xmlFile(name);
       if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qDebug("MuseScore::importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
+            qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
             return false;
             }
@@ -727,9 +779,9 @@ bool MuseScore::importMusicXml(Score* score, const QString& name)
       // validate the file
       QXmlSchemaValidator validator(schema);
       if (validator.validate(&xmlFile, QUrl::fromLocalFile(name)))
-            qDebug("MuseScore::importMusicXml() file '%s' is a valid MusicXML file", qPrintable(name));
+            qDebug("importMusicXml() file '%s' is a valid MusicXML file", qPrintable(name));
       else {
-            qDebug("MuseScore::importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
+            qDebug("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
             QString text = QString("File '%1' is not a valid MusicXML file").arg(name);
             if (!musicXMLValidationErrorDialog(text))
@@ -739,12 +791,12 @@ bool MuseScore::importMusicXml(Score* score, const QString& name)
       // finally load the file
       LoadMusicXml lx;
       if (!lx.load(name)) {
-            qDebug("MuseScore::importMusicXml() return false (not OK)");
+            qDebug("importMusicXml() return false (not OK)");
             return false;
             }
       MusicXml musicxml(lx.doc());
       musicxml.import(score);
-      qDebug("MuseScore::importMusicXml() return true (OK)");
+      qDebug("importMusicXml() return true (OK)");
       return true;
       }
 
@@ -757,17 +809,17 @@ bool MuseScore::importMusicXml(Score* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-bool MuseScore::importCompressedMusicXml(Score* score, const QString& name)
+bool importCompressedMusicXml(Score* score, const QString& name)
       {
-      qDebug("MuseScore::importCompressedMusicXml(%p, %s)", score, qPrintable(name));
+      qDebug("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
       LoadCompressedMusicXml lx;
       if (!lx.load(name)) {
-            qDebug("MuseScore::importCompressedMusicXml() return false (not OK)");
+            qDebug("importCompressedMusicXml() return false (not OK)");
             return false;
             }
       MusicXml musicxml(lx.doc());
       musicxml.import(score);
-      qDebug("MuseScore::importMusicXml() return true (OK)");
+      qDebug("importMusicXml() return true (OK)");
       return true;
       }
 

@@ -27,7 +27,10 @@ add_library(
       testutils STATIC
       testutils.cpp
       mcursor.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${OMR_SRC}
       omr
       )
@@ -36,6 +39,7 @@ add_executable(
       mtest
       mtest.cpp
       )
+
 target_link_libraries(
       mtest
       ${QT_LIBRARIES}
@@ -51,14 +55,17 @@ add_custom_target(report
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest report
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
+
 add_custom_target(reporthtml
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs(libmscore)
+subdirs(
+      libmscore
+      musicxml
+      )
 
 if (OMR)
 subdirs(omr)
 endif (OMR)
-

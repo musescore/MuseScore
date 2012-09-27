@@ -146,38 +146,6 @@ void MuseScore::readScoreError(const QString& name) const
       }
 
 //---------------------------------------------------------
-//   load
-///   Load file \a name.
-///   Display message box with error if loading fails.
-///   Return true if OK and false on error.
-//---------------------------------------------------------
-
-bool LoadFile::load(const QString& name)
-      {
-      if (name.isEmpty())
-            return false;
-
-      QFile fp(name);
-      if (!fp.open(QIODevice::ReadOnly)) {
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: file not found:"),
-               name,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return false;
-            }
-      if (!loader(&fp)) {
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: load failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            fp.close();
-            return false;
-            }
-      fp.close();
-      return true;
-      }
-
-//---------------------------------------------------------
 //   checkDirty
 //    if dirty, save score
 //    return true on cancel
@@ -1778,8 +1746,8 @@ bool MuseScore::readScore(Score* score, QString name)
                   ImportFunction importF;
                   };
             ImportDef imports[] = {
-                  { "xml",  &MuseScore::importMusicXml           },
-                  { "mxl",  &MuseScore::importCompressedMusicXml },
+                  { "xml",  &importMusicXml                      },
+                  { "mxl",  &importCompressedMusicXml },
                   { "mid",  &importMidi                          },
                   { "midi", &importMidi                          },
                   { "kar",  &importMidi                          },

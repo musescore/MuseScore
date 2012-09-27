@@ -2051,9 +2051,9 @@ static bool processNonGui()
                   return true;
                   }
             if (fn.endsWith(".xml"))
-                  return mscore->saveXml(cs, fn);
+                  return saveXml(cs, fn);
             if (fn.endsWith(".mxl"))
-                  return mscore->saveMxl(cs, fn);
+                  return saveMxl(cs, fn);
             if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
