@@ -63,6 +63,9 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void saveCurrent(QListWidgetItem*);
       void setDlgFromTab(const StaffTypeTablature* stt);
       void setTabFromDlg(StaffTypeTablature* stt);
+      void tabStemsCompatibility(bool checked);
+      void tabMinimShortCompatibility(bool checked);
+      void tabStemThroughCompatibility(bool checked);
 
    private slots:
       void typeChanged(QListWidgetItem*, QListWidgetItem*);
@@ -71,6 +74,8 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void presetTablatureChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
+      void on_tabStemThroughToggled(bool checked);
+      void on_tabMinimShortToggled(bool checked);
       void on_tabStemsToggled(bool checked);
       void updateTabPreview();
 
