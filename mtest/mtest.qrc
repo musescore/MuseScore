@@ -22,5 +22,10 @@
       <file>../mscore/data/cancel.png</file>
       <file>../mscore/revision.h</file>
       <file>../mscore/data/musescore_logo_full1.png</file>
+
+      <file alias="schema/license.html">../mscore/schema/license.html</file>
+      <file alias="schema/musicxml.xsd">../mscore/schema/musicxml.xsd</file>
+      <file alias="schema/xlink.xsd">../mscore/schema/xlink.xsd</file>
+      <file alias="schema/xml.xsd">../mscore/schema/xml.xsd</file>
    </qresource>
 </RCC>
