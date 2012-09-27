@@ -97,14 +97,14 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(noteValues1,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(noteValues2,    SIGNAL(toggled(bool)),              SLOT(on_tabStemsToggled(bool)));
+      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(on_tabStemsToggled(bool)));
       connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(updateTabPreview()));
+      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(on_tabStemThroughToggled(bool)));
 //    connect(minimNoneRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(on_tabMinimShortToggled(bool)));
       connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
       connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
@@ -187,10 +187,10 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
                      || stt->onLines()          != onLinesRadio->isChecked()
                      || stt->upsideDown()       != upsideDown->isChecked()
                      || stt->useNumbers()       != numbersRadio->isChecked()
-                     || ( noteValues0->isChecked() && (!stt->slashStyle() ||  stt->genDurations()) )
-                     || ( noteValues1->isChecked() && (!stt->slashStyle() || !stt->genDurations()) )
+                     || ( noteValuesNone->isChecked() && (!stt->slashStyle() ||  stt->genDurations()) )
+                     || ( noteValuesSymb->isChecked() && (!stt->slashStyle() || !stt->genDurations()) )
                      // if stems, there are more values to take into account
-                     || ( noteValues2->isChecked() && ( stt->slashStyle() ||  stt->genDurations()
+                     || ( noteValuesStems->isChecked()&& ( stt->slashStyle() ||  stt->genDurations()
                               || stt->stemsDown()     != stemBelowRadio->isChecked()
                               || stt->stemThrough()   != stemThroughRadio->isChecked()
                               || stt->minimStyle()    != minimStyle)
@@ -352,23 +352,27 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       minimShortRadio->setChecked(minimStyle == TAB_MINIM_SHORTER);
       minimSlashedRadio->setChecked(minimStyle == TAB_MINIM_SLASHED);
       if(stt->genDurations()) {
-            noteValues0->setChecked(false);
-            noteValues1->setChecked(true);
-            noteValues2->setChecked(false);
+            noteValuesNone->setChecked(false);
+            noteValuesSymb->setChecked(true);
+            noteValuesStems->setChecked(false);
             }
       else {
             if(stt->slashStyle()) {
-                  noteValues0->setChecked(true);
-                  noteValues1->setChecked(false);
-                  noteValues2->setChecked(false);
+                  noteValuesNone->setChecked(true);
+                  noteValuesSymb->setChecked(false);
+                  noteValuesStems->setChecked(false);
                   }
             else {
-                  noteValues0->setChecked(false);
-                  noteValues1->setChecked(false);
-                  noteValues2->setChecked(true);
+                  noteValuesNone->setChecked(false);
+                  noteValuesSymb->setChecked(false);
+                  noteValuesStems->setChecked(true);
                   }
             }
       showRests->setChecked(stt->showRests());
+      // adjust compatibility across different settings
+      tabStemThroughCompatibility(stemThroughRadio->isChecked());
+      tabMinimShortCompatibility(minimShortRadio->isChecked());
+      tabStemsCompatibility(noteValuesStems->isChecked());
       updateTabPreview();
       }
 
@@ -404,9 +408,9 @@ void EditStaffType::setTabFromDlg(StaffTypeTablature * stt)
       stt->setStemsThrough(stemThroughRadio->isChecked());
       stt->setSlashStyle(true);                 // assume no note values
       stt->setGenDurations(false);              //    "     "
-      if (noteValues1->isChecked())
+      if (noteValuesSymb->isChecked())
             stt->setGenDurations(true);
-      if (noteValues2->isChecked()) {
+      if (noteValuesStems->isChecked()) {
             stt->setSlashStyle(false);
             }
 }
@@ -487,29 +491,50 @@ void EditStaffType::on_pushQuickConfig_clicked()
 
 //---------------------------------------------------------
 //   Tabulature note stems toggled
+//
+//    enable / disable all controls related to stems
 //---------------------------------------------------------
 
 void EditStaffType::on_tabStemsToggled(bool checked)
-{
-      stemAboveRadio->setEnabled(checked);
-      stemBelowRadio->setEnabled(checked);
-      stemBesideRadio->setEnabled(checked);
-      stemThroughRadio->setEnabled(checked);
+      {
+      tabStemsCompatibility(checked);
       updateTabPreview();
-}
+      }
+
+//---------------------------------------------------------
+//   Tabulature "minim short" toggled
+//
+//    contra-toggle "stems through"
+//---------------------------------------------------------
+
+void EditStaffType::on_tabMinimShortToggled(bool checked)
+      {
+      tabMinimShortCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature "stems through" toggled
+//---------------------------------------------------------
+
+void EditStaffType::on_tabStemThroughToggled(bool checked)
+      {
+      tabStemThroughCompatibility(checked);
+      updateTabPreview();
+      }
 
 //---------------------------------------------------------
 //   Block tabulature preview signals
 //---------------------------------------------------------
 
 void EditStaffType::blockTabPreviewSignals(bool block)
-{
+      {
       lineDistance->blockSignals(block);
       showBarlines->blockSignals(block);
       genClef->blockSignals(block);
       genTimesig->blockSignals(block);
-      noteValues1->blockSignals(block);
-      noteValues2->blockSignals(block);
+      noteValuesSymb->blockSignals(block);
+      noteValuesStems->blockSignals(block);
       durFontName->blockSignals(block);
       durFontSize->blockSignals(block);
       durY->blockSignals(block);
@@ -527,7 +552,62 @@ void EditStaffType::blockTabPreviewSignals(bool block)
       minimShortRadio->blockSignals(block);
       minimSlashedRadio->blockSignals(block);
       showRests->blockSignals(block);
-}
+      }
+
+//---------------------------------------------------------
+//   Tabulature note stems compatibility
+//
+//    Enable / disable all stem-related controls according to "Stems and beams" is checked/unchecked
+//---------------------------------------------------------
+
+void EditStaffType::tabStemsCompatibility(bool checked)
+      {
+      stemAboveRadio->setEnabled(checked);
+      stemBelowRadio->setEnabled(checked);
+      stemBesideRadio->setEnabled(checked);
+      stemThroughRadio->setEnabled(checked && !minimShortRadio->isChecked());
+      minimNoneRadio->setEnabled(checked);
+      minimShortRadio->setEnabled(checked && !stemThroughRadio->isChecked());
+      minimSlashedRadio->setEnabled(checked);
+      }
+
+//---------------------------------------------------------
+//   Tabulature "minim short" compatibility
+//
+//    Setting "short minim" stems is incompatible with "stems through":
+//    if checked and "stems through" is checked, move check to "stems beside"
+//---------------------------------------------------------
+
+void EditStaffType::tabMinimShortCompatibility(bool checked)
+      {
+      if(checked) {
+            if(stemThroughRadio->isChecked()) {
+                  stemThroughRadio->setChecked(false);
+                  stemBesideRadio->setChecked(true);
+                  }
+            }
+      // disable / enable "stems through" according "minim short" is checked / unchecked
+      stemThroughRadio->setEnabled(!checked && noteValuesStems->isChecked());
+      }
+
+//---------------------------------------------------------
+//   Tabulature "stems through" compatibility
+//
+//    Setting "stems through" is incompatible with "minim short":
+//    if checking and "minim short" is checked, move check to "minim slashed"
+//---------------------------------------------------------
+
+void EditStaffType::tabStemThroughCompatibility(bool checked)
+      {
+      if(checked) {
+            if(minimShortRadio->isChecked()) {
+                  minimShortRadio->setChecked(false);
+                  minimSlashedRadio->setChecked(true);
+                  }
+            }
+      // disable / enable "minim short" according "stems through" is checked / unchecked
+      minimShortRadio->setEnabled(!checked && noteValuesStems->isChecked());
+      }
 
 //---------------------------------------------------------
 //   Update tabulature preview
