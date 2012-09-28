@@ -351,8 +351,8 @@ void System::layout2()
                   continue;
                   }
             qreal sHeight = staff->height();   // (staff->lines() - 1) * _spatium * staffMag;
-            s->setbbox(QRectF(_leftMargin, y, width() - _leftMargin, sHeight));
-            y += sHeight + s->distanceDown();
+            s->setbbox(QRectF(_leftMargin, y+s->distanceUp(), width() - _leftMargin, sHeight));
+            y += s->distanceUp() + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
             }
 
