@@ -692,8 +692,6 @@ MuseScore::MuseScore()
       _fileMenu->addAction(getAction("file-export"));
       _fileMenu->addAction(getAction("file-part-export"));
       _fileMenu->addSeparator();
-      _fileMenu->addAction(getAction("file-reload"));
-      _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("file-close"));
 
       _fileMenu->addSeparator();
