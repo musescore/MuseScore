@@ -453,8 +453,15 @@ void Channel::read(const QDomElement& de)
                   else
                         synti = 0;
                   }
-            else if (tag == "descr")
+            else if (tag == "descr") {
                   descr = e.text();
+                  }
+            else if (tag == "mute") {
+                  mute = val.toInt();
+                  }
+            else if (tag == "solo") {
+                  solo = val.toInt();
+                  }
             else
                   domError(e);
             }
