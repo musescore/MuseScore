@@ -103,14 +103,6 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
-         A_SCORE,
-         "file-reload",
-         QT_TRANSLATE_NOOP("action","Reload"),
-         QT_TRANSLATE_NOOP("action","File reload"),
-         QT_TRANSLATE_NOOP("action","Reload score from file")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          0,
          "file-close",
          QT_TRANSLATE_NOOP("action","Close"),
