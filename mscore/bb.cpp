@@ -370,12 +370,12 @@ bool BBFile::read(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::importBB(Score* score, const QString& name)
+Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
       if (!bb.read(name)) {
             qDebug("cannot open file <%s>\n", qPrintable(name));
-            return false;
+            return Score::FILE_OPEN_ERROR;
             }
       *(score->sigmap()) = bb.siglist();
 
@@ -531,7 +531,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
             Segment* sks = mks->getSegment(keysig, tick);
             sks->add(keysig);
             }
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

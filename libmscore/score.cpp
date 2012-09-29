@@ -319,6 +319,7 @@ void Score::init()
       _showFrames          = true;
       _showPageborders     = false;
       _showInstrumentNames = true;
+      _showVBox            = true;
 
       _printing       = false;
       _playlistDirty  = false;
@@ -2094,7 +2095,7 @@ Score* Score::clone()
             }
       Score* score = new Score(style());
       docName = "--";
-      score->read1(doc.documentElement());
+      score->read1(doc.documentElement(), true);
 
       score->renumberMeasures();
 

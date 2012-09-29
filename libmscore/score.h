@@ -219,6 +219,20 @@ class Score : public QObject {
       Q_PROPERTY(int ntracks  READ ntracks)
       Q_PROPERTY(int npages   READ npages)
 
+   public:
+      enum FileError {
+            FILE_NO_ERROR,
+            FILE_ERROR,
+            FILE_NOT_FOUND,
+            FILE_OPEN_ERROR,
+            FILE_BAD_FORMAT,
+            FILE_UNKNOWN_TYPE,
+            FILE_NO_ROOTFILE,
+            FILE_TOO_OLD,
+            FILE_TOO_NEW
+            };
+
+   private:
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
       QReadWriteLock _layoutLock;
@@ -293,6 +307,7 @@ class Score : public QObject {
       bool _showFrames;
       bool _showPageborders;
       bool _showInstrumentNames;
+      bool _showVBox;
 
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
@@ -440,8 +455,9 @@ class Score : public QObject {
 
       void write(Xml&, bool onlySelection);
       bool read(const QDomElement&);
-      bool read114(const QDomElement&);
-      bool read1(const QDomElement&);
+      FileError read114(const QDomElement&);
+      FileError read1(const QDomElement&, bool ignoreVersionError);
+      FileError loadCompressedMsc(QString name, bool ignoreVersionError);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -565,14 +581,15 @@ class Score : public QObject {
       bool showFrames() const          { return _showFrames; }
       bool showPageborders() const     { return _showPageborders; }
       bool showInstrumentNames() const { return _showInstrumentNames; }
+      bool showVBox() const            { return _showVBox; }
       void setShowInvisible(bool v);
       void setShowUnprintable(bool v);
       void setShowFrames(bool v);
       void setShowPageborders(bool v);
       void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
+      void setShowVBox(bool v)            { _showVBox = v;            }
 
-      bool loadMsc(QString name);
-      bool loadCompressedMsc(QString name);
+      FileError loadMsc(QString name, bool ignoreVersionError);
 
       bool saveFile(QFileInfo& info);
       void saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
