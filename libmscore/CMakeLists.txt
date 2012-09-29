@@ -12,7 +12,7 @@
 #=============================================================================
 
 if (SCRIPT_INTERFACE)
-   QT4_WRAP_CPP (mocs
+   QT4_WRAP_CPP (libqtMocs
       accidental.h arpeggio.h articulation.h barline.h beam.h bend.h
       box.h bracket.h breath.h bsymbol.h chord.h chordline.h chordrest.h
       clef.h duration.h dynamic.h element.h figuredbass.h fingering.h fret.h
@@ -43,7 +43,7 @@ endif (APPLE)
 add_library (
       libmscore STATIC
       ${PROJECT_BINARY_DIR}/all.h
-      ${mocs}
+      ${libqtMocs}
       ${INCS}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
       articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
