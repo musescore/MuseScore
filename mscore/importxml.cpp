@@ -759,21 +759,21 @@ bool LoadCompressedMusicXml::loader(QFile* qf)
  Import MusicXML file \a name into the Score.
  */
 
-bool importMusicXml(Score* score, const QString& name)
+Score::FileError importMusicXml(Score* score, const QString& name)
       {
       qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
 
       // initialize the schema
       QXmlSchema schema;
       if (!initMusicXmlSchema(schema))
-            return false;  // appropriate error message has been printed by initMusicXmlSchema
+            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
 
       // open the MusicXML file
       QFile xmlFile(name);
       if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
-            return false;
+            return Score::FILE_OPEN_ERROR;
             }
 
       // validate the file
@@ -785,19 +785,19 @@ bool importMusicXml(Score* score, const QString& name)
             MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
             QString text = QString("File '%1' is not a valid MusicXML file").arg(name);
             if (!musicXMLValidationErrorDialog(text))
-                  return false;
+                  return Score::FILE_BAD_FORMAT;
             }
 
       // finally load the file
       LoadMusicXml lx;
       if (!lx.load(name)) {
             qDebug("importMusicXml() return false (not OK)");
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       MusicXml musicxml(lx.doc());
       musicxml.import(score);
       qDebug("importMusicXml() return true (OK)");
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------
@@ -809,18 +809,18 @@ bool importMusicXml(Score* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-bool importCompressedMusicXml(Score* score, const QString& name)
+Score::FileError importCompressedMusicXml(Score* score, const QString& name)
       {
       qDebug("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
       LoadCompressedMusicXml lx;
       if (!lx.load(name)) {
             qDebug("importCompressedMusicXml() return false (not OK)");
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       MusicXml musicxml(lx.doc());
       musicxml.import(score);
       qDebug("importMusicXml() return true (OK)");
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

@@ -2627,13 +2627,11 @@ void GuitarPro5::read(QFile* fp)
 //   importGTP
 //---------------------------------------------------------
 
-bool MuseScore::importGTP(Score* score, const QString& name)
+Score::FileError importGTP(Score* score, const QString& name)
       {
-      if (name.isEmpty())
-            return false;
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly))
-            return false;
+            return Score::FILE_OPEN_ERROR;
       uchar l;
       fp.read((char*)&l, 1);
       char ss[30];
@@ -2646,7 +2644,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             s = s.mid(21);
       else {
             qDebug("unknown gtp format <%s>\n", ss);
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
 
       int a = s.left(1).toInt();
@@ -2666,7 +2664,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             gp = new GuitarPro5(score, version);
       else {
             qDebug("unknown gtp format %d\n", version);
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       try {
             gp->read(&fp);
@@ -2679,7 +2677,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             fp.close();
             qDebug("guitar pro import error====\n");
             // avoid another error message box
-            return true;
+            return Score::FILE_NO_ERROR;
             }
       fp.close();
 
@@ -2829,6 +2827,6 @@ bool MuseScore::importGTP(Score* score, const QString& name)
       score->setCreated(true);
       delete gp;
       score->rebuildMidiMapping();
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 

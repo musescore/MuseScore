@@ -2408,7 +2408,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 }
 
 //////////////////////////////////////////////////////////////////////////
-bool MuseScore::importOve(Score* score, const QString& name) {
+Score::FileError importOve(Score* score, const QString& name) {
 	OVE::IOVEStreamLoader* oveLoader = OVE::createOveStreamLoader();
 	OVE::OveSong oveSong;
 
@@ -2416,7 +2416,7 @@ bool MuseScore::importOve(Score* score, const QString& name) {
 
 	if (!oveFile.open(QFile::ReadOnly)) {
 		//messageOutString(QString("can't read file!"));
-		return false;
+		return Score::FILE_OPEN_ERROR;
 	}
 
 	QByteArray buffer = oveFile.readAll();
@@ -2441,5 +2441,5 @@ bool MuseScore::importOve(Score* score, const QString& name) {
                   }
 	}
 
-	return result;
+      return result ? Score::FILE_ERROR : Score::FILE_NO_ERROR;
 }
