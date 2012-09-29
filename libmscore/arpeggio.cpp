@@ -124,28 +124,29 @@ void Arpeggio::draw(QPainter* p) const
       qreal y1 = _spatium - _userLen1.val() * _spatium;
       qreal y2 = _height + (_userLen2.val() + .5) * _spatium;
       qreal x1;
+      qreal m = magS();
       switch (subtype()) {
             case ARP_NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, 1.0, QPointF(0.0, y));
+                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
             case ARP_UP:
-                  symbols[score()->symIdx()][arpeggioarrowupSym].draw(p, 1.0, QPointF(0.0, y1));
+                  symbols[score()->symIdx()][arpeggioarrowupSym].draw(p, m, QPointF(0.0, y1));
                   for (qreal y = y1 + _spatium; y < y2; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, 1.0, QPointF(0.0, y));
+                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
             case ARP_DOWN:
                   {
                   qreal y = y1;
                   for (; y < y2 - _spatium; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, 1.0, QPointF(0.0, y));
-                  symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, 1.0, QPointF(0.0, y));
+                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
+                  symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, m, QPointF(0.0, y));
                   }
                   break;
             case ARP_UP_STRAIGHT:
                   y1-= _spatium * .5;
                   x1 = _spatium * .5;
-                  symbols[score()->symIdx()][close11arrowHeadSym].draw(p, 1.0, QPointF(x1, y1 - (_spatium * .5)));
+                  symbols[score()->symIdx()][close11arrowHeadSym].draw(p, m, QPointF(x1, y1 - (_spatium * .5)));
                   p->save();
                   p->setPen(QPen(curColor(),
                      score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
@@ -157,7 +158,7 @@ void Arpeggio::draw(QPainter* p) const
                   y1-= _spatium;
                   y2-= _spatium * .5;
                   x1 = _spatium * .5;
-                  symbols[score()->symIdx()][close1M1arrowHeadSym].draw(p, 1.0, QPointF(x1, y2 + (_spatium * .5)));
+                  symbols[score()->symIdx()][close1M1arrowHeadSym].draw(p, m, QPointF(x1, y2 + (_spatium * .5)));
                   p->save();
                   p->setPen(QPen(curColor(),
                      score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
