@@ -91,7 +91,7 @@ void MScore::init()
       _globalShare = dir.absolutePath() + "/";
 #else
 #ifdef Q_WS_MAC
-#ifdef Q_WS_IOS
+#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();

@@ -842,7 +842,7 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
       Measure* sm = m;
       int n       = 0;
       while (m->isEmpty()) {
-            MeasureBase* mb = m->next();
+            MeasureBase* mb = _showVBox ? m->next() : m->nextMeasure();
             if (m->breakMultiMeasureRest() && n)
                   break;
             ++n;
@@ -855,7 +855,7 @@ Measure* Score::skipEmptyMeasures(Measure* m, System* system)
             m->setMultiMeasure(n);  // first measure is presented as multi measure rest
             m->setSystem(system);
             for (int i = 1; i < n; ++i) {
-                  m = static_cast<Measure*>(m->next());
+                  m = static_cast<Measure*>(_showVBox ? m->next() : m->nextMeasure());
                   m->setMultiMeasure(-1);
                   m->setSystem(system);
                   }
@@ -969,7 +969,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         }
                   else {
                         m->setMultiMeasure(0);
-                        nextMeasure = curMeasure->next();
+                        nextMeasure = _showVBox ? curMeasure->next() : curMeasure->nextMeasure();
                         }
                   }
             else
@@ -1050,7 +1050,11 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             system->measures().append(curMeasure);
 
-            Element::ElementType nt = curMeasure->next() ? curMeasure->next()->type() : Element::INVALID;
+            Element::ElementType nt;
+            if (_showVBox)
+                  nt = curMeasure->next() ? curMeasure->next()->type() : Element::INVALID;
+            else
+                  nt = curMeasure->nextMeasure() ? curMeasure->nextMeasure()->type() : Element::INVALID;
             int n = styleI(ST_FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
@@ -1196,7 +1200,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                         }
                   else {
                         m->setMultiMeasure(0);
-                        nextMeasure = curMeasure->next();
+                        nextMeasure = _showVBox ? curMeasure->next() : curMeasure->nextMeasure();
                         }
                   }
             else
@@ -2036,7 +2040,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
 void Score::layoutSystems()
       {
-      curMeasure              = first();
+      curMeasure              = _showVBox ? first() : firstMeasure();
       curSystem               = 0;
       bool firstSystem        = true;
       bool startWithLongNames = true;

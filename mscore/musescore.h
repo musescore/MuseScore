@@ -22,6 +22,7 @@
 #define __MUSESCORE_H__
 
 #include "config.h"
+#include "libmscore/score.h"
 
 #include "globals.h"
 #include "ui_measuresdialog.h"
@@ -388,7 +389,6 @@ class MuseScore : public QMainWindow {
       void showLayerManager();
       void updateUndoRedo();
       void cmdAddChordName2();
-      static void convertCapella(Score*, Capella* cap);
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
       void updateInspector();
@@ -543,7 +543,7 @@ class MuseScore : public QMainWindow {
       bool processMidiRemote(MidiRemoteType type, int data);
       ScoreTab* getTab1() const { return tab1; }
       ScoreTab* getTab2() const { return tab2; }
-      void readScoreError(const QString&) const;
+      void readScoreError(const QString&, Score::FileError) const;
       QList<LanguageItem>& languages() { return _languages; }
 
       QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
@@ -585,10 +585,14 @@ class MuseScore : public QMainWindow {
       bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
       bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
       bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
-      bool readScore(Score*, QString name);
+
+      Score::FileError readScore(Score*, QString name);
+      Score* readScore(const QString& name);
+
       bool saveAs(Score*, bool saveCopy = false);
       bool saveSelection(Score*);
       void addImage(Score*, Element*);
+
       bool savePng(Score*, const QString& name, bool screenshot, bool transparent, double convDpi, QImage::Format format);
       bool saveAudio(Score*, const QString& name, const QString& type);
       bool saveMp3(Score*, const QString& name);
@@ -596,14 +600,6 @@ class MuseScore : public QMainWindow {
       bool savePng(Score*, const QString& name);
       bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
-
-      static bool importGTP(Score*, const QString& name);
-      static bool importBww(Score*, const QString& path);
-      static bool importMuseData(Score*, const QString& name);
-      static bool importLilypond(Score*, const QString& name);
-      static bool importBB(Score*, const QString& name);
-      static bool importCapella(Score*, const QString& name);
-      static bool importOve(Score*, const QString& name);
 
       void closeScore(Score* score);
 
@@ -656,7 +652,17 @@ extern Shortcut* midiActionMap[128];
 extern void setMscoreLocale(QString localeName);
 extern QPixmap sym2pixmap(const Sym* s, qreal mag);
 
-extern bool importMidi(Score*, const QString& name);
+extern Score::FileError importMidi(Score*, const QString& name);
+extern Score::FileError importGTP(Score*, const QString& name);
+extern Score::FileError importBww(Score*, const QString& path);
+extern Score::FileError importMusicXml(Score*, const QString&);
+extern Score::FileError importCompressedMusicXml(Score*, const QString&);
+extern Score::FileError importMuseData(Score*, const QString& name);
+extern Score::FileError importLilypond(Score*, const QString& name);
+extern Score::FileError importBB(Score*, const QString& name);
+extern Score::FileError importCapella(Score*, const QString& name);
+extern Score::FileError importOve(Score*, const QString& name);
+
 extern void convertMidi(Score*, MidiFile* mf);
 
 extern bool importMusicXml(Score*, const QString& name);

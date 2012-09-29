@@ -173,7 +173,7 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read114(const QDomElement& de)
+Score::FileError Score::read114(const QDomElement& de)
       {
       spanner.clear();
 
@@ -617,5 +617,5 @@ bool Score::read114(const QDomElement& de)
                   }
             }
 
-      return true;
+      return FILE_NO_ERROR;
       }

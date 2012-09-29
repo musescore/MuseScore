@@ -479,12 +479,13 @@ void ChordList::write(Xml& xml)
 
 bool ChordList::read(const QString& name)
       {
+qDebug("ChordList::read <%s>", qPrintable(name));
       QString path;
       QFileInfo ftest(name);
       if (ftest.isAbsolute())
             path = name;
       else {
-#ifdef Q_WS_IOS
+#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
             path = QString("%1/%2").arg(MScore::globalShare()).arg(name);
 #else
             path = QString("%1styles/%2").arg(MScore::globalShare()).arg(name);
@@ -493,7 +494,7 @@ bool ChordList::read(const QString& name)
       //default to stdchords.xml
       QFileInfo fi(path);
       if (!fi.exists())
-#ifdef Q_WS_IOS
+#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
             path = QString("%1/%2").arg(MScore::globalShare()).arg("stdchords.xml");
 #else
             path = QString("%1styles/%2").arg(MScore::globalShare()).arg("stdchords.xml");

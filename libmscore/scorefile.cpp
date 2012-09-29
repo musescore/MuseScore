@@ -558,19 +558,13 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::loadCompressedMsc(QString name)
+Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       {
-      info.setFile(name);
-      if (info.suffix().isEmpty()) {
-            name += ".mscz";
-            info.setFile(name);
-            }
-
       QZipReader uz(name);
       if (!uz.exists()) {
             qDebug("loadCompressedMsc: <%s> not found\n", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
-            return false;
+            return FILE_NOT_FOUND;
             }
       QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
@@ -583,14 +577,14 @@ bool Score::loadCompressedMsc(QString name)
             ln.setNum(line);
             QString error = err + "\n at line " + ln + " column " + col;
             qDebug("loadCompressedMsc: read container error: %s\n", qPrintable(error));
-            return false;
+            return FILE_BAD_FORMAT;
             }
 
       // extract first rootfile
       QDomNodeList nl = container.elementsByTagName("rootfile");
       if (nl.isEmpty()) {
             qDebug("can't find rootfile in: %s", qPrintable(name));
-            return false;
+            return FILE_NO_ROOTFILE;
             }
       QDomElement e = nl.at(0).toElement();
       QString rootfile = e.attribute("full-path");
@@ -621,10 +615,10 @@ bool Score::loadCompressedMsc(QString name)
             ln.setNum(line);
             QString error = err + "\n at line " + ln + " column " + col;
             qDebug("error: %s", qPrintable(error));
-            return false;
+            return FILE_BAD_FORMAT;
             }
       docName = info.completeBaseName();
-      bool retval = read1(doc.documentElement());
+      FileError retval = read1(doc.documentElement(), ignoreVersionError);
 
 #ifdef OMR
       //
@@ -660,19 +654,17 @@ bool Score::loadCompressedMsc(QString name)
 //    return true on success
 //---------------------------------------------------------
 
-bool Score::loadMsc(QString name)
+Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
       {
-      QString ext(".mscx");
-
       info.setFile(name);
-      if (info.suffix().isEmpty()) {
-            name += ext;
-            info.setFile(name);
-            }
+
+      if (name.endsWith(".mscz"))
+            return loadCompressedMsc(name, ignoreVersionError);
+
       QFile f(name);
       if (!f.open(QIODevice::ReadOnly)) {
             MScore::lastError = f.errorString();
-            return false;
+            return FILE_OPEN_ERROR;
             }
 
       QDomDocument doc;
@@ -681,11 +673,11 @@ bool Score::loadMsc(QString name)
       if (!doc.setContent(&f, false, &err, &line, &column)) {
             QString s = QT_TRANSLATE_NOOP("file", "error reading file %1 at line %2 column %3: %4\n");
             MScore::lastError = s.arg(f.fileName()).arg(line).arg(column).arg(err);
-            return false;
+            return FILE_BAD_FORMAT;
             }
       f.close();
       docName = f.fileName();
-      return read1(doc.documentElement());
+      return read1(doc.documentElement(), ignoreVersionError);
       }
 
 //---------------------------------------------------------
@@ -745,7 +737,7 @@ void Score::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-bool Score::read1(const QDomElement& de)
+Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
       {
       _elinks.clear();
       for (QDomElement e = de; !e.isNull(); e = e.nextSiblingElement()) {
@@ -754,30 +746,33 @@ bool Score::read1(const QDomElement& de)
                   QStringList sl = version.split('.');
                   _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
 
-                  QString message;
-                  if (_mscVersion > MSCVERSION) {
-                        // incompatible version
-                        message = QT_TRANSLATE_NOOP("file", "Unable to open this score:<br>It was saved using a newer version of MuseScore.<br>Visit the <a href=\"http://musescore.org\">MuseScore website</a> to obtain the latest version.");
-                        }
-                  else if (_mscVersion < 114) {
-                        // incompatible version
-                        message = QT_TRANSLATE_NOOP("file",
-                           "Unable to open this score reliably:<br>"
-                           "It was last saved with version 0.9.5 or older.<br>"
-                           "You can convert this score by opening and then saving with"
-                            " MuseScore version 1.x</a>");
-                        }
-                  if (!message.isEmpty()) {
-                        QMessageBox msgBox;
-                        msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore"));
-                        msgBox.setText(message);
-                        msgBox.setTextFormat(Qt::RichText);
-                        msgBox.setIcon(QMessageBox::Warning);
-                        msgBox.setStandardButtons(
-                           QMessageBox::Cancel | QMessageBox::Ignore
-                           );
-                        if (msgBox.exec() == QMessageBox::Cancel)
-                              return false;
+                  if (!ignoreVersionError) {
+                        QString message;
+                        if (_mscVersion > MSCVERSION)
+                              return FILE_TOO_NEW;
+                              // incompatible version
+                              // message = QT_TRANSLATE_NOOP("file", "Unable to open this score:<br>"
+                              // "It was saved using a newer version of MuseScore.<br>Visit the <a href=\"http://musescore.org\">MuseScore website</a> to obtain the latest version.");
+                        if (_mscVersion < 114)
+                              return FILE_TOO_OLD;
+                              // incompatible version
+                              // message = QT_TRANSLATE_NOOP("file",
+                              //   "Unable to open this score reliably:<br>"
+                              //   "It was last saved with version 0.9.5 or older.<br>"
+                              //   "You can convert this score by opening and then saving with"
+                              //    " MuseScore version 1.x</a>");
+                        //if (!message.isEmpty()) {
+                        //      QMessageBox msgBox;
+                        //      msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore"));
+                        //      msgBox.setText(message);
+                        //      msgBox.setTextFormat(Qt::RichText);
+                        //      msgBox.setIcon(QMessageBox::Warning);
+                        //      msgBox.setStandardButtons(
+                        //         QMessageBox::Cancel | QMessageBox::Ignore
+                        //         );
+                        //      if (msgBox.exec() == QMessageBox::Cancel)
+                        //            return false;
+                        //      }
                         }
 
                   if (_mscVersion <= 114)
@@ -810,7 +805,7 @@ bool Score::read1(const QDomElement& de)
             le->setLid(this, id++);
       _elinks.clear();
       _mscVersion = MSCVERSION;     // for later drag & drop usage
-      return true;
+      return FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

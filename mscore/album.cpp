@@ -257,20 +257,13 @@ void Album::loadScores()
       foreach(AlbumItem* item, _scores) {
             if (item->path.isEmpty())
                   continue;
-            Score* score = new Score(MScore::defaultStyle());
             QString ip = item->path;
             if (ip[0] != '/') {
                   // score path it relative to album path:
                   QFileInfo f(_path);
                   ip = f.path() + "/" + item->path;
                   }
-            if (mscore->readScore(score, item->path)) {
-                  item->score = score;
-                  }
-            else {
-                  delete score;
-                  mscore->readScoreError(item->path);
-                  }
+            item->score = mscore->readScore(item->path);
             }
       }
 
@@ -434,7 +427,7 @@ void AlbumManager::addClicked()
       QString fn = files.front();
       if (fn.isEmpty())
             return;
-      
+
       AlbumItem* item = new AlbumItem;
       item->path = fn;
       album->append(item);

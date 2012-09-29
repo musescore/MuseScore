@@ -137,7 +137,7 @@ static QString createDefaultFileName(QString fn)
 //   readScoreError
 //---------------------------------------------------------
 
-void MuseScore::readScoreError(const QString& name) const
+void MuseScore::readScoreError(const QString& name, Score::FileError error) const
       {
       QMessageBox::critical(0,
          tr("MuseScore: Load error"),
@@ -227,7 +227,8 @@ Score* MuseScore::openScore(const QString& fn)
       if (fn.isEmpty())
             return 0;
       Score* score = new Score(MScore::defaultStyle());
-      if (readScore(score, fn)) {
+      Score::FileError rv = readScore(score, fn);
+      if (rv == Score::FILE_NO_ERROR) {
             setCurrentScoreView(appendScore(score));
             lastOpenPath = score->fileInfo()->path();
             updateRecentScores(score);
@@ -235,7 +236,7 @@ Score* MuseScore::openScore(const QString& fn)
             return score;
             }
       delete score;
-      readScoreError(fn);
+      readScoreError(fn, rv);
       return 0;
       }
 
@@ -366,8 +367,9 @@ void MuseScore::newFile()
       //  create score from template
       //
       if (newWizard->useTemplate()) {
-            if (!readScore(score, newWizard->templatePath())) {
-                  readScoreError(newWizard->templatePath());
+            Score::FileError rv = readScore(score, newWizard->templatePath());
+            if (rv != Score::FILE_NO_ERROR) {
+                  readScoreError(newWizard->templatePath(), rv);
                   delete score;
                   return;
                   }
@@ -1721,50 +1723,64 @@ bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFo
 
 //---------------------------------------------------------
 //   readScore
+//---------------------------------------------------------
+
+Score* MuseScore::readScore(const QString& name)
+      {
+      Score* score = new Score(MScore::defaultStyle());
+      Score::FileError rv = readScore(score, name);
+      if (rv != Score::FILE_NO_ERROR) {
+            readScoreError(name, rv);
+            delete score;
+            score = 0;
+            }
+      return score;
+      }
+
+//---------------------------------------------------------
+//   readScore
 ///   Import file \a name
 //---------------------------------------------------------
 
-bool MuseScore::readScore(Score* score, QString name)
+Score::FileError MuseScore::readScore(Score* score, QString name)
       {
       score->setName(name);
 
       QString cs  = score->fileInfo()->suffix();
       QString csl = cs.toLower();
 
-      if (csl == "mscz") {
-            if (!score->loadCompressedMsc(name))
-                  return false;
-            }
-      else if (csl == "msc" || csl == "mscx") {
-            if (!score->loadMsc(name))
-                  return false;
+      if (csl == "mscz" || csl == "mscx") {
+            Score::FileError rv = score->loadMsc(name, false);
+            if (rv != Score::FILE_NO_ERROR) {
+                  return rv;
+                  }
             }
       else {
-            typedef bool (*ImportFunction)(Score*, const QString&);
+            typedef Score::FileError (*ImportFunction)(Score*, const QString&);
             struct ImportDef {
                   const char* extension;
                   ImportFunction importF;
                   };
             ImportDef imports[] = {
-                  { "xml",  &importMusicXml                      },
+                  { "xml",  &importMusicXml           },
                   { "mxl",  &importCompressedMusicXml },
-                  { "mid",  &importMidi                          },
-                  { "midi", &importMidi                          },
-                  { "kar",  &importMidi                          },
-                  { "md",   &MuseScore::importMuseData           },
-                  { "mgu",  &MuseScore::importBB                 },
-                  { "sgu",  &MuseScore::importBB                 },
-                  { "cap",  &MuseScore::importCapella            },
-                  { "ove",  &MuseScore::importOve                },
-                  { "scw",  &MuseScore::importOve                },
+                  { "mid",  &importMidi               },
+                  { "midi", &importMidi               },
+                  { "kar",  &importMidi               },
+                  { "md",   &importMuseData           },
+                  { "mgu",  &importBB                 },
+                  { "sgu",  &importBB                 },
+                  { "cap",  &importCapella            },
+                  { "ove",  &importOve                },
+                  { "scw",  &importOve                },
 #ifdef OMR
-                  { "pdf",  &importPdf                           },
+                  { "pdf",  &importPdf                },
 #endif
-                  { "bww",  &MuseScore::importBww                },
-                  { "gtp",  &MuseScore::importGTP                },
-                  { "gp3",  &MuseScore::importGTP                },
-                  { "gp4",  &MuseScore::importGTP                },
-                  { "gp5",  &MuseScore::importGTP                },
+                  { "bww",  &importBww                },
+                  { "gtp",  &importGTP                },
+                  { "gp3",  &importGTP                },
+                  { "gp4",  &importGTP                },
+                  { "gp5",  &importGTP                },
                   };
 
             // import
@@ -1779,14 +1795,15 @@ bool MuseScore::readScore(Score* score, QString name)
             for (i = 0; i < n; ++i) {
                   if (imports[i].extension == csl) {
                         // if (!(this->*imports[i].importF)(score, name))
-                        if (!(*imports[i].importF)(score, name))
-                              return false;
+                        Score::FileError rv = (*imports[i].importF)(score, name);
+                        if (rv != Score::FILE_NO_ERROR)
+                              return rv;
                         break;
                         }
                   }
             if (i == n) {
                   qDebug("unknown file suffix <%s>, name <%s>\n", qPrintable(cs), qPrintable(name));
-                  return false;
+                  return Score::FILE_UNKNOWN_TYPE;
                   }
             score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
             score->connectTies();
@@ -1827,14 +1844,7 @@ bool MuseScore::readScore(Score* score, QString name)
             ++staffIdx;
             }
       score->updateNotes();
-//      score->doLayout();            // DEBUG
-#if 0
-      score->doLayout();
-      foreach (const Excerpt* ex, score->excerpts()) {
-            ex->score()->doLayout();
-            }
-#endif
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------
