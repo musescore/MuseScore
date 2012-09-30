@@ -37,7 +37,7 @@
 
 #include <math.h>
 #include "config.h"
-#include "musescore.h"
+//#include "musescore.h"
 #include "file.h"
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
@@ -4118,7 +4118,7 @@ void ExportMusicXml::write(QIODevice* dev)
  Return false on error.
  */
 
-bool MuseScore::saveXml(Score* score, const QString& name)
+bool saveXml(Score* score, const QString& name)
       {
       QFile f(name);
       if (!f.open(QIODevice::WriteOnly))
@@ -4148,7 +4148,7 @@ bool MuseScore::saveXml(Score* score, const QString& name)
 //     </rootfiles>
 // </container>
 
-bool MuseScore::saveMxl(Score* score, const QString& name)
+bool saveMxl(Score* score, const QString& name)
       {
       QZipWriter uz(name);
 

@@ -592,8 +592,6 @@ class MuseScore : public QMainWindow {
       bool savePng(Score*, const QString& name, bool screenshot, bool transparent, double convDpi, QImage::Format format);
       bool saveAudio(Score*, const QString& name, const QString& type);
       bool saveMp3(Score*, const QString& name);
-      bool saveMxl(Score*, const QString& name);
-      bool saveXml(Score*, const QString& name);
       bool saveSvg(Score*, const QString& name);
       bool savePng(Score*, const QString& name);
       bool saveLilypond(Score*, const QString& name);
@@ -601,8 +599,6 @@ class MuseScore : public QMainWindow {
 
       static bool importGTP(Score*, const QString& name);
       static bool importBww(Score*, const QString& path);
-      static bool importMusicXml(Score*, const QString&);
-      static bool importCompressedMusicXml(Score*, const QString&);
       static bool importMuseData(Score*, const QString& name);
       static bool importLilypond(Score*, const QString& name);
       static bool importBB(Score*, const QString& name);
@@ -663,5 +659,10 @@ extern QPixmap sym2pixmap(const Sym* s, qreal mag);
 extern bool importMidi(Score*, const QString& name);
 extern void convertMidi(Score*, MidiFile* mf);
 
+extern bool importMusicXml(Score*, const QString& name);
+extern bool importCompressedMusicXml(Score*, const QString& name);
+
+extern bool saveMxl(Score*, const QString& name);
+extern bool saveXml(Score*, const QString& name);
 #endif
 
