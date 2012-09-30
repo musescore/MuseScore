@@ -784,35 +784,26 @@ Segment* Measure::getGraceSegment(int t, int gl)
       {
       Segment* s = 0;
 
-      // find the first segment at tick >= t
-          for (Segment* ss = first(Segment::SegChordRest); ss && ss->tick() <= t; ss = ss->next(Segment::SegChordRest)) {
-              if(ss->tick() == t) {
+      // find the first segment at tick == t and create it if necessary
+      for (Segment* ss = first(Segment::SegChordRest); ss && ss->tick() <= t; ss = ss->next(Segment::SegChordRest)) {
+            if(ss->tick() == t) {
                   s = ss;
                   break;
-              }
-          }
+                  }
+            }
       if (s == 0) {
             s = new Segment(this, Segment::SegChordRest, t);
             add(s);
             }
 
-      // find the first SegChordRest segment at tick = t
-      // while counting the SegGrace segments
-
       int nGraces  = 0;
-      Segment* sCr = 0;
-      for (Segment* ss = s; ss && ss->tick() == t; ss = ss->next()) {
-            if (ss->subtype() == Segment::SegChordRest) {
-                  sCr = ss;
-                  break;
-                  }
+      Segment* sCr = s;
+      // count SegGrace segments
+      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {	
+            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
+                  nGraces++;
             }
-          
-      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
-          if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
-              nGraces++;
-      }
-          
+ 	    //create grace segment if necessary
       for (; nGraces < gl; ++nGraces) {
             Segment* ps = new Segment(this, Segment::SegGrace, t);
             _segments.insert(ps, s);
