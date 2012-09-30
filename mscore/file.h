@@ -22,24 +22,6 @@
 #define __FILE_H__
 
 //---------------------------------------------------------
-//   LoadFile
-//---------------------------------------------------------
-
-class LoadFile {
-      QString _name;
-
-   protected:
-      QString error;
-
-   public:
-      LoadFile() {}
-      virtual ~LoadFile() {}
-      virtual bool loader(QFile* f) = 0;        // return false on error
-      bool load(const QString& name);           // return false on error
-      QString name() const { return _name; }
-      };
-
-//---------------------------------------------------------
 //   WallpaperPreview
 //---------------------------------------------------------
 

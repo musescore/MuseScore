@@ -34,7 +34,10 @@ class MTest {
       Score* readCreatedScore(const QString& name);
       bool saveScore(Score*, const QString& name);
       bool savePdf(Score*, const QString& name);
+      bool saveMusicXml(Score*, const QString& name);
+      bool compareFiles(const QString& saveName, const QString& compareWith);
       bool saveCompareScore(Score*, const QString& saveName, const QString& compareWith);
+      bool saveCompareMusicXmlScore(Score*, const QString& saveName, const QString& compareWith);
       Element* writeReadElement(Element* element);
       void initMTest();
       };
