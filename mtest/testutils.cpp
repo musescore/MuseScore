@@ -24,6 +24,8 @@
 #ifdef OMR
 extern bool importPdf(Score*, const QString&);
 #endif
+extern bool importMusicXml(Score*, const QString&);
+extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 bool noGui = true;
 QString revision;
@@ -117,6 +119,8 @@ Score* MTest::readCreatedScore(const QString& name)
       else if (csl == "pdf")
             rv = importPdf(score, name);
 #endif
+      else if (csl == "xml")
+            rv = importMusicXml(score, name);
       if (!rv) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
@@ -137,13 +141,11 @@ bool MTest::saveScore(Score* score, const QString& name)
       }
 
 //---------------------------------------------------------
-//   saveCompareScore
+//   compareFiles
 //---------------------------------------------------------
 
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith)
+bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
       {
-      saveScore(score, saveName);
-
       QString cmd = "diff";
       QStringList args;
       args.append(saveName);
@@ -157,6 +159,26 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
             return false;
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   saveCompareScore
+//---------------------------------------------------------
+
+bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith)
+      {
+      saveScore(score, saveName);
+      return compareFiles(saveName, compareWith);
+      }
+
+//---------------------------------------------------------
+//   saveCompareMusicXMLScore
+//---------------------------------------------------------
+
+bool MTest::saveCompareMusicXmlScore(Score* score, const QString& saveName, const QString& compareWith)
+      {
+      saveMusicXml(score, saveName);
+      return compareFiles(saveName, compareWith);
       }
 
 //---------------------------------------------------------
@@ -207,6 +229,15 @@ bool MTest::savePdf(Score* cs, const QString& saveName)
                   }
       p.end();
       return true;
+      }
+
+//---------------------------------------------------------
+//   saveMusicXml
+//---------------------------------------------------------
+
+bool MTest::saveMusicXml(Score* score, const QString& saveName)
+      {
+      return saveXml(score, saveName);
       }
 
 //---------------------------------------------------------
