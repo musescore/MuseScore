@@ -212,42 +212,8 @@ enum NoteType {
       };
 
 //---------------------------------------------------------
-//    AccidentalType
+//    AccidentalVal
 //---------------------------------------------------------
-
-enum AccidentalType {
-      ACC_NONE,
-      ACC_SHARP,
-      ACC_FLAT,
-      ACC_SHARP2,
-      ACC_FLAT2,
-      ACC_NATURAL,
-
-      ACC_FLAT_SLASH,
-      ACC_FLAT_SLASH2,
-      ACC_MIRRORED_FLAT2,
-      ACC_MIRRORED_FLAT,
-      ACC_MIRRIRED_FLAT_SLASH,
-      ACC_FLAT_FLAT_SLASH,
-
-      ACC_SHARP_SLASH,
-      ACC_SHARP_SLASH2,
-      ACC_SHARP_SLASH3,
-      ACC_SHARP_SLASH4,
-
-      ACC_SHARP_ARROW_UP,
-      ACC_SHARP_ARROW_DOWN,
-      ACC_SHARP_ARROW_BOTH,
-      ACC_FLAT_ARROW_UP,
-      ACC_FLAT_ARROW_DOWN,
-      ACC_FLAT_ARROW_BOTH,
-      ACC_NATURAL_ARROW_UP,
-      ACC_NATURAL_ARROW_DOWN,
-      ACC_NATURAL_ARROW_BOTH,
-      ACC_SORI,
-      ACC_KORON,
-      ACC_END
-      };
 
 enum AccidentalVal {
       SHARP2  = 2,
