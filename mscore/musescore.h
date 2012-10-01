@@ -665,8 +665,8 @@ extern Score::FileError importOve(Score*, const QString& name);
 
 extern void convertMidi(Score*, MidiFile* mf);
 
-extern bool importMusicXml(Score*, const QString& name);
-extern bool importCompressedMusicXml(Score*, const QString& name);
+extern Score::FileError importMusicXml(Score*, const QString& name);
+extern Score::FileError importCompressedMusicXml(Score*, const QString& name);
 
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
