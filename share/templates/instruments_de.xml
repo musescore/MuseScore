@@ -1924,6 +1924,18 @@
       <description>Mandola</description>
       </Instrument>
 
+    <Instrument id="mandocello">
+      <longName>Mandoloncello</longName>
+      <shortName>Mncl.</shortName>
+      <description>Mandoloncello</description>
+      </Instrument>
+
+    <Instrument id="OctavMandolin">
+      <longName>Oktav-Mandoline</longName>
+      <shortName>OM.</shortName>
+      <description>Oktav-Mandoline</description>
+      </Instrument>
+
     <Instrument id="hosozao-shamisen">
       <longName>Hosozao Shamisen</longName>
       <shortName>Ho. Sh.</shortName>
