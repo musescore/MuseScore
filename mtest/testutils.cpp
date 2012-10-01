@@ -22,9 +22,9 @@
 #include "libmscore/page.h"
 
 #ifdef OMR
-extern bool importPdf(Score*, const QString&);
+extern Score::FileError importPdf(Score*, const QString&);
 #endif
-extern bool importMusicXml(Score*, const QString&);
+extern Score::FileError importMusicXml(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 bool noGui = true;
@@ -110,18 +110,19 @@ Score* MTest::readCreatedScore(const QString& name)
       score->setTestMode(true);
       QString csl  = score->fileInfo()->suffix().toLower();
 
-      bool rv = false;
-      if (csl == "mscz")
-            rv = score->loadCompressedMsc(name);
-      else if (csl == "mscx")
-            rv = score->loadMsc(name);
+      Score::FileError rv;
+      if (csl == "mscz" || csl == "mscx")
+            rv = score->loadMsc(name, false);
 #ifdef OMR
       else if (csl == "pdf")
             rv = importPdf(score, name);
 #endif
       else if (csl == "xml")
             rv = importMusicXml(score, name);
-      if (!rv) {
+      else
+            rv = Score::FILE_UNKNOWN_TYPE;
+
+      if (rv != Score::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
             return 0;
