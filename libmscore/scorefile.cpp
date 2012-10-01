@@ -750,29 +750,8 @@ Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
                         QString message;
                         if (_mscVersion > MSCVERSION)
                               return FILE_TOO_NEW;
-                              // incompatible version
-                              // message = QT_TRANSLATE_NOOP("file", "Unable to open this score:<br>"
-                              // "It was saved using a newer version of MuseScore.<br>Visit the <a href=\"http://musescore.org\">MuseScore website</a> to obtain the latest version.");
                         if (_mscVersion < 114)
                               return FILE_TOO_OLD;
-                              // incompatible version
-                              // message = QT_TRANSLATE_NOOP("file",
-                              //   "Unable to open this score reliably:<br>"
-                              //   "It was last saved with version 0.9.5 or older.<br>"
-                              //   "You can convert this score by opening and then saving with"
-                              //    " MuseScore version 1.x</a>");
-                        //if (!message.isEmpty()) {
-                        //      QMessageBox msgBox;
-                        //      msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore"));
-                        //      msgBox.setText(message);
-                        //      msgBox.setTextFormat(Qt::RichText);
-                        //      msgBox.setIcon(QMessageBox::Warning);
-                        //      msgBox.setStandardButtons(
-                        //         QMessageBox::Cancel | QMessageBox::Ignore
-                        //         );
-                        //      if (msgBox.exec() == QMessageBox::Cancel)
-                        //            return false;
-                        //      }
                         }
 
                   if (_mscVersion <= 114)
