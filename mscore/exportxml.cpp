@@ -2066,25 +2066,25 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                     */
                   QString s;
                   switch (acc->subtype()) {
-                        case ACC_SHARP:              s = "sharp";                break;
-                        case ACC_FLAT:               s = "flat";                 break;
-                        case ACC_SHARP2:             s = "double-sharp";         break;
-                        case ACC_FLAT2:              s = "flat-flat";            break;
-                        case ACC_NATURAL:            s = "natural";              break;
-                        case ACC_FLAT_SLASH:         s = "quarter-flat";         break; // (alternative)
-                        case ACC_MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
-                        case ACC_FLAT_ARROW_UP:      s = "quarter-flat";         break; // (alternative)
-                        case ACC_NATURAL_ARROW_DOWN: s = "quarter-flat";         break; // (alternative)
-                        case ACC_SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
-                        case ACC_SHARP_ARROW_DOWN:   s = "quarter-sharp";        break; // (alternative)
-                        case ACC_NATURAL_ARROW_UP:   s = "quarter-sharp";        break; // (alternative)
-                        case ACC_MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
-                        case ACC_FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative)
-                        case ACC_FLAT_ARROW_DOWN:    s = "three-quarters-flat";  break; // (alternative)
-                        case ACC_SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
-                        case ACC_SHARP_ARROW_UP:     s = "three-quarters-sharp"; break; // (alternate)
-                        case ACC_SORI:               s = "sori";                 break; //sori
-                        case ACC_KORON:              s = "koron";                break; //koron
+                        case Accidental::ACC_SHARP:              s = "sharp";                break;
+                        case Accidental::ACC_FLAT:               s = "flat";                 break;
+                        case Accidental::ACC_SHARP2:             s = "double-sharp";         break;
+                        case Accidental::ACC_FLAT2:              s = "flat-flat";            break;
+                        case Accidental::ACC_NATURAL:            s = "natural";              break;
+                        case Accidental::ACC_FLAT_SLASH:         s = "quarter-flat";         break; // (alternative)
+                        case Accidental::ACC_MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
+                        case Accidental::ACC_FLAT_ARROW_UP:      s = "quarter-flat";         break; // (alternative)
+                        case Accidental::ACC_NATURAL_ARROW_DOWN: s = "quarter-flat";         break; // (alternative)
+                        case Accidental::ACC_SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
+                        case Accidental::ACC_SHARP_ARROW_DOWN:   s = "quarter-sharp";        break; // (alternative)
+                        case Accidental::ACC_NATURAL_ARROW_UP:   s = "quarter-sharp";        break; // (alternative)
+                        case Accidental::ACC_MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
+                        case Accidental::ACC_FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative)
+                        case Accidental::ACC_FLAT_ARROW_DOWN:    s = "three-quarters-flat";  break; // (alternative)
+                        case Accidental::ACC_SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
+                        case Accidental::ACC_SHARP_ARROW_UP:     s = "three-quarters-sharp"; break; // (alternate)
+                        case Accidental::ACC_SORI:               s = "sori";                 break; //sori
+                        case Accidental::ACC_KORON:              s = "koron";                break; //koron
                         default:
                               qDebug("unknown accidental %d\n", acc->subtype());
                         }

@@ -28,6 +28,7 @@
 #include "sparm.h"
 #include "mscoreview.h"
 #include "segment.h"
+#include "accidental.h"
 #include "note.h"
 
 class TempoMap;
@@ -531,8 +532,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(AccidentalType);
-      void changeAccidental(Note* oNote, AccidentalType);
+      void changeAccidental(Accidental::AccidentalType);
+      void changeAccidental(Note* oNote, Accidental::AccidentalType);
 
       void addElement(Element*);
       void removeElement(Element*);

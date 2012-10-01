@@ -266,13 +266,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             int st1   = aclist[0].note->accidental()->subtype();
             int st2   = acc->subtype();
-            int ldiff = st1 == ACC_FLAT ? 4 : 5;
+            int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
 
             if (qAbs(l1-l2) > ldiff) {
                   aclist[nAcc-1].x = -pnd * acc->mag() - acc->width() - acc->bbox().x();
                   }
             else {
-                  if ((st1 == ACC_FLAT) && (st2 == ACC_FLAT) && (qAbs(l1-l2) > 2))
+                  if ((st1 == Accidental::ACC_FLAT) && (st2 == Accidental::ACC_FLAT) && (qAbs(l1-l2) > 2))
                         aclist[nAcc-1].x = aclist[0].x - acc->width() * .5;
                   else
                         aclist[nAcc-1].x = aclist[0].x - acc->width();
@@ -295,15 +295,15 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   int st1 = aclist[i-1].note->accidental()->subtype();
                   int st2 = acc->subtype();
 
-                  int ldiff = st1 == ACC_FLAT ? 4 : 5;
+                  int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
                   if (qAbs(l1-l2) <= ldiff) {   // overlap accidental above
-                        if ((st1 == ACC_FLAT) && (st2 == ACC_FLAT) && (qAbs(l1-l2) > 2))
+                        if ((st1 == Accidental::ACC_FLAT) && (st2 == Accidental::ACC_FLAT) && (qAbs(l1-l2) > 2))
                               x = aclist[i-1].x + acc->width() * .5;    // undercut flats
                         else
                               x = aclist[i-1].x;
                         }
 
-                  ldiff = acc->subtype() == ACC_FLAT ? 4 : 5;
+                  ldiff = acc->subtype() == Accidental::ACC_FLAT ? 4 : 5;
                   if (qAbs(l2-l3) <= ldiff) {       // overlap accidental below
                         if (aclist[n].x < x)
                               x = aclist[n].x;

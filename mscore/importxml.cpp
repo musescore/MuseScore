@@ -4191,49 +4191,49 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXML accidental name to a MuseScore enum AccidentalType.
+ Convert a MusicXML accidental name to a MuseScore enum Accidental::Type.
  */
 
-static AccidentalType convertAccidental(QString mxmlName)
+static Accidental::AccidentalType convertAccidental(QString mxmlName)
       {
-      QMap<QString, AccidentalType> map; // map MusicXML accidental name to MuseScore enum AccidentalType
-      map["natural"] = ACC_NATURAL;
-      map["flat"] = ACC_FLAT;
-      map["sharp"] = ACC_SHARP;
-      map["double-sharp"] = ACC_SHARP2;
-      map["sharp-sharp"] = ACC_SHARP2;
-      map["flat-flat"] = ACC_FLAT2;
-      map["double-flat"] = ACC_FLAT2;
-      map["natural-flat"] = ACC_NONE;
+      QMap<QString, Accidental::AccidentalType> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
+      map["natural"] = Accidental::ACC_NATURAL;
+      map["flat"] = Accidental::ACC_FLAT;
+      map["sharp"] = Accidental::ACC_SHARP;
+      map["double-sharp"] = Accidental::ACC_SHARP2;
+      map["sharp-sharp"] = Accidental::ACC_SHARP2;
+      map["flat-flat"] = Accidental::ACC_FLAT2;
+      map["double-flat"] = Accidental::ACC_FLAT2;
+      map["natural-flat"] = Accidental::ACC_NONE;
 
-      map["quarter-flat"] = ACC_MIRRORED_FLAT;
-      map["quarter-sharp"] = ACC_SHARP_SLASH;
-      map["three-quarters-flat"] = ACC_MIRRORED_FLAT2;
-      map["three-quarters-sharp"] = ACC_SHARP_SLASH4;
+      map["quarter-flat"] = Accidental::ACC_MIRRORED_FLAT;
+      map["quarter-sharp"] = Accidental::ACC_SHARP_SLASH;
+      map["three-quarters-flat"] = Accidental::ACC_MIRRORED_FLAT2;
+      map["three-quarters-sharp"] = Accidental::ACC_SHARP_SLASH4;
 
-      map["sharp-down"] = ACC_SHARP_ARROW_DOWN;
-      map["sharp-up"] = ACC_SHARP_ARROW_UP;
-      map["natural-down"] = ACC_NATURAL_ARROW_DOWN;
-      map["natural-up"] = ACC_NATURAL_ARROW_UP;
-      map["flat-down"] = ACC_FLAT_ARROW_DOWN;
-      map["flat-up"] = ACC_FLAT_ARROW_UP;
+      map["sharp-down"] = Accidental::ACC_SHARP_ARROW_DOWN;
+      map["sharp-up"] = Accidental::ACC_SHARP_ARROW_UP;
+      map["natural-down"] = Accidental::ACC_NATURAL_ARROW_DOWN;
+      map["natural-up"] = Accidental::ACC_NATURAL_ARROW_UP;
+      map["flat-down"] = Accidental::ACC_FLAT_ARROW_DOWN;
+      map["flat-up"] = Accidental::ACC_FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = ACC_MIRRIRED_FLAT_SLASH;
-      map["slash-sharp"] = ACC_SHARP_SLASH;
-      map["slash-flat"] = ACC_FLAT_SLASH;
-      map["double-slash-flat"] = ACC_FLAT_SLASH2;
+      map["slash-quarter-sharp"] = Accidental::ACC_MIRRIRED_FLAT_SLASH;
+      map["slash-sharp"] = Accidental::ACC_SHARP_SLASH;
+      map["slash-flat"] = Accidental::ACC_FLAT_SLASH;
+      map["double-slash-flat"] = Accidental::ACC_FLAT_SLASH2;
 
-      map["sori"] = ACC_SORI;
-      map["koron"] = ACC_KORON;
+      map["sori"] = Accidental::ACC_SORI;
+      map["koron"] = Accidental::ACC_KORON;
 
-      map["natural-sharp"] = ACC_NONE;
+      map["natural-sharp"] = Accidental::ACC_NONE;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("unknown accidental %s", qPrintable(mxmlName));
-      // default: return ACC_NONE
-      return ACC_NONE;
+      // default: return Accidental::ACC_NONE
+      return Accidental::ACC_NONE;
       }
 
 //---------------------------------------------------------
@@ -4770,7 +4770,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
       QString step;
       int alter  = 0;
       int octave = 4;
-      AccidentalType accidental = ACC_NONE;
+      Accidental::AccidentalType accidental = Accidental::ACC_NONE;
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
@@ -5143,7 +5143,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   Accidental* a = new Accidental(score);
                   a->setSubtype(accidental);
                   a->setHasBracket(cautionary || parentheses);
-                  a->setRole(ACC_USER);
+                  a->setRole(Accidental::ACC_USER);
                   note->add(a);
                   }
 
