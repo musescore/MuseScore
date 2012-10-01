@@ -69,7 +69,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
-      if(mscore->readScore(sc, QString(":/data/tab_sample.mscx"))) {
+      if (mscore->readScore(sc, QString(":/data/tab_sample.mscx"), false)) {
             // add a preview widget to tabulature page
 #ifdef _USE_NAVIGATOR_PREVIEW_
             NScrollArea* sa = new NScrollArea;

@@ -543,7 +543,7 @@ class MuseScore : public QMainWindow {
       bool processMidiRemote(MidiRemoteType type, int data);
       ScoreTab* getTab1() const { return tab1; }
       ScoreTab* getTab2() const { return tab2; }
-      void readScoreError(const QString&, Score::FileError) const;
+      bool readScoreError(const QString&, Score::FileError, bool ask) const;
       QList<LanguageItem>& languages() { return _languages; }
 
       QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
@@ -586,7 +586,7 @@ class MuseScore : public QMainWindow {
       bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
       bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
 
-      Score::FileError readScore(Score*, QString name);
+      Score::FileError readScore(Score*, QString name, bool ignoreVersionError);
       Score* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
