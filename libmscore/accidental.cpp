@@ -336,7 +336,7 @@ const char* Accidental::subtype2name(AccidentalType st)
 //   value2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::value2subtype(AccidentalVal v)
+Accidental::AccidentalType Accidental::value2subtype(AccidentalVal v)
       {
       switch(v) {
             case NATURAL: return ACC_NONE;
@@ -355,7 +355,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 //   name2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::name2subtype(const QString& tag)
+Accidental::AccidentalType Accidental::name2subtype(const QString& tag)
       {
       int n = sizeof(accList)/sizeof(*accList);
       for (int i = 0; i < n; ++i) {
