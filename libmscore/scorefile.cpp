@@ -783,7 +783,12 @@ Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
       foreach(LinkedElements* le, _elinks)
             le->setLid(this, id++);
       _elinks.clear();
-      _mscVersion = MSCVERSION;     // for later drag & drop usage
+
+      printf("===version %d\n", _mscVersion);
+
+// _mscVersion is needed used during layout
+//      _mscVersion = MSCVERSION;     // for later drag & drop usage
+
       return FILE_NO_ERROR;
       }
 

@@ -82,6 +82,7 @@ class Marker : public Text {
       virtual void layout();
       virtual void styleChanged();
       virtual bool systemFlag() const  { return true;        }
+      virtual void adjustReadPos();
       };
 
 enum {

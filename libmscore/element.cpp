@@ -707,7 +707,9 @@ bool Element::readProperties(const QDomElement& e)
             _readPos = QPointF();
             }
       else if (tag == "pos") {
-            if (score()->mscVersion() > 114 || (type() != TEXT && type() != DYNAMIC)) {
+            if (score()->mscVersion() > 114
+               || (type() != TEXT && type() != DYNAMIC)
+               ) {
                   qreal _spatium = spatium();
                   setUserOff(QPointF());
                   _readPos = readPoint(e) * _spatium;
