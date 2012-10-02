@@ -146,18 +146,22 @@ void Marker::layout()
       Text::layout();
       }
 
-#if 0
 //---------------------------------------------------------
-//   pagePos
+//   adjustReadPos
 //---------------------------------------------------------
 
-QPointF Marker::pagePos() const
+void Marker::adjustReadPos()
       {
-      if (parent())
-            return measure()->pagePos() + pos();
-      return pos();
+      if (!readPos().isNull()) {
+            QPointF uo = readPos() - ipos();
+            if (score()->mscVersion() <= 114) {
+                  // rebase from Measure to Segment
+                  uo.rx() -= segment()->ipos().x();
+                  }
+            setUserOff(uo);
+            setReadPos(QPointF());
+            }
       }
-#endif
 
 //---------------------------------------------------------
 //   markerType

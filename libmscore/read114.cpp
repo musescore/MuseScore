@@ -595,7 +595,7 @@ Score::FileError Score::read114(const QDomElement& de)
       if (!hasSoundfont)
             _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
 
-      _mscVersion = MSCVERSION;     // for later drag & drop usage
+//      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();
       renumberMeasures();
       rebuildMidiMapping();
