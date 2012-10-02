@@ -799,7 +799,7 @@ Segment* Measure::getGraceSegment(int t, int gl)
       int nGraces  = 0;
       Segment* sCr = s;
       // count SegGrace segments
-      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {	
+      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
             if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
                   nGraces++;
             }
@@ -853,11 +853,12 @@ void Measure::add(Element* el)
                   {
                   Segment* seg = static_cast<Segment*>(el);
                   int tracks = staves.size() * VOICES;
-                  for (int track = 0; track < tracks; track += VOICES) {
-                        if (!seg->element(track))
-                              continue;
-                        if (seg->subtype() == Segment::SegKeySig)
+                  if (seg->subtype() == Segment::SegKeySig) {
+                        for (int track = 0; track < tracks; track += VOICES) {
+                              if (!seg->element(track))
+                                    continue;
                               score()->staff(track/VOICES)->setUpdateKeymap(true);
+                              }
                         }
                   int t  = seg->tick();
                   Segment::SegmentType st = seg->subtype();
@@ -2085,9 +2086,16 @@ void Measure::read(const QDomElement& de, int staffIdx)
                         segment = segment->next();
                         }
                   else if (segment && segment != first()) {
-                        Segment* ns = segment->next();
-                        while (ns && ns->tick() < score()->curTick)
-                              ns = ns->next();
+                        Segment* ns;
+                        if (score()->curTick == tick())
+                              ns = first();
+                        else {
+                              // ??
+                              // Segment* ns = segment->next();
+                              ns = segment;
+                              while (ns && ns->tick() < score()->curTick)
+                                    ns = ns->next();
+                              }
                         segment = new Segment(this, Segment::SegClef, score()->curTick);
                         _segments.insert(segment, ns);
                         }
