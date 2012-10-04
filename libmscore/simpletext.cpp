@@ -51,7 +51,8 @@ void SimpleText::draw(QPainter* p) const
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
       p->setPen(textColor());
-      p->drawText(drawingRect, alignFlags(), _text);
+      foreach(const TLine& t, _text)
+            p->drawText(t.pos, t.text);
       }
 
 //---------------------------------------------------------
@@ -103,39 +104,13 @@ QColor SimpleText::textColor() const
       }
 
 //---------------------------------------------------------
-//   alignFlags
-//---------------------------------------------------------
-
-int SimpleText::alignFlags() const
-      {
-      int flags = Qt::TextDontClip;
-      Align align = textStyle().align();
-      if (align & ALIGN_HCENTER)
-            flags |= Qt::AlignHCenter;
-      else if (align & ALIGN_RIGHT)
-            flags |= Qt::AlignRight;
-      else
-            flags |= Qt::AlignLeft;
-      if (align & ALIGN_VCENTER)
-            flags |= Qt::AlignVCenter;
-      else if (align & ALIGN_BOTTOM)
-            flags |= Qt::AlignBottom;
-      else if (align & ALIGN_BASELINE)
-            flags |= Qt::AlignTop;
-      else
-            flags |= Qt::AlignTop;
-      if (_layoutToParentWidth)
-            flags |= Qt::TextWordWrap;
-      return flags;
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void SimpleText::layout()
       {
-      if (_text.isEmpty()) {
+      int n = _text.size();
+      if (!n) {
             setPos(QPointF());
             setbbox(QRectF());
             return;
@@ -143,26 +118,70 @@ void SimpleText::layout()
 
       const TextStyle& s(textStyle());
 
-      QPointF o(s.offset(spatium()));
-      if (_layoutToParentWidth && parent()) {
-            Element* e = parent();
-            if ((type() == MARKER || type() == JUMP) && e->parent())
-                  e = e->parent();
-            qreal w = e->width();
-            qreal h = e->height();
-            drawingRect = QRectF(0.0, 0.0, w, h);
-            QPointF ro = s.reloff() * .01;
-            setPos(o + QPointF(ro.x() * w, ro.y() * h));
-            }
-      else {
-            drawingRect = QRectF();
-            setPos(o);
-            }
-      Align align = textStyle().align();
-      if (align & ALIGN_BASELINE)
-            setPos(ipos().x(), ipos().y() - baseLine());
       QFontMetricsF fm(s.fontPx(spatium()));
-      setbbox(fm.boundingRect(drawingRect, alignFlags(), _text));
+      QPointF o(s.offset(spatium()));
+
+      QRectF bb;
+      qreal lh = lineHeight();
+      qreal ly = .0;
+      for (int i = 0; i < n; ++i) {
+            TLine* t = &_text[i];
+
+            QRectF r(fm.tightBoundingRect(t->text));
+
+            t->pos.ry() = ly;
+            if (align() & ALIGN_BOTTOM)
+                  t->pos.ry() += -r.bottom();
+            else if (align() & ALIGN_VCENTER)
+                  t->pos.ry() +=  -(r.top() + r.bottom()) * .5;
+            else if (align() & ALIGN_BASELINE)
+                  ;
+            else  // ALIGN_TOP
+                  t->pos.ry() += -r.top();
+            if (align() & ALIGN_RIGHT)
+                  t->pos.rx() = -r.right();
+            else if (align() & ALIGN_HCENTER)
+                  t->pos.rx() = -(r.left() + r.right()) * .5;
+            else  // ALIGN_LEFT
+                  t->pos.rx() = -r.left();
+            bb |= r.translated(t->pos);
+            ly += lh;
+            }
+      if (_layoutToParentWidth && parent()) {
+            //
+            // layout to parent frame
+            //
+            Element* e = parent();
+            qreal w    = e->width();
+            qreal h    = e->height();
+            QPointF ro = s.reloff() * .01;
+            o += QPointF(ro.x() * w, ro.y() * h);
+            QPointF layoutOffset;
+
+            if (align() & ALIGN_BOTTOM)
+                  layoutOffset.ry() = -bb.bottom();
+            else if (align() & ALIGN_VCENTER)
+                  layoutOffset.ry() =  -(bb.top() + bb.bottom()) * .5;
+            else if (align() & ALIGN_BASELINE)
+                  layoutOffset.ry() = 0.0;
+            else  // ALIGN_TOP
+                  layoutOffset.ry() = -bb.top();
+            if (align() & ALIGN_RIGHT)
+                  layoutOffset.rx() = w - bb.right();
+            else if (align() & ALIGN_HCENTER)
+                  layoutOffset.rx() = -(bb.left() + bb.right() - w) * .5;
+            else  // ALIGN_LEFT
+                  layoutOffset.rx() = -bb.left();
+            for (int i = 0; i < n; ++i) {
+                  TLine* t = &_text[i];
+                  t->pos += layoutOffset;
+                  }
+            bb.translate(layoutOffset);
+            }
+
+      setPos(o);
+      setbbox(bb);
+
       if (hasFrame())
             layoutFrame();
       }
@@ -219,64 +238,32 @@ qreal SimpleText::baseLine() const
       }
 
 //---------------------------------------------------------
-//   frameWidth
+//   setText
 //---------------------------------------------------------
 
-Spatium SimpleText::frameWidth() const
+void SimpleText::setText(const QString& s)
       {
-      return textStyle().frameWidth();
+      QStringList sl = s.split('\n');
+      _text.clear();
+      foreach(QString s, sl)
+            _text.append(TLine(s));
       }
 
 //---------------------------------------------------------
-//   hasFrame
+//   getText
 //---------------------------------------------------------
 
-bool SimpleText::hasFrame() const
+QString SimpleText::getText() const
       {
-      return textStyle().hasFrame();
+      QString s;
+      int n = _text.size();
+      if (n == 0)
+            return s;
+      s = _text[0].text;
+      for (int i = 1; i < n; ++i) {
+            s += '\n';
+            s += _text[i].text;
+            }
+      return s;
       }
 
-//---------------------------------------------------------
-//   paddingWidth
-//---------------------------------------------------------
-
-Spatium SimpleText::paddingWidth() const
-      {
-      return textStyle().paddingWidth();
-      }
-
-//---------------------------------------------------------
-//   frameColor
-//---------------------------------------------------------
-
-QColor SimpleText::frameColor() const
-      {
-      return textStyle().frameColor();
-      }
-
-//---------------------------------------------------------
-//   backgroundColor
-//---------------------------------------------------------
-
-QColor SimpleText::backgroundColor() const
-      {
-      return textStyle().backgroundColor();
-      }
-
-//---------------------------------------------------------
-//   frameRound
-//---------------------------------------------------------
-
-int SimpleText::frameRound() const
-      {
-      return textStyle().frameRound();
-      }
-
-//---------------------------------------------------------
-//   circle
-//---------------------------------------------------------
-
-bool SimpleText::circle() const
-      {
-      return textStyle().circle();
-      }

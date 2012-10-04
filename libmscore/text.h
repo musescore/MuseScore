@@ -32,7 +32,7 @@ class Text : public SimpleText {
       Q_PROPERTY(QString text READ getText WRITE setText)
 
       QTextDocument* _doc;
-      int _styleIndex;
+      int _styleIndex;        // set to -1 if not styled
 
       void createDoc();
       void setUnstyledText(const QString& s);
@@ -70,7 +70,6 @@ class Text : public SimpleText {
       void setHasFrame(bool);
       qreal xoff() const;
       qreal yoff() const;
-      Align align() const;
       OffsetType offsetType() const;
       QPointF reloff() const;
       void setAlign(Align val);

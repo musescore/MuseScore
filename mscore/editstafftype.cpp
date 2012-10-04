@@ -26,6 +26,8 @@
 #include "navigator.h"
 #include "scoreview.h"
 
+extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
+
 //---------------------------------------------------------
 //   EditStaffType
 //---------------------------------------------------------
@@ -69,7 +71,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
-      if (mscore->readScore(sc, QString(":/data/tab_sample.mscx"), false)) {
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) != Score::FILE_NO_ERROR) {
             // add a preview widget to tabulature page
 #ifdef _USE_NAVIGATOR_PREVIEW_
             NScrollArea* sa = new NScrollArea;

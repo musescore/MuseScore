@@ -932,21 +932,27 @@ QLineF Text::dragAnchor() const
                   p1.ry() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
                   }
             }
-      qreal tw = width();
-      qreal th = height();
-      qreal x  = 0.0;
-      qreal y  = 0.0;
+
+      QPointF p2;
+      QRectF r(canvasBoundingRect());
+
       if (align() & ALIGN_BOTTOM)
-            y = th;
+            p2.ry() = r.bottom();
       else if (align() & ALIGN_VCENTER)
-            y = (th * .5);
+            p2.ry() = r.center().y();
       else if (align() & ALIGN_BASELINE)
-            y = baseLine();
+            p2.ry() = canvasPos().y();
+      else // ALIGN_TOP
+            p2.ry() = r.top();
+
       if (align() & ALIGN_RIGHT)
-            x = tw;
+            p2.rx() = r.right();
       else if (align() & ALIGN_HCENTER)
-            x = (tw * .5);
-      return QLineF(p1, canvasBoundingRect().topLeft() + QPointF(x, y));
+            p2.rx() = r.center().x();
+      else  // ALIGN_LEFT
+            p2.rx() = r.left();
+
+      return QLineF(p1, p2);
       }
 
 //---------------------------------------------------------
@@ -985,15 +991,6 @@ void Text::setSizeIsSpatiumDependent(int v)
 qreal Text::xoff() const
       {
       return textStyle().offset().x();
-      }
-
-//---------------------------------------------------------
-//   align
-//---------------------------------------------------------
-
-Align Text::align() const
-      {
-      return textStyle().align();
       }
 
 //---------------------------------------------------------

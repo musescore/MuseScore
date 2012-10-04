@@ -487,7 +487,6 @@ QRectF Element::drag(const EditData& data)
             int n = lrint(y / vRaster);
             y = vRaster * n;
             }
-printf("drag %s\n", name());
       setUserOff(QPointF(x, y));
       return canvasBoundingRect() | r;
       }
@@ -704,16 +703,16 @@ bool Element::readProperties(const QDomElement& e)
             qreal _spatium = spatium();
             QPointF pt(readPoint(e) * _spatium);
             setUserOff(pt);
-            _readPos = QPointF();
+            // _readPos = QPointF();
             }
       else if (tag == "pos") {
-            if (score()->mscVersion() > 114
-               || (type() != TEXT && type() != DYNAMIC)
-               ) {
+//            if (score()->mscVersion() > 114
+//               || (type() != TEXT && type() != DYNAMIC)
+//               ) {
                   qreal _spatium = spatium();
-                  setUserOff(QPointF());
+//                  setUserOff(QPointF());
                   _readPos = readPoint(e) * _spatium;
-                  }
+//                  }
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + val.toInt());

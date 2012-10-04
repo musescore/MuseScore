@@ -316,7 +316,7 @@ void initStyle(MStyle* s)
          Spatium(0.2), Spatium(.5), 20, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text Left"), ff,  12, false, false, false,
+         TR( "Repeat Text Left"), "MScore",  20, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
@@ -348,7 +348,7 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "String Number"), ff,  8, false, false, false,
          ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true,
-         Spatium(0.1), Spatium(-0.2), 0, Qt::black, true, false));
+         Spatium(0.1), Spatium(0.2), 0, Qt::black, true, false));
 
       AS(TextStyle(
          TR( "Ottava"), ff, 12, false, true, false,

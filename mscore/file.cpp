@@ -91,6 +91,21 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
 
+extern Score::FileError importMidi(Score*, const QString& name);
+extern Score::FileError importGTP(Score*, const QString& name);
+extern Score::FileError importBww(Score*, const QString& path);
+extern Score::FileError importMusicXml(Score*, const QString&);
+extern Score::FileError importCompressedMusicXml(Score*, const QString&);
+extern Score::FileError importMuseData(Score*, const QString& name);
+extern Score::FileError importLilypond(Score*, const QString& name);
+extern Score::FileError importBB(Score*, const QString& name);
+extern Score::FileError importCapella(Score*, const QString& name);
+extern Score::FileError importOve(Score*, const QString& name);
+extern Score::FileError importMusicXml(Score*, const QString& name);
+extern Score::FileError importCompressedMusicXml(Score*, const QString& name);
+
+extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
+
 //---------------------------------------------------------
 //   paintElements
 //---------------------------------------------------------
@@ -139,29 +154,29 @@ static QString createDefaultFileName(QString fn)
 //    ignore is pressed by user
 //---------------------------------------------------------
 
-bool MuseScore::readScoreError(const QString& name, Score::FileError error, bool ask) const
+static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
-      QString msg = QString(tr("Cannot read file %1:\n")).arg(name);
+      QString msg = QString(QT_TRANSLATE_NOOP(file, "Cannot read file %1:\n")).arg(name);
       bool canIgnore = false;
       switch(error) {
             case Score::FILE_NO_ERROR:
                   return false;
             case Score::FILE_BAD_FORMAT:
-                  msg += tr("bad format");
+                  msg += QT_TRANSLATE_NOOP(file, "bad format");
                   break;
             case Score::FILE_UNKNOWN_TYPE:
-                  msg += tr("unknown format");
+                  msg += QT_TRANSLATE_NOOP(file, "unknown format");
                   break;
             case Score::FILE_NO_ROOTFILE:
                   break;
             case Score::FILE_TOO_OLD:
-                  msg += tr("It was last saved with version 0.9.5 or older.<br>"
+                  msg += QT_TRANSLATE_NOOP(file, "It was last saved with version 0.9.5 or older.<br>"
                          "You can convert this score by opening and then saving with"
                          " MuseScore version 1.x</a>");
                   canIgnore = true;
                   break;
             case Score::FILE_TOO_NEW:
-                  msg += tr("this score was saved using a newer version of MuseScore.<br>\n"
+                  msg += QT_TRANSLATE_NOOP(file, "this score was saved using a newer version of MuseScore.<br>\n"
                          "Visit the <a href=\"http://musescore.org\">MuseScore website</a>"
                          " to obtain the latest version.");
                   canIgnore = true;
@@ -186,7 +201,7 @@ bool MuseScore::readScoreError(const QString& name, Score::FileError error, bool
             return msgBox.exec() == QMessageBox::Ignore;
             }
       else
-            QMessageBox::critical(0, tr("MuseScore: Load error"), msg);
+            QMessageBox::critical(0, QT_TRANSLATE_NOOP(file, "MuseScore: Load error"), msg);
       return rv;
       }
 
@@ -288,10 +303,10 @@ Score* MuseScore::readScore(const QString& name)
       if (name.isEmpty())
             return 0;
       Score* score = new Score(MScore::defaultStyle());
-      Score::FileError rv = readScore(score, name, false);
+      Score::FileError rv = ::readScore(score, name, false);
       if (rv == Score::FILE_TOO_OLD || rv == Score::FILE_TOO_NEW) {
             if (readScoreError(name, rv, true))
-                  rv = readScore(score, name, true);
+                  rv = ::readScore(score, name, true);
             else {
                   delete score;
                   return 0;
@@ -432,7 +447,7 @@ void MuseScore::newFile()
       //  create score from template
       //
       if (newWizard->useTemplate()) {
-            Score::FileError rv = readScore(score, newWizard->templatePath(), false);
+            Score::FileError rv = ::readScore(score, newWizard->templatePath(), false);
             if (rv != Score::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete score;
@@ -1791,7 +1806,7 @@ bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFo
 ///   Import file \a name
 //---------------------------------------------------------
 
-Score::FileError MuseScore::readScore(Score* score, QString name, bool ignoreVersionError)
+Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       {
       score->setName(name);
 

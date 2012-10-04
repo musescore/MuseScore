@@ -72,7 +72,7 @@ void RepeatMeasure::layout()
 Marker::Marker(Score* s)
    : Text(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       setTextStyle(s->textStyle(TEXT_STYLE_REPEAT));
       }
 
@@ -85,27 +85,27 @@ void Marker::setMarkerType(MarkerType t)
       _markerType = t;
       switch(t) {
             case MARKER_SEGNO:
-                  setHtml(symToHtml(symbols[score()->symIdx()][segnoSym], 8, &textStyle()));
+                  setText(symbols[score()->symIdx()][segnoSym].toString());
                   setLabel("segno");
                   break;
 
             case MARKER_VARSEGNO:
-                  setHtml(symToHtml(symbols[score()->symIdx()][varsegnoSym], 8, &textStyle()));
+                  setText(symbols[score()->symIdx()][varsegnoSym].toString());
                   setLabel("varsegno");
                   break;
 
             case MARKER_CODA:
-                  setHtml(symToHtml(symbols[score()->symIdx()][codaSym], 8, &textStyle()));
+                  setText(symbols[score()->symIdx()][codaSym].toString());
                   setLabel("codab");
                   break;
 
             case MARKER_VARCODA:
-                  setHtml(symToHtml(symbols[score()->symIdx()][varcodaSym], 8));
+                  setText(symbols[score()->symIdx()][varcodaSym].toString());
                   setLabel("varcoda");
                   break;
 
             case MARKER_CODETTA:
-                  setHtml(symToHtml(symbols[score()->symIdx()][codaSym], symbols[score()->symIdx()][codaSym], 8));
+                  setText(symbols[score()->symIdx()][codaSym].toString());
                   setLabel("codetta");
                   break;
 
@@ -138,26 +138,24 @@ void Marker::styleChanged()
       }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Marker::layout()
-      {
-      Text::layout();
-      }
-
-//---------------------------------------------------------
 //   adjustReadPos
 //---------------------------------------------------------
 
 void Marker::adjustReadPos()
       {
       if (!readPos().isNull()) {
-            QPointF uo = readPos() - ipos();
+            QPointF uo;
             if (score()->mscVersion() <= 114) {
                   // rebase from Measure to Segment
-                  uo.rx() -= segment()->ipos().x();
+                  uo = userOff();
+                  uo.rx() -= segment()->pos().x();
+                  // 1.2 is always HCENTER aligned
+printf("align %x\n", int(align()));
+                  if ((align() & ALIGN_HMASK) == 0)    // ALIGN_LEFT
+                        uo.rx() -= bbox().width() * .5;
                   }
+            else
+                  uo = readPos() - ipos();
             setUserOff(uo);
             setReadPos(QPointF());
             }
@@ -203,22 +201,22 @@ void Marker::read(const QDomElement& de)
             else if (!Text::readProperties(e))
                   domError(e);
             }
-      switch(mt) {
+      switch (mt) {
             case MARKER_SEGNO:
             case MARKER_VARSEGNO:
             case MARKER_CODA:
             case MARKER_VARCODA:
             case MARKER_CODETTA:
-                  setTextStyle(score()->textStyle(TEXT_STYLE_REPEAT_LEFT));
+                  setTextStyleType(TEXT_STYLE_REPEAT_LEFT);
                   break;
 
             case MARKER_FINE:
             case MARKER_TOCODA:
-                  setTextStyle(score()->textStyle(TEXT_STYLE_REPEAT_RIGHT));
+                  setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
                   break;
 
             case MARKER_USER:
-                  setTextStyle(score()->textStyle(TEXT_STYLE_REPEAT));
+                  setTextStyleType(TEXT_STYLE_REPEAT);
                   break;
             }
       setMarkerType(mt);
@@ -235,17 +233,6 @@ void Marker::write(Xml& xml) const
       xml.tag("label", _label);
       xml.etag();
       }
-
-#if 0
-//---------------------------------------------------------
-//   dragAnchor
-//---------------------------------------------------------
-
-QLineF Marker::dragAnchor() const
-      {
-      return QLineF(measure()->pagePos(), pagePos());
-      }
-#endif
 
 //---------------------------------------------------------
 //   Jump
