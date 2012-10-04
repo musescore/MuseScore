@@ -79,7 +79,6 @@ class Marker : public Text {
       QString label() const            { return _label; }
       void setLabel(const QString& s)  { _label = s; }
 
-      virtual void layout();
       virtual void styleChanged();
       virtual bool systemFlag() const  { return true;        }
       virtual void adjustReadPos();

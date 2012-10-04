@@ -1523,14 +1523,24 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (fotoMode())
             _foto->draw(&vp);
       shadowNote->draw(&vp);
+
+      if (dragElement)
+            dragElement->scanElements(&vp, paintElement, false);
       if (!dropAnchor.isNull()) {
             QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldMatrix().m11(), Qt::DotLine);
             vp.setPen(pen);
             vp.drawLine(dropAnchor);
-            }
 
-      if (dragElement)
-            dragElement->scanElements(&vp, paintElement, false);
+            qreal d = 4.0 / vp.worldMatrix().m11();
+            QRectF r(-d, -d, 2 * d, 2 * d);
+
+            vp.setBrush(QBrush(QColor(80, 0, 0)));
+            vp.setPen(Qt::NoPen);
+            r.moveCenter(dropAnchor.p1());
+            vp.drawEllipse(r);
+            r.moveCenter(dropAnchor.p2());
+            vp.drawEllipse(r);
+            }
 
       if (grips) {
             qreal lw = 2.0/vp.matrix().m11();

@@ -1376,6 +1376,7 @@ void TextView::setElement(Element* e)
       tb.rxoffset->setValue(te->reloff().x());
       tb.ryoffset->setValue(te->reloff().y());
       tb.offsetType->setCurrentIndex(int(te->offsetType()));
+printf("text style %d\n", te->textStyleType());
       tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());

@@ -22,18 +22,28 @@ class MuseScoreView;
 struct SymCode;
 
 //---------------------------------------------------------
+//   TLine
+//---------------------------------------------------------
+
+struct TLine {
+      QString text;
+      QPointF pos;
+
+      TLine() {}
+      TLine(const QString& s) { text = s; }
+      };
+
+//---------------------------------------------------------
 //   @@ SimpleText
 //---------------------------------------------------------
 
 class SimpleText : public Element {
       Q_OBJECT
 
-      QString _text;
-      bool _layoutToParentWidth;
-      QRectF drawingRect;
-      QRectF frame;           // set by layout()
+      QList<TLine> _text;
+      QRectF frame;           // calculated in layout()
 
-      int alignFlags() const;
+      bool _layoutToParentWidth;
 
    protected:
       TextStyle _textStyle;
@@ -53,8 +63,8 @@ class SimpleText : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setText(const QString& s)        { _text = s;       }
-      QString getText() const               { return _text;    }
+      void setText(const QString& s);
+      QString getText() const;
 
       virtual void draw(QPainter*) const;
 
@@ -69,13 +79,14 @@ class SimpleText : public Element {
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
-      Spatium frameWidth() const;
-      QColor backgroundColor() const;
-      bool hasFrame() const;
-      Spatium paddingWidth() const;
-      QColor frameColor() const;
-      int frameRound() const;
-      bool circle() const;
+      Spatium frameWidth() const     { return textStyle().frameWidth(); }
+      QColor backgroundColor() const { return textStyle().backgroundColor(); }
+      bool hasFrame() const          { return textStyle().hasFrame(); }
+      Spatium paddingWidth() const   { return textStyle().paddingWidth(); }
+      QColor frameColor() const      { return textStyle().frameColor(); }
+      int frameRound() const         { return textStyle().frameRound(); }
+      bool circle() const            { return textStyle().circle(); }
+      Align align() const            { return textStyle().align(); }
       };
 
 #endif
