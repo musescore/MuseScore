@@ -324,7 +324,7 @@ class Element : public QObject {
       void setGenerated(bool val)             { _generated = val;   }
 
       const QPointF& ipos() const             { return _pos;                    }
-      virtual QPointF pos() const             { return _pos + _userOff;         }
+      virtual const QPointF pos() const       { return _pos + _userOff;         }
       virtual qreal x() const                 { return _pos.x() + _userOff.x(); }
       virtual qreal y() const                 { return _pos.y() + _userOff.y(); }
       void setPos(qreal x, qreal y)           { _pos.rx() = x, _pos.ry() = y;   }

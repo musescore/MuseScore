@@ -22,8 +22,6 @@
 #define __MUSESCORE_H__
 
 #include "config.h"
-#include "libmscore/score.h"
-
 #include "globals.h"
 #include "ui_measuresdialog.h"
 #include "ui_insertmeasuresdialog.h"
@@ -543,7 +541,6 @@ class MuseScore : public QMainWindow {
       bool processMidiRemote(MidiRemoteType type, int data);
       ScoreTab* getTab1() const { return tab1; }
       ScoreTab* getTab2() const { return tab2; }
-      bool readScoreError(const QString&, Score::FileError, bool ask) const;
       QList<LanguageItem>& languages() { return _languages; }
 
       QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
@@ -586,7 +583,7 @@ class MuseScore : public QMainWindow {
       bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
       bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
 
-      Score::FileError readScore(Score*, QString name, bool ignoreVersionError);
+//      Score::FileError readScore(Score*, QString name, bool ignoreVersionError);
       Score* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
@@ -652,21 +649,7 @@ extern Shortcut* midiActionMap[128];
 extern void setMscoreLocale(QString localeName);
 extern QPixmap sym2pixmap(const Sym* s, qreal mag);
 
-extern Score::FileError importMidi(Score*, const QString& name);
-extern Score::FileError importGTP(Score*, const QString& name);
-extern Score::FileError importBww(Score*, const QString& path);
-extern Score::FileError importMusicXml(Score*, const QString&);
-extern Score::FileError importCompressedMusicXml(Score*, const QString&);
-extern Score::FileError importMuseData(Score*, const QString& name);
-extern Score::FileError importLilypond(Score*, const QString& name);
-extern Score::FileError importBB(Score*, const QString& name);
-extern Score::FileError importCapella(Score*, const QString& name);
-extern Score::FileError importOve(Score*, const QString& name);
-
 extern void convertMidi(Score*, MidiFile* mf);
-
-extern Score::FileError importMusicXml(Score*, const QString& name);
-extern Score::FileError importCompressedMusicXml(Score*, const QString& name);
 
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
