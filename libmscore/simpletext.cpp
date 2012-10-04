@@ -159,13 +159,14 @@ void SimpleText::layout()
             QPointF layoutOffset;
 
             if (align() & ALIGN_BOTTOM)
-                  layoutOffset.ry() = -bb.bottom();
+                  layoutOffset.ry() = -bb.bottom() + h;
             else if (align() & ALIGN_VCENTER)
-                  layoutOffset.ry() =  -(bb.top() + bb.bottom()) * .5;
-            else if (align() & ALIGN_BASELINE)
-                  layoutOffset.ry() = 0.0;
+                  layoutOffset.ry() =  -(bb.top() + bb.bottom() - h) * .5;
+            else if (align() & ALIGN_BASELINE)        // undefined
+                  layoutOffset.ry() = -bb.top();
             else  // ALIGN_TOP
                   layoutOffset.ry() = -bb.top();
+
             if (align() & ALIGN_RIGHT)
                   layoutOffset.rx() = w - bb.right();
             else if (align() & ALIGN_HCENTER)
