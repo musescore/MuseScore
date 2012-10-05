@@ -1807,11 +1807,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal x2 = stemPos.x() - canvPos.x();
             qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
             qreal y2 = stemPos.y();
+            qreal fuzz = _spatium * .1;
             if (y2 < y1) {
                   // search bottom beam
                   qreal by = -1000000.0;
                   foreach(QLineF* l, beamSegments) {
-                        if (x2 >= l->x1() && x2 <= l->x2()) {
+                        if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                               qreal y = (x2 - l->x1()) * slope + l->y1();
                               by = qMax(by, y);
                               }
@@ -1822,7 +1823,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   // search top beam
                   qreal by = 1000000.0;
                   foreach(QLineF* l, beamSegments) {
-                        if (x2 >= l->x1() && x2 <= l->x2()) {
+                        if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                               qreal y = (x2 - l->x1()) * slope + l->y1();
                               by = qMin(by, y);
                               }
