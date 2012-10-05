@@ -204,9 +204,9 @@ Palette* MuseScore::newAccidentalsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = ACC_SHARP; i < ACC_END; ++i) {
+      for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
             Accidental* s = new Accidental(gscore);
-            s->setSubtype(AccidentalType(i));
+            s->setSubtype(Accidental::AccidentalType(i));
             sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
