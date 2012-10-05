@@ -191,8 +191,8 @@ void Lyrics::draw(QPainter* painter) const
 
 void Lyrics::layout()
       {
-      if (styled())
-            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+//      if (styled())
+//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;
@@ -294,8 +294,11 @@ Element* Lyrics::drop(const DropData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      if (type() == LYRICS)
-            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+      // if _no is odd and style is LYRICS1 (odd), set style to LYRICS2 (even)
+      // _no is 0-based, so odd _no means even line and viceversa
+      if (type() == LYRICS && (_no & 1) && textStyleType() == TEXT_STYLE_LYRIC1)
+//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+            setTextStyle( score()->textStyle(TEXT_STYLE_LYRIC2) );
       }
 
 //---------------------------------------------------------
