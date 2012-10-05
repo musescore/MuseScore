@@ -1540,7 +1540,7 @@ const QRectF& Chord::bbox() const
             bb |= _stemSlash->bbox().translated(_stemSlash->pos());
       if (_tremolo)
             bb |= _tremolo->bbox().translated(_tremolo->pos());
-      if(staff()->isTabStaff() && _tabDur)
+      if(staff() && staff()->isTabStaff() && _tabDur)
             bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
       return Element::bbox();
