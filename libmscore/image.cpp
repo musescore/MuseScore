@@ -53,7 +53,8 @@ Image::Image(const Image& img)
       _dirty           = img._dirty;
       _storeItem       = img._storeItem;
       _sizeIsSpatium   = img._sizeIsSpatium;
-      _storeItem->reference(this);
+      if(_storeItem)
+            _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
       }
@@ -356,7 +357,8 @@ bool Image::load(const QString& ss)
       _linkIsValid = true;
       _linkPath = fi.canonicalFilePath();
       _storeItem = imageStore.add(_linkPath, ba);
-      _storeItem->reference(this);
+      if(_storeItem)
+            _storeItem->reference(this);
       return true;
       }
 
