@@ -235,11 +235,11 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR("Lyrics odd lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 7), OS, QPointF(), true));
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
 
       AS(TextStyle(
          TR("Lyrics even lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 7), OS, QPointF(), true));
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Fingering"), ff,  8, false, false, false,
@@ -399,7 +399,7 @@ StyleData::StyleData()
             StyleVal(ST_akkoladeDistance, Spatium(6.5)),
             StyleVal(ST_minSystemDistance, Spatium(8.5)),
             StyleVal(ST_maxSystemDistance, Spatium(15.0)),
-            StyleVal(ST_lyricsDistance, Spatium(2)),
+            StyleVal(ST_lyricsDistance, Spatium(3.5)),
 
             StyleVal(ST_lyricsMinBottomDistance, Spatium(2)),
             StyleVal(ST_lyricsLineHeight, qreal(1.0)),
