@@ -258,9 +258,9 @@ class Element : public QObject {
       Q_PROPERTY(bool visible     READ visible   WRITE setVisible)
       Q_PROPERTY(bool generated   READ generated WRITE setGenerated)
       Q_PROPERTY(bool selected    READ selected  WRITE setSelected)
-      Q_PROPERTY(QPointF pos      READ pos       WRITE setPos)
+      Q_PROPERTY(QPointF pos      READ scriptPos       WRITE scriptSetPos)
       Q_PROPERTY(QPointF pagePos  READ pagePos )
-      Q_PROPERTY(QPointF userOff  READ userOff   WRITE setUserOff)
+      Q_PROPERTY(QPointF userOff  READ scriptUserOff   WRITE scriptSetUserOff)
       Q_PROPERTY(QRectF  bbox     READ bbox )
 
       LinkedElements* _links;
@@ -343,6 +343,13 @@ class Element : public QObject {
       void setUserOff(const QPointF& o)       { _userOff = o;     }
       void setUserXoffset(qreal v)            { _userOff.setX(v); }
       void setUserYoffset(qreal v)            { _userOff.setY(v); }
+      // function versions for scripts: use coords in spatium units rather than raster
+      // and route pos changes to userOff
+      virtual QPointF scriptPos() const;
+      void scriptSetPos(const QPointF& p);
+      QPointF scriptUserOff() const;
+      void scriptSetUserOff(const QPointF& o);
+
       bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
       int mxmlOff() const                     { return _mxmlOff;  }
       void setMxmlOff(int o)                  { _mxmlOff = o;     }
