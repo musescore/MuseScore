@@ -1557,3 +1557,30 @@ void Element::undoSetColor(const QColor& c)
       score()->undoChangeProperty(this, P_COLOR, c);
       }
 
+//---------------------------------------------------------
+//   positioning functions for scripts
+//
+//    use spatium units rather than raster units
+//    are undoable
+//    route pos changes to usefOff
+//---------------------------------------------------------
+
+QPointF Element::scriptPos() const
+      {
+      return (_pos + _userOff) / spatium();
+      }
+
+void Element::scriptSetPos(const QPointF& p)
+      {
+      score()->undoChangeProperty(this, P_USER_OFF, p*spatium() - ipos());
+      }
+
+QPointF Element::scriptUserOff() const
+      {
+      return _userOff / spatium();
+      }
+
+void Element::scriptSetUserOff(const QPointF& o)
+      {
+      score()->undoChangeProperty(this, P_USER_OFF, o * spatium());
+      }
