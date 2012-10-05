@@ -1245,7 +1245,7 @@ void Score::addArticulation(ArticulationType attr)
 ///   notes.
 //---------------------------------------------------------
 
-void Score::changeAccidental(AccidentalType idx)
+void Score::changeAccidental(Accidental::AccidentalType idx)
       {
       foreach(Note* note, selection().noteList())
             changeAccidental(note, idx);
@@ -1257,7 +1257,7 @@ void Score::changeAccidental(AccidentalType idx)
 ///   note \a note.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Note* note, AccidentalType accidental)
+void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       {
       QList<Staff*> staffList;
       Staff* ostaff = note->chord()->staff();
@@ -1284,14 +1284,14 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
       //
       AccidentalVal acc    = Accidental::subtype2value(accidental);
       AccidentalVal acc2   = measure->findAccidental(note);
-      AccidentalType accType;
+      Accidental::AccidentalType accType;
 
       int pitch, tpc;
-      if (accidental == ACC_NONE) {
+      if (accidental == Accidental::ACC_NONE) {
             //
             //  delete accidentals
             //
-            accType = ACC_NONE;
+            accType = Accidental::ACC_NONE;
             pitch   = line2pitch(note->line(), clef, 0) + acc2;
             tpc     = step2tpc(step, acc2);
             // check if there's accidentals left, previously set as
@@ -1312,7 +1312,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                   Accidental* a = new Accidental(this);
                   a->setParent(note);
                   a->setSubtype(accidental);
-                  a->setRole(ACC_USER);
+                  a->setRole(Accidental::ACC_USER);
                   undoAddElement(a);
                   }
             else {
@@ -2115,15 +2115,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-32")
             cmdSetBeamMode(BEAM_BEGIN32);
       else if (cmd == "sharp2")
-            changeAccidental(ACC_SHARP2);
+            changeAccidental(Accidental::ACC_SHARP2);
       else if (cmd == "sharp")
-            changeAccidental(ACC_SHARP);
+            changeAccidental(Accidental::ACC_SHARP);
       else if (cmd == "nat")
-            changeAccidental(ACC_NATURAL);
+            changeAccidental(Accidental::ACC_NATURAL);
       else if (cmd == "flat")
-            changeAccidental(ACC_FLAT);
+            changeAccidental(Accidental::ACC_FLAT);
       else if (cmd == "flat2")
-            changeAccidental(ACC_FLAT2);
+            changeAccidental(Accidental::ACC_FLAT2);
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")

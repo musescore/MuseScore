@@ -1131,7 +1131,7 @@ void Score::deleteItem(Element* el)
                   break;
 
             case Element::ACCIDENTAL:
-                  changeAccidental(static_cast<Note*>(el->parent()), ACC_NONE);
+                  changeAccidental(static_cast<Note*>(el->parent()), Accidental::ACC_NONE);
                   break;
 
             case Element::BAR_LINE:
