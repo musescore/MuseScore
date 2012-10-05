@@ -15,6 +15,7 @@
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
+#include "accidental.h"
 #include "figuredbass.h"
 #include "stafftype.h"
 #include "note.h"
@@ -72,6 +73,8 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
+      qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
       qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");

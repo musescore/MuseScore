@@ -36,24 +36,62 @@ struct SymElement {
       };
 
 //---------------------------------------------------------
-//   AccidentalRole
-//---------------------------------------------------------
-
-enum AccidentalRole {
-      ACC_AUTO,               // layout created accidental
-      ACC_USER                // user created accidental
-      };
-
-//---------------------------------------------------------
 //   @@ Accidental
 //    @P hasBracket bool
 //    @P small      bool
+//    @P acctype    enum ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ...
+//    @P role       enum ACC_AUTO, ACC_USER
 //---------------------------------------------------------
 
 class Accidental : public Element {
+public:
+      enum AccidentalRole {
+            ACC_AUTO,               // layout created accidental
+            ACC_USER                // user created accidental
+            };
+      enum AccidentalType {
+            ACC_NONE,
+            ACC_SHARP,
+            ACC_FLAT,
+            ACC_SHARP2,
+            ACC_FLAT2,
+            ACC_NATURAL,
+
+            ACC_FLAT_SLASH,
+            ACC_FLAT_SLASH2,
+            ACC_MIRRORED_FLAT2,
+            ACC_MIRRORED_FLAT,
+            ACC_MIRRIRED_FLAT_SLASH,
+            ACC_FLAT_FLAT_SLASH,
+
+            ACC_SHARP_SLASH,
+            ACC_SHARP_SLASH2,
+            ACC_SHARP_SLASH3,
+            ACC_SHARP_SLASH4,
+
+            ACC_SHARP_ARROW_UP,
+            ACC_SHARP_ARROW_DOWN,
+            ACC_SHARP_ARROW_BOTH,
+            ACC_FLAT_ARROW_UP,
+            ACC_FLAT_ARROW_DOWN,
+            ACC_FLAT_ARROW_BOTH,
+            ACC_NATURAL_ARROW_UP,
+            ACC_NATURAL_ARROW_DOWN,
+            ACC_NATURAL_ARROW_BOTH,
+            ACC_SORI,
+            ACC_KORON,
+            ACC_END
+            };
+
+
+private:
       Q_OBJECT
-      Q_PROPERTY(bool hasBracket READ hasBracket WRITE undoSetHasBracket)
-      Q_PROPERTY(bool small      READ small      WRITE undoSetSmall)
+      Q_PROPERTY(bool               hasBracket READ hasBracket WRITE undoSetHasBracket)
+      Q_PROPERTY(bool               small      READ small      WRITE undoSetSmall)
+      Q_PROPERTY(AccidentalType     accType    READ subtype)
+      Q_PROPERTY(AccidentalRole     role       READ role)
+      Q_ENUMS(AccidentalType)
+      Q_ENUMS(AccidentalRole)
 
       QList<SymElement> el;
       AccidentalType _subtype;
@@ -103,6 +141,9 @@ class Accidental : public Element {
       static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
       };
+
+Q_DECLARE_METATYPE(Accidental::AccidentalRole)
+Q_DECLARE_METATYPE(Accidental::AccidentalType)
 
 //---------------------------------------------------------
 //   @@ AccidentalBracket
