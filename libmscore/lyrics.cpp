@@ -294,11 +294,14 @@ Element* Lyrics::drop(const DropData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      // if _no is odd and style is LYRICS1 (odd), set style to LYRICS2 (even)
-      // _no is 0-based, so odd _no means even line and viceversa
-      if (type() == LYRICS && (_no & 1) && textStyleType() == TEXT_STYLE_LYRIC1)
-//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
-            setTextStyle( score()->textStyle(TEXT_STYLE_LYRIC2) );
+      // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
+      // (_no is 0-based, so odd _no means even line and viceversa)
+      if (type() == LYRICS) {
+            if( (_no & 1) && textStyleType() == TEXT_STYLE_LYRIC1)
+                  setTextStyleType(TEXT_STYLE_LYRIC2);
+            if( !(_no & 1) && textStyleType() == TEXT_STYLE_LYRIC2)
+                  setTextStyleType(TEXT_STYLE_LYRIC1);
+            }
       }
 
 //---------------------------------------------------------
