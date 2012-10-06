@@ -36,9 +36,10 @@ class TestMxmlIO : public QObject, public MTest
 private slots:
       void initTestCase();
 
-      // the list of MusicXML regression tests
-      // currently failing tests are commented out
-      // and annotated with the failure reason
+      // The list of MusicXML regression tests
+      // Currently failing tests are commented out and annotated with the failure reason
+      // To extract the list in a shell scipt use:
+      // cat tst_mxml_io.cpp | grep "{ mxmlIoTest" | awk -F\" '{print $2}'
 
       void accidentals1() { mxmlIoTest("testAccidentals1"); }
       void accidentals2() { mxmlIoTest("testAccidentals2"); }
