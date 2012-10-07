@@ -1337,13 +1337,13 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
 //    return true on success
 //---------------------------------------------------------
 
-bool importMidi(Score* score, const QString& name)
+Score::FileError importMidi(Score* score, const QString& name)
       {
       if (name.isEmpty())
-            return false;
+            return Score::FILE_NOT_FOUND;
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly))
-            return false;
+            return Score::FILE_OPEN_ERROR;;
       MidiFile mf;
       try {
             mf.read(&fp);
@@ -1356,13 +1356,13 @@ bool importMidi(Score* score, const QString& name)
                      QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
                   }
             fp.close();
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       fp.close();
 
       mf.setShortestNote(preferences.shortestNote);
 
       convertMidi(score, &mf);
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
