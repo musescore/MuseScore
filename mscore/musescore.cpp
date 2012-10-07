@@ -1947,7 +1947,7 @@ static void loadScores(const QStringList& argv)
                               {
                               Score* score = mscore->readScore(preferences.startScore);
                               if (score == 0)
-                                    score = mscore->readScore(":/data/Promenade_Example.mscx");
+                                    score = mscore->readScore(":/data/Promenade_Example.mscz");
                               if (score)
                                     currentScoreView = mscore->appendScore(score);
                               }
