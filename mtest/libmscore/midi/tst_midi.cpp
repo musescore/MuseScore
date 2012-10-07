@@ -26,7 +26,7 @@
 #include "mtest/mcursor.h"
 #include "mtest/testutils.h"
 
-extern bool importMidi(Score*, const QString&);
+extern Score::FileError importMidi(Score*, const QString&);
 
 //---------------------------------------------------------
 //   TestMidi
@@ -189,7 +189,7 @@ void TestMidi::midi1()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test1b");
-      QVERIFY(importMidi(score2, "test1.mid"));
+      QCOMPARE(importMidi(score2, "test1.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -229,7 +229,7 @@ void TestMidi::midi2()
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test2b");
 
-      QVERIFY(importMidi(score2, "test2.mid"));
+      QCOMPARE(importMidi(score2, "test2.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -268,7 +268,7 @@ void TestMidi::midi3()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test3b");
-      QVERIFY(importMidi(score2, "test3.mid"));
+      QCOMPARE(importMidi(score2, "test3.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
