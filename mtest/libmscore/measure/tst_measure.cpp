@@ -112,18 +112,6 @@ void TestMeasure::insertMeasureEnd()
       }
 
 //---------------------------------------------------------
-//   dumpMeasure
-//---------------------------------------------------------
-
-static void dumpMeasure(const char* s, Measure* m)
-      {
-      printf("===%s size %d %f %f\n", s, m->size(), m->minWidth1(), m->minWidth2());
-      for(Segment* s = m->first(); s; s = s->next()) {
-            printf("   %s\n", s->subTypeName());
-            }
-      }
-
-//---------------------------------------------------------
 //   minWidth
 //---------------------------------------------------------
 
@@ -137,15 +125,11 @@ void TestMeasure::minWidth()
             measuresSystem[i] = score->systems()->at(i)->measures().size();
 
       Measure* m1 = score->systems()->at(1)->lastMeasure();
-      int m1s     = m1->size();
       Measure* m2 = score->systems()->at(2)->firstMeasure();
-      int m2s     = m2->size();
       qreal mw1 = m1->minWidth1();
       qreal mw2 = m2->minWidth1();
 
-      dumpMeasure("m1", m1);
       score->doLayout();
-      dumpMeasure("m1", m1);
 
       QCOMPARE(mw1, m1->minWidth1());
       QCOMPARE(mw2, m2->minWidth1());
