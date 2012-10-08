@@ -2814,13 +2814,22 @@ bool Measure::systemHeader() const
 
 //---------------------------------------------------------
 //   minWidth1
+///   return minimum width of measure excluding system
+///   header
 //---------------------------------------------------------
 
 qreal Measure::minWidth1() const
       {
-      if (_minWidth1 == 0.0) {
+      if (_no == 3)
+            printf("minWidth1(%d) %f %f\n", size(), _minWidth1, _minWidth2);
+
+//      if (_minWidth1 == 0.0) {
             Segment* s = first();
-            if (s->subtype() == Segment::SegClef && s->element(0) && s->element(0)->generated() && s->next()) {
+            if ((s->subtype() == Segment::SegClef)
+               && s->element(0)
+               && s->element(0)->generated()
+               && s->next()
+               ) {
                   s = s->next();
                   if (s->subtype() == Segment::SegKeySig && s->element(0) && s->element(0)->generated() && s->next())
                         s = s->next();
@@ -2828,18 +2837,25 @@ qreal Measure::minWidth1() const
                         s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s);
-            }
+//            }
+      if (_no == 3)
+            printf("              %f %f\n", _minWidth1, score()->computeMinWidth(first());
       return _minWidth1;
       }
 
 //---------------------------------------------------------
 //   minWidth2
+///   return minimum width of measure
 //---------------------------------------------------------
 
 qreal Measure::minWidth2() const
       {
-      if (_minWidth2 == 0.0)
+      if (_no == 3)
+            printf("minWidth2 (%d) %f %f\n", size(), _minWidth1, _minWidth2);
+//      if (_minWidth2 == 0.0)
             _minWidth2 = score()->computeMinWidth(first());
+      if (_no == 3)
+            printf("               %f %f\n", _minWidth1, _minWidth2);
       return _minWidth2;
       }
 

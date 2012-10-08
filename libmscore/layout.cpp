@@ -1688,7 +1688,7 @@ void Score::layoutFingering(Fingering* f)
 
 //---------------------------------------------------------
 //   layoutSystemRow
-//    return hight in h
+//    return height in h
 //---------------------------------------------------------
 
 QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool useLongName)
@@ -2581,15 +2581,8 @@ void Score::respace(QList<ChordRest*>* elements)
 
 qreal Score::computeMinWidth(Segment* fs) const
       {
-      int segs = 1;
-      for (const Segment* s = fs->next(); s; s = s->next()) {
-            if (s->subtype() == Segment::SegClef)
-                  continue;
-            ++segs;
-            }
-
       int _nstaves = nstaves();
-      if (_nstaves == 0 || segs == 0)
+      if (_nstaves == 0)
             return 1.0;
 
       qreal _spatium           = spatium();
@@ -2625,7 +2618,7 @@ qreal Score::computeMinWidth(Segment* fs) const
             Segment::SegmentType segType    = s->subtype();
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            Segment* pSeg          = s->prev();
+            Segment* pSeg          = s == fs ? 0 : s->prev();
             int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
