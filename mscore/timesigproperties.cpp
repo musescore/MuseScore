@@ -71,7 +71,7 @@ void TimeSigProperties::accept()
             ts = TSIG_ALLA_BREVE;
 
       Fraction actual(zActual->value(), nActual->value());
-      Fraction nominal(zActual->value(), nActual->value());
+      Fraction nominal(zNominal->value(), nNominal->value());
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
       QDialog::accept();
