@@ -1723,10 +1723,12 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
                   preferenceDialog->updateRemote();
             return;
             }
-      if (processMidiRemote(MIDI_REMOTE_TYPE_NOTEON, pitch)) {
+            
+      if (velo && processMidiRemote(MIDI_REMOTE_TYPE_NOTEON, pitch)) {
             active = 0;
             return;
             }
+            
       QWidget* w = QApplication::activeModalWidget();
       if (!cv || w) {
             active = 0;

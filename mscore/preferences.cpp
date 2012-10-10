@@ -743,9 +743,9 @@ void PreferenceDialog::updateRemote()
       rca6->setChecked(preferences.midiRemote[RMIDI_NOTE16].type       != -1);
       rca7->setChecked(preferences.midiRemote[RMIDI_NOTE32].type       != -1);
       rca8->setChecked(preferences.midiRemote[RMIDI_NOTE64].type      != -1);
-      rca9->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
-      rca10->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
-      rca11->setChecked(preferences.midiRemote[RMIDI_REST].type        != -1);
+      rca9->setChecked(preferences.midiRemote[RMIDI_REST].type        != -1);
+      rca10->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
+      rca11->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
 
