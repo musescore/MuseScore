@@ -587,8 +587,8 @@ printf("insert local timesig\n");
                   undoAddElement(nsig);
                   }
             else {
-                  undo(new ChangeTimesig(nsig, false,
-                     ts->sig(), ts->stretch(), ts->subtype()));
+                  undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
+                        ts->numeratorString(), ts->denominatorString(), ts->subtype()));
                   nsig->setDropTarget(0);       // DEBUG
                   }
             }
