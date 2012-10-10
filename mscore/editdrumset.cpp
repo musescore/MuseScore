@@ -45,7 +45,7 @@ const char* noteHeadNames[Note::HEAD_GROUPS] = {
       QT_TRANSLATE_NOOP("noteheadnames", "re"),
       QT_TRANSLATE_NOOP("noteheadnames", "fa"),
       QT_TRANSLATE_NOOP("noteheadnames", "la"),
-      QT_TRANSLATE_NOOP("noteheadnames", "ti")
+      QT_TRANSLATE_NOOP("noteheadnames", "ti"),
       };
 
 //---------------------------------------------------------
@@ -66,7 +66,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
       updateList();
 
       noteHead->addItem(tr("invalid"));
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i)
+      for (int i = 0; i < Note::HEAD_GROUPS - 2 ; ++i)
             noteHead->addItem(noteHeadNames[i]);
 
       connect(pitchList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
