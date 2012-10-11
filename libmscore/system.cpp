@@ -126,8 +126,6 @@ void System::layout(qreal xo1)
             return;
       static const Spatium instrumentNameOffset(1.0);
 
-      qreal _spatium = score()->spatium();
-
       int nstaves  = _staves.size();
       if (nstaves != score()->nstaves())
             qDebug("System::layout: nstaves %d != %d\n", nstaves, score()->nstaves());
@@ -217,9 +215,9 @@ void System::layout(qreal xo1)
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
             if (barLine == 0) {
-                  barLine = new Line(score(), true);
-                  barLine->setLineWidth(score()->styleS(ST_barWidth));
+                  barLine = new BarLine(score());
                   barLine->setParent(this);
+                  barLine->setTrack(0);
                   }
             }
       else if (barLine) {
@@ -227,7 +225,7 @@ void System::layout(qreal xo1)
             barLine = 0;
             }
       if (barLine)
-            barLine->setPos(_leftMargin + xo1 + barLine->lineWidth().val() * _spatium * .5, 0.0);
+            barLine->setPos(_leftMargin + xo1, 0.0);
 
       //---------------------------------------------------
       //  layout brackets
@@ -300,7 +298,7 @@ void System::layout2()
       if (isVbox())                 // ignore vbox
             return;
 
-      int nstaves     = _staves.size();
+      int nstaves    = _staves.size();
       qreal _spatium = spatium();
 
       qreal y = 0.0;
@@ -369,7 +367,7 @@ void System::layout2()
             }
 
       if (barLine) {
-            barLine->setLen(Spatium(systemHeight / _spatium));
+            barLine->setSpan(nstaves);
             barLine->layout();
             }
 

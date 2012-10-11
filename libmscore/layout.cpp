@@ -1238,8 +1238,6 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   else
                         ww = m->minWidth1();
 
-// printf("%d) %d %f\n", m->no()+1, m->systemHeader(), m->minWidth());
-
                   ww *= m->userStretch() * styleD(ST_measureSpacing);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
@@ -2585,9 +2583,6 @@ qreal Score::computeMinWidth(Segment* fs) const
       if (_nstaves == 0)
             return 1.0;
 
-//      if (fs->measure()->no() == 3)
-//            printf("computeMinWidth========\n");
-
       qreal _spatium           = spatium();
       qreal clefKeyRightMargin = styleS(ST_clefKeyRightMargin).val() * _spatium;
       qreal minNoteDistance    = styleS(ST_minNoteDistance).val()    * _spatium;
@@ -2714,7 +2709,6 @@ qreal Score::computeMinWidth(Segment* fs) const
                         rest2[staffIdx] = true;
                   clefWidth[staffIdx] = 0.0;
                   }
-
             x += segmentWidth;
 
             if (segmentIdx)
@@ -2726,9 +2720,6 @@ qreal Score::computeMinWidth(Segment* fs) const
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
-//      if (fs->measure()->no() == 3)
-//            printf("  seg %s %f %f\n", fs->subTypeName(), x, segmentWidth);
-
             }
       qreal segmentWidth = 0.0;
       for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
@@ -2737,7 +2728,5 @@ qreal Score::computeMinWidth(Segment* fs) const
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
             }
       x += segmentWidth;
-//      if (fs->measure()->no() == 3)
-//            printf("   ->%f\n", x);
       return x;
       }
