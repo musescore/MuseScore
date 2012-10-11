@@ -52,7 +52,11 @@ QPointF BarLine::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      System* system = measure()->system();
+      if (parent()->type() != SEGMENT)
+            return pos() + parent()->pagePos();
+
+      System* system = static_cast<Segment*>(parent())->measure()->system();
+
       qreal yp = y();
       if (system)
             yp += system->staffY(staffIdx());
@@ -65,19 +69,27 @@ QPointF BarLine::pagePos() const
 
 void BarLine::getY(qreal* y1, qreal* y2) const
       {
-      if (parent() && parent()->type() == SEGMENT) {
+      if (parent()) {
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
             if (staffIdx2 >= score()->nstaves()) {
                   qDebug("BarLine: bad _span %d\n", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
-            Segment* segment = static_cast<Segment*>(parent());
-            Measure* measure = segment->measure();
-            System* system   = measure->system();
+            Measure* measure;
+            System* system;
+            if (parent()->type() == SEGMENT) {
+                  Segment* segment = static_cast<Segment*>(parent());
+                  measure = segment->measure();
+                  system = measure->system();
+                  }
+            else {
+                  system = static_cast<System*>(parent());
+                  measure = system->firstMeasure();
+                  }
+
             StaffLines* l1   = measure->staffLines(staffIdx1);
             StaffLines* l2   = measure->staffLines(staffIdx2);
-
             qreal yp = system ? system->staff(staffIdx())->y() : 0.0;
             *y1 = l1->y1() - yp;
             *y2 = l2->y2() - yp;
@@ -105,8 +117,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             dotsym.draw(painter, mags, QPointF(x, 1.5 * _spatium));
             dotsym.draw(painter, mags, QPointF(x, 2.5 * _spatium));
             }
-      else {
-            System* s = measure()->system();
+      else if (parent()->type() == SEGMENT) {
+            System* s = static_cast<Segment*>(parent())->measure()->system();
             int _staffIdx = staffIdx();
             qreal dy  = s->staff(_staffIdx)->y();
             for (int i = 0; i < _span; ++i) {
@@ -329,7 +341,11 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
       return type == BAR_LINE
-         || (type == ARTICULATION && segment() && segment()->subtype() == Segment::SegEndBarLine)
+         || (type == ARTICULATION
+                && parent()
+                && parent()->type() == SEGMENT
+                && static_cast<Segment*>(parent())->subtype() == Segment::SegEndBarLine
+            )
          ;
       }
 
@@ -348,7 +364,7 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
-            Measure* m = segment()->measure();
+            Measure* m = static_cast<Segment*>(parent())->measure();
             if (st == START_REPEAT) {
                   m = m->nextMeasure();
                   if (m == 0) {
@@ -602,7 +618,8 @@ QPainterPath BarLine::shape() const
 
 int BarLine::tick() const
       {
-      return segment() ? segment()->tick() : 0;
+      return (parent() && parent()->type() == SEGMENT)
+         ? static_cast<Segment*>(parent())->tick() : 0;
       }
 
 //---------------------------------------------------------
@@ -646,16 +663,21 @@ void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void BarLine::add(Element* e)
       {
+      if (parent()->type() != SEGMENT) {
+            delete e;
+            return;
+            }
 	e->setParent(this);
       switch(e->type()) {
             case ARTICULATION:
                   _el.append(e);
                   setGenerated(false);
-                  if (measure())
-                        measure()->setEndBarLineGenerated(false);
+                  if (parent() && parent()->parent())
+                        static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
                   break;
             default:
                   qDebug("BarLine::add() not impl. %s\n", e->name());
+                  delete e;
                   break;
             }
       }
@@ -701,4 +723,3 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       score()->setLayoutAll(true);
       return true;
       }
-

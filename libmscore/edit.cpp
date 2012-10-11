@@ -1137,7 +1137,9 @@ void Score::deleteItem(Element* el)
             case Element::BAR_LINE:
                   {
                   BarLine* bl  = static_cast<BarLine*>(el);
-                  Segment* seg = bl->segment();
+                  if (bl->parent()->type() != Element::SEGMENT)
+                        break;
+                  Segment* seg = static_cast<Segment*>(bl->parent());
                   Measure* m   = seg->measure();
                   if (seg->subtype() == Segment::SegStartRepeatBarLine)
                         undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatStart);

@@ -57,8 +57,6 @@ class BarLine : public Element {
       virtual Element* drop(const DropData&);
       void setSpan(int val)    { _span = val;  }
       int span() const         { return _span; }
-      Segment* segment() const { return (Segment*)parent(); }
-      Measure* measure() const { return (Measure*)(parent() ? parent()->parent() : 0); }
 
       virtual bool isEditable() const { return true; }
       virtual void endEdit();

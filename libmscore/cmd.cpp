@@ -2170,9 +2170,8 @@ void Score::cmd(const QAction* a)
                   type = LAYOUT_BREAK_SECTION;
 
             Element* e = selection().element();
-            if (e && e->type() == Element::BAR_LINE) {
-                  BarLine* barline = static_cast<BarLine*>(e);
-                  Measure* measure = barline->measure();
+            if (e && e->type() == Element::BAR_LINE && e->parent()->type() == Element::SEGMENT) {
+                  Measure* measure = static_cast<Measure*>(e->parent()->parent());
                   if (!measure->lineBreak()) {
                         LayoutBreak* lb = new LayoutBreak(this);
                         lb->setSubtype(type);
