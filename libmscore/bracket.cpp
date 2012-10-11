@@ -71,27 +71,9 @@ void Bracket::layout()
             return;
 
       qreal h = h2 + yoff * .5;
-//      qreal d = 0.0;
 
       if (subtype() == BRACKET_AKKOLADE) {
             qreal w = point(score()->styleS(ST_akkoladeWidth));
-#if 0
-            const qreal X1 =  2.0 * w;
-            const qreal X2 = -0.7096 * w;
-            const qreal X3 = -1.234 * w;
-            const qreal X4 =  1.734 * w;
-            const qreal Y1 =  .3359 * h;
-            const qreal Y2 =  .5089 * h;
-            const qreal Y3 =  .5025 * h;
-            const qreal Y4 =  .2413 * h;
-
-            path.moveTo(0, h);
-            path.cubicTo(X1, h + Y1,   X2, h + Y2,    w, 2 * h);
-            path.cubicTo(X3, h + Y3,   X4, h + Y4,    0, h);
-
-            path.cubicTo(X1, h - Y1,   X2, h - Y2,    w, 0);
-            path.cubicTo(X3, h - Y3,   X4, h - Y4,    0, h);
-#endif
 
 #define XM(a) (a+700)*w/700
 #define YM(a) (a+7100)*h2/7100
@@ -147,9 +129,25 @@ path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); /
 
 void Bracket::draw(QPainter* painter) const
       {
-      painter->setPen(Qt::NoPen);
-      painter->setBrush(QBrush(curColor()));
-      painter->drawPath(path);
+      if (subtype() == BRACKET_AKKOLADE) {
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(QBrush(curColor()));
+            painter->drawPath(path);
+            }
+      else if (subtype() == BRACKET_NORMAL) {
+            qreal h = 2 * h2 + yoff * .5;
+            qreal w = point(score()->styleS(ST_bracketWidth));
+            QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+            painter->setPen(pen);
+            painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
+            int idx = score()->symIdx();
+            qreal mags = 1.0;
+            qreal x    =  -w * .5;
+            qreal y1   = 0.0;
+            qreal y2   = h;
+            symbols[idx][brackettipsRightUp].draw(painter,   mags, QPointF(x, y1));
+            symbols[idx][brackettipsRightDown].draw(painter, mags, QPointF(x, y2));
+            }
       }
 
 //---------------------------------------------------------
