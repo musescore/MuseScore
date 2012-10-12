@@ -1295,15 +1295,10 @@ void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       foreach(System* system, *systems()) {
             if (system->isVbox())
                   continue;
-            SysStaff* s = system->staff(staffIdx);
-            for (int i = s->brackets.size(); i <= dstCol; ++i)
-                  s->brackets.append(0);
-
-            s->brackets[dstCol] = s->brackets[srcCol];
-            s->brackets[srcCol] = 0;
-
-            while (!s->brackets.isEmpty() && (s->brackets.last() == 0))
-                  s->brackets.removeLast();
+            foreach(Bracket* b, system->brackets()) {
+                  if (b->staffIdx() == staffIdx && b->level() == srcCol)
+                        b->setLevel(dstCol);
+                  }
             }
       }
 
@@ -2237,6 +2232,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       adjustBracketsIns(staffIdx+1, staffIdx+2);
       undoChangeKeySig(ns, 0, s->key(0));
 
+#if 0       // created on layout
       Bracket* b = new Bracket(this);
       b->setSubtype(BRACKET_AKKOLADE);
       b->setTrack(staffIdx * VOICES);
@@ -2244,6 +2240,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       b->setLevel(-1);  // add bracket
       b->setSpan(2);
       undoAddElement(b);
+#endif
 
       rebuildMidiMapping();
       _instrumentsChanged = true;
