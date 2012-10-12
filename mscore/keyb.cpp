@@ -72,7 +72,7 @@ void ScoreView::editCmd(const QString& cmd)
                   }
             if (key == Qt::Key_Left) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -81,7 +81,7 @@ void ScoreView::editCmd(const QString& cmd)
                   }
             if (key == Qt::Key_Right) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -149,7 +149,7 @@ void ScoreView::editCmd(const QString& cmd)
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
                   updateGrips();
                   ev->accept();
-                  _score->end();
+                  _score->update();
                   mscore->endCmd();
                   return;
                   }
@@ -239,7 +239,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             else if (key == Qt::Key_Left) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -248,7 +248,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             else if (key == Qt::Key_Right) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -317,7 +317,7 @@ void ScoreView::editKey(QKeyEvent* ev)
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
                   updateGrips();
                   ev->accept();
-                  _score->end();
+                  _score->update();
                   mscore->endCmd();
                   return;
                   }

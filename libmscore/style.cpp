@@ -422,7 +422,7 @@ StyleData::StyleData()
             StyleVal(ST_startBarlineMultiple, true),
 
             StyleVal(ST_bracketWidth, Spatium(0.35)),
-            StyleVal(ST_bracketDistance, Spatium(0.25)),
+            StyleVal(ST_bracketDistance, Spatium(0.4)),
             StyleVal(ST_akkoladeWidth,Spatium(1.6)),
             StyleVal(ST_akkoladeBarDistance,Spatium(.4)),
 

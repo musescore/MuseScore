@@ -28,11 +28,13 @@
 Bracket::Bracket(Score* s)
    : Element(s)
       {
-      _subtype = BRACKET_AKKOLADE;
-      h2       = 3.5 * spatium();
-      _column  = 0;
-      _span    = 1;
-      yoff     = 0.0;
+      _subtype    = BRACKET_AKKOLADE;
+      h2          = 3.5 * spatium();
+      _column     = 0;
+      _span       = 0;
+      _firstStaff = 0;
+      _lastStaff  = 0;
+      yoff        = 0.0;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -65,12 +67,12 @@ qreal Bracket::width() const
 
 void Bracket::layout()
       {
-      qreal _spatium = spatium();
+//      qreal _spatium = spatium();
       path = QPainterPath();
       if (h2 == 0.0)
             return;
 
-      qreal h = h2 + yoff * .5;
+//      qreal h = h2 + yoff * .5;
 
       if (subtype() == BRACKET_AKKOLADE) {
             qreal w = point(score()->styleS(ST_akkoladeWidth));
@@ -99,28 +101,18 @@ path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); /
 path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
 path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
 path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0
-
+            setbbox(path.boundingRect());
             }
       else if (subtype() == BRACKET_NORMAL) {
-            qreal w = point(score()->styleS(ST_bracketWidth));
-
-            QChar up   = symbols[score()->symIdx()][brackettipsRightUp].code();
-            QChar down = symbols[score()->symIdx()][brackettipsRightDown].code();
-
-            QFont f(fontId2font(0));
-            f.setPointSizeF(2.0 * _spatium);
-
-            qreal o   = _spatium * .17;
-            qreal slw = point(score()->styleS(ST_staffLineWidth));
-
-            path.setFillRule(Qt::WindingFill);
-
-            path.addText(QPointF(0.0, -o), f,          QString(up));
-            path.addText(QPointF(0.0, h * 2.0 + o), f, QString(down));
-            path.addRect(0.0, -slw * .5, w, h * 2.0 + slw);
+            qreal mags = 1.0;
+            int idx = score()->symIdx();
+            qreal w = point(score()->styleS(ST_bracketWidth)) * .5;
+            qreal x = -w;
+            w      += symbols[idx][brackettipsRightUp].width(mags);
+            qreal y = -symbols[idx][brackettipsRightUp].height(mags);
+            qreal h = -y * 2 + h2 * 2;
+            setbbox(QRectF(x, y, w, h));
             }
-      QRectF r(path.boundingRect());
-      setbbox(path.boundingRect());
       }
 
 //---------------------------------------------------------
@@ -303,7 +295,8 @@ Element* Bracket::drop(const DropData& data)
             Bracket* b = static_cast<Bracket*>(e);
             b->setParent(parent());
             b->setTrack(track());
-            b->setSpan(span());
+            b->setFirstStaff(firstStaff());
+            b->setLastStaff(lastStaff());
             b->setLevel(level());
             score()->undoRemoveElement(this);
             score()->undoAddElement(b);
@@ -320,41 +313,41 @@ Element* Bracket::drop(const DropData& data)
 
 bool Bracket::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
-      if (modifiers & Qt::ShiftModifier) {
-            if (key == Qt::Key_Left) {
+      if (!(modifiers & Qt::ShiftModifier))
+            return false;
+
+      if (key == Qt::Key_Left) {
+            BracketType bt = staff()->bracket(_column);
+            // search empty level
+            int oldColumn = _column;
+            staff()->setBracket(_column, NO_BRACKET);
+            for (;;) {
+                  ++_column;
+                  if (staff()->bracket(_column) == NO_BRACKET)
+                        break;
+                  }
+            staff()->setBracket(_column, bt);
+            staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
+            score()->moveBracket(staffIdx(), oldColumn, _column);
+            score()->setLayoutAll(true);
+            return true;
+            }
+      if (key == Qt::Key_Right) {
+            if (_column == 0)
+                  return true;
+            int l = _column - 1;
+            for (; l >= 0; --l) {
+                  if (staff()->bracket(l) != NO_BRACKET)
+                        continue;
                   BracketType bt = staff()->bracket(_column);
-                  // search empty level
-                  int oldColumn = _column;
                   staff()->setBracket(_column, NO_BRACKET);
-                  for (;;) {
-                        ++_column;
-                        if (staff()->bracket(_column) == NO_BRACKET)
-                              break;
-                        }
-                  staff()->setBracket(_column, bt);
-                  staff()->setBracketSpan(_column, _span);
-                  score()->moveBracket(staffIdx(), oldColumn, _column);
+                  staff()->setBracket(l, bt);
+                  staff()->setBracketSpan(l, _firstStaff - _lastStaff + 1);
+                  score()->moveBracket(staffIdx(), _column, l);
                   score()->setLayoutAll(true);
-                  return true;
+                  break;
                   }
-            else if (key == Qt::Key_Right) {
-                  if (_column) {
-                        int l = _column - 1;
-                        for (; l >= 0; --l) {
-                              if (staff()->bracket(l) == NO_BRACKET) {
-                                    BracketType bt = staff()->bracket(_column);
-                                    staff()->setBracket(_column, NO_BRACKET);
-                                    staff()->setBracket(l, bt);
-                                    staff()->setBracketSpan(l, _span);
-                                    score()->moveBracket(staffIdx(), _column, l);
-                                    _column = l;
-                                    score()->setLayoutAll(true);
-                                    break;
-                                    }
-                              }
-                        }
-                  return true;
-                  }
+            return true;
             }
       return false;
       }
