@@ -66,10 +66,8 @@ int Staff::bracketSpan(int idx) const
 
 void Staff::setBracket(int idx, BracketType val)
       {
-      if (idx >= _brackets.size()) {
-            for (int i = _brackets.size(); i <= idx; ++i)
-                  _brackets.append(BracketItem());
-            }
+      for (int i = _brackets.size(); i <= idx; ++i)
+            _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
       while (!_brackets.isEmpty() && (_brackets.last()._bracket == NO_BRACKET))
             _brackets.removeLast();
@@ -81,10 +79,10 @@ void Staff::setBracket(int idx, BracketType val)
 
 void Staff::setBracketSpan(int idx, int val)
       {
-      if (idx >= _brackets.size()) {
-            for (int i = _brackets.size(); i <= idx; ++i)
-                  _brackets.append(BracketItem());
-            }
+      Q_ASSERT(idx >= 0);
+      Q_ASSERT(val >= 0);
+      for (int i = _brackets.size(); i <= idx; ++i)
+            _brackets.append(BracketItem());
       _brackets[idx]._bracketSpan = val;
       }
 

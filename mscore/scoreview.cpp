@@ -3238,7 +3238,7 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
             if (editObject->isText())
                   mscore->textTools()->updateTools();
             updateGrips();
-            _score->end();
+            _score->update();
             mscore->endCmd();
             }
       }

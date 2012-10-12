@@ -49,7 +49,6 @@ class SysStaff {
                               ///< staff is hidden
    public:
       int idx;
-      QList<Bracket*> brackets;
       QList<InstrumentName*> instrumentNames;
 
       const QRectF& bbox() const    { return _bbox; }
@@ -82,6 +81,8 @@ class System : public Element {
 
       QList<MeasureBase*> ml;
       QList<SysStaff*> _staves;
+      QList<Bracket*> _brackets;
+
       BarLine* barLine;       ///< Left hand bar, connects staves in system.
       qreal _leftMargin;      ///< left margin for instrument name, brackets etc.
       bool _pageBreak;
@@ -176,6 +177,7 @@ class System : public Element {
       void addStretchDistance(qreal val) { _stretchDistance += val;  }
       qreal distance() const             { return _distance; }
       void setDistance(qreal val)        { _distance = val;  }
+      QList<Bracket*>& brackets()        { return _brackets; }
       };
 
 typedef QList<System*>::iterator iSystem;
