@@ -19,6 +19,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/keysig.h"
 // end includes required for fixupScore()
+extern bool saveMxl(Score*, const QString&);
 
 #define DIR QString("musicxml/io/")
 
@@ -32,6 +33,8 @@ class TestMxmlIO : public QObject, public MTest
 
       void mxmlIoTest(const char* file);
       void mxmlIoTestRef(const char* file);
+      void mxmlReadTestCompr(const char* file);
+      void mxmlReadWriteTestCompr(const char* file);
 
 private slots:
       void initTestCase();
@@ -39,7 +42,8 @@ private slots:
       // The list of MusicXML regression tests
       // Currently failing tests are commented out and annotated with the failure reason
       // To extract the list in a shell scipt use:
-      // cat tst_mxml_io.cpp | grep "{ mxmlIoTest" | awk -F\" '{print $2}'
+      // cat tst_mxml_io.cpp | grep "{ <test>" | awk -F\" '{print $2}'
+      // where <test> is mxmlIoTest or mxmlIoTestRef
 
       void accidentals1() { mxmlIoTest("testAccidentals1"); }
       void accidentals2() { mxmlIoTest("testAccidentals2"); }
@@ -64,6 +68,8 @@ private slots:
       // void harmony1() { mxmlIoTest("testHarmony1"); } fails due to print new-system
       void harmony2() { mxmlIoTest("testHarmony2"); }
       void hello() { mxmlIoTest("testHello"); }
+      void helloReadCompr() { mxmlReadTestCompr("testHello"); }
+      void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
@@ -197,6 +203,50 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       score->doLayout();
       QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
       QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_ref.xml"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   mxmlReadTestCompr
+//   read a compressed MusicXML file, write to a new file and verify against reference
+//---------------------------------------------------------
+
+void TestMxmlIO::mxmlReadTestCompr(const char* file)
+      {
+      MScore::debugMode = true;
+      Score* score = readScore(DIR + file + ".mxl");
+      QVERIFY(score);
+      fixupScore(score);
+      score->doLayout();
+      QVERIFY(saveMusicXml(score, QString(file) + "_mxl_read.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_mxl_read.xml", DIR + file + ".xml"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   mxmlReadWriteTestCompr
+//   read a MusicXML file, write to a compressed MusicXML file,
+//   read the compressed MusicXML file, write to a new file and verify files are identical
+//---------------------------------------------------------
+
+void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
+      {
+      // read xml
+      MScore::debugMode = true;
+      Score* score = readScore(DIR + file + ".xml");
+      QVERIFY(score);
+      fixupScore(score);
+      score->doLayout();
+      // write mxl
+      QVERIFY(saveMxl(score, QString(file) + "_mxl_read_write.mxl"));
+      delete score;
+      // read mxl
+      score = readScore(QString(file) + "_mxl_read_write.mxl");
+      QVERIFY(score);
+      fixupScore(score);
+      score->doLayout();
+      // write and verify
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_mxl_read_write.xml", DIR + file + ".xml"));
       delete score;
       }
 
