@@ -487,13 +487,15 @@ class ChangeEndBarLineType : public UndoCommand {
 class ChangeBarLineSpan : public UndoCommand {
       Staff* staff;
       int span;
+      int spanFrom;
+      int spanTo;
       void flip();
 
    public:
-      ChangeBarLineSpan(Staff*, int span);
+      ChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
-      UNDO_NAME("ChangeBarLineSpan");
+      UNDO_NAME("ChangeBarLineSpan")
       };
 
 //---------------------------------------------------------
