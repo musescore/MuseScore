@@ -166,6 +166,8 @@ Staff::Staff(Score* s)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = lines()-1;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -382,8 +384,8 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
-      if (_barLineSpan != 1)
-            xml.tag("barLineSpan", _barLineSpan);
+      if (_barLineSpan != 1 || _barLineFrom != 0 || _barLineTo != lines()-1)
+          xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
       xml.etag();
@@ -415,8 +417,14 @@ void Staff::read(const QDomElement& de)
                   b._bracketSpan = e.attribute("span", "0").toInt();
                   _brackets.append(b);
                   }
-            else if (tag == "barLineSpan")
+            else if (tag == "barLineSpan") {
                   _barLineSpan = val.toInt();
+                  _barLineFrom = e.attribute("from", "0").toInt();
+// WARNING: following statements assume staff type is correctly set
+                  QString strToLine;
+                  strToLine.setNum(lines()-1);
+                  _barLineTo   = e.attribute("to", strToLine).toInt();
+                  }
             else if (tag == "distOffset")
                   _userDist = e.text().toDouble() * spatium();
             else if (tag == "linkedTo") {
@@ -535,6 +543,15 @@ void Staff::setLines(int val)
       st->setLines(val);
       _staffType = st;
       score()->staffTypes().append(st);
+      }
+
+//---------------------------------------------------------
+//   line distance
+//---------------------------------------------------------
+
+qreal Staff::lineDistance() const
+      {
+      return _staffType->lineDistance().val();
       }
 
 //---------------------------------------------------------
