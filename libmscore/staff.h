@@ -96,6 +96,8 @@ class Staff : public QObject {
       KeyList* _keymap;
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
+      int _barLineFrom;       ///< line of start staff to draw the barline from (0 = staff top line, ...)
+      int _barLineTo;         ///< line of end staff to draw the bar line to (0= staff top line, ...)
       bool _small;
       bool _invisible;
       bool _updateKeymap;
@@ -166,8 +168,13 @@ class Staff : public QObject {
       void setSlashStyle(bool val);
       int lines() const;
       void setLines(int);
+      qreal lineDistance() const;
       int barLineSpan() const        { return _barLineSpan; }
+      int barLineFrom() const        { return _barLineFrom; }
+      int barLineTo() const          { return _barLineTo;   }
       void setBarLineSpan(int val)   { _barLineSpan = val;  }
+      void setBarLineFrom(int val)   { _barLineFrom = val;  }
+      void setBarLineTo(int val)     { _barLineTo   = val;  }
       Score* score() const           { return _score;       }
       qreal mag() const;
       qreal height() const;

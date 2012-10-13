@@ -562,9 +562,9 @@ void Score::undoChangeEndBarLineType(Measure* m, BarLineType subtype)
 //   undoChangeBarLineSpan
 //---------------------------------------------------------
 
-void Score::undoChangeBarLineSpan(Staff* staff, int span)
+void Score::undoChangeBarLineSpan(Staff* staff, int span, int spanFrom, int spanTo)
       {
-      undo(new ChangeBarLineSpan(staff, span));
+      undo(new ChangeBarLineSpan(staff, span, spanFrom, spanTo));
       }
 
 //---------------------------------------------------------
@@ -1856,17 +1856,25 @@ void ChangeEndBarLineType::flip()
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 
-ChangeBarLineSpan::ChangeBarLineSpan(Staff* _staff, int _span)
+ChangeBarLineSpan::ChangeBarLineSpan(Staff* _staff, int _span, int _spanFrom, int _spanTo)
       {
-      staff = _staff;
-      span  = _span;
+      staff       = _staff;
+      span        = _span;
+      spanFrom    = _spanFrom;
+      spanTo      = _spanTo;
       }
 
 void ChangeBarLineSpan::flip()
       {
-      int nspan = staff->barLineSpan();
+      int nspan         = staff->barLineSpan();
+      int nspanFrom     = staff->barLineFrom();
+      int nspanTo       = staff->barLineTo();
       staff->setBarLineSpan(span);
-      span = nspan;
+      staff->setBarLineFrom(spanFrom);
+      staff->setBarLineTo(spanTo);
+      span        = nspan;
+      spanFrom    = nspanFrom;
+      spanTo      = nspanTo;
       staff->score()->setLayoutAll(true);
       }
 

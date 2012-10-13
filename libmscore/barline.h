@@ -29,7 +29,9 @@ class BarLine : public Element {
 
       BarLineType _subtype;
       int _span;
-      qreal yoff;       // used during drag edit to extend y2
+      int _spanFrom, _spanTo;
+      static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
+      static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
 
       void getY(qreal*, qreal*) const;
       ElementList _el;        ///< fermata or other articulations
@@ -55,8 +57,12 @@ class BarLine : public Element {
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
-      void setSpan(int val)    { _span = val;  }
-      int span() const         { return _span; }
+      void setSpan(int val)         { _span = val;      }
+      void setSpanFrom(int val)     { _spanFrom = val;  }
+      void setSpanTo(int val)       { _spanTo = val;    }
+      int span() const              { return _span;     }
+      int spanFrom() const          { return _spanFrom; }
+      int spanTo() const            { return _spanTo;   }
 
       virtual bool isEditable() const { return true; }
       virtual void endEdit();
