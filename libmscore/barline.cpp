@@ -53,6 +53,7 @@ BarLine::BarLine(Score* s)
       _span     = 1;
       _spanFrom = 0;
       _spanTo   = DEFAULT_BARLINE_TO;
+      _customSpan = false;
       setHeight(DEFAULT_BARLINE_TO * spatium()); // for use in palettes
       }
 
@@ -339,13 +340,13 @@ void BarLine::read(const QDomElement& de)
                         }
                   }
             else if (tag == "span") {
-//                  QString strLine;
-                  // WARNING: following statements assume staff and staff bar line spans are correctly set
                   _span  = val.toInt();
-//                  strLine.setNum(staff() ? staff()->barLineFrom() : 0);
                   _spanFrom  = e.attribute("from", QString::number(_spanFrom)).toInt();
-//                  strLine.setNum(staff() ? staff()->barLineTo() : DEFAULT_BARLINE_TO);
                   _spanTo    = e.attribute("to", QString::number(_spanTo)).toInt();
+                  // WARNING: following statements assume staff and staff bar line spans are correctly set
+                  if(staff() && (_span != staff()->barLineSpan()
+                              || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
+                        _customSpan = true;
                   }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
@@ -443,6 +444,14 @@ void BarLine::updateGrips(int* grips, QRectF* grip) const
 
 void BarLine::endEdit()
       {
+      if(ctrlDrag) {                      // if single bar line edit
+            ctrlDrag = false;
+            // TODO: MAKE UNDOABLE
+            _customSpan = true;                 // mark bar line as custom spanning
+            measure()->createEndBarLines();     // update other bar lines of measure, if necessary
+            return;
+            }
+
       if (staff()->barLineSpan() == _span && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo)
             return;
 
@@ -465,6 +474,7 @@ void BarLine::endEdit()
                         score()->undoChangeBarLineSpan(score()->staff(idx), 1, 0, score()->staff(idx)->lines()-1);
                   }
             }
+
       // update span for the staff the edited bar line belongs to
       score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
       // added "_score->setLayoutAll(true);" to ChangeBarLineSpan::flip()
@@ -580,8 +590,9 @@ void BarLine::endEditDrag()
                   newSpanTo = staff2->lines();
             }
 
-      if (newSpan != _span) {
-/*    ONLY TAKE NOTE OF NEW BAR LINE SPAN: LET BarLine::endEdit() DO THE JOB!
+      // if any value changed, update
+      if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
+/*    ONLY TAKE NOTE OF NEW SPAN VALUES: LET BarLine::endEdit() DO THE JOB!
             if (newSpan > _span) {
                   int diff = newSpan - _span;
                   staffIdx1 += _span;
@@ -595,27 +606,14 @@ void BarLine::endEditDrag()
                                     }
                               }
                         }
-                  }
-*/            _span = newSpan;
-//            score()->undoChangeBarLineSpan(staff(), _span);
-            }
-
-      yoff1 = yoff2 = 0.0;
-      // if any value changed, update with an undoable operation
-      if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
+                  } */
             _span       = newSpan;
             _spanFrom   = newSpanFrom;
             _spanTo     = newSpanTo;
-/* to be used for individual bar line edit
-            setGenerated(false);
-            if(_span == staff()->barLineSpan() && _spanFrom == staff()->barLineFrom() && _spanTo == staff()->barLineTo())
-                  setGenerated(true);
-*/
-            // this should actually be in EndEdit() but, if span changes, bar lines are removed and recreated.
-            // While re-creating, staff span values are used as default for new bar lines!
-            // so, we need to update the staff span values
 //            score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
             }
+
+      yoff1 = yoff2 = 0.0;
       }
 
 //---------------------------------------------------------
