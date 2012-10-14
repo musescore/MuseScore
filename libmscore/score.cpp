@@ -2441,7 +2441,7 @@ void Score::adjustBracketsDel(int sidx, int eidx)
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                   int newSpan = span - (eidx-sidx);
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-                  undoChangeBarLineSpan(staff, newSpan, 0, _staves[lastSpannedStaffIdx]->lines()-1);
+                 undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
                   }
             }
       }
@@ -2466,11 +2466,8 @@ void Score::adjustBracketsIns(int sidx, int eidx)
 //                        }
                   }
             int span = staff->barLineSpan();
-            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                  int newSpan = span - (eidx-sidx);
-                  int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-                  undoChangeBarLineSpan(staff, newSpan, 0, _staves[lastSpannedStaffIdx]->lines()-1);
-                  }
+            if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
+                  undoChangeBarLineSpan(staff, span + (eidx-sidx), 0, (staff->lines()-1)*2);
             }
       }
 
