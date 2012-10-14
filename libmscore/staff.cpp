@@ -167,7 +167,7 @@ Staff::Staff(Score* s)
       _userDist       = .0;
       _barLineSpan    = 1;
       _barLineFrom    = 0;
-      _barLineTo      = lines()-1;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -186,7 +186,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _userDist       = .0;
       _barLineSpan    = 1;
       _barLineFrom    = 0;
-      _barLineTo      = lines()-1;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);

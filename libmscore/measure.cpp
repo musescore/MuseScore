@@ -2556,7 +2556,7 @@ bool Measure::createEndBarLines()
                               bl->setSpanFrom(spanFrom);
                               // if current actual span < target span, set spanTo to full staff height
                               if(aspan < spanTot)
-                                    bl->setSpanTo(staff->lines()-1);
+                                    bl->setSpanTo((staff->lines()-1)*2);
                               // if we reached target span, set spanTo to intended value
                               else
                                     bl->setSpanTo(spanTo);
