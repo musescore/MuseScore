@@ -568,6 +568,15 @@ void Score::undoChangeBarLineSpan(Staff* staff, int span, int spanFrom, int span
       }
 
 //---------------------------------------------------------
+//   undoChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+void Score::undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo)
+      {
+      undo(new ChangeSingleBarLineSpan(barLine, span, spanFrom, spanTo));
+      }
+
+//---------------------------------------------------------
 //   undoChangeDynamic
 //---------------------------------------------------------
 
@@ -1876,6 +1885,34 @@ void ChangeBarLineSpan::flip()
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
       staff->score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, int _spanFrom, int _spanTo)
+      {
+      barLine     = _barLine;
+      span        = _span;
+      spanFrom    = _spanFrom;
+      spanTo      = _spanTo;
+      }
+
+void ChangeSingleBarLineSpan::flip()
+      {
+      int nspan         = barLine->span();
+      int nspanFrom     = barLine->spanFrom();
+      int nspanTo       = barLine->spanTo();
+      barLine->setSpan(span);
+      barLine->setSpanFrom(spanFrom);
+      barLine->setSpanTo(spanTo);
+      barLine->setCustomSpan(true);
+      span        = nspan;
+      spanFrom    = nspanFrom;
+      spanTo      = nspanTo;
+      barLine->measure()->createEndBarLines();
+//      barLine->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

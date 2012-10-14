@@ -31,6 +31,8 @@ class BarLine : public Element {
       bool _customSpan;
       int _span;
       int _spanFrom, _spanTo;
+      // static variables used while dragging
+      static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
       static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
       static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
 
@@ -68,6 +70,7 @@ class BarLine : public Element {
       int spanTo() const            { return _spanTo;       }
 
       virtual bool isEditable() const { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void endEdit();
       virtual void editDrag(const EditData&);
       virtual void endEditDrag();
