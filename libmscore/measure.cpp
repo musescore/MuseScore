@@ -2461,10 +2461,15 @@ bool Measure::createEndBarLines()
       BarLine* bl = 0;
       int span    = 0;
       int aspan   = 0;    // actual span
+      int spanFrom;
+      int spanTo;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
-            int track = staffIdx * VOICES;
+            spanFrom    = staff->barLineFrom();
+            spanTo      = staff->barLineTo();
+            int track   = staffIdx * VOICES;
+            // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
             if (span == 0) {
                   span = staff->barLineSpan();
@@ -2514,8 +2519,11 @@ bool Measure::createEndBarLines()
             if (span) {
                   if (bl) {
                         ++aspan;
-                        if (staff->show())            // update only if visible
+                        if (staff->show()) {          // update only if visible
                               bl->setSpan(aspan);
+                              bl->setSpanFrom(spanFrom);
+                              bl->setSpanTo(spanTo);
+                              }
                         }
                   --span;
                   }
