@@ -1624,11 +1624,14 @@ void PreferenceDialog::defineShortcutClicked()
             return;
       Shortcut* s = localShortcuts[str.toAscii().data()];
       ShortcutCaptureDialog sc(s, localShortcuts, this);
-      int rv = sc.exec();
-      if (rv == 0)
-            return;
-      if (rv == 2)
-            s->clear();
+      
+      switch (sc.exec()) {
+            case ShortcutCaptureDialog::SC_REPLACE:  s->clear(); break;
+            case ShortcutCaptureDialog::SC_CANCEL:   return;
+            case ShortcutCaptureDialog::SC_ADD:      break;
+            default: qWarning("invalid dialog result");
+      };
+
       s->addShortcut(sc.getKey());
       active->setText(1, s->keysToString());
       shortcutsChanged = true;
@@ -1813,11 +1816,14 @@ void PreferenceDialog::definePluginShortcutClicked()
       PluginDescription* pd = preferences.pluginList[idx];
       Shortcut* s = &pd->shortcut;
       ShortcutCaptureDialog sc(s, localShortcuts, this);
-      int rv = sc.exec();
-      if (rv == 0)            // abort
-            return;
-      if (rv == 2)            // replace
-            s->clear();
+
+      switch (sc.exec()) {
+            case ShortcutCaptureDialog::SC_REPLACE:  s->clear(); break;
+            case ShortcutCaptureDialog::SC_CANCEL:   return;
+            case ShortcutCaptureDialog::SC_ADD:      break;
+            default: qWarning("invalid dialog result");
+            };
+                  
       s->addShortcut(sc.getKey());
       QAction* action = s->action();
       action->setShortcuts(s->keys());
