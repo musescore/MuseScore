@@ -185,6 +185,8 @@ Staff::Staff(Score* s, Part* p, int rs)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = lines()-1;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
