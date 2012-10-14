@@ -32,6 +32,7 @@ qreal BarLine::yoff1 = 0.0;
 qreal BarLine::yoff2 = 0.0;
 
 bool BarLine::ctrlDrag = false;
+int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 
 //---------------------------------------------------------
 //   barLineNames
@@ -440,6 +441,18 @@ void BarLine::updateGrips(int* grips, QRectF* grip) const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void BarLine::startEdit(MuseScoreView*, const QPointF&)
+{
+      // keep a copy of original span values
+      _origSpan         = _span;
+      _origSpanFrom     = _spanFrom;
+      _origSpanTo       = _spanTo;
+}
+
+//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
@@ -447,9 +460,17 @@ void BarLine::endEdit()
       {
       if(ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
-            // TODO: MAKE UNDOABLE
-            _customSpan = true;                 // mark bar line as custom spanning
-            measure()->createEndBarLines();     // update other bar lines of measure, if necessary
+//            // TODO: MAKE UNDOABLE
+            _customSpan       = true;           // mark bar line as custom spanning
+            int newSpan       = _span;          // copy edited span values
+            int newSpanFrom   = _spanFrom;
+            int newSpanTo     = _spanTo;
+            _span             = _origSpan;      // restore original span values
+            _spanFrom         = _origSpanFrom;
+            _spanTo           = _origSpanTo;
+            // undoable change
+            score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
+//            measure()->createEndBarLines();     // update other bar lines of measure, if necessary
             return;
             }
 
