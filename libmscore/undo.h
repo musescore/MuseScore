@@ -70,6 +70,7 @@ class InstrumentChange;
 class Box;
 class Accidental;
 class Spanner;
+class BarLine;
 
 // #define DEBUG_UNDO
 
@@ -496,6 +497,24 @@ class ChangeBarLineSpan : public UndoCommand {
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeBarLineSpan")
+      };
+
+//---------------------------------------------------------
+//   ChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+class ChangeSingleBarLineSpan : public UndoCommand {
+      BarLine* barLine;
+      int span;
+      int spanFrom;
+      int spanTo;
+      void flip();
+
+   public:
+      ChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
+      virtual void undo() { flip(); }
+      virtual void redo() { flip(); }
+      UNDO_NAME("ChangeSingleBarLineSpan")
       };
 
 //---------------------------------------------------------
