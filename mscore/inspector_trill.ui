@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>68</height>
+    <height>86</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,14 +74,17 @@
          <string>prall prall</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>pure line</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
