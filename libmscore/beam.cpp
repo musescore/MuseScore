@@ -523,6 +523,18 @@ void Beam::layout1()
                   }
             else {
                   ChordRest* cr = _elements[0];
+                  NoteType noteType = NOTE_NORMAL;
+                  if (cr->type() == CHORD)
+                        noteType = static_cast<Chord*>(cr)->noteType();
+                  else {
+                        for (int i = 1; i < _elements.size(); ++i) {
+                              if (_elements[i]->type() == CHORD) {
+                                    noteType = static_cast<Chord*>(_elements[i])->noteType();
+                                    break;
+                                    }
+                              }
+                        }
+
                   Measure* m = cr->measure();
                   if (m->hasVoices(cr->staffIdx())) {
                         switch(cr->voice()) {
@@ -532,6 +544,8 @@ void Beam::layout1()
                               case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
                               }
                         }
+                  else if (noteType != NOTE_NORMAL)
+                        _up = true;
                   else if (!twoBeamedNotes()) {
                         // highest or lowest note determines stem direction
                         // down-stems is preferred if equal
