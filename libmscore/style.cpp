@@ -287,7 +287,7 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Measure Number"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, .0), OS, QPointF(0.0, 0.0), true));
+         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Translator"), ff, 11, false, false, false,
