@@ -170,6 +170,8 @@ class Chord : public ChordRest {
 
       QPointF layoutArticulation(Articulation*);
 
+      virtual void crossMeasureSetup(bool on);
+
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;

@@ -172,15 +172,15 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.tag("BeamMode", s);
             }
       writeProperty(xml, P_SMALL);
-      if (durationType().dots())
-            xml.tag("dots", durationType().dots());
+      if (actualDurationType().dots())
+            xml.tag("dots", actualDurationType().dots());
       if (_staffMove)
             xml.tag("move", _staffMove);
-      if (durationType().isValid())
-            xml.tag("durationType", durationType().name());
+      if (actualDurationType().isValid())
+            xml.tag("durationType", actualDurationType().name());
 
-      if (!duration().isZero() && (!durationType().fraction().isValid()
-         || (durationType().fraction() != duration())))
+      if (!duration().isZero() && (!actualDurationType().fraction().isValid()
+         || (actualDurationType().fraction() != duration())))
             xml.fTag("duration", duration());
       foreach(const Articulation* a, _articulations)
             a->write(xml);
@@ -292,7 +292,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "durationType") {
             setDurationType(e.readElementText());
-            if (durationType().type() != TDuration::V_MEASURE) {
+            if (actualDurationType().type() != TDuration::V_MEASURE) {
                   if ((type() == REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
@@ -303,12 +303,12 @@ bool ChordRest::readProperties(XmlReader& e)
                               // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (durationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
+                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
                         // old pre 2.0 scores: convert
                         setDurationType(TDuration::V_MEASURE);
                         }
                   else  // not from old score: set duration fraction from duration type
-                        setDuration(durationType().fraction());
+                        setDuration(actualDurationType().fraction());
                   }
             else {
                   if (score()->mscVersion() < 115) {
@@ -909,21 +909,25 @@ void ChordRest::setBeam(Beam* b)
 void ChordRest::setDurationType(TDuration::DurationType t)
       {
       _durationType.setType(t);
+      _crossMeasure = CROSSMEASURE_UNKNOWN;
       }
 
 void ChordRest::setDurationType(const QString& s)
       {
       _durationType.setType(s);
+      _crossMeasure = CROSSMEASURE_UNKNOWN;
       }
 
 void ChordRest::setDurationType(int ticks)
       {
       _durationType.setVal(ticks);
+      _crossMeasure = CROSSMEASURE_UNKNOWN;
       }
 
 void ChordRest::setDurationType(const TDuration& v)
       {
       _durationType = v;
+      _crossMeasure = CROSSMEASURE_UNKNOWN;
       }
 
 //---------------------------------------------------------

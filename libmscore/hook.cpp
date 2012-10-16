@@ -60,3 +60,15 @@ void Hook::layout()
       ElementLayout::layout(this);
       setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
       }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Hook::draw(QPainter* painter) const
+{
+      // hide if belonging to the second chord of a cross-measure pair
+      if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+            return;
+      Symbol::draw(painter);
+}
