@@ -4575,10 +4575,5 @@
         <extended>1</extended>
         </instrument>
      </instrument-group>
-
-  <instrument-group name="Group-Test" extended="1">
-     <ref>Violone</ref>
-     <ref>Piccolo</ref>
-     </instrument-group>
   </museScore>
 
