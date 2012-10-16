@@ -6476,36 +6476,4 @@
 
     </InstrumentGroup>
 
-  <InstrumentGroup id="group-test">
-    <name>Group-Test</name>
-    <extended>1</extended>
-    <Instrument id="">
-      <longName>Violone</longName>
-      <shortName>Vne.</shortName>
-      <description>Violone</description>
-      <extended>1</extended>
-      <clef>F8vb</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>28-62</aPitchRange>
-      <pPitchRange>28-67</pPitchRange>
-      <Channel>
-        <program value="43"/>
-        </Channel>
-      </Instrument>
-
-    <Instrument id="">
-      <longName>Piccolo</longName>
-      <shortName>Picc.</shortName>
-      <description>Piccolo</description>
-      <clef>G8va</clef>
-      <barlineSpan>1</barlineSpan>
-      <aPitchRange>74-105</aPitchRange>
-      <pPitchRange>74-108</pPitchRange>
-      <Channel>
-        <program value="72"/>
-        </Channel>
-      </Instrument>
-
-    </InstrumentGroup>
-
   </museScore>
