@@ -618,6 +618,9 @@ void Note::draw(QPainter* painter) const
       // NOT tablature
 
       else {
+            // skip drawing, if second note of a cross-measure value
+            if(chord()->crossMeasure() == CROSSMEASURE_SECOND)
+                  return;
             //
             // warn if pitch extends usable range of instrument
             // by coloring the note head
