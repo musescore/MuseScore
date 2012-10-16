@@ -41,35 +41,13 @@ QRectF handleRect(const QPointF& pos)
 
 Measure* Score::tick2measure(int tick) const
       {
-      for (MeasureBase* mb = first(); mb;) {
-            if (mb->type() != Element::MEASURE) {
-                  mb = mb->next();
-                  continue;
-                  }
-            Measure* m = static_cast<Measure*>(mb);
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             int st = m->tick();
             int l  = m->ticks();
             if (tick >= st && tick < (st+l))
                   return m;
-            // hack:
-            MeasureBase* nmb;
-            for (nmb = mb->next(); nmb; nmb = nmb->next()) {
-                  if (nmb->type() == Element::MEASURE)
-                        break;
-                  }
-            if (nmb == 0)
-                  return m;
-            mb = nmb;
             }
       qDebug("-tick2measure %d not found", tick);
-      if (MScore::debugMode) {
-            qDebug("first %p", first());
-            for (MeasureBase* m = first(); m; m = m->next()) {
-                  int st = m->tick();
-                  int l  = m->ticks();
-                  qDebug("%d - %d", st, st+l);
-                  }
-            }
       return 0;
       }
 
