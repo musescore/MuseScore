@@ -14,3 +14,4 @@ Doc
 DocLib
 build.qt5
 *.sfd~
+/.project
