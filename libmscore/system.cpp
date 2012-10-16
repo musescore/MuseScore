@@ -153,6 +153,8 @@ void System::layout(qreal xo1)
                         continue;
                   int firstStaff = staffIdx;
                   int lastStaff  = staffIdx + s->bracketSpan(i) - 1;
+                  if (lastStaff >= nstaves)
+                        lastStaff = nstaves - 1;
 
                   for (; firstStaff <= lastStaff; ++firstStaff) {
                         if (score()->staff(firstStaff)->show())

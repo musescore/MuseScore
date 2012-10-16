@@ -443,13 +443,10 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
 
 //---------------------------------------------------------
 //   Measure::layout
+///   Layout measure; must fit into  \a width.
+///
+///   Note: minWidth = width - stretch
 //---------------------------------------------------------
-
-/**
- Layout measure; must fit into  \a width.
-
- Note: minWidth = width - stretch
-*/
 
 void Measure::layout(qreal width)
       {
@@ -476,6 +473,13 @@ void Measure::layout(qreal width)
 
 qreal Measure::tick2pos(int tck) const
       {
+      if (multiMeasure() > 0) {
+            Segment* s = first(Segment::SegChordRest);
+            qreal x1 = s->x();
+            qreal w  = width() - x1;
+            return x1 + (tck * w) / (ticks() * multiMeasure());
+            }
+
       Segment* s;
       qreal x1 = 0;
       qreal x2 = 0;
@@ -577,7 +581,7 @@ void Measure::layout2()
             if (_noText == 0) {
                   _noText = new Text(score());
                   _noText->setGenerated(true);
-                  _noText->setTextStyle(score()->textStyle(TEXT_STYLE_MEASURE_NUMBER));
+                  _noText->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
                   _noText->setParent(this);
                   _noText->setSelectable(false);
                   }
