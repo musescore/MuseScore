@@ -2245,20 +2245,4 @@
 
     </InstrumentGroup>
 
-  <InstrumentGroup id="group-test">
-    <name>Group-Test</name>
-    <Instrument id="violone">
-      <longName>Violone</longName>
-      <shortName>Vne.</shortName>
-      <description>Violone</description>
-      </Instrument>
-
-    <Instrument id="piccolo">
-      <longName>Piccolo</longName>
-      <shortName>Picc.</shortName>
-      <description>Piccolo</description>
-      </Instrument>
-
-    </InstrumentGroup>
-
   </museScore>
