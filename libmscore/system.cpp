@@ -558,6 +558,8 @@ void System::add(Element* el)
                               if (staffIdx >= bb->firstStaff() && staffIdx <= bb->lastStaff())
                                     ++level;
                               }
+                        b->setLevel(level);
+                        b->setSpan(1);
                         }
                   b->staff()->setBracket(level,     b->subtype());
                   b->staff()->setBracketSpan(level, b->span());
