@@ -42,6 +42,7 @@ echo       %1/share/locale/mscore_ro.ts \
 echo       %1/share/locale/mscore_ru.ts \
 echo       %1/share/locale/mscore_sk.ts \
 echo       %1/share/locale/mscore_sl.ts \
+echo       %1/share/locale/mscore_sr.ts \
 echo       %1/share/locale/mscore_sv.ts \
 echo       %1/share/locale/mscore_th.ts \
 echo       %1/share/locale/mscore_tr.ts \
