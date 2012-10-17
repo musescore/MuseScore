@@ -4280,10 +4280,5 @@
           </channel>
         </instrument>
      </instrument-group>
-
-  <instrument-group name="Group-Test">
-     <ref>Violone</ref>
-     <ref>Piccolo</ref>
-     </instrument-group>
   </museScore>
 
