@@ -253,7 +253,6 @@ void System::layout(qreal xo1)
       //  layout brackets
       //---------------------------------------------------
 
-//      qreal bw = point(score()->styleS(ST_bracketWidth));
       foreach (Bracket* b, _brackets) {
             qreal xo     = -xo1;
             int level   = b->level();
@@ -368,12 +367,11 @@ void System::layout2()
       //  layout brackets vertical position
       //---------------------------------------------------
 
-      qreal bd = score()->styleS(ST_bracketDistance).val() * _spatium;
       foreach (Bracket* b, _brackets) {
             qreal sy = _staves[b->firstStaff()]->bbox().top();
             qreal ey = _staves[b->lastStaff()]->bbox().bottom();
-            b->rypos() = sy - bd;
-            b->setHeight((ey - sy) + bd * 2.0);
+            b->rypos() = sy;
+            b->setHeight(ey - sy);
             b->layout();
             }
 
