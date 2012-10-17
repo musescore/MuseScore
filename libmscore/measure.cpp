@@ -2078,9 +2078,11 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "TimeSig") {
                   TimeSig* ts = new TimeSig(score());
                   ts->setTrack(score()->curTrack);
-                  ts->read(e);
+                  // parent must be set before read
                   segment = getSegment(Segment::SegTimeSig, score()->curTick);
                   segment->add(ts);
+                  ts->read(e);
+
                   timeStretch = ts->stretch();
                   _timesig    = ts->sig();
                   if (timeStretch == Fraction(1,1)) {
