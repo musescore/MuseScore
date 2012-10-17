@@ -99,12 +99,10 @@ void Score::write(Xml& xml, bool selectionOnly)
       xml.tag("showUnprintable", _showUnprintable);
       xml.tag("showFrames", _showFrames);
       xml.tag("showMargins", _showPageborders);
-      // pageFormat()->write(xml);  // saved with style
 
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            // if (!i.value().isEmpty())
             if (!_testMode  || i.key() != "platform")
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
@@ -159,7 +157,6 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.etag();
             }
       xml.curTrack = -1;
-//      xml.tag("cursorTrack", _is.track());
       if (!selectionOnly) {
             foreach(Excerpt* excerpt, _excerpts)
                   excerpt->score()->write(xml, false);       // recursion

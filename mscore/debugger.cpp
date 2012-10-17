@@ -290,8 +290,8 @@ void Debugger::updateList(Score* s)
             foreach(System* system, *page->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
 
-                  if (system->getBarLine())
-                        new ElementItem(si, system->getBarLine());
+                  if (system->barLine())
+                        new ElementItem(si, system->barLine());
 
 
                   foreach(SysStaff* ss, *system->staves()) {

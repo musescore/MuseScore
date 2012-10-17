@@ -2832,8 +2832,6 @@ qreal Measure::minWidth2() const
 //    layoutX
 ///   \brief main layout routine for note spacing
 ///   Return width of measure (in MeasureWidth), taking into account \a stretch.
-///   In the layout process this method is called twice, first with stretch==1
-///   to find out the minimal width of the measure.
 //-----------------------------------------------------------------------------
 
 void Measure::layoutX(qreal stretch)
@@ -2868,6 +2866,9 @@ void Measure::layoutX(qreal stretch)
 
       int segmentIdx = 0;
       qreal x        = 0.0;
+      if (system()->firstMeasure() == this && system()->barLine()) {
+            x += BarLine::layoutWidth(score(), system()->barLine()->subtype(), system()->barLine()->magS());
+            }
       int minTick    = 100000;
       int ntick      = tick() + ticks();   // position of next measure
 

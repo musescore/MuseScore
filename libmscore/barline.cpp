@@ -364,6 +364,12 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
+            if (parent()->type() == SYSTEM) {
+                  BarLine* b = static_cast<System*>(parent())->barLine();
+                  score()->undoChangeProperty(b, P_SUBTYPE, int(bl->subtype()));
+                  delete e;
+                  return 0;
+                  }
             Measure* m = static_cast<Segment*>(parent())->measure();
             if (st == START_REPEAT) {
                   m = m->nextMeasure();
@@ -723,3 +729,4 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       score()->setLayoutAll(true);
       return true;
       }
+

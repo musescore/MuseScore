@@ -67,7 +67,7 @@ SysStaff::~SysStaff()
 System::System(Score* s)
    : Element(s)
       {
-      barLine      = 0;
+      _barLine     = 0;
       _leftMargin  = 0.0;
       _pageBreak   = false;
       _firstSystem = false;
@@ -82,7 +82,7 @@ System::System(Score* s)
 
 System::~System()
       {
-      delete barLine;
+      delete _barLine;
       qDeleteAll(_staves);
       qDeleteAll(_brackets);
       }
@@ -236,18 +236,18 @@ void System::layout(qreal xo1)
             }
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
-            if (barLine == 0) {
-                  barLine = new BarLine(score());
-                  barLine->setParent(this);
-                  barLine->setTrack(0);
+            if (_barLine == 0) {
+                  _barLine = new BarLine(score());
+                  _barLine->setParent(this);
+                  _barLine->setTrack(0);
+                  _barLine->setGenerated(true);
+                  score()->undoAddElement(_barLine);
                   }
             }
-      else if (barLine) {
-            delete barLine;
-            barLine = 0;
-            }
-      if (barLine)
-            barLine->setPos(_leftMargin + xo1, 0.0);
+      else if (_barLine)
+            score()->undoRemoveElement(_barLine);
+      if (_barLine)
+            _barLine->setPos(_leftMargin + xo1, 0.0);
 
       //---------------------------------------------------
       //  layout brackets
@@ -358,9 +358,9 @@ void System::layout2()
                   }
             }
 
-      if (barLine) {
-            barLine->setSpan(lastStaffIdx + 1);
-            barLine->layout();
+      if (_barLine) {
+            _barLine->setSpan(lastStaffIdx + 1);
+            _barLine->layout();
             }
 
       //---------------------------------------------------
@@ -589,6 +589,9 @@ void System::add(Element* el)
                         }
                   }
                   break;
+            case BAR_LINE:
+                  _barLine = static_cast<BarLine*>(el);
+                  break;
             default:
                   qDebug("System::add(%s) not implemented", el->name());
                   break;
@@ -638,6 +641,9 @@ void System::remove(Element* el)
 //                        qDebug("System::remove: %p(%s) not found, score %p == %p", el, el->name(), score(), el->score());
                         Q_ASSERT(score() == el->score());
                         }
+                  break;
+            case BAR_LINE:
+                  _barLine = 0;
                   break;
             default:
                   qDebug("System::remove(%s) not implemented", el->name());
@@ -908,8 +914,8 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       if (isVbox())
             return;
-      if (barLine)
-            func(data, barLine);
+      if (_barLine)
+            func(data, _barLine);
 
       foreach(Bracket* b, _brackets)
             func(data, b);
@@ -956,6 +962,8 @@ qreal System::staffY(int staffIdx) const
 void System::write(Xml& xml) const
       {
       xml.stag("System");
+      if (_barLine && !_barLine->generated())
+            _barLine->write(xml);
       xml.etag();
       }
 
@@ -968,7 +976,11 @@ void System::read(const QDomElement& de)
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
 
-            if (tag == "System") {
+            if (tag == "BarLine") {
+                  _barLine = new BarLine(score());
+                  _barLine->read(e);
+                  _barLine->setTrack(0);
+                  _barLine->setParent(this);
                   }
             else
                   domError(e);
