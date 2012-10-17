@@ -602,6 +602,7 @@ void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QSt
       {
 //      const Channel& c = _channel[channelIdx];
 //      foreach(const MidiArticulation& a, c.articulation) {
+
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
                   *gateTime = *gateTime * a.gateTime / 100;
