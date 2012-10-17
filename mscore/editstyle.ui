@@ -152,7 +152,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1531,7 +1531,7 @@ p, li { white-space: pre-wrap; }
                <string>sp</string>
               </property>
               <property name="decimals">
-               <number>1</number>
+               <number>2</number>
               </property>
               <property name="minimum">
                <double>-1000.000000000000000</double>
@@ -1574,7 +1574,7 @@ p, li { white-space: pre-wrap; }
                <string extracomment="spatium unit">sp</string>
               </property>
               <property name="decimals">
-               <number>1</number>
+               <number>2</number>
               </property>
               <property name="minimum">
                <double>-1000.000000000000000</double>
@@ -1604,7 +1604,7 @@ p, li { white-space: pre-wrap; }
                <string extracomment="spatium unit">sp</string>
               </property>
               <property name="decimals">
-               <number>1</number>
+               <number>2</number>
               </property>
               <property name="minimum">
                <double>-1000.000000000000000</double>
@@ -1620,7 +1620,7 @@ p, li { white-space: pre-wrap; }
                <string extracomment="spatium unit">sp</string>
               </property>
               <property name="decimals">
-               <number>1</number>
+               <number>2</number>
               </property>
               <property name="minimum">
                <double>-1000.000000000000000</double>
