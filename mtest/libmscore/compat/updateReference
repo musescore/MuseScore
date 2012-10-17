@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/compat/articulations-test.mscx articulations-ref.mscx
+cp ../../../build.debug/mtest/libmscore/compat/keysig-test.mscx keysig-ref.mscx
+cp ../../../build.debug/mtest/libmscore/compat/notes-test.mscx notes-ref.mscx
+
