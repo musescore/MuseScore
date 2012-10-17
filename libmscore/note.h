@@ -156,7 +156,7 @@ class Note : public Element {
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
-      int _onTimeOffset;      ///< start note offset in ticks
+      int _onTimeOffset;      ///< start note offset in ticks, used for arpeggio
       int _onTimeUserOffset;  ///< start note user offset
 
       int _offTimeOffset;     ///< stop note offset in ticks
