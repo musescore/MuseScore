@@ -564,34 +564,36 @@ void Measure::layout2()
       //   set measure number
       //
       bool smn = false;
-      if (score()->styleB(ST_showMeasureNumber)
-         && !_irregular
-         && (_no || score()->styleB(ST_showMeasureNumberOne))) {
-            if (score()->styleB(ST_measureNumberSystem)) {
-                  Measure* fm = system() ? system()->firstMeasure() : 0;
-                  smn = fm == this;
+
+      if (!_noText || _noText->generated()) {
+            if (score()->styleB(ST_showMeasureNumber)
+               && !_irregular
+               && (_no || score()->styleB(ST_showMeasureNumberOne))) {
+                  if (score()->styleB(ST_measureNumberSystem))
+                        smn = system()->firstMeasure() == this;
+                  else {
+                        smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
+                              ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+                        }
+                  }
+            if (smn) {
+                  QString s(QString("%1").arg(_no + 1));
+                  if (_noText == 0) {
+                        _noText = new Text(score());
+                        _noText->setGenerated(true);
+                        _noText->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
+                        _noText->setParent(this);
+                        score()->undoAddElement(_noText);
+                        }
+                  _noText->setText(s);
                   }
             else {
-                  smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
-                        ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+                  if (_noText)
+                        score()->undoRemoveElement(_noText);
                   }
             }
-      if (smn) {
-            QString s(QString("%1").arg(_no + 1));
-            if (_noText == 0) {
-                  _noText = new Text(score());
-                  _noText->setGenerated(true);
-                  _noText->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
-                  _noText->setParent(this);
-                  _noText->setSelectable(false);
-                  }
-            _noText->setText(s);
+      if (_noText)
             _noText->layout();
-            }
-      else {
-            delete _noText;
-            _noText = 0;
-            }
 
       //
       // slur layout needs articulation layout first
@@ -840,6 +842,10 @@ void Measure::add(Element* el)
 //            qDebug("measure %p(%d): add %s %p", this, _no, el->name(), el);
 
       switch (type) {
+            case TEXT:
+                  _noText = static_cast<Text*>(el);
+                  break;
+
             case TUPLET:
                   qDebug("Measure::add(Tuplet) ??");
                   break;
@@ -972,6 +978,11 @@ void Measure::remove(Element* el)
       {
       setDirty();
       switch(el->type()) {
+            case TEXT:
+                  Q_ASSERT(el == _noText);
+                  _noText = 0;
+                  break;
+
             case SPACER:
                   if (static_cast<Spacer*>(el)->subtype() == SPACER_DOWN)
                         staves[el->staffIdx()]->_vspacerDown = 0;
@@ -1757,6 +1768,11 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
+            if (_noText && !_noText->generated()) {
+                  xml.stag("MeasureNumber");
+                  _noText->writeProperties(xml);
+                  xml.etag();
+                  }
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -1792,56 +1808,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       score()->writeSegments(xml, this, track, track+VOICES, first(), last()->next1(), writeSystemElements);
       xml.etag();
       }
-#if 0
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
 
-void Measure::write(Xml& xml) const
-      {
-      xml.stag(QString("Measure tick=\"%1\"").arg(tick()));
-      xml.curTick = tick();
-
-      if (_repeatFlags & RepeatStart)
-            xml.tagE("startRepeat");
-      if (_repeatFlags & RepeatEnd)
-            xml.tag("endRepeat", _repeatCount);
-      if (_irregular)
-            xml.tagE("irregular");
-      if (_breakMultiMeasureRest)
-            xml.tagE("breakMultiMeasureRest");
-      xml.tag("stretch", _userStretch);
-
-      for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
-            xml.stag("Staff");
-            for (ciElement i = _el.begin(); i != _el.end(); ++i) {
-                  if ((*i)->staff() == _score->staff(staffIdx) && (*i)->type() != SLUR_SEGMENT)
-                        (*i)->write(xml);
-                  }
-            int strack = staffIdx * VOICES;
-            int etrack = strack + VOICES;
-            for (int track = strack; track < etrack; ++track) {
-                  for (Segment* segment = first(); segment; segment = segment->next()) {
-                        if (track == 0)
-                              segment->setWritten(false);
-                        Element* e = segment->element(track);
-                        if (!e || e->generated())
-                              continue;
-                        if (e->isDurationElement())
-                              static_cast<DurationElement*>(e)->writeTuplet(xml);
-                        if (segment->tick() != xml.curTick) {
-                              xml.tag("tick", segment->tick());
-                              xml.curTick = segment->tick();
-                              }
-                        e->write(xml);
-                        segment->write(xml);    // write only once
-                        }
-                  }
-            xml.etag();
-            }
-      xml.etag();
-      }
-#endif
 //---------------------------------------------------------
 //   Measure::read
 //---------------------------------------------------------
@@ -2286,6 +2253,11 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   }
             else if (tag == "Segment")
                   segment->read(e);
+            else if (tag == "MeasureNumber") {
+                  _noText = new Text(score());
+                  _noText->read(e);
+                  _noText->setParent(this);
+                  }
             else
                   domError(e);
             }
