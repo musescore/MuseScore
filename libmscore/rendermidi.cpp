@@ -127,11 +127,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       if (note->hidden() || note->tieBack())       // do not play overlapping notes
             return;
 
-      int pitch   = note->ppitch();
-      int tick1   = note->chord()->tick() + tickOffset;
-      int tick2   = tick1 + note->playTicks();
-      int onTime  = tick1 + note->onTimeOffset() + note->onTimeUserOffset();
-      int offTime = tick2 + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+      int pitch = note->ppitch();
+      int tick1 = note->chord()->tick() + tickOffset;
 
       if (!note->playEvents().isEmpty()) {
             int ticks = note->playTicks();
@@ -147,7 +144,9 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   }
             }
       else {
-            offTime = tick1 + note->playTicks() * gateTime / 100 + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+            int onTime  = tick1                     + note->onTimeOffset()  + note->onTimeUserOffset();
+            int offTime = tick1 + note->playTicks() + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+            offTime    -= (offTime - onTime) * gateTime / 100;
             if (offTime - onTime <= 0)
                   offTime = onTime + 1;
             playNote(events, note, channel, pitch, velo, onTime, offTime);
@@ -239,8 +238,8 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
 
       Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
-      int strack      = firstStaffIdx * VOICES;
-      int etrack      = nextStaffIdx * VOICES;
+      int strack = firstStaffIdx * VOICES;
+      int etrack = nextStaffIdx * VOICES;
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick();
@@ -255,7 +254,6 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         Chord* chord = static_cast<Chord*>(cr);
                         Staff* staff = chord->staff();
                         int velocity = staff->velocities().velo(seg->tick());
-// printf("velo %d(%d) %d\n", tick/480, tick/480/4, velocity);
                         Instrument* instr = chord->staff()->part()->instr(tick);
                         //
                         // adjust velocity for instrument, channel and
@@ -264,6 +262,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         int channel = 0;  // note->subchannel();
                         instr->updateVelocity(&velocity, channel, "");
                         int gateTime = 100;
+                        instr->updateGateTime(&gateTime, channel, "");
                         foreach (Articulation* a, *chord->getArticulations()) {
                               instr->updateVelocity(&velocity, channel, a->subtypeName());
                               instr->updateGateTime(&gateTime, channel, a->subtypeName());
@@ -464,6 +463,7 @@ void Score::toEList(EventMap* events)
       _foundPlayPosAfterRepeats = false;
       updateChannel();
       updateVelo();
+
       foreach (Part* part, _parts)
             renderPart(events, part);
 

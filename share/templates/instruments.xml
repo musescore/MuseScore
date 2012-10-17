@@ -3284,7 +3284,7 @@
       <drumset>1</drumset>
       <Drum pitch="37">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Side Stick</name>
         <stem>2</stem>
@@ -3292,7 +3292,7 @@
         </Drum>
       <Drum pitch="38">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Acoustic Snare</name>
         <stem>2</stem>
@@ -3314,7 +3314,7 @@
       <drumset>1</drumset>
       <Drum pitch="35">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Acoustic Bass Drum</name>
         <stem>2</stem>
@@ -3336,7 +3336,7 @@
       <drumset>1</drumset>
       <Drum pitch="37">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Side Stick</name>
         <stem>2</stem>
@@ -3344,7 +3344,7 @@
         </Drum>
       <Drum pitch="40">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Snare Drum 2</name>
         <stem>2</stem>
@@ -3366,7 +3366,7 @@
       <drumset>1</drumset>
       <Drum pitch="37">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Side Stick</name>
         <stem>2</stem>
@@ -3374,7 +3374,7 @@
         </Drum>
       <Drum pitch="38">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Acoustic Snare</name>
         <stem>2</stem>
@@ -3396,7 +3396,7 @@
       <drumset>1</drumset>
       <Drum pitch="48">
         <head>0</head>
-        <line>2</line>
+        <line>-2</line>
         <voice>0</voice>
         <name>High Tom 2</name>
         <stem>1</stem>
@@ -3404,7 +3404,7 @@
         </Drum>
       <Drum pitch="50">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>High Tom 1</name>
         <stem>1</stem>
@@ -3426,7 +3426,7 @@
       <drumset>1</drumset>
       <Drum pitch="45">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Mid Tom 2</name>
         <stem>1</stem>
@@ -3434,7 +3434,7 @@
         </Drum>
       <Drum pitch="47">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Mid Tom 1</name>
         <stem>1</stem>
@@ -3456,7 +3456,7 @@
       <drumset>1</drumset>
       <Drum pitch="43">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Tom 2</name>
         <stem>1</stem>
@@ -3478,7 +3478,7 @@
       <drumset>1</drumset>
       <Drum pitch="0">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Ching</name>
         <stem>2</stem>
@@ -3486,7 +3486,7 @@
         </Drum>
       <Drum pitch="44">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>3</voice>
         <name>Pedal Hi-hat</name>
         <stem>2</stem>
@@ -3508,7 +3508,7 @@
       <drumset>1</drumset>
       <Drum pitch="61">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Bongo</name>
         <stem>1</stem>
@@ -3530,7 +3530,7 @@
       <drumset>1</drumset>
       <Drum pitch="60">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>High Bongo</name>
         <stem>1</stem>
@@ -3538,7 +3538,7 @@
         </Drum>
       <Drum pitch="61">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Bongo</name>
         <stem>1</stem>
@@ -3560,7 +3560,7 @@
       <drumset>1</drumset>
       <Drum pitch="62">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>Mute High Conga</name>
         <stem>1</stem>
@@ -3568,7 +3568,7 @@
         </Drum>
       <Drum pitch="63">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Conga</name>
         <stem>1</stem>
@@ -3590,7 +3590,7 @@
       <drumset>1</drumset>
       <Drum pitch="65">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>High Timbale</name>
         <stem>1</stem>
@@ -3598,7 +3598,7 @@
         </Drum>
       <Drum pitch="66">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Timbale</name>
         <stem>1</stem>
@@ -3620,7 +3620,7 @@
       <drumset>1</drumset>
       <Drum pitch="45">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Mid Tom 2</name>
         <stem>1</stem>
@@ -3642,7 +3642,7 @@
       <drumset>1</drumset>
       <Drum pitch="62">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>Mute High Conga</name>
         <stem>1</stem>
@@ -3650,7 +3650,7 @@
         </Drum>
       <Drum pitch="64">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Conga</name>
         <stem>1</stem>
@@ -3672,7 +3672,7 @@
       <drumset>1</drumset>
       <Drum pitch="78">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Mute Cuica</name>
         <stem>1</stem>
@@ -3680,7 +3680,7 @@
         </Drum>
       <Drum pitch="79">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Open Cuica</name>
         <stem>1</stem>
@@ -3702,7 +3702,7 @@
       <drumset>1</drumset>
       <Drum pitch="81">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Open Triangle</name>
         <stem>1</stem>
@@ -3724,7 +3724,7 @@
       <drumset>1</drumset>
       <Drum pitch="42">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Closed Hi-hat</name>
         <stem>1</stem>
@@ -3732,7 +3732,7 @@
         </Drum>
       <Drum pitch="46">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Open Hi-hat</name>
         <stem>1</stem>
@@ -3754,7 +3754,7 @@
       <drumset>1</drumset>
       <Drum pitch="52">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Chinese Cymbal</name>
         <stem>1</stem>
@@ -3776,7 +3776,7 @@
       <drumset>1</drumset>
       <Drum pitch="53">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Ride Bell</name>
         <stem>1</stem>
@@ -3798,7 +3798,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -3820,7 +3820,7 @@
       <drumset>1</drumset>
       <Drum pitch="58">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Vibra Slap</name>
         <stem>1</stem>
@@ -3842,7 +3842,7 @@
       <drumset>1</drumset>
       <Drum pitch="52">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Chinese Cymbal</name>
         <stem>1</stem>
@@ -3864,7 +3864,7 @@
       <drumset>1</drumset>
       <Drum pitch="81">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Open Triangle</name>
         <stem>1</stem>
@@ -3886,7 +3886,7 @@
       <drumset>1</drumset>
       <Drum pitch="67">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>High Agogo</name>
         <stem>1</stem>
@@ -3908,7 +3908,7 @@
       <drumset>1</drumset>
       <Drum pitch="68">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Agogo</name>
         <stem>1</stem>
@@ -3930,7 +3930,7 @@
       <drumset>1</drumset>
       <Drum pitch="68">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Agogo</name>
         <stem>1</stem>
@@ -3952,7 +3952,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -3974,7 +3974,7 @@
       <drumset>1</drumset>
       <Drum pitch="53">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Ride Bell</name>
         <stem>1</stem>
@@ -3996,7 +3996,7 @@
       <drumset>1</drumset>
       <Drum pitch="76">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>High Wood Block</name>
         <stem>1</stem>
@@ -4004,7 +4004,7 @@
         </Drum>
       <Drum pitch="77">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Wood Block</name>
         <stem>1</stem>
@@ -4026,7 +4026,7 @@
       <drumset>1</drumset>
       <Drum pitch="76">
         <head>0</head>
-        <line>3</line>
+        <line>-1</line>
         <voice>0</voice>
         <name>High Wood Block</name>
         <stem>1</stem>
@@ -4034,7 +4034,7 @@
         </Drum>
       <Drum pitch="77">
         <head>0</head>
-        <line>5</line>
+        <line>1</line>
         <voice>0</voice>
         <name>Low Wood Block</name>
         <stem>1</stem>
@@ -4056,7 +4056,7 @@
       <drumset>1</drumset>
       <Drum pitch="80">
         <head>1</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Mute Triangle</name>
         <stem>2</stem>
@@ -4064,7 +4064,7 @@
         </Drum>
       <Drum pitch="81">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Open Triangle</name>
         <stem>2</stem>
@@ -4086,7 +4086,7 @@
       <drumset>1</drumset>
       <Drum pitch="57">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Crash Cymbal 2</name>
         <stem>2</stem>
@@ -4109,7 +4109,7 @@
       <drumset>1</drumset>
       <Drum pitch="51">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Ride Cymbal 1</name>
         <stem>2</stem>
@@ -4117,7 +4117,7 @@
         </Drum>
       <Drum pitch="53">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Ride Bell</name>
         <stem>2</stem>
@@ -4139,7 +4139,7 @@
       <drumset>1</drumset>
       <Drum pitch="52">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Chinese Cymbal</name>
         <stem>2</stem>
@@ -4161,7 +4161,7 @@
       <drumset>1</drumset>
       <Drum pitch="49">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Crash Cymbal 1</name>
         <stem>2</stem>
@@ -4183,7 +4183,7 @@
       <drumset>1</drumset>
       <Drum pitch="55">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Splash Cymbal</name>
         <stem>2</stem>
@@ -4205,7 +4205,7 @@
       <drumset>1</drumset>
       <Drum pitch="56">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cowbell</name>
         <stem>2</stem>
@@ -4227,7 +4227,7 @@
       <drumset>1</drumset>
       <Drum pitch="75">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Claves</name>
         <stem>2</stem>
@@ -4249,7 +4249,7 @@
       <drumset>1</drumset>
       <Drum pitch="76">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>High Wood Block</name>
         <stem>1</stem>
@@ -4271,7 +4271,7 @@
       <drumset>1</drumset>
       <Drum pitch="73">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Short Guiro</name>
         <stem>1</stem>
@@ -4293,7 +4293,7 @@
       <drumset>1</drumset>
       <Drum pitch="70">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Maracas</name>
         <stem>2</stem>
@@ -4315,7 +4315,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4337,7 +4337,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4359,7 +4359,7 @@
       <drumset>1</drumset>
       <Drum pitch="58">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Vibra Slap</name>
         <stem>1</stem>
@@ -4381,7 +4381,7 @@
       <drumset>1</drumset>
       <Drum pitch="77">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Wood Block</name>
         <stem>1</stem>
@@ -4403,7 +4403,7 @@
       <drumset>1</drumset>
       <Drum pitch="76">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>High Wood Block</name>
         <stem>1</stem>
@@ -4425,7 +4425,7 @@
       <drumset>1</drumset>
       <Drum pitch="73">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Short Guiro</name>
         <stem>1</stem>
@@ -4447,7 +4447,7 @@
       <drumset>1</drumset>
       <Drum pitch="49">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Crash Cymbal 1</name>
         <stem>1</stem>
@@ -4469,7 +4469,7 @@
       <drumset>1</drumset>
       <Drum pitch="70">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Maracas</name>
         <stem>1</stem>
@@ -4491,7 +4491,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4513,7 +4513,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4535,7 +4535,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4557,7 +4557,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4579,7 +4579,7 @@
       <drumset>1</drumset>
       <Drum pitch="69">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Cabasa</name>
         <stem>1</stem>
@@ -4601,7 +4601,7 @@
       <drumset>1</drumset>
       <Drum pitch="67">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>High Agogo</name>
         <stem>1</stem>
@@ -4623,7 +4623,7 @@
       <drumset>1</drumset>
       <Drum pitch="75">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Claves</name>
         <stem>1</stem>
@@ -4645,7 +4645,7 @@
       <drumset>1</drumset>
       <Drum pitch="39">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Hand Clap</name>
         <stem>1</stem>
@@ -4667,7 +4667,7 @@
       <drumset>1</drumset>
       <Drum pitch="41">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Low Tom 2</name>
         <stem>1</stem>
@@ -4689,7 +4689,7 @@
       <drumset>1</drumset>
       <Drum pitch="35">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Bass Drum 2</name>
         <stem>1</stem>
@@ -4711,7 +4711,7 @@
       <drumset>1</drumset>
       <Drum pitch="40">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Snare Drum 2</name>
         <stem>1</stem>
@@ -4733,7 +4733,7 @@
       <drumset>1</drumset>
       <Drum pitch="54">
         <head>0</head>
-        <line>4</line>
+        <line>0</line>
         <voice>0</voice>
         <name>Tambourine</name>
         <stem>2</stem>

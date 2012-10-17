@@ -1784,8 +1784,7 @@ void Chord::renderArticulation(ArticulationType type)
       if (!events.isEmpty()) {
             foreach(Note* note, _notes)
                   note->setPlayEvents(events);
-            foreach(NoteEvent* e, events)
-                  delete e;
+            qDeleteAll(events);
             }
       }
 
