@@ -79,7 +79,7 @@
 #include "notedot.h"
 #include "textframe.h"
 
-extern bool showInvisible;
+// extern bool showInvisible;
 
 //
 // list has to be synchronized with ElementType enum
