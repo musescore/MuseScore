@@ -663,7 +663,7 @@ void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void BarLine::add(Element* e)
       {
-      if (parent()->type() != SEGMENT) {
+      if (parent() && parent()->type() != SEGMENT) {
             delete e;
             return;
             }
