@@ -674,15 +674,6 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
                   st = score()->staffTypes().at(PITCHED_STAFF_TYPE);
             setStaffType(st);
             setLines(t->staffLines[cidx]);            // use number of lines from instr. template
-
-/* NO: setLines() already takes care of that
-            // if instr. template num. of lines doesn't match staff type num. of lines, create new staff type
-            if (t->staffLines[cidx] != st->lines()) {
-                  st = st->clone();
-                  st->setLines(t->staffLines[cidx]);
-                  score()->staffTypes().append(st);
-                  }
-*/
             }
       }
 

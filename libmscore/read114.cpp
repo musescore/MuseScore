@@ -30,6 +30,7 @@
 #include "sig.h"
 #include "box.h"
 #include "dynamic.h"
+#include "drumset.h"
 
 //---------------------------------------------------------
 //   resolveSymCompatibility
@@ -70,7 +71,7 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
                         _staffType = st;
                   }
             else if (tag == "lines")
-                  ;                       // obsolete: setLines(v);
+                  setLines(val.toInt());
             else if (tag == "small")
                   setSmall(val.toInt());
             else if (tag == "invisible")
@@ -136,6 +137,15 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
                   }
             else if (tag == "Instrument") {
                   instr(0)->read(e);
+                  Drumset* d = instr(0)->drumset();
+                  Staff*   st = staff(0);
+                  if (d && st && st->lines() != 5) {
+                        int n = 0;
+                        if (st->lines() == 1)
+                              n = 4;
+                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              d->drum(i).line -= n;
+                        }
                   }
             else if (tag == "name") {
                   Text* t = new Text(score());
@@ -161,7 +171,9 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
 
       if (instr(0)->useDrumset()) {
             foreach(Staff* staff, _staves) {
+                  int lines = staff->lines();
                   staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
+                  staff->setLines(lines);
                   }
             }
       }
