@@ -12,7 +12,9 @@
 #=============================================================================
 
 subdirs(
-      hairpin note midi compat link measure beam split join
+      hairpin note compat link measure beam split join
       timesig layout element
       )
+
+# midi - does not work
 
