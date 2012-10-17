@@ -4649,11 +4649,6 @@
         </instrument>
     </instrument-group>
     
-    <instrument-group extended="1" name="Group-Test">
-        <ref>Violón</ref>
-        <ref>Piccolo</ref>
-    </instrument-group>
-    
     <!-- @todo -->	
     <!-- Instruments: Catalan traditional instruments -->
     <instrument-group extended="1" name="Tradicionales catalanes">
