@@ -62,7 +62,7 @@ StyleType styleTypes[] = {
       StyleType("repeatBarTips",           ST_BOOL),
       StyleType("startBarlineSingle",      ST_BOOL),
       StyleType("startBarlineMultiple",    ST_BOOL),
-      StyleType("bracketWidth",            ST_SPATIUM),     // system bracket width
+      StyleType("bracketWidth",            ST_SPATIUM),     // system bracket line width
       StyleType("bracketDistance",         ST_SPATIUM),     // system bracket distance
       StyleType("akkoladeWidth",           ST_SPATIUM),
       StyleType("akkoladeBarDistance",     ST_SPATIUM),
@@ -421,8 +421,8 @@ StyleData::StyleData()
             StyleVal(ST_startBarlineSingle, false),
             StyleVal(ST_startBarlineMultiple, true),
 
-            StyleVal(ST_bracketWidth, Spatium(0.35)),
-            StyleVal(ST_bracketDistance, Spatium(0.4)),
+            StyleVal(ST_bracketWidth, Spatium(0.45)),
+            StyleVal(ST_bracketDistance, Spatium(0.8)),
             StyleVal(ST_akkoladeWidth,Spatium(1.6)),
             StyleVal(ST_akkoladeBarDistance,Spatium(.4)),
 
