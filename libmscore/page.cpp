@@ -787,7 +787,6 @@ bool Page::isOdd() const
 void Page::write(Xml& xml) const
       {
       xml.stag("Page");
-      QList<System*> _systems;
       foreach(System* system, _systems) {
             system->write(xml);
             }
