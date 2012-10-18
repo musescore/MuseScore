@@ -13,7 +13,7 @@
 
 subdirs(
       hairpin note compat link measure beam split join
-      timesig layout element
+      timesig layout element midi
       )
 
 # midi - does not work
