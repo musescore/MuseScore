@@ -1911,7 +1911,8 @@ void ChangeSingleBarLineSpan::flip()
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
-      barLine->measure()->createEndBarLines();
+      if(barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
+            (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
 //      barLine->score()->setLayoutAll(true);
       }
 

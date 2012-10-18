@@ -119,8 +119,10 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             *y2 = DEFAULT_BARLINE_TO/2 * _spatium;
             }
 
-      *y1 += yoff1;
-      *y2 += yoff2;
+      if(selected()) {
+            *y1 += yoff1;
+            *y2 += yoff2;
+            }
       }
 
 //---------------------------------------------------------
@@ -460,7 +462,6 @@ void BarLine::endEdit()
       {
       if(ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
-//            // TODO: MAKE UNDOABLE
             _customSpan       = true;           // mark bar line as custom spanning
             int newSpan       = _span;          // copy edited span values
             int newSpanFrom   = _spanFrom;
@@ -470,7 +471,6 @@ void BarLine::endEdit()
             _spanTo           = _origSpanTo;
             // undoable change
             score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
-//            measure()->createEndBarLines();     // update other bar lines of measure, if necessary
             return;
             }
 
