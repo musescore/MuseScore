@@ -651,6 +651,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
+      connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(mySoundFontsButton, SIGNAL(clicked()), SLOT(selectSoundFontsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
 
