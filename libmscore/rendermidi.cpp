@@ -146,7 +146,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       else {
             int onTime  = tick1                     + note->onTimeOffset()  + note->onTimeUserOffset();
             int offTime = tick1 + note->playTicks() + note->offTimeOffset() + note->offTimeUserOffset() - 1;
-            offTime    -= (offTime - onTime) * gateTime / 100;
+
+            offTime    -= (offTime - onTime) * (100 - gateTime) / 100;
             if (offTime - onTime <= 0)
                   offTime = onTime + 1;
             playNote(events, note, channel, pitch, velo, onTime, offTime);
