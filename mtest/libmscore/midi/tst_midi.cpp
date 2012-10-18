@@ -146,7 +146,7 @@ bool compareScores(Score* score1, Score* score2)
                   if (e1 == 0)
                         continue;
                   if (!compareElements(e1, e2)) {
-                        printf("   %s != %s at track %d tick \n", e1->name(), e2->name());
+                        printf("   %s != %s\n", e1->name(), e2->name());
                         return false;
                         }
                   printf("   ok: %s\n", e1->name());
