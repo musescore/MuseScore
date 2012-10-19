@@ -351,8 +351,6 @@ class MScore : public QObject {
       Q_ENUMS(ValueType)
       Q_ENUMS(Direction)
       Q_ENUMS(DirectionH)
-      Q_ENUMS(NoteHeadGroup)
-      Q_ENUMS(NoteHeadType)
 
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
