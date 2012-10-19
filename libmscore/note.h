@@ -130,6 +130,8 @@ class Note : public Element {
       Q_PROPERTY(MScore::Direction dotPosition READ dotPosition       WRITE undoSetDotPosition)
       Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
       Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE undoSetHeadType)
+      Q_ENUMS(NoteHeadGroup)
+      Q_ENUMS(NoteHeadType)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
