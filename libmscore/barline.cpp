@@ -21,9 +21,6 @@
 #include "articulation.h"
 #include "stafftype.h"
 
-#define DEFAULT_BARLINE_TO          (4*2)
-#define MIN_BARLINE_SPAN_FROMTO     (-2)
-
 //---------------------------------------------------------
 //   static members init
 //---------------------------------------------------------
@@ -298,10 +295,14 @@ void BarLine::write(Xml& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", subtypeName());
-      // palette bar lines have no staff!
+      // if any span value is different from staff's, output all values
+      // (palette bar lines have no staff!)
       if (staff() && (_span != staff()->barLineSpan()
                   || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()) )
             xml.tag(QString("span from=\"%1\" to=\"%2\"").arg(_spanFrom).arg(_spanTo), _span);
+      // if no custom value, output _span only (as in previous code)
+      else
+            xml.tag("span", _span);
       foreach(const Element* e, _el)
             e->write(xml);
       Element::writeProperties(xml);
@@ -344,9 +345,9 @@ void BarLine::read(const QDomElement& de)
                         }
                   }
             else if (tag == "span") {
-                  _span  = val.toInt();
-                  _spanFrom  = e.attribute("from", QString::number(_spanFrom)).toInt();
-                  _spanTo    = e.attribute("to", QString::number(_spanTo)).toInt();
+                  _span       = val.toInt();
+                  _spanFrom   = e.attribute("from", QString::number(_spanFrom)).toInt();
+                  _spanTo     = e.attribute("to", QString::number(_spanTo)).toInt();
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
                   if(staff() && (_span != staff()->barLineSpan()
                               || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))

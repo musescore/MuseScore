@@ -28,6 +28,7 @@
 #include "cleflist.h"
 #include "timesig.h"
 #include "instrtemplate.h"
+#include "barline.h"
 
 //---------------------------------------------------------
 //   idx
@@ -386,8 +387,14 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
-      if (_barLineSpan != 1 || _barLineFrom != 0 || _barLineTo != lines()-1)
-          xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
+      // for economy and consistency, only output "from" and "to" attributes if different from default
+      int defaultLineTo = _barLineSpan == 0 ? _barLineTo : (score()->staff(idx+_barLineSpan-1)->lines() - 1) * 2;
+      if (_barLineSpan != 1 || _barLineFrom != 0 || _barLineTo != defaultLineTo) {
+            if(_barLineFrom != 0 || _barLineTo != defaultLineTo)
+                  xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
+            else
+                  xml.tag("barLineSpan", _barLineSpan);
+            }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
       xml.etag();
@@ -422,10 +429,12 @@ void Staff::read(const QDomElement& de)
             else if (tag == "barLineSpan") {
                   _barLineSpan = val.toInt();
                   _barLineFrom = e.attribute("from", "0").toInt();
-// WARNING: following statements assume staff type is correctly set
-                  QString strToLine;
-                  strToLine.setNum(lines()-1);
-                  _barLineTo   = e.attribute("to", strToLine).toInt();
+// WARNING: following statement assume staff type is correctly set
+                  // if no bar line or single staff span, set _barLineTo to this staff height
+                  // if span to another staff (yet to be read), set to unknown
+                  // (Score::read() will retrieve the correct height of the target staff)
+                  int defaultLineTo = _barLineSpan <= 1 ? (lines() - 1) * 2 : UNKNOWN_BARLINE_TO;
+                  _barLineTo   = e.attribute("to", QString::number(defaultLineTo)).toInt();
                   }
             else if (tag == "distOffset")
                   _userDist = e.text().toDouble() * spatium();
