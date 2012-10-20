@@ -20,6 +20,11 @@ class MuseScoreView;
 class Segment;
 class QPainter;
 
+#define DEFAULT_BARLINE_TO          (4*2)
+#define MIN_BARLINE_FROMTO_DIST     2
+#define MIN_BARLINE_SPAN_FROMTO     (-2)
+#define UNKNOWN_BARLINE_TO          (-4)
+
 //---------------------------------------------------------
 //   @@ BarLine
 //---------------------------------------------------------

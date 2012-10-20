@@ -41,6 +41,7 @@
 #include "undo.h"
 #include "imageStore.h"
 #include "audio.h"
+#include "barline.h"
 #include "libmscore/qzipreader_p.h"
 #include "libmscore/qzipwriter_p.h"
 
@@ -1011,13 +1012,35 @@ bool Score::read(const QDomElement& de)
       //
       //    sanity check for barLineSpan
       //
-      foreach(Staff* staff, _staves) {
-            int barLineSpan = staff->barLineSpan();
-            int idx = staffIdx(staff);
+      foreach(Staff* st, _staves) {
+            int barLineSpan = st->barLineSpan();
+            int idx = staffIdx(st);
             int n = nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d\n", idx, barLineSpan, n);
-                  staff->setBarLineSpan(n - idx);
+                  st->setBarLineSpan(n - idx);
+                  }
+            // check spanFrom
+            if(st->barLineFrom() < MIN_BARLINE_SPAN_FROMTO)
+                  st->setBarLineFrom(MIN_BARLINE_SPAN_FROMTO);
+            if(st->barLineFrom() > st->lines()*2)
+                  st->setBarLineFrom(st->lines()*2);
+            // check spanTo
+            Staff* stTo = st->barLineSpan() <= 1 ? st : staff(idx + st->barLineSpan() - 1);
+            int maxBarLineTo        = stTo->lines()*2;
+            int defaultBarLineTo    = (stTo->lines() - 1) * 2;
+            if(st->barLineTo() == UNKNOWN_BARLINE_TO)
+                  st->setBarLineTo(defaultBarLineTo);
+            if(st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
+                  st->setBarLineTo(MIN_BARLINE_SPAN_FROMTO);
+            if(st->barLineTo() > maxBarLineTo)
+                  st->setBarLineTo(maxBarLineTo);
+            // on single staff span, check spanFrom and spanTo are distant enough
+            if(st->barLineSpan() == 1) {
+                  if(st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
+                        st->setBarLineFrom(0);
+                        st->setBarLineTo(defaultBarLineTo);
+                        }
                   }
             }
 
