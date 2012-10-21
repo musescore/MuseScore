@@ -162,8 +162,8 @@ void SimpleText::layout()
                   layoutOffset.ry() = -bb.bottom() + h;
             else if (align() & ALIGN_VCENTER)
                   layoutOffset.ry() =  -(bb.top() + bb.bottom() - h) * .5;
-            else if (align() & ALIGN_BASELINE)        // undefined
-                  layoutOffset.ry() = -bb.top();
+            else if (align() & ALIGN_BASELINE)
+                  ; // layoutOffset.ry() = -bb.top();
             else  // ALIGN_TOP
                   layoutOffset.ry() = -bb.top();
 

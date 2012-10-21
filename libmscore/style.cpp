@@ -227,11 +227,11 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
         TR("Composer"), ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BOTTOM));
+         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA, QPointF(0.0, 100.0)));
 
       AS(TextStyle(
          TR("Lyricist"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BOTTOM));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA, QPointF(0.0, 100.0)));
 
       AS(TextStyle(
          TR("Lyrics odd lines"), ff, 11, false, false, false,
@@ -426,7 +426,7 @@ StyleData::StyleData()
             StyleVal(ST_akkoladeWidth,Spatium(1.6)),
             StyleVal(ST_akkoladeBarDistance,Spatium(.4)),
 
-            StyleVal(ST_clefLeftMargin, Spatium(0.8)),
+            StyleVal(ST_clefLeftMargin, Spatium(0.64)),
             StyleVal(ST_keysigLeftMargin, Spatium(0.5)),
             StyleVal(ST_timesigLeftMargin, Spatium(0.5)),
 
