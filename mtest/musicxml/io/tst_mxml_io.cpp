@@ -241,7 +241,7 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       QVERIFY(saveMxl(score, QString(file) + "_mxl_read_write.mxl"));
       delete score;
       // read mxl
-      score = readScore(QString(file) + "_mxl_read_write.mxl");
+      score = readCreatedScore(QString(file) + "_mxl_read_write.mxl");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
@@ -250,5 +250,5 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       delete score;
       }
 
-QTEST_MAIN(TestMxmlIO)
+      QTEST_MAIN(TestMxmlIO)
 #include "tst_mxml_io.moc"
