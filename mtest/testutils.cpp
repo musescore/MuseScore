@@ -24,6 +24,7 @@
 #ifdef OMR
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
+extern Score::FileError importCompressedMusicXml(Score*, const QString&);
 extern Score::FileError importMusicXml(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
@@ -113,6 +114,8 @@ Score* MTest::readCreatedScore(const QString& name)
       Score::FileError rv;
       if (csl == "mscz" || csl == "mscx")
             rv = score->loadMsc(name, false);
+      else if (csl == "mxl")
+            rv = importCompressedMusicXml(score, name);
 #ifdef OMR
       else if (csl == "pdf")
             rv = importPdf(score, name);
