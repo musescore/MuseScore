@@ -76,11 +76,17 @@ void TrillSegment::draw(QPainter* painter) const
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
+                  case Trill::PURE_LINE:
+                        sym = noSym;
+                        x0 = 0;
+                        x1 = 0;
+                        n    = int(floor((x2-x1) / w2));
+                        y = 0.0;
                   }
             if (n <= 0)
                   n = 1;
-
-            symbols[idx][sym].draw(painter, mag, QPointF(x0, y));
+            if (sym != noSym)
+                  symbols[idx][sym].draw(painter, mag, QPointF(x0, y));
             symbols[idx][trillelementSym].draw(painter, mag,  QPointF(x1, b2.y() * .9), n);
             }
       else {
@@ -275,6 +281,8 @@ void Trill::setSubtype(const QString& s)
             _subtype = DOWNPRALL_LINE;
       else if (s == "prallprall")
             _subtype = PRALLPRALL_LINE;
+      else if (s == "pure")
+            _subtype = PURE_LINE;
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -294,6 +302,8 @@ QString Trill::subtypeName() const
                   return "downprall";
             case PRALLPRALL_LINE:
                   return "prallprall";
+            case PURE_LINE:
+                  return "pure";
             default:
                   qDebug("unknown Trill subtype %d", subtype());
                   return "?";
