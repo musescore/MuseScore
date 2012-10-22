@@ -302,7 +302,6 @@ void Text::draw(QPainter* painter) const
       QScopedPointer<QTextDocument> __doc(_doc->clone());
       __doc.data()->documentLayout()->draw(painter, c);
       // _doc->documentLayout()->draw(painter, c);
-            printf("paint text: x %f %f\n", ipos().x(), pos().x());
       }
 #else
       _doc->documentLayout()->draw(painter, c);
