@@ -56,13 +56,13 @@
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
 </style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'Times New Roman'; font-size:12pt;">Voice</span><!--EndFragment--></p></body></html>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Voice<!--EndFragment--></p></body></html>
           </longName>
         <shortName pos="0">
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
 </style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'Times New Roman'; font-size:12pt;">Vo.</span><!--EndFragment--></p></body></html>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Vo.<!--EndFragment--></p></body></html>
           </shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
@@ -81,18 +81,8 @@ p, li { white-space: pre-wrap; }
         <height>10</height>
         <bottomGap>58.337</bottomGap>
         <Text>
-          <halign>center</halign>
-          <valign>top</valign>
-          <offsetType>spatium</offsetType>
-          <name>Title</name>
-          <family>FreeSerifMscore</family>
-          <size>24</size>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:24pt; font-weight:400; font-style:normal;">
-<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman';">notes</span></p></body></html>
-            </html-data>
+          <style>Title</style>
+          <text>notes</text>
           </Text>
         </VBox>
       <Measure number="1">
