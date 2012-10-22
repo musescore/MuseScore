@@ -379,13 +379,21 @@ Space BarLine::space() const
 bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
-      return type == BAR_LINE
-         || (type == ARTICULATION
+      if(type == BAR_LINE) {
+          if (parent() && parent()->type() == SEGMENT) {
+              return true;
+              }
+          if (parent() && parent()->type() == SYSTEM) {
+              BarLine* b = static_cast<BarLine*>(e);
+              return (b->subtype() == BROKEN_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
+              } 
+      }else {
+            return (type == ARTICULATION
                 && parent()
                 && parent()->type() == SEGMENT
-                && static_cast<Segment*>(parent())->subtype() == Segment::SegEndBarLine
-            )
-         ;
+                && static_cast<Segment*>(parent())->subtype() == Segment::SegEndBarLine);
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -556,10 +564,15 @@ void BarLine::endEditDrag()
 
       int staffIdx1 = staffIdx();
       int staffIdx2;
-      Segment* segm     = (Segment*)parent();
-      Measure* meas     = segm->measure();
-      System*  syst     = meas->system();
-      qreal    systTopY = syst->pagePos().y();
+      
+      System* syst;
+      if (parent()->type() == SYSTEM) {
+            syst = static_cast<System*>(parent());
+            } 
+      else {
+            syst = static_cast<Segment*>(parent())->measure()->system();
+            }      
+      qreal systTopY = syst->pagePos().y();
 
       // determine new span value
       int numOfStaves = syst->staves()->size();
