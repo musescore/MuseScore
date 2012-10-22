@@ -152,32 +152,8 @@ void SimpleText::layout()
             // layout to parent frame
             //
             Element* e = parent();
-            qreal w    = e->width();
-            qreal h    = e->height();
-            QPointF ro = s.reloff() * .01;
-            o += QPointF(ro.x() * w, ro.y() * h);
-            QPointF layoutOffset;
-
-            if (align() & ALIGN_BOTTOM)
-                  layoutOffset.ry() = -bb.bottom() + h;
-            else if (align() & ALIGN_VCENTER)
-                  layoutOffset.ry() =  -(bb.top() + bb.bottom() - h) * .5;
-            else if (align() & ALIGN_BASELINE)
-                  ; // layoutOffset.ry() = -bb.top();
-            else  // ALIGN_TOP
-                  layoutOffset.ry() = -bb.top();
-
-            if (align() & ALIGN_RIGHT)
-                  layoutOffset.rx() = w - bb.right();
-            else if (align() & ALIGN_HCENTER)
-                  layoutOffset.rx() = -(bb.left() + bb.right() - w) * .5;
-            else  // ALIGN_LEFT
-                  layoutOffset.rx() = -bb.left();
-            for (int i = 0; i < n; ++i) {
-                  TLine* t = &_text[i];
-                  t->pos += layoutOffset;
-                  }
-            bb.translate(layoutOffset);
+            QPointF ro(s.reloff() * .01);
+            o += QPointF(ro.x() * e->width(), ro.y() * e->heigt());
             }
 
       setPos(o);
