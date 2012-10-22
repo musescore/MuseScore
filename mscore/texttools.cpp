@@ -437,6 +437,7 @@ void TextTools::setHCenterAlign()
       bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignHCenter);
       cursor()->mergeBlockFormat(bformat);
       updateTools();
+      layoutText();
       }
 
 //---------------------------------------------------------
@@ -449,6 +450,7 @@ void TextTools::setLeftAlign()
       bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignLeft);
       cursor()->mergeBlockFormat(bformat);
       updateTools();
+      layoutText();
       }
 
 //---------------------------------------------------------
@@ -461,6 +463,7 @@ void TextTools::setRightAlign()
       bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignRight);
       cursor()->mergeBlockFormat(bformat);
       updateTools();
+      layoutText();
       }
 
 //---------------------------------------------------------
