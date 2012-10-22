@@ -74,7 +74,7 @@ class BarLine : public Element {
       int spanFrom() const          { return _spanFrom;     }
       int spanTo() const            { return _spanTo;       }
 
-      virtual bool isEditable() const { return true; }
+      virtual bool isEditable() const { return parent()->type() == SEGMENT; }
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void endEdit();
       virtual void editDrag(const EditData&);
