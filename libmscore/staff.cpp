@@ -28,6 +28,7 @@
 #include "cleflist.h"
 #include "timesig.h"
 #include "instrtemplate.h"
+#include "barline.h"
 
 //---------------------------------------------------------
 //   idx
@@ -166,6 +167,8 @@ Staff::Staff(Score* s)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -183,6 +186,8 @@ Staff::Staff(Score* s, Part* p, int rs)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -382,8 +387,14 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
-      if (_barLineSpan != 1)
-            xml.tag("barLineSpan", _barLineSpan);
+      // for economy and consistency, only output "from" and "to" attributes if different from default
+      int defaultLineTo = _barLineSpan == 0 ? _barLineTo : (score()->staff(idx+_barLineSpan-1)->lines() - 1) * 2;
+      if (_barLineSpan != 1 || _barLineFrom != 0 || _barLineTo != defaultLineTo) {
+            if(_barLineFrom != 0 || _barLineTo != defaultLineTo)
+                  xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
+            else
+                  xml.tag("barLineSpan", _barLineSpan);
+            }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
       xml.etag();
@@ -415,8 +426,16 @@ void Staff::read(const QDomElement& de)
                   b._bracketSpan = e.attribute("span", "0").toInt();
                   _brackets.append(b);
                   }
-            else if (tag == "barLineSpan")
+            else if (tag == "barLineSpan") {
                   _barLineSpan = val.toInt();
+                  _barLineFrom = e.attribute("from", "0").toInt();
+// WARNING: following statement assume staff type is correctly set
+                  // if no bar line or single staff span, set _barLineTo to this staff height
+                  // if span to another staff (yet to be read), set to unknown
+                  // (Score::read() will retrieve the correct height of the target staff)
+                  int defaultLineTo = _barLineSpan <= 1 ? (lines() - 1) * 2 : UNKNOWN_BARLINE_TO;
+                  _barLineTo   = e.attribute("to", QString::number(defaultLineTo)).toInt();
+                  }
             else if (tag == "distOffset")
                   _userDist = e.text().toDouble() * spatium();
             else if (tag == "linkedTo") {
@@ -535,6 +554,15 @@ void Staff::setLines(int val)
       st->setLines(val);
       _staffType = st;
       score()->staffTypes().append(st);
+      }
+
+//---------------------------------------------------------
+//   line distance
+//---------------------------------------------------------
+
+qreal Staff::lineDistance() const
+      {
+      return _staffType->lineDistance().val();
       }
 
 //---------------------------------------------------------
