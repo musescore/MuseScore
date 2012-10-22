@@ -786,7 +786,7 @@ void MuseScore::editInstrList()
       for (int i = 0; i < n; ++i) {
             Staff* staff = cs->staff(i);
             if (staff->barLineSpan() > (n - i))
-                  cs->undoChangeBarLineSpan(staff, n - i);
+                  cs->undoChangeBarLineSpan(staff, n - i, 0, cs->staff(n-1)->lines()-1);
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {
