@@ -219,15 +219,15 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR("Title"), ff, 24, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP));
+         ALIGN_HCENTER | ALIGN_TOP, QPointF(), OA, QPointF(50.0, .0)));
 
       AS(TextStyle(
          TR("Subtitle"), ff, 14, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA));
+         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA, QPointF(50.0, .0)));
 
       AS(TextStyle(
         TR("Composer"), ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA, QPointF(0.0, 100.0)));
+         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA, QPointF(100.0, 100.0)));
 
       AS(TextStyle(
          TR("Lyricist"), ff, 12, false, false, false,
