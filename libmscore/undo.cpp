@@ -562,9 +562,18 @@ void Score::undoChangeEndBarLineType(Measure* m, BarLineType subtype)
 //   undoChangeBarLineSpan
 //---------------------------------------------------------
 
-void Score::undoChangeBarLineSpan(Staff* staff, int span)
+void Score::undoChangeBarLineSpan(Staff* staff, int span, int spanFrom, int spanTo)
       {
-      undo(new ChangeBarLineSpan(staff, span));
+      undo(new ChangeBarLineSpan(staff, span, spanFrom, spanTo));
+      }
+
+//---------------------------------------------------------
+//   undoChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+void Score::undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo)
+      {
+      undo(new ChangeSingleBarLineSpan(barLine, span, spanFrom, spanTo));
       }
 
 //---------------------------------------------------------
@@ -1856,18 +1865,55 @@ void ChangeEndBarLineType::flip()
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 
-ChangeBarLineSpan::ChangeBarLineSpan(Staff* _staff, int _span)
+ChangeBarLineSpan::ChangeBarLineSpan(Staff* _staff, int _span, int _spanFrom, int _spanTo)
       {
-      staff = _staff;
-      span  = _span;
+      staff       = _staff;
+      span        = _span;
+      spanFrom    = _spanFrom;
+      spanTo      = _spanTo;
       }
 
 void ChangeBarLineSpan::flip()
       {
-      int nspan = staff->barLineSpan();
+      int nspan         = staff->barLineSpan();
+      int nspanFrom     = staff->barLineFrom();
+      int nspanTo       = staff->barLineTo();
       staff->setBarLineSpan(span);
-      span = nspan;
+      staff->setBarLineFrom(spanFrom);
+      staff->setBarLineTo(spanTo);
+      span        = nspan;
+      spanFrom    = nspanFrom;
+      spanTo      = nspanTo;
       staff->score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, int _spanFrom, int _spanTo)
+      {
+      barLine     = _barLine;
+      span        = _span;
+      spanFrom    = _spanFrom;
+      spanTo      = _spanTo;
+      }
+
+void ChangeSingleBarLineSpan::flip()
+      {
+      int nspan         = barLine->span();
+      int nspanFrom     = barLine->spanFrom();
+      int nspanTo       = barLine->spanTo();
+      barLine->setSpan(span);
+      barLine->setSpanFrom(spanFrom);
+      barLine->setSpanTo(spanTo);
+      barLine->setCustomSpan(true);
+      span        = nspan;
+      spanFrom    = nspanFrom;
+      spanTo      = nspanTo;
+      if(barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
+            (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
+//      barLine->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

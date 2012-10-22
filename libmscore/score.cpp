@@ -2228,7 +2228,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       clef->setParent(seg);
       undoAddElement(clef);
 
-      undoChangeBarLineSpan(s, p->nstaves());
+      undoChangeBarLineSpan(s, p->nstaves(), 0, staff(staffIdx+p->nstaves())->lines()-1);
       adjustBracketsIns(staffIdx+1, staffIdx+2);
       undoChangeKeySig(ns, 0, s->key(0));
 
@@ -2438,8 +2438,11 @@ void Score::adjustBracketsDel(int sidx, int eidx)
 //                        }
                   }
             int span = staff->barLineSpan();
-            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
-                  undoChangeBarLineSpan(staff, span - (eidx-sidx));
+            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
+                  int newSpan = span - (eidx-sidx);
+                  int lastSpannedStaffIdx = staffIdx + newSpan - 1;
+                 undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
+                  }
             }
       }
 
@@ -2464,7 +2467,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                   }
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
-                  undoChangeBarLineSpan(staff, span + (eidx-sidx));
+                  undoChangeBarLineSpan(staff, span + (eidx-sidx), 0, (staff->lines()-1)*2);
             }
       }
 

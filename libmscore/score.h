@@ -90,6 +90,7 @@ class FiguredBass;
 class UndoCommand;
 class Cursor;
 struct PageContext;
+class BarLine;
 
 extern bool showRubberBand;
 
@@ -490,7 +491,8 @@ class Score : public QObject {
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
       void undoChangeEndBarLineType(Measure*, BarLineType);
-      void undoChangeBarLineSpan(Staff*, int);
+      void undoChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
+      void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
       void undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type);
       void undoTransposeHarmony(Harmony*, int, int);
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
