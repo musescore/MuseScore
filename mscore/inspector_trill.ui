@@ -74,6 +74,11 @@
          <string>prall prall</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>pure line</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
