@@ -296,6 +296,7 @@ Element* Bracket::drop(const DropData& data)
             Bracket* b = static_cast<Bracket*>(e);
             b->setParent(parent());
             b->setTrack(track());
+            b->setSpan(span());
             b->setFirstStaff(firstStaff());
             b->setLastStaff(lastStaff());
             b->setLevel(level());
