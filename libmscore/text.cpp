@@ -324,6 +324,10 @@ void Text::read(const QDomElement& de)
             if (!readProperties(e))
                   domError(e);
             }
+      if (score()->mscVersion() <= 114) {
+            if (_doc && _doc->blockCount() == 1) {
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -449,8 +453,22 @@ bool Text::readProperties(const QDomElement& e)
                   s.replace(QChar(0xe167), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0b)));    // coda
                   s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
+                  if (_doc == 0)
+                        createDoc();
+                  _doc->setHtml(s);
+                  if (_doc->blockCount() == 1) {          // simple text?
+                        QString s = _doc->toPlainText();
+                        delete _doc;
+                        _doc = 0;
+                        setText(s);
+                        }
+                  else {
+                        setUnstyled();
+                        setHtml(s);
+                        }
                   }
-            setHtml(s);
+            else
+                  setHtml(s);
             }
       else if (tag == "subtype")          // obsolete
             ;
