@@ -184,22 +184,22 @@ void Text::setAbove(bool val)
 
 void Text::layout()
       {
-      if (styled() && !_editMode) {
+      if (styled() && !_editMode)
             SimpleText::layout();
-            }
       else {
             _doc->setDefaultFont(textStyle().font(spatium()));
             qreal w = -1.0;
-            qreal x = 0.0;
-            qreal y = 0.0;
+            QPointF o(textStyle().offset(spatium()));
+
             if (parent() && layoutToParentWidth()) {
-                  w = parent()->width();
                   if (parent()->type() == HBOX || parent()->type() == VBOX || parent()->type() == TBOX) {
                         Box* box = static_cast<Box*>(parent());
-                        x += box->leftMargin() * MScore::DPMM;
-                        y += box->topMargin() * MScore::DPMM;
-                        w = box->width()   - ((box->leftMargin() + box->rightMargin()) * MScore::DPMM);
+                        o.rx() += box->leftMargin() * MScore::DPMM;
+                        o.ry() += box->topMargin() * MScore::DPMM;
+                        w = box->width() - ((box->leftMargin() + box->rightMargin()) * MScore::DPMM);
                         }
+                  else
+                        w = parent()->width();
                   }
 
             QTextOption to = _doc->defaultTextOption();
@@ -211,27 +211,32 @@ void Text::layout()
                   w = _doc->idealWidth();
             _doc->setTextWidth(w);
 
-            setbbox(QRectF(QPointF(0.0, 0.0), _doc->size()));
-            if (hasFrame())
-                  layoutFrame();
-            _doc->setModified(false);
-            textStyle().layout(this);      // process alignment
+            QSizeF size(_doc->size());
 
-#if 0 // TODO  TEXT_STYLE_TEXTLINE
-            if ((textStyle().align() & ALIGN_VCENTER) && (textStyle() == TEXT_STYLE_TEXTLINE)) {
-                  // special case: vertically centered text with TextLine needs to
-                  // take into account the line width
-                  TextLineSegment* tls = static_cast<TextLineSegment*>(parent());
-                  TextLine* tl = tls->textLine();
-                  if (tl) {
-                        qreal textlineLineWidth = point(tl->lineWidth());
-                        rypos() -= textlineLineWidth * .5;
-                        }
+            if (align() & ALIGN_BOTTOM)
+                  o.ry() -= size.height();
+            else if (align() & ALIGN_VCENTER)
+                  o.ry() -= (size.height() * .5);
+            else if (align() & ALIGN_BASELINE)
+                  o.ry() -= baseLine();
+
+            if (align() & ALIGN_RIGHT)
+                  o.rx() -= size.width();
+            else if (align() & ALIGN_HCENTER)
+                  o.rx() -= (size.width() * .5);
+
+            setbbox(QRectF(QPointF(0.0, 0.0), size));
+            if (layoutToParentWidth() && parent()) {
+                  Element* e = parent();
+                  QPointF ro(_textStyle.reloff() * .01);
+                  o += QPointF(ro.x() * e->width(), ro.y() * e->height());
                   }
-#endif
-            rxpos() += x;
-            rypos() += y;
+
+            setPos(o);
+            _doc->setModified(false);
             }
+      if (hasFrame())
+            layoutFrame();
       if (parent() && parent()->type() == SEGMENT) {
             Segment* s = static_cast<Segment*>(parent());
             rypos() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
@@ -297,6 +302,7 @@ void Text::draw(QPainter* painter) const
       QScopedPointer<QTextDocument> __doc(_doc->clone());
       __doc.data()->documentLayout()->draw(painter, c);
       // _doc->documentLayout()->draw(painter, c);
+            printf("paint text: x %f %f\n", ipos().x(), pos().x());
       }
 #else
       _doc->documentLayout()->draw(painter, c);
@@ -530,19 +536,6 @@ void Text::startEdit(MuseScoreView*, const QPointF& p)
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
       setCursor(p);
-
-      if (_cursor->position() == 0 && align()) {
-            QTextBlockFormat bf = _cursor->blockFormat();
-            Qt::Alignment alignment = 0;
-            if (align() & ALIGN_HCENTER)
-                  alignment |= Qt::AlignHCenter;
-            else if (align() & ALIGN_LEFT)
-                  alignment |= Qt::AlignLeft;
-            else if (align() & ALIGN_RIGHT)
-                  alignment |= Qt::AlignRight;
-            bf.setAlignment(alignment);
-            setBlockFormat(bf);
-            }
       qreal w = 2.0; // 8.0 / view->matrix().m11();
       score()->rebuildBspTree();
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));

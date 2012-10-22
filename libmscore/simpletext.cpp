@@ -116,10 +116,8 @@ void SimpleText::layout()
             return;
             }
 
-      const TextStyle& s(textStyle());
-
-      QFontMetricsF fm(s.fontPx(spatium()));
-      QPointF o(s.offset(spatium()));
+      QFontMetricsF fm(_textStyle.fontPx(spatium()));
+      QPointF o(_textStyle.offset(spatium()));
 
       QRectF bb;
       qreal lh = lineHeight();
@@ -152,15 +150,12 @@ void SimpleText::layout()
             // layout to parent frame
             //
             Element* e = parent();
-            QPointF ro(s.reloff() * .01);
+            QPointF ro(_textStyle.reloff() * .01);
             o += QPointF(ro.x() * e->width(), ro.y() * e->height());
             }
 
       setPos(o);
       setbbox(bb);
-
-      if (hasFrame())
-            layoutFrame();
       }
 
 //---------------------------------------------------------
