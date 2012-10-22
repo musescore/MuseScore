@@ -153,7 +153,7 @@ void SimpleText::layout()
             //
             Element* e = parent();
             QPointF ro(s.reloff() * .01);
-            o += QPointF(ro.x() * e->width(), ro.y() * e->heigt());
+            o += QPointF(ro.x() * e->width(), ro.y() * e->height());
             }
 
       setPos(o);
