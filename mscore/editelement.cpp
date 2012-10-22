@@ -19,6 +19,7 @@
 #include "edittools.h"
 #include "inspector.h"
 
+#include "libmscore/barline.h"
 #include "libmscore/utils.h"
 #include "libmscore/segment.h"
 #include "libmscore/score.h"
@@ -252,8 +253,12 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             delta.setX(0.0);
             }
       else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
-            p.setY(0.0);
-            delta.setY(0.0);
+            if(editObject->type() == Element::BAR_LINE)
+                  BarLine::setCtrlDrag(true);
+            else {
+                  p.setY(0.0);
+                  delta.setY(0.0);
+                  }
             }
 
       _score->setLayoutAll(false);
