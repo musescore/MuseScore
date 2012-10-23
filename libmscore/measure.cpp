@@ -2905,9 +2905,8 @@ void Measure::layoutX(qreal stretch)
             ++segs;
             }
 
-      if (nstaves == 0 || segs == 0) {
+      if (nstaves == 0 || segs == 0)
             return;
-            }
 
       qreal _spatium           = spatium();
       int tracks               = nstaves * VOICES;
@@ -2940,24 +2939,6 @@ void Measure::layoutX(qreal stretch)
       const Segment* s = first();
       const Segment* pSeg = 0;
       for (; s; s = s->next(), ++segmentIdx) {
-            //
-            //  ignore all segments which do not contain
-            //  elements
-            //
-            bool activeSegment = false;
-            for (int track = 0; track < nstaves * VOICES; ++track) {
-                  if (!score()->staff(track / VOICES)->show()) {
-                        track += 4;
-                        continue;
-                        }
-                  if (s->element(track)) {
-                        activeSegment = true;
-                        break;
-                        }
-                  }
-            if (!activeSegment)
-                  continue;
-
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
             if ((s->subtype() == Segment::SegClef) && (s != first())) {
@@ -3110,7 +3091,19 @@ void Measure::layoutX(qreal stretch)
                   }
             else
                   ticksList[segmentIdx] = 0;
-            pSeg = s;
+            //
+            // set pSeg only to used segments
+            //
+            for (int voice = 0; voice < nstaves * VOICES; ++voice) {
+                  if (!score()->staff(voice/VOICES)->show()) {
+                        voice += VOICES-1;
+                        continue;
+                        }
+                  if (s->element(voice)) {
+                        pSeg = s;
+                        break;
+                        }
+                  }
             }
 
       //---------------------------------------------------
@@ -3226,7 +3219,7 @@ void Measure::layoutX(qreal stretch)
 
             for (int track = 0; track < tracks; ++track) {
                   if (!score()->staff(track/VOICES)->show()) {
-                        track += VOICES;
+                        track += VOICES-1;
                         continue;
                         }
                   Element* e = s->element(track);
