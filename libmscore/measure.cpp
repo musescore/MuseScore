@@ -2979,15 +2979,13 @@ void Measure::layoutX(qreal stretch)
                                     }
                               space.max(cr->space());
                               foreach(Lyrics* l, cr->lyricsList()) {
-                                    if (!l)
+                                    if (!l || l->isEmpty())
                                           continue;
-                                    if (!l->isEmpty()) {
-                                          lyrics = l;
-                                          if (!lyrics->isMelisma()) {
-                                                QRectF b(l->bbox().translated(l->pos()));
-                                                llw = qMax(llw, -b.left());
-                                                rrw = qMax(rrw, b.right());
-                                                }
+                                    lyrics = l;
+                                    if (!lyrics->isMelisma()) {
+                                          QRectF b(l->bbox().translated(l->pos()));
+                                          llw = qMax(llw, -b.left());
+                                          rrw = qMax(rrw, b.right());
                                           }
                                     }
                               }
