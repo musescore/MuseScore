@@ -445,4 +445,12 @@ QVariant TimeSig::propertyDefault(P_ID id) const
             }
       }
 
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
+      {
+      layout1();
+      }
 
