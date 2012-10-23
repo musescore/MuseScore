@@ -744,16 +744,16 @@ void BarLine::layout()
             e->layout();
             if (e->type() == ARTICULATION) {
                   Articulation* a       = static_cast<Articulation*>(e);
-                  ArticulationAnchor aa = a->anchor();
+                  MScore::Direction dir = a->direction();
                   qreal distance        = 0.5 * _spatium;
-                  qreal x               = width() - (a->width() * .5);
-                  if (aa == A_TOP_STAFF) {
-                        qreal topY = y1 - distance;
-                        a->setPos(QPointF(x, topY));
-                        }
-                  else if (aa == A_BOTTOM_STAFF) {
+                  qreal x               = width() * .5;
+                  if (dir == MScore::DOWN) {
                         qreal botY = y2 + distance;
                         a->setPos(QPointF(x, botY));
+                        }
+                  else {
+                        qreal topY = y1 - distance;
+                        a->setPos(QPointF(x, topY));
                         }
                   }
             }
