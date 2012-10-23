@@ -687,18 +687,6 @@ void Score::doLayout()
       }     // unlock mutex
       foreach(MuseScoreView* v, viewer)
             v->layoutChanged();
-
-      Measure* m = firstMeasure();
-      Segment* s = m->first();
-      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
-      s = s->next();
-      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
-      s = s->next();
-      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
-      s = s->next();
-      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
-      s = s->next();
-      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
       }
 
 //-------------------------------------------------------------------
