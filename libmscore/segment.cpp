@@ -486,7 +486,7 @@ void Segment::add(Element* el)
                         qDebug("   %d/%d -> %d/%d",
                            cr->duration().numerator(), cr->duration().denominator(),
                            cr1->duration().numerator(), cr1->duration().denominator());
-                        abort();
+                        // abort();
                         return;
                         }
                   if (track % VOICES)

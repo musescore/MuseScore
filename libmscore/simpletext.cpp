@@ -16,6 +16,7 @@
 #include "segment.h"
 #include "measure.h"
 #include "system.h"
+#include "box.h"
 
 //---------------------------------------------------------
 //   SimpleText
@@ -136,6 +137,7 @@ void SimpleText::layout()
                   ;
             else  // ALIGN_TOP
                   t->pos.ry() += -r.top();
+
             if (align() & ALIGN_RIGHT)
                   t->pos.rx() = -r.right();
             else if (align() & ALIGN_HCENTER)
@@ -145,15 +147,6 @@ void SimpleText::layout()
             bb |= r.translated(t->pos);
             ly += lh;
             }
-      if (_layoutToParentWidth && parent()) {
-            //
-            // layout to parent frame
-            //
-            Element* e = parent();
-            QPointF ro(_textStyle.reloff() * .01);
-            o += QPointF(ro.x() * e->width(), ro.y() * e->height());
-            }
-
       setPos(o);
       setbbox(bb);
       }
