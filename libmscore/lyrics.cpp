@@ -220,9 +220,8 @@ void Lyrics::layout()
       const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
 
       int line = ll->indexOf(this);
-      qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance))
-                 + sys->staff(staffIdx())->bbox().height();
-      qreal x = pos().x();
+      qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance));
+      qreal x  = 0.0;
       //
       // left align if syllable has a number or is a melisma
       //
@@ -230,7 +229,8 @@ void Lyrics::layout()
             x += symbols[score()->symIdx()][quartheadSym].width(magS()) * .5;
       else if (_ticks || ((textStyle().align() & ALIGN_HCENTER) && _verseNumber))
             x += width() * .5;
-      setPos(x, y);
+      rxpos() += x;
+      rypos() += y;
       if (_verseNumber) {
             _verseNumber->layout();
             _verseNumber->setPos(-x, 0.0);
