@@ -226,15 +226,31 @@ void Text::layout()
                   o.rx() -= (size.width() * .5);
 
             setbbox(QRectF(QPointF(0.0, 0.0), size));
-            if (layoutToParentWidth() && parent()) {
-                  Element* e = parent();
-                  QPointF ro(_textStyle.reloff() * .01);
-                  o += QPointF(ro.x() * e->width(), ro.y() * e->height());
-                  }
-
-            setPos(o);
             _doc->setModified(false);
+            setPos(o);
             }
+      if (layoutToParentWidth() && parent()) {
+            Element* e = parent();
+            qreal w, h, xo, yo;
+            if (e->type() == VBOX) {
+                  // consider inner margins of frame
+                  Box* b = static_cast<Box*>(e);
+                  xo = b->leftMargin() * MScore::DPMM;
+                  yo = b->topMargin()  * MScore::DPMM;
+                  w  = b->width()  - xo - b->rightMargin() * MScore::DPMM;
+                  h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
+                  }
+            else {
+                  w  = e->width();
+                  h  = e->height();
+                  xo = 0.0;
+                  yo = 0.0;
+                  }
+            QPointF ro(_textStyle.reloff() * .01);
+            rxpos() += xo + ro.x() * w;
+            rypos() += yo + ro.y() * h;
+            }
+
       if (hasFrame())
             layoutFrame();
       if (parent() && parent()->type() == SEGMENT) {
