@@ -687,6 +687,18 @@ void Score::doLayout()
       }     // unlock mutex
       foreach(MuseScoreView* v, viewer)
             v->layoutChanged();
+
+      Measure* m = firstMeasure();
+      Segment* s = m->first();
+      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
+      s = s->next();
+      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
+      s = s->next();
+      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
+      s = s->next();
+      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
+      s = s->next();
+      printf("Seg %s tick %d x %f\n", s->subTypeName(), s->tick(), s->pos().x());
       }
 
 //-------------------------------------------------------------------
@@ -2597,12 +2609,32 @@ qreal Score::computeMinWidth(Segment* fs) const
       qreal x        = 0.0;
 
       for (Segment* s = fs; s; s = s->next(), ++segmentIdx) {
+            //
+            //  ignore all segments which do not contain
+            //  elements
+            //
+            bool activeSegment = false;
+            for (int track = 0; track < _nstaves * VOICES; ++track) {
+                  if (!staff(track / VOICES)->show()) {
+                        track += 4;
+                        continue;
+                        }
+                  if (s->element(track)) {
+                        activeSegment = true;
+                        break;
+                        }
+                  }
+            if (!activeSegment)
+                  continue;
+
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
 
             if ((s->subtype() == Segment::SegClef) && (s != fs)) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                        if (!staff(staffIdx)->show())
+                              continue;
                         int track  = staffIdx * VOICES;
                         Element* e = s->element(track);
                         if (e) {
