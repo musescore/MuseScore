@@ -2596,25 +2596,8 @@ qreal Score::computeMinWidth(Segment* fs) const
       int segmentIdx = 0;
       qreal x        = 0.0;
 
+      const Segment* pSeg = 0;
       for (Segment* s = fs; s; s = s->next(), ++segmentIdx) {
-            //
-            //  ignore all segments which do not contain
-            //  elements
-            //
-            bool activeSegment = false;
-            for (int track = 0; track < _nstaves * VOICES; ++track) {
-                  if (!staff(track / VOICES)->show()) {
-                        track += 4;
-                        continue;
-                        }
-                  if (s->element(track)) {
-                        activeSegment = true;
-                        break;
-                        }
-                  }
-            if (!activeSegment)
-                  continue;
-
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
 
@@ -2636,7 +2619,6 @@ qreal Score::computeMinWidth(Segment* fs) const
             Segment::SegmentType segType    = s->subtype();
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            Segment* pSeg          = s == fs ? 0 : s->prev();
             int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
@@ -2731,8 +2713,8 @@ qreal Score::computeMinWidth(Segment* fs) const
                   }
             x += segmentWidth;
 
-            if (segmentIdx)
-                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
+//            if (segmentIdx && pSeg)
+//                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                   if (!staff(staffIdx)->show())
@@ -2740,7 +2722,21 @@ qreal Score::computeMinWidth(Segment* fs) const
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
+            //
+            // set pSeg only to used segments
+            //
+            for (int voice = 0; voice < _nstaves * VOICES; ++voice) {
+                  if (!staff(voice/VOICES)->show()) {
+                        voice += VOICES-1;
+                        continue;
+                        }
+                  if (s->element(voice)) {
+                        pSeg = s;
+                        break;
+                        }
+                  }
             }
+
       qreal segmentWidth = 0.0;
       for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
             if (!staff(staffIdx)->show())
