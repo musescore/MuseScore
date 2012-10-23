@@ -44,10 +44,18 @@ class VoltaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Volta
+//   @P subtype   enum VoltaType VOLTA_OPEN, VOLTA_CLOSED
 //---------------------------------------------------------
 
 class Volta : public TextLine {
       Q_OBJECT
+      Q_ENUMS(VoltaType)
+
+   public:
+      enum VoltaType { VOLTA_OPEN, VOLTA_CLOSED };
+
+   private:
+      Q_PROPERTY(VoltaType subtype READ subtype WRITE undoSetSubtype)
 
       VoltaType _subtype;
       QList<int> _endings;
@@ -69,6 +77,7 @@ class Volta : public TextLine {
       QString text() const;
 
       void setSubtype(VoltaType val);
+      void undoSetSubtype(VoltaType val);
       VoltaType subtype() const            { return _subtype; }
 
       bool hasEnding(int repeat) const;
@@ -76,7 +85,13 @@ class Volta : public TextLine {
       Measure* endMeasure() const      { return (Measure*)endElement(); }
       void setStartMeasure(Measure* m) { setStartElement((Element*)m); }
       void setEndMeasure(Measure* m)   { setEndElement((Element*)m);   }
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
+
+Q_DECLARE_METATYPE(Volta::VoltaType)
 
 #endif
 

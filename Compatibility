@@ -1,0 +1,10 @@
+
+Compatibility with 1.2 scores
+
+* In 1.2 beams cannot span measures. "Middle Beam" markings are ignored in
+  this case. In 2.0 the marking is honored.
+  Bug: the current implementation does not handle beams spanning pages.
+       The resulting layout is undefined.
+  (Fixed by replacing "Middle Beam" markings at the beginning of a Measure
+   by "Beam Begin" marking)
+

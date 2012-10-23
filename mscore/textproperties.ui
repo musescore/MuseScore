@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>557</width>
-    <height>484</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -501,8 +501,8 @@
            <string>text color</string>
           </property>
           <property name="frameShape">
-            <set>QFrame::Box</set>
-          </property>      
+           <enum>QFrame::Box</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -583,6 +583,9 @@
              </property>
              <property name="toolTip">
               <string>horizontal offset to reference point</string>
+             </property>
+             <property name="suffix">
+              <string/>
              </property>
              <property name="minimum">
               <double>-1000.000000000000000</double>
@@ -823,7 +826,7 @@
               <string>frame line width</string>
              </property>
              <property name="suffix">
-              <string>mm</string>
+              <string>sp</string>
              </property>
              <property name="maximum">
               <double>999.990000000000009</double>
@@ -855,7 +858,7 @@
               <string>frame inner margin</string>
              </property>
              <property name="suffix">
-              <string>mm</string>
+              <string>sp</string>
              </property>
              <property name="minimum">
               <double>-999.000000000000000</double>
@@ -916,7 +919,7 @@
               <string>frame color</string>
              </property>
              <property name="frameShape">
-              <set>QFrame::Box</set>
+              <enum>QFrame::Box</enum>
              </property>
             </widget>
            </item>
@@ -926,8 +929,8 @@
               <string>frame color</string>
              </property>
              <property name="frameShape">
-              <set>QFrame::Box</set>
-             </property>             
+              <enum>QFrame::Box</enum>
+             </property>
             </widget>
            </item>
            <item row="2" column="2">

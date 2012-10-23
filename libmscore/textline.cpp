@@ -62,7 +62,7 @@ void TextLineSegment::setSelected(bool f)
 
 void TextLineSegment::draw(QPainter* painter) const
       {
-      TextLine* tl    = textLine();
+      TextLine* tl   = textLine();
       qreal _spatium = spatium();
 
       qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
@@ -127,6 +127,7 @@ void TextLineSegment::draw(QPainter* painter) const
             pp1.rx() += fabs(tl->beginHookHeight().val() * _spatium * .4);
       if (tl->endHook() && tl->endHookType() == HOOK_45)
             pp2.rx() -= fabs(tl->endHookHeight().val() * _spatium * .4);
+
       painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
       if (tl->beginHook()) {
@@ -155,7 +156,7 @@ void TextLineSegment::draw(QPainter* painter) const
 
 void TextLineSegment::layout()
       {
-      TextLine* tl = static_cast<TextLine*>(line());
+      TextLine* tl = textLine();
       if (!tl->diagonal())
             _userOff2.setY(0);
       switch (subtype()) {
@@ -269,9 +270,9 @@ TextLine::TextLine(Score* s)
       _lineColor         = Qt::black;
       _mxmlOff2          = 0;
 
-      _beginSymbol       = -1;
-      _continueSymbol    = -1;
-      _endSymbol         = -1;
+      _beginSymbol       = noSym;
+      _continueSymbol    = noSym;
+      _endSymbol         = noSym;
       _sp                = 0;
       }
 
@@ -429,15 +430,15 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
             xml.etag();
             }
       if (_beginSymbol != -1) {
-            xml.tag("beginSymbol", _beginSymbol);   // symbols[_symbol].name();
+            xml.tag("beginSymbol", Sym::id2name(_beginSymbol));
             xml.tag("beginSymbolOffset", _beginSymbolOffset);
             }
       if (_continueSymbol != -1) {
-            xml.tag("continueSymbol", _continueSymbol);
+            xml.tag("continueSymbol", Sym::id2name(_continueSymbol));
             xml.tag("continueSymbolOffset", _continueSymbolOffset);
             }
       if (_endSymbol != -1) {
-            xml.tag("endSymbol", _endSymbol);
+            xml.tag("endSymbol", Sym::id2name(_endSymbol));
             xml.tag("endSymbolOffset", _endSymbolOffset);
             }
       }
@@ -466,11 +467,11 @@ bool TextLine::readProperties(const QDomElement& e)
       else if (tag == "hookUp")           // obsolete
             _endHookHeight *= qreal(-1.0);
       else if (tag == "beginSymbol" || tag == "symbol")     // "symbol" is obsolete
-            _beginSymbol = text.toInt();
+            _beginSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "continueSymbol")
-            _continueSymbol = text.toInt();
+            _continueSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "endSymbol")
-            _endSymbol = text.toInt();
+            _endSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
       else if (tag == "beginSymbolOffset")
             _beginSymbolOffset = readPoint(e);
       else if (tag == "continueSymbolOffset")
@@ -498,7 +499,7 @@ bool TextLine::readProperties(const QDomElement& e)
             _continueText->read(e);
             }
       else if (!SLine::readProperties(e)) {
-            printf(" ==readSLineProps: failed\n");
+            qDebug(" ==readSLineProps: failed");
             return false;
             }
       return true;
@@ -520,7 +521,6 @@ LineSegment* TextLine::createLineSegment()
 
 void TextLine::layout()
       {
-//      setPos(0.0, 0.0);
       if (_beginText)
             _beginText->layout();
       if (_continueText)

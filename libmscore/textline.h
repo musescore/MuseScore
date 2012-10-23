@@ -66,7 +66,7 @@ class TextLine : public SLine {
       HookType _beginHookType, _endHookType;
       Spatium _beginHookHeight, _endHookHeight;
 
-      int _beginSymbol, _continueSymbol, _endSymbol;  // -1: no symbol
+      SymId _beginSymbol, _continueSymbol, _endSymbol;
       QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;
 
       int _mxmlOff2;
@@ -112,9 +112,9 @@ class TextLine : public SLine {
       Placement continueTextPlace() const     { return _continueTextPlace;    }
       void setContinueTextPlace(Placement p)  { _continueTextPlace = p;       }
 
-      void setBeginSymbol(int v)              { _beginSymbol = v;             }
-      void setContinueSymbol(int v)           { _continueSymbol = v;          }
-      void setEndSymbol(int v)                { _endSymbol = v;               }
+      void setBeginSymbol(SymId v)            { _beginSymbol = v;             }
+      void setContinueSymbol(SymId v)         { _continueSymbol = v;          }
+      void setEndSymbol(SymId v)              { _endSymbol = v;               }
 
       void setBeginHookHeight(Spatium v)      { _beginHookHeight = v;         }
       void setEndHookHeight(Spatium v)        { _endHookHeight = v;           }
@@ -127,9 +127,9 @@ class TextLine : public SLine {
       void setLineWidth(const Spatium& v)     { _lineWidth = v;               }
       void setLineColor(const QColor& v)      { _lineColor = v;               }
       void setLineStyle(Qt::PenStyle v)       { _lineStyle = v;               }
-      int beginSymbol() const                 { return _beginSymbol;          }
-      int continueSymbol() const              { return _continueSymbol;       }
-      int endSymbol() const                   { return _endSymbol;            }
+      SymId beginSymbol() const               { return _beginSymbol;          }
+      SymId continueSymbol() const            { return _continueSymbol;       }
+      SymId endSymbol() const                 { return _endSymbol;            }
       QPointF beginSymbolOffset() const       { return _beginSymbolOffset;    }
       QPointF continueSymbolOffset() const    { return _continueSymbolOffset; }
       QPointF endSymbolOffset() const         { return _endSymbolOffset;      }

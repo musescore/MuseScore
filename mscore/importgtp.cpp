@@ -394,8 +394,9 @@ void GuitarPro::createMeasures()
                         StaffType* staffType = staff->staffType();
 qDebug("staff %d group %d timesig %d\n", staffIdx, int(staffType->group()), staffType->genTimesig());
                         if (staffType->genTimesig()) {
-                              TimeSig* t = new TimeSig(score, nts);
+                              TimeSig* t = new TimeSig(score);
                               t->setTrack(staffIdx * VOICES);
+                              t->setSig(nts);
                               Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                               s->add(t);
                               }
@@ -513,8 +514,9 @@ void GuitarPro1::read(QFile* fp)
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
@@ -733,8 +735,9 @@ qDebug("BeginRepeat=============================================\n");
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
@@ -1023,7 +1026,7 @@ void GuitarPro1::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == CHORD) {
+                        if (e->type() == Element::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -1203,8 +1206,9 @@ qDebug("BeginRepeat=============================================\n");
 
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        TimeSig* t = new TimeSig(score, nts);
+                        TimeSig* t = new TimeSig(score);
                         t->setTrack(staffIdx * VOICES);
+                        t->setSig(nts);
                         Segment* s = m->getSegment(Segment::SegTimeSig, tick);
                         s->add(t);
                         }
@@ -1594,7 +1598,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == CHORD) {
+                        if (e->type() == Element::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -1892,7 +1896,7 @@ void GuitarPro4::read(QFile* fp)
                         if (dotted)
                               l = l + (l/2);
                         cr->setDuration(l);
-                        if (cr->type() == REST && (pause == 0 || l == measure->len()))
+                        if (cr->type() == Element::REST && (pause == 0 || l == measure->len()))
                               cr->setDurationType(TDuration::V_MEASURE);
                         else
                               cr->setDurationType(d);
@@ -2086,7 +2090,7 @@ void GuitarPro5::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == CHORD) {
+                        if (e->type() == Element::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2296,7 +2300,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             if (dotted)
                   l = l + (l/2);
             cr->setDuration(l);
-            if (cr->type() == REST && pause == 0)
+            if (cr->type() == Element::REST && pause == 0)
                   cr->setDurationType(TDuration::V_MEASURE);
             else
                   cr->setDurationType(d);
@@ -2317,7 +2321,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->add(lyrics);
             }
       int rr = readChar();
-      if (cr && (cr->type() == CHORD)) {
+      if (cr && (cr->type() == Element::CHORD)) {
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == 0x2)
@@ -2623,13 +2627,11 @@ void GuitarPro5::read(QFile* fp)
 //   importGTP
 //---------------------------------------------------------
 
-bool MuseScore::importGTP(Score* score, const QString& name)
+Score::FileError importGTP(Score* score, const QString& name)
       {
-      if (name.isEmpty())
-            return false;
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly))
-            return false;
+            return Score::FILE_OPEN_ERROR;
       uchar l;
       fp.read((char*)&l, 1);
       char ss[30];
@@ -2642,7 +2644,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             s = s.mid(21);
       else {
             qDebug("unknown gtp format <%s>\n", ss);
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
 
       int a = s.left(1).toInt();
@@ -2662,7 +2664,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             gp = new GuitarPro5(score, version);
       else {
             qDebug("unknown gtp format %d\n", version);
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       try {
             gp->read(&fp);
@@ -2675,7 +2677,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             fp.close();
             qDebug("guitar pro import error====\n");
             // avoid another error message box
-            return true;
+            return Score::FILE_NO_ERROR;
             }
       fp.close();
 
@@ -2687,7 +2689,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             }
       else  {
             m = score->measures()->first();
-            if (m->type() != VBOX) {
+            if (m->type() != Element::VBOX) {
                   MeasureBase* mb = new VBox(score);
                   mb->setTick(0);
                   score->addMeasure(mb, m);
@@ -2794,7 +2796,7 @@ bool MuseScore::importGTP(Score* score, const QString& name)
             // create excerpt title
             //
             MeasureBase* measure = pscore->first();
-            if (!measure || (measure->type() != VBOX)) {
+            if (!measure || (measure->type() != Element::VBOX)) {
                   MeasureBase* mb = new VBox(pscore);
                   mb->setTick(0);
                   pscore->addMeasure(mb, measure);
@@ -2825,6 +2827,6 @@ bool MuseScore::importGTP(Score* score, const QString& name)
       score->setCreated(true);
       delete gp;
       score->rebuildMidiMapping();
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 

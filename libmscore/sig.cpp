@@ -161,6 +161,23 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
       }
 
 //---------------------------------------------------------
+//   pos
+//    Return string representation of tick position.
+//    This is not reentrant and only for debugging!
+//---------------------------------------------------------
+
+const char* TimeSigMap::pos(int t) const
+      {
+      static char* s = 0;
+      delete s;
+      int bar, beat, tick;
+      tickValues(t, &bar, &beat, &tick);
+      QString ss = QString("%1:%2:%3").arg(bar+1).arg(beat).arg(tick);
+      s = strdup(qPrintable(ss));
+      return s;
+      }
+
+//---------------------------------------------------------
 //   bar2tick
 //---------------------------------------------------------
 

@@ -92,8 +92,8 @@ void Score::cmdPaste(MuseScoreView* view)
             QDomElement e = doc.documentElement();
             QPointF dragOffset;
             Fraction duration(1, 4);
-            ElementType type = Element::readType(e, &dragOffset, &duration);
-            if (type != INVALID) {
+            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+            if (type != Element::INVALID) {
                   Element* el = Element::create(type, this);
                   if (el) {
                         el->read(e);
@@ -118,11 +118,11 @@ void Score::cmdPaste(MuseScoreView* view)
                   }
             else if (selection().isSingle()) {
                   Element* e = selection().element();
-                  if (e->type() != NOTE && e->type() != REST) {
+                  if (e->type() != Element::NOTE && e->type() != Element::REST) {
                         qDebug("cannot paste to %s", e->name());
                         return;
                         }
-                  if (e->type() == NOTE)
+                  if (e->type() == Element::NOTE)
                         e = static_cast<Note*>(e)->chord();
                   cr  = static_cast<ChordRest*>(e);
                   }
@@ -296,7 +296,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                                     Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
                                     e->setEndElement(seg);
                                     seg->addSpannerBack(e);
-                                    if (e->type() == OTTAVA) {
+                                    if (e->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(e);
                                           int shift = o->pitchShift();
                                           Staff* st = o->staff();
@@ -304,7 +304,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                                           st->pitchOffsets().setPitchOffset(tick1, shift);
                                           st->pitchOffsets().setPitchOffset(tick, 0);
                                           }
-                                    else if (e->type() == HAIRPIN) {
+                                    else if (e->type() == Element::HAIRPIN) {
                                           Hairpin* hp = static_cast<Hairpin*>(e);
                                           updateHairpin(hp);
                                           }
@@ -402,7 +402,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               }
                         }
                   foreach(Spanner* s, spanner) {
-                        if (s->type() == SLUR)
+                        if (s->type() == Element::SLUR)
                               undoAddElement(s);
                         }
                   foreach (Tuplet* tuplet, tuplets) {
@@ -452,7 +452,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
 void Score::pasteChordRest(ChordRest* cr, int tick)
       {
 // qDebug("pasteChordRest %s at %d", cr->name(), tick);
-      if (cr->type() == CHORD) {
+      if (cr->type() == Element::CHORD) {
             // set note track
             // check if staffMove moves a note to a
             // nonexistant staff
@@ -478,13 +478,13 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             }
 
       Measure* measure = tick2measure(tick);
-      bool isGrace = (cr->type() == CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
+      bool isGrace = (cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
       int measureEnd = measure->tick() + measure->ticks();
       if (tick >= measureEnd)       // end of score
             return;
 
       if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
-            if (cr->type() == CHORD) {
+            if (cr->type() == Element::CHORD) {
                   // split Chord
                   Chord* c = static_cast<Chord*>(cr);
                   int rest = c->actualTicks();

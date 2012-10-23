@@ -5,7 +5,7 @@
 set (CMAKE_SYSTEM_NAME "Windows")
 
 set (CROSS C:/QtSDK/mingw)
-set (CROSSQT C:/QtSDK/Desktop/Qt/4.8.0/mingw)
+set (CROSSQT C:/QtSDK/Desktop/Qt/4.8.1/mingw)
 
 set (CMAKE_C_COMPILER     ${CROSS}/bin/gcc.exe)
 set (CMAKE_CXX_COMPILER   ${CROSS}/bin/g++.exe)
@@ -30,8 +30,8 @@ set (QT_UIC_EXECUTABLE        "${CROSSQT}/bin/uic.exe")
 set (QT_RCC_EXECUTABLE        "${CROSSQT}/bin/rcc")
 set (QT_QTCORE_LIBRARY        "mops")
 
-set (QT_WRC_EXECUTABLE        wrc.bat)
-set (QT_WINE_EXECUTABLE       wine.bat)
+set (QT_WRC_EXECUTABLE        ${CMAKE_CURRENT_LIST_DIR}/wrc.bat)
+set (QT_WINE_EXECUTABLE       ${CMAKE_CURRENT_LIST_DIR}/wine.bat)
 
 
 set (QT_INCLUDES ${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR}

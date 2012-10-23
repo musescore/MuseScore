@@ -31,7 +31,11 @@ class ChordList;
 //---------------------------------------------------------
 
 class TextStyleData : public QSharedData, public ElementLayout {
+
    protected:
+      qreal frameWidthMM;           // for compatibility with old scores
+      qreal paddingWidthMM;
+
       QString name;                 // style name
       QString family;               // font face
       qreal size;
@@ -42,8 +46,8 @@ class TextStyleData : public QSharedData, public ElementLayout {
 
       bool sizeIsSpatiumDependent;        // text point size depends on _spatium unit
 
-      qreal frameWidth;
-      qreal paddingWidth;
+      Spatium frameWidth;
+      Spatium paddingWidth;
       int frameRound;
       QColor frameColor;
       bool circle;
@@ -57,7 +61,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
          Align _align,
          const QPointF& _off, OffsetType _ot, const QPointF& _roff,
          bool sizeSpatiumDependent,
-         qreal fw, qreal pw, int fr,
+         Spatium fw, Spatium pw, int fr,
          QColor co, bool circle, bool systemFlag,
          QColor fg, QColor bg);
       TextStyleData();
@@ -118,6 +122,7 @@ class StyleData : public QSharedData {
       void setSpatium(qreal v)                                   { _spatium = v;    }
       ArticulationAnchor articulationAnchor(int id) const        { return _articulationAnchor[id]; }
       void setArticulationAnchor(int id, ArticulationAnchor val) { _articulationAnchor[id] = val;  }
+      friend class TextStyle;
       };
 
 #endif

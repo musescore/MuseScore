@@ -29,6 +29,7 @@ class PaletteScrollArea;
 
 #include "ui_palette.h"
 #include "ui_cellproperties.h"
+#include "libmscore/sym.h"
 
 //---------------------------------------------------------
 //   PaletteCell
@@ -225,7 +226,7 @@ class Palette : public QWidget {
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
          const QString tag = QString(), qreal mag = 1.0);
-      PaletteCell* append(int sym);
+      PaletteCell* append(SymId sym);
 
       void setGrid(int, int);
       Element* element(int idx);

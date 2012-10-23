@@ -44,6 +44,8 @@
 #include "libmscore/harmony.h"
 #include "libmscore/slur.h"
 #include "libmscore/notedot.h"
+#include "libmscore/figuredbass.h"
+#include "libmscore/accidental.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -82,6 +84,8 @@ QDeclarativeListProperty<Score> QmlPlugin::scores()
 
 bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
       {
+      if(!s)
+            return false;
       return mscore->saveAs(s, true, name, ext);
       }
 
@@ -168,6 +172,7 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
+            qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
             qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
@@ -181,8 +186,12 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
+            qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+            qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
+               "Element", tr("you cannot create an element"));
             //-----------virtual classes
-            qmlRegisterType<Element>();
+//            qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
@@ -334,6 +343,11 @@ bool MuseScore::loadPlugin(const QString& filename)
       {
       bool result = false;
 
+      if (!pluginMapper) {
+            pluginMapper = new QSignalMapper(this);
+            connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
+            }
+
       QDir pluginDir(mscoreGlobalShare + "plugins");
       if (MScore::debugMode)
             qDebug("Plugin Path <%s>\n", qPrintable(mscoreGlobalShare + "plugins"));
@@ -342,7 +356,11 @@ bool MuseScore::loadPlugin(const QString& filename)
             QFileInfo fi(pluginDir, filename);
             if (fi.exists()) {
                   QString path(fi.filePath());
-//TODO                  registerPlugin(path);
+                  PluginDescription* p = new PluginDescription;
+                  p->path = path;
+                  p->load = false;
+                  collectPluginMetaInformation(p);
+                  registerPlugin(p);
                   result = true;
                   }
             }
@@ -391,12 +409,13 @@ void MuseScore::pluginTriggered(int idx)
 //   newElement
 //---------------------------------------------------------
 
-Element* QmlPlugin::newElement(int t)
+Element* QmlPlugin::newElement(Element::ElementType t)
       {
+qDebug("newElement %d score %p", int(t), curScore());
       Score* score = curScore();
       if (score == 0)
             return 0;
-      return Element::create(ElementType(t), score);
+      return Element::create(t, score);
       }
 
 //---------------------------------------------------------
@@ -497,7 +516,7 @@ bool FileIO::write(const QString& data)
       return true;
       }
 
-bool FileIO::remove(const QString& data)
+bool FileIO::remove()
       {
       if (mSource.isEmpty())
             return false;

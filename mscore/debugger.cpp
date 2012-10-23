@@ -58,6 +58,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/notedot.h"
 #include "libmscore/spacer.h"
+#include "libmscore/box.h"
 
 extern bool useFactorySettings;
 
@@ -98,14 +99,14 @@ void ElementItem::init()
       {
       QString s;
       switch(el->type()) {
-            case PAGE:
+            case Element::PAGE:
                   {
                   QString no;
                   no.setNum(((Page*)el)->no()+1);
                   s = "Page-" + no;
                   }
                   break;
-            case MEASURE:
+            case Element::MEASURE:
                   {
                   QString no;
                   no.setNum(((Measure*)el)->no()+1);
@@ -129,7 +130,7 @@ Debugger::Debugger(QWidget* parent)
       setupUi(this);
 //      setWindowTitle(tr("MuseScore: Debugger"));
 
-      for (int i = 0; i < MAXTYPE; ++i)
+      for (int i = 0; i < Element::MAXTYPE; ++i)
             elementViews[i] = 0;
       curElement   = 0;
 
@@ -235,7 +236,7 @@ static void addMeasureBaseToList(ElementItem* mi, MeasureBase* mb)
       {
       foreach(Element* e, *mb->el()) {
             ElementItem* mmi = new ElementItem(mi, e);
-            if (e->type() == HBOX || e->type() == VBOX)
+            if (e->type() == Element::HBOX || e->type() == Element::VBOX)
                   addMeasureBaseToList(mmi, static_cast<MeasureBase*>(e));
             }
       }
@@ -278,7 +279,7 @@ void Debugger::updateList(Score* s)
       if (!isVisible())
             return;
 
-      QTreeWidgetItem* li = new QTreeWidgetItem(list, INVALID);
+      QTreeWidgetItem* li = new QTreeWidgetItem(list, Element::INVALID);
       li->setText(0, "Global");
 
       int staves = cs->nstaves();
@@ -289,8 +290,8 @@ void Debugger::updateList(Score* s)
             foreach(System* system, *page->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
 
-                  if (system->getBarLine())
-                        new ElementItem(si, system->getBarLine());
+                  if (system->barLine())
+                        new ElementItem(si, system->barLine());
 
 
                   foreach(SysStaff* ss, *system->staves()) {
@@ -303,7 +304,7 @@ void Debugger::updateList(Score* s)
 
                         addMeasureBaseToList(mi, mb);
 
-                        if (mb->type() != MEASURE)
+                        if (mb->type() != Element::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
                         foreach (MStaff* ms, *measure->staffList()) {
@@ -328,7 +329,7 @@ void Debugger::updateList(Score* s)
                                     if (!e)
                                           continue;
                                     ElementItem* sei = new ElementItem(segItem, e);
-                                    if (e->type() == CHORD) {
+                                    if (e->type() == Element::CHORD) {
                                           Chord* chord = (Chord*)e;
                                           if (chord->hook())
                                                 new ElementItem(sei, chord->hook());
@@ -351,7 +352,7 @@ void Debugger::updateList(Score* s)
                                                       new ElementItem(ni, note->accidental());
                                                       }
                                                 foreach(Element* f, note->el()) {
-                                                      if (f->type() == SYMBOL || f->type() == IMAGE) {
+                                                      if (f->type() == Element::SYMBOL || f->type() == Element::IMAGE) {
                                                             BSymbol* bs = static_cast<BSymbol*>(f);
                                                             addSymbol(ni, bs);
                                                             }
@@ -368,6 +369,11 @@ void Debugger::updateList(Score* s)
                                                       ElementItem* ti = new ElementItem(ni, tie);
                                                       foreach(Element* el1, tie->spannerSegments())
                                                             new ElementItem(ti, el1);
+                                                      }
+                                                foreach(Spanner* s, note->spannerFor()) {
+                                                      ElementItem* si = new ElementItem(ni, s);
+                                                      foreach(Element* ls, s->spannerSegments())
+                                                            new ElementItem(si, ls);
                                                       }
                                                 }
                                           foreach(Element* e, chord->el())
@@ -401,7 +407,7 @@ void Debugger::updateList(Score* s)
                                           new ElementItem(si, ls);
                                     }
                               foreach(Element* s, segment->annotations()) {
-                                    if (s->type() == SYMBOL || s->type() == IMAGE)
+                                    if (s->type() == Element::SYMBOL || s->type() == Element::IMAGE)
                                           addBSymbol(segItem, static_cast<BSymbol*>(s));
                                     else
                                           new ElementItem(segItem, s);
@@ -485,7 +491,7 @@ void Debugger::itemClicked(QTreeWidgetItem* i, int)
       {
       if (i == 0)
             return;
-      if (i->type() == INVALID)
+      if (i->type() == Element::INVALID)
             return;
       Element* el = static_cast<ElementItem*>(i)->element();
       if (curElement) {
@@ -508,7 +514,7 @@ void Debugger::updateElement(Element* el)
       for (int i = 0;; ++i) {
             QTreeWidgetItem* item = list->topLevelItem(i);
             if (item == 0) {
-                  qDebug("Debugger::Element not found %s %p\n", el->name(), el);
+                  qDebug("Debugger::Element not found %s %p", el->name(), el);
                   break;
                   }
             ElementItem* ei = (ElementItem*)item;
@@ -528,41 +534,48 @@ void Debugger::updateElement(Element* el)
       ShowElementBase* ew = elementViews[el->type()];
       if (ew == 0) {
             switch (el->type()) {
-                  case PAGE:          ew = new ShowPageWidget;    break;
-                  case SYSTEM:        ew = new ShowSystemWidget;  break;
-                  case MEASURE:       ew = new MeasureView;       break;
-                  case CHORD:         ew = new ShowChordWidget;   break;
-                  case NOTE:          ew = new ShowNoteWidget;    break;
-                  case REST:          ew = new RestView;          break;
-                  case CLEF:          ew = new ClefView;          break;
-                  case TIMESIG:       ew = new ShowTimesigWidget; break;
-                  case KEYSIG:        ew = new KeySigView;        break;
-                  case SEGMENT:       ew = new SegmentView;       break;
-                  case HAIRPIN:       ew = new HairpinView;       break;
-                  case BAR_LINE:      ew = new BarLineView;       break;
-                  case DYNAMIC:       ew = new DynamicView;       break;
-                  case TUPLET:        ew = new TupletView;        break;
-                  case SLUR:          ew = new SlurView;          break;
-                  case TIE:           ew = new TieView;           break;
-                  case VOLTA:         ew = new VoltaView;         break;
-                  case VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
-                  case LYRICS:        ew = new LyricsView;        break;
-                  case BEAM:          ew = new BeamView;          break;
-                  case TREMOLO:       ew = new TremoloView;       break;
-                  case OTTAVA:        ew = new OttavaView;        break;
-                  case SLUR_SEGMENT:  ew = new SlurSegmentView;   break;
-                  case ACCIDENTAL:    ew = new AccidentalView;    break;
-                  case ARTICULATION:  ew = new ArticulationView;  break;
-                  case STEM:          ew = new StemView;          break;
-                  case FINGERING:
-                  case MARKER:
-                  case JUMP:
-                  case TEXT:
-                  case STAFF_TEXT:
+                  case Element::PAGE:          ew = new ShowPageWidget;    break;
+                  case Element::SYSTEM:        ew = new ShowSystemWidget;  break;
+                  case Element::MEASURE:       ew = new MeasureView;       break;
+                  case Element::CHORD:         ew = new ShowChordWidget;   break;
+                  case Element::NOTE:          ew = new ShowNoteWidget;    break;
+                  case Element::REST:          ew = new RestView;          break;
+                  case Element::CLEF:          ew = new ClefView;          break;
+                  case Element::TIMESIG:       ew = new ShowTimesigWidget; break;
+                  case Element::KEYSIG:        ew = new KeySigView;        break;
+                  case Element::SEGMENT:       ew = new SegmentView;       break;
+                  case Element::HAIRPIN:       ew = new HairpinView;       break;
+                  case Element::BAR_LINE:      ew = new BarLineView;       break;
+                  case Element::DYNAMIC:       ew = new DynamicView;       break;
+                  case Element::TUPLET:        ew = new TupletView;        break;
+                  case Element::SLUR:          ew = new SlurView;          break;
+                  case Element::TIE:           ew = new TieView;           break;
+                  case Element::VOLTA:         ew = new VoltaView;         break;
+                  case Element::VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
+                  case Element::TEXTLINE:         ew = new TextLineView;         break;
+                  case Element::TEXTLINE_SEGMENT: ew = new TextLineSegmentView;  break;
+                  case Element::LYRICS:        ew = new LyricsView;        break;
+                  case Element::BEAM:          ew = new BeamView;          break;
+                  case Element::TREMOLO:       ew = new TremoloView;       break;
+                  case Element::OTTAVA:        ew = new OttavaView;        break;
+                  case Element::SLUR_SEGMENT:  ew = new SlurSegmentView;   break;
+                  case Element::ACCIDENTAL:    ew = new AccidentalView;    break;
+                  case Element::ARTICULATION:  ew = new ArticulationView;  break;
+                  case Element::STEM:          ew = new StemView;          break;
+                  case Element::VBOX:
+                  case Element::HBOX:
+                  case Element::FBOX:
+                  case Element::TBOX:          ew = new BoxView;           break;
+
+                  case Element::FINGERING:
+                  case Element::MARKER:
+                  case Element::JUMP:
+                  case Element::TEXT:
+                  case Element::STAFF_TEXT:
                         ew = new TextView;
                         break;
-                  case TRILL_SEGMENT:
-                  case HAIRPIN_SEGMENT:
+                  case Element::TRILL_SEGMENT:
+                  case Element::HAIRPIN_SEGMENT:
                         ew = new LineSegmentView; break;
                         break;
                   default:
@@ -1363,6 +1376,7 @@ void TextView::setElement(Element* e)
       tb.rxoffset->setValue(te->reloff().x());
       tb.ryoffset->setValue(te->reloff().y());
       tb.offsetType->setCurrentIndex(int(te->offsetType()));
+printf("text style %d\n", te->textStyleType());
       tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
@@ -1625,7 +1639,6 @@ void ShowElementBase::setElement(Element* e)
       eb.address->setText(QString("%1").arg((unsigned long)e, 0, 16));
       eb.score->setText(QString("%1").arg((unsigned long)(e->score()), 0, 16));
 
-//      eb.subtype->setValue(e->subtype());
       eb.selected->setChecked(e->selected());
       eb.selectable->setChecked(e->selectable());
       eb.droptarget->setChecked(e->dropTarget());
@@ -1707,9 +1720,9 @@ void ShowElementBase::parentClicked()
 
 void ShowElementBase::linkClicked()
       {
-      qDebug("linkClicked\n");
+      qDebug("linkClicked");
       foreach(Element* e, *el->links()) {
-            qDebug("  element <%p> <%p>\n", e->score(), e);
+            qDebug("  element <%p> <%p>", e->score(), e);
             if (e != el) {
                   emit elementChanged(e);
                   break;
@@ -2336,8 +2349,8 @@ void AccidentalView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       acc.hasBracket->setChecked(s->hasBracket());
-      acc.accAuto->setChecked(s->role() == ACC_AUTO);
-      acc.accUser->setChecked(s->role() == ACC_USER);
+      acc.accAuto->setChecked(s->role() == Accidental::ACC_AUTO);
+      acc.accUser->setChecked(s->role() == Accidental::ACC_USER);
       }
 
 //---------------------------------------------------------
@@ -2454,4 +2467,192 @@ void StemView::setElement(Element* e)
       stem.len->setValue(s->stemLen() - s->userLen());
       stem.userLen->setValue(s->userLen());
       }
+
+//---------------------------------------------------------
+//   BoxView
+//---------------------------------------------------------
+
+BoxView::BoxView()
+   : ShowElementBase()
+      {
+      QWidget* w = new QWidget;
+      box.setupUi(w);
+      layout->addWidget(w);
+      layout->addStretch(10);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void BoxView::setElement(Element* e)
+      {
+      Box* b = static_cast<Box*>(e);
+      ShowElementBase::setElement(e);
+
+      box.width->setValue(b->boxWidth().val());
+      box.height->setValue(b->boxHeight().val());
+      box.topGap->setValue(b->topGap());
+      box.bottomGap->setValue(b->bottomGap());
+      box.topMargin->setValue(b->topMargin());
+      box.bottomMargin->setValue(b->bottomMargin());
+      box.leftMargin->setValue(b->leftMargin());
+      box.rightMargin->setValue(b->rightMargin());
+      }
+
+//---------------------------------------------------------
+//   segmentClicked
+//---------------------------------------------------------
+
+void TextLineView::segmentClicked(QTreeWidgetItem* item)
+      {
+      Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
+      emit elementChanged(e);
+      }
+
+//---------------------------------------------------------
+//   beginTextClicked
+//---------------------------------------------------------
+
+void TextLineView::beginTextClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->beginText());
+      }
+
+//---------------------------------------------------------
+//   continueTextClicked
+//---------------------------------------------------------
+
+void TextLineView::continueTextClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->continueText());
+      }
+
+//---------------------------------------------------------
+//   TextLineView
+//---------------------------------------------------------
+
+TextLineView::TextLineView()
+   : ShowElementBase()
+      {
+      QWidget* spanner = new QWidget;
+      sp.setupUi(spanner);
+      layout->addWidget(spanner);
+
+      // SLineBase
+      QWidget* w = new QWidget;
+      lb.setupUi(w);
+      layout->addWidget(w);
+
+      // TextLineBase
+      w = new QWidget;
+      tlb.setupUi(w);
+      layout->addWidget(w);
+
+      layout->addStretch(10);
+      connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
+      connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
+      connect(sp.startElement,  SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement,    SIGNAL(clicked()), SLOT(endClicked()));
+      connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void TextLineView::setElement(Element* e)
+      {
+      Volta* volta = (Volta*)e;
+      ShowElementBase::setElement(e);
+
+      tlb.lineWidth->setValue(volta->lineWidth().val());
+//      lb.anchor->setCurrentIndex(int(volta->anchor()));
+      lb.diagonal->setChecked(volta->diagonal());
+//      lb.leftElement->setText(QString("%1").arg((unsigned long)volta->startElement(), 8, 16));
+//      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
+
+      sp.segments->clear();
+      const QList<SpannerSegment*>& el = volta->spannerSegments();
+      foreach(const SpannerSegment* e, el) {
+            QListWidgetItem* item = new QListWidgetItem;
+            item->setText(QString("%1").arg((unsigned long)e, 8, 16));
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)e));
+            sp.segments->addItem(item);
+            }
+
+      sp.startElement->setEnabled(volta->startElement() != 0);
+      sp.endElement->setEnabled(volta->endElement() != 0);
+      sp.anchor->setCurrentIndex(int(volta->anchor()));
+
+      tlb.beginText->setEnabled(volta->beginText());
+      tlb.continueText->setEnabled(volta->continueText());
+      }
+
+//---------------------------------------------------------
+//   leftElementClicked
+//---------------------------------------------------------
+
+void TextLineView::leftElementClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   rightElementClicked
+//---------------------------------------------------------
+
+void TextLineView::rightElementClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->endElement());
+      }
+
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void TextLineView::startClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void TextLineView::endClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      }
+
+
+//---------------------------------------------------------
+//   TextLineSegmentView
+//---------------------------------------------------------
+
+TextLineSegmentView::TextLineSegmentView()
+   : ShowElementBase()
+      {
+      QWidget* w = new QWidget;
+      lb.setupUi(w);
+      layout->addWidget(w);
+      layout->addStretch(10);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void TextLineSegmentView::setElement(Element* e)
+      {
+      VoltaSegment* vs = (VoltaSegment*)e;
+      ShowElementBase::setElement(e);
+
+      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.pos2x->setValue(vs->pos2().x());
+      lb.pos2y->setValue(vs->pos2().y());
+      lb.offset2x->setValue(vs->userOff2().x());
+      lb.offset2y->setValue(vs->userOff2().y());
+      }
+
 

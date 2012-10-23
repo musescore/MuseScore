@@ -34,6 +34,7 @@ class Text;
 class InstrumentName;
 class SpannerSegment;
 class VBox;
+class BarLine;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -48,7 +49,6 @@ class SysStaff {
                               ///< staff is hidden
    public:
       int idx;
-      QList<Bracket*> brackets;
       QList<InstrumentName*> instrumentNames;
 
       const QRectF& bbox() const    { return _bbox; }
@@ -81,7 +81,9 @@ class System : public Element {
 
       QList<MeasureBase*> ml;
       QList<SysStaff*> _staves;
-      Line* barLine;          ///< Left hand bar, connects staves in system.
+      QList<Bracket*> _brackets;
+
+      BarLine* _barLine;      ///< Left hand bar, connects staves in system.
       qreal _leftMargin;      ///< left margin for instrument name, brackets etc.
       bool _pageBreak;
       bool _firstSystem;      ///< used to decide between long and short instrument
@@ -143,13 +145,14 @@ class System : public Element {
       SysStaff* insertStaff(int);
       void removeStaff(int);
 
-      Line* getBarLine() const             { return barLine; }
+      BarLine* barLine() const               { return _barLine; }
       int y2staff(qreal y) const;
       void setInstrumentNames(bool longName);
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;
 
       QList<MeasureBase*>& measures()        { return ml; }
+      MeasureBase* measure(int idx)          { return ml[idx]; }
       Measure* firstMeasure() const;
       Measure* lastMeasure() const;
 
@@ -174,6 +177,7 @@ class System : public Element {
       void addStretchDistance(qreal val) { _stretchDistance += val;  }
       qreal distance() const             { return _distance; }
       void setDistance(qreal val)        { _distance = val;  }
+      QList<Bracket*>& brackets()        { return _brackets; }
       };
 
 typedef QList<System*>::iterator iSystem;

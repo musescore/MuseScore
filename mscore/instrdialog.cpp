@@ -252,7 +252,7 @@ void InstrumentsDialog::genPartList()
                   sli->staff    = s;
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
-                  if (s->useTablature())
+                  if (s->isTabStaff())
                         sli->setClef(ClefType(cs->styleI(ST_tabClef)));
                   else
                         sli->setClef(s->clef(0));
@@ -282,15 +282,46 @@ void InstrumentsDialog::on_instrumentList_itemSelectionChanged()
 void InstrumentsDialog::on_partiturList_itemSelectionChanged()
       {
       QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
-      if (wi.isEmpty())
+      if (wi.isEmpty()) {
+            removeButton->setEnabled(false);
+            upButton->setEnabled(false);
+            downButton->setEnabled(false);
+            linkedButton->setEnabled(false);
+            belowButton->setEnabled(false);
             return;
+            }
       QTreeWidgetItem* item = wi.front();
       bool flag = item != 0;
-      removeButton->setEnabled(flag);
-      upButton->setEnabled(flag);
-      downButton->setEnabled(flag);
-      belowButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
+
+      int count = 0; // item can be hidden
+      QTreeWidgetItem* it = 0;
+      QList<QTreeWidgetItem*> witems;
+      if(item->type() == PART_LIST_ITEM) {
+            for (int idx = 0; (it = partiturList->topLevelItem(idx)); ++idx) {
+                  if (!it->isHidden()) {
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+      else {
+            for (int idx = 0; (it = item->parent()->child(idx)); ++idx) {
+                  if (!it->isHidden()){
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+
+      bool onlyOne = (count == 1);
+      bool first = (witems.first() == item);
+      bool last = (witems.last() == item);
+
+      removeButton->setEnabled(flag && !onlyOne);
+      upButton->setEnabled(flag && !onlyOne && !first);
+      downButton->setEnabled(flag && !onlyOne && !last);
       linkedButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
+      belowButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       }
 
 //---------------------------------------------------------
@@ -359,7 +390,7 @@ void InstrumentsDialog::on_removeButton_clicked()
                   }
             else {
                   ((StaffListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       else {
@@ -367,7 +398,7 @@ void InstrumentsDialog::on_removeButton_clicked()
                   delete item;
             else {
                   ((PartListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       partiturList->clearSelection();
@@ -660,7 +691,7 @@ void MuseScore::editInstrList()
                               int sidx = staff->idx();
                               int eidx = sidx + 1;
                               for (MeasureBase* mb = cs->measures()->first(); mb; mb = mb->next()) {
-                                    if (mb->type() != MEASURE)
+                                    if (mb->type() != Element::MEASURE)
                                           continue;
                                     Measure* m = (Measure*)mb;
                                     m->cmdRemoveStaves(sidx, eidx);
@@ -755,7 +786,7 @@ void MuseScore::editInstrList()
       for (int i = 0; i < n; ++i) {
             Staff* staff = cs->staff(i);
             if (staff->barLineSpan() > (n - i))
-                  cs->undoChangeBarLineSpan(staff, n - i);
+                  cs->undoChangeBarLineSpan(staff, n - i, 0, cs->staff(n-1)->lines()-1);
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {
@@ -767,7 +798,7 @@ void MuseScore::editInstrList()
       // there should be at least one measure
       //
       if (cs->measures()->size() == 0)
-            cs->insertMeasure(MEASURE, 0, false);
+            cs->insertMeasure(Element::MEASURE, 0, false);
 
       cs->setLayoutAll(true);
       cs->endCmd();

@@ -21,9 +21,12 @@
 set(CMAKE_C_FLAGS "-DNEWBUFFER -DPMNULL")
 
 if (APPLE)
+  file(GLOB_RECURSE INCS "*.h")
+
   add_library (
     portmidi STATIC
-        pm_common/pmutil.c
+	${INCS}
+	pm_common/pmutil.c
 	pm_common/portmidi.c
 	pm_mac/finddefault.c
 	pm_mac/pmmac.c
@@ -33,7 +36,6 @@ if (APPLE)
 	porttime/ptmacosx_mach.c
 	porttime/ptmacosx_cf.c
   )
-  include_directories(/Developer/Headers/FlatCarbon)
 else (APPLE)
   add_library (
     portmidi STATIC

@@ -84,6 +84,13 @@ void InstrumentWizard::buildTemplateList()
 void InstrumentWizard::init()
       {
       partiturList->clear();
+      instrumentList->clearSelection();
+      addButton->setEnabled(false);
+      removeButton->setEnabled(false);
+      upButton->setEnabled(false);
+      downButton->setEnabled(false);
+      linkedButton->setEnabled(false);
+      belowButton->setEnabled(false);
       emit completeChanged(false);
       }
 
@@ -105,13 +112,45 @@ void InstrumentWizard::on_instrumentList_itemSelectionChanged()
 void InstrumentWizard::on_partiturList_itemSelectionChanged()
       {
       QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
-      if (wi.isEmpty())
+      if (wi.isEmpty()) {
+            removeButton->setEnabled(false);
+            upButton->setEnabled(false);
+            downButton->setEnabled(false);
+            linkedButton->setEnabled(false);
+            belowButton->setEnabled(false);
             return;
+            }
       QTreeWidgetItem* item = wi.front();
       bool flag = item != 0;
-      removeButton->setEnabled(flag);
-      upButton->setEnabled(flag);
-      downButton->setEnabled(flag);
+
+      int count = 0; // item can be hidden
+      QTreeWidgetItem* it = 0;
+      QList<QTreeWidgetItem*> witems;
+      if(item->type() == PART_LIST_ITEM) {
+            for (int idx = 0; (it = partiturList->topLevelItem(idx)); ++idx) {
+                  if (!it->isHidden()) {
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+      else {
+            for (int idx = 0; (it = item->parent()->child(idx)); ++idx) {
+                  if (!it->isHidden()){
+                        count++;
+                        witems.append(it);
+                        }
+                  }
+            }
+
+      bool onlyOne = (count == 1);
+      bool onlyOneStaff = ((item->type() == STAFF_LIST_ITEM) && onlyOne);
+      bool first = (witems.first() == item);
+      bool last = (witems.last() == item);
+
+      removeButton->setEnabled(flag && !onlyOneStaff);
+      upButton->setEnabled(flag && !onlyOne && !first);
+      downButton->setEnabled(flag && !onlyOne && !last);
       linkedButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       belowButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       }
@@ -186,7 +225,7 @@ void InstrumentWizard::on_removeButton_clicked()
                   }
             else {
                   ((StaffListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       else {
@@ -194,7 +233,7 @@ void InstrumentWizard::on_removeButton_clicked()
                   delete item;
             else {
                   ((PartListItem*)item)->op = ITEM_DELETE;
-                  partiturList->setItemHidden(item, true);
+                  item->setHidden(true);
                   }
             }
       partiturList->clearSelection();
@@ -395,7 +434,7 @@ void InstrumentWizard::createInstruments(Score* cs)
                   dst.push_back(sli->staff);
                   }
             }
-#if 1
+
       //
       // check for bar lines
       //
@@ -414,7 +453,19 @@ void InstrumentWizard::createInstruments(Score* cs)
 
             staffIdx = nstaffIdx;
             }
-#endif
+
+      //
+      // remove instrument names if only one part
+      //
+      if (cs->parts().size() == 1) {
+            Part* part = cs->parts().front();
+            if (part->instrList()->size() == 1) {
+                  Instrument& instrument = part->instrList()->instrument(0);
+                  instrument.setShortName(QTextDocumentFragment());
+                  instrument.setLongName(QTextDocumentFragment());
+                  }
+            }
+
       cs->setLayoutAll(true);
       }
 

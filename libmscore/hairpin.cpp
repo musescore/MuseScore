@@ -24,17 +24,6 @@
 #include "mscore.h"
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-static int defaultSubtype = 0;
-
-Property<Hairpin> Hairpin::propertyList[] = {
-      { P_SUBTYPE,  &Hairpin::pSubtype, &defaultSubtype },
-      };
-static const int PROPERTIES = sizeof(Hairpin::propertyList)/sizeof(*Hairpin::propertyList);
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -58,13 +47,13 @@ void HairpinSegment::layout()
             switch (subtype()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_BEGIN:
-                        l1 = QLineF(.0, .0, len, h1);
-                        l2 = QLineF(.0, .0, len, - h1);
+                        l1.setLine(.0, .0, len, h1);
+                        l2.setLine(.0, .0, len, - h1);
                         break;
                   case SEGMENT_MIDDLE:
                   case SEGMENT_END:
-                        l1 = QLineF(.0,  h2, len, h1);
-                        l2 = QLineF(.0, -h2, len, - h1);
+                        l1.setLine(.0,  h2, len, h1);
+                        l2.setLine(.0, -h2, len, - h1);
                         break;
                   }
             }
@@ -73,13 +62,13 @@ void HairpinSegment::layout()
             switch(subtype()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_END:
-                        l1 = QLineF(.0,  h1, len, 0.0);
-                        l2 = QLineF(.0, -h1, len, 0.0);
+                        l1.setLine(.0,  h1, len, 0.0);
+                        l2.setLine(.0, -h1, len, 0.0);
                         break;
                   case SEGMENT_BEGIN:
                   case SEGMENT_MIDDLE:
-                        l1 = QLineF(.0,  h1, len, + h2);
-                        l2 = QLineF(.0, -h1, len, - h2);
+                        l1.setLine(.0,  h1, len, + h2);
+                        l2.setLine(.0, -h1, len, - h2);
                         break;
                   }
             }
@@ -99,8 +88,8 @@ void HairpinSegment::draw(QPainter* painter) const
       {
       QPen pen(curColor(), point(score()->styleS(ST_hairpinWidth)));
       painter->setPen(pen);
-      painter->drawLine(QLineF(l1.x1(), l1.y1(), l1.x2(), l1.y2()));
-      painter->drawLine(QLineF(l2.x1(), l2.y1(), l2.x2(), l2.y2()));
+      painter->drawLine(l1);
+      painter->drawLine(l2);
       }
 
 //---------------------------------------------------------
@@ -110,7 +99,7 @@ void HairpinSegment::draw(QPainter* painter) const
 Hairpin::Hairpin(Score* s)
    : SLine(s)
       {
-      _subtype    = 0;
+      _subtype    = CRESCENDO;
       _veloChange = 10;
       _dynType    = DYNAMIC_PART;
       setYoff(s->styleS(ST_hairpinY).val());
@@ -165,7 +154,7 @@ void Hairpin::read(const QDomElement& de)
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "subtype")
-                  _subtype = val.toInt();
+                  _subtype = HairpinType(val.toInt());
             else if (tag == "veloChange")
                   _veloChange = val.toInt();
             else if (e.tagName() == "dynType")
@@ -176,60 +165,70 @@ void Hairpin::read(const QDomElement& de)
       }
 
 //---------------------------------------------------------
-//   property
+//   undoSetSubtype
 //---------------------------------------------------------
 
-Property<Hairpin>* Hairpin::property(P_ID id) const
+void Hairpin::undoSetSubtype(HairpinType val)
       {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
+      score()->undoChangeProperty(this, P_HAIRPIN_TYPE, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetVeloChange
+//---------------------------------------------------------
+
+void Hairpin::undoSetVeloChange(int val)
+      {
+      score()->undoChangeProperty(this, P_VELO_CHANGE, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetDynType
+//---------------------------------------------------------
+
+void Hairpin::undoSetDynType(DynamicType val)
+      {
+      score()->undoChangeProperty(this, P_DYNAMIC_TYPE, val);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Hairpin::getProperty(P_ID propertyId) const
+QVariant Hairpin::getProperty(P_ID id) const
       {
-      Property<Hairpin>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Hairpin*)this).*(p->data))());
-      return Element::getProperty(propertyId);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Hairpin::setProperty(P_ID propertyId, const QVariant& v)
-      {
-      Property<Hairpin>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            return true;
+      switch(id) {
+            case P_HAIRPIN_TYPE:
+                  return _subtype;
+            case P_VELO_CHANGE:
+                  return _veloChange;
+            case P_DYNAMIC_TYPE:
+                  return _dynType;
+            default:
+                  return SLine::getProperty(id);
             }
-      return Element::setProperty(propertyId, v);
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Hairpin::setProperty(const QString& name, const QDomElement& e)
+bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            P_ID id = propertyList[i].id;
-            if (propertyName(id) == name) {
-                  QVariant v = ::getProperty(id, e);
-                  setVariant(id, ((*this).*(propertyList[i].data))(), v);
+      switch(id) {
+            case P_HAIRPIN_TYPE:
+                  _subtype = HairpinType(v.toInt());
                   setGenerated(false);
-                  return true;
-                  }
+                  break;
+            case P_VELO_CHANGE:
+                  _veloChange = v.toInt();
+                  break;
+            case P_DYNAMIC_TYPE:
+                  _dynType = DynamicType(v.toInt());
+                  break;
+            default:
+                  return SLine::setProperty(id, v);
             }
-      return Element::setProperty(name, e);
+      return true;
       }
 

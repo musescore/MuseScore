@@ -25,7 +25,7 @@
 #include "globals.h"
 #include "libmscore/mscore.h"
 
-struct InstrumentTemplate;
+class InstrumentTemplate;
 class Instrument;
 class Part;
 class Staff;

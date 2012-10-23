@@ -113,6 +113,8 @@ ChordRest::~ChordRest()
             delete a;
       foreach(Lyrics* l, _lyricsList)
             delete l;
+      if(_tabDur)
+            delete _tabDur;
       }
 
 //---------------------------------------------------------
@@ -166,8 +168,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   }
             xml.tag("BeamMode", s);
             }
-      if (_small)
-            xml.tag("small", _small);
+      writeProperty(xml, P_SMALL);
       if (durationType().dots())
             xml.tag("dots", durationType().dots());
       if (_staffMove)
@@ -764,7 +765,7 @@ Element* ChordRest::drop(const DropData& data)
 
             case DYNAMIC:
             case FRET_DIAGRAM:
-            case SYMBOL:            
+            case SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -859,21 +860,6 @@ void ChordRest::setBeam(Beam* b)
       }
 
 //---------------------------------------------------------
-//   toDefault
-//---------------------------------------------------------
-
-void ChordRest::toDefault()
-      {
-      score()->undoChangeUserOffset(this, QPointF());
-      if (type() == CHORD) {
-            score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
-            score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
-            }
-      else
-            score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_NO));
-      }
-
-//---------------------------------------------------------
 //   setDurationType
 //---------------------------------------------------------
 
@@ -912,8 +898,10 @@ void ChordRest::setTrack(int val)
             }
       if (_beam)
             _beam->setTrack(val);
-      foreach(Lyrics* l, _lyricsList)
-            l->setTrack(val);
+      foreach(Lyrics* l, _lyricsList) {
+            if (l)
+                  l->setTrack(val);
+            }
       if (tuplet())
             tuplet()->setTrack(val);
       }
@@ -1031,7 +1019,7 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_SMALL:     return QVariant(small());
             case P_BEAM_MODE: return int(beamMode());
-            default:          return Element::getProperty(propertyId);
+            default:          return DurationElement::getProperty(propertyId);
             }
       }
 
@@ -1044,9 +1032,23 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_SMALL:     setSmall(v.toBool()); break;
             case P_BEAM_MODE: setBeamMode(BeamMode(v.toInt())); break;
-            default:          return Element::setProperty(propertyId, v); break;
+            default:          return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant ChordRest::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_SMALL:     return false;
+            case P_BEAM_MODE: return BEAM_AUTO;
+            default:          return DurationElement::propertyDefault(propertyId);
+            }
+      score()->setLayoutAll(true);
       }
 

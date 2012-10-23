@@ -284,6 +284,11 @@ void WebPageDockWidget::addToJavascript()
       frame->addToJavaScriptWindowObject("mscore", mscore);
       }
 
+QObject* WebPageDockWidget::currentScore() {
+  QObject* score = mscore->currentScore();
+  return score;
+}
+
 //---------------------------------------------------------
 //   load
 //---------------------------------------------------------

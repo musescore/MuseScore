@@ -69,7 +69,10 @@ void MeasureProperties::setMeasure(Measure* _m)
       m = _m;
       setWindowTitle(QString(tr("MuseScore: Measure Properties for Measure %1")).arg(m->no()+1));
       actualZ->setValue(m->len().numerator());
-      actualN->setValue(m->len().denominator());
+      int index = actualN->findText(QString::number(m->len().denominator()));
+      if (index == -1)
+            index = 2;
+      actualN->setCurrentIndex(index);
       nominalZ->setNum(m->timesig().numerator());
       nominalN->setNum(m->timesig().denominator());
 
@@ -157,7 +160,7 @@ bool MeasureProperties::slashStyle(int staffIdx)
 
 Fraction MeasureProperties::len() const
       {
-      return Fraction(actualZ->value(), actualN->value());
+      return Fraction(actualZ->value(), 1 << actualN->currentIndex());
       }
 
 //---------------------------------------------------------

@@ -28,6 +28,7 @@
 #include "cleflist.h"
 #include "timesig.h"
 #include "instrtemplate.h"
+#include "barline.h"
 
 //---------------------------------------------------------
 //   idx
@@ -66,10 +67,8 @@ int Staff::bracketSpan(int idx) const
 
 void Staff::setBracket(int idx, BracketType val)
       {
-      if (idx >= _brackets.size()) {
-            for (int i = _brackets.size(); i <= idx; ++i)
-                  _brackets.append(BracketItem());
-            }
+      for (int i = _brackets.size(); i <= idx; ++i)
+            _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
       while (!_brackets.isEmpty() && (_brackets.last()._bracket == NO_BRACKET))
             _brackets.removeLast();
@@ -81,10 +80,10 @@ void Staff::setBracket(int idx, BracketType val)
 
 void Staff::setBracketSpan(int idx, int val)
       {
-      if (idx >= _brackets.size()) {
-            for (int i = _brackets.size(); i <= idx; ++i)
-                  _brackets.append(BracketItem());
-            }
+      Q_ASSERT(idx >= 0);
+      Q_ASSERT(val >= 0);
+      for (int i = _brackets.size(); i <= idx; ++i)
+            _brackets.append(BracketItem());
       _brackets[idx]._bracketSpan = val;
       }
 
@@ -168,6 +167,8 @@ Staff::Staff(Score* s)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -185,6 +186,8 @@ Staff::Staff(Score* s, Part* p, int rs)
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
+      _barLineFrom    = 0;
+      _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
@@ -295,8 +298,11 @@ static bool clefsGreater(const Clef* a, const Clef* b)
 
 void Staff::addClef(Clef* clef)
       {
-      if (clef->generated())
+      if (clef->generated()) {
+            if (clef->segment()->tick() == 0)
+                  _initialClef._concertClef = clef->clefType();
             return;
+            }
       if (clef->segment()->measure() == 0)
             abort();
       int tick = 0;
@@ -381,8 +387,14 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
-      if (_barLineSpan != 1)
-            xml.tag("barLineSpan", _barLineSpan);
+      // for economy and consistency, only output "from" and "to" attributes if different from default
+      int defaultLineTo = _barLineSpan == 0 ? _barLineTo : (score()->staff(idx+_barLineSpan-1)->lines() - 1) * 2;
+      if (_barLineSpan != 1 || _barLineFrom != 0 || _barLineTo != defaultLineTo) {
+            if(_barLineFrom != 0 || _barLineTo != defaultLineTo)
+                  xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
+            else
+                  xml.tag("barLineSpan", _barLineSpan);
+            }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
       xml.etag();
@@ -402,16 +414,10 @@ void Staff::read(const QDomElement& de)
                   if (st)
                         _staffType = st;
                   }
-            else if (tag == "lines")
-                  ;                       // obsolete: setLines(v);
             else if (tag == "small")
                   setSmall(val.toInt());
             else if (tag == "invisible")
                   setInvisible(val.toInt());
-            else if (tag == "slashStyle")
-                  ;                       // obsolete: setSlashStyle(v);
-            else if (tag == "cleflist")
-                  _clefList.read(e, _score);
             else if (tag == "keylist")
                   _keymap->read(e, _score);
             else if (tag == "bracket") {
@@ -420,8 +426,16 @@ void Staff::read(const QDomElement& de)
                   b._bracketSpan = e.attribute("span", "0").toInt();
                   _brackets.append(b);
                   }
-            else if (tag == "barLineSpan")
+            else if (tag == "barLineSpan") {
                   _barLineSpan = val.toInt();
+                  _barLineFrom = e.attribute("from", "0").toInt();
+// WARNING: following statement assume staff type is correctly set
+                  // if no bar line or single staff span, set _barLineTo to this staff height
+                  // if span to another staff (yet to be read), set to unknown
+                  // (Score::read() will retrieve the correct height of the target staff)
+                  int defaultLineTo = _barLineSpan <= 1 ? (lines() - 1) * 2 : UNKNOWN_BARLINE_TO;
+                  _barLineTo   = e.attribute("to", QString::number(defaultLineTo)).toInt();
+                  }
             else if (tag == "distOffset")
                   _userDist = e.text().toDouble() * spatium();
             else if (tag == "linkedTo") {
@@ -430,7 +444,12 @@ void Staff::read(const QDomElement& de)
                   // if this is an excerpt, link staff to parentScore()
                   //
                   if (score()->parentScore()) {
-                        linkTo(score()->parentScore()->staff(v));
+                        Staff* st = score()->parentScore()->staff(v);
+                        if (st)
+                              linkTo(st);
+                        else {
+                              qDebug("staff %d not found in parent", v);
+                              }
                         }
                   else {
                         int idx = score()->staffIdx(this);
@@ -538,6 +557,15 @@ void Staff::setLines(int val)
       }
 
 //---------------------------------------------------------
+//   line distance
+//---------------------------------------------------------
+
+qreal Staff::lineDistance() const
+      {
+      return _staffType->lineDistance().val();
+      }
+
+//---------------------------------------------------------
 //   slashStyle
 //---------------------------------------------------------
 
@@ -554,26 +582,6 @@ void Staff::setSlashStyle(bool val)
       {
       _staffType->setSlashStyle(val);
       }
-
-//---------------------------------------------------------
-//   useTablature
-//---------------------------------------------------------
-
-bool Staff::useTablature() const
-      {
-      return _staffType->group() == TAB_STAFF;
-      }
-
-//---------------------------------------------------------
-//   setUseTablature
-//---------------------------------------------------------
-
-#if 0
-void Staff::setUseTablature(bool val)
-      {
-      _staffType = score()->staffTypes()[val ? TAB_STAFF_TYPE : PITCHED_STAFF_TYPE];
-      }
-#endif
 
 //---------------------------------------------------------
 //   linkTo
@@ -652,7 +660,6 @@ void Staff::setStaffType(StaffType* st)
       StaffGroup csg = clefTable[ct].staffGroup;
 
       if (_staffType->group() != csg) {
-//            _clefList->clear();
             switch(_staffType->group()) {
                   case TAB_STAFF:        ct = ClefType(score()->styleI(ST_tabClef)); break;
                   case PITCHED_STAFF:    ct = CLEF_G; break;      // TODO: use preferred clef for instrument
@@ -695,15 +702,6 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
                   st = score()->staffTypes().at(PITCHED_STAFF_TYPE);
             setStaffType(st);
             setLines(t->staffLines[cidx]);            // use number of lines from instr. template
-
-/* NO: setLines() already takes care of that
-            // if instr. template num. of lines doesn't match staff type num. of lines, create new staff type
-            if (t->staffLines[cidx] != st->lines()) {
-                  st = st->clone();
-                  st->setLines(t->staffLines[cidx]);
-                  score()->staffTypes().append(st);
-                  }
-*/
             }
       }
 

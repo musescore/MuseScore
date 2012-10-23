@@ -26,7 +26,7 @@
 #include "libmscore/instrument.h"
 
 class Staff;
-struct InstrumentTemplate;
+class InstrumentTemplate;
 
 //---------------------------------------------------------
 //   EditStaff
@@ -52,7 +52,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void editDrumsetClicked();
       void editStringDataClicked();
       void showInstrumentDialog();
-      void showEditStaffType();
       void editShortNameClicked();
       void editLongNameClicked();
       void minPitchAClicked();

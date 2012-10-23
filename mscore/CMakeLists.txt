@@ -60,12 +60,15 @@ QT4_WRAP_UI (ui_headers
       inspector_segment.ui inspector_beam.ui inspector_note.ui
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
+      inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
+      box.ui
       ${SCRIPT_UI}
       )
 
 if (OMR)
       set(OMR_MOCS omrpanel.h)
 endif (OMR)
+
 
 QT4_WRAP_CPP (mocs
       scoreview.h editinstrument.h editstyle.h edittempo.h instrdialog.h debugger.h
@@ -89,7 +92,8 @@ QT4_WRAP_CPP (mocs
       editstringdata.h editraster.h mediadialog.h chordeditor.h chordview.h album.h layer.h
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
-      inspectorLasso.h
+      inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
+      inspectorHairpin.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -144,6 +148,12 @@ if (OMR)
       set(OMR_FILES omrpanel.cpp)
 endif (OMR)
 
+if (APPLE)
+	file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+	set(INCS "")
+endif (APPLE)
+
 add_executable ( ${ExecutableName}
       ${qrc_files}
       ${ui_headers}
@@ -151,6 +161,7 @@ add_executable ( ${ExecutableName}
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${resource_file}
+      ${INCS}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
       edittempo.cpp exportxml.cpp icons.cpp importbww.cpp importxml.cpp
@@ -185,6 +196,8 @@ add_executable ( ${ExecutableName}
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
+      editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
+      inspectorHairpin.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
@@ -248,7 +261,7 @@ if (MINGW)
       )
 
    if (HAS_AUDIOFILE)
-      target_link_libraries(mscore libsndfile-1)
+      target_link_libraries(mscore sndfile-1)
    endif (HAS_AUDIOFILE)
 
    if (OGGVORBIS)
@@ -386,10 +399,7 @@ if (APPLE)
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerifMscore.ttf
       ../fonts/FreeSans.ttf
-      ../fonts/mscore_tab_baroque.ttf
-      ../fonts/mscore_tab_modern.ttf
-      ../fonts/mscore_tab_renaiss.ttf
-      ../fonts/mscore_tab_renaiss2.ttf
+      ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )

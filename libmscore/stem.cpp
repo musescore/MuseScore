@@ -86,7 +86,13 @@ void Stem::layout()
       QPointF p1(0.0, 0.0);
       QPointF p2(0.0, l);
       if (st) {
-            if (!st->useTablature() && chord()) {
+            // if TAB, use simplified positioning
+            if (st->isTabStaff()) {
+                  p1.rx() = -lw5;
+                  p2.rx() = -lw5;
+                  }
+            // for any other staff type, use standard positioning
+            else if (chord()) {
                   // adjust P1 for note head
                   Chord* c = chord();
                   if (c->up()) {
@@ -101,10 +107,6 @@ void Stem::layout()
                         p1.rx() = lw5;
                         p2.rx() = lw5;
                         }
-                  }
-            else if (st->useTablature()) {
-                  p1.rx() = -lw5;
-                  p2.rx() = -lw5;
                   }
             }
       line.setP1(p1);
@@ -145,7 +147,7 @@ void Stem::draw(QPainter* painter) const
       {
       bool useTab = false;
       Staff* st = staff();
-      if (st && st->useTablature()) {     // stems used in palette do not have a staff
+      if (st && st->isTabStaff()) {     // stems used in palette do not have a staff
             if (st->staffType()->slashStyle())
                   return;
             useTab = true;
@@ -154,13 +156,48 @@ void Stem::draw(QPainter* painter) const
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
-      // NOT THE BEST PLACE FOR THIS?
-      // with tablatures, dots are not drawn near 'notes', but near stems
-      // TODO: adjust bounding rectangle in layout()
       if (useTab) {
+            // TODO: adjust bounding rectangle in layout() for dots and for slash
+            StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st->staffType());
+            qreal sp = spatium();
+
+            // slashed half note stem
+            if(chord() && chord()->durationType().type() == TDuration::V_HALF
+                        && stt->minimStyle() == TAB_MINIM_SLASHED) {
+                  qreal wdt   = sp * STAFFTYPE_TAB_SLASH_WIDTH;
+                  qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
+                  qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
+                  qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+                  QPainterPath path = QPainterPath();
+
+                  qreal y   = stt->stemsDown() ?
+                               _len - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp :
+                              -_len + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp;
+                  int lines = 2;
+                  for (int i = 0; i < lines; ++i) {
+                        path.moveTo( wdt*0.5-lw, y);        // top-right corner
+                        path.lineTo( wdt*0.5-lw, y+thk);    // bottom-right corner
+                        path.lineTo(-wdt*0.5,    y+thk+sln);// bottom-left corner
+                        path.lineTo(-wdt*0.5,    y+sln);    // top-left corner
+                        path.closeSubpath();
+                        y += displ;
+                        }
+//                  setbbox(path.boundingRect());
+                  painter->setBrush(QBrush(curColor()));
+                  painter->setPen(Qt::NoPen);
+                  painter->drawPath(path);
+                  }
+
+            // dots
+            // NOT THE BEST PLACE FOR THIS?
+            // with tablatures, dots are not drawn near 'notes', but near stems
             int nDots = chord()->dots();
-            if (nDots > 0)
-                  symbols[score()->symIdx()][dotSym].draw(painter, magS(), QPointF(spatium(), stemLen()), nDots);
+            if (nDots > 0) {
+                  qreal y = stemLen() - (stt->stemsDown() ?
+                              (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
+                  symbols[score()->symIdx()][dotSym].draw(painter, magS(),
+                              QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
+                  }
             }
       }
 
@@ -191,6 +228,8 @@ void Stem::read(const QDomElement& de)
             else if (!Element::readProperties(e))
                   domError(e);
             }
+      if (_userLen < 0.0)
+            _userLen = -_userLen;
       }
 
 //---------------------------------------------------------

@@ -35,6 +35,12 @@
     <metaTag name="workTitle">testpart1</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -672,6 +678,7 @@ p, li { white-space: pre-wrap; }
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
+          <lid>81</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -711,6 +718,10 @@ p, li { white-space: pre-wrap; }
       <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -1080,6 +1091,10 @@ p, li { white-space: pre-wrap; }
       <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -1412,6 +1427,7 @@ p, li { white-space: pre-wrap; }
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <lid>81</lid>
             </BarLine>
           </Measure>
         </Staff>

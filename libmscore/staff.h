@@ -24,9 +24,10 @@
 #include "velo.h"
 #include "pitch.h"
 #include "cleflist.h"
+#include "stafftype.h"
 
 class Instrument;
-struct InstrumentTemplate;
+class InstrumentTemplate;
 class Xml;
 class Part;
 class Score;
@@ -85,22 +86,23 @@ class Staff : public QObject {
 
       Score* _score;
       Part* _part;
-      int _rstaff;            ///< Index in Part.
+      int _rstaff;                  ///< Index in Part.
 
-      ClefList _clefList;           // for backward compatibility
       ClefTypeList _initialClef;    // used by new score wizard
-
       QList<Clef*> clefs;
+
       QList<TimeSig*> timesigs;
 
       KeyList* _keymap;
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
+      int _barLineFrom;       ///< line of start staff to draw the barline from (0 = staff top line, ...)
+      int _barLineTo;         ///< line of end staff to draw the bar line to (0= staff top line, ...)
       bool _small;
       bool _invisible;
-      qreal _userDist;        ///< user edited extra distance
-
       bool _updateKeymap;
+
+      qreal _userDist;        ///< user edited extra distance
 
       StaffType* _staffType;
 
@@ -123,6 +125,7 @@ class Staff : public QObject {
       int idx() const;
       void setRstaff(int n)          { _rstaff = n;    }
       void read(const QDomElement&);
+      void read114(const QDomElement&, ClefList&);
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
@@ -165,8 +168,13 @@ class Staff : public QObject {
       void setSlashStyle(bool val);
       int lines() const;
       void setLines(int);
+      qreal lineDistance() const;
       int barLineSpan() const        { return _barLineSpan; }
+      int barLineFrom() const        { return _barLineFrom; }
+      int barLineTo() const          { return _barLineTo;   }
       void setBarLineSpan(int val)   { _barLineSpan = val;  }
+      void setBarLineFrom(int val)   { _barLineFrom = val;  }
+      void setBarLineTo(int val)     { _barLineTo   = val;  }
       Score* score() const           { return _score;       }
       qreal mag() const;
       qreal height() const;
@@ -176,8 +184,10 @@ class Staff : public QObject {
 
       StaffType* staffType() const     { return _staffType;      }
       void setStaffType(StaffType* st);
+      StaffGroup staffGroup() const    { return _staffType->group(); }
+      bool isTabStaff() const          { return staffGroup() == TAB_STAFF; }
+      bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF; }
 
-      bool useTablature() const;
       bool updateKeymap() const        { return _updateKeymap;   }
       void setUpdateKeymap(bool v)     { _updateKeymap = v;      }
       VeloList& velocities()           { return _velocities;     }
@@ -187,7 +197,6 @@ class Staff : public QObject {
       void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }
       void linkTo(Staff* staff);
       bool primaryStaff() const;
-      ClefList* clefList()          { return &_clefList; }   // for backward compatibility
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;  }
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);

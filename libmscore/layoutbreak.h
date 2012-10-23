@@ -43,9 +43,6 @@ class LayoutBreak : public Element {
       void layout0();
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
 
-      void* pSubtype() { return  &_subtype; }
-      void* pPause()   { return  &_pause;   }
-
    public:
       LayoutBreak(Score*);
       virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
@@ -68,11 +65,7 @@ class LayoutBreak : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual bool setProperty(const QString&, const QDomElement&);
-      Property<LayoutBreak>* property(P_ID id) const;
       virtual QVariant propertyDefault(P_ID) const;
-
-      static Property<LayoutBreak> propertyList[];
       };
 
 #endif

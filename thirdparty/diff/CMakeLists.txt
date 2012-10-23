@@ -20,10 +20,17 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
+if (APPLE)
+        file(GLOB_RECURSE INCS "*.h")
+else (APPLE)
+        set(INCS "")
+endif (APPLE)
+
 add_library(diff_match_patch STATIC
    diff_match_patch.cpp
    ${PROJECT_BINARY_DIR}/all.h
    ${PCH}
+   ${INCS}
    )
 
 set_target_properties (

@@ -219,46 +219,6 @@ void KeyList::read(const QDomElement& de, Score* cs)
             }
       }
 
-#if 0
-//---------------------------------------------------------
-//   insert
-//---------------------------------------------------------
-
-void KeyList::removeTime(int tick, int len)
-      {
-      KeyList tmp;
-      for (ciKeyList i = begin(); i != end(); ++i) {
-            if ((i->first >= tick) && (tick != 0)) {
-                  if (i->first >= tick + len)
-                        tmp[i->first - len] = i->second;
-                  else
-                        qDebug("remove key event\n");
-                  }
-            else
-                  tmp[i->first] = i->second;
-            }
-      clear();
-      insert(tmp.begin(), tmp.end());
-      }
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
-
-void KeyList::insertTime(int tick, int len)
-      {
-      KeyList tmp;
-      for (ciKeyList i = begin(); i != end(); ++i) {
-            if ((i->first >= tick) && (tick != 0))
-                  tmp[i->first + len] = i->second;
-            else
-                  tmp[i->first] = i->second;
-            }
-      clear();
-      insert(tmp.begin(), tmp.end());
-      }
-#endif
-
 //---------------------------------------------------------
 //   transposeKey
 //---------------------------------------------------------
@@ -267,7 +227,7 @@ int transposeKey(int key, const Interval& interval)
       {
                           // Cb  Gb Db Ab   Eb  Bb   F  C   G   D   A   E   B   F#  C#
                           // -7  -6 -5 -4   -3  -2  -1  0   1   2   3   4   5   6   7
-      static int t1[] = {     7,  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 21 };
+      static int t1[] = {     7,  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
       static int t2[] = {    -7, -6,-5, -4, -3, -2, -1, 0,  1,  2,  3,  4,  5,  6,  7 };
 
       int tpc = t1[key + 7];

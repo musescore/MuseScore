@@ -70,6 +70,7 @@ class InstrumentChange;
 class Box;
 class Accidental;
 class Spanner;
+class BarLine;
 
 // #define DEBUG_UNDO
 
@@ -385,23 +386,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   InsertTime
-//---------------------------------------------------------
-
-class InsertTime : public UndoCommand {
-      Score* score;
-      int tick;
-      int len;
-      void flip();
-
-   public:
-      InsertTime(Score*, int tick, int len);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("InsertTime");
-      };
-
-//---------------------------------------------------------
 //   ChangeRepeatFlags
 //---------------------------------------------------------
 
@@ -504,13 +488,33 @@ class ChangeEndBarLineType : public UndoCommand {
 class ChangeBarLineSpan : public UndoCommand {
       Staff* staff;
       int span;
+      int spanFrom;
+      int spanTo;
       void flip();
 
    public:
-      ChangeBarLineSpan(Staff*, int span);
+      ChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
-      UNDO_NAME("ChangeBarLineSpan");
+      UNDO_NAME("ChangeBarLineSpan")
+      };
+
+//---------------------------------------------------------
+//   ChangeSingleBarLineSpan
+//---------------------------------------------------------
+
+class ChangeSingleBarLineSpan : public UndoCommand {
+      BarLine* barLine;
+      int span;
+      int spanFrom;
+      int spanTo;
+      void flip();
+
+   public:
+      ChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
+      virtual void undo() { flip(); }
+      virtual void redo() { flip(); }
+      UNDO_NAME("ChangeSingleBarLineSpan")
       };
 
 //---------------------------------------------------------
@@ -542,11 +546,11 @@ class ChangeSlurOffsets : public UndoCommand {
 class ChangeDynamic : public UndoCommand {
       Dynamic* dynamic;
       int velocity;
-      DynamicType dynType;
+      Element::DynamicType dynType;
       void flip();
 
    public:
-      ChangeDynamic(Dynamic*, int velocity, DynamicType dt);
+      ChangeDynamic(Dynamic*, int velocity, Element::DynamicType dt);
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeDynamic");
@@ -1100,13 +1104,13 @@ class ChangeImage : public UndoCommand {
 class ChangeHairpin : public UndoCommand {
       Hairpin* hairpin;
       int veloChange;
-      DynamicType dynType;
+      Element::DynamicType dynType;
       bool diagonal;
 
       void flip();
 
    public:
-      ChangeHairpin(Hairpin* h, int c, DynamicType t, bool dg)
+      ChangeHairpin(Hairpin* h, int c, Element::DynamicType t, bool dg)
          : hairpin(h), veloChange(c), dynType(t), diagonal(dg) {}
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
@@ -1226,7 +1230,7 @@ class ChangeInstrument : public UndoCommand {
       UNDO_NAME("ChangeInstrument");
       };
 
-extern void updateNoteLines(Segment* segment, int track);
+extern void updateNoteLines(Segment*, int track);
 
 //---------------------------------------------------------
 //   ChangeBoxProperties
@@ -1373,6 +1377,7 @@ class ChangeProperty : public UndoCommand {
          : element(e), id(i), property(v) {}
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
+      P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty");
       };
 

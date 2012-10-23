@@ -60,7 +60,7 @@ void Score::updateChannel()
             return;
       for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             foreach(const Element* e, s->annotations()) {
-                  if (e->type() != STAFF_TEXT)
+                  if (e->type() != Element::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
                   for (int voice = 0; voice < VOICES; ++voice) {
@@ -83,7 +83,7 @@ void Score::updateChannel()
                         if (!s->element(track))
                               continue;
                         Element* e = s->element(track);
-                        if (e->type() != CHORD)
+                        if (e->type() != Element::CHORD)
                               continue;
                         Chord* c = static_cast<Chord*>(e);
                         int channel = st->channel(c->tick(), c->voice());
@@ -127,11 +127,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       if (note->hidden() || note->tieBack())       // do not play overlapping notes
             return;
 
-      int pitch   = note->ppitch();
-      int tick1   = note->chord()->tick() + tickOffset;
-      int tick2   = tick1 + note->playTicks();
-      int onTime  = tick1 + note->onTimeOffset() + note->onTimeUserOffset();
-      int offTime = tick2 + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+      int pitch = note->ppitch();
+      int tick1 = note->chord()->tick() + tickOffset;
 
       if (!note->playEvents().isEmpty()) {
             int ticks = note->playTicks();
@@ -147,7 +144,10 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   }
             }
       else {
-            offTime = tick1 + note->playTicks() * gateTime / 100 + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+            int onTime  = tick1                     + note->onTimeOffset()  + note->onTimeUserOffset();
+            int offTime = tick1 + note->playTicks() + note->offTimeOffset() + note->offTimeUserOffset() - 1;
+
+            offTime    -= (offTime - onTime) * (100 - gateTime) / 100;
             if (offTime - onTime <= 0)
                   offTime = onTime + 1;
             playNote(events, note, channel, pitch, velo, onTime, offTime);
@@ -239,8 +239,8 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
 
       Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
-      int strack      = firstStaffIdx * VOICES;
-      int etrack      = nextStaffIdx * VOICES;
+      int strack = firstStaffIdx * VOICES;
+      int etrack = nextStaffIdx * VOICES;
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick();
@@ -251,11 +251,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         continue;
                         }
                   Element* cr = seg->element(track);
-                  if (cr && cr->type() == CHORD) {
+                  if (cr && cr->type() == Element::CHORD) {
                         Chord* chord = static_cast<Chord*>(cr);
                         Staff* staff = chord->staff();
                         int velocity = staff->velocities().velo(seg->tick());
-// printf("velo %d(%d) %d\n", tick/480, tick/480/4, velocity);
                         Instrument* instr = chord->staff()->part()->instr(tick);
                         //
                         // adjust velocity for instrument, channel and
@@ -264,6 +263,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         int channel = 0;  // note->subchannel();
                         instr->updateVelocity(&velocity, channel, "");
                         int gateTime = 100;
+                        instr->updateGateTime(&gateTime, channel, "");
                         foreach (Articulation* a, *chord->getArticulations()) {
                               instr->updateVelocity(&velocity, channel, a->subtypeName());
                               instr->updateGateTime(&gateTime, channel, a->subtypeName());
@@ -282,7 +282,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                     while (seg2 && !seg2->element(track))
                                           seg2 = seg2->next(st);
                                     ChordRest* cr = static_cast<ChordRest*>(seg2->element(track));
-                                    if (cr && cr->type() == CHORD) {
+                                    if (cr && cr->type() == Element::CHORD) {
                                           Chord* c2 = static_cast<Chord*>(cr);
                                           int tick = chord->tick() + tickOffset;
                                           for (int i = 0; i < repeats; ++i) {
@@ -323,7 +323,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             // int tick = s->tick();
             foreach(Element* e, s->annotations()) {
-                  if (e->type() != STAFF_TEXT
+                  if (e->type() != Element::STAFF_TEXT
                      || e->staffIdx() < firstStaffIdx
                      || e->staffIdx() >= nextStaffIdx)
                         continue;
@@ -378,7 +378,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
             foreach(Spanner* e, s->spannerFor()) {
                   if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
-                  if (e->type() == PEDAL) {
+                  if (e->type() == Element::PEDAL) {
                         Segment* s1 = static_cast<Segment*>(e->startElement());
                         Segment* s2 = static_cast<Segment*>(e->endElement());
                         Staff* staff = e->staff();
@@ -464,6 +464,7 @@ void Score::toEList(EventMap* events)
       _foundPlayPosAfterRepeats = false;
       updateChannel();
       updateVelo();
+
       foreach (Part* part, _parts)
             renderPart(events, part);
 
@@ -533,17 +534,17 @@ void Score::updateHairpin(Hairpin* h)
             endVelo = 1;
 
       switch(h->dynType()) {
-            case DYNAMIC_STAFF:
+            case Element::DYNAMIC_STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                   st->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
                   break;
-            case DYNAMIC_PART:
+            case Element::DYNAMIC_PART:
                   foreach(Staff* s, *st->part()->staves()) {
                         s->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                         s->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
                         }
                   break;
-            case DYNAMIC_SYSTEM:
+            case Element::DYNAMIC_SYSTEM:
                   foreach(Staff* s, _staves) {
                         s->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                         s->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
@@ -566,17 +567,17 @@ void Score::removeHairpin(Hairpin* h)
       int tick2 = es->tick() - 1;
 
       switch(h->dynType()) {
-            case DYNAMIC_STAFF:
+            case Element::DYNAMIC_STAFF:
                   st->velocities().remove(tick);
                   st->velocities().remove(tick2);
                   break;
-            case DYNAMIC_PART:
+            case Element::DYNAMIC_PART:
                   foreach(Staff* s, *st->part()->staves()) {
                         s->velocities().remove(tick);
                         s->velocities().remove(tick2);
                         }
                   break;
-            case DYNAMIC_SYSTEM:
+            case Element::DYNAMIC_SYSTEM:
                   foreach(Staff* s, _staves) {
                         s->velocities().remove(tick);
                         s->velocities().remove(tick2);
@@ -612,7 +613,7 @@ void Score::updateVelo()
                   foreach(const Element* e, s->annotations()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
-                        if (e->type() != DYNAMIC)
+                        if (e->type() != Element::DYNAMIC)
                               continue;
                         const Dynamic* d = static_cast<const Dynamic*>(e);
                         int v            = d->velocity();
@@ -620,11 +621,11 @@ void Score::updateVelo()
                               continue;
                         int dStaffIdx = d->staffIdx();
                         switch(d->dynType()) {
-                              case DYNAMIC_STAFF:
+                              case Element::DYNAMIC_STAFF:
                                     if (dStaffIdx == staffIdx)
                                           velo.setVelo(tick, v);
                                     break;
-                              case DYNAMIC_PART:
+                              case Element::DYNAMIC_PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
                                           for (int i = partStaff; i < partStaff+partStaves; ++i) {
                                                 staff(i)->velocities().setVelo(tick, v);
@@ -632,7 +633,7 @@ void Score::updateVelo()
                                                 }
                                           }
                                     break;
-                              case DYNAMIC_SYSTEM:
+                              case Element::DYNAMIC_SYSTEM:
                                     for (int i = 0; i < nstaves(); ++i)
                                           staff(i)->velocities().setVelo(tick, v);
                                     break;
@@ -641,7 +642,7 @@ void Score::updateVelo()
                   foreach(Element* e, s->spannerFor()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
-                        if (e->type() == HAIRPIN) {
+                        if (e->type() == Element::HAIRPIN) {
                               Hairpin* h = static_cast<Hairpin*>(e);
                               updateHairpin(h);
                               }

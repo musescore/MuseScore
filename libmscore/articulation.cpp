@@ -179,6 +179,7 @@ Articulation::Articulation(Score* s)
       _direction = MScore::AUTO;
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setSubtype(Articulation_Fermata);
       }
 
 //---------------------------------------------------------
@@ -364,8 +365,7 @@ void Articulation::draw(QPainter* painter) const
       SymId sym = _up ? articulationList[subtype()].upSym : articulationList[subtype()].downSym;
       int flags = articulationList[subtype()].flags;
       if (staff()) {
-            bool tab = staff()->useTablature();
-            if (tab) {
+            if (staff()->staffGroup() == TAB_STAFF) {
                   if (!(flags & ARTICULATION_SHOW_IN_TABLATURE))
                         return;
                   }

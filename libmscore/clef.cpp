@@ -65,9 +65,11 @@ Clef::Clef(Score* s)
 
       _showCourtesy               = true;
       _small                      = false;
-      _clefTypes._concertClef     = CLEF_INVALID;
-      _clefTypes._transposingClef = CLEF_INVALID;
-      curClefType                 = CLEF_INVALID;
+      _clefTypes._concertClef     = CLEF_G;
+      _clefTypes._transposingClef = CLEF_G;
+      curClefType                 = CLEF_G;
+      curLines                    = -1;
+      curLineDist                 = 1.0;
       }
 
 Clef::Clef(const Clef& c)
@@ -77,7 +79,9 @@ Clef::Clef(const Clef& c)
       _showPreviousClef = c._showPreviousClef;
       _small            = c._small;
       _clefTypes        = c._clefTypes;
-      curClefType       = CLEF_INVALID;
+      curClefType       = c.curClefType;
+      curLines          = c.curLines;
+      curLineDist       = c.curLineDist;
       }
 
 //---------------------------------------------------------
@@ -316,7 +320,7 @@ void Clef::layout1()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (staff() && staff()->useTablature() && !staff()->staffType()->genClef())
+      if (staff() && staff()->isTabStaff() && !staff()->staffType()->genClef())
 	      return;
       QColor color(curColor());
       foreach(Element* e, elements) {

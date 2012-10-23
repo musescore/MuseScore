@@ -28,6 +28,7 @@
 #include "sparm.h"
 #include "mscoreview.h"
 #include "segment.h"
+#include "accidental.h"
 #include "note.h"
 
 class TempoMap;
@@ -89,6 +90,7 @@ class FiguredBass;
 class UndoCommand;
 class Cursor;
 struct PageContext;
+class BarLine;
 
 extern bool showRubberBand;
 
@@ -170,6 +172,7 @@ struct Position {
       Segment* segment;
       int staffIdx;
       int line;
+      int fret;
       QPointF pos;
       };
 
@@ -208,6 +211,7 @@ struct Layer {
 //   @P name QString    name of the score
 //   @P nstaves int     number of staves, read only
 //   @P ntracks int     number of tracks (staves * 4), read only
+//   @P npages  int     number of pages, read only
 //---------------------------------------------------------
 
 class Score : public QObject {
@@ -215,7 +219,22 @@ class Score : public QObject {
       Q_PROPERTY(QString name READ name WRITE setName)
       Q_PROPERTY(int nstaves  READ nstaves)
       Q_PROPERTY(int ntracks  READ ntracks)
+      Q_PROPERTY(int npages   READ npages)
 
+   public:
+      enum FileError {
+            FILE_NO_ERROR,
+            FILE_ERROR,
+            FILE_NOT_FOUND,
+            FILE_OPEN_ERROR,
+            FILE_BAD_FORMAT,
+            FILE_UNKNOWN_TYPE,
+            FILE_NO_ROOTFILE,
+            FILE_TOO_OLD,
+            FILE_TOO_NEW
+            };
+
+   private:
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
       QReadWriteLock _layoutLock;
@@ -224,7 +243,6 @@ class Score : public QObject {
       QDate _creationDate;
       QString _mscoreVersion;
       int _mscoreRevision;
-      bool _testMode;               // prepare for regression tests
 
       Revisions* _revisions;
       QList<Excerpt*> _excerpts;
@@ -259,9 +277,7 @@ class Score : public QObject {
       TempoMap* _tempomap;
 
       InputState _is;
-
       MStyle _style;
-
       QList<StaffType*> _staffTypes;
 
       QFileInfo info;
@@ -273,10 +289,14 @@ class Score : public QObject {
       //   determine what to layout and what to repaint:
 
       QRectF refresh;
-      bool _updateAll;
       Measure* startLayout;   ///< start a relayout at this measure
-      bool _layoutAll;        ///< do a complete relayout
       LayoutFlags layoutFlags;
+
+      bool _testMode;               // prepare for regression tests
+
+      bool _updateAll;
+      bool _layoutAll;        ///< do a complete relayout
+
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
 
@@ -284,17 +304,12 @@ class Score : public QObject {
       bool _instrumentsChanged;
       bool _selectionChanged;
 
-      LayoutMode _layoutMode;
-
-      Qt::KeyboardModifiers keyState;
-
       bool _showInvisible;
       bool _showUnprintable;
       bool _showFrames;
       bool _showPageborders;
-
-      QList<Part*> _parts;
-      QList<Staff*> _staves;
+      bool _showInstrumentNames;
+      bool _showVBox;
 
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
@@ -303,6 +318,14 @@ class Score : public QObject {
       bool _saved;      ///< True if project was already saved; only on first
                         ///< save a backup file will be created, subsequent
                         ///< saves will not overwrite the backup file.
+
+      LayoutMode _layoutMode;
+
+      Qt::KeyboardModifiers keyState;
+
+      QList<Part*> _parts;
+      QList<Staff*> _staves;
+
       int _playPos;     ///< sequencer seek position
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
@@ -394,6 +417,7 @@ class Score : public QObject {
       void pasteChordRest(ChordRest* cr, int tick);
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
+      qreal cautionaryWidth(Measure* m);
 
    public:
       void setDirty(bool val);
@@ -433,13 +457,15 @@ class Score : public QObject {
 
       void write(Xml&, bool onlySelection);
       bool read(const QDomElement&);
-      bool read114(const QDomElement&);
-      bool read1(const QDomElement&);
+      FileError read114(const QDomElement&);
+      FileError read1(const QDomElement&, bool ignoreVersionError);
+      FileError loadCompressedMsc(QString name, bool ignoreVersionError);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
       int nstaves() const                    { return _staves.size(); }
       int ntracks() const                    { return _staves.size() * VOICES; }
+      int npages() const                     { return _pages.size(); }
 
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
@@ -455,7 +481,6 @@ class Score : public QObject {
       void undoAddCR(ChordRest* element, Measure*, int tick);
       void undoRemoveElement(Element* element);
       void undoChangeElement(Element* oldElement, Element* newElement);
-      void undoInsertTime(int tick, int len);
       void undoChangeRepeatFlags(Measure*, int);
       void undoChangeVoltaEnding(Volta* volta, const QList<int>& l);
       void undoChangeVoltaText(Volta* volta, const QString& s);
@@ -466,9 +491,9 @@ class Score : public QObject {
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
       void undoChangeEndBarLineType(Measure*, BarLineType);
-      void undoChangeBarLineSpan(Staff*, int);
-      void undoChangeUserOffset(Element* e, const QPointF& offset);
-      void undoChangeDynamic(Dynamic* e, int velocity, DynamicType type);
+      void undoChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
+      void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
+      void undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type);
       void undoTransposeHarmony(Harmony*, int, int);
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
       void undoRemovePart(Part* part, int idx);
@@ -509,8 +534,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(AccidentalType);
-      void changeAccidental(Note* oNote, AccidentalType);
+      void changeAccidental(Accidental::AccidentalType);
+      void changeAccidental(Note* oNote, Accidental::AccidentalType);
 
       void addElement(Element*);
       void removeElement(Element*);
@@ -519,6 +544,7 @@ class Score : public QObject {
       void cmdAddBSymbol(BSymbol*, const QPointF&, const QPointF&);
 
       Note* addNote(Chord*, int pitch);
+      Note* addNote(Chord*, NoteVal &noteVal);
 
       void deleteItem(Element*);
       void cmdDeleteSelectedMeasures();
@@ -548,22 +574,25 @@ class Score : public QObject {
       void colorItem(Element*);
       QList<Part*>& parts()                { return _parts; }
       const QList<Part*>& parts() const    { return _parts; }
-      Part* part(int n) const            { return _parts[n]; }
+      Part* part(int n) const              { return _parts[n]; }
       void appendPart(Part* p);
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
 
-      bool showInvisible() const   { return _showInvisible; }
-      bool showUnprintable() const { return _showUnprintable; }
-      bool showFrames() const      { return _showFrames; }
-      bool showPageborders() const { return _showPageborders; }
+      bool showInvisible() const       { return _showInvisible; }
+      bool showUnprintable() const     { return _showUnprintable; }
+      bool showFrames() const          { return _showFrames; }
+      bool showPageborders() const     { return _showPageborders; }
+      bool showInstrumentNames() const { return _showInstrumentNames; }
+      bool showVBox() const            { return _showVBox; }
       void setShowInvisible(bool v);
       void setShowUnprintable(bool v);
       void setShowFrames(bool v);
       void setShowPageborders(bool v);
+      void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
+      void setShowVBox(bool v)            { _showVBox = v;            }
 
-      bool loadMsc(QString name);
-      bool loadCompressedMsc(QString name);
+      FileError loadMsc(QString name, bool ignoreVersionError);
 
       bool saveFile(QFileInfo& info);
       void saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
@@ -638,8 +667,6 @@ class Score : public QObject {
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
-      void insertTime(int tick, int len);
-      void cmdRemoveTime(int tick, int len);
       int playPos() const                      { return _playPos;    }
       void setPlayPos(int val)                 { _playPos = val;     }
 
@@ -718,7 +745,7 @@ class Score : public QObject {
       RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
-      void updateRepeatList(bool expandRepeats);
+      Q_INVOKABLE void updateRepeatList(bool expandRepeats);
 
       void nextInputPos(ChordRest* cr, bool);
       void cmdMirrorNoteHead();
@@ -876,7 +903,7 @@ class Score : public QObject {
       bool undoRedo() const                 { return _undoRedo; }
       void respace(QList<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      MeasureBase* insertMeasure(ElementType type, MeasureBase*,
+      MeasureBase* insertMeasure(Element::ElementType type, MeasureBase*,
          bool createEmptyMeasures = false);
       bool testMode() const        { return _testMode; }
       void setTestMode(bool val);

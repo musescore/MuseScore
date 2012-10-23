@@ -154,9 +154,10 @@ QString TextEditor::toPlainText() const
 //   editText
 //---------------------------------------------------------
 
-QString editPlainText(const QString& s)
+QString editPlainText(const QString& s, const QString& title)
       {
       TextEditor editor;
+      editor.setWindowTitle(title);
       editor.setPlainText(s);
       editor.exec();
       return editor.toPlainText();
@@ -166,9 +167,10 @@ QString editPlainText(const QString& s)
 //   editHtml
 //---------------------------------------------------------
 
-QString editHtml(const QString& s)
+QString editHtml(const QString& s, const QString& title)
       {
       TextEditor editor;
+      editor.setWindowTitle(title);
       editor.setHtml(s);
       editor.exec();
       return editor.toHtml();

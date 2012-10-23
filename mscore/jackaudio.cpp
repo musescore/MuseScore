@@ -23,7 +23,6 @@
 #include "libmscore/mscore.h"
 #include "preferences.h"
 #include "msynth/synti.h"
-#include "musescore.h"
 #include "seq.h"
 
 #include <jack/midiport.h>

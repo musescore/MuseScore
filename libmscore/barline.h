@@ -20,6 +20,11 @@ class MuseScoreView;
 class Segment;
 class QPainter;
 
+#define DEFAULT_BARLINE_TO          (4*2)
+#define MIN_BARLINE_FROMTO_DIST     2
+#define MIN_BARLINE_SPAN_FROMTO     (-2)
+#define UNKNOWN_BARLINE_TO          (-4)
+
 //---------------------------------------------------------
 //   @@ BarLine
 //---------------------------------------------------------
@@ -28,14 +33,18 @@ class BarLine : public Element {
       Q_OBJECT
 
       BarLineType _subtype;
+      bool _customSpan;
       int _span;
-      qreal yoff;       // used during drag edit to extend y2
+      int _spanFrom, _spanTo;
+      // static variables used while dragging
+      static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
+      static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
+      static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
 
       void getY(qreal*, qreal*) const;
       ElementList _el;        ///< fermata or other articulations
 
       void drawDots(QPainter* painter, qreal x) const;
-      void* pSubtype() { return &_subtype; }
 
    public:
       BarLine(Score*);
@@ -56,12 +65,17 @@ class BarLine : public Element {
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
-      void setSpan(int val)    { _span = val;  }
-      int span() const         { return _span; }
-      Segment* segment() const { return (Segment*)parent(); }
-      Measure* measure() const { return (Measure*)(parent() ? parent()->parent() : 0); }
+      void setCustomSpan(bool val)  { _customSpan = val;    }
+      void setSpan(int val)         { _span = val;          }
+      void setSpanFrom(int val)     { _spanFrom = val;      }
+      void setSpanTo(int val)       { _spanTo = val;        }
+      bool customSpan() const       { return _customSpan;   }
+      int span() const              { return _span;         }
+      int spanFrom() const          { return _spanFrom;     }
+      int spanTo() const            { return _spanTo;       }
 
-      virtual bool isEditable() const { return true; }
+      virtual bool isEditable() const { return parent()->type() == SEGMENT; }
+      virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void endEdit();
       virtual void editDrag(const EditData&);
       virtual void endEditDrag();
@@ -79,9 +93,7 @@ class BarLine : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
 
-      static Property<BarLine> propertyList[];
-      Property<BarLine>* property(P_ID id) const;
-
+      static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
       };
 

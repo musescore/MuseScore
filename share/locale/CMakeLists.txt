@@ -58,6 +58,7 @@ install(FILES
       mscore_ru.qm
       mscore_sk.qm
       mscore_sl.qm
+      mscore_sr.qm
       mscore_sv.qm
       mscore_th.qm
       mscore_tr.qm

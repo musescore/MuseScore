@@ -41,35 +41,13 @@ QRectF handleRect(const QPointF& pos)
 
 Measure* Score::tick2measure(int tick) const
       {
-      for (MeasureBase* mb = first(); mb;) {
-            if (mb->type() != MEASURE) {
-                  mb = mb->next();
-                  continue;
-                  }
-            Measure* m = static_cast<Measure*>(mb);
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             int st = m->tick();
             int l  = m->ticks();
             if (tick >= st && tick < (st+l))
                   return m;
-            // hack:
-            MeasureBase* nmb;
-            for (nmb = mb->next(); nmb; nmb = nmb->next()) {
-                  if (nmb->type() == MEASURE)
-                        break;
-                  }
-            if (nmb == 0)
-                  return m;
-            mb = nmb;
             }
       qDebug("-tick2measure %d not found", tick);
-      if (MScore::debugMode) {
-            qDebug("first %p", first());
-            for (MeasureBase* m = first(); m; m = m->next()) {
-                  int st = m->tick();
-                  int l  = m->ticks();
-                  qDebug("%d - %d", st, st+l);
-                  }
-            }
       return 0;
       }
 
@@ -298,14 +276,9 @@ int line2pitch(int line, int clef, int key)
 
 int quantizeLen(int len, int raster)
       {
-      int rl = ((len + raster - 1) / raster) * raster;      // round up to raster
-#if 0
-      rl /= 2;
-      if (rl == 0)
-            rl = 1;
-      rl = ((len + rl - 1) / rl) * rl;
-#endif
-      return rl;
+      if (raster == 0)
+            return len;
+      return int( ((float)len/raster) + 0.5 ) * raster; //round to the closest multiple of raster
       }
 
 //---------------------------------------------------------
@@ -616,7 +589,7 @@ Note* searchTieNote(Note* note)
                   break;
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0 || cr->type() != CHORD)
+                  if (cr == 0 || cr->type() != Element::CHORD)
                         continue;
                   int staffIdx = cr->staffIdx() + cr->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?

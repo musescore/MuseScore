@@ -78,36 +78,6 @@ DrumTools::DrumTools(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   showDrumTools
-//---------------------------------------------------------
-
-void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
-      {
-      if (drumset) {
-            if (!_drumTools) {
-                  _drumTools = new DrumTools(this);
-                  addDockWidget(Qt::BottomDockWidgetArea, _drumTools);
-                  }
-            _drumTools->setDrumset(cs, staff, drumset);
-            _drumTools->show();
-            }
-      else {
-            if (_drumTools)
-                  _drumTools->hide();
-            }
-      }
-
-//---------------------------------------------------------
-//   updateDrumTools
-//---------------------------------------------------------
-
-void MuseScore::updateDrumTools()
-      {
-      if (_drumTools)
-            _drumTools->updateDrumset();
-      }
-
-//---------------------------------------------------------
 //   updateDrumset
 //---------------------------------------------------------
 
@@ -195,7 +165,7 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      if(element && element->type() == CHORD) {
+      if(element && element->type() == Element::CHORD) {
             Chord* ch        = static_cast<Chord*>(element);
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;

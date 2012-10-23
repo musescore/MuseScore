@@ -151,7 +151,7 @@ void Preferences::init()
 
       antialiasedDrawing       = true;
       sessionStart             = SCORE_SESSION;
-      startScore               = ":/data/Promenade_Example.mscx";
+      startScore               = ":/data/Promenade_Example.mscz";
       defaultStyleFile         = "";
       showSplashScreen         = true;
 
@@ -651,6 +651,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
+      connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(mySoundFontsButton, SIGNAL(clicked()), SLOT(selectSoundFontsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
 
@@ -666,6 +667,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
+      connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
 
       recordButtons = new QButtonGroup(this);
       recordButtons->setExclusive(false);
@@ -742,9 +744,9 @@ void PreferenceDialog::updateRemote()
       rca6->setChecked(preferences.midiRemote[RMIDI_NOTE16].type       != -1);
       rca7->setChecked(preferences.midiRemote[RMIDI_NOTE32].type       != -1);
       rca8->setChecked(preferences.midiRemote[RMIDI_NOTE64].type      != -1);
-      rca9->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
-      rca10->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
-      rca11->setChecked(preferences.midiRemote[RMIDI_REST].type        != -1);
+      rca9->setChecked(preferences.midiRemote[RMIDI_REST].type        != -1);
+      rca10->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
+      rca11->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
 
@@ -1517,8 +1519,6 @@ void PreferenceDialog::selectSoundFont()
       QStringList s = mscore->getSoundFont(soundFont->text());
       if(s.size() > 0)
             soundFont->setText(s.front());
-      else
-            soundFont->setText(QString());
       }
 
 //---------------------------------------------------------
@@ -1826,4 +1826,73 @@ void PreferenceDialog::definePluginShortcutClicked()
       prefs->dirty = true;
       }
 
+//---------------------------------------------------------
+//   printShortcutsClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::printShortcutsClicked()
+      {
+      QPrinter printer(QPrinter::HighResolution);
+      MStyle* s = MScore::defaultStyle();
+      const PageFormat* pf = s->pageFormat();
+      printer.setPaperSize(pf->size(), QPrinter::Inch);
+
+      printer.setCreator("MuseScore Version: " VERSION);
+      printer.setFullPage(true);
+      printer.setColorMode(QPrinter::Color);
+      printer.setDocName(tr("MuseScore Shortcuts"));
+      printer.setDoubleSidedPrinting(pf->twosided());
+      printer.setOutputFormat(QPrinter::NativeFormat);
+
+      QPrintDialog pd(&printer, 0);
+      pd.setWindowTitle(tr("Print Shortcuts"));
+      if (!pd.exec())
+            return;
+      qreal dpmm = printer.logicalDpiY() / 25.4;
+      qreal ph   = printer.height();
+      qreal tm   = dpmm * 15;
+      qreal bm   = dpmm * 15;
+      qreal lm   = dpmm * 20;
+
+      QPainter p;
+      p.begin(&printer);
+      qreal y;
+      qreal lh = QFontMetricsF(p.font()).lineSpacing();
+
+      QMapIterator<QString, Shortcut*> isc(localShortcuts);
+      qreal col1Width = 0.0;
+      while (isc.hasNext()) {
+            isc.next();
+            Shortcut* s = isc.value();
+            col1Width = qMax(col1Width, QFontMetricsF(p.font()).width(s->descr()));
+            }
+
+      int idx = 0;
+      isc = QMapIterator<QString, Shortcut*>(localShortcuts);
+      while (isc.hasNext()) {
+            isc.next();
+            if (idx == 0 || y >= (ph - bm)) {
+                  y = tm;
+                  if (idx)
+                        printer.newPage();
+                  else {
+                        p.save();
+                        QFont font(p.font());
+                        font.setPointSizeF(14.0);
+                        font.setBold(true);
+                        p.setFont(font);
+                        p.drawText(lm, y, tr("MuseScore Shortcuts"));
+                        p.restore();
+                        y += QFontMetricsF(font).lineSpacing();
+                        y += 5 * dpmm;
+                        }
+                  }
+            Shortcut* s = isc.value();
+            p.drawText(lm, y, s->descr());
+            p.drawText(col1Width + lm + 5 * dpmm, y, s->keysToString());
+            y += lh;
+            ++idx;
+            }
+      p.end();
+      }
 

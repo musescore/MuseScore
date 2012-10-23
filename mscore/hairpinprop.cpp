@@ -43,13 +43,13 @@ HairpinProperties::HairpinProperties(Hairpin* h, QWidget* parent)
 //   dynamicType
 //---------------------------------------------------------
 
-DynamicType HairpinProperties::dynamicType() const
+Element::DynamicType HairpinProperties::dynamicType() const
       {
       if (staffButton->isChecked())
-            return DYNAMIC_STAFF;
+            return Element::DYNAMIC_STAFF;
       if (systemButton->isChecked())
-            return DYNAMIC_SYSTEM;
+            return Element::DYNAMIC_SYSTEM;
       // default:
-      return DYNAMIC_PART;
+      return Element::DYNAMIC_PART;
       }
 

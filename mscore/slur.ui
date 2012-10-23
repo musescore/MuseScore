@@ -23,7 +23,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Slur</string>
+      <string notr="true">Slur</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -38,7 +38,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Slur End</string>
+         <string notr="true">Slur End</string>
         </property>
        </widget>
       </item>
@@ -47,7 +47,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Staff:</string>
+           <string notr="true">Staff:</string>
           </property>
          </widget>
         </item>
@@ -61,7 +61,7 @@
         <item>
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>Voice:</string>
+           <string notr="true">Voice:</string>
           </property>
          </widget>
         </item>
@@ -75,7 +75,7 @@
         <item>
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Tick:</string>
+           <string notr="true">Tick:</string>
           </property>
          </widget>
         </item>

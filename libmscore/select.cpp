@@ -126,7 +126,7 @@ ChordRest* Selection::firstChordRest(int track) const
       {
       ChordRest* cr = 0;
       foreach (Element* el, _el) {
-            if (el->type() == NOTE)
+            if (el->type() == Element::NOTE)
                   el = el->parent();
             if (el->isChordRest()) {
                   if (track != -1 && el->track() != track)
@@ -151,7 +151,7 @@ ChordRest* Selection::lastChordRest(int track) const
       ChordRest* cr = 0;
       for (ciElement i = _el.begin(); i != _el.end(); ++i) {
             Element* el = *i;
-            if (el->type() == NOTE)
+            if (el->type() == Element::NOTE)
                   el = ((Note*)el)->chord();
             if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == Segment::SegChordRest) {
                   if (track != -1 && el->track() != track)
@@ -211,7 +211,7 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
-      if (el->type() == CHORD)
+      if (el->type() == Element::CHORD)
             printf("Selection::add Chord!\n");
       _el.append(el);
       update();
@@ -245,7 +245,7 @@ void Selection::updateSelectedElements()
                   Element* e = s->element(st);
                   if (!e)
                         continue;
-                  if (e->type() == CHORD) {
+                  if (e->type() == Element::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach(Note* note, chord->notes())
                               _el.append(note);
@@ -261,7 +261,7 @@ void Selection::updateSelectedElements()
                   foreach(Spanner* sp, s->spannerFor()) {
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
-                        if (sp->endElement()->type() == SEGMENT) {
+                        if (sp->endElement()->type() == Element::SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
                               if (_endSegment && (s2->tick() < _endSegment->tick()))
                                     _el.append(sp);
@@ -271,18 +271,24 @@ void Selection::updateSelectedElements()
                               }
                         }
                   }
-            for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
+            // for each measure in the selection, check if it contains spanners within our selection
+            Measure* sm = _startSegment->measure();
+            Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
+            int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
+            for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
                   foreach(Spanner* sp, m->spannerFor()) {
+                        // ignore spanners belonging to other tracks
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
-                        if (sp->endElement()->type() == SEGMENT) {
+                        // if spanner ends between _startSegment and _endSegment, select it
+                        if (sp->endElement()->type() == Element::SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
                               }
-                        else if (sp->endElement()->type() == MEASURE) {
+                        else if (sp->endElement()->type() == Element::MEASURE) {
                               Measure* s2 = static_cast<Measure*>(sp->endElement());
-                              if (s2->tick() < _endSegment->tick())
+                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
                               }
                         else {
@@ -427,7 +433,7 @@ QByteArray Selection::mimeData() const
             case SEL_LIST:
                   if (isSingle()) {
                         Element* e = element();
-                        if (e->type() == TEXTLINE_SEGMENT)
+                        if (e->type() == Element::TEXTLINE_SEGMENT)
                               e = static_cast<TextLineSegment*>(e)->textLine();
                         a = e->mimeData(QPointF());
                         }
@@ -482,7 +488,7 @@ QList<Note*> Selection::noteList(int selTrack) const
 
       if (_state == SEL_LIST) {
             foreach(Element* e, _el) {
-                  if (e->type() == NOTE)
+                  if (e->type() == Element::NOTE)
                         nl.append(static_cast<Note*>(e));
                   }
             }
@@ -495,7 +501,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);
-                              if (e == 0 || e->type() != CHORD
+                              if (e == 0 || e->type() != Element::CHORD
                                  || (selTrack != -1 && selTrack != track))
                                     continue;
                               Chord* c = static_cast<Chord*>(e);

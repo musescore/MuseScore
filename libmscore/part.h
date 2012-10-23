@@ -21,14 +21,18 @@
 class Xml;
 class Staff;
 class Score;
-struct InstrumentTemplate;
+class InstrumentTemplate;
+class ClefList;
 
 //---------------------------------------------------------
 //   @@ Part
+//   @P partName  QString  name of the part, used in the mixer, read only
 //---------------------------------------------------------
 
 class Part : public QObject {
       Q_OBJECT
+
+      Q_PROPERTY(QString partName READ partName)
 
       Score* _score;
 
@@ -44,6 +48,7 @@ class Part : public QObject {
       void initFromInstrTemplate(const InstrumentTemplate*);
 
       void read(const QDomElement&);
+      void read114(const QDomElement&, QList<ClefList*>&);
       void write(Xml& xml) const;
       int nstaves() const                       { return _staves.size(); }
       QList<Staff*>* staves()                   { return &_staves; }
@@ -67,8 +72,8 @@ class Part : public QObject {
 
       void setStaves(int);
 
-      int volume() const;
-      void setVolume(int volume);
+      Q_INVOKABLE int volume() const;
+      Q_INVOKABLE void setVolume(int volume);
       int reverb() const;
       int chorus() const;
       int pan() const;

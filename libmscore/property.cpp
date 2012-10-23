@@ -28,6 +28,7 @@ struct PropertyData {
 //
 // always: property[subtype].id == subtype
 //
+//
 static const PropertyData propertyList[] = {
       { P_SUBTYPE,             "subtype",       T_INT   },
       { P_SELECTED,            "selected",      T_BOOL  },
@@ -104,6 +105,23 @@ static const PropertyData propertyList[] = {
       { P_DENOMINATOR_STRING,  "textD",         T_STRING },
       { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
       { P_BREAK_HINT,          "",              T_BOOL   },
+      { P_FBPREFIX,            "prefix",        T_INT    },
+
+      { P_FBDIGIT,             "digit",         T_INT    },
+      { P_FBSUFFIX,            "suffix",        T_INT    },
+      { P_FBCONTINUATIONLINE,  "continuationLine", T_BOOL},
+      { P_FBPARENTHESIS1,      "",              T_INT    },
+      { P_FBPARENTHESIS2,      "",              T_INT    },
+      { P_FBPARENTHESIS3,      "",              T_INT    },
+      { P_FBPARENTHESIS4,      "",              T_INT    },
+      { P_FBPARENTHESIS5,      "",              T_INT    },
+      { P_VOLTA_TYPE,          "",              T_INT    },
+      { P_OTTAVA_TYPE,         "",              T_INT    },
+
+      { P_TRILL_TYPE,          "",              T_INT    },
+      { P_HAIRPIN_TYPE,        "",              T_INT    },
+      { P_VELO_CHANGE,         "",              T_INT    },
+      { P_DYNAMIC_TYPE,        "",              T_INT    },
 
       { P_END,                 "",              T_INT    }
       };

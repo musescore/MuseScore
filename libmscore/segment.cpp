@@ -362,11 +362,11 @@ void Segment::addSpanner(Spanner* l)
 void Segment::removeSpanner(Spanner* l)
       {
       if (!static_cast<Segment*>(l->endElement())->removeSpannerBack(l)) {
-            qDebug("Segment(%p): cannot remove spannerBack %s %p, size %d\n", this, l->name(), l, _spannerFor.size());
+            qDebug("Segment(%p): cannot remove spannerBack %s %p, size %d", this, l->name(), l, _spannerFor.size());
             // abort();
             }
       if (!_spannerFor.removeOne(l)) {
-            qDebug("Segment(%p): cannot remove spannerFor %s %p, size %d\n", this, l->name(), l, _spannerFor.size());
+            qDebug("Segment(%p): cannot remove spannerFor %s %p, size %d", this, l->name(), l, _spannerFor.size());
             // abort();
             }
       foreach(SpannerSegment* ss, l->spannerSegments()) {
@@ -381,12 +381,12 @@ void Segment::removeSpanner(Spanner* l)
 
 void Segment::add(Element* el)
       {
-// qDebug("%p segment add(%d, %d, %s %p)\n", this, tick(), el->track(), el->name(), el);
+// qDebug("%p segment add(%d, %d, %s %p)", this, tick(), el->track(), el->name(), el);
       el->setParent(this);
 
       int track = el->track();
       if (track == -1) {
-            qDebug("element <%s> has invalid track -1\n", el->name());
+            qDebug("element <%s> has invalid track -1", el->name());
             abort();
             }
       int staffIdx = track / VOICES;
@@ -478,9 +478,15 @@ void Segment::add(Element* el)
             case CHORD:
             case REST:
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %d track %d\n",
-                           el->name(), _elist[track]->name(), tick(), track);
-                        // abort();
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track);
+                        ChordRest* cr = static_cast<ChordRest*>(el);
+                        ChordRest* cr1  = static_cast<ChordRest*>(_elist[track]);
+                        qDebug("   %d/%d -> %d/%d",
+                           cr->duration().numerator(), cr->duration().denominator(),
+                           cr1->duration().numerator(), cr1->duration().denominator());
+                        abort();
                         return;
                         }
                   if (track % VOICES)
@@ -507,7 +513,7 @@ void Segment::add(Element* el)
 
 void Segment::remove(Element* el)
       {
-// qDebug("%p Segment::remove %s %p\n", this, el->name(), el);
+// qDebug("%p Segment::remove %s %p", this, el->name(), el);
 
       int track = el->track();
 
@@ -638,7 +644,7 @@ Segment::SegmentType Segment::segmentType(ElementType type)
             case BREATH:
                   return SegBreath;
             default:
-                  qDebug("Segment:segmentType():  bad type: <%s>\n", Element::name(type));
+                  qDebug("Segment:segmentType():  bad type: <%s>", Element::name(type));
                   return (SegmentType)-1;
             }
       }
@@ -731,7 +737,7 @@ const QList<Lyrics*>* Segment::lyricsList(int staffIdx) const
       {
       if (!(subtype() & (SegChordRest | SegGrace))) {
             if (MScore::debugMode)
-                  qDebug("warning : lyricsList  bad segment type <%s><%s>\n", name(), subTypeName());
+                  qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;
             }
       int strack = staffIdx * VOICES;

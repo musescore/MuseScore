@@ -498,7 +498,7 @@ void MuseData::readBackup(const QString& s)
 Measure* MuseData::createMeasure()
       {
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* m = (Measure*)mb;
             int st = m->tick();
@@ -735,12 +735,12 @@ void MuseData::convert()
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::importMuseData(Score* score, const QString& name)
+Score::FileError importMuseData(Score* score, const QString& name)
       {
       MuseData md(score);
       if (!md.read(name))
-            return false;
+            return Score::FILE_ERROR;
       md.convert();
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 

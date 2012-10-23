@@ -32,7 +32,7 @@ static const int DEFAULT_FRETS = 5;
 FretDiagram::FretDiagram(Score* score)
    : Element(score)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlag(ELEMENT_MOVABLE, true);
       _strings    = DEFAULT_STRINGS;
       _frets      = DEFAULT_FRETS;
       _maxFrets   = 24;
@@ -96,11 +96,16 @@ QPointF FretDiagram::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      System* system = measure()->system();
-      qreal yp = y();
-      if (system)
-            yp += system->staffY(staffIdx());
-      return QPointF(pageX(), yp);
+      if (parent()->type() == SEGMENT) {
+            Measure* m = static_cast<Segment*>(parent())->measure();
+            System* system = m->system();
+            qreal yp = y();
+            if (system)
+                  yp += system->staffY(staffIdx());
+            return QPointF(pageX(), yp);
+            }
+      else
+            return Element::pagePos();
       }
 
 //---------------------------------------------------------
@@ -109,29 +114,33 @@ QPointF FretDiagram::pagePos() const
 
 QLineF FretDiagram::dragAnchor() const
       {
-      Measure* m     = measure();
-      System* system = m->system();
-      qreal yp      = system->staff(staffIdx())->y() + system->y();
-      qreal xp      = m->tick2pos(segment()->tick()) + m->pagePos().x();
-      QPointF p1(xp, yp);
+      if (parent()->type() == SEGMENT) {
+            Segment* s     = static_cast<Segment*>(parent());
+            Measure* m     = s->measure();
+            System* system = m->system();
+            qreal yp      = system->staff(staffIdx())->y() + system->y();
+            qreal xp      = m->tick2pos(s->tick()) + m->pagePos().x();
+            QPointF p1(xp, yp);
 
-      qreal x  = 0.0;
-      qreal y  = 0.0;
+            qreal x  = 0.0;
+            qreal y  = 0.0;
 #if 0 // TODOxx
-      qreal tw = width();
-      qreal th = height();
-      if (_align & ALIGN_BOTTOM)
-            y = th;
-      else if (_align & ALIGN_VCENTER)
-            y = (th * .5);
-      else if (_align & ALIGN_BASELINE)
-            y = baseLine();
-      if (_align & ALIGN_RIGHT)
-            x = tw;
-      else if (_align & ALIGN_HCENTER)
-            x = (tw * .5);
+            qreal tw = width();
+            qreal th = height();
+            if (_align & ALIGN_BOTTOM)
+                  y = th;
+            else if (_align & ALIGN_VCENTER)
+                  y = (th * .5);
+            else if (_align & ALIGN_BASELINE)
+                  y = baseLine();
+            if (_align & ALIGN_RIGHT)
+                  x = tw;
+            else if (_align & ALIGN_HCENTER)
+                  x = (tw * .5);
 #endif
-      return QLineF(p1, abbox().topLeft() + QPointF(x, y));
+            return QLineF(p1, abbox().topLeft() + QPointF(x, y));
+            }
+      return QLineF(parent()->pagePos(), abbox().topLeft());
       }
 
 //---------------------------------------------------------

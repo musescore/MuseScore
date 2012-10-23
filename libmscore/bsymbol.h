@@ -31,7 +31,7 @@ class BSymbol : public Element, public ElementLayout {
                                   ///< default is type() * 100;
 
    public:
-      BSymbol(Score* s) : Element(s) { setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE); }
+      BSymbol(Score* s);
       BSymbol(const BSymbol&);
 
       BSymbol &operator=(const BSymbol&);

@@ -16,6 +16,10 @@
 #include "inspectorImage.h"
 #include "inspectorLasso.h"
 #include "inspectorGroupElement.h"
+#include "inspectorVolta.h"
+#include "inspectorOttava.h"
+#include "inspectorTrill.h"
+#include "inspectorHairpin.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -107,30 +111,67 @@ void Inspector::reset()
 void Inspector::setElement(Element* e)
       {
       if (e == 0 || _element == 0 || (e->type() != _element->type())) {
-            delete ie;
+            if (ie)
+                  ie->deleteLater();
             ie = 0;
             _element = e;
 
             if (_element == 0)
                   return;
             switch(_element->type()) {
-                  case FBOX:
-                  case TBOX:
-                  case VBOX:         ie = new InspectorVBox(this); break;
-                  case HBOX:         ie = new InspectorHBox(this); break;
-                  case ARTICULATION: ie = new InspectorArticulation(this); break;
-                  case SPACER:       ie = new InspectorSpacer(this); break;
-                  case NOTE:         ie = new InspectorNote(this); break;
-                  case REST:         ie = new InspectorRest(this); break;
-
-                  case CLEF:         ie = new InspectorClef(this); break;
-                  case TIMESIG:      ie = new InspectorTimeSig(this); break;
-                  case KEYSIG:       ie = new InspectorKeySig(this); break;
-
-                  case BEAM:         ie = new InspectorBeam(this); break;
-                  case IMAGE:        ie = new InspectorImage(this); break;
-                  case LASSO:        ie = new InspectorLasso(this); break;
-                  default:           ie = new InspectorElement(this); break;
+                  case Element::FBOX:
+                  case Element::TBOX:
+                  case Element::VBOX:
+                        ie = new InspectorVBox(this);
+                        break;
+                  case Element::HBOX:
+                        ie = new InspectorHBox(this);
+                        break;
+                  case Element::ARTICULATION:
+                        ie = new InspectorArticulation(this);
+                        break;
+                  case Element::SPACER:
+                        ie = new InspectorSpacer(this);
+                        break;
+                  case Element::NOTE:
+                        ie = new InspectorNote(this);
+                        break;
+                  case Element::REST:
+                        ie = new InspectorRest(this);
+                        break;
+                  case Element::CLEF:
+                        ie = new InspectorClef(this);
+                        break;
+                  case Element::TIMESIG:
+                        ie = new InspectorTimeSig(this);
+                        break;
+                  case Element::KEYSIG:
+                        ie = new InspectorKeySig(this);
+                        break;
+                  case Element::BEAM:
+                        ie = new InspectorBeam(this);
+                        break;
+                  case Element::IMAGE:
+                        ie = new InspectorImage(this);
+                        break;
+                  case Element::LASSO:
+                        ie = new InspectorLasso(this);
+                        break;
+                  case Element::VOLTA_SEGMENT:
+                        ie = new InspectorVolta(this);
+                        break;
+                  case Element::OTTAVA_SEGMENT:
+                        ie = new InspectorOttava(this);
+                        break;
+                  case Element::TRILL_SEGMENT:
+                        ie = new InspectorTrill(this);
+                        break;
+                  case Element::HAIRPIN_SEGMENT:
+                        ie = new InspectorHairpin(this);
+                        break;
+                  default:
+                        ie = new InspectorElement(this);
+                        break;
                   }
             layout->insertWidget(0, ie);
             }
@@ -144,7 +185,7 @@ void Inspector::setElement(Element* e)
 
 void Inspector::setElementList(const QList<Element*>& el)
       {
-      delete ie;
+      ie->deleteLater();
       ie = new InspectorGroupElement(this);
       layout->insertWidget(0, ie);
       _element = 0;
@@ -303,7 +344,7 @@ void InspectorElementElement::apply()
             score->startCmd();
             QPointF o(offsetX->value() * _spatium, offsetY->value() * _spatium);
             if (o != e->pos())
-                  score->undoChangeUserOffset(e, o - e->ipos());
+                  score->undoChangeProperty(e, P_USER_OFF, o - e->ipos());
             if (e->color() != color->color())
                   score->undoChangeProperty(e, P_COLOR, color->color());
             if (e->visible() != visible->isChecked())
@@ -462,7 +503,7 @@ void InspectorArticulation::apply()
 
       score->startCmd();
       if (o != a->pos())
-            score->undoChangeUserOffset(a, o - a->ipos());
+            score->undoChangeProperty(a, P_USER_OFF, o - a->ipos());
       if (anchor != a->anchor())
             score->undoChangeProperty(a, P_ARTICULATION_ANCHOR, int(anchor));
       if (d != a->direction())
@@ -691,8 +732,8 @@ void InspectorNoteBase::setElement(Note* n)
       small->setChecked(note->small());
       mirrorHead->setCurrentIndex(note->userMirror());
       dotPosition->setCurrentIndex(note->dotPosition());
-      ontimeOffset->setValue(note->onTimeOffset());
-      offtimeOffset->setValue(note->offTimeOffset());
+      ontimeOffset->setValue(note->onTimeUserOffset());
+      offtimeOffset->setValue(note->offTimeUserOffset());
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;

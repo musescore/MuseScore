@@ -43,7 +43,7 @@ void TrillSegment::draw(QPainter* painter) const
             QRectF b1;
 
             switch(trill()->subtype()) {
-                  case TRILL_LINE:
+                  case Trill::TRILL_LINE:
                         sym  = trillSym;
                         b1   = symbols[idx][sym].bbox(mag);
                         x0   = -b1.x();
@@ -52,7 +52,7 @@ void TrillSegment::draw(QPainter* painter) const
                         y    = 0.0;
                         break;
 
-                  case UPPRALL_LINE:
+                  case Trill::UPPRALL_LINE:
                         sym  = upprallSym;
                         b1   = symbols[idx][sym].bbox(mag);
                         x0   = -b1.x();
@@ -60,7 +60,7 @@ void TrillSegment::draw(QPainter* painter) const
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
-                  case DOWNPRALL_LINE:
+                  case Trill::DOWNPRALL_LINE:
                         sym  = downprallSym;
                         b1   = symbols[idx][sym].bbox(mag);
                         x0   = -b1.x();
@@ -68,7 +68,7 @@ void TrillSegment::draw(QPainter* painter) const
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
-                  case PRALLPRALL_LINE:
+                  case Trill::PRALLPRALL_LINE:
                         sym  = prallprallSym;
                         b1   = symbols[idx][sym].bbox(mag);
                         x0   = -b1.x();
@@ -76,11 +76,17 @@ void TrillSegment::draw(QPainter* painter) const
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
+                  case Trill::PURE_LINE:
+                        sym = noSym;
+                        x0 = 0;
+                        x1 = 0;
+                        n    = int(floor((x2-x1) / w2));
+                        y = 0.0;
                   }
             if (n <= 0)
                   n = 1;
-
-            symbols[idx][sym].draw(painter, mag, QPointF(x0, y));
+            if (sym != noSym)
+                  symbols[idx][sym].draw(painter, mag, QPointF(x0, y));
             symbols[idx][trillelementSym].draw(painter, mag,  QPointF(x1, b2.y() * .9), n);
             }
       else {
@@ -165,10 +171,8 @@ void Trill::add(Element* e)
 
 void Trill::remove(Element* e)
       {
-      if (!_el.remove(e)) {
-            printf("Trill remove %s\n", e->name());
+      if (!_el.remove(e))
             Spanner::remove(e);
-            }
       }
 
 //---------------------------------------------------------
@@ -277,6 +281,8 @@ void Trill::setSubtype(const QString& s)
             _subtype = DOWNPRALL_LINE;
       else if (s == "prallprall")
             _subtype = PRALLPRALL_LINE;
+      else if (s == "pure")
+            _subtype = PURE_LINE;
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -296,6 +302,8 @@ QString Trill::subtypeName() const
                   return "downprall";
             case PRALLPRALL_LINE:
                   return "prallprall";
+            case PURE_LINE:
+                  return "pure";
             default:
                   qDebug("unknown Trill subtype %d", subtype());
                   return "?";
@@ -313,5 +321,64 @@ void Trill::scanElements(void* data, void (*func)(void*, Element*), bool all)
       func(data, this);
       SLine::scanElements(data, func, all);
       }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Trill::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_TRILL_TYPE:
+                  return subtype();
+            default:
+                  break;
+            }
+      return SLine::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Trill::setProperty(P_ID propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case P_TRILL_TYPE:
+                  setSubtype(TrillType(val.toInt()));
+                  break;
+            default:
+                  if (!SLine::setProperty(propertyId, val))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Trill::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_TRILL_TYPE:
+                  return 0;
+            default:
+                  return SLine::propertyDefault(propertyId);
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   undoSetSubtype
+//---------------------------------------------------------
+
+void Trill::undoSetSubtype(TrillType val)
+      {
+      score()->undoChangeProperty(this, P_TRILL_TYPE, val);
+      }
+
 
 

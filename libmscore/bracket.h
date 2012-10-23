@@ -32,24 +32,33 @@ class Bracket : public Element {
 
       qreal h2;
 
-      int _column, _span;
+      int _column;
+      int _span;
+      int _firstStaff;
+      int _lastStaff;
 
       QPainterPath path;
       qreal yoff;
 
    public:
       Bracket(Score*);
-      virtual Bracket* clone() const { return new Bracket(*this); }
+      virtual Bracket* clone() const   { return new Bracket(*this); }
 
-      virtual ElementType type() const { return BRACKET; }
+      virtual ElementType type() const { return BRACKET;  }
       BracketType subtype() const      { return _subtype; }
-      void setSubtype(BracketType t)   { _subtype = t; }
+      void setSubtype(BracketType t)   { _subtype = t;    }
 
-      int span() const       { return _span; }
-      void setSpan(int val)  { _span = val; }
-      int level() const      { return _column; }
-      void setLevel(int v)   { _column = v; }
-      System* system() const { return (System*)parent(); }
+      int firstStaff() const           { return _firstStaff; }
+      void setFirstStaff(int val)      { _firstStaff = val;  }
+
+      int lastStaff() const            { return _lastStaff; }
+      void setLastStaff(int val)       { _lastStaff = val;  }
+
+      int level() const                { return _column;           }
+      void setLevel(int v)             { _column = v;              }
+      int span() const                 { return _span;             }
+      void setSpan(int v)              { _span = v;                }
+      System* system() const           { return (System*)parent(); }
 
       virtual void setHeight(qreal);
       virtual qreal width() const;

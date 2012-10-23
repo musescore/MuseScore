@@ -10,10 +10,8 @@
       <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
       <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
       <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
-      <file alias="fonts/mscore_tab_baroque.ttf">../fonts/mscore_tab_baroque.ttf</file>
-      <file alias="fonts/mscore_tab_modern.ttf">../fonts/mscore_tab_modern.ttf</file>
-      <file alias="fonts/mscore_tab_renaiss.ttf">../fonts/mscore_tab_renaiss.ttf</file>
-      <file alias="fonts/mscore_tab_renaiss2.ttf">../fonts/mscore_tab_renaiss2.ttf</file>
+      <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
+      <file alias="fonts/mscoreTab.ttf">../fonts/mscoreTab.ttf</file>
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
       <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
 
@@ -24,5 +22,10 @@
       <file>../mscore/data/cancel.png</file>
       <file>../mscore/revision.h</file>
       <file>../mscore/data/musescore_logo_full1.png</file>
+
+      <file alias="schema/license.html">../mscore/schema/license.html</file>
+      <file alias="schema/musicxml.xsd">../mscore/schema/musicxml.xsd</file>
+      <file alias="schema/xlink.xsd">../mscore/schema/xlink.xsd</file>
+      <file alias="schema/xml.xsd">../mscore/schema/xml.xsd</file>
    </qresource>
 </RCC>

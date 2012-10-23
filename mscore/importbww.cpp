@@ -300,9 +300,9 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             if (lastVolta) {
                   qDebug("adding volta\n");
                   if (ending == 1)
-                        lastVolta->setSubtype(VOLTA_CLOSED);
+                        lastVolta->setSubtype(Volta::VOLTA_CLOSED);
                   else
-                        lastVolta->setSubtype(VOLTA_OPEN);
+                        lastVolta->setSubtype(Volta::VOLTA_OPEN);
                   lastVolta->setEndElement(currentMeasure);
                   currentMeasure->addSpannerBack(lastVolta);
                   lastVolta = 0;
@@ -535,15 +535,13 @@ void MsScWriter::doTriplet(Chord* cr, StartStop triplet)
 //   importBww
 //---------------------------------------------------------
 
-bool MuseScore::importBww(Score* score, const QString& path)
+Score::FileError importBww(Score* score, const QString& path)
       {
       qDebug("Score::importBww(%s)\n", qPrintable(path));
 
-      if (path.isEmpty())
-            return false;
       QFile fp(path);
       if (!fp.open(QIODevice::ReadOnly))
-            return false;
+            return Score::FILE_OPEN_ERROR;
 
       QString id("importBww");
       Part* part = new Part(score);
@@ -563,5 +561,5 @@ bool MuseScore::importBww(Score* score, const QString& path)
       score->setCreated(true);
       score->connectTies();
       qDebug("Score::importBww() done\n");
-      return true;      // OK
+      return Score::FILE_NO_ERROR;      // OK
       }

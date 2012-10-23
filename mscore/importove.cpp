@@ -608,23 +608,23 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 	}
 }
 
-int OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
-	int subtype = 0;
+static Ottava::OttavaType OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
+	Ottava::OttavaType subtype = Ottava::OTTAVA_8VA;
 	switch (type) {
 	case OVE::OctaveShift_8: {
-		subtype = 0;
+		subtype = Ottava::OTTAVA_8VA;
 		break;
 	}
 	case OVE::OctaveShift_15: {
-		subtype = 1;
+		subtype = Ottava::OTTAVA_15MA;
 		break;
 	}
 	case OVE::OctaveShift_Minus_8: {
-		subtype = 2;
+		subtype = Ottava::OTTAVA_8VB;
 		break;
 	}
 	case OVE::OctaveShift_Minus_15: {
-		subtype = 3;
+		subtype = Ottava::OTTAVA_15MB;
 		break;
 	}
 	default:
@@ -709,7 +709,7 @@ void OveToMScore::convertTrackElements(int track) {
 
 void OveToMScore::convertLineBreak(){
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-		if (mb->type() != MEASURE)
+		if (mb->type() != Element::MEASURE)
 			continue;
 		Measure* measure = static_cast<Measure*> (mb);
 
@@ -752,9 +752,8 @@ void OveToMScore::convertSignatures(){
 				}
 
 					TimeSig* ts = new TimeSig(score_);
-					ts->setSig(Fraction(tt.numerator_, tt.denominator_));
 					ts->setTrack(staffIdx * VOICES);
-					ts->setSubtype(subtype);
+					ts->setSig(Fraction(tt.numerator_, tt.denominator_), subtype);
 
 					Segment* seg = measure->getSegment(ts, tt.tick_);
 					seg->add(ts);
@@ -1127,7 +1126,7 @@ OVE::ClefType getClefType(OVE::MeasureData* measure, int tick) {
 
 void OveToMScore::convertMeasures() {
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != MEASURE)
+          if (mb->type() != Element::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1136,7 +1135,7 @@ void OveToMScore::convertMeasures() {
 
     //  convert based on notes
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != MEASURE)
+          if (mb->type() != Element::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1414,7 +1413,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 
 			cr = measure->findChord(tick, noteTrack, graceLevel);
 			if (cr == 0) {
-				Segment::SegmentType st = Segment::SegChordRest;
+				// Segment::SegmentType st = Segment::SegChordRest;
 
 				cr = new Chord(score_);
 				cr->setTrack(noteTrack);
@@ -1438,7 +1437,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 						cr->setDurationType(TDuration::V_EIGHT);
 					}
 
-					st = Segment::SegGrace;
+					// st = Segment::SegGrace;
 				} else {
 					TDuration duration = OveNoteType_To_Duration(container->getNoteType());
 					duration.setDots(container->getDot());
@@ -1449,7 +1448,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				}
 				cr->setDuration(cr->durationType().fraction());
 
-				Segment* s = measure->getSegment(st, tick, graceLevel);
+				Segment* s = measure->getGraceSegment(tick, graceLevel);
 				s->add(cr);
 			}
 
@@ -2142,7 +2141,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
                         s1->add(volta);
                         }
 
-			volta->setSubtype(VOLTA_CLOSED);
+			volta->setSubtype(Volta::VOLTA_CLOSED);
 			volta->setText(ending->getText());
 
 			volta->endings().clear();
@@ -2344,27 +2343,27 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 	}
 }
 
-int OveWedgeType_To_Type(OVE::WedgeType type) {
-	int subtype = 0;
+static Hairpin::HairpinType OveWedgeType_To_Type(OVE::WedgeType type) {
+	Hairpin::HairpinType subtype = Hairpin::CRESCENDO;
 	switch(type) {
 	case OVE::Wedge_Cres_Line: {
-		subtype = 0;
+		subtype = Hairpin::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Double_Line: {
-		subtype = 0;
+		subtype = Hairpin::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc_Line: {
-		subtype = 1;
+		subtype = Hairpin::DECRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Cres: {
-		subtype = 0;
+		subtype = Hairpin::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc: {
-		subtype = 1;
+		subtype = Hairpin::DECRESCENDO;
 		break;
 	}
 	default:
@@ -2409,7 +2408,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 }
 
 //////////////////////////////////////////////////////////////////////////
-bool MuseScore::importOve(Score* score, const QString& name) {
+Score::FileError importOve(Score* score, const QString& name) {
 	OVE::IOVEStreamLoader* oveLoader = OVE::createOveStreamLoader();
 	OVE::OveSong oveSong;
 
@@ -2417,7 +2416,7 @@ bool MuseScore::importOve(Score* score, const QString& name) {
 
 	if (!oveFile.open(QFile::ReadOnly)) {
 		//messageOutString(QString("can't read file!"));
-		return false;
+		return Score::FILE_OPEN_ERROR;
 	}
 
 	QByteArray buffer = oveFile.readAll();
@@ -2442,5 +2441,5 @@ bool MuseScore::importOve(Score* score, const QString& name) {
                   }
 	}
 
-	return result;
+      return result ? Score::FILE_ERROR : Score::FILE_NO_ERROR;
 }

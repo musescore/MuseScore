@@ -53,6 +53,8 @@ class Rest : public ChordRest {
       virtual Element* drop(const DropData&);
       virtual void layout();
 
+      virtual void toDefault();
+
       void setMMWidth(qreal val);
       qreal mmWidth() const        { return _mmWidth; }
       int getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);

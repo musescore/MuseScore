@@ -60,14 +60,6 @@ class Tuplet : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
-      void* pDirection()   { return &_direction;            }
-      void* pNumberType()  { return &_numberType;           }
-      void* pBracketType() { return &_bracketType;          }
-      void* pNormalNotes() { return &_ratio.rdenominator(); }
-      void* pActualNotes() { return &_ratio.rnumerator();   }
-      void* pP1()          { return &_p1;                   }
-      void* pP2()          { return &_p2;                   }
-
    public:
       Tuplet(Score*);
       Tuplet(const Tuplet&);
@@ -124,8 +116,9 @@ class Tuplet : public DurationElement {
       void sortElements();
 
       virtual void setVisible(bool f);
-
-      PROPERTY_DECLARATIONS(Tuplet)
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant& v);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

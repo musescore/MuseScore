@@ -23,7 +23,7 @@
 
 #include "ui_editinstrument.h"
 
-struct InstrumentTemplate;
+class InstrumentTemplate;
 
 //---------------------------------------------------------
 //   EditInstrument

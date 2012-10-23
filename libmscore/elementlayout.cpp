@@ -54,7 +54,7 @@ void ElementLayout::layout(Element* e) const
       qreal h = 0.0;
       if (e->parent()) {
             qreal pw, ph;
-            if ((e->type() == MARKER || e->type() == JUMP) && e->parent()->parent()) {
+            if ((e->type() == Element::MARKER || e->type() == Element::JUMP) && e->parent()->parent()) {
                   pw = e->parent()->parent()->width();      // measure width
                   ph = e->parent()->parent()->height();
                   }
@@ -64,7 +64,8 @@ void ElementLayout::layout(Element* e) const
                   }
             o += QPointF(_reloff.x() * pw * 0.01, _reloff.y() * ph * 0.01);
             }
-      bool frameText = e->type() == TEXT && static_cast<Text*>(e)->layoutToParentWidth() && e->parent();
+      bool frameText = e->type() == Element::TEXT
+         && static_cast<Text*>(e)->layoutToParentWidth() && e->parent();
       QPointF p;
       if (frameText)
             h = e->parent()->height();

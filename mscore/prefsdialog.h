@@ -73,6 +73,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void definePluginShortcutClicked();
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
       void pluginLoadToggled(bool);
+      void printShortcutsClicked();
 
    signals:
       void preferencesChanged();

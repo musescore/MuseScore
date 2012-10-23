@@ -22,16 +22,14 @@
 #include "stafftype.h"
 
 //---------------------------------------------------------
-//   propertyList
+//   static members init
 //---------------------------------------------------------
 
-static int defaultSubtype = 0;
+qreal BarLine::yoff1 = 0.0;
+qreal BarLine::yoff2 = 0.0;
 
-Property<BarLine> BarLine::propertyList[] = {
-      { P_SUBTYPE, &BarLine::pSubtype, &defaultSubtype },
-      };
-
-static const int PROPERTIES = sizeof(BarLine::propertyList)/sizeof(*BarLine::propertyList);
+bool BarLine::ctrlDrag = false;
+int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 
 //---------------------------------------------------------
 //   barLineNames
@@ -51,9 +49,11 @@ BarLine::BarLine(Score* s)
    : Element(s)
       {
       setSubtype(NORMAL_BAR);
-      _span = 1;
-      yoff  = 0.0;
-      setHeight(4.0 * spatium()); // for use in palettes
+      _span     = 1;
+      _spanFrom = 0;
+      _spanTo   = DEFAULT_BARLINE_TO;
+      _customSpan = false;
+      setHeight(DEFAULT_BARLINE_TO/2 * spatium()); // for use in palettes
       }
 
 //---------------------------------------------------------
@@ -64,7 +64,11 @@ QPointF BarLine::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      System* system = measure()->system();
+      if (parent()->type() != SEGMENT)
+            return pos() + parent()->pagePos();
+
+      System* system = static_cast<Segment*>(parent())->measure()->system();
+
       qreal yp = y();
       if (system)
             yp += system->staffY(staffIdx());
@@ -77,30 +81,45 @@ QPointF BarLine::pagePos() const
 
 void BarLine::getY(qreal* y1, qreal* y2) const
       {
-      if (parent() && parent()->type() == SEGMENT) {
+      qreal _spatium = spatium();
+      if (parent()) {
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
             if (staffIdx2 >= score()->nstaves()) {
                   qDebug("BarLine: bad _span %d\n", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
-            Segment* segment = static_cast<Segment*>(parent());
-            Measure* measure = segment->measure();
-            System* system   = measure->system();
+            Measure* measure;
+            System* system;
+            if (parent()->type() == SEGMENT) {
+                  Segment* segment = static_cast<Segment*>(parent());
+                  measure = segment->measure();
+                  system = measure->system();
+                  }
+            else {
+                  system = static_cast<System*>(parent());
+                  measure = system->firstMeasure();
+                  }
+
             StaffLines* l1   = measure->staffLines(staffIdx1);
             StaffLines* l2   = measure->staffLines(staffIdx2);
 
             qreal yp = system ? system->staff(staffIdx())->y() : 0.0;
             *y1 = l1->y1() - yp;
-            *y2 = l2->y2() - yp;
+            *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
+            *y2 = l2->y1() - yp;
+            *y2 += (_spanTo   * score()->staff(staffIdx2)->lineDistance() * _spatium) / 2;
             }
       else {
             // for use in palette
             *y1 = 0.0;
-            *y2 = 4.0 * spatium();
+            *y2 = DEFAULT_BARLINE_TO/2 * _spatium;
             }
 
-      *y2 += yoff;
+      if(selected()) {
+            *y1 += yoff1;
+            *y2 += yoff2;
+            }
       }
 
 //---------------------------------------------------------
@@ -117,8 +136,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             dotsym.draw(painter, mags, QPointF(x, 1.5 * _spatium));
             dotsym.draw(painter, mags, QPointF(x, 2.5 * _spatium));
             }
-      else {
-            System* s = measure()->system();
+      else if (parent()->type() == SEGMENT) {
+            System* s = static_cast<Segment*>(parent())->measure()->system();
             int _staffIdx = staffIdx();
             qreal dy  = s->staff(_staffIdx)->y();
             for (int i = 0; i < _span; ++i) {
@@ -223,6 +242,7 @@ void BarLine::draw(QPainter* painter) const
                   pen.setWidthF(lw2);
                   painter->setPen(pen);
                   painter->drawLine(QLineF(x2, y1, x2, y2));
+
                   if (score()->styleB(ST_repeatBarTips)) {
                         qreal x = x2 + lw2 * .5;
                         symbols[score()->symIdx()][brackettipsLeftUp].draw(painter, mags, QPointF(x, y1));
@@ -254,6 +274,14 @@ void BarLine::draw(QPainter* painter) const
                   pen.setWidthF(lw);
                   painter->setPen(pen);
                   painter->drawLine(QLineF(x3, y1, x3, y2));
+
+                  if (score()->styleB(ST_repeatBarTips)) {
+                        qreal x = x2;
+                        symbols[score()->symIdx()][brackettipsRightUp].draw(painter, mags, QPointF(x, y1));
+                        symbols[score()->symIdx()][brackettipsRightDown].draw(painter, mags, QPointF(x, y2));
+                        symbols[score()->symIdx()][brackettipsLeftUp].draw(painter, mags, QPointF(x, y1));
+                        symbols[score()->symIdx()][brackettipsLeftDown].draw(painter, mags, QPointF(x, y2));
+                        }
                   }
                   break;
             }
@@ -267,7 +295,14 @@ void BarLine::write(Xml& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", subtypeName());
-      xml.tag("span", _span);
+      // if any span value is different from staff's, output all values
+      // (palette bar lines have no staff!)
+      if (staff() && (_span != staff()->barLineSpan()
+                  || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()) )
+            xml.tag(QString("span from=\"%1\" to=\"%2\"").arg(_spanFrom).arg(_spanTo), _span);
+      // if no custom value, output _span only (as in previous code)
+      else
+            xml.tag("span", _span);
       foreach(const Element* e, _el)
             e->write(xml);
       Element::writeProperties(xml);
@@ -280,6 +315,12 @@ void BarLine::write(Xml& xml) const
 
 void BarLine::read(const QDomElement& de)
       {
+      // if bar line belongs to a staff, span values default to staff values
+      if(staff()) {
+            _span       = staff()->barLineSpan();
+            _spanFrom   = staff()->barLineFrom();
+            _spanTo     = staff()->barLineTo();
+      }
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
@@ -303,8 +344,15 @@ void BarLine::read(const QDomElement& de)
                         setSubtype(ct);
                         }
                   }
-            else if (tag == "span")
-                  _span = val.toInt();
+            else if (tag == "span") {
+                  _span       = val.toInt();
+                  _spanFrom   = e.attribute("from", QString::number(_spanFrom)).toInt();
+                  _spanTo     = e.attribute("to", QString::number(_spanTo)).toInt();
+                  // WARNING: following statements assume staff and staff bar line spans are correctly set
+                  if(staff() && (_span != staff()->barLineSpan()
+                              || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
+                        _customSpan = true;
+                  }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
                   a->read(e);
@@ -331,9 +379,21 @@ Space BarLine::space() const
 bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
-      return type == BAR_LINE
-         || (type == ARTICULATION && segment() && segment()->subtype() == Segment::SegEndBarLine)
-         ;
+      if(type == BAR_LINE) {
+          if (parent() && parent()->type() == SEGMENT) {
+              return true;
+              }
+          if (parent() && parent()->type() == SYSTEM) {
+              BarLine* b = static_cast<BarLine*>(e);
+              return (b->subtype() == BROKEN_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
+              } 
+      }else {
+            return (type == ARTICULATION
+                && parent()
+                && parent()->type() == SEGMENT
+                && static_cast<Segment*>(parent())->subtype() == Segment::SegEndBarLine);
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -351,7 +411,13 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
-            Measure* m = segment()->measure();
+            if (parent()->type() == SYSTEM) {
+                  BarLine* b = static_cast<System*>(parent())->barLine();
+                  score()->undoChangeProperty(b, P_SUBTYPE, int(bl->subtype()));
+                  delete e;
+                  return 0;
+                  }
+            Measure* m = static_cast<Segment*>(parent())->measure();
             if (st == START_REPEAT) {
                   m = m->nextMeasure();
                   if (m == 0) {
@@ -377,12 +443,25 @@ Element* BarLine::drop(const DropData& data)
 
 void BarLine::updateGrips(int* grips, QRectF* grip) const
       {
-      *grips   = 1;
+      *grips   = 2;
       qreal lw = point(score()->styleS(ST_barWidth));
       qreal y1, y2;
       getY(&y1, &y2);
-      grip[0].translate(QPointF(lw * .5, y2) + pagePos());
+      grip[0].translate(QPointF(lw * .5, y1) + pagePos());
+      grip[1].translate(QPointF(lw * .5, y2) + pagePos());
       }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void BarLine::startEdit(MuseScoreView*, const QPointF&)
+{
+      // keep a copy of original span values
+      _origSpan         = _span;
+      _origSpanFrom     = _spanFrom;
+      _origSpanTo       = _spanTo;
+}
 
 //---------------------------------------------------------
 //   endEdit
@@ -390,26 +469,45 @@ void BarLine::updateGrips(int* grips, QRectF* grip) const
 
 void BarLine::endEdit()
       {
-      if (staff()->barLineSpan() == _span)
+      if(ctrlDrag) {                      // if single bar line edit
+            ctrlDrag = false;
+            _customSpan       = true;           // mark bar line as custom spanning
+            int newSpan       = _span;          // copy edited span values
+            int newSpanFrom   = _spanFrom;
+            int newSpanTo     = _spanTo;
+            _span             = _origSpan;      // restore original span values
+            _spanFrom         = _origSpanFrom;
+            _spanTo           = _origSpanTo;
+            // undoable change
+            score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
+            return;
+            }
+
+      if (staff()->barLineSpan() == _span && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo)
             return;
 
       int idx1 = staffIdx();
 
-      if (_span > staff()->barLineSpan()) {
-            // if span increased, set span to 0 for all newly spanned staves
-            int idx2 = idx1 + _span;
-            for (int idx = idx1 + 1; idx < idx2; ++idx)
-                  score()->undoChangeBarLineSpan(score()->staff(idx), 0);
+      if(_span != staff()->barLineSpan()) {
+            // if now bar lines span more staves
+            if (_span > staff()->barLineSpan()) {
+                  int idx2 = idx1 + _span;
+                  // set span 0 to all additional staves
+                  for (int idx = idx1 + 1; idx < idx2; ++idx)
+                        score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0, (score()->staff(idx)->lines()-1)*2);
+                  }
+            // if now bar lines span fewer staves
+            else {
+                  int idx1 = staffIdx() + _span;
+                  int idx2 = staffIdx() + staff()->barLineSpan();
+                  // set standard span for each un-spanned staff
+                  for (int idx = idx1; idx < idx2; ++idx)
+                        score()->undoChangeBarLineSpan(score()->staff(idx), 1, 0, (score()->staff(idx)->lines()-1)*2);
+                  }
             }
-      else {
-            // if span decreased, set span to 1 (the default) for all staves no longer spanned
-            int idx1 = staffIdx() + _span;
-            int idx2 = staffIdx() + staff()->barLineSpan();
-            for (int idx = idx1; idx < idx2; ++idx)
-                  score()->undoChangeBarLineSpan(score()->staff(idx), 1);
-            }
+
       // update span for the staff the edited bar line belongs to
-      score()->undoChangeBarLineSpan(staff(), _span);
+      score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
       // added "_score->setLayoutAll(true);" to ChangeBarLineSpan::flip()
       // otherwise no measure bar line update occurs
       }
@@ -420,46 +518,117 @@ void BarLine::endEdit()
 
 void BarLine::editDrag(const EditData& ed)
       {
-      yoff += ed.delta.y();
+      qreal lineDist = staff()->lineDistance() * spatium();
+      qreal min, max, lastmax, y1, y2;
+      getY(&y1, &y2);
+      y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
+      y2 -= yoff2;
+      if(ed.curGrip == 0) {
+            // min offset for top grip is line -1
+            // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
+            min = -y1 - lineDist;
+            max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
+            lastmax = (staff()->lines() - _spanFrom/2) * lineDist;      // 1 line below last staff line
+            if(lastmax < max)
+                  max = lastmax;
+            // update yoff1 and bring it within limits
+            yoff1 += ed.delta.y();
+            if(yoff1 < min)
+                  yoff1 = min;
+            if(yoff1 > max)
+                  yoff1 = max;
+            }
+      else {
+            // min for bottom grip is 1 line below top grip
+            // no max
+            min = y1 - y2 + lineDist;
+            // update yoff2 and bring it within limit
+            yoff2 += ed.delta.y();
+            if(yoff2 < min)
+                  yoff2 = min;
+            }
       }
 
 //---------------------------------------------------------
 //   endEditDrag
-//    snap to nearest staff
+//    snap to nearest staff / staff line
 //---------------------------------------------------------
 
 void BarLine::endEditDrag()
       {
-      qreal y1, h2;
-      getY(&y1, &h2);
-      yoff      = 0.0;
-      qreal ay1 = pagePos().y();
-      qreal ay2 = ay1 + h2;
+      qreal y1, y2;
+      getY(&y1, &y2);
+      qreal ay0 = pagePos().y();
+//      qreal ay1 = ay0 + y1;
+      qreal ay2 = ay0 + y2;                     // absolute (page-relative) bar line bottom coord
 
       int staffIdx1 = staffIdx();
       int staffIdx2;
-      Segment* segment = (Segment*)parent();
-      Measure* measure = segment->measure();
-      System* s = measure->system();
-      int n = s->staves()->size();
-      if (staffIdx1 + 1 >= n)
-            staffIdx2 = staffIdx1;
+      
+      System* syst;
+      if (parent()->type() == SYSTEM) {
+            syst = static_cast<System*>(parent());
+            } 
       else {
-            qreal ay = s->pagePos().y();
-            qreal y  = s->staff(staffIdx1)->y() + ay;
-            qreal h1 = staff()->lines() * spatium();
+            syst = static_cast<Segment*>(parent())->measure()->system();
+            }      
+      qreal systTopY = syst->pagePos().y();
 
-            for (staffIdx2 = staffIdx1 + 1; staffIdx2 < n; ++staffIdx2) {
-                  qreal h = s->staff(staffIdx2)->y() + ay - y;
-                  if (ay2 < (y + (h + h1) * .5))
-                        break;
-                  y += h;
+      // determine new span value
+      int numOfStaves = syst->staves()->size();
+      if (staffIdx1 + 1 >= numOfStaves)
+            // if initial staff is last staff, ending staff must be the same
+            staffIdx2 = staffIdx1;
+
+      else {
+            // if there are other staves after it, look for staff nearest to bar line bottom coord
+            qreal staff1TopY = syst->staff(staffIdx1)->y() + systTopY;
+
+            for (staffIdx2 = staffIdx1 + 1; staffIdx2 < numOfStaves; ++staffIdx2) {
+                  // compute 1st staff height, absolute top Y of 2nd staff and height of blank between the staves
+                  Staff * staff1      = score()->staff(staffIdx2-1);
+                  qreal staff1Hght    = (staff1->lines()-1) * staff1->lineDistance() * spatium();
+                  qreal staff2TopY    = systTopY   + syst->staff(staffIdx2)->y();
+                  qreal blnkBtwnStaff = staff2TopY - staff1TopY - staff1Hght;
+                  // if bar line bottom coord is above than mid-way of blank between staves...
+                  if (ay2 < (staff1TopY + staff1Hght + blnkBtwnStaff * .5))
+                        break;                  // ...staff 1 is ending staff
+                  // if bar line is below, advance to next staff
+                  staff1TopY = staff2TopY;
                   }
             staffIdx2 -= 1;
             }
       int newSpan = staffIdx2 - staffIdx1 + 1;
-      if (newSpan != _span) {
-/*    ONLY TAKE NOTE OF NEW BAR LINE SPAN: LET BarLine::endEdit() DO THE JOB!
+
+      // determine new spanFrom value
+      int newSpanFrom = _spanFrom;
+      if(yoff1 != 0.0) {
+            // round bar line top coord to nearest line of 1st staff (in half line dist units)
+            newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
+            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+            if(newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
+                  newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
+            if(newSpanFrom > staff()->lines()*2)
+                  newSpanFrom = staff()->lines()*2;
+            }
+
+      // determine new spanTo value
+      int newSpanTo = _spanTo;
+      if(yoff2 != 0.0) {
+            // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
+            Staff * staff2   = score()->staff(staffIdx2);
+            qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
+            newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
+            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+            if(newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
+                  newSpanTo = MIN_BARLINE_SPAN_FROMTO;
+            if(newSpanTo > staff()->lines()*2)
+                  newSpanTo = staff2->lines()*2;
+            }
+
+      // if any value changed, update
+      if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
+/*    ONLY TAKE NOTE OF NEW SPAN VALUES: LET BarLine::endEdit() DO THE JOB!
             if (newSpan > _span) {
                   int diff = newSpan - _span;
                   staffIdx1 += _span;
@@ -473,10 +642,14 @@ void BarLine::endEditDrag()
                                     }
                               }
                         }
-                  }
-*/            _span = newSpan;
-//            score()->undoChangeBarLineSpan(staff(), _span);
+                  } */
+            _span       = newSpan;
+            _spanFrom   = newSpanFrom;
+            _spanTo     = newSpanTo;
+//            score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
             }
+
+      yoff1 = yoff2 = 0.0;
       }
 
 //---------------------------------------------------------
@@ -535,16 +708,34 @@ void BarLine::layout()
       QRectF r(0.0, y1, dw, y2-y1);
 
       if (score()->styleB(ST_repeatBarTips)) {
-            // qreal mags = magS();
+            qreal mags = magS();
+            int si = score()->symIdx();
             switch (subtype()) {
                   case START_REPEAT:
-                        //r |= symbols[brackettipsRightUp].bbox(mags).translated(0, y1);
-                        //r |= symbols[brackettipsRightDown].bbox(mags).translated(0, y2);
+                        r |= symbols[si][brackettipsRightUp].bbox(mags).translated(0, y1);
+                        r |= symbols[si][brackettipsRightDown].bbox(mags).translated(0, y2);
                         break;
                   case END_REPEAT:
-                        //r |= symbols[brackettipsLeftUp].bbox(mags).translated(0, y1);
-                        //r |= symbols[brackettipsLeftDown].bbox(mags).translated(0, y2);
+                        r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(0, y1);
+                        r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(0, y2);
                         break;
+
+                  case END_START_REPEAT:
+                        {
+                        qreal lw   = point(score()->styleS(ST_barWidth));
+                        qreal lw2  = point(score()->styleS(ST_endBarWidth));
+                        qreal d1   = point(score()->styleS(ST_endBarDistance));
+                        const Sym& dotsym = symbols[score()->symIdx()][dotSym];
+                        qreal dotw = dotsym.width(mags);
+                        qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
+
+                        r |= symbols[si][brackettipsRightUp].bbox(mags).translated(x, y1);
+                        r |= symbols[si][brackettipsRightDown].bbox(mags).translated(x, y2);
+                        r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(x, y1);
+                        r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(x, y2);
+                        }
+                        break;
+
                   default:
                         break;
                   }
@@ -587,7 +778,8 @@ QPainterPath BarLine::shape() const
 
 int BarLine::tick() const
       {
-      return segment() ? segment()->tick() : 0;
+      return (parent() && parent()->type() == SEGMENT)
+         ? static_cast<Segment*>(parent())->tick() : 0;
       }
 
 //---------------------------------------------------------
@@ -631,16 +823,21 @@ void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void BarLine::add(Element* e)
       {
+      if (parent() && parent()->type() != SEGMENT) {
+            delete e;
+            return;
+            }
 	e->setParent(this);
       switch(e->type()) {
             case ARTICULATION:
                   _el.append(e);
                   setGenerated(false);
-                  if (measure())
-                        measure()->setEndBarLineGenerated(false);
+                  if (parent() && parent()->parent())
+                        static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
                   break;
             default:
                   qDebug("BarLine::add() not impl. %s\n", e->name());
+                  delete e;
                   break;
             }
       }
@@ -663,43 +860,27 @@ void BarLine::remove(Element* e)
       }
 
 //---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-Property<BarLine>* BarLine::property(P_ID id) const
-      {
-      for (int i = 0; i < PROPERTIES; ++i) {
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant BarLine::getProperty(P_ID propertyId) const
+QVariant BarLine::getProperty(P_ID id) const
       {
-      Property<BarLine>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(BarLine*)this).*(p->data))());
-      return Element::getProperty(propertyId);
+      if (id == P_SUBTYPE)
+            return _subtype;
+      return Element::getProperty(id);
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool BarLine::setProperty(P_ID propertyId, const QVariant& v)
+bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
-      Property<BarLine>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            return true;
-            }
+      if (id == P_SUBTYPE)
+            _subtype = BarLineType(v.toInt());
+      else
+            return Element::setProperty(id, v);
       score()->setLayoutAll(true);
-      return Element::setProperty(propertyId, v);
+      return true;
       }
 

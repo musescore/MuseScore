@@ -21,6 +21,7 @@
 #ifndef __HAIRPINPROP_H__
 #define __HAIRPINPROP_H__
 
+#include "libmscore/element.h"
 #include "libmscore/mscore.h"
 #include "ui_hairpinproperties.h"
 
@@ -37,7 +38,7 @@ class HairpinProperties : public QDialog, public Ui::HairpinProperties {
    public:
       HairpinProperties(Hairpin*, QWidget* parent = 0);
       int changeVelo() const { return veloChange->value(); }
-      DynamicType dynamicType() const;
+      Element::DynamicType dynamicType() const;
       bool allowDiagonal() const { return diagonal->isChecked(); }
       };
 

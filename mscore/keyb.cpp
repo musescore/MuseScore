@@ -39,6 +39,7 @@
 #include "preferences.h"
 #include "libmscore/segment.h"
 #include "libmscore/mscore.h"
+#include "libmscore/stafftype.h"
 
 #ifdef Q_WS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -55,7 +56,7 @@ void ScoreView::editCmd(const QString& cmd)
       if (!editObject)
             return;
 
-      if (editObject->type() == LYRICS) {
+      if (editObject->type() == Element::LYRICS) {
             if (cmd == "next-lyric")
                   lyricsTab(false, true, false);
             else if (cmd == "prev-lyric")
@@ -71,7 +72,7 @@ void ScoreView::editCmd(const QString& cmd)
                   }
             if (key == Qt::Key_Left) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -80,7 +81,7 @@ void ScoreView::editCmd(const QString& cmd)
                   }
             if (key == Qt::Key_Right) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -148,7 +149,7 @@ void ScoreView::editCmd(const QString& cmd)
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
                   updateGrips();
                   ev->accept();
-                  _score->end();
+                  _score->update();
                   mscore->endCmd();
                   return;
                   }
@@ -229,7 +230,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       if (!editObject)
             return;
 
-      if (editObject->type() == LYRICS /*|| editObject->type() == FIGURED_BASS*/) {
+      if (editObject->type() == Element::LYRICS) {
             int found = false;
 		if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   // TODO: shift+tab events are filtered by qt
@@ -238,7 +239,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             else if (key == Qt::Key_Left) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -247,7 +248,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             else if (key == Qt::Key_Right) {
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->end();
+                        _score->update();
                         mscore->endCmd();
                         }
                   else
@@ -285,14 +286,14 @@ void ScoreView::editKey(QKeyEvent* ev)
                   return;
                   }
             }
-      if (editObject->type() == HARMONY) {
+      if (editObject->type() == Element::HARMONY) {
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   chordTab(modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
             }
-      if (editObject->type() == FIGURED_BASS) {
+      if (editObject->type() == Element::FIGURED_BASS) {
             int found = false;
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
@@ -316,7 +317,7 @@ void ScoreView::editKey(QKeyEvent* ev)
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
                   updateGrips();
                   ev->accept();
-                  _score->end();
+                  _score->update();
                   mscore->endCmd();
                   return;
                   }
@@ -331,7 +332,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       qreal _spatium = editObject->spatium();
 
       qreal xval, yval;
-      if (editObject->type() == BEAM) {
+      if (editObject->type() == Element::BEAM) {
             xval = 0.25 * _spatium;
             if (modifiers & Qt::ControlModifier)
                   xval = _spatium;
@@ -396,7 +397,20 @@ void ScoreView::editKey(QKeyEvent* ev)
 void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
-      showDrumTools(is.drumset(), score->staff(is.track() / VOICES));
+      if (is.noteEntryMode) {
+            Staff* staff = score->staff(is.track() / VOICES);
+            switch (staff->staffType()->group()) {
+                  case PITCHED_STAFF:
+                        changeState(STATE_NOTE_ENTRY_PITCHED);
+                        break;
+                  case TAB_STAFF:
+                        changeState(STATE_NOTE_ENTRY_TAB);
+                        break;
+                  case PERCUSSION_STAFF:
+                        changeState(STATE_NOTE_ENTRY_DRUM);
+                        break;
+                  }
+            }
 
       getAction("pad-rest")->setChecked(is.rest);
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);

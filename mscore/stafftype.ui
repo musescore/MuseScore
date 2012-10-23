@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>606</height>
+    <height>770</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -306,12 +306,22 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string comment="tablatture type">Guitar (modern)</string>
+                  <string comment="tablatture type">6 strings (generic guitar)</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string comment="tablature type">Bass (modern)</string>
+                  <string comment="tablature type">4 strings (generic bass)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>ukulele</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>bandurria</string>
                  </property>
                 </item>
                 <item>
@@ -324,16 +334,11 @@
                   <string comment="tablature type">French (historic)</string>
                  </property>
                 </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="presetTablature">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Set</string>
-                </property>
+                <item>
+                 <property name="text">
+                  <string>Custom</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -431,13 +436,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QFontComboBox" name="fretFontName">
-                     <property name="currentFont">
-                      <font>
-                       <family>MS Shell Dlg 2</family>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QComboBox" name="fretFontName"/>
                    </item>
                    <item>
                     <widget class="QLabel" name="fretFontSizeLabel">
@@ -696,34 +695,297 @@
                     </property>
                     <item>
                      <widget class="QLabel" name="durSymLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Shown as:</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues0">
+                     <widget class="QRadioButton" name="noteValuesNone">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>None</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues1">
+                     <widget class="QRadioButton" name="noteValuesSymb">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Note Symbols</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QRadioButton" name="noteValues2">
+                     <widget class="QRadioButton" name="noteValuesStems">
                       <property name="text">
                        <string>Stems and beams</string>
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <spacer name="horizontalSpacer_13">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
                    </layout>
                   </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_5">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="stemPosLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Stem position:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="stemAboveRadio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Above</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="stemBelowRadio">
+                      <property name="text">
+                       <string>Below</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_10">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_6">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_17">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="stemStyleLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Stem style:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="stemBesideRadio">
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Beside staff</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="stemThroughRadio">
+                      <property name="text">
+                       <string>Through staff</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_11">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_7">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="minimLabels">
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Half notes:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="minimNoneRadio">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>110</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>None</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="minimShortRadio">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>As short stem</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="minimSlashedRadio">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="text">
+                       <string>As slashed stem</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_14">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QGridLayout" name="gridLayout_3">
+                   <item row="0" column="1">
+                    <widget class="QCheckBox" name="showRests">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="text">
+                      <string>Show Rests</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <spacer name="horizontalSpacer_12">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
                  </item>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -735,7 +997,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QFontComboBox" name="durFontName"/>
+                    <widget class="QComboBox" name="durFontName"/>
                    </item>
                    <item>
                     <widget class="QLabel" name="durFontSizeLabel">
@@ -786,12 +1048,6 @@
                </widget>
               </item>
              </layout>
-             <zorder>upsideDown</zorder>
-             <zorder>upsideDown</zorder>
-             <zorder>fretMarksGroup</zorder>
-             <zorder></zorder>
-             <zorder>fretMarksGroup</zorder>
-             <zorder>durationsGroup</zorder>
             </widget>
            </item>
            <item>
@@ -982,10 +1238,17 @@
   <tabstop>name</tabstop>
   <tabstop>lines</tabstop>
   <tabstop>lineDistance</tabstop>
+  <tabstop>genClef</tabstop>
+  <tabstop>genTimesig</tabstop>
+  <tabstop>showBarlines</tabstop>
+  <tabstop>showLedgerLinesPitched</tabstop>
+  <tabstop>genKeysigPitched</tabstop>
+  <tabstop>stemlessPitched</tabstop>
   <tabstop>newTypePitched</tabstop>
   <tabstop>presetTablatureCombo</tabstop>
-  <tabstop>presetTablature</tabstop>
+  <tabstop>pushFullConfig</tabstop>
   <tabstop>upsideDown</tabstop>
+  <tabstop>pushQuickConfig</tabstop>
   <tabstop>fretFontName</tabstop>
   <tabstop>fretFontSize</tabstop>
   <tabstop>fretY</tabstop>
@@ -995,17 +1258,28 @@
   <tabstop>aboveLinesRadio</tabstop>
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
-  <tabstop>noteValues0</tabstop>
-  <tabstop>noteValues1</tabstop>
-  <tabstop>noteValues2</tabstop>
+  <tabstop>noteValuesNone</tabstop>
+  <tabstop>noteValuesSymb</tabstop>
+  <tabstop>noteValuesStems</tabstop>
+  <tabstop>stemAboveRadio</tabstop>
+  <tabstop>stemBelowRadio</tabstop>
+  <tabstop>stemBesideRadio</tabstop>
+  <tabstop>stemThroughRadio</tabstop>
+  <tabstop>minimNoneRadio</tabstop>
+  <tabstop>minimShortRadio</tabstop>
+  <tabstop>minimSlashedRadio</tabstop>
+  <tabstop>showRests</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
   <tabstop>newTypeTablature</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
+  <tabstop>genKeysigPercussion</tabstop>
+  <tabstop>stemlessPercussion</tabstop>
   <tabstop>newTypePercussion</tabstop>
+  <tabstop>buttonBox</tabstop>
   <tabstop>save</tabstop>
   <tabstop>load</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

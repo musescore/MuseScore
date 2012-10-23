@@ -2,7 +2,7 @@
 <Shortcuts>
   <SC>
     <key>plugin-creator</key>
-    <seq>Shift+P</seq>
+    <seq>Ctrl+Shift+P</seq>
     </SC>
   <SC>
     <key>local-help</key>
@@ -721,14 +721,6 @@
     <seq>Ctrl+G</seq>
     </SC>
   <SC>
-    <key>next-score</key>
-    <seq>F3</seq>
-    </SC>
-  <SC>
-    <key>prev-score</key>
-    <seq>Shift+F3</seq>
-    </SC>
-  <SC>
     <key>transpose-up</key>
     <seq>F2</seq>
     </SC>
@@ -751,6 +743,64 @@
   <SC>
     <key>toggle-visible</key>
     <seq>V</seq>
+    </SC>
+  <SC>
+    <key>string-above</key>
+    <seq>Alt+Up</seq>
+    </SC>
+  <SC>
+    <key>string-below</key>
+    <seq>Alt+Down</seq>
+    </SC>
+  <SC>
+    <key>fret-0</key>
+    <seq>Alt+0</seq>
+    <seq>Alt+A</seq>
+    </SC>
+  <SC>
+    <key>fret-1</key>
+    <seq>Alt+1</seq>
+    <seq>Alt+B</seq>
+    </SC>
+  <SC>
+    <key>fret-2</key>
+    <seq>Alt+2</seq>
+    <seq>Alt+C</seq>
+    </SC>
+  <SC>
+    <key>fret-3</key>
+    <seq>Alt+3</seq>
+    <seq>Alt+D</seq>
+    </SC>
+  <SC>
+    <key>fret-4</key>
+    <seq>Alt+4</seq>
+    <seq>Alt+E</seq>
+    </SC>
+  <SC>
+    <key>fret-5</key>
+    <seq>Alt+5</seq>
+    <seq>Alt+F</seq>
+    </SC>
+  <SC>
+    <key>fret-6</key>
+    <seq>Alt+6</seq>
+    <seq>Alt+G</seq>
+    </SC>
+  <SC>
+    <key>fret-7</key>
+    <seq>Alt+7</seq>
+    <seq>Alt+H</seq>
+    </SC>
+  <SC>
+    <key>fret-8</key>
+    <seq>Alt+8</seq>
+    <seq>Alt+J</seq>
+    </SC>
+  <SC>
+    <key>fret-9</key>
+    <seq>Alt+9</seq>
+    <seq>Alt+K</seq>
     </SC>
   </Shortcuts>
 

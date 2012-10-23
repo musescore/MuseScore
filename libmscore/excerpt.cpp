@@ -133,7 +133,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       // create excerpt title
       //
       MeasureBase* measure = score->first();
-      if (!measure || (measure->type() != VBOX)) {
+      if (!measure || (measure->type() != Element::VBOX)) {
             MeasureBase* nmeasure = new VBox(score);
             nmeasure->setTick(0);
             score->addMeasure(nmeasure, measure);
@@ -170,11 +170,11 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       MeasureBaseList* nmbl = score->measures();
       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
             MeasureBase* nmb = 0;
-            if (mb->type() == HBOX)
+            if (mb->type() == Element::HBOX)
                   nmb = new HBox(score);
-            else if (mb->type() == VBOX)
+            else if (mb->type() == Element::VBOX)
                   nmb = new VBox(score);
-            else if (mb->type() == MEASURE) {
+            else if (mb->type() == Element::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = new Measure(score);
                   nmb = nm;
@@ -239,7 +239,18 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
-                              Segment* ns = nm->getSegment(oseg->subtype(), oseg->tick());
+                              Segment* ns;
+                              if (oseg->subtype() == Segment::SegGrace) {
+                                    int gl = 0;
+                                    for (Segment* ms = oseg->next(); ms; ms = ms->next()) {
+                                          ++gl;
+                                          if (ms->subtype() != Segment::SegGrace)
+                                                break;
+                                          }
+                                    ns = nm->getGraceSegment(oseg->tick(), gl);
+                                    }
+                              else
+                                    ns = nm->getSegment(oseg->subtype(), oseg->tick());
 
                               foreach(Spanner* spanner, oseg->spannerFor()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
@@ -256,9 +267,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     nspanner->setScore(score);
                                     nspanner->setParent(ns);
                                     nspanner->setTrack(track == -1 ? 0 : track);
-                                    if (spanner->anchor() == ANCHOR_SEGMENT)
+                                    if (spanner->anchor() == Spanner::ANCHOR_SEGMENT)
                                           nspanner->setStartElement(ns);
-                                    else //spanner->anchor() == ANCHOR_MEASURE
+                                    else //spanner->anchor() == Spanner::ANCHOR_MEASURE
                                           nspanner->setStartElement(nm);
                                     ns->addSpannerFor(nspanner);
                                     spannerMap.add(spanner, nspanner);
@@ -268,9 +279,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           continue;
                                     Spanner* nspanner = spannerMap.findNew(spanner);
                                     if (nspanner) {
-                                          if (spanner->anchor() == ANCHOR_SEGMENT)
+                                          if (spanner->anchor() == Spanner::ANCHOR_SEGMENT)
                                                 nspanner->setEndElement(ns);
-                                          else //spanner->anchor() == ANCHOR_MEASURE
+                                          else //spanner->anchor() == Spanner::ANCHOR_MEASURE
                                                 nspanner->setEndElement(nm);
                                           ns->addSpannerBack(nspanner);
                                           }
@@ -301,12 +312,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               if (oe == 0)
                                     continue;
                               Element* ne;
-                              if (oe->generated() || oe->type() == CLEF)
+                              if (oe->generated() || oe->type() == Element::CLEF)
                                     ne = oe->clone();
                               else
                                     ne = oe->linkedClone();
                               ne->setTrack(track);
-                              ne->scanElements(score, localSetScore);
+                              ne->scanElements(score, localSetScore);   //necessary?
                               ne->setScore(score);
                               if (oe->isChordRest()) {
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
@@ -325,7 +336,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ncr->setTuplet(nt);
                                           }
                                     foreach(Spanner* sp, ocr->spannerFor()) {
-                                          if (sp->type() != SLUR)
+                                          if (sp->type() != Element::SLUR)
                                                 continue;
                                           Slur* s = static_cast<Slur*>(sp);
                                           Slur* slur = new Slur(score);
@@ -335,7 +346,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           slurMap.add(s, slur);
                                           }
                                     foreach(Spanner* sp, ocr->spannerBack()) {
-                                          if (sp->type() != SLUR)
+                                          if (sp->type() != Element::SLUR)
                                                 continue;
                                           Slur* s = static_cast<Slur*>(sp);
                                           Slur* slur = slurMap.findNew(s);
@@ -348,7 +359,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 }
                                           }
 
-                                    if (oe->type() == CHORD) {
+                                    if (oe->type() == Element::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
                                           Chord* nch = static_cast<Chord*>(ncr);
                                           int n      = och->notes().size();
@@ -379,7 +390,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         }
                   }
             foreach(Element* e, *mb->el()) {
-                  if (e->type() == LAYOUT_BREAK) {
+                  if (e->type() == Element::LAYOUT_BREAK) {
                         LayoutBreakType st = static_cast<LayoutBreak*>(e)->subtype();
                         if (st == LAYOUT_BREAK_PAGE || st == LAYOUT_BREAK_LINE)
                               continue;
@@ -410,15 +421,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
 
 //---------------------------------------------------------
 //   cloneStaff
+//    srcStaff and dstStaff are in the same score
 //---------------------------------------------------------
 
 void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
-printf("clone staff=== %p %p\n", srcStaff, dstStaff);
       Score* score = srcStaff->score();
-//      dstStaff->linkTo(srcStaff);
 
-//      int tracks = score->nstaves() * VOICES;
       SlurMap slurMap;
       TieMap tieMap;
 
@@ -436,7 +445,7 @@ printf("clone staff=== %p %p\n", srcStaff, dstStaff);
                         if (oe == 0)
                               continue;
                         Element* ne;
-                        if (oe->generated() || oe->type() == CLEF)
+                        if (oe->generated() || oe->type() == Element::CLEF)
                               ne = oe->clone();
                         else
                               ne = oe->linkedClone();
@@ -447,10 +456,8 @@ printf("clone staff=== %p %p\n", srcStaff, dstStaff);
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
                               Tuplet* ot     = ocr->tuplet();
                               if (ot) {
-printf("tuplet\n");
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-printf("  create tuplet\n");
                                           nt = new Tuplet(*ot);
                                           nt->clear();
                                           nt->setTrack(dstTrack);
@@ -461,7 +468,7 @@ printf("  create tuplet\n");
                                     nt->add(ncr);
                                     }
                               foreach (Spanner* sp, ocr->spannerFor()) {
-                                    if (sp->type() != SLUR)
+                                    if (sp->type() != Element::SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);
                                     Slur* slur = new Slur(score);
@@ -470,7 +477,7 @@ printf("  create tuplet\n");
                                     slurMap.add(s, slur);
                                     }
                               foreach (Spanner* sp, ocr->spannerBack()) {
-                                    if (sp->type() != SLUR)
+                                    if (sp->type() != Element::SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);
                                     Slur* slur = slurMap.findNew(s);
@@ -491,7 +498,7 @@ printf("  create tuplet\n");
                                     ne->setTrack(dstTrack);
                                     seg->add(ne);
                                     }
-                              if (oe->type() == CHORD) {
+                              if (oe->type() == Element::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);
                                     Chord* nch = static_cast<Chord*>(ncr);
                                     int n = och->notes().size();

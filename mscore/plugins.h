@@ -16,6 +16,7 @@
 #include "config.h"
 #ifdef SCRIPT_INTERFACE
 #include "musescore.h"
+#include "libmscore/element.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
@@ -36,7 +37,7 @@ class FileIO : public QObject {
 
       Q_INVOKABLE QString read();
       Q_INVOKABLE bool write(const QString& data);
-      Q_INVOKABLE bool remove(const QString& data);
+      Q_INVOKABLE bool remove();
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
 
       QString source() { return mSource; };
@@ -198,7 +199,7 @@ class QmlPlugin : public QDeclarativeItem {
       QDeclarativeListProperty<Score> scores();
 
       Q_INVOKABLE Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Element* newElement(int);
+      Q_INVOKABLE Element* newElement(Element::ElementType);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE MsProcess* newQProcess() { return new MsProcess(this); }
       Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);

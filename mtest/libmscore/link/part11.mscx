@@ -35,6 +35,12 @@
     <metaTag name="workTitle">testpart1</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -152,7 +158,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           <Note>
             <Symbol>
-              <name>accordeon stdbase</name>
+              <name>accordion.accStdbase</name>
               </Symbol>
             <pitch>72</pitch>
             <tpc>14</tpc>

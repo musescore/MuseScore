@@ -32,7 +32,7 @@ class Text : public SimpleText {
       Q_PROPERTY(QString text READ getText WRITE setText)
 
       QTextDocument* _doc;
-      int _styleIndex;
+      int _styleIndex;        // set to -1 if not styled
 
       void createDoc();
       void setUnstyledText(const QString& s);
@@ -62,15 +62,14 @@ class Text : public SimpleText {
 
       bool sizeIsSpatiumDependent() const;
       void setSizeIsSpatiumDependent(int v);
-      void setFrameWidth(qreal val);
-      void setPaddingWidth(qreal val);
+      void setFrameWidth(Spatium val);
+      void setPaddingWidth(Spatium val);
       void setFrameColor(const QColor& val);
       void setFrameRound(int val);
       void setCircle(bool val);
       void setHasFrame(bool);
       qreal xoff() const;
       qreal yoff() const;
-      Align align() const;
       OffsetType offsetType() const;
       QPointF reloff() const;
       void setAlign(Align val);

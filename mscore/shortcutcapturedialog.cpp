@@ -42,7 +42,11 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
       connect(replaceButton, SIGNAL(clicked()), SLOT(replaceClicked()));
       clearClicked();
       grabKeyboard();
+
+      oshrtLabel->installEventFilter(this);
+      nshrtLabel->installEventFilter(this);
       }
+
 
 //---------------------------------------------------------
 //   addClicked
@@ -68,8 +72,27 @@ void ShortcutCaptureDialog::replaceClicked()
 
 ShortcutCaptureDialog::~ShortcutCaptureDialog()
       {
+      nshrtLabel->removeEventFilter(this);
+      oshrtLabel->removeEventFilter(this);
       releaseKeyboard();
       }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
+    {
+    // Mac only, harmless on Win
+    // Grab the backspace key before one of the QLineEdit widgets gets them.
+    // Otherwise Qt on mac swallows the Backspace even if the field is read-only.
+    if (e->type() == QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key() == Qt::Key_Backspace) {
+        keyPressEvent(static_cast<QKeyEvent*>(e));
+        return true;
+        }
+    return false;
+    }
+
 
 //---------------------------------------------------------
 //   keyPressEvent
@@ -103,6 +126,8 @@ void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
 
       foreach (Shortcut* ss, localShortcuts) {
             if (s == ss)
+                  continue;
+            if (! (s->state() & ss->state()))    // no conflict if states do not overlap
                   continue;
             foreach(const QKeySequence& ks, ss->keys()) {
                   if (ks == key) {

@@ -15,8 +15,14 @@
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
+#include "accidental.h"
 #include "figuredbass.h"
+#include "stafftype.h"
 #include "note.h"
+#include "spanner.h"
+#include "volta.h"
+#include "ottava.h"
+#include "trill.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -60,14 +66,25 @@ extern void initDrumset();
 
 void MScore::init()
       {
+      Sym::init();
+
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<MScore::ElementType>("ElementType");
+      qRegisterMetaType<Element::ElementType>("ElementType");
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
+      qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
+      qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
       qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
+      qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
+      qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
+      qRegisterMetaType<Volta::VoltaType>("VoltaType");
+      qRegisterMetaType<Ottava::OttavaType>("OttavaType");
+      qRegisterMetaType<Trill::TrillType>("TrillType");
+      qRegisterMetaType<Element::DynamicType>("DynamicType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -77,7 +94,7 @@ void MScore::init()
       _globalShare = dir.absolutePath() + "/";
 #else
 #ifdef Q_WS_MAC
-#ifdef Q_WS_IOS
+#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();
@@ -130,11 +147,7 @@ void MScore::init()
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
             "gonville-20.otf",
-            "mscore_tab_baroque.ttf",
-            "mscore_tab_modern.ttf",
-            "mscore_tab_renaiss.ttf",
-            "mscore_tab_renaiss2.ttf",
-//            "FiguredBassMHGPL.otf",
+            "mscoreTab.ttf",
             "mscore-BC.ttf"
             };
 
@@ -147,6 +160,7 @@ void MScore::init()
                   }
             }
 #endif
+      StaffTypeTablature::readConfigFile(0);          // get TAB font config, before initStaffTypes()
       initSymbols(0);   // init emmentaler symbols
       initStaffTypes();
       initDrumset();

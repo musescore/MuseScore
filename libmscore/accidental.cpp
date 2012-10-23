@@ -282,30 +282,33 @@ void Accidental::layout()
       el.clear();
 
       QRectF r;
-      Note* note = static_cast<Note*>(parent());
+      if (staff() && staff()->isTabStaff()) {      //in TAB, accidentals are not shown
+            setbbox(QRectF());
+            return;
+            }
 
-      if ( note == 0 || !note->staff()->useTablature() ) {  //in TAB, accidentals are not shown
-            qreal m = magS();
-            QPointF pos;
-            if (_hasBracket) {
-                  SymElement e(leftparenSym, 0.0);
-                  el.append(e);
-                  r |= symbols[score()->symIdx()][leftparenSym].bbox(m);
-                  pos = symbols[score()->symIdx()][leftparenSym].attach(m);
-                  }
-
-            int s = symbol();
-            SymElement e(s, pos.x());
+      qreal m = magS();
+      if (_small)
+            m *= score()->styleD(ST_smallNoteMag);
+      QPointF pos;
+      if (_hasBracket) {
+            SymElement e(leftparenSym, 0.0);
             el.append(e);
-            r |= symbols[score()->symIdx()][s].bbox(m);
-            pos += symbols[score()->symIdx()][s].attach(m);
+            r |= symbols[score()->symIdx()][leftparenSym].bbox(m);
+            pos = symbols[score()->symIdx()][leftparenSym].attach(m);
+            }
 
-            if (_hasBracket) {
-                  qreal x = pos.x();     // symbols[s].width(m) + symbols[s].bbox(m).x();
-                  SymElement e(rightparenSym, x);
-                  el.append(e);
-                  r |= symbols[score()->symIdx()][rightparenSym].bbox(m).translated(x, 0.0);
-                  }
+      int s = symbol();
+      SymElement e(s, pos.x());
+      el.append(e);
+      r |= symbols[score()->symIdx()][s].bbox(m);
+      pos += symbols[score()->symIdx()][s].attach(m);
+
+      if (_hasBracket) {
+            qreal x = pos.x();     // symbols[s].width(m) + symbols[s].bbox(m).x();
+            SymElement e(rightparenSym, x);
+            el.append(e);
+            r |= symbols[score()->symIdx()][rightparenSym].bbox(m).translated(x, 0.0);
             }
       setbbox(r);
       }
@@ -333,7 +336,7 @@ const char* Accidental::subtype2name(AccidentalType st)
 //   value2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::value2subtype(AccidentalVal v)
+Accidental::AccidentalType Accidental::value2subtype(AccidentalVal v)
       {
       switch(v) {
             case NATURAL: return ACC_NONE;
@@ -352,7 +355,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 //   name2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::name2subtype(const QString& tag)
+Accidental::AccidentalType Accidental::name2subtype(const QString& tag)
       {
       int n = sizeof(accList)/sizeof(*accList);
       for (int i = 0; i < n; ++i) {
@@ -368,15 +371,15 @@ AccidentalType Accidental::name2subtype(const QString& tag)
 
 void Accidental::draw(QPainter* painter) const
       {
-      Note* note = static_cast<Note*>(parent());
-      if ( note == 0 || !note->staff()->useTablature() ) {  //in TAB, accidentals are not shown
-            qreal m = magS();
-            if (_small)
-                  m *= score()->styleD(ST_smallNoteMag);
-            painter->setPen(curColor());
-            foreach(const SymElement& e, el)
-                  symbols[score()->symIdx()][e.sym].draw(painter, m, QPointF(e.x, 0.0));
-            }
+      if (staff() && staff()->isTabStaff())        //in TAB, accidentals are not shown
+            return;
+
+      qreal m = magS();
+      if (_small)
+            m *= score()->styleD(ST_smallNoteMag);
+      painter->setPen(curColor());
+      foreach(const SymElement& e, el)
+            symbols[score()->symIdx()][e.sym].draw(painter, m, QPointF(e.x, 0.0));
       }
 
 //---------------------------------------------------------
@@ -397,8 +400,8 @@ Element* Accidental::drop(const DropData& data)
       Element* e = data.element;
       switch(e->type()) {
             case ACCIDENTAL_BRACKET:
-                  _hasBracket = true;     // TODO: make undoable
-                  // score()->changeAccidental(note(), subtype() | 0x8000);
+                  if (!_hasBracket)
+                        undoSetHasBracket(true);
                   break;
 
             default:
@@ -447,11 +450,17 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SMALL:              _small = v.toBool(); break;
-            case P_ACCIDENTAL_BRACKET: _hasBracket = v.toBool(); break;
+            case P_SMALL:
+                  _small = v.toBool();
+                  break;
+            case P_ACCIDENTAL_BRACKET:
+                  _hasBracket = v.toBool();
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
+      layout();
+      score()->setLayoutAll(true);  // spacing changes
       return true;
       }
 

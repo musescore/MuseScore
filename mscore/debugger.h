@@ -50,8 +50,10 @@
 #include "ui_keysig.h"
 #include "ui_rest.h"
 #include "ui_stem.h"
+#include "ui_box.h"
 
 #include "globals.h"
+#include "libmscore/element.h"
 #include "libmscore/mscore.h"
 
 class ShowElementBase;
@@ -74,7 +76,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       QStack<Element*>backStack;
       QStack<Element*>forwardStack;
 
-      ShowElementBase* elementViews[MAXTYPE];
+      ShowElementBase* elementViews[Element::MAXTYPE];
 
       bool searchElement(QTreeWidgetItem* pi, Element* el);
       void addSymbol(ElementItem* parent, BSymbol* bs);
@@ -488,6 +490,45 @@ class VoltaSegmentView : public ShowElementBase {
       };
 
 //---------------------------------------------------------
+//   TextLineView
+//---------------------------------------------------------
+
+class TextLineView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::TextLineBase tlb;
+      Ui::SLineBase lb;
+      Ui::SpannerBase sp;
+
+   private slots:
+      void segmentClicked(QTreeWidgetItem* item);
+      void beginTextClicked();
+      void continueTextClicked();
+      void leftElementClicked();
+      void rightElementClicked();
+      void startClicked();
+      void endClicked();
+
+   public:
+      TextLineView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   TextLineSegmentView
+//---------------------------------------------------------
+
+class TextLineSegmentView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::LineSegmentBase lb;
+
+   public:
+      TextLineSegmentView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
 //   LineSegmentView
 //---------------------------------------------------------
 
@@ -650,6 +691,20 @@ class StemView : public ShowElementBase {
 
    public:
       StemView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   BoxView
+//---------------------------------------------------------
+
+class BoxView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::BoxBase box;
+
+   public:
+      BoxView();
       virtual void setElement(Element*);
       };
 

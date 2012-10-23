@@ -370,12 +370,12 @@ bool BBFile::read(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::importBB(Score* score, const QString& name)
+Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
       if (!bb.read(name)) {
             qDebug("cannot open file <%s>\n", qPrintable(name));
-            return false;
+            return Score::FILE_OPEN_ERROR;
             }
       *(score->sigmap()) = bb.siglist();
 
@@ -414,7 +414,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
 
       if (tracks->isEmpty()) {
             for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-                  if (mb->type() != MEASURE)
+                  if (mb->type() != Element::MEASURE)
                         continue;
                   Measure* measure = (Measure*)mb;
                   Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
@@ -431,7 +431,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
             }
 
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
             Segment* s = measure->findSegment(Segment::SegChordRest, measure->tick());
@@ -456,7 +456,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
       text->setText(bb.title());
 
       MeasureBase* measure = score->first();
-      if (measure->type() != VBOX) {
+      if (measure->type() != Element::VBOX) {
             measure = new VBox(score);
             measure->setTick(0);
             measure->setNext(score->first());
@@ -502,7 +502,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
 
       int n = 0;
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != Element::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
             if (n && (n % 4) == 0) {
@@ -531,7 +531,7 @@ bool MuseScore::importBB(Score* score, const QString& name)
             Segment* sks = mks->getSegment(keysig, tick);
             sks->add(keysig);
             }
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

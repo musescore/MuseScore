@@ -140,7 +140,6 @@ class Event {
       Event& operator=(const Event&);
       bool operator==(const Event&) const;
 
-//      void write(MidiFile*) const;
       void write(Xml&) const;
       void dump() const;
 

@@ -453,8 +453,15 @@ void Channel::read(const QDomElement& de)
                   else
                         synti = 0;
                   }
-            else if (tag == "descr")
+            else if (tag == "descr") {
                   descr = e.text();
+                  }
+            else if (tag == "mute") {
+                  mute = val.toInt();
+                  }
+            else if (tag == "solo") {
+                  solo = val.toInt();
+                  }
             else
                   domError(e);
             }
@@ -595,6 +602,7 @@ void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QSt
       {
 //      const Channel& c = _channel[channelIdx];
 //      foreach(const MidiArticulation& a, c.articulation) {
+
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
                   *gateTime = *gateTime * a.gateTime / 100;

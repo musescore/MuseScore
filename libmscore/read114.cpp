@@ -28,6 +28,156 @@
 #include "text.h"
 #include "part.h"
 #include "sig.h"
+#include "box.h"
+#include "dynamic.h"
+#include "drumset.h"
+
+//---------------------------------------------------------
+//   resolveSymCompatibility
+//---------------------------------------------------------
+
+static SymId resolveSymCompatibility(SymId i, QString programVersion)
+      {
+      if(!programVersion.isEmpty() && programVersion < "1.1")
+          i = SymId(i + 5);
+      switch(i) {
+            case 197:
+                  return pedalPedSym;
+            case 191:
+                  return pedalasteriskSym;
+            case 193:
+                  return pedaldotSym;
+            case 192:
+                  return pedaldashSym;
+            case 139:
+                  return trillSym;
+            default:
+                  return noSym;
+            }
+      }
+
+//---------------------------------------------------------
+//   Staff::read114
+//---------------------------------------------------------
+
+void Staff::read114(const QDomElement& de, ClefList& _clefList)
+      {
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            if (tag == "type") {
+                  StaffType* st = score()->staffTypes().value(val.toInt());
+                  if (st)
+                        _staffType = st;
+                  }
+            else if (tag == "lines")
+                  setLines(val.toInt());
+            else if (tag == "small")
+                  setSmall(val.toInt());
+            else if (tag == "invisible")
+                  setInvisible(val.toInt());
+            else if (tag == "slashStyle")
+                  ;                       // obsolete: setSlashStyle(v);
+            else if (tag == "cleflist")
+                  _clefList.read(e, _score);
+            else if (tag == "keylist")
+                  _keymap->read(e, _score);
+            else if (tag == "bracket") {
+                  BracketItem b;
+                  b._bracket = BracketType(e.attribute("type", "-1").toInt());
+                  b._bracketSpan = e.attribute("span", "0").toInt();
+                  _brackets.append(b);
+                  }
+            else if (tag == "barLineSpan")
+                  _barLineSpan = val.toInt();
+            else if (tag == "distOffset")
+                  _userDist = e.text().toDouble() * spatium();
+            else if (tag == "linkedTo") {
+                  int v = val.toInt() - 1;
+                  //
+                  // if this is an excerpt, link staff to parentScore()
+                  //
+                  if (score()->parentScore()) {
+                        Staff* st = score()->parentScore()->staff(v);
+                        if (st)
+                              linkTo(st);
+                        else {
+                              qDebug("staff %d not found in parent", v);
+                              }
+                        }
+                  else {
+                        int idx = score()->staffIdx(this);
+                        if (v < idx)
+                              linkTo(score()->staff(v));
+                        }
+                  }
+            else
+                  domError(e);
+            }
+      }
+
+//---------------------------------------------------------
+//   Part::read114
+//---------------------------------------------------------
+
+void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
+      {
+      int rstaff = 0;
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            if (tag == "Staff") {
+                  Staff* staff = new Staff(_score, this, rstaff);
+                  _score->staves().push_back(staff);
+                  _staves.push_back(staff);
+                  ClefList* cl = new ClefList;
+                  clefList.append(cl);
+                  staff->read114(e, *cl);
+                  ++rstaff;
+                  }
+            else if (tag == "Instrument") {
+                  instr(0)->read(e);
+                  Drumset* d = instr(0)->drumset();
+                  Staff*   st = staff(0);
+                  if (d && st && st->lines() != 5) {
+                        int n = 0;
+                        if (st->lines() == 1)
+                              n = 4;
+                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              d->drum(i).line -= n;
+                        }
+                  }
+            else if (tag == "name") {
+                  Text* t = new Text(score());
+                  t->read(e);
+                  instr(0)->setLongName(t->getFragment());
+                  delete t;
+                  }
+            else if (tag == "shortName") {
+                  Text* t = new Text(score());
+                  t->read(e);
+                  instr(0)->setShortName(t->getFragment());
+                  delete t;
+                  }
+            else if (tag == "trackName")
+                  _partName = val;
+            else if (tag == "show")
+                  _show = val.toInt();
+            else
+                  domError(e);
+            }
+      if (_partName.isEmpty())
+            _partName = instr(0)->trackName();
+
+      if (instr(0)->useDrumset()) {
+            foreach(Staff* staff, _staves) {
+                  int lines = staff->lines();
+                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
+                  staff->setLines(lines);
+                  }
+            }
+      }
+
 
 //---------------------------------------------------------
 //   read114
@@ -35,10 +185,11 @@
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read114(const QDomElement& de)
+Score::FileError Score::read114(const QDomElement& de)
       {
       spanner.clear();
 
+      QList<ClefList*> clefListList;
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
       for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -157,7 +308,7 @@ bool Score::read114(const QDomElement& de)
                   }
             else if (tag == "Part") {
                   Part* part = new Part(this);
-                  part->read(ee);
+                  part->read114(ee, clefListList);
                   _parts.push_back(part);
                   }
             else if (tag == "Symbols")          // obsolete
@@ -215,7 +366,7 @@ bool Score::read114(const QDomElement& de)
             Staff* s = _staves[idx];
             int track = idx * VOICES;
 
-            ClefList* cl = s->clefList();
+            ClefList* cl = clefListList[idx];
             for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
@@ -254,6 +405,7 @@ bool Score::read114(const QDomElement& de)
                         }
                   }
             }
+      qDeleteAll(clefListList);
 
       //
       // scan spanner in a II. pass
@@ -269,6 +421,17 @@ bool Score::read114(const QDomElement& de)
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->setTrack(0);
                   s->read(ee);
+
+                 if ((tag == "Ottava")
+                  || (tag == "TextLine")
+                  || (tag == "Volta")
+                  || (tag == "Pedal")) {
+                      TextLine* tl = static_cast<TextLine*>(s);
+                      tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
+                      tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
+                      tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
+                      }
+
                   int tick2 = s->__tick2();
                   Segment* s1 = tick2segment(curTick);
                   Segment* s2 = tick2segment(tick2);
@@ -277,9 +440,9 @@ bool Score::read114(const QDomElement& de)
                            s->name(), s->__tick1(), tick2);
                         continue;
                         }
-                  if (s->type() == VOLTA) {
+                  if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
-                        volta->setAnchor(ANCHOR_MEASURE);
+                        volta->setAnchor(Spanner::ANCHOR_MEASURE);
                         volta->setStartMeasure(s1->measure());
                         Measure* m2 = s2->measure();
                         if (s2->tick() == m2->tick())
@@ -298,7 +461,7 @@ bool Score::read114(const QDomElement& de)
                         s->setEndElement(s2);
                         s1->add(s);
                         }
-                  if (s->type() == OTTAVA) {
+                  if (s->type() == Element::OTTAVA) {
                         // fix ottava position
                         Ottava* volta = static_cast<Ottava*>(s);
                         int n = volta->spannerSegments().size();
@@ -313,7 +476,7 @@ bool Score::read114(const QDomElement& de)
 
       // check slurs
       foreach(Spanner* s, spanner) {
-            if (s->type() != SLUR)
+            if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);
 
@@ -354,7 +517,48 @@ bool Score::read114(const QDomElement& de)
       spanner.clear();
       connectTies();
 
-      searchSelectedElements();
+      //
+      // remove "middle beam" flags from first ChordRest in
+      // measure
+      //
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            int tracks = nstaves() * VOICES;
+            for (int track = 0; track < tracks; ++track) {
+                  for (Segment* s = m->first(); s; s = s->next()) {
+                        if (s->subtype() != Segment::SegChordRest)
+                              continue;
+                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                        if (cr) {
+                              switch(cr->beamMode()) {
+                                    case BEAM_AUTO:
+                                    case BEAM_BEGIN:
+                                    case BEAM_END:
+                                    case BEAM_NO:
+                                          break;
+                                    case BEAM_MID:
+                                    case BEAM_BEGIN32:
+                                    case BEAM_BEGIN64:
+                                          cr->setBeamMode(BEAM_BEGIN);
+                                          break;
+                                    case BEAM_INVALID:
+                                          if (cr->type() == Element::CHORD)
+                                                cr->setBeamMode(BEAM_AUTO);
+                                          else
+                                                cr->setBeamMode(BEAM_NO);
+                                          break;
+                                    }
+                              break;
+                              }
+                        }
+                  }
+            }
+      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+            if (mb->type() == Element::VBOX) {
+                  Box* b  = static_cast<Box*>(mb);
+                  qreal y = point(styleS(ST_staffUpperBorder));
+                  b->setBottomGap(y);
+                  }
+            }
 
       _fileDivision = MScore::division;
 
@@ -396,20 +600,34 @@ bool Score::read114(const QDomElement& de)
       foreach(const SyntiParameter& sp, _syntiState) {
             if (sp.name() == "soundfont") {
                   QFileInfo fi(sp.sval());
-                  if(fi.exists())
+                  if (fi.exists())
                         hasSoundfont = true;
                   }
             }
       if (!hasSoundfont)
             _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
 
-      _mscVersion = MSCVERSION;     // for later drag & drop usage
+//      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();
       renumberMeasures();
       rebuildMidiMapping();
       updateChannel();
       updateNotes();    // only for parts needed?
-      return true;
+
+      doLayout();
+
+      //
+      // move some elements
+      //
+      for (Segment* s = firstSegment(); s; s = s->next1()) {
+            foreach (Element* e, s->annotations()) {
+                  if (e->type() == Element::TEMPO_TEXT) {
+                        // reparent from measure to segment
+                        e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
+                           e->userOff().y()));
+                        }
+                  }
+            }
+
+      return FILE_NO_ERROR;
       }
-
-

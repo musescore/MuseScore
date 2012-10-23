@@ -231,15 +231,6 @@ void Image::draw(QPainter* painter, QSize size) const
 //   write
 //---------------------------------------------------------
 
-void Image::write(Xml& xml, P_ID id) const
-      {
-      xml.tag(propertyName(id), getProperty(id), propertyDefault(id));
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
 void Image::write(Xml& xml) const
       {
       // attempt to convert the _linkPath to a path relative to the score
@@ -291,10 +282,10 @@ void Image::write(Xml& xml) const
       xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
       xml.tag("linkPath", relativeFilePath);
 
-      write(xml, P_AUTOSCALE);
-      write(xml, P_SIZE);
-      write(xml, P_LOCK_ASPECT_RATIO);
-      write(xml, P_SIZE_IS_SPATIUM);
+      writeProperty(xml, P_AUTOSCALE);
+      writeProperty(xml, P_SIZE);
+      writeProperty(xml, P_LOCK_ASPECT_RATIO);
+      writeProperty(xml, P_SIZE_IS_SPATIUM);
 
       xml.etag();
       }

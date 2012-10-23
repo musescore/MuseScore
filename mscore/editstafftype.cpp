@@ -26,6 +26,8 @@
 #include "navigator.h"
 #include "scoreview.h"
 
+extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
+
 //---------------------------------------------------------
 //   EditStaffType
 //---------------------------------------------------------
@@ -48,12 +50,28 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
             ++idx;
             }
 
+      // init tab presets
+      //                                                                          clef   bars stemless time  durations                      size off genDur frets                            size off thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
+      _tabPresets[TAB_PRESET_GUITAR]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,   true,  false, true,  true,  false, true);
+      _tabPresets[TAB_PRESET_BASS]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,   true,  false, true,  true,  false, true);
+      _tabPresets[TAB_PRESET_UKULELE] = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      _tabPresets[TAB_PRESET_BANDURRIA]=new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
+      _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
+      QList<QString> fontNames = StaffTypeTablature::fontNames(false);
+      foreach(const QString& name, fontNames)   // fill fret font name combo
+            fretFontName->addItem(name);
+      fretFontName->setCurrentIndex(0);
+      fontNames = StaffTypeTablature::fontNames(true);
+      foreach(const QString& name, fontNames)   // fill duration font name combo
+            durFontName->addItem(name);
+      durFontName->setCurrentIndex(0);
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
-      if(mscore->readScore(sc, QString(":/data/tab_sample.mscx"))) {
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) != Score::FILE_NO_ERROR) {
             // add a preview widget to tabulature page
 #ifdef _USE_NAVIGATOR_PREVIEW_
             NScrollArea* sa = new NScrollArea;
@@ -72,7 +90,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(newTypeTablature,     SIGNAL(clicked()),            SLOT(createNewType()));
       connect(newTypePercussion,    SIGNAL(clicked()),            SLOT(createNewType()));
       connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
-      connect(presetTablature,      SIGNAL(clicked()),            SLOT(presetTablatureClicked()));
+      connect(presetTablatureCombo, SIGNAL(currentIndexChanged(int)), SLOT(presetTablatureChanged(int)));
 
       if (ci)
             staffTypeList->setCurrentItem(ci);
@@ -81,12 +99,20 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(noteValues1,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(noteValues2,    SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(durFontName,    SIGNAL(editTextChanged(QString)),   SLOT(updateTabPreview()));
+      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(on_tabStemsToggled(bool)));
+      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(on_tabStemThroughToggled(bool)));
+//    connect(minimNoneRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(on_tabMinimShortToggled(bool)));
+      connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
+      connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(fretFontName,   SIGNAL(editTextChanged(QString)),   SLOT(updateTabPreview()));
+      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
       connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updateTabPreview()));
@@ -96,6 +122,22 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       modified = false;
       }
+
+EditStaffType::~EditStaffType()
+{
+      if(_tabPresets[TAB_PRESET_GUITAR])
+            delete _tabPresets[TAB_PRESET_GUITAR];
+      if(_tabPresets[TAB_PRESET_BASS])
+            delete _tabPresets[TAB_PRESET_BASS];
+      if(_tabPresets[TAB_PRESET_UKULELE])
+            delete _tabPresets[TAB_PRESET_UKULELE];
+      if(_tabPresets[TAB_PRESET_BANDURRIA])
+            delete _tabPresets[TAB_PRESET_BANDURRIA];
+      if(_tabPresets[TAB_PRESET_ITALIAN])
+            delete _tabPresets[TAB_PRESET_ITALIAN];
+      if(_tabPresets[TAB_PRESET_FRENCH])
+            delete _tabPresets[TAB_PRESET_FRENCH];
+}
 
 //---------------------------------------------------------
 //   saveCurrent
@@ -135,19 +177,27 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
             case TAB_STAFF:
                   {
                   StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(st);
-                  if (stt->durationFontName()    != durFontName->currentFont().family()
+                  TablatureMinimStyle minimStyle = minimNoneRadio->isChecked() ? TAB_MINIM_NONE :
+                        (minimShortRadio->isChecked() ? TAB_MINIM_SHORTER : TAB_MINIM_SLASHED);
+                  if (stt->durationFontName()    != durFontName->currentText()
                      || stt->durationFontSize() != durFontSize->value()
                      || stt->durationFontUserY()!= durY->value()
-                     || stt->fretFontName()     != fretFontName->currentFont().family()
+                     || stt->fretFontName()     != fretFontName->currentText()
                      || stt->fretFontSize()     != fretFontSize->value()
                      || stt->fretFontUserY()    != fretY->value()
                      || stt->linesThrough()     != linesThroughRadio->isChecked()
                      || stt->onLines()          != onLinesRadio->isChecked()
                      || stt->upsideDown()       != upsideDown->isChecked()
                      || stt->useNumbers()       != numbersRadio->isChecked()
-                     || ( noteValues0->isChecked() && (!stt->slashStyle() ||  stt->genDurations()) )
-                     || ( noteValues1->isChecked() && (!stt->slashStyle() || !stt->genDurations()) )
-                     || ( noteValues2->isChecked() && ( stt->slashStyle() ||  stt->genDurations()) )
+                     || ( noteValuesNone->isChecked() && (!stt->slashStyle() ||  stt->genDurations()) )
+                     || ( noteValuesSymb->isChecked() && (!stt->slashStyle() || !stt->genDurations()) )
+                     // if stems, there are more values to take into account
+                     || ( noteValuesStems->isChecked()&& ( stt->slashStyle() ||  stt->genDurations()
+                              || stt->stemsDown()     != stemBelowRadio->isChecked()
+                              || stt->stemThrough()   != stemThroughRadio->isChecked()
+                              || stt->minimStyle()    != minimStyle)
+                          )
+                     || stt->showRests()        != showRests->isChecked()
                      ) {
                         modif = true;
                         }
@@ -188,22 +238,7 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
                   case TAB_STAFF:
                         {
                         StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(st);
-                        stt->setSlashStyle(true);                 // assume no note values
-                        stt->setGenDurations(false);
-                        if (noteValues1->isChecked())
-                              stt->setGenDurations(true);
-                        if (noteValues2->isChecked())
-                              stt->setSlashStyle(false);
-                        stt->setDurationFontName(durFontName->currentText());
-                        stt->setDurationFontSize(durFontSize->value());
-                        stt->setDurationFontUserY(durY->value());
-                        stt->setFretFontName(fretFontName->currentText());
-                        stt->setFretFontSize(fretFontSize->value());
-                        stt->setFretFontUserY(fretY->value());
-                        stt->setLinesThrough(linesThroughRadio->isChecked());
-                        stt->setOnLines(onLinesRadio->isChecked());
-                        stt->setUpsideDown(upsideDown->isChecked());
-                        stt->setUseNumbers(numbersRadio->isChecked());
+                        setTabFromDlg(stt);
                         }
                         break;
                   case PERCUSSION_STAFF:
@@ -243,7 +278,6 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
       genTimesig->setChecked(st->genTimesig());
 
       // switch to stack page and set props specific to each staff group
-      QFont f = QFont();
 
       switch(st->group()) {
             case PITCHED_STAFF:
@@ -258,45 +292,9 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
 
             case TAB_STAFF:
                   {
-                  StaffTypeTablature* tab = static_cast<StaffTypeTablature*>(st);
+                  StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st);
+                  setDlgFromTab(stt);
                   stack->setCurrentIndex(1);
-                  upsideDown->setChecked(tab->upsideDown());
-                  f.setFamily(tab->fretFontName());
-                  f.setPointSizeF(tab->fretFontSize());
-                  fretFontName->setCurrentFont(f);
-                  fretFontSize->setValue(tab->fretFontSize());
-                  fretY->setValue(tab->fretFontUserY());
-                  numbersRadio->setChecked(tab->useNumbers());
-                  lettersRadio->setChecked(!tab->useNumbers());
-                  onLinesRadio->setChecked(tab->onLines());
-                  aboveLinesRadio->setChecked(!tab->onLines());
-                  linesThroughRadio->setChecked(tab->linesThrough());
-                  linesBrokenRadio->setChecked(!tab->linesThrough());
-                  f.setFamily(tab->durationFontName());
-                  f.setPointSizeF(tab->durationFontSize());
-                  durFontName->setCurrentFont(f);
-                  durFontSize->setValue(tab->durationFontSize());
-                  durY->setValue(tab->durationFontUserY());
-                  // convert combined values of genDurations and slashStyle
-                  // into noteValuesx radio buttons
-                  if(tab->genDurations()) {
-                        noteValues0->setChecked(false);
-                        noteValues1->setChecked(true);
-                        noteValues2->setChecked(false);
-                        }
-                  else {
-                        if(tab->slashStyle()) {
-                              noteValues0->setChecked(true);
-                              noteValues1->setChecked(false);
-                              noteValues2->setChecked(false);
-                              }
-                        else {
-                              noteValues0->setChecked(false);
-                              noteValues1->setChecked(false);
-                              noteValues2->setChecked(true);
-                              }
-                        }
-                  updateTabPreview();
                   }
                   break;
 
@@ -312,6 +310,112 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
             }
       blockTabPreviewSignals(false);
       }
+
+//---------------------------------------------------------
+//   setDlgFromTab
+//
+//    initializes dlg controls from a StaffTypeTablature
+//---------------------------------------------------------
+
+void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
+      {
+      name->setText(stt->name());
+      lines->setValue(stt->lines());
+      lineDistance->setValue(stt->lineDistance().val());
+      genClef->setChecked(stt->genClef());
+      showBarlines->setChecked(stt->showBarlines());
+      genTimesig->setChecked(stt->genTimesig());
+      upsideDown->setChecked(stt->upsideDown());
+      int idx = fretFontName->findText(stt->fretFontName(), Qt::MatchFixedString);
+      if(idx == -1)     idx = 0;          // if name not found, use firstt name
+      fretFontName->setCurrentIndex(idx);
+      fretFontSize->setValue(stt->fretFontSize());
+      fretY->setValue(stt->fretFontUserY());
+      numbersRadio->setChecked(stt->useNumbers());
+      lettersRadio->setChecked(!stt->useNumbers());
+      onLinesRadio->setChecked(stt->onLines());
+      aboveLinesRadio->setChecked(!stt->onLines());
+      linesThroughRadio->setChecked(stt->linesThrough());
+      linesBrokenRadio->setChecked(!stt->linesThrough());
+      idx = durFontName->findText(stt->durationFontName(), Qt::MatchFixedString);
+      if(idx == -1)     idx = 0;          // if name not found, use first name
+      durFontName->setCurrentIndex(idx);
+      durFontSize->setValue(stt->durationFontSize());
+      durY->setValue(stt->durationFontUserY());
+      // convert combined values of genDurations and slashStyle into noteValuesx radio buttons
+      // Sbove/Below, Beside/Through and minim are only used if stems-and-beams
+      // but set them from stt values anyway, to ensure preset matching
+      stemAboveRadio->setChecked(!stt->stemsDown());
+      stemBelowRadio->setChecked(stt->stemsDown());
+      stemBesideRadio->setChecked(!stt->stemThrough());
+      stemThroughRadio->setChecked(stt->stemThrough());
+      TablatureMinimStyle minimStyle = stt->minimStyle();
+      minimNoneRadio->setChecked(minimStyle == TAB_MINIM_NONE);
+      minimShortRadio->setChecked(minimStyle == TAB_MINIM_SHORTER);
+      minimSlashedRadio->setChecked(minimStyle == TAB_MINIM_SLASHED);
+      if(stt->genDurations()) {
+            noteValuesNone->setChecked(false);
+            noteValuesSymb->setChecked(true);
+            noteValuesStems->setChecked(false);
+            }
+      else {
+            if(stt->slashStyle()) {
+                  noteValuesNone->setChecked(true);
+                  noteValuesSymb->setChecked(false);
+                  noteValuesStems->setChecked(false);
+                  }
+            else {
+                  noteValuesNone->setChecked(false);
+                  noteValuesSymb->setChecked(false);
+                  noteValuesStems->setChecked(true);
+                  }
+            }
+      showRests->setChecked(stt->showRests());
+      // adjust compatibility across different settings
+      tabStemThroughCompatibility(stemThroughRadio->isChecked());
+      tabMinimShortCompatibility(minimShortRadio->isChecked());
+      tabStemsCompatibility(noteValuesStems->isChecked());
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   setTabFromDlg
+//
+//    initializes a StaffTypeTablature from dlg controls
+//---------------------------------------------------------
+
+void EditStaffType::setTabFromDlg(StaffTypeTablature * stt)
+{
+      stt->setName(name->text());
+      stt->setLines(lines->value());
+      stt->setLineDistance(Spatium(lineDistance->value()));
+      stt->setGenClef(genClef->isChecked());
+      stt->setShowBarlines(showBarlines->isChecked());
+      stt->setGenTimesig(genTimesig->isChecked());
+      stt->setDurationFontName(durFontName->currentText());
+      stt->setDurationFontSize(durFontSize->value());
+      stt->setDurationFontUserY(durY->value());
+      stt->setFretFontName(fretFontName->currentText());
+      stt->setFretFontSize(fretFontSize->value());
+      stt->setFretFontUserY(fretY->value());
+      stt->setLinesThrough(linesThroughRadio->isChecked());
+      stt->setMinimStyle(minimNoneRadio->isChecked() ? TAB_MINIM_NONE :
+            (minimShortRadio->isChecked() ? TAB_MINIM_SHORTER : TAB_MINIM_SLASHED));
+      stt->setOnLines(onLinesRadio->isChecked());
+      stt->setShowRests(showRests->isChecked());
+      stt->setUpsideDown(upsideDown->isChecked());
+      stt->setUseNumbers(numbersRadio->isChecked());
+      //note values
+      stt->setStemsDown(stemBelowRadio->isChecked());
+      stt->setStemsThrough(stemThroughRadio->isChecked());
+      stt->setSlashStyle(true);                 // assume no note values
+      stt->setGenDurations(false);              //    "     "
+      if (noteValuesSymb->isChecked())
+            stt->setGenDurations(true);
+      if (noteValuesStems->isChecked()) {
+            stt->setSlashStyle(false);
+            }
+}
 
 //---------------------------------------------------------
 //   createNewType
@@ -362,74 +466,13 @@ void EditStaffType::nameEdited(const QString& s)
 //   Tabulature preset clicked
 //---------------------------------------------------------
 
-void EditStaffType::presetTablatureClicked()
+void EditStaffType::presetTablatureChanged(int idx)
       {
-      QFont f = QFont();
-
-      // retrieve item currently selected in preset combo
-      int idx       = presetTablatureCombo->currentIndex();
-      blockTabPreviewSignals(true);                   // do not redraw preview for every value we change!
-      switch(idx)
-      {
-      case 0:                             // guitar
-      case 1:                             // bass
-            lines->setValue(idx == 0 ? 6 : 4);
-            lineDistance->setValue(1.5);
-            genClef->setChecked(true);
-            showBarlines->setChecked(true);
-            genTimesig->setChecked(false);
-            upsideDown->setChecked(false);
-            f.setFamily("MScoreTabulatureModern");
-            f.setPointSizeF(10);
-            fretFontName->setCurrentFont(f);
-            fretFontSize->setValue(10);
-            fretY->setValue(0);
-            numbersRadio->setChecked(true);
-            lettersRadio->setChecked(false);
-            onLinesRadio->setChecked(true);
-            aboveLinesRadio->setChecked(false);
-            linesThroughRadio->setChecked(false);
-            linesBrokenRadio->setChecked(true);
-            f.setFamily("MScoreTabulatureModern");
-            f.setPointSizeF(0);
-            durFontName->setCurrentFont(f);
-            durFontSize->setValue(15);
-            durY->setValue(0);
-            noteValues0->setChecked(false);
-            noteValues1->setChecked(false);
-            noteValues2->setChecked(true);
-            break;
-      case 2:                             // Italian
-      case 3:                             // French
-            lines->setValue(6);
-            lineDistance->setValue(1.5);
-            genClef->setChecked(false);
-            showBarlines->setChecked(true);
-            genTimesig->setChecked(true);
-            upsideDown->setChecked(idx == 2 ? true : false);
-            f.setFamily("MScoreTabulatureRenaiss");
-            f.setPointSizeF(10);
-            fretFontName->setCurrentFont(f);
-            fretFontSize->setValue(10);
-            fretY->setValue(0);
-            numbersRadio->setChecked(idx == 2 ? true : false);
-            lettersRadio->setChecked(idx == 2 ? false : true);
-            onLinesRadio->setChecked(idx == 2 ? true : false);
-            aboveLinesRadio->setChecked(idx == 2 ? false : true);
-            linesThroughRadio->setChecked(true);
-            linesBrokenRadio->setChecked(false);
-            f.setFamily("MScoreTabulatureRenaiss");
-            f.setPointSizeF(15);
-            durFontName->setCurrentFont(f);
-            durFontSize->setValue(15);
-            durY->setValue(0);
-            noteValues0->setChecked(false);
-            noteValues1->setChecked(true);
-            noteValues2->setChecked(false);
-            break;
-      }
-      updateTabPreview();
-      blockTabPreviewSignals(false);
+      if(idx < TAB_PRESETS) {
+            blockTabPreviewSignals(true);             // do not redraw preview for every value we change!
+            setDlgFromTab(_tabPresets[idx]);
+            blockTabPreviewSignals(false);
+            }
       }
 
 //---------------------------------------------------------
@@ -449,17 +492,51 @@ void EditStaffType::on_pushQuickConfig_clicked()
       }
 
 //---------------------------------------------------------
-//   Block tabulature rpreview signals
+//   Tabulature note stems toggled
+//
+//    enable / disable all controls related to stems
+//---------------------------------------------------------
+
+void EditStaffType::on_tabStemsToggled(bool checked)
+      {
+      tabStemsCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature "minim short" toggled
+//
+//    contra-toggle "stems through"
+//---------------------------------------------------------
+
+void EditStaffType::on_tabMinimShortToggled(bool checked)
+      {
+      tabMinimShortCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature "stems through" toggled
+//---------------------------------------------------------
+
+void EditStaffType::on_tabStemThroughToggled(bool checked)
+      {
+      tabStemThroughCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Block tabulature preview signals
 //---------------------------------------------------------
 
 void EditStaffType::blockTabPreviewSignals(bool block)
-{
+      {
       lineDistance->blockSignals(block);
       showBarlines->blockSignals(block);
       genClef->blockSignals(block);
       genTimesig->blockSignals(block);
-      noteValues1->blockSignals(block);
-      noteValues2->blockSignals(block);
+      noteValuesSymb->blockSignals(block);
+      noteValuesStems->blockSignals(block);
       durFontName->blockSignals(block);
       durFontSize->blockSignals(block);
       durY->blockSignals(block);
@@ -470,7 +547,69 @@ void EditStaffType::blockTabPreviewSignals(bool block)
       onLinesRadio->blockSignals(block);
       upsideDown->blockSignals(block);
       numbersRadio->blockSignals(block);
-}
+      stemAboveRadio->blockSignals(block);
+      stemBelowRadio->blockSignals(block);
+      stemBesideRadio->blockSignals(block);
+      stemThroughRadio->blockSignals(block);
+      minimShortRadio->blockSignals(block);
+      minimSlashedRadio->blockSignals(block);
+      showRests->blockSignals(block);
+      }
+
+//---------------------------------------------------------
+//   Tabulature note stems compatibility
+//
+//    Enable / disable all stem-related controls according to "Stems and beams" is checked/unchecked
+//---------------------------------------------------------
+
+void EditStaffType::tabStemsCompatibility(bool checked)
+      {
+      stemAboveRadio->setEnabled(checked);
+      stemBelowRadio->setEnabled(checked);
+      stemBesideRadio->setEnabled(checked);
+      stemThroughRadio->setEnabled(checked && !minimShortRadio->isChecked());
+      minimNoneRadio->setEnabled(checked);
+      minimShortRadio->setEnabled(checked && !stemThroughRadio->isChecked());
+      minimSlashedRadio->setEnabled(checked);
+      }
+
+//---------------------------------------------------------
+//   Tabulature "minim short" compatibility
+//
+//    Setting "short minim" stems is incompatible with "stems through":
+//    if checked and "stems through" is checked, move check to "stems beside"
+//---------------------------------------------------------
+
+void EditStaffType::tabMinimShortCompatibility(bool checked)
+      {
+      if(checked) {
+            if(stemThroughRadio->isChecked()) {
+                  stemThroughRadio->setChecked(false);
+                  stemBesideRadio->setChecked(true);
+                  }
+            }
+      // disable / enable "stems through" according "minim short" is checked / unchecked
+      stemThroughRadio->setEnabled(!checked && noteValuesStems->isChecked());
+      }
+
+//---------------------------------------------------------
+//   Tabulature "stems through" compatibility
+//
+//    Setting "stems through" is incompatible with "minim short":
+//    if checking and "minim short" is checked, move check to "minim slashed"
+//---------------------------------------------------------
+
+void EditStaffType::tabStemThroughCompatibility(bool checked)
+      {
+      if(checked) {
+            if(minimShortRadio->isChecked()) {
+                  minimShortRadio->setChecked(false);
+                  minimSlashedRadio->setChecked(true);
+                  }
+            }
+      // disable / enable "minim short" according "stems through" is checked / unchecked
+      minimShortRadio->setEnabled(!checked && noteValuesStems->isChecked());
+      }
 
 //---------------------------------------------------------
 //   Update tabulature preview
@@ -482,34 +621,22 @@ void EditStaffType::updateTabPreview()
       if(!tabPreview)
             return;
       StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(tabPreview->score()->staffTypes()[1]);
-//      stt->setName(o->text());
-//      stt->setLines(lines->value());          // do not change num of lines: sample requires 6 lines
-      stt->setLineDistance(Spatium(lineDistance->value()));
-      stt->setShowBarlines(showBarlines->isChecked());
-      stt->setGenClef(genClef->isChecked());
-      stt->setGenTimesig(genTimesig->isChecked());
-      stt->setSlashStyle(true);                 // assume no note values
-      stt->setGenDurations(false);
-      if (noteValues1->isChecked())
-            stt->setGenDurations(true);
-      if (noteValues2->isChecked())
-            stt->setSlashStyle(false);
-      stt->setDurationFontName(durFontName->currentText());
-      stt->setDurationFontSize(durFontSize->value());
-      stt->setDurationFontUserY(durY->value());
-      stt->setFretFontName(fretFontName->currentText());
-      stt->setFretFontSize(fretFontSize->value());
-      stt->setFretFontUserY(fretY->value());
-      stt->setLinesThrough(linesThroughRadio->isChecked());
-      stt->setOnLines(onLinesRadio->isChecked());
-      stt->setUpsideDown(upsideDown->isChecked());
-      stt->setUseNumbers(numbersRadio->isChecked());
+      setTabFromDlg(stt);
 
       tabPreview->score()->doLayout();
 #ifdef _USE_NAVIGATOR_PREVIEW_
       tabPreview->layoutChanged();
 #endif
       tabPreview->updateAll();
+      // set preset combo: check stt has the same structure as one of the presets
+      // if none matches, set as custom
+      int idx;
+      for(idx=0; idx < TAB_PRESETS; idx++)
+            if(stt->isSameStructure(*_tabPresets[idx]))
+                  break;
+      presetTablatureCombo->blockSignals(true);
+      presetTablatureCombo->setCurrentIndex(idx);
+      presetTablatureCombo->blockSignals(false);
       }
 
 //---------------------------------------------------------

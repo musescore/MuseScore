@@ -58,9 +58,8 @@ class Beam : public Element {
 
       void layout2(QList<ChordRest*>, SpannerSegmentType, int frag);
       bool twoBeamedNotes();
-      void computeStemLen(const QList<Chord*>& crl, qreal& py1, int beamLevels);
-      bool noSlope(const QList<Chord*>& crl);
-      void write(Xml& xml, P_ID id) const;
+      void computeStemLen(const QList<ChordRest*>& crl, qreal& py1, int beamLevels);
+      bool noSlope(const QList<ChordRest*>& crl);
 
    public:
       Beam(Score* s);

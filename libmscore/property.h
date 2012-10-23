@@ -32,6 +32,7 @@ enum P_ID {
       P_PITCH,
       P_TPC,
       P_HEAD_TYPE,
+
       P_HEAD_GROUP,
       P_VELO_TYPE,
       P_VELO_OFFSET,
@@ -42,6 +43,7 @@ enum P_ID {
       P_SLUR_DIRECTION,
       P_LEADING_SPACE,
       P_TRAILING_SPACE,
+
       P_DISTRIBUTE,
       P_MIRROR_HEAD,
       P_DOT_POSITION,
@@ -52,6 +54,7 @@ enum P_ID {
       P_BARLINE_SPAN,
       P_USER_OFF,
       P_FRET,
+
       P_STRING,
       P_GHOST,
       P_TIMESIG_NOMINAL,
@@ -62,6 +65,7 @@ enum P_ID {
       P_ACTUAL_NOTES,
       P_P1,
       P_P2,
+
       P_GROW_LEFT,
       P_GROW_RIGHT,
       P_BOX_HEIGHT,
@@ -72,6 +76,7 @@ enum P_ID {
       P_RIGHT_MARGIN,
       P_TOP_MARGIN,
       P_BOTTOM_MARGIN,
+
       P_LAYOUT_BREAK,
       P_AUTOSCALE,
       P_SIZE,
@@ -82,6 +87,7 @@ enum P_ID {
       P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
+
       P_USER_LEN,       // used for stems
       P_SPACE,          // used for spacer
       P_TEMPO,
@@ -91,6 +97,23 @@ enum P_ID {
       P_DENOMINATOR_STRING,
       P_SHOW_NATURALS,
       P_BREAK_HINT,
+      P_FBPREFIX,             // used for FiguredBassItem
+
+      P_FBDIGIT,              //    "           "
+      P_FBSUFFIX,             //    "           "
+      P_FBCONTINUATIONLINE,   //    "           "
+      P_FBPARENTHESIS1,       //    "           "
+      P_FBPARENTHESIS2,       //    "           "
+      P_FBPARENTHESIS3,       //    "           "
+      P_FBPARENTHESIS4,       //    "           "
+      P_FBPARENTHESIS5,       //    "           "
+      P_VOLTA_TYPE,
+      P_OTTAVA_TYPE,
+
+      P_TRILL_TYPE,
+      P_HAIRPIN_TYPE,
+      P_VELO_CHANGE,
+      P_DYNAMIC_TYPE,
 
       P_END
       };
@@ -117,127 +140,6 @@ enum P_TYPE {
 extern QVariant getProperty(P_ID type, const QDomElement& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
-
-//---------------------------------------------------------
-//   template Property
-//---------------------------------------------------------
-
-template <class T>
-class Property {
-   public:
-      P_ID id;
-      void* (T::*data)();   // member function returns pointer to data
-      void* defaultVal;     // pointer to default data
-      };
-
-//---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-template <class T>
-Property<T>* property(Property<T>* list, int id)
-      {
-      for (int i = 0; ; ++i) {
-            if (list[i].id == P_END)
-                  break;
-            else if (list[i].id == id)
-                  return &list[i];
-            }
-      return 0;
-      }
-
-template <class T>
-Property<T>* property(Property<T>* list, const QString& name)
-      {
-      for (int i = 0; ; ++i) {
-            if (list[i].id == P_END)
-                  break;
-            else if (propertyName((P_ID)i) == name)
-                  return &list[i];
-            }
-      return 0;
-      }
-
-#include "xml.h"
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-#define WRITE_PROPERTIES(T) \
-      for (int i = 0;; ++i) {  \
-            const Property<T>& p = propertyList[i]; \
-            if (p.id == P_END) \
-                  break;       \
-            xml.tag(p.id, ((*(T*)this).*(p.data))(), p.defaultVal); \
-            }
-
-#define PROPERTY_DECLARATIONS(T)                                                 \
-      virtual QVariant getProperty(P_ID propertyId) const;                       \
-      virtual bool setProperty(P_ID propertyId, const QVariant&);                \
-      virtual bool setProperty(const QString&, const QDomElement&);              \
-      Property<T>* property(P_ID id) const;                                      \
-      virtual QVariant propertyDefault(P_ID) const;                              \
-      static Property<T> propertyList[];
-
-
-//---------------------------------------------------------
-//   PROPERTY_FUNCTIONS
-//---------------------------------------------------------
-
-#define PROPERTY_FUNCTIONS(T)                                                    \
-                                                                                 \
-Property<T>* T::property(P_ID id) const                                          \
-      {                                                                          \
-      for (int i = 0;; ++i) {                                                    \
-            if (propertyList[i].id == P_END)                                     \
-                  break;                                                         \
-            if (propertyList[i].id == id)                                        \
-                  return &propertyList[i];                                       \
-            }                                                                    \
-      return 0;                                                                  \
-      }                                                                          \
-QVariant T::getProperty(P_ID propertyId) const                                   \
-      {                                                                          \
-      Property<T>* p = property(propertyId);                                     \
-      if (p)                                                                     \
-            return getVariant(propertyId, ((*(T*)this).*(p->data))());           \
-      return Element::getProperty(propertyId);                                   \
-      }                                                                          \
-bool T::setProperty(P_ID propertyId, const QVariant& v)                          \
-      {                                                                          \
-      score()->addRefresh(canvasBoundingRect());                                 \
-      Property<T>* p = property(propertyId);                                     \
-      bool rv = true;                                                            \
-      if (p) {                                                                   \
-            setVariant(propertyId, ((*this).*(p->data))(), v);                   \
-            setGenerated(false);                                                 \
-            }                                                                    \
-      else                                                                       \
-            rv = Element::setProperty(propertyId, v);                            \
-      score()->setLayoutAll(true);                                               \
-      return rv;                                                                 \
-      }                                                                          \
-bool T::setProperty(const QString& name, const QDomElement& e)                   \
-      {                                                                          \
-      for (int i = 0;; ++i) {                                                    \
-            P_ID id = propertyList[i].id;                                        \
-            if (id == P_END)                                                     \
-                  break;                                                         \
-            if (propertyName(id) == name) {                                      \
-                  QVariant v = ::getProperty(id, e);                             \
-                  setVariant(id, ((*this).*(propertyList[i].data))(), v);        \
-                  setGenerated(false);                                           \
-                  return true;                                                   \
-                  }                                                              \
-            }                                                                    \
-      return Element::setProperty(name, e);                                      \
-      }                                                                          \
-QVariant T::propertyDefault(P_ID id) const                                       \
-      {                                                                          \
-      Property<T>* p = property(id);                                             \
-      return getVariant(id, p->defaultVal);                                      \
-      }
 
 #endif
 

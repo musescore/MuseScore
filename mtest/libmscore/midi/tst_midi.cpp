@@ -26,7 +26,7 @@
 #include "mtest/mcursor.h"
 #include "mtest/testutils.h"
 
-extern bool importMidi(Score*, const QString&);
+extern Score::FileError importMidi(Score*, const QString&);
 
 //---------------------------------------------------------
 //   TestMidi
@@ -71,9 +71,9 @@ bool compareElements(Element* e1, Element* e2)
       {
       if (e1->type() != e2->type())
             return false;
-      if (e1->type() == TIMESIG) {
+      if (e1->type() == Element::TIMESIG) {
             }
-      else if (e1->type() == KEYSIG) {
+      else if (e1->type() == Element::KEYSIG) {
             KeySig* ks1 = static_cast<KeySig*>(e1);
             KeySig* ks2 = static_cast<KeySig*>(e2);
             if (ks1->keySignature() != ks2->keySignature()) {
@@ -82,11 +82,11 @@ bool compareElements(Element* e1, Element* e2)
                   return false;
                   }
             }
-      else if (e1->type() == CLEF) {
+      else if (e1->type() == Element::CLEF) {
             }
-      else if (e1->type() == REST) {
+      else if (e1->type() == Element::REST) {
             }
-      else if (e1->type() == CHORD) {
+      else if (e1->type() == Element::CHORD) {
             Chord* c1 = static_cast<Chord*>(e1);
             Chord* c2 = static_cast<Chord*>(e2);
             if (c1->duration() != c2->duration()) {
@@ -189,7 +189,7 @@ void TestMidi::midi1()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test1b");
-      QVERIFY(importMidi(score2, "test1.mid"));
+      QCOMPARE(importMidi(score2, "test1.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -229,7 +229,7 @@ void TestMidi::midi2()
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test2b");
 
-      QVERIFY(importMidi(score2, "test2.mid"));
+      QCOMPARE(importMidi(score2, "test2.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -268,7 +268,7 @@ void TestMidi::midi3()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test3b");
-      QVERIFY(importMidi(score2, "test3.mid"));
+      QCOMPARE(importMidi(score2, "test3.mid"), Score::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();

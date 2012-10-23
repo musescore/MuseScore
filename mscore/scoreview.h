@@ -22,6 +22,7 @@
 #define __SCANVAS_H__
 
 #include "globals.h"
+#include "libmscore/element.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
@@ -238,7 +239,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassEndEdit();
       void cmdInsertNote(int note);
       void cmdAddPitch(int note, bool addFlag);
-      void cmdAddPitch1(int, bool, int step);
+//      void cmdAddPitch1(int, bool, int step);
+      void cmdAddFret(int fret);
       void cmdAddChordName();
       void cmdAddText(int style);
       void cmdEnterRest(const TDuration&);
@@ -251,12 +253,12 @@ class ScoreView : public QWidget, public MuseScoreView {
       Page* point2page(const QPointF&);
       void setupFotoMode();
 
-      MeasureBase* insertMeasure(ElementType, MeasureBase*);
+      MeasureBase* insertMeasure(Element::ElementType, MeasureBase*);
       MeasureBase* checkSelectionStateForInsertMeasure();
 
-      void appendMeasures(int, ElementType);
-      MeasureBase* appendMeasure(ElementType);
-      void cmdInsertMeasure(ElementType);
+      void appendMeasures(int, Element::ElementType);
+      MeasureBase* appendMeasure(Element::ElementType);
+      void cmdInsertMeasure(Element::ElementType);
       void createElementPropertyMenu(Element* e, QMenu*);
       void genPropertyMenu1(Element* e, QMenu* popup);
       void genPropertyMenuText(Element* e, QMenu* popup);
@@ -356,6 +358,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool editScoreViewDragTransition(QMouseEvent* e);
       bool editSelectTransition(QMouseEvent* me);
       void cmdAddSlur();
+      void cmdAddNoteLine();
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
       bool noteEntryMode() const;
       bool editMode() const;
@@ -404,8 +407,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       int gripCount() const { return grips; }              // number of used grips
       void changeEditElement(Element*);
 
-      void cmdAppendMeasures(int, ElementType);
-      void cmdInsertMeasures(int, ElementType);
+      void cmdAppendMeasures(int, Element::ElementType);
+      void cmdInsertMeasures(int, Element::ElementType);
 
       ScoreState mscoreState() const;
       void setCursorVisible(bool v);

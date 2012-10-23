@@ -211,7 +211,7 @@
       </column>
       <column>
        <property name="text">
-        <string>visible</string>
+        <string>Visible</string>
        </property>
       </column>
       <column>
@@ -221,10 +221,10 @@
       </column>
       <column>
        <property name="text">
-        <string>linked</string>
+        <string>Linked</string>
        </property>
        <property name="toolTip">
-        <string>staff linked to previous</string>
+        <string>Staff Linked to Previous</string>
        </property>
       </column>
      </widget>

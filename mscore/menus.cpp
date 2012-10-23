@@ -131,11 +131,11 @@ Palette* MuseScore::newFramePalette()
       sp->setDrawGrid(true);
 
       static const IconAction bpa[] = {
-            { ICON_VFRAME,   "vframe" },
-            { ICON_HFRAME,   "hframe" },
-            { ICON_TFRAME,   "tframe" },
-            { ICON_FFRAME,   "fframe" },
-            { ICON_MEASURE,  "measure" },
+            { ICON_VFRAME,   "insert-vbox" },
+            { ICON_HFRAME,   "insert-hbox" },
+            { ICON_TFRAME,   "insert-textframe" },
+            { ICON_FFRAME,   "insert-fretframe" },
+            { ICON_MEASURE,  "insert-measure" },
             { -1, ""}
             };
       populateIconPalette(sp, bpa);
@@ -204,9 +204,9 @@ Palette* MuseScore::newAccidentalsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = ACC_SHARP; i < ACC_END; ++i) {
+      for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
             Accidental* s = new Accidental(gscore);
-            s->setSubtype(AccidentalType(i));
+            s->setSubtype(Accidental::AccidentalType(i));
             sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
@@ -395,6 +395,8 @@ Palette* MuseScore::newFallDoitPalette()
       const char* scorelineNames[] = {
             QT_TR_NOOP("fall"),
             QT_TR_NOOP("doit"),
+            QT_TR_NOOP("plop"),
+            QT_TR_NOOP("scoop"),
             };
 
       ChordLine* cl = new ChordLine(gscore);
@@ -404,6 +406,14 @@ Palette* MuseScore::newFallDoitPalette()
       cl = new ChordLine(gscore);
       cl->setSubtype(CHORDLINE_DOIT);
       sp->append(cl, tr(scorelineNames[1]));
+
+      cl = new ChordLine(gscore);
+      cl->setSubtype(CHORDLINE_PLOP);
+      sp->append(cl, tr(scorelineNames[2]));
+
+      cl = new ChordLine(gscore);
+      cl->setSubtype(CHORDLINE_SCOOP);
+      sp->append(cl, tr(scorelineNames[3]));
       return sp;
       }
 
@@ -449,12 +459,12 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
-            int sym = noteHeads[0][i][1];
+            SymId sym = noteHeads[0][i][1];
             if (i == Note::HEAD_BREVIS_ALT)
                   sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
-            sp->append(nh, qApp->translate("symbol", symbols[0][sym].name()));
+            sp->append(nh, qApp->translate("symbol", Sym::id2name(sym)));
             }
       return sp;
       }
@@ -546,7 +556,7 @@ Palette* MuseScore::newArpeggioPalette()
       sp->setGrid(27, 60);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < 6; ++i) {
             Arpeggio* a = new Arpeggio(gscore);
             a->setSubtype(ArpeggioType(i));
             sp->append(a, tr("Arpeggio"));
@@ -628,17 +638,17 @@ Palette* MuseScore::newLinesPalette()
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setSubtype(0);
+      gabel0->setSubtype(Hairpin::CRESCENDO);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setSubtype(1);
+      gabel1->setSubtype(Hairpin::DECRESCENDO);
       gabel1->setLen(w);
       sp->append(gabel1, qApp->translate("lines", "Diminuendo"));
 
       Volta* volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("1.");
       QList<int> il;
@@ -647,7 +657,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Prima volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();
@@ -656,7 +666,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Seconda volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_CLOSED);
+      volta->setSubtype(Volta::VOLTA_CLOSED);
       volta->setLen(w);
       volta->setText("3.");
       il.clear();
@@ -665,7 +675,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Terza volta"));
 
       volta = new Volta(gscore);
-      volta->setSubtype(VOLTA_OPEN);
+      volta->setSubtype(Volta::VOLTA_OPEN);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();
@@ -674,22 +684,22 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, qApp->translate("lines", "Seconda volta 2"));
 
       Ottava* ottava = new Ottava(gscore);
-      ottava->setSubtype(0);
+      ottava->setSubtype(Ottava::OTTAVA_8VA);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "8va"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(1);
+      ottava->setSubtype(Ottava::OTTAVA_15MA);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "15ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(2);
+      ottava->setSubtype(Ottava::OTTAVA_8VB);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "8vb"));
 
       ottava = new Ottava(gscore);
-      ottava->setSubtype(3);
+      ottava->setSubtype(Ottava::OTTAVA_15MB);
       ottava->setLen(w);
       sp->append(ottava, qApp->translate("lines", "15mb"));
 
@@ -704,7 +714,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(-1);
+      pedal->setBeginSymbol(noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       pedal->setEndHookType(HOOK_45);
@@ -712,7 +722,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(-1);
+      pedal->setBeginSymbol(noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       sp->append(pedal, qApp->translate("lines", "Pedal"));
@@ -835,6 +845,48 @@ Palette* MuseScore::newTextPalette()
       }
 
 //---------------------------------------------------------
+//   newTimePalette
+//    create default time signature palette
+//---------------------------------------------------------
+
+Palette* MuseScore::newTimePalette()
+      {
+      struct TS {
+            int numerator;
+            int denominator;
+            TimeSigType type;
+            QString name;
+            };
+
+      TS tsList[] = {
+            { 2,  4, TSIG_NORMAL, "2/4" },
+            { 3,  4, TSIG_NORMAL, "3/4" },
+            { 4,  4, TSIG_NORMAL, "4/4" },
+            { 5,  4, TSIG_NORMAL, "5/4" },
+            { 6,  4, TSIG_NORMAL, "6/4" },
+            { 3,  8, TSIG_NORMAL, "3/8" },
+            { 6,  8, TSIG_NORMAL, "6/8" },
+            { 9,  8, TSIG_NORMAL, "9/8" },
+            { 12, 8, TSIG_NORMAL, "12/8" },
+            { 4,  4, TSIG_FOUR_FOUR,  tr("4/4 common time") },
+            { 2,  2, TSIG_ALLA_BREVE, tr("2/2 alla breve") }
+            };
+
+      Palette* sp = new Palette;
+      sp->setName(tr("Time Signatures"));
+      sp->setMag(.8);
+      sp->setGrid(42, 38);
+
+      for (unsigned i = 0; i < sizeof(tsList)/sizeof(*tsList); ++i) {
+            TimeSig* ts;
+            ts = new TimeSig(gscore);
+            ts->setSig(Fraction(tsList[i].numerator, tsList[i].denominator), tsList[i].type);
+            sp->append(ts, tsList[i].name);
+            }
+      return sp;
+      }
+
+//---------------------------------------------------------
 //   populatePalette
 //---------------------------------------------------------
 
@@ -843,35 +895,7 @@ void MuseScore::populatePalette()
       paletteBox->addPalette(newGraceNotePalette());
       paletteBox->addPalette(newClefsPalette());
       paletteBox->addPalette(newKeySigPalette());
-
-      //-----------------------------------
-      //    Time
-      //-----------------------------------
-
-      Palette* sp = new Palette;
-      sp->setName(tr("Time Signatures"));
-      sp->setMag(.8);
-      sp->setGrid(42, 38);
-
-      TimeSig* ts;
-      ts = new TimeSig(gscore);
-      ts->setSig(Fraction(2, 2));
-      sp->append(ts, "2/2");
-
-      sp->append(new TimeSig(gscore,  Fraction(2, 4)), "2/4");
-      sp->append(new TimeSig(gscore,  Fraction(3, 4)), "3/4");
-      sp->append(new TimeSig(gscore,  Fraction(4, 4)), "4/4");
-      sp->append(new TimeSig(gscore,  Fraction(5, 4)), "5/4");
-      sp->append(new TimeSig(gscore,  Fraction(6, 4)), "6/4");
-      sp->append(new TimeSig(gscore,  Fraction(3, 8)), "3/8");
-      sp->append(new TimeSig(gscore,  Fraction(6, 8)), "6/8");
-      sp->append(new TimeSig(gscore,  Fraction(9, 8)), "9/8");
-      sp->append(new TimeSig(gscore, Fraction(12, 8)), "12/8");
-
-      sp->append(new TimeSig(gscore, TSIG_FOUR_FOUR),  tr("4/4 common time"));
-      sp->append(new TimeSig(gscore, TSIG_ALLA_BREVE), tr("2/2 alla breve"));
-      paletteBox->addPalette(sp);
-
+      paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette());
       paletteBox->addPalette(newLinesPalette());
       paletteBox->addPalette(newArpeggioPalette());
@@ -925,7 +949,7 @@ void MuseScore::populatePalette()
       //    Symbols
       //-----------------------------------
 
-      sp = new Palette;
+      Palette* sp = new Palette;
       sp->setName(tr("Symbols"));
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
@@ -993,6 +1017,11 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("lyrics"));
       text->addAction(getAction("tempo"));
 
+      popup->addSeparator();
+      popup->addAction(getAction("add-slur"));
+      popup->addAction(getAction("add-hairpin"));
+      popup->addAction(getAction("add-hairpin-reverse"));
+      popup->addAction(getAction("add-noteline"));
       return popup;
       }
 

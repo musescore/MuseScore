@@ -72,6 +72,16 @@
             <string notr="true">MEASURE</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>CHORD</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>NOTE</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item row="1" column="0">

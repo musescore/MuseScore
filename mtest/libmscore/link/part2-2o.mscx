@@ -35,6 +35,14 @@
     <metaTag name="workTitle">testpart1</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -151,7 +159,7 @@ p, li { white-space: pre-wrap; }
           </Tempo>
         <Dynamic>
           <subtype>pp</subtype>
-          <style>Dynamics</style>
+          <style>Dynamics2</style>
           </Dynamic>
         <Chord>
           <lid>1</lid>
@@ -956,6 +964,14 @@ p, li { white-space: pre-wrap; }
       <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -1034,7 +1050,7 @@ p, li { white-space: pre-wrap; }
             </Tempo>
           <Dynamic>
             <subtype>pp</subtype>
-            <style>Dynamics</style>
+            <style>Dynamics2</style>
             </Dynamic>
           <Chord>
             <lid>1</lid>
@@ -1502,6 +1518,14 @@ p, li { white-space: pre-wrap; }
       <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>

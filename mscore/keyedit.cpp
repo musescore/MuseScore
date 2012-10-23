@@ -206,8 +206,8 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
             QPointF dragOffset;
             Fraction duration;
-            ElementType type = Element::readType(e, &dragOffset, &duration);
-            if (type != ACCIDENTAL)
+            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+            if (type != Element::ACCIDENTAL)
                   return;
 
             event->acceptProposedAction();

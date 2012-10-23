@@ -37,7 +37,7 @@ class InstrumentName : public Text  {
 
       QString subtypeName() const;
       InstrumentNameType subtype() const { return _subtype; }
-      void setSubtype(InstrumentNameType v) { _subtype = v; }
+      void setSubtype(InstrumentNameType v);
       void setSubtype(const QString& s);
       };
 

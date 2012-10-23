@@ -22,8 +22,11 @@
 #include "libmscore/page.h"
 
 #ifdef OMR
-extern bool importPdf(Score*, const QString&);
+extern Score::FileError importPdf(Score*, const QString&);
 #endif
+extern Score::FileError importCompressedMusicXml(Score*, const QString&);
+extern Score::FileError importMusicXml(Score*, const QString&);
+extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 bool noGui = true;
 QString revision;
@@ -59,14 +62,15 @@ Element* MTest::writeReadElement(Element* element)
       //
       // read element
       //
-//      printf("%s\n", buffer.buffer().data());
+// printf("===read <%s>===\n", element->name());
+// printf("%s\n", buffer.buffer().data());
 
       QDomDocument doc;
       int line, column;
       QString err;
       if (!doc.setContent(buffer.buffer(), &err, &line, &column)) {
-            printf("writeReadElement: error reading paste data at line %d column %d: %s\n",
-               line, column, qPrintable(err));
+            printf("writeReadElement(%s): error reading data at line %d column %d: %s\n",
+               element->name(), line, column, qPrintable(err));
             printf("%s\n", buffer.buffer().data());
             return 0;
             }
@@ -107,16 +111,21 @@ Score* MTest::readCreatedScore(const QString& name)
       score->setTestMode(true);
       QString csl  = score->fileInfo()->suffix().toLower();
 
-      bool rv = false;
-      if (csl == "mscz")
-            rv = score->loadCompressedMsc(name);
-      else if (csl == "mscx")
-            rv = score->loadMsc(name);
+      Score::FileError rv;
+      if (csl == "mscz" || csl == "mscx")
+            rv = score->loadMsc(name, false);
+      else if (csl == "mxl")
+            rv = importCompressedMusicXml(score, name);
 #ifdef OMR
       else if (csl == "pdf")
             rv = importPdf(score, name);
 #endif
-      if (!rv) {
+      else if (csl == "xml")
+            rv = importMusicXml(score, name);
+      else
+            rv = Score::FILE_UNKNOWN_TYPE;
+
+      if (rv != Score::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
             return 0;
@@ -136,13 +145,11 @@ bool MTest::saveScore(Score* score, const QString& name)
       }
 
 //---------------------------------------------------------
-//   saveCompareScore
+//   compareFiles
 //---------------------------------------------------------
 
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith)
+bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
       {
-      saveScore(score, saveName);
-
       QString cmd = "diff";
       QStringList args;
       args.append(saveName);
@@ -156,6 +163,26 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
             return false;
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   saveCompareScore
+//---------------------------------------------------------
+
+bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith)
+      {
+      saveScore(score, saveName);
+      return compareFiles(saveName, compareWith);
+      }
+
+//---------------------------------------------------------
+//   saveCompareMusicXMLScore
+//---------------------------------------------------------
+
+bool MTest::saveCompareMusicXmlScore(Score* score, const QString& saveName, const QString& compareWith)
+      {
+      saveMusicXml(score, saveName);
+      return compareFiles(saveName, compareWith);
       }
 
 //---------------------------------------------------------
@@ -209,6 +236,15 @@ bool MTest::savePdf(Score* cs, const QString& saveName)
       }
 
 //---------------------------------------------------------
+//   saveMusicXml
+//---------------------------------------------------------
+
+bool MTest::saveMusicXml(Score* score, const QString& saveName)
+      {
+      return saveXml(score, saveName);
+      }
+
+//---------------------------------------------------------
 //   initMTest
 //---------------------------------------------------------
 
@@ -223,6 +259,6 @@ void MTest::initMTest()
 
       root = TESTROOT "/mtest";
       loadInstrumentTemplates(":/instruments.xml");
-      score = new Score(mscore->baseStyle());
+      score = readScore("/test.mscx");
       }
 

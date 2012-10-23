@@ -73,11 +73,8 @@ void SegmentList::check()
 
 //---------------------------------------------------------
 //   insert
+///   Insert Segment \a e before Segment \a el.
 //---------------------------------------------------------
-
-/**
- Insert Segment \a e before Segment \a el.
-*/
 
 void SegmentList::insert(Segment* e, Segment* el)
       {

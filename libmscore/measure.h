@@ -141,8 +141,9 @@ class Measure : public MeasureBase {
       Measure* cloneMeasure(Score*, TieMap*, SpannerMap*);
 
       virtual void read(const QDomElement&, int idx);
+      void read(const QDomElement& d) { read(d, 0); }
       virtual void write(Xml&, int, bool writeSystemElements) const;
-      virtual void write(Xml&) const;
+//      virtual void write(Xml&) const;
       void writeBox(Xml&) const;
       void readBox(const QDomElement&);
       virtual bool isEditable() const { return false; }
@@ -229,7 +230,7 @@ class Measure : public MeasureBase {
       Segment* undoGetSegment(Segment::SegmentType st, int tick);
       Segment* getSegment(Element* el, int tick);
       Segment* getSegment(Segment::SegmentType st, int tick);
-      Segment* getSegment(Segment::SegmentType st, int tick, int gl);
+      Segment* getGraceSegment(int tick, int gl);
       Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();

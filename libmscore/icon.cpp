@@ -30,7 +30,8 @@ void Icon::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", _subtype);
-      xml.tag("action", _action);
+      if (_action)
+            xml.tag("action", _action);
       xml.etag();
       }
 

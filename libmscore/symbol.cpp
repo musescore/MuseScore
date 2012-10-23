@@ -27,6 +27,13 @@
 //   BSymbol
 //---------------------------------------------------------
 
+BSymbol::BSymbol(Score* s)
+   : Element(s)
+      {
+      _z = SYMBOL * 100;
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      }
+
 BSymbol::BSymbol(const BSymbol& s)
    : Element(s), ElementLayout(s)
       {
@@ -158,11 +165,11 @@ QRectF BSymbol::drag(const EditData& data)
 Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
-      _sym = 0;
+      _sym = sharpSym;        // arbitrary valid default
       setZ(SYMBOL * 100);
       }
 
-Symbol::Symbol(Score* s, int sy)
+Symbol::Symbol(Score* s, SymId sy)
    : BSymbol(s)
       {
       _sym = sy;
@@ -210,7 +217,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != NOTEDOT || !staff()->useTablature()) {
+      if (type() != NOTEDOT || !staff()->isTabStaff()) {
             p->setPen(curColor());
             symbols[score()->symIdx()][_sym].draw(p, magS());
             }
@@ -223,7 +230,7 @@ void Symbol::draw(QPainter* p) const
 void Symbol::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("name", symbols[score()->symIdx()][_sym].name());
+      xml.tag("name", Sym::id2name(_sym));
       Element::writeProperties(xml);
       foreach(const Element* e, leafs())
             e->write(xml);
@@ -237,22 +244,22 @@ void Symbol::write(Xml& xml) const
 void Symbol::read(const QDomElement& de)
       {
       QPointF pos;
-      int s = -1;
+      SymId s = noSym;
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "name") {
-                  for (int i = 0; i < symbols[0].size(); ++i) {
-                        if (val == symbols[0][i].name()) {
-                              s = i;
-                              break;
+                  s = Sym::name2id(val);
+                  if (s == noSym) {
+                        // if symbol name not found, fall back to mnames
+                        s = Sym::userName2id(val);
+                        if (s == noSym) {
+                              qDebug("unknown symbol <%s> (%d symbols), falling back to default symbol\n",
+                                 qPrintable(val), symbols[0].size());
+                              // set a default symbol, or layout() will crash
+                              s = s1miHeadSym;
                               }
-                        }
-                  if (s == -1) {
-                        qDebug("unknown symbol <%s>, symbols %d\n",
-                           qPrintable(val), symbols[0].size());
-                        s = 0;
                         }
                   }
             else if (tag == "Symbol") {
@@ -292,10 +299,8 @@ void Symbol::read(const QDomElement& de)
             else if (!Element::readProperties(e))
                   domError(e);
             }
-      if (s == -1) {
+      if (s == noSym)
             qDebug("unknown symbol\n");
-            s = 0;
-            }
       setPos(pos);
       setSym(s);
       }
@@ -368,6 +373,7 @@ QPointF BSymbol::canvasPos() const
 FSymbol::FSymbol(Score* s)
   : Element(s)
       {
+      _code = 0;
       _font.setStyleStrategy(QFont::NoFontMerging);
       }
 

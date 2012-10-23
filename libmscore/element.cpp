@@ -79,7 +79,7 @@
 #include "notedot.h"
 #include "textframe.h"
 
-extern bool showInvisible;
+// extern bool showInvisible;
 
 //
 // list has to be synchronized with ElementType enum
@@ -95,10 +95,11 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "StemSlash"),
       QT_TRANSLATE_NOOP("elementName", "Line"),
       QT_TRANSLATE_NOOP("elementName", "Bracket"),
+
       QT_TRANSLATE_NOOP("elementName", "Arpeggio"),
       QT_TRANSLATE_NOOP("elementName", "Accidental"),
+      QT_TRANSLATE_NOOP("elementName", "Stem"),
       QT_TRANSLATE_NOOP("elementName", "Note"),
-      QT_TRANSLATE_NOOP("elementName", "Stem"),             // 10
       QT_TRANSLATE_NOOP("elementName", "Clef"),
       QT_TRANSLATE_NOOP("elementName", "KeySig"),
       QT_TRANSLATE_NOOP("elementName", "TimeSig"),
@@ -108,7 +109,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "RepeatMeasure"),
       QT_TRANSLATE_NOOP("elementName", "Image"),
       QT_TRANSLATE_NOOP("elementName", "Tie"),
-      QT_TRANSLATE_NOOP("elementName", "Articulation"),     // 20
+      QT_TRANSLATE_NOOP("elementName", "Articulation"),
       QT_TRANSLATE_NOOP("elementName", "ChordLine"),
       QT_TRANSLATE_NOOP("elementName", "Dynamic"),
       QT_TRANSLATE_NOOP("elementName", "Beam"),
@@ -172,9 +173,6 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "Ossia")
       };
 
-static bool defaultVisible = true;
-static bool defaultSelected = false;
-
 //---------------------------------------------------------
 //   DropData
 //---------------------------------------------------------
@@ -188,19 +186,6 @@ DropData::DropData()
       }
 
 //---------------------------------------------------------
-//   propertyList
-//---------------------------------------------------------
-
-Property<Element> Element::propertyList[] = {
-      { P_COLOR,    &Element::pColor,    &MScore::defaultColor },
-      { P_VISIBLE,  &Element::pVisible,  &defaultVisible       },
-      { P_SELECTED, &Element::pSelected, &defaultSelected      },
-      // not written:
-      { P_USER_OFF, &Element::pUserOff,  0 },
-      { P_END, 0, 0 }
-      };
-
-//---------------------------------------------------------
 //   LinkedElements
 //---------------------------------------------------------
 
@@ -212,7 +197,7 @@ LinkedElements::LinkedElements(Score* score)
 LinkedElements::LinkedElements(Score* score, int id)
       {
       _lid = id;
-      score->linkId(id);
+      score->linkId(id);      // remember used id
       }
 
 //---------------------------------------------------------
@@ -316,6 +301,9 @@ Element::Element(Score* s) :
    _track(-1),
    _color(MScore::defaultColor),
    _mag(1.0),
+//   _pos(QPointF()),
+//   _userOff(QPointF()),
+//   _readPos(QPointF()),
    _tag(1),
    _score(s),
    _mxmlOff(0),
@@ -425,7 +413,7 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::toDefault()
       {
       if (!_userOff.isNull())
-            score()->undoChangeUserOffset(this, QPointF());
+            score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -641,7 +629,8 @@ bool Element::intersects(const QRectF& rr) const
 
 void Element::writeProperties(Xml& xml) const
       {
-      if (_links && (_links->size() > 1))
+      //copy paste should not keep links
+      if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
             if (type() == VOLTA_SEGMENT)
@@ -677,43 +666,58 @@ bool Element::readProperties(const QDomElement& e)
       const QString& tag(e.tagName());
       const QString& val(e.text());
 
-      if (setProperty(tag, e))
-            ;
+      if (tag == "color")
+            _color = readColor(e);
+      else if (tag == "visible")
+            _visible = val.toInt();
+      else if (tag == "selected")
+            _selected = val.toInt();
+      else if (tag == "userOff")
+            _userOff = readPoint(e);
       else if (tag == "lid") {
-            _links = score()->links().value(val.toInt());
+            int id = val.toInt();
+            _links = score()->links().value(id);
             if (!_links) {
-                  int i = val.toInt();
                   if (score()->parentScore())   // DEBUG
-                        qDebug("---link %d not found (%d)\n", i, score()->links().size());
-                  _links = new LinkedElements(score(), i);
-                  score()->links().insert(i, _links);
+                        qDebug("---link %d not found (%d)\n", id, score()->links().size());
+                  _links = new LinkedElements(score(), id);
+                  score()->links().insert(id, _links);
                   }
+#ifndef NDEBUG
+            else {
+                  foreach(Element* e, *_links) {
+                        if (e->type() != type()) {
+                              qFatal("link %s(%d) type mismatch %s linked to %s",
+                                 qPrintable(val), id, e->name(), name());
+                              }
+                        }
+                  }
+#endif
             _links->append(this);
             }
-      else if (tag == "tick")
-            score()->curTick = score()->fileDivision(val.toInt());
+      else if (tag == "tick") {
+            if (type() != SYMBOL)   // hack for 1.2
+                  score()->curTick = score()->fileDivision(val.toInt());
+            }
       else if (tag == "offset") {         // ??obsolete -> used for volta
             qreal _spatium = spatium();
             QPointF pt(readPoint(e) * _spatium);
             setUserOff(pt);
-            _readPos = QPointF();
+            // _readPos = QPointF();
             }
       else if (tag == "pos") {
-            qreal _spatium = spatium();
-            setUserOff(QPointF());
-            _readPos = readPoint(e) * _spatium;
+//            if (score()->mscVersion() > 114
+//               || (type() != TEXT && type() != DYNAMIC)
+//               ) {
+                  qreal _spatium = spatium();
+//                  setUserOff(QPointF());
+                  _readPos = readPoint(e) * _spatium;
+//                  }
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + val.toInt());
       else if (tag == "track")
             setTrack(val.toInt());
-/*      else if (tag == "systemFlag") {
-            int i = val.toInt();
-            setFlag(ELEMENT_SYSTEM_FLAG, i);
-            if (i)
-                  _track = 0;
-            }
-*/
       else if (tag == "tag") {
             for (int i = 1; i < MAX_TAGS; i++) {
                   if (score()->layerTags()[i] == val) {
@@ -725,6 +729,15 @@ bool Element::readProperties(const QDomElement& e)
       else
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   writeProperty
+//---------------------------------------------------------
+
+void Element::writeProperty(Xml& xml, P_ID id) const
+      {
+      xml.tag(id, getProperty(id), propertyDefault(id));
       }
 
 //---------------------------------------------------------
@@ -884,6 +897,10 @@ void StaffLines::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y, x2, y));
             y = _pos.y() + (lines+2) * dist;
             painter->drawLine(QLineF(x1, y, x2, y));
+            y = _pos.y() + (lines+3) * dist;
+            painter->drawLine(QLineF(x1, y, x2, y));
+            y = _pos.y() + (lines+4) * dist;
+            painter->drawLine(QLineF(x1, y, x2, y));
             }
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->drawLines(ll);
@@ -937,6 +954,7 @@ Line::Line(Score* s, bool v)
    : Element(s)
       {
       vertical = v;
+      _z = LINE * 100;
       }
 
 //---------------------------------------------------------
@@ -1180,7 +1198,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType Element::readType(QDomElement& e, QPointF* dragOffset, Fraction* duration)
+Element::ElementType Element::readType(QDomElement& e, QPointF* dragOffset, Fraction* duration)
       {
       ElementType type = INVALID;
 
@@ -1350,103 +1368,14 @@ Element* Element::create(ElementType type, Score* score)
 
 const char* Element::name(ElementType type)
       {
-      switch(type) {
-            case SYMBOL:            return "Symbol";
-            case FSYMBOL:           return "FSymbol";
-            case TEXT:              return "Text";
-            case INSTRUMENT_NAME:   return "InstrumentName";
-            case SLUR_SEGMENT:      return "SlurSegment";
-            case BAR_LINE:          return "BarLine";
-            case STEM_SLASH:        return "StemSlash";
-            case LINE:              return "Line";
-            case BRACKET:           return "Bracket";
-            case ARPEGGIO:          return "Arpeggio";
-            case ACCIDENTAL:        return "Accidental";
-            case NOTE:              return "Note";
-            case STEM:              return "Stem";
-            case CLEF:              return "Clef";
-            case KEYSIG:            return "KeySig";
-            case TIMESIG:           return "TimeSig";
-            case REST:              return "Rest";
-            case BREATH:            return "Breath";
-            case GLISSANDO:         return "Glissando";
-            case REPEAT_MEASURE:    return "RepeatMeasure";
-            case IMAGE:             return "Image";
-            case TIE:               return "Tie";
-            case ARTICULATION:      return "Articulation";
-            case CHORDLINE:         return "ChordLine";
-            case DYNAMIC:           return "Dynamic";
-            case PAGE:              return "Page";
-            case BEAM:              return "Beam";
-            case HOOK:              return "Hook";
-            case LYRICS:            return "Lyrics";
-            case FIGURED_BASS:      return "FiguredBass";
-            case MARKER:            return "Marker";
-            case JUMP:              return "Jump";
-            case FINGERING:         return "Fingering";
-            case TUPLET:            return "Tuplet";
-            case TEMPO_TEXT:        return "Tempo";
-            case STAFF_TEXT:        return "StaffText";
-            case REHEARSAL_MARK:    return "RehearsalMark";
-            case INSTRUMENT_CHANGE: return "InstrumentChange";
-            case HARMONY:           return "Harmony";
-            case FRET_DIAGRAM:      return "FretDiagram";
-            case BEND:              return "Bend";
-            case TREMOLOBAR:        return "TremoloBar";
-            case VOLTA:             return "Volta";
-            case HAIRPIN_SEGMENT:   return "HairpinSegment";
-            case OTTAVA_SEGMENT:    return "OttavaSegment";
-            case TRILL_SEGMENT:     return "TrillSegment";
-            case TEXTLINE_SEGMENT:  return "TextLineSegment";
-            case VOLTA_SEGMENT:     return "VoltaSegment";
-            case LAYOUT_BREAK:      return "LayoutBreak";
-            case SPACER:            return "Spacer";
-            case STAFF_STATE:       return "StaffState";
-            case LEDGER_LINE:       return "LedgerLine";
-            case NOTEHEAD:          return "NoteHead";
-            case NOTEDOT:           return "NoteDot";
-            case TREMOLO:           return "Tremolo";
-            case MEASURE:           return "Measure";
-            case STAFF_LINES:       return "StaffLines";
-            case SELECTION:         return "Selection";
-            case LASSO:             return "Lasso";
-            case SHADOW_NOTE:       return "ShadowNote";
-            case RUBBERBAND:        return "RubberBand";
-            case HAIRPIN:           return "HairPin";
-            case OTTAVA:            return "Ottava";
-            case PEDAL:             return "Pedal";
-            case TRILL:             return "Trill";
-            case TEXTLINE:          return "TextLine";
-            case SEGMENT:           return "Segment";
-            case SYSTEM:            return "System";
-            case COMPOUND:          return "Compound";
-            case CHORD:             return "Chord";
-            case SLUR:              return "Slur";
-            case ELEMENT:           return "Element";
-            case ELEMENT_LIST:      return "ElementList";
-            case STAFF_LIST:        return "StaffList";
-            case MEASURE_LIST:      return "MeasureList";
-            case LAYOUT:            return "Layout";
-            case HBOX:              return "HBox";
-            case VBOX:              return "VBox";
-            case TBOX:              return "TBox";
-            case FBOX:              return "FBox";
-            case ICON:              return "Icon";
-            case OSSIA:             return "Ossia";
-            case ACCIDENTAL_BRACKET:  return "AccidentalBracket";
-            case TAB_DURATION_SYMBOL: return "TabDurationSymbol";
-            case INVALID:
-            case MAXTYPE:
-                  break;
-            }
-      return "??";
+      return elementNames[type];
       }
 
 //---------------------------------------------------------
 //   name2type
 //---------------------------------------------------------
 
-ElementType Element::name2type(const QString& s)
+Element::ElementType Element::name2type(const QString& s)
       {
       for (int i = 0; i < MAXTYPE; ++i) {
             if (s == elementNames[i])
@@ -1519,30 +1448,19 @@ Space& Space::operator+=(const Space& s)
       }
 
 //---------------------------------------------------------
-//   property
-//---------------------------------------------------------
-
-Property<Element>* Element::property(P_ID id) const
-      {
-      for (int i = 0;;  ++i) {
-            if (propertyList[i].id == P_END)
-                  break;
-            if (propertyList[i].id == id)
-                  return &propertyList[i];
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Element::getProperty(P_ID propertyId) const
       {
-      Property<Element>* p = property(propertyId);
-      if (p)
-            return getVariant(propertyId, ((*(Element*)this).*(p->data))());
-      return QVariant();
+      switch(propertyId) {
+            case P_COLOR:     return _color;
+            case P_VISIBLE:   return _visible;
+            case P_SELECTED:  return _selected;
+            case P_USER_OFF:  return _userOff;
+            default:
+                  return QVariant();
+            }
       }
 
 //---------------------------------------------------------
@@ -1551,145 +1469,84 @@ QVariant Element::getProperty(P_ID propertyId) const
 
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
-      Property<Element>* p = property(propertyId);
-      if (p) {
-            setVariant(propertyId, ((*this).*(p->data))(), v);
-            setGenerated(false);
-            score()->addRefresh(canvasBoundingRect());
-            return true;
+      switch(propertyId) {
+            case P_COLOR:
+                  _color = v.value<QColor>();
+                  break;
+            case P_VISIBLE:
+                  _visible = v.toBool();
+                  break;
+            case P_SELECTED:
+                  _selected = v.toBool();
+                  break;
+            case P_USER_OFF:
+                  _userOff = v.toPointF();
+                  break;
+            default:
+                  qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
+                  return false;
             }
-      qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
-      return false;
+      setGenerated(false);
+      score()->addRefresh(canvasBoundingRect());
+      return true;
       }
 
-bool Element::setProperty(const QString& name, const QDomElement& e)
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Element::undoChangeProperty(P_ID id, const QVariant& val)
       {
-      for (int i = 0;; ++i) {
-            P_ID id = propertyList[i].id;
-            if (id == P_END)
-                  break;
-            if (propertyName(id) == name) {
-                  QVariant v = ::getProperty(id, e);
-                  setVariant(id, ((*this).*(propertyList[i].data))(), v);
-                  setGenerated(false);
-                  score()->addRefresh(canvasBoundingRect());
-                  return true;
-                  }
-            }
-      return false;
+      score()->undoChangeProperty(this, id, val);
       }
 
 //---------------------------------------------------------
-//   setVariant
+//   isChordRest
 //---------------------------------------------------------
 
-void Element::setVariant(P_ID id, void* data, const QVariant& value)
+bool Element::isChordRest() const
       {
-      if (id == P_VISIBLE) {
-            setVisible(value.toBool());
-            return;
-            }
-      switch(propertyType(id)) {
-            case T_BOOL:
-                  *(bool*)data = value.toBool();
-                  break;
-            case T_SUBTYPE:
-            case T_INT:
-                  *(int*)data = value.toInt();
-                  break;
-            case T_SREAL:
-                  *(qreal*)data = value.toDouble() * spatium();
-                  break;
-            case T_REAL:
-                  *(qreal*)data = value.toDouble();
-                  break;
-            case T_FRACTION:
-                  *(Fraction*)data = value.value<Fraction>();
-                  break;
-            case T_SCALE:
-            case T_POINT:
-                  *(QPointF*)data = value.toPointF();
-                  break;
-            case T_SIZE:
-                  *(QSizeF*)data = value.toSizeF();
-                  break;
-            case T_COLOR:
-                  *(QColor*)data = value.value<QColor>();
-                  break;
-            case T_STRING:
-                  *(QString*)data = value.toString();
-                  break;
-            case T_DIRECTION:
-            case T_DIRECTION_H:
-            case T_LAYOUT_BREAK:
-            case T_VALUE_TYPE:
-            case T_BEAM_MODE:
-                  *(int*)data = value.toInt();
-                  break;
-            }
+      return type() == REST || type() == CHORD;
       }
 
 //---------------------------------------------------------
-//   getVariant
-//    Return QVariant from void* to property.
-//    The external representation of the property is
-//    returned, suitable for writing to xml.
+//   isDurationElement
 //---------------------------------------------------------
 
-QVariant Element::getVariant(P_ID id, void* data) const
+bool Element::isDurationElement() const
       {
-      if (data) {
-            switch(propertyType(id)) {
-                  case T_BOOL:
-                        return QVariant(*(bool*)data);
-                  case T_SUBTYPE:
-                  case T_INT:
-                  case T_DIRECTION:
-                  case T_DIRECTION_H:
-                  case T_LAYOUT_BREAK:
-                  case T_VALUE_TYPE:
-                  case T_BEAM_MODE:
-                        return QVariant(*(int*)data);
-                  case T_FRACTION:
-                        return QVariant::fromValue(*(Fraction*)data);
-                  case T_SREAL:
-                        return QVariant((*(qreal*)data) / spatium());
-                  case T_REAL:
-                        return QVariant(*(qreal*)data);
-                  case T_COLOR:
-                        return QVariant(*(QColor*)data);
-                  case T_POINT:
-                  case T_SCALE:
-                        return QVariant(*(QPointF*)data);
-                  case T_SIZE:
-                        return QVariant(*(QSizeF*)data);
-                  case T_STRING:
-                        return QVariant(*(QString*)data);
-                  }
-            }
-      return QVariant();
+      return isChordRest() || (type() == TUPLET);
       }
 
-bool Element::isChordRest() const                   { return type() == REST || type() == CHORD;   }
-bool Element::isDurationElement() const             { return isChordRest() || (type() == TUPLET); }
-bool Element::isSLine() const {
-            return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
-               || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
-            }
-bool Element::isText() const {
-              return type()  == TEXT
-                || type() == LYRICS
-                || type() == DYNAMIC
-                || type() == FINGERING
-                || type() == HARMONY
-                || type() == MARKER
-                || type() == JUMP
-                || type() == STAFF_TEXT
-                || type() == REHEARSAL_MARK
-                || type() == INSTRUMENT_CHANGE
-                || type() == FIGURED_BASS
-                || type() == TEMPO_TEXT;
-            }
+//---------------------------------------------------------
+//   isSLine
+//---------------------------------------------------------
+
+bool Element::isSLine() const
+      {
+      return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
+         || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
+      }
+
+//---------------------------------------------------------
+//   isText
+//---------------------------------------------------------
+
+bool Element::isText() const
+      {
+      return type()  == TEXT
+         || type() == LYRICS
+         || type() == DYNAMIC
+         || type() == FINGERING
+         || type() == HARMONY
+         || type() == MARKER
+         || type() == JUMP
+         || type() == STAFF_TEXT
+         || type() == REHEARSAL_MARK
+         || type() == INSTRUMENT_CHANGE
+         || type() == FIGURED_BASS
+         || type() == TEMPO_TEXT;
+      }
 
 //---------------------------------------------------------
 //   undoSetColor
@@ -1700,3 +1557,30 @@ void Element::undoSetColor(const QColor& c)
       score()->undoChangeProperty(this, P_COLOR, c);
       }
 
+//---------------------------------------------------------
+//   positioning functions for scripts
+//
+//    use spatium units rather than raster units
+//    are undoable
+//    route pos changes to usefOff
+//---------------------------------------------------------
+
+QPointF Element::scriptPos() const
+      {
+      return (_pos + _userOff) / spatium();
+      }
+
+void Element::scriptSetPos(const QPointF& p)
+      {
+      score()->undoChangeProperty(this, P_USER_OFF, p*spatium() - ipos());
+      }
+
+QPointF Element::scriptUserOff() const
+      {
+      return _userOff / spatium();
+      }
+
+void Element::scriptSetUserOff(const QPointF& o)
+      {
+      score()->undoChangeProperty(this, P_USER_OFF, o * spatium());
+      }

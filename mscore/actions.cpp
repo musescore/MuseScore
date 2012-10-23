@@ -39,7 +39,8 @@ Shortcut Shortcut::sc[] = {
          ),
 
       Shortcut(
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT
+            | STATE_LYRICS_EDIT | STATE_PLAY,
          0,
          "file-open",
          QT_TRANSLATE_NOOP("action","Open..."),
@@ -99,14 +100,6 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Export Parts"),
          QT_TRANSLATE_NOOP("action","Save a copy of the score's parts in various formats"),
          fileSave_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
-         A_SCORE,
-         "file-reload",
-         QT_TRANSLATE_NOOP("action","Reload"),
-         QT_TRANSLATE_NOOP("action","File reload"),
-         QT_TRANSLATE_NOOP("action","Reload score from file")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
@@ -199,266 +192,304 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Respell pitches")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval1",
          QT_TRANSLATE_NOOP("action","Unison Above"),
          QT_TRANSLATE_NOOP("action","Enter unison above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval2",
          QT_TRANSLATE_NOOP("action","Second Above"),
          QT_TRANSLATE_NOOP("action","Enter second above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval3",
          QT_TRANSLATE_NOOP("action","Third Above"),
          QT_TRANSLATE_NOOP("action","Enter third above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval4",
          QT_TRANSLATE_NOOP("action","Fourth Above"),
          QT_TRANSLATE_NOOP("action","Enter fourth above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval5",
          QT_TRANSLATE_NOOP("action","Fifth Above"),
          QT_TRANSLATE_NOOP("action","Enter fifth above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval6",
          QT_TRANSLATE_NOOP("action","Sixth Above"),
          QT_TRANSLATE_NOOP("action","Enter sixth above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval7",
          QT_TRANSLATE_NOOP("action","Seventh Above"),
          QT_TRANSLATE_NOOP("action","Enter seventh above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval8",
          QT_TRANSLATE_NOOP("action","Octave Above"),
          QT_TRANSLATE_NOOP("action","Enter octave above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval9",
          QT_TRANSLATE_NOOP("action","Ninth Above"),
          QT_TRANSLATE_NOOP("action","Enter ninth above")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-2",
          QT_TRANSLATE_NOOP("action","Second Below"),
          QT_TRANSLATE_NOOP("action","Enter second below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-3",
          QT_TRANSLATE_NOOP("action","Third Below"),
          QT_TRANSLATE_NOOP("action","Enter third below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-4",
          QT_TRANSLATE_NOOP("action","Fourth Below"),
          QT_TRANSLATE_NOOP("action","Enter fourth below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-5",
          QT_TRANSLATE_NOOP("action","Fifth Below"),
          QT_TRANSLATE_NOOP("action","Enter fifth below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-6",
          QT_TRANSLATE_NOOP("action","Sixth Below"),
          QT_TRANSLATE_NOOP("action","Enter sixth below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-7",
          QT_TRANSLATE_NOOP("action","Seventh Below"),
          QT_TRANSLATE_NOOP("action","Enter seventh below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-8",
          QT_TRANSLATE_NOOP("action","Octave Below"),
          QT_TRANSLATE_NOOP("action","Enter octave below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "interval-9",
          QT_TRANSLATE_NOOP("action","Ninth Below"),
          QT_TRANSLATE_NOOP("action","Enter ninth below")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-a",
          QT_TRANSLATE_NOOP("action","A"),
          QT_TRANSLATE_NOOP("action","Enter note A")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-b",
          QT_TRANSLATE_NOOP("action","B"),
          QT_TRANSLATE_NOOP("action","Enter note B")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-c",
          QT_TRANSLATE_NOOP("action","C"),
          QT_TRANSLATE_NOOP("action","Enter note C")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-d",
          QT_TRANSLATE_NOOP("action","D"),
          QT_TRANSLATE_NOOP("action","Enter note D")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-e",
          QT_TRANSLATE_NOOP("action","E"),
          QT_TRANSLATE_NOOP("action","Enter note E")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-f",
          QT_TRANSLATE_NOOP("action","F"),
          QT_TRANSLATE_NOOP("action","Enter note F")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "note-g",
          QT_TRANSLATE_NOOP("action","G"),
          QT_TRANSLATE_NOOP("action","Enter note G")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-a",
          QT_TRANSLATE_NOOP("action","Add A"),
          QT_TRANSLATE_NOOP("action","Add note A to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-b",
          QT_TRANSLATE_NOOP("action","Add B"),
          QT_TRANSLATE_NOOP("action","Add note B to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-c",
          QT_TRANSLATE_NOOP("action","Add C"),
          QT_TRANSLATE_NOOP("action","Add note C to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-d",
          QT_TRANSLATE_NOOP("action","Add D"),
          QT_TRANSLATE_NOOP("action","Add note D to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-e",
          QT_TRANSLATE_NOOP("action","Add E"),
          QT_TRANSLATE_NOOP("action","Add note E to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-f",
          QT_TRANSLATE_NOOP("action","Add F"),
          QT_TRANSLATE_NOOP("action","Add note F to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "chord-g",
          QT_TRANSLATE_NOOP("action","Add G"),
          QT_TRANSLATE_NOOP("action","Add note G to chord")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-a",
          QT_TRANSLATE_NOOP("action","Insert A"),
          QT_TRANSLATE_NOOP("action","Insert note A")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-b",
          QT_TRANSLATE_NOOP("action","Insert B"),
          QT_TRANSLATE_NOOP("action","Insert note B")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-c",
          QT_TRANSLATE_NOOP("action","Insert C"),
          QT_TRANSLATE_NOOP("action","Insert note C")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-d",
          QT_TRANSLATE_NOOP("action","Insert D"),
          QT_TRANSLATE_NOOP("action","Insert note D")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-e",
          QT_TRANSLATE_NOOP("action","Insert E"),
          QT_TRANSLATE_NOOP("action","Insert note E")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-f",
          QT_TRANSLATE_NOOP("action","Insert F"),
          QT_TRANSLATE_NOOP("action","Insert note F")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "insert-g",
          QT_TRANSLATE_NOOP("action","Insert G"),
@@ -554,7 +585,8 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Pitch up by an octave")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "up-chord",
          QT_TRANSLATE_NOOP("action","Up Note in Chord"),
@@ -596,7 +628,8 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Pitch down by an octave")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+//         STATE_NORMAL | STATE_NOTE_ENTRY,           // removed from STATE_NOTE_ENTRY_TAB state
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "down-chord",
          QT_TRANSLATE_NOOP("action","Down Note in Chord"),
@@ -747,13 +780,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "add-slur",
-         QT_TRANSLATE_NOOP("action","Add slur")
+         QT_TRANSLATE_NOOP("action","Slur"),
+         QT_TRANSLATE_NOOP("action","Add Slur")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "add-hairpin",
-         QT_TRANSLATE_NOOP("action","Crescendo")
+         QT_TRANSLATE_NOOP("action","Crescendo"),
+         QT_TRANSLATE_NOOP("action","Add Crescendo")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -806,7 +841,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-measure",
-         QT_TRANSLATE_NOOP("action","Insert One Measure")
+         QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         measure_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -819,13 +855,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-hbox",
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame")
+         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         hframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-textframe",
-         QT_TRANSLATE_NOOP("action","Insert Text Frame")
+         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         tframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -837,13 +875,15 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-fretframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame")
+         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
+         fframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-vbox",
-         QT_TRANSLATE_NOOP("action","Insert Vertical Frame")
+         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         vframe_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -1422,35 +1462,35 @@ Shortcut Shortcut::sc[] = {
          0,
          "play-prev-chord",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Previous chord")
+         QT_TRANSLATE_NOOP("action","Play Previous Chord")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-prev-measure",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Previous measure")
+         QT_TRANSLATE_NOOP("action","Play Previous Measure")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-next-chord",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Next chord")
+         QT_TRANSLATE_NOOP("action","Play Next Chord")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "play-next-measure",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Next measure")
+         QT_TRANSLATE_NOOP("action","Play Next Measure")
          ),
       Shortcut(
          STATE_PLAY,
          0,
          "seek-begin",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Player seek to begin")
+         QT_TRANSLATE_NOOP("action","Player Seek to Begin")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
@@ -1465,7 +1505,7 @@ Shortcut Shortcut::sc[] = {
          STATE_PLAY,
          0,
          "seek-end",
-         QT_TRANSLATE_NOOP("action","Player seek to end")
+         QT_TRANSLATE_NOOP("action","Player Seek to End")
          ),
       Shortcut(
          STATE_NORMAL,
@@ -1503,7 +1543,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          A_SCORE,
          "save-default-style",
-         QT_TRANSLATE_NOOP("action","Save Style As Default..."),
+         QT_TRANSLATE_NOOP("action","Save Style as Default..."),
           fileSave_ICON
          ),
       Shortcut (
@@ -1934,18 +1974,18 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Layers")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "next-score",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","next score")
+         QT_TRANSLATE_NOOP("action","Next Score")
          ),
       Shortcut(
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "previous-score",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","previous score")
+         QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
          STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
@@ -1991,18 +2031,6 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Figured Bass")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "next-score",
-         QT_TRANSLATE_NOOP("action","Next Score")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "prev-score",
-         QT_TRANSLATE_NOOP("action","Previous Score")
-         ),
-      Shortcut(
          STATE_NORMAL,
          0,
          "transpose-up",
@@ -2020,49 +2048,6 @@ Shortcut Shortcut::sc[] = {
          "masterpalette",
          QT_TRANSLATE_NOOP("action","Master Palette..."),
          QT_TRANSLATE_NOOP("action","Show master palette")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "vframe",
-         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
-         vframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "hframe",
-         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
-         0,
-         0,
-         hframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "tframe",
-         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
-         0,
-         0,
-         tframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "fframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
-         0,
-         0,
-         fframe_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "measure",
-         QT_TRANSLATE_NOOP("action","Insert Measure"),
-         0,
-         0,
-         measure_ICON
          ),
       Shortcut(
          STATE_NORMAL,
@@ -2099,6 +2084,104 @@ Shortcut Shortcut::sc[] = {
          0,
          "unset-visible",
          QT_TRANSLATE_NOOP("action","set unvisible")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "string-above",
+         QT_TRANSLATE_NOOP("action","String above (TAB)"),
+         QT_TRANSLATE_NOOP("action","Select string above (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "string-below",
+         QT_TRANSLATE_NOOP("action","String below (TAB)"),
+         QT_TRANSLATE_NOOP("action","Select string below (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-0",
+         QT_TRANSLATE_NOOP("action","Fret 0 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 0 on current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-1",
+         QT_TRANSLATE_NOOP("action","Fret 1 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 1 on current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-2",
+         QT_TRANSLATE_NOOP("action","Fret 2 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 2 on current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-3",
+         QT_TRANSLATE_NOOP("action","Fret 3 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 3 on current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-4",
+         QT_TRANSLATE_NOOP("action","Fret 4 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 4 of current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-5",
+         QT_TRANSLATE_NOOP("action","Fret 5 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 5 of current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-6",
+         QT_TRANSLATE_NOOP("action","Fret 6 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 6 of current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-7",
+         QT_TRANSLATE_NOOP("action","Fret 7 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 7 of current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-8",
+         QT_TRANSLATE_NOOP("action","Fret 8 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 8 of current string (TAB only)")
+         ),
+      Shortcut(
+         /*STATE_NORMAL |*/ STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-9",
+         QT_TRANSLATE_NOOP("action","Fret 9 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 9 of current string (TAB only)")
+         ),
+    Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "staff-types",
+         QT_TRANSLATE_NOOP("action","Staff Types..."),
+         QT_TRANSLATE_NOOP("action","Staff type editor"),
+         QT_TRANSLATE_NOOP("action","Show staff type editor")
+         ),
+    Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "add-noteline",
+         QT_TRANSLATE_NOOP("action","Note anchored Textline")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

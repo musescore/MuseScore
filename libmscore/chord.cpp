@@ -114,7 +114,7 @@ void StemSlash::layout()
       }
 
 //---------------------------------------------------------
-//   upLine
+//   upLine / downLine
 //---------------------------------------------------------
 
 int Chord::upLine() const
@@ -122,13 +122,55 @@ int Chord::upLine() const
       return upNote()->line();
       }
 
-//---------------------------------------------------------
-//   downLine
-//---------------------------------------------------------
-
 int Chord::downLine() const
       {
       return downNote()->line();
+      }
+
+//---------------------------------------------------------
+//   upString / downString
+//
+//    return the topmost / bottommost string used by chord
+//    Top and bottom refer to the DRAWN position, not the position in the instrument
+//    (i.e., upside-down TAB are taken into account)
+//
+//    If no staff, always return 0
+//    If staf is not a TAB, always returns TOP and BOTTOM staff lines
+//---------------------------------------------------------
+
+int Chord::upString() const
+      {
+      // if no staff or staff not a TAB, return 0 (=topmost line)
+      if(!staff() || !staff()->isTabStaff())
+            return 0;
+      StaffTypeTablature*     tab = (StaffTypeTablature*) staff()->staffType();
+      int                     line = tab->lines() - 1;      // start at bottom line
+      int                     noteLine;
+      // scan each note: if TAB strings are not in sequential order,
+      // visual order of notes might not correspond to pitch order
+      foreach(Note* note, notes()) {
+            noteLine = tab->physStringToVisual(note->string());
+            if(noteLine < line)
+                  line = noteLine;
+            }
+      return line;
+      }
+
+int Chord::downString() const
+      {
+      if(!staff())                              // if no staff, return 0
+            return 0;
+      if(!staff()->isTabStaff())                // if staff not a TAB, return bottom line
+            return staff()->lines()-1;
+      StaffTypeTablature*     tab = (StaffTypeTablature*) staff()->staffType();
+      int                     line = 0;         // start at top line
+      int                     noteLine;
+      foreach(Note* note, notes()) {
+            noteLine = tab->physStringToVisual(note->string());
+            if(noteLine > line)
+                  line = noteLine;
+            }
+      return line;
       }
 
 //---------------------------------------------------------
@@ -255,10 +297,8 @@ void Chord::setStem(Stem* s)
 
 QPointF Chord::stemPos() const
       {
-      if (staff() && staff()->useTablature()) {
-            qreal sp = spatium();
-            return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp) +
-               pagePos();
+      if (staff() && staff()->isTabStaff()) {
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium()) + pagePos();
             }
       return (_up ? downNote() : upNote())->stemPos(_up);
       }
@@ -271,11 +311,10 @@ QPointF Chord::stemPos() const
 
 QPointF Chord::stemPosBeam() const
       {
-      if (staff() && staff()->useTablature()) {
-            qreal sp = spatium();
-            return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp) +
-               pagePos();
+      if (staff() && staff()->isTabStaff()) {
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * spatium()) + pagePos();
             }
+
       return (_up ? upNote() : downNote())->stemPos(_up);
       }
 
@@ -559,8 +598,8 @@ void Chord::addLedgerLines(qreal x, int move)
 void Chord::computeUp()
       {
       // tablatures
-      if (staff() && staff()->useTablature()) {
-            _up = true;
+      if (staff() && staff()->isTabStaff()) {
+            _up = !((StaffTypeTablature*)staff()->staffType())->stemsDown();
             return;
             }
       // pitched staves
@@ -937,6 +976,7 @@ void Chord::setTrack(int val)
 LedgerLine::LedgerLine(Score* s)
    : Line(s, false)
       {
+      setZ(NOTE * 100 - 50);
       setSelectable(false);
       }
 
@@ -1022,10 +1062,6 @@ void Chord::layoutStem1()
       if (hasStem) {
             if (!_stem)
                   setStem(new Stem(score()));
-//            if (staff()->useTablature()) {                  // in tab, all stems are up (if present)
-//                  setStemDirection(MScore::UP);
-//                  setUp(true);
-//                  }
             }
       else
             setStem(0);
@@ -1063,26 +1099,33 @@ void Chord::layoutStem1()
 
 void Chord::layoutStem()
       {
-      if (staff() && staff()->useTablature()) {
-            // tablatures require stems only if not stemless
-            if (!staff()->staffType()->slashStyle() && _stem) {   // if tab uses stems and this chord has one
-                  // in tablatures, stem/hook setup is fixed: a simple 'comb' above the staff
-                  qreal sp = spatium();
-                  // process stem
-                  _stem->setLen(STAFFTYPE_TAB_DEFAULTSTEMLEN*sp);
-                  _stem->setPos(STAFFTYPE_TAB_DEFAULTSTEMPOSX*sp, STAFFTYPE_TAB_DEFAULTSTEMPOSY*sp);
+      //
+      // TAB
+      //
+      if (staff() && staff()->isTabStaff()) {
+            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            // require stems only if not stemless and this chord has a stem
+            if (!tab->slashStyle() && _stem) {
+                  // process stem:
+                  _stem->setPos(tab->chordStemPos(this) * spatium());
+                  _stem->setLen(tab->chordStemLength(this) * spatium());
                   // process hook
-                  int hookIdx = durationType().hooks();
+                  int   hookIdx = durationType().hooks();
+                  if (tab->stemsDown())
+                        hookIdx = -hookIdx;
                   if (hookIdx) {
                         _hook->setSubtype(hookIdx);
-                        _hook->setPos(_stem->hookPos());
+                        _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
                         _hook->setMag(mag()*score()->styleD(ST_smallNoteMag));
                         _hook->adjustReadPos();
                         }
+                  return;
                   }
-            return;
             }
 
+      //
+      // NON-TAB
+      //
       if (segment()) {
             System* s = segment()->measure()->system();
             if (s == 0)       //DEBUG
@@ -1258,26 +1301,32 @@ void Chord::layout()
       Note*  upnote    = upNote();
       qreal headWidth  = upnote->headWidth();
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+      bool  useTab      = false;
 
-      if (staff() && staff()->useTablature()) {
+      if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
+            useTab = true;
             StaffTypeTablature * tab = (StaffTypeTablature*)staff()->staffType();
             qreal lineDist = tab->lineDistance().val();
             foreach(Note* note, _notes) {
                   note->layout();
-                  note->setPos(0.0, _spatium * (tab->upsideDown() ? tab->lines()-note->string()-1 : note->string()) * lineDist);
+                  note->setPos(0.0, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
-            // if tab type is stemless or duration longer than crochet
+            // if tab type is stemless or duration longer than half (if halves have stems) or duration longer than crochet
             // remove stems
-            if (tab->slashStyle() || durationType().type() < TDuration::V_QUARTER) {
+            if (tab->slashStyle() || durationType().type() <
+                        (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
                   delete _stem;
                   delete _hook;
                   _stem = 0;
                   _hook = 0;
                   }
+            // if stem is required but missing, add it
+            else if(/*durationType().hasStem() &&*/ _stem == 0)
+                  setStem(new Stem(score()));
             // unconditionally delete grace slashes
             delete _stemSlash;
             _stemSlash = 0;
@@ -1296,26 +1345,28 @@ void Chord::layout()
                   //
                   // check duration of prev. CR segm
                   ChordRest * prevCR = prevChordRest(this);
-                  // if no previous CR or duration type and/or number of dots is different from current CR
+                  // if no previous CR
+                  // OR duration type and/or number of dots is different from current CR
+                  // OR previous CR is a rest
                   // set a duration symbol (trying to re-use existing symbols where existing to minimize
                   // symbol creation and deletion)
                   if (prevCR == 0 || prevCR->durationType().type() != durationType().type()
-                     || prevCR->dots() != dots()) {
-                        // symbol needed; if not exist, create
-                        // if exists, update duration
+                        || prevCR->dots() != dots()
+                        || prevCR->type() == REST) {
+                        // symbol needed; if not exist, create; if exists, update duration
                         if (!_tabDur)
                               _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                         else
                               _tabDur->setDuration(durationType().type(), dots());
                         _tabDur->setParent(this);
-                        // needed?        _tabDur->setTrack(track());
+                        _tabDur->layout();
                         }
                   else {                    // symbol not needed: if exists, delete
                         delete _tabDur;
                         _tabDur = 0;
                         }
                   }                 // end of if(duration_symbols)
-            }                       // end of if(useTablature)
+            }                       // end of if(isTabStaff)
       else {
             //
             // NON-TABLATURE STAVES
@@ -1437,7 +1488,7 @@ void Chord::layout()
 
       if (_hook) {
             _hook->layout();
-            if (up())
+            if (up() && !useTab)
                   rrr += _hook->width() + minNoteDistance;
             }
 
@@ -1489,6 +1540,8 @@ const QRectF& Chord::bbox() const
             bb |= _stemSlash->bbox().translated(_stemSlash->pos());
       if (_tremolo)
             bb |= _tremolo->bbox().translated(_tremolo->pos());
+      if(staff() && staff()->isTabStaff() && _tabDur)
+            bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
       return Element::bbox();
       }
@@ -1731,8 +1784,7 @@ void Chord::renderArticulation(ArticulationType type)
       if (!events.isEmpty()) {
             foreach(Note* note, _notes)
                   note->setPlayEvents(events);
-            foreach(NoteEvent* e, events)
-                  delete e;
+            qDeleteAll(events);
             }
       }
 
@@ -1963,3 +2015,16 @@ QPointF Chord::layoutArticulation(Articulation* a)
       a->adjustReadPos();
       return QPointF(x, y);
       }
+
+//---------------------------------------------------------
+//   toDefault
+//---------------------------------------------------------
+
+void Chord::toDefault()
+      {
+      score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
+      score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
+      ChordRest::toDefault();
+      }
+
+

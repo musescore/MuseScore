@@ -24,6 +24,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/image.h"
 #include "libmscore/element.h"
+#include "libmscore/system.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/measure/")
@@ -42,6 +43,7 @@ class TestMeasure : public QObject, public MTest
       void insertMeasureMiddle();
       void insertMeasureBegin();
       void insertMeasureEnd();
+      void minWidth();
       };
 
 //---------------------------------------------------------
@@ -66,7 +68,7 @@ void TestMeasure::insertMeasureMiddle()
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(MEASURE, m);
+      score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-1.mscx", DIR + "measure1-1o.mscx"));
       delete score;
@@ -85,7 +87,7 @@ void TestMeasure::insertMeasureBegin()
 
       Measure* m = score->firstMeasure();
       score->startCmd();
-      score->insertMeasure(MEASURE, m);
+      score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-2.mscx", DIR + "measure1-2o.mscx"));
       delete score;
@@ -103,10 +105,38 @@ void TestMeasure::insertMeasureEnd()
             e->score()->doLayout();
 
       score->startCmd();
-      score->insertMeasure(MEASURE, 0);
+      score->insertMeasure(Element::MEASURE, 0);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure1-3.mscx", DIR + "measure1-3o.mscx"));
       delete score;
+      }
+
+//---------------------------------------------------------
+//   minWidth
+//---------------------------------------------------------
+
+void TestMeasure::minWidth()
+      {
+      Score* score = readScore(DIR + "measure2.mscx");
+      score->doLayout();
+      int n = score->systems()->size();
+      int measuresSystem[n];
+      for (int i = 0; i < n; ++i)
+            measuresSystem[i] = score->systems()->at(i)->measures().size();
+
+      Measure* m1 = score->systems()->at(1)->lastMeasure();
+      Measure* m2 = score->systems()->at(2)->firstMeasure();
+      qreal mw1 = m1->minWidth1();
+      qreal mw2 = m2->minWidth1();
+
+      score->doLayout();
+
+      //QCOMPARE(mw1, m1->minWidth1());
+      QCOMPARE(mw2, m2->minWidth1());
+
+      // after second layout nothing should be changed:
+      for (int i = 0; i < n; ++i)
+            QCOMPARE(measuresSystem[i], score->systems()->at(i)->measures().size());
       }
 
 QTEST_MAIN(TestMeasure)

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/link/part1-1.mscx part1.mscx
+cp ../../../build.debug/mtest/libmscore/link/part1-2.mscx part1-2o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-1.mscx part2.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-2.mscx part2-2o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-4.mscx part2-4o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-3.mscx part2-3o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-6.mscx part2-6o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part3-1.mscx part3.mscx
+cp ../../../build.debug/mtest/libmscore/link/part3-2.mscx part3-2o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part4.mscx   part4o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part5.mscx   part5o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part6.mscx   part6o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part7.mscx   part7o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part8.mscx   part8o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part9.mscx   part9o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part10-1.mscx   part10.mscx
+cp ../../../build.debug/mtest/libmscore/link/part10-2.mscx   part10-2o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part11-1.mscx   part11.mscx
+cp ../../../build.debug/mtest/libmscore/link/part11-2.mscx   part11-2o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part13.mscx  part13o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part14.mscx  part14o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part15.mscx  part15o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part16.mscx  part16o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part17.mscx  part17o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part18.mscx  part18o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part19.mscx  part19o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part20.mscx  part20o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part21.mscx  part21o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part22.mscx  part22o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part23.mscx  part23o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part24.mscx  part24o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part25.mscx  part25o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part26.mscx  part26o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part27.mscx  part27o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part28.mscx  part28o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part29.mscx  part29o.mscx
+# cp ../../../build.debug/mtest/libmscore/link/part30.mscx  part30o.mscx
+
+
+

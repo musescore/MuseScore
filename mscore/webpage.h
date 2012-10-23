@@ -106,6 +106,9 @@ class WebPageDockWidget : public QDockWidget
       Q_INVOKABLE bool saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName);
 #endif
       Q_INVOKABLE bool setCurrentScoreSource(QString source);
+      
+      Q_INVOKABLE QObject* currentScore();
+      
       QUrl webUrl();
       };
 
