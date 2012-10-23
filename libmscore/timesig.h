@@ -110,6 +110,7 @@ class TimeSig : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       };
 
 #endif

@@ -387,6 +387,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p2 = pp2 - pp1;
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
             qDebug("zero slur");
+abort();
             Measure* m1 = startChord()->segment()->measure();
             Measure* m2 = endChord()->segment()->measure();
             Page* page = m1->system()->page();
@@ -530,7 +531,7 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       shoulderW = .6;
 
       shoulderH -= p6o.y();
- 
+
       if (!up())
             shoulderH = -shoulderH;
 
@@ -751,7 +752,7 @@ void Slur::slurPos(SlurPos* sp)
             yo = note1->pos().y();
       else if(_up)
             yo = e1->bbox().top();
-      else 
+      else
             yo = e1->bbox().top() + e1->height();
       yo += _spatium * .9 * __up;
       xo = hw * .5;
@@ -807,7 +808,7 @@ void Slur::slurPos(SlurPos* sp)
             yo = note2->pos().y();
       else if(_up)
             yo = e2->bbox().top();
-      else 
+      else
             yo = e2->bbox().top() + e2->height();
       yo += _spatium * .9 * __up;
 

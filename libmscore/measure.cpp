@@ -600,6 +600,10 @@ void Measure::layout2()
       //
       for (Segment* s = first(st); s; s = s->next(st)) {
             for (int track = 0; track < tracks; ++track) {
+                  if (!score()->staff(track / VOICES)->show()) {
+                        track += 4;
+                        continue;
+                        }
                   Element* el = s->element(track);
                   if (el) {
                         ChordRest* cr = static_cast<ChordRest*>(el);
@@ -1849,10 +1853,11 @@ void Measure::read(const QDomElement& de, int staffIdx)
             score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
             }
       else {
-            _len      = sigEvent.timesig();
-            irregular = false;
+            if (staffIdx == 0) {
+                  _len      = sigEvent.timesig();
+                  irregular = false;
+                  }
             }
-
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
 
@@ -1867,9 +1872,10 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(score()->curTrack);
                   barLine->read(e);
-                  if ((score()->curTick != tick()) && (score()->curTick != (tick() + ticks())))
+                  if ((score()->curTick != tick()) && (score()->curTick != (tick() + ticks()))) {
                         // this is a mid measure bar line
                         segment = getSegment(Segment::SegBarLine, score()->curTick);
+                        }
                   else if (barLine->subtype() == START_REPEAT)
                         segment = getSegment(Segment::SegStartRepeatBarLine, score()->curTick);
                   else {
@@ -2085,18 +2091,21 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   segment->add(ts);
                   ts->read(e);
 
-                  timeStretch = ts->stretch();
-                  _timesig    = ts->sig();
-                  if (timeStretch == Fraction(1,1)) {
-                        // if len is not irregular, set _len to time sig and store new time sig
-                        if (!irregular) {
-                              _len = _timesig * timeStretch;
-                              score()->sigmap()->add(tick(), SigEvent(_timesig));
-                              }
-                        // if len is irregular, update stored time sigs with new nominal value
-                        else {
-                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
-                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                  if (score()->mscVersion() > 114) {
+                        // in <= 114 sigmap is part of the mscx file
+                        timeStretch = ts->stretch();
+                        _timesig    = ts->sig();
+                        if (timeStretch == Fraction(1,1)) {
+                              // if len is not irregular, set _len to time sig and store new time sig
+                              if (!irregular) {
+                                    _len = _timesig * timeStretch;
+                                    score()->sigmap()->add(tick(), SigEvent(_timesig));
+                                    }
+                              // if len is irregular, update stored time sigs with new nominal value
+                              else {
+                                    score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                                    score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                                    }
                               }
                         }
                   }
@@ -2290,13 +2299,19 @@ void Measure::read(const QDomElement& de, int staffIdx)
                         }
                   }
             }
-      int diff   = ticks() - ticks1;
-      if (diff) {
+      if (ticks() != ticks1) {
             // this is a irregular measure
             _len = Fraction::fromTicks(ticks1);
             _len.reduce();
-            if (last() && last()->subtype() == Segment::SegBarLine)
-                  last()->setSubtype(Segment::SegEndBarLine);
+            for (Segment* s = last(); s; s = s->prev()) {
+                  if (s->tick() < tick() + ticks())
+                        break;
+                  if (s->subtype() == Segment::SegBarLine) {
+                        printf("reduce BarLine to EndBarLine\n");
+                        s->setSubtype(Segment::SegEndBarLine);
+                        }
+                  }
+
             }
       foreach (Tuplet* tuplet, tuplets) {
             if (tuplet->elements().isEmpty()) {
@@ -2923,19 +2938,40 @@ void Measure::layoutX(qreal stretch)
       memset(clefWidth, 0, nstaves * sizeof(qreal));
 
       const Segment* s = first();
+      const Segment* pSeg = 0;
       for (; s; s = s->next(), ++segmentIdx) {
+            //
+            //  ignore all segments which do not contain
+            //  elements
+            //
+            bool activeSegment = false;
+            for (int track = 0; track < nstaves * VOICES; ++track) {
+                  if (!score()->staff(track / VOICES)->show()) {
+                        track += 4;
+                        continue;
+                        }
+                  if (s->element(track)) {
+                        activeSegment = true;
+                        break;
+                        }
+                  }
+            if (!activeSegment)
+                  continue;
+
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
-
             if ((s->subtype() == Segment::SegClef) && (s != first())) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                        if (!score()->staff(staffIdx)->show())
+                              continue;
                         int track  = staffIdx * VOICES;
                         Element* e = s->element(track);
                         if (e) {
                               clefWidth[staffIdx] = e->width() + _spatium + elsp;
                               }
                         }
+                  pSeg = s;
                   continue;
                   }
             bool rest2[nstaves+1];
@@ -2943,7 +2979,6 @@ void Measure::layoutX(qreal stretch)
             types[segmentIdx]      = segType;
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            Segment* pSeg          = s->prev();
             int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -2964,7 +2999,7 @@ void Measure::layoutX(qreal stretch)
                               found = true;
                               if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
                                     qreal sp        = score()->styleS(ST_barNoteDistance).val() * _spatium;
-                                    sp += elsp;
+                                    sp             += elsp;
                                     minDistance     = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
@@ -3041,7 +3076,8 @@ void Measure::layoutX(qreal stretch)
 
             if (segmentIdx) {
                   width[segmentIdx-1] = segmentWidth;
-                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
+                  if (pSeg)
+                        pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
                   }
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -3074,6 +3110,7 @@ void Measure::layoutX(qreal stretch)
                   }
             else
                   ticksList[segmentIdx] = 0;
+            pSeg = s;
             }
 
       //---------------------------------------------------
@@ -3188,8 +3225,10 @@ void Measure::layoutX(qreal stretch)
             s->setPos(xpos[seg], 0.0);
 
             for (int track = 0; track < tracks; ++track) {
-                  if (!score()->staff(track/VOICES)->show())
+                  if (!score()->staff(track/VOICES)->show()) {
+                        track += VOICES;
                         continue;
+                        }
                   Element* e = s->element(track);
                   if (e == 0)
                         continue;
