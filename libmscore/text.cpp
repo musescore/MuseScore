@@ -36,7 +36,7 @@ QReadWriteLock docRenderLock;
 void Text::createDoc()
       {
       _doc = new QTextDocument(0);
-      _doc->setDocumentMargin(0.0);
+      _doc->setDocumentMargin(-2.0);
       _doc->setUseDesignMetrics(true);
       _doc->setUndoRedoEnabled(true);
       _doc->documentLayout()->setProperty("cursorWidth", QVariant(2));
@@ -192,14 +192,12 @@ void Text::layout()
             QPointF o(textStyle().offset(spatium()));
 
             if (parent() && layoutToParentWidth()) {
-                  if (parent()->type() == HBOX || parent()->type() == VBOX || parent()->type() == TBOX) {
-                        Box* box = static_cast<Box*>(parent());
-                        o.rx() += box->leftMargin() * MScore::DPMM;
-                        o.ry() += box->topMargin() * MScore::DPMM;
-                        w = box->width() - ((box->leftMargin() + box->rightMargin()) * MScore::DPMM);
+                  Element* e = parent();
+                  w = e->width();
+                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
+                        Box* b = static_cast<Box*>(e);
+                        w -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                         }
-                  else
-                        w = parent()->width();
                   }
 
             QTextOption to = _doc->defaultTextOption();
@@ -229,34 +227,36 @@ void Text::layout()
             _doc->setModified(false);
             setPos(o);
             }
-      if (layoutToParentWidth() && parent()) {
+      if (parent()) {
             Element* e = parent();
             qreal w, h, xo, yo;
-            if (e->type() == VBOX) {
-                  // consider inner margins of frame
-                  Box* b = static_cast<Box*>(e);
-                  xo = b->leftMargin() * MScore::DPMM;
-                  yo = b->topMargin()  * MScore::DPMM;
-                  w  = b->width()  - xo - b->rightMargin() * MScore::DPMM;
-                  h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
+            if (layoutToParentWidth()) {
+                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
+                        // consider inner margins of frame
+                        Box* b = static_cast<Box*>(e);
+                        xo = b->leftMargin() * MScore::DPMM;
+                        yo = b->topMargin()  * MScore::DPMM;
+                        w  = b->width()  - xo - b->rightMargin() * MScore::DPMM;
+                        h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
+                        }
+                  else {
+                        w  = e->width();
+                        h  = e->height();
+                        xo = 0.0;
+                        yo = 0.0;
+                        }
+                  QPointF ro(_textStyle.reloff() * .01);
+                  rxpos() += xo + ro.x() * w;
+                  rypos() += yo + ro.y() * h;
                   }
-            else {
-                  w  = e->width();
-                  h  = e->height();
-                  xo = 0.0;
-                  yo = 0.0;
+            if (e->type() == SEGMENT) {
+                  Segment* s = static_cast<Segment*>(e);
+                  rypos() += s->measure()->system()->staff(staffIdx())->y();
                   }
-            QPointF ro(_textStyle.reloff() * .01);
-            rxpos() += xo + ro.x() * w;
-            rypos() += yo + ro.y() * h;
             }
 
       if (hasFrame())
             layoutFrame();
-      if (parent() && parent()->type() == SEGMENT) {
-            Segment* s = static_cast<Segment*>(parent());
-            rypos() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
-            }
       adjustReadPos();
       }
 
