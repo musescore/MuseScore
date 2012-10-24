@@ -38,6 +38,7 @@ TimeSig::TimeSig(Score* s)
       _sig.set(0, 1);               // initialize to invalid
       _subtype   = TSIG_NORMAL;
       customText = false;
+      needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -208,7 +209,7 @@ void TimeSig::read(const QDomElement& de)
             else
                   _subtype = TSIG_NORMAL;
             }
-      layout1();
+      needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -293,6 +294,7 @@ void TimeSig::layout1()
 
       pz *= im;                           // convert positions to raster units
       pn *= im;
+      needLayout = false;
       // adjustReadPos();
       }
 
@@ -451,6 +453,16 @@ QVariant TimeSig::propertyDefault(P_ID id) const
 
 void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
       {
-      layout1();
+      needLayout = true;
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void TimeSig::layout()
+      {
+      if (needLayout)
+            layout1();
       }
 
