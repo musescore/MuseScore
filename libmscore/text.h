@@ -37,6 +37,7 @@ class Text : public SimpleText {
       void createDoc();
       void setUnstyledText(const QString& s);
       void layoutEdit();
+      bool isSimpleText() const;
 
    protected:
       bool _editMode;
