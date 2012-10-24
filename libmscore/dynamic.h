@@ -59,6 +59,7 @@ class Dynamic : public Text {
       QString subtypeName() const;
       int subtype() const { return _subtype; }
 
+      virtual void layout();
       virtual void write(Xml& xml) const;
       virtual void read(const QDomElement&);
 

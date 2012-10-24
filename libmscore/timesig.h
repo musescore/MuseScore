@@ -52,13 +52,16 @@ class TimeSig : public Element {
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
 
       TimeSigType _subtype;
-      bool	_showCourtesySig;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
       QPointF pz, pn;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
+      bool	_showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
+      bool needLayout;
+
+      void layout1();
 
    public:
       TimeSig(Score* = 0);
@@ -74,7 +77,7 @@ class TimeSig : public Element {
       void draw(QPainter*) const;
       void write(Xml& xml) const;
       void read(const QDomElement&);
-      void layout1();
+      void layout();
       Space space() const;
 
       Fraction sig() const               { return _sig; }
