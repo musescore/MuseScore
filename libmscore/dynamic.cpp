@@ -130,8 +130,26 @@ void Dynamic::read(const QDomElement& de)
             else if (!Text::readProperties(e))
                   domError(e);
             }
-      if (score()->mscVersion() < 118)
+      if (score()->mscVersion() < 118) {
             setTextStyleType(TEXT_STYLE_DYNAMICS2);
+            }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Dynamic::layout()
+      {
+      if (!readPos().isNull()) {
+            if (score()->mscVersion() < 118) {
+                  setReadPos(QPointF());
+                  // hack: 1.2 boundingBoxes are a bit wider which results
+                  // in symbols moved right
+                  setUserXoffset(userOff().x() - spatium() * .6);
+                  }
+            }
+      Text::layout();
       }
 
 //---------------------------------------------------------

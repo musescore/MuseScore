@@ -2086,10 +2086,9 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "TimeSig") {
                   TimeSig* ts = new TimeSig(score());
                   ts->setTrack(score()->curTrack);
-                  // parent must be set before read
+                  ts->read(e);
                   segment = getSegment(Segment::SegTimeSig, score()->curTick);
                   segment->add(ts);
-                  ts->read(e);
 
                   if (score()->mscVersion() > 114) {
                         // in <= 114 sigmap is part of the mscx file
