@@ -2591,7 +2591,7 @@ void ChangeTimesig::flip()
       denominatorString = denStr;
       subtype           = st;
 
-      timesig->layout1();
+      timesig->layout();
       timesig->score()->addRefresh(timesig->abbox());
       }
 
