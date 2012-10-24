@@ -374,6 +374,23 @@ void Text::writeProperties(Xml& xml, bool writeText) const
       }
 
 //---------------------------------------------------------
+//   isSimpleText
+//    check if _doc can be converted to simple text
+//---------------------------------------------------------
+
+bool Text::isSimpleText() const
+      {
+      if (_doc->blockCount() > 1)
+            return false;
+      int n = 0;
+      QTextBlock b(_doc->firstBlock());
+      QTextBlock::iterator i(_doc->firstBlock().begin());
+      for (; !i.atEnd(); ++i)
+            ++n;
+      return n <= 1;
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -477,7 +494,7 @@ bool Text::readProperties(const QDomElement& e)
                   if (_doc == 0)
                         createDoc();
                   _doc->setHtml(s);
-                  if (_doc->blockCount() == 1) {          // simple text?
+                  if (isSimpleText()) {
                         QString s = _doc->toPlainText();
                         delete _doc;
                         _doc = 0;
