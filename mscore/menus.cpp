@@ -745,6 +745,11 @@ Palette* MuseScore::newLinesPalette()
       trill->setSubtype("prallprall");
       trill->setLen(w);
       sp->append(trill, qApp->translate("lines", "Prallprall line"));
+      
+      trill = new Trill(gscore);
+      trill->setSubtype("pure");
+      trill->setLen(w);
+      sp->append(trill, qApp->translate("lines", "Wavy line"));
 
       TextLine* textLine = new TextLine(gscore);
       textLine->setLen(w);
