@@ -174,11 +174,15 @@ void TextTools::setText(Text* te)
       _textElement = te;
       textStyles->clear();
       textStyles->addItem(tr("unstyled"));
-      foreach(const TextStyle& st, te->score()->style()->textStyles())
-            textStyles->addItem(st.name());
+
+      const QList<TextStyle>& ts = te->score()->style()->textStyles();
+
+      int n = ts.size();
+      for (int i = 1; i < n; ++i)                     // skip default style
+            textStyles->addItem(ts[i].name());
       int idx = 0;
       if (te->styled())
-            idx = te->textStyleType() + 1;
+            idx = te->textStyleType();
       textStyles->setCurrentIndex(idx);
       styleChanged(idx);
       Align align = _textElement->align();
@@ -509,7 +513,7 @@ void TextTools::styleChanged(int idx)
       bool styled = idx != 0;
 
       if (styled)
-            _textElement->setTextStyleType(idx - 1);
+            _textElement->setTextStyleType(idx);
       else
             _textElement->setUnstyled();
       bool unstyled = !styled;

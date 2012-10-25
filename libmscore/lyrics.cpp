@@ -26,7 +26,7 @@
 Lyrics::Lyrics(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_LYRIC1));
+      setTextStyleType(TEXT_STYLE_LYRIC1);
       _no          = 0;
       _ticks       = 0;
       _syllabic    = SINGLE;
@@ -37,8 +37,6 @@ Lyrics::Lyrics(const Lyrics& l)
    : Text(l)
       {
       _no  = l._no;
-      if (styled())
-            setTextStyle(l.textStyle());
       _ticks = l._ticks;
       _syllabic = l._syllabic;
       if (l._verseNumber)
@@ -306,5 +304,15 @@ void Lyrics::setNo(int n)
       _no = n;
       if (type() == LYRICS)
             setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Lyrics::endEdit()
+      {
+      Text::endEdit();
+      score()->setLayoutAll(true);
       }
 

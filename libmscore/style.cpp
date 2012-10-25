@@ -214,6 +214,7 @@ static const QString ff("FreeSerifMscore");
 void initStyle(MStyle* s)
       {
       // this is an empty style, no offsets are allowed
+      // dont show this style in editor
       AS(TextStyle(
          "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE));
 
