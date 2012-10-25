@@ -209,8 +209,7 @@ void Lyrics::layout()
       if (styled())
             setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
       Text::layout();
-      qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
-      if(!parent()) // palette & clone trick
+      if (!parent()) // palette & clone trick
           return;
       System* sys = measure()->system();
       if (sys == 0) {
@@ -219,6 +218,7 @@ void Lyrics::layout()
             }
       const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
 
+      qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
       int line = ll->indexOf(this);
       qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance));
       qreal x  = 0.0;

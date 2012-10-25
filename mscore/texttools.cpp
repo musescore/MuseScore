@@ -77,29 +77,42 @@ TextTools::TextTools(QWidget* parent)
 
       tb->addSeparator();
 
-      leftAlign   = tb->addAction(*icons[textLeft_ICON],   "");
+      QActionGroup* ha = new QActionGroup(tb);
+      leftAlign   = new QAction(*icons[textLeft_ICON],   "", ha);
       leftAlign->setToolTip(tr("align left"));
       leftAlign->setCheckable(true);
-
-      centerAlign = tb->addAction(*icons[textCenter_ICON], "");
-      centerAlign->setToolTip(tr("align horizontal center"));
-      centerAlign->setCheckable(true);
-
-      rightAlign  = tb->addAction(*icons[textRight_ICON],  "");
+      leftAlign->setData(ALIGN_LEFT);
+      hcenterAlign = new QAction(*icons[textCenter_ICON], "", ha);
+      hcenterAlign->setToolTip(tr("align horizontal center"));
+      hcenterAlign->setCheckable(true);
+      hcenterAlign->setData(ALIGN_HCENTER);
+      rightAlign  = new QAction(*icons[textRight_ICON],  "", ha);
       rightAlign->setToolTip(tr("align right"));
       rightAlign->setCheckable(true);
+      rightAlign->setData(ALIGN_RIGHT);
+      tb->addActions(ha->actions());
 
-      topAlign  = tb->addAction(*icons[textTop_ICON],  "");
+      QActionGroup* va = new QActionGroup(tb);
+      topAlign  = new QAction(*icons[textTop_ICON],  "", va);
       topAlign->setToolTip(tr("align top"));
       topAlign->setCheckable(true);
+      topAlign->setData(ALIGN_TOP);
 
-      bottomAlign  = tb->addAction(*icons[textBottom_ICON],  "");
+      bottomAlign  = new QAction(*icons[textBottom_ICON],  "", va);
       bottomAlign->setToolTip(tr("align bottom"));
       bottomAlign->setCheckable(true);
+      bottomAlign->setData(ALIGN_BOTTOM);
 
-      vcenterAlign  = tb->addAction(*icons[textVCenter_ICON],  "");
+      baselineAlign  = new QAction(*icons[textVCenter_ICON],  "", va);
+      baselineAlign->setToolTip(tr("align vertical baseline"));
+      baselineAlign->setCheckable(true);
+      baselineAlign->setData(ALIGN_BASELINE);
+
+      vcenterAlign  = new QAction(*icons[textVCenter_ICON],  "", va);
       vcenterAlign->setToolTip(tr("align vertical center"));
       vcenterAlign->setCheckable(true);
+      vcenterAlign->setData(ALIGN_VCENTER);
+      tb->addActions(va->actions());
 
       typefaceSubscript   = tb->addAction(*icons[textSub_ICON], "");
       typefaceSubscript->setToolTip(tr("subscript"));
@@ -141,12 +154,8 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
       connect(typefaceFamily,      SIGNAL(currentFontChanged(const QFont&)), SLOT(fontChanged(const QFont&)));
-      connect(leftAlign,           SIGNAL(triggered()),     SLOT(setLeftAlign()));
-      connect(rightAlign,          SIGNAL(triggered()),     SLOT(setRightAlign()));
-      connect(centerAlign,         SIGNAL(triggered()),     SLOT(setHCenterAlign()));
-      connect(topAlign,            SIGNAL(triggered()),     SLOT(setTopAlign()));
-      connect(bottomAlign,         SIGNAL(triggered()),     SLOT(setBottomAlign()));
-      connect(vcenterAlign,        SIGNAL(triggered()),     SLOT(setVCenterAlign()));
+      connect(ha,                  SIGNAL(triggered(QAction*)), SLOT(setHalign(QAction*)));
+      connect(va,                  SIGNAL(triggered(QAction*)), SLOT(setValign(QAction*)));
       connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
       connect(textStyles,          SIGNAL(currentIndexChanged(int)), SLOT(styleChanged(int)));
       connect(unorderedList,       SIGNAL(triggered()),     SLOT(unorderedListClicked()));
@@ -167,10 +176,27 @@ void TextTools::setText(Text* te)
       textStyles->addItem(tr("unstyled"));
       foreach(const TextStyle& st, te->score()->style()->textStyles())
             textStyles->addItem(st.name());
+      int idx = 0;
       if (te->styled())
-            textStyles->setCurrentIndex(te->textStyleType() + 1);
+            idx = te->textStyleType() + 1;
+      textStyles->setCurrentIndex(idx);
+      styleChanged(idx);
+      Align align = _textElement->align();
+      if (align & ALIGN_HCENTER)
+            hcenterAlign->setChecked(true);
+      else if (align & ALIGN_RIGHT)
+            rightAlign->setChecked(true);
       else
-            textStyles->setCurrentIndex(0);
+            leftAlign->setChecked(true);
+
+      if (align & ALIGN_BOTTOM)
+            bottomAlign->setChecked(true);
+      else if (align & ALIGN_BASELINE)
+            baselineAlign->setChecked(true);
+      else if (align & ALIGN_VCENTER)
+            vcenterAlign->setChecked(true);
+      else
+            topAlign->setChecked(true);
       textStyles->blockSignals(false);
       }
 
@@ -188,12 +214,6 @@ void TextTools::blockAllSignals(bool val)
       typefaceSubscript->blockSignals(val);
       typefaceSuperscript->blockSignals(val);
       typefaceFamily->blockSignals(val);
-      leftAlign->blockSignals(val);
-      rightAlign->blockSignals(val);
-      centerAlign->blockSignals(val);
-      topAlign->blockSignals(val);
-      bottomAlign->blockSignals(val);
-      vcenterAlign->blockSignals(val);
       showKeyboard->blockSignals(val);
       textStyles->blockSignals(val);
       }
@@ -222,25 +242,6 @@ void TextTools::updateTools()
       typefaceSubscript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
       typefaceSuperscript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
 
-      centerAlign->setChecked(bformat.alignment() & Qt::AlignHCenter);
-      leftAlign->setChecked  (bformat.alignment() & Qt::AlignLeft);
-      rightAlign->setChecked (bformat.alignment() & Qt::AlignRight);
-      Align align = _textElement->align();
-      if (align & ALIGN_BOTTOM) {
-            topAlign->setChecked(false);
-            bottomAlign->setChecked(true);
-            vcenterAlign->setChecked(false);
-            }
-      else if (align & ALIGN_VCENTER) {
-            topAlign->setChecked(false);
-            bottomAlign->setChecked(false);
-            vcenterAlign->setChecked(true);
-            }
-      else {
-            topAlign->setChecked(true);
-            bottomAlign->setChecked(false);
-            vcenterAlign->setChecked(false);
-            }
       blockAllSignals(false);
       }
 
@@ -428,76 +429,40 @@ void TextTools::indentLessClicked()
       }
 
 //---------------------------------------------------------
-//   setHCenterAlign
+//   setHalign
 //---------------------------------------------------------
 
-void TextTools::setHCenterAlign()
+void TextTools::setHalign(QAction* a)
       {
       QTextBlockFormat bformat;
-      bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignHCenter);
+
+      Qt::Alignment qa = bformat.alignment() & ~Qt::AlignHorizontal_Mask;
+      switch(a->data().toInt()) {
+            case ALIGN_HCENTER:
+                  qa  |= Qt::AlignHCenter;
+                  break;
+            case ALIGN_RIGHT:
+                  qa |= Qt::AlignRight;
+                  break;
+            case ALIGN_LEFT:
+                  qa |= Qt::AlignLeft;
+                  break;
+            }
+
+      bformat.setAlignment(qa);
       cursor()->mergeBlockFormat(bformat);
+      _textElement->setAlign((_textElement->align() & ~ ALIGN_HMASK) | Align(a->data().toInt()));
       updateTools();
       layoutText();
       }
 
 //---------------------------------------------------------
-//   setLeftAlign
+//   setValign
 //---------------------------------------------------------
 
-void TextTools::setLeftAlign()
+void TextTools::setValign(QAction* a)
       {
-      QTextBlockFormat bformat;
-      bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignLeft);
-      cursor()->mergeBlockFormat(bformat);
-      updateTools();
-      layoutText();
-      }
-
-//---------------------------------------------------------
-//   setRightAlign
-//---------------------------------------------------------
-
-void TextTools::setRightAlign()
-      {
-      QTextBlockFormat bformat;
-      bformat.setAlignment((bformat.alignment() & ~Qt::AlignHorizontal_Mask) | Qt::AlignRight);
-      cursor()->mergeBlockFormat(bformat);
-      updateTools();
-      layoutText();
-      }
-
-//---------------------------------------------------------
-//   setTopAlign
-//---------------------------------------------------------
-
-void TextTools::setTopAlign()
-      {
-      Align align = (_textElement->align() & ~ALIGN_VMASK) | ALIGN_TOP;
-      _textElement->setAlign(align);
-      updateTools();
-      layoutText();
-      }
-
-//---------------------------------------------------------
-//   setBottomAlign
-//---------------------------------------------------------
-
-void TextTools::setBottomAlign()
-      {
-      Align align = (_textElement->align() & ~ALIGN_VMASK) | ALIGN_BOTTOM;
-      _textElement->setAlign(align);
-      updateTools();
-      layoutText();
-      }
-
-//---------------------------------------------------------
-//   setVCenterAlign
-//---------------------------------------------------------
-
-void TextTools::setVCenterAlign()
-      {
-      Align align = (_textElement->align() & ~ALIGN_VMASK) | ALIGN_VCENTER;
-      _textElement->setAlign(align);
+      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
       updateTools();
       layoutText();
       }
@@ -515,6 +480,7 @@ void TextTools::subscriptClicked(bool val)
       QTextCharFormat format;
       format.setVerticalAlignment(val ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
       cursor()->mergeCharFormat(format);
+      updateText();
       }
 
 //---------------------------------------------------------
@@ -530,6 +496,7 @@ void TextTools::superscriptClicked(bool val)
       QTextCharFormat format;
       format.setVerticalAlignment(val ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
       cursor()->mergeCharFormat(format);
+      updateText();
       }
 
 //---------------------------------------------------------
@@ -556,11 +523,10 @@ void TextTools::styleChanged(int idx)
       typefaceFamily->setEnabled(unstyled);
       leftAlign->setEnabled(unstyled);
       rightAlign->setEnabled(unstyled);
-      centerAlign->setEnabled(unstyled);
+      hcenterAlign->setEnabled(unstyled);
       topAlign->setEnabled(unstyled);
       bottomAlign->setEnabled(unstyled);
       vcenterAlign->setEnabled(unstyled);
-
       blockAllSignals(false);
       }
 

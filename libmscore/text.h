@@ -41,7 +41,7 @@ class Text : public SimpleText {
 
    protected:
       bool _editMode;
-      QTextCursor* _cursor;
+      static QTextCursor* _cursor;
       bool setCursor(const QPointF& p, QTextCursor::MoveMode mm = QTextCursor::MoveAnchor);
 
    public:
