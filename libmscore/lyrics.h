@@ -67,6 +67,7 @@ class Lyrics : public Text {
       virtual void add(Element*);
       virtual void remove(Element*);
       virtual void draw(QPainter*) const;
+      virtual void endEdit();
 
       int ticks() const             { return _ticks;    }
       void setTicks(int tick)       { _ticks = tick;    }

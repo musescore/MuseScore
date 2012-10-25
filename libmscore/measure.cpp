@@ -1853,10 +1853,9 @@ void Measure::read(const QDomElement& de, int staffIdx)
             score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
             }
       else {
-            if (staffIdx == 0) {
-                  _len      = sigEvent.timesig();
-                  irregular = false;
-                  }
+            if (staffIdx == 0)
+                  _len = sigEvent.timesig();
+            irregular = false;
             }
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
