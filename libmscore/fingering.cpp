@@ -22,7 +22,7 @@
 Fingering::Fingering(Score* s)
   : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_FINGERING));
+      setTextStyleType(TEXT_STYLE_FINGERING);
       setFlag(ELEMENT_HAS_TAG, true);
       }
 
