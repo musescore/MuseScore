@@ -530,6 +530,7 @@ void TextTools::styleChanged(int idx)
       hcenterAlign->setEnabled(unstyled);
       topAlign->setEnabled(unstyled);
       bottomAlign->setEnabled(unstyled);
+      baselineAlign->setEnabled(unstyled);
       vcenterAlign->setEnabled(unstyled);
       blockAllSignals(false);
       }
