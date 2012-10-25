@@ -40,6 +40,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/mscore.h"
 #include "libmscore/stafftype.h"
+#include "texttools.h"
 
 #ifdef Q_WS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -62,158 +63,78 @@ void ScoreView::editCmd(const QString& cmd)
             else if (cmd == "prev-lyric")
                   lyricsTab(true, true, false);
             }
-#if 0
-      if (editObject->type() == LYRICS) {
-            int found = false;
-		if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  // TODO: shift+tab events are filtered by qt
-                  lyricsTab(modifiers & Qt::ShiftModifier, true, false);
-                  return;
-                  }
-            if (key == Qt::Key_Left) {
+      }
+
+//---------------------------------------------------------
+//   editKeyLyrics
+//---------------------------------------------------------
+
+bool ScoreView::editKeyLyrics(QKeyEvent* ev)
+      {
+      int key                         = ev->key();
+      Qt::KeyboardModifiers modifiers = ev->modifiers();
+      QString s                       = ev->text();
+      bool ctrl                       = modifiers == Qt::ControlModifier;
+
+      switch(key) {
+            case Qt::Key_Space:
+	            if (!(modifiers & CONTROL_MODIFIER)) {
+                        // TODO: shift+tab events are filtered by qt
+                        lyricsTab(modifiers & Qt::ShiftModifier, true, false);
+                        }
+                  else
+                        return false;
+                  break;
+
+            case Qt::Key_Left:
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                        mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
                         }
                   else
                         lyricsTab(true, true, true);      // go to previous lyrics
-                  return;
-                  }
-            if (key == Qt::Key_Right) {
+                  break;
+            case Qt::Key_Right:
                   if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                        mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
                         }
                   else
                         lyricsTab(false, false, true);    // go to next lyrics
-                  found = true;
-                  }
-            else if (key == Qt::Key_Up) {
+                  break;
+            case Qt::Key_Up:
                   lyricsUpDown(true, true);
-                  found = true;
-                  }
-            else if (key == Qt::Key_Down) {
+                  break;
+            case Qt::Key_Down:
                   lyricsUpDown(false, true);
-                  found = true;
-                  }
-            else if (key == Qt::Key_Return) {
+                  break;
+            case Qt::Key_Return:
                   lyricsReturn();
-                  found = true;
-                  }
-		else if (key == Qt::Key_Minus && !(modifiers & CONTROL_MODIFIER)) {
-                  lyricsMinus();
-                  found = true;
-                  }
-		else if (key == Qt::Key_Underscore) {
+                  break;
+	      case Qt::Key_Minus:
+                  if (!(modifiers & CONTROL_MODIFIER))
+                        lyricsMinus();
+                  else
+                        return false;
+                  break;
+	      case Qt::Key_Underscore:
                   if (modifiers & CONTROL_MODIFIER) {
                         modifiers &= ~CONTROL_MODIFIER;
                         s = "_";
                         }
-                  else {
+                  else
                         lyricsUnderscore();
-                        found = true;
-                        }
-                  }
-            if (found) {
-                  return;
-                  }
-            }
-      if (editObject->type() == HARMONY) {
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  chordTab(modifiers & Qt::ShiftModifier);
-                  ev->accept();
-                  return;
-                  }
-            }
-      if (editObject->type() == FIGURED_BASS) {
-            int found = false;
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  figuredBassTab(false, modifiers & Qt::ShiftModifier);
-                  found = true;
-                  }
-            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
-                  figuredBassTab(true, key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier) );
-                  found = true;
-                  }
-            if (key >= Qt::Key_1 && key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
-                  int ticks = (MScore::division >> 4) << (key - Qt::Key_1);
-                  figuredBassTicksTab(ticks);
-                  found = true;
-                  }
-            if (found) {
-                  ev->accept();
-                  return;
-                  }
-            }
-      if (!((modifiers & Qt::ShiftModifier) && (key == Qt::Key_Backtab))) {
-            if (editObject->edit(this, curGrip, key, modifiers, s)) {
-                  updateGrips();
-                  ev->accept();
-                  _score->update();
-                  mscore->endCmd();
-                  return;
-                  }
-            if (editObject->isText() && (key == Qt::Key_Left || key == Qt::Key_Right)) {
-                  ev->accept();
-                  _score->end();
-                  mscore->endCmd();
-                  //return;
-                  }
-            }
-      QPointF delta;
-      qreal _spatium = editObject->spatium();
-      qreal xval     = MScore::nudgeStep * _spatium;
-
-      if (modifiers & Qt::ControlModifier)
-            xval = preferences.nudgeStep10 * _spatium;
-      else if (modifiers & Qt::AltModifier)
-            xval = preferences.nudgeStep50 * _spatium;
-      qreal yval = xval;
-
-      if (mscore->vRaster()) {
-            qreal vRaster = _spatium / MScore::vRaster();
-            if (yval < vRaster)
-                  yval = vRaster;
-            }
-      if (mscore->hRaster()) {
-            qreal hRaster = _spatium / MScore::hRaster();
-            if (xval < hRaster)
-                  xval = hRaster;
-            }
-      // TODO: if raster, then xval/yval should be multiple of raster
-
-      switch (key) {
-            case Qt::Key_Left:
-                  delta = QPointF(-xval, 0);
-                  break;
-            case Qt::Key_Right:
-                  delta = QPointF(xval, 0);
-                  break;
-            case Qt::Key_Up:
-                  delta = QPointF(0, -yval);
-                  break;
-            case Qt::Key_Down:
-                  delta = QPointF(0, yval);
                   break;
             default:
-                  ev->ignore();
-                  return;
+                  return false;
             }
-      EditData ed;
-      ed.curGrip = curGrip;
-      ed.delta   = delta;
-      ed.view    = this;
-      if (curGrip >= 0)
-            ed.pos = grip[curGrip].center() + delta;
-      editObject->editDrag(ed);
-      updateGrips();
-      _score->end();
-      mscore->endCmd();
-#endif
+      return true;
       }
 
 //---------------------------------------------------------
-//   Canvas::editKey
+//   editKey
 //---------------------------------------------------------
 
 void ScoreView::editKey(QKeyEvent* ev)
@@ -221,7 +142,6 @@ void ScoreView::editKey(QKeyEvent* ev)
       int key                         = ev->key();
       Qt::KeyboardModifiers modifiers = ev->modifiers();
       QString s                       = ev->text();
-      bool ctrl                       = modifiers == Qt::ControlModifier;
 
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s>\n",
@@ -231,69 +151,19 @@ void ScoreView::editKey(QKeyEvent* ev)
             return;
 
       if (editObject->type() == Element::LYRICS) {
-            int found = false;
-		if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  // TODO: shift+tab events are filtered by qt
-                  lyricsTab(modifiers & Qt::ShiftModifier, true, false);
-                  found = true;
-                  }
-            else if (key == Qt::Key_Left) {
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->update();
-                        mscore->endCmd();
-                        }
-                  else
-                        lyricsTab(true, true, true);      // go to previous lyrics
-                  found = true;
-                  }
-            else if (key == Qt::Key_Right) {
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
-                        _score->update();
-                        mscore->endCmd();
-                        }
-                  else
-                        lyricsTab(false, false, true);    // go to next lyrics
-                  found = true;
-                  }
-            else if (key == Qt::Key_Up) {
-                  lyricsUpDown(true, true);
-                  found = true;
-                  }
-            else if (key == Qt::Key_Down) {
-                  lyricsUpDown(false, true);
-                  found = true;
-                  }
-            else if (key == Qt::Key_Return) {
-                  lyricsReturn();
-                  found = true;
-                  }
-		else if (key == Qt::Key_Minus && !(modifiers & CONTROL_MODIFIER)) {
-                  lyricsMinus();
-                  found = true;
-                  }
-		else if (key == Qt::Key_Underscore) {
-                  if (modifiers & CONTROL_MODIFIER) {
-                        modifiers &= ~CONTROL_MODIFIER;
-                        s = "_";
-                        }
-                  else {
-                        lyricsUnderscore();
-                        found = true;
-                        }
-                  }
-            if (found) {
+            if (editKeyLyrics(ev)) {
                   ev->accept();
                   return;
                   }
             }
-      if (editObject->type() == Element::HARMONY) {
+      else if (editObject->type() == Element::HARMONY) {
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   chordTab(modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
             }
-      if (editObject->type() == Element::FIGURED_BASS) {
+      else if (editObject->type() == Element::FIGURED_BASS) {
             int found = false;
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
@@ -313,8 +183,11 @@ void ScoreView::editKey(QKeyEvent* ev)
                   return;
                   }
             }
+
       if (!((modifiers & Qt::ShiftModifier) && (key == Qt::Key_Backtab))) {
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
+                  if (editObject->isText())
+                        mscore->textTools()->updateTools();
                   updateGrips();
                   ev->accept();
                   _score->update();

@@ -31,10 +31,11 @@ class TextTools : public QDockWidget {
       QAction* typefaceItalic;
       QAction* typefaceUnderline;
       QAction* leftAlign;
-      QAction* centerAlign;
+      QAction* hcenterAlign;
       QAction* topAlign;
       QAction* bottomAlign;
       QAction* vcenterAlign;
+      QAction* baselineAlign;
       QAction* rightAlign;
       QAction* typefaceSubscript;
       QAction* typefaceSuperscript;
@@ -58,12 +59,8 @@ class TextTools : public QDockWidget {
       void underlineClicked(bool);
       void subscriptClicked(bool);
       void superscriptClicked(bool);
-      void setLeftAlign();
-      void setRightAlign();
-      void setHCenterAlign();
-      void setTopAlign();
-      void setBottomAlign();
-      void setVCenterAlign();
+      void setHalign(QAction*);
+      void setValign(QAction*);
       void showKeyboardClicked(bool);
       void styleChanged(int);
       void unorderedListClicked();
