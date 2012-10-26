@@ -4374,6 +4374,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   score->setLayoutAll(true);
                   score->endCmd();
                   }
+            delete est;
             }
       else {
             if (cv) {
