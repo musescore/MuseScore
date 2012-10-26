@@ -575,6 +575,11 @@ Score::FileError Score::read114(const QDomElement& de)
                   }
             }
 
+      // adjust lyricsDistance if not modified
+      if (styleS(ST_lyricsDistance).val() == MScore::baseStyle()->valueS(ST_lyricsDistance).val()) {
+            style()->set(ST_lyricsDistance, Spatium(2));
+            }
+
       _showOmr = false;
 
       // create excerpts

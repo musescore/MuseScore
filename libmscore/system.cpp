@@ -958,7 +958,7 @@ qreal System::staffY(int staffIdx) const
                _staves.size(), staffIdx, _vbox);
             return pagePos().y();
             }
-      return _staves[staffIdx]->y() + pagePos().y();
+      return _staves[staffIdx]->y() + y(); // pagePos().y();
       }
 
 //---------------------------------------------------------

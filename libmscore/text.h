@@ -101,6 +101,7 @@ class Text : public SimpleText {
       void writeProperties(Xml& xml, bool writeText = true) const;
       bool readProperties(const QDomElement& node);
       virtual void layout();
+      void layout1();
       virtual QPainterPath shape() const;
       virtual bool mousePress(const QPointF&, QMouseEvent* ev);
       qreal lineSpacing() const;
