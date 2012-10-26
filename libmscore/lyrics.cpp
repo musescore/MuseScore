@@ -186,19 +186,6 @@ void Lyrics::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF Lyrics::pagePos() const
-      {
-      System* system = measure()->system();
-      qreal yp = y();
-      if (system)
-	      yp = yp + system->staff(staffIdx())->y() + system->y();
-      return QPointF(pageX(), yp);
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -206,14 +193,10 @@ void Lyrics::layout()
       {
       if (styled())
             setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
-      Text::layout();
+      Text::layout1();
       if (!parent()) // palette & clone trick
           return;
-      System* sys = measure()->system();
-      if (sys == 0) {
-            qDebug("lyrics layout: no system!");
-            abort();
-            }
+
       const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
 
       qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
@@ -232,6 +215,15 @@ void Lyrics::layout()
       if (_verseNumber) {
             _verseNumber->layout();
             _verseNumber->setPos(-x, 0.0);
+            }
+      QPointF rp(readPos());
+      if (!rp.isNull()) {
+            if (score()->mscVersion() <= 114) {
+                  rp.ry() += lineSpacing() + 2;
+                  rp.rx() += bbox().width() * .5;
+                  }
+            setUserOff(rp - ipos());
+            setReadPos(QPointF());
             }
       }
 
