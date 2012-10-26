@@ -2217,6 +2217,8 @@ void ChangeStaff::flip()
       {
       bool invisibleChanged = staff->invisible() != invisible;
       bool typeChanged      = staff->staffType() != staffType;
+      int linesOld            = staff->lines();
+      int linesNew            = staffType->lines();
 
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
@@ -2236,6 +2238,11 @@ void ChangeStaff::flip()
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
+                  }
+            if(typeChanged) {
+                  score->setLayoutAll(true);
+                  if(linesOld != linesNew)
+                        score->updateBarLineSpans(staffIdx, linesOld, linesNew, true);
                   }
             }
       staff->score()->rebuildMidiMapping();
