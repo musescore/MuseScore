@@ -1929,7 +1929,29 @@ void Score::addStaffTypes(const QList<StaffType*>& tl)
 
 void Score::replaceStaffTypes(const QList<StaffType*>& tl)
       {
-      rootScore()->_staffTypes = tl;
+      Score* score = rootScore();
+      int   numCommonTypes = qMin(_staffTypes.size(), tl.size());
+      int   idx;
+
+      // overwrite existing styles with styles in list
+      // re-use existing _stafftype objects, so that pointers to styles in staves remain valid
+      for(idx = 0; idx < numCommonTypes; idx++)
+            if(score->_staffTypes.at(idx)->group() == tl.at(idx)->group())
+                  switch (tl.at(idx)->group()) {
+                  case PITCHED_STAFF:
+                        *(StaffTypePitched*)(score->_staffTypes[idx]) = *(StaffTypePitched*)(tl.at(idx));
+                        break;
+                  case PERCUSSION_STAFF:
+                        *(StaffTypePercussion*)(score->_staffTypes[idx]) = *(StaffTypePercussion*)(tl.at(idx));
+                        break;
+                  case TAB_STAFF:
+                        *(StaffTypeTablature*)(score->_staffTypes[idx]) = *(StaffTypeTablature*)(tl.at(idx));
+                        break;
+                  }
+
+      // add new styles
+      for(; idx < tl.size(); idx++)
+            score->_staffTypes.append(tl.at(idx)->clone());
       }
 
 //---------------------------------------------------------
