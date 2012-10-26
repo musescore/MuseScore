@@ -38,7 +38,8 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setupUi(this);
       staff = st;
       Score* score = staff->score();
-      staffTypes   = score->staffTypes();
+      foreach(StaffType* st, score->staffTypes())
+             staffTypes.append(st->clone());
       int idx = 0;
       QListWidgetItem* ci = 0;
       foreach(StaffType* st, staffTypes) {
@@ -71,7 +72,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) != Score::FILE_NO_ERROR) {
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR) {
             // add a preview widget to tabulature page
 #ifdef _USE_NAVIGATOR_PREVIEW_
             NScrollArea* sa = new NScrollArea;
@@ -125,6 +126,8 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
 EditStaffType::~EditStaffType()
 {
+      foreach(StaffType* st, staffTypes)
+            delete st;
       if(_tabPresets[TAB_PRESET_GUITAR])
             delete _tabPresets[TAB_PRESET_GUITAR];
       if(_tabPresets[TAB_PRESET_BASS])
@@ -294,6 +297,7 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                   {
                   StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st);
                   setDlgFromTab(stt);
+                  name->setText(stt->name());   // setDlgFromTab() does not copy the name and it shouldn't
                   stack->setCurrentIndex(1);
                   }
                   break;
@@ -319,7 +323,7 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
 
 void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       {
-      name->setText(stt->name());
+//      name->setText(stt->name());             // keep existing name: presets should not overwrite type name
       lines->setValue(stt->lines());
       lineDistance->setValue(stt->lineDistance().val());
       genClef->setChecked(stt->genClef());
@@ -327,7 +331,7 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       genTimesig->setChecked(stt->genTimesig());
       upsideDown->setChecked(stt->upsideDown());
       int idx = fretFontName->findText(stt->fretFontName(), Qt::MatchFixedString);
-      if(idx == -1)     idx = 0;          // if name not found, use firstt name
+      if(idx == -1)     idx = 0;          // if name not found, use first name
       fretFontName->setCurrentIndex(idx);
       fretFontSize->setValue(stt->fretFontSize());
       fretY->setValue(stt->fretFontUserY());
