@@ -921,6 +921,7 @@ class Score : public QObject {
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
+      void updateBarLineSpans(int idx, int linesOld, int linesNew, bool idxIsStaffIdx);
       };
 
 extern Score* gscore;
