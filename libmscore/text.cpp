@@ -184,6 +184,16 @@ void Text::setAbove(bool val)
 
 void Text::layout()
       {
+      layout1();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   layout1
+//---------------------------------------------------------
+
+void Text::layout1()
+      {
       if (styled() && !_editMode)
             SimpleText::layout();
       else {
@@ -257,7 +267,6 @@ void Text::layout()
 
       if (hasFrame())
             layoutFrame();
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -977,7 +986,7 @@ QLineF Text::dragAnchor() const
             p1 = QPointF(xp, yp);
             }
       else {
-            p1 = QPointF(parent()->canvasBoundingRect().topLeft());
+            p1 = parent()->canvasPos(); // QPointF(parent()->canvasBoundingRect().topLeft());
             if (parent()->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(parent());
                   p1.ry() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;

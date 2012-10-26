@@ -508,12 +508,12 @@ QPointF Element::pagePos() const
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
                         si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staff(si)->y() + system->y();
+                  p.ry() += system->staffY(si); // system->staff(si)->y() + system->y();
                   }
             p.rx() = pageX();
             }
       else {
-            if (parent() && parent()->parent())
+            if (parent()->parent())
                   p += parent()->pagePos();
             }
       return p;
@@ -534,7 +534,7 @@ QPointF Element::canvasPos() const
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
                         si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staff(si)->y() + system->y();
+                  p.ry() += system->staffY(si); // system->staff(si)->y() + system->y();
                   Page* page = system->page();
                   if (page)
                         p.ry() += page->y();
@@ -542,8 +542,7 @@ QPointF Element::canvasPos() const
             p.rx() = canvasX();
             }
       else {
-            if (parent())
-                  p += parent()->canvasPos();
+            p += parent()->canvasPos();
             }
       return p;
       }
