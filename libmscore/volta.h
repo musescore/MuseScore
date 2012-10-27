@@ -40,6 +40,7 @@ class VoltaSegment : public TextLineSegment {
       virtual ElementType type() const     { return VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const  { return new VoltaSegment(*this); }
       Volta* volta() const                 { return (Volta*)spanner(); }
+      virtual void layout();
       };
 
 //---------------------------------------------------------
@@ -89,6 +90,7 @@ class Volta : public TextLine {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual void setYoff(qreal);
       };
 
 Q_DECLARE_METATYPE(Volta::VoltaType)

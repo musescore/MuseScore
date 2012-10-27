@@ -42,6 +42,7 @@ class OttavaSegment : public TextLineSegment {
       virtual ElementType type() const     { return OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const { return new OttavaSegment(*this); }
       Ottava* ottava() const               { return (Ottava*)spanner(); }
+      virtual void layout();
       };
 
 //---------------------------------------------------------
@@ -91,6 +92,7 @@ class Ottava : public TextLine {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual void setYoff(qreal);
       };
 
 Q_DECLARE_METATYPE(Ottava::OttavaType)

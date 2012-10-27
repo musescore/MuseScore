@@ -89,7 +89,6 @@ class Spanner : public Element {
    protected:
       Element* oStartElement; // start/end element at startEdit()
       Element* oEndElement;
-      qreal _yoffset;        // in spatium units
 
    public:
       Spanner(Score* = 0);
@@ -126,13 +125,12 @@ class Spanner : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void setSelected(bool f);
-      void setYoff(qreal d) { _yoffset = d;        }
-      qreal yoff() const    { return _yoffset;     }
       virtual bool isEdited(Spanner* originalSpanner) const;
       int startTick() const;
       int endTick() const;
       bool removeSpannerBack();
       void addSpannerBack();
+      virtual void setYoff(qreal) {};    // used in musicxml import
       };
 
 Q_DECLARE_METATYPE(Spanner::Anchor)

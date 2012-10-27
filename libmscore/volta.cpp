@@ -18,6 +18,17 @@
 #include "text.h"
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void VoltaSegment::layout()
+      {
+      TextLineSegment::layout();
+      rypos() += score()->styleS(ST_voltaY).val() * spatium();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   Volta
 //---------------------------------------------------------
 
@@ -33,7 +44,6 @@ Volta::Volta(Score* s)
       setBeginHook(true);
       Spatium hook(s->styleS(ST_voltaHook));
       setBeginHookHeight(hook);
-      setYoff(s->styleS(ST_voltaY).val());
       setEndHookHeight(hook);
       setAnchor(ANCHOR_MEASURE);
       }
@@ -220,5 +230,14 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
 void Volta::undoSetSubtype(VoltaType val)
       {
       score()->undoChangeProperty(this, P_VOLTA_TYPE, val);
+      }
+
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
+
+void Volta::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_voltaY).val()) * spatium();
       }
 

@@ -60,6 +60,13 @@ bool LineSegment::readProperties(const QDomElement& e)
                   setReadPos(readPoint(e) * _spatium);
                   }
             }
+      else if (tag == "pos") {
+            QPointF rp = readPoint(e) * spatium();
+            if ((score()->mscVersion() <= 114) && (type() == VOLTA_SEGMENT)) {
+                  rp.ry() -= spatium();
+                  }
+            setReadPos(rp);
+            }
       else if (!Element::readProperties(e)) {
             domError(e);
             return false;
@@ -632,8 +639,6 @@ void SLine::layout()
                   seg->setPos2(QPointF(p2.x() - x1, 0.0));
                   }
             seg->layout();
-            seg->rypos() += (_yoffset * spatium());
-            seg->adjustReadPos();
             }
       }
 

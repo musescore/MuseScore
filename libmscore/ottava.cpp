@@ -23,6 +23,17 @@
 #include "segment.h"
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void OttavaSegment::layout()
+      {
+      TextLineSegment::layout();
+      rypos() += score()->styleS(ST_ottavaY).val() * spatium();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   Ottava
 //---------------------------------------------------------
 
@@ -31,7 +42,6 @@ Ottava::Ottava(Score* s)
       {
       _subtype = OttavaType(-1);
       setSubtype(OTTAVA_8VA);
-      setYoff(s->styleS(ST_ottavaY).val());
       }
 
 //---------------------------------------------------------
@@ -212,4 +222,11 @@ void Ottava::undoSetSubtype(OttavaType val)
       score()->undoChangeProperty(this, P_OTTAVA_TYPE, val);
       }
 
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
 
+void Ottava::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_ottavaY).val()) * spatium();
+      }

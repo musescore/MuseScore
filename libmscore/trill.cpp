@@ -106,6 +106,8 @@ void TrillSegment::layout()
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
       setbbox(rr);
+      rypos() += score()->styleS(ST_trillY).val() * spatium();
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -148,7 +150,7 @@ Trill::Trill(Score* s)
   : SLine(s)
       {
       _subtype = TRILL_LINE;
-      setYoff(-1.0);           // default position
+//      setYoff(-1.0);           // default position
       }
 
 //---------------------------------------------------------
@@ -182,7 +184,7 @@ void Trill::remove(Element* e)
 void Trill::layout()
       {
       qreal _spatium = spatium();
-      setPos(0.0, yoff() * _spatium);
+//      setPos(0.0, yoff() * _spatium);
 
       SLine::layout();
 
@@ -380,5 +382,13 @@ void Trill::undoSetSubtype(TrillType val)
       score()->undoChangeProperty(this, P_TRILL_TYPE, val);
       }
 
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
+
+void Trill::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_trillY).val()) * spatium();
+      }
 
 

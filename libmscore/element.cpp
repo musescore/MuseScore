@@ -134,6 +134,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "TrillSegment"),
       QT_TRANSLATE_NOOP("elementName", "TextLineSegment"),
       QT_TRANSLATE_NOOP("elementName", "VoltaSegment"),
+      QT_TRANSLATE_NOOP("elementName", "PedalSegment"),
       QT_TRANSLATE_NOOP("elementName", "LayoutBreak"),
       QT_TRANSLATE_NOOP("elementName", "Spacer"),
       QT_TRANSLATE_NOOP("elementName", "StaffState"),
@@ -704,15 +705,8 @@ bool Element::readProperties(const QDomElement& e)
             setUserOff(pt);
             // _readPos = QPointF();
             }
-      else if (tag == "pos") {
-//            if (score()->mscVersion() > 114
-//               || (type() != TEXT && type() != DYNAMIC)
-//               ) {
-                  qreal _spatium = spatium();
-//                  setUserOff(QPointF());
-                  _readPos = readPoint(e) * _spatium;
-//                  }
-            }
+      else if (tag == "pos")
+            _readPos = readPoint(e) * spatium();
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + val.toInt());
       else if (tag == "track")
@@ -1340,6 +1334,7 @@ Element* Element::create(ElementType type, Score* score)
             case OTTAVA_SEGMENT:
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
+            case PEDAL_SEGMENT:
             case LEDGER_LINE:
             case STAFF_LINES:
             case SELECTION:
