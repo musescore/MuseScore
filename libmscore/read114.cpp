@@ -451,7 +451,7 @@ Score::FileError Score::read114(const QDomElement& de)
                         s1->measure()->add(s);
                         int n = volta->spannerSegments().size();
                         if (n) {
-                              volta->setYoff(-styleS(ST_voltaHook).val());
+                              // volta->setYoff(-styleS(ST_voltaHook).val());
                               // LineSegment* ls = volta->segmentAt(0);
                               // ls->setReadPos(QPointF());
                               }
@@ -575,9 +575,12 @@ Score::FileError Score::read114(const QDomElement& de)
                   }
             }
 
-      // adjust lyricsDistance if not modified
-      if (styleS(ST_lyricsDistance).val() == MScore::baseStyle()->valueS(ST_lyricsDistance).val()) {
-            style()->set(ST_lyricsDistance, Spatium(2));
+      // adjust some styles
+      if (styleS(ST_lyricsDistance).val() == MScore::baseStyle()->valueS(ST_lyricsDistance).val())
+            style()->set(ST_lyricsDistance, Spatium(2.0));
+      if (styleS(ST_voltaY).val() == MScore::baseStyle()->valueS(ST_voltaY).val()) {
+            printf("=====adjust volta style\n");
+            style()->set(ST_voltaY, Spatium(-2.0));
             }
 
       _showOmr = false;

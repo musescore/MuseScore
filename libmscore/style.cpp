@@ -108,6 +108,10 @@ StyleType styleTypes[] = {
       StyleType("hairpinHeight",           ST_SPATIUM),
       StyleType("hairpinContHeight",       ST_SPATIUM),
       StyleType("hairpinWidth",            ST_SPATIUM),
+
+      StyleType("pedalY",                  ST_SPATIUM),
+      StyleType("trillY",                  ST_SPATIUM),
+
       StyleType("showPageNumber",          ST_BOOL),
       StyleType("showPageNumberOne",       ST_BOOL),
       StyleType("pageNumberOddEven",       ST_BOOL),
@@ -470,6 +474,10 @@ StyleData::StyleData()
             StyleVal(ST_hairpinHeight, Spatium(1.2)),
             StyleVal(ST_hairpinContHeight, Spatium(0.5)),
             StyleVal(ST_hairpinWidth, Spatium(0.13)),
+
+            StyleVal(ST_pedalY, Spatium(8)),
+            StyleVal(ST_trillY, Spatium(-1)),
+
             StyleVal(ST_showPageNumber, true),
             StyleVal(ST_showPageNumberOne, false),
             StyleVal(ST_pageNumberOddEven, true),

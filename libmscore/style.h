@@ -215,6 +215,9 @@ enum StyleIdx {
       ST_hairpinContHeight,
       ST_hairpinWidth,
 
+      ST_pedalY,
+      ST_trillY,
+
       ST_showPageNumber,
       ST_showPageNumberOne,
       ST_pageNumberOddEven,

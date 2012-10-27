@@ -201,6 +201,7 @@ class Element : public QObject {
             TRILL_SEGMENT,
             TEXTLINE_SEGMENT,
             VOLTA_SEGMENT,
+            PEDAL_SEGMENT,
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,
@@ -343,6 +344,10 @@ class Element : public QObject {
       void setUserOff(const QPointF& o)       { _userOff = o;     }
       void setUserXoffset(qreal v)            { _userOff.setX(v); }
       void setUserYoffset(qreal v)            { _userOff.setY(v); }
+
+      qreal& rUserXoffset()                   { return _userOff.rx(); }
+      qreal& rUserYoffset()                   { return _userOff.ry(); }
+
       // function versions for scripts: use coords in spatium units rather than raster
       // and route pos changes to userOff
       virtual QPointF scriptPos() const;

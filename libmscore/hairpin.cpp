@@ -78,6 +78,8 @@ void HairpinSegment::layout()
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
       qreal w = point(score()->styleS(ST_hairpinWidth));
       setbbox(r.adjusted(-w*.5, -w*.5, w, w));
+      rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -102,7 +104,6 @@ Hairpin::Hairpin(Score* s)
       _subtype    = CRESCENDO;
       _veloChange = 10;
       _dynType    = DYNAMIC_PART;
-      setYoff(s->styleS(ST_hairpinY).val());
       }
 
 //---------------------------------------------------------
@@ -231,4 +232,14 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
+
+void Hairpin::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_hairpinY).val()) * spatium();
+      }
+
 
