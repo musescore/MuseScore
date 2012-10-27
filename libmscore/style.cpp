@@ -331,9 +331,10 @@ void initStyle(MStyle* s)
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
+      // y offset may depend on voltaHook style element
       AS(TextStyle(
          TR( "Volta"), ff, 11, true, false, false,
-         ALIGN_LEFT, QPointF(0.5, .0), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Frame"), ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP));
