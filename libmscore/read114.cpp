@@ -578,10 +578,8 @@ Score::FileError Score::read114(const QDomElement& de)
       // adjust some styles
       if (styleS(ST_lyricsDistance).val() == MScore::baseStyle()->valueS(ST_lyricsDistance).val())
             style()->set(ST_lyricsDistance, Spatium(2.0));
-      if (styleS(ST_voltaY).val() == MScore::baseStyle()->valueS(ST_voltaY).val()) {
-            printf("=====adjust volta style\n");
+      if (styleS(ST_voltaY).val() == MScore::baseStyle()->valueS(ST_voltaY).val())
             style()->set(ST_voltaY, Spatium(-2.0));
-            }
 
       _showOmr = false;
 
