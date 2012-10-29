@@ -915,10 +915,6 @@ bool Score::isSavable() const
 void Score::setInputState(const InputState& st)
       {
       _is = st;
-//      printf("Score::setInputState:\n");
-//      printf("  noteEntryMode %d\n", _is.noteEntryMode);
-//      printf("  tick  %d\n", _is.tick());
-//      printf("  track %d\n", _is.track());
       }
 
 //---------------------------------------------------------
@@ -1914,7 +1910,6 @@ void Score::addStaffType(StaffType* st)
 
 void Score::addStaffType(int idx, StaffType* st)
       {
-printf("addStaffType %d <%s> %d\n", idx, qPrintable(st->name()), st->buildin());
       if (idx < 0 || idx >= _staffTypes.size()) {
             StaffType** stp = new StaffType*;
             *stp = st;
@@ -1938,6 +1933,17 @@ int Score::staffTypeIdx(StaffType* st) const
                   return i;
             }
       return -1;
+      }
+
+//---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+StaffType* Score::staffType(int idx)
+      {
+      if (idx < 0 || idx >= _staffTypes.size())
+            return 0;
+      return *(_staffTypes[idx]);
       }
 
 //---------------------------------------------------------
