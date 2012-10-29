@@ -6,8 +6,10 @@
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
+      <lyricsDistance>2</lyricsDistance>
       <bracketDistance>0.2</bracketDistance>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <voltaY>-2</voltaY>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>
