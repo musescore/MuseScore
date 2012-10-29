@@ -121,7 +121,6 @@ extern void initStaffTypes();
 extern void qt_mac_set_menubar_icons(bool b);
 #endif
 
-
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -748,9 +747,6 @@ MuseScore::MuseScore()
       menuEdit->addMenu(menuVoices);
 
       menuEdit->addSeparator();
-      menuEdit->addAction(getAction("staff-types"));
-
-      menuEdit->addSeparator();
       menuEdit->addAction(getAction("debugger"));
 
       menuEdit->addSeparator();
@@ -856,6 +852,8 @@ MuseScore::MuseScore()
       menuStyle->addAction(getAction("edit-style"));
       menuStyle->addAction(getAction("edit-text-style"));
       menuStyle->addAction(getAction("edit-harmony"));
+      menuEdit->addAction(getAction("staff-types"));
+
       menuStyle->addSeparator();
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
@@ -1723,12 +1721,12 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
                   preferenceDialog->updateRemote();
             return;
             }
-            
+
       if (velo && processMidiRemote(MIDI_REMOTE_TYPE_NOTEON, pitch)) {
             active = 0;
             return;
             }
-            
+
       QWidget* w = QApplication::activeModalWidget();
       if (!cv || w) {
             active = 0;
