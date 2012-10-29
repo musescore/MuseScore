@@ -38,8 +38,8 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setupUi(this);
       staff = st;
       Score* score = staff->score();
-      foreach(StaffType* st, score->staffTypes())
-             staffTypes.append(st->clone());
+      foreach(StaffType** const st, score->staffTypes())
+             staffTypes.append((*st)->clone());
       int idx = 0;
       QListWidgetItem* ci = 0;
       foreach(StaffType* st, staffTypes) {
@@ -59,6 +59,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       _tabPresets[TAB_PRESET_BANDURRIA]=new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
       _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
       _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
       QList<QString> fontNames = StaffTypeTablature::fontNames(false);
@@ -125,22 +126,16 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       }
 
 EditStaffType::~EditStaffType()
-{
+      {
       foreach(StaffType* st, staffTypes)
             delete st;
-      if(_tabPresets[TAB_PRESET_GUITAR])
-            delete _tabPresets[TAB_PRESET_GUITAR];
-      if(_tabPresets[TAB_PRESET_BASS])
-            delete _tabPresets[TAB_PRESET_BASS];
-      if(_tabPresets[TAB_PRESET_UKULELE])
-            delete _tabPresets[TAB_PRESET_UKULELE];
-      if(_tabPresets[TAB_PRESET_BANDURRIA])
-            delete _tabPresets[TAB_PRESET_BANDURRIA];
-      if(_tabPresets[TAB_PRESET_ITALIAN])
-            delete _tabPresets[TAB_PRESET_ITALIAN];
-      if(_tabPresets[TAB_PRESET_FRENCH])
-            delete _tabPresets[TAB_PRESET_FRENCH];
-}
+      delete _tabPresets[TAB_PRESET_GUITAR];
+      delete _tabPresets[TAB_PRESET_BASS];
+      delete _tabPresets[TAB_PRESET_UKULELE];
+      delete _tabPresets[TAB_PRESET_BANDURRIA];
+      delete _tabPresets[TAB_PRESET_ITALIAN];
+      delete _tabPresets[TAB_PRESET_FRENCH];
+      }
 
 //---------------------------------------------------------
 //   saveCurrent
@@ -624,7 +619,8 @@ void EditStaffType::updateTabPreview()
       // update tabulature staff type in preview score
       if(!tabPreview)
             return;
-      StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(tabPreview->score()->staffTypes()[1]);
+      StaffTypeTablature*  stt =
+         static_cast<StaffTypeTablature*>(tabPreview->score()->staffType(TAB_STAFF_TYPE));
       setTabFromDlg(stt);
 
       tabPreview->score()->doLayout();

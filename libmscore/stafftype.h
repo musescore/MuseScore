@@ -50,6 +50,7 @@ class QPainter;
 //---------------------------------------------------------
 
 class StaffType {
+      bool _buildin;          // used for memory management: do not delete if true
 
    protected:
       QString _name;
@@ -65,7 +66,7 @@ class StaffType {
    public:
       StaffType();
       virtual ~StaffType() {}
-      StaffType(const QString& s);
+
       QString name() const                     { return _name;            }
       void setName(const QString& val)         { _name = val;             }
       virtual StaffGroup group() const = 0;
@@ -93,6 +94,8 @@ class StaffType {
       void setGenTimesig(bool val)             { _genTimesig = val;       }
       qreal doty1() const;
       qreal doty2() const;
+      bool buildin()            { return _buildin; }
+      void setBuildin(bool val) { _buildin = val; }
       };
 
 // first three staff types in staffTypes[] are build in:
@@ -112,7 +115,6 @@ class StaffTypePitched : public StaffType {
 
    public:
       StaffTypePitched();
-      StaffTypePitched(const QString& s) : StaffType(s) {}
       virtual StaffGroup group() const        { return PITCHED_STAFF; }
       virtual StaffTypePitched* clone() const { return new StaffTypePitched(*this); }
       virtual const char* groupName() const   { return "pitched"; }
@@ -138,7 +140,6 @@ class StaffTypePercussion : public StaffType {
 
    public:
       StaffTypePercussion();
-      StaffTypePercussion(const QString& s) : StaffType(s) {}
       virtual StaffGroup group() const           { return PERCUSSION_STAFF; }
       virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
       virtual const char* groupName() const      { return "percussion"; }
@@ -254,7 +255,6 @@ class StaffTypeTablature : public StaffType {
 
    public:
       StaffTypeTablature() : StaffType() { init(); }
-      StaffTypeTablature(const QString& s) : StaffType(s) { init(); }
       StaffTypeTablature(const QString& name, int lines, qreal lineDist, bool genClef,
             bool showBarLines, bool stemless, bool genTimesig,
             const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,

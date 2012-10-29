@@ -66,7 +66,7 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "type") {
-                  StaffType* st = score()->staffTypes().value(val.toInt());
+                  StaffType* st = score()->staffType(val.toInt());
                   if (st)
                         _staffType = st;
                   }
@@ -172,7 +172,7 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
       if (instr(0)->useDrumset()) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
-                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score()->staffType(PERCUSSION_STAFF_TYPE));
                   staff->setLines(lines);
                   }
             }
@@ -206,7 +206,7 @@ Score::FileError Score::read114(const QDomElement& de)
                   }
             else if (tag == "StaffType") {
                   int idx        = ee.attribute("idx").toInt();
-                  StaffType* ost = _staffTypes.value(idx);
+                  StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
                         st = ost;
@@ -220,10 +220,7 @@ Score::FileError Score::read114(const QDomElement& de)
                               st  = new StaffTypePitched();
                         }
                   st->read(ee);
-                  if (idx < _staffTypes.size())
-                        _staffTypes[idx] = st;
-                  else
-                        _staffTypes.append(st);
+                  addStaffType(idx, st);
                   }
             else if (tag == "siglist")
                   _sigmap->read(ee, _fileDivision);

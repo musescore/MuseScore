@@ -298,8 +298,8 @@ void Score::init()
       startLayout     = 0;
       _undo           = new UndoStack();
       _repeatList     = new RepeatList(this);
-      foreach(StaffType* st, ::staffTypes)
-             _staffTypes.append(st->clone());
+      foreach (StaffType* st, ::staffTypes)
+             addStaffType(st);
 
       _mscVersion     = MSCVERSION;
       _created        = false;
@@ -415,8 +415,11 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
-      foreach(StaffType* st, _staffTypes)
+      foreach(StaffType** st, _staffTypes) {
+            if (!(*st)->buildin())
+                  delete *st;
             delete st;
+            }
       }
 
 //---------------------------------------------------------
@@ -1899,28 +1902,42 @@ TimeSigMap* Score::sigmap() const
       }
 
 //---------------------------------------------------------
-//   staffTypes
+//   addStaffType
+//    ownership of st move to score except if the buildin
+//    flag is set
 //---------------------------------------------------------
 
-const QList<StaffType*>& Score::staffTypes() const
+void Score::addStaffType(StaffType* st)
       {
-      return rootScore()->_staffTypes;
+      addStaffType(-1, st);
       }
 
-QList<StaffType*>& Score::staffTypes()
+void Score::addStaffType(int idx, StaffType* st)
       {
-      return rootScore()->_staffTypes;
+printf("addStaffType %d <%s> %d\n", idx, qPrintable(st->name()), st->buildin());
+      if (idx < 0 || idx >= _staffTypes.size()) {
+            StaffType** stp = new StaffType*;
+            *stp = st;
+            _staffTypes.append(stp);
+            }
+      else {
+            if (!(*(_staffTypes[idx]))->buildin())
+                  delete *(_staffTypes[idx]);
+            *(_staffTypes[idx]) = st;
+            }
       }
 
 //---------------------------------------------------------
-//   setStaffTypes
+//   staffTypeIdx
 //---------------------------------------------------------
 
-void Score::addStaffTypes(const QList<StaffType*>& tl)
+int Score::staffTypeIdx(StaffType* st) const
       {
-      Score* score = rootScore();
-      foreach(StaffType* st, tl)
-            score->_staffTypes.append(st->clone());
+      for (int i = 0; i < _staffTypes.size(); ++i) {
+            if ((*_staffTypes[i]) == st)
+                  return i;
+            }
+      return -1;
       }
 
 //---------------------------------------------------------
@@ -1929,29 +1946,9 @@ void Score::addStaffTypes(const QList<StaffType*>& tl)
 
 void Score::replaceStaffTypes(const QList<StaffType*>& tl)
       {
-      Score* score = rootScore();
-      int   numCommonTypes = qMin(_staffTypes.size(), tl.size());
-      int   idx;
-
-      // overwrite existing styles with styles in list
-      // re-use existing _stafftype objects, so that pointers to styles in staves remain valid
-      for(idx = 0; idx < numCommonTypes; idx++)
-            if(score->_staffTypes.at(idx)->group() == tl.at(idx)->group())
-                  switch (tl.at(idx)->group()) {
-                  case PITCHED_STAFF:
-                        *(StaffTypePitched*)(score->_staffTypes[idx]) = *(StaffTypePitched*)(tl.at(idx));
-                        break;
-                  case PERCUSSION_STAFF:
-                        *(StaffTypePercussion*)(score->_staffTypes[idx]) = *(StaffTypePercussion*)(tl.at(idx));
-                        break;
-                  case TAB_STAFF:
-                        *(StaffTypeTablature*)(score->_staffTypes[idx]) = *(StaffTypeTablature*)(tl.at(idx));
-                        break;
-                  }
-
-      // add new styles
-      for(; idx < tl.size(); idx++)
-            score->_staffTypes.append(tl.at(idx)->clone());
+      Q_ASSERT(this == rootScore());
+      for (int idx = 0; idx < tl.size(); idx++)
+            addStaffType(idx, tl[idx]->clone());
       }
 
 //---------------------------------------------------------

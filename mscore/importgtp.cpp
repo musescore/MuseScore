@@ -791,7 +791,7 @@ qDebug("BeginRepeat=============================================\n");
             if (c & 0x1) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
-                  staff->setStaffType(score->staffTypes().at(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = CLEF_G3;
@@ -1271,7 +1271,7 @@ qDebug("BeginRepeat=============================================\n");
             if (c & 0x1) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
-                  staff->setStaffType(score->staffTypes().at(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = CLEF_G3;
@@ -1789,7 +1789,7 @@ void GuitarPro4::read(QFile* fp)
             if (c & 0x1) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
-                  staff->setStaffType(score->staffTypes().at(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = CLEF_G3;
@@ -2479,7 +2479,7 @@ void GuitarPro5::readTracks()
             if (c & 0x1) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
-                  staff->setStaffType(score->staffTypes().at(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = CLEF_G3;
@@ -2757,9 +2757,9 @@ Score::FileError importGTP(Score* score, const QString& name)
             s->setUpdateKeymap(true);
             StaffType* st = staff->staffType();
             s->setStaffType(st);
-            int idx = pscore->staffTypes().indexOf(st);
+            int idx = pscore->staffTypeIdx(st);
             if (idx == -1)
-                  pscore->staffTypes().append(st);
+                  pscore->addStaffType(st);
             s->linkTo(staff);
             p->staves()->append(s);
             pscore->staves().append(s);
@@ -2767,7 +2767,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (part->staves()->front()->staffType()->group() == PITCHED_STAFF) {
                   s = new Staff(pscore, p, 1);
                   s->setUpdateKeymap(true);
-                  StaffTypeTablature* st = static_cast<StaffTypeTablature*>(pscore->staffTypes().at(TAB_STAFF_TYPE));
+                  StaffTypeTablature* st = static_cast<StaffTypeTablature*>(pscore->staffType(TAB_STAFF_TYPE));
                   st->setSlashStyle(true);
 
                   s->setStaffType(st);
@@ -2789,7 +2789,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             if (part->staves()->front()->staffType()->group() == PITCHED_STAFF) {
                   Staff* staff2 = pscore->staff(1);
-                  staff2->setStaffType(pscore->staffTypes().at(TAB_STAFF_TYPE));
+                  staff2->setStaffType(pscore->staffType(TAB_STAFF_TYPE));
                   }
 
             //
