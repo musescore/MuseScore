@@ -278,7 +278,7 @@ class Score : public QObject {
 
       InputState _is;
       MStyle _style;
-      QList<StaffType*> _staffTypes;
+      QList<StaffType**> _staffTypes;
 
       QFileInfo info;
       bool _created;          ///< file is never saved, has generated name
@@ -821,10 +821,12 @@ class Score : public QObject {
       SyntiState& syntiState()                           { return _syntiState;         }
       void setSyntiState(const SyntiState& s);
 
-      const QList<StaffType*>& staffTypes() const;
-      QList<StaffType*>& staffTypes();
-      void addStaffTypes(const QList<StaffType*>& tl);
+      const QList<StaffType**>& staffTypes() const { return _staffTypes; }
       void replaceStaffTypes(const QList<StaffType*>&);
+      StaffType* staffType(int idx) { return *(_staffTypes[idx]); }
+      int staffTypeIdx(StaffType*) const;
+      void addStaffType(StaffType*);
+      void addStaffType(int idx, StaffType*);
 
       void addLayoutFlags(LayoutFlags val)               { layoutFlags |= val; }
       int symIdx() const                                 { return _symIdx; }

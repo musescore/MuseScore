@@ -90,9 +90,9 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       if (!parentScore()) {
             int idx = 0;
-            foreach(StaffType* st, _staffTypes) {
-                  if ((idx >= STAFF_TYPES) || !st->isEqual(*::staffTypes[idx]))
-                        st->write(xml, idx);
+            foreach(StaffType** st, _staffTypes) {
+                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*::staffTypes[idx]))
+                        (*st)->write(xml, idx);
                   ++idx;
                   }
             }
@@ -813,7 +813,7 @@ bool Score::read(const QDomElement& de)
                   }
             else if (tag == "StaffType") {
                   int idx        = ee.attribute("idx").toInt();
-                  StaffType* ost = _staffTypes.value(idx);
+                  StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
                         st = ost;
@@ -827,10 +827,7 @@ bool Score::read(const QDomElement& de)
                               st  = new StaffTypePitched();
                         }
                   st->read(ee);
-                  if (idx < _staffTypes.size())
-                        _staffTypes[idx] = st;
-                  else
-                        _staffTypes.append(st);
+                  addStaffType(idx, st);
                   }
             else if (tag == "siglist")
                   _sigmap->read(ee, _fileDivision);

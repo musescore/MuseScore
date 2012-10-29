@@ -2199,7 +2199,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       if (hasDrumset) {
             // set staff type to percussion
             for (int j = 0; j < part->nstaves(); ++j)
-                  part->staff(j)->setStaffType(score->staffTypes()[PERCUSSION_STAFF_TYPE]);
+                  part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -3495,7 +3495,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                          score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
                   if (st == TAB_STAFF_TYPE)
-                        score->staff(staffIdx)->setStaffType(score->staffTypes()[TAB_STAFF_TYPE]);
+                        score->staff(staffIdx)->setStaffType(score->staffType(TAB_STAFF_TYPE));
                   }
             else if (e.tagName() == "staves")
                   ;  // ignore, already handled
