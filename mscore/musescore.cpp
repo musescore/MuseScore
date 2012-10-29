@@ -852,7 +852,7 @@ MuseScore::MuseScore()
       menuStyle->addAction(getAction("edit-style"));
       menuStyle->addAction(getAction("edit-text-style"));
       menuStyle->addAction(getAction("edit-harmony"));
-      menuEdit->addAction(getAction("staff-types"));
+      menuStyle->addAction(getAction("staff-types"));
 
       menuStyle->addSeparator();
       menuStyle->addAction(getAction("load-style"));

@@ -162,7 +162,7 @@ Staff::Staff(Score* s)
       _part           = 0;
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
+      _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -181,7 +181,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _part           = p;
       _keymap         = new KeyList;
       (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffTypes()[PITCHED_STAFF_TYPE];
+      _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -380,7 +380,7 @@ void Staff::write(Xml& xml) const
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
                   }
             }
-      xml.tag("type", score()->staffTypes().indexOf(_staffType));
+      xml.tag("type", score()->staffTypeIdx(_staffType));
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
       if (invisible())
@@ -410,7 +410,7 @@ void Staff::read(const QDomElement& de)
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "type") {
-                  StaffType* st = score()->staffTypes().value(val.toInt());
+                  StaffType* st = score()->staffType(val.toInt());
                   if (st)
                         _staffType = st;
                   }
@@ -553,7 +553,7 @@ void Staff::setLines(int val)
       StaffType* st = _staffType->clone();
       st->setLines(val);
       _staffType = st;
-      score()->staffTypes().append(st);
+      score()->addStaffType(st);
       }
 
 //---------------------------------------------------------
@@ -692,14 +692,14 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
       StaffType* st;
       if (t->useTablature && t->tablature) {
-            setStaffType(score()->staffTypes().at(TAB_STAFF_TYPE));
+            setStaffType(score()->staffType(TAB_STAFF_TYPE));
             setLines(t->tablature->strings());        // use number of lines from tablature definition:
             }
       else {
             if (t->useDrumset)
-                  st = score()->staffTypes().at(PERCUSSION_STAFF_TYPE);
+                  st = score()->staffType(PERCUSSION_STAFF_TYPE);
             else
-                  st = score()->staffTypes().at(PITCHED_STAFF_TYPE);
+                  st = score()->staffType(PITCHED_STAFF_TYPE);
             setStaffType(st);
             setLines(t->staffLines[cidx]);            // use number of lines from instr. template
             }

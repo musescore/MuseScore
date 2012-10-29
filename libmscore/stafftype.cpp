@@ -28,7 +28,9 @@ QList<StaffType*> staffTypes;
 
 void initStaffTypes()
       {
-      StaffTypePitched* st = new StaffTypePitched("Pitched 5 lines");
+      StaffTypePitched* st = new StaffTypePitched();
+      st->setName("Pitched 5 lines");
+      st->setBuildin(true);
       st->setLines(5);
       st->setLineDistance(Spatium(1.0));
       st->setGenClef(true);
@@ -38,10 +40,14 @@ void initStaffTypes()
       st->setShowLedgerLines(true);
       staffTypes.append(st);
 
-      StaffTypeTablature* stab = new StaffTypeTablature("Tab");
+      StaffTypeTablature* stab = new StaffTypeTablature();
+      stab->setName("Tab");
+      stab->setBuildin(true);
       staffTypes.append(stab);
 
-      StaffTypePercussion* sp = new StaffTypePercussion("Percussion 5 lines");
+      StaffTypePercussion* sp = new StaffTypePercussion();
+      sp->setName("Percussion 5 lines");
+      sp->setBuildin(true);
       sp->setLines(5);
       sp->setLineDistance(Spatium(1.0));
       sp->setGenClef(true);
@@ -58,19 +64,7 @@ void initStaffTypes()
 
 StaffType::StaffType()
       {
-      _lines           = 5;
-      _stepOffset      = 0;
-      _lineDistance    = Spatium(1);
-
-      _genClef         = true;      // create clef at beginning of system
-      _showBarlines    = true;
-      _slashStyle      = false;     // do not show stems
-      _genTimesig      = true;      // whether time signature is shown or not
-      }
-
-StaffType::StaffType(const QString& s)
-      {
-      _name            = s;
+      _buildin         = false;
       _lines           = 5;
       _stepOffset      = 0;
       _lineDistance    = Spatium(1);
