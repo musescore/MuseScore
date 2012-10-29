@@ -823,7 +823,7 @@ class Score : public QObject {
 
       const QList<StaffType**>& staffTypes() const { return _staffTypes; }
       void replaceStaffTypes(const QList<StaffType*>&);
-      StaffType* staffType(int idx) { return *(_staffTypes[idx]); }
+      StaffType* staffType(int idx);
       int staffTypeIdx(StaffType*) const;
       void addStaffType(StaffType*);
       void addStaffType(int idx, StaffType*);
