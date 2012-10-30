@@ -26,11 +26,13 @@
 
 class TempoText : public Text  {
       Q_OBJECT
-      Q_PROPERTY(qreal tempo      READ tempo      WRITE undoSetTempo)
-      Q_PROPERTY(bool  followText READ followText WRITE undoSetFollowText)
+      Q_PROPERTY(qreal tempo         READ tempo      WRITE undoSetTempo)
+      Q_PROPERTY(bool  followText    READ followText WRITE undoSetFollowText)
+      Q_PROPERTY(Placement placement READ placement  WRITE undoSetPlacement)
 
       qreal _tempo;          // beats per second
       bool _followText;       // parse text to determine tempo
+      Placement _placement;
 
    public:
       TempoText(Score*);
@@ -49,7 +51,12 @@ class TempoText : public Text  {
       void setFollowText(bool v) { _followText = v;    }
       void undoSetFollowText(bool v);
 
+      Placement placement() const { return _placement; }
+      void setPlacement(Placement val) { _placement = val; }
+      void undoSetPlacement(Placement);
+
       virtual void textChanged();
+      virtual void layout();
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);

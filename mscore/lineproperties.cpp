@@ -214,7 +214,7 @@ void LineProperties::accept()
       sym = SymId(endSymbol->itemData(endSymbol->currentIndex()).toInt());
       tl->setEndSymbol(endSymbolRb->isChecked() ? sym : noSym);
 
-      Placement p = PLACE_ABOVE;
+      PlaceText p = PLACE_ABOVE;
       switch(beginTextPlace->currentIndex()) {
             case 0: p = PLACE_ABOVE; break;
             case 1: p = PLACE_BELOW; break;

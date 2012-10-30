@@ -141,6 +141,7 @@ class Element : public QObject {
       Q_OBJECT
       Q_ENUMS(ElementType)
       Q_ENUMS(DynamicType)
+      Q_ENUMS(Placement)
 
    public:
       //-------------------------------------------------------------------
@@ -250,6 +251,7 @@ class Element : public QObject {
       enum DynamicType {
             DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
             };
+      enum Placement  { ABOVE, BELOW };
 
    private:
       Q_PROPERTY(ElementType type READ type)
@@ -654,6 +656,7 @@ extern void collectElements(void* data, Element* e);
 
 Q_DECLARE_METATYPE(Element::ElementType)
 Q_DECLARE_METATYPE(Element::DynamicType)
+Q_DECLARE_METATYPE(Element::Placement)
 
 #endif
 

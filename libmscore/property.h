@@ -114,6 +114,7 @@ enum P_ID {
       P_HAIRPIN_TYPE,
       P_VELO_CHANGE,
       P_DYNAMIC_TYPE,
+      P_PLACEMENT,
 
       P_END
       };
@@ -135,6 +136,7 @@ enum P_TYPE {
       T_LAYOUT_BREAK,
       T_VALUE_TYPE,
       T_BEAM_MODE,
+      T_PLACEMENT
       };
 
 extern QVariant getProperty(P_ID type, const QDomElement& e);
