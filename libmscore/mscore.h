@@ -120,10 +120,10 @@ enum BracketType {
       };
 
 //---------------------------------------------------------
-//   Placement
+//   PlaceText
 //---------------------------------------------------------
 
-enum Placement {
+enum PlaceText {
       PLACE_AUTO, PLACE_ABOVE, PLACE_BELOW, PLACE_LEFT
       };
 
