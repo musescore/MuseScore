@@ -26,6 +26,7 @@ TempoText::TempoText(Score* s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
+      _placement  = ABOVE;
       setTextStyle(s->textStyle(TEXT_STYLE_TEMPO));
       }
 
@@ -39,6 +40,7 @@ void TempoText::write(Xml& xml) const
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
+      writeProperty(xml, P_PLACEMENT);
       Text::writeProperties(xml);
       xml.etag();
       }
@@ -55,6 +57,8 @@ void TempoText::read(const QDomElement& de)
                   _tempo = e.text().toDouble();
             else if (tag == "followText")
                   _followText = e.text().toInt();
+            else if (tag == "placement")
+                  _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
             else if (!Text::readProperties(e))
                   domError(e);
             }
@@ -135,6 +139,15 @@ void TempoText::undoSetFollowText(bool v)
       }
 
 //---------------------------------------------------------
+//   undoSetPlacement
+//---------------------------------------------------------
+
+void TempoText::undoSetPlacement(Placement v)
+      {
+      score()->undoChangeProperty(this, P_PLACEMENT, v);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -143,6 +156,7 @@ QVariant TempoText::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_TEMPO:             return _tempo;
             case P_TEMPO_FOLLOW_TEXT: return _followText;
+            case P_PLACEMENT:         return int(_placement);
             default:
                   return Element::getProperty(propertyId);
             }
@@ -160,6 +174,9 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
+                  break;
+            case P_PLACEMENT:
+                  _placement = Placement(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -179,8 +196,22 @@ QVariant TempoText::propertyDefault(P_ID id) const
       switch(id) {
             case P_TEMPO:             return 2.0;
             case P_TEMPO_FOLLOW_TEXT: return false;
+            case P_PLACEMENT:         return ABOVE;
             default:                  return Element::propertyDefault(id);
             }
       }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void TempoText::layout()
+      {
+      Text::layout();
+      if (_placement == BELOW) {
+            rypos() = -rypos() + 4 * spatium();
+            // rUserYoffset() *= -1;
+            // text height ?
+            }
+      }
 

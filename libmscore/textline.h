@@ -60,7 +60,7 @@ class TextLine : public SLine {
       Spatium _lineWidth;
       QColor _lineColor;
       Qt::PenStyle _lineStyle;
-      Placement _beginTextPlace, _continueTextPlace;
+      PlaceText _beginTextPlace, _continueTextPlace;
 
       bool _beginHook, _endHook;
       HookType _beginHookType, _endHookType;
@@ -107,10 +107,10 @@ class TextLine : public SLine {
       void setBeginText(Text* v);
       Text* continueText() const             { return _continueText;         }
       void setContinueText(Text* v);
-      Placement beginTextPlace() const        { return _beginTextPlace;       }
-      void setBeginTextPlace(Placement p)     { _beginTextPlace = p;          }
-      Placement continueTextPlace() const     { return _continueTextPlace;    }
-      void setContinueTextPlace(Placement p)  { _continueTextPlace = p;       }
+      PlaceText beginTextPlace() const        { return _beginTextPlace;       }
+      void setBeginTextPlace(PlaceText p)     { _beginTextPlace = p;          }
+      PlaceText continueTextPlace() const     { return _continueTextPlace;    }
+      void setContinueTextPlace(PlaceText p)  { _continueTextPlace = p;       }
 
       void setBeginSymbol(SymId v)            { _beginSymbol = v;             }
       void setContinueSymbol(SymId v)         { _continueSymbol = v;          }

@@ -150,7 +150,6 @@ Trill::Trill(Score* s)
   : SLine(s)
       {
       _subtype = TRILL_LINE;
-//      setYoff(-1.0);           // default position
       }
 
 //---------------------------------------------------------

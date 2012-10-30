@@ -122,6 +122,7 @@ static const PropertyData propertyList[] = {
       { P_HAIRPIN_TYPE,        "",              T_INT    },
       { P_VELO_CHANGE,         "",              T_INT    },
       { P_DYNAMIC_TYPE,        "",              T_INT    },
+      { P_PLACEMENT,           "placement",     T_PLACEMENT    },
 
       { P_END,                 "",              T_INT    }
       };
@@ -205,6 +206,12 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                         return QVariant(int(MScore::OFFSET_VAL));
                   else if (value == "user")
                         return QVariant(int(MScore::USER_VAL));
+                  break;
+            case T_PLACEMENT:
+                  if (value == "above")
+                        return QVariant(int(Element::ABOVE));
+                  else if (value == "below")
+                        return QVariant(int(Element::BELOW));
                   break;
             case T_BEAM_MODE:             // TODO
                   return QVariant(int(0));
