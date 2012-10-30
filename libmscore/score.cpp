@@ -1910,15 +1910,25 @@ void Score::addStaffType(StaffType* st)
 
 void Score::addStaffType(int idx, StaffType* st)
       {
+      // if the modified staff type is NOT replacing an existing type
       if (idx < 0 || idx >= _staffTypes.size()) {
+            // store new pointer to pointer to type data
             StaffType** stp = new StaffType*;
             *stp = st;
             _staffTypes.append(stp);
             }
+      // if the modified staff type IS replacing an existing type
       else {
-            if (!(*(_staffTypes[idx]))->buildin())
-                  delete *(_staffTypes[idx]);
+            StaffType* oldStaffType = *(_staffTypes[idx]);
+            // update the type of each score staff which uses the old type
+            for(int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
+                  if(staff(staffIdx)->staffType() == oldStaffType)
+                        staff(staffIdx)->setStaffType(st);
+            // store the updated staff type
             *(_staffTypes[idx]) = st;
+            // delete old staff type if not built-in
+            if (!oldStaffType->buildin())
+                  delete oldStaffType;
             }
       }
 

@@ -816,7 +816,7 @@ bool Score::read(const QDomElement& de)
                   StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
-                        st = ost;
+                        st = ost->clone();
                   else {
                         QString group  = ee.attribute("group", "pitched");
                         if (group == "percussion")
@@ -827,6 +827,7 @@ bool Score::read(const QDomElement& de)
                               st  = new StaffTypePitched();
                         }
                   st->read(ee);
+                  st->setBuildin(false);
                   addStaffType(idx, st);
                   }
             else if (tag == "siglist")
