@@ -540,23 +540,6 @@ class ChangeSlurOffsets : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeDynamic
-//---------------------------------------------------------
-
-class ChangeDynamic : public UndoCommand {
-      Dynamic* dynamic;
-      int velocity;
-      Element::DynamicType dynType;
-      void flip();
-
-   public:
-      ChangeDynamic(Dynamic*, int velocity, Element::DynamicType dt);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("ChangeDynamic");
-      };
-
-//---------------------------------------------------------
 //   SigInsertTime
 //---------------------------------------------------------
 
@@ -1104,14 +1087,14 @@ class ChangeImage : public UndoCommand {
 class ChangeHairpin : public UndoCommand {
       Hairpin* hairpin;
       int veloChange;
-      Element::DynamicType dynType;
+      Element::DynamicRange dynRange;
       bool diagonal;
 
       void flip();
 
    public:
-      ChangeHairpin(Hairpin* h, int c, Element::DynamicType t, bool dg)
-         : hairpin(h), veloChange(c), dynType(t), diagonal(dg) {}
+      ChangeHairpin(Hairpin* h, int c, Element::DynamicRange t, bool dg)
+         : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
       virtual void undo() { flip(); }
       virtual void redo() { flip(); }
       UNDO_NAME("ChangeHairpin");

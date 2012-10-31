@@ -245,10 +245,10 @@ class Element : public QObject {
             };
 
       //---------------------------------------------------------
-      //   DynamicType
+      //   DynamicRange
       //---------------------------------------------------------
 
-      enum DynamicType {
+      enum DynamicRange {
             DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
             };
       enum Placement  { ABOVE, BELOW };
@@ -655,7 +655,7 @@ extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
 Q_DECLARE_METATYPE(Element::ElementType)
-Q_DECLARE_METATYPE(Element::DynamicType)
+Q_DECLARE_METATYPE(Element::DynamicRange)
 Q_DECLARE_METATYPE(Element::Placement)
 
 #endif
