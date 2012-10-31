@@ -988,24 +988,13 @@ void Score::cmdFlip()
                   }
             else if (e->type() == Element::NOTEDOT)
                   undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
-            else if (e->type() == Element::TEMPO_TEXT) {
-                  TempoText* d = static_cast<TempoText*>(e);
-                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
-                  undoChangeProperty(e, P_PLACEMENT, p);
-                  }
-            else if (e->type() == Element::DYNAMIC) {
-                  Dynamic* d = static_cast<Dynamic*>(e);
-                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
-                  undoChangeProperty(e, P_PLACEMENT, p);
-                  }
-            else if (e->type() == Element::HAIRPIN) {
-                  Hairpin* d = static_cast<Hairpin*>(e);
-                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
-                  undoChangeProperty(e, P_PLACEMENT, p);
-                  }
-            else if (e->type() == Element::TEMPO_TEXT) {
-                  TempoText* d = static_cast<TempoText*>(e);
-                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
+            else if (
+                 (e->type() == Element::TEMPO_TEXT)
+               | (e->type() == Element::DYNAMIC)
+               | (e->type() == Element::HAIRPIN)
+               | (e->type() == Element::DYNAMIC)
+               ) {
+                  Element::Placement p = e->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
                   undoChangeProperty(e, P_PLACEMENT, p);
                   }
             }
