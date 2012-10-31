@@ -113,8 +113,9 @@ enum P_ID {
       P_TRILL_TYPE,
       P_HAIRPIN_TYPE,
       P_VELO_CHANGE,
-      P_DYNAMIC_TYPE,
+      P_DYNAMIC_RANGE,
       P_PLACEMENT,
+      P_VELOCITY,
 
       P_END
       };

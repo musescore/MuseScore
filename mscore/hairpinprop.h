@@ -38,7 +38,7 @@ class HairpinProperties : public QDialog, public Ui::HairpinProperties {
    public:
       HairpinProperties(Hairpin*, QWidget* parent = 0);
       int changeVelo() const { return veloChange->value(); }
-      Element::DynamicType dynamicType() const;
+      Element::DynamicRange dynamicRange() const;
       bool allowDiagonal() const { return diagonal->isChecked(); }
       };
 

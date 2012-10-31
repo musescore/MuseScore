@@ -571,15 +571,18 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "d-dynamics") {
             Dynamic* dynamic = static_cast<Dynamic*>(e);
             int oldVelo    = dynamic->velocity();
-            Element::DynamicType ot = dynamic->dynType();
+            Element::DynamicRange ot = dynamic->dynRange();
             DynamicProperties dp(dynamic);
             int rv = dp.exec();
             if (rv) {
                   int newVelo    = dynamic->velocity();
-                  Element::DynamicType nt = dynamic->dynType();
+                  Element::DynamicRange nt = dynamic->dynRange();
                   dynamic->setVelocity(oldVelo);
-                  dynamic->setDynType(ot);
-                  score()->undoChangeDynamic(dynamic, newVelo, nt);
+                  dynamic->setDynRange(ot);
+                  if (newVelo != oldVelo)
+                        score()->undoChangeProperty(dynamic, P_VELOCITY, newVelo);
+                  if (nt != ot)
+                        score()->undoChangeProperty(dynamic, P_DYNAMIC_RANGE, nt);
                   }
             }
       else if (cmd == "text-props") {
@@ -747,9 +750,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = dp.exec();
 
             int vo = dp.changeVelo();
-            Element::DynamicType dt = dp.dynamicType();
+            Element::DynamicRange dt = dp.dynamicRange();
             if (rv && ((vo != hp->veloChange())
-               || (dt != hp->dynType())
+               || (dt != hp->dynRange())
                || (dp.allowDiagonal() != hp->diagonal())
                )) {
                   score()->undo(new ChangeHairpin(hp, vo, dt, dp.allowDiagonal()));

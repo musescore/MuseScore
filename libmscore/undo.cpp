@@ -577,15 +577,6 @@ void Score::undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom
       }
 
 //---------------------------------------------------------
-//   undoChangeDynamic
-//---------------------------------------------------------
-
-void Score::undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type)
-      {
-      undo(new ChangeDynamic(e, velocity, type));
-      }
-
-//---------------------------------------------------------
 //   undoTransposeHarmony
 //---------------------------------------------------------
 
@@ -1930,28 +1921,6 @@ void ChangeSlurOffsets::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeDynamic
-//---------------------------------------------------------
-
-ChangeDynamic::ChangeDynamic(Dynamic* d, int v, Element::DynamicType dt)
-      {
-      dynamic  = d;
-      velocity = v;
-      dynType  = dt;
-      }
-
-void ChangeDynamic::flip()
-      {
-      int v = dynamic->velocity();
-      Element::DynamicType t = dynamic->dynType();
-      dynamic->setVelocity(velocity);
-      dynamic->setDynType(dynType);
-      dynType  = t;
-      velocity = v;
-      dynamic->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
-      }
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 
@@ -2693,13 +2662,13 @@ void ChangeImage::flip()
 void ChangeHairpin::flip()
       {
       int vc        = hairpin->veloChange();
-      Element::DynamicType t = hairpin->dynType();
+      Element::DynamicRange t = hairpin->dynRange();
       bool dg       = hairpin->diagonal();
       hairpin->setVeloChange(veloChange);
-      hairpin->setDynType(dynType);
+      hairpin->setDynRange(dynRange);
       hairpin->setDiagonal(diagonal);
       veloChange = vc;
-      dynType    = t;
+      dynRange   = t;
       diagonal   = dg;
       hairpin->score()->updateHairpin(hairpin);
       }
