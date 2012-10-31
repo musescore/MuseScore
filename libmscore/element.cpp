@@ -298,6 +298,7 @@ Element::Element(Score* s) :
    _selected(false),
    _generated(false),
    _visible(true),
+   _placement(BELOW),
    _flags(ELEMENT_SELECTABLE),
    _track(-1),
    _color(MScore::defaultColor),
@@ -320,6 +321,7 @@ Element::Element(const Element& e)
       _selected   = e._selected;
       _generated  = e._generated;
       _visible    = e._visible;
+      _placement  = e._placement;
       _flags      = e._flags;
       _track      = e._track;
       _color      = e._color;
@@ -655,6 +657,7 @@ void Element::writeProperties(Xml& xml) const
             xml.tag("color", color());
       if (!visible())
             xml.tag("visible", visible());
+      writeProperty(xml, P_PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -719,6 +722,8 @@ bool Element::readProperties(const QDomElement& e)
                         }
                   }
             }
+      else if (tag == "placement")
+            _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
       else
             return false;
       return true;
@@ -1442,6 +1447,15 @@ Space& Space::operator+=(const Space& s)
       }
 
 //---------------------------------------------------------
+//   undoSetPlacement
+//---------------------------------------------------------
+
+void Element::undoSetPlacement(Placement v)
+      {
+      score()->undoChangeProperty(this, P_PLACEMENT, v);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -1452,6 +1466,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_VISIBLE:   return _visible;
             case P_SELECTED:  return _selected;
             case P_USER_OFF:  return _userOff;
+            case P_PLACEMENT: return int(_placement);
             default:
                   return QVariant();
             }
@@ -1476,6 +1491,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             case P_USER_OFF:
                   _userOff = v.toPointF();
                   break;
+            case P_PLACEMENT:
+                  _placement = Placement(v.toInt());
+                  break;
             default:
                   qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
                   return false;
@@ -1483,6 +1501,20 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
       setGenerated(false);
       score()->addRefresh(canvasBoundingRect());
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Element::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_PLACEMENT:     return BELOW;
+            default:    // not all properties have a default
+                  break;
+            }
+      return QVariant();
       }
 
 //---------------------------------------------------------

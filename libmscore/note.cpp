@@ -2015,6 +2015,6 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             default:
                   break;
             }
-      return QVariant();
+      return Element::propertyDefault(propertyId);
       }
 
