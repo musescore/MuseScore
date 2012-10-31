@@ -158,7 +158,7 @@ QVariant TempoText::getProperty(P_ID propertyId) const
             case P_TEMPO_FOLLOW_TEXT: return _followText;
             case P_PLACEMENT:         return int(_placement);
             default:
-                  return Element::getProperty(propertyId);
+                  return Text::getProperty(propertyId);
             }
       }
 
@@ -179,7 +179,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                   _placement = Placement(v.toInt());
                   break;
             default:
-                  if (!Element::setProperty(propertyId, v))
+                  if (!Text::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -197,7 +197,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
             case P_TEMPO:             return 2.0;
             case P_TEMPO_FOLLOW_TEXT: return false;
             case P_PLACEMENT:         return ABOVE;
-            default:                  return Element::propertyDefault(id);
+            default:                  return Text::propertyDefault(id);
             }
       }
 

@@ -43,7 +43,7 @@ HairpinProperties::HairpinProperties(Hairpin* h, QWidget* parent)
 //   dynamicType
 //---------------------------------------------------------
 
-Element::DynamicType HairpinProperties::dynamicType() const
+Element::DynamicRange HairpinProperties::dynamicRange() const
       {
       if (staffButton->isChecked())
             return Element::DYNAMIC_STAFF;

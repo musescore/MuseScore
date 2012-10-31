@@ -27,6 +27,7 @@ class QPainter;
 
 class Lyrics : public Text {
       Q_OBJECT
+      Q_PROPERTY(Placement placement READ placement  WRITE undoSetPlacement)
 
    public:
       enum Syllabic { SINGLE, BEGIN, END, MIDDLE };
@@ -37,6 +38,7 @@ class Lyrics : public Text {
       Syllabic _syllabic;
       QList<Line*> _separator;
       Text* _verseNumber;
+      Placement _placement;
 
    protected:
       int _no;                ///< row index
@@ -68,16 +70,24 @@ class Lyrics : public Text {
       virtual void draw(QPainter*) const;
       virtual void endEdit();
 
-      int ticks() const             { return _ticks;    }
-      void setTicks(int tick)       { _ticks = tick;    }
+      int ticks() const                { return _ticks;    }
+      void setTicks(int tick)          { _ticks = tick;    }
       int endTick() const;
-      bool isMelisma() const       { return _ticks > 0; }
+      bool isMelisma() const           { return _ticks > 0; }
 
-      void clearSeparator()         { _separator.clear(); } // TODO: memory leak
-      QList<Line*>* separatorList() { return &_separator; }
+      void clearSeparator()            { _separator.clear(); } // TODO: memory leak
+      QList<Line*>* separatorList()    { return &_separator; }
       virtual void paste();
-      Text* verseNumber() const     { return _verseNumber; }
-      void setVerseNumber(Text* t)  { _verseNumber = t;    }
+      Text* verseNumber() const        { return _verseNumber; }
+      void setVerseNumber(Text* t)     { _verseNumber = t;    }
+
+      Placement placement() const      { return _placement; }
+      void setPlacement(Placement val) { _placement = val; }
+      void undoSetPlacement(Placement);
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

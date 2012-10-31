@@ -51,6 +51,7 @@
 #include "hook.h"
 #include "pitchspelling.h"
 #include "tempotext.h"
+#include "dynamic.h"
 
 //---------------------------------------------------------
 //   getSelectedNote
@@ -987,6 +988,21 @@ void Score::cmdFlip()
                   }
             else if (e->type() == Element::NOTEDOT)
                   undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
+            else if (e->type() == Element::TEMPO_TEXT) {
+                  TempoText* d = static_cast<TempoText*>(e);
+                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
+                  undoChangeProperty(e, P_PLACEMENT, p);
+                  }
+            else if (e->type() == Element::DYNAMIC) {
+                  Dynamic* d = static_cast<Dynamic*>(e);
+                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
+                  undoChangeProperty(e, P_PLACEMENT, p);
+                  }
+            else if (e->type() == Element::HAIRPIN) {
+                  Hairpin* d = static_cast<Hairpin*>(e);
+                  Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
+                  undoChangeProperty(e, P_PLACEMENT, p);
+                  }
             else if (e->type() == Element::TEMPO_TEXT) {
                   TempoText* d = static_cast<TempoText*>(e);
                   Element::Placement p = d->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;

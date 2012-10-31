@@ -44,7 +44,7 @@ class HairpinSegment : public LineSegment {
 //   @@ Hairpin
 //   @P subtype enum HairpinType CRESCENDO, DECRESCENDO
 //   @P veloChange int
-//   @P dynType    enum Element::DynamicType
+//   @P dynRange    enum Element::DynamicRange
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
@@ -57,11 +57,13 @@ class Hairpin : public SLine {
    private:
       Q_PROPERTY(HairpinType subtype     READ subtype     WRITE undoSetSubtype)
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Element::DynamicType dynType READ dynType WRITE undoSetDynType)
+      Q_PROPERTY(Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
+      Q_PROPERTY(Placement placement READ placement  WRITE undoSetPlacement)
 
       HairpinType _subtype;
       int _veloChange;
-      DynamicType _dynType;
+      DynamicRange _dynRange;
+      Placement _placement;
 
    public:
       Hairpin(Score* s);
@@ -80,15 +82,21 @@ class Hairpin : public SLine {
       void setVeloChange(int v)        { _veloChange = v;    }
       void undoSetVeloChange(int v);
 
-      DynamicType dynType() const      { return _dynType; }
-      void setDynType(DynamicType t)   { _dynType = t;    }
-      void undoSetDynType(DynamicType t);
+      DynamicRange dynRange() const       { return _dynRange; }
+      void setDynRange(DynamicRange t)    { _dynRange = t;    }
+      void undoSetDynRange(DynamicRange t);
+
+      Placement placement() const         { return _placement; }
+      void setPlacement(Placement val)    { _placement = val; }
+      void undoSetPlacement(Placement);
 
       virtual void write(Xml&) const;
       virtual void read(const QDomElement&);
 
       virtual QVariant getProperty(P_ID id) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
+
       virtual void setYoff(qreal);
       };
 

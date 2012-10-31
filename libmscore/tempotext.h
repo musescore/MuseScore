@@ -22,6 +22,7 @@
 //
 //    @P tempo qreal      tempo in beats per second (beat=1/4)
 //    @P followText bool  determine tempo from text
+//    @P placement Placement ABOVE, BELOW
 //-------------------------------------------------------------------
 
 class TempoText : public Text  {

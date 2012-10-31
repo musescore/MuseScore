@@ -32,7 +32,7 @@ DynamicProperties::DynamicProperties(Dynamic* d, QWidget* parent)
       setupUi(this);
       dynamic = d;
       velocity->setValue(dynamic->velocity());
-      switch(dynamic->dynType()) {
+      switch(dynamic->dynRange()) {
             case Element::DYNAMIC_STAFF:     staffButton->setChecked(true); break;
             case Element::DYNAMIC_PART:      partButton->setChecked(true); break;
             case Element::DYNAMIC_SYSTEM:    systemButton->setChecked(true); break;
@@ -47,11 +47,11 @@ void DynamicProperties::accept()
       {
       dynamic->setVelocity(velocity->value());
       if (staffButton->isChecked())
-            dynamic->setDynType(Element::DYNAMIC_STAFF);
+            dynamic->setDynRange(Element::DYNAMIC_STAFF);
       else if (partButton->isChecked())
-            dynamic->setDynType(Element::DYNAMIC_PART);
+            dynamic->setDynRange(Element::DYNAMIC_PART);
       else if (systemButton->isChecked())
-            dynamic->setDynType(Element::DYNAMIC_SYSTEM);
+            dynamic->setDynRange(Element::DYNAMIC_SYSTEM);
       QDialog::accept();
       }
 

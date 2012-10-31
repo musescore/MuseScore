@@ -69,7 +69,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic Type:</string>
+        <string>Dynamic Range:</string>
        </property>
       </widget>
      </item>
@@ -81,7 +81,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="dynType">
+      <widget class="QComboBox" name="dynRange">
        <item>
         <property name="text">
          <string>Staff</string>

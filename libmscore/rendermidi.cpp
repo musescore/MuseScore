@@ -533,7 +533,7 @@ void Score::updateHairpin(Hairpin* h)
       else if (endVelo < 1)
             endVelo = 1;
 
-      switch(h->dynType()) {
+      switch(h->dynRange()) {
             case Element::DYNAMIC_STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                   st->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
@@ -566,7 +566,7 @@ void Score::removeHairpin(Hairpin* h)
             return;
       int tick2 = es->tick() - 1;
 
-      switch(h->dynType()) {
+      switch(h->dynRange()) {
             case Element::DYNAMIC_STAFF:
                   st->velocities().remove(tick);
                   st->velocities().remove(tick2);
@@ -620,7 +620,7 @@ void Score::updateVelo()
                         if (v < 1)     //  illegal value
                               continue;
                         int dStaffIdx = d->staffIdx();
-                        switch(d->dynType()) {
+                        switch(d->dynRange()) {
                               case Element::DYNAMIC_STAFF:
                                     if (dStaffIdx == staffIdx)
                                           velo.setVelo(tick, v);
