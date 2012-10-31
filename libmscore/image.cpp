@@ -357,8 +357,7 @@ bool Image::load(const QString& ss)
       _linkIsValid = true;
       _linkPath = fi.canonicalFilePath();
       _storeItem = imageStore.add(_linkPath, ba);
-      if(_storeItem)
-            _storeItem->reference(this);
+      _storeItem->reference(this);
       return true;
       }
 
