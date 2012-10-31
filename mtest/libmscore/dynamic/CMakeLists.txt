@@ -3,7 +3,7 @@
 #  Music Composition & Notation
 #  $Id:$
 #
-#  Copyright (C) 2011 Werner Schweer
+#  Copyright (C) 2012 Werner Schweer
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2
@@ -11,10 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      hairpin note compat link measure beam split join
-      timesig layout element midi dynamic
-      )
+set(TARGET tst_dynamic)
 
-# midi - does not work
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

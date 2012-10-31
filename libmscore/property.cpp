@@ -121,7 +121,7 @@ static const PropertyData propertyList[] = {
       { P_TRILL_TYPE,          "",              T_INT    },
       { P_HAIRPIN_TYPE,        "",              T_INT    },
       { P_VELO_CHANGE,         "",              T_INT    },
-      { P_DYNAMIC_RANGE,       "",              T_INT    },
+      { P_DYNAMIC_RANGE,       "dynType",       T_INT    },
       { P_PLACEMENT,           "placement",     T_PLACEMENT    },
       { P_VELOCITY,            "velocity",      T_INT    },
 
