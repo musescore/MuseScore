@@ -2608,9 +2608,9 @@ static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYof
       else {
             // MuseScore 1.x compatible offsets
             if (pl == "above")
-                  offs = -5;
+                  sli->setPlacement(Element::ABOVE);
             else if (pl == "below")
-                  offs = 9;
+                  sli->setPlacement(Element::BELOW);
             else
                   qDebug("setSLinePlacement invalid placement '%s'", qPrintable(pl));
             }
@@ -2701,10 +2701,11 @@ static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Scor
       {
       if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
       else {
-            double y = (staff + rstaff) * (score->styleD(ST_staffDistance) + 4);             // TODO 4 = #lines/staff - 1
-            y += (placement == "above" ? -3 : 5);
-            y *= score->spatium();
-            el->setReadPos(QPoint(0, y));
+            el->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+            // double y = (staff + rstaff) * (score->styleD(ST_staffDistance) + 4);             // TODO 4 = #lines/staff - 1
+            // y += (placement == "above" ? -3 : 5);
+            // y *= score->spatium();
+            // el->setReadPos(QPoint(0, y));
             }
       el->setUserOff(QPointF(rx, ry));
       el->setMxmlOff(offset);
@@ -3042,7 +3043,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             Text* t = new RehearsalMark(score);
             t->setText(rehearsal);
             if (hasYoffset) t->setYoff(yoffset);
-            else t->setAbove(placement == "above");
+            else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
             if (hasYoffset) t->setYoff(yoffset);
             addElement(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
@@ -3097,7 +3098,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
                   if (hasYoffset) s->setYoff(yoffset);
-                  else s->setAbove(placement == "above");
+                  else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
                   s->setUserOff(QPointF(rx, ry));
                   s->setMxmlOff(offset);
                   s->setTrack((staff + rstaff) * VOICES);
@@ -3126,7 +3127,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "wedge") {
             qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
-            bool above = (placement == "above");
+            // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
                   if (hairpin) {
                         qDebug("overlapping wedge not supported");
@@ -3137,10 +3138,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         hairpin = new Hairpin(score);
                         hairpin->setSubtype(type == "crescendo"
                            ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                        hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+
                         if (hasYoffset)
                               hairpin->setYoff(yoffset);
-                        else
-                              hairpin->setYoff(above ? -3 : 8);
+                        // else
+                        //      hairpin->setYoff(above ? -3 : 8);
                         // hairpin->setUserOff(rx, ry));
                         hairpin->setTrack((staff + rstaff) * VOICES);
                         spanners[hairpin] = QPair<int, int>(tick, -1);

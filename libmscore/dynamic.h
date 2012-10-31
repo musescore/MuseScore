@@ -37,20 +37,17 @@ struct Dyn {
 //   @@ Dynamic
 ///   dynamics marker; determines midi velocity
 //
-//    @P placement Placement ABOVE, BELOW
 //    @P dynRange  DynamicRange  DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
       Q_OBJECT
-      Q_PROPERTY(Placement placement READ placement  WRITE undoSetPlacement)
       Q_PROPERTY(DynamicRange type READ dynRange  WRITE undoSetDynRange)
 
       int _subtype;
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
-      Placement _placement;
       DynamicRange _dynRange;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 
    public:
@@ -82,10 +79,6 @@ class Dynamic : public Text {
       void undoSetDynRange(DynamicRange t);
 
       virtual QLineF dragAnchor() const;
-
-      Placement placement() const { return _placement; }
-      void setPlacement(Placement val) { _placement = val; }
-      void undoSetPlacement(Placement);
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
