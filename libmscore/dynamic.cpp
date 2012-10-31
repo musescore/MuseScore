@@ -79,6 +79,7 @@ Dynamic::Dynamic(const Dynamic& d)
       _subtype   = d._subtype;
       _velocity  = d._velocity;
       _dynRange  = d._dynRange;
+      _placement = d._placement;
       }
 
 //---------------------------------------------------------
@@ -306,7 +307,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
       switch(id) {
             case P_PLACEMENT:     return BELOW;
             case P_DYNAMIC_RANGE: return DYNAMIC_PART;
-            case P_VELOCITY:      return 0;
+            case P_VELOCITY:      return -1;
             default:              return Text::propertyDefault(id);
             }
       }
