@@ -136,8 +136,7 @@ void Hairpin::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       xml.tag("subtype", _subtype);
       xml.tag("veloChange", _veloChange);
-      if (_dynRange != DYNAMIC_PART)
-            xml.tag("dynType", _dynRange);
+      writeProperty(xml, P_DYNAMIC_RANGE);
       writeProperty(xml, P_PLACEMENT);
       SLine::writeProperties(xml);
       xml.etag();
@@ -268,6 +267,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_PLACEMENT:     return BELOW;
+            case P_DYNAMIC_RANGE: return DYNAMIC_PART;
             default:              return SLine::propertyDefault(id);
             }
       }
