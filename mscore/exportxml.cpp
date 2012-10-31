@@ -2394,9 +2394,9 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   }
             */
             if (ppel && ppel->type() == Element::MEASURE) {
-                  Measure* m = static_cast<Measure*>(ppel);
-                  System* sys = m->system();
-                  QRectF bb = sys->staff(el->staffIdx())->bbox();
+                  // Measure* m = static_cast<Measure*>(ppel);
+                  // System* sys = m->system();
+                  // QRectF bb = sys->staff(el->staffIdx())->bbox();
                   /*
                   qDebug("directionTag()  syst x=%g y=%g cpx=%g cpy=%g",
                          sys->pos().x(),  sys->pos().y(),
@@ -2409,6 +2409,12 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   // element is above the staff if center of bbox is above center of staff
                   qDebug("directionTag()  center diff=%g", el->y() + el->height() / 2 - bb.y() - bb.height() / 2);
                   */
+                  if (el->placement() == Element::ABOVE)
+                        tagname += " placement=\"above\"";
+                  else if (el->placement() == Element::BELOW)
+                        tagname += " placement=\"below\"";
+
+#if 0
                   if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA || el->type() == Element::PEDAL || el->type() == Element::TEXTLINE) {
                         SLine const* const sl = static_cast<SLine const* const>(el);
                         if (sl->spannerSegments().size() > 0) {
@@ -2428,6 +2434,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                         else
                               tagname += " placement=\"below\"";
                         }
+#endif
                   } // if (ppel && ...
             }
       xml.stag(tagname);

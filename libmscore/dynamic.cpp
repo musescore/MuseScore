@@ -68,8 +68,7 @@ Dynamic::Dynamic(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _velocity = -1;
-      _placement = BELOW;
-      _dynRange  = DYNAMIC_PART;
+      _dynRange = DYNAMIC_PART;
       setSubtype(0);
       }
 
@@ -79,7 +78,6 @@ Dynamic::Dynamic(const Dynamic& d)
       _subtype   = d._subtype;
       _velocity  = d._velocity;
       _dynRange  = d._dynRange;
-      _placement = d._placement;
       }
 
 //---------------------------------------------------------
@@ -110,7 +108,6 @@ void Dynamic::write(Xml& xml) const
       xml.tag("subtype", subtypeName());
       writeProperty(xml, P_VELOCITY);
       writeProperty(xml, P_DYNAMIC_RANGE);
-      writeProperty(xml, P_PLACEMENT);
       Text::writeProperties(xml, subtype() == 0);
       xml.etag();
       }
@@ -129,8 +126,6 @@ void Dynamic::read(const QDomElement& de)
                   _velocity = e.text().toInt();
             else if (tag == "dynType")
                   _dynRange = DynamicRange(e.text().toInt());
-            else if (tag == "placement")
-                  _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
             else if (!Text::readProperties(e))
                   domError(e);
             }
@@ -237,15 +232,6 @@ QLineF Dynamic::dragAnchor() const
       }
 
 //---------------------------------------------------------
-//   undoSetPlacement
-//---------------------------------------------------------
-
-void Dynamic::undoSetPlacement(Placement v)
-      {
-      score()->undoChangeProperty(this, P_PLACEMENT, v);
-      }
-
-//---------------------------------------------------------
 //   undoSetDynRange
 //---------------------------------------------------------
 
@@ -261,7 +247,6 @@ void Dynamic::undoSetDynRange(DynamicRange v)
 QVariant Dynamic::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_PLACEMENT:         return int(_placement);
             case P_DYNAMIC_RANGE:     return int(_dynRange);
             case P_VELOCITY:          return _velocity;
             case P_SUBTYPE:           return _subtype;
@@ -277,9 +262,6 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
 bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_PLACEMENT:
-                  _placement = Placement(v.toInt());
-                  break;
             case P_DYNAMIC_RANGE:
                   _dynRange = DynamicRange(v.toInt());
                   break;
@@ -305,7 +287,6 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_PLACEMENT:     return BELOW;
             case P_DYNAMIC_RANGE: return DYNAMIC_PART;
             case P_VELOCITY:      return -1;
             default:              return Text::propertyDefault(id);

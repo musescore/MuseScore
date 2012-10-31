@@ -104,7 +104,6 @@ Hairpin::Hairpin(Score* s)
       _subtype     = CRESCENDO;
       _veloChange  = 10;
       _dynRange    = DYNAMIC_PART;
-      _placement   = BELOW;
       }
 
 //---------------------------------------------------------
@@ -161,8 +160,6 @@ void Hairpin::read(const QDomElement& de)
                   _veloChange = val.toInt();
             else if (tag == "dynType")
                   _dynRange = DynamicRange(val.toInt());
-            else if (tag == "placement")
-                  _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
             else if (!SLine::readProperties(e))
                   domError(e);
             }
@@ -196,15 +193,6 @@ void Hairpin::undoSetDynRange(DynamicRange val)
       }
 
 //---------------------------------------------------------
-//   undoSetPlacement
-//---------------------------------------------------------
-
-void Hairpin::undoSetPlacement(Placement v)
-      {
-      score()->undoChangeProperty(this, P_PLACEMENT, v);
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -217,8 +205,6 @@ QVariant Hairpin::getProperty(P_ID id) const
                   return _veloChange;
             case P_DYNAMIC_RANGE:
                   return _dynRange;
-            case P_PLACEMENT:
-                  return _placement;
             default:
                   return SLine::getProperty(id);
             }
@@ -240,9 +226,6 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   break;
             case P_DYNAMIC_RANGE:
                   _dynRange = DynamicRange(v.toInt());
-                  break;
-            case P_PLACEMENT:
-                  _placement = Placement(v.toInt());
                   break;
             default:
                   return SLine::setProperty(id, v);
@@ -266,7 +249,6 @@ void Hairpin::setYoff(qreal val)
 QVariant Hairpin::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_PLACEMENT:     return BELOW;
             case P_DYNAMIC_RANGE: return DYNAMIC_PART;
             default:              return SLine::propertyDefault(id);
             }

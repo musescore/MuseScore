@@ -58,12 +58,10 @@ class Hairpin : public SLine {
       Q_PROPERTY(HairpinType subtype     READ subtype     WRITE undoSetSubtype)
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
       Q_PROPERTY(Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
-      Q_PROPERTY(Placement placement READ placement  WRITE undoSetPlacement)
 
       HairpinType _subtype;
       int _veloChange;
       DynamicRange _dynRange;
-      Placement _placement;
 
    public:
       Hairpin(Score* s);
@@ -85,10 +83,6 @@ class Hairpin : public SLine {
       DynamicRange dynRange() const       { return _dynRange; }
       void setDynRange(DynamicRange t)    { _dynRange = t;    }
       void undoSetDynRange(DynamicRange t);
-
-      Placement placement() const         { return _placement; }
-      void setPlacement(Placement val)    { _placement = val; }
-      void undoSetPlacement(Placement);
 
       virtual void write(Xml&) const;
       virtual void read(const QDomElement&);

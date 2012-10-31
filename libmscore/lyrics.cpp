@@ -91,7 +91,6 @@ void Lyrics::write(Xml& xml) const
             _verseNumber->writeProperties(xml);
             xml.etag();
             }
-      writeProperty(xml, P_PLACEMENT);
       xml.etag();
       }
 
@@ -132,8 +131,6 @@ void Lyrics::read(const QDomElement& de)
                   _verseNumber->read(e);
                   _verseNumber->setParent(this);
                   }
-            else if (tag == "placement")
-                  _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
             else if (!Text::readProperties(e))
                   domError(e);
             }
@@ -312,22 +309,12 @@ void Lyrics::endEdit()
       }
 
 //---------------------------------------------------------
-//   undoSetPlacement
-//---------------------------------------------------------
-
-void Lyrics::undoSetPlacement(Placement v)
-      {
-      score()->undoChangeProperty(this, P_PLACEMENT, v);
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant Lyrics::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_PLACEMENT:         return int(_placement);
             default:
                   return Text::getProperty(propertyId);
             }
@@ -340,9 +327,6 @@ QVariant Lyrics::getProperty(P_ID propertyId) const
 bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_PLACEMENT:
-                  _placement = Placement(v.toInt());
-                  break;
             default:
                   if (!Text::setProperty(propertyId, v))
                         return false;
@@ -359,8 +343,7 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Lyrics::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_PLACEMENT:     return BELOW;
-            default:              return Text::propertyDefault(id);
+            default: return Text::propertyDefault(id);
             }
       }
 
