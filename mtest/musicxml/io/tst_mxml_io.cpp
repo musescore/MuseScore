@@ -55,7 +55,7 @@ private slots:
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
-      // void directions1() { mxmlIoTest("testDirections1"); } // fails due to direction-type pedal
+      void directions1() { mxmlIoTest("testDirections1"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
       void dynamics1() { mxmlIoTest("testDynamics1"); }
@@ -94,8 +94,8 @@ private slots:
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
       void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
-      // void tablature1() { mxmlIoTest("testTablature1"); } fails due to visible key and changed stem direction
-      // void tablature2() { mxmlIoTest("testTablature2"); } fails due to visible key and changed stem direction
+      void tablature1() { mxmlIoTest("testTablature1"); }
+      void tablature2() { mxmlIoTest("testTablature2"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
