@@ -234,6 +234,7 @@ void TextLineSegment::layout()
                   y1 = h;
             }
       setbbox(QRectF(.0, y1, pp2.x(), y2 - y1));
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
