@@ -494,7 +494,14 @@ void BarLine::endEdit()
                   int idx2 = idx1 + _span;
                   // set span 0 to all additional staves
                   for (int idx = idx1 + 1; idx < idx2; ++idx)
-                        score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0, (score()->staff(idx)->lines()-1)*2);
+                        // mensurstrich special case:
+                        // if line spans to top line of a stave AND current staff is
+                        //    the last spanned staff BUT NOT the last score staff
+                        //          keep its bar lines
+                        // otherwise remove them
+                        if(_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1) )
+                              score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0,
+                                          (score()->staff(idx)->lines()-1)*2);
                   }
             // if now bar lines span fewer staves
             else {
