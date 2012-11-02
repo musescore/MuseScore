@@ -2544,8 +2544,17 @@ bool Measure::createEndBarLines()
                         // we are extending down the bar line of a staff above (bl)
                         // and the bar line for this staff (cbl) is not needed: delete it
                         if (cbl && cbl != bl) {
-                              score()->undoRemoveElement(cbl);
-                              changed = true;
+                              // mensurstrich special case:
+                              // if line spans to top line of a stave AND current staff is
+                              //    the last spanned staff (span==1) BUT NOT the last score staff
+                              //          keep its bar line and scan this staff again!
+                              // otherwise remove them
+                              if(spanTo <= 0 && spanTot > 1 && (span == 1 && staffIdx != nstaves-1) )
+                                    staffIdx--;
+                              else {
+                                    score()->undoRemoveElement(cbl);
+                                    changed = true;
+                                    }
                               }
                         }
                   }
