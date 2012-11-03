@@ -478,7 +478,7 @@ add_custom_target(install_plugins_manual
    )
 
 if (MINGW)
-  install(CODE "execute_process(COMMAND cmd /c \"make install_plugins_manual\")")
+  install(CODE "execute_process(COMMAND cmd /c \"mingw32-make install_plugins_manual\")")
 else (MINGW)
   install(CODE "execute_process(COMMAND make install_plugins_manual)")
 endif (MINGW)
