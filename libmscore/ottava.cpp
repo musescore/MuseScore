@@ -52,7 +52,7 @@ void Ottava::layout()
       {
       setPos(0.0, 0.0);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
-      TextLine::layout1();
+      TextLine::layout();
       }
 
 //---------------------------------------------------------
