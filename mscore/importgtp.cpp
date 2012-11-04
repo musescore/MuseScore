@@ -498,7 +498,7 @@ void GuitarPro1::read(QFile* fp)
 
             int frets = 32;   // TODO
             Tablature* tab = new Tablature(frets, strings, tuning2);
-            Part* part = score->part(i);
+            Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setTablature(tab);
             }
@@ -775,7 +775,7 @@ qDebug("BeginRepeat=============================================\n");
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
             Tablature* tab = new Tablature(frets, strings, tuning2);
-            Part* part = score->part(i);
+            Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setTablature(tab);
             part->setPartName(name);
@@ -1255,7 +1255,7 @@ qDebug("BeginRepeat=============================================\n");
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
             Tablature* tab = new Tablature(frets, strings, tuning2);
-            Part* part = score->part(i);
+            Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setTablature(tab);
             part->setPartName(name);
@@ -1773,7 +1773,7 @@ void GuitarPro4::read(QFile* fp)
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
             Tablature* tab = new Tablature(frets, strings, tuning2);
-            Part* part = score->part(i);
+            Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setTablature(tab);
             part->setPartName(name);

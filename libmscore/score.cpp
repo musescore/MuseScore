@@ -452,21 +452,6 @@ static void elementAdjustReadPos(void*, Element* e)
       }
 
 //---------------------------------------------------------
-//   instrument
-//---------------------------------------------------------
-
-Part* Score::part(int n)
-      {
-      int idx = 0;
-      foreach (Part* part, _parts) {
-            idx += part->nstaves();
-            if (n < idx)
-                  return part;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   addMeasure
 //---------------------------------------------------------
 

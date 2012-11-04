@@ -471,7 +471,6 @@ class Score : public QObject {
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
       Staff* staff(int n) const              { return _staves.value(n); }
 
-      Part* part(int staffIdx);
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
@@ -573,7 +572,7 @@ class Score : public QObject {
       void colorItem(Element*);
       QList<Part*>& parts()                { return _parts; }
       const QList<Part*>& parts() const    { return _parts; }
-      Part* part(int n) const              { return _parts[n]; }
+
       void appendPart(Part* p);
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
