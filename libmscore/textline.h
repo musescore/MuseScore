@@ -40,6 +40,7 @@ class TextLineSegment : public LineSegment {
       virtual void draw(QPainter*) const;
 
       virtual void layout();
+      void layout1();
       virtual void setSelected(bool f);
 
       Text* text() const { return _text; }
