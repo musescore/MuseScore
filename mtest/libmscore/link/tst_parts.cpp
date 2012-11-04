@@ -108,7 +108,7 @@ void TestParts::createParts(Score* score)
       // create first part
       //
       QList<Part*> parts;
-      parts.append(score->part(0));
+      parts.append(score->parts().at(0));
       Score* nscore = ::createExcerpt(parts);
       QVERIFY(nscore);
 
@@ -121,7 +121,7 @@ void TestParts::createParts(Score* score)
       // create second part
       //
       parts.clear();
-      parts.append(score->part(1));
+      parts.append(score->parts().at(1));
       nscore = ::createExcerpt(parts);
       QVERIFY(nscore);
 
