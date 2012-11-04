@@ -455,7 +455,7 @@ void MsScWriter::header(const QString title, const QString type,
       if (!footer.isEmpty())
             score->style()->set(ST_oddFooterC, footer);
 
-      Part* part = score->part(0);
+      Part* part = score->staff(0)->part();
       part->setLongName(instrumentName());
       part->setMidiProgram(midiProgram() - 1);
       }

@@ -249,7 +249,7 @@ void Note::setPitch(int val)
       _pitch = restrict(val, 0, 127);
       int pitchOffset = 0;
       if (score()) {
-            Part* part = score()->part(staffIdx());
+            Part* part = staff()->part();
             if (part)
                   pitchOffset = score()->styleB(ST_concertPitch) ? 0 : part->instr()->transpose().chromatic;
             }
