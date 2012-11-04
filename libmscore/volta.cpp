@@ -23,7 +23,7 @@
 
 void VoltaSegment::layout()
       {
-      TextLineSegment::layout();
+      TextLineSegment::layout1();
       rypos() += score()->styleS(ST_voltaY).val() * spatium();
       adjustReadPos();
       }

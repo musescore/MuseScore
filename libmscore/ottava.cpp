@@ -28,7 +28,7 @@
 
 void OttavaSegment::layout()
       {
-      TextLineSegment::layout();
+      TextLineSegment::layout1();
       rypos() += score()->styleS(ST_ottavaY).val() * spatium();
       adjustReadPos();
       }
@@ -52,7 +52,7 @@ void Ottava::layout()
       {
       setPos(0.0, 0.0);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
-      TextLine::layout();
+      TextLine::layout1();
       }
 
 //---------------------------------------------------------
