@@ -3361,7 +3361,7 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
             }
 
       if (number == -1) {
-            int staves = score->part(staff)->nstaves();
+            int staves = score->staff(staff)->part()->nstaves();
             for (int i = 0; i < staves; ++i) {
                   score->staff(staffIdx+i)->setLines(stafflines);
                   }
@@ -3371,7 +3371,7 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
 
       if (t) {
             t->readMusicXML(e);
-            Instrument* i = score->part(staff)->instr();
+            Instrument* i = score->staff(staff)->part()->instr();
             i->setTablature(t);
             }
       }
@@ -3399,7 +3399,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
       for (QDomElement e2 = e; !e2.isNull(); e2 = e2.nextSiblingElement()) {
             if (e2.tagName() == "staves") {
                   staves = e2.text().toInt();
-                  Part* part = score->part(staff);
+                  Part* part = score->staff(staff)->part();
                   part->setStaves(staves);
                   // grow tuplets size, do not shrink to prevent losing info
                   if (staves * VOICES > tuplets.size())
@@ -3442,7 +3442,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         //
                         // apply key to all staves in the part
                         //
-                        int staves = score->part(staff)->nstaves();
+                        int staves = score->staff(staff)->part()->nstaves();
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
                               KeySigEvent oldkey = score->staff(staffIdx+i)->keymap()->key(tick);
@@ -3526,7 +3526,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         else
                               domError(ee);
                         }
-                  score->part(staff)->instr()->setTranspose(interval);
+                  score->staff(staff)->part()->instr()->setTranspose(interval);
                   }
             else if (e.tagName() == "measure-style")
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -3554,7 +3554,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   // add timesig to all staves
                   //ws score->sigmap()->add(tick, TimeSig::getSig(st));
-                  Part* part = score->part(staff);
+                  Part* part = score->staff(staff)->part();
                   int staves = part->nstaves();
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);

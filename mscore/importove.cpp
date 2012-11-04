@@ -240,7 +240,7 @@ void OveToMScore::convert(OVE::OveSong* ove, Score* score) {
     int staffCount = 0;
 	for(int i=0; i<ove_->getPartCount(); ++i ){
 		int partStaffCount = ove_->getStaffCount(i) ;
-		Part* part = score_->part(i);
+		Part* part = score_->parts().at(i);
 
 		for(int j=0; j<partStaffCount; ++j){
 			OVE::Track* track = ove_->getTrack(i, j);
@@ -1357,7 +1357,7 @@ bool isRestDefaultLine(OVE::Note* rest, OVE::NoteType noteType) {
 }
 
 Drumset* getDrumset(Score* score, int part) {
-	Part* p = score->part(part);
+	Part* p = score->parts().at(part);
 	return p->instr()->drumset();
 }
 
