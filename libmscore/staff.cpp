@@ -411,8 +411,10 @@ void Staff::read(const QDomElement& de)
             const QString& val(e.text());
             if (tag == "type") {
                   StaffType* st = score()->staffType(val.toInt());
-                  if (st)
+                  if (st) {
                         _staffType = st;
+                        _barLineTo = (lines()-1) * 2; // set default barLineTo according to staff type
+                        }
                   }
             else if (tag == "small")
                   setSmall(val.toInt());
@@ -650,7 +652,18 @@ void Staff::setStaffType(StaffType* st)
       {
       if (_staffType == st)
             return;
+      int linesOld = lines();
+      int linesNew = st->lines();
       _staffType = st;
+      if(linesNew != linesOld) {
+            int sIdx = score()->staffIdx(this);
+            if(sIdx < 0) {                      // staff does not belong to score (yet?)
+                  _barLineFrom = 0;             // set default barLineFrom/To
+                  _barLineTo = (linesNew-1)*2;  // set default barLineTo
+                  }
+            else                                // update barLineFrom/To in whole score context
+                  score()->updateBarLineSpans(sIdx, linesOld, linesNew /*, true*/);
+            }
 
       //
       //    check for right clef-type and fix
