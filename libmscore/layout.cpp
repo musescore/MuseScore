@@ -2757,23 +2757,10 @@ qreal Score::computeMinWidth(Segment* fs) const
 //    if idxIsStaffIdx ==false, change for all staves with StaffType idx
 //---------------------------------------------------------
 
-void Score::updateBarLineSpans(int idx, int linesOld, int linesNew, bool idxIsStaffIdx)
+void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
       {
       int         nStaves = nstaves();
       Staff*      _staff;
-
-      // if idx is for staff type
-      if(!idxIsStaffIdx) {
-            if(idx < 0 or idx >= _staffTypes.size())
-                  return;                       // no such a staff type
-            // scan all score staffs for this staff type
-            for(int sIdx = 0; sIdx < nStaves; sIdx++)
-                  if(staff(sIdx)->staffType() == _staffTypes.at(idx))
-                        updateBarLineSpans(sIdx, linesOld, linesNew, true);
-            return;
-      }
-
-      // if idx is for staff
 
       // scan staves and check the destination staff of each bar line span
       // barLineSpan is not changed; barLineFrom and barLineTo are changed if they occur in the bottom half of a staff

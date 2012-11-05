@@ -1955,36 +1955,6 @@ void Score::replaceStaffTypes(const QList<StaffType*>& tl)
       Q_ASSERT(this == rootScore());
       for (int idx = 0; idx < tl.size(); idx++)
             addStaffType(idx, tl[idx]->clone());
-/*
-      Score* score = rootScore();
-      int   numCommonTypes = qMin(_staffTypes.size(), tl.size());
-      int   idx;
-
-      // overwrite existing styles with styles in list
-      // re-use existing _stafftype objects, so that pointers to styles in staves remain valid
-      for(idx = 0; idx < numCommonTypes; idx++)
-            if(score->_staffTypes.at(idx)->group() == tl.at(idx)->group()) {
-                  int linesOld = score->_staffTypes.at(idx)->lines();
-                  int linesNew = tl.at(idx)->lines();
-                  if(linesNew != linesOld)
-                        updateBarLineSpans(idx, linesOld, linesNew, false);
-                  switch (tl.at(idx)->group()) {
-                  case PITCHED_STAFF:
-                        *(StaffTypePitched*)(score->_staffTypes[idx]) = *(StaffTypePitched*)(tl.at(idx));
-                        break;
-                  case PERCUSSION_STAFF:
-                        *(StaffTypePercussion*)(score->_staffTypes[idx]) = *(StaffTypePercussion*)(tl.at(idx));
-                        break;
-                  case TAB_STAFF:
-                        *(StaffTypeTablature*)(score->_staffTypes[idx]) = *(StaffTypeTablature*)(tl.at(idx));
-                        break;
-                  }
-            }
-
-      // add new styles
-      for(; idx < tl.size(); idx++)
-            score->_staffTypes.append(tl.at(idx)->clone());
-*/
       }
 
 //---------------------------------------------------------
