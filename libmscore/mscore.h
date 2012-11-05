@@ -329,7 +329,7 @@ enum {
 
 enum BarLineType {
       NORMAL_BAR, DOUBLE_BAR, START_REPEAT, END_REPEAT,
-      BROKEN_BAR, END_BAR, END_START_REPEAT
+      BROKEN_BAR, END_BAR, END_START_REPEAT, DOTTED_BAR
       };
 
 // Icon() subtypes

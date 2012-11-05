@@ -231,6 +231,7 @@ Palette* MuseScore::newBarLinePalette()
             } t[] = {
             { NORMAL_BAR,       QT_TR_NOOP("Normal") },
             { BROKEN_BAR,       QT_TR_NOOP("Dashed") },
+            { DOTTED_BAR,       QT_TR_NOOP("Dotted") },
             { END_BAR,          QT_TR_NOOP("End Bar") },
             { DOUBLE_BAR,       QT_TR_NOOP("Double Bar") },
             { START_REPEAT,     QT_TR_NOOP("Start Repeat") },
