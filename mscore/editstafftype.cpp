@@ -38,8 +38,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setupUi(this);
       staff = st;
       Score* score = staff->score();
+      // copy types from score and set as non-built-in
       foreach(StaffType** const st, score->staffTypes())
              staffTypes.append((*st)->clone());
+      foreach(StaffType* const st, staffTypes)
+             st->setBuildin(false);
       int idx = 0;
       QListWidgetItem* ci = 0;
       foreach(StaffType* st, staffTypes) {
@@ -97,6 +100,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       if (ci)
             staffTypeList->setCurrentItem(ci);
 
+      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updateTabPreview()));
       connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
@@ -612,16 +616,19 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 
 //---------------------------------------------------------
 //   Update tabulature preview
+///   update tabulature staff type in preview score
 //---------------------------------------------------------
 
 void EditStaffType::updateTabPreview()
       {
-      // update tabulature staff type in preview score
-      if(!tabPreview)
+      // if no preview or current type is not a TAB type, do nothing
+      if(!tabPreview ||
+                  staffTypes[staffTypeList->currentItem()->data(Qt::UserRole).toInt()]->group() != TAB_STAFF)
             return;
-      StaffTypeTablature*  stt =
-         static_cast<StaffTypeTablature*>(tabPreview->score()->staffType(TAB_STAFF_TYPE));
+      // create a new staff type from dlg settings and set it into the preview score
+      StaffTypeTablature* stt = new StaffTypeTablature();
       setTabFromDlg(stt);
+      tabPreview->score()->addStaffType(TAB_STAFF_TYPE, stt);
 
       tabPreview->score()->doLayout();
 #ifdef _USE_NAVIGATOR_PREVIEW_
