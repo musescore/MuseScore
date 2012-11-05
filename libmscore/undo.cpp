@@ -2772,6 +2772,7 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case NORMAL_BAR:
                   case DOUBLE_BAR:
                   case BROKEN_BAR:
+                  case DOTTED_BAR:
                         {
                         s->undoChangeRepeatFlags(measure, measure->repeatFlags() & ~RepeatEnd);
                         if (nm)

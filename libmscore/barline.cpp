@@ -38,7 +38,7 @@ int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 
 static const char* barLineNames[] = {
       "normal", "double", "start-repeat", "end-repeat", "dashed", "end",
-      "end-start-repeat"
+      "end-start-repeat", "dotted"
       };
 
 //---------------------------------------------------------
@@ -172,6 +172,12 @@ void BarLine::draw(QPainter* painter) const
       switch(subtype()) {
             case BROKEN_BAR:
                   pen.setStyle(Qt::DashLine);
+                  painter->setPen(pen);
+                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
+                  break;
+
+            case DOTTED_BAR:
+                  pen.setStyle(Qt::DotLine);
                   painter->setPen(pen);
 
             case NORMAL_BAR:
@@ -341,6 +347,7 @@ void BarLine::read(const QDomElement& de)
                               case  4: ct = BROKEN_BAR; break;
                               case  5: ct = END_BAR; break;
                               case  6: ct = END_START_REPEAT; break;
+                              case  7: ct = DOTTED_BAR; break;
                               }
                         setSubtype(ct);
                         }
@@ -386,8 +393,8 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
               }
           if (parent() && parent()->type() == SYSTEM) {
               BarLine* b = static_cast<BarLine*>(e);
-              return (b->subtype() == BROKEN_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
-              }
+              return (b->subtype() == BROKEN_BAR || b->subtype() == DOTTED_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
+              } 
       }else {
             return (type == ARTICULATION
                 && parent()
@@ -687,6 +694,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
                   break;
             case BROKEN_BAR:
             case NORMAL_BAR:
+            case DOTTED_BAR:
                   break;
             default:
                   qDebug("illegal bar line type\n");
