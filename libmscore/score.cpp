@@ -2453,15 +2453,12 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                         continue;
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span - (eidx-sidx));
-//                  else {
-//                        qDebug("TODO: adjust brackets, span %d\n", span);
-//                        }
                   }
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                  int newSpan = span - (eidx-sidx);
+                  int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-                 undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
+                  undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
                   }
             }
       }
