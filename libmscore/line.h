@@ -72,7 +72,7 @@ class LineSegment : public SpannerSegment {
 
 //---------------------------------------------------------
 //   @@ SLine
-//    virtual base class for Hairpin, Trill and TextLine
+///    virtual base class for Hairpin, Trill and TextLine
 //---------------------------------------------------------
 
 class SLine : public Spanner {
