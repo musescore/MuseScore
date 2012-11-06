@@ -32,10 +32,10 @@ enum TimeSigType {
 //   @@ TimeSig
 ///    This class represents a time signature.
 //
-//    @P numerator          int
-//    @P denominator        int
-//    @P numeratorStretch   int
-//    @P denominatorStretch int
+//    @P numerator          int (read only)
+//    @P denominator        int (read only)
+//    @P numeratorStretch   int (read only)
+//    @P denominatorStretch int (read only)
 //    @P numeratorString   QString  text of numerator
 //    @P denominatorString QString  text of denominator
 //    @P showCourtesySig bool show courtesy time signature for this sig if appropriate
