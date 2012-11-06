@@ -53,6 +53,7 @@ BarLine::BarLine(Score* s)
       _spanFrom = 0;
       _spanTo   = DEFAULT_BARLINE_TO;
       _customSpan = false;
+      _customSubtype = false;
       setHeight(DEFAULT_BARLINE_TO/2 * spatium()); // for use in palettes
       }
 
@@ -113,8 +114,8 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             }
       else {
             // for use in palette
-            *y1 = 0.0;
-            *y2 = DEFAULT_BARLINE_TO/2 * _spatium;
+            *y1 = _spanFrom * _spatium / 2;
+            *y2 = _spanTo   * _spatium / 2;
             }
 
       if (selected()) {
@@ -302,10 +303,15 @@ void BarLine::write(Xml& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", subtypeName());
+      if(customSubtype())
+            xml.tag("customSubtype", _customSubtype);
       // if any span value is different from staff's, output all values
-      // (palette bar lines have no staff!)
-      if (staff() && (_span != staff()->barLineSpan()
-                  || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()) )
+      if (  (staff() && (  _span != staff()->barLineSpan()
+                           || _spanFrom != staff()->barLineFrom()
+                           || _spanTo != staff()->barLineTo()
+                         )
+             )
+            || !staff())            // (palette bar lines have no staff: output all values)
             xml.tag(QString("span from=\"%1\" to=\"%2\"").arg(_spanFrom).arg(_spanTo), _span);
       // if no custom value, output _span only (as in previous code)
       else
@@ -351,7 +357,14 @@ void BarLine::read(const QDomElement& de)
                               }
                         setSubtype(ct);
                         }
+                  if(parent() && parent()->type() == SEGMENT) {
+                        Measure* m = static_cast<Segment*>(parent())->measure();
+                        if(subtype() != m->endBarLineType())
+                              setCustomSubtype(true);
+                        }
                   }
+            else if (tag == "customSubtype")
+                  setCustomSubtype(val.toInt() != 0);
             else if (tag == "span") {
                   _span       = val.toInt();
                   _spanFrom   = e.attribute("from", QString::number(_spanFrom)).toInt();
@@ -393,7 +406,9 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
               }
           if (parent() && parent()->type() == SYSTEM) {
               BarLine* b = static_cast<BarLine*>(e);
-              return (b->subtype() == BROKEN_BAR || b->subtype() == DOTTED_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
+              return (b->subtype() == BROKEN_BAR || b->subtype() == DOTTED_BAR
+                      || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR
+                      || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
               } 
       }else {
             return (type == ARTICULATION
@@ -415,16 +430,46 @@ Element* BarLine::drop(const DropData& data)
       if (type == BAR_LINE) {
             BarLine* bl = static_cast<BarLine*>(e);
             BarLineType st = bl->subtype();
-            if (st == subtype()) {
+            // if no change in subtype or no change in span, do nothing
+            if (st == subtype() && bl->spanFrom() == 0 && bl->spanTo() == DEFAULT_BARLINE_TO) {
                   delete e;
                   return 0;
                   }
+            // system left-hand bar line
             if (parent()->type() == SYSTEM) {
                   BarLine* b = static_cast<System*>(parent())->barLine();
                   score()->undoChangeProperty(b, P_SUBTYPE, int(bl->subtype()));
                   delete e;
                   return 0;
                   }
+
+            // check if the new property can apply to this single bar line
+            bool oldRepeat = (subtype() == START_REPEAT || subtype() == END_REPEAT
+                        || subtype() == END_START_REPEAT);
+            bool newRepeat = (bl->subtype() == START_REPEAT || bl->subtype() == END_REPEAT
+                        || bl->subtype() == END_START_REPEAT);
+            // if repeats are not involved or drop refers to span rather than subtype =>
+            // single bar line drop
+            if( (!oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
+                  // if drop refers to span, update this bar line span
+                  if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
+                        // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
+                        // adjust to the number of lines of this bar line staff
+                        int bottomSpan = (staff()->lines()-1) * 2;
+                        int spanFrom   = bl->spanFrom() > 4 ? bottomSpan - (8 - bl->spanFrom()) : bl->spanFrom();
+                        int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
+                        score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
+                        }
+                  // if drop refer to subtype, update this bar line subtype
+                  else {
+                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->subtype()));
+                        setCustomSubtype(true);
+                        }
+                  delete e;
+                  return 0;
+                  }
+
+            // drop applies to all bar lines of the measure
             Measure* m = static_cast<Segment*>(parent())->measure();
             if (st == START_REPEAT) {
                   m = m->nextMeasure();
