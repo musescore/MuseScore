@@ -348,7 +348,8 @@ void Score::layoutStage1()
             MeasureBase* mb = m->prev();
             if (mb && mb->type() == Element::MEASURE) {
                   Measure* pm = static_cast<Measure*>(mb);
-                  if (pm->endBarLineType() != NORMAL_BAR && pm->endBarLineType() != BROKEN_BAR)
+                  if (pm->endBarLineType() != NORMAL_BAR
+                              && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
                         m->setBreakMMRest(true);
                   foreach(Spanner* spanner, pm->spannerBack()) {
                         if (spanner->type() == Element::VOLTA)
