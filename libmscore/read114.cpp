@@ -578,6 +578,8 @@ Score::FileError Score::read114(const QDomElement& de)
             style()->set(ST_lyricsDistance, Spatium(2.0));
       if (styleS(ST_voltaY).val() == MScore::baseStyle()->valueS(ST_voltaY).val())
             style()->set(ST_voltaY, Spatium(-2.0));
+      if (styleB(ST_hideEmptyStaves) == true) // http://musescore.org/en/node/16228
+            style()->set(ST_dontHideStavesInFirstSystem, false);
 
       _showOmr = false;
 
