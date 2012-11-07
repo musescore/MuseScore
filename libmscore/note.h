@@ -72,21 +72,21 @@ class NoteHead : public Symbol {
 //
 //   @P pitch             int   midi pitch
 //   @P tpc               int   tonal pitch class
-//   @P line              int   notehead position
+//   @P line              int   notehead position (read only)
 //   @P fret              int   fret number in tablature
 //   @P string            int   string number in tablature
-//   @P subchannel        int   midi subchannel (for midi articulation)
-//   @P ppitch            int   actual played midi pitch (honoring ottavas)
+//   @P subchannel        int   midi subchannel (for midi articulation) (read only)
+//   @P ppitch            int   actual played midi pitch (honoring ottavas) (read only)
 //   @P ghost             bool  ghost note (guitar: death note)
-//   @P hidden            bool  hidden, not played note
-//   @P mirror            bool  mirror note head on x axis
+//   @P hidden            bool  hidden, not played note (read only)
+//   @P mirror            bool  mirror note head on x axis (read only)
 //   @P small             bool  small note head
 //   @P tuning            qreal tuning offset in cent
 //   @P veloType          enum  OFFSET_VAL, USER_VAL
 //   @P veloOffset        int
-//   @P onTimeOffset      int
+//   @P onTimeOffset      int (read only)
 //   @P onTimeUserOffset  int
-//   @P offTimeOffset     int
+//   @P offTimeOffset     int (read only)
 //   @P offTimeUserOffset int
 //   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
 //   @P dotPosition       enum AUTO, UP, DOWN

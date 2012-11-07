@@ -116,7 +116,7 @@ class PageFormat : public QObject {
 
 //---------------------------------------------------------
 //   @@ Page
-//   @P pagenumber int
+//   @P pagenumber int (read only)
 //---------------------------------------------------------
 
 class Page : public Element {
