@@ -28,7 +28,7 @@ enum SpacerType {
 
 //-------------------------------------------------------------------
 //   @@ Spacer
-//    Vertical spacer element to adjust the distance of staves.
+///    Vertical spacer element to adjust the distance of staves.
 //-------------------------------------------------------------------
 
 class Spacer : public Element {

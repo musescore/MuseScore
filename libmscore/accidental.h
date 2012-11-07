@@ -39,8 +39,8 @@ struct SymElement {
 //   @@ Accidental
 //    @P hasBracket bool
 //    @P small      bool
-//    @P acctype    enum ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ...
-//    @P role       enum ACC_AUTO, ACC_USER
+//    @P acctype    enum ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ... (read only)
+//    @P role       enum ACC_AUTO, ACC_USER (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
@@ -147,7 +147,7 @@ Q_DECLARE_METATYPE(Accidental::AccidentalType)
 
 //---------------------------------------------------------
 //   @@ AccidentalBracket
-//    used as icon in palette
+///    used as icon in palette
 //---------------------------------------------------------
 
 class AccidentalBracket : public Compound {
