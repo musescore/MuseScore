@@ -426,6 +426,7 @@ void System::layout2()
 //   move
 //---------------------------------------------------------
 
+#if 0
 void SysStaff::move(qreal x, qreal y)
       {
       _bbox.translate(x, y);
@@ -434,6 +435,7 @@ void SysStaff::move(qreal x, qreal y)
       foreach(InstrumentName* t, instrumentNames)
             t->move(x, y);
       }
+#endif
 
 //---------------------------------------------------------
 ///   clear
@@ -578,6 +580,7 @@ void System::add(Element* el)
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
             case SLUR_SEGMENT:
+            case PEDAL_SEGMENT:
                   {
 // qDebug("System::add: %p %s spanner %p %s", el, el->name(),
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
@@ -634,6 +637,7 @@ void System::remove(Element* el)
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
             case SLUR_SEGMENT:
+            case PEDAL_SEGMENT:
 // qDebug("System::remove: %p %s spanner %p %s", el, el->name(),
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
 
