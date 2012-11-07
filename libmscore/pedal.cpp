@@ -23,7 +23,7 @@
 
 void PedalSegment::layout()
       {
-      TextLineSegment::layout();
+      TextLineSegment::layout1();
       rypos() += score()->styleS(ST_pedalY).val() * spatium();
       adjustReadPos();
       }
