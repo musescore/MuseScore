@@ -133,6 +133,8 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
 //   QmlPlugin
 //   @@ MuseScore
 //   @P menuPath              QString        where the plugin is placed in menu
+//   @P version               QString
+//   @P description           QString
 //   @P pluginType            QString
 //   @P dockArea              QString
 //   @P division              int            number of MIDI ticks for 1/4 note, read only

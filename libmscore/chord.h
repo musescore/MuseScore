@@ -84,7 +84,7 @@ class LedgerLine : public Line {
 ///   Graphic representation of a chord.
 ///   Single notes are handled as degenerated chords.
 //
-//   @P notes  array[Note]    the list of notes
+//   @P notes  array[Note]    the list of notes (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
