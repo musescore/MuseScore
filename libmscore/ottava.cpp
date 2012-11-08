@@ -29,7 +29,8 @@
 void OttavaSegment::layout()
       {
       TextLineSegment::layout1();
-      rypos() += score()->styleS(ST_ottavaY).val() * spatium();
+      if (parent())     // for palette
+            rypos() += score()->styleS(ST_ottavaY).val() * spatium();
       adjustReadPos();
       }
 

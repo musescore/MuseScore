@@ -341,8 +341,9 @@ void System::layout2()
                   continue;
                   }
             qreal sHeight = staff->height();   // (staff->lines() - 1) * _spatium * staffMag;
-            s->setbbox(QRectF(_leftMargin, y+s->distanceUp(), width() - _leftMargin, sHeight));
-            y += s->distanceUp() + sHeight + s->distanceDown();
+            qreal dup = staffIdx == 0 ? 0.0 : s->distanceUp();
+            s->setbbox(QRectF(_leftMargin, y + dup, width() - _leftMargin, sHeight));
+            y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
             }
 
@@ -421,21 +422,6 @@ void System::layout2()
             staffIdx += nstaves;
             }
       }
-
-//---------------------------------------------------------
-//   move
-//---------------------------------------------------------
-
-#if 0
-void SysStaff::move(qreal x, qreal y)
-      {
-      _bbox.translate(x, y);
-//      foreach(Bracket* b, _brackets)
-//            b->move(x, y);
-      foreach(InstrumentName* t, instrumentNames)
-            t->move(x, y);
-      }
-#endif
 
 //---------------------------------------------------------
 ///   clear
