@@ -247,7 +247,7 @@ void System::layout(qreal xo1)
       else if (_barLine)
             score()->undoRemoveElement(_barLine);
       if (_barLine)
-            _barLine->setPos(_leftMargin + xo1, 0.0);
+            _barLine->rxpos() = _leftMargin + xo1;
 
       //---------------------------------------------------
       //  layout brackets

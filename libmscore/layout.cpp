@@ -572,6 +572,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
+//      qDebug("doLayout");
       {
       QWriteLocker locker(&_layoutLock);
 
