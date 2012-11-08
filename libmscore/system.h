@@ -56,7 +56,6 @@ class SysStaff {
       qreal y() const               { return _bbox.y(); }
       qreal right() const           { return _bbox.right(); }
       void setbbox(const QRectF& r) { _bbox = r; }
-//      void move(qreal x, qreal y);
 
       qreal distanceUp() const      { return _distanceUp;   }
       void setDistanceUp(qreal v)   { _distanceUp = v;      }

@@ -106,7 +106,8 @@ void TrillSegment::layout()
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
       setbbox(rr);
-      rypos() += score()->styleS(ST_trillY).val() * spatium();
+      if (parent())
+            rypos() += score()->styleS(ST_trillY).val() * spatium();
       adjustReadPos();
       }
 
