@@ -76,6 +76,7 @@ class Beam : public Element {
 
       virtual void write(Xml& xml) const;
       virtual void read(const QDomElement&);
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       virtual void toDefault();
 
