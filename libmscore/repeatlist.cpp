@@ -268,7 +268,7 @@ void RepeatList::unwind()
       if (!fm)
             return;
 
-// qDebug("unwind===================\n");
+// qDebug("unwind===================");
 
       rs                  = new RepeatSegment;
       rs->tick            = 0;
@@ -285,8 +285,8 @@ void RepeatList::unwind()
             m->setPlaybackCount(m->playbackCount() + 1);
             int flags = m->repeatFlags();
 
-// qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p\n",
-//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat);
+// qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p flags 0x%x",
+//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, flags);
 
             if (endRepeat) {
                   Volta* volta = _score->searchVolta(m->tick());
@@ -336,7 +336,7 @@ void RepeatList::unwind()
 
             if (isGoto && (endRepeat == m)) {
                   if (continueAt == 0) {
-// qDebug("  isGoto && endReapeat == %p, continueAt == 0\n", m);
+// qDebug("  isGoto && endReapeat == %p, continueAt == 0", m);
                         rs->len = m->tick() + m->ticks() - rs->tick;
                         if (rs->len)
                               append(rs);
