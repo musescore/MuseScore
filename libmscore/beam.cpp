@@ -1868,6 +1868,22 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       }
 
 //---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Beam::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
+      if (_userModified[idx]) {
+            qreal diff = newValue / oldValue;
+            foreach(BeamFragment* f, fragments) {
+                  f->py1[idx] = f->py1[idx] * diff;
+                  f->py2[idx] = f->py2[idx] * diff;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
