@@ -78,7 +78,8 @@ void HairpinSegment::layout()
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
       qreal w = point(score()->styleS(ST_hairpinWidth));
       setbbox(r.adjusted(-w*.5, -w*.5, w, w));
-      rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
+      if (parent())
+            rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
       adjustReadPos();
       }
 

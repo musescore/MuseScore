@@ -582,6 +582,19 @@ void Score::fixTicks()
       }
 
 //---------------------------------------------------------
+//   validSegment
+//---------------------------------------------------------
+
+static bool validSegment(Segment* s, int startTrack, int endTrack)
+      {
+      for (int track = startTrack; track < endTrack; ++track) {
+            if (s->element(track))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   pos2measure
 //---------------------------------------------------------
 
@@ -632,25 +645,17 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
-      int track = i * VOICES;
+      int strack = i * VOICES;
+      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
-      for (Segment* segment = m->first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
-            if ((segment->element(track) == 0)
-               && (segment->element(track+1) == 0)
-               && (segment->element(track+2) == 0)
-               && (segment->element(track+3) == 0)
-               ) {
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
+            if (!validSegment(segment, strack, etrack))
                   continue;
-                  }
-            Segment* ns = segment->next();
-            for (; ns; ns = ns->next()) {
-                  if (ns->subtype() != Segment::SegChordRest)
-                        continue;
-                  if (ns->element(track)
-                     || ns->element(track+1)
-                     || ns->element(track+2)
-                     || ns->element(track+3))
+            Segment* ns = segment->next(st);
+            for (; ns; ns = ns->next(st)) {
+                  if (validSegment(ns, strack, etrack))
                         break;
                   }
             if (!ns || (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0))) {
