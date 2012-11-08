@@ -218,6 +218,7 @@ void LinkedElements::setLid(Score* score, int id)
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userOff *= (newValue / oldValue);
+      _readPos *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
