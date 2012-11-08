@@ -64,10 +64,11 @@ QPointF BarLine::pagePos() const
       {
       if (parent() == 0)
             return pos();
+      System* system;
       if (parent()->type() != SEGMENT)
-            return pos() + parent()->pagePos();
-
-      System* system = static_cast<Segment*>(parent())->measure()->system();
+            system = static_cast<System*>(parent());
+      else
+            system = static_cast<Segment*>(parent())->measure()->system();
 
       qreal yp = y();
       if (system)
@@ -104,7 +105,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             StaffLines* l1   = measure->staffLines(staffIdx1);
             StaffLines* l2   = measure->staffLines(staffIdx2);
 
-            qreal yp = system ? system->staff(staffIdx())->y() : 0.0;
+            qreal yp = system ? system->staff(staffIdx1)->y() : 0.0;
             *y1 = l1->y1() - yp;
             *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
             *y2 = l2->y1() - yp;
@@ -116,7 +117,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             *y2 = DEFAULT_BARLINE_TO/2 * _spatium;
             }
 
-      if(selected()) {
+      if (selected()) {
             *y1 += yoff1;
             *y2 += yoff2;
             }
@@ -386,7 +387,7 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
           if (parent() && parent()->type() == SYSTEM) {
               BarLine* b = static_cast<BarLine*>(e);
               return (b->subtype() == BROKEN_BAR || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR);
-              } 
+              }
       }else {
             return (type == ARTICULATION
                 && parent()
@@ -564,14 +565,14 @@ void BarLine::endEditDrag()
 
       int staffIdx1 = staffIdx();
       int staffIdx2;
-      
+
       System* syst;
       if (parent()->type() == SYSTEM) {
             syst = static_cast<System*>(parent());
-            } 
+            }
       else {
             syst = static_cast<Segment*>(parent())->measure()->system();
-            }      
+            }
       qreal systTopY = syst->pagePos().y();
 
       // determine new span value
