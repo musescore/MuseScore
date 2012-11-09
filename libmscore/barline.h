@@ -34,6 +34,7 @@ class BarLine : public Element {
 
       BarLineType _subtype;
       bool _customSpan;
+      bool _customSubtype;
       int _span;
       int _spanFrom, _spanTo;
       // static variables used while dragging
@@ -66,10 +67,12 @@ class BarLine : public Element {
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       void setCustomSpan(bool val)  { _customSpan = val;    }
+      void setCustomSubtype(bool val) { _customSubtype = val; }
       void setSpan(int val)         { _span = val;          }
       void setSpanFrom(int val)     { _spanFrom = val;      }
       void setSpanTo(int val)       { _spanTo = val;        }
       bool customSpan() const       { return _customSpan;   }
+      bool customSubtype() const    { return _customSubtype;}
       int span() const              { return _span;         }
       int spanFrom() const          { return _spanFrom;     }
       int spanTo() const            { return _spanTo;       }

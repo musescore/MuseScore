@@ -1236,6 +1236,9 @@ void ExportMusicXml::barlineRight(Measure* m)
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
                         case BROKEN_BAR:
+                              xml.tag("bar-style", QString("dashed"));
+                              break;
+                        case DOTTED_BAR:
                               xml.tag("bar-style", QString("dotted"));
                               break;
                         case END_BAR:
