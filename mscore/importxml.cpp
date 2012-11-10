@@ -497,10 +497,10 @@ MusicXml::MusicXml(QDomDocument* d)
 class LoadFile {
       QString _name;
 
-   protected:
+protected:
       QString error;
 
-   public:
+public:
       LoadFile() {}
       virtual ~LoadFile() {}
       virtual bool loader(QFile* f) = 0;        // return false on error
@@ -523,16 +523,16 @@ bool LoadFile::load(const QString& name)
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: file not found:"),
-               name,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                                 QWidget::tr("MuseScore: file not found:"),
+                                 name,
+                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return false;
             }
       if (!loader(&fp)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: load failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                                 QWidget::tr("MuseScore: load failed:"),
+                                 error,
+                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             fp.close();
             return false;
             }
@@ -2197,9 +2197,12 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
-            // set staff type to percussion
+            // TBD: set staff type to percussion ?
+            // Note: part has been read, staff type already set based on clef type and staff-details
+            /*
             for (int j = 0; j < part->nstaves(); ++j)
                   part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
+            */
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -3139,7 +3142,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setSubtype(type == "crescendo"
-                           ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                                            ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
                         hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
 
                         if (hasYoffset)
@@ -3499,8 +3502,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         staffIdx += number - 1;
                   qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                          score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st == TAB_STAFF_TYPE)
-                        score->staff(staffIdx)->setStaffType(score->staffType(TAB_STAFF_TYPE));
+                  if (st != PITCHED_STAFF_TYPE)
+                        score->staff(staffIdx)->setStaffType(score->staffType(st));
                   }
             else if (e.tagName() == "staves")
                   ;  // ignore, already handled
@@ -3509,11 +3512,10 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   int staffIdx = staff;
                   if (number != -1)
                         staffIdx += number - 1;
-                  Tablature* t;
-                  if (score->staff(staffIdx)->isTabStaff()) {
+                  Tablature* t = 0;
+                  if (score->staff(staffIdx)->isTabStaff())
                         t = new Tablature;
-                        xmlStaffDetails(score, staff, t, e);
-                        }
+                  xmlStaffDetails(score, staff, t, e);
                   }
             else if (e.tagName() == "instruments")
                   domNotImplemented(e);
