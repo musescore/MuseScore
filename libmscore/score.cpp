@@ -2550,7 +2550,18 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
       {
-      undo(new ChangeConcertPitch(this, flag));
+      // to be sure all staves are affected this must only be
+      // done in the root score
+      if (rootScore() != this) {
+            rootScore()->cmdConcertPitchChanged(flag, useDoubleSharpsFlats);
+            return;
+      }
+
+      // generate a ChangeConcertPitch for all parts
+      QList<Excerpt*> excerpts = rootScore()->excerpts();
+      undo(new ChangeConcertPitch(rootScore(), flag));
+      foreach (Excerpt *e, excerpts)
+            undo(new ChangeConcertPitch(e->score(), flag));
 
       foreach(Staff* staff, _staves) {
             if (staff->staffType()->group() == PERCUSSION_STAFF)
