@@ -1564,9 +1564,23 @@ qDebug("drop staffList");
                   }
 
             case BAR_LINE:
-                  score()->undoChangeBarLine(this, static_cast<BarLine*>(e)->subtype());
-                  delete e;
+                  {
+                  BarLine* bl = static_cast<BarLine*>(e);
+                  // if dropped bar line refers to span rather than to subtype
+                  if (bl->spanFrom() != 0 && bl->spanTo() != DEFAULT_BARLINE_TO) {
+                        // get existing bar line for this staff, and drop the change to it
+                        Segment* seg = undoGetSegment(Segment::SegEndBarLine, tick() + ticks());
+                        BarLine* cbl = static_cast<BarLine*>(seg->element(staffIdx * VOICES));
+                        if (cbl)
+                              cbl->drop(data);
+                        }
+                  // if dropped bar line refers to line subtype
+                  else {
+                        score()->undoChangeBarLine(this, bl->subtype());
+                        delete e;
+                        }
                   break;
+                  }
 
             case REPEAT_MEASURE:
                   {
@@ -2534,7 +2548,7 @@ bool Measure::createEndBarLines()
                   else {
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
-                        if (bl->subtype() != et) {
+                        if (bl->subtype() != et && !bl->customSubtype()) {
                               score()->undoChangeProperty(bl, P_SUBTYPE, et);
                               bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
                               changed = true;
