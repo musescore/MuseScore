@@ -225,12 +225,14 @@ Palette* MuseScore::newBarLinePalette()
       sp->setMag(0.8);
       sp->setGrid(42, 38);
 
+      // bar line styles
       struct {
             BarLineType type;
             const char* name;
             } t[] = {
             { NORMAL_BAR,       QT_TR_NOOP("Normal") },
             { BROKEN_BAR,       QT_TR_NOOP("Dashed") },
+            { DOTTED_BAR,       QT_TR_NOOP("Dotted") },
             { END_BAR,          QT_TR_NOOP("End Bar") },
             { DOUBLE_BAR,       QT_TR_NOOP("Double Bar") },
             { START_REPEAT,     QT_TR_NOOP("Start Repeat") },
@@ -241,6 +243,24 @@ Palette* MuseScore::newBarLinePalette()
             BarLine* b  = new BarLine(gscore);
             b->setSubtype(t[i].type);
             sp->append(b, qApp->translate("barlines", t[i].name));
+            }
+
+      // bar line spans
+      struct {
+            int         from, to;
+            const char* name;
+            } span[] = {
+            { -1, 1, QT_TR_NOOP("Tick 1") },
+            { -2, 2, QT_TR_NOOP("Tick 2") },
+            { 2,  6, QT_TR_NOOP("Short 1") },
+            { 1,  7, QT_TR_NOOP("Short 2") },
+            };
+      for (unsigned i = 0; i < sizeof(span)/sizeof(*span); ++i) {
+            BarLine* b  = new BarLine(gscore);
+            b->setSubtype(NORMAL_BAR);
+            b->setSpanFrom(span[i].from);
+            b->setSpanTo(span[i].to);
+            sp->append(b, qApp->translate("barlines", span[i].name));
             }
       return sp;
       }
