@@ -2400,8 +2400,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                               barLine->setSubtype(END_BAR);
                         else if (barStyle == "regular")
                               barLine->setSubtype(NORMAL_BAR);
-                        else if (barStyle == "dotted")
+                        else if (barStyle == "dashed")
                               barLine->setSubtype(BROKEN_BAR);
+                        else if (barStyle == "dotted")
+                              barLine->setSubtype(DOTTED_BAR);
                         else if (barStyle == "light-light")
                               barLine->setSubtype(DOUBLE_BAR);
                         /*

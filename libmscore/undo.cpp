@@ -1875,6 +1875,7 @@ void ChangeBarLineSpan::flip()
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
+      // all bar lines of this staff across the whole score needs to be re-laid out and re-drawn
       staff->score()->setLayoutAll(true);
       }
 
@@ -1892,6 +1893,7 @@ ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, i
 
 void ChangeSingleBarLineSpan::flip()
       {
+      barLine->score()->addRefresh(barLine->abbox()); // area of this bar line needs redraw
       int nspan         = barLine->span();
       int nspanFrom     = barLine->spanFrom();
       int nspanTo       = barLine->spanTo();
@@ -1902,9 +1904,11 @@ void ChangeSingleBarLineSpan::flip()
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
+      barLine->layout();                              // update bbox
+      // re-create bar lines for other staves, if span of this bar line decreased
       if(barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
             (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
-//      barLine->score()->setLayoutAll(true);
+      barLine->score()->addRefresh(barLine->abbox()); // new area of this bar line needs redraw
       }
 
 //---------------------------------------------------------
@@ -2772,6 +2776,7 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case NORMAL_BAR:
                   case DOUBLE_BAR:
                   case BROKEN_BAR:
+                  case DOTTED_BAR:
                         {
                         s->undoChangeRepeatFlags(measure, measure->repeatFlags() & ~RepeatEnd);
                         if (nm)
