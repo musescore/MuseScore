@@ -2237,6 +2237,7 @@ void ChangeStaff::flip()
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
                   }
+            // if staff type changed, the whole staff across the entire score needs re-laying out
             if(typeChanged)
                   score->setLayoutAll(true);
             }

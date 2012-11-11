@@ -2752,9 +2752,6 @@ qreal Score::computeMinWidth(Segment* fs) const
 //---------------------------------------------------------
 //   updateBarLineSpans
 ///   updates bar line span(s) when the number of lines of a staff changes
-//
-//    if idxIsStaffIdx == true, change is for staff(idx)
-//    if idxIsStaffIdx ==false, change for all staves with StaffType idx
 //---------------------------------------------------------
 
 void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
@@ -2766,7 +2763,7 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
       // barLineSpan is not changed; barLineFrom and barLineTo are changed if they occur in the bottom half of a staff
       // in practice, a barLineFrom/To from/to the top half of the staff is linked to the staff top line,
       // a barLineFrom/To from/to the bottom half of the staff is linked to staff bottom line;
-      // this ensures plainchant and mensurstrich special bar lines keep their relationships to the staff.
+      // this ensures plainchant and mensurstrich special bar lines keep their relationships to the staff lines.
       for(int sIdx = 0; sIdx < nStaves; sIdx++) {
             _staff = staff(sIdx);
             // if this is the modified staff

@@ -435,7 +435,7 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
-            // system left-hand bar line
+            // system left-side bar line
             if (parent()->type() == SYSTEM) {
                   BarLine* b = static_cast<System*>(parent())->barLine();
                   score()->undoChangeProperty(b, P_SUBTYPE, int(bl->subtype()));
@@ -454,7 +454,7 @@ Element* BarLine::drop(const DropData& data)
                   // if drop refers to span, update this bar line span
                   if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
                         // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
-                        // adjust to the number of lines of this bar line staff
+                        // adjust to the number of syaff lines
                         int bottomSpan = (staff()->lines()-1) * 2;
                         int spanFrom   = bl->spanFrom() > 4 ? bottomSpan - (8 - bl->spanFrom()) : bl->spanFrom();
                         int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
@@ -531,11 +531,11 @@ void BarLine::endEdit()
             _span             = _origSpan;      // restore original span values
             _spanFrom         = _origSpanFrom;
             _spanTo           = _origSpanTo;
-            // undoable change
             score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
             return;
             }
 
+      // if same as staff settings, do nothing
       if (staff()->barLineSpan() == _span && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo)
             return;
 
@@ -553,7 +553,7 @@ void BarLine::endEdit()
             else {
                   int idx1 = staffIdx() + _span;
                   int idx2 = staffIdx() + staff()->barLineSpan();
-                  // set standard span for each un-spanned staff
+                  // set standard span for each no-longer-spanned staff
                   for (int idx = idx1; idx < idx2; ++idx)
                         score()->undoChangeBarLineSpan(score()->staff(idx), 1, 0, (score()->staff(idx)->lines()-1)*2);
                   }
@@ -561,8 +561,6 @@ void BarLine::endEdit()
 
       // update span for the staff the edited bar line belongs to
       score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
-      // added "_score->setLayoutAll(true);" to ChangeBarLineSpan::flip()
-      // otherwise no measure bar line update occurs
       }
 
 //---------------------------------------------------------
@@ -612,7 +610,6 @@ void BarLine::endEditDrag()
       qreal y1, y2;
       getY(&y1, &y2);
       qreal ay0 = pagePos().y();
-//      qreal ay1 = ay0 + y1;
       qreal ay2 = ay0 + y2;                     // absolute (page-relative) bar line bottom coord
 
       int staffIdx1 = staffIdx();
@@ -681,25 +678,9 @@ void BarLine::endEditDrag()
 
       // if any value changed, update
       if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
-/*    ONLY TAKE NOTE OF NEW SPAN VALUES: LET BarLine::endEdit() DO THE JOB!
-            if (newSpan > _span) {
-                  int diff = newSpan - _span;
-                  staffIdx1 += _span;
-                  staffIdx2 = staffIdx1 + diff;
-                  Segment* s = score()->firstMeasure()->first(SegEndBarLine);
-                  for (; s; s = s->next1(SegEndBarLine)) {
-                        for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
-                              Element* e = s->element(staffIdx * VOICES);
-                              if (e) {
-                                    score()->undoRemoveElement(e);
-                                    }
-                              }
-                        }
-                  } */
             _span       = newSpan;
             _spanFrom   = newSpanFrom;
             _spanTo     = newSpanTo;
-//            score()->undoChangeBarLineSpan(staff(), _span, _spanFrom, _spanTo);
             }
 
       yoff1 = yoff2 = 0.0;
