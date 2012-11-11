@@ -232,7 +232,8 @@ void System::layout(qreal xo1)
                   continue;
                   }
             qreal staffMag = staff->mag();
-            s->setbbox(QRectF(_leftMargin + xo1, 0.0, 0.0, 4 * spatium() * staffMag));
+            s->setbbox(QRectF(_leftMargin + xo1, 0.0, 0.0,
+                        (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag));
             }
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
@@ -361,6 +362,7 @@ void System::layout2()
 
       if (_barLine) {
             _barLine->setSpan(lastStaffIdx + 1);
+            _barLine->setSpanTo( (score()->staff(lastStaffIdx)->lines()-1)*2 );
             _barLine->layout();
             }
 

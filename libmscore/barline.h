@@ -23,6 +23,8 @@ class QPainter;
 #define DEFAULT_BARLINE_TO          (4*2)
 #define MIN_BARLINE_FROMTO_DIST     2
 #define MIN_BARLINE_SPAN_FROMTO     (-2)
+// used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
+// fixed once all staves are read
 #define UNKNOWN_BARLINE_TO          (-4)
 
 //---------------------------------------------------------
