@@ -414,11 +414,11 @@ abort();
                   dd = 3.0;
             shoulderH = (dd + smallH) * _spatium;
             if (d > 18.0)
-                  shoulderW = 0.8;
+                  shoulderW = 0.7; // 0.8;
             else if (d > 10)
-                  shoulderW = 0.7;
+                  shoulderW = 0.6; // 0.7;
             else
-                  shoulderW = 0.6;
+                  shoulderW = 0.5; // 0.6;
             }
 
       shoulderH -= p6o.y();
