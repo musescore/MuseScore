@@ -118,7 +118,6 @@ include ( ${PROJECT_SOURCE_DIR}/build/FindPulseAudio.cmake)
 ##
 ##  look for Qt4
 ##
-
 set(QT_MIN_VERSION    "4.8.0")
 set(QT_USE_QTXML         TRUE)
 set(QT_USE_QTSVG         TRUE)
@@ -474,7 +473,7 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    )
 
 add_custom_target(install_plugins_manual
-   COMMAND ${PROJECT_BINARY_DIR}/manual/genManual ${PROJECT_SOURCE_DIR} ${CMAKE_INSTALL_PREFIX}/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+   COMMAND ${PROJECT_BINARY_DIR}/manual/${CMAKE_CFG_INTDIR}/genManual ${PROJECT_SOURCE_DIR} ${CMAKE_INSTALL_PREFIX}/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
    )
 
 if (MINGW)
