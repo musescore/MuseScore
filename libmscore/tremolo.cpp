@@ -27,7 +27,7 @@
 Tremolo::Tremolo(Score* score)
    : Element(score)
       {
-      _subtype = TREMOLO_R8;
+      setSubtype(TREMOLO_R8);
       _chord1  = 0;
       _chord2  = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
@@ -52,44 +52,54 @@ void Tremolo::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
+//   setSubtype
+//---------------------------------------------------------
+
+void Tremolo::setSubtype(TremoloType t)
+      {
+      _subtype = t;
+      switch (subtype()) {
+            case TREMOLO_R16:
+            case TREMOLO_C16:
+                  _lines = 2;
+                  break;
+            case TREMOLO_R32:
+            case TREMOLO_C32:
+                  _lines = 3;
+                  break;
+            case TREMOLO_R64:
+            case TREMOLO_C64:
+                  _lines = 4;
+                  break;
+            default:
+                  _lines = 1;
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Tremolo::layout()
       {
-      qreal sp  = spatium();
-      qreal w   = sp * 1.2;
-      qreal h   = sp * .8;
-      qreal lw  = sp * .35;
-      qreal d   = sp * 0.8;
+      qreal _spatium  = spatium();
+
+      qreal w2  = _spatium * score()->styleS(ST_tremoloWidth).val() * .5;
+      qreal h2  = _spatium * score()->styleS(ST_tremoloBoxHeight).val()  * .5;
+      qreal lw  = _spatium * score()->styleS(ST_tremoloStrokeWidth).val();
+      qreal td  = _spatium * score()->styleS(ST_tremoloDistance).val();
       path      = QPainterPath();
 
-      qreal y   = 0.0;
-      int lines;
-      switch(subtype()) {
-            case TREMOLO_R16:
-            case TREMOLO_C16:
-                  lines = 2;
-                  break;
-            case TREMOLO_R32:
-            case TREMOLO_C32:
-                  lines = 3;
-                  break;
-            case TREMOLO_R64:
-            case TREMOLO_C64:
-                  lines = 4;
-                  break;
-            default:
-                  lines = 1;
-                  break;
-            }
-      for (int i = 0; i < lines; ++i) {
-            path.moveTo(-w*.5, y + h - lw);
-            path.lineTo(w*.5,  y);
-            path.lineTo(w*.5,  y + lw);
-            path.lineTo(-w*.5, y + h);
+      qreal ty   = 0.0;
+      for (int i = 0; i < _lines; ++i) {
+            path.moveTo(-w2,  ty + h2 - lw);
+            path.lineTo( w2,  ty - h2);
+            path.lineTo( w2,  ty - h2 + lw);
+            path.lineTo(-w2,  ty + h2);
+
             path.closeSubpath();
-            y += d;
+            ty += td;
             }
       setbbox(path.boundingRect());
 
@@ -98,7 +108,7 @@ void Tremolo::layout()
             return;
       Note* anchor1 = _chord1->upNote();
       Stem* stem    = _chord1->stem();
-      qreal x;
+      qreal x, y, h;
       if (stem) {
             x  = stem->pos().x();
             y  = stem->pos().y();
@@ -108,32 +118,77 @@ void Tremolo::layout()
             // center tremolo above note
             x = anchor1->x() + anchor1->headWidth() * .5;
             y = anchor1->y();
-            h = 2.0 * spatium() + bbox().height();
+            h = 2.0 * _spatium + bbox().height();
             if (anchor1->line() > 4)
                   h *= -1;
             }
       if (!twoNotes()) {
-            if (_chord1->hook()) {
-                  y += (h - bbox().height()) * .5;
-                  y -= spatium() * .5 * (_chord1->up() ? -1.0 : 1.0);
-                  }
-            else {
-                  bool up  = _chord1->up();
-                  qreal d = _chord1->downNote()->y() - _chord1->upNote()->y();
-                  if (_chord1->beam()) {
-                        qreal bd  = score()->styleD(ST_beamDistance);
-                        qreal bw = score()->styleS(ST_beamWidth).val() * sp;
-                        int n = _chord1->durationType().hooks();
-                        qreal beamHeight = bw * n + bw * bd * (n-1);
-                        if (up)
-                              h += beamHeight;
-                        else
-                              h -= beamHeight;
+            //
+            // single note tremolos
+            //
+            bool up = _chord1->up();
+            int line = up ? _chord1->upLine() : _chord1->downLine();
+            static const qreal t[3][2][4][2] = {
+                  // normal stem
+                  {
+                     // DOWN
+                     {
+                        // even line   odd line
+                        { 6,           5          },  // line 1
+                        { 6 - 2 * .8,  5 - 2 * .8 },  // line 2
+                        { 6 - 4 * .8,  3          },  // line 3
+                        { 2         ,  3          }   // line 4
+                        },
+                     // UP
+                     {
+                        // even line   odd line
+                        { -6,          -5          },  // line 1
+                        { -6,          -5          },  // line 2
+                        { -6,          -3 - 4 * .8 },  // line 3
+                        { -2 - 6 * .8, -3 - 6 * .8 }   // line 4
                         }
-                  if (!up)
-                        d = -d;
-                  y = y - d - ((bbox().height() - d - h) * .5);
-                  }
+                     },
+                  // stem with hook
+                  {
+                     // DOWN
+                     {
+                        // even line   odd line
+                        { 3,           3          },  // line 1
+                        { 2,           2          },  // line 2
+                        { 2,           2          },  // line 3
+                        { 2,           2          }   // line 4
+                        },
+                     // UP
+                     {
+                        // even line   odd line
+                        { -3,          -3          },  // line 1
+                        { -2 - 2 * .8, -2 - 2 * .8 },  // line 2
+                        { -2 - 4 * .8, -2 - 4 * .8 },  // line 3
+                        { -2 - 6 * .8, -2 - 6 * .8 }   // line 4
+                        }
+                     },
+                  // stem with beam
+                  {
+                     // DOWN
+                     {
+                        // even line   odd line
+                        { 3,           3          },  // line 1
+                        { 2,           2          },  // line 2
+                        { 2,           2          },  // line 3
+                        { 2,           2          }   // line 4
+                        },
+                     // UP
+                     {
+                        // even line   odd line
+                        { -3,          -3          },  // line 1
+                        { -2 - 2 * .8, -2 - 2 * .8 },  // line 2
+                        { -2 - 4 * .8, -2 - 4 * .8 },  // line 3
+                        { -2 - 6 * .8, -2 - 6 * .8 }   // line 4
+                        }
+                     },
+                  };
+            int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
+            y = (line + t[idx][up][_lines-1][line & 1]) * _spatium * .5;
             setPos(x, y);
             _chord1->setTremoloChordType(TremoloSingle);
             return;
@@ -242,7 +297,7 @@ void Tremolo::setSubtype(const QString& s)
             t = TREMOLO_C64;
       else
             t = TremoloType(s.toInt());    // for compatibility with old tremolo type
-      _subtype = t;
+      setSubtype(t);
       }
 
 //---------------------------------------------------------

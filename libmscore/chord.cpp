@@ -1140,7 +1140,8 @@ void Chord::layoutStem()
             int ul           = upnote->line();
             int dl           = downnote->line();
             bool shortenStem = score()->styleB(ST_shortenStem);
-
+            if (hookIdx >= 2 || _tremolo)
+                  shortenStem = false;
 
             Spatium progression(score()->styleS(ST_shortStemProgression));
             qreal shortest(score()->styleS(ST_shortestStem).val());
@@ -1160,8 +1161,6 @@ void Chord::layoutStem()
                               normalStemLen += .5;
                         shortenStem = false;
                         }
-                  if (hookIdx >= 2)
-                        shortenStem = false;
                   }
 
             if (_noteType != NOTE_NORMAL) {
@@ -1200,7 +1199,6 @@ void Chord::layoutStem()
                   }
 
             QPointF npos(stemPos());
-            _stem->setLen(stemLen * _spatium);
             _stem->setPos(npos - pagePos());
 
             if (_stemSlash) {
@@ -1208,6 +1206,30 @@ void Chord::layoutStem()
                   _stemSlash->layout();
                   }
 
+            // adjust stem len for tremolo
+            if (_tremolo && !_tremolo->twoNotes()) {
+                  // hook up odd lines
+                  int tab[2][2][2][4] = {
+                        { { { 0, 0, 0,  1 },  // stem - down - even - lines
+                            { 0, 0, 0,  2 }   // stem - down - odd - lines
+                            },
+                          { { 0, 0, 0, -1 },  // stem - up - even - lines
+                            { 0, 0, 0, -2 }   // stem - up - odd - lines
+                            }
+                          },
+                        { { { 0, 0, 1, 2 },   // hook - down - even - lines
+                            { 0, 0, 1, 2 }    // hook - down - odd - lines
+                            },
+                          { { 0, 0, -1, -2 }, // hook - up - even - lines
+                            { 0, 0, -1, -2 }  // hook - up - odd - lines
+                            }
+                          }
+                        };
+                  int odd = (up() ? upLine() : downLine()) & 1;
+                  int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
+                  stemLen += n * .5;
+                  }
+            _stem->setLen(stemLen * _spatium);
             if (_hook) {
                   _hook->setPos(_stem->hookPos());
                   _hook->adjustReadPos();
