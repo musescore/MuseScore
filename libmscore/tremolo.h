@@ -44,6 +44,8 @@ class Tremolo : public Element {
       Chord* _chord2;
       QPainterPath path;
 
+      int _lines;       // derived from _subtype
+
    public:
       Tremolo(Score*);
       Tremolo &operator=(const Tremolo&);
@@ -52,7 +54,8 @@ class Tremolo : public Element {
 
       QString subtypeName() const;
       void setSubtype(const QString& s);
-      void setSubtype(TremoloType t)   { _subtype = t; }
+
+      void setSubtype(TremoloType t);
       TremoloType subtype() const      { return _subtype; }
 
       virtual void draw(QPainter*) const;
@@ -69,6 +72,7 @@ class Tremolo : public Element {
             }
       Fraction tremoloLen() const;
       bool twoNotes() const { return subtype() > TREMOLO_R64; } // is it a two note tremolo?
+      int lines() const { return _lines; }
       };
 
 #endif
