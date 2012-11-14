@@ -487,7 +487,7 @@ qDebug("ChordList::read <%s>", qPrintable(name));
       else {
 #if defined(Q_WS_IOS)
             path = QString("%1/%2").arg(MScore::globalShare()).arg(name);
-#elseif defined(Q_OS_ANDROID)
+#elif defined(Q_OS_ANDROID)
             path = QString(":/styles/%1").arg(name);
 #else
             path = QString("%1styles/%2").arg(MScore::globalShare()).arg(name);
@@ -498,7 +498,7 @@ qDebug("ChordList::read <%s>", qPrintable(name));
       if (!fi.exists())
 #if defined(Q_WS_IOS)
             path = QString("%1/%2").arg(MScore::globalShare()).arg("stdchords.xml");
-#elsif defined(Q_OS_ANDROID)
+#elif defined(Q_OS_ANDROID)
             path = QString(":/styles/stdchords.xml");
 #else
             path = QString("%1styles/%2").arg(MScore::globalShare()).arg("stdchords.xml");
