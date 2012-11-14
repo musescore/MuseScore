@@ -305,6 +305,11 @@ enum StyleIdx {
 
       ST_tabClef,
 
+      ST_tremoloWidth,
+      ST_tremoloBoxHeight,
+      ST_tremoloStrokeWidth,
+      ST_tremoloDistance,
+
       ST_STYLES
       };
 
