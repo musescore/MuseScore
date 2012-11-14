@@ -21,6 +21,6 @@
 RehearsalMark::RehearsalMark(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_REHEARSAL_MARK));
+      setTextStyleType(TEXT_STYLE_REHEARSAL_MARK);
       }
 
