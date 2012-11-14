@@ -199,7 +199,12 @@ StyleType styleTypes[] = {
       StyleType("ottavaHook",              ST_SPATIUM),
       StyleType("ottavaLineWidth",         ST_SPATIUM),
 
-      StyleType("tabClef",                ST_INT),
+      StyleType("tabClef",                 ST_INT),
+
+      StyleType("tremoloWidth",            ST_SPATIUM),
+      StyleType("tremoloBoxHeight",        ST_SPATIUM),
+      StyleType("tremoloLineWidth",        ST_SPATIUM),
+      StyleType("tremoloDistance",         ST_SPATIUM),
       };
 
 static const QString ff("FreeSerifMscore");
@@ -564,7 +569,14 @@ StyleData::StyleData()
             StyleVal(ST_ottavaY, Spatium(-3.0)),
             StyleVal(ST_ottavaHook, Spatium(1.9)),
             StyleVal(ST_ottavaLineWidth, Spatium(.1)),
-            StyleVal(ST_tabClef, int(CLEF_TAB2))
+            StyleVal(ST_tabClef, int(CLEF_TAB2)),
+
+            StyleVal(ST_tremoloWidth, Spatium(1.2)),  // tremolo stroke width: note head width
+            StyleVal(ST_tremoloBoxHeight, Spatium(0.65)),
+            StyleVal(ST_tremoloStrokeWidth, Spatium(0.35)),
+            StyleVal(ST_tremoloDistance, Spatium(0.8))
+
+
             };
 
       for (int idx = 0; idx < ST_STYLES; ++idx)
