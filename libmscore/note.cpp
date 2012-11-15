@@ -249,7 +249,7 @@ void Note::setPitch(int val)
       _pitch = restrict(val, 0, 127);
       int pitchOffset = 0;
       if (score()) {
-            Part* part = score()->part(staffIdx());
+            Part* part = staff() ? staff()->part() : 0;
             if (part)
                   pitchOffset = score()->styleB(ST_concertPitch) ? 0 : part->instr()->transpose().chromatic;
             }
@@ -1053,9 +1053,20 @@ Element* Note::drop(const DropData& data)
 
             case SYMBOL:
             case IMAGE:
+                  e->setParent(this);
+                  score()->undoAddElement(e);
+                  return e;
+
             case FINGERING:
                   e->setParent(this);
                   score()->undoAddElement(e);
+                  {
+                  // set style
+                  Fingering* f = static_cast<Fingering*>(e);
+                  int st = f->textStyleType();
+                  if (st != TEXT_STYLE_UNKNOWN)
+                        f->setTextStyle(score()->textStyle(st));
+                  }
                   return e;
 
             case SLUR:
@@ -2004,6 +2015,6 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             default:
                   break;
             }
-      return QVariant();
+      return Element::propertyDefault(propertyId);
       }
 

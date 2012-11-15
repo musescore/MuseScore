@@ -278,7 +278,7 @@ class Score : public QObject {
 
       InputState _is;
       MStyle _style;
-      QList<StaffType*> _staffTypes;
+      QList<StaffType**> _staffTypes;
 
       QFileInfo info;
       bool _created;          ///< file is never saved, has generated name
@@ -471,7 +471,6 @@ class Score : public QObject {
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
       Staff* staff(int n) const              { return _staves.value(n); }
 
-      Part* part(int staffIdx);
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
@@ -493,7 +492,6 @@ class Score : public QObject {
       void undoChangeEndBarLineType(Measure*, BarLineType);
       void undoChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
       void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
-      void undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type);
       void undoTransposeHarmony(Harmony*, int, int);
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
       void undoRemovePart(Part* part, int idx);
@@ -574,7 +572,7 @@ class Score : public QObject {
       void colorItem(Element*);
       QList<Part*>& parts()                { return _parts; }
       const QList<Part*>& parts() const    { return _parts; }
-      Part* part(int n) const              { return _parts[n]; }
+
       void appendPart(Part* p);
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
@@ -821,10 +819,12 @@ class Score : public QObject {
       SyntiState& syntiState()                           { return _syntiState;         }
       void setSyntiState(const SyntiState& s);
 
-      const QList<StaffType*>& staffTypes() const;
-      QList<StaffType*>& staffTypes();
-      void addStaffTypes(const QList<StaffType*>& tl);
+      const QList<StaffType**>& staffTypes() const { return _staffTypes; }
       void replaceStaffTypes(const QList<StaffType*>&);
+      StaffType* staffType(int idx);
+      int staffTypeIdx(StaffType*) const;
+      void addStaffType(StaffType*);
+      void addStaffType(int idx, StaffType*);
 
       void addLayoutFlags(LayoutFlags val)               { layoutFlags |= val; }
       int symIdx() const                                 { return _symIdx; }
@@ -921,6 +921,7 @@ class Score : public QObject {
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
+      void updateBarLineSpans(int idx, int linesOld, int linesNew);
       };
 
 extern Score* gscore;

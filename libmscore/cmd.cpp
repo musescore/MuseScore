@@ -1561,7 +1561,7 @@ bool Score::processMidiInput()
                   int staffIdx = selection().staffStart();
                   Part* p;
                   if (staffIdx < 0 || staffIdx >= nstaves())
-                        p = part(0);
+                        p = staff(0)->part();
                   else
                         p = staff(staffIdx)->part();
                   if (p)

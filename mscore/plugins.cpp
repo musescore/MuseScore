@@ -114,7 +114,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             QFileInfo fi(s);
             if (fi.baseName() == baseName) {
                   if (MScore::debugMode)
-                        qDebug("  Plugin <%s> already registered\n", qPrintable(pluginPath));
+                        qDebug("  Plugin <%s> already registered", qPrintable(pluginPath));
                   return;
                   }
             }
@@ -122,7 +122,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       QFile f(pluginPath);
       if (!f.open(QIODevice::ReadOnly)) {
             if (MScore::debugMode)
-                  qDebug("Loading Plugin <%s> failed\n", qPrintable(pluginPath));
+                  qDebug("Loading Plugin <%s> failed", qPrintable(pluginPath));
             return;
             }
       if (MScore::debugMode)
@@ -258,7 +258,7 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
                         curMenu->setObjectName(m);
                         menuBar()->insertMenu(menuBar()->actions().back(), (QMenu*)curMenu);
                         if (MScore::debugMode)
-                              qDebug("add Menu <%s>\n", qPrintable(m));
+                              qDebug("add Menu <%s>", qPrintable(m));
                         }
                   else if (i + 1 == n) {
                         QStringList sl = m.split(":");
@@ -282,12 +282,12 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
                               }
 
                         if (MScore::debugMode)
-                              qDebug("add action <%s>\n", qPrintable(m));
+                              qDebug("plugins: add action <%s>", qPrintable(m));
                         }
                   else {
                         curMenu = ((QMenu*)curMenu)->addMenu(m);
                         if (MScore::debugMode)
-                              qDebug("add menu <%s>\n", qPrintable(m));
+                              qDebug("add menu <%s>", qPrintable(m));
                         }
                   }
             }
@@ -350,7 +350,7 @@ bool MuseScore::loadPlugin(const QString& filename)
 
       QDir pluginDir(mscoreGlobalShare + "plugins");
       if (MScore::debugMode)
-            qDebug("Plugin Path <%s>\n", qPrintable(mscoreGlobalShare + "plugins"));
+            qDebug("Plugin Path <%s>", qPrintable(mscoreGlobalShare + "plugins"));
 
       if (filename.endsWith(".qml")){
             QFileInfo fi(pluginDir, filename);

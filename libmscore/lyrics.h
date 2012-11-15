@@ -47,7 +47,6 @@ class Lyrics : public Text {
       ~Lyrics();
       virtual Lyrics* clone() const    { return new Lyrics(*this); }
       virtual ElementType type() const { return LYRICS; }
-      virtual QPointF pagePos() const;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
@@ -67,17 +66,22 @@ class Lyrics : public Text {
       virtual void add(Element*);
       virtual void remove(Element*);
       virtual void draw(QPainter*) const;
+      virtual void endEdit();
 
-      int ticks() const             { return _ticks;    }
-      void setTicks(int tick)       { _ticks = tick;    }
+      int ticks() const                { return _ticks;    }
+      void setTicks(int tick)          { _ticks = tick;    }
       int endTick() const;
-      bool isMelisma() const       { return _ticks > 0; }
+      bool isMelisma() const           { return _ticks > 0; }
 
-      void clearSeparator()         { _separator.clear(); } // TODO: memory leak
-      QList<Line*>* separatorList() { return &_separator; }
+      void clearSeparator()            { _separator.clear(); } // TODO: memory leak
+      QList<Line*>* separatorList()    { return &_separator; }
       virtual void paste();
-      Text* verseNumber() const     { return _verseNumber; }
-      void setVerseNumber(Text* t)  { _verseNumber = t;    }
+      Text* verseNumber() const        { return _verseNumber; }
+      void setVerseNumber(Text* t)     { _verseNumber = t;    }
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

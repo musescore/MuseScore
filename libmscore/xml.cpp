@@ -66,7 +66,7 @@ Xml::Xml(QIODevice* device)
 //   pTag
 //---------------------------------------------------------
 
-void Xml::pTag(const char* name, Placement place)
+void Xml::pTag(const char* name, PlaceText place)
       {
       const char* tags[] = {
             "auto", "above", "below", "left"
@@ -78,7 +78,7 @@ void Xml::pTag(const char* name, Placement place)
 //   readPlacement
 //---------------------------------------------------------
 
-Placement readPlacement(const QDomElement& e)
+PlaceText readPlacement(const QDomElement& e)
       {
       const QString& s(e.text());
       if (s == "auto" || s == "0")
@@ -274,6 +274,16 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         case MScore::USER_VAL:
                               tag(name, QVariant("user"));
+                              break;
+                        }
+                  break;
+            case T_PLACEMENT:
+                  switch(Element::Placement(data.toInt())) {
+                        case Element::ABOVE:
+                              tag(name, QVariant("above"));
+                              break;
+                        case Element::BELOW:
+                              tag(name, QVariant("below"));
                               break;
                         }
                   break;

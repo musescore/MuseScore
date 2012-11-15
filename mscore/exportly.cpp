@@ -2123,6 +2123,7 @@ int ExportLy::voltaCheckBar(Measure* meas, int i)
       voltarray[i].barno=taktnr;
       break;
     case BROKEN_BAR:
+    case DOTTED_BAR:
       i++;
       voltarray[i].voltart=brokenbar;
       voltarray[i].barno=taktnr;

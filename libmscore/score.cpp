@@ -298,8 +298,8 @@ void Score::init()
       startLayout     = 0;
       _undo           = new UndoStack();
       _repeatList     = new RepeatList(this);
-      foreach(StaffType* st, ::staffTypes)
-             _staffTypes.append(st->clone());
+      foreach (StaffType* st, ::staffTypes)
+             addStaffType(st);
 
       _mscVersion     = MSCVERSION;
       _created        = false;
@@ -415,8 +415,11 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
-      foreach(StaffType* st, _staffTypes)
+      foreach(StaffType** st, _staffTypes) {
+            if (!(*st)->buildin())
+                  delete *st;
             delete st;
+            }
       }
 
 //---------------------------------------------------------
@@ -446,21 +449,6 @@ static void elementAdjustReadPos(void*, Element* e)
       {
       if (e->isMovable())
             e->adjustReadPos();
-      }
-
-//---------------------------------------------------------
-//   instrument
-//---------------------------------------------------------
-
-Part* Score::part(int n)
-      {
-      int idx = 0;
-      foreach (Part* part, _parts) {
-            idx += part->nstaves();
-            if (n < idx)
-                  return part;
-            }
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -594,6 +582,19 @@ void Score::fixTicks()
       }
 
 //---------------------------------------------------------
+//   validSegment
+//---------------------------------------------------------
+
+static bool validSegment(Segment* s, int startTrack, int endTrack)
+      {
+      for (int track = startTrack; track < endTrack; ++track) {
+            if (s->element(track))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   pos2measure
 //---------------------------------------------------------
 
@@ -644,25 +645,17 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
-      int track = i * VOICES;
+      int strack = i * VOICES;
+      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
-      for (Segment* segment = m->first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
-            if ((segment->element(track) == 0)
-               && (segment->element(track+1) == 0)
-               && (segment->element(track+2) == 0)
-               && (segment->element(track+3) == 0)
-               ) {
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
+            if (!validSegment(segment, strack, etrack))
                   continue;
-                  }
-            Segment* ns = segment->next();
-            for (; ns; ns = ns->next()) {
-                  if (ns->subtype() != Segment::SegChordRest)
-                        continue;
-                  if (ns->element(track)
-                     || ns->element(track+1)
-                     || ns->element(track+2)
-                     || ns->element(track+3))
+            Segment* ns = segment->next(st);
+            for (; ns; ns = ns->next(st)) {
+                  if (validSegment(ns, strack, etrack))
                         break;
                   }
             if (!ns || (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0))) {
@@ -912,10 +905,6 @@ bool Score::isSavable() const
 void Score::setInputState(const InputState& st)
       {
       _is = st;
-//      printf("Score::setInputState:\n");
-//      printf("  noteEntryMode %d\n", _is.noteEntryMode);
-//      printf("  tick  %d\n", _is.tick());
-//      printf("  track %d\n", _is.track());
       }
 
 //---------------------------------------------------------
@@ -1899,28 +1888,62 @@ TimeSigMap* Score::sigmap() const
       }
 
 //---------------------------------------------------------
-//   staffTypes
+//   addStaffType
+//    ownership of st move to score except if the buildin
+//    flag is set
 //---------------------------------------------------------
 
-const QList<StaffType*>& Score::staffTypes() const
+void Score::addStaffType(StaffType* st)
       {
-      return rootScore()->_staffTypes;
+      addStaffType(-1, st);
       }
 
-QList<StaffType*>& Score::staffTypes()
+void Score::addStaffType(int idx, StaffType* st)
       {
-      return rootScore()->_staffTypes;
+      // if the modified staff type is NOT replacing an existing type
+      if (idx < 0 || idx >= _staffTypes.size()) {
+            // store new pointer to pointer to type data
+            StaffType** stp = new StaffType*;
+            *stp = st;
+            _staffTypes.append(stp);
+            }
+      // if the modified staff type IS replacing an existing type
+      else {
+            StaffType* oldStaffType = *(_staffTypes[idx]);
+            // update the type of each score staff which uses the old type
+            for(int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
+                  if(staff(staffIdx)->staffType() == oldStaffType)
+                        staff(staffIdx)->setStaffType(st);
+            // store the updated staff type
+            *(_staffTypes[idx]) = st;
+            // delete old staff type if not built-in
+            if (!oldStaffType->buildin())
+                  delete oldStaffType;
+            }
       }
 
 //---------------------------------------------------------
-//   setStaffTypes
+//   staffTypeIdx
 //---------------------------------------------------------
 
-void Score::addStaffTypes(const QList<StaffType*>& tl)
+int Score::staffTypeIdx(StaffType* st) const
       {
-      Score* score = rootScore();
-      foreach(StaffType* st, tl)
-            score->_staffTypes.append(st->clone());
+      for (int i = 0; i < _staffTypes.size(); ++i) {
+            if ((*_staffTypes[i]) == st)
+                  return i;
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+StaffType* Score::staffType(int idx)
+      {
+      if (idx < 0 || idx >= _staffTypes.size())
+            return 0;
+      return *(_staffTypes[idx]);
       }
 
 //---------------------------------------------------------
@@ -1929,7 +1952,9 @@ void Score::addStaffTypes(const QList<StaffType*>& tl)
 
 void Score::replaceStaffTypes(const QList<StaffType*>& tl)
       {
-      rootScore()->_staffTypes = tl;
+      Q_ASSERT(this == rootScore());
+      for (int idx = 0; idx < tl.size(); idx++)
+            addStaffType(idx, tl[idx]->clone());
       }
 
 //---------------------------------------------------------
@@ -2433,15 +2458,12 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                         continue;
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span - (eidx-sidx));
-//                  else {
-//                        qDebug("TODO: adjust brackets, span %d\n", span);
-//                        }
                   }
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                  int newSpan = span - (eidx-sidx);
+                  int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-                 undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
+                  undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
                   }
             }
       }

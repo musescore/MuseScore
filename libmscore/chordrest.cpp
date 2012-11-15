@@ -759,6 +759,9 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setParent(segment());
+                  int st = tt->textStyleType();
+                  if (st != TEXT_STYLE_UNKNOWN)
+                        tt->setTextStyle(score()->textStyle(st));
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -792,6 +795,12 @@ Element* ChordRest::drop(const DropData& data)
             case REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
+                  {
+                  Text* f = static_cast<Text*>(e);
+                  int st = f->textStyleType();
+                  if (st != TEXT_STYLE_UNKNOWN)
+                        f->setTextStyle(score()->textStyle(st));
+                  }
                   score()->undoAddElement(e);
                   return e;
 

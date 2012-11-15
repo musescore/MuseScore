@@ -76,7 +76,6 @@ Spanner::Spanner(Score* s)
       _startElement = 0;
       _endElement   = 0;
       _anchor       = ANCHOR_SEGMENT;
-      _yoffset      = 0.0;
       _id           = 0;
       _tick1        = 0;
       _tick2        = 0;
@@ -90,7 +89,6 @@ Spanner::Spanner(const Spanner& s)
       _startElement = s._startElement;
       _endElement   = s._endElement;
       _anchor       = s._anchor;
-      _yoffset      = s._yoffset;
       foreach(SpannerSegment* ss, s.segments) {
             SpannerSegment* nss = ss->clone();
             add(nss);
@@ -245,4 +243,3 @@ void Spanner::addSpannerBack()
       else
             qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
       }
-

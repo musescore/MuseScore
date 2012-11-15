@@ -18,6 +18,18 @@
 #include "score.h"
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void PedalSegment::layout()
+      {
+      TextLineSegment::layout1();
+      if (parent())     // for palette
+            rypos() += score()->styleS(ST_pedalY).val() * spatium();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   Pedal
 //---------------------------------------------------------
 
@@ -30,8 +42,6 @@ Pedal::Pedal(Score* s)
       setEndHook(true);
       setBeginHookHeight(Spatium(-1.2));
       setEndHookHeight(Spatium(-1.2));
-
-      setYoff(8.0);
       }
 
 //---------------------------------------------------------
@@ -46,3 +56,22 @@ void Pedal::read(const QDomElement& e)
             }
       TextLine::read(e);
       }
+
+//---------------------------------------------------------
+//   createLineSegment
+//---------------------------------------------------------
+
+LineSegment* Pedal::createLineSegment()
+      {
+      return new PedalSegment(score());
+      }
+
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
+
+void Pedal::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_pedalY).val()) * spatium();
+      }
+

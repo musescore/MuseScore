@@ -182,7 +182,7 @@
           <number>2</number>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0">
@@ -1290,8 +1290,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>732</x>
+     <y>759</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -1306,8 +1306,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>789</x>
+     <y>759</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

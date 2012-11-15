@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
   <programVersion>2.0.0</programVersion>
-  <programRevision>da1358d</programRevision>
+  <programRevision>bbb35cb</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <SyntiSettings>
-      <s name="soundfont" val="/home/mmg/Documents/soundfonts/FluidR3_GM.sf2"/>
+      <s name="soundfont" val="C:/Program Files/MusicSW/soundfonts/FluidR3_GM.sf2"/>
       <f name="RevRoomsize" val="0.84"/>
       <f name="RevDamp" val="0.2"/>
       <f name="RevWidth" val="1"/>
@@ -49,26 +49,6 @@
         </page-layout>
       <Spatium>1.7</Spatium>
       </Style>
-    <StaffType idx="1" group="tablature">
-      <name>Tab</name>
-      <lines>6</lines>
-      <lineDistance>1.5</lineDistance>
-      <clef>0</clef>
-      <slashStyle>1</slashStyle>
-      <barlines>1</barlines>
-      <timesig>1</timesig>
-      <durations>1</durations>
-      <durationFontName>MuseScore Tab French</durationFontName>
-      <durationFontSize>15</durationFontSize>
-      <durationFontY>0</durationFontY>
-      <fretFontName>MuseScore Tab Renaiss</fretFontName>
-      <fretFontSize>10</fretFontSize>
-      <fretFontY>0</fretFontY>
-      <linesThrough>1</linesThrough>
-      <onLines>0</onLines>
-      <upsideDown>0</upsideDown>
-      <useNumbers>0</useNumbers>
-      </StaffType>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -83,12 +63,17 @@
     <metaTag name="workTitle">Lachrimae Antiquae</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
       <Staff id="1">
         <type>1</type>
         <bracket type="-1" span="1"/>
+        <barLineSpan from="0" to="8">1</barLineSpan>
         </Staff>
       <trackName>Renaissance Tenor Lute (6 course)</trackName>
       <Instrument>

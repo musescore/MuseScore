@@ -232,7 +232,8 @@ void System::layout(qreal xo1)
                   continue;
                   }
             qreal staffMag = staff->mag();
-            s->setbbox(QRectF(_leftMargin + xo1, 0.0, 0.0, 4 * spatium() * staffMag));
+            s->setbbox(QRectF(_leftMargin + xo1, 0.0, 0.0,
+                        (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag));
             }
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
@@ -247,7 +248,7 @@ void System::layout(qreal xo1)
       else if (_barLine)
             score()->undoRemoveElement(_barLine);
       if (_barLine)
-            _barLine->setPos(_leftMargin + xo1, 0.0);
+            _barLine->rxpos() = _leftMargin + xo1;
 
       //---------------------------------------------------
       //  layout brackets
@@ -341,8 +342,9 @@ void System::layout2()
                   continue;
                   }
             qreal sHeight = staff->height();   // (staff->lines() - 1) * _spatium * staffMag;
-            s->setbbox(QRectF(_leftMargin, y+s->distanceUp(), width() - _leftMargin, sHeight));
-            y += s->distanceUp() + sHeight + s->distanceDown();
+            qreal dup = staffIdx == 0 ? 0.0 : s->distanceUp();
+            s->setbbox(QRectF(_leftMargin, y + dup, width() - _leftMargin, sHeight));
+            y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
             }
 
@@ -360,6 +362,7 @@ void System::layout2()
 
       if (_barLine) {
             _barLine->setSpan(lastStaffIdx + 1);
+            _barLine->setSpanTo( (score()->staff(lastStaffIdx)->lines()-1)*2 );
             _barLine->layout();
             }
 
@@ -420,19 +423,6 @@ void System::layout2()
                   }
             staffIdx += nstaves;
             }
-      }
-
-//---------------------------------------------------------
-//   move
-//---------------------------------------------------------
-
-void SysStaff::move(qreal x, qreal y)
-      {
-      _bbox.translate(x, y);
-//      foreach(Bracket* b, _brackets)
-//            b->move(x, y);
-      foreach(InstrumentName* t, instrumentNames)
-            t->move(x, y);
       }
 
 //---------------------------------------------------------
@@ -578,6 +568,7 @@ void System::add(Element* el)
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
             case SLUR_SEGMENT:
+            case PEDAL_SEGMENT:
                   {
 // qDebug("System::add: %p %s spanner %p %s", el, el->name(),
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
@@ -634,6 +625,7 @@ void System::remove(Element* el)
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
             case SLUR_SEGMENT:
+            case PEDAL_SEGMENT:
 // qDebug("System::remove: %p %s spanner %p %s", el, el->name(),
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
 
@@ -958,7 +950,7 @@ qreal System::staffY(int staffIdx) const
                _staves.size(), staffIdx, _vbox);
             return pagePos().y();
             }
-      return _staves[staffIdx]->y() + pagePos().y();
+      return _staves[staffIdx]->y() + y(); // pagePos().y();
       }
 
 //---------------------------------------------------------

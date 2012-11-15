@@ -31,7 +31,7 @@
     <measure number="1">
       <attributes>
         <divisions>1</divisions>
-        <key print-object="no">
+        <key>
           <fifths>0</fifths>
           <mode>major</mode>
           </key>
@@ -79,7 +79,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>6</string>
@@ -95,7 +95,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>5</string>
@@ -111,7 +111,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>4</string>
@@ -129,7 +129,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>3</string>
@@ -145,7 +145,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>2</string>
@@ -161,7 +161,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <technical>
             <string>1</string>

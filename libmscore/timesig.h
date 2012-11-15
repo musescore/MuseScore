@@ -32,10 +32,10 @@ enum TimeSigType {
 //   @@ TimeSig
 ///    This class represents a time signature.
 //
-//    @P numerator          int
-//    @P denominator        int
-//    @P numeratorStretch   int
-//    @P denominatorStretch int
+//    @P numerator          int (read only)
+//    @P denominator        int (read only)
+//    @P numeratorStretch   int (read only)
+//    @P denominatorStretch int (read only)
 //    @P numeratorString   QString  text of numerator
 //    @P denominatorString QString  text of denominator
 //    @P showCourtesySig bool show courtesy time signature for this sig if appropriate
@@ -52,13 +52,16 @@ class TimeSig : public Element {
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
 
       TimeSigType _subtype;
-      bool	_showCourtesySig;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
       QPointF pz, pn;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
+      bool	_showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
+      bool needLayout;
+
+      void layout1();
 
    public:
       TimeSig(Score* = 0);
@@ -74,7 +77,7 @@ class TimeSig : public Element {
       void draw(QPainter*) const;
       void write(Xml& xml) const;
       void read(const QDomElement&);
-      void layout1();
+      void layout();
       Space space() const;
 
       Fraction sig() const               { return _sig; }
@@ -110,6 +113,7 @@ class TimeSig : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       };
 
 #endif

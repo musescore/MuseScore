@@ -73,6 +73,7 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<Element::Placement>("Placement");
       qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
       qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
@@ -84,7 +85,7 @@ void MScore::init()
       qRegisterMetaType<Volta::VoltaType>("VoltaType");
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
-      qRegisterMetaType<Element::DynamicType>("DynamicType");
+      qRegisterMetaType<Element::DynamicRange>("DynamicRange");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

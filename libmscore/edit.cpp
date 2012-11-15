@@ -50,6 +50,8 @@
 #include "range.h"
 #include "hook.h"
 #include "pitchspelling.h"
+#include "tempotext.h"
+#include "dynamic.h"
 
 //---------------------------------------------------------
 //   getSelectedNote
@@ -986,6 +988,15 @@ void Score::cmdFlip()
                   }
             else if (e->type() == Element::NOTEDOT)
                   undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
+            else if (
+                 (e->type() == Element::TEMPO_TEXT)
+               | (e->type() == Element::DYNAMIC)
+               | (e->type() == Element::HAIRPIN)
+               | (e->type() == Element::DYNAMIC)
+               ) {
+                  Element::Placement p = e->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
+                  undoChangeProperty(e, P_PLACEMENT, p);
+                  }
             }
       _layoutAll = true;      // must be set in und/redo
       }

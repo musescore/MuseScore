@@ -17,6 +17,22 @@
 #include "textline.h"
 
 //---------------------------------------------------------
+//   @@ PedalSegment
+//---------------------------------------------------------
+
+class PedalSegment : public TextLineSegment {
+      Q_OBJECT
+
+   protected:
+
+   public:
+      PedalSegment(Score* s) : TextLineSegment(s) {}
+      virtual ElementType type() const     { return PEDAL_SEGMENT; }
+      virtual PedalSegment* clone() const  { return new PedalSegment(*this); }
+      virtual void layout();
+      };
+
+//---------------------------------------------------------
 //   @@ Pedal
 //---------------------------------------------------------
 
@@ -28,6 +44,8 @@ class Pedal : public TextLine {
       virtual Pedal* clone() const     { return new Pedal(*this); }
       virtual ElementType type() const { return PEDAL; }
       virtual void read(const QDomElement&);
+      LineSegment* createLineSegment();
+      virtual void setYoff(qreal);
       };
 #endif
 

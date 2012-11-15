@@ -343,6 +343,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setOrigEditObject(Element* e) { origEditObject = e; }
       Element* getOrigEditObject()       { return origEditObject; }
       void editKey(QKeyEvent*);
+      bool editKeyLyrics(QKeyEvent*);
       void dragScoreView(QMouseEvent* ev);
       void dragNoteEntry(QMouseEvent* ev);
       void noteEntryButton(QMouseEvent* ev);

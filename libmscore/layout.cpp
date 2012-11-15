@@ -348,7 +348,8 @@ void Score::layoutStage1()
             MeasureBase* mb = m->prev();
             if (mb && mb->type() == Element::MEASURE) {
                   Measure* pm = static_cast<Measure*>(mb);
-                  if (pm->endBarLineType() != NORMAL_BAR && pm->endBarLineType() != BROKEN_BAR)
+                  if (pm->endBarLineType() != NORMAL_BAR
+                              && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
                         m->setBreakMMRest(true);
                   foreach(Spanner* spanner, pm->spannerBack()) {
                         if (spanner->type() == Element::VOLTA)
@@ -572,6 +573,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
+//      qDebug("doLayout");
       {
       QWriteLocker locker(&_layoutLock);
 
@@ -2596,6 +2598,7 @@ qreal Score::computeMinWidth(Segment* fs) const
       int segmentIdx = 0;
       qreal x        = 0.0;
 
+      const Segment* pSeg = 0;
       for (Segment* s = fs; s; s = s->next(), ++segmentIdx) {
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
@@ -2603,6 +2606,8 @@ qreal Score::computeMinWidth(Segment* fs) const
             if ((s->subtype() == Segment::SegClef) && (s != fs)) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
+                        if (!staff(staffIdx)->show())
+                              continue;
                         int track  = staffIdx * VOICES;
                         Element* e = s->element(track);
                         if (e) {
@@ -2616,7 +2621,6 @@ qreal Score::computeMinWidth(Segment* fs) const
             Segment::SegmentType segType    = s->subtype();
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            Segment* pSeg          = s == fs ? 0 : s->prev();
             int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
@@ -2711,8 +2715,8 @@ qreal Score::computeMinWidth(Segment* fs) const
                   }
             x += segmentWidth;
 
-            if (segmentIdx)
-                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
+//            if (segmentIdx && pSeg)
+//                  pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                   if (!staff(staffIdx)->show())
@@ -2720,7 +2724,21 @@ qreal Score::computeMinWidth(Segment* fs) const
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
+            //
+            // set pSeg only to used segments
+            //
+            for (int voice = 0; voice < _nstaves * VOICES; ++voice) {
+                  if (!staff(voice/VOICES)->show()) {
+                        voice += VOICES-1;
+                        continue;
+                        }
+                  if (s->element(voice)) {
+                        pSeg = s;
+                        break;
+                        }
+                  }
             }
+
       qreal segmentWidth = 0.0;
       for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
             if (!staff(staffIdx)->show())
@@ -2729,4 +2747,40 @@ qreal Score::computeMinWidth(Segment* fs) const
             }
       x += segmentWidth;
       return x;
+      }
+
+//---------------------------------------------------------
+//   updateBarLineSpans
+///   updates bar line span(s) when the number of lines of a staff changes
+//---------------------------------------------------------
+
+void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
+      {
+      int         nStaves = nstaves();
+      Staff*      _staff;
+
+      // scan staves and check the destination staff of each bar line span
+      // barLineSpan is not changed; barLineFrom and barLineTo are changed if they occur in the bottom half of a staff
+      // in practice, a barLineFrom/To from/to the top half of the staff is linked to the staff top line,
+      // a barLineFrom/To from/to the bottom half of the staff is linked to staff bottom line;
+      // this ensures plainchant and mensurstrich special bar lines keep their relationships to the staff lines.
+      for(int sIdx = 0; sIdx < nStaves; sIdx++) {
+            _staff = staff(sIdx);
+            // if this is the modified staff
+            if(sIdx == idx) {
+                  // if it has no bar line, set barLineTo to a default value
+                  if(_staff->barLineSpan() == 0)
+                        _staff->setBarLineTo( (linesNew-1) * 2);
+                  // if barLineFrom was below the staff middle position
+                  // raise or lower it to account for new number of lines
+                  else if(_staff->barLineFrom() > linesOld - 1)
+                        _staff->setBarLineFrom(_staff->barLineFrom() + (linesNew - linesOld)*2);
+            }
+
+            // if the modified staff is the destination of the current staff bar span AND
+            // barLineTo was below its middle position, raise or lower it
+            if(sIdx + _staff->barLineSpan() - 1 == idx
+                        &&_staff->barLineTo() > linesOld - 1)
+                  _staff->setBarLineTo(_staff->barLineTo() + (linesNew - linesOld)*2);
+            }
       }

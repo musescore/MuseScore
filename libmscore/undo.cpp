@@ -577,15 +577,6 @@ void Score::undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom
       }
 
 //---------------------------------------------------------
-//   undoChangeDynamic
-//---------------------------------------------------------
-
-void Score::undoChangeDynamic(Dynamic* e, int velocity, Element::DynamicType type)
-      {
-      undo(new ChangeDynamic(e, velocity, type));
-      }
-
-//---------------------------------------------------------
 //   undoTransposeHarmony
 //---------------------------------------------------------
 
@@ -1884,6 +1875,7 @@ void ChangeBarLineSpan::flip()
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
+      // all bar lines of this staff across the whole score needs to be re-laid out and re-drawn
       staff->score()->setLayoutAll(true);
       }
 
@@ -1901,6 +1893,7 @@ ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, i
 
 void ChangeSingleBarLineSpan::flip()
       {
+      barLine->score()->addRefresh(barLine->abbox()); // area of this bar line needs redraw
       int nspan         = barLine->span();
       int nspanFrom     = barLine->spanFrom();
       int nspanTo       = barLine->spanTo();
@@ -1911,9 +1904,11 @@ void ChangeSingleBarLineSpan::flip()
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
+      barLine->layout();                              // update bbox
+      // re-create bar lines for other staves, if span of this bar line decreased
       if(barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
             (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
-//      barLine->score()->setLayoutAll(true);
+      barLine->score()->addRefresh(barLine->abbox()); // new area of this bar line needs redraw
       }
 
 //---------------------------------------------------------
@@ -1927,28 +1922,6 @@ void ChangeSlurOffsets::flip()
             slur->setSlurOffset(i, off[i]);
             off[i] = f;
             }
-      }
-
-//---------------------------------------------------------
-//   ChangeDynamic
-//---------------------------------------------------------
-
-ChangeDynamic::ChangeDynamic(Dynamic* d, int v, Element::DynamicType dt)
-      {
-      dynamic  = d;
-      velocity = v;
-      dynType  = dt;
-      }
-
-void ChangeDynamic::flip()
-      {
-      int v = dynamic->velocity();
-      Element::DynamicType t = dynamic->dynType();
-      dynamic->setVelocity(velocity);
-      dynamic->setDynType(dynType);
-      dynType  = t;
-      velocity = v;
-      dynamic->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
       }
 
 //---------------------------------------------------------
@@ -2264,6 +2237,9 @@ void ChangeStaff::flip()
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
                   }
+            // if staff type changed, the whole staff across the entire score needs re-laying out
+            if(typeChanged)
+                  score->setLayoutAll(true);
             }
       staff->score()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty(true);
@@ -2693,13 +2669,13 @@ void ChangeImage::flip()
 void ChangeHairpin::flip()
       {
       int vc        = hairpin->veloChange();
-      Element::DynamicType t = hairpin->dynType();
+      Element::DynamicRange t = hairpin->dynRange();
       bool dg       = hairpin->diagonal();
       hairpin->setVeloChange(veloChange);
-      hairpin->setDynType(dynType);
+      hairpin->setDynRange(dynRange);
       hairpin->setDiagonal(diagonal);
       veloChange = vc;
-      dynType    = t;
+      dynRange   = t;
       diagonal   = dg;
       hairpin->score()->updateHairpin(hairpin);
       }
@@ -2803,6 +2779,7 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case NORMAL_BAR:
                   case DOUBLE_BAR:
                   case BROKEN_BAR:
+                  case DOTTED_BAR:
                         {
                         s->undoChangeRepeatFlags(measure, measure->repeatFlags() & ~RepeatEnd);
                         if (nm)

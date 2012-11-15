@@ -16,8 +16,7 @@ MuseScore [free music notation software](http://musescore.org). http://musescore
 
 * **fluid** Clone of [FluidSynth](http://sourceforge.net/apps/trac/fluidsynth/), ported to C++ and customized
 
-* **fonts** Contains fontforge source + ttf or sfd version
-    (bc. the ttf/sfd can only be created on the linux platform)
+* **fonts** Contains fontforge source (sfd) + ttf/otf fonts
 
 * **libmscore** Data model of MuseScore. It is a subtree and you can find it standalone on [GitHub](https://github.com/musescore/LibMuseScore)
 

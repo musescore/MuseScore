@@ -138,8 +138,6 @@ void InspectorBase::valueChanged(int idx)
       if (ii.r)
             ii.r->setEnabled(!isDefault(idx));
 //      inspector->enableApply(dirty());
-      printf("valueChanged %d\n", idx);
-
       apply();
       }
 

@@ -47,7 +47,7 @@ class Xml : public QTextStream {
       Xml();
 
       void sTag(const char* name, Spatium sp) { Xml::tag(name, QVariant(sp.val())); }
-      void pTag(const char* name, Placement);
+      void pTag(const char* name, PlaceText);
       void fTag(const char* name, const Fraction&);
 
       void header();
@@ -76,7 +76,7 @@ class Xml : public QTextStream {
       static QString htmlToString(const QDomElement&);
       };
 
-extern Placement readPlacement(const QDomElement&);
+extern PlaceText readPlacement(const QDomElement&);
 extern Fraction  readFraction(const QDomElement&);
 extern QString docName;
 extern QPointF readPoint(const QDomElement&);

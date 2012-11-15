@@ -50,13 +50,15 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       instrument = *part->instr();
 
       Score* score = part->score();
-      int idx      = 0;
       int curIdx   = 0;
-      foreach(StaffType* st, score->staffTypes()) {
+      int n = score->staffTypes().size();
+printf("staff types %d\n", n);
+      for (int idx = 0; idx < n; ++idx) {
+            StaffType* st = score->staffType(idx);
+printf("  %d <%s>\n", idx, qPrintable(st->name()));
             staffType->addItem(st->name(), idx);
             if (st == s->staffType())
                   curIdx = idx;
-            ++idx;
             }
       staffType->setCurrentIndex(curIdx);
 
@@ -196,7 +198,7 @@ void EditStaff::apply()
 
       bool s   = small->isChecked();
       bool inv = invisible->isChecked();
-      StaffType* st = score->staffTypes()[staffType->currentIndex()];
+      StaffType* st = score->staffType(staffType->currentIndex());
 
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another

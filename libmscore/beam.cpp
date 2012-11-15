@@ -1567,6 +1567,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       qreal& py1      = f->py1[dIdx];
       qreal& py2      = f->py2[dIdx];
 
+
       qreal _spatium   = spatium();
       QPointF canvPos(pagePos());
       qreal beamMinLen = point(score()->styleS(ST_beamMinLen));
@@ -1637,7 +1638,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal y1   = -200000;
                   qreal y2   = 200000;
                   foreach(const ChordRest* cr, crl) {
-                        if (cr->type() == NOTE) {
+                        if (cr->type() == CHORD) {
                               const Chord* c = static_cast<const Chord*>(cr);
                               qreal y  = c->upNote()->pagePos().y();
                               y1       = qMax(y1, y);
@@ -1649,6 +1650,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   else
                         beamY = _up ? y2 : y1;
                   py1 = beamY;
+
                   //
                   // set stem direction for every chord
                   //
@@ -1750,7 +1752,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                               if (staff()->isTabStaff() || cr1->up())
                                     x2 -= stemWidth;
-//                              if ( !(staff()->isTabStaff() || cr2->up()) )
                               else
                                     x3 += stemWidth;
                               }
@@ -1794,8 +1795,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                            || !qIsFinite(x3) || !qIsFinite(ly2)) {
                               qDebug("bad beam segment: slope %f", slope);
                               }
-                        else
+                        else {
                               beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                              }
                         --i;
                         }
                   }
@@ -1864,6 +1866,22 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             Tremolo* tremolo = c->tremolo();
             if (tremolo)
                   tremolo->layout();
+            }
+      }
+
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Beam::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
+      if (_userModified[idx]) {
+            qreal diff = newValue / oldValue;
+            foreach(BeamFragment* f, fragments) {
+                  f->py1[idx] = f->py1[idx] * diff;
+                  f->py2[idx] = f->py2[idx] * diff;
+                  }
             }
       }
 

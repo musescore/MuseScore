@@ -66,7 +66,7 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "type") {
-                  StaffType* st = score()->staffTypes().value(val.toInt());
+                  StaffType* st = score()->staffType(val.toInt());
                   if (st)
                         _staffType = st;
                   }
@@ -172,7 +172,7 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
       if (instr(0)->useDrumset()) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
-                  staff->setStaffType(score()->staffTypes().value(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score()->staffType(PERCUSSION_STAFF_TYPE));
                   staff->setLines(lines);
                   }
             }
@@ -206,10 +206,10 @@ Score::FileError Score::read114(const QDomElement& de)
                   }
             else if (tag == "StaffType") {
                   int idx        = ee.attribute("idx").toInt();
-                  StaffType* ost = _staffTypes.value(idx);
+                  StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
-                        st = ost;
+                        st = ost->clone();
                   else {
                         QString group  = ee.attribute("group", "pitched");
                         if (group == "percussion")
@@ -220,10 +220,8 @@ Score::FileError Score::read114(const QDomElement& de)
                               st  = new StaffTypePitched();
                         }
                   st->read(ee);
-                  if (idx < _staffTypes.size())
-                        _staffTypes[idx] = st;
-                  else
-                        _staffTypes.append(st);
+                  st->setBuildin(false);
+                  addStaffType(idx, st);
                   }
             else if (tag == "siglist")
                   _sigmap->read(ee, _fileDivision);
@@ -451,7 +449,7 @@ Score::FileError Score::read114(const QDomElement& de)
                         s1->measure()->add(s);
                         int n = volta->spannerSegments().size();
                         if (n) {
-                              volta->setYoff(-styleS(ST_voltaHook).val());
+                              // volta->setYoff(-styleS(ST_voltaHook).val());
                               // LineSegment* ls = volta->segmentAt(0);
                               // ls->setReadPos(QPointF());
                               }
@@ -574,6 +572,14 @@ Score::FileError Score::read114(const QDomElement& de)
                   staff->setBarLineSpan(n - idx);
                   }
             }
+
+      // adjust some styles
+      if (styleS(ST_lyricsDistance).val() == MScore::baseStyle()->valueS(ST_lyricsDistance).val())
+            style()->set(ST_lyricsDistance, Spatium(2.0));
+      if (styleS(ST_voltaY).val() == MScore::baseStyle()->valueS(ST_voltaY).val())
+            style()->set(ST_voltaY, Spatium(-2.0));
+      if (styleB(ST_hideEmptyStaves) == true) // http://musescore.org/en/node/16228
+            style()->set(ST_dontHideStavesInFirstSystem, false);
 
       _showOmr = false;
 
