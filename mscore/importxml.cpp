@@ -2701,7 +2701,7 @@ static void metronome(QDomElement e, Text* t)
 //   addElement
 //---------------------------------------------------------
 
-static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* score, QString& placement,
+static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* /* score */, QString& placement,
                        qreal rx, qreal ry, int offset, Measure* measure, int tick)
       {
       if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
