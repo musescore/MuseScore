@@ -96,8 +96,8 @@ class TimeSig : public Element {
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
 
-      bool showCourtesySig() const       { return _showCourtesySig; };
-      void setShowCourtesySig(bool v)    { _showCourtesySig = v;    };
+      bool showCourtesySig() const       { return _showCourtesySig; }
+      void setShowCourtesySig(bool v)    { _showCourtesySig = v;    }
       void undoSetShowCourtesySig(bool v);
 
       QString numeratorString() const    { return _numeratorString;   }
