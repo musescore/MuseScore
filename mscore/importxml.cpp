@@ -3348,6 +3348,20 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       }
 
 //---------------------------------------------------------
+//   setStaffLines - set bracket and barline span for a single staff
+//---------------------------------------------------------
+
+static void setStaffLines(Score* score, int staffIdx, int stafflines)
+      {
+      score->staff(staffIdx)->setLines(stafflines);
+      BracketItem b(NO_BRACKET, 0);
+      score->staff(staffIdx)->addBracket(b);
+      // Following barLineTo value differs from the default set in staff.cpp,
+      // but results in the same barlines as the new score wizard.
+      score->staff(staffIdx)->setBarLineTo(stafflines * 2);
+      }
+
+//---------------------------------------------------------
 //   xmlStaffDetails
 //---------------------------------------------------------
 
@@ -3367,12 +3381,11 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
 
       if (number == -1) {
             int staves = score->staff(staff)->part()->nstaves();
-            for (int i = 0; i < staves; ++i) {
-                  score->staff(staffIdx+i)->setLines(stafflines);
-                  }
+            for (int i = 0; i < staves; ++i)
+                  setStaffLines(score, staffIdx+i, stafflines);
             }
       else
-            score->staff(staffIdx)->setLines(stafflines);
+            setStaffLines(score, staffIdx, stafflines);
 
       if (t) {
             t->readMusicXML(e);
@@ -3493,8 +3506,6 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         }
                   }
             else if (e.tagName() == "clef") {
-                  // for tablature clef, set staff to tab
-                  // TODO TBD: same for percussion ?
                   int st = xmlClef(e, staff, measure);
                   int number = e.attribute(QString("number"), "-1").toInt();
                   int staffIdx = staff;
