@@ -418,6 +418,8 @@ class Score : public QObject {
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
+      void createPlayEvents();
+      void createPlayEvents(Measure*);
 
    public:
       void setDirty(bool val);
@@ -678,7 +680,7 @@ class Score : public QObject {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       void pasteStaff(const QDomElement&, ChordRest* dst);
-      void toEList(EventMap* events);
+      void renderMidi(EventMap* events);
       void renderPart(EventMap* events, Part*);
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }

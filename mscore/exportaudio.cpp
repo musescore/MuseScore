@@ -60,7 +60,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       MScore::sampleRate = sampleRate;
 
       EventMap events;
-      score->toEList(&events);
+      score->renderMidi(&events);
 
       SF_INFO info;
       memset(&info, 0, sizeof(info));
