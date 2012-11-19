@@ -21,11 +21,10 @@
 #ifndef __CHORDEDITOR_H__
 #define __CHORDEDITOR_H__
 
-#include "libmscore/pos.h"
+#include "libmscore/noteevent.h"
 
 class ChordView;
-class Chord;
-class ChordRuler;
+class Note;
 
 //---------------------------------------------------------
 //   ChordEditor
@@ -35,19 +34,21 @@ class ChordEditor : public QDialog {
       Q_OBJECT
 
       ChordView* pianoroll;
-      Chord* _chord;
+      Note* _note;
+      QDialogButtonBox* bb;
+      NoteEventList* events;
+      int notes;
 
    private slots:
-//      void keyPressed(int);
-//      void keyReleased(int);
-//      void moveLocator(int);
-//      void cmd(QAction*);
-      virtual void accept();
+      void clicked(QAbstractButton*);
+      void accept();
+      void reject();
 
    public slots:
 
    public:
-      ChordEditor(Chord*, QWidget* parent = 0);
+      ChordEditor(Note*, QWidget* parent = 0);
+      ~ChordEditor();
       };
 
 #endif

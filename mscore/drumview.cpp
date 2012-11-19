@@ -73,7 +73,7 @@ DrumItem::DrumItem(Note* n)
 void DrumItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
       {
 //      Chord* chord = note->chord();
-      int x1       = note->onTimeOffset() + note->onTimeUserOffset();
+      int x1       = 0; // note->onTimeOffset() + note->onTimeUserOffset();
       painter->setPen(pen());
       painter->setBrush(isSelected() ? Qt::yellow : Qt::blue);
       painter->drawPolygon(polygon().translated(x1, 0.0));

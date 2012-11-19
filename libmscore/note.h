@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: note.h 5534 2012-04-12 17:40:51Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -22,6 +21,7 @@
 #include "element.h"
 #include "symbol.h"
 #include "durationtype.h"
+#include "noteevent.h"
 
 class Tie;
 class Chord;
@@ -84,10 +84,6 @@ class NoteHead : public Symbol {
 //   @P tuning            qreal tuning offset in cent
 //   @P veloType          enum  OFFSET_VAL, USER_VAL
 //   @P veloOffset        int
-//   @P onTimeOffset      int (read only)
-//   @P onTimeUserOffset  int
-//   @P offTimeOffset     int (read only)
-//   @P offTimeUserOffset int
 //   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
 //   @P dotPosition       enum AUTO, UP, DOWN
 //   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
@@ -122,10 +118,6 @@ class Note : public Element {
       Q_PROPERTY(qreal tuning                  READ tuning            WRITE undoSetTuning)
       Q_PROPERTY(MScore::ValueType veloType    READ veloType          WRITE undoSetVeloType)
       Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
-      Q_PROPERTY(int onTimeOffset              READ onTimeOffset)
-      Q_PROPERTY(int onTimeUserOffset          READ onTimeUserOffset  WRITE undoSetOnTimeUserOffset)
-      Q_PROPERTY(int offTimeOffset             READ offTimeOffset)
-      Q_PROPERTY(int offTimeUserOffset         READ offTimeUserOffset WRITE undoSetOffTimeUserOffset)
       Q_PROPERTY(MScore::DirectionH userMirror READ userMirror        WRITE undoSetUserMirror)
       Q_PROPERTY(MScore::Direction dotPosition READ dotPosition       WRITE undoSetDotPosition)
       Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
@@ -140,7 +132,6 @@ class Note : public Element {
       NoteHeadGroup _headGroup;
       mutable int _tpc;       ///< tonal pitch class
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
-      int  _ppitch;           ///< played pitch (honor ottavas etc.); cached value
       bool _ghost;            ///< ghost note (guitar: death note)
       bool _hidden;           ///< markes this note as the hidden one if there are
                               ///< overlapping notes; hidden notes are not played
@@ -158,12 +149,6 @@ class Note : public Element {
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
-      int _onTimeOffset;      ///< start note offset in ticks, used for arpeggio
-      int _onTimeUserOffset;  ///< start note user offset
-
-      int _offTimeOffset;     ///< stop note offset in ticks
-      int _offTimeUserOffset; ///< stop note user offset
-
       MScore::DirectionH _userMirror; ///< user override of mirror
       MScore::Direction _dotPosition; ///< dot position: above or below current staff line
 
@@ -176,7 +161,7 @@ class Note : public Element {
 
       NoteDot* _dots[3];
 
-      QList<NoteEvent*> _playEvents;
+      NoteEventList _playEvents;
 
       int _lineOffset;        ///< Used during mouse dragging.
       QList<Spanner*> _spannerFor;
@@ -208,26 +193,26 @@ class Note : public Element {
       qreal headWidth() const;
       qreal headHeight() const;
       int noteHead() const;
-      NoteHeadGroup headGroup() const  { return _headGroup; }
-      NoteHeadType headType() const    { return _headType;  }
+      NoteHeadGroup headGroup() const     { return _headGroup; }
+      NoteHeadType headType() const       { return _headType;  }
       void setHeadGroup(NoteHeadGroup val);
-      void setHeadType(NoteHeadType t) { _headType = t;     }
+      void setHeadType(NoteHeadType t)    { _headType = t;     }
 
-      int pitch() const               { return _pitch;    }
+      int pitch() const                   { return _pitch;    }
       void setPitch(int val);
       void undoSetPitch(int val);
       void setPitch(int a, int b);
       int ppitch() const;
-      qreal tuning() const           { return _tuning;   }
-      void setTuning(qreal v)        { _tuning = v;      }
+      qreal tuning() const                { return _tuning;   }
+      void setTuning(qreal v)             { _tuning = v;      }
 
-      int tpc() const                 { return _tpc;      }
+      int tpc() const                     { return _tpc;      }
       void setTpc(int v);
       void undoSetTpc(int v);
       void setTpcFromPitch();
 
       Q_INVOKABLE Accidental* accidental() const    { return _accidental; }
-      void setAccidental(Accidental* a) { _accidental = a;    }
+      void setAccidental(Accidental* a)   { _accidental = a;    }
 
       int line() const                { return _line + _lineOffset;   }
       void setLine(int n);
@@ -286,7 +271,7 @@ class Note : public Element {
       void setDotPosition(MScore::Direction d) { _dotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
-      void toDefault();
+      void reset();
       void setMag(qreal val);
 
       MScore::ValueType veloType() const    { return _veloType;          }
@@ -294,15 +279,8 @@ class Note : public Element {
       int veloOffset() const           { return _veloOffset;        }
       void setVeloOffset(int v)        { _veloOffset = v;           }
 
-      int onTimeOffset() const         { return _onTimeOffset;      }
-      void setOnTimeOffset(int v)      { _onTimeOffset = v;         }
-      int onTimeUserOffset() const     { return _onTimeUserOffset;  }
-      void setOnTimeUserOffset(int v)  { _onTimeUserOffset = v;     }
-
-      int offTimeOffset() const        { return _offTimeOffset;     }
-      void setOffTimeOffset(int v)     { _offTimeOffset = v;        }
-      int offTimeUserOffset() const    { return _offTimeUserOffset; }
-      void setOffTimeUserOffset(int v) { _offTimeUserOffset = v;    }
+      void setOnTimeOffset(int v);
+      void setOffTimeOffset(int v);
 
       void setBend(Bend* b)            { _bend = b;    }
       int customizeVelocity(int velo) const;
@@ -310,9 +288,10 @@ class Note : public Element {
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);
-      QList<NoteEvent*>& playEvents()                { return _playEvents; }
-      const QList<NoteEvent*>& playEvents() const    { return _playEvents; }
-      void setPlayEvents(const QList<NoteEvent*>& v);
+      NoteEventList& playEvents()                { return _playEvents; }
+      const NoteEventList& playEvents() const    { return _playEvents; }
+      NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
+      void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
       QList<Spanner*> spannerFor() const        { return _spannerFor;         }
       QList<Spanner*> spannerBack() const       { return _spannerBack;        }

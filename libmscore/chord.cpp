@@ -180,16 +180,17 @@ int Chord::downString() const
 Chord::Chord(Score* s)
    : ChordRest(s)
       {
-      _stem          = 0;
-      _hook          = 0;
-      _stemDirection = MScore::AUTO;
-      _arpeggio      = 0;
-      _tremolo       = 0;
+      _stem             = 0;
+      _hook             = 0;
+      _stemDirection    = MScore::AUTO;
+      _arpeggio         = 0;
+      _tremolo          = 0;
       _tremoloChordType = TremoloSingle;
-      _glissando     = 0;
-      _noteType      = NOTE_NORMAL;
-      _stemSlash     = 0;
-      _noStem        = false;
+      _glissando        = 0;
+      _noteType         = NOTE_NORMAL;
+      _stemSlash        = 0;
+      _noStem           = false;
+      _userPlayEvents   = false;
       setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
       }
 
@@ -205,7 +206,9 @@ Chord::Chord(const Chord& c)
       _arpeggio      = 0;
       _stemSlash     = 0;
 
-      _noStem = c._noStem;
+      _noStem         = c._noStem;
+      _userPlayEvents = c._userPlayEvents;
+
       if (c._stem)
             add(new Stem(*(c._stem)));
       if (c._hook)
@@ -1573,7 +1576,6 @@ const QRectF& Chord::bbox() const
 
 static void renderArpeggio(QList<Note*> notes, bool up)
       {
-
       if (notes.isEmpty())
             return;
 
@@ -1760,10 +1762,39 @@ Element* Chord::drop(const DropData& data)
                         }
                   return atr;
                   }
+
             case CHORDLINE:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   break;
+
+            case TREMOLO:
+                  {
+                  Tremolo* t = static_cast<Tremolo*>(e);
+                  if (t->twoNotes()) {
+                        Segment* s = segment()->next();
+                        while (s) {
+                              if (s->element(track()) && s->element(track())->type() == CHORD)
+                                    break;
+                              s = s->next();
+                              }
+                        if (s == 0) {
+                              qDebug("no segment for second note of tremolo found\n");
+                              delete e;
+                              return 0;
+                              }
+                        Chord* ch2 = static_cast<Chord*>(s->element(track()));
+                        t->setChords(this, ch2);
+                        }
+                  }
+                  if (tremolo())
+                        score()->undoRemoveElement(tremolo());
+                  e->setParent(this);
+                  e->setTrack(track());
+                  score()->undoAddElement(e);
+                  renderTremolo();
+                  break;
+
             default:
                   return ChordRest::drop(data);
             }
@@ -1777,7 +1808,7 @@ Element* Chord::drop(const DropData& data)
 void Chord::renderArticulation(ArticulationType type)
       {
       int key  = staff()->key(segment()->tick()).accidentalType();
-      QList<NoteEvent*> events;
+      NoteEventList events;
       int pitch     = upNote()->ppitch();
       int pitchDown = diatonicUpDown(key, pitch, -1);
       int pitchUp   = diatonicUpDown(key, pitch, 1);
@@ -1787,25 +1818,83 @@ void Chord::renderArticulation(ArticulationType type)
                   //
                   // create default playback for Mordent
                   //
-                  events.append(new NoteEvent(0, 0, 125));
-                  events.append(new NoteEvent(pitchUp - pitch, 125, 125));
-                  events.append(new NoteEvent(0, 250, 750));
+                  events.append(NoteEvent(0, 0, 125));
+                  events.append(NoteEvent(pitchUp - pitch, 125, 125));
+                  events.append(NoteEvent(0, 250, 750));
                   break;
             case Articulation_Prall:
                   //
                   // create default playback events for PrallSym
                   //
-                  events.append(new NoteEvent(0, 0, 125));
-                  events.append(new NoteEvent(pitchDown - pitch, 125, 125));
-                  events.append(new NoteEvent(0, 250, 750));
+                  events.append(NoteEvent(0, 0, 125));
+                  events.append(NoteEvent(pitchDown - pitch, 125, 125));
+                  events.append(NoteEvent(0, 250, 750));
                   break;
             default:
                   return;
             }
       if (!events.isEmpty()) {
+            foreach(Note* note, _notes) {
+                  note->setPlayEvents(events);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   renderTremolo
+//---------------------------------------------------------
+
+void Chord::renderTremolo()
+      {
+      if (!_tremolo)
+            return;
+      if (_tremolo->twoNotes()) {
+            Fraction tl = _tremolo->tremoloLen();
+            Fraction cl = durationType().fraction();
+            Fraction r = cl / tl;
+            int repeats = r.numerator() / r.denominator();
+
+            if (tremoloChordType() == TremoloFirstNote) {
+                  repeats /= 2;
+                  Segment* seg = segment();
+                  Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+                  Segment* seg2 = seg->next(st);
+                  while (seg2 && !seg2->element(track()))
+                        seg2 = seg2->next(st);
+                  ChordRest* cr = static_cast<ChordRest*>(seg2->element(track()));
+                  if (cr && cr->type() == Element::CHORD) {
+                        // Chord* c2 = static_cast<Chord*>(cr);
+                        // int tick = tick() + tickOffset;
+                        for (int i = 0; i < repeats; ++i) {
+                              // playChord(events, chord, instr, velocity, tick, tl.ticks());
+                              // tick += tl.ticks();
+                              // playChord(events, c2, instr, velocity, tick, tl.ticks());
+                              // tick += tl.ticks();
+                              }
+                        }
+                  else
+                        qDebug("Tremolo: cannot find 2. chord\n");
+                  }
+            return;
+            }
+      NoteEventList events;
+      int gateTime = 80;
+
+      int n = 0;
+      switch (_tremolo->lines()) {
+            case 1: n = 2; break;
+            case 2: n = 4; break;
+            case 3: n = 8; break;
+            case 4: n = 16; break;
+            }
+      int l = 1000 / n;
+      int ll = 1000 * gateTime / (n * 100);
+      for (int i = 0; i < n; ++i)
+            events.append(NoteEvent(0, l * i, ll));
+
+      if (!events.isEmpty()) {
             foreach(Note* note, _notes)
                   note->setPlayEvents(events);
-            qDeleteAll(events);
             }
       }
 
@@ -2038,14 +2127,14 @@ QPointF Chord::layoutArticulation(Articulation* a)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Chord::toDefault()
+void Chord::reset()
       {
       score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
       score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
-      ChordRest::toDefault();
+      ChordRest::reset();
       }
 
 

@@ -691,10 +691,10 @@ void Tuplet::updateGrips(int* grips, QRectF*grip) const
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Tuplet::toDefault()
+void Tuplet::reset()
       {
       score()->addRefresh(canvasBoundingRect());
 
@@ -702,7 +702,7 @@ void Tuplet::toDefault()
       undoChangeProperty(P_P2,        QPointF());
       undoChangeProperty(P_DIRECTION, propertyDefault(P_DIRECTION));
 
-      Element::toDefault();
+      Element::reset();
       layout();
       score()->addRefresh(canvasBoundingRect());
       }

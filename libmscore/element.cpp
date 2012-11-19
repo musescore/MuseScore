@@ -411,10 +411,10 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Element::toDefault()
+void Element::reset()
       {
       if (!_userOff.isNull())
             score()->undoChangeProperty(this, P_USER_OFF, QPointF());

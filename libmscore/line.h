@@ -60,7 +60,7 @@ class LineSegment : public SpannerSegment {
       void setPos2(const QPointF& p)              { _p2 = p;                }
       QPointF pos2() const                        { return _p2 + _userOff2; }
       const QPointF& ipos2() const                { return _p2;             }
-      virtual void toDefault();
+      virtual void reset();
       virtual void spatiumChanged(qreal, qreal);
       virtual QPointF pagePos() const;
       virtual bool isEdited(SpannerSegment*) const;
