@@ -31,6 +31,7 @@
 #include "midipatch.h"
 #include "pitchvalue.h"
 #include "timesig.h"
+#include "noteevent.h"
 
 class ElementList;
 class Element;
@@ -86,6 +87,9 @@ class BarLine;
 
 class UndoCommand {
       QList<UndoCommand*> childList;
+
+   protected:
+      virtual void flip() {}
 
    public:
       virtual ~UndoCommand();
@@ -314,8 +318,6 @@ class ChangePitch : public UndoCommand {
 
    public:
       ChangePitch(Note* note, int pitch, int tpc, int l/*, int f, int string*/);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangePitch");
       };
 
@@ -333,8 +335,6 @@ class ChangeKeySig : public UndoCommand {
 
    public:
       ChangeKeySig(KeySig*, KeySigEvent newKeySig, bool sc, bool sn);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeKeySig");
       };
 
@@ -348,8 +348,6 @@ class FlipNoteDotDirection : public UndoCommand {
 
    public:
       FlipNoteDotDirection(Note* n) : note(n) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("FlipNoteDotDirection");
       };
 
@@ -364,8 +362,6 @@ class ChangeMeasureLen : public UndoCommand {
 
    public:
       ChangeMeasureLen(Measure*, Fraction);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeMeasureLen");
       };
 
@@ -380,8 +376,6 @@ class ChangeElement : public UndoCommand {
 
    public:
       ChangeElement(Element* oldElement, Element* newElement);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeElement");
       };
 
@@ -396,8 +390,6 @@ class ChangeRepeatFlags : public UndoCommand {
 
    public:
       ChangeRepeatFlags(Measure*, int flags);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeRepeatFlags");
       };
 
@@ -412,8 +404,6 @@ class ChangeVoltaEnding : public UndoCommand {
 
    public:
       ChangeVoltaEnding(Volta*, const QList<int>&);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeVoltaEnding");
       };
 
@@ -428,8 +418,6 @@ class ChangeVoltaText : public UndoCommand {
 
    public:
       ChangeVoltaText(Volta*, const QString&);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeVoltaText");
       };
 
@@ -444,8 +432,6 @@ class ChangeChordRestSize : public UndoCommand {
 
    public:
       ChangeChordRestSize(ChordRest*, bool small);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeChordRestSize");
       };
 
@@ -460,8 +446,6 @@ class ChangeChordNoStem : public UndoCommand {
 
    public:
       ChangeChordNoStem(Chord*, bool noStem);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeChordNoStem");
       };
 
@@ -476,8 +460,6 @@ class ChangeEndBarLineType : public UndoCommand {
 
    public:
       ChangeEndBarLineType(Measure*, BarLineType subtype);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeEndBarLineType");
       };
 
@@ -494,8 +476,6 @@ class ChangeBarLineSpan : public UndoCommand {
 
    public:
       ChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeBarLineSpan")
       };
 
@@ -512,8 +492,6 @@ class ChangeSingleBarLineSpan : public UndoCommand {
 
    public:
       ChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeSingleBarLineSpan")
       };
 
@@ -534,8 +512,6 @@ class ChangeSlurOffsets : public UndoCommand {
             off[2] = o3;
             off[3] = o4;
             }
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeSlurOffsets");
       };
 
@@ -551,28 +527,8 @@ class SigInsertTime : public UndoCommand {
 
    public:
       SigInsertTime(Score*, int tick, int len);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("SigInsertTime");
       };
-
-#if 0
-//---------------------------------------------------------
-//   ChangeCopyright
-//---------------------------------------------------------
-
-class ChangeCopyright : public UndoCommand {
-      Score* score;
-      QString text;
-      void flip();
-
-   public:
-      ChangeCopyright(Score*, const QString&);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("ChangeCopyright");
-      };
-#endif
 
 //---------------------------------------------------------
 //   TransposeHarmony
@@ -585,8 +541,6 @@ class TransposeHarmony : public UndoCommand {
 
    public:
       TransposeHarmony(Harmony*, int rootTpc, int baseTpc);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("TransposeHarmony");
       };
 
@@ -618,8 +572,6 @@ class ChangeInstrumentShort : public UndoCommand {
 
    public:
       ChangeInstrumentShort(int, Part*, QList<StaffNameDoc>);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeInstrumentShort");
       };
 
@@ -636,8 +588,6 @@ class ChangeInstrumentLong : public UndoCommand {
    public:
       const QList<StaffNameDoc>& longNames() const;
       ChangeInstrumentLong(int, Part*, QList<StaffNameDoc>);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeInstrumentLong");
       };
 
@@ -652,8 +602,6 @@ class ChangeChordRestLen : public UndoCommand {
 
    public:
       ChangeChordRestLen(ChordRest*, const TDuration& d);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeChordRestLen");
       };
 
@@ -668,8 +616,6 @@ class MoveElement : public UndoCommand {
 
    public:
       MoveElement(Element*, const QPointF&);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("MoveElement");
       };
 
@@ -685,8 +631,6 @@ class ChangeBracketSpan : public UndoCommand {
 
    public:
       ChangeBracketSpan(Staff*, int column, int span);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeBracketSpan");
       };
 
@@ -733,8 +677,6 @@ class ChangeConcertPitch : public UndoCommand {
 
    public:
       ChangeConcertPitch(Score* s, bool val);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeConcertPitch");
       };
 
@@ -769,8 +711,6 @@ class ChangePatch : public UndoCommand {
    public:
       ChangePatch(Channel* c, const MidiPatch* pt)
          : channel(c), patch(*pt) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangePitch");
       };
 
@@ -808,8 +748,6 @@ class ChangeStaff : public UndoCommand {
 
    public:
       ChangeStaff(Staff*, bool small, bool invisible, StaffType*);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeStaff");
       };
 
@@ -827,8 +765,6 @@ class ChangePart : public UndoCommand {
    public:
       ChangePart(Part*, const Instrument&, const QString& name);
 
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangePart");
       };
 
@@ -846,8 +782,6 @@ class ChangePartProperty : public UndoCommand {
    public:
       ChangePartProperty(Part* e, int i, const QVariant& v)
          : part(e), id(i), property(v) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangePartProperty");
       };
 
@@ -863,8 +797,6 @@ class ChangeTextStyle : public UndoCommand {
 
    public:
       ChangeTextStyle(Score*, const TextStyle& style);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeTextStyle");
       };
 
@@ -894,8 +826,6 @@ class ChangeStretch : public UndoCommand {
 
    public:
       ChangeStretch(Measure*, qreal);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeStretch");
       };
 
@@ -910,8 +840,6 @@ class ChangeStyle : public UndoCommand {
 
    public:
       ChangeStyle(Score*, const MStyle&);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeStyle");
       };
 
@@ -926,8 +854,6 @@ class ChangeChordStaffMove : public UndoCommand {
 
    public:
       ChangeChordStaffMove(Chord*, int);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeChordStaffMove");
       };
 
@@ -943,8 +869,6 @@ class ChangeVelocity : public UndoCommand {
 
    public:
       ChangeVelocity(Note*, MScore::ValueType, int);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeVelocity");
       };
 
@@ -960,8 +884,6 @@ class ChangeMStaffProperties : public UndoCommand {
 
    public:
       ChangeMStaffProperties(MStaff*, bool visible, bool slashStyle);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeMStaffProperties");
       };
 
@@ -982,31 +904,7 @@ class ChangeMeasureProperties : public UndoCommand {
    public:
       ChangeMeasureProperties(Measure*, bool breakMM,
          int repeatCount, qreal stretch, int noOffset, bool irregular);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeMeasureProperties");
-      };
-
-//---------------------------------------------------------
-//   ChangeNoteProperties
-//---------------------------------------------------------
-
-class ChangeNoteProperties : public UndoCommand {
-      Note* note;
-
-      MScore::ValueType _veloType;
-      int _veloOffset;        ///< velocity user offset in promille
-
-      int _onTimeUserOffset;  ///< start note user offset
-      int _offTimeUserOffset; ///< stop note user offset
-
-      void flip();
-
-   public:
-      ChangeNoteProperties(Note*, MScore::ValueType, int, int, int);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("ChangeNoteProperties");
       };
 
 //---------------------------------------------------------
@@ -1025,8 +923,6 @@ class ChangeTimesig : public UndoCommand {
    public:
       ChangeTimesig(TimeSig* _timesig, bool sc, const Fraction&,
          const Fraction&, TimeSigType subtype);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeTimesig");
       };
 
@@ -1075,8 +971,6 @@ class ChangeImage : public UndoCommand {
    public:
       ChangeImage(Image* i, bool l, bool a, int _z)
          : image(i), lockAspectRatio(l), autoScale(a), z(_z) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeImage");
       };
 
@@ -1095,8 +989,6 @@ class ChangeHairpin : public UndoCommand {
    public:
       ChangeHairpin(Hairpin* h, int c, Element::DynamicRange t, bool dg)
          : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeHairpin");
       };
 
@@ -1112,8 +1004,6 @@ class ChangeDuration : public UndoCommand {
 
    public:
       ChangeDuration(ChordRest* _cr, Fraction _d) : cr(_cr), d(_d) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeDuration");
       };
 
@@ -1157,8 +1047,6 @@ class ChangeBend : public UndoCommand {
 
    public:
       ChangeBend(Bend* b, QList<PitchValue> p) : bend(b), points(p) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeBend");
       };
 
@@ -1174,8 +1062,6 @@ class ChangeTremoloBar : public UndoCommand {
 
    public:
       ChangeTremoloBar(TremoloBar* b, QList<PitchValue> p) : bend(b), points(p) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeTremoloBar");
       };
 
@@ -1191,8 +1077,6 @@ class ChangeNoteEvents : public UndoCommand {
 
    public:
       ChangeNoteEvents(Chord* n, const QList<NoteEvent*>& l) : chord(n), events(l) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeNoteEvents");
       };
 
@@ -1208,8 +1092,6 @@ class ChangeInstrument : public UndoCommand {
 
    public:
       ChangeInstrument(InstrumentChange* _is, const Instrument& i) : is(_is), instrument(i) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeInstrument");
       };
 
@@ -1232,8 +1114,6 @@ class ChangeBoxProperties : public UndoCommand {
       ChangeBoxProperties(Box *, qreal, qreal, qreal, qreal,
          Spatium, Spatium,
          qreal, qreal);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeBoxProperties");
       };
 
@@ -1249,8 +1129,6 @@ class SwapCR : public UndoCommand {
 
    public:
       SwapCR(ChordRest* a, ChordRest* b) : cr1(a), cr2(b) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("SwapCR");
       };
 
@@ -1266,8 +1144,6 @@ class ChangeClefType : public UndoCommand {
 
    public:
       ChangeClefType(Clef*, ClefType cl, ClefType tc);
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeClef");
       };
 
@@ -1284,8 +1160,6 @@ class MoveStaff : public UndoCommand {
 
    public:
       MoveStaff(Staff* s, Part* p, int idx) : staff(s), part(p), rstaff(idx) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("MoveStaff");
       };
 
@@ -1302,8 +1176,6 @@ class ChangeDurationType : public UndoCommand {
    public:
       ChangeDurationType(ChordRest* _cr, TDuration _t)
          : cr(_cr), t(_t) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeDurationType");
       };
 
@@ -1321,8 +1193,6 @@ class ChangeSpannerAnchor : public UndoCommand {
    public:
       ChangeSpannerAnchor(Spanner* s, Element* se, Element* ee)
          : spanner(s), startElement(se), endElement(ee) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeSpannerAnchor");
       };
 
@@ -1339,8 +1209,6 @@ class ChangeStaffUserDist : public UndoCommand {
    public:
       ChangeStaffUserDist(Staff* s, qreal d)
          : staff(s), dist(d) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeStaffUserDist");
       };
 
@@ -1358,8 +1226,6 @@ class ChangeProperty : public UndoCommand {
    public:
       ChangeProperty(Element* e, P_ID i, const QVariant& v)
          : element(e), id(i), property(v) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty");
       };
@@ -1377,9 +1243,24 @@ class ChangeMetaText : public UndoCommand {
 
    public:
       ChangeMetaText(Score* s, const QString& i, const QString& t) : score(s), id(i), text(t) {}
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
       UNDO_NAME("ChangeMetaText");
+      };
+
+//---------------------------------------------------------
+//   ChangeEventList
+//---------------------------------------------------------
+
+class ChangeEventList : public UndoCommand {
+      Note* note;
+      NoteEventList events;
+      bool userModified;
+
+      void flip();
+
+   public:
+      ChangeEventList(Note* n, const NoteEventList& l, bool um) : note(n), events(l), userModified(um) {}
+      ~ChangeEventList();
+      UNDO_NAME("ChangeEventList");
       };
 
 #endif

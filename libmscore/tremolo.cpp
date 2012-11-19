@@ -306,23 +306,13 @@ void Tremolo::setSubtype(const QString& s)
 
 Fraction Tremolo::tremoloLen() const
       {
-      switch(subtype()) {
-            default:
-            case TREMOLO_R8:
-            case TREMOLO_C8:
-                  return Fraction(1,8);
-
-            case TREMOLO_R16:
-            case TREMOLO_C16:
-                  return Fraction(1,16);
-
-            case TREMOLO_R32:
-            case TREMOLO_C32:
-                  return Fraction(1,32);
-
-            case TREMOLO_R64:
-            case TREMOLO_C64:
-                  return Fraction(1,64);
+      Fraction f;
+      switch(lines()) {
+            case 1: f.set(1,8); break;
+            case 2: f.set(1,16); break;
+            case 3: f.set(1,32); break;
+            case 4: f.set(1,64); break;
             }
+      return f;
       }
 

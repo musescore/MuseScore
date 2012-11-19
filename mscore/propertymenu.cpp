@@ -676,13 +676,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
-            Chord* nc = new Chord(*note->chord());
-            ChordEditor ce(nc);
+            ChordEditor ce(note);
             mscore->disableCommands(true);
-            if (ce.exec())
-                  score()->undoChangeElement(note->chord(), nc);
-            else
-                  delete nc;
+            ce.exec();
             mscore->disableCommands(false);
             }
       else if (cmd == "style") {

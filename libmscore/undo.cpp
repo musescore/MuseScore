@@ -120,6 +120,7 @@ void UndoCommand::undo()
 #endif
             childList[i]->undo();
             }
+      flip();
       }
 
 //---------------------------------------------------------
@@ -135,6 +136,7 @@ void UndoCommand::redo()
 #endif
             childList[i]->redo();
             }
+      flip();
       }
 
 //---------------------------------------------------------
@@ -2520,42 +2522,6 @@ void ChangeMeasureProperties::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeNoteProperties
-//---------------------------------------------------------
-
-ChangeNoteProperties::ChangeNoteProperties(Note* n, MScore::ValueType v1, int v3,
-   int v6, int v9)
-      {
-      note               = n;
-      _veloType          = v1;
-      _veloOffset        = v3;      ///< velocity user offset in promille
-      _onTimeUserOffset  = v6;      ///< start note user offset
-      _offTimeUserOffset = v9;      ///< stop note user offset
-      };
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeNoteProperties::flip()
-      {
-      MScore::ValueType v1 = note->veloType();
-      int       v3 = note->veloOffset();
-      int       v6 = note->onTimeUserOffset();
-      int       v9 = note->offTimeUserOffset();
-
-      note->setVeloType(_veloType);
-      note->setVeloOffset(_veloOffset);
-      note->setOnTimeUserOffset(_onTimeUserOffset);
-      note->setOffTimeUserOffset(_offTimeUserOffset);
-
-      _veloType          = v1;
-      _veloOffset        = v3;
-      _onTimeUserOffset  = v6;
-      _offTimeUserOffset = v9;
-      }
-
-//---------------------------------------------------------
 //   ChangeTimesig
 //---------------------------------------------------------
 
@@ -3071,5 +3037,25 @@ void ChangeMetaText::flip()
       QString s = score->metaTag(id);
       score->setMetaTag(id, text);
       text = s;
+      }
+
+//---------------------------------------------------------
+//   ChangeEventList
+//---------------------------------------------------------
+
+ChangeEventList::~ChangeEventList()
+      {
+      }
+
+//---------------------------------------------------------
+//   ChangeEventList::flip
+//---------------------------------------------------------
+
+void ChangeEventList::flip()
+      {
+      note->playEvents().swap(events);
+      bool um = note->chord()->userPlayEvents();
+      note->chord()->setUserPlayEvents(userModified);
+      userModified = um;
       }
 

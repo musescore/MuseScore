@@ -47,3 +47,14 @@ void NoteEvent::write(Xml& xml) const
       xml.tag("len", _len);
       xml.etag();
       }
+
+//---------------------------------------------------------
+//   NoteEventList
+//---------------------------------------------------------
+
+NoteEventList::NoteEventList()
+   : QList<NoteEvent>()
+      {
+      }
+
+
