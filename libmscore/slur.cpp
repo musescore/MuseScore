@@ -973,10 +973,10 @@ void SlurTie::undoSetSlurDirection(MScore::Direction d)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void SlurTie::toDefault()
+void SlurTie::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       }
@@ -1011,16 +1011,16 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void SlurSegment::toDefault()
+void SlurSegment::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undo(new ChangeSlurOffsets(this, QPointF(), QPointF(), QPointF(), QPointF()));
       for (int i = 0; i < SLUR_GRIPS; ++i)
             ups[i].off = QPointF();
-      parent()->toDefault();
+      parent()->reset();
       parent()->layout();
       }
 

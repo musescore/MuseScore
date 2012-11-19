@@ -107,6 +107,7 @@ class Chord : public ChordRest {
 
       NoteType   _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
       bool       _noStem;
+      bool       _userPlayEvents;   ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
@@ -180,33 +181,40 @@ class Chord : public ChordRest {
 
       void readNote(const QDomElement& node, QList<Tuplet*>*, QList<Spanner*>*);
 
-      NoteType noteType() const         { return _noteType; }
-      void setNoteType(NoteType t)      { _noteType = t; }
-      bool isGrace() const              { return _noteType != NOTE_NORMAL; }
+      NoteType noteType() const       { return _noteType; }
+      void setNoteType(NoteType t)    { _noteType = t; }
+      bool isGrace() const            { return _noteType != NOTE_NORMAL; }
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       virtual void setTrack(int val);
 
       void computeUp();
+
       qreal dotPosX() const;
       void setDotPosX(qreal val);
-      bool noStem() const                 { return _noStem;  }
-      void setNoStem(bool val)            { _noStem = val;   }
+
+      bool noStem() const             { return _noStem;  }
+      void setNoStem(bool val)        { _noStem = val;   }
+
+      bool userPlayEvents() const     { return _userPlayEvents; }
+      void setUserPlayEvents(bool v)  { _userPlayEvents = v; }
+
       virtual void setMag(qreal val);
       void pitchChanged();
       void renderPlayback();
       TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }
 
-      ElementList& el()                { return _el; }
-      const ElementList& el() const    { return _el; }
+      ElementList& el()               { return _el; }
+      const ElementList& el() const   { return _el; }
 
       QPointF layoutArticulation(Articulation*);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual void toDefault();
+      virtual void reset();
+      void renderTremolo();
       };
 
 #endif

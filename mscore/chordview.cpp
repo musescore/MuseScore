@@ -166,7 +166,7 @@ ChordView::ChordView()
       scale(6.0, 1.0);
       QAction* a = getAction("delete");
       addAction(a);
-      connect(a, SIGNAL(activated()), SLOT(deleteItem()));
+      connect(a, SIGNAL(triggered()), SLOT(deleteItem()));
       connect(scene(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
       }
 
@@ -266,22 +266,15 @@ void ChordView::setChord(Chord* c)
       locatorLine->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
       scene()->addItem(locatorLine);
 
+      curEvent = 0;
       foreach(Note* note, c->notes()) {
-            if (note->playEvents().isEmpty()) {
-                  NoteEvent* ne = new NoteEvent;
-                  note->playEvents().append(ne);
-                  ChordItem* item = new ChordItem(note, ne);
+            int n = note->playEvents().size();
+            for (int i = 0; i < n; ++i) {
+                  NoteEvent* e = &note->playEvents()[i];
+                  ChordItem* item = new ChordItem(note, e);
                   if (curEvent == 0)
                         curEvent = item;
                   scene()->addItem(item);
-                  }
-            else {
-                  foreach(NoteEvent* e, note->playEvents()) {
-                        ChordItem* item = new ChordItem(note, e);
-                        if (curEvent == 0)
-                              curEvent = item;
-                        scene()->addItem(item);
-                        }
                   }
             }
       curNote = c->notes().front();
@@ -298,7 +291,6 @@ void ChordView::setChord(Chord* c)
       setCurItem(curEvent);
       // selectionChanged();
 
-
       scene()->setSceneRect(0.0, 0.0, double(ticks + CHORD_MAP_OFFSET * 2), keyHeight * 256);
 
       moveLocator();
@@ -314,6 +306,7 @@ void ChordView::setChord(Chord* c)
                   boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
             }
       centerOn(boundingRect.center());
+      scene()->update();
       }
 
 //---------------------------------------------------------
@@ -451,23 +444,24 @@ void ChordView::mousePressEvent(QMouseEvent* event)
             int pitch = y2pitch(int(p.y()));
             int tick  = int(p.x()) - CHORD_MAP_OFFSET;
             int ticks = 1000 - tick;
-            foreach(NoteEvent* e, curNote->playEvents()) {
-                  if (e->pitch() != pitch)
+            foreach(const NoteEvent& e, curNote->playEvents()) {
+                  if (e.pitch() != pitch)
                         continue;
-                  if (tick >= e->ontime() && tick < e->offtime()) {
+                  if (tick >= e.ontime() && tick < e.offtime()) {
                         return;     // cannot place an event here
                         }
-                  int nticks = e->ontime() - tick;
+                  int nticks = e.ontime() - tick;
                   if (nticks > 0)
                         ticks = qMin(ticks, nticks);
                   }
 
-            NoteEvent* ne = new NoteEvent;
-            ne->setPitch(pitch);
-            ne->setOntime(tick);
-            ne->setLen(ticks);
+            NoteEvent ne;
+            ne.setPitch(pitch);
+            ne.setOntime(tick);
+            ne.setLen(ticks);
             curNote->playEvents().append(ne);
-            ChordItem* item = new ChordItem(curNote, ne);
+            NoteEvent* pne = &curNote->playEvents()[curNote->playEvents().size()-1];
+            ChordItem* item = new ChordItem(curNote, pne);
             scene()->addItem(item);
             setCurItem(item);
             }
@@ -565,8 +559,8 @@ void ChordView::deleteItem()
                   ChordItem* ci = static_cast<ChordItem*>(item);
                   if (curEvent == ci)
                         setCurItem(0);
-                  NoteEvent* event = ci->event();
-                  ci->note()->playEvents().removeOne(event);
+//                  NoteEvent* event = ci->event();
+//                  ci->note()->playEvents().removeOne(event);          TODO
 
                   scene()->removeItem(item);
                   delete item;

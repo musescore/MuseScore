@@ -78,7 +78,7 @@ class Beam : public Element {
       virtual void read(const QDomElement&);
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
-      virtual void toDefault();
+      virtual void reset();
 
       System* system() const { return (System*)parent(); }
 
