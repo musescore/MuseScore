@@ -60,10 +60,10 @@ void Fingering::read(const QDomElement& de)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Fingering::toDefault()
+void Fingering::reset()
       {
       QPointF o(userOff());
       score()->layoutFingering(this);

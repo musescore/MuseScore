@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: note.cpp 5631 2012-05-15 16:04:07Z lasconic $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -47,7 +46,6 @@
 #include "harmony.h"
 #include "fingering.h"
 #include "bend.h"
-#include "noteevent.h"
 #include "mscore.h"
 #include "accidental.h"
 #include "page.h"
@@ -139,7 +137,6 @@ Note::Note(Score* s)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       dragMode           = false;
       _pitch             = 0;
-      _ppitch            = 0;
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
@@ -164,23 +161,16 @@ Note::Note(Score* s)
       _veloType          = MScore::OFFSET_VAL;
       _veloOffset        = 0;
 
-      _onTimeOffset      = 0;
-      _onTimeUserOffset  = 0;
-
-      _offTimeOffset     = 0;
-      _offTimeUserOffset = 0;
       _dots[0]           = 0;
       _dots[1]           = 0;
       _dots[2]           = 0;
+      _playEvents.append(NoteEvent());    // add default play event
       }
 
 Note::~Note()
       {
       delete _accidental;
-      foreach(Element* e, _el)
-            delete e;
-      foreach(NoteEvent* e, _playEvents)
-            delete e;
+      qDeleteAll(_el);
       delete _tieFor;
       delete _dots[0];
       delete _dots[1];
@@ -199,15 +189,10 @@ Note::Note(const Note& n)
       dragMode           = n.dragMode;
       _pitch             = n._pitch;
       _tpc               = n._tpc;
-      _ppitch            = n._ppitch;
       _hidden            = n._hidden;
       _tuning            = n._tuning;
       _veloType          = n._veloType;
       _veloOffset        = n._veloOffset;
-      _onTimeOffset      = n._onTimeOffset;
-      _onTimeUserOffset  = n._onTimeUserOffset;
-      _offTimeOffset     = n._offTimeOffset;
-      _offTimeUserOffset = n._offTimeUserOffset;
       _headGroup         = n._headGroup;
       _headType          = n._headType;
       _mirror            = n._mirror;
@@ -220,9 +205,7 @@ Note::Note(const Note& n)
 
       foreach(Element* e, n._el)
             add(e->clone());
-      _playEvents.clear();
-      foreach(NoteEvent* e, n._playEvents)
-            _playEvents.append(new NoteEvent(*e));
+      _playEvents = n._playEvents;
 
       if (n._tieFor) {
             _tieFor = new Tie(*n._tieFor);
@@ -253,7 +236,8 @@ void Note::setPitch(int val)
             if (part)
                   pitchOffset = score()->styleB(ST_concertPitch) ? 0 : part->instr()->transpose().chromatic;
             }
-      _ppitch = _pitch + pitchOffset;
+      for (int i = 0; i < _playEvents.size(); ++i)
+            _playEvents[i].setPitch(pitchOffset);
       if (chord())
             chord()->pitchChanged();
       }
@@ -638,19 +622,21 @@ void Note::write(Xml& xml) const
             }
       if (_tieFor)
             _tieFor->write(xml);
-      if (!_playEvents.isEmpty()) {
-            xml.stag("Events");
-            foreach(const NoteEvent* e, _playEvents)
-                  e->write(xml);
-            xml.etag();
+      if (chord()->userPlayEvents()) {
+            if (!_playEvents.isEmpty()) {
+                  xml.stag("Events");
+                  foreach(const NoteEvent& e, _playEvents)
+                        e.write(xml);
+                  xml.etag();
+                  }
             }
       writeProperty(xml, P_PITCH);
       writeProperty(xml, P_TPC);
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
       writeProperty(xml, P_DOT_POSITION);
-      writeProperty(xml, P_ONTIME_OFFSET);
-      writeProperty(xml, P_OFFTIME_OFFSET);
+//      writeProperty(xml, P_ONTIME_OFFSET);
+//      writeProperty(xml, P_OFFTIME_OFFSET);
       writeProperty(xml, P_HEAD_GROUP);
       writeProperty(xml, P_VELO_OFFSET);
       writeProperty(xml, P_TUNING);
@@ -701,9 +687,9 @@ void Note::read(const QDomElement& de)
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, ::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeOffset")
-                  setOnTimeUserOffset(val.toInt());
+                  ; // TODO setOnTimeUserOffset(val.toInt());
             else if (tag == "offTimeOffset")
-                  setOffTimeUserOffset(val.toInt());
+                  ; // TODO setOffTimeUserOffset(val.toInt());
             else if (tag == "head")
                   setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
@@ -875,13 +861,14 @@ void Note::read(const QDomElement& de)
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         const QString& tag(ee.tagName());
                         if (tag == "Event") {
-                              NoteEvent* ne = new NoteEvent;
-                              ne->read(ee);
+                              NoteEvent ne;
+                              ne.read(ee);
                               _playEvents.append(ne);
                               }
                         else
                               domError(ee);
                         }
+                  chord()->setUserPlayEvents(true);
                   }
             else if (tag == "endSpanner") {
                   int id = e.attribute("id").toInt();
@@ -918,7 +905,7 @@ void Note::read(const QDomElement& de)
       _pitch = restrict(_pitch, 0, 127);
       if (!tpcIsValid(_tpc))
             setTpcFromPitch();
-      _ppitch = _pitch;
+//      _ppitch = _pitch;
       }
 
 //---------------------------------------------------------
@@ -1210,32 +1197,6 @@ Element* Note::drop(const DropData& data)
                   e->setParent(cr1);
                   score()->undoAddElement(e);
                   score()->setLayout(cr1->measure());
-                  }
-                  break;
-
-            case TREMOLO:
-                  {
-                  Tremolo* tremolo = static_cast<Tremolo*>(e);
-                  if (tremolo->twoNotes()) {
-                        Segment* s = ch->segment()->next();
-                        while (s) {
-                              if (s->element(track()) && s->element(track())->type() == CHORD)
-                                    break;
-                              s = s->next();
-                              }
-                        if (s == 0) {
-                              qDebug("no segment for second note of tremolo found\n");
-                              delete e;
-                              return 0;
-                              }
-                        Chord* ch2 = static_cast<Chord*>(s->element(track()));
-                        tremolo->setChords(ch, ch2);
-                        }
-                  e->setParent(ch);
-                  e->setTrack(track());
-                  if (ch->tremolo())
-                        score()->undoRemoveElement(ch->tremolo());
-                  score()->undoAddElement(e);
                   }
                   break;
 
@@ -1536,10 +1497,10 @@ void Note::setTrack(int val)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//    reset
 //---------------------------------------------------------
 
-void Note::toDefault()
+void Note::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_USER_OFF, QPointF());
@@ -1750,19 +1711,6 @@ void Note::setNval(NoteVal nval)
       }
 
 //---------------------------------------------------------
-//   setPlayEvents
-//---------------------------------------------------------
-
-void Note::setPlayEvents(const QList<NoteEvent*>& v)
-      {
-      foreach(NoteEvent* e, _playEvents)
-            delete e;
-      _playEvents.clear();
-      foreach(NoteEvent* e, v)
-            _playEvents.append(new NoteEvent(*e));
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -1779,10 +1727,6 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return userMirror();
             case P_DOT_POSITION:
                   return dotPosition();
-            case P_ONTIME_OFFSET:
-                  return onTimeUserOffset();
-            case P_OFFTIME_OFFSET:
-                  return offTimeUserOffset();
             case P_HEAD_GROUP:
                   return headGroup();
             case P_VELO_OFFSET:
@@ -1826,12 +1770,6 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_DOT_POSITION:
                   setDotPosition(MScore::Direction(v.toInt()));
-                  break;
-            case P_ONTIME_OFFSET:
-                  setOnTimeUserOffset(v.toInt());
-                  break;
-            case P_OFFTIME_OFFSET:
-                  setOffTimeUserOffset(v.toInt());
                   break;
             case P_HEAD_GROUP:
                   setHeadGroup(NoteHeadGroup(v.toInt()));
@@ -1930,24 +1868,6 @@ void Note::undoSetVeloOffset(int val)
       }
 
 //---------------------------------------------------------
-//   undoSetOnTimeUserOffset
-//---------------------------------------------------------
-
-void Note::undoSetOnTimeUserOffset(int val)
-      {
-      undoChangeProperty(P_ONTIME_OFFSET, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetOffTimeUserOffset
-//---------------------------------------------------------
-
-void Note::undoSetOffTimeUserOffset(int val)
-      {
-      undoChangeProperty(P_OFFTIME_OFFSET, val);
-      }
-
-//---------------------------------------------------------
 //   undoSetUserMirror
 //---------------------------------------------------------
 
@@ -1996,8 +1916,6 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return MScore::DH_AUTO;
             case P_DOT_POSITION:
                   return MScore::AUTO;
-            case P_ONTIME_OFFSET:
-            case P_OFFTIME_OFFSET:
             case P_HEAD_GROUP:
             case P_VELO_OFFSET:
                   return 0;
@@ -2017,4 +1935,23 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             }
       return Element::propertyDefault(propertyId);
       }
+
+//---------------------------------------------------------
+//   setOnTimeOffset
+//---------------------------------------------------------
+
+void Note::setOnTimeOffset(int)
+      {
+      // TODO
+      }
+
+//---------------------------------------------------------
+//   setOffTimeOffset
+//---------------------------------------------------------
+
+void Note::setOffTimeOffset(int)
+      {
+      // TODO
+      }
+
 

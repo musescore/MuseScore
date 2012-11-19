@@ -86,7 +86,7 @@ class SlurSegment : public SpannerSegment {
 
       void write(Xml& xml, int no) const;
       void read(const QDomElement&);
-      virtual void toDefault();
+      virtual void reset();
       void setSlurOffset(int i, const QPointF& val) { ups[i].off = val;  }
       QPointF slurOffset(int i) const               { return ups[i].off; }
       const struct UP* getUps(int idx) const        { return &ups[idx]; }
@@ -136,7 +136,7 @@ class SlurTie : public Spanner {
       void writeProperties(Xml& xml) const;
       bool readProperties(const QDomElement&);
 
-      virtual void toDefault();
+      virtual void reset();
 
       int lineType() const                { return _lineType; }
       void setLineType(int val)           { _lineType = val;  }

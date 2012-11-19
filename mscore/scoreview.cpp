@@ -2685,14 +2685,14 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "reset") {
             if (editMode()) {
-                  editObject->toDefault();
+                  editObject->reset();
                   updateGrips();
                   _score->end();
                   }
             else {
                   _score->startCmd();
                   foreach(Element* e, _score->selection().elements())
-                        e->toDefault();
+                        e->reset();
                   _score->endCmd();
                   }
             _score->setLayoutAll(true);
