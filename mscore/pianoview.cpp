@@ -48,13 +48,14 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
       {
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
       int pitch = n->pitch();
-      int len   = n->playTicks();
+      int ticks = n->playTicks();
+      int len   = ticks * e->len() / 1000;
       setRect(0, 0, len, keyHeight/2);
       setBrush(QBrush());
       setSelected(n->selected());
       setData(0, QVariant::fromValue<void*>(n));
 
-      setPos(n->chord()->tick() + 480, pitch2y(pitch) + keyHeight / 4);
+      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + 480, pitch2y(pitch) + keyHeight / 4);
       }
 
 //---------------------------------------------------------
@@ -63,22 +64,9 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
 
 void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
       {
-      Chord* chord = note->chord();
-      int x1       = note->onTimeOffset() + note->onTimeUserOffset();
-      int x2       = note->playTicks() + note->offTimeOffset() + note->offTimeUserOffset();
       painter->setPen(pen());
       painter->setBrush(isSelected() ? Qt::yellow : Qt::blue);
-      painter->drawRect(x1, 0.0, x2-x1, keyHeight / 2);
-
-      int len = chord->actualTicks();
-
-      if (x1 > 0 || x2 < len) {
-            painter->setBrush(Qt::gray);
-            if (x1 > 0)
-                  painter->drawRect(0.0, 0.0, x1, keyHeight / 2);
-            if (x2 < len)
-                  painter->drawRect(x2, 0.0, len - x2, keyHeight / 2);
-            }
+      painter->drawRect(boundingRect());
       }
 
 //---------------------------------------------------------
@@ -290,8 +278,11 @@ void PianoView::setChord(Chord* c, Pos* l)
       foreach(Note* note, c->notes()) {
             if (!note->playEvents().isEmpty()) {
 //                  int ticks = note->playTicks();
-                  foreach(NoteEvent* e, note->playEvents())
+                  int n = note->playEvents().size();
+                  for (int i = 0; i < n; ++i) {
+                        NoteEvent* e = &note->playEvents()[i];
                         scene()->addItem(new PianoItem(note, e));
+                        }
                   }
             else
                   scene()->addItem(new PianoItem(note, new NoteEvent));
@@ -354,16 +345,13 @@ void PianoView::setStaff(Staff* s, Pos* l)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
 
-                  foreach(Note* n, chord->notes()) {
-                        if (n->tieBack())
+                  foreach(Note* note, chord->notes()) {
+                        if (note->tieBack())
                               continue;
-                        if (n->playEvents().isEmpty()) {
-                              scene()->addItem(new PianoItem(n, 0));
-                              }
-                        else {
-                              foreach(NoteEvent* e, n->playEvents()) {
-                                    scene()->addItem(new PianoItem(n, e));
-                                    }
+                        int n = note->playEvents().size();
+                        for (int i = 0; i < n; ++i) {
+                              NoteEvent* e = &note->playEvents()[i];
+                              scene()->addItem(new PianoItem(note, e));
                               }
                         }
                   }

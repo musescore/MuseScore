@@ -732,8 +732,8 @@ void InspectorNoteBase::setElement(Note* n)
       small->setChecked(note->small());
       mirrorHead->setCurrentIndex(note->userMirror());
       dotPosition->setCurrentIndex(note->dotPosition());
-      ontimeOffset->setValue(note->onTimeUserOffset());
-      offtimeOffset->setValue(note->offTimeUserOffset());
+//      ontimeOffset->setValue(note->onTimeUserOffset());
+//      offtimeOffset->setValue(note->offTimeUserOffset());
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;
@@ -756,8 +756,8 @@ void InspectorNoteBase::setElement(Note* n)
       resetSmall->setEnabled(note->small());
       resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
       resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
-      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
-      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
+//      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
+//      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
       block(false);
       }
 
@@ -770,8 +770,8 @@ bool InspectorNoteBase::dirty() const
       return note->small()            != small->isChecked()
          || note->userMirror()        != mirrorHead->currentIndex()
          || note->dotPosition()       != dotPosition->currentIndex()
-         || note->onTimeUserOffset()  != ontimeOffset->value()
-         || note->offTimeUserOffset() != offtimeOffset->value()
+//         || note->onTimeUserOffset()  != ontimeOffset->value()
+//         || note->offTimeUserOffset() != offtimeOffset->value()
          || note->headGroup()         != noteHeadGroup->itemData(noteHeadGroup->currentIndex())
          || note->headType()          != noteHeadType->currentIndex()
          || note->tuning()            != tuning->value()
@@ -797,12 +797,12 @@ void InspectorNoteBase::apply()
       val = dotPosition->currentIndex();
       if (note->dotPosition() != val)
             score->undoChangeProperty(note, P_DOT_POSITION, val);
-      val = ontimeOffset->value();
-      if (note->onTimeOffset() != val)
-            score->undoChangeProperty(note, P_ONTIME_OFFSET, val);
-      val = offtimeOffset->value();
-      if (note->offTimeOffset() != val)
-            score->undoChangeProperty(note, P_OFFTIME_OFFSET, val);
+//      val = ontimeOffset->value();
+//      if (note->onTimeOffset() != val)
+//            score->undoChangeProperty(note, P_ONTIME_OFFSET, val);
+//      val = offtimeOffset->value();
+//      if (note->offTimeOffset() != val)
+//            score->undoChangeProperty(note, P_OFFTIME_OFFSET, val);
       val = noteHeadGroup->itemData(noteHeadGroup->currentIndex()).toInt();
       if (note->headGroup() != val)
             score->undoChangeProperty(note, P_HEAD_GROUP, val);
@@ -855,7 +855,7 @@ void InspectorNoteBase::dotPositionChanged(int)
 
 void InspectorNoteBase::ontimeOffsetChanged(int)
       {
-      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
+//      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
       apply();
       }
 
@@ -865,7 +865,7 @@ void InspectorNoteBase::ontimeOffsetChanged(int)
 
 void InspectorNoteBase::offtimeOffsetChanged(int)
       {
-      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
+//      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
       apply();
       }
 
