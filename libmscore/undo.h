@@ -1253,14 +1253,14 @@ class ChangeMetaText : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeEventList : public UndoCommand {
-      Note* note;
-      NoteEventList events;
+      Chord* chord;
+      QList<NoteEventList> events;
       bool userModified;
 
       void flip();
 
    public:
-      ChangeEventList(Note* n, const NoteEventList& l, bool um) : note(n), events(l), userModified(um) {}
+      ChangeEventList(Chord* c, const QList<NoteEventList> l, bool u) : chord(c), events(l), userModified(u) {}
       ~ChangeEventList();
       UNDO_NAME("ChangeEventList");
       };

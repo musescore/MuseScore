@@ -676,7 +676,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
-            ChordEditor ce(note);
+            ChordEditor ce(note->chord());
             mscore->disableCommands(true);
             ce.exec();
             mscore->disableCommands(false);

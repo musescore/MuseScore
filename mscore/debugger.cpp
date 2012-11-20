@@ -342,7 +342,7 @@ void Debugger::updateList(Score* s)
                                           if (chord->glissando())
                                                 new ElementItem(sei, chord->glissando());
 
-                                          foreach(Articulation* a, *chord->getArticulations())
+                                          foreach(Articulation* a, chord->articulations())
                                                 new ElementItem(sei, a);
                                           foreach(LedgerLine* h, *chord->ledgerLines())
                                                 new ElementItem(sei, h);
@@ -917,7 +917,7 @@ void ShowChordWidget::setElement(Element* e)
       cb.glissandoButton->setEnabled(chord->glissando());
 
       crb.attributes->clear();
-      foreach(Articulation* a, *chord->getArticulations()) {
+      foreach(Articulation* a, chord->articulations()) {
             QString s;
             s.setNum(long(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -965,6 +965,7 @@ void ShowChordWidget::setElement(Element* e)
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)n));
             cb.notes->addItem(item);
             }
+      cb.userPlayEvents->setChecked(chord->userPlayEvents());
       }
 
 //---------------------------------------------------------
@@ -1083,7 +1084,6 @@ void ShowNoteWidget::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       nb.pitch->setValue(note->pitch());
-      nb.ppitch->setValue(note->ppitch());
       nb.tuning->setValue(note->tuning());
       nb.line->setValue(note->line());
       nb.string->setValue(note->string());
@@ -1101,11 +1101,6 @@ void ShowNoteWidget::setElement(Element* e)
       nb.dot2->setEnabled(note->dot(1));
       nb.dot3->setEnabled(note->dot(2));
 
-//      nb.onTimeOffset->setValue(note->onTimeOffset());
-//      nb.offTimeOffset->setValue(note->offTimeOffset());
-//      nb.onTimeUserOffset->setValue(note->onTimeUserOffset());
-//      nb.offTimeUserOffset->setValue(note->offTimeUserOffset());
-
       note->el().clear();     // ??
       foreach(Element* text, note->el()) {
             QString s;
@@ -1113,6 +1108,11 @@ void ShowNoteWidget::setElement(Element* e)
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)text));
             nb.fingering->addItem(item);
+            }
+      foreach(const NoteEvent& e, note->playEvents()) {
+            QString s = QString("%1 %2 %3").arg(e.pitch()).arg(e.ontime()).arg(e.len());
+            QListWidgetItem* item = new QListWidgetItem(s);
+            nb.noteEvents->addItem(item);
             }
       }
 
@@ -1252,7 +1252,7 @@ void RestView::setElement(Element* e)
             crb.slurBack->addItem(item);
             }
       crb.attributes->clear();
-      foreach(Articulation* a, *rest->getArticulations()) {
+      foreach(Articulation* a, rest->articulations()) {
             QString s;
             s.setNum(long(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);

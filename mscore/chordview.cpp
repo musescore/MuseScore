@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "chordview.h"
@@ -26,6 +18,7 @@
 #include "preferences.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
+#include "libmscore/score.h"
 
 static const int CHORD_MAP_OFFSET = 50;
 static const int grip = 7;
@@ -83,6 +76,7 @@ void GripItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
                   setPos(x, pos().y());
                   _event->event()->setLen(x);
                   }
+            _view->setDirty(true);
             _event->update();
             }
       }
@@ -91,12 +85,12 @@ void GripItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 //   ChordItem
 //---------------------------------------------------------
 
-ChordItem::ChordItem(Note* n, NoteEvent* e)
-   : QGraphicsRectItem(), _note(n), _event(e)
+ChordItem::ChordItem(ChordView* v, Note* n, NoteEvent* e)
+   : QGraphicsRectItem(), _view(v), _note(n), _event(e)
       {
       setFlags(flags() | ItemIsSelectable | ItemIsMovable);
       _current  = false;
-      int pitch = _event->pitch();
+      int pitch = _event->pitch() + n->pitch();
       int len   = _event->len();
       setRect(0, 0, len, keyHeight/2);
       setBrush(QBrush());
@@ -116,7 +110,7 @@ void ChordItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
       int pitch  = ChordView::y2pitch(np.y());
       int y = ChordView::pitch2y(pitch);
       setPos(pos().x(), y + keyHeight / 4);
-      _event->setPitch(pitch);
+      _event->setPitch(pitch - _note->pitch());
       }
 
 //---------------------------------------------------------
@@ -127,7 +121,10 @@ void ChordItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
       {
       int len = _event->len();
       painter->setPen(pen());
-      painter->setBrush(_current ? Qt::yellow : Qt::blue);
+      if (_view->curNote() == _note)
+            painter->setBrush(_current ? Qt::yellow : Qt::blue);
+      else
+            painter->setBrush(Qt::gray);
       painter->drawRect(0.0, 0.0, len, keyHeight / 2);
       }
 
@@ -156,12 +153,13 @@ ChordView::ChordView()
       setDragMode(QGraphicsView::RubberBandDrag);
       magStep   = 2;
       chord     = 0;
-      curNote   = 0;
+      _curNote   = 0;
       _evenGrid = true;
       lg        = 0;
       rg        = 0;
       curEvent  = 0;
       ticks     = 1000;
+      _dirty    = false;
 
       scale(6.0, 1.0);
       QAction* a = getAction("delete");
@@ -180,8 +178,8 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
             return;
       QRectF r1(-1000000.0,               0.0, 1000000.0+CHORD_MAP_OFFSET, 1000000.0);
       QRectF r2(ticks + CHORD_MAP_OFFSET, 0.0, 1000000.0, 1000000.0);
-      QRectF r3(-1000000.0,     128*keyHeight, 1000000.0+CHORD_MAP_OFFSET, keyHeight);
-      QRectF r4(ticks + CHORD_MAP_OFFSET,  128*keyHeight, 1000000.0,        keyHeight);
+      QRectF r3(-1000000.0,     127*keyHeight, 1000000.0+CHORD_MAP_OFFSET, keyHeight);
+      QRectF r4(ticks + CHORD_MAP_OFFSET,  127*keyHeight, 1000000.0,        keyHeight);
 
       QColor bg(0x71, 0x8d, 0xbe);
       QColor bg1 = bg.darker(150);
@@ -192,7 +190,11 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
       p->fillRect(r.intersected(r1), bg1);
       p->fillRect(r.intersected(r2), bg1);
 
-      p->fillRect(QRect(CHORD_MAP_OFFSET, 128*keyHeight, 1000, keyHeight), bg2);
+      foreach (const Note* n, chord->notes()) {
+            p->fillRect(QRect(CHORD_MAP_OFFSET, (127 - n->pitch()) * keyHeight,
+               1000, keyHeight), bg2);
+            }
+
       p->fillRect(r.intersected(r3), bg3);
       p->fillRect(r.intersected(r4), bg3);
 
@@ -208,7 +210,7 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
       int key = floor(y1 / keyHeight);
       qreal y = key * keyHeight;
 
-      for (; key < 256; ++key, y += keyHeight) {
+      for (; key < 127; ++key, y += keyHeight) {
             if (y < y1)
                   continue;
             if (y > y2)
@@ -253,12 +255,13 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
 void ChordView::setChord(Chord* c)
       {
       chord    = c;
+      _dirty   = false;
       _pos     = 0;
       _locator = 0;
 
       scene()->blockSignals(true);
       scene()->clear();
-      locatorLine = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 256.0 * 5));
+      locatorLine = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 127.0 * 5));
       QPen pen(Qt::red);
       pen.setWidth(2);
       locatorLine->setPen(pen);
@@ -267,17 +270,19 @@ void ChordView::setChord(Chord* c)
       scene()->addItem(locatorLine);
 
       curEvent = 0;
+      _curNote  = 0;
       foreach(Note* note, c->notes()) {
+            if (note->selected() && _curNote == 0)
+                  _curNote = note;
             int n = note->playEvents().size();
             for (int i = 0; i < n; ++i) {
                   NoteEvent* e = &note->playEvents()[i];
-                  ChordItem* item = new ChordItem(note, e);
-                  if (curEvent == 0)
+                  ChordItem* item = new ChordItem(this, note, e);
+                  if (_curNote == note && curEvent == 0)
                         curEvent = item;
                   scene()->addItem(item);
                   }
             }
-      curNote = c->notes().front();
       lg = new GripItem(0, this);
       rg = new GripItem(1, this);
       lg->setZValue(100);
@@ -291,7 +296,7 @@ void ChordView::setChord(Chord* c)
       setCurItem(curEvent);
       // selectionChanged();
 
-      scene()->setSceneRect(0.0, 0.0, double(ticks + CHORD_MAP_OFFSET * 2), keyHeight * 256);
+      scene()->setSceneRect(0.0, 0.0, double(ticks + CHORD_MAP_OFFSET * 2), keyHeight * 127);
 
       moveLocator();
 
@@ -421,7 +426,7 @@ void ChordView::wheelEvent(QWheelEvent* event)
 
 int ChordView::y2pitch(int y)
       {
-      return 128 - (y / keyHeight);
+      return 127 - (y / keyHeight);
       }
 
 //---------------------------------------------------------
@@ -430,7 +435,7 @@ int ChordView::y2pitch(int y)
 
 int ChordView::pitch2y(int pitch)
       {
-      return keyHeight * (128 - pitch);
+      return keyHeight * (127 - pitch);
       }
 
 //---------------------------------------------------------
@@ -444,7 +449,7 @@ void ChordView::mousePressEvent(QMouseEvent* event)
             int pitch = y2pitch(int(p.y()));
             int tick  = int(p.x()) - CHORD_MAP_OFFSET;
             int ticks = 1000 - tick;
-            foreach(const NoteEvent& e, curNote->playEvents()) {
+            foreach(const NoteEvent& e, _curNote->playEvents()) {
                   if (e.pitch() != pitch)
                         continue;
                   if (tick >= e.ontime() && tick < e.offtime()) {
@@ -459,11 +464,12 @@ void ChordView::mousePressEvent(QMouseEvent* event)
             ne.setPitch(pitch);
             ne.setOntime(tick);
             ne.setLen(ticks);
-            curNote->playEvents().append(ne);
-            NoteEvent* pne = &curNote->playEvents()[curNote->playEvents().size()-1];
-            ChordItem* item = new ChordItem(curNote, pne);
+            _curNote->playEvents().append(ne);
+            NoteEvent* pne = &_curNote->playEvents()[_curNote->playEvents().size()-1];
+            ChordItem* item = new ChordItem(this, _curNote, pne);
             scene()->addItem(item);
             setCurItem(item);
+            _dirty = true;
             }
       QGraphicsView::mousePressEvent(event);
       }
@@ -559,11 +565,12 @@ void ChordView::deleteItem()
                   ChordItem* ci = static_cast<ChordItem*>(item);
                   if (curEvent == ci)
                         setCurItem(0);
-//                  NoteEvent* event = ci->event();
-//                  ci->note()->playEvents().removeOne(event);          TODO
+                  NoteEvent* event = ci->event();
+                  ci->note()->playEvents().removeOne(*event);
 
                   scene()->removeItem(item);
                   delete item;
+                  _dirty = true;
                   }
             }
       }
@@ -588,6 +595,11 @@ void ChordView::setCurItem(ChordItem* item)
             lg->setPos(0,   keyHeight / 4);
             rg->setPos(item->event()->len(), keyHeight / 4);
             item->setCurrent(true);
+            if (item->note() != _curNote) {
+                  _curNote = item->note();
+                  _curNote->score()->select(_curNote);
+                  _curNote->score()->update();
+                  }
             }
       }
 
