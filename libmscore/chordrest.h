@@ -47,7 +47,7 @@ class ChordRest : public DurationElement {
       QList<Element*> _annotations;
 
    protected:
-      QList<Articulation*> articulations;
+      QList<Articulation*> _articulations;
       Beam* _beam;
       BeamMode _beamMode;
       bool _up;                           // actual stem direction
@@ -91,8 +91,11 @@ class ChordRest : public DurationElement {
       virtual QPointF stemPos() const           { return pagePos(); }    // point to connect stem
       bool up() const                           { return _up;   }
       void setUp(bool val)                      { _up = val; }
-      QList<Articulation*>* getArticulations()  { return &articulations; }
+
+      QList<Articulation*>& articulations()     { return _articulations; }
+      const QList<Articulation*>& articulations() const { return _articulations; }
       Articulation* hasArticulation(const Articulation*);
+
       bool small() const                        { return _small; }
       void setSmall(bool val);
 

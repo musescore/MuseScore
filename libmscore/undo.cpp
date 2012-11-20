@@ -3063,9 +3063,13 @@ ChangeEventList::~ChangeEventList()
 
 void ChangeEventList::flip()
       {
-      note->playEvents().swap(events);
-      bool um = note->chord()->userPlayEvents();
-      note->chord()->setUserPlayEvents(userModified);
+      int n = chord->notes().size();
+      for (int i = 0; i < n; ++i) {
+            Note* note = chord->notes()[i];
+            note->playEvents().swap(events[i]);
+            }
+      bool um = chord->userPlayEvents();
+      chord->setUserPlayEvents(userModified);
       userModified = um;
       }
 

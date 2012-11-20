@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -924,6 +924,8 @@ class Score : public QObject {
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
+      QList<NoteEventList> renderChord(Chord* chord);
+      void createPlayEvents(Chord*);
       };
 
 extern Score* gscore;

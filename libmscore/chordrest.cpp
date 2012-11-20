@@ -50,7 +50,7 @@
 Articulation* ChordRest::hasArticulation(const Articulation* aa)
       {
       int idx = aa->subtype();
-      foreach(Articulation* a, articulations) {
+      foreach(Articulation* a, _articulations) {
             if (idx == a->subtype())
                   return a;
             }
@@ -80,11 +80,11 @@ ChordRest::ChordRest(const ChordRest& cr)
       _tabDur       = 0;  // tab sur. symb. depends upon context: can't be
                           // simply copied from another CR
 
-      foreach(Articulation* a, cr.articulations) {    // make deep copy
+      foreach(Articulation* a, cr._articulations) {    // make deep copy
             Articulation* na = new Articulation(*a);
             na->setParent(this);
             na->setTrack(track());
-            articulations.append(na);
+            _articulations.append(na);
             }
 
       _beam      = 0;
@@ -109,7 +109,7 @@ ChordRest::ChordRest(const ChordRest& cr)
 
 ChordRest::~ChordRest()
       {
-      foreach(Articulation* a,  articulations)
+      foreach(Articulation* a,  _articulations)
             delete a;
       foreach(Lyrics* l, _lyricsList)
             delete l;
@@ -125,7 +125,7 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
       {
       if (_beam && (_beam->elements().front() == this))
             _beam->scanElements(data, func, all);
-      foreach(Articulation* a, articulations)
+      foreach(Articulation* a, _articulations)
             func(data, a);
       foreach(Lyrics* l, _lyricsList) {
             if (l)
@@ -179,7 +179,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (!duration().isZero() && (!durationType().fraction().isValid()
          || (durationType().fraction() != duration())))
             xml.fTag("duration", duration());
-      foreach(const Articulation* a, articulations)
+      foreach(const Articulation* a, _articulations)
             a->write(xml);
       foreach(Spanner* s, _spannerFor)
             xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
@@ -372,7 +372,7 @@ void ChordRest::setSmall(bool val)
 void ChordRest::setMag(qreal val)
       {
       Element::setMag(val);
-      foreach(Articulation* a, articulations)
+      foreach(Articulation* a, _articulations)
             a->setMag(val);
       }
 
@@ -383,20 +383,20 @@ void ChordRest::setMag(qreal val)
 
 void ChordRest::layoutArticulations()
       {
-      if (parent() == 0 || articulations.isEmpty())
+      if (parent() == 0 || _articulations.isEmpty())
             return;
       qreal _spatium  = spatium();
       if (type() == CHORD) {
-            if (articulations.size() == 1) {
-                  static_cast<Chord*>(this)->layoutArticulation(articulations[0]);
+            if (_articulations.size() == 1) {
+                  static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
                   return;
                   }
-            if (articulations.size() == 2) {
+            if (_articulations.size() == 2) {
                   //
                   // staccato | tenuto + marcato
                   //
-                  Articulation* a1 = articulations[0];
-                  Articulation* a2 = articulations[1];
+                  Articulation* a1 = _articulations[0];
+                  Articulation* a2 = _articulations[1];
                   int st1 = a1->subtype();
                   int st2 = a2->subtype();
 
@@ -474,7 +474,7 @@ void ChordRest::layoutArticulations()
 
       qreal dy = 0.0;
 
-      foreach (Articulation* a, articulations) {
+      foreach (Articulation* a, _articulations) {
             //
             // determine Direction
             //
@@ -494,7 +494,7 @@ void ChordRest::layoutArticulations()
       //    place tenuto and staccato
       //
 
-      foreach (Articulation* a, articulations) {
+      foreach (Articulation* a, _articulations) {
             a->layout();
             ArticulationAnchor aa = a->anchor();
 
@@ -596,7 +596,7 @@ void ChordRest::layoutArticulations()
       //    pass 2
       //    place all articulations with anchor at chord/rest
       //
-      foreach (Articulation* a, articulations) {
+      foreach (Articulation* a, _articulations) {
             a->layout();
             ArticulationAnchor aa = a->anchor();
             if ((a->subtype() == Articulation_Tenuto)
@@ -652,7 +652,7 @@ void ChordRest::layoutArticulations()
       if ((downPos() + _spatium) > dyBot)
             dyBot = downPos() + _spatium;
   */
-      foreach (Articulation* a, articulations) {
+      foreach (Articulation* a, _articulations) {
             ArticulationAnchor aa = a->anchor();
             if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
                   if (a->up()) {
@@ -898,7 +898,7 @@ void ChordRest::setDurationType(const TDuration& v)
 
 void ChordRest::setTrack(int val)
       {
-      foreach(Articulation* a, articulations)
+      foreach(Articulation* a, _articulations)
             a->setTrack(val);
       Element::setTrack(val);
       if (type() == CHORD) {
@@ -936,7 +936,7 @@ void ChordRest::add(Element* e)
             case ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
-                  articulations.push_back(a);
+                  _articulations.push_back(a);
                   if (a->timeStretch() > 0.0) {
                         qreal otempo = score()->tempo(tick());
                         qreal ntempo = otempo / a->timeStretch();
@@ -974,7 +974,7 @@ void ChordRest::remove(Element* e)
             case ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (!articulations.removeOne(a))
+                  if (!_articulations.removeOne(a))
                         qDebug("ChordRest::remove(): articulation not found");
                   if (a->timeStretch() > 0.0) {
                         score()->removeTempo(tick());

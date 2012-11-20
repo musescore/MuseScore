@@ -542,7 +542,7 @@ void Score::fixTicks()
                               if (!e)
                                     continue;
                               ChordRest* cr = static_cast<ChordRest*>(e);
-                              foreach(Articulation* a, *cr->getArticulations())
+                              foreach(Articulation* a, cr->articulations())
                                     stretch = qMax(a->timeStretch(), stretch);
                               if (stretch > 0.0) {
                                     qreal otempo = tempomap()->tempo(cr->tick());
@@ -1467,6 +1467,12 @@ void Score::addElement(Element* element)
                   _instrumentsChanged = true;
                   break;
 
+            case Element::TREMOLO:
+            case Element::ARTICULATION:
+            case Element::ARPEGGIO:
+                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  break;
+
             default:
                   break;
             }
@@ -1483,7 +1489,7 @@ void Score::addElement(Element* element)
 void Score::removeElement(Element* element)
       {
 //      if (_undoRedo)
-//            qFatal("Score:addElement in undo/redo");
+//            qFatal("Score:removeElement in undo/redo");
       Element* parent = element->parent();
 
       if (MScore::debugMode) {
@@ -1605,6 +1611,13 @@ void Score::removeElement(Element* element)
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   break;
+
+            case Element::TREMOLO:
+            case Element::ARTICULATION:
+            case Element::ARPEGGIO:
+                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  break;
+
             default:
                   break;
             }

@@ -57,4 +57,12 @@ NoteEventList::NoteEventList()
       {
       }
 
+//---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool NoteEvent::operator==(const NoteEvent& e) const
+      {
+      return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
+      }
 
