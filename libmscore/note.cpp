@@ -164,7 +164,6 @@ Note::Note(Score* s)
       _dots[0]           = 0;
       _dots[1]           = 0;
       _dots[2]           = 0;
-      _playEvents.append(NoteEvent());    // add default play event
       }
 
 Note::~Note()
@@ -905,7 +904,6 @@ void Note::read(const QDomElement& de)
       _pitch = restrict(_pitch, 0, 127);
       if (!tpcIsValid(_tpc))
             setTpcFromPitch();
-//      _ppitch = _pitch;
       }
 
 //---------------------------------------------------------
@@ -1072,15 +1070,6 @@ Element* Note::drop(const DropData& data)
                   if (_accidental)
                         return e;
                   break;
-
-            case ARPEGGIO:
-                  {
-                  Arpeggio* a = static_cast<Arpeggio*>(e);
-                  a->setParent(ch);
-                  a->setHeight(spatium() * 5);   //DEBUG
-                  score()->undoAddElement(a);
-                  }
-                  return e;
 
             case BEND:
                   {

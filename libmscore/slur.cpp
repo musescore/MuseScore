@@ -649,14 +649,14 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       //
       // handle special case of tenuto and staccato;
       //
-      QList<Articulation*>* al = c->getArticulations();
-      if (al->size() >= 2) {
-            Articulation* a = al->at(1);
+      const QList<Articulation*>& al = c->articulations();
+      if (al.size() >= 2) {
+            Articulation* a = al.at(1);
             if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
-      else if (al->size() >= 1) {
-            Articulation* a = al->at(0);
+      else if (al.size() >= 1) {
+            Articulation* a = al.at(0);
             if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }

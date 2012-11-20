@@ -24,7 +24,7 @@
 #include "libmscore/noteevent.h"
 
 class ChordView;
-class Note;
+class Chord;
 
 //---------------------------------------------------------
 //   ChordEditor
@@ -33,11 +33,11 @@ class Note;
 class ChordEditor : public QDialog {
       Q_OBJECT
 
-      ChordView* pianoroll;
-      Note* _note;
+      ChordView* chordView;
+      Chord* _chord;
       QDialogButtonBox* bb;
-      NoteEventList* events;
-      int notes;
+      QList<NoteEventList> events;
+      bool dirty;
 
    private slots:
       void clicked(QAbstractButton*);
@@ -47,8 +47,7 @@ class ChordEditor : public QDialog {
    public slots:
 
    public:
-      ChordEditor(Note*, QWidget* parent = 0);
-      ~ChordEditor();
+      ChordEditor(Chord*, QWidget* parent = 0);
       };
 
 #endif
