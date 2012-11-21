@@ -202,18 +202,24 @@ int tpc2pitch(int tpc)
 //
 // returns the alteration (-3 to 3) of a given tpc in the given key
 // to understand the formula:
-//    in the lowest key (CbMaj), the first 7 tpcs (Fbb to Bbb; tpc-TPC_MIN: 0 to 7)
-//          are all 1 semitone below the key degree (alter = -1)
-//    the second 7 tpcs (Fb to Bb; tpc-TPC_MIN: 8 to 13) are all at key degrees (alter = 0) and so on up to 3
-//    thus, for CbMaj, ((tpc-TPC_MIN - 13) / 7) - 1 is the result
-//    for each next key, the result is shifted 1 tpc 'down' in the tpc sequence:
-//          GbMaj: Fbb => -2, Cbb to Fb => -1 and so on
-//          DbMaj: Fbb,Cbb => -2, Gbb to Cb => -1 and so on
+//    in the highest key (C#Maj), each of the first 7 tpcs (Fbb to Bbb; tpc-TPC_MIN: 0 to 7)
+//          is 3 semitones below its key degree (alter = -3)
+//    the second 7 tpcs (Fb to Bb; tpc-TPC_MIN: 8 to 13) are 2 semitones below (alter = -2) and so on up to 1
+//    thus, for C#Maj:
+// (1)      (tpc-TPC_MIN) - 0         =  0 to 34 (for tcp-TCP_MIN from 0 to 34)
+// (2)      (tpc-TCP_MIN) - 0) / 7    =  0 to 4  (for each settuple of tcp's) and finally
+// (3)      (tcp-TCP_MIN) - 0) / 7 -3 = -3 to 1  (for each settuple of tcp's)
+//          where 0 = KEY_C_S - KEY_MAX
+//    for each previous key, the result of (1) increases by 1 and the classes of alter are shifted 1 TPC 'up':
+//          F#Maj: Fbb-Ebb => -3, Bbb to Eb => -2 and so on
+//          BMaj:  Fbb-Abb => -3, Ebb to Ab => -2 and so on
 //          and so on
+//    thus, for any 'key', the formula is:
+//          ((tcp-TCP_MIN) - (key-KEY_MAX)) / TCP_DELTA_SEMITONE - 3
 //---------------------------------------------------------
 
 int tpc2alterByKey(int tpc, int key) {
-      return (tpc-TPC_MIN-((TPC_DELTA_SEMITONE*2)-1) - (key-KEY_MIN)) / TPC_DELTA_SEMITONE;
+      return (tpc - key - TPC_MIN+KEY_MAX) / TPC_DELTA_SEMITONE - 3;
       }
 
 //---------------------------------------------------------
