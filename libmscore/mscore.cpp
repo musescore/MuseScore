@@ -93,7 +93,7 @@ void MScore::init()
 #ifdef __MINGW32__
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";
-#elif defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
+#elif defined(Q_WS_IOS)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();
