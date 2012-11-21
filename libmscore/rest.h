@@ -53,7 +53,7 @@ class Rest : public ChordRest {
       virtual Element* drop(const DropData&);
       virtual void layout();
 
-      virtual void toDefault();
+      virtual void reset();
 
       void setMMWidth(qreal val);
       qreal mmWidth() const        { return _mmWidth; }

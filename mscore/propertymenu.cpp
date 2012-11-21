@@ -524,8 +524,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e),
-               !ts->showCourtesySig(), ts->sig(), ts->stretch(), ts->subtype()));
+            score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e), !ts->showCourtesySig(), ts->sig(),
+                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->subtype()));
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -539,8 +539,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                      || r.sig() != ts->sig()
                      || stretchChanged
                      || r.subtype() != ts->subtype()) {
-                        score()->undo(new ChangeTimesig(ts,
-                           r.showCourtesySig(), r.sig(), r.stretch(), r.subtype()));
+                        score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
+                           r.numeratorString(), r.denominatorString(), r.subtype()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
                         }
@@ -676,7 +676,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
-            ChordEditor ce(note);
+            ChordEditor ce(note->chord());
             mscore->disableCommands(true);
             ce.exec();
             mscore->disableCommands(false);

@@ -48,17 +48,11 @@ TimeSig::TimeSig(Score* s)
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
       if (_sig != f) {
-            customText = false;
+//            customText = false;
             _sig       = f;
             }
-      if (st == TSIG_FOUR_FOUR) {
-            _sig.set(4, 4);
+      if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
             customText = false;
-            }
-      else if (st == TSIG_ALLA_BREVE) {
-            _sig.set(2, 2);
-            customText = false;
-            }
       _subtype = st;
       layout1();
       }
@@ -97,7 +91,10 @@ Element* TimeSig::drop(const DropData& data)
 void TimeSig::setNumeratorString(const QString& a)
       {
       _numeratorString = a;
-      customText = !(_numeratorString.isEmpty() && _denominatorString.isEmpty());
+      // text is custom if only one string is present or if either string is not the default string
+      customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
+            || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
+            || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
       }
 
 //---------------------------------------------------------
@@ -107,7 +104,10 @@ void TimeSig::setNumeratorString(const QString& a)
 void TimeSig::setDenominatorString(const QString& a)
       {
       _denominatorString = a;
-      customText = !(_numeratorString.isEmpty() && _denominatorString.isEmpty());
+      // text is custom if only one string is present or if either string is not the default string
+      customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
+            || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
+            || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
       }
 
 //---------------------------------------------------------

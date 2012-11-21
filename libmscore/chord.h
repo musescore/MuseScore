@@ -20,6 +20,7 @@
 */
 
 #include "chordrest.h"
+#include "noteevent.h"
 
 class Note;
 class Hook;
@@ -114,7 +115,6 @@ class Chord : public ChordRest {
       virtual qreal centerX() const;
       void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible);
       void addLedgerLines(qreal x, int move);
-      void renderArticulation(ArticulationType);
 
    public:
       Chord(Score* s = 0);
@@ -202,7 +202,6 @@ class Chord : public ChordRest {
 
       virtual void setMag(qreal val);
       void pitchChanged();
-      void renderPlayback();
       TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }
 
@@ -213,8 +212,7 @@ class Chord : public ChordRest {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual void toDefault();
-      void renderTremolo();
+      virtual void reset();
       };
 
 #endif

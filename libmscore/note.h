@@ -271,7 +271,7 @@ class Note : public Element {
       void setDotPosition(MScore::Direction d) { _dotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
-      void toDefault();
+      void reset();
       void setMag(qreal val);
 
       MScore::ValueType veloType() const    { return _veloType;          }

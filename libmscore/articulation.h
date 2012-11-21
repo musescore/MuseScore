@@ -79,7 +79,7 @@ class Articulation : public Element {
       virtual void read(const QDomElement&);
       virtual void write(Xml& xml) const;
 
-      virtual void toDefault();
+      virtual void reset();
       virtual QLineF dragAnchor() const;
 
       virtual QVariant getProperty(P_ID propertyId) const;

@@ -97,7 +97,7 @@ class Tuplet : public DurationElement {
       void read(const QDomElement&, QList<Tuplet*>*, const QList<Spanner*>*);
       void write(Xml&) const;
 
-      virtual void toDefault();
+      virtual void reset();
 
       virtual void draw(QPainter*) const;
       int id() const                       { return _id;          }

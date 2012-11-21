@@ -2585,7 +2585,7 @@ void ExportLy::checkSlur(Chord* chord, bool nextisrest)
 
 void ExportLy::writeArticulation(ChordRest* c)
 {
-  foreach(Articulation* a, *c->getArticulations())
+  foreach(Articulation* a, c->articulations())
     {
       switch(a->subtype())
 	{
@@ -3985,7 +3985,7 @@ void ExportLy::writeVoiceMeasure(MeasureBase* mb, Staff* staff, int staffInd, in
 	     QList<Articulation*> a;
 	     ChordRest * CR = (ChordRest*) e;
 
-	     a = *CR->getArticulations();
+	     a = CR->articulations();
 
 	     if (!(a.isEmpty()) ) articul = true;
 

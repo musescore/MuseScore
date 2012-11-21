@@ -480,7 +480,7 @@ class Element : public QObject {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void toDefault();
+      virtual void reset();
 
       qreal mag() const                        { return _mag;   }
       qreal magS() const;

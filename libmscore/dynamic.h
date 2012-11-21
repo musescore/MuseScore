@@ -69,7 +69,7 @@ class Dynamic : public Text {
 
       virtual bool isEditable() const { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void toDefault();
+      virtual void reset();
 
       void resetType();
       void setVelocity(int v);
