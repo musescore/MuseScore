@@ -5531,6 +5531,10 @@
         <velocity>100</velocity>
         <gateTime>40</gateTime>
         </Articulation>
+      <Articulation name="tenuto">
+        <velocity>100</velocity>
+        <gateTime>100</gateTime>
+        </Articulation>
       </Instrument>
 
     <Instrument id="clavichord">

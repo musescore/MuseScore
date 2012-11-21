@@ -1414,6 +1414,7 @@ void Score::addElement(Element* element)
                   if (slur->endElement())
                         static_cast<ChordRest*>(slur->endElement())->addSlurBack(slur);
                   }
+                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
             case Element::OTTAVA:
@@ -1538,6 +1539,7 @@ void Score::removeElement(Element* element)
                   static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
                   static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
                   }
+                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
             case Element::VOLTA:
