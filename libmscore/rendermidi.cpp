@@ -44,6 +44,8 @@
 #include "tremolo.h"
 #include "noteevent.h"
 #include "segment.h"
+#include "undo.h"
+#include "utils.h"
 
 //---------------------------------------------------------
 //   updateChannel
@@ -530,8 +532,167 @@ void Score::renderPart(EventMap* events, Part* part)
       }
 
 //---------------------------------------------------------
-//   createPlayEvents
+//   renderChord
 //---------------------------------------------------------
+
+QList<NoteEventList> Score::renderChord(Chord* chord)
+      {
+      QList<NoteEventList> ell;
+      if (chord->notes().isEmpty())
+            return ell;
+      Segment* seg = chord->segment();
+      Instrument* instr = chord->staff()->part()->instr(seg->tick());
+      //
+      // adjust velocity for instrument, channel and
+      // depending on articulation marks
+      //
+      int channel  = 0;  // note->subchannel();
+      int gateTime = 100;
+      instr->updateGateTime(&gateTime, channel, "");
+      foreach (Articulation* a, chord->articulations())
+            instr->updateGateTime(&gateTime, channel, a->subtypeName());
+
+      int n = chord->notes().size();
+      for (int i = 0; i < n; ++i)
+            ell.append(NoteEventList());
+
+      bool gateEvents = true;
+      //
+      //    process tremolo
+      //
+      Tremolo* tremolo = chord->tremolo();
+      if (tremolo) {
+            int n = 1 << tremolo->lines();
+            int l = 1000 / n;
+            if (chord->tremoloChordType() == TremoloFirstNote) {
+                  Segment* seg = chord->segment();
+                  Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+                  Segment* seg2 = seg->next(st);
+                  int track = chord->track();
+                  while (seg2 && !seg2->element(track))
+                        seg2 = seg2->next(st);
+                  Chord* c2 = static_cast<Chord*>(seg2->element(track));
+                  if (c2 && c2->type() == Element::CHORD) {
+                        int notes = qMin(chord->notes().size(), c2->notes().size());
+                        n /= 2;
+                        for (int k = 0; k < notes; ++k) {
+                              NoteEventList* events = &ell[k];
+                              events->clear();
+                              int p1 = chord->notes()[k]->pitch();
+                              int p2 = c2->notes()[k]->pitch();
+                              for (int i = 0; i < n; ++i) {
+                                    events->append(NoteEvent(p1, l * i * 2, l));
+                                    events->append(NoteEvent(p2, l * i * 2 + l, l));
+                                    }
+                              }
+                        }
+                  else
+                        qDebug("Chord::renderTremolo: cannot find 2. chord\n");
+                  }
+            else if (chord->tremoloChordType() == TremoloSecondNote) {
+                  }
+            else if (chord->tremoloChordType() == TremoloSingle) {
+                  for (int k = 0; k < chord->notes().size(); ++k) {
+                        NoteEventList* events = &(ell)[k];
+                        events->clear();
+                        for (int i = 0; i < n; ++i)
+                              events->append(NoteEvent(0, l * i, l));
+                        }
+                  }
+            }
+      else if (chord->arpeggio()) {
+            gateEvents = false;
+            int l = 1000 / n;
+
+            int start, end, step;
+            bool up = chord->arpeggio()->subtype() != ARP_DOWN;
+            if (up) {
+                  start = 0;
+                  end   = chord->notes().size();
+                  step  = 1;
+                  }
+            else {
+                  start = chord->notes().size() - 1;
+                  end   = -1;
+                  step  = -1;
+                  }
+            for (int i = start; i != end; i += step) {
+                  NoteEventList* events = &(ell)[i];
+                  events->clear();
+                  events->append(NoteEvent(0, l * i, 1000 - l * i));
+                  }
+            }
+
+      else if (!chord->articulations().isEmpty()) {
+            ArticulationType type = chord->articulations()[0]->subtype();
+            int key       = chord->staff()->key(chord->segment()->tick()).accidentalType();
+            int pitch     = chord->upNote()->ppitch();
+            int pitchDown = diatonicUpDown(key, pitch, -1);
+            int pitchUp   = diatonicUpDown(key, pitch, 1);
+
+            for (int k = 0; k < chord->notes().size(); ++k) {
+                  NoteEventList* events = &ell[k];
+                  events->clear();
+
+                  switch (type) {
+                        case Articulation_Mordent:
+                              //
+                              // create default playback for Mordent
+                              //
+                              events->append(NoteEvent(0, 0, 125));
+                              events->append(NoteEvent(pitchUp - pitch, 125, 125));
+                              events->append(NoteEvent(0, 250, 750));
+                              break;
+                        case Articulation_Prall:
+                              //
+                              // create default playback events for PrallSym
+                              //
+                              events->append(NoteEvent(0, 0, 125));
+                              events->append(NoteEvent(pitchDown - pitch, 125, 125));
+                              events->append(NoteEvent(0, 250, 750));
+                              break;
+                        default:
+                              break;
+                        }
+                  }
+            }
+
+      //
+      //    apply gateTime
+      //
+      if (!gateEvents)
+            return ell;
+      for (int i = 0; i < n; ++i) {
+            NoteEventList* el = &ell[i];
+            int nn = el->size();
+            if (nn == 0) {
+                  el->append(NoteEvent());
+                  ++nn;
+                  }
+            for (int i = 0; i < nn; ++i) {
+                  NoteEvent* e = &(*el)[i];
+                  e->setLen(e->len() * gateTime / 100);
+                  }
+            }
+      return ell;
+      }
+
+//---------------------------------------------------------
+//   createPlayEvents
+//    create default play events
+//---------------------------------------------------------
+
+void Score::createPlayEvents(Chord* chord)
+      {
+      QList<NoteEventList> el = renderChord(chord);
+      if (chord->userPlayEvents())
+            undo(new ChangeEventList(chord, el, false));
+      else {
+            int n = chord->notes().size();
+            for (int i = 0; i < n; ++i)
+                  chord->notes()[i]->setPlayEvents(el[i]);
+            }
+      }
 
 void Score::createPlayEvents(Measure* m)
       {
@@ -539,7 +700,6 @@ void Score::createPlayEvents(Measure* m)
       int etrack = nstaves() * VOICES;
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            int tick = seg->tick();
             for (int track = 0; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
@@ -549,36 +709,7 @@ void Score::createPlayEvents(Measure* m)
                   Element* cr = seg->element(track);
                   if (cr == 0 || cr->type() != Element::CHORD)
                         continue;
-
-                  Chord* chord = static_cast<Chord*>(cr);
-                  Staff* staff = chord->staff();
-                  int velocity = staff->velocities().velo(seg->tick());
-                  Instrument* instr = chord->staff()->part()->instr(tick);
-                  //
-                  // adjust velocity for instrument, channel and
-                  // depending on articulation marks
-                  //
-                  int channel = 0;  // note->subchannel();
-                  instr->updateVelocity(&velocity, channel, "");
-                  int gateTime = 100;
-                  instr->updateGateTime(&gateTime, channel, "");
-                  foreach (Articulation* a, *chord->getArticulations()) {
-                        instr->updateVelocity(&velocity, channel, a->subtypeName());
-                        instr->updateGateTime(&gateTime, channel, a->subtypeName());
-                        }
-
-                  Tremolo* tremolo = chord->tremolo();
-                  if (tremolo)
-                        chord->renderTremolo();
-                  if (chord->userPlayEvents())
-                        continue;
-                  foreach(Note* note, chord->notes()) {
-                        int n = note->playEvents().size();
-                        for (int i = 0; i < n; ++i) {
-                              NoteEvent* e = note->noteEvent(i);
-                              e->setLen(1000 * gateTime / 100);
-                              }
-                        }
+                  createPlayEvents(static_cast<Chord*>(cr));
                   }
             }
       }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>413</width>
-    <height>185</height>
+    <width>538</width>
+    <height>267</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,23 +32,10 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="hookButton">
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="userPlayEvents">
         <property name="text">
-         <string notr="true" comment="do not translate">Hook</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3">
-       <widget class="QPushButton" name="stemButton">
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string notr="true" comment="do not translate">Stem</string>
+         <string notr="true">userPlayEvents</string>
         </property>
        </widget>
       </item>
@@ -66,13 +53,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="3">
-       <widget class="QPushButton" name="tremoloButton">
-        <property name="text">
-         <string>Tremolo</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="4" colspan="2">
        <widget class="QPushButton" name="glissandoButton">
         <property name="text">
@@ -80,14 +60,44 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
+      <item row="2" column="5">
+       <widget class="QComboBox" name="stemDirection"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="hookButton">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string notr="true" comment="do not translate">Hook</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
        <widget class="QCheckBox" name="graceNote">
         <property name="text">
          <string notr="true" comment="do not translate">Grace Note</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="3">
+      <item row="1" column="1">
+       <widget class="QPushButton" name="tremoloButton">
+        <property name="text">
+         <string>Tremolo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="stemButton">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string notr="true" comment="do not translate">Stem</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
        <widget class="QLabel" name="label">
         <property name="text">
          <string notr="true" comment="do not translate">Stem Direction</string>
@@ -100,69 +110,96 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="5">
-       <widget class="QComboBox" name="stemDirection"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string notr="true" comment="do not translate">Notes:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3" colspan="3">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string notr="true" comment="do not translate">Ledger Lines:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="QListWidget" name="notes">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3" colspan="3">
-       <widget class="QListWidget" name="helplineList">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string notr="true" comment="do not translate">Notes:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="notes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string notr="true" comment="do not translate">Ledger Lines:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="helplineList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

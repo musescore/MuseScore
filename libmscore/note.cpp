@@ -905,7 +905,6 @@ void Note::read(const QDomElement& de)
       _pitch = restrict(_pitch, 0, 127);
       if (!tpcIsValid(_tpc))
             setTpcFromPitch();
-//      _ppitch = _pitch;
       }
 
 //---------------------------------------------------------
@@ -1072,15 +1071,6 @@ Element* Note::drop(const DropData& data)
                   if (_accidental)
                         return e;
                   break;
-
-            case ARPEGGIO:
-                  {
-                  Arpeggio* a = static_cast<Arpeggio*>(e);
-                  a->setParent(ch);
-                  a->setHeight(spatium() * 5);   //DEBUG
-                  score()->undoAddElement(a);
-                  }
-                  return e;
 
             case BEND:
                   {
@@ -1497,10 +1487,10 @@ void Note::setTrack(int val)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//    reset
 //---------------------------------------------------------
 
-void Note::toDefault()
+void Note::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_USER_OFF, QPointF());

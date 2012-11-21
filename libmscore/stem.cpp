@@ -257,13 +257,13 @@ void Stem::editDrag(const EditData& ed)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Stem::toDefault()
+void Stem::reset()
       {
       score()->undoChangeProperty(this, P_USER_LEN, 0.0);
-      Element::toDefault();
+      Element::reset();
       }
 
 //---------------------------------------------------------

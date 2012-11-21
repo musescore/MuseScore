@@ -57,6 +57,7 @@ private slots:
       void dcalFine() { mxmlIoTest("testDCalFine"); }
       void directions1() { mxmlIoTest("testDirections1"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
+      void drumset2() { mxmlIoTest("testDrumset2"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
       void dynamics1() { mxmlIoTest("testDynamics1"); }
       void dynamics2() { mxmlIoTest("testDynamics2"); }

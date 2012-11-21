@@ -195,29 +195,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string notr="true">Ppitch</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="ppitch">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum">
-         <number>127</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_11">
         <property name="text">
@@ -238,17 +215,7 @@
       <item row="0" column="4">
        <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>OnTime:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>OffTime:</string>
+         <string>NoteEvents</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -258,7 +225,7 @@
       <item row="2" column="4">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string notr="true" comment="do not translate">S.-ements:</string>
+         <string notr="true" comment="do not translate">Elements</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -366,70 +333,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
-       <widget class="QSpinBox" name="onTimeOffset">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>-999999</number>
-        </property>
-        <property name="maximum">
-         <number>999999</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QSpinBox" name="offTimeOffset">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>-999999</number>
-        </property>
-        <property name="maximum">
-         <number>999999</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QSpinBox" name="onTimeUserOffset">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>-999999</number>
-        </property>
-        <property name="maximum">
-         <number>999999</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <widget class="QSpinBox" name="offTimeUserOffset">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>-999999</number>
-        </property>
-        <property name="maximum">
-         <number>999999</number>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="4">
        <widget class="QPushButton" name="dot1">
         <property name="text">
@@ -450,6 +353,9 @@
          <string>Dot3</string>
         </property>
        </widget>
+      </item>
+      <item row="0" column="5" rowspan="2" colspan="2">
+       <widget class="QListWidget" name="noteEvents"/>
       </item>
      </layout>
     </widget>

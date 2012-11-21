@@ -2526,14 +2526,16 @@ void ChangeMeasureProperties::flip()
 //---------------------------------------------------------
 
 ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
-   const Fraction& f2, TimeSigType st)
+   const Fraction& f2, QString numStr, QString denStr, TimeSigType st)
       {
-      timesig = _timesig;
-      showCourtesy = sc;
-      sig          = f1;
-      stretch      = f2;
-      subtype      = st;
-      };
+      timesig           = _timesig;
+      showCourtesy      = sc;
+      sig               = f1;
+      stretch           = f2;
+      numeratorString   = numStr;
+      denominatorString = denStr;
+      subtype           = st;
+      }
 
 //---------------------------------------------------------
 //   flip
@@ -2542,18 +2544,26 @@ ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
 void ChangeTimesig::flip()
       {
       timesig->score()->addRefresh(timesig->abbox());
-      bool sc        = timesig->showCourtesySig();
-      Fraction f1    = timesig->sig();
-      Fraction f2    = timesig->stretch();
-      TimeSigType st = timesig->subtype();
-      // setSubType() must come first, as it also calls setSig() with its own parameters
+      bool sc           = timesig->showCourtesySig();
+      Fraction f1       = timesig->sig();
+      Fraction f2       = timesig->stretch();
+      QString numStr    = timesig->numeratorString();
+      QString denStr    = timesig->denominatorString();
+      TimeSigType st    = timesig->subtype();
+
       timesig->setShowCourtesySig(showCourtesy);
       timesig->setSig(sig, subtype);
       timesig->setStretch(stretch);
-      showCourtesy = sc;
-      sig          = f1;
-      stretch      = f2;
-      subtype      = st;
+      timesig->setNumeratorString(numeratorString);
+      timesig->setDenominatorString(denominatorString);
+
+      showCourtesy      = sc;
+      sig               = f1;
+      stretch           = f2;
+      numeratorString   = numStr;
+      denominatorString = denStr;
+      subtype           = st;
+
       timesig->layout();
       timesig->score()->addRefresh(timesig->abbox());
       }
@@ -3053,9 +3063,13 @@ ChangeEventList::~ChangeEventList()
 
 void ChangeEventList::flip()
       {
-      note->playEvents().swap(events);
-      bool um = note->chord()->userPlayEvents();
-      note->chord()->setUserPlayEvents(userModified);
+      int n = chord->notes().size();
+      for (int i = 0; i < n; ++i) {
+            Note* note = chord->notes()[i];
+            note->playEvents().swap(events[i]);
+            }
+      bool um = chord->userPlayEvents();
+      chord->setUserPlayEvents(userModified);
       userModified = um;
       }
 
