@@ -632,7 +632,7 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
                   }
             }
       else if (chord->arpeggio()) {
-            gateEvents = false;
+            gateEvents = false;     // dont apply gateTime to arpeggio events
             int l = 1000 / notes;
 
             int start, end, step;
@@ -654,36 +654,49 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
                   }
             }
 
-      else if (!chord->articulations().isEmpty()) {
-            ArticulationType type = chord->articulations()[0]->subtype();
-            int key       = chord->staff()->key(chord->segment()->tick()).accidentalType();
-            int pitch     = chord->upNote()->ppitch();
-            int pitchDown = diatonicUpDown(key, pitch, -1);
-            int pitchUp   = diatonicUpDown(key, pitch, 1);
+      if (!chord->articulations().isEmpty() && !chord->arpeggio()) {
+            Instrument* instr = chord->staff()->part()->instr(seg->tick());
+            int channel  = 0;  // note->subchannel();
 
-            for (int k = 0; k < notes; ++k) {
-                  NoteEventList* events = &ell[k];
-                  events->clear();
+//qDebug("Chord");
+            foreach (Articulation* a, chord->articulations()) {
+                  ArticulationType type = a->subtype();
+                  for (int k = 0; k < notes; ++k) {
+                        NoteEventList* events = &ell[k];
 
-                  switch (type) {
-                        case Articulation_Mordent:
-                              //
-                              // create default playback for Mordent
-                              //
-                              events->append(NoteEvent(0, 0, 125));
-                              events->append(NoteEvent(pitchUp - pitch, 125, 125));
-                              events->append(NoteEvent(0, 250, 750));
-                              break;
-                        case Articulation_Prall:
-                              //
-                              // create default playback events for PrallSym
-                              //
-                              events->append(NoteEvent(0, 0, 125));
-                              events->append(NoteEvent(pitchDown - pitch, 125, 125));
-                              events->append(NoteEvent(0, 250, 750));
-                              break;
-                        default:
-                              break;
+                        switch (type) {
+                              case Articulation_Mordent: {
+                                    //
+                                    // create default playback for Mordent
+                                    //
+                                    events->clear();
+                                    events->append(NoteEvent(0, 0, 125));
+                                    int key     = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int pitch   = chord->notes()[k]->pitch();
+                                    int pitchUp = diatonicUpDown(key, pitch, 1);
+                                    events->append(NoteEvent(pitchUp - pitch, 125, 125));
+                                    events->append(NoteEvent(0, 250, 750));
+                                    }
+                                    break;
+                              case Articulation_Prall:
+                                    //
+                                    // create default playback events for PrallSym
+                                    //
+                                    {
+                                    events->clear();
+                                    events->append(NoteEvent(0, 0, 125));
+                                    int key       = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int pitch     = chord->notes()[k]->pitch();
+                                    int pitchDown = diatonicUpDown(key, pitch, -1);
+                                    events->append(NoteEvent(pitchDown - pitch, 125, 125));
+                                    events->append(NoteEvent(0, 250, 750));
+                                    }
+                                    break;
+                              default:
+//qDebug("   %s", qPrintable(a->subtypeName()));
+                                    instr->updateGateTime(&gateTime, channel, a->subtypeName());
+                                    break;
+                              }
                         }
                   }
             }
@@ -693,10 +706,6 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
       //
       if (!gateEvents)
             return ell;
-      Instrument* instr = chord->staff()->part()->instr(seg->tick());
-      int channel  = 0;  // note->subchannel();
-      foreach (Articulation* a, chord->articulations())
-            instr->updateGateTime(&gateTime, channel, a->subtypeName());
       for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             int nn = el->size();
