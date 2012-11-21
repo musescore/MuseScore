@@ -432,17 +432,17 @@ void Articulation::setDirection(MScore::Direction d)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Articulation::toDefault()
+void Articulation::reset()
       {
       if (_direction != MScore::AUTO)
             score()->undoChangeProperty(this, P_DIRECTION, int(MScore::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(subtype());
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ARTICULATION_ANCHOR, int(a));
-      Element::toDefault();
+      Element::reset();
       if (chordRest())
             chordRest()->layoutArticulations();
       score()->addRefresh(canvasBoundingRect());

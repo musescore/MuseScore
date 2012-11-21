@@ -1552,9 +1552,9 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 static void chordAttributes(Chord* chord, Notations& notations, Technical& technical, Xml& xml,
                             TrillHash& trillStart, TrillHash& trillStop)
       {
-      QList<Articulation*>* na = chord->getArticulations();
+      const QList<Articulation*>& na = chord->articulations();
       // first output the fermatas
-      foreach (const Articulation* a, *na) {
+      foreach (const Articulation* a, na) {
             if (a->subtype() == Articulation_Fermata
                 || a->subtype() == Articulation_Shortfermata
                 || a->subtype() == Articulation_Longfermata
@@ -1575,7 +1575,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
 
       // then the attributes whose elements are children of <articulations>
       Articulations articulations;
-      foreach (const Articulation* a, *na) {
+      foreach (const Articulation* a, na) {
             switch (a->subtype()) {
                   case Articulation_Fermata:
                   case Articulation_Shortfermata:
@@ -1690,7 +1690,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
 
       // then the attributes whose elements are children of <ornaments>
       Ornaments ornaments;
-      foreach (const Articulation* a, *na) {
+      foreach (const Articulation* a, na) {
             switch (a->subtype()) {
                   case Articulation_Fermata:
                   case Articulation_Shortfermata:
@@ -1762,7 +1762,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
       ornaments.etag(xml);
 
       // and finally the attributes whose elements are children of <technical>
-      foreach (const Articulation* a, *na) {
+      foreach (const Articulation* a, na) {
             switch (a->subtype()) {
                   case Articulation_Plusstop:
                         {

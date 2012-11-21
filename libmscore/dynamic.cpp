@@ -208,13 +208,13 @@ void Dynamic::resetType()
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Dynamic::toDefault()
+void Dynamic::reset()
       {
       resetType();
-      Text::toDefault();
+      Text::reset();
       }
 
 //---------------------------------------------------------

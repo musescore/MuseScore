@@ -41,30 +41,27 @@
 //   ChordEditor
 //---------------------------------------------------------
 
-ChordEditor::ChordEditor(Note* c, QWidget* parent)
+ChordEditor::ChordEditor(Chord* c, QWidget* parent)
    : QDialog(parent)
       {
-      _note = c;
+      _chord = c;
       setWindowTitle(QString("MuseScore: Chord Articulation"));
 
-      Chord* chord = _note->chord();
-      notes = chord->notes().size();
-      events = new NoteEventList[notes];
-      for (int i = 0; i < notes; ++i) {
-            Note* n = chord->notes()[i];
-            events[i] = n->playEvents();
-            }
+      // save original events
+      int notes = _chord->notes().size();
+      for (int i = 0; i < notes; ++i)
+            events.append(_chord->notes()[i]->playEvents());
 
       QGridLayout* layout = new QGridLayout;
       setLayout(layout);
       layout->setSpacing(0);
 
       double xmag = .1;
-      pianoroll   = new ChordView;
-      pianoroll->scale(xmag, 1.0);
-      layout->addWidget(pianoroll, 0, 0);
-      pianoroll->setChord(chord);
-      pianoroll->setEvenGrid(false);      //TODO
+      chordView   = new ChordView;
+      chordView->scale(xmag, 1.0);
+      layout->addWidget(chordView, 0, 0);
+      chordView->setChord(_chord);
+      chordView->setEvenGrid(false);      //TODO
       bb = new QDialogButtonBox(
          QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel
          );
@@ -73,15 +70,7 @@ ChordEditor::ChordEditor(Note* c, QWidget* parent)
       connect(bb, SIGNAL(rejected()), SLOT(reject()));
       connect(bb, SIGNAL(clicked(QAbstractButton*)), SLOT(clicked(QAbstractButton*)));
       resize(800, 400);
-      }
-
-//---------------------------------------------------------
-//   ChordEditor
-//---------------------------------------------------------
-
-ChordEditor::~ChordEditor()
-      {
-      delete[] events;
+      dirty = false;
       }
 
 //---------------------------------------------------------
@@ -91,12 +80,12 @@ ChordEditor::~ChordEditor()
 void ChordEditor::clicked(QAbstractButton* b)
       {
       if (bb->standardButton(b) == QDialogButtonBox::Reset) {
-            Chord* chord = _note->chord();
+            int notes = _chord->notes().size();
             for (int i = 0; i < notes; ++i) {
-                  Note* note = chord->notes()[i];
+                  Note* note = _chord->notes()[i];
                   note->setPlayEvents(events[i]);
                   }
-            pianoroll->setChord(chord);
+            chordView->setChord(_chord);
             }
       }
 
@@ -106,11 +95,15 @@ void ChordEditor::clicked(QAbstractButton* b)
 
 void ChordEditor::accept()
       {
-      Chord* chord = _note->chord();
-      for (int i = 0; i < notes; ++i) {
-            Note* note = chord->notes()[i];
-            note->playEvents().swap(events[i]);
-            note->score()->undo(new ChangeEventList(note, events[i], true));
+      QList<NoteEventList> nevents;
+
+      if (chordView->dirty() || dirty) {
+            int notes = _chord->notes().size();
+            for (int i = 0; i < notes; ++i)
+                  nevents.append(_chord->notes()[i]->playEvents());
+            for (int i = 0; i < notes; ++i)
+                  _chord->notes()[i]->setPlayEvents(events[i]);
+            _chord->score()->undo(new ChangeEventList(_chord, nevents, chordView->dirty()));
             }
       QDialog::accept();
       }
@@ -121,10 +114,10 @@ void ChordEditor::accept()
 
 void ChordEditor::reject()
       {
-      Chord* chord = _note->chord();
+      int notes = _chord->notes().size();
       for (int i = 0; i < notes; ++i) {
-            Note* note = chord->notes()[i];
-            note->playEvents().swap(events[i]);
+            Note* note = _chord->notes()[i];
+            note->setPlayEvents(events[i]);
             }
       QDialog::reject();
       }
