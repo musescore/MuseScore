@@ -532,28 +532,60 @@ void Score::renderPart(EventMap* events, Part* part)
       }
 
 //---------------------------------------------------------
+//   gateTime
+//---------------------------------------------------------
+
+static int gateTime(Chord* chord)
+      {
+      QList<Slur*> slurs;
+      int track = chord->track();
+      int gateTime = 100;
+      Score* score = chord->score();
+      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+            for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+                  if (cr == 0)
+                        continue;
+                  foreach(Spanner* spanner, cr->spannerFor()) {
+                        if (spanner->type() == Element::SLUR)
+                              slurs.append(static_cast<Slur*>(spanner));
+                        }
+                  foreach(Spanner* spanner, cr->spannerBack()) {
+                        if (spanner->type() == Element::SLUR)
+                              slurs.removeOne(static_cast<Slur*>(spanner));
+                        }
+                  if (cr == chord) {
+                        if (slurs.isEmpty()) {
+                              Instrument* instr = cr->staff()->part()->instr(seg->tick());
+                              int channel = 0;
+                              instr->updateGateTime(&gateTime, channel, "");
+                              }
+                        break;
+                        }
+                  }
+            }
+      return gateTime;
+      }
+
+//---------------------------------------------------------
 //   renderChord
 //---------------------------------------------------------
 
 QList<NoteEventList> Score::renderChord(Chord* chord)
       {
+      return renderChord(chord, gateTime(chord));
+      }
+
+QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
+      {
       QList<NoteEventList> ell;
       if (chord->notes().isEmpty())
             return ell;
       Segment* seg = chord->segment();
-      Instrument* instr = chord->staff()->part()->instr(seg->tick());
-      //
-      // adjust velocity for instrument, channel and
-      // depending on articulation marks
-      //
-      int channel  = 0;  // note->subchannel();
-      int gateTime = 100;
-      instr->updateGateTime(&gateTime, channel, "");
-      foreach (Articulation* a, chord->articulations())
-            instr->updateGateTime(&gateTime, channel, a->subtypeName());
 
-      int n = chord->notes().size();
-      for (int i = 0; i < n; ++i)
+      int notes = chord->notes().size();
+      for (int i = 0; i < notes; ++i)
             ell.append(NoteEventList());
 
       bool gateEvents = true;
@@ -565,7 +597,6 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
             int n = 1 << tremolo->lines();
             int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
-                  Segment* seg = chord->segment();
                   Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
@@ -573,9 +604,9 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
                         seg2 = seg2->next(st);
                   Chord* c2 = static_cast<Chord*>(seg2->element(track));
                   if (c2 && c2->type() == Element::CHORD) {
-                        int notes = qMin(chord->notes().size(), c2->notes().size());
+                        int tnotes = qMin(notes, c2->notes().size());
                         n /= 2;
-                        for (int k = 0; k < notes; ++k) {
+                        for (int k = 0; k < tnotes; ++k) {
                               NoteEventList* events = &ell[k];
                               events->clear();
                               int p1 = chord->notes()[k]->pitch();
@@ -592,7 +623,7 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
             else if (chord->tremoloChordType() == TremoloSecondNote) {
                   }
             else if (chord->tremoloChordType() == TremoloSingle) {
-                  for (int k = 0; k < chord->notes().size(); ++k) {
+                  for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &(ell)[k];
                         events->clear();
                         for (int i = 0; i < n; ++i)
@@ -602,17 +633,17 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
             }
       else if (chord->arpeggio()) {
             gateEvents = false;
-            int l = 1000 / n;
+            int l = 1000 / notes;
 
             int start, end, step;
             bool up = chord->arpeggio()->subtype() != ARP_DOWN;
             if (up) {
                   start = 0;
-                  end   = chord->notes().size();
+                  end   = notes;
                   step  = 1;
                   }
             else {
-                  start = chord->notes().size() - 1;
+                  start = notes - 1;
                   end   = -1;
                   step  = -1;
                   }
@@ -630,7 +661,7 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
             int pitchDown = diatonicUpDown(key, pitch, -1);
             int pitchUp   = diatonicUpDown(key, pitch, 1);
 
-            for (int k = 0; k < chord->notes().size(); ++k) {
+            for (int k = 0; k < notes; ++k) {
                   NoteEventList* events = &ell[k];
                   events->clear();
 
@@ -662,7 +693,11 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
       //
       if (!gateEvents)
             return ell;
-      for (int i = 0; i < n; ++i) {
+      Instrument* instr = chord->staff()->part()->instr(seg->tick());
+      int channel  = 0;  // note->subchannel();
+      foreach (Articulation* a, chord->articulations())
+            instr->updateGateTime(&gateTime, channel, a->subtypeName());
+      for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             int nn = el->size();
             if (nn == 0) {
@@ -684,7 +719,12 @@ QList<NoteEventList> Score::renderChord(Chord* chord)
 
 void Score::createPlayEvents(Chord* chord)
       {
-      QList<NoteEventList> el = renderChord(chord);
+      createPlayEvents(chord, gateTime(chord));
+      }
+
+void Score::createPlayEvents(Chord* chord, int gateTime)
+      {
+      QList<NoteEventList> el = renderChord(chord, gateTime);
       if (chord->userPlayEvents())
             undo(new ChangeEventList(chord, el, false));
       else {
@@ -694,30 +734,45 @@ void Score::createPlayEvents(Chord* chord)
             }
       }
 
-void Score::createPlayEvents(Measure* m)
+void Score::createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
       {
-      Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
-      int etrack = nstaves() * VOICES;
-
+      const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            for (int track = 0; track < etrack; ++track) {
-                  // skip linked staves, except primary
-                  if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                        track += VOICES-1;
-                        continue;
-                        }
-                  Element* cr = seg->element(track);
-                  if (cr == 0 || cr->type() != Element::CHORD)
-                        continue;
-                  createPlayEvents(static_cast<Chord*>(cr));
+            // skip linked staves, except primary
+            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+                  track += VOICES-1;
+                  continue;
                   }
+            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+            if (cr == 0)
+                  continue;
+            foreach(Spanner* spanner, cr->spannerFor()) {
+                  if (spanner->type() == Element::SLUR)
+                        slurs->append(static_cast<Slur*>(spanner));
+                  }
+            foreach(Spanner* spanner, cr->spannerBack()) {
+                  if (spanner->type() == Element::SLUR)
+                        slurs->removeOne(static_cast<Slur*>(spanner));
+                  }
+            if (cr->type() != Element::CHORD)
+                  continue;
+            int gateTime = 100;
+            if (slurs->isEmpty()) {
+                  Instrument* instr = cr->staff()->part()->instr(seg->tick());
+                  int channel = 0;
+                  instr->updateGateTime(&gateTime, channel, "");
+                  }
+            createPlayEvents(static_cast<Chord*>(cr), gateTime);
             }
       }
 
 void Score::createPlayEvents()
       {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            createPlayEvents(m);
+      QList<Slur*> slurs;
+      int etrack = nstaves() * VOICES;
+      for (int track = 0; track < etrack; ++track) {
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+                  createPlayEvents(m, track, &slurs);
             }
       }
 

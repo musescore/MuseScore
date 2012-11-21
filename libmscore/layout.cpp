@@ -587,6 +587,8 @@ void Score::doLayout()
             fixTicks();
       if (layoutFlags & LAYOUT_FIX_PITCH_VELO)
             updateVelo();
+      if (layoutFlags & LAYOUT_PLAY_EVENTS)
+            createPlayEvents();
 
       for (MeasureBase* m = first(); m; m = m->next()) {
             m->layout0();
