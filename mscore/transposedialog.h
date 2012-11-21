@@ -34,15 +34,21 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
    private slots:
       void transposeByKeyToggled(bool);
       void transposeByIntervalToggled(bool);
+      void on_chromaticBox_toggled(bool val);
+      void on_diatonicBox_toggled(bool val);
 
    public:
       TransposeDialog(QWidget* parent = 0);
       void enableTransposeKeys(bool val)  { transposeKeys->setEnabled(val);       }
       void enableTransposeByKey(bool val);
-      bool getTransposeKeys() const       { return transposeKeys->isChecked();    }
+      bool getTransposeKeys() const       { return chromaticBox->isChecked()
+                                                ? transposeKeys->isChecked()
+                                                : keepDegreeAlterations->isChecked();}
       bool getTransposeChordNames() const { return transposeChordNames->isChecked(); }
       int transposeKey() const            { return keyList->currentIndex() - 7;      }
-      int transposeInterval() const       { return intervalList->currentIndex();     }
+      int transposeInterval() const       { return chromaticBox->isChecked()
+                                                ? intervalList->currentIndex()
+                                                : degreeList->currentIndex() + 1;   }
       TransposeDirection direction() const;
       TransposeMode mode() const;
       void setKey(int k)                  { keyList->setCurrentIndex(k + 7); }
