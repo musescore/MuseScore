@@ -1468,6 +1468,11 @@ void Score::addElement(Element* element)
                   _instrumentsChanged = true;
                   break;
 
+            case Element::CHORD:
+                  createPlayEvents(static_cast<Chord*>(element));
+                  break;
+
+            case Element::NOTE:
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
@@ -1585,7 +1590,6 @@ void Score::removeElement(Element* element)
                   ChordRest* cr = static_cast<ChordRest*>(element);
                   if (cr->beam())
                         cr->beam()->remove(cr);
-                  // cr->setBeam(0);
                   }
                   break;
             case Element::CLEF:

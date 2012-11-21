@@ -549,7 +549,7 @@ int diatonicUpDown(int key, int pitch, int steps)
                               }
                         }
                   else {
-                        while (++steps != 0) {
+                        while (++steps <= 0) {
                               --i;
                               if (i < 0) {
                                     i = 6;

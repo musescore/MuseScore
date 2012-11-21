@@ -605,7 +605,9 @@ void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QSt
 
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
-                  *gateTime = *gateTime * a.gateTime / 100;
+// qDebug("updateGateTime found %d", a.gateTime);
+                  // *gateTime = *gateTime * a.gateTime / 100;
+                  *gateTime = a.gateTime;
                   break;
                   }
             }
