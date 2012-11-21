@@ -1788,9 +1788,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                                     x2 += stemWidth;
                               x3 = x2 + len;
                               }
+                        //feathered beams
                         qreal yo   = py1 + bl * _beamDist * _grow1;
+                        qreal yoo = py1 + bl * _beamDist * _grow2;
                         qreal ly1  = (x2 - x1) * slope + yo;
-                        qreal ly2  = (x3 - x1) * slope + yo;
+                        qreal ly2  = (x3 - x1) * slope + yoo;
                         if (!qIsFinite(x2) || !qIsFinite(ly1)
                            || !qIsFinite(x3) || !qIsFinite(ly2)) {
                               qDebug("bad beam segment: slope %f", slope);
