@@ -321,6 +321,8 @@ class Note : public Element {
       void addSpannerFor(Spanner* e)            { _spannerFor.append(e);      }
       bool removeSpannerFor(Spanner* e)         { return _spannerFor.removeOne(e); }
 
+      void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
+
       void undoSetFret(int);
       void undoSetString(int);
       void undoSetGhost(bool);

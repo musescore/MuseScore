@@ -20,6 +20,25 @@ class MidiNote;
 class Note;
 class Event;
 
+// a list of tpc's, with legal ranges
+enum {
+      INVALID_TPC = -2,
+      TPC_F_BB, TPC_C_BB, TPC_G_BB, TPC_D_BB, TPC_A_BB, TPC_E_BB, TPC_B_BB,
+      TPC_F_B,  TPC_C_B,  TPC_G_B,  TPC_D_B,  TPC_A_B,  TPC_E_B,  TPC_B_B,
+      TPC_F,    TPC_C,    TPC_G,    TPC_D,    TPC_A,    TPC_E,    TPC_B,
+      TPC_F_S,  TPC_C_S,  TPC_G_S,  TPC_D_S,  TPC_A_S,  TPC_E_S,  TPC_B_S,
+      TPC_F_SS, TPC_C_SS, TPC_G_SS, TPC_D_SS, TPC_A_SS, TPC_E_SS, TPC_B_SS,
+      TPC_MIN = TPC_F_BB,
+      TPC_MAX = TPC_B_SS
+      };
+
+const int   TPC_DELTA_SEMITONE      = 7;  // the delta in tpc value to go 1 semitone up or down
+const int   TPC_DELTA_ENHARMONIC    = 12; // the delta in tpc value to reach the next (or prev) enharmonic spelling
+const int   TPC_FIRST_STEP          = 3;  // the step of the first valid tpc (= F = step 3)
+const int   PITCH_DELTA_OCTAVE      = 12; // the delta in pitch value to go 1 octave up or down
+const int   STEP_DELTA_OCTAVE       = 7;  // the number of steps in an octave
+const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (= a fifth = 4 steps)
+
 //---------------------------------------------------------
 //   pitch2tpc
 //    Returns a default tpc for a given midi pitch.
@@ -33,8 +52,6 @@ inline static int pitch2tpc(int pitch)
 
 int pitch2tpc2(int pitch, bool preferSharp);
 
-const int INVALID_TPC = -2;
-
 extern int pitch2tpc(int pitch, int key);
 
 extern void spell(QList<Event>& notes, int);
@@ -46,8 +63,13 @@ extern void tpc2name(int tpc, bool germanNames, QChar* name, int* acc);
 extern int step2tpc(const QString& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
+extern int step2tpcByKey(int step, int key);
 extern int tpc2pitch(int tpc);
 extern int tpc2step(int tpc);
+extern int tpc2stepByKey(int tpc, int key, int* pAlter);
+extern int tpc2alterByKey(int tpc, int key);
+extern int pitch2absStepByKey(int pitch, int tpc, int key, int* pAlter);
+extern int absStep2pitchByKey(int step, int key);
 
 //---------------------------------------------------------
 //   tpc2alter
