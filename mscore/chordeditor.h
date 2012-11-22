@@ -47,8 +47,7 @@ class ChordEditor : public QDialog {
    public slots:
 
    public:
-      ChordEditor(Note*, QWidget* parent = 0);
-      ~ChordEditor();
+      ChordEditor(Chord*, QWidget* parent = 0);
       };
 
 #endif
