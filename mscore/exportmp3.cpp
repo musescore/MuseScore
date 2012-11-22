@@ -683,7 +683,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       synti->setState(score->syntiState());
 
       EventMap events;
-      score->toEList(&events);
+      score->renderMidi(&events);
 
       QProgressBar* pBar = showProgressBar();
       pBar->reset();
