@@ -41,10 +41,10 @@
 //   ChordEditor
 //---------------------------------------------------------
 
-ChordEditor::ChordEditor(Note* c, QWidget* parent)
+ChordEditor::ChordEditor(Chord* c, QWidget* parent)
    : QDialog(parent)
       {
-      _note = c;
+      _chord = c;
       setWindowTitle(QString("MuseScore: Chord Articulation"));
 
       // save original events
@@ -86,31 +86,6 @@ void ChordEditor::clicked(QAbstractButton* b)
                   note->setPlayEvents(events[i]);
                   }
             chordView->setChord(_chord);
-            }
-      }
-
-//---------------------------------------------------------
-//   ChordEditor
-//---------------------------------------------------------
-
-ChordEditor::~ChordEditor()
-      {
-      delete[] events;
-      }
-
-//---------------------------------------------------------
-//   clicked - Reset
-//---------------------------------------------------------
-
-void ChordEditor::clicked(QAbstractButton* b)
-      {
-      if (bb->standardButton(b) == QDialogButtonBox::Reset) {
-            Chord* chord = _note->chord();
-            for (int i = 0; i < notes; ++i) {
-                  Note* note = chord->notes()[i];
-                  note->setPlayEvents(events[i]);
-                  }
-            pianoroll->setChord(chord);
             }
       }
 
