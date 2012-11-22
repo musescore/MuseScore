@@ -622,7 +622,7 @@ void Note::write(Xml& xml) const
             }
       if (_tieFor)
             _tieFor->write(xml);
-      if (chord()->userPlayEvents()) {
+      if (chord() == 0 || chord()->userPlayEvents()) {
             if (!_playEvents.isEmpty()) {
                   xml.stag("Events");
                   foreach(const NoteEvent& e, _playEvents)
@@ -868,7 +868,8 @@ void Note::read(const QDomElement& de)
                         else
                               domError(ee);
                         }
-                  chord()->setUserPlayEvents(true);
+                  if (chord())
+                        chord()->setUserPlayEvents(true);
                   }
             else if (tag == "endSpanner") {
                   int id = e.attribute("id").toInt();

@@ -186,7 +186,7 @@ enum TransposeDirection {
 //---------------------------------------------------------
 
 enum TransposeMode {
-      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL
+      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL, TRANSPOSE_DIATONICALLY
       };
 
 //---------------------------------------------------------
