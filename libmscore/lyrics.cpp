@@ -26,7 +26,7 @@
 Lyrics::Lyrics(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_LYRIC1));
+      setTextStyleType(TEXT_STYLE_LYRIC1);
       _no          = 0;
       _ticks       = 0;
       _syllabic    = SINGLE;
@@ -37,8 +37,6 @@ Lyrics::Lyrics(const Lyrics& l)
    : Text(l)
       {
       _no  = l._no;
-      if (styled())
-            setTextStyle(l.textStyle());
       _ticks = l._ticks;
       _syllabic = l._syllabic;
       if (l._verseNumber)
@@ -188,41 +186,23 @@ void Lyrics::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF Lyrics::pagePos() const
-      {
-      System* system = measure()->system();
-      qreal yp = y();
-      if (system)
-	      yp = yp + system->staff(staffIdx())->y() + system->y();
-      return QPointF(pageX(), yp);
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Lyrics::layout()
       {
-      if (styled())
-            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
-      Text::layout();
-      qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
-      if(!parent()) // palette & clone trick
+//      if (styled())
+//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+      Text::layout1();
+      if (!parent()) // palette & clone trick
           return;
-      System* sys = measure()->system();
-      if (sys == 0) {
-            qDebug("lyrics layout: no system!");
-            abort();
-            }
+
       const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
 
+      qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
       int line = ll->indexOf(this);
-      qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance))
-                 + sys->staff(staffIdx())->bbox().height();
-      qreal x = pos().x();
+      qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance));
+      qreal x  = 0.0;
       //
       // left align if syllable has a number or is a melisma
       //
@@ -230,10 +210,20 @@ void Lyrics::layout()
             x += symbols[score()->symIdx()][quartheadSym].width(magS()) * .5;
       else if (_ticks || ((textStyle().align() & ALIGN_HCENTER) && _verseNumber))
             x += width() * .5;
-      setPos(x, y);
+      rxpos() += x;
+      rypos() += y;
       if (_verseNumber) {
             _verseNumber->layout();
             _verseNumber->setPos(-x, 0.0);
+            }
+      QPointF rp(readPos());
+      if (!rp.isNull()) {
+            if (score()->mscVersion() <= 114) {
+                  rp.ry() += lineSpacing() + 2;
+                  rp.rx() += bbox().width() * .5;
+                  }
+            setUserOff(rp - ipos());
+            setReadPos(QPointF());
             }
       }
 
@@ -304,7 +294,63 @@ Element* Lyrics::drop(const DropData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      if (type() == LYRICS)
-            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
+      // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
+      // (_no is 0-based, so odd _no means even line and viceversa)
+      if (type() == LYRICS) {
+            if( (_no & 1) && textStyleType() == TEXT_STYLE_LYRIC1)
+                  setTextStyleType(TEXT_STYLE_LYRIC2);
+            if( !(_no & 1) && textStyleType() == TEXT_STYLE_LYRIC2)
+                  setTextStyleType(TEXT_STYLE_LYRIC1);
+            }
       }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Lyrics::endEdit()
+      {
+      Text::endEdit();
+      score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Lyrics::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            default:
+                  return Text::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            default:
+                  if (!Text::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Lyrics::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            default: return Text::propertyDefault(id);
+            }
+      }
+
 

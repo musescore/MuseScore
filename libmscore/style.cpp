@@ -108,6 +108,10 @@ StyleType styleTypes[] = {
       StyleType("hairpinHeight",           ST_SPATIUM),
       StyleType("hairpinContHeight",       ST_SPATIUM),
       StyleType("hairpinWidth",            ST_SPATIUM),
+
+      StyleType("pedalY",                  ST_SPATIUM),
+      StyleType("trillY",                  ST_SPATIUM),
+
       StyleType("showPageNumber",          ST_BOOL),
       StyleType("showPageNumberOne",       ST_BOOL),
       StyleType("pageNumberOddEven",       ST_BOOL),
@@ -214,6 +218,7 @@ static const QString ff("FreeSerifMscore");
 void initStyle(MStyle* s)
       {
       // this is an empty style, no offsets are allowed
+      // dont show this style in editor
       AS(TextStyle(
          "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE));
 
@@ -330,9 +335,10 @@ void initStyle(MStyle* s)
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
+      // y offset may depend on voltaHook style element
       AS(TextStyle(
          TR( "Volta"), ff, 11, true, false, false,
-         ALIGN_LEFT, QPointF(0.5, .0), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Frame"), ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP));
@@ -468,6 +474,10 @@ StyleData::StyleData()
             StyleVal(ST_hairpinHeight, Spatium(1.2)),
             StyleVal(ST_hairpinContHeight, Spatium(0.5)),
             StyleVal(ST_hairpinWidth, Spatium(0.13)),
+
+            StyleVal(ST_pedalY, Spatium(8)),
+            StyleVal(ST_trillY, Spatium(-1)),
+
             StyleVal(ST_showPageNumber, true),
             StyleVal(ST_showPageNumberOne, false),
             StyleVal(ST_pageNumberOddEven, true),

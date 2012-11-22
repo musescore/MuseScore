@@ -62,10 +62,14 @@ version: revision
 	@echo ${VERSION}
 
 install:
-	cd build.release;xcodebuild -project ${XCODEPROJ} -configuration Release -target install;
+	cd build.release;   \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target install_plugins_manual; \
+	xcodebuild -project ${XCODEPROJ} -configuration Release -target install;
 
 installdebug:
-	cd build.debug;xcodebuild -project ${XCODEPROJ} -configuration Debug -target install;
+	cd build.debug; \
+	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install_plugins_manual; \
+	xcodebuild -project ${XCODEPROJ} -configuration Debug -target install;
 
 package:
 	build/package_mac;

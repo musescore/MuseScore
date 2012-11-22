@@ -134,6 +134,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "TrillSegment"),
       QT_TRANSLATE_NOOP("elementName", "TextLineSegment"),
       QT_TRANSLATE_NOOP("elementName", "VoltaSegment"),
+      QT_TRANSLATE_NOOP("elementName", "PedalSegment"),
       QT_TRANSLATE_NOOP("elementName", "LayoutBreak"),
       QT_TRANSLATE_NOOP("elementName", "Spacer"),
       QT_TRANSLATE_NOOP("elementName", "StaffState"),
@@ -217,6 +218,7 @@ void LinkedElements::setLid(Score* score, int id)
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userOff *= (newValue / oldValue);
+      _readPos *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -297,6 +299,7 @@ Element::Element(Score* s) :
    _selected(false),
    _generated(false),
    _visible(true),
+   _placement(BELOW),
    _flags(ELEMENT_SELECTABLE),
    _track(-1),
    _color(MScore::defaultColor),
@@ -319,6 +322,7 @@ Element::Element(const Element& e)
       _selected   = e._selected;
       _generated  = e._generated;
       _visible    = e._visible;
+      _placement  = e._placement;
       _flags      = e._flags;
       _track      = e._track;
       _color      = e._color;
@@ -508,12 +512,12 @@ QPointF Element::pagePos() const
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
                         si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staff(si)->y() + system->y();
+                  p.ry() += system->staffY(si); // system->staff(si)->y() + system->y();
                   }
             p.rx() = pageX();
             }
       else {
-            if (parent() && parent()->parent())
+            if (parent()->parent())
                   p += parent()->pagePos();
             }
       return p;
@@ -534,7 +538,7 @@ QPointF Element::canvasPos() const
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
                         si += static_cast<const ChordRest*>(this)->staffMove();
-                  p.ry() += system->staff(si)->y() + system->y();
+                  p.ry() += system->staffY(si); // system->staff(si)->y() + system->y();
                   Page* page = system->page();
                   if (page)
                         p.ry() += page->y();
@@ -542,8 +546,7 @@ QPointF Element::canvasPos() const
             p.rx() = canvasX();
             }
       else {
-            if (parent())
-                  p += parent()->canvasPos();
+            p += parent()->canvasPos();
             }
       return p;
       }
@@ -655,6 +658,7 @@ void Element::writeProperties(Xml& xml) const
             xml.tag("color", color());
       if (!visible())
             xml.tag("visible", visible());
+      writeProperty(xml, P_PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -705,15 +709,8 @@ bool Element::readProperties(const QDomElement& e)
             setUserOff(pt);
             // _readPos = QPointF();
             }
-      else if (tag == "pos") {
-//            if (score()->mscVersion() > 114
-//               || (type() != TEXT && type() != DYNAMIC)
-//               ) {
-                  qreal _spatium = spatium();
-//                  setUserOff(QPointF());
-                  _readPos = readPoint(e) * _spatium;
-//                  }
-            }
+      else if (tag == "pos")
+            _readPos = readPoint(e) * spatium();
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + val.toInt());
       else if (tag == "track")
@@ -726,6 +723,8 @@ bool Element::readProperties(const QDomElement& e)
                         }
                   }
             }
+      else if (tag == "placement")
+            _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
       else
             return false;
       return true;
@@ -1341,6 +1340,7 @@ Element* Element::create(ElementType type, Score* score)
             case OTTAVA_SEGMENT:
             case TRILL_SEGMENT:
             case VOLTA_SEGMENT:
+            case PEDAL_SEGMENT:
             case LEDGER_LINE:
             case STAFF_LINES:
             case SELECTION:
@@ -1448,6 +1448,15 @@ Space& Space::operator+=(const Space& s)
       }
 
 //---------------------------------------------------------
+//   undoSetPlacement
+//---------------------------------------------------------
+
+void Element::undoSetPlacement(Placement v)
+      {
+      score()->undoChangeProperty(this, P_PLACEMENT, v);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -1458,6 +1467,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_VISIBLE:   return _visible;
             case P_SELECTED:  return _selected;
             case P_USER_OFF:  return _userOff;
+            case P_PLACEMENT: return int(_placement);
             default:
                   return QVariant();
             }
@@ -1482,6 +1492,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             case P_USER_OFF:
                   _userOff = v.toPointF();
                   break;
+            case P_PLACEMENT:
+                  _placement = Placement(v.toInt());
+                  break;
             default:
                   qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
                   return false;
@@ -1489,6 +1502,20 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
       setGenerated(false);
       score()->addRefresh(canvasBoundingRect());
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Element::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_PLACEMENT:     return BELOW;
+            default:    // not all properties have a default
+                  break;
+            }
+      return QVariant();
       }
 
 //---------------------------------------------------------

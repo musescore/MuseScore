@@ -120,10 +120,10 @@ enum BracketType {
       };
 
 //---------------------------------------------------------
-//   Placement
+//   PlaceText
 //---------------------------------------------------------
 
-enum Placement {
+enum PlaceText {
       PLACE_AUTO, PLACE_ABOVE, PLACE_BELOW, PLACE_LEFT
       };
 
@@ -186,7 +186,7 @@ enum TransposeDirection {
 //---------------------------------------------------------
 
 enum TransposeMode {
-      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL
+      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL, TRANSPOSE_DIATONICALLY
       };
 
 //---------------------------------------------------------
@@ -329,7 +329,7 @@ enum {
 
 enum BarLineType {
       NORMAL_BAR, DOUBLE_BAR, START_REPEAT, END_REPEAT,
-      BROKEN_BAR, END_BAR, END_START_REPEAT
+      BROKEN_BAR, END_BAR, END_START_REPEAT, DOTTED_BAR
       };
 
 // Icon() subtypes

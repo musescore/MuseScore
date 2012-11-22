@@ -82,6 +82,7 @@ class Trill : public SLine {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual void setYoff(qreal);
       };
 
 Q_DECLARE_METATYPE(Trill::TrillType)

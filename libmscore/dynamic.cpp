@@ -68,16 +68,16 @@ Dynamic::Dynamic(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _velocity = -1;
-      _dynType  = DYNAMIC_PART;
+      _dynRange = DYNAMIC_PART;
       setSubtype(0);
       }
 
 Dynamic::Dynamic(const Dynamic& d)
    : Text(d)
       {
-      _subtype  = d._subtype;
-      _velocity = d._velocity;
-      _dynType  = d._dynType;
+      _subtype   = d._subtype;
+      _velocity  = d._velocity;
+      _dynRange  = d._dynRange;
       }
 
 //---------------------------------------------------------
@@ -106,10 +106,8 @@ void Dynamic::write(Xml& xml) const
       {
       xml.stag("Dynamic");
       xml.tag("subtype", subtypeName());
-      if (_velocity > 0)
-            xml.tag("velocity", _velocity);
-      if (_dynType != DYNAMIC_PART)
-            xml.tag("dynType", _dynType);
+      writeProperty(xml, P_VELOCITY);
+      writeProperty(xml, P_DYNAMIC_RANGE);
       Text::writeProperties(xml, subtype() == 0);
       xml.etag();
       }
@@ -121,17 +119,36 @@ void Dynamic::write(Xml& xml) const
 void Dynamic::read(const QDomElement& de)
       {
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "subtype")
+            const QString& tag = e.tagName();
+            if (tag == "subtype")
                   setSubtype(e.text());
-            else if (e.tagName() == "velocity")
+            else if (tag == "velocity")
                   _velocity = e.text().toInt();
-            else if (e.tagName() == "dynType")
-                  _dynType = DynamicType(e.text().toInt());
+            else if (tag == "dynType")
+                  _dynRange = DynamicRange(e.text().toInt());
             else if (!Text::readProperties(e))
                   domError(e);
             }
-      if (score()->mscVersion() < 118)
+      if (score()->mscVersion() < 118) {
             setTextStyleType(TEXT_STYLE_DYNAMICS2);
+            }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Dynamic::layout()
+      {
+      if (!readPos().isNull()) {
+            if (score()->mscVersion() < 118) {
+                  setReadPos(QPointF());
+                  // hack: 1.2 boundingBoxes are a bit wider which results
+                  // in symbols moved right
+                  setUserXoffset(userOff().x() - spatium() * .6);
+                  }
+            }
+      Text::layout();
       }
 
 //---------------------------------------------------------
@@ -212,5 +229,67 @@ QLineF Dynamic::dragAnchor() const
       qreal yp = measure()->system()->staffY(staffIdx());
       QPointF p(xp, yp);
       return QLineF(p, canvasPos());
+      }
+
+//---------------------------------------------------------
+//   undoSetDynRange
+//---------------------------------------------------------
+
+void Dynamic::undoSetDynRange(DynamicRange v)
+      {
+      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, v);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Dynamic::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_DYNAMIC_RANGE:     return int(_dynRange);
+            case P_VELOCITY:          return _velocity;
+            case P_SUBTYPE:           return _subtype;
+            default:
+                  return Text::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_DYNAMIC_RANGE:
+                  _dynRange = DynamicRange(v.toInt());
+                  break;
+            case P_VELOCITY:
+                  _velocity = v.toInt();
+                  break;
+            case P_SUBTYPE:
+                  _subtype = v.toInt();
+                  break;
+            default:
+                  if (!Text::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Dynamic::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_DYNAMIC_RANGE: return DYNAMIC_PART;
+            case P_VELOCITY:      return -1;
+            default:              return Text::propertyDefault(id);
+            }
       }
 

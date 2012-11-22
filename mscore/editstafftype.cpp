@@ -38,7 +38,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setupUi(this);
       staff = st;
       Score* score = staff->score();
-      staffTypes   = score->staffTypes();
+      // copy types from score and set as non-built-in
+      foreach(StaffType** const st, score->staffTypes())
+             staffTypes.append((*st)->clone());
+      foreach(StaffType* const st, staffTypes)
+             st->setBuildin(false);
       int idx = 0;
       QListWidgetItem* ci = 0;
       foreach(StaffType* st, staffTypes) {
@@ -58,6 +62,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       _tabPresets[TAB_PRESET_BANDURRIA]=new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
       _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
       _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
       QList<QString> fontNames = StaffTypeTablature::fontNames(false);
@@ -71,7 +76,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
       tabPreview = 0;
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) != Score::FILE_NO_ERROR) {
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR) {
             // add a preview widget to tabulature page
 #ifdef _USE_NAVIGATOR_PREVIEW_
             NScrollArea* sa = new NScrollArea;
@@ -95,6 +100,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       if (ci)
             staffTypeList->setCurrentItem(ci);
 
+      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updateTabPreview()));
       connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
@@ -124,20 +130,16 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       }
 
 EditStaffType::~EditStaffType()
-{
-      if(_tabPresets[TAB_PRESET_GUITAR])
-            delete _tabPresets[TAB_PRESET_GUITAR];
-      if(_tabPresets[TAB_PRESET_BASS])
-            delete _tabPresets[TAB_PRESET_BASS];
-      if(_tabPresets[TAB_PRESET_UKULELE])
-            delete _tabPresets[TAB_PRESET_UKULELE];
-      if(_tabPresets[TAB_PRESET_BANDURRIA])
-            delete _tabPresets[TAB_PRESET_BANDURRIA];
-      if(_tabPresets[TAB_PRESET_ITALIAN])
-            delete _tabPresets[TAB_PRESET_ITALIAN];
-      if(_tabPresets[TAB_PRESET_FRENCH])
-            delete _tabPresets[TAB_PRESET_FRENCH];
-}
+      {
+      foreach(StaffType* st, staffTypes)
+            delete st;
+      delete _tabPresets[TAB_PRESET_GUITAR];
+      delete _tabPresets[TAB_PRESET_BASS];
+      delete _tabPresets[TAB_PRESET_UKULELE];
+      delete _tabPresets[TAB_PRESET_BANDURRIA];
+      delete _tabPresets[TAB_PRESET_ITALIAN];
+      delete _tabPresets[TAB_PRESET_FRENCH];
+      }
 
 //---------------------------------------------------------
 //   saveCurrent
@@ -294,6 +296,7 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                   {
                   StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st);
                   setDlgFromTab(stt);
+                  name->setText(stt->name());   // setDlgFromTab() does not copy the name and it shouldn't
                   stack->setCurrentIndex(1);
                   }
                   break;
@@ -319,7 +322,7 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
 
 void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       {
-      name->setText(stt->name());
+//      name->setText(stt->name());             // keep existing name: presets should not overwrite type name
       lines->setValue(stt->lines());
       lineDistance->setValue(stt->lineDistance().val());
       genClef->setChecked(stt->genClef());
@@ -327,7 +330,7 @@ void EditStaffType::setDlgFromTab(const StaffTypeTablature * stt)
       genTimesig->setChecked(stt->genTimesig());
       upsideDown->setChecked(stt->upsideDown());
       int idx = fretFontName->findText(stt->fretFontName(), Qt::MatchFixedString);
-      if(idx == -1)     idx = 0;          // if name not found, use firstt name
+      if(idx == -1)     idx = 0;          // if name not found, use first name
       fretFontName->setCurrentIndex(idx);
       fretFontSize->setValue(stt->fretFontSize());
       fretY->setValue(stt->fretFontUserY());
@@ -613,15 +616,19 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 
 //---------------------------------------------------------
 //   Update tabulature preview
+///   update tabulature staff type in preview score
 //---------------------------------------------------------
 
 void EditStaffType::updateTabPreview()
       {
-      // update tabulature staff type in preview score
-      if(!tabPreview)
+      // if no preview or current type is not a TAB type, do nothing
+      if(!tabPreview ||
+                  staffTypes[staffTypeList->currentItem()->data(Qt::UserRole).toInt()]->group() != TAB_STAFF)
             return;
-      StaffTypeTablature*  stt = static_cast<StaffTypeTablature*>(tabPreview->score()->staffTypes()[1]);
+      // create a new staff type from dlg settings and set it into the preview score
+      StaffTypeTablature* stt = new StaffTypeTablature();
       setTabFromDlg(stt);
+      tabPreview->score()->addStaffType(TAB_STAFF_TYPE, stt);
 
       tabPreview->score()->doLayout();
 #ifdef _USE_NAVIGATOR_PREVIEW_

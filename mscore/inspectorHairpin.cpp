@@ -44,7 +44,7 @@ void InspectorHairpin::setElement(Element* e)
       iHairpin.subtype->blockSignals(true);
       iHairpin.subtype->setCurrentIndex(int(hairpin->subtype()));
       iHairpin.subtype->blockSignals(false);
-      iHairpin.dynType->setCurrentIndex(int(hairpin->dynType()));
+      iHairpin.dynRange->setCurrentIndex(int(hairpin->dynRange()));
       iHairpin.veloChange->setValue(hairpin->veloChange());
       }
 

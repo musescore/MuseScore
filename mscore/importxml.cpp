@@ -497,10 +497,10 @@ MusicXml::MusicXml(QDomDocument* d)
 class LoadFile {
       QString _name;
 
-   protected:
+protected:
       QString error;
 
-   public:
+public:
       LoadFile() {}
       virtual ~LoadFile() {}
       virtual bool loader(QFile* f) = 0;        // return false on error
@@ -523,16 +523,16 @@ bool LoadFile::load(const QString& name)
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: file not found:"),
-               name,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                                 QWidget::tr("MuseScore: file not found:"),
+                                 name,
+                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return false;
             }
       if (!loader(&fp)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: load failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                                 QWidget::tr("MuseScore: load failed:"),
+                                 error,
+                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             fp.close();
             return false;
             }
@@ -2197,9 +2197,12 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
-            // set staff type to percussion
+            // TBD: set staff type to percussion ?
+            // Note: part has been read, staff type already set based on clef type and staff-details
+            /*
             for (int j = 0; j < part->nstaves(); ++j)
-                  part->staff(j)->setStaffType(score->staffTypes()[PERCUSSION_STAFF_TYPE]);
+                  part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
+            */
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -2400,8 +2403,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                               barLine->setSubtype(END_BAR);
                         else if (barStyle == "regular")
                               barLine->setSubtype(NORMAL_BAR);
-                        else if (barStyle == "dotted")
+                        else if (barStyle == "dashed")
                               barLine->setSubtype(BROKEN_BAR);
+                        else if (barStyle == "dotted")
+                              barLine->setSubtype(DOTTED_BAR);
                         else if (barStyle == "light-light")
                               barLine->setSubtype(DOUBLE_BAR);
                         /*
@@ -2608,9 +2613,9 @@ static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYof
       else {
             // MuseScore 1.x compatible offsets
             if (pl == "above")
-                  offs = -5;
+                  sli->setPlacement(Element::ABOVE);
             else if (pl == "below")
-                  offs = 9;
+                  sli->setPlacement(Element::BELOW);
             else
                   qDebug("setSLinePlacement invalid placement '%s'", qPrintable(pl));
             }
@@ -2696,15 +2701,16 @@ static void metronome(QDomElement e, Text* t)
 //   addElement
 //---------------------------------------------------------
 
-static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* score, QString& placement,
+static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* /* score */, QString& placement,
                        qreal rx, qreal ry, int offset, Measure* measure, int tick)
       {
       if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
       else {
-            double y = (staff + rstaff) * (score->styleD(ST_staffDistance) + 4);             // TODO 4 = #lines/staff - 1
-            y += (placement == "above" ? -3 : 5);
-            y *= score->spatium();
-            el->setReadPos(QPoint(0, y));
+            el->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+            // double y = (staff + rstaff) * (score->styleD(ST_staffDistance) + 4);             // TODO 4 = #lines/staff - 1
+            // y += (placement == "above" ? -3 : 5);
+            // y *= score->spatium();
+            // el->setReadPos(QPoint(0, y));
             }
       el->setUserOff(QPointF(rx, ry));
       el->setMxmlOff(offset);
@@ -3042,7 +3048,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             Text* t = new RehearsalMark(score);
             t->setText(rehearsal);
             if (hasYoffset) t->setYoff(yoffset);
-            else t->setAbove(placement == "above");
+            else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
             if (hasYoffset) t->setYoff(yoffset);
             addElement(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
@@ -3097,7 +3103,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
                   if (hasYoffset) s->setYoff(yoffset);
-                  else s->setAbove(placement == "above");
+                  else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
                   s->setUserOff(QPointF(rx, ry));
                   s->setMxmlOff(offset);
                   s->setTrack((staff + rstaff) * VOICES);
@@ -3126,7 +3132,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "wedge") {
             qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
-            bool above = (placement == "above");
+            // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
                   if (hairpin) {
                         qDebug("overlapping wedge not supported");
@@ -3136,11 +3142,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setSubtype(type == "crescendo"
-                           ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                                            ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                        hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+
                         if (hasYoffset)
                               hairpin->setYoff(yoffset);
-                        else
-                              hairpin->setYoff(above ? -3 : 8);
+                        // else
+                        //      hairpin->setYoff(above ? -3 : 8);
                         // hairpin->setUserOff(rx, ry));
                         hairpin->setTrack((staff + rstaff) * VOICES);
                         spanners[hairpin] = QPair<int, int>(tick, -1);
@@ -3340,6 +3348,20 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       }
 
 //---------------------------------------------------------
+//   setStaffLines - set bracket and barline span for a single staff
+//---------------------------------------------------------
+
+static void setStaffLines(Score* score, int staffIdx, int stafflines)
+      {
+      score->staff(staffIdx)->setLines(stafflines);
+      BracketItem b(NO_BRACKET, 0);
+      score->staff(staffIdx)->addBracket(b);
+      // Following barLineTo value differs from the default set in staff.cpp,
+      // but results in the same barlines as the new score wizard.
+      score->staff(staffIdx)->setBarLineTo(stafflines * 2);
+      }
+
+//---------------------------------------------------------
 //   xmlStaffDetails
 //---------------------------------------------------------
 
@@ -3358,17 +3380,16 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
             }
 
       if (number == -1) {
-            int staves = score->part(staff)->nstaves();
-            for (int i = 0; i < staves; ++i) {
-                  score->staff(staffIdx+i)->setLines(stafflines);
-                  }
+            int staves = score->staff(staff)->part()->nstaves();
+            for (int i = 0; i < staves; ++i)
+                  setStaffLines(score, staffIdx+i, stafflines);
             }
       else
-            score->staff(staffIdx)->setLines(stafflines);
+            setStaffLines(score, staffIdx, stafflines);
 
       if (t) {
             t->readMusicXML(e);
-            Instrument* i = score->part(staff)->instr();
+            Instrument* i = score->staff(staff)->part()->instr();
             i->setTablature(t);
             }
       }
@@ -3396,7 +3417,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
       for (QDomElement e2 = e; !e2.isNull(); e2 = e2.nextSiblingElement()) {
             if (e2.tagName() == "staves") {
                   staves = e2.text().toInt();
-                  Part* part = score->part(staff);
+                  Part* part = score->staff(staff)->part();
                   part->setStaves(staves);
                   // grow tuplets size, do not shrink to prevent losing info
                   if (staves * VOICES > tuplets.size())
@@ -3439,7 +3460,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         //
                         // apply key to all staves in the part
                         //
-                        int staves = score->part(staff)->nstaves();
+                        int staves = score->staff(staff)->part()->nstaves();
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
                               KeySigEvent oldkey = score->staff(staffIdx+i)->keymap()->key(tick);
@@ -3485,8 +3506,6 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         }
                   }
             else if (e.tagName() == "clef") {
-                  // for tablature clef, set staff to tab
-                  // TODO TBD: same for percussion ?
                   int st = xmlClef(e, staff, measure);
                   int number = e.attribute(QString("number"), "-1").toInt();
                   int staffIdx = staff;
@@ -3494,8 +3513,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         staffIdx += number - 1;
                   qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                          score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st == TAB_STAFF_TYPE)
-                        score->staff(staffIdx)->setStaffType(score->staffTypes()[TAB_STAFF_TYPE]);
+                  if (st != PITCHED_STAFF_TYPE)
+                        score->staff(staffIdx)->setStaffType(score->staffType(st));
                   }
             else if (e.tagName() == "staves")
                   ;  // ignore, already handled
@@ -3504,11 +3523,10 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   int staffIdx = staff;
                   if (number != -1)
                         staffIdx += number - 1;
-                  Tablature* t;
-                  if (score->staff(staffIdx)->isTabStaff()) {
+                  Tablature* t = 0;
+                  if (score->staff(staffIdx)->isTabStaff())
                         t = new Tablature;
-                        xmlStaffDetails(score, staff, t, e);
-                        }
+                  xmlStaffDetails(score, staff, t, e);
                   }
             else if (e.tagName() == "instruments")
                   domNotImplemented(e);
@@ -3523,7 +3541,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         else
                               domError(ee);
                         }
-                  score->part(staff)->instr()->setTranspose(interval);
+                  score->staff(staff)->part()->instr()->setTranspose(interval);
                   }
             else if (e.tagName() == "measure-style")
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -3551,7 +3569,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   // add timesig to all staves
                   //ws score->sigmap()->add(tick, TimeSig::getSig(st));
-                  Part* part = score->part(staff);
+                  Part* part = score->staff(staff)->part();
                   int staves = part->nstaves();
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);

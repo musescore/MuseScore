@@ -78,6 +78,9 @@ void HairpinSegment::layout()
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
       qreal w = point(score()->styleS(ST_hairpinWidth));
       setbbox(r.adjusted(-w*.5, -w*.5, w, w));
+      if (parent())
+            rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -99,10 +102,9 @@ void HairpinSegment::draw(QPainter* painter) const
 Hairpin::Hairpin(Score* s)
    : SLine(s)
       {
-      _subtype    = CRESCENDO;
-      _veloChange = 10;
-      _dynType    = DYNAMIC_PART;
-      setYoff(s->styleS(ST_hairpinY).val());
+      _subtype     = CRESCENDO;
+      _veloChange  = 10;
+      _dynRange    = DYNAMIC_PART;
       }
 
 //---------------------------------------------------------
@@ -134,8 +136,8 @@ void Hairpin::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       xml.tag("subtype", _subtype);
       xml.tag("veloChange", _veloChange);
-      if (_dynType != DYNAMIC_PART)
-            xml.tag("dynType", _dynType);
+      writeProperty(xml, P_DYNAMIC_RANGE);
+      writeProperty(xml, P_PLACEMENT);
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -157,8 +159,8 @@ void Hairpin::read(const QDomElement& de)
                   _subtype = HairpinType(val.toInt());
             else if (tag == "veloChange")
                   _veloChange = val.toInt();
-            else if (e.tagName() == "dynType")
-                  _dynType = DynamicType(val.toInt());
+            else if (tag == "dynType")
+                  _dynRange = DynamicRange(val.toInt());
             else if (!SLine::readProperties(e))
                   domError(e);
             }
@@ -186,9 +188,9 @@ void Hairpin::undoSetVeloChange(int val)
 //   undoSetDynType
 //---------------------------------------------------------
 
-void Hairpin::undoSetDynType(DynamicType val)
+void Hairpin::undoSetDynRange(DynamicRange val)
       {
-      score()->undoChangeProperty(this, P_DYNAMIC_TYPE, val);
+      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, val);
       }
 
 //---------------------------------------------------------
@@ -202,8 +204,8 @@ QVariant Hairpin::getProperty(P_ID id) const
                   return _subtype;
             case P_VELO_CHANGE:
                   return _veloChange;
-            case P_DYNAMIC_TYPE:
-                  return _dynType;
+            case P_DYNAMIC_RANGE:
+                  return _dynRange;
             default:
                   return SLine::getProperty(id);
             }
@@ -223,12 +225,34 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
             case P_VELO_CHANGE:
                   _veloChange = v.toInt();
                   break;
-            case P_DYNAMIC_TYPE:
-                  _dynType = DynamicType(v.toInt());
+            case P_DYNAMIC_RANGE:
+                  _dynRange = DynamicRange(v.toInt());
                   break;
             default:
                   return SLine::setProperty(id, v);
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   setYoff
+//---------------------------------------------------------
+
+void Hairpin::setYoff(qreal val)
+      {
+      rUserYoffset() += (val - score()->styleS(ST_hairpinY).val()) * spatium();
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Hairpin::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_DYNAMIC_RANGE: return DYNAMIC_PART;
+            default:              return SLine::propertyDefault(id);
+            }
+      }
+
 

@@ -33,18 +33,22 @@ struct Dyn {
          : velocity(velo), accent(a), tag(t) {}
       };
 
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 //   @@ Dynamic
-//---------------------------------------------------------
+///   dynamics marker; determines midi velocity
+//
+//    @P dynRange  DynamicRange  DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+//-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
       Q_OBJECT
+      Q_PROPERTY(DynamicRange type READ dynRange  WRITE undoSetDynRange)
 
       int _subtype;
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
-      DynamicType _dynType;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+      DynamicRange _dynRange;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 
    public:
       Dynamic(Score*);
@@ -59,6 +63,7 @@ class Dynamic : public Text {
       QString subtypeName() const;
       int subtype() const { return _subtype; }
 
+      virtual void layout();
       virtual void write(Xml& xml) const;
       virtual void read(const QDomElement&);
 
@@ -69,10 +74,15 @@ class Dynamic : public Text {
       void resetType();
       void setVelocity(int v);
       int velocity() const;
-      DynamicType dynType() const    { return _dynType; }
-      void setDynType(DynamicType t) { _dynType = t;    }
+      DynamicRange dynRange() const    { return _dynRange; }
+      void setDynRange(DynamicRange t) { _dynRange = t;    }
+      void undoSetDynRange(DynamicRange t);
 
       virtual QLineF dragAnchor() const;
+
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant&);
+      QVariant propertyDefault(P_ID id) const;
       };
 
 extern Dyn dynList[];

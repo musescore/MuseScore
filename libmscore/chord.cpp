@@ -987,8 +987,7 @@ LedgerLine::LedgerLine(Score* s)
 QPointF LedgerLine::pagePos() const
       {
       System* system = chord()->measure()->system();
-      int st = track() / VOICES;
-      qreal yp = y() + system->staff(st)->y() + system->y();
+      qreal yp = y() + system->staff(track() / VOICES)->y() + system->y();
       return QPointF(pageX(), yp);
       }
 

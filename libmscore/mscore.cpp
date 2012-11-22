@@ -73,6 +73,7 @@ void MScore::init()
       qRegisterMetaType<MScore::ValueType>("ValueType");
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<Element::Placement>("Placement");
       qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
       qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
@@ -84,7 +85,7 @@ void MScore::init()
       qRegisterMetaType<Volta::VoltaType>("VoltaType");
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
-      qRegisterMetaType<Element::DynamicType>("DynamicType");
+      qRegisterMetaType<Element::DynamicRange>("DynamicRange");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -92,21 +93,18 @@ void MScore::init()
 #ifdef __MINGW32__
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";
-#else
-#ifdef Q_WS_MAC
-#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
+#elif defined(Q_WS_IOS)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();
       }
-#else
+#elif defined(Q_WS_MAC)
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
-#endif
 #else
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
-#endif
+
       selectColor[0].setRgb(0, 0, 255);     //blue
       selectColor[1].setRgb(0, 150, 0);     //green
       selectColor[2].setRgb(230, 180, 50);  //yellow

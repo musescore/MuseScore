@@ -29,6 +29,8 @@
 
 QReadWriteLock docRenderLock;
 
+QTextCursor* Text::_cursor;
+
 //---------------------------------------------------------
 //   createDoc
 //---------------------------------------------------------
@@ -36,7 +38,7 @@ QReadWriteLock docRenderLock;
 void Text::createDoc()
       {
       _doc = new QTextDocument(0);
-      _doc->setDocumentMargin(0.0);
+      _doc->setDocumentMargin(-2.0);
       _doc->setUseDesignMetrics(true);
       _doc->setUndoRedoEnabled(true);
       _doc->documentLayout()->setProperty("cursorWidth", QVariant(2));
@@ -55,9 +57,8 @@ Text::Text(Score* s)
    : SimpleText(s)
       {
       setFlag(ELEMENT_MOVABLE, true);
-      _doc       = 0;
-      _editMode  = false;
-      _cursor    = 0;
+      _doc        = 0;
+      _editMode   = false;
       _styleIndex = TEXT_STYLE_DEFAULT;
       }
 
@@ -70,7 +71,6 @@ Text::Text(const Text& e)
             _doc = 0;
       _styleIndex = e._styleIndex;
       _editMode   = false;
-      _cursor     = 0;
       }
 
 Text::~Text()
@@ -184,6 +184,16 @@ void Text::setAbove(bool val)
 
 void Text::layout()
       {
+      layout1();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   layout1
+//---------------------------------------------------------
+
+void Text::layout1()
+      {
       if (styled() && !_editMode)
             SimpleText::layout();
       else {
@@ -192,14 +202,12 @@ void Text::layout()
             QPointF o(textStyle().offset(spatium()));
 
             if (parent() && layoutToParentWidth()) {
-                  if (parent()->type() == HBOX || parent()->type() == VBOX || parent()->type() == TBOX) {
-                        Box* box = static_cast<Box*>(parent());
-                        o.rx() += box->leftMargin() * MScore::DPMM;
-                        o.ry() += box->topMargin() * MScore::DPMM;
-                        w = box->width() - ((box->leftMargin() + box->rightMargin()) * MScore::DPMM);
+                  Element* e = parent();
+                  w = e->width();
+                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
+                        Box* b = static_cast<Box*>(e);
+                        w -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                         }
-                  else
-                        w = parent()->width();
                   }
 
             QTextOption to = _doc->defaultTextOption();
@@ -226,22 +234,39 @@ void Text::layout()
                   o.rx() -= (size.width() * .5);
 
             setbbox(QRectF(QPointF(0.0, 0.0), size));
-            if (layoutToParentWidth() && parent()) {
-                  Element* e = parent();
-                  QPointF ro(_textStyle.reloff() * .01);
-                  o += QPointF(ro.x() * e->width(), ro.y() * e->height());
-                  }
-
-            setPos(o);
             _doc->setModified(false);
+            setPos(o);
             }
+      if (parent()) {
+            Element* e = parent();
+            qreal w, h, xo, yo;
+            if (layoutToParentWidth()) {
+                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
+                        // consider inner margins of frame
+                        Box* b = static_cast<Box*>(e);
+                        xo = b->leftMargin() * MScore::DPMM;
+                        yo = b->topMargin()  * MScore::DPMM;
+                        w  = b->width()  - xo - b->rightMargin() * MScore::DPMM;
+                        h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
+                        }
+                  else {
+                        w  = e->width();
+                        h  = e->height();
+                        xo = 0.0;
+                        yo = 0.0;
+                        }
+                  QPointF ro(_textStyle.reloff() * .01);
+                  rxpos() += xo + ro.x() * w;
+                  rypos() += yo + ro.y() * h;
+                  }
+            if (e->type() == SEGMENT) {
+                  Segment* s = static_cast<Segment*>(e);
+                  rypos() += s->measure()->system()->staff(staffIdx())->y();
+                  }
+            }
+
       if (hasFrame())
             layoutFrame();
-      if (parent() && parent()->type() == SEGMENT) {
-            Segment* s = static_cast<Segment*>(parent());
-            rypos() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
-            }
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -279,8 +304,11 @@ void Text::draw(QPainter* painter) const
             return;
             }
       QAbstractTextDocumentLayout::PaintContext c;
-      c.cursorPosition = -1;
-      if (_cursor && !(score() && score()->printing())) {
+      bool printing = score() && score()->printing();
+      if (_cursor
+         && _doc
+         && _cursor->document() == _doc
+         && !printing) {
             if (_cursor->hasSelection()) {
                   QAbstractTextDocumentLayout::Selection selection;
                   selection.cursor = *_cursor;
@@ -290,7 +318,9 @@ void Text::draw(QPainter* painter) const
                   }
             c.cursorPosition = _cursor->position();
             }
-      bool printing = score() && score()->printing();
+      else
+            c.cursorPosition = -1;
+
       if ((printing || !score()->showInvisible()) && !visible())
             return;
       c.palette.setColor(QPalette::Text, textColor());
@@ -329,10 +359,6 @@ void Text::read(const QDomElement& de)
             if (!readProperties(e))
                   domError(e);
             }
-      if (score()->mscVersion() <= 114) {
-            if (_doc && _doc->blockCount() == 1) {
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -355,6 +381,23 @@ void Text::writeProperties(Xml& xml, bool writeText) const
                   xml.etag();
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   isSimpleText
+//    check if _doc can be converted to simple text
+//---------------------------------------------------------
+
+bool Text::isSimpleText() const
+      {
+      if (_doc->blockCount() > 1)
+            return false;
+      int n = 0;
+      QTextBlock b(_doc->firstBlock());
+      QTextBlock::iterator i(_doc->firstBlock().begin());
+      for (; !i.atEnd(); ++i)
+            ++n;
+      return n <= 1;
       }
 
 //---------------------------------------------------------
@@ -461,7 +504,7 @@ bool Text::readProperties(const QDomElement& e)
                   if (_doc == 0)
                         createDoc();
                   _doc->setHtml(s);
-                  if (_doc->blockCount() == 1) {          // simple text?
+                  if (isSimpleText()) {
                         QString s = _doc->toPlainText();
                         delete _doc;
                         _doc = 0;
@@ -472,8 +515,9 @@ bool Text::readProperties(const QDomElement& e)
                         setHtml(s);
                         }
                   }
-            else
+            else {
                   setHtml(s);
+                  }
             }
       else if (tag == "subtype")          // obsolete
             ;
@@ -499,24 +543,30 @@ bool Text::readProperties(const QDomElement& e)
 void Text::spatiumChanged(qreal oldVal, qreal newVal)
       {
       Element::spatiumChanged(oldVal, newVal);
-#if 0
-qDebug("Text::spatiumChanged %d  -- %s %s %p %f\n",
-      sizeIsSpatiumDependent(), name(), parent() ? parent()->name() : "?", this, newVal);
-#endif
+
       if (!sizeIsSpatiumDependent() || styled())
             return;
       qreal v = newVal / oldVal;
+
       QTextCursor c(_doc);
-      c.movePosition(QTextCursor::Start);
-      for (;;) {
-            c.select(QTextCursor::BlockUnderCursor);
-            QTextCharFormat cf = c.charFormat();
-            QFont font = cf.font();
-            font.setPointSizeF(font.pointSizeF() * v);
-            cf.setFont(font);
-            c.setCharFormat(cf);
-            if (!c.movePosition(QTextCursor::NextBlock))
-                  break;
+      QTextBlock cb = _doc->begin();
+      while (cb.isValid()) {
+            QTextBlock::iterator i(cb.begin());
+            for (; !i.atEnd(); ++i) {
+                  QTextFragment f = i.fragment();
+                  if (f.isValid()) {
+                        int pos = f.position();
+                        int len = f.length();
+                        c.setPosition(pos, QTextCursor::MoveAnchor);
+                        c.setPosition(pos + len, QTextCursor::KeepAnchor);
+                        QTextCharFormat cf = c.charFormat();
+                        QFont font = cf.font();
+                        font.setPointSizeF(font.pointSizeF() * v);
+                        cf.setFont(font);
+                        c.setCharFormat(cf);
+                        }
+                  }
+            cb = cb.next();
             }
       }
 
@@ -936,7 +986,7 @@ QLineF Text::dragAnchor() const
             p1 = QPointF(xp, yp);
             }
       else {
-            p1 = QPointF(parent()->canvasBoundingRect().topLeft());
+            p1 = parent()->canvasPos(); // QPointF(parent()->canvasBoundingRect().topLeft());
             if (parent()->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(parent());
                   p1.ry() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
@@ -1289,10 +1339,6 @@ QTextCursor* Text::startCursorEdit()
 
 void Text::endEdit()
       {
-      if (!_cursor) {
-            qDebug("endEdit<%p>: no cursor: edit mode %d %p\n", this, _editMode, _cursor);
-            return;
-            }
       _editMode = false;
       endCursorEdit();
       layoutEdit();

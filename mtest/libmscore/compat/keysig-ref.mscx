@@ -5,6 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <lyricsDistance>2</lyricsDistance>
+      <voltaY>-2</voltaY>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>

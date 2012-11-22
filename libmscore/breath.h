@@ -20,7 +20,7 @@ class QPainter;
 
 //---------------------------------------------------------
 //   @@ Breath
-//    subtype() is index in symList
+///    subtype() is index in symList
 //---------------------------------------------------------
 
 class Breath : public Element {

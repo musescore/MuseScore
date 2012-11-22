@@ -156,6 +156,16 @@ void TextLineSegment::draw(QPainter* painter) const
 
 void TextLineSegment::layout()
       {
+      layout1();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   layout1
+//---------------------------------------------------------
+
+void TextLineSegment::layout1()
+      {
       TextLine* tl = textLine();
       if (!tl->diagonal())
             _userOff2.setY(0);

@@ -47,6 +47,8 @@ Measure* Score::tick2measure(int tick) const
             if (tick >= st && tick < (st+l))
                   return m;
             }
+      if(tick == lastMeasure()->tick() + lastMeasure()->ticks())
+            return lastMeasure();
       qDebug("-tick2measure %d not found", tick);
       return 0;
       }

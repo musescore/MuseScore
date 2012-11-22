@@ -142,9 +142,7 @@ static QString createDefaultFileName(QString fn)
       fn = fn.replace(QChar(0xc4), "Ae");
       fn = fn.replace(QChar(0xd6), "Oe");
       fn = fn.replace(QChar(0xdc), "Ue");
-      fn = fn.replace(QChar(':'),  "_");
-      fn = fn.replace(QChar('/'),  "_");
-      fn = fn.replace(QChar('\\'), "_");
+      fn = fn.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
       return fn;
       }
 
