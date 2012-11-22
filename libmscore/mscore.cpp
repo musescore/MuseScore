@@ -93,21 +93,18 @@ void MScore::init()
 #ifdef __MINGW32__
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";
-#else
-#ifdef Q_WS_MAC
-#if defined(Q_WS_IOS) or defined(Q_OS_ANDROID)
+#elif defined(Q_WS_IOS)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();
       }
-#else
+#elif defined(Q_WS_MAC)
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
-#endif
 #else
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
-#endif
+
       selectColor[0].setRgb(0, 0, 255);     //blue
       selectColor[1].setRgb(0, 150, 0);     //green
       selectColor[2].setRgb(230, 180, 50);  //yellow
