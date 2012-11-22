@@ -1101,10 +1101,10 @@ void ShowNoteWidget::setElement(Element* e)
       nb.dot2->setEnabled(note->dot(1));
       nb.dot3->setEnabled(note->dot(2));
 
-      nb.onTimeOffset->setValue(note->onTimeOffset());
-      nb.offTimeOffset->setValue(note->offTimeOffset());
-      nb.onTimeUserOffset->setValue(note->onTimeUserOffset());
-      nb.offTimeUserOffset->setValue(note->offTimeUserOffset());
+//      nb.onTimeOffset->setValue(note->onTimeOffset());
+//      nb.offTimeOffset->setValue(note->offTimeOffset());
+//      nb.onTimeUserOffset->setValue(note->onTimeUserOffset());
+//      nb.offTimeUserOffset->setValue(note->offTimeUserOffset());
 
       note->el().clear();     // ??
       foreach(Element* text, note->el()) {

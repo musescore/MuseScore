@@ -101,7 +101,7 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->dotPosition(), MScore::AUTO);
       delete n;
-
+#if 0
   // onTimeUserOffset
       note->setOnTimeUserOffset(12);
       n = static_cast<Note*>(writeReadElement(note));
@@ -113,7 +113,7 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->offTimeUserOffset(), 21);
       delete n;
-
+#endif
   // headGroup
       for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             note->setHeadGroup(Note::NoteHeadGroup(i));
@@ -229,7 +229,7 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->dotPosition(), MScore::AUTO);
       delete n;
-
+#if 0
   // onTimeUserOffset
       note->setProperty(P_ONTIME_OFFSET, 9);
       n = static_cast<Note*>(writeReadElement(note));
@@ -241,7 +241,7 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->offTimeUserOffset(), 19);
       delete n;
-
+#endif
   // headGroup
       for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             note->setProperty(P_HEAD_GROUP, int(i));
