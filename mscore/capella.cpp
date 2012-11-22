@@ -73,6 +73,58 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
       }
 
 //---------------------------------------------------------
+//   levelofGraceSeg
+//---------------------------------------------------------
+
+static int levelofGraceSeg(Measure* m,int tick)
+      {
+      int nGraces = 1;
+      Segment* seglist = m->findSegment(Segment::SegGrace,tick);
+      // count SegGrace segments
+      for (Segment* ss = seglist; ss && ss->tick() == tick; ss = ss->prev()) {
+            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == tick))
+                  nGraces++;
+            }
+      return nGraces;
+      }
+
+//---------------------------------------------------------
+//   SetCapGraceDuration
+//---------------------------------------------------------
+
+static void SetCapGraceDuration(Chord* chord,ChordObj* o)
+      {
+      NoteType nt = NOTE_APPOGGIATURA;
+      ((Chord*)chord)->setNoteType(nt);
+      if (o->t == D4) {
+            ((Chord*)chord)->setNoteType(NOTE_GRACE4);
+            chord->setDurationType(TDuration::V_QUARTER);
+            }
+      else if (o->t == D_BREVE)
+            ((Chord*)chord)->setDurationType(TDuration::V_BREVE);
+      else if (o->t == D1)
+            ((Chord*)chord)->setDurationType(TDuration::V_WHOLE);
+      else if (o->t == D2)
+            ((Chord*)chord)->setDurationType(TDuration::V_HALF);
+      else if (o->t == D16) {
+            ((Chord*)chord)->setNoteType(NOTE_GRACE16);
+            chord->setDurationType(TDuration::V_16TH);
+            }
+      else if (o->t == D32) {
+            ((Chord*)chord)->setNoteType(NOTE_GRACE32);
+            chord->setDurationType(TDuration::V_32ND);
+            }
+      else if (o->t == D64)
+            ((Chord*)chord)->setDurationType(TDuration::V_64TH);
+      else if (o->t == D128)
+            ((Chord*)chord)->setDurationType(TDuration::V_128TH);
+      else if (o->t == D256)
+            ((Chord*)chord)->setDurationType(TDuration::V_256TH);
+      else
+            ((Chord*)chord)->setDurationType(TDuration::V_EIGHT);
+      }
+
+//---------------------------------------------------------
 //   processBasicDrawObj
 //---------------------------------------------------------
 
@@ -215,6 +267,9 @@ qDebug("readCapVoice 1\n");
                         Measure* m = score->getCreateMeasure(tick);
                         RestObj* o = static_cast<RestObj*>(no);
                         int ticks  = o->ticks();
+                        if (o->invisible && ticks == 0) {  // get rid of placeholders
+                              break;
+                        }
                         TDuration d;
                         d.setVal(ticks);
                         if (o->count) {
@@ -280,11 +335,17 @@ qDebug("readCapVoice 1\n");
 //qDebug("     <Chord>\n");
                         ChordObj* o = static_cast<ChordObj*>(no);
                         int ticks = o->ticks();
+                        if (o->invisible && ticks == 0) {  // get rid of placeholders
+                              break;
+                        }
                         TDuration d;
                         d.setVal(ticks);
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(Segment::SegChordRest, tick);
-
+                        int gl = levelofGraceSeg(m,tick);
+                        bool isgracenote = (!(o->invisible) && (ticks==0));
+                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::SegChordRest, tick);
+                        if (isgracenote)
+                              s = m->getGraceSegment(tick,1);
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
@@ -312,8 +373,14 @@ qDebug("readCapVoice 1\n");
 
                         Chord* chord = new Chord(score);
                         chord->setTuplet(tuplet);
-                        chord->setDurationType(d);
-                        chord->setDuration(d.fraction());
+                        if (isgracenote) { // grace notes
+                              SetCapGraceDuration(chord,o);
+                              chord->setDuration(chord->durationType().fraction());
+                              }
+                        else { // normal notes
+                              chord->setDurationType(d);
+                              chord->setDuration(d.fraction());
+                              }
                         chord->setTrack(track);
                         switch (o->stemDir) {
                               case -1:    // down
