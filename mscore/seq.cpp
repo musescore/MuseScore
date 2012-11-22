@@ -862,7 +862,7 @@ void Seq::collectEvents()
             return;
       events.clear();
 
-      cs->toEList(&events);
+      cs->renderMidi(&events);
       endTick = 0;
       if (!events.empty()) {
             EventMap::const_iterator e = events.constEnd();
@@ -963,7 +963,7 @@ void Seq::seek(int utick)
       cs->setPlayPos(utick);
       cs->setLayoutAll(false);
       cs->end();
-      
+
       if (cs->playMode() == PLAYMODE_AUDIO) {
             ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
             ov_pcm_seek(&vf, sp);
