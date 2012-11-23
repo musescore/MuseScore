@@ -375,7 +375,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setParent(chord);
       note->setTrack(chord->track());
       note->setNval(noteVal);
-      if(note->tpc() == INVALID_TPC)
+      if (note->tpc() == INVALID_TPC)
             note->setTpcFromPitch();
       undoAddElement(note);
       select(note, SELECT_SINGLE, 0);
@@ -535,7 +535,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             }
 
       if (local) {
-printf("insert local timesig\n");
             ts->setParent(seg);
             ts->setTrack(track);
             ts->setStretch(ts->sig() / lsig);
@@ -670,6 +669,7 @@ void Score::putNote(const Position& p, bool replace)
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
+
       const Instrument* instr = st->part()->instr();
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
@@ -708,8 +708,7 @@ void Score::putNote(const Position& p, bool replace)
                   break;
                   }
 
-            case PITCHED_STAFF:
-                  {
+            case PITCHED_STAFF: {
                   AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;
@@ -773,16 +772,18 @@ void Score::putNote(const Position& p, bool replace)
                   addToChord = true;            // if no special case, add note to chord
                   }
             }
-      // if adding, add!
-      if (addToChord && cr->type() == Element::CHORD)
+      if (addToChord && cr->type() == Element::CHORD) {
+            // if adding, add!
             addNote(static_cast<Chord*>(cr), nval);
-      // if not adding, replace current chord (or create a new one)
+            }
       else {
+            // if not adding, replace current chord (or create a new one)
+
             if (_is.rest)
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
             }
-      if(!st->isTabStaff())
+      if (!st->isTabStaff())
             moveToNextInputPos();
       }
 

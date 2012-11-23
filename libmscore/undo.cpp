@@ -754,6 +754,7 @@ void Score::undoAddElement(Element* element)
       if (et == Element::FINGERING
          || et == Element::IMAGE
          || et == Element::SYMBOL
+         || et == Element::NOTE
             ) {
             Element* parent       = element->parent();
             LinkedElements* links = parent->links();
@@ -962,23 +963,6 @@ void Score::undoAddElement(Element* element)
                   nhp->setEndElement(e2);
                   nhp->setParent(e1);
                   undo(new AddElement(nhp));
-                  }
-            else if (element->type() == Element::NOTE) {
-                  Note* note       = static_cast<Note*>(element);
-                  Chord* cr        = note->chord();
-                  Segment* segment = cr->segment();
-                  int tick         = segment->tick();
-                  Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
-                  Note* nnote      = static_cast<Note*>(ne);
-                  int ntrack       = staffIdx * VOICES + nnote->voice();
-                  nnote->setScore(score);
-                  nnote->setTrack(ntrack);
-                  Chord* ncr       = static_cast<Chord*>(seg->element(ntrack));
-                  nnote->setParent(ncr);
-                  undo(new AddElement(nnote));
-                  score->updateAccidentals(m, staffIdx);
-                  score->setLayout(m);
                   }
             else if (element->type() == Element::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);

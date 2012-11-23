@@ -1472,7 +1472,12 @@ void Score::addElement(Element* element)
                   createPlayEvents(static_cast<Chord*>(element));
                   break;
 
-            case Element::NOTE:
+            case Element::NOTE: {
+                  Note* note = static_cast<Note*>(element);
+                  updateAccidentals(note->chord()->segment()->measure(), element->staffIdx());
+                  }
+                  // fall through
+
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
