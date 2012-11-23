@@ -124,6 +124,14 @@ ChordRest* Selection::activeCR() const
 
 ChordRest* Selection::firstChordRest(int track) const
       {
+      if (_el.size() == 1) {
+            Element* el = _el[0];
+            if (el->type() == Element::NOTE)
+                  return static_cast<ChordRest*>(el->parent());
+            else if (el->type() == Element::REST)
+                  return static_cast<ChordRest*>(el);
+            return 0;
+            }
       ChordRest* cr = 0;
       foreach (Element* el, _el) {
             if (el->type() == Element::NOTE)
@@ -148,6 +156,14 @@ ChordRest* Selection::firstChordRest(int track) const
 
 ChordRest* Selection::lastChordRest(int track) const
       {
+      if (_el.size() == 1) {
+            Element* el = _el[0];
+            if (el && el->type() == Element::NOTE)
+                  return static_cast<ChordRest*>(el->parent());
+            else if (el->type() == Element::REST)
+                  return static_cast<ChordRest*>(el);
+            return 0;
+            }
       ChordRest* cr = 0;
       for (ciElement i = _el.begin(); i != _el.end(); ++i) {
             Element* el = *i;
@@ -211,8 +227,6 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
-      if (el->type() == Element::CHORD)
-            printf("Selection::add Chord!\n");
       _el.append(el);
       update();
       }
