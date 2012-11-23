@@ -157,7 +157,7 @@ class Note : public Element {
       ElementList _el;        ///< fingering, other text, symbols or images
       Tie* _tieFor;
       Tie* _tieBack;
-      Bend* _bend;
+//      Bend* _bend;
 
       NoteDot* _dots[3];
 
@@ -282,7 +282,8 @@ class Note : public Element {
       void setOnTimeOffset(int v);
       void setOffTimeOffset(int v);
 
-      void setBend(Bend* b)            { _bend = b;    }
+//      void setBend(Bend* b)            { _bend = b;    }
+
       int customizeVelocity(int velo) const;
       Q_INVOKABLE NoteDot* dot(int n)  { return _dots[n];           }
       void updateAccidental(AccidentalState*);
