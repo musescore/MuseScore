@@ -84,30 +84,19 @@ void StemSlash::layout()
       {
       Stem* stem = chord()->stem();
       qreal h2;
-      qreal l = spatium();
+      qreal _spatium = spatium();
+      qreal l = chord()->up() ? _spatium : -_spatium;
       QPointF p(stem->hookPos());
-      qreal x = p.x() + l * .1;
+      qreal x = p.x() + _spatium * .1;
       qreal y = p.y();
 
       if (chord()->beam()) {
-            if (chord()->up()) {
-                  y += l * .3;
-                  h2 = l * .8;
-                  }
-            else {
-                  y -= l * .3;
-                  h2 = l * -.8;
-                  }
+            y += l * .3;
+            h2 = l * .8;
             }
       else {
-            if (chord()->up()) {
-                  y += l * 1.2;
-                  h2 = l * .4;
-                  }
-            else {
-                  y -= l * 1.2;
-                  h2 = l * -.4;
-                  }
+            y += l * 1.2;
+            h2 = l * .4;
             }
       qreal w  = chord()->upNote()->headWidth() * .7;
       setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
@@ -1204,11 +1193,6 @@ void Chord::layoutStem()
             QPointF npos(stemPos());
             _stem->setPos(npos - pagePos());
 
-            if (_stemSlash) {
-                  // TODO: does not work for chords
-                  _stemSlash->layout();
-                  }
-
             // adjust stem len for tremolo
             if (_tremolo && !_tremolo->twoNotes()) {
                   // hook up odd lines
@@ -1237,6 +1221,8 @@ void Chord::layoutStem()
                   _hook->setPos(_stem->hookPos());
                   _hook->adjustReadPos();
                   }
+            if (_stemSlash)
+                  _stemSlash->layout();
             }
 
       //-----------------------------------------
