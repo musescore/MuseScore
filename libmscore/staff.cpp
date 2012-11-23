@@ -553,8 +553,10 @@ void Staff::setLines(int val)
       // create new staff type
       //
       StaffType* st = _staffType->clone();
+      if(part())
+            st->setName(partName());
       st->setLines(val);
-      _staffType = st;
+      setStaffType(st);
       score()->addStaffType(st);
       }
 
