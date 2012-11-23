@@ -1643,71 +1643,11 @@ Element* Score::move(const QString& cmd)
       if (cr == 0)
             return 0;
 
-#if 0
-      if (!cr) {
-            if (selection().elements().isEmpty())
-                  return 0;
-            Element* e = selection().elements().front();
-            if (e->type() == Element::NOTE)
-                  cr = static_cast<Note*>(e)->chord();
-            else if (e->isChordRest())
-                  cr = static_cast<ChordRest*>(e);
-            else if (e->parent() && e->parent()->type() == SEGMENT) {
-                  Segment* segment = static_cast<Segment*>(e->parent());
-                  if (segment->subtype() != Segment::SegChordRest) {
-                        segment = segment->next1(Segment::SegChordRest);
-                        Element* el = segment->element(e->track());
-                        if (el == 0)
-                              return 0;
-                        _playNote = true;
-                        select(el, SELECT_SINGLE, 0);
-                        return el;
-                        }
-                  cr = static_cast<ChordRest*>(segment->element(e->track()));
-                  if (cr == 0)
-                        return 0;
-                  }
-            else if (e->type() == Element::LYRICS) {
-                  Lyrics* lyrics = static_cast<Lyrics*>(e);
-                  ChordRest* cr  = lyrics->chordRest();
-                  int no         = lyrics->no();
-                  Element* el    = 0;
-                  if (cmd == "next-chord") {
-                        for (ChordRest* ncr = cr;;) {
-                              ncr = nextChordRest(ncr);
-                              if (ncr == 0)
-                                    break;
-                              if (ncr->isChordRest() && ncr->lyrics(no)) {
-                                    el = ncr->lyrics(no);
-                                    break;
-                                    }
-                              }
-                        }
-                  else if (cmd == "prev-chord") {
-                        for (ChordRest* pcr = cr;;) {
-                              pcr = prevChordRest(pcr);
-                              if (pcr == 0)
-                                    break;
-                              if (pcr->isChordRest() && pcr->lyrics(no)) {
-                                    el = pcr->lyrics(no);
-                                    break;
-                                    }
-                              }
-                        }
-                  if (el)
-                        select(el, SELECT_SINGLE, 0);
-                  return el;
-                  }
-            else
-                  return 0;
-            }
-#endif
-
       Element* el = 0;
       if (cmd == "next-chord") {
             if (noteEntryMode())
                   moveToNextInputPos();
-            el = nextChordRest(cr);
+            el = nextChordRest(cr, false);
             }
       else if (cmd == "prev-chord") {
             if (noteEntryMode()) {
@@ -1733,16 +1673,16 @@ Element* Score::move(const QString& cmd)
                         s = m->firstCRSegment();
                   moveInputPos(s);
                   }
-            el = prevChordRest(cr);
+            el = prevChordRest(cr, false);
             }
-      else if (cmd == "next-measure"){
+      else if (cmd == "next-measure") {
             el = nextMeasure(cr);
             if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
                   ChordRest* crc = static_cast<ChordRest*>(el);
                   moveInputPos(crc->segment());
                   }
             }
-      else if (cmd == "prev-measure"){
+      else if (cmd == "prev-measure") {
             el = prevMeasure(cr);
             if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
                   ChordRest* crc = static_cast<ChordRest*>(el);

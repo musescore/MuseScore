@@ -29,21 +29,24 @@
 
 //---------------------------------------------------------
 //   nextChordRest
-//    return next NOTE or REST, skip grace notes
-//    element - current element
+//    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr)
+ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
       int track = cr->track();
-      for (Segment* seg = cr->segment()->next1(Segment::SegChordRest); seg; seg = seg->next1(Segment::SegChordRest)) {
+      Segment::SegmentTypes st = Segment::SegChordRest;
+      if (!skipGrace)
+            st |= Segment::SegGrace;
+
+      for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
-            Element* e = seg->element(track);
-            if (e && e->isChordRest())
-                  return static_cast<ChordRest*>(e);
+            ChordRest* e = static_cast<ChordRest*>(seg->element(track));
+            if (e)
+                  return e;
             }
       return 0;
       }
@@ -53,19 +56,20 @@ ChordRest* nextChordRest(ChordRest* cr)
 //    return previous Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr)
+ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
       int track = cr->track();
-      for (Segment* seg = cr->segment()->prev1(); seg; seg = seg->prev1()) {
-            if (seg->subtype() != Segment::SegChordRest)
-                  continue;
+      Segment::SegmentTypes st = Segment::SegChordRest;
+      if (!skipGrace)
+            st |= Segment::SegGrace;
+      for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
-            Element* e = seg->element(track);
-            if (e && e->isChordRest())
-                  return static_cast<ChordRest*>(e);
+            ChordRest* e = static_cast<ChordRest*>(seg->element(track));
+            if (e)
+                  return e;
             }
       return 0;
       }
