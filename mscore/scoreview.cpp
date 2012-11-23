@@ -4772,13 +4772,14 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qApp->processEvents();
             }
       Position pos;
-      pos.segment   = is.segment();
+      pos.segment = is.segment();
 
-      if(addFlag) {
+      if (addFlag) {
             Element* el = score()->selection().element();
             if (el && el->type() == Element::NOTE) {
-                 ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
-                 if (cr) pos.segment = cr->segment();
+                 Chord* c = static_cast<Note*>(el)->chord();
+                 if (c)
+                        pos.segment = c->segment();
                  }
             }
 

@@ -373,7 +373,7 @@ class Score : public QObject {
 
       void padToggle(int n);
 
-      void cmdAddPitch(int note, bool addFlag);
+//      void cmdAddPitch(int note, bool addFlag);
 
       void addTempo();
       void addMetronome();
