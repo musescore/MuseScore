@@ -140,7 +140,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             else if (p > 127)
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
-                  int off = on + (ticks * e.len())/1000;
+                  int off = on + (ticks * e.len())/1000 - 1;
             playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
