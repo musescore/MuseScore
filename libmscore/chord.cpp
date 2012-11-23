@@ -1851,7 +1851,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
             qreal _spatium2 = _spatium * .5;
             if (stemSide) {
-                  int line = lrint((pos.y() + 0.5 * _spatium) / _spatium);
+                  qreal yy = up() ? -_spatium2 : _spatium2;
+                  int line = lrint((pos.y() + yy) / _spatium);
                   if (line >= 0 && line <= 4)    // align between staff lines
                         pos.ry() = (line * _spatium) + (bottom ? _spatium2 : -_spatium2);
                   else {
