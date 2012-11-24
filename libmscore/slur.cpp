@@ -649,14 +649,14 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       //
       // handle special case of tenuto and staccato;
       //
-      QList<Articulation*>* al = c->getArticulations();
-      if (al->size() >= 2) {
-            Articulation* a = al->at(1);
+      const QList<Articulation*>& al = c->articulations();
+      if (al.size() >= 2) {
+            Articulation* a = al.at(1);
             if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
-      else if (al->size() >= 1) {
-            Articulation* a = al->at(0);
+      else if (al.size() >= 1) {
+            Articulation* a = al.at(0);
             if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
@@ -973,10 +973,10 @@ void SlurTie::undoSetSlurDirection(MScore::Direction d)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void SlurTie::toDefault()
+void SlurTie::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       }
@@ -1011,16 +1011,16 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void SlurSegment::toDefault()
+void SlurSegment::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undo(new ChangeSlurOffsets(this, QPointF(), QPointF(), QPointF(), QPointF()));
       for (int i = 0; i < SLUR_GRIPS; ++i)
             ups[i].off = QPointF();
-      parent()->toDefault();
+      parent()->reset();
       parent()->layout();
       }
 

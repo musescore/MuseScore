@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id:$
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -21,9 +21,9 @@ class Xml;
 //---------------------------------------------------------
 
 class NoteEvent {
-      char _pitch;      // relative pitch to note pitch
-      int _ontime;      // 1/1000 of nominal note len
-      int _len;         // 1/1000 of nominal note len
+      int _pitch;   // relative pitch to note pitch
+      int _ontime;  // 1/1000 of nominal note len
+      int _len;     // 1/1000 of nominal note len
 
    public:
       NoteEvent() : _pitch(0), _ontime(0), _len(1000) {}
@@ -32,14 +32,23 @@ class NoteEvent {
       void read(const QDomElement&);
       void write(Xml& xml) const;
 
-      char pitch() const     { return _pitch; }
+      int  pitch() const     { return _pitch; }
       int ontime() const     { return _ontime; }
       int offtime() const    { return _ontime + _len; }
       int len() const        { return _len; }
       void setPitch(int v)   { _pitch = v; }
       void setOntime(int v)  { _ontime = v; }
       void setLen(int v)     { _len = v;    }
+      bool operator==(const NoteEvent&) const;
       };
 
+//---------------------------------------------------------
+//   NoteEventList
+//---------------------------------------------------------
+
+class NoteEventList : public QList<NoteEvent> {
+   public:
+      NoteEventList();
+      };
 
 #endif

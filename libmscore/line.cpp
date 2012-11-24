@@ -420,13 +420,13 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //    TODO: make undoable
 //---------------------------------------------------------
 
-void LineSegment::toDefault()
+void LineSegment::reset()
       {
-      Element::toDefault();
+      Element::reset();
       setUserOff2(QPointF());
       }
 

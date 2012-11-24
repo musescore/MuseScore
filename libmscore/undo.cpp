@@ -120,6 +120,7 @@ void UndoCommand::undo()
 #endif
             childList[i]->undo();
             }
+      flip();
       }
 
 //---------------------------------------------------------
@@ -135,6 +136,7 @@ void UndoCommand::redo()
 #endif
             childList[i]->redo();
             }
+      flip();
       }
 
 //---------------------------------------------------------
@@ -752,6 +754,7 @@ void Score::undoAddElement(Element* element)
       if (et == Element::FINGERING
          || et == Element::IMAGE
          || et == Element::SYMBOL
+         || et == Element::NOTE
             ) {
             Element* parent       = element->parent();
             LinkedElements* links = parent->links();
@@ -960,23 +963,6 @@ void Score::undoAddElement(Element* element)
                   nhp->setEndElement(e2);
                   nhp->setParent(e1);
                   undo(new AddElement(nhp));
-                  }
-            else if (element->type() == Element::NOTE) {
-                  Note* note       = static_cast<Note*>(element);
-                  Chord* cr        = note->chord();
-                  Segment* segment = cr->segment();
-                  int tick         = segment->tick();
-                  Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
-                  Note* nnote      = static_cast<Note*>(ne);
-                  int ntrack       = staffIdx * VOICES + nnote->voice();
-                  nnote->setScore(score);
-                  nnote->setTrack(ntrack);
-                  Chord* ncr       = static_cast<Chord*>(seg->element(ntrack));
-                  nnote->setParent(ncr);
-                  undo(new AddElement(nnote));
-                  score->updateAccidentals(m, staffIdx);
-                  score->setLayout(m);
                   }
             else if (element->type() == Element::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
@@ -2520,42 +2506,6 @@ void ChangeMeasureProperties::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeNoteProperties
-//---------------------------------------------------------
-
-ChangeNoteProperties::ChangeNoteProperties(Note* n, MScore::ValueType v1, int v3,
-   int v6, int v9)
-      {
-      note               = n;
-      _veloType          = v1;
-      _veloOffset        = v3;      ///< velocity user offset in promille
-      _onTimeUserOffset  = v6;      ///< start note user offset
-      _offTimeUserOffset = v9;      ///< stop note user offset
-      };
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeNoteProperties::flip()
-      {
-      MScore::ValueType v1 = note->veloType();
-      int       v3 = note->veloOffset();
-      int       v6 = note->onTimeUserOffset();
-      int       v9 = note->offTimeUserOffset();
-
-      note->setVeloType(_veloType);
-      note->setVeloOffset(_veloOffset);
-      note->setOnTimeUserOffset(_onTimeUserOffset);
-      note->setOffTimeUserOffset(_offTimeUserOffset);
-
-      _veloType          = v1;
-      _veloOffset        = v3;
-      _onTimeUserOffset  = v6;
-      _offTimeUserOffset = v9;
-      }
-
-//---------------------------------------------------------
 //   ChangeTimesig
 //---------------------------------------------------------
 
@@ -3081,5 +3031,29 @@ void ChangeMetaText::flip()
       QString s = score->metaTag(id);
       score->setMetaTag(id, text);
       text = s;
+      }
+
+//---------------------------------------------------------
+//   ChangeEventList
+//---------------------------------------------------------
+
+ChangeEventList::~ChangeEventList()
+      {
+      }
+
+//---------------------------------------------------------
+//   ChangeEventList::flip
+//---------------------------------------------------------
+
+void ChangeEventList::flip()
+      {
+      int n = chord->notes().size();
+      for (int i = 0; i < n; ++i) {
+            Note* note = chord->notes()[i];
+            note->playEvents().swap(events[i]);
+            }
+      bool um = chord->userPlayEvents();
+      chord->setUserPlayEvents(userModified);
+      userModified = um;
       }
 

@@ -542,7 +542,7 @@ void Score::fixTicks()
                               if (!e)
                                     continue;
                               ChordRest* cr = static_cast<ChordRest*>(e);
-                              foreach(Articulation* a, *cr->getArticulations())
+                              foreach(Articulation* a, cr->articulations())
                                     stretch = qMax(a->timeStretch(), stretch);
                               if (stretch > 0.0) {
                                     qreal otempo = tempomap()->tempo(cr->tick());
@@ -1414,6 +1414,7 @@ void Score::addElement(Element* element)
                   if (slur->endElement())
                         static_cast<ChordRest*>(slur->endElement())->addSlurBack(slur);
                   }
+                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
             case Element::OTTAVA:
@@ -1467,6 +1468,22 @@ void Score::addElement(Element* element)
                   _instrumentsChanged = true;
                   break;
 
+            case Element::CHORD:
+                  createPlayEvents(static_cast<Chord*>(element));
+                  break;
+
+            case Element::NOTE: {
+                  Note* note = static_cast<Note*>(element);
+                  updateAccidentals(note->chord()->segment()->measure(), element->staffIdx());
+                  }
+                  // fall through
+
+            case Element::TREMOLO:
+            case Element::ARTICULATION:
+            case Element::ARPEGGIO:
+                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  break;
+
             default:
                   break;
             }
@@ -1483,7 +1500,7 @@ void Score::addElement(Element* element)
 void Score::removeElement(Element* element)
       {
 //      if (_undoRedo)
-//            qFatal("Score:addElement in undo/redo");
+//            qFatal("Score:removeElement in undo/redo");
       Element* parent = element->parent();
 
       if (MScore::debugMode) {
@@ -1532,6 +1549,7 @@ void Score::removeElement(Element* element)
                   static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
                   static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
                   }
+                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
             case Element::VOLTA:
@@ -1577,7 +1595,6 @@ void Score::removeElement(Element* element)
                   ChordRest* cr = static_cast<ChordRest*>(element);
                   if (cr->beam())
                         cr->beam()->remove(cr);
-                  // cr->setBeam(0);
                   }
                   break;
             case Element::CLEF:
@@ -1605,6 +1622,13 @@ void Score::removeElement(Element* element)
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   break;
+
+            case Element::TREMOLO:
+            case Element::ARTICULATION:
+            case Element::ARPEGGIO:
+                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  break;
+
             default:
                   break;
             }

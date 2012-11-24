@@ -47,3 +47,22 @@ void NoteEvent::write(Xml& xml) const
       xml.tag("len", _len);
       xml.etag();
       }
+
+//---------------------------------------------------------
+//   NoteEventList
+//---------------------------------------------------------
+
+NoteEventList::NoteEventList()
+   : QList<NoteEvent>()
+      {
+      }
+
+//---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool NoteEvent::operator==(const NoteEvent& e) const
+      {
+      return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
+      }
+

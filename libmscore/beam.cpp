@@ -2053,10 +2053,10 @@ void Beam::setBeamDirection(MScore::Direction d)
       }
 
 //---------------------------------------------------------
-//   toDefault
+//   reset
 //---------------------------------------------------------
 
-void Beam::toDefault()
+void Beam::reset()
       {
       if (distribute())
             score()->undoChangeProperty(this, P_DISTRIBUTE, false);

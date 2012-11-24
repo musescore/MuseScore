@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id: rendermidi.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -44,6 +44,8 @@
 #include "tremolo.h"
 #include "noteevent.h"
 #include "segment.h"
+#include "undo.h"
+#include "utils.h"
 
 //---------------------------------------------------------
 //   updateChannel
@@ -122,7 +124,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset, int gateTime)
+static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset)
       {
       if (note->hidden() || note->tieBack())       // do not play overlapping notes
             return;
@@ -130,27 +132,16 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       int pitch = note->ppitch();
       int tick1 = note->chord()->tick() + tickOffset;
 
-      if (!note->playEvents().isEmpty()) {
-            int ticks = note->playTicks();
-            foreach(NoteEvent* e, note->playEvents()) {
-                  int p = pitch + e->pitch();
-                  if (p < 0)
-                        p = 0;
-                  else if (p > 127)
-                        p = 127;
-                  int on  = tick1 + (ticks * e->ontime())/1000;
-                  int off = on + (ticks * e->len())/1000;
-                  playNote(events, note, channel, p, velo, on, off);
-                  }
-            }
-      else {
-            int onTime  = tick1                     + note->onTimeOffset()  + note->onTimeUserOffset();
-            int offTime = tick1 + note->playTicks() + note->offTimeOffset() + note->offTimeUserOffset() - 1;
-
-            offTime    -= (offTime - onTime) * (100 - gateTime) / 100;
-            if (offTime - onTime <= 0)
-                  offTime = onTime + 1;
-            playNote(events, note, channel, pitch, velo, onTime, offTime);
+      int ticks = note->playTicks();
+      foreach(const NoteEvent& e, note->playEvents()) {
+            int p = pitch + e.pitch();
+            if (p < 0)
+                  p = 0;
+            else if (p > 127)
+                  p = 127;
+            int on  = tick1 + (ticks * e.ontime())/1000;
+                  int off = on + (ticks * e.len())/1000 - 1;
+            playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
       if (note->bend()) {
@@ -218,18 +209,6 @@ struct OttavaShiftSegment {
       };
 
 //---------------------------------------------------------
-//   playChord
-//---------------------------------------------------------
-
-static void playChord(EventMap* events, Chord* chord, Instrument* instr, int velocity, int tick, int ticks)
-      {
-      foreach (const Note* note, chord->notes()) {
-            int channel = instr->channel(note->subchannel()).channel;
-            playNote(events, note, channel, note->ppitch(), velocity, tick, tick + ticks);
-            }
-      }
-
-//---------------------------------------------------------
 //   collectMeasureEvents
 //---------------------------------------------------------
 
@@ -251,69 +230,17 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         continue;
                         }
                   Element* cr = seg->element(track);
-                  if (cr && cr->type() == Element::CHORD) {
-                        Chord* chord = static_cast<Chord*>(cr);
-                        Staff* staff = chord->staff();
-                        int velocity = staff->velocities().velo(seg->tick());
-                        Instrument* instr = chord->staff()->part()->instr(tick);
-                        //
-                        // adjust velocity for instrument, channel and
-                        // depending on articulation marks
-                        //
-                        int channel = 0;  // note->subchannel();
-                        instr->updateVelocity(&velocity, channel, "");
-                        int gateTime = 100;
-                        instr->updateGateTime(&gateTime, channel, "");
-                        foreach (Articulation* a, *chord->getArticulations()) {
-                              instr->updateVelocity(&velocity, channel, a->subtypeName());
-                              instr->updateGateTime(&gateTime, channel, a->subtypeName());
-                              }
+                  if (cr == 0 || cr->type() != Element::CHORD)
+                        continue;
 
-                        Tremolo* tremolo = chord->tremolo();
-                        if (tremolo) {
-                              Fraction tl = tremolo->tremoloLen();
-                              Fraction cl = chord->durationType().fraction();
-                              Fraction r = cl / tl;
-                              int repeats = r.numerator() / r.denominator();
+                  Chord* chord = static_cast<Chord*>(cr);
+                  Staff* staff = chord->staff();
+                  int velocity = staff->velocities().velo(seg->tick());
+                  Instrument* instr = chord->staff()->part()->instr(tick);
 
-                              if (chord->tremoloChordType() == TremoloFirstNote) {
-                                    repeats /= 2;
-                                    Segment* seg2 = seg->next(st);
-                                    while (seg2 && !seg2->element(track))
-                                          seg2 = seg2->next(st);
-                                    ChordRest* cr = static_cast<ChordRest*>(seg2->element(track));
-                                    if (cr && cr->type() == Element::CHORD) {
-                                          Chord* c2 = static_cast<Chord*>(cr);
-                                          int tick = chord->tick() + tickOffset;
-                                          for (int i = 0; i < repeats; ++i) {
-                                                playChord(events, chord, instr, velocity, tick, tl.ticks());
-                                                tick += tl.ticks();
-                                                playChord(events, c2, instr, velocity, tick, tl.ticks());
-                                                tick += tl.ticks();
-                                                }
-                                          }
-                                    else
-                                          qDebug("Tremolo: cannot find 2. chord\n");
-                                    }
-                              else if (chord->tremoloChordType() == TremoloSingle) {
-                                    for (int i = 0; i < repeats; ++i) {
-                                          int tick = chord->tick() + tickOffset + i * tl.ticks();
-                                          playChord(events, chord, instr, velocity, tick, tl.ticks());
-                                          }
-                                    }
-                              // else if (chord->tremoloChordType() == TremoloSecondNote)
-                              //    ignore second note of two note tremolo
-                              }
-                        else {
-                              //
-                              // TODO: channel should be moved to chord instead of note
-                              //
-                              int channel = instr->channel(chord->upNote()->subchannel()).channel;
-                              foreach(const Note* note, chord->notes()) {
-                                    collectNote(events, channel, note, velocity, tickOffset, gateTime);
-                                    }
-                              }
-                        }
+                  int channel = instr->channel(chord->upNote()->subchannel()).channel;
+                  foreach(const Note* note, chord->notes())
+                        collectNote(events, channel, note, velocity, tickOffset);
                   }
             }
 
@@ -400,32 +327,6 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       }
 
 //---------------------------------------------------------
-//   renderPart
-//---------------------------------------------------------
-
-void Score::renderPart(EventMap* events, Part* part)
-      {
-      Measure* lastMeasure = 0;
-      foreach (const RepeatSegment* rs, *repeatList()) {
-            int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
-            int tickOffset = rs->utick - rs->tick;
-            for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure(part)) {
-                        int offset = m->tick() - lastMeasure->tick();
-                        collectMeasureEvents(events, lastMeasure, part, tickOffset + offset);
-                        }
-                  else {
-                        lastMeasure = m;
-                        collectMeasureEvents(events, m, part, tickOffset);
-                        }
-                  if (m->tick() + m->ticks() >= endTick)
-                        break;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   updateRepeatList
 //---------------------------------------------------------
 
@@ -451,53 +352,6 @@ void Score::updateRepeatList(bool expandRepeats)
       if (MScore::debugMode)
             repeatList()->dump();
       setPlaylistDirty(true);
-      }
-
-//---------------------------------------------------------
-//   toEList
-//    export score to event list
-//---------------------------------------------------------
-
-void Score::toEList(EventMap* events)
-      {
-      updateRepeatList(MScore::playRepeats);
-      _foundPlayPosAfterRepeats = false;
-      updateChannel();
-      updateVelo();
-
-      foreach (Part* part, _parts)
-            renderPart(events, part);
-
-      // add metronome ticks
-      foreach (const RepeatSegment* rs, *repeatList()) {
-            int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
-            int tickOffset = rs->utick - rs->tick;
-            for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  Fraction ts = sigmap()->timesig(m->tick()).timesig();
-
-                  int tw = 0;
-                  switch(ts.denominator()) {
-                        case  1: tw = MScore::division * 4; break;
-                        case  2: tw = MScore::division * 2; break;
-                        case  4: tw = MScore::division; break;
-                        case  8: tw = MScore::division / 2; break;
-                        case 16: tw = MScore::division / 4; break;
-                        case 32: tw = MScore::division / 8; break;
-                        }
-
-                  if (tw == 0)
-                        continue;
-                  for (int i = 0; i < ts.numerator(); i++) {
-                        int tick = m->tick() + i * tw + tickOffset;
-                        Event event;
-                        event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insertMulti(tick, event);
-                        }
-                  if (m->tick() + m->ticks() >= endTick)
-                        break;
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -650,3 +504,333 @@ void Score::updateVelo()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   renderPart
+//---------------------------------------------------------
+
+void Score::renderPart(EventMap* events, Part* part)
+      {
+      Measure* lastMeasure = 0;
+      foreach (const RepeatSegment* rs, *repeatList()) {
+            int startTick  = rs->tick;
+            int endTick    = startTick + rs->len;
+            int tickOffset = rs->utick - rs->tick;
+            for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
+                  if (lastMeasure && m->isRepeatMeasure(part)) {
+                        int offset = m->tick() - lastMeasure->tick();
+                        collectMeasureEvents(events, lastMeasure, part, tickOffset + offset);
+                        }
+                  else {
+                        lastMeasure = m;
+                        collectMeasureEvents(events, m, part, tickOffset);
+                        }
+                  if (m->tick() + m->ticks() >= endTick)
+                        break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   gateTime
+//---------------------------------------------------------
+
+static int gateTime(Chord* chord)
+      {
+      QList<Slur*> slurs;
+      int track = chord->track();
+      int gateTime = 100;
+      Score* score = chord->score();
+      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+            for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+                  if (cr == 0)
+                        continue;
+                  foreach(Spanner* spanner, cr->spannerFor()) {
+                        if (spanner->type() == Element::SLUR)
+                              slurs.append(static_cast<Slur*>(spanner));
+                        }
+                  foreach(Spanner* spanner, cr->spannerBack()) {
+                        if (spanner->type() == Element::SLUR)
+                              slurs.removeOne(static_cast<Slur*>(spanner));
+                        }
+                  if (cr == chord) {
+                        if (slurs.isEmpty()) {
+                              Instrument* instr = cr->staff()->part()->instr(seg->tick());
+                              int channel = 0;
+                              instr->updateGateTime(&gateTime, channel, "");
+                              }
+                        break;
+                        }
+                  }
+            }
+      return gateTime;
+      }
+
+//---------------------------------------------------------
+//   renderChord
+//---------------------------------------------------------
+
+QList<NoteEventList> Score::renderChord(Chord* chord)
+      {
+      return renderChord(chord, gateTime(chord));
+      }
+
+QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
+      {
+      QList<NoteEventList> ell;
+      if (chord->notes().isEmpty())
+            return ell;
+      Segment* seg = chord->segment();
+
+      int notes = chord->notes().size();
+      for (int i = 0; i < notes; ++i)
+            ell.append(NoteEventList());
+
+      bool gateEvents = true;
+      //
+      //    process tremolo
+      //
+      Tremolo* tremolo = chord->tremolo();
+      if (tremolo) {
+            int n = 1 << tremolo->lines();
+            int l = 1000 / n;
+            if (chord->tremoloChordType() == TremoloFirstNote) {
+                  Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+                  Segment* seg2 = seg->next(st);
+                  int track = chord->track();
+                  while (seg2 && !seg2->element(track))
+                        seg2 = seg2->next(st);
+                  Chord* c2 = static_cast<Chord*>(seg2->element(track));
+                  if (c2 && c2->type() == Element::CHORD) {
+                        int tnotes = qMin(notes, c2->notes().size());
+                        n /= 2;
+                        for (int k = 0; k < tnotes; ++k) {
+                              NoteEventList* events = &ell[k];
+                              events->clear();
+                              int p1 = chord->notes()[k]->pitch();
+                              int p2 = c2->notes()[k]->pitch();
+                              for (int i = 0; i < n; ++i) {
+                                    events->append(NoteEvent(p1, l * i * 2, l));
+                                    events->append(NoteEvent(p2, l * i * 2 + l, l));
+                                    }
+                              }
+                        }
+                  else
+                        qDebug("Chord::renderTremolo: cannot find 2. chord\n");
+                  }
+            else if (chord->tremoloChordType() == TremoloSecondNote) {
+                  }
+            else if (chord->tremoloChordType() == TremoloSingle) {
+                  for (int k = 0; k < notes; ++k) {
+                        NoteEventList* events = &(ell)[k];
+                        events->clear();
+                        for (int i = 0; i < n; ++i)
+                              events->append(NoteEvent(0, l * i, l));
+                        }
+                  }
+            }
+      else if (chord->arpeggio()) {
+            gateEvents = false;     // dont apply gateTime to arpeggio events
+            int l = 1000 / notes;
+
+            int start, end, step;
+            bool up = chord->arpeggio()->subtype() != ARP_DOWN;
+            if (up) {
+                  start = 0;
+                  end   = notes;
+                  step  = 1;
+                  }
+            else {
+                  start = notes - 1;
+                  end   = -1;
+                  step  = -1;
+                  }
+            for (int i = start; i != end; i += step) {
+                  NoteEventList* events = &(ell)[i];
+                  events->clear();
+                  events->append(NoteEvent(0, l * i, 1000 - l * i));
+                  }
+            }
+
+      if (!chord->articulations().isEmpty() && !chord->arpeggio()) {
+            Instrument* instr = chord->staff()->part()->instr(seg->tick());
+            int channel  = 0;  // note->subchannel();
+
+//qDebug("Chord");
+            foreach (Articulation* a, chord->articulations()) {
+                  ArticulationType type = a->subtype();
+                  for (int k = 0; k < notes; ++k) {
+                        NoteEventList* events = &ell[k];
+
+                        switch (type) {
+                              case Articulation_Mordent: {
+                                    //
+                                    // create default playback for Mordent
+                                    //
+                                    events->clear();
+                                    events->append(NoteEvent(0, 0, 125));
+                                    int key     = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int pitch   = chord->notes()[k]->pitch();
+                                    int pitchUp = diatonicUpDown(key, pitch, 1);
+                                    events->append(NoteEvent(pitchUp - pitch, 125, 125));
+                                    events->append(NoteEvent(0, 250, 750));
+                                    }
+                                    break;
+                              case Articulation_Prall:
+                                    //
+                                    // create default playback events for PrallSym
+                                    //
+                                    {
+                                    events->clear();
+                                    events->append(NoteEvent(0, 0, 125));
+                                    int key       = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int pitch     = chord->notes()[k]->pitch();
+                                    int pitchDown = diatonicUpDown(key, pitch, -1);
+                                    events->append(NoteEvent(pitchDown - pitch, 125, 125));
+                                    events->append(NoteEvent(0, 250, 750));
+                                    }
+                                    break;
+                              default:
+//qDebug("   %s", qPrintable(a->subtypeName()));
+                                    instr->updateGateTime(&gateTime, channel, a->subtypeName());
+                                    break;
+                              }
+                        }
+                  }
+            }
+
+      //
+      //    apply gateTime
+      //
+      if (!gateEvents)
+            return ell;
+      for (int i = 0; i < notes; ++i) {
+            NoteEventList* el = &ell[i];
+            int nn = el->size();
+            if (nn == 0) {
+                  el->append(NoteEvent());
+                  ++nn;
+                  }
+            for (int i = 0; i < nn; ++i) {
+                  NoteEvent* e = &(*el)[i];
+                  e->setLen(e->len() * gateTime / 100);
+                  }
+            }
+      return ell;
+      }
+
+//---------------------------------------------------------
+//   createPlayEvents
+//    create default play events
+//---------------------------------------------------------
+
+void Score::createPlayEvents(Chord* chord)
+      {
+      createPlayEvents(chord, gateTime(chord));
+      }
+
+void Score::createPlayEvents(Chord* chord, int gateTime)
+      {
+      QList<NoteEventList> el = renderChord(chord, gateTime);
+      if (chord->userPlayEvents())
+            undo(new ChangeEventList(chord, el, false));
+      else {
+            int n = chord->notes().size();
+            for (int i = 0; i < n; ++i)
+                  chord->notes()[i]->setPlayEvents(el[i]);
+            }
+      }
+
+void Score::createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
+      {
+      const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+            // skip linked staves, except primary
+            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+                  track += VOICES-1;
+                  continue;
+                  }
+            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+            if (cr == 0)
+                  continue;
+            foreach(Spanner* spanner, cr->spannerFor()) {
+                  if (spanner->type() == Element::SLUR)
+                        slurs->append(static_cast<Slur*>(spanner));
+                  }
+            foreach(Spanner* spanner, cr->spannerBack()) {
+                  if (spanner->type() == Element::SLUR)
+                        slurs->removeOne(static_cast<Slur*>(spanner));
+                  }
+            if (cr->type() != Element::CHORD)
+                  continue;
+            int gateTime = 100;
+            if (slurs->isEmpty()) {
+                  Instrument* instr = cr->staff()->part()->instr(seg->tick());
+                  int channel = 0;
+                  instr->updateGateTime(&gateTime, channel, "");
+                  }
+            createPlayEvents(static_cast<Chord*>(cr), gateTime);
+            }
+      }
+
+void Score::createPlayEvents()
+      {
+      QList<Slur*> slurs;
+      int etrack = nstaves() * VOICES;
+      for (int track = 0; track < etrack; ++track) {
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+                  createPlayEvents(m, track, &slurs);
+            }
+      }
+
+//---------------------------------------------------------
+//   renderMidi
+//    export score to event list
+//---------------------------------------------------------
+
+void Score::renderMidi(EventMap* events)
+      {
+      createPlayEvents();
+
+      updateRepeatList(MScore::playRepeats);
+      _foundPlayPosAfterRepeats = false;
+      updateChannel();
+      updateVelo();
+
+      foreach (Part* part, _parts)
+            renderPart(events, part);
+
+      // add metronome ticks
+      foreach (const RepeatSegment* rs, *repeatList()) {
+            int startTick  = rs->tick;
+            int endTick    = startTick + rs->len;
+            int tickOffset = rs->utick - rs->tick;
+            for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
+                  Fraction ts = sigmap()->timesig(m->tick()).timesig();
+
+                  int tw = 0;
+                  switch(ts.denominator()) {
+                        case  1: tw = MScore::division * 4; break;
+                        case  2: tw = MScore::division * 2; break;
+                        case  4: tw = MScore::division; break;
+                        case  8: tw = MScore::division / 2; break;
+                        case 16: tw = MScore::division / 4; break;
+                        case 32: tw = MScore::division / 8; break;
+                        }
+
+                  if (tw == 0)
+                        continue;
+                  for (int i = 0; i < ts.numerator(); i++) {
+                        int tick = m->tick() + i * tw + tickOffset;
+                        Event event;
+                        event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
+                        events->insertMulti(tick, event);
+                        }
+                  if (m->tick() + m->ticks() >= endTick)
+                        break;
+                  }
+            }
+      }
+

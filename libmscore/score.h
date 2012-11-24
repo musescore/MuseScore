@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -182,7 +182,8 @@ struct Position {
 
 enum LayoutFlag {
       LAYOUT_FIX_TICKS = 1,
-      LAYOUT_FIX_PITCH_VELO = 2
+      LAYOUT_FIX_PITCH_VELO = 2,
+      LAYOUT_PLAY_EVENTS = 4
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
@@ -372,7 +373,7 @@ class Score : public QObject {
 
       void padToggle(int n);
 
-      void cmdAddPitch(int note, bool addFlag);
+//      void cmdAddPitch(int note, bool addFlag);
 
       void addTempo();
       void addMetronome();
@@ -418,6 +419,8 @@ class Score : public QObject {
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
+      void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs);
+      void createPlayEvents();
 
    public:
       void setDirty(bool val);
@@ -678,7 +681,7 @@ class Score : public QObject {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       void pasteStaff(const QDomElement&, ChordRest* dst);
-      void toEList(EventMap* events);
+      void renderMidi(EventMap* events);
       void renderPart(EventMap* events, Part*);
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
@@ -922,6 +925,10 @@ class Score : public QObject {
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
+      QList<NoteEventList> renderChord(Chord* chord, int gateTime);
+      QList<NoteEventList> renderChord(Chord* chord);
+      void createPlayEvents(Chord*, int gateTime);
+      void createPlayEvents(Chord*);
       };
 
 extern Score* gscore;

@@ -2685,14 +2685,14 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "reset") {
             if (editMode()) {
-                  editObject->toDefault();
+                  editObject->reset();
                   updateGrips();
                   _score->end();
                   }
             else {
                   _score->startCmd();
                   foreach(Element* e, _score->selection().elements())
-                        e->toDefault();
+                        e->reset();
                   _score->endCmd();
                   }
             _score->setLayoutAll(true);
@@ -4772,13 +4772,14 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qApp->processEvents();
             }
       Position pos;
-      pos.segment   = is.segment();
+      pos.segment = is.segment();
 
-      if(addFlag) {
+      if (addFlag) {
             Element* el = score()->selection().element();
             if (el && el->type() == Element::NOTE) {
-                 ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
-                 if (cr) pos.segment = cr->segment();
+                 Chord* c = static_cast<Note*>(el)->chord();
+                 if (c)
+                        pos.segment = c->segment();
                  }
             }
 
