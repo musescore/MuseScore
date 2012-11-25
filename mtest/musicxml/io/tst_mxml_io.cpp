@@ -52,6 +52,7 @@ private slots:
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
+      void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
@@ -91,6 +92,7 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
+      void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurs() { mxmlIoTest("testSlurs"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
