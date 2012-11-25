@@ -30,7 +30,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>16</divisions>
+        <divisions>32</divisions>
         <key>
           <fifths>0</fifths>
           <mode>major</mode>
@@ -49,7 +49,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -61,7 +61,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -73,14 +73,14 @@
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>64th</type>
+        <type>128th</type>
         <stem>up</stem>
         </note>
       <note print-object="no">
         <rest/>
         <duration>1</duration>
         <voice>1</voice>
-        <type>64th</type>
+        <type>128th</type>
         </note>
       </measure>
     <measure number="3">
@@ -89,7 +89,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
