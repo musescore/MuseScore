@@ -12,6 +12,7 @@ testMultiMeasureRest3.xml
 testNonUniqueThings.xml
 testNoteAttributes2.xml
 testNumberedLyrics.xml
+testRestsNoType.xml
 testTuplets1.xml
 testTuplets2.xml
 testTuplets3.xml

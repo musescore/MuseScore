@@ -1182,20 +1182,19 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                          qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                   int length = maxNoteTypeTickFr.ticks();
                   int correctedLength = length;
-#if 1 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-                  // if necessary, round up to an integral number of 1/32s,
+
+                  // if necessary, round up to an integral number of 1/64s,
                   // to comply with MuseScores actual measure length constraints
-                  if ((length % (MScore::division/8)) != 0) {
-                        correctedLength = ((length / (MScore::division/8)) + 1) * (MScore::division/8);
+                  if ((length % (MScore::division/16)) != 0) {
+                        correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
                         }
-#endif
+
                   // fix for PDFtoMusic Pro v1.3.0d Build BF4E (which sometimes generates empty measures)
                   // if no valid length found and length according to time signature is known,
                   // use length according to time signature
                   if (correctedLength <= 0 && timeSigLen > 0)
                         correctedLength = timeSigLen;
 #ifdef DEBUG_TICK
-                  // debug
                   qDebug("measurelength measure %d length %d corr length %d\n",
                          measureNr + 1, length, correctedLength);
 #endif
@@ -2115,6 +2114,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
+      fractionTSig          = Fraction(0, 1);
       tick                  = 0;
       maxtick               = 0;
       prevtick              = 0;
@@ -2302,6 +2302,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   }
             measure  = new Measure(score);
             measure->setTick(tick);
+            measure->setLen(Fraction::fromTicks(measureLen));
             measure->setNo(number);
             score->measures()->add(measure);
             } else {
@@ -2526,53 +2527,20 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       fixupFiguredBass(part, measure);
 
 #ifdef DEBUG_TICK
-      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d",
-             measure->tick(), maxtick, lastMeasureLen, measureLen);
+      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
+             measure->tick(), maxtick, lastMeasureLen, measureLen,
+             fractionTSig.ticks(), qPrintable(fractionTSig.print()));
 #endif
 
+      // TODO:
+      // - how to handle fractionTSig.isZero (shouldn't happen ?)
+      // - how to handle unmetered music
+      if (fractionTSig.isValid() && !fractionTSig.isZero())
+            measure->setTimesig(fractionTSig);
 #if 1 // previous code
-      measure->setLen(Fraction::fromTicks(measureLen));
+      // measure->setLen(Fraction::fromTicks(measureLen));
       lastMeasureLen = measureLen;
       tick = maxtick;
-#endif
-
-#if 0 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-      // if number of ticks in the measure does not match the nominal time signature
-      // set a different actual time signature
-
-      AL::TimeSigMap* sigmap = score->sigmap();
-      int mtick        = measure->tick();
-
-      if (measureLen != sigmap->ticksMeasure(mtick)) {
-
-            AL::SigEvent se = sigmap->timesig(mtick);
-            Fraction nominal = se.getNominal();
-#ifdef DEBUG_TICK
-            qDebug("measure %d actual len %d at %d -> nominal %d: %s",
-                   number+1, measureLen, mtick, sigmap->ticksMeasure(tick), qPrintable(nominal.print()));
-#endif
-
-            // determine actual duration as fraction
-            Fraction actual;
-            if ((measureLen % AL::division) == 0)
-                  actual = Fraction(measureLen / AL::division, 4);
-            else if ((measureLen % (AL::division/2)) == 0)
-                  actual = Fraction(measureLen / (AL::division/2), 8);
-            else if ((measureLen % (AL::division/4)) == 0)
-                  actual = Fraction(measureLen / (AL::division/4), 16);
-            else if ((measureLen % (AL::division/8)) == 0)
-                  actual = Fraction(measureLen / (AL::division/8), 32);
-            else {
-                  // this shouldn't happen
-                  qDebug("ImportXml: incorrect measure length calculated by determineMeasureLength()");
-                  }
-
-            // set time signature
-#ifdef DEBUG_TICK
-            qDebug("Add Sig %d  len %d:  %s", mtick, measureLen, qPrintable(actual.print()));
-#endif
-            score->sigmap()->add(mtick, actual, nominal);
-            }
 #endif
 
       // multi-measure rest handling:
@@ -3567,6 +3535,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
+                  fractionTSig = Fraction(bts, btp);
                   // add timesig to all staves
                   //ws score->sigmap()->add(tick, TimeSig::getSig(st));
                   Part* part = score->staff(staff)->part();
@@ -3574,7 +3543,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);
                         timesig->setTrack((staff + i) * VOICES);
-                        timesig->setSig(Fraction(bts, btp), st);
+                        timesig->setSig(fractionTSig, st);
                         // handle simple compound time signature
                         if (beats.contains(QChar('+'))) {
                               timesig->setNumeratorString(beats);
@@ -5035,9 +5004,17 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       if (rest) {
             cr = new Rest(score);
-            // whole measure rests do not have a "type" element
+            // By convention, whole measure rests do not have a "type" element
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
+            // but for backwards compatibility the "old" convention still has to be supported.
             if (durationType.type() == TDuration::V_INVALID) {
-                  durationType.setType(TDuration::V_MEASURE);
+                  // Verify the rest fits exactly in the measure, as some programs
+                  // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+                  // the type for all rests.
+                  if (tick == measure->tick() && ticks == measure->ticks())
+                        durationType.setType(TDuration::V_MEASURE);
+                  else
+                        durationType.setVal(ticks);
                   cr->setDurationType(durationType);
                   cr->setDuration(Fraction::fromTicks(ticks));
                   }
@@ -5053,8 +5030,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             cr->setTrack(track);
             static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
-            //sibelius might import 2 rests at the same place, ignore the 2one
-            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
+            // Sibelius might export two rests at the same place, ignore the 2nd one
+            // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
