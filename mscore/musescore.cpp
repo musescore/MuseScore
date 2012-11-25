@@ -1962,8 +1962,10 @@ static void loadScores(const QStringList& argv)
                   Score* score = mscore->readScore(name);
                   if (score) {
                         mscore->appendScore(score);
-                        mscore->updateRecentScores(score);
-                        mscore->writeSessionFile(false);
+                        if(!noGui) {
+                              mscore->updateRecentScores(score);
+                              mscore->writeSessionFile(false);
+                              }
                         }
                   }
             }
