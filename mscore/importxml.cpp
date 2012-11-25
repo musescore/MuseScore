@@ -2115,6 +2115,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
+      fractionTSig          = Fraction(0, 1);
       tick                  = 0;
       maxtick               = 0;
       prevtick              = 0;
@@ -2302,6 +2303,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   }
             measure  = new Measure(score);
             measure->setTick(tick);
+            measure->setLen(Fraction::fromTicks(measureLen));
             measure->setNo(number);
             score->measures()->add(measure);
             } else {
@@ -2526,12 +2528,18 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       fixupFiguredBass(part, measure);
 
 #ifdef DEBUG_TICK
-      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d",
-             measure->tick(), maxtick, lastMeasureLen, measureLen);
+      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
+             measure->tick(), maxtick, lastMeasureLen, measureLen,
+             fractionTSig.ticks(), qPrintable(fractionTSig.print()));
 #endif
 
+      // TODO:
+      // - how to handle fractionTSig.isZero (shouldn't happen ?)
+      // - how to handle unmetered music
+      if (fractionTSig.isValid() && !fractionTSig.isZero())
+            measure->setTimesig(fractionTSig);
 #if 1 // previous code
-      measure->setLen(Fraction::fromTicks(measureLen));
+      // measure->setLen(Fraction::fromTicks(measureLen));
       lastMeasureLen = measureLen;
       tick = maxtick;
 #endif
@@ -3567,6 +3575,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
+                  fractionTSig = Fraction(bts, btp);
                   // add timesig to all staves
                   //ws score->sigmap()->add(tick, TimeSig::getSig(st));
                   Part* part = score->staff(staff)->part();
@@ -3574,7 +3583,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);
                         timesig->setTrack((staff + i) * VOICES);
-                        timesig->setSig(Fraction(bts, btp), st);
+                        timesig->setSig(fractionTSig, st);
                         // handle simple compound time signature
                         if (beats.contains(QChar('+'))) {
                               timesig->setNumeratorString(beats);
@@ -5035,9 +5044,18 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       if (rest) {
             cr = new Rest(score);
-            // whole measure rests do not have a "type" element
+            printf("AllocatingRest: rest tick %d ticks %d measure tick %d ticks %d tsig ticks %d len ticks %d\n",
+                   tick, ticks, measure->tick(), measure->ticks(), measure->timesig().ticks(), measure->len().ticks());
+            // By convention, whole measure rests do not have a "type" element
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure"
             if (durationType.type() == TDuration::V_INVALID) {
-                  durationType.setType(TDuration::V_MEASURE);
+                  // Verify the rest fits exactly in the measure, as some programs
+                  // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+                  // the type for all rests.
+                  if (tick == measure->tick() && ticks == measure->ticks())
+                        durationType.setType(TDuration::V_MEASURE);
+                  else
+                        durationType.setVal(ticks);
                   cr->setDurationType(durationType);
                   cr->setDuration(Fraction::fromTicks(ticks));
                   }
@@ -5053,8 +5071,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             cr->setTrack(track);
             static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
-            //sibelius might import 2 rests at the same place, ignore the 2one
-            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
+            // Sibelius might export two rests at the same place, ignore the 2nd one
+            // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
