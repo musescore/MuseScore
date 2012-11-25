@@ -351,6 +351,10 @@ void Score::layoutStage2()
                   if(cr->type() == Element::CHORD && segment->subtype() == Segment::SegChordRest)
                         ((Chord*)cr)->crossMeasureSetup(crossMeasure);
                   bm = cr->beamMode();
+                  // if chord has hooks and is 2nd element of a cross-measure value
+                  // set beam mode to NO (do not combine with following chord beam/hook, if any)
+                  if(cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
+                        bm = BEAM_NO;
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
