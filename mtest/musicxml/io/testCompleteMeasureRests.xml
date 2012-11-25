@@ -3,10 +3,9 @@
 <score-partwise>
   <work>
     <work-number>MuseScore testfile</work-number>
-    <work-title>Unusual Durations</work-title>
+    <work-title>Complete Measure Rests</work-title>
     </work>
   <identification>
-    <creator type="composer">Leon Vinken</creator>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
@@ -14,10 +13,9 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Flute</part-name>
-      <part-abbreviation>Fl.</part-abbreviation>
+      <part-name></part-name>
       <score-instrument id="P1-I3">
-        <instrument-name>Flute</instrument-name>
+        <instrument-name></instrument-name>
         </score-instrument>
       <midi-instrument id="P1-I3">
         <midi-channel>1</midi-channel>
@@ -30,14 +28,14 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>32</divisions>
+        <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
           <mode>major</mode>
           </key>
         <time>
-          <beats>1</beats>
-          <beat-type>2</beat-type>
+          <beats>3</beats>
+          <beat-type>4</beat-type>
           </time>
         <clef>
           <sign>G</sign>
@@ -45,54 +43,35 @@
           </clef>
         </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>64</duration>
+        <rest/>
+        <duration>3</duration>
         <voice>1</voice>
-        <type>half</type>
-        <stem>up</stem>
         </note>
       </measure>
     <measure number="2">
+      <attributes>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>64</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>128th</type>
-        <stem>up</stem>
-        </note>
-      <note print-object="no">
         <rest/>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>128th</type>
         </note>
       </measure>
     <measure number="3">
+      <attributes>
+        <time>
+          <beats>5</beats>
+          <beat-type>4</beat-type>
+          </time>
+        </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>64</duration>
+        <rest/>
+        <duration>5</duration>
         <voice>1</voice>
-        <type>half</type>
-        <stem>up</stem>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

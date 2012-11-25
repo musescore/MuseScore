@@ -3,23 +3,13 @@
 <score-partwise>
   <work>
     <work-number>MuseScore testfile</work-number>
-    <work-title>Unusual Durations</work-title>
+    <work-title>Rests (no type)</work-title>
     </work>
   <identification>
-    <creator type="composer">Leon Vinken</creator>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
       </encoding>
-    <miscellaneous>
-      <miscellaneous-field name="description">
-        Test valid MusicXML durations not supported by MuseScore.
-
-        Measure 2 contains 65/128, MuseScore restricts actual measure duration
-        to an integral number of 1/64s. The measure will be rounded up to 33/64,
-        by adding one (hidden) 1/128 rest.
-        </miscellaneous-field>
-      </miscellaneous>
     </identification>
   <part-list>
     <score-part id="P1">
@@ -31,20 +21,22 @@
       <midi-instrument id="P1-I3">
         <midi-channel>1</midi-channel>
         <midi-program>74</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
         </midi-instrument>
       </score-part>
     </part-list>
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>32</divisions>
+        <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
           <mode>major</mode>
           </key>
         <time>
-          <beats>1</beats>
-          <beat-type>2</beat-type>
+          <beats>3</beats>
+          <beat-type>4</beat-type>
           </time>
         <clef>
           <sign>G</sign>
@@ -52,14 +44,9 @@
           </clef>
         </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>64</duration>
+        <rest/>
+        <duration>3</duration>
         <voice>1</voice>
-        <type>half</type>
-        <stem>up</stem>
         </note>
       </measure>
     <measure number="2">
@@ -68,31 +55,25 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>64</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <stem>up</stem>
         </note>
       <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        </note>
+      <note>
         <pitch>
-          <step>A</step>
+          <step>B</step>
           <octave>4</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>128th</type>
-        <stem>up</stem>
-        </note>
-      </measure>
-    <measure number="3">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>64</duration>
-        <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <stem>up</stem>
         </note>
       <barline location="right">

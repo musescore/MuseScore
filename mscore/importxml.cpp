@@ -1182,20 +1182,19 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                          qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                   int length = maxNoteTypeTickFr.ticks();
                   int correctedLength = length;
-#if 1 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-                  // if necessary, round up to an integral number of 1/32s,
+
+                  // if necessary, round up to an integral number of 1/64s,
                   // to comply with MuseScores actual measure length constraints
-                  if ((length % (MScore::division/8)) != 0) {
-                        correctedLength = ((length / (MScore::division/8)) + 1) * (MScore::division/8);
+                  if ((length % (MScore::division/16)) != 0) {
+                        correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
                         }
-#endif
+
                   // fix for PDFtoMusic Pro v1.3.0d Build BF4E (which sometimes generates empty measures)
                   // if no valid length found and length according to time signature is known,
                   // use length according to time signature
                   if (correctedLength <= 0 && timeSigLen > 0)
                         correctedLength = timeSigLen;
 #ifdef DEBUG_TICK
-                  // debug
                   qDebug("measurelength measure %d length %d corr length %d\n",
                          measureNr + 1, length, correctedLength);
 #endif
@@ -2542,45 +2541,6 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       // measure->setLen(Fraction::fromTicks(measureLen));
       lastMeasureLen = measureLen;
       tick = maxtick;
-#endif
-
-#if 0 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-      // if number of ticks in the measure does not match the nominal time signature
-      // set a different actual time signature
-
-      AL::TimeSigMap* sigmap = score->sigmap();
-      int mtick        = measure->tick();
-
-      if (measureLen != sigmap->ticksMeasure(mtick)) {
-
-            AL::SigEvent se = sigmap->timesig(mtick);
-            Fraction nominal = se.getNominal();
-#ifdef DEBUG_TICK
-            qDebug("measure %d actual len %d at %d -> nominal %d: %s",
-                   number+1, measureLen, mtick, sigmap->ticksMeasure(tick), qPrintable(nominal.print()));
-#endif
-
-            // determine actual duration as fraction
-            Fraction actual;
-            if ((measureLen % AL::division) == 0)
-                  actual = Fraction(measureLen / AL::division, 4);
-            else if ((measureLen % (AL::division/2)) == 0)
-                  actual = Fraction(measureLen / (AL::division/2), 8);
-            else if ((measureLen % (AL::division/4)) == 0)
-                  actual = Fraction(measureLen / (AL::division/4), 16);
-            else if ((measureLen % (AL::division/8)) == 0)
-                  actual = Fraction(measureLen / (AL::division/8), 32);
-            else {
-                  // this shouldn't happen
-                  qDebug("ImportXml: incorrect measure length calculated by determineMeasureLength()");
-                  }
-
-            // set time signature
-#ifdef DEBUG_TICK
-            qDebug("Add Sig %d  len %d:  %s", mtick, measureLen, qPrintable(actual.print()));
-#endif
-            score->sigmap()->add(mtick, actual, nominal);
-            }
 #endif
 
       // multi-measure rest handling:
@@ -5044,10 +5004,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       if (rest) {
             cr = new Rest(score);
-            printf("AllocatingRest: rest tick %d ticks %d measure tick %d ticks %d tsig ticks %d len ticks %d\n",
-                   tick, ticks, measure->tick(), measure->ticks(), measure->timesig().ticks(), measure->len().ticks());
             // By convention, whole measure rests do not have a "type" element
-            // As of MusicXML 3.0, this can be indicated by an attribute "measure"
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
+            // but for backwards compatibility the "old" convention still has to be supported.
             if (durationType.type() == TDuration::V_INVALID) {
                   // Verify the rest fits exactly in the measure, as some programs
                   // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
