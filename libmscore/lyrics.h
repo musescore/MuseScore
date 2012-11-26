@@ -42,7 +42,7 @@ class Lyrics : public Text {
       int _no;                ///< row index
 
    public:
-      Lyrics(Score*);
+      Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
       virtual Lyrics* clone() const    { return new Lyrics(*this); }

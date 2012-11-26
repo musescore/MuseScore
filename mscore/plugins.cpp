@@ -46,6 +46,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/accidental.h"
+#include "libmscore/lyrics.h"
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -187,6 +188,8 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<Text>       ("MuseScore", 1, 0, "Text");
+            qmlRegisterType<Lyrics>       ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
