@@ -1762,22 +1762,36 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               //
                               // find direction
                               //
-                              if (c1 == 0)                // point to right
+                              // if first or last of group
+                              // unconditionally set beam at right or left side
+                              if (c1 == 0)                // first => point to right
                                     ;
-                              else if (c1 == n - 1)       // point to left
+                              else if (c1 == n - 1)       // last => point to left
                                     len = -len;
                               else {
-                                    // 0 < c1 < (n-1)
+                                    // if inside group
                                     Fraction a  = crl[c1-1]->duration();
                                     Fraction b  = cr1->duration();
                                     Fraction c  = crl[c1+1]->duration();
                                     Fraction ab = (a + b).reduced();
                                     Fraction bc = (b + c).reduced();
 
+                                    // if previous + current chord (a + b) is shorter
+                                    // than current + next chord (b + c),
+                                    // turn beam to left side
                                     if (ab.denominator() < bc.denominator())
                                           len = -len;
+                                    // if same length
                                     else if (ab.denominator() == bc.denominator()) {
-                                          if (a.reduced().denominator() < b.reduced().denominator())
+                                          // compute position in measure of previous and target chords
+                                          int measTick = cr1->measure()->tick();
+                                          int tick1 = crl[c1-1]->tick() - measTick;
+                                          int tick2 = crl[c1]->tick() - measTick;
+                                          // if the previous chord better approximates than target chord
+                                          // a measure division equal to a + b duration (modulus of
+                                          // position in measure is less), turn beam to left side
+                                          int ticks = ab.ticks();
+                                          if ( (tick1 % ticks) < (tick2 % ticks) )
                                                 len = -len;
                                           }
                                     }
