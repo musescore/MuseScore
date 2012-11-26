@@ -86,12 +86,14 @@ class LedgerLine : public Line {
 ///   Single notes are handled as degenerated chords.
 //
 //   @P notes  array[Note]    the list of notes (read only)
+//   @P lyrics  array[Lyrics]  the list of lyrics (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
       Q_OBJECT
 
       Q_PROPERTY(QDeclarativeListProperty<Note> notes READ qmlNotes);
+      Q_PROPERTY(QDeclarativeListProperty<Lyrics> lyrics READ qmlLyrics);
 
       QList<Note*> _notes;                // sorted to increasing pitch
       QList<LedgerLine*> _ledgerLines;
@@ -146,6 +148,7 @@ class Chord : public ChordRest {
       void layoutArpeggio2();
 
       QDeclarativeListProperty<Note> qmlNotes() { return QDeclarativeListProperty<Note>(this, _notes); }
+      QDeclarativeListProperty<Lyrics> qmlLyrics() { return QDeclarativeListProperty<Lyrics>(this, _lyricsList); }
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 
