@@ -2563,6 +2563,9 @@ bool Measure::createEndBarLines()
                               bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
                               changed = true;
                               }
+                        // or clear custom subtype flag if same type as measure
+                        if (bl->subtype() == et && bl->customSubtype())
+                              bl->setCustomSubtype(false);
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),
                         // we are extending down the bar line of a staff above (bl)
