@@ -463,7 +463,7 @@ Element* BarLine::drop(const DropData& data)
                   // if drop refer to subtype, update this bar line subtype
                   else {
                         score()->undoChangeProperty(this, P_SUBTYPE, int(bl->subtype()));
-                        setCustomSubtype(true);
+//                        setCustomSubtype(true);
                         }
                   delete e;
                   return 0;
@@ -918,8 +918,10 @@ QVariant BarLine::getProperty(P_ID id) const
 
 bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
-      if (id == P_SUBTYPE)
+      if (id == P_SUBTYPE) {
             _subtype = BarLineType(v.toInt());
+            setCustomSubtype(parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt());
+            }
       else
             return Element::setProperty(id, v);
       score()->setLayoutAll(true);
