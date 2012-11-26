@@ -15,9 +15,9 @@
       <miscellaneous-field name="description">
         Test valid MusicXML durations not supported by MuseScore.
 
-        Measure 2 contains 33/64, MuseScore restricts actual measure duration
-        to an integral number of 1/32s. The measure will be rounded up to 17/32,
-        by adding one (hidden) 1/64 rest.
+        Measure 2 contains 65/128, MuseScore restricts actual measure duration
+        to an integral number of 1/64s. The measure will be rounded up to 33/64,
+        by adding one (hidden) 1/128 rest.
         </miscellaneous-field>
       </miscellaneous>
     </identification>
@@ -37,7 +37,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>16</divisions>
+        <divisions>32</divisions>
         <key>
           <fifths>0</fifths>
           <mode>major</mode>
@@ -56,7 +56,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -68,7 +68,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -80,7 +80,7 @@
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>64th</type>
+        <type>128th</type>
         <stem>up</stem>
         </note>
       </measure>
@@ -90,7 +90,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>64</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>

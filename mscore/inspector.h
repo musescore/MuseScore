@@ -368,6 +368,31 @@ class InspectorKeySig : public InspectorBase {
       };
 
 //---------------------------------------------------------
+//   InspectorBarLine
+//---------------------------------------------------------
+
+#define BARLINE_BUILTIN_SPANS 5
+
+class InspectorBarLine : public InspectorBase {
+      Q_OBJECT
+
+      InspectorElementElement* iElement;
+      QComboBox*  type;
+      QComboBox*  span;
+      int         measureBarLineType;
+
+      static QString    builtinSpanNames[BARLINE_BUILTIN_SPANS];
+      static int        builtinSpans[BARLINE_BUILTIN_SPANS][3];
+
+   public slots:
+      virtual void apply();
+
+   public:
+      InspectorBarLine(QWidget* parent);
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
 //   Inspector
 //---------------------------------------------------------
 

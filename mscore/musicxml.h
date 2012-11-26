@@ -26,6 +26,7 @@
  Definition of class MusicXML
 */
 
+#include "libmscore/fraction.h"
 #include "libmscore/mscore.h"
 #include "musicxmlsupport.h"
 
@@ -195,6 +196,7 @@ class MusicXml {
       QMap<int, VoiceDesc> voicelist;
       QVector<int> measureLength;               ///< Length of each measure in ticks
       QVector<int> measureStart;                ///< Start tick of each measure
+      Fraction fractionTSig;                    ///< Current timesig as fraction
 
       Slur* slur[MAX_NUMBER_LEVEL];
 
