@@ -1832,17 +1832,15 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(int /*subtype*/)
+Text* Score::getText(int subtype)
       {
-#if 0 // TODO
-      MeasureBase* m = measures()->first();
-      if (m) {
+      MeasureBase* m = first();
+      if (m && m->type() == Element::VBOX) {
             foreach(Element* e, *m->el()) {
-                  if (e->type() == Element::TEXT && static_cast<Text*>(e)->subtype() == subtype)
+                  if (e->type() == Element::TEXT && static_cast<Text*>(e)->textStyleType() == subtype)
                         return static_cast<Text*>(e);
                   }
             }
-#endif
       return 0;
       }
 
