@@ -336,7 +336,7 @@ void MuseScore::saveFile()
       if (cs->created()) {
             QString selectedFilter;
             QString fn = cs->fileInfo()->fileName();
-            Text* t = cs->getText(TEXT_TITLE);
+            Text* t = cs->getText(TEXT_STYLE_TITLE);
             if (t)
                   fn = t->getText();
             QString name = createDefaultFileName(fn);
