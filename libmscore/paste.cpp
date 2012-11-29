@@ -164,8 +164,7 @@ void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
       {
       beams.clear();
       spanner.clear();
-//      QList<Tuplet*> invalidTuplets;
-
+      QMap<int, Spanner*> localSpanner;
       for (Segment* s = firstMeasure()->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             foreach(Spanner* e, s->spannerFor())
                   e->setId(-1);
@@ -285,17 +284,19 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Segment* segment = m->undoGetSegment(Segment::SegChordRest, tick);
                               sp->setStartElement(segment);
                               sp->setParent(segment);
-                              undoAddElement(sp);
+                              localSpanner.insert(sp->id(), sp);
                               }
                         else if (tag == "endSpanner") {
                               int id = eee.attribute("id").toInt();
-                              Spanner* e = findSpanner(id);
+                              Spanner* e = localSpanner.value(id, 0);
                               if (e) {
+                                    localSpanner.remove(id);
                                     int tick = curTick - tickStart + dstTick;
                                     Measure* m = tick2measure(tick);
                                     Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
                                     e->setEndElement(seg);
                                     seg->addSpannerBack(e);
+                                    undoAddElement(e);
                                     if (e->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(e);
                                           int shift = o->pitchShift();
