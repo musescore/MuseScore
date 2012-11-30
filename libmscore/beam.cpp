@@ -1760,7 +1760,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               int n = crl.size();
                               qreal len = point(score()->styleS(ST_beamMinLen));
                               //
-                              // find direction
+                              // find direction (by default, segment points to right)
                               //
                               // if first or last of group
                               // unconditionally set beam at right or left side
@@ -1783,15 +1783,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                                           len = -len;
                                     // if same length
                                     else if (ab.denominator() == bc.denominator()) {
-                                          // compute position in measure of previous and target chords
+                                          // compute previous chord's position in measure
                                           int measTick = cr1->measure()->tick();
-                                          int tick1 = crl[c1-1]->tick() - measTick;
-                                          int tick2 = crl[c1]->tick() - measTick;
-                                          // if the previous chord better approximates than target chord
-                                          // a measure division equal to a + b duration (modulus of
-                                          // position in measure is less), turn beam to left side
-                                          int ticks = ab.ticks();
-                                          if ( (tick1 % ticks) < (tick2 % ticks) )
+                                          int tickPrev = crl[c1-1]->tick() - measTick;
+                                          // if the previous chord falls on a measure division equal
+                                          // to a + b duration (modulus of position in measure is 0),
+                                          // turn beam to left side
+                                          if ( (tickPrev % ab.ticks()) == 0)
                                                 len = -len;
                                           }
                                     }
