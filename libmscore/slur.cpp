@@ -1353,7 +1353,6 @@ void Tie::read(const QDomElement& de)
 void SlurTie::fixupSegments(unsigned nsegs)
       {
       unsigned onsegs = spannerSegments().size();
-      qDebug("spannerSegments().size() %d",  spannerSegments().size());
       if (nsegs > onsegs) {
             for (unsigned i = onsegs; i < nsegs; ++i) {
                   SlurSegment* s;
