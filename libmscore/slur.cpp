@@ -1353,6 +1353,7 @@ void Tie::read(const QDomElement& de)
 void SlurTie::fixupSegments(unsigned nsegs)
       {
       unsigned onsegs = spannerSegments().size();
+      qDebug("spannerSegments().size() %d",  spannerSegments().size());
       if (nsegs > onsegs) {
             for (unsigned i = onsegs; i < nsegs; ++i) {
                   SlurSegment* s;
@@ -1497,7 +1498,9 @@ void Tie::layout()
             return;
             }
 
-      int sysIdx2     = systems->indexOf(sPos.system2, sysIdx1);
+      int sysIdx2     = systems->indexOf(sPos.system2);
+      if (sysIdx2 < 0)
+            sysIdx2 = sysIdx1;
       unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
       fixupSegments(nsegs);
 
