@@ -3872,7 +3872,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       {
       _score->startCmd();
       ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
 
       if (cr2 == 0)
             cr2 = cr1;
