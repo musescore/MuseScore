@@ -745,13 +745,11 @@ void Score::createPlayEvents(Chord* chord, int gateTime)
 
 void Score::createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
       {
+      // skip linked staves, except primary
+      if (!m->score()->staff(track / VOICES)->primaryStaff())
+            return;
       const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                  track += VOICES-1;
-                  continue;
-                  }
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr == 0)
                   continue;
