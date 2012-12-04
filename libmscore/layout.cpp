@@ -993,11 +993,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         switch(_layoutMode) {
                               case LayoutFloat:
                                     break;
-                              case LayoutSystem:
-                                    continueFlag = !curMeasure->lineBreak();
-                                    break;
                               case LayoutLine:
                               case LayoutPage:
+                              case LayoutSystem:
                                     continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
                                     break;
                               }
@@ -1063,14 +1061,12 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutPage:
+                  case LayoutSystem:
                         pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
                         break;
                   case LayoutFloat:
                   case LayoutLine:
                         pbreak = false;
-                        break;
-                  case LayoutSystem:
-                        pbreak = curMeasure->lineBreak();
                         break;
                   }
             if ((n && system->measures().size() >= n)
@@ -1078,7 +1074,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                || pbreak
                || (nt == Element::VBOX || nt == Element::TBOX || nt == Element::FBOX)
                ) {
-                  system->setPageBreak(curMeasure->pageBreak());
+                  if (_layoutMode != LayoutSystem)
+                        system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
                   break;
                   }
@@ -1222,11 +1219,9 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                         switch(_layoutMode) {
                               case LayoutFloat:
                                     break;
-                              case LayoutSystem:
-                                    continueFlag = !curMeasure->lineBreak();
-                                    break;
                               case LayoutLine:
                               case LayoutPage:
+                              case LayoutSystem:
                                     continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
                                     break;
                               }
@@ -1256,19 +1251,18 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutPage:
+                  case LayoutSystem:
                         pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
                         break;
                   case LayoutFloat:
                   case LayoutLine:
                         pbreak = false;
                         break;
-                  case LayoutSystem:
-                        pbreak = curMeasure->lineBreak();
-                        break;
                   }
             if ((n && system->measures().size() >= n)
                || continueFlag || pbreak || (nt == Element::VBOX || nt == Element::TBOX || nt == Element::FBOX)) {
-                  system->setPageBreak(curMeasure->pageBreak());
+                  if (_layoutMode != LayoutSystem)
+                        system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
                   break;
                   }
