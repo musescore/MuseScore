@@ -3,34 +3,31 @@ import MuseScore 1.0
 
 
 MuseScore {
-      menuPath:   "Plugins.panel"
-      version:  "2.0"
-      description: "This demo plugin creates a GUI panel."
+    menuPath:   "Plugins.panel"
+    version:  "2.0"
+    description: "This demo plugin creates a GUI panel."
 
-      pluginType: "dock"
-      dockArea:   "left"
+    pluginType: "dock"
+    dockArea:   "left"
 
-      width:  150
-      height: 75
-      onRun: {
-            console.log("hello panel");
+    width:  150
+    height: 75
+    onRun:  console.log("hello panel");
+
+    Rectangle {
+        color: "grey"
+        anchors.fill: parent
+
+        Text {
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: "Hello Panel"
             }
 
-      Rectangle {
-            id: simplebutton
-            color: "grey"
+        MouseArea {
             anchors.fill: parent
-
-            Text {
-                  id: buttonLabel
-                  anchors.centerIn: parent
-                  text: "Hello Panel"
-                  }
-
-            MouseArea {
-                  anchors.fill: parent
-                  onClicked: Qt.quit()
-                  }
+            onClicked: Qt.quit()
             }
-      }
+        }
+    }
 
