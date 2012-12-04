@@ -48,6 +48,8 @@
 #include "libmscore/accidental.h"
 #include "libmscore/lyrics.h"
 
+extern QString localeName;
+
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -139,6 +141,21 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
                   }
             return;
             }
+      //
+      // load translation
+      //
+      QLocale locale;
+      QString t = np.absolutePath() + "/qml_" + MuseScore::getLocaleISOCode().left(2) + ".qm";
+      QTranslator* translator = new QTranslator;
+      if (!translator->load(t)) {
+            qDebug("cannot load qml translations <%s>", qPrintable(t));
+            delete translator;
+            }
+      else {
+            qDebug("load qml translations <%s>", qPrintable(t));
+            qApp->installTranslator(translator);
+            }
+
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
       QString menuPath = item->menuPath();
       plugin->menuPath = menuPath;
@@ -188,8 +205,8 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-            qmlRegisterType<Text>       ("MuseScore", 1, 0, "Text");
-            qmlRegisterType<Lyrics>       ("MuseScore", 1, 0, "Lyrics");
+            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
+            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
