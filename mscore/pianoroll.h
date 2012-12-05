@@ -37,7 +37,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Q_OBJECT
 
       PianoView* gv;
-      QScrollBar* hsb;  // horizontal scroll bar for pianoView
+      QScrollBar* hsb;        // horizontal scroll bar for pianoView
       Score* _score;
       Staff* staff;
       Awl::PitchEdit* pitch;
