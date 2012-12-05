@@ -1255,7 +1255,7 @@ void Note::layout()
                               score()->undoAddElement(dot); // move dot to _dots[i]
                               }
                         _dots[i]->layout();
-                        _dots[i]->setVisible(visible());
+//                        _dots[i]->setVisible(visible());
                         }
                   else if (_dots[i])
                         score()->undoRemoveElement(_dots[i]);
@@ -1786,6 +1786,16 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_VELO_TYPE:
                   setVeloType(MScore::ValueType(v.toInt()));
                   break;
+            case P_VISIBLE:                     // P_VISIBLE requires reflecting property on dots
+            {
+                  setVisible(v.toBool());
+                  int dots = chord()->dots();
+                  for (int i = 0; i < dots; ++i) {
+                        if (_dots[i])
+                              _dots[i]->setVisible(visible());
+                        }
+                  break;
+                  }
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
