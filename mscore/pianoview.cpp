@@ -338,13 +338,12 @@ void PianoView::setStaff(Staff* s, Pos* l)
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
 
-      for (Segment* s = staff->score()->firstSegment(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
             for (int track = startTrack; track < endTrack; ++track) {
-                  Element* e = s->element(track);
-                  if (e == 0 || e->type() != Element::CHORD)
+                  Chord* chord = static_cast<Chord*>(s->element(track));
+                  if (chord == 0 || chord->type() != Element::CHORD)
                         continue;
-                  Chord* chord = static_cast<Chord*>(e);
-
                   foreach(Note* note, chord->notes()) {
                         if (note->tieBack())
                               continue;

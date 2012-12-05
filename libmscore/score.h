@@ -423,7 +423,6 @@ class Score : public QObject {
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
-      void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs);
       void createPlayEvents();
 
    public:
@@ -929,10 +928,6 @@ class Score : public QObject {
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
-      QList<NoteEventList> renderChord(Chord* chord, int gateTime);
-      QList<NoteEventList> renderChord(Chord* chord);
-      void createPlayEvents(Chord*, int gateTime);
-      void createPlayEvents(Chord*);
       };
 
 extern Score* gscore;

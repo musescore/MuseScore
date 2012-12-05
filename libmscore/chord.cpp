@@ -44,6 +44,7 @@
 #include "accidental.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
+#include "rendermidi.h"
 
 //---------------------------------------------------------
 //   StemSlash
@@ -1996,8 +1997,7 @@ void Chord::reset()
       {
       score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
       score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
-      QList<NoteEventList> el = score()->renderChord(this);
-      score()->undo(new ChangeEventList(this, el, false));
+      createPlayEvents(this);
       ChordRest::reset();
       }
 
