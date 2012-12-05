@@ -80,7 +80,7 @@ class Shortcut {
          int i);
 
       Shortcut(const Shortcut& c);
-      ~Shortcut();
+      ~Shortcut() {}
 
       QAction* action() const;
 

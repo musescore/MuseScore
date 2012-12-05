@@ -143,11 +143,11 @@ Shortcut::Shortcut(const Shortcut& sc)
       _action      = 0;
       }
 
-Shortcut::~Shortcut()
-      {
+//Shortcut::~Shortcut()
+//      {
 //      delete _action;
 //    _action->deleteLater();
-      }
+//      }
 
 //---------------------------------------------------------
 //   clear
