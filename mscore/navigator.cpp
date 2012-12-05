@@ -82,13 +82,10 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
       _score         = 0;
       scrollArea     = sa;
       _cv            = 0;
-      recreatePixmap = false;
       viewRect       = QRect();
-      cachedWidth    = -1;
       setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
       sa->setWidget(this);
       sa->setWidgetResizable(false);
-      connect(&watcher, SIGNAL(finished()), SLOT(pmFinished()));
       }
 
 //---------------------------------------------------------
@@ -101,18 +98,9 @@ void Navigator::resizeEvent(QResizeEvent* ev)
             return;
       if (_score) {
             rescale();
-            Page* lp = _score->pages().back();
-            int w    = int ((lp->x() + lp->width()) * matrix.m11());
-
-            if (w != cachedWidth) {
-                  cachedWidth = w;
-                  updateViewRect();
-                  layoutChanged();
-                  }
-
+            updateViewRect();
+            layoutChanged();
             }
-      else
-            recreatePixmap = true;
       }
 
 //---------------------------------------------------------
@@ -137,7 +125,6 @@ void Navigator::setScoreView(ScoreView* v)
             }
       else {
             _score = 0;
-            pcl.clear();
             update();
             }
       }
@@ -156,7 +143,6 @@ void Navigator::setScore(Score* v)
             }
       else {
             _score = 0;
-            pcl.clear();
             update();
             }
       }
@@ -183,9 +169,6 @@ void Navigator::rescale()
 
       matrix.setMatrix(m, matrix.m12(), matrix.m13(), matrix.m21(), m,
          matrix.m23(), matrix.m31(), matrix.m32(), matrix.m33());
-      int n = pcl.size();
-      for (int i = 0; i < n; ++i)
-            pcl[i].matrix = matrix;
       }
 
 //---------------------------------------------------------
@@ -234,12 +217,6 @@ void Navigator::mouseMoveEvent(QMouseEvent* ev)
       QPoint delta = ev->pos() - startMove;
       viewRect.translate(delta);
       startMove = ev->pos();
-
-/*      if (viewRect.x() <= 0 && viewRect.width() < width())
-            viewRect.moveLeft(0);
-      else if (viewRect.right() > width() && viewRect.width() < width())
-            viewRect.moveRight(width());
-  */
 
       if (viewRect.width() == width())
             viewRect.moveLeft(0);
@@ -295,48 +272,10 @@ void Navigator::setViewRect(const QRectF& _viewRect)
 static void paintElement(void* data, Element* e)
       {
       QPainter* p = static_cast<QPainter*>(data);
-      p->save();
-//      p->setPen(QPen(e->curColor()));
-      p->translate(e->pagePos());
+      QPointF pos(e->pagePos());
+      p->translate(pos);
       e->draw(p);
-      p->restore();
-      }
-
-//---------------------------------------------------------
-//   createPixmap
-//---------------------------------------------------------
-
-static void createPixmap(PageCache* pc)
-      {
-      QReadLocker locker (pc->page->score()->layoutLock());
-      pc->valid = false;
-      QRect pageRect = pc->matrix.mapRect(pc->page->bbox()).toRect();
-      if (pageRect.width() == 0 || pageRect.height() == 0) {
-            return;
-            }
-
-      pc->pm = QImage(pageRect.size(), QImage::Format_ARGB32_Premultiplied);
-      QPainter p(&pc->pm);
-
-      QColor _fgColor(Qt::white);
-      QColor _bgColor(Qt::darkGray);
-
-      p.setRenderHint(QPainter::Antialiasing, false);
-      p.setTransform(pc->matrix);
-      p.fillRect(pc->page->bbox(), _fgColor);
-      foreach(System* s, *pc->page->systems()) {
-            foreach(MeasureBase* m, s->measures())
-                  m->scanElements(&p, paintElement, false);
-            }
-      pc->page->scanElements(&p, paintElement, false);
-      if (pc->page->score()->layoutMode() == LayoutPage) {
-            p.setFont(QFont("FreeSans", 400));  // !!
-            p.setPen(QColor(0, 0, 255, 50));
-            p.drawText(pc->page->bbox(), Qt::AlignCenter, QString("%1").arg(pc->page->no()+1));
-            }
-      
-      pc->navigator->update(pageRect);
-      pc->valid = true;
+      p->translate(-pos);
       }
 
 //---------------------------------------------------------
@@ -345,43 +284,12 @@ static void createPixmap(PageCache* pc)
 
 void Navigator::layoutChanged()
       {
-      if (watcher.isRunning()) {
-            updatePixmap.cancel();
-            recreatePixmap = true;
-            return;
-            }
       if (_score == 0 || _score->pages().isEmpty()) {
-            recreatePixmap = true;
             update();
             return;
             }
-      int n = _score->pages().size();
-//      if (n != pcl.size())
-            rescale();
-      pcl.clear();
-      for (int i = 0; i < n; ++i) {
-            PageCache pc;
-            pc.page      = _score->pages()[i];
-            pc.matrix    = matrix;
-            pc.valid     = false;
-            pc.navigator = this;
-            pcl.append(pc);
-            }
+      rescale();
       update();
-      }
-
-//---------------------------------------------------------
-//   pmFinished
-//---------------------------------------------------------
-
-void Navigator::pmFinished()
-      {
-      if (recreatePixmap) {
-            recreatePixmap = false;
-            layoutChanged();
-            }
-      else
-            update();
       }
 
 //---------------------------------------------------------
@@ -390,43 +298,42 @@ void Navigator::pmFinished()
 
 void Navigator::paintEvent(QPaintEvent* ev)
       {
-      if (watcher.isRunning())
-            return;
       QPainter p(this);
       QRect r(ev->rect());
+      p.fillRect(r, Qt::gray);
 
-      QRegion region(r);
+      if (!_score)
+            return;
 
-      npcl.clear();
-      if (matrix.m11() != .0) {
-            for (int i = 0; i < pcl.size(); ++i) {
-                  const PageCache& pc = pcl[i];
-                  QRect rr = matrix.mapRect(pc.page->canvasBoundingRect()).toRect();
-                  if (rr.intersects(r)) {
-                        if (pc.valid) {
-                              QPixmap pm = QPixmap::fromImage(pc.pm);
-                              p.drawPixmap(rr.topLeft(), pm);
-                              }
-                        else {
-                              npcl.append(&pcl[i]);
-                              }
-                        region -= rr;
-                        }
+      p.save();
+      p.setTransform(matrix);
+      QRectF fr = matrix.inverted().mapRect(QRectF(r));
+
+      foreach (Page* page, _score->pages()) {
+            QPointF pos(page->pos());
+            QRectF pr(page->abbox().translated(pos));
+            if (pr.right() < fr.left())
+                  continue;
+            if (pr.left() > fr.right())
+                  break;
+
+            p.fillRect(pr, Qt::white);
+            p.translate(pos);
+            foreach(System* s, *page->systems()) {
+                  foreach(MeasureBase* m, s->measures())
+                        m->scanElements(&p, paintElement, false);
                   }
+            page->scanElements(&p, paintElement, false);
+            if (page->score()->layoutMode() == LayoutPage) {
+                  p.setFont(QFont("FreeSans", 400));  // !!
+                  p.setPen(QColor(0, 0, 255, 50));
+                  p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no()+1));
+                  }
+            p.translate(-pos);
             }
-      foreach(QRect r, region.rects())
-            p.fillRect(r, Qt::gray);
-
-      if (_score && !recreatePixmap) {
-            QPen pen(Qt::blue, 2.0);
-            p.setPen(pen);
-            p.setBrush(QColor(0, 0, 255, 40));
-            p.drawRect(viewRect);
-            }
-      if (!npcl.isEmpty()) {
-            updatePixmap = QtConcurrent::map(npcl, createPixmap);
-            watcher.setFuture(updatePixmap);
-            }
+      p.restore();
+      QPen pen(Qt::blue, 2.0);
+      p.setPen(pen);
+      p.setBrush(QColor(0, 0, 255, 40));
+      p.drawRect(viewRect);
       }
-
-

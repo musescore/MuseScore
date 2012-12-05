@@ -41,18 +41,6 @@ class NScrollArea : public QScrollArea {
       };
 
 //---------------------------------------------------------
-//   PageCache
-//---------------------------------------------------------
-
-struct PageCache {
-      bool valid;
-      Page* page;
-      QImage pm;
-      QTransform matrix;
-      Navigator* navigator;
-      };
-
-//---------------------------------------------------------
 //   Navigator
 //---------------------------------------------------------
 
@@ -65,15 +53,7 @@ class Navigator : public QWidget {
 
       QRect viewRect;
       QPoint startMove;
-      QList<PageCache> pcl;
-      QList<PageCache*> npcl;
       QTransform matrix;
-
-      QFuture<void> updatePixmap;
-      QFutureWatcher<void> watcher;
-      bool recreatePixmap;
-
-      int cachedWidth;
 
       void rescale();
 
@@ -81,9 +61,6 @@ class Navigator : public QWidget {
       virtual void mousePressEvent(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent*);
       virtual void resizeEvent(QResizeEvent*);
-
-   private slots:
-      void pmFinished();
 
    public slots:
       void updateViewRect();
