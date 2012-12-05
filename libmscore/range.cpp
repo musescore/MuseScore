@@ -325,7 +325,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                                     }
                               }
                         if (!found)
-                              printf("Tied note not found\n");
+                              qDebug("Tied note not found");
                         break;
                         }
                   }
@@ -599,10 +599,9 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
             tracks.append(dl);
             }
       if (!spannerMap.isEmpty()) {
-            printf("ScoreRange::read(): dangling Spanner\n");
-            foreach(Spanner* s, spannerMap) {
-                  printf("  <%s> end %p\n", s->name(), s->endElement());
-                  }
+            qDebug("ScoreRange::read(): dangling Spanner");
+            foreach(Spanner* s, spannerMap)
+                  qDebug("  <%s> end %p", s->name(), s->endElement());
             }
       }
 
@@ -620,10 +619,9 @@ bool ScoreRange::write(int track, Measure* m) const
                   return false;
             }
       if (!spannerMap.isEmpty()) {
-            printf("ScoreRange::write(): dangling Spanner\n");
-            foreach(Spanner* s, spannerMap) {
-                  printf("  <%s>\n", s->name());
-                  }
+            qDebug("ScoreRange::write(): dangling Spanner");
+            foreach(Spanner* s, spannerMap)
+                  qDebug("  <%s>", s->name());
             }
       return true;
       }

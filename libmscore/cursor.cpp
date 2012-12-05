@@ -123,7 +123,6 @@ void Cursor::add(Element* s)
       s->setTrack(_track);
       s->setParent(_segment);
       if (s->isChordRest()) {
-            printf("Cursor::add CR\n");
             s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
             }
       else
