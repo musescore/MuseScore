@@ -18,5 +18,11 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-subdirs( templates wallpaper locale plugins styles sound manual)
+subdirs( templates wallpaper locale styles sound manual)
+
+install (DIRECTORY
+      plugins
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+      PATTERN ".*" EXCLUDE
+      )
 
