@@ -338,7 +338,8 @@ void MuseScore::loadPlugins()
       {
       pluginMapper = new QSignalMapper(this);
       connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
-      foreach(PluginDescription* d, preferences.pluginList) {
+      for (int i = 0; i < preferences.pluginList.size(); ++i) {
+            PluginDescription* d = &preferences.pluginList[i];
             if (d->load)
                   registerPlugin(d);
             }

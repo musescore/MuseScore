@@ -587,6 +587,7 @@ void MuseScore::startPreferenceDialog()
             connect(preferenceDialog, SIGNAL(preferencesChanged()),
                SLOT(preferencesChanged()));
             }
+      preferenceDialog->setPreferences(preferences);
       preferenceDialog->show();
       }
 
@@ -693,9 +694,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       for (int idx = 0; idx < n; ++idx)
             exportAudioSampleRate->addItem(QString("%1").arg(exportAudioSampleRates[idx]));
 
-      // update values after ui setup
-      updateValues(&preferences);
-
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
       connect(sfOpenButton,           SIGNAL(clicked()), SLOT(selectSoundFont()));
@@ -704,6 +702,16 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
          SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(pluginLoad, SIGNAL(toggled(bool)), SLOT(pluginLoadToggled(bool)));
       updateRemote();
+      }
+
+//---------------------------------------------------------
+//   setPreferences
+//---------------------------------------------------------
+
+void PreferenceDialog::setPreferences(const Preferences& p)
+      {
+      prefs = p;
+      updateValues();
       }
 
 //---------------------------------------------------------
@@ -773,19 +781,18 @@ void PreferenceDialog::updateRemote()
 //   updateValues
 //---------------------------------------------------------
 
-void PreferenceDialog::updateValues(Preferences* p)
+void PreferenceDialog::updateValues()
       {
-      prefs = p;
-      rcGroup->setChecked(p->useMidiRemote);
-      fgWallpaper->setText(p->fgWallpaper);
-      bgWallpaper->setText(p->bgWallpaper);
+      rcGroup->setChecked(prefs.useMidiRemote);
+      fgWallpaper->setText(prefs.fgWallpaper);
+      bgWallpaper->setText(prefs.bgWallpaper);
 
-      bgColorButton->setChecked(p->bgUseColor);
-      bgWallpaperButton->setChecked(!p->bgUseColor);
-      fgColorButton->setChecked(p->fgUseColor);
-      fgWallpaperButton->setChecked(!p->fgUseColor);
+      bgColorButton->setChecked(prefs.bgUseColor);
+      bgWallpaperButton->setChecked(!prefs.bgUseColor);
+      fgColorButton->setChecked(prefs.fgUseColor);
+      fgWallpaperButton->setChecked(!prefs.fgUseColor);
 
-      if (p->bgUseColor) {
+      if (prefs.bgUseColor) {
             bgColorLabel->setColor(MScore::bgColor);
             bgColorLabel->setPixmap(0);
             }
@@ -793,22 +800,22 @@ void PreferenceDialog::updateValues(Preferences* p)
             bgColorLabel->setPixmap(new QPixmap(bgWallpaper->text()));
             }
 
-      if (p->fgUseColor) {
-            fgColorLabel->setColor(p->fgColor);
+      if (prefs.fgUseColor) {
+            fgColorLabel->setColor(prefs.fgColor);
             fgColorLabel->setPixmap(0);
             }
       else {
             fgColorLabel->setPixmap(new QPixmap(fgWallpaper->text()));
             }
 
-      iconWidth->setValue(p->iconWidth);
-      iconHeight->setValue(p->iconHeight);
+      iconWidth->setValue(prefs.iconWidth);
+      iconHeight->setValue(prefs.iconHeight);
 
       replaceFractions->setChecked(MScore::replaceFractions);
-      replaceCopyrightSymbol->setChecked(p->replaceCopyrightSymbol);
+      replaceCopyrightSymbol->setChecked(prefs.replaceCopyrightSymbol);
 
-      enableMidiInput->setChecked(p->enableMidiInput);
-      playNotes->setChecked(p->playNotes);
+      enableMidiInput->setChecked(prefs.enableMidiInput);
+      playNotes->setChecked(prefs.playNotes);
 
       //Update
       checkUpdateStartup->clear();
@@ -816,7 +823,7 @@ void PreferenceDialog::updateValues(Preferences* p)
 
       for(unsigned i = 0; i < sizeof(updatePeriods)/sizeof(*updatePeriods); ++i) {
             checkUpdateStartup->addItem(qApp->translate("preferences", updatePeriods[i].text), i);
-            if (updatePeriods[i].time == p->checkUpdateStartup)
+            if (updatePeriods[i].time == prefs.checkUpdateStartup)
                   curPeriodIdx = i;
             }
       checkUpdateStartup->setCurrentIndex(curPeriodIdx);
@@ -827,9 +834,9 @@ void PreferenceDialog::updateValues(Preferences* p)
             for (QList<QString>::iterator i = sl.begin(); i != sl.end(); ++i, ++idx) {
                   jackRPort->addItem(*i);
                   jackLPort->addItem(*i);
-                  if (p->rPort == *i)
+                  if (prefs.rPort == *i)
                         jackRPort->setCurrentIndex(idx);
-                  if (p->lPort == *i)
+                  if (prefs.lPort == *i)
                         jackLPort->setCurrentIndex(idx);
                   }
             }
@@ -839,55 +846,55 @@ void PreferenceDialog::updateValues(Preferences* p)
             }
 
       soundFont->setText(MScore::soundFont);
-      navigatorShow->setChecked(p->showNavigator);
-      playPanelShow->setChecked(p->showPlayPanel);
-      webPanelShow->setChecked(p->showWebPanel);
+      navigatorShow->setChecked(prefs.showNavigator);
+      playPanelShow->setChecked(prefs.showPlayPanel);
+      webPanelShow->setChecked(prefs.showWebPanel);
 
-      alsaDriver->setChecked(p->useAlsaAudio);
-      jackDriver->setChecked(p->useJackAudio);
-      portaudioDriver->setChecked(p->usePortaudioAudio);
-      pulseaudioDriver->setChecked(p->usePulseAudio);
-      useJackMidi->setChecked(p->useJackMidi);
+      alsaDriver->setChecked(prefs.useAlsaAudio);
+      jackDriver->setChecked(prefs.useJackAudio);
+      portaudioDriver->setChecked(prefs.usePortaudioAudio);
+      pulseaudioDriver->setChecked(prefs.usePulseAudio);
+      useJackMidi->setChecked(prefs.useJackMidi);
 
-      alsaDevice->setText(p->alsaDevice);
+      alsaDevice->setText(prefs.alsaDevice);
 
-      int index = alsaSampleRate->findText(QString("%1").arg(p->alsaSampleRate));
+      int index = alsaSampleRate->findText(QString("%1").arg(prefs.alsaSampleRate));
       alsaSampleRate->setCurrentIndex(index);
-      index = alsaPeriodSize->findText(QString("%1").arg(p->alsaPeriodSize));
+      index = alsaPeriodSize->findText(QString("%1").arg(prefs.alsaPeriodSize));
       alsaPeriodSize->setCurrentIndex(index);
 
-      alsaFragments->setValue(p->alsaFragments);
-      drawAntialiased->setChecked(p->antialiasedDrawing);
-      switch(p->sessionStart) {
+      alsaFragments->setValue(prefs.alsaFragments);
+      drawAntialiased->setChecked(prefs.antialiasedDrawing);
+      switch(prefs.sessionStart) {
             case EMPTY_SESSION:  emptySession->setChecked(true); break;
             case LAST_SESSION:   lastSession->setChecked(true); break;
             case NEW_SESSION:    newSession->setChecked(true); break;
             case SCORE_SESSION:  scoreSession->setChecked(true); break;
             }
-      sessionScore->setText(p->startScore);
-      showSplashScreen->setChecked(p->showSplashScreen);
-      expandRepeats->setChecked(p->midiExpandRepeats);
-      instrumentList1->setText(p->instrumentList1);
-      instrumentList2->setText(p->instrumentList2);
+      sessionScore->setText(prefs.startScore);
+      showSplashScreen->setChecked(prefs.showSplashScreen);
+      expandRepeats->setChecked(prefs.midiExpandRepeats);
+      instrumentList1->setText(prefs.instrumentList1);
+      instrumentList2->setText(prefs.instrumentList2);
 
-      importLayout->setChecked(p->musicxmlImportLayout);
-      importBreaks->setChecked(p->musicxmlImportBreaks);
-      exportLayout->setChecked(p->musicxmlExportLayout);
-      switch(p->musicxmlExportBreaks) {
+      importLayout->setChecked(prefs.musicxmlImportLayout);
+      importBreaks->setChecked(prefs.musicxmlImportBreaks);
+      exportLayout->setChecked(prefs.musicxmlExportLayout);
+      switch(prefs.musicxmlExportBreaks) {
             case ALL_BREAKS:     exportAllBreaks->setChecked(true); break;
             case MANUAL_BREAKS:  exportManualBreaks->setChecked(true); break;
             case NO_BREAKS:      exportNoBreaks->setChecked(true); break;
             }
 
-      midiPorts->setValue(p->midiPorts);
-      rememberLastMidiConnections->setChecked(p->rememberLastMidiConnections);
-      proximity->setValue(p->proximity);
-      autoSave->setChecked(p->autoSave);
-      autoSaveTime->setValue(p->autoSaveTime);
-      pngResolution->setValue(p->pngResolution);
-      pngTransparent->setChecked(p->pngTransparent);
+      midiPorts->setValue(prefs.midiPorts);
+      rememberLastMidiConnections->setChecked(prefs.rememberLastMidiConnections);
+      proximity->setValue(prefs.proximity);
+      autoSave->setChecked(prefs.autoSave);
+      autoSaveTime->setValue(prefs.autoSaveTime);
+      pngResolution->setValue(prefs.pngResolution);
+      pngTransparent->setChecked(prefs.pngTransparent);
       for (int i = 0; i < language->count(); ++i) {
-            if (language->itemText(i).startsWith(p->language)) {
+            if (language->itemText(i).startsWith(prefs.language)) {
                   language->setCurrentIndex(i);
                   break;
                   }
@@ -942,12 +949,12 @@ void PreferenceDialog::updateValues(Preferences* p)
       //
       // score settings
       //
-      scale->setValue(p->mag);
+      scale->setValue(prefs.mag);
 
       defaultPlayDuration->setValue(MScore::defaultPlayDuration);
-      importStyleFile->setText(p->importStyleFile);
+      importStyleFile->setText(prefs.importStyleFile);
       int shortestNoteIndex = 2;
-      int nn = (p->shortestNote * 16)/MScore::division;
+      int nn = (prefs.shortestNote * 16)/MScore::division;
       switch(nn) {
             case 16: shortestNoteIndex = 0; break;
             case 8:  shortestNoteIndex = 1; break;
@@ -956,8 +963,8 @@ void PreferenceDialog::updateValues(Preferences* p)
             case 1:  shortestNoteIndex = 4; break;
             }
       shortestNote->setCurrentIndex(shortestNoteIndex);
-      useImportBuildinStyle->setChecked(p->importStyleFile.isEmpty());
-      useImportStyleFile->setChecked(!p->importStyleFile.isEmpty());
+      useImportBuildinStyle->setChecked(prefs.importStyleFile.isEmpty());
+      useImportStyleFile->setChecked(!prefs.importStyleFile.isEmpty());
 
       importCharsetList->clear();
       QList<QByteArray> charsets = QTextCodec::availableCodecs();
@@ -965,7 +972,7 @@ void PreferenceDialog::updateValues(Preferences* p)
       int idx = 0;
       foreach (QByteArray charset, charsets) {
             importCharsetList->addItem(charset);
-            if (charset == p->importCharset)
+            if (charset == prefs.importCharset)
                   importCharsetList->setCurrentIndex(idx);
             idx++;
             }
@@ -976,30 +983,30 @@ void PreferenceDialog::updateValues(Preferences* p)
       int curIdx = 0;
       for(int i = 0; i < mscore->languages().size(); ++i) {
             language->addItem(mscore->languages().at(i).name, i);
-            if (mscore->languages().at(i).key == p->language)
+            if (mscore->languages().at(i).key == prefs.language)
                   curIdx = i;
             }
       language->setCurrentIndex(curIdx);
 
-      oscServer->setChecked(p->useOsc);
-      oscPort->setValue(p->oscPort);
+      oscServer->setChecked(prefs.useOsc);
+      oscPort->setValue(prefs.oscPort);
 
-      styleName->setCurrentIndex(p->globalStyle);
+      styleName->setCurrentIndex(prefs.globalStyle);
 
-      defaultStyle->setText(p->defaultStyleFile);
+      defaultStyle->setText(prefs.defaultStyleFile);
 
-      myScores->setText(p->myScoresPath);
-      myStyles->setText(p->myStylesPath);
-      myImages->setText(p->myImagesPath);
-      myTemplates->setText(p->myTemplatesPath);
-      myPlugins->setText(p->myPluginsPath);
-      mySoundFonts->setText(p->mySoundFontsPath);
+      myScores->setText(prefs.myScoresPath);
+      myStyles->setText(prefs.myStylesPath);
+      myImages->setText(prefs.myImagesPath);
+      myTemplates->setText(prefs.myTemplatesPath);
+      myPlugins->setText(prefs.myPluginsPath);
+      mySoundFonts->setText(prefs.mySoundFontsPath);
 
-      nativeDialogs->setChecked(p->nativeDialogs);
+      nativeDialogs->setChecked(prefs.nativeDialogs);
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
       for (;idx < n; ++idx) {
-            if (exportAudioSampleRates[idx] == p->exportAudioSampleRate)
+            if (exportAudioSampleRates[idx] == prefs.exportAudioSampleRate)
                   break;
             }
       if (idx == n)     // if not found in table
@@ -1009,15 +1016,19 @@ void PreferenceDialog::updateValues(Preferences* p)
       //
       //  update plugin manager
       //
-      p->updatePluginList();
-      for (int i = 0; i < p->pluginList.size(); ++i) {
-            PluginDescription* d = p->pluginList[i];
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d->path).baseName(),  pluginList);
+      prefs.updatePluginList();
+      pluginList->clear();
+
+      n = prefs.pluginList.size();
+      for (int i = 0; i < n; ++i) {
+            const PluginDescription& d = prefs.pluginList[i];
+            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
             item->setData(Qt::UserRole, i);
             }
-      pluginList->setCurrentRow(0);
-      pluginListItemChanged(pluginList->item(0), 0);
-
+      if (n) {
+            pluginList->setCurrentRow(0);
+            pluginListItemChanged(pluginList->item(0), 0);
+            }
       sfChanged = false;
       }
 
@@ -1262,52 +1273,52 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
 
 void PreferenceDialog::apply()
       {
-      preferences.useMidiRemote  = rcGroup->isChecked();
-      preferences.fgWallpaper    = fgWallpaper->text();
-      preferences.bgWallpaper    = bgWallpaper->text();
-      preferences.fgColor        = fgColorLabel->color();
+      prefs.useMidiRemote  = rcGroup->isChecked();
+      prefs.fgWallpaper    = fgWallpaper->text();
+      prefs.bgWallpaper    = bgWallpaper->text();
+      prefs.fgColor        = fgColorLabel->color();
       MScore::bgColor            = bgColorLabel->color();
 
-      preferences.iconWidth      = iconWidth->value();
-      preferences.iconHeight     = iconHeight->value();
+      prefs.iconWidth      = iconWidth->value();
+      prefs.iconHeight     = iconHeight->value();
 
-      preferences.bgUseColor     = bgColorButton->isChecked();
-      preferences.fgUseColor     = fgColorButton->isChecked();
-      preferences.enableMidiInput = enableMidiInput->isChecked();
-      preferences.playNotes      = playNotes->isChecked();
-      if (preferences.lPort != jackLPort->currentText()
-         || preferences.rPort != jackRPort->currentText()) {
+      prefs.bgUseColor     = bgColorButton->isChecked();
+      prefs.fgUseColor     = fgColorButton->isChecked();
+      prefs.enableMidiInput = enableMidiInput->isChecked();
+      prefs.playNotes      = playNotes->isChecked();
+      if (prefs.lPort != jackLPort->currentText()
+         || prefs.rPort != jackRPort->currentText()) {
             // TODO: change ports
-            preferences.lPort = jackLPort->currentText();
-            preferences.rPort = jackRPort->currentText();
+            prefs.lPort = jackLPort->currentText();
+            prefs.rPort = jackRPort->currentText();
             }
       MScore::soundFont              = soundFont->text();
-      preferences.showNavigator      = navigatorShow->isChecked();
-      preferences.showPlayPanel      = playPanelShow->isChecked();
-      preferences.showWebPanel       = webPanelShow->isChecked();
-      preferences.antialiasedDrawing = drawAntialiased->isChecked();
+      prefs.showNavigator      = navigatorShow->isChecked();
+      prefs.showPlayPanel      = playPanelShow->isChecked();
+      prefs.showWebPanel       = webPanelShow->isChecked();
+      prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
       if (
-         (preferences.useAlsaAudio != alsaDriver->isChecked())
-         || (preferences.useJackAudio != jackDriver->isChecked())
-         || (preferences.usePortaudioAudio != portaudioDriver->isChecked())
-         || (preferences.usePulseAudio != pulseaudioDriver->isChecked())
-         || (preferences.useJackMidi != useJackMidi->isChecked())
-         || (preferences.alsaDevice != alsaDevice->text())
-         || (preferences.alsaSampleRate != alsaSampleRate->currentText().toInt())
-         || (preferences.alsaPeriodSize != alsaPeriodSize->currentText().toInt())
-         || (preferences.alsaFragments != alsaFragments->value())
+         (prefs.useAlsaAudio != alsaDriver->isChecked())
+         || (prefs.useJackAudio != jackDriver->isChecked())
+         || (prefs.usePortaudioAudio != portaudioDriver->isChecked())
+         || (prefs.usePulseAudio != pulseaudioDriver->isChecked())
+         || (prefs.useJackMidi != useJackMidi->isChecked())
+         || (prefs.alsaDevice != alsaDevice->text())
+         || (prefs.alsaSampleRate != alsaSampleRate->currentText().toInt())
+         || (prefs.alsaPeriodSize != alsaPeriodSize->currentText().toInt())
+         || (prefs.alsaFragments != alsaFragments->value())
             ) {
             seq->exit();
-            preferences.useAlsaAudio       = alsaDriver->isChecked();
-            preferences.useJackAudio       = jackDriver->isChecked();
-            preferences.usePortaudioAudio  = portaudioDriver->isChecked();
-            preferences.usePulseAudio      = pulseaudioDriver->isChecked();
-            preferences.useJackMidi        = useJackMidi->isChecked();
-            preferences.alsaDevice         = alsaDevice->text();
-            preferences.alsaSampleRate     = alsaSampleRate->currentText().toInt();
-            preferences.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
-            preferences.alsaFragments      = alsaFragments->value();
+            prefs.useAlsaAudio       = alsaDriver->isChecked();
+            prefs.useJackAudio       = jackDriver->isChecked();
+            prefs.usePortaudioAudio  = portaudioDriver->isChecked();
+            prefs.usePulseAudio      = pulseaudioDriver->isChecked();
+            prefs.useJackMidi        = useJackMidi->isChecked();
+            prefs.alsaDevice         = alsaDevice->text();
+            prefs.alsaSampleRate     = alsaSampleRate->currentText().toInt();
+            prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
+            prefs.alsaFragments      = alsaFragments->value();
             if (!seq->init()) {
                   qDebug("sequencer init failed\n");
                   }
@@ -1315,57 +1326,57 @@ void PreferenceDialog::apply()
 
 #ifdef USE_PORTAUDIO
       Portaudio* audio = static_cast<Portaudio*>(seq->getDriver());
-      preferences.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
+      prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
          portaudioDevice->currentIndex());
 #endif
 
 #ifdef USE_PORTMIDI
-      preferences.portMidiInput = portMidiInput->currentText();
+      prefs.portMidiInput = portMidiInput->currentText();
 #endif
 
       if (lastSession->isChecked())
-            preferences.sessionStart = LAST_SESSION;
+            prefs.sessionStart = LAST_SESSION;
       else if (newSession->isChecked())
-            preferences.sessionStart = NEW_SESSION;
+            prefs.sessionStart = NEW_SESSION;
       else if (scoreSession->isChecked())
-            preferences.sessionStart = SCORE_SESSION;
+            prefs.sessionStart = SCORE_SESSION;
       else if (emptySession->isChecked())
-            preferences.sessionStart = EMPTY_SESSION;
-      preferences.startScore         = sessionScore->text();
-      preferences.myScoresPath       = myScores->text();
-      preferences.myStylesPath       = myStyles->text();
-      preferences.myImagesPath       = myImages->text();
-      preferences.myTemplatesPath    = myTemplates->text();
-      preferences.myPluginsPath      = myPlugins->text();
-      preferences.mySoundFontsPath   = mySoundFonts->text();
+            prefs.sessionStart = EMPTY_SESSION;
+      prefs.startScore         = sessionScore->text();
+      prefs.myScoresPath       = myScores->text();
+      prefs.myStylesPath       = myStyles->text();
+      prefs.myImagesPath       = myImages->text();
+      prefs.myTemplatesPath    = myTemplates->text();
+      prefs.myPluginsPath      = myPlugins->text();
+      prefs.mySoundFontsPath   = mySoundFonts->text();
 
-      preferences.nativeDialogs      = nativeDialogs->isChecked();
+      prefs.nativeDialogs      = nativeDialogs->isChecked();
       int idx = exportAudioSampleRate->currentIndex();
-      preferences.exportAudioSampleRate = exportAudioSampleRates[idx];
+      prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
-      preferences.showSplashScreen   = showSplashScreen->isChecked();
-      preferences.midiExpandRepeats  = expandRepeats->isChecked();
-      preferences.instrumentList1    = instrumentList1->text();
-      preferences.instrumentList2    = instrumentList2->text();
+      prefs.showSplashScreen   = showSplashScreen->isChecked();
+      prefs.midiExpandRepeats  = expandRepeats->isChecked();
+      prefs.instrumentList1    = instrumentList1->text();
+      prefs.instrumentList2    = instrumentList2->text();
 
-      preferences.musicxmlImportLayout  = importLayout->isChecked();
-      preferences.musicxmlImportBreaks  = importBreaks->isChecked();
-      preferences.musicxmlExportLayout  = exportLayout->isChecked();
+      prefs.musicxmlImportLayout  = importLayout->isChecked();
+      prefs.musicxmlImportBreaks  = importBreaks->isChecked();
+      prefs.musicxmlExportLayout  = exportLayout->isChecked();
       if (exportAllBreaks->isChecked())
-            preferences.musicxmlExportBreaks = ALL_BREAKS;
+            prefs.musicxmlExportBreaks = ALL_BREAKS;
       else if (exportManualBreaks->isChecked())
-            preferences.musicxmlExportBreaks = MANUAL_BREAKS;
+            prefs.musicxmlExportBreaks = MANUAL_BREAKS;
       else if (exportNoBreaks->isChecked())
-            preferences.musicxmlExportBreaks = NO_BREAKS;
+            prefs.musicxmlExportBreaks = NO_BREAKS;
 
-      preferences.midiPorts          = midiPorts->value();
-      preferences.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
-      preferences.proximity          = proximity->value();
-      preferences.autoSave           = autoSave->isChecked();
-      preferences.autoSaveTime       = autoSaveTime->value();
-      preferences.pngResolution      = pngResolution->value();
-      preferences.pngTransparent     = pngTransparent->isChecked();
-      converterDpi                   = preferences.pngResolution;
+      prefs.midiPorts          = midiPorts->value();
+      prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
+      prefs.proximity          = proximity->value();
+      prefs.autoSave           = autoSave->isChecked();
+      prefs.autoSaveTime       = autoSaveTime->value();
+      prefs.pngResolution      = pngResolution->value();
+      prefs.pngTransparent     = pngTransparent->isChecked();
+      converterDpi             = prefs.pngResolution;
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
@@ -1381,25 +1392,25 @@ void PreferenceDialog::apply()
 
       int lang = language->itemData(language->currentIndex()).toInt();
       QString l = lang == 0 ? "system" : mscore->languages().at(lang).key;
-      bool languageChanged = l != preferences.language;
-      preferences.language = l;
+      bool languageChanged = l != prefs.language;
+      prefs.language = l;
 
       MScore::replaceFractions       = replaceFractions->isChecked();
-      preferences.replaceCopyrightSymbol = replaceCopyrightSymbol->isChecked();
+      prefs.replaceCopyrightSymbol = replaceCopyrightSymbol->isChecked();
 
       //update
       int periodIndex = checkUpdateStartup->currentIndex();
       int t = updatePeriods[periodIndex].time;
-      preferences.checkUpdateStartup = t;
+      prefs.checkUpdateStartup = t;
 
-      preferences.mag         = scale->value();
+      prefs.mag         = scale->value();
 
       MScore::defaultPlayDuration = defaultPlayDuration->value();
 
       if (useImportStyleFile->isChecked())
-            preferences.importStyleFile = importStyleFile->text();
+            prefs.importStyleFile = importStyleFile->text();
       else
-            preferences.importStyleFile.clear();
+            prefs.importStyleFile.clear();
 
       int ticks = MScore::division/4;
       switch(shortestNote->currentIndex()) {
@@ -1409,33 +1420,33 @@ void PreferenceDialog::apply()
             case 3: ticks = MScore::division/8;  break;
             case 4: ticks = MScore::division/16; break;
             }
-      preferences.shortestNote = ticks;
+      prefs.shortestNote = ticks;
 
-      preferences.importCharset = importCharsetList->currentText();
+      prefs.importCharset = importCharsetList->currentText();
       MScore::warnPitchRange = warnPitchRange->isChecked();
 
-      preferences.useOsc  = oscServer->isChecked();
-      preferences.oscPort = oscPort->value();
+      prefs.useOsc  = oscServer->isChecked();
+      prefs.oscPort = oscPort->value();
       if (styleName->currentIndex() == STYLE_DARK) {
             iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
-            preferences.styleName = "dark";
-            preferences.globalStyle = STYLE_DARK;
+            prefs.styleName = "dark";
+            prefs.globalStyle = STYLE_DARK;
             }
       else {
             iconGroup = "icons/";
             appStyleFile = ":/data/appstyle.css";
-            preferences.styleName = "native";
-            preferences.globalStyle = STYLE_NATIVE;
+            prefs.styleName = "native";
+            prefs.globalStyle = STYLE_NATIVE;
             }
 
       if (languageChanged) {
-            setMscoreLocale(preferences.language);
+            setMscoreLocale(prefs.language);
             mscore->update();
             }
-      if (defaultStyle->text() != preferences.defaultStyleFile) {
-            preferences.defaultStyleFile = defaultStyle->text();
-            preferences.readDefaultStyle();
+      if (defaultStyle->text() != prefs.defaultStyleFile) {
+            prefs.defaultStyleFile = defaultStyle->text();
+            prefs.readDefaultStyle();
             }
 
       qApp->setStyleSheet(appStyleSheet());
@@ -1443,6 +1454,7 @@ void PreferenceDialog::apply()
 
       mscore->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
+      preferences = prefs;
       emit preferencesChanged();
       preferences.write();
       mscore->startAutoSave();
@@ -1473,10 +1485,8 @@ bool Preferences::readDefaultStyle()
 
 void PreferenceDialog::resetAllValues()
       {
-      Preferences prefs;
       prefs.init();
-
-      updateValues(&prefs);
+      updateValues();
 
       shortcutsChanged = true;
       qDeleteAll(localShortcuts);
@@ -1663,26 +1673,24 @@ bool Preferences::readPluginList()
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
                         QString tag(ee.tagName());
                         if (tag == "Plugin") {
-                              PluginDescription* d = new PluginDescription;
+                              PluginDescription d;
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull();  eee = eee.nextSiblingElement()) {
                                     QString tag(eee.tagName());
                                     if (tag == "path")
-                                          d->path = eee.text();
+                                          d.path = eee.text();
                                     else if (tag == "load")
-                                          d->load = eee.text().toInt();
+                                          d.load = eee.text().toInt();
                                     else if (tag == "SC")
-                                          d->shortcut.read(eee);
+                                          d.shortcut.read(eee);
                                     else if (tag == "version")
-                                          d->version = eee.text();
+                                          d.version = eee.text();
                                     else if (tag == "description")
-                                          d->description = eee.text();
+                                          d.description = eee.text();
                                     else
                                           domError(eee);
                                     }
-                              if (d->path.endsWith(".qml"))
+                              if (d.path.endsWith(".qml"))
                                     pluginList.append(d);
-                              else
-                                    delete d;
                               }
                         else
                               domError(ee);
@@ -1710,15 +1718,14 @@ void Preferences::writePluginList()
       Xml xml(&f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      foreach(PluginDescription* d, pluginList) {
+      foreach(const PluginDescription& d, pluginList) {
             xml.stag("Plugin");
-            xml.tag("path", d->path);
-            xml.tag("load", d->load);
-            xml.tag("version", d->version);
-            xml.tag("description", d->description);
-            if (!d->shortcut.keys().isEmpty()) {
-                  d->shortcut.write(xml);
-                  }
+            xml.tag("path", d.path);
+            xml.tag("load", d.load);
+            xml.tag("version", d.version);
+            xml.tag("description", d.description);
+            if (!d.shortcut.keys().isEmpty())
+                  d.shortcut.write(xml);
             xml.etag();
             }
       xml.etag();
@@ -1731,39 +1738,49 @@ void Preferences::writePluginList()
 //    pluginList
 //---------------------------------------------------------
 
+static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
+   QList<PluginDescription>& pluginList)
+      {
+      QDirIterator it(pluginPath, QDir::NoDot|QDir::NoDotDot|QDir::Dirs|QDir::Files,
+         QDirIterator::Subdirectories);
+      while (it.hasNext()) {
+            it.next();
+            QFileInfo fi = it.fileInfo();
+            QString path(fi.absoluteFilePath());
+            printf("   <%s>\n", qPrintable(path));
+            if (fi.isFile()) {
+                  if (path.endsWith(".qml")) {
+                        bool alreadyInList = false;
+                        foreach (const PluginDescription& p, pluginList) {
+                              if (p.path == path) {
+                                    alreadyInList = true;
+                                    break;
+                                    }
+                              }
+                        if (!alreadyInList) {
+                              PluginDescription p;
+                              p.path = path;
+                              p.load = false;
+                              collectPluginMetaInformation(&p);
+                              pluginList.append(p);
+                              }
+                        }
+                  }
+            else
+                  updatePluginList(pluginPathList, path, pluginList);
+            }
+      }
+
 void Preferences::updatePluginList()
       {
+      pluginList.clear();
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
       pluginPathList.append(myPluginsPath);
 
       foreach(QString pluginPath, pluginPathList) {
-            QDir pluginDir(pluginPath);
-            QDirIterator it(pluginDir, QDirIterator::Subdirectories);
-            while (it.hasNext()) {
-                  it.next();
-                  QFileInfo fi = it.fileInfo();
-                  if (fi.isFile()) {
-                        QString path(fi.filePath());
-                        if (path.endsWith(".qml")) {
-                              bool alreadyInList = false;
-                              foreach (PluginDescription* p, pluginList) {
-                                    if (p->path == path) {
-                                          alreadyInList = true;
-                                          break;
-                                          }
-                                    }
-                              if (!alreadyInList) {
-                                    PluginDescription* p = new PluginDescription;
-                                    p->path = path;
-                                    p->load = false;
-                                    collectPluginMetaInformation(p);
-                                    pluginList.append(p);
-                                    }
-                              }
-                        }
-                  }
+            ::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
       }
 
@@ -1776,14 +1793,14 @@ void PreferenceDialog::pluginListItemChanged(QListWidgetItem* item, QListWidgetI
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = prefs->pluginList[idx];
-      QFileInfo fi(d->path);
+      const PluginDescription& d = prefs.pluginList[idx];
+      QFileInfo fi(d.path);
       pluginName->setText(fi.baseName());
       pluginPath->setText(fi.absolutePath());
-      pluginLoad->setChecked(d->load);
-      pluginVersion->setText(d->version);
-      pluginShortcut->setText(d->shortcut.keysToString());
-      pluginDescription->setText(d->description);
+      pluginLoad->setChecked(d.load);
+      pluginVersion->setText(d.version);
+      pluginShortcut->setText(d.shortcut.keysToString());
+      pluginDescription->setText(d.description);
       }
 
 //---------------------------------------------------------
@@ -1796,9 +1813,9 @@ void PreferenceDialog::pluginLoadToggled(bool val)
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = prefs->pluginList[idx];
+      PluginDescription* d = &prefs.pluginList[idx];
       d->load = val;
-      prefs->dirty = true;
+      prefs.dirty = true;
       }
 
 //---------------------------------------------------------
@@ -1811,7 +1828,7 @@ void PreferenceDialog::definePluginShortcutClicked()
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* pd = preferences.pluginList[idx];
+      PluginDescription* pd = &preferences.pluginList[idx];
       Shortcut* s = &pd->shortcut;
       ShortcutCaptureDialog sc(s, localShortcuts, this);
       int rv = sc.exec();
@@ -1823,7 +1840,7 @@ void PreferenceDialog::definePluginShortcutClicked()
       QAction* action = s->action();
       action->setShortcuts(s->keys());
       pluginShortcut->setText(s->keysToString());
-      prefs->dirty = true;
+      prefs.dirty = true;
       }
 
 //---------------------------------------------------------
