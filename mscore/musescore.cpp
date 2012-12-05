@@ -109,7 +109,7 @@ static QStringList recentScores;
 static QString outFileName;
 static QString pluginName;
 static QString styleFile;
-static QString localeName;
+QString localeName;
 bool useFactorySettings = false;
 QString styleName;
 QString revision;

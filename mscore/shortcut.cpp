@@ -284,7 +284,7 @@ void Shortcut::addShortcut(const QKeySequence& ks)
 //   keysToString
 //---------------------------------------------------------
 
-QString Shortcut::keysToString()
+QString Shortcut::keysToString() const
       {
       QAction* a = action();
       QList<QKeySequence> kl = a->shortcuts();
@@ -359,7 +359,7 @@ void Shortcut::save()
 //   write
 //---------------------------------------------------------
 
-void Shortcut::write(Xml& xml)
+void Shortcut::write(Xml& xml) const
       {
       xml.stag("SC");
       xml.tag("key", _key);
@@ -380,7 +380,7 @@ void Shortcut::read(const QDomElement& e)
             const QString& tag(eee.tagName());
             const QString& val(eee.text());
             if (tag == "key")
-                  _key = val.toAscii().data();
+                  _key = strdup(val.toAscii().data());      // memory leak!
             else if (tag == "std")
                   _standardKey = QKeySequence::StandardKey(val.toInt());
             else if (tag == "seq")

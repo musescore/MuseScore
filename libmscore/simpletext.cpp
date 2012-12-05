@@ -25,7 +25,8 @@
 SimpleText::SimpleText(Score* s)
    : Element(s)
       {
-      _textStyle           = s->textStyle(TEXT_STYLE_DEFAULT);
+      if (s)
+            _textStyle = s->textStyle(TEXT_STYLE_DEFAULT);
       _layoutToParentWidth = false;
       }
 

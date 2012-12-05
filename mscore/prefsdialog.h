@@ -22,9 +22,9 @@
 #define __PREFSDIALOG_H__
 
 #include "ui_prefsdialog.h"
+#include "preferences.h"
 
 class Shortcut;
-struct Preferences;
 
 //---------------------------------------------------------
 //   PreferenceDialog
@@ -36,13 +36,13 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QButtonGroup* recordButtons;
-      Preferences* prefs;
+      Preferences prefs;
 
       void apply();
       bool sfChanged;
       void updateSCListView();
       void setUseMidiOutput(bool);
-      void updateValues(Preferences*);
+      void updateValues();
 
    private slots:
       void buttonBoxClicked(QAbstractButton*);
@@ -81,6 +81,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
    public:
       PreferenceDialog(QWidget* parent);
       ~PreferenceDialog();
+      void setPreferences(const Preferences& p);
       void updateRemote();
       };
 
