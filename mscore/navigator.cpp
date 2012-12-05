@@ -72,6 +72,28 @@ void NScrollArea::resizeEvent(QResizeEvent* ev)
       }
 
 //---------------------------------------------------------
+//   ViewRect
+//---------------------------------------------------------
+
+ViewRect::ViewRect(QWidget* w)
+   : QWidget(w)
+      {
+      }
+
+//---------------------------------------------------------
+//   paintEvent
+//---------------------------------------------------------
+
+void ViewRect::paintEvent(QPaintEvent* ev)
+      {
+      QPainter p(this);
+      QPen pen(Qt::blue, 2.0);
+      p.setPen(pen);
+      p.setBrush(QColor(0, 0, 255, 40));
+      p.drawRect(ev->rect());
+      }
+
+//---------------------------------------------------------
 //   Navigator
 //---------------------------------------------------------
 
@@ -82,7 +104,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
       _score         = 0;
       scrollArea     = sa;
       _cv            = 0;
-      viewRect       = QRect();
+      viewRect       = new ViewRect(this);
       setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
       sa->setWidget(this);
       sa->setWidgetResizable(false);
@@ -94,8 +116,6 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
 
 void Navigator::resizeEvent(QResizeEvent* ev)
       {
-      if (ev->size().height() == ev->oldSize().height())
-            return;
       if (_score) {
             rescale();
             updateViewRect();
@@ -137,14 +157,11 @@ void Navigator::setScore(Score* v)
       {
       _cv = 0;
       if (v) {
-            _score  = v;
             rescale();
             setViewRect(QRect());
             }
-      else {
-            _score = 0;
-            update();
-            }
+      _score = v;
+      update();
       }
 
 //---------------------------------------------------------
@@ -169,6 +186,7 @@ void Navigator::rescale()
 
       matrix.setMatrix(m, matrix.m12(), matrix.m13(), matrix.m21(), m,
          matrix.m23(), matrix.m31(), matrix.m32(), matrix.m33());
+      update();
       }
 
 //---------------------------------------------------------
@@ -196,15 +214,14 @@ void Navigator::mousePressEvent(QMouseEvent* ev)
       if (_cv == 0)
             return;
       startMove = ev->pos();
-      if (!viewRect.contains(startMove)) {
+      if (!viewRect->geometry().contains(startMove)) {
             QPointF p = matrix.inverted().map(QPointF(ev->pos()));
             QRectF r(_cv->toLogical(QRectF(0.0, 0.0, _cv->width(), _cv->height())));
             double dx = p.x() - (r.x() + (r.width() * .5));
             double dy = p.y() - (r.y() + (r.height() * .5));
             r.translate(dx, dy);
             setViewRect(r);
-            emit viewRectMoved(matrix.inverted().mapRect(viewRect));
-            update();
+            emit viewRectMoved(matrix.inverted().mapRect(viewRect->geometry()));
             }
       }
 
@@ -215,43 +232,44 @@ void Navigator::mousePressEvent(QMouseEvent* ev)
 void Navigator::mouseMoveEvent(QMouseEvent* ev)
       {
       QPoint delta = ev->pos() - startMove;
-      viewRect.translate(delta);
+      QRect r(viewRect->geometry().translated(delta));
       startMove = ev->pos();
 
-      if (viewRect.width() == width())
-            viewRect.moveLeft(0);
-      else if (viewRect.width() < width()) {
-            if (viewRect.x() < 0)
-                  viewRect.moveLeft(0);
-            else if (viewRect.right() > width())
-                  viewRect.moveRight(width());
+      if (r.width() == width())
+            r.moveLeft(0);
+      else if (r.width() < width()) {
+            if (r.x() < 0)
+                  r.moveLeft(0);
+            else if (r.right() > width())
+                  r.moveRight(width());
             }
       else {
-            if (viewRect.right() < width())
-                  viewRect.moveRight(width());
-            else if (viewRect.left() > 0)
-                  viewRect.moveLeft(0);
+            if (r.right() < width())
+                  r.moveRight(width());
+            else if (r.left() > 0)
+                  r.moveLeft(0);
             }
 
-      if (viewRect.height() == height())
-            viewRect.moveTop(0);
-      else if (viewRect.height() < height()) {
-            if (viewRect.y() < 0)
-                  viewRect.moveTop(0);
-            else if (viewRect.bottom() > height())
-                  viewRect.moveBottom(height());
+      if (r.height() == height())
+            r.moveTop(0);
+      else if (r.height() < height()) {
+            if (r.y() < 0)
+                  r.moveTop(0);
+            else if (r.bottom() > height())
+                  r.moveBottom(height());
             }
       else {
-            if (viewRect.bottom() < height())
-                  viewRect.moveBottom(height());
-            else if (viewRect.top() > 0)
-                  viewRect.moveTop(0);
+            if (r.bottom() < height())
+                  r.moveBottom(height());
+            else if (r.top() > 0)
+                  r.moveTop(0);
             }
 
-      emit viewRectMoved(matrix.inverted().mapRect(viewRect));
-      int x = delta.x() > 0 ? viewRect.x() + viewRect.width() : viewRect.x();
+      viewRect->setGeometry(r);
+
+      emit viewRectMoved(matrix.inverted().mapRect(r));
+      int x = delta.x() > 0 ? r.x() + r.width() : r.x();
       scrollArea->ensureVisible(x, height()/2, 0, 0);
-      update();
       }
 
 //---------------------------------------------------------
@@ -260,9 +278,8 @@ void Navigator::mouseMoveEvent(QMouseEvent* ev)
 
 void Navigator::setViewRect(const QRectF& _viewRect)
       {
-      viewRect = matrix.mapRect(_viewRect).toRect();
-      scrollArea->ensureVisible(viewRect.x(), 0);
-      update();
+      viewRect->setGeometry(matrix.mapRect(_viewRect).toRect());
+      scrollArea->ensureVisible(viewRect->x(), 0);
       }
 
 //---------------------------------------------------------
@@ -284,11 +301,8 @@ static void paintElement(void* data, Element* e)
 
 void Navigator::layoutChanged()
       {
-      if (_score == 0 || _score->pages().isEmpty()) {
-            update();
-            return;
-            }
-      rescale();
+      if (_score && !_score->pages().isEmpty())
+            rescale();
       update();
       }
 
@@ -305,7 +319,6 @@ void Navigator::paintEvent(QPaintEvent* ev)
       if (!_score)
             return;
 
-      p.save();
       p.setTransform(matrix);
       QRectF fr = matrix.inverted().mapRect(QRectF(r));
 
@@ -331,9 +344,4 @@ void Navigator::paintEvent(QPaintEvent* ev)
                   }
             p.translate(-pos);
             }
-      p.restore();
-      QPen pen(Qt::blue, 2.0);
-      p.setPen(pen);
-      p.setBrush(QColor(0, 0, 255, 40));
-      p.drawRect(viewRect);
       }
