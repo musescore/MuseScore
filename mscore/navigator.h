@@ -41,6 +41,20 @@ class NScrollArea : public QScrollArea {
       };
 
 //---------------------------------------------------------
+//   ViewRect
+//---------------------------------------------------------
+
+class ViewRect : public QWidget {
+      Q_OBJECT
+
+      virtual void paintEvent(QPaintEvent*);
+
+   public:
+      ViewRect(QWidget* w = 0);
+      };
+
+
+//---------------------------------------------------------
 //   Navigator
 //---------------------------------------------------------
 
@@ -51,7 +65,7 @@ class Navigator : public QWidget {
       NScrollArea* scrollArea;
       QPointer<ScoreView> _cv;
 
-      QRect viewRect;
+      ViewRect* viewRect;
       QPoint startMove;
       QTransform matrix;
 
