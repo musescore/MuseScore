@@ -933,7 +933,7 @@ void PreferenceDialog::updateValues()
                 int curMidiInIdx = 0;
                 for(int i = 0; i < midiInputs.size(); ++i) {
                       portMidiInput->addItem(midiInputs.at(i), i);
-                      if (midiInputs.at(i) == p->portMidiInput)
+                      if (midiInputs.at(i) == prefs.portMidiInput)
                             curMidiInIdx = i;
                       }
                 portMidiInput->setCurrentIndex(curMidiInIdx);
