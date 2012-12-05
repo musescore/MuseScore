@@ -70,6 +70,7 @@
 #include "audio.h"
 #include "instrtemplate.h"
 #include "cursor.h"
+#include "rendermidi.h"
 
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
@@ -1469,7 +1470,7 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::CHORD:
-                  createPlayEvents(static_cast<Chord*>(element));
+                  ::createPlayEvents(static_cast<Chord*>(element));
                   break;
 
             case Element::NOTE: {
@@ -1481,7 +1482,7 @@ void Score::addElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  ::createPlayEvents(static_cast<Chord*>(element->parent()));
                   break;
 
             default:
@@ -1626,7 +1627,7 @@ void Score::removeElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  ::createPlayEvents(static_cast<Chord*>(element->parent()));
                   break;
 
             default:
