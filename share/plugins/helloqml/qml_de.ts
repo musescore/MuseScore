@@ -6,12 +6,12 @@
     <message>
         <location filename="helloqml.qml" line="8"/>
         <source>This demo plugin shows some basic tasks.</source>
-        <translation>Dieses Demp-Plugins zeigt einige einface Funktionen.</translation>
+        <translation>Dieses Demo-Plugins zeigt einige einfache Funktionen.</translation>
     </message>
     <message>
         <location filename="helloqml.qml" line="13"/>
         <source>hello world</source>
-        <translation>Hallo!</translation>
+        <translation>Hallo Welt</translation>
     </message>
     <message>
         <location filename="helloqml.qml" line="23"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="helloqml.qml" line="26"/>
         <source>  segment</source>
-        <translation> Segment</translation>
+        <translation>  Segment</translation>
     </message>
     <message>
         <location filename="helloqml.qml" line="29"/>
