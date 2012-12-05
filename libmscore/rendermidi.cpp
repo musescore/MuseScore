@@ -482,10 +482,8 @@ void Score::updateVelo()
                                     break;
                               case Element::DYNAMIC_PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
-                                          for (int i = partStaff; i < partStaff+partStaves; ++i) {
+                                          for (int i = partStaff; i < partStaff+partStaves; ++i)
                                                 staff(i)->velocities().setVelo(tick, v);
-//                                                printf("   setVelo %d %d\n", tick, v);
-                                                }
                                           }
                                     break;
                               case Element::DYNAMIC_SYSTEM:
@@ -738,7 +736,6 @@ static void createPlayEvents(Chord* chord, int gateTime, const QList<Chord*>& gr
             ontime = (graceNotes[0]->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
             qreal scale = (qreal)graceNotes[0]->duration().denominator() / (qreal)chord->duration().denominator();
             int graceDuration = (ontime * scale)/ n;
-printf("===n %d ontime %d duration %d\n", n, ontime, graceDuration);
 
             int on = 0;
             for (int i = 0; i < n; ++i) {
