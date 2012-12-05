@@ -828,8 +828,14 @@
              <property name="suffix">
               <string>sp</string>
              </property>
+             <property name="singleStep">
+              <double>0.10</double>
+             </property>
+             <property name="minimum">
+              <double>0.0</double>
+             </property>
              <property name="maximum">
-              <double>999.990000000000009</double>
+              <double>999.0</double>
              </property>
             </widget>
            </item>
@@ -860,11 +866,14 @@
              <property name="suffix">
               <string>sp</string>
              </property>
+             <property name="singleStep">
+              <double>0.50</double>
+             </property>
              <property name="minimum">
-              <double>-999.000000000000000</double>
+              <double>0.0</double>
              </property>
              <property name="maximum">
-              <double>999.990000000000009</double>
+              <double>999.0</double>
              </property>
             </widget>
            </item>
