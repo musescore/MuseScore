@@ -2264,15 +2264,24 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             }
       xml.stag(noteTag);
 
-      double yOffsSp = rest->userOff().y() / rest->spatium();                    // y offset in spatium (negative = up)
-      int yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5);     // same rounded to int (positive = up)
-
+      int yOffsSt   = 0;
+      int oct       = 0;
+      int stp       = 0;
       ClefType clef = rest->staff()->clef(rest->tick());
-      int po = clefTable[clef].pitchOffset;
-      po -= 4;          // pitch middle staff line (two lines times two steps lower than top line)
-      po += yOffsSt;    // rest "pitch"
-      int oct = po / 7; // octave
-      int stp = po % 7; // step
+      int po        = clefTable[clef].pitchOffset;
+
+      // Determine y position, but leave at zero in case of tablature staff
+      // as no display-step or display-octave should be written for a tablature staff,
+
+      if (clef != CLEF_TAB && clef != CLEF_TAB2) {
+            double yOffsSp = rest->userOff().y() / rest->spatium();              // y offset in spatium (negative = up)
+            yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5); // same rounded to int (positive = up)
+
+            po -= 4;    // pitch middle staff line (two lines times two steps lower than top line)
+            po += yOffsSt; // rest "pitch"
+            oct = po / 7; // octave
+            stp = po % 7; // step
+            }
 
       // Either <rest/>
       // or <rest><display-step>F</display-step><display-octave>5</display-octave></rest>
@@ -2924,7 +2933,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       if (staff)
             xml.tag("staff", staff);
 
-      if(dyn->velocity() > 0)
+      if (dyn->velocity() > 0)
             xml.tagE(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
 
       xml.etag();
