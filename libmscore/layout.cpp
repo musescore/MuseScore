@@ -64,24 +64,17 @@ void Score::rebuildBspTree()
 
 ChordRest* Score::searchNote(int tick, int track) const
       {
-      int startTrack = track;
-      int endTrack   = startTrack + 1;
-
       ChordRest* ipe = 0;
-      for (const Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (int track = startTrack; track < endTrack; ++track) {
-                  for (Segment* segment = m->first(Segment::SegChordRest);
-                     segment; segment = segment->next(Segment::SegChordRest)) {
-                        ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
-                        if (!cr)
-                              continue;
-                        if (cr->tick() == tick)
-                              return cr;
-                        if (cr->tick() >  tick)
-                              return ipe ? ipe : cr;
-                        ipe = cr;
-                        }
-                  }
+      Segment::SegmentTypes st = Segment::SegChordRest;
+      for (Segment* segment = firstSegment(st); segment; segment = segment->next(st)) {
+            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+            if (!cr)
+                  continue;
+            if (cr->tick() == tick)
+                  return cr;
+            if (cr->tick() >  tick)
+                  return ipe ? ipe : cr;
+            ipe = cr;
             }
       return 0;
       }
