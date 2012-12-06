@@ -78,7 +78,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(Segment::SegChordRest | Segment::SegGrace); s; s = s->next1(Segment::SegChordRest | Segment::SegGrace)) {
+      for (Segment* s = fm->first(Segment::SegChordRestGrace); s; s = s->next1(Segment::SegChordRestGrace)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -218,7 +218,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       int firstStaffIdx = m->score()->staffIdx(part);
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
 
-      Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
@@ -541,7 +541,7 @@ static int gateTime(Chord* chord)
       int gateTime = 100;
       Score* score = chord->score();
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+            const Segment::SegmentTypes st = Segment::SegChordRestGrace;
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
@@ -591,7 +591,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             int n = 1 << tremolo->lines();
             int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
-                  Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+                  Segment::SegmentTypes st = Segment::SegChordRestGrace;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
@@ -791,7 +791,7 @@ static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
       if (!m->score()->staff(track / VOICES)->primaryStaff())
             return;
       QList<Chord*> graceNotes;
-      const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      const Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr == 0)

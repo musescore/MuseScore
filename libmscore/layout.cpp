@@ -52,8 +52,9 @@
 
 void Score::rebuildBspTree()
       {
-      foreach(Page* page, _pages)
-            page->rebuildBspTree();
+      int n = _pages.size();
+      for (int i = 0; i < n; ++i)
+            _pages.at(i)->rebuildBspTree();
       }
 
 //---------------------------------------------------------
@@ -309,9 +310,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
             }
 
-      foreach(const AcEl e, aclist) {
+      int n = aclist.size();
+      for (int i = 0; i < n; ++i) {
+            const AcEl& e = aclist.at(i);
             Note* note = e.note;
-            qreal x   = e.x;
+            qreal x    = e.x;
             if (moveLeft) {
                   Chord* chord = note->chord();
                   if (((note->mirror() && chord->up()) || (!note->mirror() && !chord->up())))
@@ -319,36 +322,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
-            }
-      }
-
-//-------------------------------------------------------------------
-//    layoutStage1
-//    - compute note head lines and accidentals
-//    - mark multi measure rest breaks if in multi measure rest mode
-//-------------------------------------------------------------------
-
-void Score::layoutStage1()
-      {
-      int idx = 0;
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            ++idx;
-            m->layoutStage1();
-            foreach(Spanner* spanner, m->spannerFor()) {
-                  if (spanner->type() == Element::VOLTA)
-                        m->setBreakMMRest(true);
-                  }
-            MeasureBase* mb = m->prev();
-            if (mb && mb->type() == Element::MEASURE) {
-                  Measure* pm = static_cast<Measure*>(mb);
-                  if (pm->endBarLineType() != NORMAL_BAR
-                              && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
-                        m->setBreakMMRest(true);
-                  foreach(Spanner* spanner, pm->spannerBack()) {
-                        if (spanner->type() == Element::VOLTA)
-                              m->setBreakMMRest(true);
-                        }
-                  }
             }
       }
 
@@ -367,7 +340,7 @@ void Score::layoutStage2()
             Measure* measure = 0;
 
             BeamMode bm = BEAM_AUTO;
-            Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+            Segment::SegmentTypes st = Segment::SegChordRestGrace;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
@@ -549,7 +522,7 @@ void Score::layoutStage2()
 
 void Score::layoutStage3()
       {
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   layoutChords1(segment, staffIdx);
@@ -617,8 +590,7 @@ void Score::doLayout()
             }
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
-            foreach(Page* page, _pages)
-                  delete page;
+            qDeleteAll(_pages);
             _pages.clear();
 
             Page* page = addPage();
@@ -629,7 +601,9 @@ void Score::doLayout()
             return;
             }
 
-      layoutStage1();   // compute note head lines and accidentals
+      // compute note head lines and accidentals:
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+            m->layoutStage1();
       layoutStage2();   // beam notes, finally decide if chord is up/down
       layoutStage3();   // compute note head horizontal positions
 
@@ -647,8 +621,18 @@ void Score::doLayout()
       int tracks = nstaves * VOICES;
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
+                  if (track == tracks-1) {
+                        int n = segment->spannerFor().size();
+                        for (int i = 0; i < n; ++i)
+                              segment->spannerFor().at(i)->layout();
+                        n = segment->annotations().size();
+                        for (int i = 0; i < n; ++i)
+                              segment->annotations().at(i)->layout();
+                        }
                   Element* e = segment->element(track);
-                  if (e && e->isChordRest()) {
+                  if (!e)
+                        continue;
+                  if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               cr->beam()->layout();
@@ -658,22 +642,17 @@ void Score::doLayout()
                               if (!c->beam())
                                     c->layoutStem();
                               c->layoutArpeggio2();
-                              foreach(Note* n, c->notes()) {
-                                    Tie* tie = n->tieFor();
+                              int n = c->notes().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Tie* tie = c->notes().at(i)->tieFor();
                                     if (tie)
                                           tie->layout();
                                     }
                               }
                         cr->layoutArticulations();
                         }
-                  else if (e && e->type() == Element::BAR_LINE)
+                  else if (e->type() == Element::BAR_LINE)
                         e->layout();
-                  if (track == tracks-1) {
-                        foreach(Spanner* s, segment->spannerFor())
-                              s->layout();
-                        foreach(Element* e, segment->annotations())
-                              e->layout();
-                        }
                   }
             }
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
@@ -682,8 +661,9 @@ void Score::doLayout()
       rebuildBspTree();
 
       }     // unlock mutex
-      foreach(MuseScoreView* v, viewer)
-            v->layoutChanged();
+      int n = viewer.size();
+      for (int i = 0; i < n; ++i)
+            viewer.at(i)->layoutChanged();
       }
 
 //-------------------------------------------------------------------
@@ -1420,12 +1400,15 @@ void Score::connectTies()
       Measure* m = firstMeasure();
       if (!m)
             return;
-      for (Segment* s = m->first(); s; s = s->next1()) {
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
-                  Element* el = s->element(i);
-                  if (el == 0 || el->type() != Element::CHORD)
+                  Chord* c = static_cast<Chord*>(s->element(i));
+                  if (c == 0 || c->type() != Element::CHORD)
                         continue;
-                  foreach(Note* n, static_cast<Chord*>(el)->notes()) {
+                  int nn = c->notes().size();
+                  for (int i = 0; i < nn; ++i) {
+                        Note* n = c->notes().at(i);
                         Tie* tie = n->tieFor();
                         if (!tie)
                               continue;
@@ -1462,8 +1445,9 @@ void Score::add(Element* el)
             case Element::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(el);
-                  foreach(ChordRest* cr, b->elements())
-                        cr->setBeam(b);
+                  int n = b->elements().size();
+                  for (int i = 0; i < n; ++i)
+                        b->elements().at(i)->setBeam(b);
                   }
                   break;
             case Element::SLUR:
@@ -2535,7 +2519,8 @@ void Score::respace(QList<ChordRest*>* elements)
       for (int i = 0; i < n-1; ++i) {
             qreal w   = width[i];
             int t     = ticksList[i];
-            qreal str = 1.0 + .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
+            // qreal str = 1.0 + .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
+            qreal str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
             qreal d   = w / str;
 
             springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
@@ -2619,7 +2604,7 @@ qreal Score::computeMinWidth(Segment* fs) const
                   Space space;
                   int track  = staffIdx * VOICES;
                   bool found = false;
-                  if (segType & (Segment::SegChordRest | Segment::SegGrace)) {
+                  if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
@@ -2634,7 +2619,7 @@ qreal Score::computeMinWidth(Segment* fs) const
                                     minDistance     = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
-                              else if (pt & (Segment::SegChordRest | Segment::SegGrace)) {
+                              else if (pt & (Segment::SegChordRestGrace)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {

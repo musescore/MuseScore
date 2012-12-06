@@ -405,7 +405,6 @@ class Score : public QObject {
       bool doReLayout();
       Measure* skipEmptyMeasures(Measure*, System*);
 
-      void layoutStage1();
       void layoutStage2();
       void layoutStage3();
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);

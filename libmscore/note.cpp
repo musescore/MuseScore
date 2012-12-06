@@ -635,8 +635,6 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
       writeProperty(xml, P_DOT_POSITION);
-//      writeProperty(xml, P_ONTIME_OFFSET);
-//      writeProperty(xml, P_OFFTIME_OFFSET);
       writeProperty(xml, P_HEAD_GROUP);
       writeProperty(xml, P_VELO_OFFSET);
       writeProperty(xml, P_TUNING);
@@ -1302,7 +1300,9 @@ void Note::layout2()
                   }
             }
 
-      foreach (Element* e, _el) {
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
@@ -1446,12 +1446,12 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       // tie segments are collected from System
       //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
-      foreach(Element* e, _el) {
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-//      foreach(Spanner* s, _spannerFor)              scanned in System()
-//            s->scanElements(data, func, all);
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -1475,8 +1475,11 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      foreach(Element* e, _el)
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             e->setTrack(val);
+            }
       if (_accidental)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
@@ -1507,8 +1510,11 @@ void Note::setMag(qreal val)
       Element::setMag(val);
       if (_accidental)
             _accidental->setMag(val);
-      foreach(Element* e, _el)
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             e->setMag(val);
+            }
       }
 
 //---------------------------------------------------------

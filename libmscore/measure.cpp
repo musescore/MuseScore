@@ -345,7 +345,9 @@ void Measure::layoutChords10(Segment* segment, int startTrack, AccidentalState* 
             if (!e || e->type() != CHORD)
                  continue;
             Chord* chord = static_cast<Chord*>(e);
-            foreach(Note* note, chord->notes()) {
+            int n = chord->notes().size();
+            for (int i = 0; i < n; ++i) {
+                  Note* note = chord->notes().at(i);
                   if (drumset) {
                         int pitch = note->pitch();
                         if (!drumset->isValid(pitch)) {
@@ -372,7 +374,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
       AccidentalState tversatz;  // state of already set accidentals for this measure
       tversatz.init(note->chord()->staff()->keymap()->key(tick()));
 
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
             int startTrack = note->staffIdx() * VOICES;
             int endTrack   = startTrack + VOICES;
@@ -382,7 +384,10 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
 
-                  foreach(Note* note1, chord->notes()) {
+                  int n = chord->notes().size();
+                  for (int i = 0; i < n; ++i) {
+                        Note* note1 = chord->notes().at(i);
+
                         if (note1->tieBack())
                               continue;
                         //
@@ -413,7 +418,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       Staff* staff = score()->staff(staffIdx);
       tversatz.init(staff->keymap()->key(tick()));
 
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       int startTrack           = staffIdx * VOICES;
       int endTrack             = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
@@ -428,7 +433,9 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
 
-                  foreach(Note* note, chord->notes()) {
+                  int n = chord->notes().size();
+                  for (int i = 0; i < n; ++i) {
+                        Note* note = chord->notes().at(i);
                         if (note->tieBack())
                               continue;
                         int tpc    = note->tpc();
@@ -526,13 +533,15 @@ void Measure::layout2()
 
       qreal _spatium = spatium();
       int tracks = staves.size() * VOICES;
-      static const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      static const Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (int track = 0; track < tracks; ++track) {
             for (Segment* s = first(st); s; s = s->next(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                   if (!cr)
                         continue;
-                  foreach(Lyrics* lyrics, cr->lyricsList()) {
+                  int n = cr->lyricsList().size();
+                  for (int i = 0; i < n; ++i) {
+                        Lyrics* lyrics = cr->lyricsList().at(i);
                         if (lyrics)
                               system()->layoutLyrics(lyrics, s, track/VOICES);
                         }
@@ -553,9 +562,9 @@ void Measure::layout2()
                         }
                   }
             }
-
-      foreach(const MStaff* ms, staves)
-            ms->lines->setWidth(width());
+      int n = staves.size();
+      for (int i = 0; i < n; ++i)
+            staves.at(i)->lines->setWidth(width());
 
 
       MeasureBase::layout();  // layout LAYOUT_BREAK elements
@@ -624,8 +633,9 @@ void Measure::layout2()
                         }
                   }
             }
-      foreach(Spanner* s, spannerFor())
-            s->layout();
+      n = spannerFor().size();
+      for (int i = 0; i < n; ++i)
+            spannerFor().at(i)->layout();
       }
 
 //---------------------------------------------------------
@@ -648,9 +658,8 @@ Chord* Measure::findChord(int tick, int track, int gl)
                   if (seg->subtype() == Segment::SegGrace)
                         graces++;
                   Element* el = seg->element(track);
-                  if (el && el->type() == CHORD && graces == gl) {
-                        return (Chord*)el;
-                        }
+                  if (el && el->type() == CHORD && graces == gl)
+                        return static_cast<Chord*>(el);
                   }
             }
       return 0;
@@ -1590,7 +1599,7 @@ qDebug("drop staffList");
                   //
                   _score->select(0, SELECT_SINGLE, 0);
                   for (Segment* s = first(); s; s = s->next()) {
-                        if (s->subtype() == Segment::SegChordRest || s->subtype() == Segment::SegGrace) {
+                        if (s->subtype() & Segment::SegChordRestGrace) {
                               int strack = staffIdx * VOICES;
                               int etrack = strack + VOICES;
                               for (int track = strack; track < etrack; ++track) {
@@ -3009,7 +3018,7 @@ void Measure::layoutX(qreal stretch)
                   Space space;
                   int track  = staffIdx * VOICES;
                   bool found = false;
-                  if (segType & (Segment::SegChordRest | Segment::SegGrace)) {
+                  if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
@@ -3024,7 +3033,7 @@ void Measure::layoutX(qreal stretch)
                                     minDistance     = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
-                              else if (pt & (Segment::SegChordRest | Segment::SegGrace)) {
+                              else if (pt & (Segment::SegChordRestGrace)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
@@ -3034,7 +3043,9 @@ void Measure::layoutX(qreal stretch)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               space.max(cr->space());
-                              foreach(Lyrics* l, cr->lyricsList()) {
+                              int n = cr->lyricsList().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Lyrics* l = cr->lyricsList().at(i);
                                     if (!l || l->isEmpty())
                                           continue;
                                     lyrics = l;
@@ -3196,7 +3207,8 @@ void Measure::layoutX(qreal stretch)
             int t = ticksList[i];
             if (t) {
                   if (minTick > 0)
-                      str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
+                        // str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
+                        str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
                   d = w / str;
                   }
             else {
@@ -3336,19 +3348,25 @@ void Measure::layoutStage1()
                         setBreakMMRest(true);
                   else if (!breakMMRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
-                              foreach(Element* e, s->annotations()) {
+                              int n = s->annotations().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Element* e = s->annotations().at(i);
                                     if (e->type() == REHEARSAL_MARK || e->type() == TEMPO_TEXT) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
-                              foreach(Spanner* sp, s->spannerFor()) {
+                              n = s->spannerFor().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Spanner* sp = s->spannerFor().at(i);
                                     if (sp->type() == VOLTA) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
-                              foreach(Spanner* sp, s->spannerBack()) {
+                              n = s->spannerBack().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Spanner* sp = s->spannerBack().at(i);
                                     if (sp->type() == VOLTA) {
                                           setBreakMMRest(true);
                                           break;
@@ -3370,8 +3388,27 @@ void Measure::layoutStage1()
                               setBreakMMRest(true);
                         }
 
-                  if (segment->subtype() & (Segment::SegChordRest | Segment::SegGrace))
+                  if (segment->subtype() & Segment::SegChordRestGrace)
                         layoutChords0(segment, staffIdx * VOICES);
+                  }
+            }
+      int n = _spannerFor.size();
+      for (int i = 0; i < n; ++i) {
+            Spanner* spanner = _spannerFor.at(i);
+            if (spanner->type() == Element::VOLTA)
+                  setBreakMMRest(true);
+            }
+      MeasureBase* mb = prev();
+      if (mb && mb->type() == Element::MEASURE) {
+            Measure* pm = static_cast<Measure*>(mb);
+            if (pm->endBarLineType() != NORMAL_BAR
+               && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
+                  setBreakMMRest(true);
+            int n = pm->_spannerBack.size();
+            for (int i = 0; i < n; ++i) {
+                  Spanner* spanner = pm->_spannerBack.at(i);
+                  if (spanner->type() == Element::VOLTA)
+                        setBreakMMRest(true);
                   }
             }
       }
@@ -3405,7 +3442,9 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
 
             // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-            foreach(Note* note, chord->notes()) {
+            int n = chord->notes().size();
+            for (int i = 0; i < n; ++i) {
+                  Note* note = chord->notes().at(i);
                   switch(staffGroup) {
                         case PITCHED_STAFF:
                               if (note->tieBack()) {
