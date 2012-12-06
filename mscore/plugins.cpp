@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: plugins.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
-//  Copyright (C) 2009-2010 Werner Schweer and others
+//  Copyright (C) 2009-2012 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -208,8 +207,10 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
             qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
+
             //-----------virtual classes
 //            qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
@@ -430,13 +431,12 @@ void MuseScore::pluginTriggered(int idx)
 //   newElement
 //---------------------------------------------------------
 
-Element* QmlPlugin::newElement(Element::ElementType t)
+Element* QmlPlugin::newElement(int t)
       {
-qDebug("newElement %d score %p", int(t), curScore());
       Score* score = curScore();
       if (score == 0)
             return 0;
-      return Element::create(t, score);
+      return Element::create(Element::ElementType(t), score);
       }
 
 //---------------------------------------------------------
