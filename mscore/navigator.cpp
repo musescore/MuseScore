@@ -156,11 +156,11 @@ void Navigator::setScoreView(ScoreView* v)
 void Navigator::setScore(Score* v)
       {
       _cv = 0;
+      _score = v;
       if (v) {
             rescale();
             setViewRect(QRect());
             }
-      _score = v;
       update();
       }
 
