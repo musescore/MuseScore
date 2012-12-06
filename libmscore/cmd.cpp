@@ -671,7 +671,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
       Segment* firstSegment = segment;
       int nextTick = segment->tick();
 
-      for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRest | Segment::SegGrace)) {
+      for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRestGrace)) {
             if (seg->subtype() == Segment::SegGrace) {
                   if (seg->element(track)) {
                         undoRemoveElement(seg->element(track));
@@ -816,7 +816,7 @@ qDebug("  akkumulated %d/%d rest %d/%d (-%d/%d)",
 bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       {
       ChordRest* cr = 0;
-      Segment* seg = tick2segment(tick, true, Segment::SegChordRest | Segment::SegGrace);
+      Segment* seg = tick2segment(tick, true, Segment::SegChordRestGrace);
       if (!seg) {
             qDebug("1:makeGap1: no segment at %d", tick);
             return false;
@@ -849,7 +849,7 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
                   len -= cr1->duration() - dstF;
                   undoChangeChordRestLen(cr1, TDuration(dstF));
                   for (;;) {
-                        seg = seg->next1(Segment::SegChordRest | Segment::SegGrace);
+                        seg = seg->next1(Segment::SegChordRestGrace);
                         if (seg == 0) {
                               qDebug("2:makeGap1: no segment");
                               return false;
@@ -1517,7 +1517,7 @@ void Score::cmdResetBeamMode()
       int startTick = selection().tickStart();
       int endTick   = selection().tickEnd();
 
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             if (seg->tick() < startTick)
                   continue;

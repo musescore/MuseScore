@@ -83,7 +83,7 @@ bool Cursor::next()
       {
       if (!_segment)
             return false;
-      _segment = _segment->next1(Segment::SegChordRest | Segment::SegGrace);
+      _segment = _segment->next1(Segment::SegChordRestGrace);
       firstChordRestInTrack();
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
@@ -105,9 +105,9 @@ bool Cursor::nextMeasure()
             _segment = 0;
             return false;
             }
-      _segment = m->first(Segment::SegChordRest | Segment::SegGrace);
+      _segment = m->first(Segment::SegChordRestGrace);
 //      while (seg && seg->element(_track) == 0)
-//            seg = seg->next1(SegChordRest | SegGrace);
+//            seg = seg->next1(SegChordRestGrace);
       firstChordRestInTrack();
       return _segment != 0;
       }
@@ -249,6 +249,6 @@ int Cursor::voice() const
 inline void Cursor::firstChordRestInTrack()
       {
       while (_segment && _segment->element(_track) == 0)
-            _segment = _segment->next1(Segment::SegChordRest | Segment::SegGrace);
+            _segment = _segment->next1(Segment::SegChordRestGrace);
       }
 
