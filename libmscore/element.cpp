@@ -1358,7 +1358,7 @@ Element* Element::create(ElementType type, Score* score)
             case MAXTYPE:
             case INVALID:  break;
             }
-      qDebug("cannot create type <%s>\n", Element::name(type));
+      qDebug("cannot create type %d <%s>\n", int(type), Element::name(type));
       return 0;
       }
 
