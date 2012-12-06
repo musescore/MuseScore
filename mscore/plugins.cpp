@@ -144,7 +144,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       // load translation
       //
       QLocale locale;
-      QString t = np.absolutePath() + "/qml_" + MuseScore::getLocaleISOCode().left(2) + ".qm";
+      QString t = np.absolutePath() + "translations/locale_" + MuseScore::getLocaleISOCode().left(2) + ".qm";
       QTranslator* translator = new QTranslator;
       if (!translator->load(t)) {
             qDebug("cannot load qml translations <%s>", qPrintable(t));
