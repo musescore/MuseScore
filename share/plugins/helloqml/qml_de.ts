@@ -6,7 +6,7 @@
     <message>
         <location filename="helloqml.qml" line="8"/>
         <source>This demo plugin shows some basic tasks.</source>
-        <translation>Dieses Demo-Plugins zeigt einige einfache Funktionen.</translation>
+        <translation>Dieses Demo-Plugin zeigt einige einfache Funktionen.</translation>
     </message>
     <message>
         <location filename="helloqml.qml" line="13"/>
