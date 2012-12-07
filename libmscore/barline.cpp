@@ -88,7 +88,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
             if (staffIdx2 >= score()->nstaves()) {
-                  qDebug("BarLine: bad _span %d\n", _span);
+                  qDebug("BarLine: bad _span %d", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
             Measure* measure;
@@ -140,15 +140,22 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             }
       else if (parent()->type() == SEGMENT) {
             System* s = static_cast<Segment*>(parent())->measure()->system();
-            int _staffIdx = staffIdx();
-            qreal dy  = s->staff(_staffIdx)->y();
-            for (int i = 0; i < _span; ++i) {
-                  Staff* staff  = score()->staff(_staffIdx + i);
+            int staffIdx1    = staffIdx();
+            int staffIdx2    = staffIdx1 + _span - 1;
+            int sp = _span;
+            if (staffIdx2 >= score()->nstaves()) {
+                  qDebug("BarLine: bad _span %d", _span);
+                  staffIdx2 = score()->nstaves() - 1;
+                  sp = staffIdx2 - staffIdx1 + 1;
+                  }
+            qreal dy  = s->staff(staffIdx1)->y();
+            for (int i = 0; i < sp; ++i) {
+                  Staff* staff  = score()->staff(staffIdx1 + i);
                   StaffType* st = staff->staffType();
                   qreal doty1   = st->doty1() * _spatium;
                   qreal doty2   = st->doty2() * _spatium;
 
-                  qreal staffy  = s->staff(_staffIdx + i)->y() - dy;
+                  qreal staffy  = s->staff(staffIdx1 + i)->y() - dy;
 
                   dotsym.draw(painter, mags, QPointF(x, staffy + doty1));
                   dotsym.draw(painter, mags, QPointF(x, staffy + doty2));
@@ -730,7 +737,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case DOTTED_BAR:
                   break;
             default:
-                  qDebug("illegal bar line type\n");
+                  qDebug("illegal bar line type");
                   break;
             }
       return dw;
@@ -878,7 +885,7 @@ void BarLine::add(Element* e)
                         static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);
                   break;
             default:
-                  qDebug("BarLine::add() not impl. %s\n", e->name());
+                  qDebug("BarLine::add() not impl. %s", e->name());
                   delete e;
                   break;
             }
@@ -893,10 +900,10 @@ void BarLine::remove(Element* e)
       switch(e->type()) {
             case ARTICULATION:
                   if (!_el.remove(e))
-                        qDebug("BarLine::remove(): cannot find %s\n", e->name());
+                        qDebug("BarLine::remove(): cannot find %s", e->name());
                   break;
             default:
-                  qDebug("BarLine::remove() not impl. %s\n", e->name());
+                  qDebug("BarLine::remove() not impl. %s", e->name());
                   break;
             }
       }
