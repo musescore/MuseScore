@@ -278,13 +278,10 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
 
 //---------------------------------------------------------
 //   Read MusicXML
-//
-// Set the FretDiagram state based on the MusicXML <figure> node de.
 //---------------------------------------------------------
 
 void Tablature::readMusicXML(const QDomElement& de)
       {
-      qDebug("Tablature::readMusicXML");
       _frets = 25;
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -294,8 +291,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                   if (val > 0) {
                         // resize the string table and init with zeroes
                         stringTable = QVector<int>(val).toList();
-                        for (int i = 0; i < stringTable.size(); ++i)
-                              qDebug("Tablature::readMusicXML stringTable[%d] = %d", i, stringTable.at(i));
                         }
                   else
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
@@ -317,8 +312,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                         else
                               domError(ee);
                         }
-                  qDebug("Tablature::readMusicXML string %d step/alter/oct %s/%d/%d",
-                         line, qPrintable(step), alter, octave);
                   if (0 < line && line <= stringTable.size()) {
                         int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
                         if (pitch >= 0)
@@ -335,8 +328,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                   ; // others silently ignored
                   }
             }
-      for (int i = 0; i < stringTable.size(); ++i)
-            qDebug("Tablature::readMusicXML stringTable[%d] = %d", i, stringTable.at(i));
       }
 
 //---------------------------------------------------------
