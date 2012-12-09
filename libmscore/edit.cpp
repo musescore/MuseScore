@@ -1193,16 +1193,12 @@ void Score::cmdDeleteSelectedMeasures()
       Segment* seg      = selection().endSegment();
       MeasureBase* ie   = seg ? seg->measure() : lastMeasure();
       int endIdx        = measureIdx(ie);
-      if (ie != is)
-            ie = ie->prev();
 
       // createEndBar if last measure is deleted
-      bool createEndBar = true;
-      for (MeasureBase* mb = ie->next(); mb; mb = mb->next()) {
-            if (mb->type() == Element::MEASURE) {
-                  createEndBar = false;
-                  break;
-                  }
+      bool createEndBar = false;
+      if (ie->type() == Element::MEASURE) {
+            Measure* iem = static_cast<Measure*>(ie);
+            createEndBar = (iem == lastMeasure()) && (iem->endBarLineType() == END_BAR);
             }
 
       QList<Score*> scores = scoreList();
