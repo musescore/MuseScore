@@ -1112,19 +1112,43 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
             }
       }
 
-void ExportMusicXml::unpitch2xml(Note* note, char& c, int& octave)
+// unpitch2xml -- calculate display-step and display-octave for an unpitched note
+// note:
+// even though this produces the correct step/octave according to Recordare's tutorial
+// Finale Notepad 2012 does not import a three line staff with percussion clef correctly
+// Same goes for Sibelius 6 in case of three or five line staff with percussion clef
+
+void ExportMusicXml::unpitch2xml(Note* note, char& step, int& octave)
       {
       static char table1[]  = "FEDCBAG";
 
-      int tick   = note->chord()->tick();
-      Staff* i   = note->staff();
-      int offset = clefTable[i->clef(tick)].pitchOffset - 45;     // HACK
-
-      int step   = (note->line() - offset + 700) % 7;
-      c          = table1[step];
-
-      int tmp = (note->line() - offset);
-      octave =(3-tmp+700)/7 + 5 - 100;
+      int tick        = note->chord()->tick();
+      Staff* st       = note->staff();
+      ClefType ct     = st->clef(tick);
+      // offset in lines between staff with current clef and with G clef
+      int clefOffset  = clefTable[ct].pitchOffset - clefTable[CLEF_G].pitchOffset;
+      // line note would be on on a five line staff with G clef
+      // note top line is line 0, bottom line is line 8
+      int line5g      = note->line() - clefOffset;
+      // in MusicXML with percussion clef, step and octave are determined as if G clef is used
+      // when stafflines is not equal to five, in MusicXML the bottom line is still E4.
+      // in MuseScore assumes line 0 is F5
+      // MS line numbers (top to bottom) plus correction to get lowest line at E4 (line 8)
+      // 1 line staff: 0             -> correction 8
+      // 3 line staff: 2, 4, 6       -> correction 2
+      // 5 line staff: 0, 2, 4, 6, 8 -> correction 0
+      // TODO handle other # staff lines ?
+      if (st->lines() == 1) line5g += 8;
+      if (st->lines() == 3) line5g += 2;
+      // index in table1 to get step
+      int stepIdx     = (line5g + 700) % 7;
+      // get step
+      step            = table1[stepIdx];
+      // calculate octave, offset "3" correcting for the fact that an octave starts
+      // with C instead of F
+      octave =(3 - line5g + 700) / 7 + 5 - 100;
+      // qDebug("ExportMusicXml::unpitch2xml(%p) clef %d clef.po %d clefOffset %d staff.lines %d note.line %d line5g %d step %c oct %d",
+      //        note, ct, clefTable[ct].pitchOffset, clefOffset, st->lines(), note->line(), line5g, step, octave);
       }
 
 //---------------------------------------------------------
