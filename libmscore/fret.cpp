@@ -280,10 +280,12 @@ void FretDiagram::layout()
             h -= y;
             }
       setbbox(QRectF(x, y, w, h));
-//      Element::layout();      // alignment & offset
-//      setPos(ipos() + QPointF(-w * .5, - (h + _spatium * 1.5)));
-      setPos(0.0, 0.0);
+      setPos(-_spatium, -h - _spatium);
       adjustReadPos();
+
+      MStaff* mstaff = segment()->measure()->mstaff(staffIdx());
+      mstaff->distanceUp = qMax(mstaff->distanceUp, h + _spatium * 4);
+
       if (_harmony)
             _harmony->layout();
       }
