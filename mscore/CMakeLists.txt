@@ -93,7 +93,7 @@ QT4_WRAP_CPP (mocs
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
-      inspectorHairpin.h
+      inspectorHairpin.h qmlplugin.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -197,7 +197,7 @@ add_executable ( ${ExecutableName}
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
-      inspectorHairpin.cpp
+      inspectorHairpin.cpp qmlplugin.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

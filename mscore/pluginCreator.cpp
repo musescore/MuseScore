@@ -13,6 +13,7 @@
 #include "pluginCreator.h"
 #include "musescore.h"
 #include "plugins.h"
+#include "qmlplugin.h"
 #include "icons.h"
 #include "helpBrowser.h"
 

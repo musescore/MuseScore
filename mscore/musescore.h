@@ -30,6 +30,7 @@
 #include "ui_startdialog.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
+#include "musescoreCore.h"
 
 class Shortcut;
 class ScoreView;
@@ -57,7 +58,6 @@ class SynthControl;
 class PianorollEditor;
 class DrumrollEditor;
 class Staff;
-class ScoreView;
 class ScoreTab;
 class Drumset;
 class TextTools;
@@ -202,14 +202,12 @@ class MuseScoreApplication : public QtSingleApplication {
 //   MuseScore
 //---------------------------------------------------------
 
-class MuseScore : public QMainWindow {
+class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_OBJECT
 
+      ScoreView* cv;
       ScoreState _sstate;
       UpdateChecker* ucheck;
-      QList<Score*> scoreList;
-      Score* cs;              // current score
-      ScoreView* cv;          // current viewer
 
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
@@ -445,7 +443,7 @@ class MuseScore : public QMainWindow {
       void closePluginCreator();
 
    public slots:
-      void cmd(QAction* a);
+      virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
       void setPos(int tick);
       void searchTextChanged(const QString& s);
@@ -471,15 +469,12 @@ class MuseScore : public QMainWindow {
       bool checkDirty(Score*);
       PlayPanel* getPlayPanel() const { return playPanel; }
       QMenu* genCreateMenu(QWidget* parent = 0);
-      int appendScore(Score*);
+      virtual int appendScore(Score*);
       void midiCtrlReceived(int controller, int value);
       void showElementContext(Element* el);
       void cmdAppendMeasures(int);
       bool midiinEnabled() const;
       bool playEnabled() const;
-
-      Score* currentScore() const         { return cs; }
-      ScoreView* currentScoreView() const { return cv; }
 
       void incMag();
       void decMag();
@@ -493,7 +488,6 @@ class MuseScore : public QMainWindow {
       double getMag(ScoreView*) const;
       void setMag(double);
       bool noScore() const { return scoreList.isEmpty(); }
-      QList<Score*>& scores() { return scoreList; }
 
       TextTools* textTools();
       EditTools* editTools();
@@ -519,7 +513,7 @@ class MuseScore : public QMainWindow {
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }
-      void setCurrentView(int tabIdx, int idx);
+      virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
       ScoreState state() const { return _sstate; }
@@ -530,7 +524,7 @@ class MuseScore : public QMainWindow {
       Q_INVOKABLE void newFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
-      Score* openScore(const QString& fn);
+      virtual Score* openScore(const QString& fn);
       bool hasToCheckForUpdate();
       static bool unstable();
       bool eventFilter(QObject *, QEvent *);
@@ -639,9 +633,11 @@ class MuseScore : public QMainWindow {
       Inspector* getInspector() { return inspector; }
       QDeclarativeEngine* qml();
       PluginCreator* getPluginCreator() { return pluginCreator; }
+      ScoreView* currentScoreView() const { return cv; }
       };
 
 extern MuseScore* mscore;
+extern MuseScoreCore* mscoreCore;
 extern QString dataPath;
 
 extern QAction* getAction(const char*);
