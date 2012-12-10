@@ -46,59 +46,9 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/accidental.h"
 #include "libmscore/lyrics.h"
+#include "qmlplugin.h"
 
 extern QString localeName;
-
-//---------------------------------------------------------
-//   QmlPlugin
-//---------------------------------------------------------
-
-QmlPlugin::QmlPlugin(QDeclarativeItem* parent)
-   : QDeclarativeItem(parent)
-      {
-      }
-
-QmlPlugin::~QmlPlugin()
-      {
-      }
-
-//---------------------------------------------------------
-//   curScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::curScore() const
-      {
-      return mscore->currentScore();
-      }
-
-//---------------------------------------------------------
-//   scores
-//---------------------------------------------------------
-
-QDeclarativeListProperty<Score> QmlPlugin::scores()
-      {
-      return QDeclarativeListProperty<Score>(this, mscore->scores());
-      }
-
-//---------------------------------------------------------
-//   writeScore
-//---------------------------------------------------------
-
-bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
-      {
-      if(!s)
-            return false;
-      return mscore->saveAs(s, true, name, ext);
-      }
-
-//---------------------------------------------------------
-//   readScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::readScore(const QString& name)
-      {
-      return mscore->openScore(name);
-      }
 
 //---------------------------------------------------------
 //   registerPlugin
@@ -425,53 +375,6 @@ void MuseScore::pluginTriggered(int idx)
       if (cs)
             cs->endCmd();
       endCmd();
-      }
-
-//---------------------------------------------------------
-//   newElement
-//---------------------------------------------------------
-
-Element* QmlPlugin::newElement(int t)
-      {
-      Score* score = curScore();
-      if (score == 0)
-            return 0;
-      return Element::create(Element::ElementType(t), score);
-      }
-
-//---------------------------------------------------------
-//   newScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
-      {
-      if (mscore->currentScore()) {
-            mscore->currentScore()->endCmd();
-            mscore->endCmd();
-            }
-      Score* score = new Score(MScore::defaultStyle());
-      int view = mscore->appendScore(score);
-      mscore->setCurrentView(0, view);
-      qApp->processEvents();
-      score->setName(name);
-      score->appendPart(part);
-      score->appendMeasures(measures);
-      score->doLayout();
-      score->startCmd();
-      return score;
-      }
-
-//---------------------------------------------------------
-//   cmd
-//---------------------------------------------------------
-
-void QmlPlugin::cmd(const QString& s)
-      {
-      Shortcut* sc = Shortcut::getShortcut(s.toAscii().data());
-      if (sc)
-            mscore->cmd(sc->action());
-      else
-            printf("QmlPlugin:cmd: not found <%s>\n", qPrintable(s));
       }
 
 //---------------------------------------------------------

@@ -20,6 +20,8 @@
 #include "testutils.h"
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
+#include "mscore/musescoreCore.h"
+#include "mscore/shortcut.h"
 
 #ifdef OMR
 extern Score::FileError importPdf(Score*, const QString&);
@@ -32,6 +34,10 @@ bool noGui = true;
 QString revision;
 
 Score* score;
+MuseScoreCore* mscoreCore;
+QString dataPath;
+QIcon* icons[0];
+Shortcut Shortcut::sc[1] = { Shortcut() };
 
 //---------------------------------------------------------
 //   Preferences

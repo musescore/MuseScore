@@ -30,6 +30,7 @@ class TestBenchmark : public QObject, public MTest
 
    private slots:
       void initTestCase();
+      void benchmark3();
       void benchmark1();
       void benchmark2();
       };
@@ -46,6 +47,17 @@ void TestBenchmark::initTestCase()
 //---------------------------------------------------------
 //   benchmark
 //---------------------------------------------------------
+
+void TestBenchmark::benchmark3()
+      {
+      QString path = root + "/" + DIR + "goldberg.mscx";
+      score = new Score(mscore->baseStyle());
+      score->setName(path);
+      score->setTestMode(true);
+      QBENCHMARK {
+            score->loadMsc(path, false);
+            }
+      }
 
 void TestBenchmark::benchmark1()
       {
