@@ -750,7 +750,7 @@
             <string>offset in Space units</string>
            </property>
            <property name="text">
-            <string>Space</string>
+            <string extracomment="spatium unit">Space</string>
            </property>
           </widget>
          </item>
@@ -828,14 +828,14 @@
              <property name="suffix">
               <string>sp</string>
              </property>
-             <property name="singleStep">
-              <double>0.10</double>
-             </property>
              <property name="minimum">
-              <double>0.0</double>
+              <double>0.000000000000000</double>
              </property>
              <property name="maximum">
-              <double>999.0</double>
+              <double>999.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -866,14 +866,14 @@
              <property name="suffix">
               <string>sp</string>
              </property>
-             <property name="singleStep">
-              <double>0.50</double>
-             </property>
              <property name="minimum">
-              <double>0.0</double>
+              <double>0.000000000000000</double>
              </property>
              <property name="maximum">
-              <double>999.0</double>
+              <double>999.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
