@@ -25,6 +25,9 @@
 static const int DEFAULT_STRINGS = 6;
 static const int DEFAULT_FRETS = 5;
 
+//    parent() is Segment or Box
+//
+
 //---------------------------------------------------------
 //   FretDiagram
 //---------------------------------------------------------
@@ -32,7 +35,7 @@ static const int DEFAULT_FRETS = 5;
 FretDiagram::FretDiagram(Score* score)
    : Element(score)
       {
-      setFlag(ELEMENT_MOVABLE, true);
+      setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF | ELEMENT_SELECTABLE);
       _strings    = DEFAULT_STRINGS;
       _frets      = DEFAULT_FRETS;
       _maxFrets   = 24;
@@ -88,6 +91,7 @@ FretDiagram::~FretDiagram()
       delete _fingering;
       }
 
+#if 1
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
@@ -107,6 +111,7 @@ QPointF FretDiagram::pagePos() const
       else
             return Element::pagePos();
       }
+#endif
 
 //---------------------------------------------------------
 //   dragAnchor
@@ -280,14 +285,21 @@ void FretDiagram::layout()
             h -= y;
             }
       setbbox(QRectF(x, y, w, h));
+
       setPos(-_spatium, -h - _spatium);
       adjustReadPos();
 
-      MStaff* mstaff = segment()->measure()->mstaff(staffIdx());
-      mstaff->distanceUp = qMax(mstaff->distanceUp, h + _spatium * 4);
-
       if (_harmony)
             _harmony->layout();
+
+      if (parent() == 0)
+            return;
+      Measure* m     = segment()->measure();
+      int idx        = staffIdx();
+      MStaff* mstaff = m->mstaff(idx);
+      System* system = m->system();
+      qreal yp       = pos().y() + system->staff(idx)->y() + system->y();
+      mstaff->distanceUp = qMax(mstaff->distanceUp, h + _spatium * 2 - yp);
       }
 
 //---------------------------------------------------------
@@ -422,6 +434,7 @@ void FretDiagram::add(Element* e)
       e->setParent(this);
       if (e->type() == HARMONY) {
             _harmony = static_cast<Harmony*>(e);
+            _harmony->setTrack(track());
             }
       else
             qWarning("FretDiagram: cannot add <%s>\n", e->name());
@@ -457,14 +470,15 @@ Element* FretDiagram::drop(const DropData& data)
       Element* e = data.element;
       if (e->type() == HARMONY) {
             // TODO: make undoable
-            _harmony = static_cast<Harmony*>(e);
-            score()->setUpdateAll(true);
+            Harmony* h = static_cast<Harmony*>(e);
+            h->setParent(this);
+            score()->undoAddElement(h);
             }
       else {
+            qWarning("FretDiagram: cannot drop <%s>\n", e->name());
             delete e;
             e = 0;
             }
-            qWarning("FretDiagram: cannot drop <%s>\n", e->name());
       return e;
       }
 

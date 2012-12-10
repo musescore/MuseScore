@@ -59,6 +59,8 @@
 #include "libmscore/notedot.h"
 #include "libmscore/spacer.h"
 #include "libmscore/box.h"
+#include "libmscore/fret.h"
+#include "libmscore/harmony.h"
 
 extern bool useFactorySettings;
 
@@ -409,6 +411,12 @@ void Debugger::updateList(Score* s)
                               foreach(Element* s, segment->annotations()) {
                                     if (s->type() == Element::SYMBOL || s->type() == Element::IMAGE)
                                           addBSymbol(segItem, static_cast<BSymbol*>(s));
+                                    else if (s->type() == Element::FRET_DIAGRAM) {
+                                          ElementItem* fdi = new ElementItem(segItem, s);
+                                          FretDiagram* fd = static_cast<FretDiagram*>(s);
+                                          if (fd->harmony())
+                                                new ElementItem(fdi, fd->harmony());
+                                          }
                                     else
                                           new ElementItem(segItem, s);
                                     }

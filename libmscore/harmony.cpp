@@ -19,6 +19,7 @@
 #include "segment.h"
 #include "chordlist.h"
 #include "mscore.h"
+#include "fret.h"
 
 //---------------------------------------------------------
 //   harmonyName
@@ -536,11 +537,18 @@ void Harmony::layout()
             return;
             }
       textStyle().layout(this);
-      if (parent()) {
-            Measure* m = measure();
+      if (!parent()) {
+            setPos(QPointF(0.0, 0.0));
+            return;
+            }
+      if (parent()->type() == SEGMENT) {
+            Measure* m = static_cast<Measure*>(parent()->parent());
             qreal yy = track() < 0 ? 0.0 : m->system()->staff(track() / VOICES)->y();
             setPos(ipos() + QPointF(0.0, yy));
             }
+      else
+            setPos(QPointF(0.0, 0.0));
+
       QRectF bb;
       foreach(const TextSegment* ts, textList)
             bb |= ts->boundingRect().translated(ts->x, ts->y);
@@ -548,10 +556,16 @@ void Harmony::layout()
       if (!readPos().isNull()) {
             // version 114 is measure based
             // rebase to segment
-            if (score()->mscVersion() == 114)
-                  setReadPos(readPos() - segment()->pos());
+            if (score()->mscVersion() == 114) {
+                  setReadPos(readPos() - parent()->pos());
+                  }
             setUserOff(readPos() - ipos());
             setReadPos(QPointF());
+            }
+      if (parent()->type() == FRET_DIAGRAM) {
+            MStaff* mstaff = measure()->mstaff(staffIdx());
+            qreal dist = -(bbox().top());
+            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
             }
       }
 
@@ -772,7 +786,11 @@ QLineF Harmony::dragAnchor() const
       qreal xp = 0.0;
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
-      qreal yp = measure()->system()->staffY(staffIdx());
+      qreal yp;
+      if (parent()->type() == SEGMENT)
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffY(staffIdx());
+      else
+            yp = parent()->canvasPos().y();
       QPointF p(xp, yp);
       return QLineF(p, canvasPos());
       }
@@ -847,5 +865,27 @@ void Harmony::clearDegrees()
 const QList<HDegree>& Harmony::degreeList() const
       {
       return _degreeList;
+      }
+
+//---------------------------------------------------------
+//   segment
+//---------------------------------------------------------
+
+Segment* Harmony::segment() const
+      {
+      if (parent()->type() == FRET_DIAGRAM)
+            return static_cast<FretDiagram*>(parent())->segment();
+      if (parent()->type() == SEGMENT)
+            return static_cast<Segment*>(parent());
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   measure
+//---------------------------------------------------------
+
+Measure* Harmony::measure() const
+      {
+      return segment()->measure();
       }
 
