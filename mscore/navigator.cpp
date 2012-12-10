@@ -347,3 +347,4 @@ void Navigator::paintEvent(QPaintEvent* ev)
             p.translate(-pos);
             }
       }
+
