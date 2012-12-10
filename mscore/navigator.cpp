@@ -156,11 +156,9 @@ void Navigator::setScoreView(ScoreView* v)
 void Navigator::setScore(Score* v)
       {
       _cv = 0;
-      if (v) {
-            rescale();
-            setViewRect(QRect());
-            }
       _score = v;
+      rescale();
+      setViewRect(QRect());
       update();
       }
 
@@ -170,6 +168,10 @@ void Navigator::setScore(Score* v)
 
 void Navigator::rescale()
       {
+      if (!_score) {
+            setFixedWidth(0);
+            return;
+            }
       if (_score->pages().isEmpty())
             return;
       int h       = height();
