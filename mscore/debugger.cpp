@@ -552,7 +552,9 @@ void Debugger::updateElement(Element* el)
                   case Element::TIE:           ew = new TieView;           break;
                   case Element::VOLTA:         ew = new VoltaView;         break;
                   case Element::VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
-                  case Element::TEXTLINE:         ew = new TextLineView;         break;
+                  case Element::PEDAL:
+                  case Element::TEXTLINE:      ew = new TextLineView;         break;
+                  case Element::PEDAL_SEGMENT:
                   case Element::TEXTLINE_SEGMENT: ew = new TextLineSegmentView;  break;
                   case Element::LYRICS:        ew = new LyricsView;        break;
                   case Element::BEAM:          ew = new BeamView;          break;

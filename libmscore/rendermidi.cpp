@@ -309,6 +309,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                   if (e->type() == Element::PEDAL) {
                         Segment* s1 = static_cast<Segment*>(e->startElement());
                         Segment* s2 = static_cast<Segment*>(e->endElement());
+                        if (s2 == 0) {
+                              qDebug("CollectMeasureEvents: spanner %s: no end element at measure %d, staff %d",
+                                 e->name(), s1->measure()->no(), e->staffIdx());
+                              continue;
+                              }
                         Staff* staff = e->staff();
 
                         int channel = staff->channel(s1->tick(), 0);
