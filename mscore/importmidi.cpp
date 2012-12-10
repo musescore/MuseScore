@@ -1075,19 +1075,26 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
                         Segment* s = measure->getSegment(chord, tick);
                         s->add(chord);
 
+                        int actualTicks = chord->actualTicks();
                   	foreach (MNote* n, notes) {
                               QList<Event>& nl = n->mc.notes();
                               for (int i = 0; i < nl.size(); ++i) {
                                     Event mn = nl[i];
                         		Note* note = new Note(score);
-                                    // note->setPitch(mn.pitch(), mn.tpc());
+                                    NoteEvent ne;
                                     note->setPitch(mn.pitch(), pitch2tpc(mn.pitch()));
                   	      	chord->add(note);
-                                    // note->setOnTimeUserOffset(mn.noquantOntime() - tick);
-                                    int ot = (mn.noquantOntime() + mn.noquantDuration()) - (tick + chord->actualTicks());
-                                    // note->setOffTimeUserOffset(ot);
+                                    int ontime  = (mn.noquantOntime() - tick) * 1000 / actualTicks;
+                                    int offtime = mn.noquantOntime() + mn.noquantDuration() - tick;
+                                    offtime = offtime * 1000 / actualTicks;
+                                    ne.setOntime(ontime);
+                                    ne.setLen(offtime - ontime);
                                     note->setVeloType(MScore::USER_VAL);
                                     note->setVeloOffset(mn.velo());
+
+                                    NoteEventList el;
+                                    el.append(ne);
+                                    note->setPlayEvents(el);
 
                                     if (useDrumset) {
                                           if (!drumset->isValid(mn.pitch())) {
@@ -1234,6 +1241,7 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                   chord->setDuration(d.fraction());
                   ctick += len;
 
+                  int actualTicks = chord->actualTicks();
             	foreach (MNote* n, notes) {
                         const QList<Event>& nl = n->mc.notes();
                         for (int i = 0; i < nl.size(); ++i) {
@@ -1241,11 +1249,19 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                   		Note* note = new Note(score);
                               note->setPitch(mn.pitch(), mn.tpc());
             	      	chord->add(note);
-                              // note->setOnTimeUserOffset(mn.noquantOntime() - tick);
-                              int ot = (mn.noquantOntime() + mn.noquantDuration()) - (tick + chord->actualTicks());
-                              // note->setOffTimeUserOffset(ot);
                               note->setVeloType(MScore::USER_VAL);
                               note->setVeloOffset(mn.velo());
+
+                              NoteEvent ne;
+                              int ontime  = (mn.noquantOntime() - tick) * 1000 / actualTicks;
+                              int offtime = mn.noquantOntime() + mn.noquantDuration() - tick;
+                              offtime = offtime * 1000 / actualTicks;
+                              ne.setOntime(ontime);
+                              ne.setLen(offtime - ontime);
+
+                              NoteEventList el;
+                              el.append(ne);
+                              note->setPlayEvents(el);
 
                               if (n->ties[i]) {
                                     n->ties[i]->setEndNote(note);
