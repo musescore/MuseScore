@@ -877,7 +877,7 @@ void Note::read(const QDomElement& de)
                         _spannerBack.append(e);
                         }
                   else
-                        qDebug("Measure::read(): cannot find spanner %d", id);
+                        qDebug("Note::read(): cannot find spanner %d", id);
                   }
             else if (tag == "TextLine") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
