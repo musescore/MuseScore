@@ -944,7 +944,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 qreal System::staffY(int staffIdx) const
       {
       if (_staves.size() <= staffIdx) {
-            qDebug("staffY: staves %d <= staff %d, vbox %d",
+            qDebug("staffY: staves %d <= staffIdx %d, vbox %d",
                _staves.size(), staffIdx, _vbox);
             return pagePos().y();
             }
