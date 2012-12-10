@@ -2815,21 +2815,25 @@ bool Measure::isRepeatMeasure(Part* part)
       }
 
 //---------------------------------------------------------
-//   userDistanceDown
+//   distanceDown
 //---------------------------------------------------------
 
-qreal Measure::userDistanceDown(int i) const
+qreal Measure::distanceDown(int i) const
       {
-      return staves[i]->_vspacerDown ? staves[i]->_vspacerDown->gap() : .0;
+      if (staves[i]->_vspacerDown)
+            return qMax(staves[i]->distanceDown, staves[i]->_vspacerDown->gap());
+      return staves[i]->distanceDown;
       }
 
 //---------------------------------------------------------
-//   userDistanceUp
+//   distanceUp
 //---------------------------------------------------------
 
-qreal Measure::userDistanceUp(int i) const
+qreal Measure::distanceUp(int i) const
       {
-      return staves[i]->_vspacerUp ? staves[i]->_vspacerUp->gap() : .0;
+      if (staves[i]->_vspacerUp)
+            return qMax(staves[i]->distanceUp, staves[i]->_vspacerUp->gap());
+      return staves[i]->distanceUp;
       }
 
 //---------------------------------------------------------

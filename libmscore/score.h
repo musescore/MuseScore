@@ -814,6 +814,7 @@ class Score : public QObject {
 
       Q_INVOKABLE void doLayout();
       void layoutSystems();
+      void layoutSystems2();
       void layoutLinear();
       void layoutPages();
       void layoutSystemsUndoRedo();
