@@ -34,6 +34,7 @@ SimpleText::SimpleText(const SimpleText& st)
    : Element(st)
       {
       _text                = st._text;
+      _layout              = st._layout;
       _textStyle           = st._textStyle;
       _layoutToParentWidth = st._layoutToParentWidth;
       frame                = st.frame;
@@ -53,7 +54,7 @@ void SimpleText::draw(QPainter* p) const
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
       p->setPen(textColor());
-      foreach(const TLine& t, _text)
+      foreach(const TLine& t, _layout)
             p->drawText(t.pos, t.text);
       }
 
@@ -111,21 +112,59 @@ QColor SimpleText::textColor() const
 
 void SimpleText::layout()
       {
-      int n = _text.size();
+      QFontMetricsF fm(_textStyle.fontPx(spatium()));
+      QStringList sl = _text.split('\n');
+      _layout.clear();
+      if (parent() && layoutToParentWidth()) {
+            Element* e = parent();
+            qreal w = e->width();
+            if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
+                  Box* b = static_cast<Box*>(e);
+                  w -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
+                  }
+            foreach(QString s, sl) {
+                  if (fm.width(s) < w)
+                        _layout.append(TLine(s));
+                  else {
+                        int n = s.size();
+                        int sidx = 0;
+                        int eidx = n-1;
+                        while (eidx > sidx) {
+                              while (fm.width(s.mid(sidx, eidx-sidx+1)) > w) {
+                                    --eidx;
+                                    while (eidx > sidx) {
+                                          if (s[eidx].isSpace())
+                                                break;
+                                          --eidx;
+                                          }
+                                    }
+                              if (eidx == sidx)
+                                   eidx = n-1;
+                              _layout.append(TLine(s.mid(sidx, eidx-sidx+1)));
+                              sidx = eidx;
+                              eidx = n-1;
+                              }
+                        }
+                  }
+            }
+      else {
+            foreach(QString s, sl)
+                  _layout.append(TLine(s));
+            }
+      int n = _layout.size();
       if (!n) {
             setPos(QPointF());
             setbbox(QRectF());
             return;
             }
 
-      QFontMetricsF fm(_textStyle.fontPx(spatium()));
       QPointF o(_textStyle.offset(spatium()));
 
       QRectF bb;
       qreal lh = lineHeight();
       qreal ly = .0;
       for (int i = 0; i < n; ++i) {
-            TLine* t = &_text[i];
+            TLine* t = &_layout[i];
 
             QRectF r(fm.tightBoundingRect(t->text));
 
@@ -209,10 +248,7 @@ qreal SimpleText::baseLine() const
 
 void SimpleText::setText(const QString& s)
       {
-      QStringList sl = s.split('\n');
-      _text.clear();
-      foreach(QString s, sl)
-            _text.append(TLine(s));
+      _text = s;
       }
 
 //---------------------------------------------------------
@@ -221,15 +257,6 @@ void SimpleText::setText(const QString& s)
 
 QString SimpleText::getText() const
       {
-      QString s;
-      int n = _text.size();
-      if (n == 0)
-            return s;
-      s = _text[0].text;
-      for (int i = 1; i < n; ++i) {
-            s += '\n';
-            s += _text[i].text;
-            }
-      return s;
+      return _text;
       }
 
