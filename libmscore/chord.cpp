@@ -1419,7 +1419,7 @@ void Chord::layout()
                   // hack for use in palette
                   //
                   int n = _notes.size();
-                  for (int i = 0; i < n; ++n) {
+                  for (int i = 0; i < n; i++) {
                         Note* note = _notes.at(i);
                         note->layout();
                         qreal x = 0.0;
