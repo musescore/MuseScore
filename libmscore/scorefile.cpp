@@ -1025,8 +1025,9 @@ bool Score::read(const QDomElement& de)
                   st->setBarLineFrom(st->lines()*2);
             // check spanTo
             Staff* stTo = st->barLineSpan() <= 1 ? st : staff(idx + st->barLineSpan() - 1);
-            int maxBarLineTo        = stTo->lines()*2;
-            int defaultBarLineTo    = (stTo->lines() - 1) * 2;
+            // 1-line staves have special bar line spans
+            int maxBarLineTo        = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines()*2;
+            int defaultBarLineTo    = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines() - 1) * 2;
             if(st->barLineTo() == UNKNOWN_BARLINE_TO)
                   st->setBarLineTo(defaultBarLineTo);
             if(st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
