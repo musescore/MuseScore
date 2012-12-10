@@ -163,10 +163,8 @@ class Measure : public MeasureBase {
       Text* noText() const                 { return _noText;      }
       void setNo(int n)                    { _no = n;             }
       void setNoOffset(int n)              { _noOffset = n;       }
-      virtual qreal distanceUp(int i) const   { return staves[i]->distanceUp; }
-      virtual qreal distanceDown(int i) const { return staves[i]->distanceDown; }
-      virtual qreal userDistanceUp(int i) const;
-      virtual qreal userDistanceDown(int i) const;
+      virtual qreal distanceUp(int i) const;
+      virtual qreal distanceDown(int i) const;
 
       qreal minWidth1() const;
       qreal minWidth2() const;

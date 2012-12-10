@@ -79,10 +79,10 @@ class FSymbol : public Element {
 
       virtual qreal baseLine() const { return 0.0; }
       Segment* segment() const       { return (Segment*)parent(); }
-      QFont font() const           { return _font; }
-      int code() const             { return _code; }
+      QFont font() const             { return _font; }
+      int code() const               { return _code; }
       void setFont(const QFont& f);
-      void setCode(int val)        { _code = val; }
+      void setCode(int val)          { _code = val; }
       };
 
 #endif

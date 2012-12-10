@@ -1074,6 +1074,7 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
                         chord->setDuration(d.fraction());
                         Segment* s = measure->getSegment(chord, tick);
                         s->add(chord);
+                        chord->setUserPlayEvents(true);
 
                         int actualTicks = chord->actualTicks();
                   	foreach (MNote* n, notes) {
@@ -1240,6 +1241,7 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                   chord->setDurationType(d);
                   chord->setDuration(d.fraction());
                   ctick += len;
+                  chord->setUserPlayEvents(true);
 
                   int actualTicks = chord->actualTicks();
             	foreach (MNote* n, notes) {

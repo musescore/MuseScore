@@ -609,10 +609,8 @@ void Score::doLayout()
 
       if (layoutMode() == LayoutLine)
             layoutLinear();
-      else {
+      else
             layoutSystems();  // create list of systems
-            layoutPages();    // create list of pages
-            }
 
       //---------------------------------------------------
       //   place Spanner & beams
@@ -655,6 +653,13 @@ void Score::doLayout()
                         e->layout();
                   }
             }
+
+
+      if (layoutMode() != LayoutLine) {
+            layoutSystems2();
+            layoutPages();    // create list of pages
+            }
+
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layout2();
 
@@ -2059,6 +2064,22 @@ void Score::layoutSystems()
       }
 
 //---------------------------------------------------------
+//   layoutSystems2
+//    update distanceUp, distanceDown
+//---------------------------------------------------------
+
+void Score::layoutSystems2()
+      {
+      int n = _systems.size();
+      for (int i = 0; i < n; ++i) {
+            System* system = _systems.at(i);
+            if (!system->isVbox()) {
+                  system->layout2();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutLinear
 //---------------------------------------------------------
 
@@ -2272,14 +2293,14 @@ void Score::layoutPages()
                         }
                   else
                         tmargin = qMax(pC.tm(), sub);
-                  bmargin = qMax(pC.bm(), slb);
+                  bmargin = pC.bm();
                   }
 
             tmargin     = qMax(tmargin, pC.prevDist);
             pC.prevDist = bmargin;
 
             qreal h = pC.sr.height();
-            if (pC.lastSystem && (pC.y + h + tmargin + bmargin > pC.ey)) {
+            if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
                   //
                   // prepare next page
                   //

@@ -330,9 +330,7 @@ void System::layout2()
             qreal distUp   = 0.0;
             foreach(MeasureBase* m, ml) {
                   distDown = qMax(distDown, m->distanceDown(staffIdx));
-                  distDown = qMax(distDown, m->userDistanceDown(staffIdx));
                   distUp   = qMax(distUp,   m->distanceUp(staffIdx));
-                  distUp   = qMax(distUp,   m->userDistanceUp(staffIdx));
                   }
             s->setDistanceDown(distDown);
             s->setDistanceUp(distUp);
