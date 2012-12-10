@@ -24,6 +24,7 @@
 #include "stafftype.h"
 #include "chord.h"
 #include "measure.h"
+#include "fret.h"
 
 //---------------------------------------------------------
 //   keydiff2Interval
@@ -315,7 +316,11 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
                         if (mode == TRANSPOSE_DIATONICALLY) {
-                              int tick = h->segment()->tick();
+                              int tick = 0;
+                              if (h->parent()->type() == Element::SEGMENT)
+                                    tick = static_cast<Segment*>(h->parent())->tick();
+                              else if (h->parent()->type() == Element::FRET_DIAGRAM)
+                                    tick = static_cast<FretDiagram*>(h->parent())->segment()->tick();
                               int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);

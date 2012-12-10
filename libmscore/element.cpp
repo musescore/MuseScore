@@ -507,6 +507,7 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ELEMENT_ON_STAFF) {
+            Q_ASSERT(parent()->type() == SEGMENT);
             System* system = static_cast<Segment*>(parent())->measure()->system();
             if (system) {
                   int si = staffIdx();
@@ -533,6 +534,7 @@ QPointF Element::canvasPos() const
       if (parent() == 0)
             return p;
       if (_flags & ELEMENT_ON_STAFF) {
+            Q_ASSERT(parent()->type() == SEGMENT);
             System* system = static_cast<Segment*>(parent())->measure()->system();
             if (system) {
                   int si = staffIdx();

@@ -50,7 +50,6 @@ class FretDiagram : public Element {
       virtual void draw(QPainter*) const;
       virtual FretDiagram* clone() const { return new FretDiagram(*this); }
       Segment* segment() const           { return (Segment*)parent(); }
-//      Measure* measure() const           { return (Measure*)parent()->parent(); }
 
       virtual ElementType type() const   { return FRET_DIAGRAM; }
       virtual void layout();
@@ -77,6 +76,8 @@ class FretDiagram : public Element {
 
       char* dots()      { return _dots;   }
       char* marker()    { return _marker; }
+      Harmony* harmony() const { return _harmony; }
+
       char* fingering() { return _fingering; }
       void init(Tablature*, Chord*);
 
