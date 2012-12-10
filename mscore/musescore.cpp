@@ -83,6 +83,7 @@
 #include "msynth/synti.h"
 
 MuseScore* mscore;
+MuseScoreCore* mscoreCore;
 
 bool enableExperimental = false;
 
@@ -2367,6 +2368,7 @@ int main(int argc, char* av[])
             qApp->setWindowIcon(*icons[window_ICON]);
       initProfile();
       mscore = new MuseScore();
+      mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
 
       if (!noSeq) {

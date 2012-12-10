@@ -11,10 +11,11 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      hairpin note compat link measure beam split join
-      timesig layout element midi dynamic plugins
-      )
+set(TARGET tst_plugins)
 
-# midi - does not work
+#// QT4_WRAP_CPP (mocs
+#//      ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h
+#//      )
+
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

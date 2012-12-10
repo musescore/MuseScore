@@ -23,14 +23,21 @@ if (OMR)
 set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
+QT4_WRAP_CPP (mtestMocs
+      ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h
+      )
+
 add_library(
       testutils STATIC
+      ${mtestMocs}
       testutils.cpp
       mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${OMR_SRC}
       omr
       )
@@ -69,3 +76,4 @@ subdirs(
 if (OMR)
 subdirs(omr)
 endif (OMR)
+

@@ -2268,7 +2268,7 @@ void ScoreView::setMag(int idx, double mag)
 
 void ScoreView::focusInEvent(QFocusEvent* event)
       {
-      if(this != mscore->currentScoreView())
+      if (this != mscore->currentScoreView())
          mscore->setCurrentScoreView(this);
 
       if (mscore->splitScreen()) {

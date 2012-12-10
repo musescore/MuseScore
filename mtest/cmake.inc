@@ -31,9 +31,9 @@ target_link_libraries(
       )
 
 if (NOT MINGW)
-      target_link_libraries(${TARGET} 
-      z 
-      dl       
+      target_link_libraries(${TARGET}
+      z
+      dl
       pthread
       fontconfig
       freetype)

@@ -13,12 +13,13 @@
 
 #include "globals.h"
 #include "shortcut.h"
-#include "musescore.h"
+// #include "musescore.h"
 #include "icons.h"
 #include "libmscore/xml.h"
 
 bool Shortcut::dirty = false;
 QMap<QString, Shortcut*> Shortcut::_shortcuts;
+extern QString dataPath;
 
 //---------------------------------------------------------
 //   Shortcut
