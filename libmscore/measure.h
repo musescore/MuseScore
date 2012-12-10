@@ -143,7 +143,6 @@ class Measure : public MeasureBase {
       virtual void read(const QDomElement&, int idx);
       void read(const QDomElement& d) { read(d, 0); }
       virtual void write(Xml&, int, bool writeSystemElements) const;
-//      virtual void write(Xml&) const;
       void writeBox(Xml&) const;
       void readBox(const QDomElement&);
       virtual bool isEditable() const { return false; }

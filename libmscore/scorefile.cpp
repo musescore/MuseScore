@@ -962,42 +962,66 @@ bool Score::read(const QDomElement& de)
 
       // check slurs
       foreach(Spanner* s, spanner) {
+            if (!s->startElement() || !s->endElement()) {
+                  qDebug("remove incomplete Spanner %s", s->name());
+                  switch (s->anchor()) {
+                        case Spanner::ANCHOR_SEGMENT: {
+                              if (s->startElement()) {
+                                    Segment* seg = static_cast<Segment*>(s->startElement());
+                                    seg->removeSpannerFor(s);
+                                    }
+                              if (s->endElement()) {
+                                    Segment* seg = static_cast<Segment*>(s->endElement());
+                                    seg->removeSpannerBack(s);
+                                    }
+                              Segment* seg = static_cast<Segment*>(s->parent());
+                              if (seg->isEmpty())
+                                    seg->measure()->remove(seg);
+                              delete s;
+                              }
+                              break;
+                        case Spanner::ANCHOR_CHORD:
+                              if (s->startElement()) {
+                                    ChordRest* cr = static_cast<ChordRest*>(s->startElement());
+                                    cr->removeSpannerFor(s);
+                                    }
+                              if (s->endElement()) {
+                                    ChordRest* cr = static_cast<ChordRest*>(s->endElement());
+                                    cr->removeSpannerBack(s);
+                                    }
+                              delete s;
+                              break;
+
+                        case Spanner::ANCHOR_NOTE:
+                        case Spanner::ANCHOR_MEASURE:
+                              break;
+                        }
+                  continue;
+                  }
             if (s->type() != Element::SLUR)
                   continue;
+
             Slur* slur = static_cast<Slur*>(s);
 
-            if (!slur->startElement() || !slur->endElement()) {
-                  qDebug("incomplete Slur\n");
-                  if (slur->startElement()) {
-                        qDebug("  front %d\n", static_cast<ChordRest*>(slur->startElement())->tick());
-                        static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                        }
-                  if (slur->endElement()) {
-                        qDebug("  back %d\n", static_cast<ChordRest*>(slur->endElement())->tick());
-                        static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
-                        }
+            ChordRest* cr1 = (ChordRest*)(slur->startElement());
+            ChordRest* cr2 = (ChordRest*)(slur->endElement());
+            if (cr1->tick() > cr2->tick()) {
+                  qDebug("Slur invalid start-end tick %d-%d\n", cr1->tick(), cr2->tick());
+                  slur->setStartElement(cr2);
+                  slur->setEndElement(cr1);
                   }
-            else {
-                  ChordRest* cr1 = (ChordRest*)(slur->startElement());
-                  ChordRest* cr2 = (ChordRest*)(slur->endElement());
-                  if (cr1->tick() > cr2->tick()) {
-                        qDebug("Slur invalid start-end tick %d-%d\n", cr1->tick(), cr2->tick());
-                        slur->setStartElement(cr2);
-                        slur->setEndElement(cr1);
-                        }
-                  int n1 = 0;
-                  int n2 = 0;
-                  foreach(Spanner* s, cr1->spannerFor()) {
-                        if (s == slur)
-                              ++n1;
-                        }
-                  foreach(Spanner* s, cr2->spannerBack()) {
-                        if (s == slur)
-                              ++n2;
-                        }
-                  if (n1 != 1 || n2 != 1) {
-                        qDebug("Slur references bad: %d %d\n", n1, n2);
-                        }
+            int n1 = 0;
+            int n2 = 0;
+            foreach(Spanner* s, cr1->spannerFor()) {
+                  if (s == slur)
+                        ++n1;
+                  }
+            foreach(Spanner* s, cr2->spannerBack()) {
+                  if (s == slur)
+                        ++n2;
+                  }
+            if (n1 != 1 || n2 != 1) {
+                  qDebug("Slur references bad: %d %d\n", n1, n2);
                   }
             }
       spanner.clear();
