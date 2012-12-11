@@ -19,7 +19,7 @@
 
 static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
 
-Tablature guitarTablature(13, 6, guitarStrings);
+Tablature guitarTablature(23, 6, guitarStrings);
 
 //---------------------------------------------------------
 //   Tablature
@@ -230,15 +230,9 @@ void Tablature::fretChord(Chord * chord) const
                   // if we run out of strings
                   if(nTempString >= strings()) {
                         // no way to fit this chord in this tab:
-                        // mark as fretting conflict this note...
+                        // mark this note as fretting conflict
                         note->setFretConflict(true);
-//                        // and any note already scanned and set on the same string
-//                        for(nCount2=chord->notes().size()-1; nCount2 > nCount; nCount2--) {
-//                              note2 = chord->notes().at(nCount2);
-//                              if(note2->string() == nNewString)
-//                                    note2->setFretConflict(true);
-//                              }
-                        continue;
+//                        continue;
                         }
                   }
 
