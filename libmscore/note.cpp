@@ -1167,7 +1167,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if (s->subtype() == Segment::SegChordRest && s->element(track()))
+                        if ((s->subtype() == Segment::SegChordRest || s->subtype() == Segment::SegGrace) && s->element(track()))
                               break;
                         s = s->next1();
                         }
