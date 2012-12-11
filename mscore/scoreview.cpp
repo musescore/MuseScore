@@ -3511,8 +3511,11 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             m = static_cast<const Segment*>(el)->measure();
       else if (el->type() == Element::LYRICS)
             m = static_cast<const Lyrics*>(el)->measure();
-      else if (el->type() == Element::HARMONY)
-            m = static_cast<const Harmony*>(el)->measure();
+      else if (el->type() == Element::HARMONY && el->parent()->type() == Element::SEGMENT)
+            m = static_cast<const Segment*>(el->parent())->measure();
+      else if (el->type() == Element::HARMONY && el->parent()->type() == Element::FRET_DIAGRAM
+         && el->parent()->parent()->type() == Element::SEGMENT)
+            m = static_cast<const Segment*>(el->parent()->parent())->measure();
       else if (el->type() == Element::MEASURE)
             m = static_cast<const Measure*>(el);
       else
@@ -4614,13 +4617,12 @@ void ScoreView::modifyElement(Element* el)
 
 void ScoreView::chordTab(bool back)
       {
-      Harmony* cn      = (Harmony*)editObject;
-      Segment* segment = cn->segment();
-      int track        = cn->track();
-      if (segment == 0) {
-            qDebug("chordTab: no segment");
+      Harmony* cn = static_cast<Harmony*>(editObject);
+      if (!cn->parent() || cn->parent()->type() != Element::SEGMENT)
+            qDebug("chordTab: no segment parent");
             return;
-            }
+      Segment* segment = static_cast<Segment*>(cn->parent());
+      int track        = cn->track();
 
       // search next chord
       if (back)

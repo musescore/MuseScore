@@ -319,8 +319,10 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                               int tick = 0;
                               if (h->parent()->type() == Element::SEGMENT)
                                     tick = static_cast<Segment*>(h->parent())->tick();
-                              else if (h->parent()->type() == Element::FRET_DIAGRAM)
-                                    tick = static_cast<FretDiagram*>(h->parent())->segment()->tick();
+                              else if (h->parent()->type() == Element::FRET_DIAGRAM
+                                 && h->parent()->parent()->type() == Element::SEGMENT) {
+                                    tick = static_cast<Segment*>(h->parent()->parent())->tick();
+                                    }
                               int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);

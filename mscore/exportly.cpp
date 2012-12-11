@@ -893,7 +893,9 @@ void ExportLy::storeChord(struct InstructionAnchor chordanchor)
       aux->cd.chrName = chord2Name(chordroot);
       n=thisHarmony.chrName;
 
-      aux->cd.tickpos = harmelm->segment()->tick();
+      aux->cd.tickpos = harmelm->parent()->type() == Element::SEGMENT
+         ? static_cast<Segment*>(harmelm->parent())->tick() : 0;
+
       if (!harmelm->xmlKind().isEmpty())
 	{
 	  aux->cd.extName = harmelm->extensionName();
@@ -1979,7 +1981,10 @@ void ExportLy::buildInstructionList(Measure* m, int strack, int etrack)
 	  break;
 	case Element::HARMONY:
 	  {
-	    found = findMatchInMeasure(((Harmony*)instruction)->segment()->tick(), instruction->staff(), m, strack, etrack, false);
+          Harmony* h = static_cast<Harmony*>(instruction);
+          int tick = h->parent()->type() == Element::SEGMENT
+             ? static_cast<Segment*>(h->parent())->tick() : 0;
+	    found = findMatchInMeasure(tick, instruction->staff(), m, strack, etrack, false);
 	    if ((found) && (staffInd == 0)) //only save chords in first staff.
 	      {
 		anker.instruct=instruction;
