@@ -82,11 +82,6 @@ void Glissando::layout()
                   y2 += yOff;                               // move ending point to base of note
             else                                      // ascending glissando:
                   y1 += yOff;                               // move starting point to base of note
-            // convert to straight line without any text
-            if (subtype() != GLISS_STRAIGHT)
-                  setSubtype(GLISS_STRAIGHT);
-            if(showText())
-                  setShowText(false);
             }
 
       QLineF fullLine(x1, y1, x2, y2);
