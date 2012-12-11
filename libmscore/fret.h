@@ -49,7 +49,6 @@ class FretDiagram : public Element {
       ~FretDiagram();
       virtual void draw(QPainter*) const;
       virtual FretDiagram* clone() const { return new FretDiagram(*this); }
-      Segment* segment() const           { return (Segment*)parent(); }
 
       virtual ElementType type() const   { return FRET_DIAGRAM; }
       virtual void layout();

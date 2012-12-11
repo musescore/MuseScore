@@ -562,8 +562,8 @@ void Harmony::layout()
             setUserOff(readPos() - ipos());
             setReadPos(QPointF());
             }
-      if (parent()->type() == FRET_DIAGRAM) {
-            MStaff* mstaff = measure()->mstaff(staffIdx());
+      if (parent()->type() == FRET_DIAGRAM && parent()->parent()->type() == SEGMENT) {
+            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
             qreal dist = -(bbox().top());
             mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
             }
@@ -865,27 +865,5 @@ void Harmony::clearDegrees()
 const QList<HDegree>& Harmony::degreeList() const
       {
       return _degreeList;
-      }
-
-//---------------------------------------------------------
-//   segment
-//---------------------------------------------------------
-
-Segment* Harmony::segment() const
-      {
-      if (parent()->type() == FRET_DIAGRAM)
-            return static_cast<FretDiagram*>(parent())->segment();
-      if (parent()->type() == SEGMENT)
-            return static_cast<Segment*>(parent());
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   measure
-//---------------------------------------------------------
-
-Measure* Harmony::measure() const
-      {
-      return segment()->measure();
       }
 

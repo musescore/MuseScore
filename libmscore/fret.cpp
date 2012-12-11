@@ -292,9 +292,9 @@ void FretDiagram::layout()
       if (_harmony)
             _harmony->layout();
 
-      if (parent() == 0)
+      if (parent() == 0 || parent()->type() != SEGMENT)
             return;
-      Measure* m     = segment()->measure();
+      Measure* m     = static_cast<Segment*>(parent())->measure();
       int idx        = staffIdx();
       MStaff* mstaff = m->mstaff(idx);
       System* system = m->system();
