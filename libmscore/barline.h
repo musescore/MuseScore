@@ -20,12 +20,18 @@ class MuseScoreView;
 class Segment;
 class QPainter;
 
-#define DEFAULT_BARLINE_TO          (4*2)
-#define MIN_BARLINE_FROMTO_DIST     2
-#define MIN_BARLINE_SPAN_FROMTO     (-2)
+#define DEFAULT_BARLINE_TO                (4*2)
+#define MIN_BARLINE_FROMTO_DIST           2
+#define MIN_BARLINE_SPAN_FROMTO           (-2)
+// bar line span for 1-line staves is special: goes from 2sp above the line to 2sp below the line;
+// for some reason, the single staff line counts as line -1 rather than as line 0
+// thus, 2sp above it is -2 rather than -4 and 2sp below it is 6 rather than 4
+// (see StaffLines::y1() function in element.cpp)
+#define BARLINE_SPAN_1LINESTAFF_FROM      (-2)
+#define BARLINE_SPAN_1LINESTAFF_TO        6
 // used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
 // fixed once all staves are read
-#define UNKNOWN_BARLINE_TO          (-4)
+#define UNKNOWN_BARLINE_TO                (-4)
 
 //---------------------------------------------------------
 //   @@ BarLine
