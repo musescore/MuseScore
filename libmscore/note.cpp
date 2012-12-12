@@ -52,6 +52,7 @@
 #include "icon.h"
 #include "notedot.h"
 #include "spanner.h"
+#include "glissando.h"
 
 //---------------------------------------------------------
 //   noteHeads
@@ -1184,6 +1185,11 @@ Element* Note::drop(const DropData& data)
                         }
                   e->setTrack(track());
                   e->setParent(cr1);
+                  // in TAB, use straight line with no text
+                  if (staff()->isTabStaff()) {
+                        (static_cast<Glissando*>(e))->setSubtype(GLISS_STRAIGHT);
+                        (static_cast<Glissando*>(e))->setShowText(false);
+                  }
                   score()->undoAddElement(e);
                   score()->setLayout(cr1->measure());
                   }
