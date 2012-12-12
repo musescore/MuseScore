@@ -13,10 +13,11 @@
 
 #include "glissando.h"
 #include "chord.h"
-#include "segment.h"
 #include "note.h"
-#include "style.h"
 #include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "style.h"
 #include "sym.h"
 
 //---------------------------------------------------------
@@ -26,7 +27,7 @@
 Glissando::Glissando(Score* s)
   : Element(s)
       {
-      _subtype = 0;
+      _subtype = GLISS_STRAIGHT;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _text = "gliss.";
       _showText = true;
@@ -73,6 +74,16 @@ void Glissando::layout()
       qreal y1 = anchor1->pos().y();
       qreal x2 = anchor2->pos().x();
       qreal y2 = anchor2->pos().y();
+
+      // on TAB's, adjust lower end point from string line height to base of note height (= ca. half line spacing)
+      if (chord->staff()->isTabStaff()) {
+            qreal yOff = chord->staff()->lineDistance() * 0.5 * spatium();
+            if (anchor1->pitch() > anchor2->pitch())  // descending glissando:
+                  y2 += yOff;                               // move ending point to base of note
+            else                                      // ascending glissando:
+                  y1 += yOff;                               // move starting point to base of note
+            }
+
       QLineF fullLine(x1, y1, x2, y2);
 
       // shorten line on each side by offsets
@@ -142,10 +153,10 @@ void Glissando::draw(QPainter* painter) const
       qreal wi = asin(-h / l) * 180.0 / M_PI;
       painter->rotate(-wi);
 
-      if (subtype() == 0) {
+      if (subtype() == GLISS_STRAIGHT) {
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
-      else if (subtype() == 1) {
+      else if (subtype() == GLISS_WAVY) {
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
