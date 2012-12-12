@@ -16,6 +16,9 @@
 
 #include "element.h"
 
+#define GLISS_STRAIGHT  0
+#define GLISS_WAVY      1
+
 class Note;
 
 //---------------------------------------------------------
