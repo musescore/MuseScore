@@ -3320,7 +3320,7 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
             if (ee.tagName() == "staff-lines")
                   stafflines = ee.text().toInt();
             else if (ee.tagName() == "staff-tuning")
-                  ; // ignore here (but prevent error message), handled by Tablature::readMusicXML
+                  ;  // ignore here (but prevent error message), handled by Tablature::readMusicXML
             else
                   domNotImplemented(ee);
             }
@@ -5106,17 +5106,32 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
             // set drumset information
             // note that in MuseScore, the drumset contains defaults for notehead,
-            // line and stem direction, while a MusicXML file contains actual.
+            // line and stem direction, while a MusicXML file contains actuals.
             // the MusicXML values for each note are simply copied to the defaults
+
             if (unpitched) {
+                  // determine staff line based on display-step / -octave and clef type
                   ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
-                  // int line = absoluteStaffLine(pitch) - absoluteStaffLine(po);
-                  // int line = absoluteStaffLine(po) - absoluteStaffLine(pitch);
-                  // TODO: magic constant "19" seems to work only for percussion clef.
-                  // find out why and fix for other clefs (G seems to work also, but F doesn't)
-                  int line = absStep(po) - absStep(pitch) + 19;
+                  int line = po - absStep(pitch);
+
+                  // correct for number of staff lines
+                  // see ExportMusicXml::unpitch2xml for explanation
+                  // TODO handle other # staff lines ?
+                  int staffLines = cr->staff()->lines();
+                  if (staffLines == 1) line -= 8;
+                  if (staffLines == 3) line -= 2;
+
+                  // the drum palette cannot handle stem direction AUTO,
+                  // overrule if necessary
+                  if (sd == MScore::AUTO) {
+                        if (line > 4)
+                              sd = MScore::DOWN;
+                        else
+                              sd = MScore::UP;
+                        }
+
                   qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
                          clef, po, absStep(po), pitch, absStep(pitch));
                   qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",
