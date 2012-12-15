@@ -2183,12 +2183,12 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
-            // TBD: set staff type to percussion ?
+            // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
-            /*
+            // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
-                  part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
-            */
+                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
+                        part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
