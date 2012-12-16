@@ -217,6 +217,8 @@ enum StyleIdx {
 
       ST_pedalY,
       ST_trillY,
+      ST_harmonyY,
+      ST_harmonyFretDist,
 
       ST_showPageNumber,
       ST_showPageNumberOne,
