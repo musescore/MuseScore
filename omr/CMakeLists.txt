@@ -18,7 +18,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/cmake/gch.cmake)
+include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
 include_directories(
       ${PROJECT_SOURCE_DIR}

@@ -532,27 +532,34 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
+printf("Harmony layout() text %d editMode %d\n", textList.isEmpty(), _editMode);
       if (_editMode || textList.isEmpty()) {
-            Text::layout();
-            return;
+            Text::layout1();
             }
-      textStyle().layout(this);
-      if (!parent()) {
-            setPos(QPointF(0.0, 0.0));
-            return;
+      else {
+            // textStyle().layout(this);
+            if (!parent()) {
+                  setPos(QPointF(0.0, 0.0));
+                  return;
+                  }
+
+            QRectF bb;
+            foreach(const TextSegment* ts, textList)
+                  bb |= ts->boundingRect().translated(ts->x, ts->y);
+            setbbox(bb);
             }
+
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
-            qreal yy = track() < 0 ? 0.0 : m->system()->staff(track() / VOICES)->y();
+            qreal yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
+            yy -= (bbox().height() + score()->styleP(ST_harmonyY));
             setPos(ipos() + QPointF(0.0, yy));
             }
-      else
-            setPos(QPointF(0.0, 0.0));
+      else {
+            qreal yy = score()->styleP(ST_harmonyFretDist);
+            setPos(QPointF(0.0, yy));
+            }
 
-      QRectF bb;
-      foreach(const TextSegment* ts, textList)
-            bb |= ts->boundingRect().translated(ts->x, ts->y);
-      setbbox(bb);
       if (!readPos().isNull()) {
             // version 114 is measure based
             // rebase to segment

@@ -111,6 +111,8 @@ StyleType styleTypes[] = {
 
       StyleType("pedalY",                  ST_SPATIUM),
       StyleType("trillY",                  ST_SPATIUM),
+      StyleType("harmonyY",                ST_SPATIUM),
+      StyleType("harmonyFretDist",         ST_SPATIUM),
 
       StyleType("showPageNumber",          ST_BOOL),
       StyleType("showPageNumberOne",       ST_BOOL),
@@ -318,7 +320,7 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Chordname"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
@@ -480,8 +482,10 @@ StyleData::StyleData()
             StyleVal(ST_hairpinContHeight, Spatium(0.5)),
             StyleVal(ST_hairpinWidth, Spatium(0.13)),
 
-            StyleVal(ST_pedalY, Spatium(8)),
-            StyleVal(ST_trillY, Spatium(-1)),
+            StyleVal(ST_pedalY,   Spatium(8)),
+            StyleVal(ST_trillY,   Spatium(-1)),
+            StyleVal(ST_harmonyY, Spatium(-4)),
+            StyleVal(ST_harmonyFretDist, Spatium(-1.5)),
 
             StyleVal(ST_showPageNumber, true),
             StyleVal(ST_showPageNumberOne, false),
