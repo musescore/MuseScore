@@ -99,7 +99,7 @@ QImage Pdf::page(int i)
       fz_rect bounds = fz_bound_page(doc, page);
       fz_matrix ctm  = fz_scale(zoom, zoom);
       fz_bbox bbox   = fz_round_rect(fz_transform_rect(ctm, bounds));
-      fz_pixmap* pix = fz_new_pixmap_with_rect(ctx, fz_device_gray, bbox);
+      fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray, bbox);
 
       fz_clear_pixmap_with_value(ctx, pix, 255);
       fz_device* dev = fz_new_draw_device(ctx, pix);
@@ -107,10 +107,10 @@ QImage Pdf::page(int i)
       fz_free_device(dev);
       dev = NULL;
 
-      int w = pix->w;
-      int h = pix->h;
-      if (pix->n != 2) {
-            printf("omg: pixmap not bw? %d\n", pix->n);
+      int w = fz_pixmap_width(ctx, pix);
+      int h = fz_pixmap_height(ctx, pix);
+      if (fz_pixmap_components(ctx, pix) != 2) {
+            printf("omg: pixmap not bw? %d\n", fz_pixmap_components(ctx, pix));
             return QImage();
             }
 
@@ -120,7 +120,7 @@ QImage Pdf::page(int i)
       ct[1] = qRgb(0, 0, 0);
       image.setColorTable(ct);
 
-      uchar* s   = pix->samples;
+      uchar* s   = fz_pixmap_samples(ctx, pix);
       int bytes  = w / 8;
       int bits   = w % 8;
       for (int line = 0; line < h; ++line) {

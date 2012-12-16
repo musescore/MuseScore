@@ -96,14 +96,14 @@ static void importPdfMeasure(Measure* measure, const OmrSystem* omrSystem, int s
                   note->setTpcFromPitch();
                   chord->add(note);
 
-                  Segment* s = measure->getSegment(SegChordRest, tick);
+                  Segment* s = measure->getSegment(Segment::SegChordRest, tick);
                   s->add(chord);
                   tick += duration.ticks();
                   }
             }
       else {
             TDuration d(TDuration::V_MEASURE);
-            Segment* s = measure->getSegment(SegChordRest, measure->tick());
+            Segment* s = measure->getSegment(Segment::SegChordRest, measure->tick());
             Rest* rest = new Rest(score, d);
             rest->setDuration(Fraction(4,4));
             rest->setTrack(staffIdx * VOICES);
@@ -169,7 +169,7 @@ static void importPdfPage(Score* score, const OmrPage* omrPage)
       		      Rest* rest = new Rest(score, d);
                         rest->setDuration(Fraction(4,4));
                         rest->setTrack(0);
-                        Segment* s = measure->getSegment(SegChordRest, tick);
+                        Segment* s = measure->getSegment(Segment::SegChordRest, tick);
       	            s->add(rest);
       		      rest = new Rest(score, d);
                         rest->setDuration(Fraction(4,4));
@@ -197,12 +197,12 @@ static void importPdfPage(Score* score, const OmrPage* omrPage)
 //   importPdf
 //---------------------------------------------------------
 
-bool importPdf(Score* score, const QString& path)
+Score::FileError importPdf(Score* score, const QString& path)
       {
       Omr* omr = new Omr(path, score);
       if (!omr->readPdf()) {
             delete omr;
-            return false;
+            return Score::FILE_BAD_FORMAT;
             }
       score->setOmr(omr);
       qreal sp = omr->spatiumMM();
@@ -213,7 +213,8 @@ bool importPdf(Score* score, const QString& path)
       score->style()->set(StyleVal(ST_staffLowerBorder, 0.0));
       score->style()->set(StyleVal(ST_measureSpacing, 1.0));
 
-      PageFormat pF(*score->pageFormat());
+      PageFormat pF;
+      pF.copy(*score->pageFormat());
       pF.setEvenLeftMargin(5.0 * MScore::DPMM / MScore::DPI);
       pF.setEvenTopMargin(0);
       pF.setEvenBottomMargin(0);
@@ -251,7 +252,7 @@ bool importPdf(Score* score, const QString& path)
             Clef* clef = new Clef(score);
             clef->setClefType(CLEF_G);
             clef->setTrack(0);
-            Segment* segment = measure->getSegment(SegClef, 0);
+            Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
 
             clef = new Clef(score);
@@ -263,6 +264,6 @@ bool importPdf(Score* score, const QString& path)
       score->setShowOmr(true);
       omr->page(0)->readHeader(score);
       score->rebuildMidiMapping();
-      return true;
+      return Score::FILE_NO_ERROR;
       }
 
