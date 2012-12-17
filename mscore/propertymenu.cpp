@@ -90,17 +90,17 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
             if (e->flag(ELEMENT_HAS_TAG)) {
                   popup->addSeparator();
 
-                  QMenu* menuLayer = new QMenu(tr("Layer"));
+                  QMenu* menuTags = new QMenu(tr("Tags"));
                   for (int i = 0; i < MAX_TAGS; ++i) {
                         QString tagName = score()->layerTags()[i];
                         if (!tagName.isEmpty()) {
-                              QAction* a = menuLayer->addAction(tagName);
+                              QAction* a = menuTags->addAction(tagName);
                               a->setData(QString("layer-%1").arg(i));
                               a->setCheckable(true);
                               a->setChecked(e->tag() & (1 << i));
                               }
                         }
-                  popup->addMenu(menuLayer);
+                  popup->addMenu(menuTags);
                   }
             }
       }
@@ -120,17 +120,17 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
       if (e->flag(ELEMENT_HAS_TAG)) {
             popup->addSeparator();
 
-            QMenu* menuLayer = new QMenu(tr("Layer"));
+            QMenu* menuTags = new QMenu(tr("Tags"));
             for (int i = 0; i < MAX_TAGS; ++i) {
                   QString tagName = score()->layerTags()[i];
                   if (!tagName.isEmpty()) {
-                        QAction* a = menuLayer->addAction(tagName);
+                        QAction* a = menuTags->addAction(tagName);
                         a->setData(QString("layer-%1").arg(i));
                         a->setCheckable(true);
                         a->setChecked(e->tag() & (1 << i));
                         }
                   }
-            popup->addMenu(menuLayer);
+            popup->addMenu(menuTags);
             }
       popup->addAction(tr("Text Properties..."))->setData("text-props");
       }
@@ -633,9 +633,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->colorItem(e);
       else if (cmd.startsWith("layer-")) {
             int n = cmd.mid(6).toInt();
-            uint mask = 1 << n;
+            uint mask = e->tag() ^ (1 << n);
             e->setTag(mask);
             }
       }
 }
-

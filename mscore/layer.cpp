@@ -21,6 +21,7 @@
 #include "layer.h"
 #include "libmscore/score.h"
 #include "musescore.h"
+#include "libmscore/mscore.h"
 
 namespace Ms {
 
@@ -35,7 +36,7 @@ LayerManager::LayerManager(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      for (int i = 0; i < 31; ++i) {
+      for (int i = 0; i < MAX_TAGS; ++i) {
             QTableWidgetItem* item = new QTableWidgetItem(score->layerTags()[i+1]);
             tags->setItem(i, 0, item);
             item = new QTableWidgetItem(score->layerTagComments()[i+1]);
@@ -48,7 +49,7 @@ LayerManager::LayerManager(Score* s, QWidget* parent)
             QTableWidgetItem* item = new QTableWidgetItem(l.name);
             layers->setItem(row, 0, item);
             QString tagString;
-            for (int i = 0; i < 31; ++i) {
+            for (int i = 0; i < MAX_TAGS; ++i) {
                   uint mask = 1 << (i+1);
                   if (mask &  l.tags) {
                         if (!tagString.isEmpty())
@@ -111,12 +112,12 @@ void LayerManager::addTagClicked()
       if (row == -1)
             return;
       QStringList items;
-      for (int i = 0; i < 31; ++i) {
+      for (int i = 0; i < MAX_TAGS; ++i) {
             QString s = score->layerTags()[i+1];
             if (!s.isEmpty())
                   items.append(s);
             }
-      for (int i = 0; i < 31; ++i) {
+      for (int i = 0; i < MAX_TAGS; ++i) {
             QString tag(tags->item(i, 0)->text());
             if (!tag.isEmpty())
                   items.append(tag);
@@ -131,7 +132,7 @@ void LayerManager::addTagClicked()
          items, 0, false, &ok);
       if (ok && !item.isEmpty()) {
 //            uint tagBits = 0;
-            for (int i = 0; i < 31; ++i) {
+            for (int i = 0; i < MAX_TAGS; ++i) {
                   QString s = score->layerTags()[i+1];
                   if (s == item) {
 //                        tagBits = 1 << (i+1);
@@ -175,7 +176,7 @@ void LayerManager::deleteTagClicked()
 void LayerManager:: accept()
       {
       score->startCmd();
-      for (int i = 0; i < 31; ++i) {
+      for (int i = 0; i < MAX_TAGS; ++i) {
             QString tag(tags->item(i, 0)->text());
             QString comment(tags->item(i, 1)->text());
             score->layerTags()[i+1] = tag;
@@ -196,7 +197,7 @@ void LayerManager:: accept()
             QString ts       = layers->item(i, 1)->text();
             QStringList tags = ts.split(",");
             foreach (QString tag, tags) {
-                  for (int idx = 0; idx < 32; ++idx) {
+                  for (int idx = 0; idx < MAX_TAGS; ++idx) {
                         if (tag == score->layerTags()[idx]) {
                               l.tags |= 1 << idx;
                               break;
@@ -215,4 +216,3 @@ void LayerManager:: accept()
       }
 
 }
-
