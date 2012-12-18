@@ -37,7 +37,7 @@ set(AEOLUS            TRUE)         # pipe organ synthesizer
 set(SCRIPT_INTERFACE  TRUE)
 
 option (OSC "enable OSC remote control protocol" ON)        # osc remote control
-option (OMR "enable PDF import"  ON)                        # OMR - optical music recognition
+option (OMR "enable PDF import"  OFF)                        # OMR - optical music recognition
 
 if (APPLE OR MINGW)
       set(GCC_VISIBILITY FALSE)     # warnings if not, with gcc4.4 from qt
