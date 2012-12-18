@@ -3607,7 +3607,7 @@ p, li { white-space: pre-wrap; }
              <double>10000.000000000000000</double>
             </property>
             <property name="singleStep">
-             <double>1.500000000000000</double>
+             <double>0.500000000000000</double>
             </property>
             <property name="value">
              <double>-4.000000000000000</double>
