@@ -479,7 +479,7 @@ void ChordList::write(Xml& xml)
 
 bool ChordList::read(const QString& name)
       {
-qDebug("ChordList::read <%s>", qPrintable(name));
+// qDebug("ChordList::read <%s>", qPrintable(name));
       QString path;
       QFileInfo ftest(name);
       if (ftest.isAbsolute())

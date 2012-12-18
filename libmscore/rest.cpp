@@ -296,10 +296,10 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
             case TDuration::V_128TH:
                   return rest128Sym;
             case TDuration::V_256TH:
-                  qDebug("Rest: no symbol for 1/256\n");
+                  qDebug("Rest: no symbol for 1/256");
                   return rest128Sym;
             default:
-                  qDebug("unknown rest type %d\n", type);
+                  qDebug("unknown rest type %d", type);
                   return rest4Sym;
             }
       }

@@ -248,14 +248,16 @@ void Symbol::read(const QDomElement& de)
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
-            const QString& val(e.text());
+            QString val(e.text());
             if (tag == "name") {
+                  if (val == "acc dot")               // compatibility hack
+                        val = "accordion.accDot";
                   s = Sym::name2id(val);
                   if (s == noSym) {
                         // if symbol name not found, fall back to mnames
                         s = Sym::userName2id(val);
                         if (s == noSym) {
-                              qDebug("unknown symbol <%s> (%d symbols), falling back to default symbol\n",
+                              qDebug("unknown symbol <%s> (%d symbols), falling back to default symbol",
                                  qPrintable(val), symbols[0].size());
                               // set a default symbol, or layout() will crash
                               s = s1miHeadSym;
@@ -300,7 +302,7 @@ void Symbol::read(const QDomElement& de)
                   domError(e);
             }
       if (s == noSym)
-            qDebug("unknown symbol\n");
+            qDebug("unknown symbol");
       setPos(pos);
       setSym(s);
       }

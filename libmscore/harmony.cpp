@@ -532,7 +532,6 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-printf("Harmony layout() text %d editMode %d\n", textList.isEmpty(), _editMode);
       if (_editMode || textList.isEmpty()) {
             Text::layout1();
             }
