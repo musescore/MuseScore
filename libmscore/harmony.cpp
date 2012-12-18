@@ -546,6 +546,10 @@ void Harmony::layout()
                   bb |= ts->boundingRect().translated(ts->x, ts->y);
             setbbox(bb);
             }
+      if (parent() == 0) {          // for use in palette
+            setPos(QPointF());
+            return;
+            }
 
       qreal yy;
       if (parent()->type() == SEGMENT) {
