@@ -536,28 +536,23 @@ void Harmony::layout()
             Text::layout1();
       else {
             // textStyle().layout(this);
-            if (!parent()) {
-                  setPos(QPointF(0.0, 0.0));
-                  return;
-                  }
-
             QRectF bb;
             foreach(const TextSegment* ts, textList)
                   bb |= ts->boundingRect().translated(ts->x, ts->y);
             setbbox(bb);
             }
-      if (parent() == 0) {          // for use in palette
+      if (!parent()) {          // for use in palette
             setPos(QPointF());
             return;
             }
 
-      qreal yy;
+      qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
             yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
-            yy -= (bbox().height() + score()->styleP(ST_harmonyY));
+            yy += score()->styleP(ST_harmonyY);
             }
-      else {
+      else if (parent()->type() == FRET_DIAGRAM) {
             yy = score()->styleP(ST_harmonyFretDist);
             }
       setPos(QPointF(0.0, yy));

@@ -484,7 +484,7 @@ StyleData::StyleData()
 
             StyleVal(ST_pedalY,   Spatium(8)),
             StyleVal(ST_trillY,   Spatium(-1)),
-            StyleVal(ST_harmonyY, Spatium(-4)),
+            StyleVal(ST_harmonyY, Spatium(-2.5)),
             StyleVal(ST_harmonyFretDist, Spatium(-1.5)),
 
             StyleVal(ST_showPageNumber, true),
