@@ -59,7 +59,7 @@ void Glissando::layout()
             }
       ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
       if (cr == 0 || cr->type() != CHORD) {
-            qDebug("no first note for glissando found, track %d\n", track());
+            qDebug("no first note for glissando found, track %d", track());
             return;
             }
       Note* anchor1 = static_cast<Chord*>(cr)->upNote();

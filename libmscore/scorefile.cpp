@@ -159,8 +159,10 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
       xml.curTrack = -1;
       if (!selectionOnly) {
-            foreach(Excerpt* excerpt, _excerpts)
-                  excerpt->score()->write(xml, false);       // recursion
+            foreach(Excerpt* excerpt, _excerpts) {
+                  if (excerpt->score() != this)
+                        excerpt->score()->write(xml, false);       // recursion
+                  }
             }
       if (parentScore())
             xml.tag("name", name());
