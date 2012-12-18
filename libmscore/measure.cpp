@@ -307,7 +307,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
                         foreach(Note* note, chord->notes()) {
                               int pitch = note->pitch();
                               if (!drumset->isValid(pitch)) {
-                                    qDebug("unmapped drum note %d", pitch);
+                                    // qDebug("unmapped drum note %d", pitch);
                                     }
                               else {
                                     note->setHeadGroup(drumset->noteHead(pitch));
@@ -351,7 +351,7 @@ void Measure::layoutChords10(Segment* segment, int startTrack, AccidentalState* 
                   if (drumset) {
                         int pitch = note->pitch();
                         if (!drumset->isValid(pitch)) {
-                              qDebug("unmapped drum note %d", pitch);
+                              // qDebug("unmapped drum note %d", pitch);
                               }
                         else {
                               note->setHeadGroup(drumset->noteHead(pitch));
@@ -3469,7 +3469,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                               Drumset* drumset = instrument->drumset();
                               int pitch = note->pitch();
                               if (!drumset->isValid(pitch)) {
-                                    qDebug("unmapped drum note %d", pitch);
+                                    // qDebug("unmapped drum note %d", pitch);
                                     }
                               else {
                                     note->setHeadGroup(drumset->noteHead(pitch));
