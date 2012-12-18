@@ -13,6 +13,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
+#include "libmscore/score.h"
 
 #define DIR QString("omr/notes/")
 
