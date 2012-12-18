@@ -32,45 +32,6 @@ static int getDots(int base, int rest, int* dots)
       return rest;
       }
 
-#if 0
-//---------------------------------------------------------
-//   headType
-//    return for a given ticks the baselen of a note
-//    (which determines the head symbol) and a number of
-//    dots (<= 2)
-//
-//    return the remaining ticks if any
-//---------------------------------------------------------
-
-static int headType(int tickLen, TDuration* type)
-      {
-      if (tickLen == 0) {
-            *type = TDuration(TDuration::V_MEASURE);
-            return 0;
-            }
-      TDuration dt;
-      for (int i = 0; i < TDuration::V_ZERO; ++i) {
-            dt.setType(TDuration::DurationType(i));
-            int ticks = dt.ticks();
-            if (tickLen / ticks) {
-                  int remain = tickLen % ticks;
-                  if ((ticks - remain) < (ticks/4)) {
-                        *type = TDuration(TDuration::DurationType(i-1));
-                        return 0;
-                        }
-                  *type = dt;
-                  int dots;
-                  int rest = getDots(ticks, remain, &dots);
-                  dt.setDots(dots);
-                  return rest;
-                  }
-            }
-qDebug("1: no duration type for ticks %d", tickLen);
-      *type = TDuration(TDuration::V_QUARTER);
-      return 0;
-      }
-#endif
-
 //---------------------------------------------------------
 //   setVal
 //---------------------------------------------------------
@@ -277,7 +238,7 @@ void TDuration::setType(const QString& s)
       else {
             // _val = V_INVALID;
             _val = V_QUARTER;
-            qDebug("TDuration::setVal(%s): unknown, assume \"quarter\"", qPrintable(s));
+            qDebug("TDuration::setType(%s): unknown, assume \"quarter\"", qPrintable(s));
             }
       }
 

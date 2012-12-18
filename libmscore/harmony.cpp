@@ -532,9 +532,8 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      if (_editMode || textList.isEmpty()) {
+      if (_editMode || textList.isEmpty())
             Text::layout1();
-            }
       else {
             // textStyle().layout(this);
             if (!parent()) {
@@ -548,16 +547,16 @@ void Harmony::layout()
             setbbox(bb);
             }
 
+      qreal yy;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
-            qreal yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
+            yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
             yy -= (bbox().height() + score()->styleP(ST_harmonyY));
-            setPos(ipos() + QPointF(0.0, yy));
             }
       else {
-            qreal yy = score()->styleP(ST_harmonyFretDist);
-            setPos(QPointF(0.0, yy));
+            yy = score()->styleP(ST_harmonyFretDist);
             }
+      setPos(QPointF(0.0, yy));
 
       if (!readPos().isNull()) {
             // version 114 is measure based
