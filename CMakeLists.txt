@@ -42,13 +42,15 @@ option (OMR "enable PDF import"  OFF)                        # OMR - optical mus
 if (APPLE OR MINGW)
       set(GCC_VISIBILITY FALSE)     # warnings if not, with gcc4.4 from qt
       set(AEOLUS TRUE)
-      set(OMR FALSE) # needs work to get rid of fontconfig dependency
+      set(OMR FALSE)                # needs work to get rid of fontconfig dependency
 endif (APPLE OR MINGW)
 
 if (OMR)
-      set(OCR    FALSE) # requires tesseract 3.0
+      message("OMR enabled")
+      set(OCR    FALSE)  # requires tesseract 3.0
                         # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
 else (OMR)
+      message("OMR disabled")
       set(OCR FALSE)
 endif (OMR)
 

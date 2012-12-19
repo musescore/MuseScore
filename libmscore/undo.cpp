@@ -1204,7 +1204,9 @@ void AddElement::undo()
       if (element->type() == Element::TIE) {
             Tie* tie = static_cast<Tie*>(element);
             Measure* m1 = tie->startNote()->chord()->measure();
-            Measure* m2 = tie->endNote()->chord()->measure();
+            Measure* m2 = 0;
+            if(tie->endNote())
+                  m2 = tie->endNote()->chord()->measure();
 
             if (m1 != m2)
                   tie->score()->cmdUpdateNotes();

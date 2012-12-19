@@ -80,7 +80,7 @@ class Shortcut {
          int i);
 
       Shortcut(const Shortcut& c);
-      ~Shortcut();
+      ~Shortcut() {}
 
       QAction* action() const;
 
@@ -99,8 +99,8 @@ class Shortcut {
       void setStandardKey(QKeySequence::StandardKey k) {  _standardKey = k; }
 
       bool compareKeys(const Shortcut&) const;
-      QString keysToString();
-      void write(Xml&);
+      QString keysToString() const;
+      void write(Xml&) const;
       void read(const QDomElement&);
 
       static void init();

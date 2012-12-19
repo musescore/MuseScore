@@ -93,7 +93,7 @@ QT4_WRAP_CPP (mocs
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
-      inspectorHairpin.h
+      inspectorHairpin.h qmlplugin.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -197,7 +197,7 @@ add_executable ( ${ExecutableName}
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
-      inspectorHairpin.cpp
+      inspectorHairpin.cpp qmlplugin.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
@@ -272,8 +272,8 @@ if (MINGW)
       target_link_libraries(mscore aeolus)
    endif (AEOLUS)
 
-	if (OMR)
-      target_link_libraries(mscore omr fitz openjpeg jbig2dec jpeg)
+   if (OMR)
+      target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -358,7 +358,7 @@ else (MINGW)
    endif (AEOLUS)
 
    if (OMR)
-      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg fontconfig freetype)
+      target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)

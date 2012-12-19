@@ -52,6 +52,7 @@
 #include "icon.h"
 #include "notedot.h"
 #include "spanner.h"
+#include "glissando.h"
 
 //---------------------------------------------------------
 //   noteHeads
@@ -635,8 +636,6 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
       writeProperty(xml, P_DOT_POSITION);
-//      writeProperty(xml, P_ONTIME_OFFSET);
-//      writeProperty(xml, P_OFFTIME_OFFSET);
       writeProperty(xml, P_HEAD_GROUP);
       writeProperty(xml, P_VELO_OFFSET);
       writeProperty(xml, P_TUNING);
@@ -879,7 +878,7 @@ void Note::read(const QDomElement& de)
                         _spannerBack.append(e);
                         }
                   else
-                        qDebug("Measure::read(): cannot find spanner %d", id);
+                        qDebug("Note::read(): cannot find spanner %d", id);
                   }
             else if (tag == "TextLine") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
@@ -1169,7 +1168,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if (s->subtype() == Segment::SegChordRest && s->element(track()))
+                        if ((s->subtype() == Segment::SegChordRest || s->subtype() == Segment::SegGrace) && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1186,6 +1185,11 @@ Element* Note::drop(const DropData& data)
                         }
                   e->setTrack(track());
                   e->setParent(cr1);
+                  // in TAB, use straight line with no text
+                  if (staff()->isTabStaff()) {
+                        (static_cast<Glissando*>(e))->setSubtype(GLISS_STRAIGHT);
+                        (static_cast<Glissando*>(e))->setShowText(false);
+                  }
                   score()->undoAddElement(e);
                   score()->setLayout(cr1->measure());
                   }
@@ -1255,7 +1259,7 @@ void Note::layout()
                               score()->undoAddElement(dot); // move dot to _dots[i]
                               }
                         _dots[i]->layout();
-                        _dots[i]->setVisible(visible());
+//                        _dots[i]->setVisible(visible());
                         }
                   else if (_dots[i])
                         score()->undoRemoveElement(_dots[i]);
@@ -1302,7 +1306,9 @@ void Note::layout2()
                   }
             }
 
-      foreach (Element* e, _el) {
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
@@ -1446,12 +1452,12 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       // tie segments are collected from System
       //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
-      foreach(Element* e, _el) {
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-//      foreach(Spanner* s, _spannerFor)              scanned in System()
-//            s->scanElements(data, func, all);
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -1475,8 +1481,11 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      foreach(Element* e, _el)
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             e->setTrack(val);
+            }
       if (_accidental)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
@@ -1507,8 +1516,11 @@ void Note::setMag(qreal val)
       Element::setMag(val);
       if (_accidental)
             _accidental->setMag(val);
-      foreach(Element* e, _el)
+      int n = _el.size();
+      for (int i = 0; i < n; ++i) {
+            Element* e = _el.at(i);
             e->setMag(val);
+            }
       }
 
 //---------------------------------------------------------
@@ -1786,6 +1798,16 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_VELO_TYPE:
                   setVeloType(MScore::ValueType(v.toInt()));
                   break;
+            case P_VISIBLE:                     // P_VISIBLE requires reflecting property on dots
+            {
+                  setVisible(v.toBool());
+                  int dots = chord()->dots();
+                  for (int i = 0; i < dots; ++i) {
+                        if (_dots[i])
+                              _dots[i]->setVisible(visible());
+                        }
+                  break;
+                  }
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;

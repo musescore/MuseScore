@@ -25,19 +25,16 @@ MuseScore {
             var cursor = curScore.newCursor();
             cursor.rewind(0);  // set cursor to first chord/rest
 
-            var names = ["C", "Cis", "D", "Dis", "E", "F", "Fis", "G", "Gis", "A", "Ais", "B" ];
+            var names = ["C", "Cis", "D", "Dis", "E", "F",
+               "Fis", "G", "Gis", "A", "Ais", "B" ];
 
             while (cursor.segment) {
                   if (cursor.element.type == Element.CHORD) {
-                        var id  = Element.STAFF_TEXT;
-                        var text  = newElement(id);
-                        console.log("======after newElement " + Element.STAFF_TEXT + " " + id);
-                        var chord  = cursor.element;
+                        var text  = newElement(Element.STAFF_TEXT);
+                        var chord = cursor.element;
                         var note  = chord.notes[0];
                         var pitch = note.pitch;
-                        console.log(text);
                         text.text = names[pitch % 12];
-                        console.log(text.text);
                         cursor.add(text);
                         }
                   cursor.next();

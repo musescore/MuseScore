@@ -107,7 +107,7 @@
 //---------------------------------------------------------
 
 // #define DEBUG_VOICE_MAPPER true
-#define DEBUG_TICK true
+// #define DEBUG_TICK true
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
@@ -359,17 +359,13 @@ static Fraction noteDurationAsFraction(const int divisions, const QDomElement e)
       // note divisions = ticks / quarter note
       Fraction f = calculateFraction(type, dots, normalNotes, actualNotes);
       if (!f.isValid()) {
-            qDebug("time-in-fraction: f invalid, using duration");
             f = Fraction(duration, 4 * divisions);
             }
 
       // bug fix for rests in triplet
       if (f.isValid() && rest && normalNotes == 0 && actualNotes == 0) {
-            qDebug("time-in-fraction: check for rest in triplet bug: %s",
-                   qPrintable((Fraction(duration, 4 * divisions) / f).print()));
             if ((Fraction(duration, 4 * divisions) / f) == Fraction(2, 3)) {
                   // duration is exactly 2/3 of what is expected based on type
-                  qDebug("time-in-fraction: rest in triplet bug found, fixing ...");
                   f = Fraction(duration, 4 * divisions);
                   }
             }
@@ -449,6 +445,7 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
                   }
             }
       else if (e.tagName() == "note") {
+#ifdef DEBUG_TICK
             int ticks = 0;
             for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                   QString tag(ee.tagName());
@@ -456,7 +453,6 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
                         ticks = calcTicks(ee.text(), divisions);
                         }
                   }
-#ifdef DEBUG_TICK
             qDebug("note %d", ticks);
 #endif
             Fraction f = noteDurationAsFraction(divisions, e);
@@ -1155,22 +1151,14 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                                     moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
                                     if (noteTypeTickFr > maxNoteTypeTickFr)
                                           maxNoteTypeTickFr = noteTypeTickFr;
-                                    qDebug("time-in-fraction: after note type based fraction %s tick %d max fraction %s tick %d",
-                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
-                                           qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                                     }
                               else if (ee.tagName() == "backup") {
                                     moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
-                                    qDebug("time-in-fraction: after backup type based fraction %s tick %d",
-                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks());
                                     }
                               else if (ee.tagName() == "forward") {
                                     moveTick(0, dummy_tick, dummy_maxtick, noteTypeTickFr, divisions, ee);
                                     if (noteTypeTickFr > maxNoteTypeTickFr)
                                           maxNoteTypeTickFr = noteTypeTickFr;
-                                    qDebug("time-in-fraction: after forward type based fraction %s tick %d max fraction %s tick %d",
-                                           qPrintable(noteTypeTickFr.print()), noteTypeTickFr.ticks(),
-                                           qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                                     }
                               }
                         else
@@ -1178,24 +1166,21 @@ static bool determineMeasureLength(QDomElement e, QVector<int>& ml)
                         } // for (QDomElement ee ....
 
                   // measure has been read, determine length
-                  qDebug("time-in-fraction: max type based fraction %s tick %d",
-                         qPrintable(maxNoteTypeTickFr.print()), maxNoteTypeTickFr.ticks());
                   int length = maxNoteTypeTickFr.ticks();
                   int correctedLength = length;
-#if 1 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-                  // if necessary, round up to an integral number of 1/32s,
+
+                  // if necessary, round up to an integral number of 1/64s,
                   // to comply with MuseScores actual measure length constraints
-                  if ((length % (MScore::division/8)) != 0) {
-                        correctedLength = ((length / (MScore::division/8)) + 1) * (MScore::division/8);
+                  if ((length % (MScore::division/16)) != 0) {
+                        correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
                         }
-#endif
+
                   // fix for PDFtoMusic Pro v1.3.0d Build BF4E (which sometimes generates empty measures)
                   // if no valid length found and length according to time signature is known,
                   // use length according to time signature
                   if (correctedLength <= 0 && timeSigLen > 0)
                         correctedLength = timeSigLen;
 #ifdef DEBUG_TICK
-                  // debug
                   qDebug("measurelength measure %d length %d corr length %d\n",
                          measureNr + 1, length, correctedLength);
 #endif
@@ -2115,6 +2100,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
+      fractionTSig          = Fraction(0, 1);
       tick                  = 0;
       maxtick               = 0;
       prevtick              = 0;
@@ -2197,12 +2183,12 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
-            // TBD: set staff type to percussion ?
+            // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
-            /*
+            // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
-                  part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
-            */
+                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
+                        part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -2223,19 +2209,11 @@ void MusicXml::xmlPart(QDomElement e, QString id)
 
 static void fixupFiguredBass(Part* part, Measure* measure)
       {
-      int staves = part->nstaves();
-      int strack = measure->score()->staffIdx(part) * VOICES;
-      int etrack = strack + staves * VOICES;
-      qDebug("fixupFiguredBass part %p measure %p staves %d strack %d etrack %d",
-             part, measure, staves, strack, etrack);
-
       for (Segment* seg = measure->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest)) {
-            qDebug("fixupFiguredBass measure %p segment %p", measure, seg);
             foreach(Element* e, seg->annotations()) {
                   if (e->type() == Element::FIGURED_BASS) {
                         FiguredBass* fb = static_cast<FiguredBass*>(e);
                         if (fb->ticks() <= 0) {
-                              qDebug("fixupFiguredBass fb %p ticks %d track %d", fb, fb->ticks(), fb->track());
                               // Found FiguredBass w/o valid ticks value
                               // Find chord to attach to in same staff and copy ticks
                               for (int tr = fb->track(); tr < fb->track() + VOICES; ++tr) {
@@ -2243,8 +2221,6 @@ static void fixupFiguredBass(Part* part, Measure* measure)
                                     if (el && el->type() == Element::CHORD) {
                                           // found chord
                                           Chord* ch = static_cast<Chord*>(el);
-                                          qDebug("fixupFiguredBass chord %p track %d ticks %d",
-                                                 ch, ch->track(), ch->actualTicks());
                                           fb->setTicks(ch->actualTicks());
                                           break; // use the first chord found
                                           }
@@ -2302,6 +2278,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   }
             measure  = new Measure(score);
             measure->setTick(tick);
+            measure->setLen(Fraction::fromTicks(measureLen));
             measure->setNo(number);
             score->measures()->add(measure);
             } else {
@@ -2526,53 +2503,20 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       fixupFiguredBass(part, measure);
 
 #ifdef DEBUG_TICK
-      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d",
-             measure->tick(), maxtick, lastMeasureLen, measureLen);
+      qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
+             measure->tick(), maxtick, lastMeasureLen, measureLen,
+             fractionTSig.ticks(), qPrintable(fractionTSig.print()));
 #endif
 
+      // TODO:
+      // - how to handle fractionTSig.isZero (shouldn't happen ?)
+      // - how to handle unmetered music
+      if (fractionTSig.isValid() && !fractionTSig.isZero())
+            measure->setTimesig(fractionTSig);
 #if 1 // previous code
-      measure->setLen(Fraction::fromTicks(measureLen));
+      // measure->setLen(Fraction::fromTicks(measureLen));
       lastMeasureLen = measureLen;
       tick = maxtick;
-#endif
-
-#if 0 // change in 0.9.6 trunk revision 5241 for issue 14451, TODO verify if useful in trunk
-      // if number of ticks in the measure does not match the nominal time signature
-      // set a different actual time signature
-
-      AL::TimeSigMap* sigmap = score->sigmap();
-      int mtick        = measure->tick();
-
-      if (measureLen != sigmap->ticksMeasure(mtick)) {
-
-            AL::SigEvent se = sigmap->timesig(mtick);
-            Fraction nominal = se.getNominal();
-#ifdef DEBUG_TICK
-            qDebug("measure %d actual len %d at %d -> nominal %d: %s",
-                   number+1, measureLen, mtick, sigmap->ticksMeasure(tick), qPrintable(nominal.print()));
-#endif
-
-            // determine actual duration as fraction
-            Fraction actual;
-            if ((measureLen % AL::division) == 0)
-                  actual = Fraction(measureLen / AL::division, 4);
-            else if ((measureLen % (AL::division/2)) == 0)
-                  actual = Fraction(measureLen / (AL::division/2), 8);
-            else if ((measureLen % (AL::division/4)) == 0)
-                  actual = Fraction(measureLen / (AL::division/4), 16);
-            else if ((measureLen % (AL::division/8)) == 0)
-                  actual = Fraction(measureLen / (AL::division/8), 32);
-            else {
-                  // this shouldn't happen
-                  qDebug("ImportXml: incorrect measure length calculated by determineMeasureLength()");
-                  }
-
-            // set time signature
-#ifdef DEBUG_TICK
-            qDebug("Add Sig %d  len %d:  %s", mtick, measureLen, qPrintable(actual.print()));
-#endif
-            score->sigmap()->add(mtick, actual, nominal);
-            }
 #endif
 
       // multi-measure rest handling:
@@ -3375,6 +3319,8 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
       for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
             if (ee.tagName() == "staff-lines")
                   stafflines = ee.text().toInt();
+            else if (ee.tagName() == "staff-tuning")
+                  ;  // ignore here (but prevent error message), handled by Tablature::readMusicXML
             else
                   domNotImplemented(ee);
             }
@@ -3567,6 +3513,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
+                  fractionTSig = Fraction(bts, btp);
                   // add timesig to all staves
                   //ws score->sigmap()->add(tick, TimeSig::getSig(st));
                   Part* part = score->staff(staff)->part();
@@ -3574,7 +3521,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);
                         timesig->setTrack((staff + i) * VOICES);
-                        timesig->setSig(Fraction(bts, btp), st);
+                        timesig->setSig(fractionTSig, st);
                         // handle simple compound time signature
                         if (beats.contains(QChar('+'))) {
                               timesig->setNumeratorString(beats);
@@ -3857,20 +3804,14 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
                   if (elemCount == 0) {
                         // first note: init variables
                         smallestTypeAndCount(cr, tupletType, tupletCount);
-                        qDebug("determineTupletTypeAndCount(%p) cr %p type %d count %d",
-                               t, de, tupletType, tupletCount);
                         }
                   else {
                         int noteType = 0;
                         int noteCount = 0;
                         smallestTypeAndCount(cr, noteType, noteCount);
-                        qDebug("determineTupletTypeAndCount(%p) cr %p type %d count %d",
-                               t, de, noteType, noteCount);
                         // match the types
                         matchTypeAndCount(tupletType, tupletCount, noteType, noteCount);
                         tupletCount += noteCount;
-                        qDebug("determineTupletTypeAndCount(%p) total type %d count %d",
-                               t, tupletType, tupletCount);
                         }
                   }
             elemCount++;
@@ -3896,8 +3837,6 @@ TDuration determineTupletBaseLen(Tuplet* t)
 
       // first determine type and number of smallest notes in the tuplet
       determineTupletTypeAndCount(t, tupletType, tupletCount);
-      qDebug("determineTupletBaseLen(%p) num/denom %d/%d smallest type %d count %d",
-             t, t->ratio().numerator(), t->ratio().denominator(), tupletType, tupletCount);
 
       // sanity check:
       // for a 3:2 tuplet, count must be a multiple of 3
@@ -3908,14 +3847,12 @@ TDuration determineTupletBaseLen(Tuplet* t)
 
       // calculate baselen in smallest notes
       tupletCount /= t->ratio().numerator();
-      qDebug("determineTupletBaseLen(%p) baselen type %d count %d", t, tupletType, tupletCount);
 
       // normalize
       while (tupletCount > 1 && (tupletCount % 2) == 0) {
             tupletCount /= 2;
             tupletType  -= 1;
             }
-      qDebug("determineTupletBaseLen(%p) normalized baselen type %d count %d", t, tupletType, tupletCount);
 
       return TDuration(TDuration::DurationType(tupletType));
       }
@@ -3955,16 +3892,10 @@ bool isTupletFilled(Tuplet* t, TDuration normalType)
             int matchedNormalCount = t->ratio().numerator();
             // match the types
             matchTypeAndCount(tupletType, tupletCount, matchedNormalType, matchedNormalCount);
-            qDebug("isTupletFilledWithNormalType(%p, %d) matched type/count %d/%d tuplet type/count %d/%d done %d",
-                   t, normalType.type(), matchedNormalType, matchedNormalCount,
-                   tupletType, tupletCount, (tupletCount >= matchedNormalCount));
             // ... result scenario (1)
             return tupletCount >= matchedNormalCount;
             }
       else {
-            qDebug("isTupletFilled(%p) %d/%d tupletCount %d done %d",
-                   t, t->ratio().numerator(), t->ratio().denominator(),
-                   tupletCount, (tupletCount >= t->ratio().numerator()));
             // ... result scenario (2)
             return tupletCount >= t->ratio().numerator();
             }
@@ -4035,14 +3966,11 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
       // Detect this by comparing the actual duration with the expected duration
       // based on note type. If actual is 2/3 of expected, the rest is part
       // of a tuplet.
-      qDebug("xmlTuplet(tuplet %p cr %p len %d ticks %d) rest %d", tuplet, cr, cr->duration().ticks(), ticks, rest);
       if (rest && actualNotes == 1 && normalNotes == 1 && cr->duration().ticks() != ticks) {
-            qDebug("xmlTuplet --> found one !");
             if (2 * cr->duration().ticks() == 3 * ticks) {
                   actualNotes = 3;
                   normalNotes = 2;
                   }
-            qDebug("xmlTuplet --> actualNotes %d normalNotes %d", actualNotes, normalNotes);
             }
 
       // check for obvious errors
@@ -4064,7 +3992,6 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
             if (tupletType == "start"
                 || (!tuplet && (actualNotes != 1 || normalNotes != 1))) {
                   tuplet = new Tuplet(cr->score());
-                  qDebug("tuplet start new tuplet %p", tuplet);
                   tuplet->setTrack(cr->track());
                   tuplet->setRatio(Fraction(actualNotes, normalNotes));
                   tuplet->setTick(cr->tick());
@@ -4089,7 +4016,6 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
       // Must also check for actual/normal notes to prevent
       // adding one chord too much if tuplet stop is missing.
       if (tuplet && !(actualNotes == 1 && normalNotes == 1)) {
-            qDebug("tuplet add cr %p to tuplet %p", cr, tuplet);
             cr->setTuplet(tuplet);
             tuplet->add(cr);
             }
@@ -4104,7 +4030,6 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
             if (tupletType == "stop"
                 || isTupletFilled(tuplet, normalType)
                 || (actualNotes == 1 && normalNotes == 1)) {
-                  qDebug("stop tuplet %p last chordrest %p", tuplet, cr);
                   // set baselen
                   TDuration td = determineTupletBaseLen(tuplet);
                   td.print();
@@ -4117,21 +4042,9 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                               totalDuration+=de->globalDuration().ticks();
                               }
                         }
-                  if (totalDuration && normalNotes) {
-                        /*
-                        Duration d;
-                        d.setVal(totalDuration);
-                        tuplet->setFraction(d.fraction());
-                        Duration d2;
-                        d2.setVal(totalDuration/normalNotes);
-                        tuplet->setBaseLen(d2.fraction());
-                        */
-                        qDebug("tuplet stop, duration OK");
-                        }
-                  else {
+                  if (!(totalDuration && normalNotes)) {
                         qDebug("MusicXML::import: tuplet stop but bad duration");
                         }
-                  qDebug("tuplet stop, tuplet 0");
                   tuplet = 0;
                   }
             }
@@ -4868,7 +4781,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       // determine tick for note
       int loc_tick = chord ? prevtick : tick;
-      qDebug("chord %d prevtick %d tick %d loc_tick %d", chord, prevtick, tick, loc_tick);
+      // qDebug("chord %d prevtick %d tick %d loc_tick %d", chord, prevtick, tick, loc_tick);
 
       // trk is first track of staff
       int trk = (staff + relStaff) * VOICES;
@@ -5035,9 +4948,17 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       if (rest) {
             cr = new Rest(score);
-            // whole measure rests do not have a "type" element
+            // By convention, whole measure rests do not have a "type" element
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
+            // but for backwards compatibility the "old" convention still has to be supported.
             if (durationType.type() == TDuration::V_INVALID) {
-                  durationType.setType(TDuration::V_MEASURE);
+                  // Verify the rest fits exactly in the measure, as some programs
+                  // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+                  // the type for all rests.
+                  if (tick == measure->tick() && ticks == measure->ticks())
+                        durationType.setType(TDuration::V_MEASURE);
+                  else
+                        durationType.setVal(ticks);
                   cr->setDurationType(durationType);
                   cr->setDuration(Fraction::fromTicks(ticks));
                   }
@@ -5053,17 +4974,17 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             cr->setTrack(track);
             static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
-            //sibelius might import 2 rests at the same place, ignore the 2one
-            //<?DoletSibelius Two NoteRests in same voice at same position may be an error?>
+            // Sibelius might export two rests at the same place, ignore the 2nd one
+            // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
             if (step != "" && 0 <= octave && octave <= 9) {
-                  qDebug("rest step=%s oct=%d", qPrintable(step), octave);
+                  // qDebug("rest step=%s oct=%d", qPrintable(step), octave);
                   ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
                   int istep = step[0].toAscii() - 'A';
-                  qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
+                  // qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
                   if (istep < 0 || istep > 6) {
                         qDebug("rest: illegal display-step %d, <%s>", istep, qPrintable(step));
                         }
@@ -5071,7 +4992,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                         //                        a  b  c  d  e  f  g
                         static int table2[7]  = { 5, 6, 0, 1, 2, 3, 4 };
                         int dp = 7 * (octave + 2) + table2[istep];
-                        qDebug(" dp=%d po-dp=%d", dp, po-dp);
+                        // qDebug(" dp=%d po-dp=%d", dp, po-dp);
                         cr->setUserYoffset((po - dp + 3) * score->spatium() / 2);
                         }
                   }
@@ -5185,17 +5106,32 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
             // set drumset information
             // note that in MuseScore, the drumset contains defaults for notehead,
-            // line and stem direction, while a MusicXML file contains actual.
+            // line and stem direction, while a MusicXML file contains actuals.
             // the MusicXML values for each note are simply copied to the defaults
+
             if (unpitched) {
+                  // determine staff line based on display-step / -octave and clef type
                   ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
-                  // int line = absoluteStaffLine(pitch) - absoluteStaffLine(po);
-                  // int line = absoluteStaffLine(po) - absoluteStaffLine(pitch);
-                  // TODO: magic constant "19" seems to work only for percussion clef.
-                  // find out why and fix for other clefs (G seems to work also, but F doesn't)
-                  int line = absStep(po) - absStep(pitch) + 19;
+                  int line = po - absStep(pitch);
+
+                  // correct for number of staff lines
+                  // see ExportMusicXml::unpitch2xml for explanation
+                  // TODO handle other # staff lines ?
+                  int staffLines = cr->staff()->lines();
+                  if (staffLines == 1) line -= 8;
+                  if (staffLines == 3) line -= 2;
+
+                  // the drum palette cannot handle stem direction AUTO,
+                  // overrule if necessary
+                  if (sd == MScore::AUTO) {
+                        if (line > 4)
+                              sd = MScore::DOWN;
+                        else
+                              sd = MScore::UP;
+                        }
+
                   qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
                          clef, po, absStep(po), pitch, absStep(pitch));
                   qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",

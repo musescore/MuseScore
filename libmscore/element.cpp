@@ -507,6 +507,7 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ELEMENT_ON_STAFF) {
+            Q_ASSERT(parent()->type() == SEGMENT);
             System* system = static_cast<Segment*>(parent())->measure()->system();
             if (system) {
                   int si = staffIdx();
@@ -533,6 +534,7 @@ QPointF Element::canvasPos() const
       if (parent() == 0)
             return p;
       if (_flags & ELEMENT_ON_STAFF) {
+            Q_ASSERT(parent()->type() == SEGMENT);
             System* system = static_cast<Segment*>(parent())->measure()->system();
             if (system) {
                   int si = staffIdx();
@@ -1358,7 +1360,7 @@ Element* Element::create(ElementType type, Score* score)
             case MAXTYPE:
             case INVALID:  break;
             }
-      qDebug("cannot create type <%s>\n", Element::name(type));
+      qDebug("cannot create type %d <%s>\n", int(type), Element::name(type));
       return 0;
       }
 

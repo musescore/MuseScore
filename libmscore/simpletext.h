@@ -40,7 +40,8 @@ struct TLine {
 class SimpleText : public Element {
       Q_OBJECT
 
-      QList<TLine> _text;
+      QString _text;
+      QList<TLine> _layout;
       QRectF frame;           // calculated in layout()
 
       bool _layoutToParentWidth;

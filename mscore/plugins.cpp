@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: plugins.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
-//  Copyright (C) 2009-2010 Werner Schweer and others
+//  Copyright (C) 2009-2012 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -46,57 +45,10 @@
 #include "libmscore/notedot.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/accidental.h"
+#include "libmscore/lyrics.h"
+#include "qmlplugin.h"
 
-//---------------------------------------------------------
-//   QmlPlugin
-//---------------------------------------------------------
-
-QmlPlugin::QmlPlugin(QDeclarativeItem* parent)
-   : QDeclarativeItem(parent)
-      {
-      }
-
-QmlPlugin::~QmlPlugin()
-      {
-      }
-
-//---------------------------------------------------------
-//   curScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::curScore() const
-      {
-      return mscore->currentScore();
-      }
-
-//---------------------------------------------------------
-//   scores
-//---------------------------------------------------------
-
-QDeclarativeListProperty<Score> QmlPlugin::scores()
-      {
-      return QDeclarativeListProperty<Score>(this, mscore->scores());
-      }
-
-//---------------------------------------------------------
-//   writeScore
-//---------------------------------------------------------
-
-bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
-      {
-      if(!s)
-            return false;
-      return mscore->saveAs(s, true, name, ext);
-      }
-
-//---------------------------------------------------------
-//   readScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::readScore(const QString& name)
-      {
-      return mscore->openScore(name);
-      }
+extern QString localeName;
 
 //---------------------------------------------------------
 //   registerPlugin
@@ -138,6 +90,21 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
                   }
             return;
             }
+      //
+      // load translation
+      //
+      QLocale locale;
+      QString t = np.absolutePath() + "/translations/locale_" + MuseScore::getLocaleISOCode().left(2) + ".qm";
+      QTranslator* translator = new QTranslator;
+      if (!translator->load(t)) {
+            qDebug("cannot load qml translations <%s>", qPrintable(t));
+            delete translator;
+            }
+      else {
+            qDebug("load qml translations <%s>", qPrintable(t));
+            qApp->installTranslator(translator);
+            }
+
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
       QString menuPath = item->menuPath();
       plugin->menuPath = menuPath;
@@ -187,9 +154,13 @@ QDeclarativeEngine* MuseScore::qml()
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
+            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
+
             //-----------virtual classes
 //            qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
@@ -318,7 +289,8 @@ void MuseScore::loadPlugins()
       {
       pluginMapper = new QSignalMapper(this);
       connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
-      foreach(PluginDescription* d, preferences.pluginList) {
+      for (int i = 0; i < preferences.pluginList.size(); ++i) {
+            PluginDescription* d = &preferences.pluginList[i];
             if (d->load)
                   registerPlugin(d);
             }
@@ -403,54 +375,6 @@ void MuseScore::pluginTriggered(int idx)
       if (cs)
             cs->endCmd();
       endCmd();
-      }
-
-//---------------------------------------------------------
-//   newElement
-//---------------------------------------------------------
-
-Element* QmlPlugin::newElement(Element::ElementType t)
-      {
-qDebug("newElement %d score %p", int(t), curScore());
-      Score* score = curScore();
-      if (score == 0)
-            return 0;
-      return Element::create(t, score);
-      }
-
-//---------------------------------------------------------
-//   newScore
-//---------------------------------------------------------
-
-Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
-      {
-      if (mscore->currentScore()) {
-            mscore->currentScore()->endCmd();
-            mscore->endCmd();
-            }
-      Score* score = new Score(MScore::defaultStyle());
-      int view = mscore->appendScore(score);
-      mscore->setCurrentView(0, view);
-      qApp->processEvents();
-      score->setName(name);
-      score->appendPart(part);
-      score->appendMeasures(measures);
-      score->doLayout();
-      score->startCmd();
-      return score;
-      }
-
-//---------------------------------------------------------
-//   cmd
-//---------------------------------------------------------
-
-void QmlPlugin::cmd(const QString& s)
-      {
-      Shortcut* sc = Shortcut::getShortcut(s.toAscii().data());
-      if (sc)
-            mscore->cmd(sc->action());
-      else
-            printf("QmlPlugin:cmd: not found <%s>\n", qPrintable(s));
       }
 
 //---------------------------------------------------------

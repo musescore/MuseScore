@@ -113,6 +113,10 @@ enum {
 
 //---------------------------------------------------------
 //   LayoutMode
+//   LayoutPage   The normal page view, honors page and line breaks
+//   LayoutLine   The panoramic view, one long system
+//   LayoutFloat  The "reflow" mode, ignore page and line breaks
+//   LayoutSystem The "never ending page", page break are turned into line break
 //---------------------------------------------------------
 
 enum LayoutMode {
@@ -401,7 +405,6 @@ class Score : public QObject {
       bool doReLayout();
       Measure* skipEmptyMeasures(Measure*, System*);
 
-      void layoutStage1();
       void layoutStage2();
       void layoutStage3();
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
@@ -419,7 +422,6 @@ class Score : public QObject {
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
-      void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs);
       void createPlayEvents();
 
    public:
@@ -812,6 +814,7 @@ class Score : public QObject {
 
       Q_INVOKABLE void doLayout();
       void layoutSystems();
+      void layoutSystems2();
       void layoutLinear();
       void layoutPages();
       void layoutSystemsUndoRedo();
@@ -925,10 +928,6 @@ class Score : public QObject {
       Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
-      QList<NoteEventList> renderChord(Chord* chord, int gateTime);
-      QList<NoteEventList> renderChord(Chord* chord);
-      void createPlayEvents(Chord*, int gateTime);
-      void createPlayEvents(Chord*);
       };
 
 extern Score* gscore;

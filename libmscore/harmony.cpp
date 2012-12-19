@@ -19,6 +19,7 @@
 #include "segment.h"
 #include "chordlist.h"
 #include "mscore.h"
+#include "fret.h"
 
 //---------------------------------------------------------
 //   harmonyName
@@ -87,13 +88,13 @@ void Harmony::resolveDegreeList()
       ChordList* cl = score()->style()->chordList();
       foreach(const ChordDescription* cd, *cl) {
             if ((cd->chord == hc) && !cd->names.isEmpty()) {
-qDebug("ResolveDegreeList: found in table as %s\n", qPrintable(cd->names.front()));
+qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd->names.front()));
                   _id = cd->id;
                   _degreeList.clear();
                   return;
                   }
             }
-qDebug("ResolveDegreeList: not found in table\n");
+qDebug("ResolveDegreeList: not found in table");
       }
 
 //---------------------------------------------------------
@@ -219,7 +220,7 @@ void Harmony::read(const QDomElement& de)
                   if (degreeValue <= 0 || degreeValue > 13
                       || degreeAlter < -2 || degreeAlter > 2
                       || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                        qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s\n",
+                        qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
                                degreeValue, degreeAlter, qPrintable(degreeType));
                         }
                   else {
@@ -327,7 +328,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       bool germanNames = score()->styleB(ST_useGermanNoteNames);
       int r = convertRoot(s, germanNames);
       if (r == INVALID_TPC) {
-            qDebug("1:parseHarmony failed <%s>\n", qPrintable(ss));
+            qDebug("1:parseHarmony failed <%s>", qPrintable(ss));
             return false;
             }
       *root = r;
@@ -351,7 +352,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                   }
             }
       _userName = s;
-      qDebug("2:parseHarmony failed <%s><%s>\n", qPrintable(ss), qPrintable(s));
+      qDebug("2:parseHarmony failed <%s><%s>", qPrintable(ss), qPrintable(s));
       return false;
       }
 
@@ -483,7 +484,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind,  const QList<HDegr
             QString lowerCaseK = k.toLower(); // required for xmlKind Tristan
             QStringList d = cd->xmlDegrees;
             if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
-//                  qDebug("harmony found in db: %s %s -> %d\n", qPrintable(kind), qPrintable(degrees), cd->id);
+//                  qDebug("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
                   return cd;
                   }
             }
@@ -531,27 +532,44 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      if (_editMode || textList.isEmpty()) {
-            Text::layout();
+      if (_editMode || textList.isEmpty())
+            Text::layout1();
+      else {
+            // textStyle().layout(this);
+            QRectF bb;
+            foreach(const TextSegment* ts, textList)
+                  bb |= ts->boundingRect().translated(ts->x, ts->y);
+            setbbox(bb);
+            }
+      if (!parent()) {          // for use in palette
+            setPos(QPointF());
             return;
             }
-      textStyle().layout(this);
-      if (parent()) {
-            Measure* m = measure();
-            qreal yy = track() < 0 ? 0.0 : m->system()->staff(track() / VOICES)->y();
-            setPos(ipos() + QPointF(0.0, yy));
+
+      qreal yy = 0.0;
+      if (parent()->type() == SEGMENT) {
+            Measure* m = static_cast<Measure*>(parent()->parent());
+            yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
+            yy += score()->styleP(ST_harmonyY);
             }
-      QRectF bb;
-      foreach(const TextSegment* ts, textList)
-            bb |= ts->boundingRect().translated(ts->x, ts->y);
-      setbbox(bb);
+      else if (parent()->type() == FRET_DIAGRAM) {
+            yy = score()->styleP(ST_harmonyFretDist);
+            }
+      setPos(QPointF(0.0, yy));
+
       if (!readPos().isNull()) {
             // version 114 is measure based
             // rebase to segment
-            if (score()->mscVersion() == 114)
-                  setReadPos(readPos() - segment()->pos());
+            if (score()->mscVersion() == 114) {
+                  setReadPos(readPos() - parent()->pos());
+                  }
             setUserOff(readPos() - ipos());
             setReadPos(QPointF());
+            }
+      if (parent()->type() == FRET_DIAGRAM && parent()->parent()->type() == SEGMENT) {
+            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
+            qreal dist = -(bbox().top());
+            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
             }
       }
 
@@ -667,7 +685,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty\n");
+                        qDebug("RenderAction::RENDER_POP: stack empty");
                   }
             else if (a.type == RenderAction::RENDER_NOTE) {
                   bool germanNames = score()->styleB(ST_useGermanNoteNames);
@@ -708,7 +726,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         }
                   }
             else
-                  qDebug("========unknown render action %d\n", a.type);
+                  qDebug("========unknown render action %d", a.type);
             }
       }
 
@@ -772,7 +790,11 @@ QLineF Harmony::dragAnchor() const
       qreal xp = 0.0;
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
-      qreal yp = measure()->system()->staffY(staffIdx());
+      qreal yp;
+      if (parent()->type() == SEGMENT)
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffY(staffIdx());
+      else
+            yp = parent()->canvasPos().y();
       QPointF p(xp, yp);
       return QLineF(p, canvasPos());
       }

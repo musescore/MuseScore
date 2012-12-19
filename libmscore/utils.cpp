@@ -155,11 +155,9 @@ int Score::nextSeg(int tick, int track)
       {
       Segment* seg = tick2segment(tick);
       while (seg) {
-            seg = seg->next1();
+            seg = seg->next1(Segment::SegChordRest);
             if (seg == 0)
                   break;
-            if (seg->subtype() != Segment::SegChordRest)
-                  continue;
             if (seg->element(track))
                   break;
             }
@@ -596,7 +594,10 @@ Note* searchTieNote(Note* note)
                   int staffIdx = cr->staffIdx() + cr->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;
-                  foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
+                  Chord* c = static_cast<Chord*>(cr);
+                  int n = c->notes().size();
+                  for (int i = 0; i < n; ++i) {
+                        Note* n = c->notes().at(i);
                         if (n->pitch() == note->pitch()) {
                               if (note2 == 0 || cr->track() == chord->track())
                                     note2 = n;

@@ -31,18 +31,18 @@ target_link_libraries(
       )
 
 if (NOT MINGW)
-      target_link_libraries(${TARGET} 
-      z 
-      dl       
+      target_link_libraries(${TARGET}
+      z
+      dl
       pthread
       fontconfig
       freetype)
 endif (NOT MINGW)
 
 if (OMR)
-      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg)
+      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg freetype)
       if (OCR)
-            target_link_libraries(mscore tesseract_api)
+            target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)
 endif (OMR)
 

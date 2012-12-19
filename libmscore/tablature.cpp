@@ -19,7 +19,7 @@
 
 static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
 
-Tablature guitarTablature(13, 6, guitarStrings);
+Tablature guitarTablature(23, 6, guitarStrings);
 
 //---------------------------------------------------------
 //   Tablature
@@ -230,15 +230,9 @@ void Tablature::fretChord(Chord * chord) const
                   // if we run out of strings
                   if(nTempString >= strings()) {
                         // no way to fit this chord in this tab:
-                        // mark as fretting conflict this note...
+                        // mark this note as fretting conflict
                         note->setFretConflict(true);
-//                        // and any note already scanned and set on the same string
-//                        for(nCount2=chord->notes().size()-1; nCount2 > nCount; nCount2--) {
-//                              note2 = chord->notes().at(nCount2);
-//                              if(note2->string() == nNewString)
-//                                    note2->setFretConflict(true);
-//                              }
-                        continue;
+//                        continue;
                         }
                   }
 
@@ -284,13 +278,10 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
 
 //---------------------------------------------------------
 //   Read MusicXML
-//
-// Set the FretDiagram state based on the MusicXML <figure> node de.
 //---------------------------------------------------------
 
 void Tablature::readMusicXML(const QDomElement& de)
       {
-      qDebug("Tablature::readMusicXML");
       _frets = 25;
 
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -300,8 +291,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                   if (val > 0) {
                         // resize the string table and init with zeroes
                         stringTable = QVector<int>(val).toList();
-                        for (int i = 0; i < stringTable.size(); ++i)
-                              qDebug("Tablature::readMusicXML stringTable[%d] = %d", i, stringTable.at(i));
                         }
                   else
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
@@ -323,8 +312,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                         else
                               domError(ee);
                         }
-                  qDebug("Tablature::readMusicXML string %d step/alter/oct %s/%d/%d",
-                         line, qPrintable(step), alter, octave);
                   if (0 < line && line <= stringTable.size()) {
                         int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
                         if (pitch >= 0)
@@ -341,8 +328,6 @@ void Tablature::readMusicXML(const QDomElement& de)
                   ; // others silently ignored
                   }
             }
-      for (int i = 0; i < stringTable.size(); ++i)
-            qDebug("Tablature::readMusicXML stringTable[%d] = %d", i, stringTable.at(i));
       }
 
 //---------------------------------------------------------

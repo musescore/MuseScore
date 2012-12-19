@@ -180,7 +180,7 @@ struct Preferences {
 
       bool dirty;
 
-      QList<PluginDescription*> pluginList;
+      QList<PluginDescription> pluginList;
 
       bool readPluginList();
       void writePluginList();

@@ -330,9 +330,7 @@ void System::layout2()
             qreal distUp   = 0.0;
             foreach(MeasureBase* m, ml) {
                   distDown = qMax(distDown, m->distanceDown(staffIdx));
-                  distDown = qMax(distDown, m->userDistanceDown(staffIdx));
                   distUp   = qMax(distUp,   m->distanceUp(staffIdx));
-                  distUp   = qMax(distUp,   m->userDistanceUp(staffIdx));
                   }
             s->setDistanceDown(distDown);
             s->setDistanceUp(distUp);
@@ -749,7 +747,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       {
       Lyrics* l = 0;
-      while ((s = s->next1(Segment::SegChordRest | Segment::SegGrace))) {
+      while ((s = s->next1(Segment::SegChordRestGrace))) {
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             QList<Lyrics*>* nll = 0;
@@ -946,7 +944,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 qreal System::staffY(int staffIdx) const
       {
       if (_staves.size() <= staffIdx) {
-            qDebug("staffY: staves %d <= staff %d, vbox %d",
+            qDebug("staffY: staves %d <= staffIdx %d, vbox %d",
                _staves.size(), staffIdx, _vbox);
             return pagePos().y();
             }

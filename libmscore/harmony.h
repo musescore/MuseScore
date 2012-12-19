@@ -85,8 +85,6 @@ class Harmony : public Text {
       ~Harmony();
       virtual Harmony* clone() const           { return new Harmony(*this); }
       virtual ElementType type() const         { return HARMONY; }
-      Segment* segment() const                 { return (Segment*)parent(); }
-      Measure* measure() const                 { return (Measure*)(parent()->parent()); }
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }

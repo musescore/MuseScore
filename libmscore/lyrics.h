@@ -23,11 +23,14 @@ class QPainter;
 
 //---------------------------------------------------------
 //   @@ Lyrics
+//   @P syllabic  enum SINGLE, BEGIN, END, MIDDLE
 //---------------------------------------------------------
 
 class Lyrics : public Text {
       Q_OBJECT
-
+      Q_PROPERTY(Syllabic syllabic READ syllabic WRITE setSyllabic)
+      Q_ENUMS(Syllabic)
+      
    public:
       enum Syllabic { SINGLE, BEGIN, END, MIDDLE };
 
@@ -42,7 +45,7 @@ class Lyrics : public Text {
       int _no;                ///< row index
 
    public:
-      Lyrics(Score*);
+      Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
       virtual Lyrics* clone() const    { return new Lyrics(*this); }

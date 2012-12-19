@@ -70,6 +70,7 @@
 #include "audio.h"
 #include "instrtemplate.h"
 #include "cursor.h"
+#include "rendermidi.h"
 
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
@@ -195,7 +196,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
       for (MeasureBase* mb = fm;;) {
             if (mb->type() == Measure::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
-                  Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+                  Segment::SegmentTypes st = Segment::SegChordRestGrace;
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
                         foreach(Element* e, s->elist()) {
                               if (e) {
@@ -501,20 +502,6 @@ void Score::fixTicks()
                   continue;
                   }
             Measure* m = static_cast<Measure*>(mb);
-            if (!parentScore()) {
-                  for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
-                        foreach(Element* e, s->annotations()) {
-                              if (e->type() == Element::TEMPO_TEXT) {
-                                    const TempoText* tt = static_cast<const TempoText*>(e);
-                                    setTempo(tt->segment(), tt->tempo());
-                                    }
-                              }
-                        }
-                  }
-
-            //
-            // fix ticks
-            //
             int mtick        = m->tick();
             int diff         = tick - mtick;
             int measureTicks = m->ticks();
@@ -535,21 +522,31 @@ void Score::fixTicks()
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
                         if (s->subtype() == Segment::SegBreath) {
                               setPause(s->tick(), .1);
-                              continue;
                               }
-                        qreal stretch = -1.0;
-                        foreach(Element* e, s->elist()) {
-                              if (!e)
-                                    continue;
-                              ChordRest* cr = static_cast<ChordRest*>(e);
-                              foreach(Articulation* a, cr->articulations())
-                                    stretch = qMax(a->timeStretch(), stretch);
-                              if (stretch > 0.0) {
-                                    qreal otempo = tempomap()->tempo(cr->tick());
-                                    qreal ntempo = otempo / stretch;
-                                    setTempo(cr->tick(), ntempo);
-                                    setTempo(cr->tick() + cr->actualTicks(), otempo);
-                                    break;
+                        else {
+                              foreach(Element* e, s->annotations()) {
+                                    if (e->type() == Element::TEMPO_TEXT) {
+                                          const TempoText* tt = static_cast<const TempoText*>(e);
+                                          setTempo(tt->segment(), tt->tempo());
+                                          }
+                                    }
+                              qreal stretch = -1.0;
+                              int n = s->elist().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Element* e = s->elist().at(i);
+                                    if (!e)
+                                          continue;
+                                    ChordRest* cr = static_cast<ChordRest*>(e);
+                                    int nn = cr->articulations().size();
+                                    for (int ii = 0; ii < nn; ++ii)
+                                          stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
+                                    if (stretch > 0.0) {
+                                          qreal otempo = tempomap()->tempo(cr->tick());
+                                          qreal ntempo = otempo / stretch;
+                                          setTempo(cr->tick(), ntempo);
+                                          setTempo(cr->tick() + cr->actualTicks(), otempo);
+                                          break;
+                                          }
                                     }
                               }
                         }
@@ -649,7 +646,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
             if (!validSegment(segment, strack, etrack))
                   continue;
@@ -1469,7 +1466,7 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::CHORD:
-                  createPlayEvents(static_cast<Chord*>(element));
+                  ::createPlayEvents(static_cast<Chord*>(element));
                   break;
 
             case Element::NOTE: {
@@ -1481,9 +1478,12 @@ void Score::addElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  {     
+                  Element* cr = element->parent();
+                  if (cr->type() == Element::CHORD)
+                         ::createPlayEvents(static_cast<Chord*>(cr));
+                  }
                   break;
-
             default:
                   break;
             }
@@ -1626,7 +1626,7 @@ void Score::removeElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  createPlayEvents(static_cast<Chord*>(element->parent()));
+                  ::createPlayEvents(static_cast<Chord*>(element->parent()));
                   break;
 
             default:
@@ -1832,17 +1832,15 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(int /*subtype*/)
+Text* Score::getText(int subtype)
       {
-#if 0 // TODO
-      MeasureBase* m = measures()->first();
-      if (m) {
+      MeasureBase* m = first();
+      if (m && m->type() == Element::VBOX) {
             foreach(Element* e, *m->el()) {
-                  if (e->type() == Element::TEXT && static_cast<Text*>(e)->subtype() == subtype)
+                  if (e->type() == Element::TEXT && static_cast<Text*>(e)->textStyleType() == subtype)
                         return static_cast<Text*>(e);
                   }
             }
-#endif
       return 0;
       }
 
@@ -2073,7 +2071,7 @@ void Score::updateNotes()
                   tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
 
                   for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->subtype() & (Segment::SegChordRest | Segment::SegGrace)))
+                        if (!(segment->subtype() & (Segment::SegChordRestGrace)))
                               continue;
                         m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
                         }
@@ -2106,7 +2104,7 @@ void Score::updateAccidentals(Measure* m, int staffIdx)
       as.init(st->keymap()->key(m->tick()));
 
       for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->subtype() & (Segment::SegChordRest | Segment::SegGrace))
+            if (segment->subtype() & (Segment::SegChordRestGrace))
                   m->updateAccidentals(segment, staffIdx, &as);
             }
       }

@@ -46,6 +46,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
+#include "rendermidi.h"
 
 //---------------------------------------------------------
 //   updateChannel
@@ -77,7 +78,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(Segment::SegChordRest | Segment::SegGrace); s; s = s->next1(Segment::SegChordRest | Segment::SegGrace)) {
+      for (Segment* s = fm->first(Segment::SegChordRestGrace); s; s = s->next1(Segment::SegChordRestGrace)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -217,7 +218,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
       int firstStaffIdx = m->score()->staffIdx(part);
       int nextStaffIdx  = firstStaffIdx + part->nstaves();
 
-      Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      Segment::SegmentTypes st = Segment::SegChordRestGrace;
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
@@ -308,6 +309,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                   if (e->type() == Element::PEDAL) {
                         Segment* s1 = static_cast<Segment*>(e->startElement());
                         Segment* s2 = static_cast<Segment*>(e->endElement());
+                        if (s2 == 0) {
+                              qDebug("CollectMeasureEvents: spanner %s: no end element at measure %d, staff %d",
+                                 e->name(), s1->measure()->no(), e->staffIdx());
+                              continue;
+                              }
                         Staff* staff = e->staff();
 
                         int channel = staff->channel(s1->tick(), 0);
@@ -481,10 +487,8 @@ void Score::updateVelo()
                                     break;
                               case Element::DYNAMIC_PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
-                                          for (int i = partStaff; i < partStaff+partStaves; ++i) {
+                                          for (int i = partStaff; i < partStaff+partStaves; ++i)
                                                 staff(i)->velocities().setVelo(tick, v);
-//                                                printf("   setVelo %d %d\n", tick, v);
-                                                }
                                           }
                                     break;
                               case Element::DYNAMIC_SYSTEM:
@@ -542,7 +546,7 @@ static int gateTime(Chord* chord)
       int gateTime = 100;
       Score* score = chord->score();
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+            const Segment::SegmentTypes st = Segment::SegChordRestGrace;
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
@@ -572,12 +576,7 @@ static int gateTime(Chord* chord)
 //   renderChord
 //---------------------------------------------------------
 
-QList<NoteEventList> Score::renderChord(Chord* chord)
-      {
-      return renderChord(chord, gateTime(chord));
-      }
-
-QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
+static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
       if (chord->notes().isEmpty())
@@ -597,7 +596,7 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
             int n = 1 << tremolo->lines();
             int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
-                  Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+                  Segment::SegmentTypes st = Segment::SegChordRestGrace;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
@@ -710,7 +709,7 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
             NoteEventList* el = &ell[i];
             int nn = el->size();
             if (nn == 0) {
-                  el->append(NoteEvent());
+                  el->append(NoteEvent(0, ontime, 1000-ontime));
                   ++nn;
                   }
             for (int i = 0; i < nn; ++i) {
@@ -721,21 +720,54 @@ QList<NoteEventList> Score::renderChord(Chord* chord, int gateTime)
       return ell;
       }
 
+QList<NoteEventList> renderChord(Chord* chord)
+      {
+      return renderChord(chord, gateTime(chord), 0);
+      }
+
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
 //---------------------------------------------------------
 
-void Score::createPlayEvents(Chord* chord)
+static void createPlayEvents(Chord* chord, int gateTime, const QList<Chord*>& graceNotes)
       {
-      createPlayEvents(chord, gateTime(chord));
-      }
+      int n = graceNotes.size();
+      int ontime = 0;
+      if (n) {
+            //
+            //    render chords with grace notes
+            //
+            ontime = (graceNotes[0]->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
+            qreal scale = (qreal)graceNotes[0]->duration().denominator() / (qreal)chord->duration().denominator();
+            int graceDuration = (ontime * scale)/ n;
 
-void Score::createPlayEvents(Chord* chord, int gateTime)
-      {
-      QList<NoteEventList> el = renderChord(chord, gateTime);
+            int on = 0;
+            for (int i = 0; i < n; ++i) {
+                  QList<NoteEventList> el;
+                  Chord* gc = graceNotes[i];
+                  int nn = gc->notes().size();
+                  for (int ii = 0; ii < nn; ++ii) {
+                        NoteEventList nel;
+                        nel.append(NoteEvent(0, on, graceDuration));
+                        el.append(nel);
+                        }
+
+                  if (gc->userPlayEvents())
+                        chord->score()->undo(new ChangeEventList(chord, el, false));
+                  else {
+                        for (int ii = 0; ii < nn; ++ii)
+                              gc->notes()[ii]->setPlayEvents(el[ii]);
+                        }
+                  on += graceDuration;
+                  }
+            }
+      //
+      //    render normal (and articulated) chords
+      //
+      QList<NoteEventList> el = renderChord(chord, gateTime, ontime);
       if (chord->userPlayEvents())
-            undo(new ChangeEventList(chord, el, false));
+            chord->score()->undo(new ChangeEventList(chord, el, false));
       else {
             int n = chord->notes().size();
             for (int i = 0; i < n; ++i)
@@ -743,15 +775,29 @@ void Score::createPlayEvents(Chord* chord, int gateTime)
             }
       }
 
-void Score::createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
+void createPlayEvents(Chord* chord)
       {
-      const Segment::SegmentTypes st = Segment::SegGrace | Segment::SegChordRest;
+      QList<Chord*> gl;       // list of grace chords
+      Segment* s = chord->segment();
+      while (s->prev()) {
+            s = s->prev();
+            if (s->subtype() != Segment::SegGrace)
+                  break;
+            Element* cr = s->element(chord->track());
+            if (cr && cr->type() == Element::CHORD)
+                  gl.prepend(static_cast<Chord*>(cr));
+            }
+      createPlayEvents(chord, gateTime(chord), gl);
+      }
+
+static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
+      {
+      // skip linked staves, except primary
+      if (!m->score()->staff(track / VOICES)->primaryStaff())
+            return;
+      QList<Chord*> graceNotes;
+      const Segment::SegmentTypes st = Segment::SegChordRestGrace;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                  track += VOICES-1;
-                  continue;
-                  }
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr == 0)
                   continue;
@@ -765,13 +811,19 @@ void Score::createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
                   }
             if (cr->type() != Element::CHORD)
                   continue;
+            Chord* chord = static_cast<Chord*>(cr);
+            if (chord->noteType() != NOTE_NORMAL) {
+                  graceNotes.append(chord);
+                  continue;
+                  }
             int gateTime = 100;
             if (slurs->isEmpty()) {
                   Instrument* instr = cr->staff()->part()->instr(seg->tick());
                   int channel = 0;
                   instr->updateGateTime(&gateTime, channel, "");
                   }
-            createPlayEvents(static_cast<Chord*>(cr), gateTime);
+            createPlayEvents(chord, gateTime, graceNotes);
+            graceNotes.clear();
             }
       }
 
@@ -781,7 +833,7 @@ void Score::createPlayEvents()
       int etrack = nstaves() * VOICES;
       for (int track = 0; track < etrack; ++track) {
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-                  createPlayEvents(m, track, &slurs);
+                  ::createPlayEvents(m, track, &slurs);
             }
       }
 
@@ -810,18 +862,7 @@ void Score::renderMidi(EventMap* events)
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   Fraction ts = sigmap()->timesig(m->tick()).timesig();
 
-                  int tw = 0;
-                  switch(ts.denominator()) {
-                        case  1: tw = MScore::division * 4; break;
-                        case  2: tw = MScore::division * 2; break;
-                        case  4: tw = MScore::division; break;
-                        case  8: tw = MScore::division / 2; break;
-                        case 16: tw = MScore::division / 4; break;
-                        case 32: tw = MScore::division / 8; break;
-                        }
-
-                  if (tw == 0)
-                        continue;
+                  int tw = MScore::division * 4 / ts.denominator();
                   for (int i = 0; i < ts.numerator(); i++) {
                         int tick = m->tick() + i * tw + tickOffset;
                         Event event;

@@ -259,8 +259,9 @@ void OmrSystem::searchNotes(int sym)
 #ifdef OCR
 static void addText(Score* score, int subtype, const QString& s)
       {
+#if 0 //TODO-1
       MeasureBase* measure = score->first();
-      if (measure == 0 || measure->type() != VBOX) {
+      if (measure == 0 || measure->type() != Element::VBOX) {
             measure = new VBox(score);
             measure->setNext(score->first());
             measure->setTick(0);
@@ -276,6 +277,7 @@ static void addText(Score* score, int subtype, const QString& s)
       text->setSubtype(subtype);
       text->setText(s);
       measure->add(text);
+#endif
       }
 #endif
 
@@ -283,7 +285,7 @@ static void addText(Score* score, int subtype, const QString& s)
 //   readHeader
 //---------------------------------------------------------
 
-void OmrPage::readHeader(Score* /*score*/)
+void OmrPage::readHeader(Score* score)
       {
       if (_slices.isEmpty())
             return;
@@ -291,7 +293,7 @@ void OmrPage::readHeader(Score* /*score*/)
 
       int slice = 0;
       double maxH = 0.0;
-//      int maxIdx;
+      int maxIdx;
       for (;slice < _slices.size(); ++slice) {
             double h = _slices[slice].height();
 
@@ -299,7 +301,7 @@ void OmrPage::readHeader(Score* /*score*/)
                   break;
             if (h > maxH) {
                   maxH = h;
-//                  maxIdx = slice;
+                  maxIdx = slice;
                   }
             }
 #ifdef OCR
@@ -309,7 +311,7 @@ void OmrPage::readHeader(Score* /*score*/)
       OcrImage img = OcrImage(_image.bits(), _slices[maxIdx], (_image.width() + 31)/32);
       QString s    = _omr->ocr()->readLine(img).trimmed();
       if (!s.isEmpty())
-            addText(score, TEXT_TITLE, s);
+            score->addText("title", s);
 
       QString subTitle;
       for (int i = maxIdx + 1; i < slice; ++i) {
@@ -322,7 +324,7 @@ void OmrPage::readHeader(Score* /*score*/)
                   }
             }
       if (!subTitle.isEmpty())
-            addText(score, TEXT_SUBTITLE, subTitle);
+            score->addText("subtitle", subTitle);
 #endif
 #if 0
       OcrImage img = OcrImage(_image.bits(), _slices[0], (_image.width() + 31)/32);

@@ -70,7 +70,8 @@ class Segment : public Element {
             SegEndBarLine         = 0x100,
             SegTimeSigAnnounce    = 0x200,
             SegKeySigAnnounce     = 0x400,
-            SegAll                = 0xfff
+            SegAll                = 0xfff,
+            SegChordRestGrace     = SegChordRest | SegGrace
             };
       typedef QFlags<SegmentType> SegmentTypes;
 

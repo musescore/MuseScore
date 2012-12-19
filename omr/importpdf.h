@@ -21,10 +21,8 @@
 #ifndef __IMPORT_PDF_H__
 #define __IMPORT_PDF_H__
 
+#include "libmscore/score.h"
 
-class Score;
-class QString;
-
-extern bool importPdf(Score*, const QString&);
+extern Score::FileError importPdf(Score*, const QString&);
 #endif
 

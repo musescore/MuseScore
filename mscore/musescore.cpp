@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: musescore.cpp 5652 2012-05-19 18:22:24Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include <fenv.h>
@@ -91,6 +83,7 @@
 #include "msynth/synti.h"
 
 MuseScore* mscore;
+MuseScoreCore* mscoreCore;
 
 bool enableExperimental = false;
 
@@ -109,7 +102,7 @@ static QStringList recentScores;
 static QString outFileName;
 static QString pluginName;
 static QString styleFile;
-static QString localeName;
+QString localeName;
 bool useFactorySettings = false;
 QString styleName;
 QString revision;
@@ -1962,8 +1955,10 @@ static void loadScores(const QStringList& argv)
                   Score* score = mscore->readScore(name);
                   if (score) {
                         mscore->appendScore(score);
-                        mscore->updateRecentScores(score);
-                        mscore->writeSessionFile(false);
+                        if(!noGui) {
+                              mscore->updateRecentScores(score);
+                              mscore->writeSessionFile(false);
+                              }
                         }
                   }
             }
@@ -2373,6 +2368,7 @@ int main(int argc, char* av[])
             qApp->setWindowIcon(*icons[window_ICON]);
       initProfile();
       mscore = new MuseScore();
+      mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
 
       if (!noSeq) {

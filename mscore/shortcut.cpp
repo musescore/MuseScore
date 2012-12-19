@@ -13,12 +13,13 @@
 
 #include "globals.h"
 #include "shortcut.h"
-#include "musescore.h"
+// #include "musescore.h"
 #include "icons.h"
 #include "libmscore/xml.h"
 
 bool Shortcut::dirty = false;
 QMap<QString, Shortcut*> Shortcut::_shortcuts;
+extern QString dataPath;
 
 //---------------------------------------------------------
 //   Shortcut
@@ -143,11 +144,11 @@ Shortcut::Shortcut(const Shortcut& sc)
       _action      = 0;
       }
 
-Shortcut::~Shortcut()
-      {
+//Shortcut::~Shortcut()
+//      {
 //      delete _action;
 //    _action->deleteLater();
-      }
+//      }
 
 //---------------------------------------------------------
 //   clear
@@ -284,7 +285,7 @@ void Shortcut::addShortcut(const QKeySequence& ks)
 //   keysToString
 //---------------------------------------------------------
 
-QString Shortcut::keysToString()
+QString Shortcut::keysToString() const
       {
       QAction* a = action();
       QList<QKeySequence> kl = a->shortcuts();
@@ -359,7 +360,7 @@ void Shortcut::save()
 //   write
 //---------------------------------------------------------
 
-void Shortcut::write(Xml& xml)
+void Shortcut::write(Xml& xml) const
       {
       xml.stag("SC");
       xml.tag("key", _key);
@@ -380,7 +381,7 @@ void Shortcut::read(const QDomElement& e)
             const QString& tag(eee.tagName());
             const QString& val(eee.text());
             if (tag == "key")
-                  _key = val.toAscii().data();
+                  _key = strdup(val.toAscii().data());      // memory leak!
             else if (tag == "std")
                   _standardKey = QKeySequence::StandardKey(val.toInt());
             else if (tag == "seq")
