@@ -243,13 +243,13 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 void Score::init()
       {
       _linkId         = 0;
-      _currentLayer   = 0;
+      _currentTagSet  = 0;
       _playMode       = PLAYMODE_SYNTHESIZER;
-      Layer l;
+      TagSet l;
       l.name          = "default";
       l.tags          = 1;
-      _layer.append(l);
-      _layerTags[0]   = "default";
+      _tagSet.append(l);
+      _tagSetTags[0]  = "default";
 
       if (!_parentScore) {
 #ifdef Q_OS_WIN
@@ -3277,18 +3277,18 @@ QList<Score*> Score::scoreList()
       }
 
 //---------------------------------------------------------
-//   switchLayer
+//   switchTagSet
 //---------------------------------------------------------
 
-bool Score::switchLayer(const QString& s)
+bool Score::switchTagSet(const QString& s)
       {
-      int layerIdx = 0;
-      foreach(const Layer& l, layer()) {
+      int tagSetIdx = 0;
+      foreach(const TagSet& l, tagSet()) {
             if (s == l.name) {
-                  setCurrentLayer(layerIdx);
+                  setCurrentTagSet(tagSetIdx);
                   return true;
                   }
-            ++layerIdx;
+            ++tagSetIdx;
             }
       return false;
       }

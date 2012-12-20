@@ -100,15 +100,15 @@ Score* createExcerpt(const QList<Part*>& parts)
       Score* oscore = parts.front()->score();
       Score* score = new Score(oscore);
 
-      // clone layer:
-      for (int i = 0; i < 32; ++i) {
-            score->layerTags()[i] = oscore->layerTags()[i];
-            score->layerTagComments()[i] = oscore->layerTagComments()[i];
+      // clone tagSet:
+      for (int i = 0; i < MAX_TAGS; ++i) {
+            score->tagSetTags()[i] = oscore->tagSetTags()[i];
+            score->tagSetTagComments()[i] = oscore->tagSetTagComments()[i];
             }
-      score->setCurrentLayer(oscore->currentLayer());
-      score->layer().clear();
-      foreach(const Layer& l, oscore->layer())
-            score->layer().append(l);
+      score->setCurrentTagSet(oscore->currentTagSet());
+      score->tagSet().clear();
+      foreach(const TagSet& ts, oscore->tagSet())
+            score->tagSet().append(ts);
 
       score->setPageNumberOffset(oscore->pageNumberOffset());
 

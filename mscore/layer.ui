@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LayerManager</class>
- <widget class="QDialog" name="LayerManager">
+ <class>TagSetManager</class>
+ <widget class="QDialog" name="TagSetManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Layers</string>
+   <string>MuseScore: TagSets</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -21,7 +21,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Layer</string>
+       <string>TagSet</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
@@ -52,7 +52,7 @@
         </spacer>
        </item>
        <item row="0" column="0" colspan="5">
-        <widget class="QTableWidget" name="layers">
+        <widget class="QTableWidget" name="tagSets">
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
@@ -73,7 +73,7 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Layer</string>
+           <string>TagSet</string>
           </property>
          </column>
          <column>
@@ -309,7 +309,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>LayerManager</receiver>
+   <receiver>TagSetManager</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -325,7 +325,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>LayerManager</receiver>
+   <receiver>TagSetManager</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

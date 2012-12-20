@@ -335,7 +335,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       bool inChordEditor;
 
-      QComboBox* layerSwitch;
+      QComboBox* tagSetSwitch;
       QComboBox* playMode;
       QNetworkAccessManager* networkManager;
       QAction* lastCmd;
@@ -392,7 +392,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPianoKeyboard(bool);
       void showMediaDialog();
       void showAlbumManager();
-      void showLayerManager();
+      void showTagSetManager();
       void updateUndoRedo();
       void cmdAddChordName2();
       void changeScore(int);
@@ -447,7 +447,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showWorkspaceMenu();
       void changeWorkspace(QAction*);
       void changeWorkspace(Workspace* p);
-      void switchLayer(const QString&);
+      void switchTagSet(const QString&);
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
       void switchLayoutMode(int);
@@ -604,7 +604,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
-      void updateLayer();
+      void updateTagSet();
       void updatePlayMode();
       bool loop() const         	 { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }

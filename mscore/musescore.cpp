@@ -476,9 +476,9 @@ MuseScore::MuseScore()
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
-      layerSwitch = new QComboBox(this);
-      layerSwitch->setToolTip(tr("switch layer"));
-      connect(layerSwitch, SIGNAL(activated(const QString&)), SLOT(switchLayer(const QString&)));
+      tagSetSwitch = new QComboBox(this);
+      tagSetSwitch->setToolTip(tr("switch tagset"));
+      connect(tagSetSwitch, SIGNAL(activated(const QString&)), SLOT(switchTagSet(const QString&)));
 
       playMode = new QComboBox(this);
       playMode->addItem(tr("synthesizer"));
@@ -487,7 +487,7 @@ MuseScore::MuseScore()
       connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
 
       _statusBar->addPermanentWidget(playMode);
-      _statusBar->addPermanentWidget(layerSwitch);
+      _statusBar->addPermanentWidget(tagSetSwitch);
       _statusBar->addPermanentWidget(_positionLabel, 0);
 
       setStatusBar(_statusBar);
@@ -764,7 +764,7 @@ MuseScore::MuseScore()
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("parts"));
       _fileMenu->addAction(getAction("album"));
-      _fileMenu->addAction(getAction("layer"));
+      _fileMenu->addAction(getAction("tagSet"));
 
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("edit-info"));
@@ -1460,12 +1460,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
       else
             cs = 0;
-
+      updateTagSet();
                   // set midi import panel
       QString fileName = cs ? cs->fileInfo()->filePath() : "";
       midiPanelOnSwitchToFile(fileName);
 
-      updateLayer();
       updatePlayMode();
       if (seq)
             seq->setScoreView(cv);
@@ -3529,12 +3528,12 @@ void MuseScore::midiNoteReceived(int pitch, bool ctrl)
       }
 
 //---------------------------------------------------------
-//   switchLayer
+//   switchTagSet
 //---------------------------------------------------------
 
-void MuseScore::switchLayer(const QString& s)
+void MuseScore::switchTagSet(const QString& s)
       {
-      if (cs->switchLayer(s)) {
+      if (cs->switchTagSet(s)) {
             cs->setLayoutAll(true);
             cs->update();
             }
@@ -3992,8 +3991,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             startDebugger();
       else if (cmd == "album")
             showAlbumManager();
-      else if (cmd == "layer")
-            showLayerManager();
+      else if (cmd == "tagSet")
+            showTagSetManager();
       else if (cmd == "backspace")
             undo();
       else if (cmd == "zoomin")
@@ -4316,24 +4315,24 @@ Navigator* MuseScore::navigator() const
       }
 
 //---------------------------------------------------------
-//   updateLayer
+//   updateTagSet
 //---------------------------------------------------------
 
-void MuseScore::updateLayer()
+void MuseScore::updateTagSet()
       {
-      layerSwitch->clear();
+      tagSetSwitch->clear();
       bool enable;
       if (cs) {
-            enable = cs->layer().size() > 1;
+            enable = cs->tagSet().size() > 1;
             if (enable) {
-                  foreach(const Layer& l, cs->layer())
-                        layerSwitch->addItem(l.name);
-                  layerSwitch->setCurrentIndex(cs->currentLayer());
+                  foreach(const TagSet& ts, cs->tagSet())
+                        tagSetSwitch->addItem(ts.name);
+                  tagSetSwitch->setCurrentIndex(cs->currentTagSet());
                   }
             }
       else
            enable = false;
-      layerSwitch->setVisible(enable);
+      tagSetSwitch->setVisible(enable);
       }
 
 //---------------------------------------------------------

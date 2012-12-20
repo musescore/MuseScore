@@ -92,10 +92,10 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
 
                   QMenu* menuTags = new QMenu(tr("Tags"));
                   for (int i = 0; i < MAX_TAGS; ++i) {
-                        QString tagName = score()->layerTags()[i];
+                        QString tagName = score()->tagSetTags()[i];
                         if (!tagName.isEmpty()) {
                               QAction* a = menuTags->addAction(tagName);
-                              a->setData(QString("layer-%1").arg(i));
+                              a->setData(QString("tagSet-%1").arg(i));
                               a->setCheckable(true);
                               a->setChecked(e->tag() & (1 << i));
                               }
@@ -122,10 +122,10 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
 
             QMenu* menuTags = new QMenu(tr("Tags"));
             for (int i = 0; i < MAX_TAGS; ++i) {
-                  QString tagName = score()->layerTags()[i];
+                  QString tagName = score()->tagSetTags()[i];
                   if (!tagName.isEmpty()) {
                         QAction* a = menuTags->addAction(tagName);
-                        a->setData(QString("layer-%1").arg(i));
+                        a->setData(QString("tagSet-%1").arg(i));
                         a->setCheckable(true);
                         a->setChecked(e->tag() & (1 << i));
                         }
@@ -631,7 +631,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->undoChangeInvisible(e, !e->visible());
       else if (cmd == "color")
             score()->colorItem(e);
-      else if (cmd.startsWith("layer-")) {
+      else if (cmd.startsWith("tagSet-")) {
             int n = cmd.mid(6).toInt();
             uint mask = e->tag() ^ (1 << n);
             e->setTag(mask);
