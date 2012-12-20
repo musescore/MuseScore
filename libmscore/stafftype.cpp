@@ -801,8 +801,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s, StaffTypeTablature * tab, TDurati
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       setGenerated(true);
-      _tab  = tab;
-      buildText(type, dots);
+      setDuration(type, dots, tab);
       }
 
 TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
@@ -818,6 +817,10 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 void TabDurationSymbol::layout()
       {
+      if(!_tab) {
+            setbbox(QRectF());
+            return;
+            }
       QFontMetricsF fm(_tab->durationFont());
       qreal mags = magS();
       qreal w = fm.width(_text);
@@ -849,18 +852,6 @@ void TabDurationSymbol::draw(QPainter* painter) const
       painter->scale(imag, imag);
       }
 
-//---------------------------------------------------------
-//   buildText
-//---------------------------------------------------------
-/*
-void TabDurationSymbol::buildText(TDuration::DurationType type, int dots)
-      {
-      // text string is a main symbol plus as many dots as required by chord duration
-      _text = QString(g_cDurationChars[type]);
-      for(int count=0; count < dots; count++)
-            _text.append(g_cDurationChars[STAFFTYPETAB_IDXOFDOTCHAR]);
-      }
-*/
 //---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
