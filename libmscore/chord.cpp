@@ -1397,7 +1397,7 @@ void Chord::layout()
                         if (!_tabDur)
                               _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                         else
-                              _tabDur->setDuration(durationType().type(), dots());
+                              _tabDur->setDuration(durationType().type(), dots(), tab);
                         _tabDur->setParent(this);
                         _tabDur->layout();
                         }
