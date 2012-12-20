@@ -373,9 +373,6 @@ class TabDurationSymbol : public Element {
       StaffTypeTablature* _tab;
       QString             _text;
 
-      void buildText(TDuration::DurationType type, int dots)
-                                                { _text = _tab->durationString(type, dots); }
-
    public:
       TabDurationSymbol(Score* s);
       TabDurationSymbol(Score* s, StaffTypeTablature * tab, TDuration::DurationType type, int dots);
@@ -386,8 +383,10 @@ class TabDurationSymbol : public Element {
       virtual void layout();
       virtual ElementType type() const          { return TAB_DURATION_SYMBOL; }
 
-      void  setDuration(TDuration::DurationType type, int dots) { buildText(type, dots); }
-      void  setTablature(StaffTypeTablature * tab)              { _tab = tab; }
+      void  setDuration(TDuration::DurationType type, int dots, StaffTypeTablature* tab)
+                                                { _tab = tab;
+                                                  _text = tab->durationString(type, dots);
+                                                }
       };
 
 #endif
