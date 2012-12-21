@@ -565,7 +565,7 @@ void Staff::setLines(int val)
       // create new staff type
       //
       StaffType* st = _staffType->clone();
-      if(part())
+      if(part() && !partName().isEmpty())
             st->setName(partName());
       st->setLines(val);
       setStaffType(st);
