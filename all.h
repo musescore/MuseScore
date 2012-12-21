@@ -36,6 +36,7 @@
 #include <QtWebKit/QWebFrame>
 
 #include <QtXml/QtXml>
+#include <QtXmlPatterns/QAbstractMessageHandler>
 #include <QtXmlPatterns/QXmlSchema>
 #include <QtXmlPatterns/QXmlSchemaValidator>
 

@@ -44,13 +44,13 @@ typedef QList<StartStop> StartStopList;
 */
 
 class NoteList {
-   public:
+public:
       NoteList();
       void addNote(const int startTick, const int endTick, const int staff);
       void dump(const int voice) const;
       bool stavesOverlap(const int staff1, const int staff2) const;
       bool anyStaffOverlaps() const;
-   private:
+private:
       QList<StartStopList> _staffNoteLists; ///< The note start/stop times in all staves
       };
 
@@ -69,13 +69,13 @@ class NoteList {
 */
 
 class VoiceOverlapDetector {
-   public:
+public:
       VoiceOverlapDetector();
       void addNote(const int startTick, const int endTick, const int voice, const int staff);
       void dump() const;
       void newMeasure();
       bool stavesOverlap(const int voice) const;
-   private:
+private:
       QMap<int, NoteList> _noteLists; ///< The notelists for all the voices
       };
 
@@ -97,11 +97,11 @@ struct MusicXMLDrumInstrument {
       QString toString() const;
 
       MusicXMLDrumInstrument()
-         : pitch(-1), name(), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
+            : pitch(-1), name(), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
       MusicXMLDrumInstrument(QString s)
-         : pitch(-1), name(s), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
+            : pitch(-1), name(s), notehead(Note::HEAD_INVALID), line(0), stemDirection(MScore::AUTO) {}
       MusicXMLDrumInstrument(int p, QString s, Note::NoteHeadGroup nh, int l, MScore::Direction d)
-         : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
+            : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
       };
 
 /**
@@ -110,5 +110,26 @@ struct MusicXMLDrumInstrument {
 
 typedef QMap<QString, MusicXMLDrumInstrument> MusicXMLDrumset;
 typedef QMapIterator<QString, MusicXMLDrumInstrument> MusicXMLDrumsetIterator;
+
+
+//---------------------------------------------------------
+//   ValidatorMessageHandler
+//---------------------------------------------------------
+
+/**
+ Message handler for the MusicXML schema validator QXmlSchemaValidator.
+ */
+
+class ValidatorMessageHandler : public QAbstractMessageHandler
+      {
+public:
+      ValidatorMessageHandler() : QAbstractMessageHandler(0) {}
+      QString getErrors() const { return errors; }
+protected:
+      virtual void handleMessage(QtMsgType type, const QString& description,
+                                 const QUrl& identifier, const QSourceLocation& sourceLocation);
+private:
+      QString errors;
+      };
 
 #endif

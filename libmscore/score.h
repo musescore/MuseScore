@@ -236,7 +236,8 @@ class Score : public QObject {
             FILE_UNKNOWN_TYPE,
             FILE_NO_ROOTFILE,
             FILE_TOO_OLD,
-            FILE_TOO_NEW
+            FILE_TOO_NEW,
+            FILE_USER_ABORT
             };
 
    private:
