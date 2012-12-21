@@ -485,126 +485,6 @@ MusicXml::MusicXml(QDomDocument* d)
       {
       }
 
-// TODO: should probably remove class loadfile
-//---------------------------------------------------------
-//   LoadFile
-//---------------------------------------------------------
-
-class LoadFile {
-      QString _name;
-
-protected:
-      QString error;
-
-public:
-      LoadFile() {}
-      virtual ~LoadFile() {}
-      virtual bool loader(QFile* f) = 0;        // return false on error
-      bool load(const QString& name);           // return false on error
-      QString name() const { return _name; }
-      };
-
-//---------------------------------------------------------
-//   load
-///   Load file \a name.
-///   Display message box with error if loading fails.
-///   Return true if OK and false on error.
-//---------------------------------------------------------
-
-bool LoadFile::load(const QString& name)
-      {
-      if (name.isEmpty())
-            return false;
-
-      QFile fp(name);
-      if (!fp.open(QIODevice::ReadOnly)) {
-            QMessageBox::warning(0,
-                                 QWidget::tr("MuseScore: file not found:"),
-                                 name,
-                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return false;
-            }
-      if (!loader(&fp)) {
-            QMessageBox::warning(0,
-                                 QWidget::tr("MuseScore: load failed:"),
-                                 error,
-                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            fp.close();
-            return false;
-            }
-      fp.close();
-      return true;
-      }
-// end TODO: should probably remove class loadfile
-
-//---------------------------------------------------------
-//   LoadMusicXml
-//---------------------------------------------------------
-
-/**
- Loader for MusicXml files.
- */
-
-class LoadMusicXml : public LoadFile {
-      QDomDocument* _doc;
-
-public:
-      LoadMusicXml()
-            {
-            _doc = new QDomDocument();
-            }
-      ~LoadMusicXml()
-            {
-            delete _doc;
-            }
-      virtual bool loader(QFile* f);
-      QDomDocument* doc() const { return _doc; }
-      };
-
-//---------------------------------------------------------
-//   loader
-//---------------------------------------------------------
-
-/**
- Load MusicXML file \a qf, return true if OK and false on error.
- */
-
-bool LoadMusicXml::loader(QFile* qf)
-      {
-      int line, column;
-      QString err;
-      if (!_doc->setContent(qf, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
-            MScore::lastError = s.arg(line).arg(column).arg(err);
-            return false;
-            }
-      docName = qf->fileName();
-      return true;
-      }
-
-//---------------------------------------------------------
-//   LoadCompressedMusicXml
-//---------------------------------------------------------
-
-/**
- Loader for compressed MusicXml files.
- */
-
-class LoadCompressedMusicXml : public LoadFile {
-      QDomDocument* _doc;
-
-public:
-      LoadCompressedMusicXml()
-            {
-            _doc = new QDomDocument();
-            }
-      ~LoadCompressedMusicXml()
-            {
-            delete _doc;
-            }
-      virtual bool loader(QFile* f);
-      QDomDocument* doc() const { return _doc; }
-      };
 
 //---------------------------------------------------------
 //   initMusicXmlSchema
@@ -645,6 +525,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       return true;
       }
 
+
 //---------------------------------------------------------
 //   musicXMLValidationErrorDialog
 //---------------------------------------------------------
@@ -652,33 +533,34 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
 /**
  Show a dialog displaying the MusicXML validation error(s)
  and asks the user if he wants to try to load the file anyway.
- Return true (try anyway) or false (don't)
+ Return QMessageBox::Yes (try anyway) or QMessageBox::No (don't)
  */
 
-static bool musicXMLValidationErrorDialog(QString& text)
+static int musicXMLValidationErrorDialog(QString text, QString detailedText)
       {
       QMessageBox errorDialog;
       errorDialog.setIcon(QMessageBox::Question);
       errorDialog.setText(text);
       errorDialog.setInformativeText("Do you want to try to load this file anyway ?");
-      errorDialog.setDetailedText("Detailed text here in future ...");
+      errorDialog.setDetailedText(detailedText);
       errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
       errorDialog.setDefaultButton(QMessageBox::No);
-      return errorDialog.exec() == QMessageBox::Yes;
+      return errorDialog.exec();
       }
 
+
 //---------------------------------------------------------
-//   loader
+//   extractRootfile
 //---------------------------------------------------------
 
 /**
- Load compressed MusicXML file \a qf, return true if OK and false on error.
- */
+Extract rootfile from compressed MusicXML file \a qf, return true if OK and false on error.
+*/
 
-bool LoadCompressedMusicXml::loader(QFile* qf)
+static bool extractRootfile(QFile* qf, QByteArray& data)
       {
       QZipReader f(qf->fileName());
-      QByteArray data = f.fileData("META-INF/container.xml");
+      data = f.fileData("META-INF/container.xml");
 
       QDomDocument container;
       int line, column;
@@ -711,6 +593,7 @@ bool LoadCompressedMusicXml::loader(QFile* qf)
             else
                   domError(e);
             }
+
       if (rootfile == "") {
             qDebug("can't find rootfile in: %s", qPrintable(qf->fileName()));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "can't find rootfile\n");
@@ -719,32 +602,9 @@ bool LoadCompressedMusicXml::loader(QFile* qf)
 
       // read the rootfile
       data = f.fileData(rootfile);
-
-      // initialize the schema
-      QXmlSchema schema;
-      if (!initMusicXmlSchema(schema))
-            return false;  // appropriate error message has been printed by initMusicXmlSchema
-
-      // validate the data
-      QXmlSchemaValidator validator(schema);
-      if (validator.validate(data))
-            qDebug("LoadCompressedMusicXml: file '%s' is a valid MusicXML file", qPrintable(qf->fileName()));
-      else {
-            qDebug("LoadCompressedMusicXml: file '%s' is not a valid MusicXML file", qPrintable(qf->fileName()));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
-            QString text = QString("File '%1' is not a valid MusicXML file").arg(qPrintable(qf->fileName()));
-            if (!musicXMLValidationErrorDialog(text))
-                  return false;
-            }
-
-      if (!_doc->setContent(data, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
-            MScore::lastError = s.arg(line).arg(column).arg(err);
-            return false;
-            }
-      docName = qf->fileName();
       return true;
       }
+
 
 //---------------------------------------------------------
 //   importMusicXml
@@ -759,11 +619,6 @@ Score::FileError importMusicXml(Score* score, const QString& name)
       {
       qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
 
-      // initialize the schema
-      QXmlSchema schema;
-      if (!initMusicXmlSchema(schema))
-            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
-
       // open the MusicXML file
       QFile xmlFile(name);
       if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -771,6 +626,13 @@ Score::FileError importMusicXml(Score* score, const QString& name)
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
             return Score::FILE_OPEN_ERROR;
             }
+
+      // initialize the schema
+      ValidatorMessageHandler messageHandler;
+      QXmlSchema schema;
+      schema.setMessageHandler(&messageHandler);
+      if (!initMusicXmlSchema(schema))
+            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
 
       // validate the file
       QXmlSchemaValidator validator(schema);
@@ -780,21 +642,27 @@ Score::FileError importMusicXml(Score* score, const QString& name)
             qDebug("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
             QString text = QString("File '%1' is not a valid MusicXML file").arg(name);
-            if (!musicXMLValidationErrorDialog(text))
-                  return Score::FILE_BAD_FORMAT;
+            if (musicXMLValidationErrorDialog(text, messageHandler.getErrors()) != QMessageBox::Yes)
+                  return Score::FILE_USER_ABORT;
             }
 
       // finally load the file
-      LoadMusicXml lx;
-      if (!lx.load(name)) {
-            qDebug("importMusicXml() return false (not OK)");
+      xmlFile.seek(0);
+      QDomDocument doc;
+      int line, column;
+      QString err;
+      if (!doc.setContent(&xmlFile, false, &err, &line, &column)) {
+            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
+            MScore::lastError = s.arg(line).arg(column).arg(err);
             return Score::FILE_BAD_FORMAT;
             }
-      MusicXml musicxml(lx.doc());
+      docName = xmlFile.fileName();
+      MusicXml musicxml(&doc);
       musicxml.import(score);
-      qDebug("importMusicXml() return true (OK)");
+      qDebug("importMusicXml() return FILE_NO_ERROR");
       return Score::FILE_NO_ERROR;
       }
+
 
 //---------------------------------------------------------
 //   importCompressedMusicXml
@@ -808,16 +676,54 @@ Score::FileError importMusicXml(Score* score, const QString& name)
 Score::FileError importCompressedMusicXml(Score* score, const QString& name)
       {
       qDebug("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
-      LoadCompressedMusicXml lx;
-      if (!lx.load(name)) {
-            qDebug("importCompressedMusicXml() return false (not OK)");
+
+      // open the compressed MusicXML file
+      QFile mxlFile(name);
+      if (!mxlFile.open(QIODevice::ReadOnly)) {
+            qDebug("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open compressed MusicXML file\n");
+            return Score::FILE_OPEN_ERROR;
+            }
+
+      QByteArray data;
+      if (!extractRootfile(&mxlFile, data))
+            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by extractRootfile
+
+      // initialize the schema
+      ValidatorMessageHandler messageHandler;
+      QXmlSchema schema;
+      schema.setMessageHandler(&messageHandler);
+      if (!initMusicXmlSchema(schema))
+            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
+
+      // validate the file
+      QXmlSchemaValidator validator(schema);
+      if (validator.validate(data, QUrl::fromLocalFile(name)))
+            qDebug("importMusicXml() file '%s' is a valid compressed MusicXML file", qPrintable(name));
+      else {
+            qDebug("importMusicXml() file '%s' is not a valid compressed MusicXML file", qPrintable(name));
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid compressed MusicXML file\n");
+            QString text = QString("File '%1' is not a valid compressed MusicXML file").arg(name);
+            if (musicXMLValidationErrorDialog(text, messageHandler.getErrors()) != QMessageBox::Yes)
+                  return Score::FILE_USER_ABORT;
+            }
+
+      // finally load the file
+      QDomDocument doc;
+      int line, column;
+      QString err;
+      if (!doc.setContent(data, false, &err, &line, &column)) {
+            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
+            MScore::lastError = s.arg(line).arg(column).arg(err);
             return Score::FILE_BAD_FORMAT;
             }
-      MusicXml musicxml(lx.doc());
+      docName = mxlFile.fileName();
+      MusicXml musicxml(&doc);
       musicxml.import(score);
-      qDebug("importMusicXml() return true (OK)");
+      qDebug("importMusicXml() return FILE_NO_ERROR");
       return Score::FILE_NO_ERROR;
       }
+
 
 //---------------------------------------------------------
 //   import
