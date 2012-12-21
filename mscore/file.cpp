@@ -311,7 +311,10 @@ Score* MuseScore::readScore(const QString& name)
                   }
             }
       if (rv != Score::FILE_NO_ERROR) {
-            readScoreError(name, rv, false);
+            // in case of user abort while reading, the error has already been reported
+            // else report it now
+            if (rv != Score::FILE_USER_ABORT)
+                  readScoreError(name, rv, false);
             delete score;
             score = 0;
             }
