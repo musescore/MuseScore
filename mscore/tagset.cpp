@@ -18,7 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "layer.h"
+#include "tagset.h"
 #include "libmscore/score.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
@@ -176,7 +176,7 @@ void TagSetManager::deleteTagClicked()
 void TagSetManager:: accept()
       {
       score->startCmd();
-      for (int i = 0; i < MAX_TAGS; ++i) {
+      for (int i = 0; i < MAX_TAGS-1; ++i) {
             QString tag(tags->item(i, 0)->text());
             QString comment(tags->item(i, 1)->text());
             score->tagSetTags()[i+1] = tag;
