@@ -1663,6 +1663,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case Articulation_Upbow:
                   case Articulation_Downbow:
                   case Articulation_Snappizzicato:
+                  case Articulation_Thumb:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1774,6 +1775,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case Articulation_Upbow:
                   case Articulation_Downbow:
                   case Articulation_Snappizzicato:
+                  case Articulation_Thumb:
                         // ignore, handled with technical
                         break;
                   default:
