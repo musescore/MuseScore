@@ -4487,7 +4487,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 
       if (tremolo) {
             qDebug("tremolo=%d tremoloType='%s'", tremolo, qPrintable(tremoloType));
-            if (tremolo == 1 || tremolo == 2 || tremolo == 3) {
+            if (tremolo == 1 || tremolo == 2 || tremolo == 3 || tremolo == 4) {
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(score);
                         switch (tremolo) {
