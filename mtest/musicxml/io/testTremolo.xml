@@ -63,6 +63,22 @@
     <measure number="2">
       <note>
         <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <ornaments>
+            <tremolo type="single">4</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      </measure>
+    <measure number="3">
+      <note>
+        <pitch>
           <step>A</step>
           <octave>4</octave>
           </pitch>
@@ -158,7 +174,7 @@
         <type>64th</type>
         </note>
       </measure>
-    <measure number="3">
+    <measure number="4">
       <note>
         <pitch>
           <step>G</step>
@@ -220,7 +236,7 @@
           </notations>
         </note>
       </measure>
-    <measure number="4">
+    <measure number="5">
       <note>
         <pitch>
           <step>B</step>
