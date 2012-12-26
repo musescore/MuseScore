@@ -160,7 +160,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = _el[0];
             if (el && el->type() == Element::NOTE)
                   return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == Element::REST)
+            else if (el->type() == Element::CHORD || el->type() == Element::REST)
                   return static_cast<ChordRest*>(el);
             return 0;
             }
