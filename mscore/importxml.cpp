@@ -3867,6 +3867,10 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   }
             }
 
+      // detect tremolo
+      if (actualNotes == 2 && normalNotes == 1)
+            return;
+
       // Special case:
       // Encore generates rests in tuplets w/o <tuplet> or <time-modification>.
       // Detect this by comparing the actual duration with the expected duration
@@ -4486,8 +4490,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             }
 
       if (tremolo) {
-            qDebug("tremolo=%d tremoloType='%s'", tremolo, qPrintable(tremoloType));
-            if (tremolo == 1 || tremolo == 2 || tremolo == 3) {
+            if (tremolo == 1 || tremolo == 2 || tremolo == 3 || tremolo == 4) {
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(score);
                         switch (tremolo) {
@@ -4512,7 +4515,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     case 4: t->setSubtype(TREMOLO_C64); break;
                                     }
                               t->setChords(tremStart, static_cast<Chord*>(cr));
-                              cr->add(t);
+                              // fixup chord duration and type
+                              t->chord1()->setDurationType(ticks);
+                              t->chord1()->setDuration(ticks);
+                              t->chord2()->setDurationType(ticks);
+                              t->chord2()->setDuration(ticks);
+                              // add tremolo to first chord (only)
+                              tremStart->add(t);
                               }
                         else qDebug("MusicXML::import: double tremolo stop w/o start");
                         tremStart = 0;
@@ -4599,7 +4608,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       bool rest    = false;
       int relStaff = 0;
-      BeamMode bm  = BEAM_AUTO;
+      BeamMode bm  = BEAM_NO;
       MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
@@ -5000,8 +5009,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // note->setAccidentalType(accidental);
 
             // remember beam mode last non-grace note
-            // bm == BEAM_AUTO means no <beam> was found
-            if (!grace && bm != BEAM_AUTO)
+            // bm == BEAM_NO means no <beam> was found
+            if (!grace && bm != BEAM_NO)
                   beamMode = bm;
 
             // handle beam
