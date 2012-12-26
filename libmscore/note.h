@@ -36,6 +36,7 @@ class AccidentalState;
 class Accidental;
 class NoteDot;
 class Spanner;
+class StaffTypeTablature;
 
 //---------------------------------------------------------
 //   NoteVal
@@ -192,6 +193,8 @@ class Note : public Element {
 
       qreal headWidth() const;
       qreal headHeight() const;
+      qreal tabHeadWidth(StaffTypeTablature* tab = 0) const;
+      qreal tabHeadHeight(StaffTypeTablature* tab = 0) const;
       QPointF attach() const;
 
       int noteHead() const;
