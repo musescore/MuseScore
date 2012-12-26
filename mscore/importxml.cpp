@@ -4608,7 +4608,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       bool rest    = false;
       int relStaff = 0;
-      BeamMode bm  = BEAM_AUTO;
+      BeamMode bm  = BEAM_NO;
       MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
@@ -5009,8 +5009,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             // note->setAccidentalType(accidental);
 
             // remember beam mode last non-grace note
-            // bm == BEAM_AUTO means no <beam> was found
-            if (!grace && bm != BEAM_AUTO)
+            // bm == BEAM_NO means no <beam> was found
+            if (!grace && bm != BEAM_NO)
                   beamMode = bm;
 
             // handle beam
