@@ -36,29 +36,37 @@ TagSetManager::TagSetManager(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+            // Set up tags for tag tab
       for (int i = 0; i < MAX_TAGS; ++i) {
-            QTableWidgetItem* item = new QTableWidgetItem(score->tagSetTags()[i+1]);
+          QTableWidgetItem* item = new QTableWidgetItem();
+            item->setCheckState(s->autoTagIsSet(i+1) ? Qt::Checked : Qt::Unchecked);
             tags->setItem(i, 0, item);
-            item = new QTableWidgetItem(score->tagSetTagComments()[i+1]);
+            item = new QTableWidgetItem(score->tagSetTags()[i+1]);
             tags->setItem(i, 1, item);
+            item = new QTableWidgetItem(score->tagSetTagComments()[i+1]);
+            tags->setItem(i, 2, item);
             }
 
+            // Set up tagset tab
       tagSets->setRowCount(score->tagSet().size());
       int row = 0;
       foreach(const TagSet& ts, score->tagSet()) {
-            QTableWidgetItem* item = new QTableWidgetItem(ts.name);
+          QTableWidgetItem* item = new QTableWidgetItem();
+            item->setCheckState(score->currentTagSet()==row ? Qt::Checked : Qt::Unchecked);
             tagSets->setItem(row, 0, item);
+            item = new QTableWidgetItem(ts.name);
+            tagSets->setItem(row, 1, item);
             QString tagString;
             for (int i = 0; i < MAX_TAGS-1; ++i) {
                   uint mask = 1 << (i+1);
                   if (mask &  ts.tags) {
                         if (!tagString.isEmpty())
                               tagString += ",";
-                        tagString += tags->item(i, 0)->text();
+                        tagString += tags->item(i, 1)->text();
                         }
                   }
             item = new QTableWidgetItem(tagString);
-            tagSets->setItem(row, 1, item);
+            tagSets->setItem(row, 2, item);
             ++row;
             }
       tagSets->setCurrentCell(score->currentTagSet(), 0);
@@ -86,11 +94,16 @@ void TagSetManager::createClicked()
       {
       int row      = tagSets->rowCount();
       QString name = QString("tagSet%1").arg(row + 1);
-      QTableWidgetItem* item = new QTableWidgetItem(name);
+
       tagSets->setRowCount(row+1);
-      tagSets->setItem(row, 0, item);
-      item = new QTableWidgetItem("");
+
+      QTableWidgetItem* item = new QTableWidgetItem();
+      item->setCheckState(Qt::Unchecked);
+      tags->setItem(row, 0, item);
+      item = new QTableWidgetItem(name);
       tagSets->setItem(row, 1, item);
+      item = new QTableWidgetItem("");
+      tagSets->setItem(row, 2, item);
       }
 
 //---------------------------------------------------------
@@ -112,16 +125,16 @@ void TagSetManager::addTagClicked()
       if (row == -1)
             return;
       QStringList items;
-      for (int i = 0; i < MAX_TAGS; ++i) {
-            QString s = score->tagSetTags()[i+1];
+      for (int i = 1; i <= MAX_TAGS; ++i) {
+            QString s = score->tagSetTags()[i];
             if (!s.isEmpty())
                   items.append(s);
             }
-      for (int i = 0; i < MAX_TAGS; ++i) {
-            QString tag(tags->item(i, 0)->text());
+/*      for (int i = 0; i < MAX_TAGS-1; ++i) {
+            QString tag(tags->item(i, 1)->text());
             if (!tag.isEmpty())
                   items.append(tag);
-            }
+            } */
 
       if (items.isEmpty()) {
             qDebug("no tags defined\n");
@@ -132,14 +145,14 @@ void TagSetManager::addTagClicked()
          items, 0, false, &ok);
       if (ok && !item.isEmpty()) {
 //            uint tagBits = 0;
-            for (int i = 0; i < MAX_TAGS; ++i) {
-                  QString s = score->tagSetTags()[i+1];
+            for (int i = 1; i < MAX_TAGS; ++i) {
+                  QString s = score->tagSetTags()[i];
                   if (s == item) {
 //                        tagBits = 1 << (i+1);
                         break;
                         }
                   }
-            QTableWidgetItem* wi = tagSets->item(row, 1);
+            QTableWidgetItem* wi = tagSets->item(row, 2);
             QString s = wi->text();
             if (!s.isEmpty())
                   s += ",";
@@ -176,11 +189,17 @@ void TagSetManager::deleteTagClicked()
 void TagSetManager:: accept()
       {
       score->startCmd();
+      score->clearAutoTags();
+            // Record tags & tagsets in the score
       for (int i = 0; i < MAX_TAGS-1; ++i) {
-            QString tag(tags->item(i, 0)->text());
-            QString comment(tags->item(i, 1)->text());
+            QString tag(tags->item(i, 1)->text());
+            QString comment(tags->item(i, 2)->text());
             score->tagSetTags()[i+1] = tag;
             score->tagSetTagComments()[i+1] = comment;
+
+                  // If this tag is set as an autotag, record it in the score
+            if (tags->item(i, 0)->checkState() && i+1 != 0 )
+                  score->addAutoTag(i+1);
             }
       int row = tagSets->currentRow();
       if (row != -1)
@@ -192,20 +211,19 @@ void TagSetManager:: accept()
       int n = tagSets->rowCount();
       for (int i = 0; i < n; ++i) {
             TagSet ts;
-            ts.name          = tagSets->item(i, 0)->text();
-            ts.tags           = 1;
-            QString tstxt    = tagSets->item(i, 1)->text();
+            ts.name          = tagSets->item(i, 1)->text();
+            ts.tags          = 1;                   // Every tagset has the default tag
+            QString tstxt    = tagSets->item(i, 2)->text();
             QStringList tags = tstxt.split(",");
             foreach (QString tag, tags) {
                   for (int idx = 0; idx < MAX_TAGS; ++idx) {
-                        if (tag == score->tagSetTags()[idx]) {
+                        if (tag != "" && tag == score->tagSetTags()[idx]) {
                               ts.tags |= 1 << idx;
-                              break;
                               }
                         }
                   }
-            if (i == 0)             // hardwired default tag
-                  ts.tags |= 1;
+/*            if (i == 0)             // hardwired default tag
+                  ts.tags |= 1; */
             tagSet.append(ts);
             }
       score->setDirty(true);

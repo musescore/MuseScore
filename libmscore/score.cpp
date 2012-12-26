@@ -245,11 +245,12 @@ void Score::init()
       _linkId         = 0;
       _currentTagSet  = 0;
       _playMode       = PLAYMODE_SYNTHESIZER;
-      TagSet l;
-      l.name          = "default";
-      l.tags          = 1;
-      _tagSet.append(l);
+      TagSet ts;
+      ts.name         = "default";
+      ts.tags         = 1;
+      _tagSet.append(ts);
       _tagSetTags[0]  = "default";
+      _autoTags       = 0;
 
       if (!_parentScore) {
 #ifdef Q_OS_WIN

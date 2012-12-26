@@ -260,6 +260,7 @@ class Score : public QObject {
       QString _tagSetTagComments[MAX_TAGS];
       QList<TagSet> _tagSet;
       int _currentTagSet;
+      uint _autoTags;
 
       int _symIdx;                  // used symbol set, derived from style
       int _pageNumberOffset;        ///< Offset for page numbers.
@@ -270,7 +271,7 @@ class Score : public QObject {
       // generated objects during layout:
       //
       QList<Page*> _pages;          // pages are build from systems
-      QList<System*> _systems;      // measures are akkumulated to systems
+      QList<System*> _systems;      // measures are accumulated to systems
 
       // temp values used during doLayout:
       int curPage;
@@ -887,6 +888,10 @@ class Score : public QObject {
       QList<TagSet>& tagSet()               { return _tagSet;       }
       const QList<TagSet>& tagSet() const   { return _tagSet;       }
       bool tagIsValid(uint tag) const       { return tag & _tagSet[_currentTagSet].tags; }
+      uint currentAutoTagMask() const       { return _autoTags; }
+      void addAutoTag(int val)              { _autoTags |= 1 << val; }
+      void clearAutoTags()                  { _autoTags = 0; }
+      bool autoTagIsSet(int val) const      { return _autoTags & 1 << val; }
 
       void transpose(int mode, TransposeDirection, int transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);

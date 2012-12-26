@@ -21,7 +21,7 @@
 #ifndef __TAGSET_H__
 #define __TAGSET_H__
 
-#include "ui_layer.h"
+#include "ui_tagset.h"
 
 namespace Ms {
 

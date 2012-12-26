@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
+    <width>500</width>
     <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MuseScore: TagSets</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -71,6 +74,11 @@
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
          </attribute>
+         <column>
+          <property name="text">
+           <string>Visible</string>
+          </property>
+         </column>
          <column>
           <property name="text">
            <string>TagSet</string>
@@ -276,6 +284,11 @@
            <string>31</string>
           </property>
          </row>
+         <column>
+          <property name="text">
+           <string>Auto Tag</string>
+          </property>
+         </column>
          <column>
           <property name="text">
            <string>Tag</string>
