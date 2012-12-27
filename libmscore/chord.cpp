@@ -1337,7 +1337,15 @@ void Chord::layout()
 
       qreal lx         = 0.0;
       Note*  upnote    = upNote();
-      qreal headWidth  = upnote->headWidth();
+
+      // Find the notehead with the maximum width
+      qreal maxHeadWidth = _notes.at(0)->headWidth();
+      for (int i = 1; i < _notes.size(); ++i) {
+          qreal width = _notes.at(i)->headWidth();
+          if (width > maxHeadWidth)
+              maxHeadWidth = width;
+      }
+
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
       bool  useTab      = false;
 
@@ -1458,7 +1466,7 @@ void Chord::layout()
                         x += stemUp ? note->headWidth() : -note->headWidth();
 
                   if (note->small() && _up)
-                        x += (headWidth - note->headWidth());
+                        x += (maxHeadWidth - note->headWidth());
 
                   note->setPos(x, (note->line() + stepOffset) * stepDistance);
                   Accidental* accidental = note->accidental();
@@ -1471,7 +1479,7 @@ void Chord::layout()
             qreal x  = upnote->ipos().x();
 
             if (up() ^ upnote->mirror())
-                  x += headWidth;
+                  x += maxHeadWidth;
 
             addLedgerLines(x, staffMove());
 
@@ -1521,7 +1529,7 @@ void Chord::layout()
                   rr = lhw;
             if (rr > rrr)
                   rrr = rr;
-            qreal xx = note->pos().x() + headWidth + pos().x();
+            qreal xx = note->pos().x() + maxHeadWidth + pos().x();
             if (xx > dotPosX())
                   setDotPosX(xx);
             }
