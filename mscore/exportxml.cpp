@@ -2652,9 +2652,11 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
       wordsMetrome(xml, text);
+      /*
       int offs = text->mxmlOff();
       if (offs)
             xml.tag("offset", offs);
+      */
       if (staff)
             xml.tag("staff", staff);
       xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(text->tempo()*60.0)));
@@ -2681,7 +2683,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
             }
       else
             wordsMetrome(xml, text);
-      directionETag(xml, staff, text->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
@@ -2694,7 +2696,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.stag("direction-type");
       xml.tag("rehearsal", rmk->getText());
       xml.etag();
-      directionETag(xml, staff, rmk->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
@@ -2806,7 +2808,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       QString type;
       bool hook = false;
       double hookHeight = 0.0;
-      int offs;
       int n = 0;
       if (tl->tick() == tick) {
             if (!dashes) {
@@ -2829,14 +2830,14 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             hook = tl->beginHook();
             hookHeight = tl->beginHookHeight().val();
             p = tl->spannerSegments().first()->userOff();
-            offs = tl->mxmlOff();
+            // offs = tl->mxmlOff();
             type = "start";
             }
       else {
             hook = tl->endHook();
             hookHeight = tl->endHookHeight().val();
             p = ((LineSegment*)tl->spannerSegments().last())->userOff2();
-            offs = tl->mxmlOff2();
+            // offs = tl->mxmlOff2();
             type = "stop";
             }
 
@@ -2875,8 +2876,10 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       else
             xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
       xml.etag();
+      /*
       if (offs)
             xml.tag("offset", offs);
+      */
       directionETag(xml, staff);
       }
 
@@ -2909,9 +2912,11 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       else
             xml.tag("words", t);
       xml.etag();
+      /*
       int offs = dyn->mxmlOff();
       if (offs)
             xml.tag("offset", offs);
+      */
       if (staff)
             xml.tag("staff", staff);
 
@@ -2944,7 +2949,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       xml.stag("direction-type");
       xml.tagE(mxmlName);
       xml.etag();
-      directionETag(xml, staff, sym->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
