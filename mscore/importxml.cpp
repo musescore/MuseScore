@@ -2552,7 +2552,7 @@ static void metronome(QDomElement e, Text* t)
 //---------------------------------------------------------
 
 static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* /* score */, QString& placement,
-                       qreal rx, qreal ry, int offset, Measure* measure, int tick)
+                       qreal rx, qreal ry, int /* offset */, Measure* measure, int tick)
       {
       if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
       else {
@@ -2563,7 +2563,7 @@ static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Scor
             // el->setReadPos(QPoint(0, y));
             }
       el->setUserOff(QPointF(rx, ry));
-      el->setMxmlOff(offset);
+      // el->setMxmlOff(offset);
       el->setTrack((staff + rstaff) * VOICES);
       Segment* s = measure->getSegment(Segment::SegChordRest, tick);
       s->add(el);
@@ -2606,7 +2606,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString fontWeight = "";
       QString fontStyle = "";
       QString fontSize = "";
-      int offset = 0;
+      int offset = 0; // not supported yet
       int rstaff = 0;
       QStringList dynamics;
       // int spread;
@@ -2955,7 +2955,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (hasYoffset) s->setYoff(yoffset);
                   else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
                   s->setUserOff(QPointF(rx, ry));
-                  s->setMxmlOff(offset);
+                  // s->setMxmlOff(offset);
                   s->setTrack((staff + rstaff) * VOICES);
                   Segment* seg = measure->getSegment(Segment::SegChordRest, tick);
                   seg->add(s);
@@ -3034,7 +3034,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         //yoffset += (placement == "above" ? 0.0 : 5.0);
                         // store for later to set in segment
                         // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        b->setMxmlOff(offset);
+                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
@@ -3107,7 +3107,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         //yoffset += (placement == "above" ? 0.0 : 5.0);
                         // store for later to set in segment
                         // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        b->setMxmlOff(offset);
+                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
