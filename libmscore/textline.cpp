@@ -278,7 +278,6 @@ TextLine::TextLine(Score* s)
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
       _lineColor         = Qt::black;
-      _mxmlOff2          = 0;
 
       _beginSymbol       = noSym;
       _continueSymbol    = noSym;
@@ -308,7 +307,6 @@ TextLine::TextLine(const TextLine& e)
       _beginSymbolOffset    = e._beginSymbolOffset;
       _continueSymbolOffset = e._continueSymbolOffset;
       _endSymbolOffset      = e._endSymbolOffset;
-      _mxmlOff2             = e._mxmlOff2;
       _beginText            = 0;
       _continueText         = 0;
       if (e._beginText) {

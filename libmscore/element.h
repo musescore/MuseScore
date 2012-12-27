@@ -295,9 +295,6 @@ class Element : public QObject {
 
       Score* _score;
 
-      int _mxmlOff;               ///< MusicXML offset in ticks.
-                                  ///< Note: interacts with userXoffset.
-
       QPointF _startDragPosition;   ///< used during drag
 
    public:
@@ -366,8 +363,6 @@ class Element : public QObject {
       void scriptSetUserOff(const QPointF& o);
 
       bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
-      int mxmlOff() const                     { return _mxmlOff;  }
-      void setMxmlOff(int o)                  { _mxmlOff = o;     }
 
       const QPointF& readPos() const          { return _readPos;   }
       void setReadPos(const QPointF& p)       { _readPos = p;      }
