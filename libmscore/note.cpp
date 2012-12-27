@@ -327,7 +327,10 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      return symbols[score()->symIdx()][noteHead()].width(magS());
+      qreal val = symbols[score()->symIdx()][noteHead()].width(magS());
+      if (_small)
+            val *= score()->styleD(ST_smallNoteMag);
+      return val;
       }
 
 qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
@@ -341,11 +344,11 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
             QFontMetricsF fm(f);
             QString s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
+            if (_small)
+                  val *= score()->styleD(ST_smallNoteMag);
       }
       else
-            val = symbols[score()->symIdx()][noteHead()].width(magS());
-      if (_small)
-            val *= score()->styleD(ST_smallNoteMag);
+            val = headWidth();
       return val;
       }
 
@@ -358,8 +361,6 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
 
 qreal Note::headHeight() const
       {
-      if(tab && _fret != FRET_NONE && _string != STRING_NONE)
-            return tab->fretBoxH() * magS();
       return symbols[score()->symIdx()][noteHead()].height(magS());
       }
 
@@ -1268,8 +1269,8 @@ void Note::layout()
       if (useTablature) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal mags = magS();
-            qreal w = headWidth(tab);
-            // center string name to note head
+            qreal w = tabHeadWidth(tab);
+            // centre fret string to note head
             qreal xo = (headWidth() - w) * .5;
             bbox().setRect(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
