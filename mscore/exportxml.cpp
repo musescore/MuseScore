@@ -785,10 +785,17 @@ void ExportMusicXml::calcDivMoveToTick(int t)
       }
 
 //---------------------------------------------------------
-//  calcDivisions
+// isTwoNoteTremolo - determine is chord is part of two note tremolo
 //---------------------------------------------------------
 
-static bool isTwoNoteTremolo(Chord* chord);
+static bool isTwoNoteTremolo(Chord* chord)
+      {
+      return (chord->tremolo() && chord->tremolo()->twoNotes());
+      }
+
+//---------------------------------------------------------
+//  calcDivisions
+//---------------------------------------------------------
 
 // Loop over all voices in all staffs and determine a suitable value for divisions.
 
@@ -1451,123 +1458,58 @@ static Breath* hasBreathMark(Chord* ch)
       }
 
 //---------------------------------------------------------
-// isTwoNoteTremolo - determine is chord is part of two note tremolo
-//---------------------------------------------------------
-
-static bool isTwoNoteTremolo(Chord* chord)
-      {
-      ChordRest* cr = nextChordRest(chord);
-      Chord* nextChord = 0;
-      if (cr && cr->type() == Element::CHORD) nextChord = static_cast<Chord*>(cr);
-      Tremolo* tr = 0;
-      // this chord or next chord may have tremolo, but not both chords
-      if (chord && chord->tremolo()) {
-            tr = chord->tremolo();
-            }
-      if (nextChord && nextChord->tremolo()) {
-            tr = nextChord->tremolo();
-            }
-      if (tr) {
-            int st = tr->subtype();
-            if (st == 3 || st == 4 || st == 5) return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   tremoloSingleStartStop
 //---------------------------------------------------------
 
 static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments& ornaments, Xml& xml)
       {
-      ChordRest* cr = nextChordRest(chord);
-      Chord* nextChord = 0;
-      if (cr && cr->type() == Element::CHORD) nextChord = static_cast<Chord*>(cr);
-      if (nextChord && nextChord->tremolo()) {
-            Tremolo* tr = nextChord->tremolo();
-            int st = tr->subtype();
-            switch (st) {
-                  case TREMOLO_R8:
-                  case TREMOLO_R16:
-                  case TREMOLO_R32:
-                  case TREMOLO_R64:
-                        // ignore
-                        break;
-                  case TREMOLO_C8:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"start\"", "1");
-                        break;
-                  case TREMOLO_C16:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"start\"", "2");
-                        break;
-                  case TREMOLO_C32:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"start\"", "3");
-                        break;
-                  case TREMOLO_C64:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"start\"", "4");
-                        break;
-                  default:
-                        qDebug("unknown tremolo %d\n", st);
-                        break;
-                  }
-            }
       if (chord->tremolo()) {
             Tremolo* tr = chord->tremolo();
+            int count = 0;
             int st = tr->subtype();
-            switch (st) {
-                  case TREMOLO_R8:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"single\"", "1");
-                        break;
-                  case TREMOLO_R16:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"single\"", "2");
-                        break;
-                  case TREMOLO_R32:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"single\"", "3");
-                        break;
-                  case TREMOLO_R64:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"single\"", "4");
-                        break;
-                  case TREMOLO_C8:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"stop\"", "1");
-                        break;
-                  case TREMOLO_C16:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"stop\"", "2");
-                        break;
-                  case TREMOLO_C32:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"stop\"", "3");
-                        break;
-                  case TREMOLO_C64:
-                        notations.tag(xml);
-                        ornaments.tag(xml);
-                        xml.tag("tremolo type=\"stop\"", "4");
-                        break;
-                  default:
-                        qDebug("unknown tremolo %d\n", st);
-                        break;
+            QString type = "";
+
+            if (chord->tremoloChordType() == TremoloSingle) {
+                  type = "single";
+                  switch (st) {
+                        case TREMOLO_R8:  count = 1; break;
+                        case TREMOLO_R16: count = 2; break;
+                        case TREMOLO_R32: count = 3; break;
+                        case TREMOLO_R64: count = 4; break;
+                        default: qDebug("unknown tremolo single %d\n", st); break;
+                        }
+                  }
+            else if (chord->tremoloChordType() == TremoloFirstNote) {
+                  type = "start";
+                  switch (st) {
+                        case TREMOLO_C8:  count = 1; break;
+                        case TREMOLO_C16: count = 2; break;
+                        case TREMOLO_C32: count = 3; break;
+                        case TREMOLO_C64: count = 4; break;
+                        default: qDebug("unknown tremolo double %d\n", st); break;
+                        }
+                  }
+            else if (chord->tremoloChordType() == TremoloSecondNote) {
+                  type = "stop";
+                  switch (st) {
+                        case TREMOLO_C8:  count = 1; break;
+                        case TREMOLO_C16: count = 2; break;
+                        case TREMOLO_C32: count = 3; break;
+                        case TREMOLO_C64: count = 4; break;
+                        default: qDebug("unknown tremolo double %d\n", st); break;
+                        }
+                  }
+            else qDebug("unknown tremolo subtype %d\n", st);
+
+
+            if (type != "" && count > 0) {
+                  notations.tag(xml);
+                  ornaments.tag(xml);
+                  xml.tag(QString("tremolo type=\"%1\"").arg(type), count);
                   }
             }
       }
+
 
 //---------------------------------------------------------
 //   chordAttributes
@@ -1663,6 +1605,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case Articulation_Upbow:
                   case Articulation_Downbow:
                   case Articulation_Snappizzicato:
+                  case Articulation_Thumb:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1774,6 +1717,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case Articulation_Upbow:
                   case Articulation_Downbow:
                   case Articulation_Snappizzicato:
+                  case Articulation_Thumb:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1949,7 +1893,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                     || gracen == NOTE_GRACE32);
       int tremCorr = 1; // duration correction for two note tremolo
       if (isTwoNoteTremolo(chord)) tremCorr = 2;
-      if (!grace) tick += chord->actualTicks() / tremCorr;
+      if (!grace) tick += chord->actualTicks();
 #ifdef DEBUG_TICK
       qDebug("ExportMusicXml::chord() oldtick=%d", tick);
       qDebug("notetype=%d grace=%d", gracen, grace);
@@ -2041,7 +1985,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 
             // duration
             if (!grace)
-                  xml.tag("duration", note->chord()->actualTicks() / (div * tremCorr));
+                  xml.tag("duration", note->chord()->actualTicks() / div);
 
             if (note->tieBack())
                   xml.tagE("tie type=\"stop\"");
@@ -2073,7 +2017,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   nrmTicks = determineTupletNormalTicks(chord);
                   }
 
-            QString s = tick2xml(note->chord()->actualTicks() * actNotes / (nrmNotes * tremCorr), &dots);
+            QString s = tick2xml(note->chord()->actualTicks() * actNotes * tremCorr / nrmNotes, &dots);
             if (s.isEmpty()) {
                   qDebug("no note type found for ticks %d\n",
                          note->chord()->actualTicks());
@@ -2123,6 +2067,16 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                         }
                   }
 
+            // time modification for two note tremolo
+            // TODO: support tremolo in tuplet ?
+            if (tremCorr == 2) {
+                  xml.stag("time-modification");
+                  xml.tag("actual-notes", 2);
+                  xml.tag("normal-notes", 1);
+                  xml.etag();
+                  }
+
+            // time modification for tuplet
             if (t) {
                   // TODO: remove following duplicated code (present for both notes and rests)
                   xml.stag("time-modification");
@@ -2147,7 +2101,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (chord->noStem() || chord->measure()->slashStyle(chord->staffIdx())) {
                   xml.tag("stem", QString("none"));
                   }
-            else if ((note->chord()->actualTicks() * actNotes / (nrmNotes * tremCorr)) < (4 * MScore::division)) {
+            else if ((note->chord()->actualTicks() * actNotes * tremCorr / nrmNotes) < (4 * MScore::division)) {
                   xml.tag("stem", QString(note->chord()->up() ? "up" : "down"));
                   }
 
@@ -2279,7 +2233,9 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 void ExportMusicXml::rest(Rest* rest, int staff)
       {
       static char table2[]  = "CDEFGAB";
+#ifdef DEBUG_TICK
       qDebug("ExportMusicXml::rest() oldtick=%d", tick);
+#endif
       attr.doAttr(xml, false);
 
       QString noteTag = QString("note");
@@ -2326,7 +2282,9 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             tickLen = rest->measure()->ticks();
             }
       tick += tickLen;
+#ifdef DEBUG_TICK
       qDebug(" tickLen=%d newtick=%d", tickLen, tick);
+#endif
 
       xml.tag("duration", tickLen / div);
 

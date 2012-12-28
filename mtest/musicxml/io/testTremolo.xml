@@ -63,6 +63,22 @@
     <measure number="2">
       <note>
         <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>64</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <ornaments>
+            <tremolo type="single">4</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      </measure>
+    <measure number="3">
+      <note>
+        <pitch>
           <step>A</step>
           <octave>4</octave>
           </pitch>
@@ -158,7 +174,7 @@
         <type>64th</type>
         </note>
       </measure>
-    <measure number="3">
+    <measure number="4">
       <note>
         <pitch>
           <step>G</step>
@@ -220,7 +236,46 @@
           </notations>
         </note>
       </measure>
-    <measure number="4">
+    <measure number="5">
+      <print new-system="yes"/>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>up</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="start">1</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>up</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="stop">1</tremolo>
+            </ornaments>
+          </notations>
+        </note>
       <note>
         <pitch>
           <step>B</step>
@@ -228,7 +283,11 @@
           </pitch>
         <duration>16</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
         <stem>down</stem>
         <notations>
           <ornaments>
@@ -238,12 +297,16 @@
         </note>
       <note>
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
           </pitch>
         <duration>16</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
         <stem>down</stem>
         <notations>
           <ornaments>
@@ -251,17 +314,121 @@
             </ornaments>
           </notations>
         </note>
+      </measure>
+    <measure number="6">
       <note>
-        <rest/>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
         <duration>16</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>up</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="start">3</tremolo>
+            </ornaments>
+          </notations>
         </note>
       <note>
-        <rest/>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
         <duration>16</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>up</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="stop">3</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>down</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="start">4</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <stem>down</stem>
+        <notations>
+          <ornaments>
+            <tremolo type="stop">4</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>32</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <notations>
+          <ornaments>
+            <tremolo type="start">1</tremolo>
+            </ornaments>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>32</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <time-modification>
+          <actual-notes>2</actual-notes>
+          <normal-notes>1</normal-notes>
+          </time-modification>
+        <notations>
+          <ornaments>
+            <tremolo type="stop">1</tremolo>
+            </ornaments>
+          </notations>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
