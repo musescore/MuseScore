@@ -1653,6 +1653,7 @@ Element* Score::move(const QString& cmd)
             // get parent of element and process accordingly:
             // trg is the element to select on "next-chord" cmd
             // cr is the ChordRest to move from on other cmd's
+            int track = el->track();            // keep note of element track
             el = el->parent();
             switch (el->type()) {
                   case Element::NOTE:           // a note is a valid target
@@ -1672,9 +1673,15 @@ Element* Score::move(const QString& cmd)
                               if (seg == 0)     // if none found, reutrn failure
                                     return 0;
                               }
-                        // segment for sure contains notes/rests,
-                        // get topmost chord/rest
+                        // segment for sure contains chords/rests,
                         int size = seg->elist().size();
+                        // if segment has a chord/rest in original element track, use it
+                        if(track > -1 && track < size && seg->element(track)) {
+                              trg  = seg->element(track);
+                              cr = static_cast<ChordRest*>(trg);
+                              break;
+                              }
+                        // if not, get topmost chord/rest
                         for (int i = 0; i < size; i++)
                               if (seg->element(i)) {
                                     trg  = seg->element(i);
