@@ -757,6 +757,7 @@ void MusicXml::import(Score* s)
       harmony = 0;
       tremStart = 0;
       hairpin = 0;
+      figBass = 0;
 
       // TODO only if multi-measure rests used ???
       // score->style()->set(ST_createMultiMeasureRests, true);
@@ -2106,38 +2107,6 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       }
 
 //---------------------------------------------------------
-//   fixupFiguredBass
-//
-// set correct ticks and (TODO ?) onNote value for the
-// FiguredBass elements in this measure and staff
-// note: FiguredBass element already has a valid track value
-//---------------------------------------------------------
-
-static void fixupFiguredBass(Part* part, Measure* measure)
-      {
-      for (Segment* seg = measure->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest)) {
-            foreach(Element* e, seg->annotations()) {
-                  if (e->type() == Element::FIGURED_BASS) {
-                        FiguredBass* fb = static_cast<FiguredBass*>(e);
-                        if (fb->ticks() <= 0) {
-                              // Found FiguredBass w/o valid ticks value
-                              // Find chord to attach to in same staff and copy ticks
-                              for (int tr = fb->track(); tr < fb->track() + VOICES; ++tr) {
-                                    Element* el = seg->element(tr);
-                                    if (el && el->type() == Element::CHORD) {
-                                          // found chord
-                                          Chord* ch = static_cast<Chord*>(el);
-                                          fb->setTicks(ch->actualTicks());
-                                          break; // use the first chord found
-                                          }
-                                    }
-                              }
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   xmlMeasure
 //---------------------------------------------------------
 
@@ -2393,20 +2362,18 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             else if (e.tagName() == "harmony")
                   xmlHarmony(e, tick, measure, staff);
             else if (e.tagName() == "figured-bass") {
-                  FiguredBass* fb = new FiguredBass(score);
-                  fb->setTrack(staff * VOICES);
-                  fb->readMusicXML(e, divisions);
-                  Segment* s = measure->getSegment(Segment::SegChordRest, tick);
-                  // TODO: use addelement() instead of Segment::add() ?
-                  //       or FiguredBass::addFiguredBassToSegment() ?
-                  // TODO: set correct onNote value
-                  s->add(fb);
+                  if (figBass) {
+                        qDebug("more than one figured bass element on note not supported");
+                        }
+                  else {
+                        // read figured bass element to attach to next note
+                        figBass = new FiguredBass(score);
+                        figBass->readMusicXML(e, divisions);
+                        }
                   }
             else
                   domError(e);
             }
-
-      fixupFiguredBass(part, measure);
 
 #ifdef DEBUG_TICK
       qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
@@ -5069,6 +5036,18 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       // add lyrics found by xmlLyric
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
+
+      // add figured bass element
+      if (figBass) {
+            qDebug("add figured bass %p at tick %d ticks %d trk %d", figBass, tick, ticks, trk);
+            figBass->setTrack(trk);
+            figBass->setTicks(ticks);
+            // TODO: set correct onNote value
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
+            // TODO: use addelement() instead of Segment::add() ?
+            s->add(figBass);
+            figBass = 0;
+            }
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
