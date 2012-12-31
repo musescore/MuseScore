@@ -41,29 +41,29 @@ Acc accList[] = {
       Acc("double flat",         QT_TRANSLATE_NOOP("accidental", "double flat"),         FLAT2,   0, flatflatSym),
       Acc("natural",             QT_TRANSLATE_NOOP("accidental", "natural"),             NATURAL, 0, naturalSym),
 
-      Acc("flat-slash",          QT_TRANSLATE_NOOP("accidental", "flat-slash"),          NATURAL, 0, flatslashSym),
+      Acc("flat-slash",          QT_TRANSLATE_NOOP("accidental", "flat-slash"),          NATURAL, -50, flatslashSym),
       Acc("flat-slash2",         QT_TRANSLATE_NOOP("accidental", "flat-slash2"),         NATURAL, 0, flatslash2Sym),
-      Acc("mirrored-flat2",      QT_TRANSLATE_NOOP("accidental", "mirrored-flat2"),      NATURAL, 0, mirroredflat2Sym),
-      Acc("mirrored-flat",       QT_TRANSLATE_NOOP("accidental", "mirrored-flat"),       NATURAL, 0, mirroredflatSym),
+      Acc("mirrored-flat2",      QT_TRANSLATE_NOOP("accidental", "mirrored-flat2"),      NATURAL, -150, mirroredflat2Sym),
+      Acc("mirrored-flat",       QT_TRANSLATE_NOOP("accidental", "mirrored-flat"),       NATURAL, -50, mirroredflatSym),
       Acc("mirrored-flat-slash", QT_TRANSLATE_NOOP("accidental", "mirrored-flat-slash"), NATURAL, 0, mirroredflatslashSym),
-      Acc("flat-flat-slash",     QT_TRANSLATE_NOOP("accidental", "flat-flat-slash"),     NATURAL, 0, flatflatslashSym),
+      Acc("flat-flat-slash",     QT_TRANSLATE_NOOP("accidental", "flat-flat-slash"),     NATURAL, -150, flatflatslashSym),
 
-      Acc("sharp-slash",         QT_TRANSLATE_NOOP("accidental", "sharp-slash"),         NATURAL, 0, sharpslashSym),
+      Acc("sharp-slash",         QT_TRANSLATE_NOOP("accidental", "sharp-slash"),         NATURAL, 50, sharpslashSym),
       Acc("sharp-slash2",        QT_TRANSLATE_NOOP("accidental", "sharp-slash2"),        NATURAL, 0, sharpslash2Sym),
       Acc("sharp-slash3",        QT_TRANSLATE_NOOP("accidental", "sharp-slash3"),        NATURAL, 0, sharpslash3Sym),
-      Acc("sharp-slash4",        QT_TRANSLATE_NOOP("accidental", "sharp-slash4"),        NATURAL, 0, sharpslash4Sym),
+      Acc("sharp-slash4",        QT_TRANSLATE_NOOP("accidental", "sharp-slash4"),        NATURAL, 150, sharpslash4Sym),
 
-      Acc("sharp arrow up",      QT_TRANSLATE_NOOP("accidental", "sharp arrow up"),      NATURAL, 0, sharpArrowUpSym),
-      Acc("sharp arrow down",    QT_TRANSLATE_NOOP("accidental", "sharp arrow down"),    NATURAL, 0, sharpArrowDownSym),
+      Acc("sharp arrow up",      QT_TRANSLATE_NOOP("accidental", "sharp arrow up"),      NATURAL, -50, sharpArrowUpSym),
+      Acc("sharp arrow down",    QT_TRANSLATE_NOOP("accidental", "sharp arrow down"),    NATURAL, -150, sharpArrowDownSym),
       Acc("sharp arrow both",    QT_TRANSLATE_NOOP("accidental", "sharp arrow both"),    NATURAL, 0, sharpArrowBothSym),
-      Acc("flat arrow up",       QT_TRANSLATE_NOOP("accidental", "flat arrow up"),       NATURAL, 0, flatArrowUpSym),
-      Acc("flat arrow down",     QT_TRANSLATE_NOOP("accidental", "flat arrow down"),     NATURAL, 0, flatArrowDownSym),
+      Acc("flat arrow up",       QT_TRANSLATE_NOOP("accidental", "flat arrow up"),       NATURAL, 50, flatArrowUpSym),
+      Acc("flat arrow down",     QT_TRANSLATE_NOOP("accidental", "flat arrow down"),     NATURAL, -50, flatArrowDownSym),
       Acc("flat arrow both",     QT_TRANSLATE_NOOP("accidental", "flat arrow both"),     NATURAL, 0, flatArrowBothSym),
-      Acc("natural arrow up",    QT_TRANSLATE_NOOP("accidental", "natural arrow up"),    NATURAL, 0, naturalArrowUpSym),
-      Acc("natural arrow down",  QT_TRANSLATE_NOOP("accidental", "natural arrow down"),  NATURAL, 0, naturalArrowDownSym),
+      Acc("natural arrow up",    QT_TRANSLATE_NOOP("accidental", "natural arrow up"),    NATURAL, 50, naturalArrowUpSym),
+      Acc("natural arrow down",  QT_TRANSLATE_NOOP("accidental", "natural arrow down"),  NATURAL, 150, naturalArrowDownSym),
       Acc("natural arrow both",  QT_TRANSLATE_NOOP("accidental", "natural arrow both"),  NATURAL, 0, naturalArrowBothSym),
-      Acc("sori",                QT_TRANSLATE_NOOP("accidental", "sori"),                NATURAL, 0, soriSym),
-      Acc("koron",               QT_TRANSLATE_NOOP("accidental", "koron"),               NATURAL, 0, koronSym)
+      Acc("sori",                QT_TRANSLATE_NOOP("accidental", "sori"),                NATURAL, 50, soriSym),
+      Acc("koron",               QT_TRANSLATE_NOOP("accidental", "koron"),               NATURAL, -50, koronSym)
       };
 
 //---------------------------------------------------------
