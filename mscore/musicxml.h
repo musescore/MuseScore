@@ -50,6 +50,7 @@ class Spanner;
 class Lyrics;
 class ChordRest;
 class Beam;
+class FiguredBass;
 
 //---------------------------------------------------------
 //   MusicXmlWedge
@@ -236,6 +237,8 @@ class MusicXml {
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
+      FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
+      bool figBassExtend;                        ///< Current figured bass extend
       BeamMode beamMode;                         ///< Current beam mode
       Beam* beam;                                ///< Current beam mode
 

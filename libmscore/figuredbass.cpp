@@ -770,7 +770,7 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 // node instead of for each individual <figure> node.
 //---------------------------------------------------------
 
-void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
+void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren, bool& extend)
       {
       // read the <figure> node de
       for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
@@ -778,7 +778,7 @@ void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
             const QString& val(e.text());
             int   iVal = val.toInt();
             if (tag == "extend")
-                  ; // TODO
+                  extend = true;
             else if (tag == "figure-number") {
                   // MusicXML spec states figure-number is a number
                   // MuseScore can only handle single digit
@@ -815,17 +815,22 @@ void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren)
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FiguredBassItem::writeMusicXML(Xml& xml) const
+void FiguredBassItem::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
       {
       xml.stag("figure");
-      QString strPrefix = Modifier2MusicXML(_prefix);
-      if (strPrefix != "")
-            xml.tag("prefix", strPrefix);
-      if (_digit != FBIDigitNone)
-            xml.tag("figure-number", _digit);
-      QString strSuffix = Modifier2MusicXML(_suffix);
-      if (strSuffix != "")
-            xml.tag("suffix", strSuffix);
+      if (doFigure) {
+            QString strPrefix = Modifier2MusicXML(_prefix);
+            if (strPrefix != "")
+                  xml.tag("prefix", strPrefix);
+            if (_digit != FBIDigitNone)
+                  xml.tag("figure-number", _digit);
+            QString strSuffix = Modifier2MusicXML(_suffix);
+            if (strSuffix != "")
+                  xml.tag("suffix", strSuffix);
+            }
+      if (doExtend) {
+            xml.tagE("extend");
+            }
       xml.etag();
       }
 
@@ -1490,10 +1495,13 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
 // Note that onNote and ticks must be set by the MusicXML importer,
 // as the required context is not present in the items DOM tree.
 // Exception: if a <duration> element is present, tick can be set.
+// Return true if valid, non-empty figure(s) are found
+// Set extend to true if extend elements were found
 //---------------------------------------------------------
 
-void FiguredBass::readMusicXML(const QDomElement& de, int divisions)
+bool FiguredBass::readMusicXML(const QDomElement& de, int divisions, bool& extend)
       {
+      extend = false;
       bool parentheses = (de.attribute("parentheses") == "yes");
       QString normalizedText;
       int idx = 0;
@@ -1513,20 +1521,27 @@ void FiguredBass::readMusicXML(const QDomElement& de, int divisions)
                                qPrintable(val));
                   }
             else if (tag == "figure") {
+                  bool figureExtend = false;
                   FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
                   pItem->setTrack(track());
                   pItem->setParent(this);
-                  pItem->readMusicXML(e, parentheses);
+                  pItem->readMusicXML(e, parentheses, figureExtend);
+                  if (figureExtend)
+                        extend = true;
                   items.append(*pItem);
                   // add item normalized text
                   if(!normalizedText.isEmpty())
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
-            else
+            else {
                   domError(e);
+                  return false;
+                  }
             }
       setText(normalizedText);                  // this is the text to show while editing
+      bool res = !normalizedText.isEmpty();
+      return res;
       }
 
 //---------------------------------------------------------
@@ -1547,15 +1562,17 @@ bool FiguredBass::hasParentheses() const
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FiguredBass::writeMusicXML(Xml& xml) const
+void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
       {
-      QString stag = "figured-bass";
-      if (hasParentheses())
-            stag += " parentheses=\"yes\"";
-      xml.stag(stag);
-      foreach(FiguredBassItem item, items)
-            item.writeMusicXML(xml);
-      xml.etag();
+      if (doFigure || doExtend) {
+            QString stag = "figured-bass";
+            if (hasParentheses())
+                  stag += " parentheses=\"yes\"";
+            xml.stag(stag);
+            foreach(FiguredBassItem item, items)
+                  item.writeMusicXML(xml, doFigure, doExtend);
+            xml.etag();
+            }
       }
 
 //---------------------------------------------------------

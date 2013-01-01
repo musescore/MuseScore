@@ -757,6 +757,8 @@ void MusicXml::import(Score* s)
       harmony = 0;
       tremStart = 0;
       hairpin = 0;
+      figBass = 0;
+      figBassExtend = false;
 
       // TODO only if multi-measure rests used ???
       // score->style()->set(ST_createMultiMeasureRests, true);
@@ -2106,38 +2108,6 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       }
 
 //---------------------------------------------------------
-//   fixupFiguredBass
-//
-// set correct ticks and (TODO ?) onNote value for the
-// FiguredBass elements in this measure and staff
-// note: FiguredBass element already has a valid track value
-//---------------------------------------------------------
-
-static void fixupFiguredBass(Part* part, Measure* measure)
-      {
-      for (Segment* seg = measure->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest)) {
-            foreach(Element* e, seg->annotations()) {
-                  if (e->type() == Element::FIGURED_BASS) {
-                        FiguredBass* fb = static_cast<FiguredBass*>(e);
-                        if (fb->ticks() <= 0) {
-                              // Found FiguredBass w/o valid ticks value
-                              // Find chord to attach to in same staff and copy ticks
-                              for (int tr = fb->track(); tr < fb->track() + VOICES; ++tr) {
-                                    Element* el = seg->element(tr);
-                                    if (el && el->type() == Element::CHORD) {
-                                          // found chord
-                                          Chord* ch = static_cast<Chord*>(el);
-                                          fb->setTicks(ch->actualTicks());
-                                          break; // use the first chord found
-                                          }
-                                    }
-                              }
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   xmlMeasure
 //---------------------------------------------------------
 
@@ -2393,20 +2363,25 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             else if (e.tagName() == "harmony")
                   xmlHarmony(e, tick, measure, staff);
             else if (e.tagName() == "figured-bass") {
-                  FiguredBass* fb = new FiguredBass(score);
-                  fb->setTrack(staff * VOICES);
-                  fb->readMusicXML(e, divisions);
-                  Segment* s = measure->getSegment(Segment::SegChordRest, tick);
-                  // TODO: use addelement() instead of Segment::add() ?
-                  //       or FiguredBass::addFiguredBassToSegment() ?
-                  // TODO: set correct onNote value
-                  s->add(fb);
+                  if (figBass) {
+                        qDebug("more than one figured bass element on note not supported");
+                        }
+                  else {
+                        // read figured bass element to attach to next note
+                        figBassExtend = false;
+                        bool mustkeep = false;
+                        figBass = new FiguredBass(score);
+                        mustkeep = figBass->readMusicXML(e, divisions, figBassExtend);
+                        // qDebug("xmlMeaure: fb mustkeep %d extend %d", mustkeep, figBassExtend);
+                        if (!mustkeep) {
+                              delete figBass;
+                              figBass = 0;
+                              }
+                        }
                   }
             else
                   domError(e);
             }
-
-      fixupFiguredBass(part, measure);
 
 #ifdef DEBUG_TICK
       qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
@@ -2552,7 +2527,7 @@ static void metronome(QDomElement e, Text* t)
 //---------------------------------------------------------
 
 static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* /* score */, QString& placement,
-                       qreal rx, qreal ry, int offset, Measure* measure, int tick)
+                       qreal rx, qreal ry, int /* offset */, Measure* measure, int tick)
       {
       if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
       else {
@@ -2563,7 +2538,7 @@ static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Scor
             // el->setReadPos(QPoint(0, y));
             }
       el->setUserOff(QPointF(rx, ry));
-      el->setMxmlOff(offset);
+      // el->setMxmlOff(offset);
       el->setTrack((staff + rstaff) * VOICES);
       Segment* s = measure->getSegment(Segment::SegChordRest, tick);
       s->add(el);
@@ -2606,7 +2581,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString fontWeight = "";
       QString fontStyle = "";
       QString fontSize = "";
-      int offset = 0;
+      int offset = 0; // not supported yet
       int rstaff = 0;
       QStringList dynamics;
       // int spread;
@@ -2955,7 +2930,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (hasYoffset) s->setYoff(yoffset);
                   else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
                   s->setUserOff(QPointF(rx, ry));
-                  s->setMxmlOff(offset);
+                  // s->setMxmlOff(offset);
                   s->setTrack((staff + rstaff) * VOICES);
                   Segment* seg = measure->getSegment(Segment::SegChordRest, tick);
                   seg->add(s);
@@ -3034,7 +3009,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         //yoffset += (placement == "above" ? 0.0 : 5.0);
                         // store for later to set in segment
                         // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        b->setMxmlOff(offset);
+                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
@@ -3107,7 +3082,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         //yoffset += (placement == "above" ? 0.0 : 5.0);
                         // store for later to set in segment
                         // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        b->setMxmlOff(offset);
+                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
@@ -4585,6 +4560,31 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
 
 
 //---------------------------------------------------------
+//   findLastFiguredBass
+//---------------------------------------------------------
+
+/**
+ * Find last figured bass on \a track before \a seg
+ */
+
+static FiguredBass* findLastFiguredBass(int track, Segment* seg)
+      {
+      // qDebug("findLastFiguredBass(track %d seg %p)", track, seg);
+      while ((seg = seg->prev1(Segment::SegChordRest))) {
+            // qDebug("findLastFiguredBass seg %p", seg);
+            foreach(Element* e, seg->annotations()) {
+                  if (e->track() == track && e->type() == Element::FIGURED_BASS) {
+                        FiguredBass* fb = static_cast<FiguredBass*>(e);
+                        // qDebug("findLastFiguredBass found fb %p at seg %p", fb, seg);
+                        return fb;
+                        }
+                  }
+            }
+      return 0;
+      }
+
+
+//---------------------------------------------------------
 //   xmlNote
 //---------------------------------------------------------
 
@@ -5069,6 +5069,26 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       // add lyrics found by xmlLyric
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
+
+      // add figured bass element
+      if (figBass) {
+            // qDebug("add figured bass %p at tick %d ticks %d trk %d", figBass, tick, ticks, trk);
+            figBass->setTrack(trk);
+            figBass->setTicks(ticks);
+            // TODO: set correct onNote value
+            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
+            // TODO: use addelement() instead of Segment::add() ?
+            s->add(figBass);
+            figBass = 0;
+            }
+      else if (figBassExtend) {
+            // extend last figured bass to end of this chord
+            // qDebug("extend figured bass at tick %d ticks %d trk %d end %d", tick, ticks, trk, tick + ticks);
+            FiguredBass* fb = findLastFiguredBass((trk / VOICES) * VOICES, cr->segment());
+            if (fb)
+                  fb->setTicks(tick + ticks - fb->segment()->tick());
+            }
+      figBassExtend = false;
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
