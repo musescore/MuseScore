@@ -93,6 +93,7 @@
 #include "libmscore/tablature.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/qzipwriter_p.h"
+#include "libmscore/fret.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -297,7 +298,7 @@ public:
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
-      void harmony(Harmony const* const);
+      void harmony(Harmony const* const, FretDiagram const* const fd);
       };
 
 //---------------------------------------------------------
@@ -3168,6 +3169,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
                                     case Element::HARMONY:
                                     case Element::FIGURED_BASS:
                                     case Element::REHEARSAL_MARK:
+                                    case Element::FRET_DIAGRAM:
                                     case Element::JUMP: // note: all jumps are handled at measure stop
                                           break;
                                     case Element::MARKER:
@@ -3244,6 +3246,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
                                     case Element::HARMONY:
                                     case Element::FIGURED_BASS:
                                     case Element::REHEARSAL_MARK:
+                                    case Element::FRET_DIAGRAM:
                                           break;
                                     case Element::MARKER:
                                           {
@@ -3350,12 +3353,40 @@ static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
       }
 
 //---------------------------------------------------------
+//  findFretDiagram
+//---------------------------------------------------------
+
+static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
+      {
+      if (seg->subtype() == Segment::SegChordRest) {
+            foreach(const Element* e, seg->annotations()) {
+
+                  int wtrack = -1; // track to write annotation
+
+                  if (strack <= e->track() && e->track() < etrack)
+                        wtrack = findTrackForAnnotations(e->track(), seg);
+
+                  if (track == wtrack && e->type() == Element::FRET_DIAGRAM)
+                        return static_cast<const FretDiagram*>(e);
+                  }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //  annotations
 //---------------------------------------------------------
+
+// In MuseScore, Element::FRET_DIAGRAM and Element::HARMONY are separate annotations,
+// in MusicXML they are combined in the harmony element. This means they have to be matched.
+// TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
 static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->subtype() == Segment::SegChordRest) {
+
+            const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
+
             foreach(const Element* e, seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3379,12 +3410,15 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                                     exp->dynamic(static_cast<const Dynamic*>(e), sstaff);
                                     break;
                               case Element::HARMONY:
-                                    exp->harmony(static_cast<const Harmony*>(e) /*, sstaff */);
+                                    qDebug("annotations found harmony");
+                                    exp->harmony(static_cast<const Harmony*>(e), fd /*, sstaff */);
+                                    fd = 0; // make sure to write only once ...
                                     break;
                               case Element::REHEARSAL_MARK:
                                     exp->rehearsal(static_cast<const RehearsalMark*>(e), sstaff);
                                     break;
                               case Element::FIGURED_BASS: // handled separately by figuredBass()
+                              case Element::FRET_DIAGRAM: // handled using findFretDiagram()
                               case Element::JUMP:         // ignore
                                     break;
                               default:
@@ -3394,6 +3428,9 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               }
                         }
                   } // foreach
+            if (fd) {
+                  // TODO: found fd but no Element::HARMONY -> write separately
+                  }
             }
       }
 
@@ -4059,7 +4096,8 @@ void ExportMusicXml::write(QIODevice* dev)
 
                                     foreach (Element* hhe, list) {
                                           attr.doAttr(xml, false);
-                                          harmony((Harmony*)hhe);
+                                          qDebug("writing harmony");
+                                          harmony((Harmony*)hhe, 0);
                                           }
                                     }
 
@@ -4264,7 +4302,7 @@ double ExportMusicXml::getTenthsFromDots(double dots)
 //   harmony
 //---------------------------------------------------------
 
-void ExportMusicXml::harmony(Harmony const* const h)
+void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd)
       {
       int rootTpc = h->rootTpc();
       if (rootTpc != INVALID_TPC) {
