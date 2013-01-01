@@ -70,7 +70,6 @@ class TextLine : public SLine {
       SymId _beginSymbol, _continueSymbol, _endSymbol;
       QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;
 
-      int _mxmlOff2;
       qreal _sp;       // cached value from last spatiumChanged() call
 
    protected:
@@ -137,8 +136,6 @@ class TextLine : public SLine {
       void setBeginSymbolOffset(QPointF v)    { _beginSymbolOffset = v;       }
       void setContinueSymbolOffset(QPointF v) { _continueSymbolOffset = v;    }
       void setEndSymbolOffset(QPointF v)      { _endSymbolOffset = v;         }
-      void setMxmlOff2(int v)                 { _mxmlOff2 = v;                }
-      int mxmlOff2() const                    { return _mxmlOff2;             }
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       };
 
