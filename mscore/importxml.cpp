@@ -758,6 +758,7 @@ void MusicXml::import(Score* s)
       tremStart = 0;
       hairpin = 0;
       figBass = 0;
+      figBassExtend = false;
 
       // TODO only if multi-measure rests used ???
       // score->style()->set(ST_createMultiMeasureRests, true);
@@ -2367,8 +2368,15 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                         }
                   else {
                         // read figured bass element to attach to next note
+                        figBassExtend = false;
+                        bool mustkeep = false;
                         figBass = new FiguredBass(score);
-                        figBass->readMusicXML(e, divisions);
+                        mustkeep = figBass->readMusicXML(e, divisions, figBassExtend);
+                        // qDebug("xmlMeaure: fb mustkeep %d extend %d", mustkeep, figBassExtend);
+                        if (!mustkeep) {
+                              delete figBass;
+                              figBass = 0;
+                              }
                         }
                   }
             else
@@ -4552,6 +4560,31 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
 
 
 //---------------------------------------------------------
+//   findLastFiguredBass
+//---------------------------------------------------------
+
+/**
+ * Find last figured bass on \a track before \a seg
+ */
+
+static FiguredBass* findLastFiguredBass(int track, Segment* seg)
+      {
+      // qDebug("findLastFiguredBass(track %d seg %p)", track, seg);
+      while ((seg = seg->prev1(Segment::SegChordRest))) {
+            // qDebug("findLastFiguredBass seg %p", seg);
+            foreach(Element* e, seg->annotations()) {
+                  if (e->track() == track && e->type() == Element::FIGURED_BASS) {
+                        FiguredBass* fb = static_cast<FiguredBass*>(e);
+                        // qDebug("findLastFiguredBass found fb %p at seg %p", fb, seg);
+                        return fb;
+                        }
+                  }
+            }
+      return 0;
+      }
+
+
+//---------------------------------------------------------
 //   xmlNote
 //---------------------------------------------------------
 
@@ -5039,7 +5072,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
       // add figured bass element
       if (figBass) {
-            qDebug("add figured bass %p at tick %d ticks %d trk %d", figBass, tick, ticks, trk);
+            // qDebug("add figured bass %p at tick %d ticks %d trk %d", figBass, tick, ticks, trk);
             figBass->setTrack(trk);
             figBass->setTicks(ticks);
             // TODO: set correct onNote value
@@ -5048,6 +5081,14 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
             s->add(figBass);
             figBass = 0;
             }
+      else if (figBassExtend) {
+            // extend last figured bass to end of this chord
+            // qDebug("extend figured bass at tick %d ticks %d trk %d end %d", tick, ticks, trk, tick + ticks);
+            FiguredBass* fb = findLastFiguredBass((trk / VOICES) * VOICES, cr->segment());
+            if (fb)
+                  fb->setTicks(tick + ticks - fb->segment()->tick());
+            }
+      figBassExtend = false;
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
