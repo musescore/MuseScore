@@ -93,6 +93,7 @@
 #include "libmscore/tablature.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/qzipwriter_p.h"
+#include "libmscore/fret.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -101,6 +102,12 @@
 // #define DEBUG_CLEF true
 // #define DEBUG_REPEATS true
 // #define DEBUG_TICK true
+
+//---------------------------------------------------------
+//   typedefs
+//---------------------------------------------------------
+
+typedef QMap<int, const FiguredBass*> FigBassMap;
 
 //---------------------------------------------------------
 //   attributes -- prints <attributes> tag when necessary
@@ -291,8 +298,7 @@ public:
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
-      void harmony(Harmony const* const);
-      void figuredBass(FiguredBass const* const);
+      void harmony(Harmony const* const, FretDiagram const* const fd);
       };
 
 //---------------------------------------------------------
@@ -2652,9 +2658,11 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
       wordsMetrome(xml, text);
+      /*
       int offs = text->mxmlOff();
       if (offs)
             xml.tag("offset", offs);
+      */
       if (staff)
             xml.tag("staff", staff);
       xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(text->tempo()*60.0)));
@@ -2681,7 +2689,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
             }
       else
             wordsMetrome(xml, text);
-      directionETag(xml, staff, text->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
@@ -2694,7 +2702,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.stag("direction-type");
       xml.tag("rehearsal", rmk->getText());
       xml.etag();
-      directionETag(xml, staff, rmk->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
@@ -2806,7 +2814,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       QString type;
       bool hook = false;
       double hookHeight = 0.0;
-      int offs;
       int n = 0;
       if (tl->tick() == tick) {
             if (!dashes) {
@@ -2829,14 +2836,14 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             hook = tl->beginHook();
             hookHeight = tl->beginHookHeight().val();
             p = tl->spannerSegments().first()->userOff();
-            offs = tl->mxmlOff();
+            // offs = tl->mxmlOff();
             type = "start";
             }
       else {
             hook = tl->endHook();
             hookHeight = tl->endHookHeight().val();
             p = ((LineSegment*)tl->spannerSegments().last())->userOff2();
-            offs = tl->mxmlOff2();
+            // offs = tl->mxmlOff2();
             type = "stop";
             }
 
@@ -2875,8 +2882,10 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       else
             xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
       xml.etag();
+      /*
       if (offs)
             xml.tag("offset", offs);
+      */
       directionETag(xml, staff);
       }
 
@@ -2909,9 +2918,11 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       else
             xml.tag("words", t);
       xml.etag();
+      /*
       int offs = dyn->mxmlOff();
       if (offs)
             xml.tag("offset", offs);
+      */
       if (staff)
             xml.tag("staff", staff);
 
@@ -2944,7 +2955,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       xml.stag("direction-type");
       xml.tagE(mxmlName);
       xml.etag();
-      directionETag(xml, staff, sym->mxmlOff());
+      directionETag(xml, staff);
       }
 
 //---------------------------------------------------------
@@ -3158,6 +3169,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
                                     case Element::HARMONY:
                                     case Element::FIGURED_BASS:
                                     case Element::REHEARSAL_MARK:
+                                    case Element::FRET_DIAGRAM:
                                     case Element::JUMP: // note: all jumps are handled at measure stop
                                           break;
                                     case Element::MARKER:
@@ -3234,6 +3246,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
                                     case Element::HARMONY:
                                     case Element::FIGURED_BASS:
                                     case Element::REHEARSAL_MARK:
+                                    case Element::FRET_DIAGRAM:
                                           break;
                                     case Element::MARKER:
                                           {
@@ -3340,12 +3353,40 @@ static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
       }
 
 //---------------------------------------------------------
+//  findFretDiagram
+//---------------------------------------------------------
+
+static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
+      {
+      if (seg->subtype() == Segment::SegChordRest) {
+            foreach(const Element* e, seg->annotations()) {
+
+                  int wtrack = -1; // track to write annotation
+
+                  if (strack <= e->track() && e->track() < etrack)
+                        wtrack = findTrackForAnnotations(e->track(), seg);
+
+                  if (track == wtrack && e->type() == Element::FRET_DIAGRAM)
+                        return static_cast<const FretDiagram*>(e);
+                  }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //  annotations
 //---------------------------------------------------------
+
+// In MuseScore, Element::FRET_DIAGRAM and Element::HARMONY are separate annotations,
+// in MusicXML they are combined in the harmony element. This means they have to be matched.
+// TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
 static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->subtype() == Segment::SegChordRest) {
+
+            const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
+
             foreach(const Element* e, seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3369,16 +3410,16 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                                     exp->dynamic(static_cast<const Dynamic*>(e), sstaff);
                                     break;
                               case Element::HARMONY:
-                                    exp->harmony(static_cast<const Harmony*>(e) /*, sstaff */);
-                                    break;
-                              case Element::FIGURED_BASS:
-                                    exp->figuredBass(static_cast<const FiguredBass*>(e) /*, sstaff */);
+                                    qDebug("annotations found harmony");
+                                    exp->harmony(static_cast<const Harmony*>(e), fd /*, sstaff */);
+                                    fd = 0; // make sure to write only once ...
                                     break;
                               case Element::REHEARSAL_MARK:
                                     exp->rehearsal(static_cast<const RehearsalMark*>(e), sstaff);
                                     break;
-                              case Element::JUMP:
-                                    // ignore
+                              case Element::FIGURED_BASS: // handled separately by figuredBass()
+                              case Element::FRET_DIAGRAM: // handled using findFretDiagram()
+                              case Element::JUMP:         // ignore
                                     break;
                               default:
                                     qDebug("annotations: direction type %s at tick %d not implemented\n",
@@ -3387,6 +3428,61 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               }
                         }
                   } // foreach
+            if (fd) {
+                  // TODO: found fd but no Element::HARMONY -> write separately
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//  figuredBass
+//---------------------------------------------------------
+
+static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap)
+      {
+      Segment* seg = cr->segment();
+      if (seg->subtype() == Segment::SegChordRest) {
+            foreach(const Element* e, seg->annotations()) {
+
+                  int wtrack = -1; // track to write annotation
+
+                  if (strack <= e->track() && e->track() < etrack)
+                        wtrack = findTrackForAnnotations(e->track(), seg);
+
+                  if (track == wtrack) {
+                        if (e->type() == Element::FIGURED_BASS) {
+                              const FiguredBass* fb = static_cast<const FiguredBass*>(e);
+                              //qDebug("figuredbass() track %d seg %p fb %p seg %p tick %d ticks %d cr %p tick %d ticks %d",
+                              //       track, seg, fb, fb->segment(), fb->segment()->tick(), fb->ticks(), cr, cr->tick(), cr->actualTicks());
+                              bool extend = fb->ticks() > cr->actualTicks();
+                              if (extend) {
+                                    //qDebug("figuredbass() extend to %d + %d = %d",
+                                    //       cr->tick(), fb->ticks(), cr->tick() + fb->ticks());
+                                    fbMap.insert(strack, fb);
+                                    }
+                              else
+                                    fbMap.remove(strack);
+                              fb->writeMusicXML(xml, true, extend);
+                              // there can only be one FB, if one was found
+                              // no extend can be pending
+                              return;
+                              }
+                        }
+                  }
+            // check for extend pending
+            if (fbMap.contains(strack)) {
+                  const FiguredBass* fb = fbMap.value(strack);
+                  int endTick = fb->segment()->tick() + fb->ticks();
+                  if (cr->tick() < endTick) {
+                        //qDebug("figuredbass() at tick %d extend only", cr->tick());
+                        // write figured bass element with extend only
+                        fb->writeMusicXML(xml, false, true);
+                        }
+                  if (endTick <= cr->tick() + cr->actualTicks()) {
+                        //qDebug("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
+                        fbMap.remove(strack);
+                        }
+                  }
             }
       }
 
@@ -3728,6 +3824,8 @@ void ExportMusicXml::write(QIODevice* dev)
             int irregularMeasureNo = 1; // number of next irregular measure
             int pickupMeasureNo = 1;    // number of next pickup measure
 
+            FigBassMap fbMap;           // pending figure base extends
+
             for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
                   if (mb->type() != Element::MEASURE)
                         continue;
@@ -3998,7 +4096,8 @@ void ExportMusicXml::write(QIODevice* dev)
 
                                     foreach (Element* hhe, list) {
                                           attr.doAttr(xml, false);
-                                          harmony((Harmony*)hhe);
+                                          qDebug("writing harmony");
+                                          harmony((Harmony*)hhe, 0);
                                           }
                                     }
 
@@ -4015,6 +4114,7 @@ void ExportMusicXml::write(QIODevice* dev)
                               if (el->isChordRest()) {
                                     attr.doAttr(xml, false);
                                     annotations(this, strack, etrack, st, sstaff, seg);
+                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
                                     spannerStop(this, strack, etrack, st, sstaff, seg);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
@@ -4198,22 +4298,11 @@ double ExportMusicXml::getTenthsFromDots(double dots)
       return dots / MScore::DPMM / millimeters * tenths;
       }
 
-
-//---------------------------------------------------------
-//   figuredBass
-//---------------------------------------------------------
-
-void ExportMusicXml::figuredBass(FiguredBass const* const fb)
-      {
-      fb->writeMusicXML(xml);
-      }
-
-
 //---------------------------------------------------------
 //   harmony
 //---------------------------------------------------------
 
-void ExportMusicXml::harmony(Harmony const* const h)
+void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd)
       {
       int rootTpc = h->rootTpc();
       if (rootTpc != INVALID_TPC) {

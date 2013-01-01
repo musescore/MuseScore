@@ -309,7 +309,6 @@ Element::Element(Score* s) :
 //   _readPos(QPointF()),
    _tag(1),
    _score(s),
-   _mxmlOff(0),
    itemDiscovered(0)
       {
       }
@@ -331,7 +330,6 @@ Element::Element(const Element& e)
       _userOff    = e._userOff;
       _readPos    = e._readPos;
       _score      = e._score;
-      _mxmlOff    = e._mxmlOff;
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = 0;
