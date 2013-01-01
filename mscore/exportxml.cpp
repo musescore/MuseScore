@@ -103,6 +103,12 @@
 // #define DEBUG_TICK true
 
 //---------------------------------------------------------
+//   typedefs
+//---------------------------------------------------------
+
+typedef QMap<int, const FiguredBass*> FigBassMap;
+
+//---------------------------------------------------------
 //   attributes -- prints <attributes> tag when necessary
 //---------------------------------------------------------
 
@@ -292,7 +298,6 @@ public:
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
       void harmony(Harmony const* const);
-      void figuredBass(FiguredBass const* const);
       };
 
 //---------------------------------------------------------
@@ -3376,14 +3381,11 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               case Element::HARMONY:
                                     exp->harmony(static_cast<const Harmony*>(e) /*, sstaff */);
                                     break;
-                              case Element::FIGURED_BASS:
-                                    exp->figuredBass(static_cast<const FiguredBass*>(e) /*, sstaff */);
-                                    break;
                               case Element::REHEARSAL_MARK:
                                     exp->rehearsal(static_cast<const RehearsalMark*>(e), sstaff);
                                     break;
-                              case Element::JUMP:
-                                    // ignore
+                              case Element::FIGURED_BASS: // handled separately by figuredBass()
+                              case Element::JUMP:         // ignore
                                     break;
                               default:
                                     qDebug("annotations: direction type %s at tick %d not implemented\n",
@@ -3392,6 +3394,58 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               }
                         }
                   } // foreach
+            }
+      }
+
+//---------------------------------------------------------
+//  figuredBass
+//---------------------------------------------------------
+
+static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap)
+      {
+      Segment* seg = cr->segment();
+      if (seg->subtype() == Segment::SegChordRest) {
+            foreach(const Element* e, seg->annotations()) {
+
+                  int wtrack = -1; // track to write annotation
+
+                  if (strack <= e->track() && e->track() < etrack)
+                        wtrack = findTrackForAnnotations(e->track(), seg);
+
+                  if (track == wtrack) {
+                        if (e->type() == Element::FIGURED_BASS) {
+                              const FiguredBass* fb = static_cast<const FiguredBass*>(e);
+                              //qDebug("figuredbass() track %d seg %p fb %p seg %p tick %d ticks %d cr %p tick %d ticks %d",
+                              //       track, seg, fb, fb->segment(), fb->segment()->tick(), fb->ticks(), cr, cr->tick(), cr->actualTicks());
+                              bool extend = fb->ticks() > cr->actualTicks();
+                              if (extend) {
+                                    //qDebug("figuredbass() extend to %d + %d = %d",
+                                    //       cr->tick(), fb->ticks(), cr->tick() + fb->ticks());
+                                    fbMap.insert(strack, fb);
+                                    }
+                              else
+                                    fbMap.remove(strack);
+                              fb->writeMusicXML(xml, true, extend);
+                              // there can only be one FB, if one was found
+                              // no extend can be pending
+                              return;
+                              }
+                        }
+                  }
+            // check for extend pending
+            if (fbMap.contains(strack)) {
+                  const FiguredBass* fb = fbMap.value(strack);
+                  int endTick = fb->segment()->tick() + fb->ticks();
+                  if (cr->tick() < endTick) {
+                        //qDebug("figuredbass() at tick %d extend only", cr->tick());
+                        // write figured bass element with extend only
+                        fb->writeMusicXML(xml, false, true);
+                        }
+                  if (endTick <= cr->tick() + cr->actualTicks()) {
+                        //qDebug("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
+                        fbMap.remove(strack);
+                        }
+                  }
             }
       }
 
@@ -3733,6 +3787,8 @@ void ExportMusicXml::write(QIODevice* dev)
             int irregularMeasureNo = 1; // number of next irregular measure
             int pickupMeasureNo = 1;    // number of next pickup measure
 
+            FigBassMap fbMap;           // pending figure base extends
+
             for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
                   if (mb->type() != Element::MEASURE)
                         continue;
@@ -4020,6 +4076,7 @@ void ExportMusicXml::write(QIODevice* dev)
                               if (el->isChordRest()) {
                                     attr.doAttr(xml, false);
                                     annotations(this, strack, etrack, st, sstaff, seg);
+                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
                                     spannerStop(this, strack, etrack, st, sstaff, seg);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
@@ -4202,17 +4259,6 @@ double ExportMusicXml::getTenthsFromDots(double dots)
       {
       return dots / MScore::DPMM / millimeters * tenths;
       }
-
-
-//---------------------------------------------------------
-//   figuredBass
-//---------------------------------------------------------
-
-void ExportMusicXml::figuredBass(FiguredBass const* const fb)
-      {
-      fb->writeMusicXML(xml);
-      }
-
 
 //---------------------------------------------------------
 //   harmony

@@ -152,8 +152,8 @@ class FiguredBassItem : public Element {
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
-      void              readMusicXML(const QDomElement& de, bool paren);
-      void              writeMusicXML(Xml& xml) const;
+      void              readMusicXML(const QDomElement& de, bool paren, bool& extend);
+      void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
       bool              startsWithParenthesis() const;
 
       // specific API
@@ -255,8 +255,8 @@ class FiguredBass : public Text {
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
-      void              readMusicXML(const QDomElement& de, int divisions);
-      void              writeMusicXML(Xml& xml) const;
+      bool              readMusicXML(const QDomElement& de, int divisions, bool& extend);
+      void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
 
 //DEBUG
 Q_INVOKABLE FiguredBassItem* addItem();
