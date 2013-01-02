@@ -272,7 +272,7 @@ void EditDrumset::valueChanged()
             if (shortcut->currentText().isEmpty())
                   nDrumset.drum(pitch).shortcut = 0;
             else
-                  nDrumset.drum(pitch).shortcut = shortcut->currentText().at(0).toAscii();
+                  nDrumset.drum(pitch).shortcut = shortcut->currentText().at(0).toLatin1();
             }
       updateExample();
       }

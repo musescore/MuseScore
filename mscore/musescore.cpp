@@ -2164,7 +2164,7 @@ int main(int argc, char* av[])
                   ++i;
                   continue;
                   }
-            switch(s[1].toAscii()) {
+            switch(s[1].toLatin1()) {
                   case 'v':
                         printVersion("MuseScore");
                         return 0;
@@ -3985,9 +3985,9 @@ void MuseScore::cmd(QAction* a)
       QString cmdn(a->data().toString());
 
       if (MScore::debugMode)
-            qDebug("MuseScore::cmd <%s>", cmdn.toAscii().data());
+            qDebug("MuseScore::cmd <%s>", cmdn.toLatin1().data());
 
-      Shortcut* sc = Shortcut::getShortcut(cmdn.toAscii().data());
+      Shortcut* sc = Shortcut::getShortcut(cmdn.toLatin1().data());
       if (sc == 0) {
             qDebug("MuseScore::cmd(): unknown action <%s>", qPrintable(cmdn));
             return;

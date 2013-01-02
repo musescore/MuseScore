@@ -381,7 +381,7 @@ void Shortcut::read(const QDomElement& e)
             const QString& tag(eee.tagName());
             const QString& val(eee.text());
             if (tag == "key")
-                  _key = strdup(val.toAscii().data());      // memory leak!
+                  _key = strdup(val.toLatin1().data());      // memory leak!
             else if (tag == "std")
                   _standardKey = QKeySequence::StandardKey(val.toInt());
             else if (tag == "seq")
@@ -424,7 +424,7 @@ void Shortcut::load()
                                     const QString& tag(eee.tagName());
                                     const QString& val(eee.text());
                                     if (tag == "key") {
-                                          sc = getShortcut(val.toAscii().data());
+                                          sc = getShortcut(val.toLatin1().data());
                                           if (!sc) {
                                                 printf("cannot find shortcut <%s>\n", qPrintable(val));
                                                 break;
@@ -495,7 +495,7 @@ static QList<Shortcut1*> loadDefaultShortcuts()
                                     const QString& tag(eee.tagName());
                                     const QString& val(eee.text());
                                     if (tag == "key")
-                                          sc->key = strdup(val.toAscii().data());
+                                          sc->key = strdup(val.toLatin1().data());
                                     else if (tag == "std")
                                           sc->standardKey = QKeySequence::StandardKey(val.toInt());
                                     else if (tag == "seq")

@@ -1094,7 +1094,7 @@ void PreferenceDialog::resetShortcutClicked()
       QString str = active->data(0, Qt::UserRole).toString();
       if (str.isEmpty())
             return;
-      Shortcut* shortcut = localShortcuts[str.toAscii().data()];
+      Shortcut* shortcut = localShortcuts[str.toLatin1().data()];
 
       shortcut->reset();
 
@@ -1114,7 +1114,7 @@ void PreferenceDialog::clearShortcutClicked()
       QString str = active->data(0, Qt::UserRole).toString();
       if (str.isEmpty())
             return;
-      Shortcut* s = localShortcuts[str.toAscii().data()];
+      Shortcut* s = localShortcuts[str.toLatin1().data()];
       s->clear();
       active->setText(1, "");
       shortcutsChanged = true;
@@ -1633,7 +1633,7 @@ void PreferenceDialog::defineShortcutClicked()
       QString str = active->data(0, Qt::UserRole).toString();
       if (str.isEmpty())
             return;
-      Shortcut* s = localShortcuts[str.toAscii().data()];
+      Shortcut* s = localShortcuts[str.toLatin1().data()];
       ShortcutCaptureDialog sc(s, localShortcuts, this);
       int rv = sc.exec();
       if (rv == 0)

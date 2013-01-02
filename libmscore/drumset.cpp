@@ -85,7 +85,7 @@ void Drumset::load(const QDomElement& de)
             else if (tag == "stem")
                   _drum[pitch].stemDirection = MScore::Direction(i);
             else if (tag == "shortcut")
-                  _drum[pitch].shortcut = isNum ? i : toupper(val[0].toAscii());
+                  _drum[pitch].shortcut = isNum ? i : toupper(val[0].toLatin1());
             else
                   domError(e);
             }
