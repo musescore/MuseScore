@@ -43,7 +43,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       textNames->clear();
       for (int i = 0; i < styles.size(); ++i) {
             const TextStyle& s = styles.at(i);
-            textNames->addItem(qApp->translate("MuseScore", s.name().toAscii().data()));
+            textNames->addItem(qApp->translate("MuseScore", s.name().toLatin1().data()));
             }
 
       connect(bb, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));

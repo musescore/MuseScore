@@ -721,7 +721,7 @@ QString Page::replaceTextMacros(const QString& s) const
             QChar c = s[i];
             if (c == '$' && (i < (n-1))) {
                   QChar c = s[i+1];
-                  switch(c.toAscii()) {
+                  switch(c.toLatin1()) {
                         case 'p':
                               d += QString("%1").arg(pageno);
                               break;
@@ -748,7 +748,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               QString tag;
                               int k = i+2;
                               for (; k < n; ++k) {
-                                    if (s[k].toAscii() == ':')
+                                    if (s[k].toLatin1() == ':')
                                           break;
                                     tag += s[k];
                                     }

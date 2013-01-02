@@ -2085,7 +2085,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             if (0 <= pitch && pitch <= 127) {
                   hasDrumset = true;
                   drumset->drum(ii.value().pitch)
-                        = DrumInstrument(ii.value().name.toAscii().constData(),
+                        = DrumInstrument(ii.value().name.toLatin1().constData(),
                                          ii.value().notehead, ii.value().line, ii.value().stemDirection);
                   }
             }
@@ -4898,7 +4898,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   // qDebug("rest step=%s oct=%d", qPrintable(step), octave);
                   ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
-                  int istep = step[0].toAscii() - 'A';
+                  int istep = step[0].toLatin1() - 'A';
                   // qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
                   if (istep < 0 || istep > 6) {
                         qDebug("rest: illegal display-step %d, <%s>", istep, qPrintable(step));
@@ -5028,7 +5028,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   // determine staff line based on display-step / -octave and clef type
                   ClefType clef = cr->staff()->clef(loc_tick);
                   int po = clefTable[clef].pitchOffset;
-                  int pitch = MusicXMLStepAltOct2Pitch(step[0].toAscii(), 0, octave);
+                  int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), 0, octave);
                   int line = po - absStep(pitch);
 
                   // correct for number of staff lines

@@ -388,7 +388,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       // add note to chord
       Note* note = new Note(score);
       note->setTrack(0);
-      xmlSetPitch(note, sao.s.toAscii(), sao.a, sao.o);
+      xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
       if (tieStart) {
             Tie* tie = new Tie(score);
             note->setTieFor(tie);
