@@ -492,7 +492,7 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
       LedgerLine* h = new LedgerLine(score());
 
       h->setParent(this);
-      h->setTrack(staffIdx * VOICES);
+      h->setTrack(staff2track(staffIdx));
       if (staff()->invisible())
             visible = false;
       h->setVisible(visible);
@@ -1014,7 +1014,7 @@ LedgerLine::LedgerLine(Score* s)
 QPointF LedgerLine::pagePos() const
       {
       System* system = chord()->measure()->system();
-      qreal yp = y() + system->staff(track() / VOICES)->y() + system->y();
+      qreal yp = y() + system->staff(staffIdx())->y() + system->y();
       return QPointF(pageX(), yp);
       }
 
@@ -1288,7 +1288,7 @@ void Chord::layout2()
 
       Segment* s = segment()->prev(Segment::SegChordRestGrace);
       if (s) {
-            int strack = staffIdx() * VOICES;
+            int strack = staff2track(staffIdx());
             int etrack = strack + VOICES;
 
             int n = _ledgerLines.size();
@@ -1385,7 +1385,7 @@ void Chord::layout()
             _stemSlash = 0;
 
             if (!tab->genDurations()            // if tab is not set for duration symbols
-               || (track() % VOICES)) {         // or not in first voice
+               || (track2voice(track()))) {         // or not in first voice
                   //
                   // no tab duration symbols
                   //
@@ -1581,7 +1581,7 @@ void Chord::layout()
                   }
             }
       // bbox();
-#if 1
+
       QRectF bb;
       n = _notes.size();
       for (int i = 0; i < n; ++i) {
@@ -1614,50 +1614,6 @@ void Chord::layout()
       if (staff() && staff()->isTabStaff() && _tabDur)
             bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
-#endif
-      }
-
-//---------------------------------------------------------
-//   bbox
-//---------------------------------------------------------
-
-const QRectF& Chord::bbox() const
-      {
-#if 0
-      QRectF bb;
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
-            Note* note = _notes.at(i);
-            note->layout2();
-            bb |= note->bbox().translated(note->pos());
-            }
-      n = _ledgerLines.size();
-      for (int i = 0; i < n; ++i) {
-            const LedgerLine* l = _ledgerLines.at(i);
-            bb |= l->bbox().translated(l->pos());
-            }
-      n = _articulations.size();
-      for (int i = 0; i < n; ++i) {
-            Articulation* a = _articulations.at(i);
-            bb |= a->bbox().translated(a->pos());
-            }
-      if (_hook)
-            bb |= _hook->bbox().translated(_hook->pos());
-      if (_stem)
-            bb |= _stem->bbox().translated(_stem->pos());
-      if (_arpeggio)
-            bb |= _arpeggio->bbox().translated(_arpeggio->pos());
-      if (_glissando)
-            bb |= _glissando->bbox().translated(_glissando->pos());
-      if (_stemSlash)
-            bb |= _stemSlash->bbox().translated(_stemSlash->pos());
-      if (_tremolo)
-            bb |= _tremolo->bbox().translated(_tremolo->pos());
-      if (staff() && staff()->isTabStaff() && _tabDur)
-            bb |= _tabDur->bbox().translated(_tabDur->pos());
-      setbbox(bb);
-#endif
-      return Element::bbox();
       }
 
 //---------------------------------------------------------

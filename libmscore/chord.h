@@ -130,8 +130,6 @@ class Chord : public ChordRest {
       virtual void setScore(Score* s);
       virtual ElementType type() const { return CHORD; }
 
-      virtual const QRectF& bbox() const;
-
       virtual void write(Xml& xml) const;
       void read(const QDomElement&, QList<Tuplet*>*, QList<Spanner*>*);
       virtual void read(const QDomElement&);
@@ -152,8 +150,11 @@ class Chord : public ChordRest {
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 
-      Note* upNote() const                   { return _notes.size() ? _notes.back() : 0; }
-      Note* downNote() const                 { return _notes.size() ? _notes.front(): 0; }
+      // Chord has at least one Note
+      // Note* upNote() const                   { return _notes.size() ? _notes.back() : 0; }
+      Note* upNote() const                   { return _notes.back(); }
+      // Note* downNote() const                 { return _notes.size() ? _notes.front(): 0; }
+      Note* downNote() const                 { return _notes.front(); }
       virtual int upLine() const;
       virtual int downLine() const;
       virtual int upString() const;

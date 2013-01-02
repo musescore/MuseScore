@@ -418,8 +418,8 @@ class Element : public QObject {
 
       virtual int z() const                   { return type() * 100; }  // stacking order
 
-      int staffIdx() const                    { return _track / VOICES;         }
-      int voice() const                       { return _track % VOICES;         }
+      int staffIdx() const                    { return _track >> 2;        }
+      int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) + v; }
       Staff* staff() const;
 
