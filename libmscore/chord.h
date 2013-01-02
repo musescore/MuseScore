@@ -143,8 +143,8 @@ class Chord : public ChordRest {
 
       QList<LedgerLine*>* ledgerLines()      { return &_ledgerLines; }
 
-      virtual void layoutStem1();
-      virtual void layoutStem();
+      void layoutStem1();
+      void layoutStem();
       void layoutArpeggio2();
 
       QDeclarativeListProperty<Note> qmlNotes() { return QDeclarativeListProperty<Note>(this, _notes); }
@@ -170,8 +170,9 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s);
 
-      virtual QPointF stemPos() const;          ///< page coordinates
-      QPointF stemPosBeam() const;              ///< page coordinates
+      virtual QPointF stemPos() const;        ///< page coordinates
+      virtual qreal stemPosX() const;         ///< page coordinates
+      QPointF stemPosBeam() const;            ///< page coordinates
 
       Hook* hook() const                     { return _hook; }
 

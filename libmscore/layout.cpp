@@ -354,7 +354,6 @@ void Score::layoutStage2()
                                     }
                               else if (a1) {
                                     a1->removeDeleteBeam();
-                                    a1->layoutStem1();
                                     a1 = 0;
                                     }
                               }
@@ -401,7 +400,6 @@ void Score::layoutStage2()
                               }
                         else {
                               cr->removeDeleteBeam();
-                              cr->layoutStem1();
                               }
                         continue;
                         }
@@ -412,11 +410,9 @@ void Score::layoutStage2()
                               }
                         if (a1) {
                               a1->removeDeleteBeam();
-                              a1->layoutStem1();
                               a1 = 0;
                               }
                         cr->removeDeleteBeam();
-                        cr->layoutStem1();
                         continue;
                         }
                   bool beamEnd = false;
@@ -452,7 +448,6 @@ void Score::layoutStage2()
                               beam->layout1();
                               beam = 0;
                               cr->removeDeleteBeam();
-                              cr->layoutStem1();
                               }
                         else if (a1) {
                               beam = a1->beam();
@@ -472,7 +467,6 @@ void Score::layoutStage2()
                         else {
                               //cr->setBeam(0);
                               cr->removeDeleteBeam();
-                              cr->layoutStem1();
                               }
                         }
                   else if (cr) {
@@ -488,7 +482,6 @@ void Score::layoutStage2()
                                    )
                                  ) {
                                     a1->removeDeleteBeam();
-                                    a1->layoutStem1();      //?
                                     a1 = cr;
                                     }
                               else {
@@ -511,7 +504,6 @@ void Score::layoutStage2()
                   beam->layout1();
             else if (a1) {
                   a1->removeDeleteBeam();
-                  a1->layoutStem1();
                   }
             }
       }

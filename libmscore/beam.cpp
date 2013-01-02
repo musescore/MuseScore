@@ -1569,7 +1569,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
 
       qreal _spatium   = spatium();
-      QPointF canvPos(pagePos());
+      QPointF _pagePos(pagePos());
       qreal beamMinLen = point(score()->styleS(ST_beamMinLen));
       qreal graceMag   = score()->styleD(ST_graceNoteMag);
 
@@ -1610,8 +1610,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal px1 = c1->stemPos().x();
             qreal px2 = c2->stemPos().x();
             if (_userModified[dIdx]) {
-                  py1 += canvPos.y();
-                  py2 += canvPos.y();
+                  py1 += _pagePos.y();
+                  py2 += _pagePos.y();
 
                   qreal beamY = py1;
                   slope       = (py2 - py1) / (px2 - px1);
@@ -1674,7 +1674,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               continue;
                         const Chord* c = static_cast<const Chord*>(cr);
                         bool _up = c->up();
-                        qreal y = (_up ? c->upNote() : c->downNote())->stemPos(_up).y();
+                        qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
                         if (_up)
                               yUpMin = qMin(y, yUpMin);
                         else
@@ -1692,15 +1692,15 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   computeStemLen(crl, py1, beamLevels);
                   }
             py2 = (px2 - px1) * slope + py1;
-            py1 -= canvPos.y();
-            py2 -= canvPos.y();
+            py1 -= _pagePos.y();
+            py2 -= _pagePos.y();
             }
 
       //---------------------------------------------
       //   create beam segments
       //---------------------------------------------
 
-      qreal x1 = crl[0]->stemPos().x() - canvPos.x();
+      qreal x1 = crl[0]->stemPosX() - pageX();
       int n    = crl.size();
 
       int baseLevel = 0;
@@ -1730,9 +1730,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ChordRest* cr2 = crl[i-1];
                         if (c1 && (cr1->up() == cr2->up())) {
                               QPointF stemPos(cr1->stemPos());
-                              qreal x2 = stemPos.x() - canvPos.x();
-                              qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
-                              qreal y2 = stemPos.y();
+                              qreal x  = stemPos.x() - _pagePos.x();
+                              qreal x2 = x - _pagePos.x();
+                              qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
+                              qreal y2 = cr1->stemPos().y();
 
                               if ((y1 < y2) != growDown)
                                     bl = baseLevel - (beamLevel + 1);
@@ -1742,13 +1743,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               ++baseLevel;
 
                         qreal stemWidth  = point(score()->styleS(ST_stemWidth));
-                        qreal x2   = cr1->stemPos().x() - canvPos.x();
+                        qreal x2   = cr1->stemPosX() - _pagePos.x();
                         qreal x3;
 
                         if ((c2 - c1) > 1) {
                               ChordRest* cr2 = crl[c2-1];
                               // create segment
-                              x3 = cr2->stemPos().x() - canvPos.x();
+                              x3 = cr2->stemPosX() - _pagePos.x();
 
                               if (staff()->isTabStaff() || cr1->up())
                                     x2 -= stemWidth;
@@ -1822,8 +1823,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   score()->undoRemoveElement(c->hook());
 
             QPointF stemPos(c->stemPos());
-            qreal x2 = stemPos.x() - canvPos.x();
-            qreal y1 = (x2 - x1) * slope + py1 + canvPos.y();
+            qreal x2 = c->stemPosX() - _pagePos.x();
+            qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2 = stemPos.y();
             qreal fuzz = _spatium * .1;
             if (y2 < y1) {
@@ -1835,7 +1836,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               by = qMax(by, y);
                               }
                         }
-                  y1 = by + canvPos.y();
+                  y1 = by + _pagePos.y();
                   }
             else {
                   // search top beam
@@ -1846,11 +1847,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               by = qMin(by, y);
                               }
                         }
-                  y1 = by + canvPos.y();
+                  y1 = by + _pagePos.y();
                   }
 
             stem->setLen(y2 - y1);
-            stem->setPos(stemPos - c->pagePos());
+
             //
             // layout stem slash for acciacatura
             //
