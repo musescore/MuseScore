@@ -1607,8 +1607,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             //
             // PITCHED STAVES: SETMScore::UP
             //
-            qreal px1 = c1->stemPos().x();
-            qreal px2 = c2->stemPos().x();
+            qreal px1 = c1->stemPosX();
+            qreal px2 = c2->stemPosX();
             if (_userModified[dIdx]) {
                   py1 += _pagePos.y();
                   py2 += _pagePos.y();
@@ -1823,7 +1823,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   score()->undoRemoveElement(c->hook());
 
             QPointF stemPos(c->stemPos());
-            qreal x2 = c->stemPosX() - _pagePos.x();
+            qreal x2 = stemPos.x() - _pagePos.x();
             qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2 = stemPos.y();
             qreal fuzz = _spatium * .1;
@@ -2038,8 +2038,8 @@ void Beam::updateGrips(int* grips, QRectF* grip) const
                   }
             }
       int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPos().x(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPos().x(), f->py2[idx] + y));
+      grip[0].translate(QPointF(c1->stemPosX(), f->py1[idx] + y));
+      grip[1].translate(QPointF(c2->stemPosX(), f->py2[idx] + y));
       }
 
 //---------------------------------------------------------

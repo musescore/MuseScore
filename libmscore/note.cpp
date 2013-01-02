@@ -297,25 +297,20 @@ void Note::undoSetTpc(int tpc)
 
 int Note::noteHead() const
       {
-      int hg = 1;
-      int ht = 2;       // default quarter head
+      int hg, ht;
       if (chord()) {
             hg = chord()->up();
             ht = chord()->durationType().headType();
             }
-      switch(_headType) {
-            default:
-            case HEAD_AUTO:
-                  return noteHeads[hg][int(_headGroup)][ht];
-            case HEAD_WHOLE:
-                  return noteHeads[hg][int(_headGroup)][0];
-            case HEAD_HALF:
-                  return noteHeads[hg][int(_headGroup)][1];
-            case HEAD_QUARTER:
-                  return noteHeads[hg][int(_headGroup)][2];
-            case HEAD_BREVIS:
-                  return noteHeads[hg][int(_headGroup)][3];
+      else {
+            hg = 1;
+            ht = 2;       // default quarter head
             }
+
+      if (_headType == HEAD_AUTO)
+            return noteHeads[hg][int(_headGroup)][ht];
+      else
+            return noteHeads[hg][int(_headGroup)][_headType];
       }
 
 //---------------------------------------------------------
@@ -1065,7 +1060,7 @@ Element* Note::drop(const DropData& data)
 
             case LYRICS:
                   e->setParent(ch->segment());
-                  e->setTrack((track() / VOICES) * VOICES);
+                  e->setTrack(trackZeroVoice(track()));
                   score()->undoAddElement(e);
                   return e;
 
@@ -1203,7 +1198,7 @@ Element* Note::drop(const DropData& data)
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
                   MScore::Direction dir = c->stemDirection();
-                  int t         = (staffIdx() * VOICES) + (n->voice() % VOICES);
+                  int t         = (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
@@ -1977,3 +1972,4 @@ void Note::setOffTimeOffset(int)
       {
       // TODO
       }
+
