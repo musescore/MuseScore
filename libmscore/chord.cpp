@@ -294,14 +294,24 @@ QPointF Chord::stemPos() const
       {
       if (staff() && staff()->isTabStaff())
             return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium()) + pagePos();
-      QPointF p;
-      if (_up) {
-            Note* note = downNote();
-            p = QPointF(symbols[score()->symIdx()][note->noteHead()].width(magS()), note->y());
+      return (_up ? downNote() : upNote())->stemPos(_up);
+      }
+
+//---------------------------------------------------------
+//   stemPosX
+//    return chord coordinates
+//---------------------------------------------------------
+
+qreal Chord::stemPosX() const
+      {
+      if (staff() && staff()->isTabStaff()) {
+            QPointF p = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium();
+            return p.x();
             }
-      Note* note = upNote();
-      p = QPointF(0.0, note->y());
-      return p + pagePos();
+      qreal x = pageX();
+      if (_up)
+            x += symbols[score()->symIdx()][quartheadSym].width(magS());
+      return x;
       }
 
 //---------------------------------------------------------
@@ -312,10 +322,8 @@ QPointF Chord::stemPos() const
 
 QPointF Chord::stemPosBeam() const
       {
-      if (staff() && staff()->isTabStaff()) {
+      if (staff() && staff()->isTabStaff())
             return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * spatium()) + pagePos();
-            }
-
       return (_up ? upNote() : downNote())->stemPos(_up);
       }
 
@@ -1449,21 +1457,18 @@ void Chord::layout()
             qreal stemWidth5;
             if (stem()) {
                   stemWidth5 = stem()->lineWidth() * .5;
-                  QPointF p;
                   if (_up) {
-                        p.rx() = symbols[score()->symIdx()][downNote()->noteHead()].width(magS());
-                        p.ry() = (downNote()->line() + stepOffset) * stepDistance;
+                        stemX = symbols[score()->symIdx()][quartheadSym].width(magS());
+                        _stem->rxpos() = stemX - stemWidth5;
                         }
                   else {
-                        p.ry() = (upNote()->line() + stepOffset) * stepDistance;
+                        stemX = 0;
+                        _stem->rxpos() = stemWidth5;
                         }
-                  _stem->setPos(p);
-                  stemX = p.x();
                   }
-            else {
-                  stemX      = 0.0;  // CHECK
+            else
                   stemWidth5 = 0.0;
-                  }
+
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
@@ -1478,18 +1483,18 @@ void Chord::layout()
                   else
                         stemUp = _up;
 
-                  qreal ax = note->attach().x();
+                  qreal hw = note->headWidth();
 
                   if (note->mirror())
                         if (stemUp)
-                              x = stemX + ax - note->headWidth() - stemWidth5;
+                              x = stemX - stemWidth5 * 2;
                         else
-                              x = ax - note->headWidth() - stemWidth5;
+                              x = stemX - hw + stemWidth5 * 2;
                   else {
-                        if (_up)
-                              x = stemX - ax + stemWidth5;
+                        if (stemUp)
+                              x = stemX - hw;
                         else
-                              x = ax - note->headWidth() - stemWidth5;
+                              x = 0.0;
                         }
 
                   note->rypos() = (note->line() + stepOffset) * stepDistance;
@@ -1501,6 +1506,8 @@ void Chord::layout()
                   if (x < lx)
                         lx = x;
                   }
+            if (stem())
+                  stem()->rypos() = (_up ? _notes.front() : _notes.back())->rypos();
 
             qreal x  = upnote->ipos().x();
             if (up() ^ upnote->mirror())

@@ -301,6 +301,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
 
             if (cr->type() == CHORD) {
                   Chord* chord = static_cast<Chord*>(cr);
+
                   if (chord->noteType() != NOTE_NORMAL)
                         m *= score()->styleD(ST_graceNoteMag);
                   if (drumset) {
@@ -317,6 +318,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
                               }
                         }
                   chord->computeUp();
+                  chord->layoutStem1();
                   }
             if (m != mag()) {
                   cr->setMag(m);
@@ -2914,16 +2916,16 @@ qreal Measure::minWidth1() const
       {
       if (_minWidth1 == 0.0) {
             Segment* s = first();
-            if ((s->subtype() == Segment::SegClef)
-               && s->element(0)
-               && s->element(0)->generated()
-               && s->next()
-               ) {
-                  s = s->next();
-                  if (s->subtype() == Segment::SegKeySig && s->element(0) && s->element(0)->generated() && s->next())
+            Segment::SegmentTypes st = Segment::SegClef | Segment::SegKeySig | Segment::SegStartRepeatBarLine;
+            for (;;) {
+                  if ((s->subtype() & st)
+                     && s->next()
+                     && (!s->element(0) || s->element(0)->generated())
+                     ) {
                         s = s->next();
-                  if (s->subtype() == Segment::SegStartRepeatBarLine && s->next())
-                        s = s->next();
+                        }
+                  else
+                        break;
                   }
             _minWidth1 = score()->computeMinWidth(s);
             }

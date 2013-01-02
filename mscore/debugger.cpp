@@ -2476,7 +2476,7 @@ void StemView::setElement(Element* e)
       Stem* s = static_cast<Stem*>(e);
       ShowElementBase::setElement(e);
 
-      stem.len->setValue(s->stemLen() - s->userLen());
+      stem.len->setValue(s->len());
       stem.userLen->setValue(s->userLen());
       }
 
