@@ -125,7 +125,7 @@ int step2tpc(const QString& stepName, AccidentalVal alter)
       if (stepName.isEmpty())
             return INVALID_TPC;
       int r;
-      switch (stepName[0].toLower().toAscii()) {
+      switch (stepName[0].toLower().toLatin1()) {
             case 'c': r = 0; break;
             case 'd': r = 1; break;
             case 'e': r = 2; break;

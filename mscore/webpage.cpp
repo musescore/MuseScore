@@ -86,7 +86,7 @@ QObject* MyWebPage::createPlugin(
 //---------------------------------------------------------
 
 QString MyWebPage::userAgentForUrl(const QUrl &url) const {
-      return QString("MuseScore %1").arg(VERSION).toAscii();
+      return QString("MuseScore %1").arg(VERSION).toLatin1();
       }
 
 //---------------------------------------------------------
@@ -123,11 +123,11 @@ MyWebView::~MyWebView()
       disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyStatic(bool)));
       }
 
-void MyWebView::load ( const QNetworkRequest & request, QNetworkAccessManager::Operation operation, const QByteArray & body) 
+void MyWebView::load ( const QNetworkRequest & request, QNetworkAccessManager::Operation operation, const QByteArray & body)
       {
-      QNetworkRequest new_req(request);  
-      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toAscii());  
-      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());   
+      QNetworkRequest new_req(request);
+      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toLatin1());
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toLatin1());
       QWebView::load( new_req, operation, body);
       }
 
@@ -306,14 +306,14 @@ bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap param
       qDebug("saveCurrentOnline");
       QWebPage * page = web->webPage();
       QNetworkAccessManager* manager = page->networkAccessManager();
-      
+
       QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
       QMap<QString, QVariant>::const_iterator i = parameters.constBegin();
       while (i != parameters.constEnd()) {
             QHttpPart part;
             part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(QString("form-data; name=\"%1\"").arg(i.key())));
-            part.setBody(i.value().toString().toAscii());
+            part.setBody(i.value().toString().toLatin1());
             multiPart->append(part);
             //printf("%s \n", qPrintable(i.key()));
             //printf("%s \n", qPrintable(i.value().toString()));
@@ -340,10 +340,10 @@ bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap param
             file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
             multiPart->append(filePart);
             }
-      
+
       QUrl url(action);
       QNetworkRequest request(url);
-      
+
       //QNetworkAccessManager manager;
       QNetworkReply *reply = manager->post(request, multiPart);
       multiPart->setParent(reply); // delete the multiPart with the reply
@@ -352,30 +352,30 @@ bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap param
          this, SLOT(saveOnlineFinished()));
 
       return true;
-      }      
-      
+      }
+
 void WebPageDockWidget::saveOnlineFinished() {
       qDebug("Save online finished");
       // delete file
       QDir dir;
       QFile file(dir.tempPath() + "/temp.mscz");
       file.remove();
-      
+
       QNetworkReply *reply = (QNetworkReply *)sender();
       // Reading attributes of the reply
       // e.g. the HTTP status code
       int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
       QString message = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-   
+
       // no error received?
       if (reply->error() == QNetworkReply::NoError) {
             //deal with redirect
             if (300 <= httpStatus && httpStatus < 400) {
                   qDebug("Redirecting to: %s", qPrintable(reply->url().toString()));
                   web->load(QNetworkRequest(reply->url()));
-                  }	
-            else if (httpStatus == 200) {    
-                  //Reading bytes form the reply    
+                  }
+            else if (httpStatus == 200) {
+                  //Reading bytes form the reply
                   QByteArray bytes = reply->readAll();
                   QString string(bytes);
                   web->setHtml(string);
@@ -388,10 +388,10 @@ void WebPageDockWidget::saveOnlineFinished() {
             qDebug("Save online error %d, HTTP status: %d - %s", reply->error(), httpStatus, qPrintable(message));
             }
       reply->deleteLater();
-      }      
+      }
 #endif
 
-bool WebPageDockWidget::setCurrentScoreSource(QString source) 
+bool WebPageDockWidget::setCurrentScoreSource(QString source)
       {
       Score* score = mscore->currentScore();
       if(score) {

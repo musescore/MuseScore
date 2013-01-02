@@ -115,7 +115,7 @@ void MuseData::readChord(Part*, const QString& s)
       //                       a  b   c  d  e  f  g
       static int table[7]  = { 9, 11, 0, 2, 4, 5, 7 };
 
-      int step  = s[1].toAscii() - 'A';
+      int step  = s[1].toLatin1() - 'A';
       int alter = 0;
       int octave = 0;
       for (int i = 2; i < 4; ++i) {
@@ -187,7 +187,7 @@ void MuseData::readNote(Part* part, const QString& s)
       //                       a  b   c  d  e  f  g
       static int table[7]  = { 9, 11, 0, 2, 4, 5, 7 };
 
-      int step  = s[0].toAscii() - 'A';
+      int step  = s[0].toLatin1() - 'A';
       int alter = 0;
       int octave = 0;
       for (int i = 1; i < 3; ++i) {
@@ -231,11 +231,11 @@ void MuseData::readNote(Part* part, const QString& s)
             int a = 1;
             int b = 1;
             if (s[19] != ' ') {
-                  a = s[19].toAscii() - '0';
+                  a = s[19].toLatin1() - '0';
                   if (a == 3 && s[20] != ':')
                         b = 2;
                   else {
-                        b = s[21].toAscii() - '0';
+                        b = s[21].toLatin1() - '0';
                         }
                   }
             if (a == 3 && b == 2) {       // triplet
@@ -352,7 +352,7 @@ void MuseData::readNote(Part* part, const QString& s)
                   // Articulation* atr = new Articulation(score);
                   // atr->setSubtype(Articulation_Downbow);
                   // chord->add(atr);
-                  qDebug("%06d: open string '%c' not implemented\n", tick, an[i].toAscii());
+                  qDebug("%06d: open string '%c' not implemented\n", tick, an[i].toLatin1());
                   }
             else if (an[i] == '&') {
                   // skip editorial level
@@ -378,7 +378,7 @@ void MuseData::readNote(Part* part, const QString& s)
             else if (an[i] == ' ')
                   ;
             else {
-                  qDebug("%06d: notation '%c' not implemented\n", tick, an[i].toAscii());
+                  qDebug("%06d: notation '%c' not implemented\n", tick, an[i].toLatin1());
                   }
             }
       if (!dynamics.isEmpty()) {
@@ -562,7 +562,7 @@ void MuseData::readPart(QStringList sl, Part* part)
       for (; line < sl.size(); ++line) {
             s = sl[line];
 // qDebug("%6d: <%s>\n", curTick, qPrintable(s));
-            char c = s[0].toAscii();
+            char c = s[0].toLatin1();
             switch(c) {
                   case 'A':
                   case 'B':
@@ -615,7 +615,7 @@ int MuseData::countStaves(const QStringList& sl)
       int staves = 1;
       for (int i = 10; i < sl.size(); ++i) {
             QString s = sl[i];
-            char c = s[0].toAscii();
+            char c = s[0].toLatin1();
             switch(c) {
                   case 'A':
                   case 'B':

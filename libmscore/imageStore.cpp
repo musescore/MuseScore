@@ -159,7 +159,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
             }
       QByteArray hash(16, 0);
       for (int i = 0; i < 16; ++i) {
-            hash[i] = toInt(s[i * 2].toAscii()) * 16 + toInt(s[i * 2 + 1].toAscii());
+            hash[i] = toInt(s[i * 2].toLatin1()) * 16 + toInt(s[i * 2 + 1].toLatin1());
             }
       foreach(ImageStoreItem* item, *this) {
             if (item->hash() == hash)

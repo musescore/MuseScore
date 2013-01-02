@@ -38,7 +38,7 @@ UpdateChecker::~UpdateChecker()
 void UpdateChecker::onRequestFinished(QNetworkReply* reply)
 {
     if(reply->error() != QNetworkReply::NoError){
-        qDebug("Error while checking update [%s]\n", reply->errorString().toAscii().constData());
+        qDebug("Error while checking update [%s]\n", reply->errorString().toLatin1().constData());
         return;
     }
 
@@ -80,7 +80,7 @@ void UpdateChecker::onRequestFinished(QNetworkReply* reply)
         qDebug() << reader.error() << reader.errorString();
 
     QString message = QString(tr("An update for MuseScore is available: <a href=\"%1\">MuseScore %2 r.%3</a>")).arg(downloadUrl).arg(version).arg(upgradeRevision);
-//    qDebug("revision %s\n", revision.toAscii().constData());
+//    qDebug("revision %s\n", revision.toLatin1().constData());
     if(!version.isEmpty() &&  upgradeRevision > revision ){
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Update Available"));
@@ -122,7 +122,7 @@ void UpdateChecker::check(QString rev, bool m)
     }else{
         release = "nightly";
     }
-//    qDebug("release type: %s\n", release.toAscii().constData());
+//    qDebug("release type: %s\n", release.toLatin1().constData());
     if(!os.isEmpty() && !release.isEmpty() && release != "nightly"){
         revision =  rev;
         manager->get(QNetworkRequest(QUrl("http://update.musescore.org/update_"+os +"_" + release +".xml")));
@@ -152,7 +152,7 @@ bool UpdateChecker::hasToCheck(){
     QDateTime lastUpdate = s.value("lastUpdateDate", QDateTime::currentDateTime()).value<QDateTime>();
 
 //    qDebug("preferences.checkUpdateStartup: %d\n" , preferences.checkUpdateStartup);
-//    qDebug("lastupdate: %s\n", lastUpdate.toString("dd.MM.yyyy hh:mm:ss.zzz").toAscii().constData());
+//    qDebug("lastupdate: %s\n", lastUpdate.toString("dd.MM.yyyy hh:mm:ss.zzz").toLatin1().constData());
 
     if(preferences.checkUpdateStartup < 0 ){ //Never
       return false;

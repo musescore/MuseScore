@@ -250,14 +250,14 @@ static int convertRoot(const QString& s, bool germanNames)
             return INVALID_TPC;
       int alter = 0;
       if (n > 1) {
-            if (s[1].toLower().toAscii() == 'b')
+            if (s[1].toLower().toLatin1() == 'b')
                   alter = -1;
             else if (s[1] == '#')
                   alter = 1;
             }
       int r;
       if (germanNames) {
-            switch(s[0].toLower().toAscii()) {
+            switch(s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
                   case 'e':   r = 2; break;
@@ -287,7 +287,7 @@ static int convertRoot(const QString& s, bool germanNames)
             r = spellings[r * 5 + alter + 2];
             }
       else {
-            switch(s[0].toLower().toAscii()) {
+            switch(s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
                   case 'e':   r = 2; break;
