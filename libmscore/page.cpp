@@ -186,7 +186,7 @@ void Page::setNo(int n)
 
 void Page::layout()
       {
-      setbbox(QRectF(0.0, 0.0, score()->loWidth(), score()->loHeight()));
+      bbox().setRect(0.0, 0.0, score()->loWidth(), score()->loHeight());
       }
 
 //---------------------------------------------------------

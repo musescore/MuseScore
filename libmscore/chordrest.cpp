@@ -458,6 +458,7 @@ void ChordRest::layoutArticulations()
                         y += stem->stemLen();
                   else if (!up() && stem->stemLen() > 0.0)
                         y -= stem->stemLen();
+
                   if (beam()) {
                         qreal bw = score()->styleS(ST_beamWidth).val() * _spatium;
                         y += up() ? -bw : bw;
@@ -474,7 +475,9 @@ void ChordRest::layoutArticulations()
 
       qreal dy = 0.0;
 
-      foreach (Articulation* a, _articulations) {
+      int n = _articulations.size();
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
             //
             // determine Direction
             //
@@ -494,7 +497,8 @@ void ChordRest::layoutArticulations()
       //    place tenuto and staccato
       //
 
-      foreach (Articulation* a, _articulations) {
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
             a->layout();
             ArticulationAnchor aa = a->anchor();
 
@@ -569,7 +573,10 @@ void ChordRest::layoutArticulations()
       // reserve space for slur
       bool botGap = false;
       bool topGap = false;
-      foreach(Spanner* sp, _spannerFor) {
+
+      n = _spannerFor.size();
+      for (int i = 0; i < n; ++i) {
+            Spanner* sp = _spannerFor.at(i);
             if (sp->type() != SLUR)
                   continue;
             Slur* s = static_cast<Slur*>(sp);
@@ -578,7 +585,9 @@ void ChordRest::layoutArticulations()
             else
                   botGap = true;
             }
-      foreach(Spanner* sp, _spannerBack) {
+      n = _spannerBack.size();
+      for (int i = 0; i < n; ++i) {
+            Spanner* sp = _spannerBack.at(i);
             if (sp->type() != SLUR)
                   continue;
             Slur* s = static_cast<Slur*>(sp);
@@ -596,7 +605,9 @@ void ChordRest::layoutArticulations()
       //    pass 2
       //    place all articulations with anchor at chord/rest
       //
-      foreach (Articulation* a, _articulations) {
+      n = _articulations.size();
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
             a->layout();
             ArticulationAnchor aa = a->anchor();
             if ((a->subtype() == Articulation_Tenuto)
@@ -652,7 +663,8 @@ void ChordRest::layoutArticulations()
       if ((downPos() + _spatium) > dyBot)
             dyBot = downPos() + _spatium;
   */
-      foreach (Articulation* a, _articulations) {
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
             ArticulationAnchor aa = a->anchor();
             if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
                   if (a->up()) {

@@ -555,6 +555,6 @@ void Image::layout()
 
       // in any case, adjust position relative to parent
       adjustReadPos();
-      setbbox(QRectF(0.0, 0.0, _size.width() * f, _size.height() * f));
+      bbox().setRect(0.0, 0.0, _size.width() * f, _size.height() * f);
       }
 

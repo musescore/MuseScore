@@ -46,7 +46,7 @@ TBox::TBox(Score* score)
 void TBox::layout()
       {
       setPos(QPointF());      // !?
-      setbbox(QRectF(0.0, 0.0, system()->width(), point(boxHeight())));
+      bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       foreach(Element* e, _el) {
             if (e->isText()) {
                   Text* text = static_cast<Text*>(e);
@@ -59,7 +59,7 @@ void TBox::layout()
                   else
                         h = text->height();
                   text->setPos(leftMargin() * MScore::DPMM, topMargin() * MScore::DPMM);
-                  setbbox(QRectF(0.0, 0.0, system()->width(), h));
+                  bbox().setRect(0.0, 0.0, system()->width(), h);
                   }
             }
       MeasureBase::layout();  // layout LayoutBreak's

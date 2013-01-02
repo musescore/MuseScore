@@ -168,7 +168,7 @@ class Chord : public ChordRest {
       void setTremolo(Tremolo* t)            { _tremolo = t;      }
       Glissando* glissando() const           { return _glissando; }
       StemSlash* stemSlash() const           { return _stemSlash; }
-      void setStemSlash(StemSlash* s)        { delete _stemSlash; _stemSlash = s; }
+      void setStemSlash(StemSlash* s);
 
       virtual QPointF stemPos() const;          ///< page coordinates
       QPointF stemPosBeam() const;              ///< page coordinates

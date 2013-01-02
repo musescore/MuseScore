@@ -108,7 +108,7 @@ void Box::editDrag(const EditData& ed)
                   int n = lrint(_boxHeight.val() / vRaster);
                   _boxHeight = Spatium(vRaster * n);
                   }
-            setbbox(QRectF(0.0, 0.0, system()->width(), point(boxHeight())));
+            bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
             system()->setHeight(height());
             score()->doLayoutPages();
             }
@@ -409,10 +409,10 @@ void HBox::layout()
             qreal w = point(boxWidth());
             qreal h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * MScore::DPMM;
             setPos(x, y);
-            setbbox(QRectF(0.0, 0.0, w, h));
+            bbox().setRect(0.0, 0.0, w, h);
             }
       else {
-            setbbox(QRectF(0.0, 0.0, point(boxWidth()), system()->height()));
+            bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
             }
       Box::layout();
       adjustReadPos();
@@ -584,9 +584,9 @@ void VBox::layout()
       {
       setPos(QPointF());      // !?
       if (system())
-            setbbox(QRectF(0.0, 0.0, system()->width(), point(boxHeight())));
+            bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       else
-            setbbox(QRectF(0.0, 0.0, 50, 50));
+            bbox().setRect(0.0, 0.0, 50, 50);
       Box::layout();
       }
 
@@ -616,7 +616,7 @@ void VBox::setGrip(int, const QPointF& pt)
 void FBox::layout()
       {
 //      setPos(QPointF());      // !?
-      setbbox(QRectF(0.0, 0.0, system()->width(), point(boxHeight())));
+      bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       Box::layout();
       }
 

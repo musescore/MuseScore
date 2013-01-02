@@ -445,7 +445,7 @@ void Rest::layout()
             qreal _spatium = spatium();
             qreal h = _spatium * 6.5;
             qreal w = point(score()->styleS(ST_minMMRestWidth));
-            setbbox(QRectF(-w * .5, -h + 2 * _spatium, w, h));
+            bbox().setRect(-w * .5, -h + 2 * _spatium, w, h);
             }
       else {
             if (dots()) {
@@ -508,7 +508,7 @@ void Rest::setMMWidth(qreal val)
             qreal h = _spatium * 6.5;
             qreal w = _mmWidth;
             // setbbox(QRectF(-w * .5, -h + 2 * _spatium, w, h));
-            setbbox(QRectF(0.0, -h + 2 * _spatium, w, h));
+            bbox().setRect(0.0, -h + 2 * _spatium, w, h);
             }
       }
 
