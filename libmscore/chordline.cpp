@@ -101,7 +101,7 @@ void ChordLine::layout()
       else
             setPos(0.0, 0.0);
       QRectF r(path.boundingRect());
-      setbbox(QRectF(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium));
+      bbox().setRect(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium);
       }
 
 //---------------------------------------------------------

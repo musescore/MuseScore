@@ -828,7 +828,7 @@ void TabDurationSymbol::layout()
       // with rests, move symbol down by half its displacement from staff
       if(parent() && parent()->type() == REST)
             y += TAB_RESTSYMBDISPL * spatium();
-      setbbox(QRectF(0.0, y * mags, w * mags, _tab->durationBoxH() * mags) );
+      bbox().setRect(0.0, y * mags, w * mags, _tab->durationBoxH() * mags);
       }
 
 //---------------------------------------------------------

@@ -233,7 +233,7 @@ void Text::layout1()
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
 
-            setbbox(QRectF(QPointF(0.0, 0.0), size));
+            bbox().setRect(0.0, 0.0, size.width(), size.height());
             _doc->setModified(false);
             setPos(o);
             }

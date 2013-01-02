@@ -292,10 +292,16 @@ void Chord::setStem(Stem* s)
 
 QPointF Chord::stemPos() const
       {
-      if (staff() && staff()->isTabStaff()) {
+      if (staff() && staff()->isTabStaff())
             return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium()) + pagePos();
+      QPointF p;
+      if (_up) {
+            Note* note = downNote();
+            p = QPointF(symbols[score()->symIdx()][note->noteHead()].width(magS()), note->y());
             }
-      return (_up ? downNote() : upNote())->stemPos(_up);
+      Note* note = upNote();
+      p = QPointF(0.0, note->y());
+      return p + pagePos();
       }
 
 //---------------------------------------------------------
@@ -1212,9 +1218,6 @@ void Chord::layoutStem()
                         }
                   }
 
-            QPointF npos(stemPos());
-            _stem->setPos(npos - pagePos());
-
             // adjust stem len for tremolo
             if (_tremolo && !_tremolo->twoNotes()) {
                   // hook up odd lines
@@ -1337,16 +1340,17 @@ void Chord::layout()
 
       qreal lx         = 0.0;
       Note*  upnote    = upNote();
-      qreal headWidth  = upnote->headWidth();
+      qreal headWidth  = symbols[score()->symIdx()][quartheadSym].width(magS());
+
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
-      bool  useTab      = false;
+      bool  useTab     = false;
 
       if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
             useTab = true;
-            StaffTypeTablature * tab = (StaffTypeTablature*)staff()->staffType();
+            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal lineDist = tab->lineDistance().val();
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
@@ -1440,6 +1444,26 @@ void Chord::layout()
             int stepOffset     = staff()->staffType()->stepOffset();
 
             adjustReadPos();
+
+            qreal stemX;
+            qreal stemWidth5;
+            if (stem()) {
+                  stemWidth5 = stem()->lineWidth() * .5;
+                  QPointF p;
+                  if (_up) {
+                        p.rx() = symbols[score()->symIdx()][downNote()->noteHead()].width(magS());
+                        p.ry() = (downNote()->line() + stepOffset) * stepDistance;
+                        }
+                  else {
+                        p.ry() = (upNote()->line() + stepOffset) * stepDistance;
+                        }
+                  _stem->setPos(p);
+                  stemX = p.x();
+                  }
+            else {
+                  stemX      = 0.0;  // CHECK
+                  stemWidth5 = 0.0;
+                  }
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
@@ -1452,27 +1476,35 @@ void Chord::layout()
                   else if (staffMove() > 0)
                         stemUp = true;
                   else
-                        stemUp = up();
+                        stemUp = _up;
+
+                  qreal ax = note->attach().x();
 
                   if (note->mirror())
-                        x += stemUp ? note->headWidth() : -note->headWidth();
+                        if (stemUp)
+                              x = stemX + ax - note->headWidth() - stemWidth5;
+                        else
+                              x = ax - note->headWidth() - stemWidth5;
+                  else {
+                        if (_up)
+                              x = stemX - ax + stemWidth5;
+                        else
+                              x = ax - note->headWidth() - stemWidth5;
+                        }
 
-                  if (note->small() && _up)
-                        x += (headWidth - note->headWidth());
+                  note->rypos() = (note->line() + stepOffset) * stepDistance;
+                  note->rxpos() = x;
 
-                  note->setPos(x, (note->line() + stepOffset) * stepDistance);
                   Accidental* accidental = note->accidental();
                   if (accidental)
-                        x = accidental->x() + note->x() - minNoteDistance;
+                        x = accidental->x() + x - minNoteDistance;
                   if (x < lx)
                         lx = x;
                   }
 
             qreal x  = upnote->ipos().x();
-
             if (up() ^ upnote->mirror())
                   x += headWidth;
-
             addLedgerLines(x, staffMove());
 
             n = _ledgerLines.size();
@@ -1483,7 +1515,6 @@ void Chord::layout()
       //
       // COMMON TO ALL STAVES
       //
-//      renderPlayback();
       qreal lll = -lx;
 
       if (_arpeggio) {
@@ -1559,7 +1590,41 @@ void Chord::layout()
                         _space.setRw(x);
                   }
             }
-      bbox();
+      // bbox();
+#if 1
+      QRectF bb;
+      n = _notes.size();
+      for (int i = 0; i < n; ++i) {
+            Note* note = _notes.at(i);
+            note->layout2();
+            bb |= note->bbox().translated(note->pos());
+            }
+      n = _ledgerLines.size();
+      for (int i = 0; i < n; ++i) {
+            const LedgerLine* l = _ledgerLines.at(i);
+            bb |= l->bbox().translated(l->pos());
+            }
+      n = _articulations.size();
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
+            bb |= a->bbox().translated(a->pos());
+            }
+      if (_hook)
+            bb |= _hook->bbox().translated(_hook->pos());
+      if (_stem)
+            bb |= _stem->bbox().translated(_stem->pos());
+      if (_arpeggio)
+            bb |= _arpeggio->bbox().translated(_arpeggio->pos());
+      if (_glissando)
+            bb |= _glissando->bbox().translated(_glissando->pos());
+      if (_stemSlash)
+            bb |= _stemSlash->bbox().translated(_stemSlash->pos());
+      if (_tremolo)
+            bb |= _tremolo->bbox().translated(_tremolo->pos());
+      if (staff() && staff()->isTabStaff() && _tabDur)
+            bb |= _tabDur->bbox().translated(_tabDur->pos());
+      setbbox(bb);
+#endif
       }
 
 //---------------------------------------------------------
@@ -1568,6 +1633,7 @@ void Chord::layout()
 
 const QRectF& Chord::bbox() const
       {
+#if 0
       QRectF bb;
       int n = _notes.size();
       for (int i = 0; i < n; ++i) {
@@ -1600,6 +1666,7 @@ const QRectF& Chord::bbox() const
       if (staff() && staff()->isTabStaff() && _tabDur)
             bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
+#endif
       return Element::bbox();
       }
 
@@ -2001,5 +2068,15 @@ void Chord::reset()
       score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
       createPlayEvents(this);
       ChordRest::reset();
+      }
+
+//---------------------------------------------------------
+//   setStemSlash
+//---------------------------------------------------------
+
+void Chord::setStemSlash(StemSlash* s)
+      {
+      delete _stemSlash;
+      _stemSlash = s;
       }
 

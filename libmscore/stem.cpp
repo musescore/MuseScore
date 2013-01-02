@@ -56,20 +56,12 @@ qreal Stem::stemLen() const
       }
 
 //---------------------------------------------------------
-//   hookPos
+//   lineWidth
 //---------------------------------------------------------
 
-QPointF Stem::hookPos() const
+qreal Stem::lineWidth() const
       {
-      QPointF p(pos());
-      if (up()) {
-            p.ry() -= _len + _userLen;
-            }
-      else {
-            p.rx() += score()->styleP(ST_stemWidth);
-            p.ry() += _len + _userLen;
-            }
-      return p;
+      return point(score()->styleS(ST_stemWidth));
       }
 
 //---------------------------------------------------------
@@ -79,41 +71,24 @@ QPointF Stem::hookPos() const
 void Stem::layout()
       {
       qreal l = _len + _userLen;
-      if (up())
-            l = -l;
+      qreal _up = up() ? -1.0 : 1.0;
+      l *= _up;
+
+      qreal y1 = 0.0;
       Staff* st = staff();
-      qreal lw5  = point(score()->styleS(ST_stemWidth)) * .5;
-      QPointF p1(0.0, 0.0);
-      QPointF p2(0.0, l);
-      if (st) {
-            // if TAB, use simplified positioning
-            if (st->isTabStaff()) {
-                  p1.rx() = -lw5;
-                  p2.rx() = -lw5;
-                  }
-            // for any other staff type, use standard positioning
-            else if (chord()) {
-                  // adjust P1 for note head
-                  Chord* c = chord();
-                  if (c->up()) {
-                        Note* n   = c->downNote();
-                        p1 = symbols[score()->symIdx()][n->noteHead()].attach(n->magS());
-                        p1.rx() = -lw5;
-                        p2.rx() = -lw5;
-                        }
-                  else {
-                        Note* n = c->upNote();
-                        p1 = -symbols[score()->symIdx()][n->noteHead()].attach(n->magS());
-                        p1.rx() = lw5;
-                        p2.rx() = lw5;
-                        }
-                  }
+      if (chord() && st && !st->isTabStaff()) {
+            Note* n  = up() ? chord()->downNote() : chord()->upNote();
+            const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
+            if (n->mirror())
+                  _up *= -1;
+            y1 -= sym.attach(n->magS()).y() * _up;
             }
-      line.setP1(p1);
-      line.setP2(p2);
+
+      line.setLine(0.0, y1, 0.0, l);
 
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
+      qreal lw5  = lineWidth() * .5;
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
       }
 
@@ -145,59 +120,56 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Stem::draw(QPainter* painter) const
       {
-      bool useTab = false;
       Staff* st = staff();
-      if (st && st->isTabStaff()) {     // stems used in palette do not have a staff
-            if (st->staffType()->slashStyle())
-                  return;
-            useTab = true;
-            }
-      qreal lw = point(score()->styleS(ST_stemWidth));
+      bool useTab = st && st->isTabStaff();
+
+      if (useTab && st->staffType()->slashStyle())
+            return;
+      qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
+      if (!useTab)
+            return;
 
-      if (useTab) {
-            // TODO: adjust bounding rectangle in layout() for dots and for slash
-            StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st->staffType());
-            qreal sp = spatium();
+      // TODO: adjust bounding rectangle in layout() for dots and for slash
+      StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st->staffType());
+      qreal sp = spatium();
 
-            // slashed half note stem
-            if(chord() && chord()->durationType().type() == TDuration::V_HALF
-                        && stt->minimStyle() == TAB_MINIM_SLASHED) {
-                  qreal wdt   = sp * STAFFTYPE_TAB_SLASH_WIDTH;
-                  qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
-                  qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
-                  qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
-                  QPainterPath path = QPainterPath();
+      // slashed half note stem
+      if (chord() && chord()->durationType().type() == TDuration::V_HALF
+         && stt->minimStyle() == TAB_MINIM_SLASHED) {
+            qreal wdt   = sp * STAFFTYPE_TAB_SLASH_WIDTH;
+            qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
+            qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
+            qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+            QPainterPath path;
 
-                  qreal y   = stt->stemsDown() ?
-                               _len - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp :
-                              -_len + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp;
-                  int lines = 2;
-                  for (int i = 0; i < lines; ++i) {
-                        path.moveTo( wdt*0.5-lw, y);        // top-right corner
-                        path.lineTo( wdt*0.5-lw, y+thk);    // bottom-right corner
-                        path.lineTo(-wdt*0.5,    y+thk+sln);// bottom-left corner
-                        path.lineTo(-wdt*0.5,    y+sln);    // top-left corner
-                        path.closeSubpath();
-                        y += displ;
-                        }
-//                  setbbox(path.boundingRect());
-                  painter->setBrush(QBrush(curColor()));
-                  painter->setPen(Qt::NoPen);
-                  painter->drawPath(path);
+            qreal y = stt->stemsDown() ?
+                         _len - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp :
+                        -_len + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp;
+            for (int i = 0; i < 2; ++i) {
+                  path.moveTo( wdt*0.5-lw, y);        // top-right corner
+                  path.lineTo( wdt*0.5-lw, y+thk);    // bottom-right corner
+                  path.lineTo(-wdt*0.5,    y+thk+sln);// bottom-left corner
+                  path.lineTo(-wdt*0.5,    y+sln);    // top-left corner
+                  path.closeSubpath();
+                  y += displ;
                   }
+//            setbbox(path.boundingRect());
+            painter->setBrush(QBrush(curColor()));
+            painter->setPen(Qt::NoPen);
+            painter->drawPath(path);
+            }
 
-            // dots
-            // NOT THE BEST PLACE FOR THIS?
-            // with tablatures, dots are not drawn near 'notes', but near stems
-            int nDots = chord()->dots();
-            if (nDots > 0) {
-                  qreal y = stemLen() - (stt->stemsDown() ?
-                              (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
-                  symbols[score()->symIdx()][dotSym].draw(painter, magS(),
-                              QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
-                  }
+      // dots
+      // NOT THE BEST PLACE FOR THIS?
+      // with tablatures, dots are not drawn near 'notes', but near stems
+      int nDots = chord()->dots();
+      if (nDots > 0) {
+            qreal y = stemLen() - (stt->stemsDown() ?
+                        (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
+            symbols[score()->symIdx()][dotSym].draw(painter, magS(),
+                        QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
             }
       }
 
@@ -306,7 +278,7 @@ Element* Stem::drop(const DropData& data)
 QVariant Stem::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_USER_LEN:            return userLen();
+            case P_USER_LEN: return userLen();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -330,4 +302,5 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       score()->setLayoutAll(false);       //DEBUG
       return true;
       }
+
 

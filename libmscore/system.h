@@ -52,6 +52,7 @@ class SysStaff {
       QList<InstrumentName*> instrumentNames;
 
       const QRectF& bbox() const    { return _bbox; }
+      QRectF& bbox()                { return _bbox; }
       QRectF& rbb()                 { return _bbox; }
       qreal y() const               { return _bbox.y(); }
       qreal right() const           { return _bbox.right(); }

@@ -110,7 +110,7 @@ void Bracket::layout()
             qreal bd = _spatium * .25;
             qreal y = -symbols[idx][brackettipsRightUp].height(mags) - bd;
             qreal h = (-y + h2) * 2;
-            setbbox(QRectF(x, y, w, h));
+            bbox().setRect(x, y, w, h);
             }
       }
 

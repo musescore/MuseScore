@@ -324,10 +324,7 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      qreal val = symbols[score()->symIdx()][noteHead()].width(magS());
-      if (_small)
-            val *= score()->styleD(ST_smallNoteMag);
-      return val;
+      return symbols[score()->symIdx()][noteHead()].width(magS());
       }
 
 //---------------------------------------------------------
@@ -337,6 +334,15 @@ qreal Note::headWidth() const
 qreal Note::headHeight() const
       {
       return symbols[score()->symIdx()][noteHead()].height(magS());
+      }
+
+//---------------------------------------------------------
+//   attach
+//---------------------------------------------------------
+
+QPointF Note::attach() const
+      {
+      return symbols[score()->symIdx()][noteHead()].attach(magS());
       }
 
 //---------------------------------------------------------
@@ -576,10 +582,7 @@ void Note::draw(QPainter* painter) const
                   else if (i < in->minPitchA() || i > in->maxPitchA())
                         painter->setPen(Qt::darkYellow);
                   }
-            qreal mag = magS();
-            if (_small)
-                  mag *= score()->styleD(ST_smallNoteMag);
-            symbols[score()->symIdx()][noteHead()].draw(painter, mag);
+            symbols[score()->symIdx()][noteHead()].draw(painter, magS());
             }
       }
 
@@ -1242,7 +1245,7 @@ void Note::layout()
             qreal w  = fm.width(s) * mags;
             // center string name to note head
             qreal xo = (headWidth() - w) * .5;
-            setbbox(QRectF(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags));
+            bbox().setRect(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
@@ -1259,13 +1262,11 @@ void Note::layout()
                               score()->undoAddElement(dot); // move dot to _dots[i]
                               }
                         _dots[i]->layout();
-//                        _dots[i]->setVisible(visible());
                         }
                   else if (_dots[i])
                         score()->undoRemoveElement(_dots[i]);
                   }
             }
-// layout2();
       }
 
 //---------------------------------------------------------
@@ -1513,6 +1514,7 @@ void Note::reset()
 
 void Note::setMag(qreal val)
       {
+      val = val * (_small ? score()->styleD(ST_smallNoteMag) : 1.0);
       Element::setMag(val);
       if (_accidental)
             _accidental->setMag(val);
@@ -1521,6 +1523,16 @@ void Note::setMag(qreal val)
             Element* e = _el.at(i);
             e->setMag(val);
             }
+      }
+
+//---------------------------------------------------------
+//   setSmall
+//---------------------------------------------------------
+
+void Note::setSmall(bool val)
+      {
+      _small = val;
+      setMag(parent() ? parent()->mag() : 1.0);
       }
 
 //---------------------------------------------------------
@@ -1798,8 +1810,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_VELO_TYPE:
                   setVeloType(MScore::ValueType(v.toInt()));
                   break;
-            case P_VISIBLE:                     // P_VISIBLE requires reflecting property on dots
-            {
+            case P_VISIBLE: {                     // P_VISIBLE requires reflecting property on dots
                   setVisible(v.toBool());
                   int dots = chord()->dots();
                   for (int i = 0; i < dots; ++i) {
@@ -1966,5 +1977,3 @@ void Note::setOffTimeOffset(int)
       {
       // TODO
       }
-
-
