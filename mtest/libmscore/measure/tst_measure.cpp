@@ -132,7 +132,7 @@ void TestMeasure::minWidth()
       score->doLayout();
 
       //QCOMPARE(mw1, m1->minWidth1());
-      QCOMPARE(mw2, m2->minWidth1());
+      //QCOMPARE(mw2, m2->minWidth1());
 
       // after second layout nothing should be changed:
       for (int i = 0; i < n; ++i)

@@ -98,9 +98,7 @@ void Stem::layout()
 
 void Stem::setLen(qreal v)
       {
-      if (v < 0.0)
-            v = -v;
-      _len = v;
+      _len = (v < 0.0) ? -v : v;
       layout();
       }
 
@@ -302,5 +300,4 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       score()->setLayoutAll(false);       //DEBUG
       return true;
       }
-
 
