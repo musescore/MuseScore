@@ -192,6 +192,8 @@ class Note : public Element {
 
       qreal headWidth() const;
       qreal headHeight() const;
+      QPointF attach() const;
+
       int noteHead() const;
       NoteHeadGroup headGroup() const     { return _headGroup; }
       NoteHeadType headType() const       { return _headType;  }
@@ -233,7 +235,7 @@ class Note : public Element {
       void setMirror(bool val)        { _mirror = val;   }
 
       bool small() const              { return _small;   }
-      void setSmall(bool val)         { _small = val;    }
+      void setSmall(bool val);
 
       Q_INVOKABLE Tie* tieFor() const  { return _tieFor;  }
       Q_INVOKABLE Tie* tieBack() const { return _tieBack; }
@@ -253,22 +255,22 @@ class Note : public Element {
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
 
-      bool hidden() const              { return _hidden; }
-      void setHidden(bool val)         { _hidden = val;  }
+      bool hidden() const                       { return _hidden; }
+      void setHidden(bool val)                  { _hidden = val;  }
 
       NoteType noteType() const;
 
-      ElementList el()                 { return _el; }
-      const ElementList el() const     { return _el; }
+      ElementList el()                          { return _el; }
+      const ElementList el() const              { return _el; }
 
-      int subchannel() const           { return _subchannel; }
-      void setSubchannel(int val)      { _subchannel = val;  }
+      int subchannel() const                    { return _subchannel; }
+      void setSubchannel(int val)               { _subchannel = val;  }
 
-      MScore::DirectionH userMirror() const    { return _userMirror; }
-      void setUserMirror(MScore::DirectionH d) { _userMirror = d; }
+      MScore::DirectionH userMirror() const     { return _userMirror; }
+      void setUserMirror(MScore::DirectionH d)  { _userMirror = d; }
 
-      MScore::Direction dotPosition() const    { return _dotPosition; }
-      void setDotPosition(MScore::Direction d) { _dotPosition = d;    }
+      MScore::Direction dotPosition() const     { return _dotPosition; }
+      void setDotPosition(MScore::Direction d)  { _dotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void reset();
@@ -276,16 +278,16 @@ class Note : public Element {
 
       MScore::ValueType veloType() const    { return _veloType;          }
       void setVeloType(MScore::ValueType v) { _veloType = v;             }
-      int veloOffset() const           { return _veloOffset;        }
-      void setVeloOffset(int v)        { _veloOffset = v;           }
+      int veloOffset() const                { return _veloOffset;        }
+      void setVeloOffset(int v)             { _veloOffset = v;           }
 
       void setOnTimeOffset(int v);
       void setOffTimeOffset(int v);
 
-//      void setBend(Bend* b)            { _bend = b;    }
+//      void setBend(Bend* b)               { _bend = b;    }
 
       int customizeVelocity(int velo) const;
-      Q_INVOKABLE NoteDot* dot(int n)  { return _dots[n];           }
+      Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);
@@ -294,12 +296,12 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      QList<Spanner*> spannerFor() const        { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const       { return _spannerBack;        }
-      void addSpannerBack(Spanner* e)           { _spannerBack.append(e);     }
-      bool removeSpannerBack(Spanner* e)        { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)            { _spannerFor.append(e);      }
-      bool removeSpannerFor(Spanner* e)         { return _spannerFor.removeOne(e); }
+      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
+      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
+      void addSpannerBack(Spanner* e)            { _spannerBack.append(e);     }
+      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
+      void addSpannerFor(Spanner* e)             { _spannerFor.append(e);      }
+      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e); }
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 

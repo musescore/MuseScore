@@ -499,8 +499,8 @@ void FiguredBassItem::layout()
             w = lineLen;
       y = h * ord;
       setPos(x, y);
-      setbbox(QRect(0, 0, w, h));
-}
+      bbox().setRect(0, 0, w, h);
+      }
 
 //---------------------------------------------------------
 //   FiguredBassItem draw()
@@ -977,12 +977,12 @@ void FiguredBass::layout()
             h *= (list.size() > 1 ? list.size() : 1);      // at least 1 line
             // ready to set position and bbox
             setPos(0, y);
-            setbbox(QRectF(0-2, 0-2, w+4, h+4));
+            bbox().setRect(0-2, 0-2, w+4, h+4);
             }
       else
             {
             setPos(0, y);
-            setbbox(QRectF(0, 0, _lineLenghts.at(0), 0));
+            bbox().setRect(0, 0, _lineLenghts.at(0), 0);
             // if element could be parsed into items, layout each element
             if(items.size() > 0) {
                   // layout each item and enlarge bbox to include items bboxes

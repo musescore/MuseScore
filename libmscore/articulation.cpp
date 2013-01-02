@@ -416,7 +416,7 @@ QString Articulation::subtypeUserName() const
 void Articulation::layout()
       {
       SymId sym = _up ? articulationList[subtype()].upSym : articulationList[subtype()].downSym;
-      setbbox(symbols[score()->symIdx()][sym].bbox(magS()));
+      setbbox(score()->sym(sym).bbox(magS()));
       }
 
 //---------------------------------------------------------

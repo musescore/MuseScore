@@ -96,17 +96,17 @@ void Arpeggio::layout()
             case ARP_UP:
             case ARP_DOWN:
             default:
-                  setbbox(QRectF(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1));
+                  bbox().setRect(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1);
                   return;
             case ARP_UP_STRAIGHT:
             case ARP_DOWN_STRAIGHT:
-                  setbbox(QRectF(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1));
+                  bbox().setRect(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1);
                   return;
             case ARP_BRACKET:
                   {
                   qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
                   qreal w = score()->styleS(ST_ArpeggioHookLen).val() * _spatium;
-                  setbbox(QRectF(-lw * .5, y1 - lw * .5, w + lw, y2 - y1 + lw));
+                  bbox().setRect(-lw * .5, y1 - lw * .5, w + lw, y2 - y1 + lw);
                   return;
                   }
             }

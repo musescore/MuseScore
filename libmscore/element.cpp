@@ -847,22 +847,7 @@ void StaffLines::layout()
 //      qDebug("StaffLines::layout:: dist %f st %p\n", dist, st);
 
       lw = score()->styleS(ST_staffLineWidth).val() * _spatium;
-
-      qreal w = width();
-      switch (lines) {
-            case 0:
-                  setbbox(QRectF(0.0, - 2.0 * dist - lw*.5, w, 4 * dist + lw));
-                  break;
-            case 1:
-                  setbbox(QRectF(0.0,  -lw*.5, w, lw));
-                  break;
-            case 2:
-                  setbbox(QRectF(0.0, -lw*.5, w, lines * dist + lw));
-                  break;
-            default:
-                  setbbox(QRectF(0.0, -lw*.5, w, lines * dist + lw));
-                  break;
-            }
+      bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
       }
 
 //---------------------------------------------------------
@@ -994,9 +979,9 @@ void Line::layout()
       qreal l  = _len.val() * sp;
       qreal w2 = w * .5;
       if (vertical)
-            setbbox(QRectF(-w2, -w2, w, l + w));
+            bbox().setRect(-w2, -w2, w, l + w);
       else
-            setbbox(QRectF(-w2, -w2, l + w, w));
+            bbox().setRect(-w2, -w2, l + w, w);
       }
 
 //---------------------------------------------------------

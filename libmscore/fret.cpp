@@ -284,7 +284,7 @@ void FretDiagram::layout()
             y = -(fretDist * .1 + fm.height());
             h -= y;
             }
-      setbbox(QRectF(x, y, w, h));
+      bbox().setRect(x, y, w, h);
 
       setPos(-_spatium, -h - _spatium);
       adjustReadPos();

@@ -470,7 +470,7 @@ void Measure::layout(qreal width)
       // height of boundingRect will be set in system->layout2()
       // keep old value for relayout
 
-      setbbox(QRectF(0.0, 0.0, width, height()));
+      bbox().setRect(0.0, 0.0, width, height());
       layoutX(width);
       }
 

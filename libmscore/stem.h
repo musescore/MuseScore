@@ -59,7 +59,9 @@ class Stem : public Element {
       qreal userLen() const           { return _userLen; }
       void setUserLen(qreal l)        { _userLen = l; }
 
-      QPointF hookPos() const;
+      qreal lineWidth() const;
+
+      QPointF hookPos() const         { return (pos() + line.p2()); }   // in chord coordinates
       void setLen(qreal l);
       qreal len() const               { return _len; }
       qreal stemLen() const;

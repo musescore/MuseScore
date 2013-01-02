@@ -243,7 +243,7 @@ void TextLineSegment::layout1()
             else if (h < y1)
                   y1 = h;
             }
-      setbbox(QRectF(.0, y1, pp2.x(), y2 - y1));
+      bbox().setRect(.0, y1, pp2.x(), y2 - y1);
       }
 
 //---------------------------------------------------------

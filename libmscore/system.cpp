@@ -232,8 +232,8 @@ void System::layout(qreal xo1)
                   continue;
                   }
             qreal staffMag = staff->mag();
-            s->setbbox(QRectF(_leftMargin + xo1, 0.0, 0.0,
-                        (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag));
+            s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0,
+               (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag);
             }
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
@@ -341,7 +341,7 @@ void System::layout2()
                   }
             qreal sHeight = staff->height();   // (staff->lines() - 1) * _spatium * staffMag;
             qreal dup = staffIdx == 0 ? 0.0 : s->distanceUp();
-            s->setbbox(QRectF(_leftMargin, y + dup, width() - _leftMargin, sHeight));
+            s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
             }
@@ -350,10 +350,10 @@ void System::layout2()
       setHeight(systemHeight);
       foreach(MeasureBase* m, ml) {
             if (m->type() == MEASURE) {
-                  m->setbbox(QRectF(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium));
+                  m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
                   }
             else if (m->type() == HBOX) {
-                  m->setbbox(QRectF(0.0, 0.0, m->width(), systemHeight));
+                  m->bbox().setRect(0.0, 0.0, m->width(), systemHeight);
                   static_cast<HBox*>(m)->layout2();
                   }
             }
