@@ -2592,7 +2592,7 @@ bool Measure::createEndBarLines()
                               //    remove bar line for this staff
                               // If NONE of the above conditions holds, the staff is the last staff of
                               // a mensurstrich(-like) span: keep its bar line, as it may span to next staff
-                              if(spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
+                              if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
                                     score()->undoRemoveElement(cbl);
                                     changed = true;
                                     }

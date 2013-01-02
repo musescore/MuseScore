@@ -50,6 +50,11 @@ class MStyle;
 class Sequencer;
 
 static const int VOICES = 4;
+inline int staff2track(int staffIdx) { return staffIdx << 2; }
+inline int track2staff(int voice)    { return voice >> 2;    }
+inline int track2voice(int track)    { return track & 3;     }
+inline int trackZeroVoice(int track) { return track & ~3;    }
+
 static const int MAX_TAGS = 32;
 
 static const qreal INCH = 25.4;

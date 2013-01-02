@@ -100,7 +100,8 @@ class Note : public Element {
             HEAD_GROUPS,
             HEAD_INVALID = -1
             };
-      enum NoteHeadType { HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS };
+      enum NoteHeadType { HEAD_AUTO = -1, HEAD_WHOLE = 0, HEAD_HALF = 1, HEAD_QUARTER = 2,
+            HEAD_BREVIS = 3 };
 
    private:
       Q_OBJECT
@@ -129,7 +130,6 @@ class Note : public Element {
       int _line;              ///< y-Position; 0 - top line.
       int _fret;              ///< for tablature view
       int _string;
-      NoteHeadGroup _headGroup;
       mutable int _tpc;       ///< tonal pitch class
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
       bool _ghost;            ///< ghost note (guitar: death note)
@@ -143,9 +143,10 @@ class Note : public Element {
       bool _mirror;           ///< True if note is mirrored at stem.
       bool _small;
 
+      NoteHeadGroup _headGroup;
       NoteHeadType _headType;
       MScore::ValueType _veloType;
-      int _veloOffset;        ///< velocity user offset in percent, or absolute velocity for this note
+      short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
