@@ -477,9 +477,10 @@ void Chord::remove(Element* e)
 //---------------------------------------------------------
 //   addLedgerLine
 ///   Add a ledger line to a chord.
-///   \arg x          center of note head
+///   \arg x          note head position
 ///   \arg staffIdx   determines the y origin
 ///   \arg line       vertical position of line
+///   \arg lr         extend to left and/or right
 //---------------------------------------------------------
 
 void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
@@ -488,9 +489,8 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
       qreal hw       = upNote()->headWidth();
       qreal hw2      = hw * .5;
 
-      qreal y = line * _spatium * .5;
+      LedgerLine* h = new LedgerLine(score());
 
-      LedgerLine* h   = new LedgerLine(score());
       h->setParent(this);
       h->setTrack(staffIdx * VOICES);
       if (staff()->invisible())
@@ -500,16 +500,17 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
       // ledger lines extend less than half a space on each side
       // of the notehead:
       //
-      qreal ll = _notes[0]->headWidth() + score()->styleS(ST_ledgerLineLength).val() * _spatium;
-      Spatium len(ll / _spatium);
+      qreal ll = hw + score()->styleS(ST_ledgerLineLength).val() * _spatium;
 
       if (_noteType != NOTE_NORMAL)
-            len *= score()->style(ST_graceNoteMag).toDouble();
-      x -= len.val() * _spatium * .5;
+            ll *= score()->style(ST_graceNoteMag).toDouble();
+      x -= ll * .5;
 
       x += (lr & 1) ? -hw2 : hw2;
       if (lr == 3)
-            len += Spatium(hw / spatium());
+            ll += hw;
+
+      Spatium len(ll / _spatium);
 
       //
       // Experimental:
@@ -526,7 +527,7 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
                   }
             }
       h->setLen(len);
-      h->setPos(x, y);
+      h->setPos(x, line * _spatium * .5);
       _ledgerLines.push_back(h);
       }
 
@@ -1453,18 +1454,11 @@ void Chord::layout()
 
             adjustReadPos();
 
-            qreal stemX;
             qreal stemWidth5;
+            qreal stemX = _up ? symbols[score()->symIdx()][quartheadSym].width(magS()) : 0.0;
             if (stem()) {
                   stemWidth5 = stem()->lineWidth() * .5;
-                  if (_up) {
-                        stemX = symbols[score()->symIdx()][quartheadSym].width(magS());
-                        _stem->rxpos() = stemX - stemWidth5;
-                        }
-                  else {
-                        stemX = 0;
-                        _stem->rxpos() = stemWidth5;
-                        }
+                  _stem->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
                   }
             else
                   stemWidth5 = 0.0;
@@ -1473,25 +1467,17 @@ void Chord::layout()
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
                   note->layout();
-                  qreal x = 0.0;
-
-                  bool stemUp;
-                  if (staffMove() < 0)
-                        stemUp = false;
-                  else if (staffMove() > 0)
-                        stemUp = true;
-                  else
-                        stemUp = _up;
+                  qreal x;
 
                   qreal hw = note->headWidth();
 
                   if (note->mirror())
-                        if (stemUp)
+                        if (_up)
                               x = stemX - stemWidth5 * 2;
                         else
                               x = stemX - hw + stemWidth5 * 2;
                   else {
-                        if (stemUp)
+                        if (_up)
                               x = stemX - hw;
                         else
                               x = 0.0;
@@ -1509,10 +1495,7 @@ void Chord::layout()
             if (stem())
                   stem()->rypos() = (_up ? _notes.front() : _notes.back())->rypos();
 
-            qreal x  = upnote->ipos().x();
-            if (up() ^ upnote->mirror())
-                  x += headWidth;
-            addLedgerLines(x, staffMove());
+            addLedgerLines(stemX, staffMove());
 
             n = _ledgerLines.size();
             for (int i = 0; i < n; ++i)

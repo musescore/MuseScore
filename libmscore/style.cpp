@@ -458,7 +458,7 @@ StyleData::StyleData()
             StyleVal(ST_measureSpacing, qreal(1.2)),
             StyleVal(ST_staffLineWidth,Spatium(0.08)),      // 0.09375
             StyleVal(ST_ledgerLineWidth,Spatium(0.12)),     // 0.1875
-            StyleVal(ST_ledgerLineLength, Spatium(.6)),
+            StyleVal(ST_ledgerLineLength, Spatium(.6)),     // note head width + this value
             StyleVal(ST_accidentalDistance,Spatium(0.22)),
             StyleVal(ST_accidentalNoteDistance,Spatium(0.22)),
             StyleVal(ST_beamWidth, Spatium(0.5)),           // was 0.48
