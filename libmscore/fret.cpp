@@ -564,6 +564,34 @@ void FretDiagram::readMusicXML(XmlReader& e)
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FretDiagram::writeMusicXML(Xml& /*xml*/) const
+void FretDiagram::writeMusicXML(Xml& xml) const
       {
+      qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
+            xml.stag("frame");
+            xml.tag("frame-strings", strings());
+            xml.tag("frame-frets", frets());
+            QString strDots = "'";
+            QString strMarker = "'";
+            QString strFingering = "'";
+            for (int i = 0; i < strings(); ++i) {
+                  // TODO print frame note
+                  if (_dots) strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
+                  if (_marker) strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
+                  if (_fingering) strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
+                  if (_marker[i] != 88) {
+                        xml.stag("frame-note");
+                        xml.tag("string", strings() - i);
+                        xml.tag("fret", _dots[i]);
+                        xml.etag();
+                  }
+            }
+            qDebug("FretDiagram::writeMusicXML() this %p dots %s marker %s fingering %s",
+                   this, qPrintable(strDots), qPrintable(strMarker), qPrintable(strFingering));
+            /*
+            xml.tag("root-step", tpc2stepName(rootTpc));
+            int alter = tpc2alter(rootTpc);
+            if (alter)
+                  xml.tag("root-alter", alter);
+            */
+            xml.etag();
       }

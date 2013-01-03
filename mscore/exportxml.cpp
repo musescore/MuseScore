@@ -3460,11 +3460,12 @@ static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Seg
 // in MusicXML they are combined in the harmony element. This means they have to be matched.
 // TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
-static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
+static void annotations(ExportMusicXml* exp, Xml& xml, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->subtype() == Segment::SegChordRest) {
 
             const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
+            // if (fd) qDebug("annotations seg %p found fret diagram %p", seg, fd);
 
             foreach(const Element* e, seg->annotations()) {
 
@@ -3489,7 +3490,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                                     exp->dynamic(static_cast<const Dynamic*>(e), sstaff);
                                     break;
                               case Element::HARMONY:
-                                    qDebug("annotations found harmony");
+                                    // qDebug("annotations seg %p found harmony %p", seg, e);
                                     exp->harmony(static_cast<const Harmony*>(e), fd /*, sstaff */);
                                     fd = 0; // make sure to write only once ...
                                     break;
@@ -3507,9 +3508,10 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               }
                         }
                   } // foreach
-            if (fd) {
-                  // TODO: found fd but no Element::HARMONY -> write separately
-                  }
+            if (fd)
+                  // found fd but no harmony, cannot write (MusicXML would be invalid)
+                  qDebug("annotations seg %p found fret diagram %p w/o harmony: cannot write",
+                         seg, fd);
             }
       }
 
@@ -4192,7 +4194,7 @@ void ExportMusicXml::write(QIODevice* dev)
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {
                                     attr.doAttr(xml, false);
-                                    annotations(this, strack, etrack, st, sstaff, seg);
+                                    annotations(this, xml, strack, etrack, st, sstaff, seg);
                                     figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
                                     spannerStop(this, strack, etrack, st, sstaff, seg);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
@@ -4446,6 +4448,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         }
                   xml.etag();
                   }
+
+            if (fd)
+                  fd->writeMusicXML(xml);
+
             xml.etag();
             }
       else {
