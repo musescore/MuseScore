@@ -2448,7 +2448,7 @@ int ExportLy::findSlur(const Slur* s) const
 void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 {
   int slurcount=0;
-  foreach(const Spanner* sp, chord->spannerFor())
+  for(const Spanner* sp = chord->spannerFor(); sp; sp = sp->next())
     {
       if (sp->type() != Element::SLUR)
             continue;
@@ -2515,7 +2515,7 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 void ExportLy::doSlurStop(Chord* chord)
 {
 
-  foreach(const Spanner* sp, chord->spannerBack())
+  for(const Spanner* sp = chord->spannerBack(); sp; sp = sp->next())
     {
     if (sp->type() != Element::SLUR)
           continue;

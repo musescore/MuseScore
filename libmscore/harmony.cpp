@@ -444,7 +444,7 @@ QString HDegree::text() const
       {
       if (_type == UNDEF)
             return QString();
-      const char* d;
+      const char* d = 0;
       switch(_type) {
             case UNDEF: break;
             case ADD:         d= "add"; break;

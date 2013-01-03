@@ -201,9 +201,9 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
                         foreach(Element* e, s->elist()) {
                               if (e) {
                                     ChordRest* cr = static_cast<ChordRest*>(e);
-                                    foreach(Spanner* s, cr->spannerFor())
+                                    for (Spanner* s = cr->spannerFor(); s; s = s->next())
                                           s->setStartElement(cr);
-                                    foreach(Spanner* s, cr->spannerBack())
+                                    for (Spanner* s = cr->spannerBack(); s; s = s->next())
                                           s->setEndElement(cr);
                                     }
                               }
@@ -1478,7 +1478,7 @@ void Score::addElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  {     
+                  {
                   Element* cr = element->parent();
                   if (cr->type() == Element::CHORD)
                          ::createPlayEvents(static_cast<Chord*>(cr));
@@ -2030,7 +2030,7 @@ Spanner* Score::findSpanner(int id) const
       {
       static const Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
-            foreach(Spanner* e, s->spannerFor()) {
+            for(Spanner* e = s->spannerFor(); e; e = e->next()) {
                   if (e->id() == id)
                         return e;
                   }
@@ -2040,7 +2040,7 @@ Spanner* Score::findSpanner(int id) const
                   if (cr && cr->type() == Element::CHORD) {
                         Chord* c = static_cast<Chord*>(cr);
                         foreach(const Note* note, c->notes()) {
-                              foreach(Spanner* e, note->spannerFor()) {
+                              for(Spanner* e = note->spannerFor(); e; e = e->next()) {
                                     if (e->id() == id)
                                           return e;
                                     }
@@ -2049,7 +2049,7 @@ Spanner* Score::findSpanner(int id) const
                   }
             }
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            foreach(Spanner* e, m->spannerFor()) {
+            for(Spanner* e = m->spannerFor(); e; e = e->next()) {
                   if (e->id() == id)
                         return e;
                   }

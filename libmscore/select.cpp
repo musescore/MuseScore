@@ -272,7 +272,7 @@ void Selection::updateSelectedElements()
                               continue;
                         _el.append(e);
                         }
-                  foreach(Spanner* sp, s->spannerFor()) {
+                  for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
                         if (sp->endElement()->type() == Element::SEGMENT) {
@@ -290,7 +290,7 @@ void Selection::updateSelectedElements()
             Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
             int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
             for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
-                  foreach(Spanner* sp, m->spannerFor()) {
+                  for(Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {
                         // ignore spanners belonging to other tracks
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;

@@ -207,7 +207,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               ++st;
                               }
                         if (((srcTrack % VOICES) == 0) && track != -1) {
-                              foreach(Spanner* s, m->spannerFor()) {
+                              for(Spanner* s = m->spannerFor(); s; s = s->next()) {
                                     if (s->track() != srcTrack)
                                           continue;
                                     Spanner* ns = static_cast<Spanner*>(s->linkedClone());
@@ -222,7 +222,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     nm->addSpannerFor(ns);
                                     spannerMap.add(s, ns);
                                     }
-                              foreach(Spanner* s, m->spannerBack()) {
+                              for(Spanner* s = m->spannerBack(); s; s = s->next()) {
                                     if (s->track() != srcTrack)
                                           continue;
                                     Spanner* ns = spannerMap.findNew(s);
@@ -252,7 +252,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               else
                                     ns = nm->getSegment(oseg->subtype(), oseg->tick());
 
-                              foreach(Spanner* spanner, oseg->spannerFor()) {
+                              for(Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
                                           continue;
                                     Spanner* nspanner = static_cast<Spanner*>(spanner->linkedClone());
@@ -274,7 +274,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     ns->addSpannerFor(nspanner);
                                     spannerMap.add(spanner, nspanner);
                                     }
-                              foreach(Spanner* spanner, oseg->spannerBack()) {
+                              for(Spanner* spanner = oseg->spannerBack(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
                                           continue;
                                     Spanner* nspanner = spannerMap.findNew(spanner);
@@ -335,7 +335,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           nt->add(ncr);
                                           ncr->setTuplet(nt);
                                           }
-                                    foreach(Spanner* sp, ocr->spannerFor()) {
+                                    for (Spanner* sp = ocr->spannerFor(); sp; sp = sp->next()) {
                                           if (sp->type() != Element::SLUR)
                                                 continue;
                                           Slur* s = static_cast<Slur*>(sp);
@@ -345,7 +345,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ncr->addSlurFor(slur);
                                           slurMap.add(s, slur);
                                           }
-                                    foreach(Spanner* sp, ocr->spannerBack()) {
+                                    for (Spanner* sp = ocr->spannerBack(); sp; sp = sp->next()) {
                                           if (sp->type() != Element::SLUR)
                                                 continue;
                                           Slur* s = static_cast<Slur*>(sp);
@@ -467,7 +467,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     ncr->setTuplet(nt);
                                     nt->add(ncr);
                                     }
-                              foreach (Spanner* sp, ocr->spannerFor()) {
+                              for (Spanner* sp = ocr->spannerFor(); sp; sp = sp->next()) {
                                     if (sp->type() != Element::SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);
@@ -476,7 +476,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     ncr->addSlurFor(slur);
                                     slurMap.add(s, slur);
                                     }
-                              foreach (Spanner* sp, ocr->spannerBack()) {
+                              for (Spanner* sp = ocr->spannerBack(); sp; sp = sp->next()) {
                                     if (sp->type() != Element::SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);

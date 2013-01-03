@@ -172,6 +172,7 @@ int Chord::downString() const
 Chord::Chord(Score* s)
    : ChordRest(s)
       {
+      _ledgerLines      = 0;
       _stem             = 0;
       _hook             = 0;
       _stemDirection    = MScore::AUTO;
@@ -189,6 +190,7 @@ Chord::Chord(Score* s)
 Chord::Chord(const Chord& c)
    : ChordRest(c)
       {
+      _ledgerLines = 0;
       int n = c._notes.size();
       for (int i = 0; i < n; ++i)
             add(new Note(*c._notes.at(i)));
@@ -267,7 +269,8 @@ Chord::~Chord()
       delete _stemSlash;
       delete _stem;
       delete _hook;
-      qDeleteAll(_ledgerLines);
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            delete ll;
       qDeleteAll(_notes);
       }
 
@@ -528,7 +531,8 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
             }
       h->setLen(len);
       h->setPos(x, line * _spatium * .5);
-      _ledgerLines.push_back(h);
+      h->setNext(_ledgerLines);
+      _ledgerLines = h;
       }
 
 //---------------------------------------------------------
@@ -955,10 +959,9 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _tremolo);
       if (_glissando)
             func(data, _glissando);
-      int n = _ledgerLines.size();
-      for (int i = 0; i < n; ++i)
-            func(data, _ledgerLines.at(i));
-      n = _notes.size();
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            func(data, ll);
+      int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
       n = _el.size();
@@ -986,11 +989,10 @@ void Chord::setTrack(int val)
       if (_tremolo)
             _tremolo->setTrack(val);
 
-      int n = _ledgerLines.size();
-      for (int i = 0; i < n; ++i)
-            _ledgerLines.at(i)->setTrack(val);
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            ll->setTrack(val);
 
-      n = _notes.size();
+      int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setTrack(val);
       ChordRest::setTrack(val);
@@ -1005,6 +1007,7 @@ LedgerLine::LedgerLine(Score* s)
       {
       setZ(NOTE * 100 - 50);
       setSelectable(false);
+      _next = 0;
       }
 
 //---------------------------------------------------------
@@ -1047,9 +1050,8 @@ void LedgerLine::layout()
 void Chord::setMag(qreal val)
       {
       ChordRest::setMag(val);
-      int n = _ledgerLines.size();
-      for (int i = 0; i < n; ++i)
-            _ledgerLines.at(i)->setMag(val);
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            ll->setMag(val);
       if (_stem)
             _stem->setMag(val);
       if (_hook)
@@ -1062,7 +1064,7 @@ void Chord::setMag(qreal val)
             _tremolo->setMag(val);
       if (_glissando)
             _glissando->setMag(val);
-      n = _notes.size();
+      int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setMag(val);
       }
@@ -1291,9 +1293,7 @@ void Chord::layout2()
             int strack = staff2track(staffIdx());
             int etrack = strack + VOICES;
 
-            int n = _ledgerLines.size();
-            for (int i = 0; i < n; ++i) {
-                  LedgerLine* h = _ledgerLines.at(i);
+            for (LedgerLine* h = _ledgerLines; h; h = h->next()) {
                   Spatium len(h->len());
                   qreal y   = h->y();
                   qreal x   = h->x();
@@ -1301,13 +1301,10 @@ void Chord::layout2()
                   qreal cx  = h->measureXPos();
 
                   for (int track = strack; track < etrack; ++track) {
-                        Element* e = s->element(track);
+                        Chord* e = static_cast<Chord*>(s->element(track));
                         if (!e || e->type() != CHORD)
                               continue;
-                        QVector<LedgerLine*>* lll = static_cast<Chord*>(e)->ledgerLines();
-                        int nn = lll->size();
-                        for (int ii = 0; ii < nn; ++ii) {
-                              LedgerLine* ll = lll->at(ii);
+                        for (LedgerLine* ll = e->ledgerLines(); ll; ll = ll->next()) {
                               if (ll->y() != y)
                                     continue;
 
@@ -1344,8 +1341,9 @@ void Chord::layout()
 
       qreal _spatium  = spatium();
 
-      qDeleteAll(_ledgerLines);
-      _ledgerLines.clear();
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            delete ll;
+      _ledgerLines = 0;
 
       qreal lx         = 0.0;
       Note*  upnote    = upNote();
@@ -1497,9 +1495,8 @@ void Chord::layout()
 
             addLedgerLines(stemX, staffMove());
 
-            n = _ledgerLines.size();
-            for (int i = 0; i < n; ++i)
-                  _ledgerLines.at(i)->layout();
+            for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+                  ll->layout();
             }
 
       //
@@ -1589,11 +1586,8 @@ void Chord::layout()
             note->layout2();
             bb |= note->bbox().translated(note->pos());
             }
-      n = _ledgerLines.size();
-      for (int i = 0; i < n; ++i) {
-            const LedgerLine* l = _ledgerLines.at(i);
-            bb |= l->bbox().translated(l->pos());
-            }
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            bb |= ll->bbox().translated(ll->pos());
       n = _articulations.size();
       for (int i = 0; i < n; ++i) {
             Articulation* a = _articulations.at(i);
@@ -1902,9 +1896,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // reserve space for slur
       bool botGap = false;
       bool topGap = false;
-      int n = spannerFor().size();
-      for (int i = 0; i < n; ++i) {
-            Spanner* sp = spannerFor().at(i);
+      for (Spanner* sp = spannerFor(); sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                  continue;
             Slur* s = static_cast<Slur*>(sp);
@@ -1913,9 +1905,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             else
                   botGap = true;
             }
-      n = spannerBack().size();
-      for (int i = 0; i < n; ++i) {
-            Spanner* sp = spannerBack().at(i);
+      for (Spanner* sp = spannerBack(); sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                  continue;
             Slur* s = static_cast<Slur*>(sp);

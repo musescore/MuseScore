@@ -42,8 +42,8 @@ class ChordRest : public DurationElement {
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
 
-      QList<Spanner*> _spannerFor;
-      QList<Spanner*> _spannerBack;
+      Spanner* _spannerFor;
+      Spanner* _spannerBack;
       QList<Element*> _annotations;
 
    protected:
@@ -103,8 +103,8 @@ class ChordRest : public DurationElement {
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
 
-      QList<Spanner*> spannerFor() const        { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const       { return _spannerBack;        }
+      Spanner* spannerFor() const               { return _spannerFor;         }
+      Spanner* spannerBack() const              { return _spannerBack;        }
 
       void addSlurFor(Slur* s)                  { addSpannerFor((Spanner*)s);  }
       void addSlurBack(Slur* s)                 { addSpannerBack((Spanner*)s);    }

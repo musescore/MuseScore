@@ -64,12 +64,14 @@ Articulation* ChordRest::hasArticulation(const Articulation* aa)
 ChordRest::ChordRest(Score* s)
    : DurationElement(s)
       {
-      _beam      = 0;
-      _small     = false;
-      _beamMode  = BEAM_AUTO;
-      _up        = true;
-      _staffMove = 0;
-      _tabDur    = 0;
+      _beam        = 0;
+      _small       = false;
+      _beamMode    = BEAM_AUTO;
+      _up          = true;
+      _staffMove   = 0;
+      _tabDur      = 0;
+      _spannerFor  = 0;
+      _spannerBack = 0;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -101,6 +103,8 @@ ChordRest::ChordRest(const ChordRest& cr)
             nl->setTrack(track());
             _lyricsList.append(nl);
             }
+      _spannerFor  = 0;
+      _spannerBack = 0;
       }
 
 //---------------------------------------------------------
@@ -181,9 +185,9 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.fTag("duration", duration());
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-      foreach(Spanner* s, _spannerFor)
+      for(Spanner* s = _spannerFor; s; s = s->next())
             xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
-      foreach(Spanner* s, _spannerBack)
+      for(Spanner* s = _spannerBack; s; s = s->next())
             xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
 #ifndef NDEBUG
       if (_beam && (score()->testMode() || !_beam->generated()))
@@ -574,9 +578,7 @@ void ChordRest::layoutArticulations()
       bool botGap = false;
       bool topGap = false;
 
-      n = _spannerFor.size();
-      for (int i = 0; i < n; ++i) {
-            Spanner* sp = _spannerFor.at(i);
+      for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                   continue;
             Slur* s = static_cast<Slur*>(sp);
@@ -585,9 +587,7 @@ void ChordRest::layoutArticulations()
             else
                   botGap = true;
             }
-      n = _spannerBack.size();
-      for (int i = 0; i < n; ++i) {
-            Spanner* sp = _spannerBack.at(i);
+      for (Spanner* sp = _spannerBack; sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                   continue;
             Slur* s = static_cast<Slur*>(sp);
@@ -681,49 +681,63 @@ void ChordRest::layoutArticulations()
       }
 
 //---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void ChordRest::addSpannerFor(Spanner* s)
-      {
-      int idx = _spannerFor.indexOf(s);
-      if (idx >= 0) {
-            qDebug("ChordRest::setSpannerFor(): already there");
-            return;
-            }
-      _spannerFor.append(s);
-      }
-
-//---------------------------------------------------------
 //   addSpannerBack
 //---------------------------------------------------------
 
-void ChordRest::addSpannerBack(Spanner* s)
+void ChordRest::addSpannerBack(Spanner* e)
       {
-      int idx = _spannerBack.indexOf(s);
-      if (idx >= 0) {
-            qDebug("ChordRest::setSlurBack(): already there");
-            return;
-            }
-      _spannerBack.append(s);
-      }
-
-//---------------------------------------------------------
-//   removeSpannerFor
-//---------------------------------------------------------
-
-bool ChordRest::removeSpannerFor(Spanner* s)
-      {
-      return _spannerFor.removeOne(s);
+      e->setNext(_spannerBack);
+      _spannerBack = e;
       }
 
 //---------------------------------------------------------
 //   removeSpannerBack
 //---------------------------------------------------------
 
-bool ChordRest::removeSpannerBack(Spanner* s)
+bool ChordRest::removeSpannerBack(Spanner* e)
       {
-      return _spannerBack.removeOne(s);
+      Spanner* sp = _spannerBack;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerBack = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   addSpannerFor
+//---------------------------------------------------------
+
+void ChordRest::addSpannerFor(Spanner* e)
+      {
+      e->setNext(_spannerFor);
+      _spannerFor = e;
+      }
+
+bool ChordRest::removeSpannerFor(Spanner* e)
+      {
+      Spanner* sp = _spannerFor;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerFor = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
       }
 
 //---------------------------------------------------------
