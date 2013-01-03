@@ -1012,19 +1012,20 @@ bool Score::read(const QDomElement& de)
                   slur->setStartElement(cr2);
                   slur->setEndElement(cr1);
                   }
+#if 1 // DEBUG
             int n1 = 0;
             int n2 = 0;
-            foreach(Spanner* s, cr1->spannerFor()) {
+            for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
                   if (s == slur)
                         ++n1;
                   }
-            foreach(Spanner* s, cr2->spannerBack()) {
+            for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
                   if (s == slur)
                         ++n2;
                   }
-            if (n1 != 1 || n2 != 1) {
-                  qDebug("Slur references bad: %d %d\n", n1, n2);
-                  }
+            if (n1 != 1 || n2 != 1)
+                  qDebug("Slur references bad: %d %d", n1, n2);
+#endif
             }
       spanner.clear();
       connectTies();
@@ -1280,7 +1281,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               }
                         e->write(xml);
                         }
-                  foreach (Spanner* e, segment->spannerFor()) {
+                  for (Spanner* e = segment->spannerFor(); e; e = e->next()) {
                         if (e->track() == track && !e->generated()) {
                               if (needTick) {
                                     xml.tag("tick", segment->tick() - xml.tickDiff);
@@ -1291,7 +1292,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               e->write(xml);
                               }
                         }
-                  foreach(Spanner* e, segment->spannerBack()) {
+                  for (Spanner* e = segment->spannerBack(); e; e = e->next()) {
                         if (e->track() == track && !e->generated()) {
                               if (needTick) {
                                     xml.tag("tick", segment->tick() - xml.tickDiff);
@@ -1337,9 +1338,9 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               }
 #endif
                         cr->writeTuplet(xml);
-                        foreach(Spanner* slur, cr->spannerFor()) {
+                        for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
                               bool found = false;
-                              foreach(Spanner* slur1, spanner) {
+                              foreach (Spanner* slur1, spanner) {
                                     if (slur1 == slur) {
                                           found = true;
                                           break;
@@ -1351,9 +1352,9 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                     slur->write(xml);
                                     }
                               }
-                        foreach(Spanner* slur, cr->spannerBack()) {
+                        for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
                               bool found = false;
-                              foreach(Spanner* slur1, spanner) {
+                              foreach (Spanner* slur1, spanner) {
                                     if (slur1 == slur) {
                                           found = true;
                                           break;

@@ -499,11 +499,11 @@ Score::FileError Score::read114(const QDomElement& de)
                         }
                   int n1 = 0;
                   int n2 = 0;
-                  foreach(Spanner* s, cr1->spannerFor()) {
+                  for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
                         if (s == slur)
                               ++n1;
                         }
-                  foreach(Spanner* s, cr2->spannerBack()) {
+                  for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
                         if (s == slur)
                               ++n2;
                         }

@@ -166,7 +166,7 @@ void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
       spanner.clear();
       QMap<int, Spanner*> localSpanner;
       for (Segment* s = firstMeasure()->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
-            foreach(Spanner* e, s->spannerFor())
+            for (Spanner* e = s->spannerFor(); e; e = e->next())
                   e->setId(-1);
             }
       int dstStaffStart = dst->staffIdx();

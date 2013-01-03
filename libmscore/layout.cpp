@@ -612,10 +612,9 @@ void Score::doLayout()
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
-                        int n = segment->spannerFor().size();
-                        for (int i = 0; i < n; ++i)
-                              segment->spannerFor().at(i)->layout();
-                        n = segment->annotations().size();
+                        for (Spanner* sp = segment->spannerFor(); sp; sp = sp->next())
+                              sp->layout();
+                        int n = segment->annotations().size();
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }

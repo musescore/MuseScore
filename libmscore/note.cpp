@@ -140,6 +140,8 @@ Note::Note(Score* s)
       _pitch             = 0;
       _tuning            = 0.0;
       _accidental        = 0;
+      _spannerFor        = 0;
+      _spannerBack       = 0;
       _mirror            = false;
       _userMirror        = MScore::DH_AUTO;
       _small             = false;
@@ -201,6 +203,9 @@ Note::Note(const Note& n)
       _small             = n._small;
       _dotPosition       = n._dotPosition;
       _accidental        = 0;
+      _spannerFor        = 0;
+      _spannerBack       = 0;
+
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
 
@@ -371,7 +376,7 @@ void Note::addSpanner(Spanner* l)
       Element* e = l->endElement();
       if (e)
             static_cast<Note*>(e)->addSpannerBack(l);
-      _spannerFor.append(l);
+      addSpannerFor(l);
       foreach(SpannerSegment* ss, l->spannerSegments()) {
             Q_ASSERT(ss->spanner() == l);
             if (ss->system())
@@ -386,11 +391,11 @@ void Note::addSpanner(Spanner* l)
 void Note::removeSpanner(Spanner* l)
       {
       if (!static_cast<Note*>(l->endElement())->removeSpannerBack(l)) {
-            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p, size %d", this, l->name(), l, _spannerFor.size());
+            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
             // abort();
             }
-      if (!_spannerFor.removeOne(l)) {
-            qDebug("Note(%p): cannot remove spannerFor %s %p, size %d", this, l->name(), l, _spannerFor.size());
+      if (!removeSpannerFor(l)) {
+            qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
             // abort();
             }
       foreach(SpannerSegment* ss, l->spannerSegments()) {
@@ -643,13 +648,13 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_HEAD_TYPE);
       writeProperty(xml, P_VELO_TYPE);
 
-      foreach(Spanner* e, _spannerFor) {
+      for(Spanner* e = _spannerFor; e; e = e->next()) {
             e->setId(++xml.spannerId);
             e->write(xml);
             }
-      foreach(Spanner* e, _spannerBack) {
+      for(Spanner* e = _spannerBack; e; e = e->next())
             xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
-            }
+
       _pitch = rpitch;
       _tpc   = rtpc;
       xml.etag();
@@ -873,7 +878,7 @@ void Note::read(const QDomElement& de)
                   Spanner* e = score()->findSpanner(id);
                   if (e) {
                         e->setEndElement(this);
-                        _spannerBack.append(e);
+                        addSpannerBack(e);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
@@ -884,7 +889,7 @@ void Note::read(const QDomElement& de)
                   sp->read(e);
                   sp->setAnchor(Spanner::ANCHOR_NOTE);
                   sp->setStartElement(this);
-                  _spannerFor.append(sp);
+                  addSpannerFor(sp);
                   sp->setParent(this);
                   score()->spanner.append(sp);
                   }
@@ -1971,5 +1976,65 @@ void Note::setOnTimeOffset(int)
 void Note::setOffTimeOffset(int)
       {
       // TODO
+      }
+
+//---------------------------------------------------------
+//   addSpannerBack
+//---------------------------------------------------------
+
+void Note::addSpannerBack(Spanner* e)
+      {
+      e->setNext(_spannerBack);
+      _spannerBack = e;
+      }
+
+//---------------------------------------------------------
+//   removeSpannerBack
+//---------------------------------------------------------
+
+bool Note::removeSpannerBack(Spanner* e)
+      {
+      Spanner* sp = _spannerBack;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerBack = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   addSpannerFor
+//---------------------------------------------------------
+
+void Note::addSpannerFor(Spanner* e)
+      {
+      e->setNext(_spannerFor);
+      _spannerFor = e;
+      }
+
+bool Note::removeSpannerFor(Spanner* e)
+      {
+      Spanner* sp = _spannerFor;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerFor = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
       }
 
