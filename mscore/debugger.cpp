@@ -316,7 +316,7 @@ void Debugger::updateList(Score* s)
                                     new ElementItem(si, ms->_vspacerDown);
                               }
 
-                        foreach(Spanner* s, measure->spannerFor()) {
+                        for(Spanner* s = measure->spannerFor(); s; s = s->next()) {
                               SLine* sl = (SLine*)s;
                               ElementItem* si = new ElementItem(mi, s);
                               foreach(Element* ls, sl->spannerSegments())
@@ -346,7 +346,7 @@ void Debugger::updateList(Score* s)
 
                                           foreach(Articulation* a, chord->articulations())
                                                 new ElementItem(sei, a);
-                                          foreach(LedgerLine* h, *chord->ledgerLines())
+                                          for(LedgerLine* h = chord->ledgerLines(); h; h = h->next())
                                                 new ElementItem(sei, h);
                                           foreach(Note* note, chord->notes()) {
                                                 ElementItem* ni = new ElementItem(sei, note);
@@ -372,7 +372,7 @@ void Debugger::updateList(Score* s)
                                                       foreach(Element* el1, tie->spannerSegments())
                                                             new ElementItem(ti, el1);
                                                       }
-                                                foreach(Spanner* s, note->spannerFor()) {
+                                                for (Spanner* s = note->spannerFor(); s; s = s->next()) {
                                                       ElementItem* si = new ElementItem(ni, s);
                                                       foreach(Element* ls, s->spannerSegments())
                                                             new ElementItem(si, ls);
@@ -385,7 +385,7 @@ void Debugger::updateList(Score* s)
                                           ChordRest* cr = static_cast<ChordRest*>(e);
                                           if (cr->beam() && cr->beam()->elements().front() == cr)
                                                 new ElementItem(sei, cr->beam());
-                                          foreach(Spanner* slur, cr->spannerFor()) {
+                                          for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
                                                 ElementItem* sli = new ElementItem(sei, slur);
                                                 foreach(SpannerSegment* ss, slur->spannerSegments()) {
                                                       new ElementItem(sli, ss);
@@ -402,7 +402,7 @@ void Debugger::updateList(Score* s)
                                                 }
                                           }
                                     }
-                              foreach(Spanner* s, segment->spannerFor()) {
+                              for (Spanner* s = segment->spannerFor(); s; s = s->next()) {
                                     SLine* sl = (SLine*)s;
                                     ElementItem* si = new ElementItem(segItem, s);
                                     foreach(Element* ls, sl->spannerSegments())
@@ -823,14 +823,14 @@ void SegmentView::setElement(Element* e)
       sb.spannerFor->clear();
       sb.spannerBack->clear();
       sb.annotations->clear();
-      foreach(Spanner* sp, s->spannerFor()) {
+      for (Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
             QString s;
             s.setNum(long(sp), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)sp));
             sb.spannerFor->addItem(item);
             }
-      foreach(Spanner* sp, s->spannerBack()) {
+      for (Spanner* sp = s->spannerBack(); sp; sp = sp->next()) {
             QString s;
             s.setNum(long(sp), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -935,7 +935,7 @@ void ShowChordWidget::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.slurFor->clear();
-      foreach(Spanner* slur, chord->spannerFor()) {
+      for (Spanner* slur = chord->spannerFor(); slur; slur = slur->next()) {
             QString s;
             s.setNum(long(slur), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -943,7 +943,7 @@ void ShowChordWidget::setElement(Element* e)
             crb.slurFor->addItem(item);
             }
       crb.slurBack->clear();
-      foreach(Spanner* slur, chord->spannerBack()) {
+      for (Spanner* slur = chord->spannerBack(); slur; slur = slur->next()) {
             QString s;
             s.setNum(long(slur), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -960,7 +960,7 @@ void ShowChordWidget::setElement(Element* e)
             }
 
       cb.helplineList->clear();
-      foreach(LedgerLine* h, *chord->ledgerLines()) {
+      for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
             QString s;
             s.setNum(long(h), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1246,7 +1246,7 @@ void RestView::setElement(Element* e)
       crb.spaceR->setValue(rest->space().rw());
 
       crb.slurFor->clear();
-      foreach(Spanner* slur, rest->spannerFor()) {
+      for (Spanner* slur = rest->spannerFor(); slur; slur = slur->next()) {
             QString s;
             s.setNum(long(slur), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1254,7 +1254,7 @@ void RestView::setElement(Element* e)
             crb.slurFor->addItem(item);
             }
       crb.slurBack->clear();
-      foreach(Spanner* slur, rest->spannerBack()) {
+      for (Spanner* slur = rest->spannerBack(); slur; slur = slur->next()) {
             QString s;
             s.setNum(long(slur), 16);
             QListWidgetItem* item = new QListWidgetItem(s);

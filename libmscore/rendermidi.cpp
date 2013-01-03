@@ -303,7 +303,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                               }
                         }
                   }
-            foreach(Spanner* e, s->spannerFor()) {
+            for(Spanner* e = s->spannerFor(); e; e = e->next()) {
                   if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
                   if (e->type() == Element::PEDAL) {
@@ -497,7 +497,7 @@ void Score::updateVelo()
                                     break;
                               }
                         }
-                  foreach(Element* e, s->spannerFor()) {
+                  for (Spanner* e = s->spannerFor(); e; e = e->next()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
                         if (e->type() == Element::HAIRPIN) {
@@ -551,11 +551,11 @@ static int gateTime(Chord* chord)
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
                         continue;
-                  foreach(Spanner* spanner, cr->spannerFor()) {
+                  for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
                         if (spanner->type() == Element::SLUR)
                               slurs.append(static_cast<Slur*>(spanner));
                         }
-                  foreach(Spanner* spanner, cr->spannerBack()) {
+                  for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
                         if (spanner->type() == Element::SLUR)
                               slurs.removeOne(static_cast<Slur*>(spanner));
                         }
@@ -801,11 +801,11 @@ static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr == 0)
                   continue;
-            foreach(Spanner* spanner, cr->spannerFor()) {
+            for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
                   if (spanner->type() == Element::SLUR)
                         slurs->append(static_cast<Slur*>(spanner));
                   }
-            foreach(Spanner* spanner, cr->spannerBack()) {
+            for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
                   if (spanner->type() == Element::SLUR)
                         slurs->removeOne(static_cast<Slur*>(spanner));
                   }

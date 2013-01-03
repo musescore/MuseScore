@@ -1266,9 +1266,9 @@ RemoveElement::RemoveElement(Element* e)
       if (element->isChordRest()) {
             // remove any slurs pointing to this chor/rest
             ChordRest* cr = static_cast<ChordRest*>(element);
-            foreach(Spanner* s, cr->spannerFor())
+            for (Spanner* s = cr->spannerFor(); s; s = s->next())
                   score->undoRemoveElement(s);
-            foreach(Spanner* s, cr->spannerBack())
+            for (Spanner* s = cr->spannerBack(); s; s = s->next())
                   score->undoRemoveElement(s);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undoRemoveElement(cr->tuplet());

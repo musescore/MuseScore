@@ -73,6 +73,7 @@ void SpannerSegment::setSystem(System* s)
 Spanner::Spanner(Score* s)
    : Element(s)
       {
+      _next         = 0;
       _startElement = 0;
       _endElement   = 0;
       _anchor       = ANCHOR_SEGMENT;
@@ -86,6 +87,7 @@ Spanner::Spanner(Score* s)
 Spanner::Spanner(const Spanner& s)
    : Element(s)
       {
+      _next         = 0;
       _startElement = s._startElement;
       _endElement   = s._endElement;
       _anchor       = s._anchor;
@@ -243,3 +245,4 @@ void Spanner::addSpannerBack()
       else
             qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
       }
+

@@ -35,9 +35,8 @@ class TrackList : public QList<Element*>
 
       Tuplet* writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const;
       void append(Element*, QHash<Spanner*, Spanner*>*);
-      void readSpanner(int track, const QList<Spanner*>& spannerFor,
-         const QList<Spanner*>& spannerBack, ChordRest* dst,
-         QHash<Spanner*,Spanner*>* map);
+      void readSpanner(int track, Spanner* spannerFor,
+         Spanner* spannerBack, ChordRest* dst, QHash<Spanner*,Spanner*>* map);
       void writeSpanner(int track, ChordRest* src, ChordRest* dst,
          Segment* segment, QHash<Spanner*, Spanner*>* map) const;
 

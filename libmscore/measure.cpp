@@ -113,6 +113,7 @@ Measure::Measure(Score* s)
       _repeatFlags           = 0;
 
       int n = _score->nstaves();
+      staves.reserve(n);
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
             MStaff* s    = new MStaff;
             Staff* staff = score()->staff(staffIdx);
@@ -126,6 +127,8 @@ Measure::Measure(Score* s)
       _minWidth1             = 0.0;
       _minWidth2             = 0.0;
 
+      _spannerFor            = 0;
+      _spannerBack           = 0;
       _no                    = 0;
       _noOffset              = 0;
       _noText                = 0;
@@ -160,6 +163,8 @@ Measure::Measure(const Measure& m)
       _minWidth1             = m._minWidth1;
       _minWidth2             = m._minWidth2;
 
+      _spannerFor            = 0;
+      _spannerBack           = 0;
       _no                    = m._no;
       _noOffset              = m._noOffset;
       _noText                = 0;
@@ -186,7 +191,7 @@ void Measure::setScore(Score* score)
       MeasureBase::setScore(score);
       for (Segment* s = first(); s; s = s->next())
             s->setScore(score);
-      foreach(Spanner* s, _spannerFor)
+      for(Spanner* s = _spannerFor; s; s = s->next())
             s->setScore(score);
       }
 
@@ -215,8 +220,7 @@ Measure::~Measure()
             delete s;
             s = ns;
             }
-      foreach(MStaff* m, staves)
-            delete m;
+      qDeleteAll(staves);
       delete _noText;
       }
 
@@ -618,12 +622,12 @@ void Measure::layout2()
                   Element* el = s->element(track);
                   if (el) {
                         ChordRest* cr = static_cast<ChordRest*>(el);
-                        foreach(Spanner* sp, static_cast<ChordRest*>(el)->spannerFor())
+                        for (Spanner* sp = cr->spannerFor(); sp; sp = sp->next())
                               sp->layout();
                         if (cr->type() == CHORD) {
                               Chord* c = static_cast<Chord*>(cr);
                               foreach(const Note* note, c->notes()) {
-                                    foreach(Spanner* sp, note->spannerFor())
+                                    for(Spanner* sp = note->spannerFor(); sp; sp = sp->next())
                                           sp->layout();
                                     }
                               }
@@ -635,9 +639,8 @@ void Measure::layout2()
                         }
                   }
             }
-      n = spannerFor().size();
-      for (int i = 0; i < n; ++i)
-            spannerFor().at(i)->layout();
+      for (Spanner* sp = spannerFor(); sp; sp = sp->next())
+            sp->layout();
       }
 
 //---------------------------------------------------------
@@ -969,7 +972,7 @@ void Measure::add(Element* el)
                   Measure* m = volta->endMeasure();
                   if (m)
                         m->addSpannerBack(volta);
-                  _spannerFor.append(volta);
+                  addSpannerFor(volta);
                   foreach(SpannerSegment* ss, volta->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
@@ -1043,7 +1046,7 @@ void Measure::remove(Element* el)
                   Volta* volta = static_cast<Volta*>(el);
                   Measure* m = volta->endMeasure();
                   m->removeSpannerBack(volta);
-                  if (!_spannerFor.removeOne(volta)) {
+                  if (!removeSpannerFor(volta)) {
                         qDebug("Measure:remove: %s not found", volta->name());
                         Q_ASSERT(volta->score() == score());
                         }
@@ -1816,13 +1819,13 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
-      foreach(Spanner* e, _spannerFor) {
+      for(Spanner* e = _spannerFor; e; e = e->next()) {
             if (e->track() >= strack && e->track() < etrack && !e->generated()) {
                   e->setId(++xml.spannerId);
                   e->write(xml);
                   }
             }
-      foreach(Spanner* e, _spannerBack) {
+      for(Spanner* e = _spannerBack; e; e = e->next()) {
             if (e->track() >= strack && e->track() < etrack && !e->generated()) {
                   xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
                   }
@@ -3204,7 +3207,6 @@ void Measure::layoutX(qreal stretch)
       //---------------------------------------------------
 
       SpringMap springs;
-
       qreal minimum = xpos[0];
       for (int i = 0; i < segs; ++i) {
             qreal str = 1.0;
@@ -3363,17 +3365,13 @@ void Measure::layoutStage1()
                                           break;
                                           }
                                     }
-                              n = s->spannerFor().size();
-                              for (int i = 0; i < n; ++i) {
-                                    Spanner* sp = s->spannerFor().at(i);
+                              for (Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
                                     if (sp->type() == VOLTA) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
-                              n = s->spannerBack().size();
-                              for (int i = 0; i < n; ++i) {
-                                    Spanner* sp = s->spannerBack().at(i);
+                              for (Spanner* sp = s->spannerBack(); sp; sp = sp->next()) {
                                     if (sp->type() == VOLTA) {
                                           setBreakMMRest(true);
                                           break;
@@ -3399,10 +3397,8 @@ void Measure::layoutStage1()
                         layoutChords0(segment, staffIdx * VOICES);
                   }
             }
-      int n = _spannerFor.size();
-      for (int i = 0; i < n; ++i) {
-            Spanner* spanner = _spannerFor.at(i);
-            if (spanner->type() == Element::VOLTA)
+      for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
+            if (sp->type() == Element::VOLTA)
                   setBreakMMRest(true);
             }
       MeasureBase* mb = prev();
@@ -3411,10 +3407,8 @@ void Measure::layoutStage1()
             if (pm->endBarLineType() != NORMAL_BAR
                && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
                   setBreakMMRest(true);
-            int n = pm->_spannerBack.size();
-            for (int i = 0; i < n; ++i) {
-                  Spanner* spanner = pm->_spannerBack.at(i);
-                  if (spanner->type() == Element::VOLTA)
+            for (Spanner* sp = _spannerBack; sp; sp = sp->next()) {
+                  if (sp->type() == Element::VOLTA)
                         setBreakMMRest(true);
                   }
             }
@@ -3562,7 +3556,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
                                           }
                                     ncr->setTuplet(nt);
                                     }
-                              foreach(Spanner* sp, ocr->spannerFor()) {
+                              for (Spanner* sp = ocr->spannerFor(); sp; sp = sp->next()) {
                                     if (sp->type() != SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);
@@ -3572,7 +3566,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
                                     ncr->addSlurFor(slur);
                                     spannerMap->add(s, slur);
                                     }
-                              foreach(Spanner* sp, ocr->spannerBack()) {
+                              for (Spanner* sp = ocr->spannerBack(); sp; sp = sp->next()) {
                                     if (sp->type() != SLUR)
                                           continue;
                                     Slur* s = static_cast<Slur*>(sp);
@@ -3628,7 +3622,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
                         ne->setTrack(track);
                         s->add(ne);
                         }
-                  foreach(Spanner* spanner, oseg->spannerFor()) {
+                  for (Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                         if (spanner->track() != track)
                               continue;
                         Spanner* nsp = static_cast<Spanner*>(spanner->clone());
@@ -3637,7 +3631,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
                         spannerMap->add(spanner, nsp);
                         nsp->setStartElement(s);
                         }
-                  foreach(Spanner* osp, oseg->spannerBack()) {
+                  for (Spanner* osp = oseg->spannerBack(); osp; osp = osp->next()) {
                         if (osp->track() != track)
                               continue;
                         Spanner* spanner = spannerMap->findNew(osp);
@@ -3747,3 +3741,64 @@ QVariant Measure::propertyDefault(P_ID) const
       {
       return QVariant();
       }
+
+//---------------------------------------------------------
+//   addSpannerBack
+//---------------------------------------------------------
+
+void Measure::addSpannerBack(Spanner* e)
+      {
+      e->setNext(_spannerBack);
+      _spannerBack = e;
+      }
+
+//---------------------------------------------------------
+//   removeSpannerBack
+//---------------------------------------------------------
+
+bool Measure::removeSpannerBack(Spanner* e)
+      {
+      Spanner* sp = _spannerBack;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerBack = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   addSpannerFor
+//---------------------------------------------------------
+
+void Measure::addSpannerFor(Spanner* e)
+      {
+      e->setNext(_spannerFor);
+      _spannerFor = e;
+      }
+
+bool Measure::removeSpannerFor(Spanner* e)
+      {
+      Spanner* sp = _spannerFor;
+      Spanner* prev = 0;
+      while (sp) {
+            if (sp == e) {
+                  if (prev)
+                        prev->setNext(sp->next());
+                  else
+                        _spannerFor = sp->next();
+                  return true;
+                  }
+            prev = sp;
+            sp = sp->next();
+            }
+      return false;
+      }
+

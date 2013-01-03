@@ -420,7 +420,7 @@ int SlurHandler::findSlur(const Slur* s) const
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) starting at this chord
-      foreach(const Spanner* sp, chord->spannerFor()) {
+      for(Spanner* sp = chord->spannerFor(); sp; sp = sp->next()) {
             if (sp->type() != Element::SLUR)
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
@@ -476,7 +476,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
 void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) stopping at this chord but not on slur list yet
-      foreach(const Spanner* sp, chord->spannerBack()) {
+      for(Spanner* sp = chord->spannerBack(); sp; sp = sp->next()) {
             if (sp->type() != Element::SLUR)
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
@@ -711,7 +711,7 @@ static void findTrills(Measure* measure, int strack, int etrack, TrillHash& tril
       // loop over all segments in this measure
       for (Segment* seg = measure->first(); seg; seg = seg->next()) {
             // loop over all spanners in this segment
-            foreach(const Element* e, seg->spannerFor()) {
+            for(Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
                   if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack) {
 
@@ -1183,7 +1183,7 @@ static QString tick2xml(const int ticks, int* dots)
 
 static Volta* findVolta(Measure* m, bool /*left*/)
       {
-      foreach(Spanner* el, m->spannerFor()) {
+      for(Spanner* el = m->spannerFor(); el; el = el->next()) {
             if (el->type() != Element::VOLTA)
                   continue;
             return (Volta*) el;
@@ -3502,7 +3502,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->subtype() == Segment::SegChordRest) {
-            foreach(const Element* e, seg->spannerFor()) {
+            for(Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
                   int wtrack = -1; // track to write spanner
 
@@ -3545,7 +3545,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->subtype() == Segment::SegChordRest) {
-            foreach(const Element* e, seg->spannerBack()) {
+            for(Spanner* e = seg->spannerBack(); e; e = e->next()) {
 
                   int wtrack = -1; // track to write spanner
 

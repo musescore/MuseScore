@@ -158,15 +158,14 @@ class Note : public Element {
       ElementList _el;        ///< fingering, other text, symbols or images
       Tie* _tieFor;
       Tie* _tieBack;
-//      Bend* _bend;
 
       NoteDot* _dots[3];
 
       NoteEventList _playEvents;
 
       int _lineOffset;        ///< Used during mouse dragging.
-      QList<Spanner*> _spannerFor;
-      QList<Spanner*> _spannerBack;
+      Spanner* _spannerFor;
+      Spanner* _spannerBack;
 
       virtual QRectF drag(const EditData& s);
       void endDrag();
@@ -297,12 +296,13 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
-      void addSpannerBack(Spanner* e)            { _spannerBack.append(e);     }
-      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)             { _spannerFor.append(e);      }
-      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e); }
+      Spanner* spannerFor() const                { return _spannerFor;         }
+      Spanner* spannerBack() const               { return _spannerBack;        }
+
+      void addSpannerBack(Spanner* e);
+      bool removeSpannerBack(Spanner* e);
+      void addSpannerFor(Spanner* e);
+      bool removeSpannerFor(Spanner* e);
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 

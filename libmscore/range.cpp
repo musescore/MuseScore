@@ -46,7 +46,7 @@ TrackList::~TrackList()
             Element* e = at(i);
             if (e->isChordRest()) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
-                  foreach(Spanner* sp, cr->spannerFor())
+                  for (Spanner* sp = cr->spannerFor(); sp; sp = sp->next())
                         delete sp;
                   foreach(Element* el, cr->annotations())
                         delete el;
@@ -65,11 +65,10 @@ TrackList::~TrackList()
 //   readSpanner
 //---------------------------------------------------------
 
-void TrackList::readSpanner(int track, const QList<Spanner*>& spannerFor,
-   const QList<Spanner*>& spannerBack, ChordRest* dst,
-   QHash<Spanner*,Spanner*>* map)
+void TrackList::readSpanner(int track, Spanner* spannerFor, Spanner* spannerBack,
+   ChordRest* dst, QHash<Spanner*,Spanner*>* map)
       {
-      foreach (Spanner* oldSpanner, spannerFor) {
+      for (Spanner* oldSpanner = spannerFor; oldSpanner; oldSpanner = oldSpanner->next()) {
             if (track != -1 && oldSpanner->track() != track)
                   continue;
             Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
@@ -83,7 +82,7 @@ void TrackList::readSpanner(int track, const QList<Spanner*>& spannerFor,
                   map->remove(oldSpanner);
                   }
             }
-      foreach (Spanner* oldSpanner, spannerBack) {
+      for (Spanner* oldSpanner = spannerBack; oldSpanner; oldSpanner = oldSpanner->next()) {
             if (track != -1 && oldSpanner->track() != track)
                   continue;
             Spanner* newSpanner = map->value(oldSpanner);
@@ -114,7 +113,7 @@ void TrackList::readSpanner(int track, const QList<Spanner*>& spannerFor,
 void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
    Segment* segment, QHash<Spanner*, Spanner*>* map) const
       {
-      foreach(Spanner* oldSpanner, src->spannerFor()) {
+      for (Spanner* oldSpanner = src->spannerFor(); oldSpanner; oldSpanner = oldSpanner->next()) {
             Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
             newSpanner->setTrack(track);
             map->insert(oldSpanner, newSpanner);
@@ -134,7 +133,7 @@ void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
                   }
             }
 
-      foreach(Spanner* oldSpanner, src->spannerBack()) {
+      for (Spanner* oldSpanner = src->spannerBack(); oldSpanner; oldSpanner = oldSpanner->next()) {
             Spanner* newSpanner = map->value(oldSpanner);
             if (newSpanner) {
                   if (newSpanner->type() == Element::SLUR) {
@@ -190,7 +189,7 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
                && back()->type() == Element::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
-            if (s && s->spannerFor().isEmpty() && s->spannerBack().isEmpty()) {
+            if (s && !s->spannerFor() && !s->spannerBack()) {
                   // akkumulate rests
                   Rest* rest = static_cast<Rest*>(back());
                   Fraction d = rest->duration();

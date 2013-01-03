@@ -69,6 +69,8 @@ class StemSlash : public Element {
 class LedgerLine : public Line {
       Q_OBJECT
 
+      LedgerLine* _next;
+
    public:
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&);
@@ -78,6 +80,8 @@ class LedgerLine : public Line {
       Chord* chord() const { return (Chord*)parent(); }
       virtual void layout();
       qreal measureXPos() const;
+      LedgerLine* next() const    { return _next; }
+      void setNext(LedgerLine* l) { _next = l;    }
       };
 
 //---------------------------------------------------------
@@ -96,7 +100,7 @@ class Chord : public ChordRest {
       Q_PROPERTY(QDeclarativeListProperty<Lyrics> lyrics READ qmlLyrics);
 
       QList<Note*> _notes;                // sorted to increasing pitch
-      QVector<LedgerLine*> _ledgerLines;
+      LedgerLine*  _ledgerLines;    // single linked list
 
       Stem*      _stem;
       Hook*      _hook;
@@ -139,7 +143,7 @@ class Chord : public ChordRest {
       void setStemDirection(MScore::Direction d)     { _stemDirection = d; }
       MScore::Direction stemDirection() const        { return _stemDirection; }
 
-      QVector<LedgerLine*>* ledgerLines()      { return &_ledgerLines; }
+      LedgerLine* ledgerLines()           { return _ledgerLines; }
 
       void layoutStem1();
       void layoutStem();
@@ -151,9 +155,7 @@ class Chord : public ChordRest {
       const QList<Note*>& notes() const      { return _notes; }
 
       // Chord has at least one Note
-      // Note* upNote() const                   { return _notes.size() ? _notes.back() : 0; }
       Note* upNote() const                   { return _notes.back(); }
-      // Note* downNote() const                 { return _notes.size() ? _notes.front(): 0; }
       Note* downNote() const                 { return _notes.front(); }
       virtual int upLine() const;
       virtual int downLine() const;
