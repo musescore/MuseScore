@@ -1786,7 +1786,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                              ks->showCourtesy(), ks->showNaturals()));
                                           }
                                     // change bar line to qreal bar line
-                                    m->setEndBarLineType(DOUBLE_BAR, true);
+                                    // m->setEndBarLineType(DOUBLE_BAR, true); // this caused issue #12918
                                     }
                               }
                         if (!showCourtesySig) {
