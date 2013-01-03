@@ -5291,10 +5291,10 @@
         <string>62</string>
         <string>69</string>
         </Tablature>
-      <clef>C3</clef>
+      <clef>G8vb</clef>
       <barlineSpan>1</barlineSpan>
-      <aPitchRange>48-87</aPitchRange>
-      <pPitchRange>48-93</pPitchRange>
+      <aPitchRange>43-74</aPitchRange>
+      <pPitchRange>43-82</pPitchRange>
       <Channel>
         <program value="24"/>
         </Channel>
