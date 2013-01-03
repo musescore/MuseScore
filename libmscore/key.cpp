@@ -225,14 +225,12 @@ void KeyList::read(const QDomElement& de, Score* cs)
 
 int transposeKey(int key, const Interval& interval)
       {
-                          // Cb  Gb Db Ab   Eb  Bb   F  C   G   D   A   E   B   F#  C#
-                          // -7  -6 -5 -4   -3  -2  -1  0   1   2   3   4   5   6   7
-      static int t1[] = {     7,  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
-      static int t2[] = {    -7, -6,-5, -4, -3, -2, -1, 0,  1,  2,  3,  4,  5,  6,  7 };
-
-      int tpc = t1[key + 7];
+      int tpc = key+14;
       tpc = transposeTpc(tpc, interval, false);
-      return t2[tpc - 7];
+      // check for valid key sigs
+      if (tpc > 21) tpc-=12; // no more than 7 sharps in keysig
+      if (tpc < 7) tpc+=12; // no more than 7 flats in keysig
+      return (tpc-14);
       }
 
 //---------------------------------------------------------
