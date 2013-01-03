@@ -75,6 +75,7 @@ class Spanner : public Element {
       Q_PROPERTY(Element* endElement   READ endElement   WRITE setEndElement)
       Q_PROPERTY(Anchor   anchor       READ anchor       WRITE setAnchor)
 
+      Spanner* _next;
       Element* _startElement;       // can be Note, ChordRest, Segment or Measure
       Element* _endElement;         // depending on anchor
 
@@ -131,6 +132,8 @@ class Spanner : public Element {
       bool removeSpannerBack();
       void addSpannerBack();
       virtual void setYoff(qreal) {};    // used in musicxml import
+      Spanner* next() const     { return _next; }
+      void setNext(Spanner* sp) { _next = sp; }
       };
 
 Q_DECLARE_METATYPE(Spanner::Anchor)

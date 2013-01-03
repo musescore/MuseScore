@@ -27,7 +27,7 @@
 Volta* Score::searchVolta(int tick) const
       {
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            foreach(Spanner* e, m->spannerFor()) {
+            for(Spanner* e = m->spannerFor(); e; e = e->next()) {
                   if (e->type() != Element::VOLTA)
                         continue;
                   Volta* volta = static_cast<Volta*>(e);

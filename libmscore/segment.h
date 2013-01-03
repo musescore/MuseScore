@@ -88,8 +88,9 @@ class Segment : public Element {
       Spatium _extraTrailingSpace;
       QList<qreal>   _dotPosX;     ///< size = staves
 
-      QList<Spanner*> _spannerFor;
-      QList<Spanner*> _spannerBack;
+      Spanner* _spannerFor;
+      Spanner* _spannerBack;
+
       QList<Element*> _annotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
@@ -164,12 +165,12 @@ class Segment : public Element {
 
       bool splitsTuplet() const;
 
-      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
-      void addSpannerBack(Spanner* e)            { _spannerBack.append(e);     }
-      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)             { _spannerFor.append(e);      }
-      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e); }
+      Spanner* spannerFor() const                { return _spannerFor;         }
+      Spanner* spannerBack() const               { return _spannerBack;        }
+      void addSpannerBack(Spanner* e);
+      bool removeSpannerBack(Spanner* e);
+      void addSpannerFor(Spanner* e);
+      bool removeSpannerFor(Spanner* e);
 
       const QList<Element*>& annotations() const { return _annotations;        }
       void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
