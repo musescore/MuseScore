@@ -1304,7 +1304,7 @@ void Chord::layout2()
                         Element* e = s->element(track);
                         if (!e || e->type() != CHORD)
                               continue;
-                        QList<LedgerLine*>* lll = static_cast<Chord*>(e)->ledgerLines();
+                        QVector<LedgerLine*>* lll = static_cast<Chord*>(e)->ledgerLines();
                         int nn = lll->size();
                         for (int ii = 0; ii < nn; ++ii) {
                               LedgerLine* ll = lll->at(ii);

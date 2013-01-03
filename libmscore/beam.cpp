@@ -1173,8 +1173,8 @@ static Bm beamMetric1(bool up, char l1, char l2)
 static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
       {
       int n = cl.size();
-      const Chord* c1;
-      const Chord* c2;
+      const Chord* c1 = 0;
+      const Chord* c2 = 0;
       int i1, i2;
       for (i1 = 0; i1 < n; ++i1) {
             if (cl[i1]->type() == Element::CHORD) {

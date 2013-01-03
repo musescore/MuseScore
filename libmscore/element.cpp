@@ -274,18 +274,6 @@ Element::~Element()
                   delete _links;
                   }
             }
-      if (score()) {
-            foreach(Element* e, score()->selection().elements()) {
-                  if (e == this) {
-//                        if (MScore::debugMode)
-                              qDebug("======~Element: %p still in selection! generated %d\n",
-                                 this, generated());
-//                        if (MScore::debugMode)
-//                              abort();
-                        score()->deselect(this);
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -304,9 +292,6 @@ Element::Element(Score* s) :
    _track(-1),
    _color(MScore::defaultColor),
    _mag(1.0),
-//   _pos(QPointF()),
-//   _userOff(QPointF()),
-//   _readPos(QPointF()),
    _tag(1),
    _score(s),
    itemDiscovered(0)

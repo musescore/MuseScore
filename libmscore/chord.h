@@ -96,7 +96,7 @@ class Chord : public ChordRest {
       Q_PROPERTY(QDeclarativeListProperty<Lyrics> lyrics READ qmlLyrics);
 
       QList<Note*> _notes;                // sorted to increasing pitch
-      QList<LedgerLine*> _ledgerLines;
+      QVector<LedgerLine*> _ledgerLines;
 
       Stem*      _stem;
       Hook*      _hook;
@@ -139,7 +139,7 @@ class Chord : public ChordRest {
       void setStemDirection(MScore::Direction d)     { _stemDirection = d; }
       MScore::Direction stemDirection() const        { return _stemDirection; }
 
-      QList<LedgerLine*>* ledgerLines()      { return &_ledgerLines; }
+      QVector<LedgerLine*>* ledgerLines()      { return &_ledgerLines; }
 
       void layoutStem1();
       void layoutStem();
