@@ -313,7 +313,7 @@ int intervalPenalty[13] = {
 //   enharmonicSpelling
 //---------------------------------------------------------
 
-static const bool enharmonicSpelling[15][34] = {
+static const int enharmonicSpelling[15][34] = {
       {
 //Ces f  c  g  d  a  e  b
          1, 1, 1, 1, 1, 1, // bb

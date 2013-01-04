@@ -2334,7 +2334,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   if (s->tick() < tick() + ticks())
                         break;
                   if (s->subtype() == Segment::SegBarLine) {
-                        printf("reduce BarLine to EndBarLine\n");
+                        qDebug("reduce BarLine to EndBarLine");
                         s->setSubtype(Segment::SegEndBarLine);
                         }
                   }
@@ -3407,7 +3407,7 @@ void Measure::layoutStage1()
             if (pm->endBarLineType() != NORMAL_BAR
                && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
                   setBreakMMRest(true);
-            for (Spanner* sp = _spannerBack; sp; sp = sp->next()) {
+            for (Spanner* sp = pm->_spannerBack; sp; sp = sp->next()) {
                   if (sp->type() == Element::VOLTA)
                         setBreakMMRest(true);
                   }
