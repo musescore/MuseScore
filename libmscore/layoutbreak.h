@@ -48,6 +48,8 @@ class LayoutBreak : public Element {
       virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
 
       virtual ElementType type() const { return LAYOUT_BREAK; }
+      virtual bool systemFlag() const  { return true;  }
+
       void setSubtype(LayoutBreakType);
       LayoutBreakType subtype() const  { return _subtype; }
 
