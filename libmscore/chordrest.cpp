@@ -185,10 +185,17 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.fTag("duration", duration());
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-      for(Spanner* s = _spannerFor; s; s = s->next())
-            xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
-      for(Spanner* s = _spannerBack; s; s = s->next())
-            xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
+      //
+      // ignore spanner with id==-1 as they are outside of the write range
+      //
+      for(Spanner* s = _spannerFor; s; s = s->next()) {
+            if (s->id() != -1)
+                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
+            }
+      for(Spanner* s = _spannerBack; s; s = s->next()) {
+            if (s->id() != -1)
+                  xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
+            }
 #ifndef NDEBUG
       if (_beam && (score()->testMode() || !_beam->generated()))
             xml.tag("Beam", _beam->id());
