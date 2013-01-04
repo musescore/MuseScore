@@ -597,11 +597,13 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
             dl->read(track, first, last, &spannerMap);
             tracks.append(dl);
             }
+#ifndef NDEBUG
       if (!spannerMap.isEmpty()) {
             qDebug("ScoreRange::read(): dangling Spanner");
             foreach(Spanner* s, spannerMap)
                   qDebug("  <%s> end %p", s->name(), s->endElement());
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -617,11 +619,13 @@ bool ScoreRange::write(int track, Measure* m) const
             if (!dl->write(track + i, m, &spannerMap))
                   return false;
             }
+#ifndef NDEBUG
       if (!spannerMap.isEmpty()) {
             qDebug("ScoreRange::write(): dangling Spanner");
             foreach(Spanner* s, spannerMap)
                   qDebug("  <%s>", s->name());
             }
+#endif
       return true;
       }
 
