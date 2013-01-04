@@ -19,6 +19,7 @@
 #include "segment.h"
 #include "slur.h"
 #include "chordrest.h"
+#include "chord.h"
 #include "tuplet.h"
 #include "beam.h"
 #include "revisions.h"
@@ -1347,9 +1348,17 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                           }
                                     }
                               if (!found) {
-                                    slur->setId(xml.spannerId++);
+                                    Slur* s = static_cast<Slur*>(slur);
+                                    if (s->endChord()->segment()->tick() >= ls->tick()) {
+                                          // this slur ends outside of the write range
+                                          // dont write
+                                          slur->setId(-1);
+                                          }
+                                    else {
+                                          slur->setId(xml.spannerId++);
+                                          slur->write(xml);
+                                          }
                                     spanner.append(slur);
-                                    slur->write(xml);
                                     }
                               }
                         for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
@@ -1361,9 +1370,17 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                           }
                                     }
                               if (!found) {
-                                    slur->setId(xml.spannerId++);
+                                    Slur* s = static_cast<Slur*>(slur);
+                                    if (s->startChord()->segment()->tick() < fs->tick()) {
+                                          // this slur begins outside of the write range
+                                          // dont write
+                                          slur->setId(-1);
+                                          }
+                                    else {
+                                          slur->setId(xml.spannerId++);
+                                          slur->write(xml);
+                                          }
                                     spanner.append(slur);
-                                    slur->write(xml);
                                     }
                               }
                         }
