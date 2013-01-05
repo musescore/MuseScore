@@ -476,6 +476,10 @@ MuseScore::MuseScore()
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
+
+      autoTagLabel = new QLabel;
+      autoTagLabel->setVisible(false);
+      autoTagLabel->setText(tr("AutoTagging On"));
       tagSetSwitch = new QComboBox(this);
       tagSetSwitch->setToolTip(tr("switch tagset"));
       connect(tagSetSwitch, SIGNAL(activated(const QString&)), SLOT(switchTagSet(const QString&)));
@@ -486,6 +490,7 @@ MuseScore::MuseScore()
       playMode->setToolTip(tr("switch play mode"));
       connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
 
+      _statusBar->addPermanentWidget(autoTagLabel, 0);
       _statusBar->addPermanentWidget(playMode);
       _statusBar->addPermanentWidget(tagSetSwitch);
       _statusBar->addPermanentWidget(_positionLabel, 0);
@@ -3536,6 +3541,7 @@ void MuseScore::switchTagSet(const QString& s)
       if (cs->switchTagSet(s)) {
             cs->setLayoutAll(true);
             cs->update();
+            showAutoTagState();
             }
       }
 
@@ -4312,6 +4318,19 @@ void MuseScore::closeWebPanelPermanently()
 Navigator* MuseScore::navigator() const
       {
       return _navigator ? static_cast<Navigator*>(_navigator->widget()) : 0;
+      }
+
+//---------------------------------------------------------
+//   showAutoTagState
+//---------------------------------------------------------
+
+void MuseScore::showAutoTagState()
+      {
+      bool enable = false;
+      if (cs) {
+          enable = !(cs->currentAutoTagMask() == 0);
+            }
+      autoTagLabel->setVisible(enable);
       }
 
 //---------------------------------------------------------

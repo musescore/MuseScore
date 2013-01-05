@@ -99,7 +99,7 @@ void TagSetManager::createClicked()
 
       QTableWidgetItem* item = new QTableWidgetItem();
       item->setCheckState(Qt::Unchecked);
-      tags->setItem(row, 0, item);
+      tagSets->setItem(row, 0, item);
       item = new QTableWidgetItem(name);
       tagSets->setItem(row, 1, item);
       item = new QTableWidgetItem("");
@@ -170,7 +170,7 @@ void TagSetManager::deleteTagClicked()
       int row = tagSets->currentRow();
       if (row == -1)
             return;
-      QTableWidgetItem* item = tagSets->item(row, 1);
+      QTableWidgetItem* item = tagSets->item(row, 2);
       QString s = item->text();
       QStringList items = s.split(",");
       bool ok;
@@ -222,14 +222,15 @@ void TagSetManager:: accept()
                               }
                         }
                   }
-/*            if (i == 0)             // hardwired default tag
-                  ts.tags |= 1; */
+            if (i == 0)             // hardwired default tag
+                  ts.tags |= 1;
             tagSet.append(ts);
             }
       score->setDirty(true);
       score->setLayoutAll(true);
       score->endCmd();
       mscore->updateTagSet();
+      mscore->showAutoTagState();
       QDialog::accept();
       }
 

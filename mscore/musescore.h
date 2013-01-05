@@ -335,6 +335,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       bool inChordEditor;
 
+      QLabel* autoTagLabel;
       QComboBox* tagSetSwitch;
       QComboBox* playMode;
       QNetworkAccessManager* networkManager;
@@ -605,6 +606,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       void updateTagSet();
+      void showAutoTagState();
       void updatePlayMode();
       bool loop() const         	 { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
