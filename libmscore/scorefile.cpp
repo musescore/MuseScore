@@ -1241,11 +1241,12 @@ qDebug("createRevision\n");
 
 //---------------------------------------------------------
 //   writeSegments
+//    ls  - write upto this segment (excluding)
+//          can be zero
 //---------------------------------------------------------
 
 void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
-   Segment* fs, Segment* ls,
-   bool writeSystemElements)
+   Segment* fs, Segment* ls, bool writeSystemElements)
       {
       for (int track = strack; track < etrack; ++track) {
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
@@ -1340,46 +1341,18 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
 #endif
                         cr->writeTuplet(xml);
                         for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
-                              bool found = false;
-                              foreach (Spanner* slur1, spanner) {
-                                    if (slur1 == slur) {
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              if (!found) {
-                                    Slur* s = static_cast<Slur*>(slur);
-                                    if (s->endChord()->segment()->tick() >= ls->tick()) {
-                                          // this slur ends outside of the write range
-                                          // dont write
-                                          slur->setId(-1);
-                                          }
-                                    else {
-                                          slur->setId(xml.spannerId++);
-                                          slur->write(xml);
-                                          }
+                              if (spanner.indexOf(slur) == -1) {
+                                    Q_ASSERT(slur->type() == Element::SLUR);
+                                    slur->setId(xml.spannerId++);
+                                    slur->write(xml);
                                     spanner.append(slur);
                                     }
                               }
                         for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
-                              bool found = false;
-                              foreach (Spanner* slur1, spanner) {
-                                    if (slur1 == slur) {
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              if (!found) {
-                                    Slur* s = static_cast<Slur*>(slur);
-                                    if (s->startChord()->segment()->tick() < fs->tick()) {
-                                          // this slur begins outside of the write range
-                                          // dont write
-                                          slur->setId(-1);
-                                          }
-                                    else {
-                                          slur->setId(xml.spannerId++);
-                                          slur->write(xml);
-                                          }
+                              if (spanner.indexOf(slur) == -1) {
+                                    Q_ASSERT(slur->type() == Element::SLUR);
+                                    slur->setId(xml.spannerId++);
+                                    slur->write(xml);
                                     spanner.append(slur);
                                     }
                               }
