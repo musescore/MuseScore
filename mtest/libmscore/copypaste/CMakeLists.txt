@@ -11,10 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      hairpin note compat link measure beam split join
-      timesig layout element midi dynamic plugins copypaste
-      )
+set(TARGET tst_copypaste)
 
-# midi - does not work
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

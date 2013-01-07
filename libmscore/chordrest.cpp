@@ -188,13 +188,17 @@ void ChordRest::writeProperties(Xml& xml) const
       //
       // ignore spanner with id==-1 as they are outside of the write range
       //
-      for(Spanner* s = _spannerFor; s; s = s->next()) {
+      for (Spanner* s = _spannerFor; s; s = s->next()) {
             if (s->id() != -1)
                   xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
+            else
+                  qDebug("ChordRest: spannerFor->id == -1");
             }
-      for(Spanner* s = _spannerBack; s; s = s->next()) {
+      for (Spanner* s = _spannerBack; s; s = s->next()) {
             if (s->id() != -1)
                   xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
+            else
+                  qDebug("ChordRest: spannerBack->id == -1");
             }
 #ifndef NDEBUG
       if (_beam && (score()->testMode() || !_beam->generated()))
