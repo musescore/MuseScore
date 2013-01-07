@@ -165,7 +165,8 @@ void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
       beams.clear();
       spanner.clear();
       QMap<int, Spanner*> localSpanner;
-      for (Segment* s = firstMeasure()->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
+      static const Segment::SegmentTypes st = Segment::SegChordRest;
+      for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
             for (Spanner* e = s->spannerFor(); e; e = e->next())
                   e->setId(-1);
             }
@@ -176,6 +177,7 @@ void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
                   domError(e);
                   continue;
                   }
+
             int tickStart     = e.attribute("tick","0").toInt();
             int tickLen       = e.attribute("len", "0").toInt();
             int srcStaffStart = e.attribute("staff", "0").toInt();
@@ -199,16 +201,16 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         continue;
                         }
                   int srcStaffIdx = ee.attribute("id", "0").toInt();
-                  if(blackList.contains(srcStaffIdx))
+                  if (blackList.contains(srcStaffIdx))
                         continue;
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
                   QList<Tuplet*> tuplets;
-                  QList<Spanner*> spanner;
                   for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                         pasted = true;
                         const QString& tag(eee.tagName());
+
                         if (tag == "tick")
                               curTick = eee.text().toInt();
                         else if (tag == "Tuplet") {
@@ -397,15 +399,10 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         else if (tag == "BarLine") {
                               // ignore bar line
                               }
-                        else {
+                        else
                               domError(eee);
-                              continue;
-                              }
                         }
-                  foreach(Spanner* s, spanner) {
-                        if (s->type() == Element::SLUR)
-                              undoAddElement(s);
-                        }
+
                   foreach (Tuplet* tuplet, tuplets) {
                         if (tuplet->elements().isEmpty()) {
                               // this should not happen and is a sign of input file corruption
