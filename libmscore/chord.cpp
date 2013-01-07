@@ -1341,9 +1341,11 @@ void Chord::layout()
 
       qreal _spatium  = spatium();
 
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            delete ll;
-      _ledgerLines = 0;
+      while (_ledgerLines) {
+            LedgerLine* l = _ledgerLines->next();
+            delete _ledgerLines;
+            _ledgerLines = l;
+            }
 
       qreal lx         = 0.0;
       Note*  upnote    = upNote();
