@@ -283,22 +283,20 @@ bool ChordRest::readProperties(const QDomElement& e, QList<Tuplet*>* tuplets, QL
                               break;
                               }
                         }
-                  if (!slur) {
+                  if (!slur)
                         qDebug("ChordRest::read(): Slur id %d not found", id);
-                        slur = new Slur(score());
-                        slur->setId(id);
-                        spanner->append(slur);
+                  else {
+                        if (type == "start") {
+                              slur->setStartElement(this);
+                              addSlurFor(slur);
+                              }
+                        else if (type == "stop") {
+                              slur->setEndElement(this);
+                              addSlurBack(slur);
+                              }
+                        else
+                              qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                         }
-                  if (type == "start") {
-                        slur->setStartElement(this);
-                        addSlurFor(slur);
-                        }
-                  else if (type == "stop") {
-                        slur->setEndElement(this);
-                        addSlurBack(slur);
-                        }
-                  else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                   }
             }
       else if (tag == "durationType") {
