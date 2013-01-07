@@ -1,7 +1,8 @@
 #!/bin/bash
 
-for a in copypaste1 copypaste2 copypaste3; do
-      cp ../../../build.debug/mtest/libmscore/copypaste/$a.mscx $a-ref.mscx
+for a in 1 2 3 4 5 6 7 8 9; do
+      echo cp ../../../build.debug/mtest/libmscore/copypaste/copypaste${a}.mscx copypaste${a}-ref.mscx
+      cp ../../../build.debug/mtest/libmscore/copypaste/copypaste${a}.mscx copypaste${a}-ref.mscx
       done
 
 
