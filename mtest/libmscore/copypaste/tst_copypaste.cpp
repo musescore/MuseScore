@@ -28,13 +28,19 @@ class TestCopyPaste : public QObject, public MTest
       {
       Q_OBJECT
 
-      void copypaste(const char* p1, const char* p2);
+      void copypaste(int);
 
    private slots:
       void initTestCase();
-      void copypaste1() { copypaste("copypaste1.mscx",  "copypaste1-ref.mscx"); }
-      void copypaste2() { copypaste("copypaste2.mscx",  "copypaste2-ref.mscx"); }
-      void copypaste3() { copypaste("copypaste3.mscx",  "copypaste3-ref.mscx"); }
+      void copypaste1() { copypaste(1); }       // start slur
+      void copypaste2() { copypaste(2); }       // end slur
+      void copypaste3() { copypaste(3); }       // slur
+      void copypaste4() { copypaste(4); }       // start tie
+      void copypaste5() { copypaste(5); }       // end tie
+      void copypaste6() { copypaste(6); }       // tie
+      void copypaste7() { copypaste(7); }       // start ottava
+      void copypaste8() { copypaste(8); }       // end ottava
+      void copypaste9() { copypaste(9); }       // ottava
       };
 
 //---------------------------------------------------------
@@ -50,9 +56,9 @@ void TestCopyPaste::initTestCase()
 //   copypaste
 //---------------------------------------------------------
 
-void TestCopyPaste::copypaste(const char* p1, const char* p2)
+void TestCopyPaste::copypaste(int idx)
       {
-      Score* score = readScore(DIR + p1);
+      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
       score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();    // src
@@ -76,7 +82,8 @@ void TestCopyPaste::copypaste(const char* p1, const char* p2)
       score->cmdPaste(0);
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, p1, DIR + p2));
+      QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
+         DIR + QString("copypaste%1-ref.mscx").arg(idx)));
       delete score;
       }
 
