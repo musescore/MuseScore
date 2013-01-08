@@ -87,33 +87,31 @@ QList<Prop> DurationElement::properties(Xml& xml, bool /*clipboardmode*/) const
 //   readProperties
 //---------------------------------------------------------
 
-bool DurationElement::readProperties(const QDomElement& e, QList<Tuplet*>* tuplets, const QList<Spanner*>*)
+bool DurationElement::readProperties(const QDomElement& e)
       {
       if (Element::readProperties(e))
             return true;
       const QString& tag(e.tagName());
       if (tag == "Tuplet") {
-            if (tuplets) {
-                  // setTuplet(0);
-                  int i = e.text().toInt();
-                  foreach(Tuplet* t, *tuplets) {
-                        if (t->id() == i) {
-                              setTuplet(t);
-                              if (!score()->undo()->active())  // HACK, also added in Undo::AddElement()
-                                    t->add(this);
-                              break;
-                              }
+            // setTuplet(0);
+            int i = e.text().toInt();
+            foreach(Tuplet* t, score()->tuplets) {
+                  if (t->id() == i) {
+                        setTuplet(t);
+                        if (!score()->undo()->active())  // HACK, also added in Undo::AddElement()
+                              t->add(this);
+                        break;
                         }
-                  if (tuplet() == 0) {
-                        qDebug("DurationElement:read(): Tuplet id %d not found", i);
-                        Tuplet* t = score()->searchTuplet(e, i);
-                        if (t) {
-                              qDebug("   ...found outside measure, input file corrupted?");
-                              setTuplet(t);
-                              if (!score()->undo()->active())     // HACK
-                                    t->add(this);
-                              tuplets->append(t);
-                              }
+                  }
+            if (tuplet() == 0) {
+                  qDebug("DurationElement:read(): Tuplet id %d not found", i);
+                  Tuplet* t = score()->searchTuplet(e, i);
+                  if (t) {
+                        qDebug("   ...found outside measure, input file corrupted?");
+                        setTuplet(t);
+                        if (!score()->undo()->active())     // HACK
+                              t->add(this);
+                        score()->tuplets.append(t);
                         }
                   }
             }

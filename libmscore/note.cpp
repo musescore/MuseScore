@@ -891,7 +891,8 @@ void Note::read(const QDomElement& de)
                   sp->setStartElement(this);
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  score()->spanner.append(sp);
+                  sp->setNext(score()->spanner);
+                  score()->spanner = sp;
                   }
             else if (tag == "onTimeType")                   // obsolete
                   ; // _onTimeType = readValueType(e);

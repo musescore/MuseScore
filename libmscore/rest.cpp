@@ -252,10 +252,10 @@ void Rest::write(Xml& xml) const
 //   Rest::read
 //---------------------------------------------------------
 
-void Rest::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>* spanner)
+void Rest::read(const QDomElement& de)
       {
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (!ChordRest::readProperties(e, tuplets, spanner))
+            if (!ChordRest::readProperties(e))
                   domError(e);
             }
       QPointF off(userOff());

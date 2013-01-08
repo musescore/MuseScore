@@ -99,7 +99,7 @@ class Chord : public ChordRest {
       Q_PROPERTY(QDeclarativeListProperty<Note> notes READ qmlNotes);
       Q_PROPERTY(QDeclarativeListProperty<Lyrics> lyrics READ qmlLyrics);
 
-      QList<Note*> _notes;                // sorted to increasing pitch
+      QList<Note*> _notes;          // sorted to increasing pitch
       LedgerLine*  _ledgerLines;    // single linked list
 
       Stem*      _stem;
@@ -135,7 +135,6 @@ class Chord : public ChordRest {
       virtual ElementType type() const { return CHORD; }
 
       virtual void write(Xml& xml) const;
-      void read(const QDomElement&, QList<Tuplet*>*, QList<Spanner*>*);
       virtual void read(const QDomElement&);
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
@@ -186,7 +185,7 @@ class Chord : public ChordRest {
       virtual void layout();
       void layout2();
 
-      void readNote(const QDomElement& node, QList<Tuplet*>*, QList<Spanner*>*);
+      void readNote(const QDomElement& node);
 
       NoteType noteType() const       { return _noteType; }
       void setNoteType(NoteType t)    { _noteType = t; }

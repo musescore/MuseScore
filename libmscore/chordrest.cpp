@@ -221,9 +221,9 @@ void ChordRest::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool ChordRest::readProperties(const QDomElement& e, QList<Tuplet*>* tuplets, QList<Spanner*>* spanner)
+bool ChordRest::readProperties(const QDomElement& e)
       {
-      if (DurationElement::readProperties(e, tuplets, spanner))
+      if (DurationElement::readProperties(e))
             return true;
       const QString& tag(e.tagName());
       const QString& val(e.text());
@@ -277,30 +277,28 @@ bool ChordRest::readProperties(const QDomElement& e, QList<Tuplet*>* tuplets, QL
       else if (tag == "small")
             _small = val.toInt();
       else if (tag == "Slur") {
-            if (spanner) {
-                  int id = e.attribute("number").toInt();
-                  QString type = e.attribute("type");
-                  Slur* slur = 0;
-                  foreach(Spanner* s, *spanner) {
-                        if (s->id() == id) {
-                              slur = static_cast<Slur*>(s);
-                              break;
-                              }
+            int id = e.attribute("number").toInt();
+            QString type = e.attribute("type");
+            Slur* slur = 0;
+            for (Spanner* s = score()->spanner; s; s = s->next()) {
+                  if (s->id() == id) {
+                        slur = static_cast<Slur*>(s);
+                        break;
                         }
-                  if (!slur)
-                        qDebug("ChordRest::read(): Slur id %d not found", id);
-                  else {
-                        if (type == "start") {
-                              slur->setStartElement(this);
-                              addSlurFor(slur);
-                              }
-                        else if (type == "stop") {
-                              slur->setEndElement(this);
-                              addSlurBack(slur);
-                              }
-                        else
-                              qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
+                  }
+            if (!slur)
+                  qDebug("ChordRest::read(): Slur id %d not found", id);
+            else {
+                  if (type == "start") {
+                        slur->setStartElement(this);
+                        addSlurFor(slur);
                         }
+                  else if (type == "stop") {
+                        slur->setEndElement(this);
+                        addSlurBack(slur);
+                        }
+                  else
+                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                   }
             }
       else if (tag == "durationType") {
