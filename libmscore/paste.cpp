@@ -163,7 +163,7 @@ void Score::cmdPaste(MuseScoreView* view)
 void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
       {
       beams.clear();
-      spanner.clear();
+      spanner = 0;
       QMap<int, Spanner*> localSpanner;
       static const Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
@@ -206,7 +206,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
-                  QList<Tuplet*> tuplets;
+                  tuplets.clear();
                   for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                         pasted = true;
                         const QString& tag(eee.tagName());
@@ -216,7 +216,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
                               tuplet->setTrack(curTrack);
-                              tuplet->read(eee, &tuplets, &spanner);
+                              tuplet->read(eee);
                               int tick = curTick - tickStart + dstTick;
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
@@ -227,12 +227,13 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Slur* slur = new Slur(this);
                               slur->read(eee);
                               slur->setTrack(dstStaffIdx * VOICES);
-                              spanner.append(slur);
+                              slur->setNext(spanner);
+                              spanner = slur;
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
                               cr->setTrack(curTrack);
-                              cr->read(eee, &tuplets, &spanner);
+                              cr->read(eee);
                               cr->setSelected(false);
                               int voice = cr->voice();
                               int track = dstStaffIdx * VOICES + voice;

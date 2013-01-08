@@ -187,7 +187,7 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
 
 Score::FileError Score::read114(const QDomElement& de)
       {
-      spanner.clear();
+      spanner = 0;
 
       QList<ClefList*> clefListList;
       if (parentScore())
@@ -316,7 +316,8 @@ Score::FileError Score::read114(const QDomElement& de)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(ee);
-                  spanner.append(slur);
+                  slur->setNext(spanner);
+                  spanner = slur;
                   }
             else if ((tag == "HairPin")
                 || (tag == "Ottava")
@@ -473,7 +474,7 @@ Score::FileError Score::read114(const QDomElement& de)
             }
 
       // check slurs
-      foreach(Spanner* s, spanner) {
+      for(Spanner* s = spanner; s; s = s->next()) {
             if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);
@@ -512,7 +513,7 @@ Score::FileError Score::read114(const QDomElement& de)
                         }
                   }
             }
-      spanner.clear();
+      spanner = 0;
       connectTies();
 
       //

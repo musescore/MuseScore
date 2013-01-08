@@ -1847,7 +1847,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 
 void Measure::read(const QDomElement& de, int staffIdx)
       {
-      QList<Tuplet*> tuplets;
+//      QList<Tuplet*> tuplets;
 
       Segment* segment = 0;
       qreal _spatium = spatium();
@@ -1919,7 +1919,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
                   chord->setTrack(score()->curTrack);
-                  chord->read(e, &tuplets, &score()->spanner);
+                  chord->read(e);
 
                   if (chord->noteType() != NOTE_NORMAL
                      && segment
@@ -2000,7 +2000,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   rest->setDurationType(TDuration::V_MEASURE);
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(score()->curTrack);
-                  rest->read(e, &tuplets, &score()->spanner);
+                  rest->read(e);
 
                   segment = getSegment(rest, score()->curTick);
                   segment->add(rest);
@@ -2013,7 +2013,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "Note") {                 // obsolete
                   Chord* chord = new Chord(score());
                   chord->setTrack(score()->curTrack);
-                  chord->readNote(e, &tuplets, &score()->spanner);
+                  chord->readNote(e);
                   segment = getSegment(chord, score()->curTick);
                   segment->add(chord);
 
@@ -2063,7 +2063,8 @@ void Measure::read(const QDomElement& de, int staffIdx)
                || tag == "TextLine"
                || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
-                  score()->spanner.append(sp);
+                  sp->setNext(score()->spanner);
+                  score()->spanner = sp;
                   sp->setTrack(staffIdx * VOICES);
                   sp->read(e);
                   segment = getSegment(Segment::SegChordRest, score()->curTick);
@@ -2079,7 +2080,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());
                   rm->setTrack(score()->curTrack);
-                  rm->read(e, &tuplets, &score()->spanner);
+                  rm->read(e);
                   segment = getSegment(Segment::SegChordRest, score()->curTick);
                   segment->add(rm);
                   score()->curTick += ticks();
@@ -2247,8 +2248,8 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   tuplet->setTrack(score()->curTrack);
                   tuplet->setTick(score()->curTick);
                   tuplet->setParent(this);
-                  tuplet->read(e, &tuplets, &score()->spanner);
-                  tuplets.append(tuplet);
+                  tuplet->read(e);
+                  score()->tuplets.append(tuplet);
                   }
             else if (tag == "startRepeat")
                   _repeatFlags |= RepeatStart;
@@ -2260,7 +2261,9 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   Slur* slur = new Slur(score());
                   slur->setTrack(score()->curTrack);
                   slur->read(e);
-                  score()->spanner.append(slur);
+                  slur->setNext(score()->spanner);
+                  slur->setNext(score()->spanner);
+                  score()->spanner = slur;
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
@@ -2340,7 +2343,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   }
 
             }
-      foreach (Tuplet* tuplet, tuplets) {
+      foreach (Tuplet* tuplet, score()->tuplets) {
             if (tuplet->elements().isEmpty()) {
                   // this should not happen and is a sign of input file corruption
                   qDebug("Measure:read(): empty tuplet, input file corrupted?");
