@@ -759,7 +759,7 @@ void Chord::write(Xml& xml) const
 //   Chord::readNote
 //---------------------------------------------------------
 
-void Chord::readNote(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>* spanner)
+void Chord::readNote(const QDomElement& de)
       {
       Note* note = new Note(score());
       note->setPitch(de.attribute("pitch").toInt());
@@ -808,7 +808,7 @@ void Chord::readNote(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spann
                   }
             else if (tag == "move")
                   setStaffMove(val.toInt());
-            else if (!ChordRest::readProperties(e, tuplets, spanner))
+            else if (!ChordRest::readProperties(e))
                   domError(e);
             }
       if (!tpcIsValid(tpc))
@@ -819,21 +819,10 @@ void Chord::readNote(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spann
       }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Chord::read(const QDomElement& e)
-      {
-      QList<Tuplet*> tl;
-      QList<Spanner*> sl;
-      read(e, &tl, &sl);
-      }
-
-//---------------------------------------------------------
 //   Chord::read
 //---------------------------------------------------------
 
-void Chord::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>* spanner)
+void Chord::read(const QDomElement& de)
       {
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
@@ -902,7 +891,7 @@ void Chord::read(const QDomElement& de, QList<Tuplet*>* tuplets, QList<Spanner*>
                   cl->read(e);
                   add(cl);
                   }
-            else if (!ChordRest::readProperties(e, tuplets, spanner))
+            else if (!ChordRest::readProperties(e))
                   domError(e);
             }
       }
