@@ -384,9 +384,12 @@ qDebug("add pitch %d %d", pitch, addFlag);
             Note* n = addNote(chord, pitch);
             setLayoutAll(false);
             setLayout(chord->measure());
-            moveToNextInputPos();
             return n;
             }
+      if (_is.moveBeforeAdding())
+            moveToNextInputPos();
+      else
+          _is.setMoveBeforeAdding(true);
       expandVoice();
 
       // insert note
@@ -444,7 +447,6 @@ qDebug("add pitch %d %d", pitch, addFlag);
                   qDebug("addPitch: cannot find slur note");
             setLayoutAll(true);
             }
-      moveToNextInputPos();
       return note;
       }
 
