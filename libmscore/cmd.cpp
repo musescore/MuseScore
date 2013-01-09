@@ -1573,7 +1573,9 @@ bool Score::processMidiInput()
                         startCmd();
                         cmdActive = true;
                         }
-                  n = addPitch(ev.pitch, ev.chord);
+                  Note* n2 = addPitch(ev.pitch, ev.chord);
+                  if (n2)
+                        n = n2;
                   }
             }
       if (cmdActive) {

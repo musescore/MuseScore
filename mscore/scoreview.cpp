@@ -3501,7 +3501,9 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             }
 
       const Measure* m;
-      if (el->type() == Element::NOTE)
+      if (!el)
+            return;
+      else if (el->type() == Element::NOTE)
             m = static_cast<const Note*>(el)->chord()->measure();
       else if (el->type() == Element::REST)
             m = static_cast<const Rest*>(el)->measure();
