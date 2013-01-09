@@ -173,11 +173,8 @@
           </BarLine>
         </Measure>
       <Measure number="4">
-        <Slur id="3">
-          </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="3"/>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
