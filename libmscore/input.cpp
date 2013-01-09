@@ -32,6 +32,7 @@ InputState::InputState() :
    _segment(0),
    _string(VISUAL_STRING_NONE),
    _repitchMode(false),
+   _moveBeforeAdding(false),
    rest(false),
    pitch(72),
    noteType(NOTE_NORMAL),

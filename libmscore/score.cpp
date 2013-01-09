@@ -2714,6 +2714,7 @@ void Score::setInputState(Element* e)
             e = static_cast<Chord*>(e)->upNote();
 
       _is.setDrumNote(-1);
+      _is.setMoveBeforeAdding(false);
 //      _is.setDrumset(0);
       if (e->type() == Element::NOTE) {
             Note* note    = static_cast<Note*>(e);
