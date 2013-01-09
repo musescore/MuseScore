@@ -239,37 +239,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               int track = dstStaffIdx * VOICES + voice;
                               cr->setTrack(track);
                               int tick = curTick - tickStart + dstTick;
-#if 0
-                              //
-                              // check for tuplet
-                              //
-                              if (cr->tuplet()) {
-                                    Tuplet* tuplet = cr->tuplet();
-                                    if (tuplet->elements().isEmpty()) {
-                                          Measure* measure = tick2measure(tick);
-                                          int measureEnd = measure->tick() + measure->ticks();
-                                          if (tick + tuplet->actualTicks() > measureEnd) {
-                                                invalidTuplets.append(tuplet);
-                                                cr->setDuration(tuplet->duration());
-                                                cr->setDurationType(cr->duration());
-                                                cr->setTuplet(0);
-                                                tuplet->add(cr);
-                                                qDebug("cannot paste tuplet across bar line");
-                                                }
-                                          }
-                                    else {
-                                          foreach(Tuplet* t, invalidTuplets) {
-                                                if (tuplet == t) {
-                                                      delete cr;
-                                                      cr = 0;
-                                                      break;
-                                                      }
-                                                }
-                                          }
-                                    }
-                              if (cr == 0)
-                                    continue;
-#endif
                               curTick += cr->actualTicks();
                               pasteChordRest(cr, tick);
                               }
@@ -432,16 +401,46 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         _selection.setState(SEL_RANGE);
                   }
             }
-
-/*      foreach(Tuplet* t, invalidTuplets) {
-            t->measure()->remove(t);
-            delete t;
+      printf("====end paste\n");
+      for (Spanner* sp = spanner; sp;) {
+            Spanner* spNext = sp->next();
+            printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());
+            if (sp->startElement() == 0 || sp->endElement() == 0) {
+                  // spanner is not copied complete, lets remove it:
+                  printf("    remove\n");
+                  switch(sp->anchor()) {
+                        case Spanner::ANCHOR_SEGMENT:
+                              if (sp->startElement())
+                                    static_cast<Segment*>(sp->startElement())->removeSpannerFor(sp);
+                              else if (sp->endElement())
+                                    static_cast<Segment*>(sp->endElement())->removeSpannerBack(sp);
+                              break;
+                        case Spanner::ANCHOR_MEASURE:
+                              if (sp->startElement())
+                                    static_cast<Measure*>(sp->startElement())->removeSpannerFor(sp);
+                              else if (sp->endElement())
+                                    static_cast<Measure*>(sp->endElement())->removeSpannerBack(sp);
+                              break;
+                              break;
+                        case Spanner::ANCHOR_CHORD:
+                              if (sp->startElement())
+                                    static_cast<ChordRest*>(sp->startElement())->removeSpannerFor(sp);
+                              else if (sp->endElement())
+                                    static_cast<ChordRest*>(sp->endElement())->removeSpannerBack(sp);
+                              break;
+                        case Spanner::ANCHOR_NOTE:
+                              if (sp->startElement())
+                                    static_cast<Note*>(sp->startElement())->removeSpannerFor(sp);
+                              else if (sp->endElement())
+                                    static_cast<Note*>(sp->endElement())->removeSpannerBack(sp);
+                              break;
+                        }
+                  delete sp;
+                  }
+            sp = spNext;
             }
-*/
+      spanner = 0;
       connectTies();
-//      updateNotes();    // TODO: undoable version needed
-
-//      layoutFlags |= LAYOUT_FIX_PITCH_VELO;
       }
 
 //---------------------------------------------------------
