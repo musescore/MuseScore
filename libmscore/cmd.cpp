@@ -378,6 +378,7 @@ Note* Score::addPitch(int pitch, bool addFlag)
 qDebug("add pitch %d %d", pitch, addFlag);
 
       if (addFlag) {
+            moveToPrevInputPos();
             if (_is.cr() == 0 || _is.cr()->type() != Element::CHORD)
                   return 0;
             Chord* chord = static_cast<Chord*>(_is.cr());
@@ -1609,6 +1610,22 @@ void Score::moveInputPos(Segment* s)
 #endif
       }
 
+//---------------------------------------------------------
+//   moveToPrevInputPos
+//   Derived from moveToNextInputPos()
+//---------------------------------------------------------
+
+void Score::moveToPrevInputPos()
+      {
+      Segment* s = _is.segment();
+      Measure* m = s->measure();
+      int track  = _is.track();
+      for (s = s->prev1(Segment::SegChordRest); s; s = s->prev1(Segment::SegChordRest)) {
+            if (s->element(track) || s->measure() != m)
+                  break;
+            }
+      moveInputPos(s);
+      }
 //---------------------------------------------------------
 //   moveToNextInputPos
 //   TODO: special case: note is first note of tie: goto to last note of tie
