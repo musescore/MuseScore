@@ -1742,7 +1742,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
                   iter = 0;
                   }
 // qDebug("    midiNoteReceived %d active %d", pitch, active);
-            cv->midiNoteReceived(pitch, active);
+            cv->midiNoteReceived(pitch, active > 0);
             ++active;
             }
       else {
