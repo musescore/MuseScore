@@ -45,7 +45,7 @@ class Stem : public Element {
       virtual void editDrag(const EditData&);
       virtual void updateGrips(int*, QRectF*) const;
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement& e);
+      virtual void read(XmlReader& e);
       virtual void reset();
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);

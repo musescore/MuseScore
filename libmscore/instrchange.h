@@ -31,7 +31,7 @@ class InstrumentChange : public Text  {
       virtual InstrumentChange* clone() const { return new InstrumentChange(*this); }
       virtual ElementType type() const        { return INSTRUMENT_CHANGE; }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       Instrument instrument() const           { return _instrument; }
       void setInstrument(const Instrument& i) { _instrument = i;    }

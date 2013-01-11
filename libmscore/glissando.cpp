@@ -116,18 +116,19 @@ void Glissando::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Glissando::read(const QDomElement& de)
+void Glissando::read(XmlReader& e)
       {
       _showText = false;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "text") {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
+            if (tag == "text") {
                   _showText = true;
-                  _text = e.text();
+                  _text = e.readElementText();
                   }
-            else if (e.tagName() == "subtype")
-                  _subtype = e.text().toInt();
+            else if (tag == "subtype")
+                  _subtype = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -383,15 +383,15 @@ void TextLine::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void TextLine::read(const QDomElement& de)
+void TextLine::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
+      qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      setId(de.attribute("id", "-1").toInt());
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      setId(e.intAttribute("id", -1));
+
+      while (e.readNextStartElement()) {
             if (!readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -455,47 +455,52 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
 //   readProperties
 //---------------------------------------------------------
 
-bool TextLine::readProperties(const QDomElement& e)
+bool TextLine::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& text(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "beginHookHeight") {
-            _beginHookHeight = Spatium(text.toDouble());
+            _beginHookHeight = Spatium(e.readDouble());
             _beginHook = true;
             }
       else if (tag == "beginHookType")
-            _beginHookType = HookType(text.toInt());
+            _beginHookType = HookType(e.readInt());
       else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
-            _endHookHeight = Spatium(text.toDouble());
+            _endHookHeight = Spatium(e.readDouble());
             _endHook = true;
             }
       else if (tag == "endHookType")
-            _endHookType = HookType(text.toInt());
+            _endHookType = HookType(e.readInt());
       else if (tag == "hookUp")           // obsolete
             _endHookHeight *= qreal(-1.0);
-      else if (tag == "beginSymbol" || tag == "symbol")     // "symbol" is obsolete
+      else if (tag == "beginSymbol" || tag == "symbol") {     // "symbol" is obsolete
+            QString text(e.readElementText());
             _beginSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
-      else if (tag == "continueSymbol")
+            }
+      else if (tag == "continueSymbol") {
+            QString text(e.readElementText());
             _continueSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
-      else if (tag == "endSymbol")
+            }
+      else if (tag == "endSymbol") {
+            QString text(e.readElementText());
             _endSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
+            }
       else if (tag == "beginSymbolOffset")
-            _beginSymbolOffset = readPoint(e);
+            _beginSymbolOffset = e.readPoint();
       else if (tag == "continueSymbolOffset")
-            _continueSymbolOffset = readPoint(e);
+            _continueSymbolOffset = e.readPoint();
       else if (tag == "endSymbolOffset")
-            _endSymbolOffset = readPoint(e);
+            _endSymbolOffset = e.readPoint();
       else if (tag == "lineWidth")
-            _lineWidth = Spatium(text.toDouble());
+            _lineWidth = Spatium(e.readDouble());
       else if (tag == "lineStyle")
-            _lineStyle = Qt::PenStyle(text.toInt());
+            _lineStyle = Qt::PenStyle(e.readInt());
       else if (tag == "beginTextPlace")
             _beginTextPlace = readPlacement(e);
       else if (tag == "continueTextPlace")
             _continueTextPlace = readPlacement(e);
       else if (tag == "lineColor")
-            _lineColor = readColor(e);
+            _lineColor = e.readColor();
       else if (tag == "beginText") {
             _beginText = new Text(score());
             _beginText->setParent(this);

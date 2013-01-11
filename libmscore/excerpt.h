@@ -18,6 +18,7 @@ class Score;
 class Part;
 class Xml;
 class Staff;
+class XmlReader;
 
 //---------------------------------------------------------
 //   Excerpt
@@ -34,7 +35,7 @@ class Excerpt {
       Score* score() const            { return _score;  }
       void setScore(Score* s)         { _score = s; }
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
 
       bool operator!=(const Excerpt&) const;
       QString title() const           { return _title; }

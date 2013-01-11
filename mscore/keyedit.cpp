@@ -189,6 +189,7 @@ void KeyCanvas::mouseReleaseEvent(QMouseEvent*)
 
 void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
       {
+#if 0 // TODOx
       const QMimeData* data = event->mimeData();
       if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray a = data->data(mimeSymbolFormat);
@@ -223,6 +224,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
                         qDebug("   %s\n", qPrintable(s));
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------

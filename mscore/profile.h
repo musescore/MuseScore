@@ -21,6 +21,8 @@
 #ifndef __PROFILE_H__
 #define __PROFILE_H__
 
+class XmlReader;
+
 //---------------------------------------------------------
 //   Profile
 //---------------------------------------------------------
@@ -41,7 +43,7 @@ class Profile {
 
       void save();
       void write();
-      void read(QDomElement);
+      void read(XmlReader&);
       void read();
 
       static QList<Profile*>& profiles();

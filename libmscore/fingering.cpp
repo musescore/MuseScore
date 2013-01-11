@@ -51,11 +51,11 @@ void Fingering::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Fingering::read(const QDomElement& de)
+void Fingering::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

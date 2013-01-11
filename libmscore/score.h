@@ -443,7 +443,7 @@ class Score : public QObject {
       void cmdRemoveStaff(int staffIdx);
       void removeStaff(Staff*);
       void addMeasure(MeasureBase*, MeasureBase*);
-      void readStaff(const QDomElement&);
+      void readStaff(XmlReader&);
 
       void cmdInsertPart(Part*, int);
       void cmdRemovePart(Part*);
@@ -463,9 +463,9 @@ class Score : public QObject {
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
 
       void write(Xml&, bool onlySelection);
-      bool read(const QDomElement&);
-      FileError read114(const QDomElement&);
-      FileError read1(const QDomElement&, bool ignoreVersionError);
+      bool read(XmlReader&);
+      FileError read114(XmlReader&);
+      FileError read1(XmlReader&, bool ignoreVersionError);
       FileError loadCompressedMsc(QString name, bool ignoreVersionError);
 
       QList<Staff*>& staves()                { return _staves; }
@@ -684,7 +684,7 @@ class Score : public QObject {
 
       void spatiumChanged(qreal oldValue, qreal newValue);
 
-      void pasteStaff(const QDomElement&, ChordRest* dst);
+      void pasteStaff(XmlReader&, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderPart(EventMap* events, Part*);
       int mscVersion() const    { return _mscVersion; }
@@ -904,7 +904,7 @@ class Score : public QObject {
       QReadWriteLock* layoutLock() { return &_layoutLock; }
       void doLayoutSystems();
       void doLayoutPages();
-      Tuplet* searchTuplet(const QDomElement& e, int id);
+      Tuplet* searchTuplet(XmlReader& e, int id);
       void cmdSelectAll();
       void cmdSelectSection();
       void setUndoRedo(bool val)            { _undoRedo = val; }

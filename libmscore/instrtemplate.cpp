@@ -42,9 +42,9 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
 //   readStaffIdx
 //---------------------------------------------------------
 
-static int readStaffIdx(QDomElement e)
+static int readStaffIdx(XmlReader& e)
       {
-      int idx = e.attribute("staff", "1").toInt() - 1;
+      int idx = e.intAttribute("staff", 1) - 1;
       if (idx >= MAX_STAVES)
             idx = MAX_STAVES-1;
       if (idx < 0)
@@ -56,13 +56,14 @@ static int readStaffIdx(QDomElement e)
 //   readInstrumentGroup
 //---------------------------------------------------------
 
-void InstrumentGroup::read(const QDomElement& de)
+void InstrumentGroup::read(XmlReader& e)
       {
-      id   = de.attribute("id");
-      name = de.attribute("name");
-      extended = de.attribute("extended", "0").toInt();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      id       = e.attribute("id");
+      name     = e.attribute("name");
+      extended = e.intAttribute("extended", 0);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "instrument" || tag == "Instrument") {
                   QString id = e.attribute("id");
                   InstrumentTemplate* t = searchTemplate(id);
@@ -74,20 +75,20 @@ void InstrumentGroup::read(const QDomElement& de)
                   t->read(e);
                   }
             else if (tag == "ref") {
-                  InstrumentTemplate* ttt = searchTemplate(e.text());
+                  InstrumentTemplate* ttt = searchTemplate(e.readElementText());
                   if (ttt) {
                         InstrumentTemplate* t = new InstrumentTemplate(*ttt);
                         instrumentTemplates.append(t);
                         }
                   else
-                        qDebug("instrument reference not found <%s>", qPrintable(e.text()));
+                        qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
                   }
             else if (tag == "name")
-                  name = e.text();
+                  name = e.readElementText();
             else if (tag == "extended")
-                  extended = e.text().toInt();
+                  extended = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       if (id.isEmpty())
             id = name.toLower().replace(" ", "-");
@@ -291,43 +292,43 @@ void InstrumentTemplate::write1(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void InstrumentTemplate::read(const QDomElement& de)
+void InstrumentTemplate::read(XmlReader& e)
       {
-      id = de.attribute("id");
+      id = e.attribute("id");
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
-            if (tag == "name" || tag == "longName") {               // "name" is obsolete
-                  int pos = e.attribute("pos", "0").toInt();
+            if (tag == "longName" || tag == "name") {               // "name" is obsolete
+                  int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
                         if((*i).pos == pos)
                               longNames.erase(i);
-                              break;
+                        break;
                         }
-                  longNames.append(StaffName(val, pos));
+                  longNames.append(StaffName(e.readElementText(), pos));
                   }
-            else if (tag == "short-name" || tag == "shortName") {   // "short-name" is obsolete
-                  int pos = e.attribute("pos", "0").toInt();
+            else if (tag == "shortName" || tag == "short-name") {   // "short-name" is obsolete
+                  int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
                         if((*i).pos == pos)
                               shortNames.erase(i);
-                              break;
+                        break;
                         }
-                  shortNames.append(StaffName(val, pos));
+                  shortNames.append(StaffName(e.readElementText(), pos));
                   }
             else if (tag == "description")
-                  trackName = val;
+                  trackName = e.readElementText();
             else if (tag == "extended")
-                  extended = val.toInt();
+                  extended = e.readInt();
             else if (tag == "staves") {
-                  staves = val.toInt();
+                  staves = e.readInt();
                   bracketSpan[0] = staves;
                   barlineSpan[0] = staves;
                   }
             else if (tag == "clef") {
                   int idx = readStaffIdx(e);
+                  QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
                   if (!ok) {
@@ -339,42 +340,43 @@ void InstrumentTemplate::read(const QDomElement& de)
                   }
             else if (tag == "stafflines") {
                   int idx = readStaffIdx(e);
-                  staffLines[idx] = val.toInt();
+                  staffLines[idx] = e.readInt();
                   }
             else if (tag == "smallStaff") {
                   int idx = readStaffIdx(e);
-                  smallStaff[idx] = val.toInt();
+                  smallStaff[idx] = e.readInt();
                   }
             else if (tag == "bracket") {
                   int idx = readStaffIdx(e);
-                  bracket[idx] = BracketType(val.toInt());
+                  bracket[idx] = BracketType(e.readInt());
                   }
             else if (tag == "bracketSpan") {
                   int idx = readStaffIdx(e);
-                  bracketSpan[idx] = val.toInt();
+                  bracketSpan[idx] = e.readInt();
                   }
             else if (tag == "barlineSpan") {
                   int idx = readStaffIdx(e);
-                  barlineSpan[idx] = val.toInt();
+                  barlineSpan[idx] = e.readInt();
                   }
             else if (tag == "Tablature") {
                   tablature = new Tablature;
                   tablature->read(e);
                   }
             else if (tag == "aPitchRange")
-                  setPitchRange(val, &minPitchA, &maxPitchA);
+                  setPitchRange(e.readElementText(), &minPitchA, &maxPitchA);
             else if (tag == "pPitchRange")
-                  setPitchRange(val, &minPitchP, &maxPitchP);
+                  setPitchRange(e.readElementText(), &minPitchP, &maxPitchP);
             else if (tag == "transposition") {    // obsolete
-                  transpose.chromatic = val.toInt();
-                  transpose.diatonic = chromatic2diatonic(val.toInt());
+                  int i = e.readInt();
+                  transpose.chromatic = i;
+                  transpose.diatonic = chromatic2diatonic(i);
                   }
             else if (tag == "transposeChromatic")
-                  transpose.chromatic = val.toInt();
+                  transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
-                  transpose.diatonic = val.toInt();
+                  transpose.diatonic = e.readInt();
             else if (tag == "drumset")
-                  useDrumset = val.toInt();
+                  useDrumset = e.readInt();
             else if (tag == "Drum") {
                   // if we see one of this tags, a custom drumset will
                   // be created
@@ -409,14 +411,16 @@ void InstrumentTemplate::read(const QDomElement& de)
                         articulation.append(a);
                   }
             else if (tag == "stafftype") {
+                  QString val(e.readElementText());
                   if (val == "tablature")
                         useTablature = true;
                   else {
                         qDebug("unknown stafftype <%s>\n", qPrintable(val));
-                        domError(e);
+                        e.unknown();
                         }
                   }
             else if (tag == "init") {
+                  QString val(e.readElementText());
                   InstrumentTemplate* ttt = searchTemplate(val);
                   if (ttt)
                         init(*ttt);
@@ -424,7 +428,7 @@ void InstrumentTemplate::read(const QDomElement& de)
                         qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       //
       // check bar line spans
@@ -570,54 +574,28 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
             return false;
             }
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-
-      bool rv = doc.setContent(&qf, false, &err, &line, &column);
-
-      docName = qf.fileName();
-      qf.close();
-
-#if 0
-      foreach(InstrumentGroup* g, instrumentGroups) {
-            foreach(InstrumentTemplate* t, g->instrumentTemplates)
-                  delete t;
-            delete g;
-            }
-      instrumentGroups.clear();
-#endif
-
-      if (!rv) {
-            QString s;
-            s.sprintf("error reading file %s at line %d column %d: %s\n",
-               instrTemplates.toLatin1().data(), line, column, err.toLatin1().data());
-
-            QMessageBox::critical(0, "MuseScore: Read Template File", s);
-            return true;
-            }
-
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
+      XmlReader e(&qf);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "instrument-group" || tag == "InstrumentGroup") {
-                              QString id = ee.attribute("id");
+                              QString id(e.attribute("id"));
                               InstrumentGroup* group = searchInstrumentGroup(id);
                               if (group == 0) {
                                     group = new InstrumentGroup;
                                     instrumentGroups.append(group);
                                     }
-                              group->read(ee);
+                              group->read(e);
                               }
                         else if (tag == "Articulation") {
                               // read global articulation
                               MidiArticulation a;
-                              a.read(ee);
+                              a.read(e);
                               articulation.append(a);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }

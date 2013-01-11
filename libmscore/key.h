@@ -18,6 +18,7 @@
 
 class Xml;
 class Score;
+class XmlReader;
 
 enum {
       KEY_C_B=-7,
@@ -106,7 +107,7 @@ class KeyList : public std::map<const int, KeySigEvent> {
    public:
       KeyList() {}
       KeySigEvent key(int tick) const;
-      void read(const QDomElement&, Score*);
+      void read(XmlReader&, Score*);
       void write(Xml&, const char* name) const;
       };
 

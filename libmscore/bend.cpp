@@ -262,18 +262,18 @@ void Bend::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Bend::read(const QDomElement& de)
+void Bend::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            if (tag == "point") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "point") {
                   PitchValue pv;
-                  pv.time    = e.attribute("time").toInt();
-                  pv.pitch   = e.attribute("pitch").toInt();
-                  pv.vibrato = e.attribute("vibrato").toInt();
+                  pv.time    = e.intAttribute("time");
+                  pv.pitch   = e.intAttribute("pitch");
+                  pv.vibrato = e.intAttribute("vibrato");
                   _points.append(pv);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
+

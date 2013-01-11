@@ -69,7 +69,7 @@ class InstrumentTemplate {
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(Xml& xml) const;
       void write1(Xml& xml) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
       int nstaves() const { return staves; }
       void setStaves(int val) { staves = val; }
       };
@@ -83,7 +83,7 @@ struct InstrumentGroup {
       QString name;
       bool extended;          // belongs to extended instruments set if true
       QList<InstrumentTemplate*> instrumentTemplates;
-      void read(const QDomElement&);
+      void read(XmlReader&);
 
       InstrumentGroup() { extended = false; }
       };

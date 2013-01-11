@@ -338,7 +338,7 @@ void FretDiagram::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void FretDiagram::read(const QDomElement& de)
+void FretDiagram::read(XmlReader& e)
       {
       delete _dots;
       delete _marker;
@@ -348,9 +348,9 @@ void FretDiagram::read(const QDomElement& de)
       _fingering  = 0;
       _fretOffset = 0;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            int val = e.text().toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            int val = e.readInt();
             if (tag == "strings")
                   _strings = val;
             else if (tag == "frets")
@@ -358,18 +358,17 @@ void FretDiagram::read(const QDomElement& de)
             else if (tag == "fretOffset")
                   _fretOffset = val;
             else if (tag == "string") {
-                  int no = e.attribute("no").toInt();
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        int val = ee.text().toInt();
+                  int no = e.intAttribute("no");
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "dot")
-                              setDot(no, val);
+                              setDot(no, e.readInt());
                         else if (tag == "marker")
-                              setMarker(no, val);
+                              setMarker(no, e.readInt());
                         else if (tag == "fingering")
-                              setFingering(no, val);
+                              setFingering(no, e.readInt());
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else if (tag == "Harmony") {
@@ -378,7 +377,7 @@ void FretDiagram::read(const QDomElement& de)
                   add(h);
                   }
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -501,7 +500,7 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
 // Set the FretDiagram state based on the MusicXML <figure> node de.
 //---------------------------------------------------------
 
-void FretDiagram::readMusicXML(const QDomElement& de)
+void FretDiagram::readMusicXML(XmlReader& e)
       {
       qDebug("FretDiagram::readMusicXML");
 
@@ -515,10 +514,10 @@ void FretDiagram::readMusicXML(const QDomElement& de)
       _fretOffset = 0;
       // end TODO: is this required ?
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            int val = e.text().toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "frame-frets") {
+                  int val = e.readInt();
                   if (val > 0)
                         setFrets(val);
                   else
@@ -527,15 +526,15 @@ void FretDiagram::readMusicXML(const QDomElement& de)
             else if (tag == "frame-note") {
                   int fret   = -1;
                   int string = -1;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        int val = ee.text().toInt();
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        int val = e.readInt();
                         if (tag == "fret")
                               fret = val;
                         else if (tag == "string")
                               string = val;
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   qDebug("FretDiagram::readMusicXML string %d fret %d", string, fret);
                   if (string > 0) {
@@ -546,6 +545,7 @@ void FretDiagram::readMusicXML(const QDomElement& de)
                         }
                   }
             else if (tag == "frame-strings") {
+                  int val = e.readInt();
                   if (val > 0) {
                         setStrings(val);
                         for (int i = 0; i < val; ++i)
@@ -555,7 +555,7 @@ void FretDiagram::readMusicXML(const QDomElement& de)
                         qDebug("FretDiagram::readMusicXML: illegal frame-strings %d", val);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

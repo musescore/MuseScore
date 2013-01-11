@@ -53,12 +53,12 @@ class FretDiagram : public Element {
       virtual ElementType type() const   { return FRET_DIAGRAM; }
       virtual void layout();
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual QLineF dragAnchor() const;
       virtual QPointF pagePos() const;
 
       // read / write MusicXML
-      void readMusicXML(const QDomElement& de);
+      void readMusicXML(XmlReader& de);
       void writeMusicXML(Xml& xml) const;
 
       int strings() const    { return _strings; }

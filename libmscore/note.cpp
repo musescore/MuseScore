@@ -664,26 +664,25 @@ void Note::write(Xml& xml) const
 //   Note::read
 //---------------------------------------------------------
 
-void Note::read(const QDomElement& de)
+void Note::read(XmlReader& e)
       {
       bool hasAccidental = false;                     // used for userAccidental backward compatibility
 
       _tpc = INVALID_TPC;
 
-      if (de.hasAttribute("pitch"))                   // obsolete
-            _pitch = de.attribute("pitch").toInt();
-      if (de.hasAttribute("tpc"))                     // obsolete
-            _tpc = de.attribute("tpc").toInt();
+      if (e.hasAttribute("pitch"))                   // obsolete
+            _pitch = e.intAttribute("pitch");
+      if (e.hasAttribute("tpc"))                     // obsolete
+            _tpc = e.intAttribute("tpc");
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "pitch")
-                  _pitch = val.toInt();
+                  _pitch = e.readInt();
             else if (tag == "tpc")
-                  _tpc = val.toInt();
+                  _tpc = e.readInt();
             else if (tag == "small")
-                  setSmall(val.toInt());
+                  setSmall(e.readInt());
             else if (tag == "mirror")
                   setProperty(P_MIRROR_HEAD, ::getProperty(P_MIRROR_HEAD, e));
             else if (tag == "dotPosition")
@@ -695,21 +694,21 @@ void Note::read(const QDomElement& de)
             else if (tag == "head")
                   setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
-                  setVeloOffset(val.toInt());
+                  setVeloOffset(e.readInt());
             else if (tag == "tuning")
-                  setTuning(val.toDouble());
+                  setTuning(e.readDouble());
             else if (tag == "fret")
-                  setFret(val.toInt());
+                  setFret(e.readInt());
             else if (tag == "string")
-                  setString(val.toInt());
+                  setString(e.readInt());
             else if (tag == "ghost")
-                  setGhost(val.toInt());
+                  setGhost(e.readInt());
             else if (tag == "headType")
                   setProperty(P_HEAD_TYPE, ::getProperty(P_HEAD_TYPE, e));
             else if (tag == "veloType")
                   setProperty(P_VELO_TYPE, ::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
-                  _line = val.toInt();
+                  _line = e.readInt();
             else if (tag == "Tie") {
                   _tieFor = new Tie(score());
                   _tieFor->setTrack(track());
@@ -729,33 +728,13 @@ void Note::read(const QDomElement& de)
                   add(s);
                   }
             else if (tag == "Image") {
-                  // look ahead for image type
-                  QString path;
-                  QDomElement ee = e.firstChildElement("path");
-                  if (!ee.isNull())
-                        path = ee.text();
-                  Image* image = 0;
-                  QString s(path.toLower());
-                  if (s.endsWith(".svg"))
-                        image = new SvgImage(score());
-                  else
-                        if (s.endsWith(".jpg")
-                     || s.endsWith(".png")
-                     || s.endsWith(".gif")
-                     || s.endsWith(".xpm")
-                        ) {
-                        image = new RasterImage(score());
-                        }
-                  else {
-                        qDebug("unknown image format <%s>\n", qPrintable(path));
-                        }
-                  if (image) {
-                        image->setTrack(track());
-                        image->read(e);
-                        add(image);
-                        }
+                  Image* image = new Image(score());
+                  image->setTrack(track());
+                  image->read(e);
+                  add(image);
                   }
             else if (tag == "userAccidental") {
+                  QString val(e.readElementText());
                   bool ok;
                   int k = val.toInt(&ok);
                   if (ok) {
@@ -836,7 +815,7 @@ void Note::read(const QDomElement& de)
                         hasAccidental = true;   // we now have an accidental
                   }
             else if (tag == "move")             // obsolete
-                  chord()->setStaffMove(val.toInt());
+                  chord()->setStaffMove(e.readInt());
             else if (tag == "Bend") {
                   Bend* b = new Bend(score());
                   b->setTrack(track());
@@ -860,21 +839,21 @@ void Note::read(const QDomElement& de)
                         }
                   }
             else if (tag == "Events") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "Event") {
                               NoteEvent ne;
-                              ne.read(ee);
+                              ne.read(e);
                               _playEvents.append(ne);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   if (chord())
                         chord()->setUserPlayEvents(true);
                   }
             else if (tag == "endSpanner") {
-                  int id = e.attribute("id").toInt();
+                  int id = e.intAttribute("id");
                   Spanner* e = score()->findSpanner(id);
                   if (e) {
                         e->setEndElement(this);
@@ -884,7 +863,7 @@ void Note::read(const QDomElement& de)
                         qDebug("Note::read(): cannot find spanner %d", id);
                   }
             else if (tag == "TextLine") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), score()));
                   sp->setTrack(track());
                   sp->read(e);
                   sp->setAnchor(Spanner::ANCHOR_NOTE);
@@ -903,7 +882,7 @@ void Note::read(const QDomElement& de)
             else if (Element::readProperties(e))
                   ;
             else
-                  domError(e);
+                  e.unknown();
             }
       // ensure sane values:
       _pitch = restrict(_pitch, 0, 127);

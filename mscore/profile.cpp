@@ -272,6 +272,7 @@ void Profile::write()
 
 void Profile::read()
       {
+#if 0 // TODOx
       if (_path.isEmpty() || !QFile(_path).exists()) {
             PaletteBox* paletteBox = mscore->getPaletteBox();
             paletteBox->clear();
@@ -358,23 +359,23 @@ void Profile::read()
                         }
                   }
             }
+#endif
       }
 
-void Profile::read(QDomElement e)
+void Profile::read(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "name")
-                  _name = val;
+                  _name = e.readElementText();
             else if (tag == "PaletteBox") {
                   PaletteBox* paletteBox = mscore->getPaletteBox();
                   paletteBox->clear();
                   paletteBox->read(e);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

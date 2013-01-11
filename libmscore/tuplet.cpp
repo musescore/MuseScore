@@ -522,31 +522,30 @@ void Tuplet::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Tuplet::read(const QDomElement& de)
+void Tuplet::read(XmlReader& e)
       {
       int bl = -1;
-      _id    = de.attribute("id", "0").toInt();
+      _id    = e.intAttribute("id", 0);
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  _direction = MScore::Direction(val.toInt());
+                  _direction = MScore::Direction(e.readInt());
             else if (tag == "numberType")
-                  _numberType = val.toInt();
+                  _numberType = e.readInt();
             else if (tag == "bracketType")
-                  _bracketType = val.toInt();
+                  _bracketType = e.readInt();
             else if (tag == "normalNotes")
-                  _ratio.setDenominator(val.toInt());
+                  _ratio.setDenominator(e.readInt());
             else if (tag == "actualNotes")
-                  _ratio.setNumerator(val.toInt());
+                  _ratio.setNumerator(e.readInt());
             else if (tag == "p1")
-                  _p1 = readPoint(e);
+                  _p1 = e.readPoint();
             else if (tag == "p2")
-                  _p2 = readPoint(e);
+                  _p2 = e.readPoint();
             else if (tag == "baseNote")
-                  _baseLen = TDuration(e.text());
+                  _baseLen = TDuration(e.readElementText());
             else if (tag == "Number") {
                   _number = new Text(score());
                   _number->setParent(this);
@@ -557,15 +556,15 @@ void Tuplet::read(const QDomElement& de)
             else if (tag == "subtype")    // obsolete
                   ;
             else if (tag == "hasNumber")             // obsolete
-                  _numberType = val.toInt() ? SHOW_NUMBER : NO_TEXT;
+                  _numberType = e.readInt() ? SHOW_NUMBER : NO_TEXT;
             else if (tag == "hasLine") {          // obsolete
-                  _hasBracket = val.toInt();
+                  _hasBracket = e.readInt();
                   _bracketType = AUTO_BRACKET;
                   }
             else if (tag == "baseLen")            // obsolete
-                  bl = val.toInt();
+                  bl = e.readInt();
             else if (!DurationElement::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());
       setDuration(f);

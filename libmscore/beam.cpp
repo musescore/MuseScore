@@ -1934,29 +1934,28 @@ void Beam::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Beam::read(const QDomElement& de)
+void Beam::read(XmlReader& e)
       {
       QPointF p1, p2;
       qreal _spatium = spatium();
-      _id = de.attribute("id").toInt();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      _id = e.intAttribute("id");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "StemDirection")
                   setProperty(P_STEM_DIRECTION, ::getProperty(P_STEM_DIRECTION, e));
             else if (tag == "distribute")
-                  setDistribute(val.toInt());
+                  setDistribute(e.readInt());
             else if (tag == "growLeft")
-                  setGrowLeft(val.toDouble());
+                  setGrowLeft(e.readDouble());
             else if (tag == "growRight")
-                  setGrowRight(val.toDouble());
+                  setGrowRight(e.readDouble());
             else if (tag == "y1") {
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
                   int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
-                  f->py1[idx] = val.toDouble() * _spatium;
+                  f->py1[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "y2") {
                   if (fragments.isEmpty())
@@ -1964,22 +1963,23 @@ void Beam::read(const QDomElement& de)
                   BeamFragment* f = fragments.back();
                   int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
-                  f->py2[idx] = val.toDouble() * _spatium;
+                  f->py2[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "Fragment") {
                   BeamFragment* f = new BeamFragment;
                   int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   qreal _spatium = spatium();
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        qreal v = ee.text().toDouble() * _spatium;
+
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        qreal v = e.readDouble() * _spatium;
                         if (tag == "y1")
                               f->py1[idx] = v;
                         else if (tag == "y2")
                               f->py2[idx] = v;
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   fragments.append(f);
                   }
@@ -1990,7 +1990,7 @@ void Beam::read(const QDomElement& de)
             else if (tag == "subtype")          // obsolete
                   ;
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

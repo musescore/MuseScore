@@ -351,20 +351,20 @@ void SlurSegment::write(Xml& xml, int no) const
 //   readSegment
 //---------------------------------------------------------
 
-void SlurSegment::read(const QDomElement& de)
+void SlurSegment::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "o1")
-                  ups[GRIP_START].off = readPoint(e);
+                  ups[GRIP_START].off = e.readPoint();
             else if (tag == "o2")
-                  ups[GRIP_BEZIER1].off = readPoint(e);
+                  ups[GRIP_BEZIER1].off = e.readPoint();
             else if (tag == "o3")
-                  ups[GRIP_BEZIER2].off = readPoint(e);
+                  ups[GRIP_BEZIER2].off = e.readPoint();
             else if (tag == "o4")
-                  ups[GRIP_END].off = readPoint(e);
+                  ups[GRIP_END].off = e.readPoint();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -931,13 +931,12 @@ void SlurTie::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool SlurTie::readProperties(const QDomElement& e)
+bool SlurTie::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "SlurSegment") {
-            int idx = e.attribute("no", 0).toInt();
+            int idx = e.intAttribute("no", 0);
             int n = spannerSegments().size();
             for (int i = n; i < idx; ++i)
                   add(new SlurSegment(score()));
@@ -946,9 +945,9 @@ bool SlurTie::readProperties(const QDomElement& e)
             add(segment);
             }
       else if (tag == "up")
-            _slurDirection = MScore::Direction(val.toInt());
+            _slurDirection = MScore::Direction(e.readInt());
       else if (tag == "lineType")
-            _lineType = val.toInt();
+            _lineType = e.readInt();
       else if (!Element::readProperties(e))
             return false;
       return true;
@@ -1059,27 +1058,20 @@ void Slur::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Slur::read(const QDomElement& de)
+void Slur::read(XmlReader& e)
       {
       setTrack(0);      // set staff
-      setId(de.attribute("id").toInt());
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-//            if (tag == "tick2")
-//                  _tick2 = score()->fileDivision(i);
+      setId(e.intAttribute("id"));
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "track2")
-                  _track2 = val.toInt();
-//            else if (tag == "startTick")        // obsolete
-//                  ; //                  setTick(i);
-//            else if (tag == "endTick")          // obsolete
-//                  setTick2(val.toInt());
+                  _track2 = e.readInt();
             else if (tag == "startTrack")       // obsolete
-                  setTrack(val.toInt());
+                  setTrack(e.readInt());
             else if (tag == "endTrack")         // obsolete
-                  setTrack2(val.toInt());
+                  setTrack2(e.readInt());
             else if (!SlurTie::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -1338,15 +1330,15 @@ void Tie::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Tie::read(const QDomElement& de)
+void Tie::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (Element::readProperties(e))
                   ;
             else if (SlurTie::readProperties(e))
                   ;
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

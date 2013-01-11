@@ -24,6 +24,7 @@
 class Element;
 class Sym;
 class Xml;
+class XmlReader;
 class Palette;
 class PaletteScrollArea;
 
@@ -150,7 +151,7 @@ class PaletteBox : public QDockWidget {
       void addPalette(Palette*);
       bool dirty() const      { return _dirty; }
       void write(Xml&);
-      bool read(QDomElement);
+      bool read(XmlReader&);
       void clear();
       };
 
@@ -234,7 +235,7 @@ class Palette : public QWidget {
       bool drawGrid() const          { return _drawGrid; }
       void read(const QString& path);
       void write(const QString& path);
-      void read(QDomElement);
+      void read(XmlReader&);
       void write(Xml&, const QString& name) const;
       bool read(QFile*);
       void clear();

@@ -17,6 +17,175 @@
 QString docName;
 
 //---------------------------------------------------------
+//   XmlReader
+//---------------------------------------------------------
+
+XmlReader::XmlReader(QFile* d)
+   : QXmlStreamReader(d)
+      {
+      docName = d->fileName();
+      }
+
+//---------------------------------------------------------
+//   intAttribute
+//---------------------------------------------------------
+
+int XmlReader::intAttribute(const char* s, int _default) const
+      {
+      if (attributes().hasAttribute(s))
+            return attributes().value(s).toString().toInt();
+      else
+            return _default;
+      }
+
+int XmlReader::intAttribute(const char* s) const
+      {
+      return attributes().value(s).toString().toInt();
+      }
+
+//---------------------------------------------------------
+//   doubleAttribute
+//---------------------------------------------------------
+
+double XmlReader::doubleAttribute(const char* s) const
+      {
+      return attributes().value(s).toString().toDouble();
+      }
+
+double XmlReader::doubleAttribute(const char* s, double _default) const
+      {
+      if (attributes().hasAttribute(s))
+            return attributes().value(s).toUtf8().toDouble();
+      else
+            return _default;
+      }
+
+//---------------------------------------------------------
+//   attribute
+//---------------------------------------------------------
+
+QString XmlReader::attribute(const char* s, const QString& _default) const
+      {
+      if (attributes().hasAttribute(s))
+            return attributes().value(s).toString();
+      else
+            return _default;
+      }
+
+//---------------------------------------------------------
+//   hasAttribute
+//---------------------------------------------------------
+
+bool XmlReader::hasAttribute(const char* s) const
+      {
+      return attributes().hasAttribute(s);
+      }
+
+//---------------------------------------------------------
+//   readPoint
+//---------------------------------------------------------
+
+QPointF XmlReader::readPoint()
+      {
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      QPointF p;
+#ifndef NDEBUG
+      if (!attributes().hasAttribute("x")) {
+            QXmlStreamAttributes map = attributes();
+            qDebug("XmlReader::readPoint: x attribute missing: %s (%d)",
+               name().toUtf8().data(), map.size());
+            for (int i = 0; i < map.size(); ++i) {
+                  const QXmlStreamAttribute& a = map.at(i);
+                  qDebug(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
+                  }
+            unknown();
+            }
+      if (!attributes().hasAttribute("y")) {
+            qDebug("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
+            unknown();
+            }
+#endif
+      p.setX(doubleAttribute("x", 0.0));
+      p.setY(doubleAttribute("y", 0.0));
+      readNext();
+      return p;
+      }
+
+//---------------------------------------------------------
+//   readColor
+//---------------------------------------------------------
+
+QColor XmlReader::readColor()
+      {
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      QColor c;
+      c.setRed(intAttribute("r"));
+      c.setGreen(intAttribute("g"));
+      c.setBlue(intAttribute("b"));
+      c.setAlpha(intAttribute("a", 255));
+      skipCurrentElement();
+      return c;
+      }
+
+//---------------------------------------------------------
+//   readSize
+//---------------------------------------------------------
+
+QSizeF XmlReader::readSize()
+      {
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      QSizeF p;
+      p.setWidth(doubleAttribute("w", 0.0));
+      p.setHeight(doubleAttribute("h", 0.0));
+      skipCurrentElement();
+      return p;
+      }
+
+//---------------------------------------------------------
+//   readRect
+//---------------------------------------------------------
+
+QRectF XmlReader::readRect()
+      {
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      QRectF p;
+      p.setX(doubleAttribute("x", 0.0));
+      p.setY(doubleAttribute("y", 0.0));
+      p.setWidth(doubleAttribute("w", 0.0));
+      p.setHeight(doubleAttribute("h", 0.0));
+      skipCurrentElement();
+      return p;
+      }
+
+//---------------------------------------------------------
+//   readFraction
+//---------------------------------------------------------
+
+Fraction XmlReader::readFraction()
+      {
+      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      qreal z = attribute("z", "0.0").toDouble();
+      qreal n = attribute("n", "0.0").toDouble();
+      skipCurrentElement();
+      return Fraction(z, n);
+      }
+
+//---------------------------------------------------------
+//   unknown
+//    unknown tag read
+//---------------------------------------------------------
+
+void XmlReader::unknown() const
+      {
+      if (QXmlStreamReader::error())
+            qDebug("StreamReaderError: %s", qPrintable(errorString()));
+      qDebug("%s: xml read error at line %lld col %lld: %s",
+         qPrintable(docName), lineNumber(), columnNumber(),
+         name().toUtf8().data());
+      abort();
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 
@@ -78,9 +247,9 @@ void Xml::pTag(const char* name, PlaceText place)
 //   readPlacement
 //---------------------------------------------------------
 
-PlaceText readPlacement(const QDomElement& e)
+PlaceText readPlacement(XmlReader& e)
       {
-      const QString& s(e.text());
+      const QString& s(e.readElementText());
       if (s == "auto" || s == "0")
             return PLACE_AUTO;
       if (s == "above" || s == "1")
@@ -100,17 +269,6 @@ PlaceText readPlacement(const QDomElement& e)
 void Xml::fTag(const char* name, const Fraction& f)
       {
       tagE(QString("%1 z=\"%2\" n=\"%3\"").arg(name).arg(f.numerator()).arg(f.denominator()));
-      }
-
-//---------------------------------------------------------
-//   readFraction
-//---------------------------------------------------------
-
-Fraction readFraction(const QDomElement& e)
-      {
-      qreal z = e.attribute("z", "0.0").toDouble();
-      qreal n = e.attribute("n", "0.0").toDouble();
-      return Fraction(z, n);
       }
 
 //---------------------------------------------------------
@@ -413,144 +571,55 @@ void Xml::dump(int len, const unsigned char* p)
       }
 
 //---------------------------------------------------------
-//   readPoint
-//---------------------------------------------------------
-
-QPointF readPoint(const QDomElement& e)
-      {
-      QPointF p;
-      p.setX(e.attribute("x", "0.0").toDouble());
-      p.setY(e.attribute("y", "0.0").toDouble());
-      return p;
-      }
-
-//---------------------------------------------------------
-//   readColor
-//---------------------------------------------------------
-
-QColor readColor(const QDomElement& e)
-      {
-      QColor c;
-      c.setRed(e.attribute("r").toInt());
-      c.setGreen(e.attribute("g").toInt());
-      c.setBlue(e.attribute("b").toInt());
-      c.setAlpha(e.attribute("a", "255").toInt());
-      return c;
-      }
-
-//---------------------------------------------------------
-//   readSize
-//---------------------------------------------------------
-
-QSizeF readSize(const QDomElement& e)
-      {
-      QSizeF p;
-      p.setWidth(e.attribute("w", "0.0").toDouble());
-      p.setHeight(e.attribute("h", "0.0").toDouble());
-      return p;
-      }
-
-//---------------------------------------------------------
-//   readRectF
-//---------------------------------------------------------
-
-QRectF readRectF(const QDomElement& e)
-      {
-      QRectF p;
-      p.setX(e.attribute("x", "0.0").toDouble());
-      p.setY(e.attribute("y", "0.0").toDouble());
-      p.setWidth(e.attribute("w", "0.0").toDouble());
-      p.setHeight(e.attribute("h", "0.0").toDouble());
-      return p;
-      }
-
-//---------------------------------------------------------
-//   printDomElementPath
-//---------------------------------------------------------
-
-static QString domElementPath(const QDomElement& e)
-      {
-      QString s;
-      QDomNode dn(e);
-      while (!dn.parentNode().isNull()) {
-            dn = dn.parentNode();
-            const QDomElement& e = dn.toElement();
-            const QString k(e.tagName());
-            if (!s.isEmpty())
-                  s += ":";
-            s += k;
-            }
-      return s;
-      }
-
-//---------------------------------------------------------
-//   domError
-//---------------------------------------------------------
-
-void domError(const QDomElement& e)
-      {
-      QString m;
-      QString s = domElementPath(e);
-      if (!docName.isEmpty())
-            m = QString("<%1>:").arg(docName);
-      int ln = e.lineNumber();
-      if (ln != -1)
-            m += QString("line:%1 ").arg(ln);
-      int col = e.columnNumber();
-      if (col != -1)
-            m += QString("col:%1 ").arg(col);
-      m += QString("%1: Unknown Node <%2>, type %3").arg(s).arg(e.tagName()).arg(e.nodeType());
-      if (e.isText())
-            m += QString("  text node <%1>").arg(e.toText().data());
-      qDebug("%s", qPrintable(m));
-      }
-
-//---------------------------------------------------------
-//   domNotImplemented
-//---------------------------------------------------------
-
-void domNotImplemented(const QDomElement& e)
-      {
-      if (!MScore::debugMode)
-            return;
-      QString s = domElementPath(e);
-      if (!docName.isEmpty())
-            qDebug("<%s>:", qPrintable(docName));
-      qDebug("%s: Node not implemented: <%s>, type %d\n",
-         qPrintable(s), qPrintable(e.tagName()), e.nodeType());
-      if (e.isText())
-            qDebug("  text node <%s>\n", qPrintable(e.toText().data()));
-      }
-
-//---------------------------------------------------------
 //   htmlToString
 //---------------------------------------------------------
 
-void Xml::htmlToString(const QDomElement& e, int level, QString* s)
+void Xml::htmlToString(XmlReader& e, int level, QString* s)
       {
-      *s += QString("<%1").arg(e.tagName());
-      QDomNamedNodeMap map = e.attributes();
+// printf("  html <%s>\n", e.name().toUtf8().data());
+      *s += QString("<%1").arg(e.name().toString());
+      QXmlStreamAttributes map = e.attributes();
       int n = map.size();
       for (int i = 0; i < n; ++i) {
-            QDomAttr a = map.item(i).toAttr();
-            *s += QString(" %1=\"%2\"").arg(a.name()).arg(a.value());
+            const QXmlStreamAttribute& a = map.at(i);
+            *s += QString(" %1=\"%2\"").arg(a.name().toString()).arg(a.value().toString());
             }
       *s += ">";
       ++level;
-      for (QDomNode ee = e.firstChild(); !ee.isNull(); ee = ee.nextSibling()) {
-            if (ee.nodeType() == QDomNode::ElementNode)
-                  htmlToString(ee.toElement(), level, s);
-            else if (ee.nodeType() == QDomNode::TextNode)
-                  *s += Qt::escape(ee.toText().data());
+      for (;;) {
+            QXmlStreamReader::TokenType t = e.readNext();
+//            printf("    token %d\n", int(t));
+            switch(t) {
+                  case QXmlStreamReader::StartElement:
+//                        printf("         start <%s>\n", e.name().toUtf8().data());
+                        htmlToString(e, level, s);
+                        break;
+                  case QXmlStreamReader::EndElement:
+//                        printf("         end <%s>\n", e.name().toUtf8().data());
+                        *s += QString("</%1>").arg(e.name().toString());
+                        --level;
+                        return;
+                  case QXmlStreamReader::Characters:
+//                        printf("         char <%s>\n", e.text().toUtf8().data());
+                        if (!e.isWhitespace())
+                              *s += e.text().toString();
+                        break;
+                  case QXmlStreamReader::Comment:
+                        break;
+                  default:
+//                        printf("      ?? %d\n", int(t));
+                        return;
+                  }
             }
-      *s += QString("</%1>").arg(e.tagName());
-      --level;
       }
 
-QString Xml::htmlToString(const QDomElement& e)
+QString Xml::htmlToString(XmlReader& e)
       {
+      e.readNextStartElement();
       QString s;
       htmlToString(e, 0, &s);
+//      printf("====HTML<%s>====\n", qPrintable(s));
+      e.skipCurrentElement();
       return s;
       }
 

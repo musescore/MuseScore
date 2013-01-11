@@ -375,19 +375,18 @@ void Shortcut::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Shortcut::read(const QDomElement& e)
+void Shortcut::read(XmlReader& e)
       {
-      for (QDomElement eee = e.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-            const QString& tag(eee.tagName());
-            const QString& val(eee.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "key")
-                  _key = strdup(val.toLatin1().data());      // memory leak!
+                  _key = strdup(e.readElementText().toLatin1().data());      // memory leak!
             else if (tag == "std")
-                  _standardKey = QKeySequence::StandardKey(val.toInt());
+                  _standardKey = QKeySequence::StandardKey(e.readInt());
             else if (tag == "seq")
-                  _keys.append(QKeySequence::fromString(val, QKeySequence::PortableText));
+                  _keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
             else
-                  domError(eee);
+                  e.unknown();
             }
       }
 
@@ -404,26 +403,19 @@ void Shortcut::load()
             printf("cannot open shortcuts\n");
             return;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            printf("error reading shortcuts.xml at line %d column %d: %s\n",
-               line, column, qPrintable(err));
-            return;
-            }
-      f.close();
+
+      XmlReader e(&f);
 
       QString key;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "Shortcuts") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "SC") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "Shortcuts") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "SC") {
                               Shortcut* sc = 0;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                    const QString& tag(eee.tagName());
-                                    const QString& val(eee.text());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "key") {
+                                          QString val(e.readElementText());
                                           sc = getShortcut(val.toLatin1().data());
                                           if (!sc) {
                                                 printf("cannot find shortcut <%s>\n", qPrintable(val));
@@ -432,19 +424,19 @@ void Shortcut::load()
                                           sc->clear();
                                           }
                                     else if (tag == "std")
-                                          sc->_standardKey = QKeySequence::StandardKey(val.toInt());
+                                          sc->_standardKey = QKeySequence::StandardKey(e.readInt());
                                     else if (tag == "seq")
-                                          sc->_keys.append(QKeySequence::fromString(val, QKeySequence::PortableText));
+                                          sc->_keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
                                     else
-                                          domError(eee);
+                                          e.unknown();
                                     }
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       dirty = false;
       }
@@ -474,42 +466,32 @@ static QList<Shortcut1*> loadDefaultShortcuts()
             printf("cannot open shortcuts\n");
             return list;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            printf("error reading shortcuts.xml at line %d column %d: %s\n",
-               line, column, qPrintable(err));
-            return list;
-            }
-      f.close();
-
+      XmlReader e(&f);
       QString key;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "Shortcuts") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "SC") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "Shortcuts") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "SC") {
                               Shortcut1* sc = new Shortcut1;
                               sc->key = 0;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                    const QString& tag(eee.tagName());
-                                    const QString& val(eee.text());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "key")
-                                          sc->key = strdup(val.toLatin1().data());
+                                          sc->key = strdup(e.readElementText().toLatin1().data());
                                     else if (tag == "std")
-                                          sc->standardKey = QKeySequence::StandardKey(val.toInt());
+                                          sc->standardKey = QKeySequence::StandardKey(e.readInt());
                                     else if (tag == "seq")
-                                          sc->keys.append(QKeySequence::fromString(val, QKeySequence::PortableText));
+                                          sc->keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
                                     else
-                                          domError(eee);
+                                          e.unknown();
                                     }
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       return list;
       }

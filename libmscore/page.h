@@ -84,8 +84,8 @@ class PageFormat : public QObject {
       void copy(const PageFormat&);
 
       QString name() const;
-      void read(const QDomElement&);
-      void readMusicXML(const QDomElement&, qreal);
+      void read(XmlReader&);
+      void readMusicXML(XmlReader&, qreal);
       void write(Xml&) const;
       void writeMusicXML(Xml&, qreal) const;
       qreal evenLeftMargin() const        { return _evenLeftMargin;   }
@@ -144,7 +144,7 @@ class Page : public Element {
 
       virtual void layout();
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       void appendSystem(System* s);
 

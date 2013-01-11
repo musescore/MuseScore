@@ -650,21 +650,20 @@ void Element::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool Element::readProperties(const QDomElement& e)
+bool Element::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "color")
-            _color = readColor(e);
+            _color = e.readColor();
       else if (tag == "visible")
-            _visible = val.toInt();
+            _visible = e.readInt();
       else if (tag == "selected")
-            _selected = val.toInt();
+            _selected = e.readInt();
       else if (tag == "userOff")
-            _userOff = readPoint(e);
+            _userOff = e.readPoint();
       else if (tag == "lid") {
-            int id = val.toInt();
+            int id = e.readInt();
             _links = score()->links().value(id);
             if (!_links) {
                   if (score()->parentScore())   // DEBUG
@@ -674,10 +673,10 @@ bool Element::readProperties(const QDomElement& e)
                   }
 #ifndef NDEBUG
             else {
-                  foreach(Element* e, *_links) {
-                        if (e->type() != type()) {
+                  foreach(Element* ee, *_links) {
+                        if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
-                                 qPrintable(val), id, e->name(), name());
+                                 ee->name(), id, ee->name(), name());
                               }
                         }
                   }
@@ -685,22 +684,24 @@ bool Element::readProperties(const QDomElement& e)
             _links->append(this);
             }
       else if (tag == "tick") {
+            int val = e.readInt();
             if (type() != SYMBOL)   // hack for 1.2
-                  score()->curTick = score()->fileDivision(val.toInt());
+                  score()->curTick = score()->fileDivision(val);
             }
       else if (tag == "offset") {         // ??obsolete -> used for volta
             qreal _spatium = spatium();
-            QPointF pt(readPoint(e) * _spatium);
+            QPointF pt(e.readPoint() * _spatium);
             setUserOff(pt);
             // _readPos = QPointF();
             }
       else if (tag == "pos")
-            _readPos = readPoint(e) * spatium();
+            _readPos = e.readPoint() * spatium();
       else if (tag == "voice")
-            setTrack((_track/VOICES)*VOICES + val.toInt());
+            setTrack((_track/VOICES)*VOICES + e.readInt());
       else if (tag == "track")
-            setTrack(val.toInt());
+            setTrack(e.readInt());
       else if (tag == "tag") {
+            QString val(e.readElementText());
             for (int i = 1; i < MAX_TAGS; i++) {
                   if (score()->layerTags()[i] == val) {
                         _tag = 1 << i;
@@ -739,11 +740,11 @@ void Element::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Element::read(const QDomElement& de)
+void Element::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -1001,17 +1002,16 @@ void Line::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool Line::readProperties(const QDomElement& e)
+bool Line::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "lineWidth")
-            _width = Spatium(val.toDouble());
+            _width = Spatium(e.readDouble());
       else if (tag == "lineLen")
-            _len = Spatium(val.toDouble());
+            _len = Spatium(e.readDouble());
       else if (tag == "vertical")
-            vertical = val.toInt();
+            vertical = e.readInt();
       else
             return false;
       return true;
@@ -1167,23 +1167,24 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-Element::ElementType Element::readType(QDomElement& e, QPointF* dragOffset, Fraction* duration)
+Element::ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
+   Fraction* duration)
       {
-      ElementType type = INVALID;
-
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "dragOffset")
-                  *dragOffset = readPoint(e);
-            else if (e.tagName() == "duration")
-                  *duration = readFraction(e);
-            else if ((type = name2type(e.tagName())) == INVALID) {
-                  domError(e);
-                  break;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
+            if (tag == "dragOffset")
+                  *dragOffset = e.readPoint();
+            else if (tag == "duration")
+                  *duration = e.readFraction();
+            else {
+                  ElementType type = name2type(tag.toString());
+                  if (type == INVALID)
+                        break;
+                  return type;
                   }
-            if (type != INVALID)
-                  break;
             }
-      return type;
+      e.unknown();
+      return INVALID;
       }
 
 //---------------------------------------------------------

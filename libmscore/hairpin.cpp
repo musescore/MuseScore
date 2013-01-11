@@ -146,23 +146,23 @@ void Hairpin::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Hairpin::read(const QDomElement& de)
+void Hairpin::read(XmlReader& e)
       {
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
       spannerSegments().clear();
-      setId(de.attribute("id", "-1").toInt());
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+
+      setId(e.intAttribute("id", -1));
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = HairpinType(val.toInt());
+                  _subtype = HairpinType(e.readInt());
             else if (tag == "veloChange")
-                  _veloChange = val.toInt();
+                  _veloChange = e.readInt();
             else if (tag == "dynType")
-                  _dynRange = DynamicRange(val.toInt());
+                  _dynRange = DynamicRange(e.readInt());
             else if (!SLine::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

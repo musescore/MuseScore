@@ -86,8 +86,8 @@ class StaffType {
       bool showBarlines() const                { return _showBarlines;    }
       virtual void write(Xml& xml, int) const;
       void writeProperties(Xml& xml) const;
-      virtual void read(const QDomElement&);
-      bool readProperties(const QDomElement& e);
+      virtual void read(XmlReader&);
+      bool readProperties(XmlReader& e);
       void setSlashStyle(bool val)             { _slashStyle = val;       }
       bool slashStyle() const                  { return _slashStyle;      }
       bool genTimesig() const                  { return _genTimesig;      }
@@ -120,7 +120,7 @@ class StaffTypePitched : public StaffType {
       virtual const char* groupName() const   { return "pitched"; }
       virtual bool isEqual(const StaffType&) const;
 
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
 
       void setGenKeysig(bool val)              { _genKeysig = val;        }
@@ -144,7 +144,7 @@ class StaffTypePercussion : public StaffType {
       virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
       virtual const char* groupName() const      { return "percussion"; }
 
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
 
       void setGenKeysig(bool val)                { _genKeysig = val;        }
@@ -169,7 +169,7 @@ struct TablatureFretFont {
       QString           displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
       QChar             displayLetter[NUM_OF_LETTERFRETS];  // the char to use for letter frets
 
-      bool read(const QDomElement&);
+      bool read(XmlReader&);
 };
 
 enum {
@@ -200,7 +200,7 @@ struct TablatureDurationFont {
       QChar             displayDot;             // the char to use to draw a dot
       QChar             displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
 
-      bool read(const QDomElement&);
+      bool read(XmlReader&);
 };
 
 //---------------------------------------------------------
@@ -290,7 +290,7 @@ class StaffTypeTablature : public StaffType {
       virtual StaffGroup group() const          { return TAB_STAFF; }
       virtual StaffTypeTablature* clone() const { return new StaffTypeTablature(*this); }
       virtual const char* groupName() const     { return "tablature"; }
-      virtual void read(const QDomElement& e);
+      virtual void read(XmlReader& e);
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
       bool        isSameStructure(const StaffTypeTablature& stt) const;

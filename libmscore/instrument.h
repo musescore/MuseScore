@@ -20,6 +20,7 @@
 
 class InstrumentTemplate;
 class Xml;
+class XmlReader;
 class Drumset;
 class Tablature;
 
@@ -57,7 +58,7 @@ struct NamedEventList {
       EventList events;
 
       void write(Xml&, const QString& name) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
       bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
       };
 
@@ -71,7 +72,7 @@ struct MidiArticulation {
       int velocity;           // velocity change: -100% - +100%
       int gateTime;           // gate time change: -100% - +100%
       void write(Xml&) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
 
       MidiArticulation() {}
       bool operator==(const MidiArticulation& i) const;
@@ -112,7 +113,7 @@ struct Channel {
 
       Channel();
       void write(Xml&) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (name == c.name) && (channel == c.channel); }
       };
@@ -133,7 +134,7 @@ class Instrument {
       Instrument& operator=(const Instrument&);
       bool operator==(const Instrument&) const;
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml& xml) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;

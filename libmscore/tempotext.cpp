@@ -48,16 +48,16 @@ void TempoText::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void TempoText::read(const QDomElement& de)
+void TempoText::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "tempo")
-                  _tempo = e.text().toDouble();
+                  _tempo = e.readDouble();
             else if (tag == "followText")
-                  _followText = e.text().toInt();
+                  _followText = e.readInt();
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (score()->mscVersion() < 119) {
             //

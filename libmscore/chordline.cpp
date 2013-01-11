@@ -108,22 +108,22 @@ void ChordLine::layout()
 //   read
 //---------------------------------------------------------
 
-void ChordLine::read(const QDomElement& de)
+void ChordLine::read(XmlReader& e)
       {
       path = QPainterPath();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "Path") {
                   path = QPainterPath();
                   QPointF curveTo;
                   QPointF p1;
                   int state = 0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "Element") {
-                              int type = ee.attribute("type").toInt();
-                              qreal x = ee.attribute("x").toDouble();
-                              qreal y = ee.attribute("y").toDouble();
+                              int type = e.intAttribute("type");
+                              qreal x  = e.doubleAttribute("x");
+                              qreal y  = e.doubleAttribute("y");
                               switch(QPainterPath::ElementType(type)) {
                                     case QPainterPath::MoveToElement:
                                           path.moveTo(x, y);
@@ -150,15 +150,15 @@ void ChordLine::read(const QDomElement& de)
                                     }
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   modified = true;
                   setSubtype(ChordLineType(0));
                   }
             else if (tag == "subtype")
-                  setSubtype(ChordLineType(e.text().toInt()));
+                  setSubtype(ChordLineType(e.readInt()));
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -345,24 +345,23 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(const QDomElement& de)
+void ChordDescription::read(XmlReader& e)
       {
-      id = de.attribute("id").toInt();
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      id = e.attribute("id").toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "name")
-                  names.append(val);
+                  names.append(e.readElementText());
             else if (tag == "xml")
-                  xmlKind = val;
+                  xmlKind = e.readElementText();
             else if (tag == "degree")
-                  xmlDegrees.append(val);
+                  xmlDegrees.append(e.readElementText());
             else if (tag == "voicing")
-                  chord = HChord(val);
+                  chord = HChord(e.readElementText());
             else if (tag == "render")
-                  readRenderList(val, renderList);
+                  readRenderList(e.readElementText(), renderList);
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -402,35 +401,33 @@ ChordList::~ChordList()
 //   read
 //---------------------------------------------------------
 
-void ChordList::read(const QDomElement& de)
+void ChordList::read(XmlReader& e)
       {
       int fontIdx = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "font") {
                   ChordFont f;
                   f.family = e.attribute("family", "default");
                   f.mag    = 1.0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "sym") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "sym") {
                               ChordSymbol cs;
                               cs.fontIdx = fontIdx;
-                              cs.name    = ee.attribute("name");
-                              cs.code    = ee.attribute("code").toInt(0, 0);
+                              cs.name    = e.attribute("name");
+                              cs.code    = e.intAttribute("code");
                               symbols.insert(cs.name, cs);
                               }
-                        else if (ee.tagName() == "mag") {
-                              f.mag = ee.text().toDouble();
-                              }
+                        else if (e.name() == "mag")
+                              f.mag = e.readDouble();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   fonts.append(f);
                   ++fontIdx;
                   }
             else if (tag == "chord") {
-                  int id = e.attribute("id").toInt();
+                  int id = e.intAttribute("id");
                   ChordDescription* cd = take(id);
                   if (cd == 0)
                         cd = new ChordDescription();
@@ -438,11 +435,11 @@ void ChordList::read(const QDomElement& de)
                   insert(id, cd);
                   }
             else if (tag == "renderRoot")
-                  readRenderList(val, renderListRoot);
+                  readRenderList(e.readElementText(), renderListRoot);
             else if (tag == "renderBase")
-                  readRenderList(val, renderListBase);
+                  readRenderList(e.readElementText(), renderListBase);
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -510,21 +507,14 @@ bool ChordList::read(const QString& name)
       if (!f.open(QIODevice::ReadOnly)) {
             QString s = QT_TRANSLATE_NOOP("file", "cannot open chord description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("ChordList::read failed: <%s>", qPrintable(path));
+            qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error reading chord description %1 at line %2 column %3: %4\n");
-            MScore::lastError = s.arg(f.fileName()).arg(line).arg(column).arg(err);
-            return false;
-            }
+      XmlReader e(&f);
       docName = f.fileName();
 
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
                   // QString version = e.attribute(QString("version"));
                   // QStringList sl = version.split('.');
                   // int _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();

@@ -61,7 +61,7 @@ class Tremolo : public Element {
       virtual void draw(QPainter*) const;
       virtual void layout();
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       Chord* chord1() const { return _chord1; }
       Chord* chord2() const { return _chord2; }

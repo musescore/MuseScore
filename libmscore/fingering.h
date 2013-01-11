@@ -34,7 +34,7 @@ class Fingering : public Text {
 
       virtual void layout();
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void reset();
       };
 

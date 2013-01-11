@@ -247,7 +247,7 @@ class Note : public Element {
 
       void draw(QPainter*) const;
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml& xml) const;
 
       QPointF stemPos(bool upFlag) const;    ///< Point to connect stem.

@@ -241,15 +241,15 @@ void Symbol::write(Xml& xml) const
 //   Symbol::read
 //---------------------------------------------------------
 
-void Symbol::read(const QDomElement& de)
+void Symbol::read(XmlReader& e)
       {
       QPointF pos;
       SymId s = noSym;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "name") {
+                  QString val(e.readElementText());
                   if (val == "acc dot")               // compatibility hack
                         val = "accordion.accDot";
                   s = Sym::name2id(val);
@@ -271,6 +271,7 @@ void Symbol::read(const QDomElement& de)
                   add(s);
                   }
             else if (tag == "Image") {
+#if 0 // TODOx
                   // look ahead for image type
                   QString path;
                   QDomElement ee = e.firstChildElement("path");
@@ -295,11 +296,12 @@ void Symbol::read(const QDomElement& de)
                         image->read(e);
                         add(image);
                         }
+#endif
                   }
             else if (tag == "small" || tag == "subtype")
                   ;
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (s == noSym)
             qDebug("unknown symbol");
@@ -421,19 +423,18 @@ void FSymbol::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void FSymbol::read(const QDomElement& de)
+void FSymbol::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "font")
-                  _font.setFamily(val);
+                  _font.setFamily(e.readElementText());
             else if (tag == "fontsize")
-                  _font.setPixelSize(val.toInt());
+                  _font.setPixelSize(e.readInt());
             else if (tag == "code")
-                  _code = val.toInt();
+                  _code = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       setPos(QPointF());
       }

@@ -41,7 +41,7 @@ class InstrumentData : public QSharedData {
       InstrumentData(const InstrumentData&);
       ~InstrumentData();
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml& xml) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;

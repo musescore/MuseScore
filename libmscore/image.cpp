@@ -33,6 +33,7 @@ static bool defaultSizeIsSpatium    = true;
 Image::Image(Score* s)
    : BSymbol(s)
       {
+      imageType        = IMAGE_NONE;
       _size            = QSizeF(0, 0);
       _storeItem       = 0;
       _dirty           = false;
@@ -46,6 +47,7 @@ Image::Image(Score* s)
 Image::Image(const Image& img)
    : BSymbol(img)
       {
+      imageType        = img.imageType;
       buffer           = img.buffer;
       _size            = img._size;
       _lockAspectRatio = img._lockAspectRatio;
@@ -53,10 +55,14 @@ Image::Image(const Image& img)
       _dirty           = img._dirty;
       _storeItem       = img._storeItem;
       _sizeIsSpatium   = img._sizeIsSpatium;
-      if(_storeItem)
+      if (_storeItem)
             _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
+      if (imageType == IMAGE_RASTER)
+            rasterDoc = img.rasterDoc;
+      else if (imageType == IMAGE_SVG)
+            svgDoc = img.svgDoc;
       }
 
 //---------------------------------------------------------
@@ -67,6 +73,49 @@ Image::~Image()
       {
       if (_storeItem)
             _storeItem->dereference(this);
+      if (imageType == IMAGE_SVG)
+            delete svgDoc;
+      else if (imageType == IMAGE_RASTER)
+            delete rasterDoc;
+      }
+
+//---------------------------------------------------------
+//   setImageType
+//---------------------------------------------------------
+
+void Image::setImageType(ImageType t)
+      {
+      imageType = t;
+      if (imageType == IMAGE_SVG)
+            svgDoc = 0;
+      else if (imageType == IMAGE_RASTER)
+            rasterDoc = 0;
+      else
+            qDebug("illegal image type");
+      }
+
+//---------------------------------------------------------
+//   imageSize
+//---------------------------------------------------------
+
+QSizeF Image::imageSize() const
+      {
+      if (imageType == IMAGE_RASTER)
+            return rasterDoc->size();
+      else
+            return svgDoc->defaultSize();
+      }
+
+//---------------------------------------------------------
+//   scaleFactor
+//---------------------------------------------------------
+
+qreal Image::scaleFactor() const
+      {
+      if (imageType == IMAGE_RASTER)
+            return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 );
+      else
+            return (_sizeIsSpatium ? 10.0 : MScore::DPMM);
       }
 
 //---------------------------------------------------------
@@ -94,7 +143,6 @@ void Image::setScale(const QSizeF& scale)
 
 QSizeF Image::scaleForSize(const QSizeF& s) const
       {
-//      QSizeF sz = s * (_sizeIsSpatium ? spatium() : MScore::DPMM);
       QSizeF sz = s * scaleFactor();
       return QSizeF(
          (sz.width()  * 100.0)/ imageSize().width(),
@@ -190,41 +238,54 @@ QVariant Image::propertyDefault(P_ID id) const
 //   draw
 //---------------------------------------------------------
 
-void Image::draw(QPainter* painter, QSize size) const
+void Image::draw(QPainter* painter) const
       {
-      if (buffer.isNull()) {
+      bool emptyImage = false;
+      if (imageType == IMAGE_SVG) {
+            if (!svgDoc)
+                  emptyImage = true;
+            else
+                  svgDoc->render(painter, bbox());
+            }
+      else if (imageType == IMAGE_RASTER) {
+            painter->save();
+            QSizeF s;
+            if (_sizeIsSpatium)
+                  s = _size * spatium();
+            else
+                  s = _size * MScore::DPMM;
+            if (score()->printing()) {
+                  // use original image size for printing
+                  painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
+                  painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                  }
+            else {
+                  QTransform t = painter->transform();
+                  QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
+                  t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
+                  painter->setWorldTransform(t);
+                  if ((buffer.size() != ss || _dirty) && !rasterDoc->isNull()) {
+                        buffer = QPixmap::fromImage(rasterDoc->scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                        _dirty = false;
+                        }
+                  if (buffer.isNull())
+                        emptyImage = true;
+                  else
+                        painter->drawPixmap(QPointF(0.0, 0.0), buffer);
+                  }
+            painter->restore();
+            }
+      if (emptyImage) {
             painter->setBrush(Qt::NoBrush);
             painter->setPen(Qt::black);
-            QPointF p[6];
-            qreal w = size.width();
-            qreal h = size.height();
-            p[0] = QPointF(0.0, 0.0);
-            p[1] = QPointF(w,   0.0);
-            p[2] = QPointF(w,   h);
-            p[3] = QPointF(0.0, 0.0);
-            p[4] = QPointF(0.0, h);
-            p[5] = QPointF(w,  0.0);
-            painter->drawPolyline(p, 6);
-            p[0] = QPointF(0.0, h);
-            p[1] = QPointF(w, h);
-            painter->drawPolyline(p, 2);
+            painter->drawRect(bbox());
+            painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
+            painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
             }
-      else
-            painter->drawPixmap(QPointF(0.0, 0.0), buffer);
       if (selected() && !(score() && score()->printing())) {
             painter->setBrush(Qt::NoBrush);
             painter->setPen(Qt::blue);
-
-            QPointF p[5];
-            qreal w = size.width();
-            qreal h = size.height();
-
-            p[0] = QPointF(0.0, 0.0);
-            p[1] = QPointF(w,   0.0);
-            p[2] = QPointF(w,   h);
-            p[3] = QPointF(0.0, h);
-            p[4] = QPointF(0.0, 0.0);
-            painter->drawPolyline(p, 5);
+            painter->drawRect(bbox());
             }
       }
 
@@ -295,13 +356,13 @@ void Image::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Image::read(const QDomElement& de)
+void Image::read(XmlReader& e)
       {
       if (score()->mscVersion() <= 123)
             _sizeIsSpatium = false;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "autoScale")
                   setProperty(P_AUTOSCALE, ::getProperty(P_AUTOSCALE, e));
             else if (tag == "size")
@@ -311,24 +372,39 @@ void Image::read(const QDomElement& de)
             else if (tag == "sizeIsSpatium")
                   setProperty(P_SIZE_IS_SPATIUM, ::getProperty(P_SIZE_IS_SPATIUM, e));
             else if (tag == "path")
-                  _storePath = e.text();
-            else if(tag == "linkPath")
-                  _linkPath = e.text();
+                  _storePath = e.readElementText();
+            else if (tag == "linkPath")
+                  _linkPath = e.readElementText();
+            else if (tag == "subtype")    // obsolete
+                  e.skipCurrentElement();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
 
       // once all paths are read, load img or retrieve it from store
       // loading from file is tried first to update the stored image, if necessary
-      if(_linkPath.isEmpty() || !load(_linkPath)) {
+
+      qDebug("linkPath <%s>", qPrintable(_linkPath));
+      qDebug("storePath <%s>", qPrintable(_storePath));
+
+      QString path;
+      if (_linkPath.isEmpty() || !load(_linkPath)) {
             // if could not load img from _linkPath, retrieve from store
             _storeItem = imageStore.getImage(_storePath);
-            if (_storeItem)
+            if (_storeItem) {
                   _storeItem->reference(this);
+                  }
             // if not in store, try to load from _storePath for backward compatibility
             else
                   load(_storePath);
+            path = _storePath;
             }
+      else
+            path = _linkPath;
+      if (path.endsWith(".svg"))
+            setImageType(IMAGE_SVG);
+      else
+            setImageType(IMAGE_RASTER);
       }
 
 //---------------------------------------------------------
@@ -339,18 +415,21 @@ void Image::read(const QDomElement& de)
 
 bool Image::load(const QString& ss)
       {
+      qDebug("Image::load <%s>", qPrintable(ss));
       QString path(ss);
       // if file path is relative, prepend score path
       QFileInfo fi(path);
-      if(fi.isRelative()) {
+      if (fi.isRelative()) {
             path.prepend(_score->fileInfo()->absolutePath() + "/");
             fi.setFile(path);
-      }
+            }
 
       _linkIsValid = false;                     // assume link fname is invalid
       QFile f(path);
-      if (!f.open(QIODevice::ReadOnly))
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("Image::load<%s> failed", qPrintable(path));
             return false;
+            }
       QByteArray ba = f.readAll();
       f.close();
 
@@ -405,115 +484,31 @@ void Image::updateGrips(int* grips, QRectF* grip) const
       }
 
 //---------------------------------------------------------
-//   SvgImage
-//---------------------------------------------------------
-
-SvgImage::SvgImage(Score* s)
-   : Image(s)
-      {
-      doc = 0;
-      }
-
-//---------------------------------------------------------
-//   SvgImage
-//---------------------------------------------------------
-
-SvgImage::~SvgImage()
-      {
-      delete doc;
-      }
-
-SvgImage* SvgImage::clone() const
-      {
-      return new SvgImage(*this);
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void SvgImage::draw(QPainter* painter) const
-      {
-      if (!doc) {
-            painter->setBrush(Qt::NoBrush);
-            painter->setPen(Qt::black);
-            painter->drawRect(bbox());
-            painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
-            painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
-            }
-      else
-            doc->render(painter, bbox());
-      if (selected() && !(score() && score()->printing())) {
-            painter->setBrush(Qt::NoBrush);
-            painter->setPen(Qt::blue);
-            painter->drawRect(bbox());
-            }
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
-void SvgImage::layout()
+void Image::layout()
       {
-      if (!doc) {
+      qDebug("Image::layout: %d", imageType);
+      if (imageType == IMAGE_SVG && !svgDoc) {
             if (_storeItem) {
-                  doc = new QSvgRenderer(_storeItem->buffer());
-                  if (doc->isValid()) {
+                  svgDoc = new QSvgRenderer(_storeItem->buffer());
+                  if (svgDoc->isValid()) {
                         if (_size.isNull()) {
-                              _size = doc->defaultSize();
+                              _size = svgDoc->defaultSize();
                               if (_sizeIsSpatium)
                                     _size /= 10.0;    // by convention
                               }
                         }
                   }
             }
-      Image::layout();
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void RasterImage::draw(QPainter* painter) const
-      {
-      painter->save();
-      QSizeF s;
-      if (_sizeIsSpatium)
-            s = _size * spatium();
-      else
-            s = _size * MScore::DPMM;
-      if (score()->printing()) {
-            // use original image size for printing
-            painter->scale(s.width() / doc.width(), s.height() / doc.height());
-            painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(doc));
-            }
-      else {
-            QTransform t = painter->transform();
-            QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
-            t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-            painter->setWorldTransform(t);
-            if ((buffer.size() != ss || _dirty) && !doc.isNull()) {
-                  buffer = QPixmap::fromImage(doc.scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-                  _dirty = false;
-                  }
-            Image::draw(painter, ss);
-            }
-      painter->restore();
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void RasterImage::layout()
-      {
-      if (doc.isNull()) {
+      else if (imageType == IMAGE_RASTER && !rasterDoc) {
             if (_storeItem) {
-                  doc.loadFromData(_storeItem->buffer());
-                  if (!doc.isNull()) {
+                  rasterDoc = new QImage;
+                  rasterDoc->loadFromData(_storeItem->buffer());
+                  if (!rasterDoc->isNull()) {
                         if (_size.isNull()) {
-                              _size = doc.size() * 0.4;
+                              _size = rasterDoc->size() * 0.4;
                               if (_sizeIsSpatium)
                                     _size /= spatium();
                               else
@@ -523,15 +518,7 @@ void RasterImage::layout()
                         }
                   }
             }
-      Image::layout();
-      }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Image::layout()
-      {
       qreal f = _sizeIsSpatium ? spatium() : MScore::DPMM;
       // if autoscale && inside a box, scale to box relevant size
       if (autoScale() && parent() && ((parent()->type() == HBOX || parent()->type() == VBOX))) {

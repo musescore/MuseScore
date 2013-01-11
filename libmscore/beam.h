@@ -75,7 +75,7 @@ class Beam : public Element {
       virtual void updateGrips(int*, QRectF*) const;
 
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       virtual void reset();

@@ -61,33 +61,34 @@ void Drumset::save(Xml& xml)
 //   load
 //---------------------------------------------------------
 
-void Drumset::load(const QDomElement& de)
+void Drumset::load(XmlReader& e)
       {
-      int pitch = de.attribute("pitch", "-1").toInt();
+      int pitch = e.intAttribute("pitch", -1);
       if (pitch < 0 || pitch > 127) {
             qDebug("load drumset: invalid pitch %d\n", pitch);
             return;
             }
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
-            bool isNum;
-            int i = val.toInt(&isNum);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "head")
-                  _drum[pitch].notehead = Note::NoteHeadGroup(i);
+                  _drum[pitch].notehead = Note::NoteHeadGroup(e.readInt());
             else if (tag == "line")
-                  _drum[pitch].line = i;
+                  _drum[pitch].line = e.readInt();
             else if (tag == "voice")
-                  _drum[pitch].voice = i;
+                  _drum[pitch].voice = e.readInt();
             else if (tag == "name")
-                  _drum[pitch].name = val;
+                  _drum[pitch].name = e.readElementText();
             else if (tag == "stem")
-                  _drum[pitch].stemDirection = MScore::Direction(i);
-            else if (tag == "shortcut")
+                  _drum[pitch].stemDirection = MScore::Direction(e.readInt());
+            else if (tag == "shortcut") {
+                  bool isNum;
+                  QString val(e.readElementText());
+                  int i = val.toInt(&isNum);
                   _drum[pitch].shortcut = isNum ? i : toupper(val[0].toLatin1());
+                  }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

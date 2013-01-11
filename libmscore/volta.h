@@ -69,7 +69,7 @@ class Volta : public TextLine {
       virtual void layout();
 
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement& e);
+      virtual void read(XmlReader& e);
 
       QList<int> endings() const           { return _endings; }
       QList<int>& endings()                { return _endings; }

@@ -68,7 +68,7 @@ class Trill : public SLine {
       virtual void add(Element*);
       virtual void remove(Element*);
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       void setSubtype(const QString& s);
       void undoSetSubtype(TrillType val);

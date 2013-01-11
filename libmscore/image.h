@@ -18,11 +18,18 @@
 
 class ImageStoreItem;
 
+enum ImageType { IMAGE_NONE, IMAGE_RASTER, IMAGE_SVG };
+
 //---------------------------------------------------------
 //   @@ Image
 //---------------------------------------------------------
 
 class Image : public BSymbol {
+      union {
+            QImage*       rasterDoc;
+            QSvgRenderer* svgDoc;
+            };
+      ImageType imageType;
       Q_OBJECT
 
    protected:
@@ -39,21 +46,20 @@ class Image : public BSymbol {
 
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
-      void draw(QPainter*, QSize size) const;
       virtual void updateGrips(int*, QRectF*) const;
       virtual QPointF gripAnchor(int /*grip*/) const { return QPointF(); }
-      virtual QSizeF imageSize() const = 0;
-      virtual qreal scaleFactor() const = 0;
 
    public:
       Image(Score* = 0);
       Image(const Image&);
       ~Image();
+      virtual Image* clone() const     { return new Image(*this); }
       virtual ElementType type() const { return IMAGE; }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       bool load(const QString& s);
       virtual void layout();
+      virtual void draw(QPainter*) const;
 
       void setSize(const QSizeF& s)     { _size = s;    }
       QSizeF size() const               { return _size; }
@@ -73,40 +79,11 @@ class Image : public BSymbol {
       QVariant getProperty(P_ID ) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
-      };
 
-//---------------------------------------------------------
-//   @@ RasterImage
-//---------------------------------------------------------
+      QSizeF imageSize() const;
+      qreal scaleFactor() const;
 
-class RasterImage : public Image {
-      QImage doc;
-
-   public:
-      RasterImage(Score* s) : Image(s) {}
-      ~RasterImage() {}
-      virtual RasterImage* clone() const { return new RasterImage(*this); }
-      virtual void draw(QPainter*) const;
-      virtual QSizeF imageSize() const { return doc.size(); }
-      virtual qreal scaleFactor() const   { return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 ); }
-      virtual void layout();
-      };
-
-//---------------------------------------------------------
-//   @@ SvgImage
-//---------------------------------------------------------
-
-class SvgImage : public Image {
-      QSvgRenderer* doc;
-
-   public:
-      SvgImage(Score*);
-      ~SvgImage();
-      virtual SvgImage* clone() const;
-      virtual void draw(QPainter*) const;
-      virtual QSizeF imageSize() const { return doc->defaultSize(); }
-      virtual qreal scaleFactor() const   { return (_sizeIsSpatium ? 10.0 : MScore::DPMM); }
-      virtual void layout();
+      void setImageType(ImageType);
       };
 
 #endif

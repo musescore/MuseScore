@@ -51,7 +51,7 @@ class Spacer : public Element {
       void setSubtype(SpacerType val);
 
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);

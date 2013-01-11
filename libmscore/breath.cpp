@@ -61,13 +61,13 @@ void Breath::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Breath::read(const QDomElement& de)
+void Breath::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "subtype")
-                  _subtype = e.text().toInt();
+      while (e.readNextStartElement()) {
+            if (e.name() == "subtype")
+                  _subtype = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

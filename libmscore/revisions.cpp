@@ -41,20 +41,19 @@ void Revision::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Revision::read(const QDomElement& de)
+void Revision::read(XmlReader& e)
       {
       _dateTime = QDateTime::currentDateTime();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "id")
-                  _id = val;
+                  _id = e.readElementText();
             else if (tag == "diff")
-                  _diff = val;
+                  _diff = e.readElementText();
             else if (tag == "date")
-                  _dateTime = QDateTime::fromString(val);
+                  _dateTime = QDateTime::fromString(e.readElementText());
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
