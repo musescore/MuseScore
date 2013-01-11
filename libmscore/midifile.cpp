@@ -972,7 +972,7 @@ void MidiTrack::quantize(int startTick, int endTick, EventList* dst)
              mintick = div;
       else
              mintick = quantizeLen(mintick, div >> 1);    //closest
-      
+
       if (mintick < mf->shortestNote())         // DEBUG
             mintick = mf->shortestNote();
 
@@ -1238,32 +1238,31 @@ static void readData(unsigned char* d, int dataLen, QString s)
 //   readXml
 //---------------------------------------------------------
 
-void MidiTrack::readXml(QDomElement e)
+void MidiTrack::readXml(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             Event ev;
             ev.setType(ME_INVALID);
             if (tag == "NoteOn") {
                   ev.setType(ME_NOTEON);
-                  ev.setOntime(e.attribute("tick").toInt());
-                  ev.setChannel(e.attribute("channel").toInt());
-                  ev.setPitch(e.attribute("pitch").toInt());
-                  ev.setVelo(e.attribute("velo").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
+                  ev.setChannel(e.intAttribute("channel"));
+                  ev.setPitch(e.intAttribute("pitch"));
+                  ev.setVelo(e.intAttribute("velo"));
                   }
             else if (tag == "NoteOff") {
                   ev.setType(ME_NOTEOFF);
-                  ev.setOntime(e.attribute("tick").toInt());
-                  ev.setChannel(e.attribute("channel").toInt());
-                  ev.setPitch(e.attribute("pitch").toInt());
-                  ev.setVelo(e.attribute("velo").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
+                  ev.setChannel(e.intAttribute("channel"));
+                  ev.setPitch(e.intAttribute("pitch"));
+                  ev.setVelo(e.intAttribute("velo"));
                   }
             else if (tag == "Lyric") {
                   ev.setType(ME_META);
                   ev.setMetaType(META_LYRIC);
-                  ev.setOntime(e.attribute("tick").toInt());
-                  QString s   = e.text();
+                  ev.setOntime(e.intAttribute("tick"));
+                  QString s(e.readElementText());
                   char* data  = new char[s.length() + 1];
                   strcpy(data, s.toLatin1().data());
                   ev.setLen(s.length());
@@ -1272,8 +1271,8 @@ void MidiTrack::readXml(QDomElement e)
             else if (tag == "TrackName") {
                   ev.setType(ME_META);
                   ev.setMetaType(META_TRACK_NAME);
-                  ev.setOntime(e.attribute("tick").toInt());
-                  QString s   = e.text();
+                  ev.setOntime(e.intAttribute("tick"));
+                  QString s(e.readElementText());
                   char* data  = new char[s.length() + 1];
                   strcpy(data, s.toLatin1().data());
                   ev.setLen(s.length());
@@ -1281,14 +1280,14 @@ void MidiTrack::readXml(QDomElement e)
                   }
             else if (tag == "Controller") {
                   ev.setType(ME_CONTROLLER);
-                  ev.setOntime(e.attribute("tick").toInt());
-                  ev.setChannel(e.attribute("channel").toInt());
-                  ev.setController(e.attribute("ctrl").toInt());
-                  ev.setValue(e.attribute("value").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
+                  ev.setChannel(e.intAttribute("channel"));
+                  ev.setController(e.intAttribute("ctrl"));
+                  ev.setValue(e.intAttribute("value"));
                   }
             else if (tag == "Key") {
-                  int key  = e.attribute("key").toInt();
-                  int sex  = e.attribute("sex").toInt();
+                  int key  = e.intAttribute("key");
+                  int sex  = e.intAttribute("sex");
                   unsigned char* data = new unsigned char[2];
                   data[0]  = key;
                   data[1]  = sex;
@@ -1301,22 +1300,22 @@ void MidiTrack::readXml(QDomElement e)
 
                   }
             else if (tag == "Tempo") {
-                  int val  = e.attribute("value").toInt();
+                  int val = e.intAttribute("value");
                   unsigned char* data = new unsigned char[3];
                   data[0] = val >> 16;
                   data[1] = val >> 8;
                   data[2] = val;
                   ev.setType(ME_META);
                   ev.setMetaType(META_TEMPO);
-                  ev.setOntime(e.attribute("tick").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
                   ev.setLen(3);
                   ev.setData(data);
                   }
             else if (tag == "TimeSig") {
-                  int num     = e.attribute("num").toInt();
-                  int denom   = e.attribute("denom").toInt();
-                  int metro   = e.attribute("metro").toInt();
-                  int quarter = e.attribute("quarter").toInt();
+                  int num     = e.intAttribute("num");
+                  int denom   = e.intAttribute("denom");
+                  int metro   = e.intAttribute("metro");
+                  int quarter = e.intAttribute("quarter");
 
                   unsigned char* data = new unsigned char[4];
                   data[0] = num;
@@ -1326,34 +1325,34 @@ void MidiTrack::readXml(QDomElement e)
 
                   ev.setType(ME_META);
                   ev.setMetaType(META_TIME_SIGNATURE);
-                  ev.setOntime(e.attribute("tick").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
                   ev.setLen(4);
                   ev.setData(data);
                   }
             else if (tag == "Meta") {
-                  int type = e.attribute("type").toInt();
-                  int len  = e.attribute("len").toInt();
+                  int type = e.intAttribute("type");
+                  int len  = e.intAttribute("len");
                   unsigned char* data = new unsigned char[len];
-                  readData(data, len, e.text());
+                  readData(data, len, e.readElementText());
 
                   ev.setType(ME_META);
                   ev.setMetaType(type);
-                  ev.setOntime(e.attribute("tick").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
                   ev.setLen(len);
                   ev.setData(data);
                   }
             else if (tag == "Sysex") {
-                  int len  = e.attribute("len").toInt();
+                  int len  = e.intAttribute("len");
                   unsigned char* data = new unsigned char[len];
-                  readData(data, len, e.text());
+                  readData(data, len, e.readElementText());
 
                   ev.setType(ME_SYSEX);
-                  ev.setOntime(e.attribute("tick").toInt());
+                  ev.setOntime(e.intAttribute("tick"));
                   ev.setLen(len);
                   ev.setData(data);
                   }
             else {
-                  domError(e);
+                  e.unknown();
                   ev.setType(ME_INVALID);
                   }
             if (ev.type() != ME_INVALID)
@@ -1380,22 +1379,21 @@ int MidiTrack::getInitProgram()
 //   readXml
 //---------------------------------------------------------
 
-void MidiFile::readXml(QDomElement e)
+void MidiFile::readXml(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "format")
-                  _format = val.toInt();
+                  _format = e.readInt();
             else if (tag == "division")
-                  _division = val.toInt();
+                  _division = e.readInt();
             else if (tag == "Track") {
                   MidiTrack* track = new MidiTrack(this);
                   track->readXml(e);
                   _tracks.append(track);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

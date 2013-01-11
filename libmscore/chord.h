@@ -135,7 +135,7 @@ class Chord : public ChordRest {
       virtual ElementType type() const { return CHORD; }
 
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
@@ -185,7 +185,7 @@ class Chord : public ChordRest {
       virtual void layout();
       void layout2();
 
-      void readNote(const QDomElement& node);
+      void readNote(XmlReader& node);
 
       NoteType noteType() const       { return _noteType; }
       void setNoteType(NoteType t)    { _noteType = t; }

@@ -22,6 +22,7 @@
 #define __SPARM_H__
 
 class Xml;
+class XmlReader;
 class Synth;
 class SyntiParameterData;
 
@@ -84,7 +85,7 @@ class SyntiState : public QList<SyntiParameter> {
    public:
       SyntiState();
       void write(Xml&) const;
-      void read(QDomElement);
+      void read(XmlReader&);
       bool operator==(const SyntiState&) const;
       };
 

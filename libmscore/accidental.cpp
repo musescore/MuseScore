@@ -84,17 +84,19 @@ Accidental::Accidental(Score* s)
 //   read
 //---------------------------------------------------------
 
-void Accidental::read(const QDomElement& de)
+void Accidental::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            bool isInt;
-            int i = e.text().toInt(&isInt);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "bracket") {
+                  int i = e.readInt();
                   if (i == 0 || i == 1)
                         _hasBracket = i;
                   }
             else if (tag == "subtype") {
+                  QString text(e.readElementText());
+                  bool isInt;
+                  int i = text.toInt(&isInt);
                   if (isInt) {
                         _hasBracket = i & 0x8000;
                         i &= ~0x8000;
@@ -206,18 +208,19 @@ void Accidental::read(const QDomElement& de)
                         setSubtype(AccidentalType(i));
                         }
                   else
-                        setSubtype(e.text());
+                        setSubtype(text);
                   }
             else if (tag == "role") {
+                  int i = e.readInt();
                   if (i == ACC_AUTO || i == ACC_USER)
                         _role = AccidentalRole(i);
                   }
             else if (tag == "small")
-                  _small = i;
+                  _small = e.readInt();
             else if (Element::readProperties(e))
                   ;
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

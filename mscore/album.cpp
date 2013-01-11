@@ -185,32 +185,19 @@ bool Album::read(const QString& p)
             return false;
             }
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString error = QString("error reading style file %1 at line %2 column %3: %4\n")
-               .arg(_path).arg(line).arg(column).arg(err);
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load Album failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return false;
-            }
-      docName = f.fileName();
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  QString version = e.attribute(QString("version"));
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
                   QStringList sl = version.split('.');
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        QString val(ee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "Album")
-                              load(ee);
+                              load(e);
                         else if (tag == "programVersion")
-                              ;
+                              e.skipCurrentElement();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }
@@ -222,28 +209,28 @@ bool Album::read(const QString& p)
 //   load
 //---------------------------------------------------------
 
-void Album::load(QDomElement e)
+void Album::load(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "Score") {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Score") {
                   AlbumItem* i = new AlbumItem;
                   i->score = 0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        QString val(ee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "name")
-                              i->name = val;
+                              i->name = e.readElementText();
                         else if (tag == "path")
-                              i->path = val;
+                              i->path = e.readElementText();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   append(i);
                   }
-            else if (e.tagName() == "name")
-                  _name = e.text();
+            else if (tag == "name")
+                  _name = e.readElementText();
             else
-                  domError(e);
+                  e.unknown();
             }
       _dirty = false;
       }

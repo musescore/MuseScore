@@ -333,19 +333,19 @@ void BarLine::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void BarLine::read(const QDomElement& de)
+void BarLine::read(XmlReader& e)
       {
       // if bar line belongs to a staff, span values default to staff values
-      if(staff()) {
-            _span       = staff()->barLineSpan();
-            _spanFrom   = staff()->barLineFrom();
-            _spanTo     = staff()->barLineTo();
-      }
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      if (staff()) {
+            _span     = staff()->barLineSpan();
+            _spanFrom = staff()->barLineFrom();
+            _spanTo   = staff()->barLineTo();
+            }
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype") {
                   bool ok;
+                  const QString& val(e.readElementText());
                   int i = val.toInt(&ok);
                   if (!ok)
                         setSubtype(val);
@@ -364,21 +364,21 @@ void BarLine::read(const QDomElement& de)
                               }
                         setSubtype(ct);
                         }
-                  if(parent() && parent()->type() == SEGMENT) {
+                  if (parent() && parent()->type() == SEGMENT) {
                         Measure* m = static_cast<Segment*>(parent())->measure();
-                        if(subtype() != m->endBarLineType())
+                        if (subtype() != m->endBarLineType())
                               setCustomSubtype(true);
                         }
                   }
             else if (tag == "customSubtype")
-                  setCustomSubtype(val.toInt() != 0);
+                  setCustomSubtype(e.readInt() != 0);
             else if (tag == "span") {
-                  _span       = val.toInt();
-                  _spanFrom   = e.attribute("from", QString::number(_spanFrom)).toInt();
-                  _spanTo     = e.attribute("to", QString::number(_spanTo)).toInt();
+                  _span       = e.readInt();
+                  _spanFrom   = e.intAttribute("from", _spanFrom);
+                  _spanTo     = e.intAttribute("to", _spanTo);
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
-                  if(staff() && (_span != staff()->barLineSpan()
-                              || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
+                  if (staff() && (_span != staff()->barLineSpan()
+                     || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
                         _customSpan = true;
                   }
             else if (tag == "Articulation") {
@@ -387,7 +387,7 @@ void BarLine::read(const QDomElement& de)
                   add(a);
                   }
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -416,7 +416,7 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
               return (b->subtype() == BROKEN_BAR || b->subtype() == DOTTED_BAR
                       || b->subtype() == NORMAL_BAR || b->subtype() == DOUBLE_BAR
                       || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
-              } 
+              }
       }else {
             return (type == ARTICULATION
                 && parent()

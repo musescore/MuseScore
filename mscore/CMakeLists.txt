@@ -164,7 +164,7 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
-      edittempo.cpp exportxml.cpp icons.cpp importbww.cpp importxml.cpp
+      edittempo.cpp icons.cpp importbww.cpp
       instrdialog.cpp debugger.cpp menus.cpp importmidi.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp preferences.cpp measureproperties.cpp
@@ -195,9 +195,10 @@ add_executable ( ${ExecutableName}
       inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
-      waveview.cpp musicxmlsupport.cpp helpBrowser.cpp inspectorLasso.cpp
+      waveview.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       inspectorHairpin.cpp qmlplugin.cpp
+#      musicxmlsupport.cpp exportxml.cpp importxml.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

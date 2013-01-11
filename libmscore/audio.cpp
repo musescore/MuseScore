@@ -26,15 +26,13 @@ Audio::Audio()
 //   read
 //---------------------------------------------------------
 
-void Audio::read(const QDomElement& ee)
+void Audio::read(XmlReader& e)
       {
-      for (QDomElement e = ee.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            if (tag == "path")
-                  _path = val;
+      while (e.readNextStartElement()) {
+            if (e.name() == "path")
+                  _path = e.readElementText();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

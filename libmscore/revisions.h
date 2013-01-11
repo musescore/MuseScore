@@ -15,6 +15,7 @@
 #define __REVISIONS_H__
 
 class Xml;
+class XmlReader;
 
 //---------------------------------------------------------
 //   Revision
@@ -29,7 +30,7 @@ class Revision {
 
    public:
       Revision();
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml&) const;
       void setParent(Revision* r)              { _parent = r; }
       Revision* parent() const                 { return _parent; }

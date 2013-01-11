@@ -25,6 +25,7 @@
 
 class Score;
 class Xml;
+class XmlReader;
 
 //---------------------------------------------------------
 //   AlbumItem
@@ -46,7 +47,7 @@ class Album {
       QString _name;
       QList<AlbumItem*> _scores;
 
-      void load(QDomElement);
+      void load(XmlReader&);
       void save(Xml&);
       void loadScores();
 

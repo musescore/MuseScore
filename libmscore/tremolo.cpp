@@ -241,13 +241,13 @@ void Tremolo::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Tremolo::read(const QDomElement& de)
+void Tremolo::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "subtype")
-                  setSubtype(e.text());
+      while (e.readNextStartElement()) {
+            if (e.name() == "subtype")
+                  setSubtype(e.readElementText());
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

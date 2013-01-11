@@ -124,8 +124,8 @@ class Staff : public QObject {
       int rstaff() const             { return _rstaff; }
       int idx() const;
       void setRstaff(int n)          { _rstaff = n;    }
-      void read(const QDomElement&);
-      void read114(const QDomElement&, ClefList&);
+      void read(XmlReader&);
+      void read114(XmlReader&, ClefList&);
       void write(Xml& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }

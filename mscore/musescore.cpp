@@ -2024,10 +2024,12 @@ static bool processNonGui()
                         }
                   return true;
                   }
+#if 0 // TODOx
             if (fn.endsWith(".xml"))
                   return saveXml(cs, fn);
             if (fn.endsWith(".mxl"))
                   return saveMxl(cs, fn);
+#endif
             if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
@@ -3333,32 +3335,21 @@ bool MuseScore::restoreSession(bool always)
             qDebug("cannot open session file <%s>", qPrintable(f.fileName()));
             return false;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      docName = f.fileName();
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString error;
-            error.sprintf("error reading session file %s at line %d column %d: %s\n",
-               qPrintable(docName), line, column, qPrintable(err));
-            return false;
-            }
+      XmlReader e(&f);
       int tab = 0;
       int idx = -1;
       bool cleanExit = false;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
                   /* QString version = e.attribute(QString("version"));
                   QStringList sl  = version.split('.');
                   int v           = sl[0].toInt() * 100 + sl[1].toInt();
                   */
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "clean") {
-                              if (!always) {
-                                    f.close();
+                              if (!always)
                                     return false;
-                                    }
                               cleanExit = true;
                               }
                         else if (tag == "dirty") {
@@ -3368,26 +3359,23 @@ bool MuseScore::restoreSession(bool always)
                                  QMessageBox::Yes | QMessageBox::No,
                                  QMessageBox::Yes
                                  );
-                              if (b != QMessageBox::Yes) {
-                                    f.close();
+                              if (b != QMessageBox::Yes)
                                     return false;
-                                    }
                               }
                         else if (tag == "Score") {
                               QString name;
                               bool created = false;
                               bool dirty = false;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull();  eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
-                                    QString val(eee.text());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "name")
-                                          name = val;
+                                          name = e.readElementText();
                                     else if (tag == "created")
-                                          created = val.toInt();
+                                          created = e.readInt();
                                     else if (tag == "dirty")
-                                          dirty = val.toInt();
+                                          dirty = e.readInt();
                                     else if (tag == "path") {
-                                          Score* score = readScore(val);
+                                          Score* score = readScore(e.readElementText());
                                           if (score) {
                                                 if (!name.isEmpty())
                                                       score->setName(name);
@@ -3402,8 +3390,7 @@ bool MuseScore::restoreSession(bool always)
                                                 }
                                           }
                                     else {
-                                          domError(eee);
-                                          f.close();
+                                          e.unknown();
                                           return false;
                                           }
                                     }
@@ -3412,24 +3399,22 @@ bool MuseScore::restoreSession(bool always)
                               double x = .0, y = .0, vmag = .0;
                               int magIdx = MAG_FREE;
                               int tab = 0, idx = 0;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull();  eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
-                                    QString val(eee.text());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "tab")
-                                          tab = val.toInt();
+                                          tab = e.readInt();
                                     else if (tag == "idx")
-                                          idx = val.toInt();
+                                          idx = e.readInt();
                                     else if (tag == "mag")
-                                          vmag = val.toDouble();
+                                          vmag = e.readDouble();
                                     else if (tag == "magIdx")
-                                          magIdx = val.toInt();
+                                          magIdx = e.readInt();
                                     else if (tag == "x")
-                                          x = val.toDouble() * MScore::DPMM;
+                                          x = e.readDouble() * MScore::DPMM;
                                     else if (tag == "y")
-                                          y = val.toDouble() * MScore::DPMM;
+                                          y = e.readDouble() * MScore::DPMM;
                                     else {
-                                          domError(eee);
-                                          f.close();
+                                          e.unknown();
                                           return false;
                                           }
                                     }
@@ -3438,24 +3423,21 @@ bool MuseScore::restoreSession(bool always)
                               (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
                               }
                         else if (tag == "tab")
-                              tab = ee.text().toInt();
+                              tab = e.readInt();
                         else if (tag == "idx")
-                              idx = ee.text().toInt();
+                              idx = e.readInt();
                         else {
-                              domError(ee);
-                              f.close();
+                              e.unknown();
                               return false;
                               }
                         }
                   }
             else {
-                  domError(e);
-                  f.close();
+                  e.unknown();
                   return false;
                   }
             }
       setCurrentView(tab, idx);
-      f.close();
       return true;
       }
 

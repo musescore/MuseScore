@@ -185,7 +185,7 @@ class Segment : public Element {
       bool written() const                       { return _written;            }
       void setWritten(bool val)                  { _written = val;             }
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

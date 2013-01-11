@@ -377,21 +377,20 @@ void Clef::setSmall(bool val)
 //   read
 //---------------------------------------------------------
 
-void Clef::read(const QDomElement& de)
+void Clef::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setClefType(clefType(val));
+                  setClefType(clefType(e.readElementText()));
             else if (tag == "concertClefType")
-                  _clefTypes._concertClef = Clef::clefType(val);
+                  _clefTypes._concertClef = Clef::clefType(e.readElementText());
             else if (tag == "transposingClefType")
-                  _clefTypes._transposingClef = Clef::clefType(val);
+                  _clefTypes._transposingClef = Clef::clefType(e.readElementText());
             else if (tag == "showCourtesyClef")
-                  _showCourtesy = val.toInt();
+                  _showCourtesy = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (score()->mscVersion() < 113)
             setUserOff(QPointF());

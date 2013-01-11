@@ -65,7 +65,7 @@ class Bracket : public Element {
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void layout();
 
       virtual bool isEditable() const { return true; }

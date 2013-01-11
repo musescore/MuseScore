@@ -57,7 +57,7 @@ class Box : public MeasureBase {
       virtual void layout();
       virtual void write(Xml&) const;
       virtual void write(Xml& xml, int, bool) const { write(xml); }
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void add(Element* e);

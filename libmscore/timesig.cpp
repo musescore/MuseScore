@@ -139,39 +139,38 @@ void TimeSig::write(Xml& xml) const
 //   TimeSig::read
 //---------------------------------------------------------
 
-void TimeSig::read(const QDomElement& de)
+void TimeSig::read(XmlReader& e)
       {
       int n=0, z1=0, z2=0, z3=0, z4=0;
       bool old = false;
 
       customText = false;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "den") {
                   old = true;
-                  n = val.toInt();
+                  n = e.readInt();
                   }
             else if (tag == "nom1") {
                   old = true;
-                  z1 = val.toInt();
+                  z1 = e.readInt();
                   }
             else if (tag == "nom2") {
                   old = true;
-                  z2 = val.toInt();
+                  z2 = e.readInt();
                   }
             else if (tag == "nom3") {
                   old = true;
-                  z3 = val.toInt();
+                  z3 = e.readInt();
                   }
             else if (tag == "nom4") {
                   old = true;
-                  z4 = val.toInt();
+                  z4 = e.readInt();
                   }
             else if (tag == "subtype") {
-                  TimeSigType i = TimeSigType(val.toInt());
+                  TimeSigType i = TimeSigType(e.readInt());
                   if (score()->mscVersion() < 122) {
                         setSig(Fraction(
                              ((i >> 24) & 0x3f)
@@ -183,21 +182,21 @@ void TimeSig::read(const QDomElement& de)
                         _subtype = i;
                   }
             else if (tag == "showCourtesySig")
-                  _showCourtesySig = val.toInt();
+                  _showCourtesySig = e.readInt();
             else if (tag == "sigN")
-                  _sig.setNumerator(val.toInt());
+                  _sig.setNumerator(e.readInt());
             else if (tag == "sigD")
-                  _sig.setDenominator(val.toInt());
+                  _sig.setDenominator(e.readInt());
             else if (tag == "stretchN")
-                  _stretch.setNumerator(val.toInt());
+                  _stretch.setNumerator(e.readInt());
             else if (tag == "stretchD")
-                  _stretch.setDenominator(val.toInt());
+                  _stretch.setDenominator(e.readInt());
             else if (tag == "textN")
-                  setNumeratorString(val);
+                  setNumeratorString(e.readElementText());
             else if (tag == "textD")
-                  setDenominatorString(val);
+                  setDenominatorString(e.readElementText());
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (old) {
             _sig.set(z1+z2+z3+z4, n);

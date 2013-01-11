@@ -54,7 +54,7 @@ class StaffState : public Element {
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       Instrument instrument() const           { return _instrument; }
       void setInstrument(const Instrument& i) { _instrument = i;    }
       Segment* segment()                      { return (Segment*)parent(); }

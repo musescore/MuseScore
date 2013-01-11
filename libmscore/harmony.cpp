@@ -176,46 +176,43 @@ void Harmony::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Harmony::read(const QDomElement& de)
+void Harmony::read(XmlReader& e)
       {
       // convert table to tpc values
       static const int table[] = {
             14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
             };
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            int i = e.text().toInt();
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "base") {
                   if (score()->mscVersion() >= 106)
-                        setBaseTpc(i);
+                        setBaseTpc(e.readInt());
                   else
-                        setBaseTpc(table[i-1]);    // obsolete
+                        setBaseTpc(table[e.readInt()-1]);    // obsolete
                   }
             else if (tag == "extension")
-                  setId(i);
+                  setId(e.readInt());
             else if (tag == "root") {
                   if (score()->mscVersion() >= 106)
-                        setRootTpc(i);
+                        setRootTpc(e.readInt());
                   else
-                        setRootTpc(table[i-1]);    // obsolete
+                        setRootTpc(table[e.readInt()-1]);    // obsolete
                   }
             else if (tag == "degree") {
                   int degreeValue = 0;
                   int degreeAlter = 0;
                   QString degreeType = "";
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        if (tag == "degree-value") {
-                              degreeValue = ee.text().toInt();
-                              }
-                        else if (tag == "degree-alter") {
-                              degreeAlter = ee.text().toInt();
-                              }
-                        else if (tag == "degree-type") {
-                              degreeType = ee.text();
-                              }
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "degree-value")
+                              degreeValue = e.readInt();
+                        else if (tag == "degree-alter")
+                              degreeAlter = e.readInt();
+                        else if (tag == "degree-type")
+                              degreeType = e.readElementText();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   if (degreeValue <= 0 || degreeValue > 13
                       || degreeAlter < -2 || degreeAlter > 2
@@ -233,7 +230,7 @@ void Harmony::read(const QDomElement& de)
                         }
                   }
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       render();
       }

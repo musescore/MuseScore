@@ -37,7 +37,7 @@ class TempoText : public Text  {
       virtual TempoText* clone() const { return new TempoText(*this); }
       virtual ElementType type() const { return TEMPO_TEXT; }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       Segment* segment() const   { return (Segment*)parent(); }
       Measure* measure() const   { return (Measure*)parent()->parent(); }
 

@@ -56,15 +56,15 @@ void StaffText::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void StaffText::read(const QDomElement& de)
+void StaffText::read(XmlReader& e)
       {
       for (int voice = 0; voice < VOICES; ++voice)
             _channelNames[voice].clear();
       clearAeolusStops();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "MidiAction") {
-                  int channel = e.attribute("channel", 0).toInt();
+                  int channel = e.intAttribute("channel", 0);
                   QString name = e.attribute("name");
                   bool found = false;
                   int n = _channelActions.size();
@@ -84,7 +84,7 @@ void StaffText::read(const QDomElement& de)
                         }
                   }
             else if (tag == "channelSwitch" || tag == "articulationChange") {
-                  int voice = e.attribute("voice", "-1").toInt();
+                  int voice = e.intAttribute("voice", -1);
                   if (voice >= 0 && voice < VOICES)
                         _channelNames[voice] = e.attribute("name");
                   else if (voice == -1) {
@@ -95,14 +95,13 @@ void StaffText::read(const QDomElement& de)
                         }
                   }
             else if (tag == "aeolus") {
-                  int group = e.attribute("group", "-1").toInt();
-                  if (group >= 0 && group <= 4) {
-                        aeolusStops[group] = e.text().toInt();
-                        }
+                  int group = e.intAttribute("group", -1);
+                  if (group >= 0 && group <= 4)
+                        aeolusStops[group] = e.readInt();
                   _setAeolusStops = true;
                   }
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

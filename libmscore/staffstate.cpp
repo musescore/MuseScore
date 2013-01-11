@@ -47,15 +47,16 @@ void StaffState::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void StaffState::read(const QDomElement& de)
+void StaffState::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "subtype")
-                  _subtype = StaffStateType(e.text().toInt());
-            else if (e.tagName() == "Instrument")
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  _subtype = StaffStateType(e.readInt());
+            else if (tag == "Instrument")
                   _instrument.read(e);
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

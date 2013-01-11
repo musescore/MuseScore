@@ -308,7 +308,7 @@ static SymCode pSymbols[] = {
 //   symIdx2fontId
 //---------------------------------------------------------
 
-int symIdx2fontId(int symIdx) 
+int symIdx2fontId(int symIdx)
       {
       return symIdx == 0 ? 0 : 3;
       }
@@ -616,50 +616,37 @@ void initSymbols(int idx)
             qDebug("cannot open symbols file %s\n", qPrintable(path));
             exit(-1);
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString error;
-            error.sprintf("error reading style file %s at line %d column %d: %s\n",
-               f.fileName().toLatin1().data(), line, column, err.toLatin1().data());
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load font symbols failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
-      f.close();
-      docName = f.fileName();
+      XmlReader e(&f);
       int fid = idx == 0 ? 0 : 3;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "Glyph") {
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Glyph") {
                               QString name;
                               int code = -1;
                               QPointF p;
                               QRectF b;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull();  eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
-                                    QString val(eee.text());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "name")
-                                          name = val;
+                                          name = e.readElementText();
                                     else if (tag == "code") {
+                                          QString val(e.readElementText());
                                           bool ok;
                                           code = val.mid(2).toInt(&ok, 16);
                                           if (!ok)
-                                                qDebug("cannot read code\n");
+                                                qDebug("cannot read code");
                                           }
                                     else if (tag == "attach")
-                                          p = readPoint(eee);
+                                          p = e.readPoint();
                                     else if (tag == "bbox")
-                                          b = readRectF(eee);
+                                          b = e.readRect();
                                     else
-                                          domError(eee);
+                                          e.unknown();
                                     }
                               if (code == -1)
-                                    qDebug("no code for glyph <%s>\n", qPrintable(name));
+                                    qDebug("no code for glyph <%s>", qPrintable(name));
                               SymId idx1 = Sym::name2id(name);
                               if (idx1 != noSym)
                                     symbols[idx][idx1] = Sym(code, fid, p, b);
@@ -669,11 +656,11 @@ void initSymbols(int idx)
                                     }
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       for (int i = 0; i < lastSym; ++i) {
             Sym* sym = &symbols[idx][i];

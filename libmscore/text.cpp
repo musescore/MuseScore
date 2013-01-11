@@ -353,11 +353,11 @@ void Text::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Text::read(const QDomElement& de)
+void Text::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -404,12 +404,12 @@ bool Text::isSimpleText() const
 //   readProperties
 //---------------------------------------------------------
 
-bool Text::readProperties(const QDomElement& e)
+bool Text::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "style") {
+            QString val(e.readElementText());
             int st;
             bool ok;
             int i = val.toInt(&ok);
@@ -475,15 +475,15 @@ bool Text::readProperties(const QDomElement& e)
       else if (tag == "styleName")          // obsolete, unstyled text
             ; // _styleName = val;
       else if (tag == "data")                  // obsolete
-            _doc->setHtml(val);
+            _doc->setHtml(e.readElementText());
       else if (tag == "html") {
             QString s = Xml::htmlToString(e);
             setHtml(s);
             }
       else if (tag == "text")
-            setText(val);
+            setText(e.readElementText());
       else if (tag == "html-data") {
-            QString s = Xml::htmlToString(e.firstChildElement());
+            QString s = Xml::htmlToString(e);
             if (score()->mscVersion() <= 114) {
                   s.replace("MScore1", "FreeSerifMscore");
                   s.replace(QChar(0xe10e), QChar(0x266e));    //natural
@@ -491,7 +491,6 @@ bool Text::readProperties(const QDomElement& e)
                   s.replace(QChar(0xe10d), QChar(0x266d));    // flat
                   s.replace(QChar(0xe104), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5e))),    // note2_Sym
                   s.replace(QChar(0xe105), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)));    // note4_Sym
-//test                  s.replace(QChar(0xe105), QString("XXX"));
                   s.replace(QChar(0xe106), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd60)));    // note8_Sym
                   s.replace(QChar(0xe107), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd61)));    // note16_Sym
                   s.replace(QChar(0xe108), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd62)));    // note32_Sym
@@ -520,14 +519,14 @@ bool Text::readProperties(const QDomElement& e)
                   }
             }
       else if (tag == "subtype")          // obsolete
-            ;
+            e.skipCurrentElement();
       else if (tag == "frameWidth") {           // obsolete
             qreal spMM = spatium() / MScore::DPMM;
-            setFrameWidth(Spatium(val.toDouble() / spMM));
+            setFrameWidth(Spatium(e.readDouble() / spMM));
             }
       else if (tag == "paddingWidth") {          // obsolete
             qreal spMM = spatium() / MScore::DPMM;
-            setPaddingWidth(Spatium(val.toDouble() / spMM));
+            setPaddingWidth(Spatium(e.readDouble() / spMM));
             }
       else if (_textStyle.readProperties(e))
             ;

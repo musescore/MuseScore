@@ -863,14 +863,14 @@ void TextStyleData::writeProperties(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void TextStyleData::read(const QDomElement& de)
+void TextStyleData::read(XmlReader& e)
       {
       frameWidth = Spatium(0.0);
-      name = de.attribute("name");
+      name = e.attribute("name");
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -878,58 +878,56 @@ void TextStyleData::read(const QDomElement& de)
 //   readProperties
 //---------------------------------------------------------
 
-bool TextStyleData::readProperties(const QDomElement& e)
+bool TextStyleData::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
-      int i = val.toInt();
+      const QStringRef& tag(e.name());
 
       if (tag == "name")
-            name = val;
+            name = e.readElementText();
       else if (tag == "family")
-            family = val;
+            family = e.readElementText();
       else if (tag == "size")
-            size = val.toDouble();
+            size = e.readDouble();
       else if (tag == "bold")
-            bold = i;
+            bold = e.readInt();
       else if (tag == "italic")
-            italic = i;
+            italic = e.readInt();
       else if (tag == "underline")
-            underline = i;
+            underline = e.readInt();
       else if (tag == "align")
-            setAlign(Align(i));
+            setAlign(Align(e.readInt()));
       else if (tag == "anchor")     // obsolete
-            ;
+            e.skipCurrentElement();
       else if (ElementLayout::readProperties(e))
             ;
       else if (tag == "sizeIsSpatiumDependent")
-            sizeIsSpatiumDependent = val.toDouble();
+            sizeIsSpatiumDependent = e.readDouble();
       else if (tag == "frameWidth") {
             hasFrame = true;
-            frameWidthMM = val.toDouble();
+            frameWidthMM = e.readDouble();
             }
       else if (tag == "frameWidthS") {
             hasFrame = true;
-            frameWidth = Spatium(val.toDouble());
+            frameWidth = Spatium(e.readDouble());
             }
       else if (tag == "frame")      // obsolete
-            hasFrame = i;
+            hasFrame = e.readInt();
       else if (tag == "paddingWidth")          // obsolete
-            paddingWidthMM = val.toDouble();
+            paddingWidthMM = e.readDouble();
       else if (tag == "paddingWidthS")
-            paddingWidth = Spatium(val.toDouble());
+            paddingWidth = Spatium(e.readDouble());
       else if (tag == "frameRound")
-            frameRound = i;
+            frameRound = e.readInt();
       else if (tag == "frameColor")
-            frameColor = readColor(e);
+            frameColor = e.readColor();
       else if (tag == "foregroundColor")
-            foregroundColor = readColor(e);
+            foregroundColor = e.readColor();
       else if (tag == "backgroundColor")
-            backgroundColor = readColor(e);
+            backgroundColor = e.readColor();
       else if (tag == "circle")
-            circle = val.toInt();
+            circle = e.readInt();
       else if (tag == "systemFlag")
-            systemFlag = val.toInt();
+            systemFlag = e.readInt();
       else
             return false;
       return true;
@@ -939,11 +937,10 @@ bool TextStyleData::readProperties(const QDomElement& e)
 //   load
 //---------------------------------------------------------
 
-void StyleData::load(const QDomElement& de)
+void StyleData::load(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            QString tag = e.name().toString();
 
             if (tag == "TextStyle") {
                   TextStyle s;
@@ -951,21 +948,21 @@ void StyleData::load(const QDomElement& de)
                   setTextStyle(s);
                   }
             else if (tag == "Spatium")
-                  setSpatium (val.toDouble() * MScore::DPMM);
+                  setSpatium (e.readDouble() * MScore::DPMM);
             else if (tag == "page-layout")
                   _pageFormat.read(e);
             else if (tag == "displayInConcertPitch")
-                  set(StyleVal(ST_concertPitch, bool(val.toInt())));
+                  set(StyleVal(ST_concertPitch, bool(e.readInt())));
             else if (tag == "ChordList") {
                   delete _chordList;
                   _chordList = new ChordList;
                   _chordList->read(e);
                   _customChordList = true;
                   }
-            else if (tag == "pageFillLimit") { // obsolete
-                  }
+            else if (tag == "pageFillLimit")   // obsolete
+                  e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
-                  set(StyleVal(ST_minSystemDistance, Spatium(val.toDouble())));
+                  set(StyleVal(ST_minSystemDistance, Spatium(e.readDouble())));
             else {
                   if (tag == "stemDir") {
                         int voice = e.attribute("voice", "1").toInt() - 1;
@@ -981,6 +978,7 @@ void StyleData::load(const QDomElement& de)
                      || tag == "oddFooter" || tag == "evenFooter")
                         tag += "C";
 
+                  QString val(e.readElementText());
                   int idx;
                   for (idx = 0; idx < ST_STYLES; ++idx) {
                         if (styleTypes[idx].name() == tag) {
@@ -1015,7 +1013,7 @@ void StyleData::load(const QDomElement& de)
                                           }
                                     }
                               if (idx2 == ARTICULATIONS)
-                                    domError(e);
+                                    e.unknown();
                               }
                         }
                   }
@@ -1369,7 +1367,7 @@ void TextStyle::setSystemFlag(bool v)                    { d->systemFlag = v; }
 void TextStyle::setForegroundColor(const QColor& v)      { d->foregroundColor = v; }
 void TextStyle::setBackgroundColor(const QColor& v)      { d->backgroundColor = v; }
 void TextStyle::write(Xml& xml) const                    { d->write(xml); }
-void TextStyle::read(const QDomElement& v)               { d->read(v); }
+void TextStyle::read(XmlReader& v)               { d->read(v); }
 QFont TextStyle::font(qreal space) const                 { return d->font(space); }
 QFont TextStyle::fontPx(qreal spatium) const             { return d->fontPx(spatium); }
 QRectF TextStyle::bbox(qreal sp, const QString& s) const { return d->bbox(sp, s); }
@@ -1379,7 +1377,7 @@ void TextStyle::layout(Element* e) const                 { d->layout(e); }
 void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xml); }
 const QPointF& TextStyle::reloff() const                 { return d->reloff();      }
 void TextStyle::setReloff(const QPointF& p)              { setRxoff(p.x()), setRyoff(p.y()); }
-bool TextStyle::readProperties(const QDomElement& v)     { return d->readProperties(v); }
+bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
 
 //---------------------------------------------------------
 //   setFont
@@ -1570,7 +1568,7 @@ bool MStyle::load(QFile* qf)
       return d->load(qf);
       }
 
-void MStyle::load(const QDomElement& e)
+void MStyle::load(XmlReader& e)
       {
       d->load(e);
       }
@@ -1591,30 +1589,17 @@ void MStyle::save(Xml& xml, bool optimize)
 
 bool StyleData::load(QFile* qf)
       {
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(qf, false, &err, &line, &column)) {
-            QString error;
-            error.sprintf("error reading style file %s at line %d column %d: %s\n",
-               qf->fileName().toLatin1().data(), line, column, err.toLatin1().data());
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load Style failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return false;
-            }
-      docName = qf->fileName();
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  QString version = e.attribute(QString("version"));
+      XmlReader e(qf);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
                   QStringList sl  = version.split('.');
                   // _mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "Style")
-                              load(ee);
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Style")
+                              load(e);
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }

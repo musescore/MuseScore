@@ -94,15 +94,15 @@
 extern Score::FileError importMidi(Score*, const QString& name);
 extern Score::FileError importGTP(Score*, const QString& name);
 extern Score::FileError importBww(Score*, const QString& path);
+#if 0 // TODOx
 extern Score::FileError importMusicXml(Score*, const QString&);
 extern Score::FileError importCompressedMusicXml(Score*, const QString&);
+#endif
 extern Score::FileError importMuseData(Score*, const QString& name);
 extern Score::FileError importLilypond(Score*, const QString& name);
 extern Score::FileError importBB(Score*, const QString& name);
 extern Score::FileError importCapella(Score*, const QString& name);
 extern Score::FileError importOve(Score*, const QString& name);
-extern Score::FileError importMusicXml(Score*, const QString& name);
-extern Score::FileError importCompressedMusicXml(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
@@ -1689,6 +1689,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   writeSessionFile(false);
                   }
             }
+#if 0  // TODOx
       else if (ext == "xml") {
             // save as MusicXML *.xml file
             rv = saveXml(cs, fn);
@@ -1697,6 +1698,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as compressed MusicXML *.mxl file
             rv = saveMxl(cs, fn);
             }
+#endif
       else if (ext == "mid") {
             // save as midi file *.mid
             rv = saveMidi(cs, fn);
@@ -1826,8 +1828,10 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   ImportFunction importF;
                   };
             ImportDef imports[] = {
+#if 0 // TODOx
                   { "xml",  &importMusicXml           },
                   { "mxl",  &importCompressedMusicXml },
+#endif
                   { "mid",  &importMidi               },
                   { "midi", &importMidi               },
                   { "kar",  &importMidi               },
@@ -2059,13 +2063,13 @@ void MuseScore::addImage(Score* score, Element* e)
             return;
 
       QFileInfo fi(fn);
-      Image* s = 0;
+      Image* s = new Image(score);
       QString suffix(fi.suffix().toLower());
 
       if (suffix == "svg")
-            s = new SvgImage(score);
+            s->setImageType(IMAGE_SVG);
       else if (suffix == "jpg" || suffix == "png" || suffix == "xpm")
-            s = new RasterImage(score);
+            s->setImageType(IMAGE_RASTER);
       else
             return;
       s->load(fn);

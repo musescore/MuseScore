@@ -150,18 +150,17 @@ void Ottava::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Ottava::read(const QDomElement& de)
+void Ottava::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
+      qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      setId(de.attribute("id", "-1").toInt());
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      setId(e.intAttribute("id", -1));
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(OttavaType(e.text().toInt()));
+                  setSubtype(OttavaType(e.readInt()));
             else if (!TextLine::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

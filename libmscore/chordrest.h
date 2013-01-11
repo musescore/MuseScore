@@ -67,9 +67,9 @@ class ChordRest : public DurationElement {
       Segment* segment() const                   { return (Segment*)parent(); }
       virtual Measure* measure() const           { return (Measure*)(parent()->parent()); }
 
-      virtual void read(const QDomElement&) = 0;
+      virtual void read(XmlReader&) = 0;
       void writeProperties(Xml& xml) const;
-      bool readProperties(const QDomElement&);
+      bool readProperties(XmlReader&);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       void setBeamMode(BeamMode m)              { _beamMode = m;    }

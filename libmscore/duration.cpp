@@ -87,14 +87,14 @@ QList<Prop> DurationElement::properties(Xml& xml, bool /*clipboardmode*/) const
 //   readProperties
 //---------------------------------------------------------
 
-bool DurationElement::readProperties(const QDomElement& e)
+bool DurationElement::readProperties(XmlReader& e)
       {
       if (Element::readProperties(e))
             return true;
-      const QString& tag(e.tagName());
+      const QStringRef& tag(e.name());
       if (tag == "Tuplet") {
             // setTuplet(0);
-            int i = e.text().toInt();
+            int i = e.readInt();
             foreach(Tuplet* t, score()->tuplets) {
                   if (t->id() == i) {
                         setTuplet(t);

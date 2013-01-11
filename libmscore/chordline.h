@@ -48,7 +48,7 @@ class ChordLine : public Element {
       ChordLineType subtype() const    { return _subtype; }
       Chord* chord() const             { return (Chord*)(parent()); }
 
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;
       virtual void layout();
       virtual void draw(QPainter*) const;

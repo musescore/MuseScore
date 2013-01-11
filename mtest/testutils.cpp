@@ -71,19 +71,9 @@ Element* MTest::writeReadElement(Element* element)
 // printf("===read <%s>===\n", element->name());
 // printf("%s\n", buffer.buffer().data());
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(buffer.buffer(), &err, &line, &column)) {
-            printf("writeReadElement(%s): error reading data at line %d column %d: %s\n",
-               element->name(), line, column, qPrintable(err));
-            printf("%s\n", buffer.buffer().data());
-            return 0;
-            }
-      docName = "--";
-      QDomElement e = doc.documentElement();
-      QString tag(e.tagName());
-      element = Element::name2Element(e.tagName(), score);
+      XmlReader e(buffer.buffer());
+      QString tag(e.readNextStartElement());
+      element = Element::name2Element(e.name().toString(), score);
       element->read(e);
       return element;
       }

@@ -252,11 +252,11 @@ void Rest::write(Xml& xml) const
 //   Rest::read
 //---------------------------------------------------------
 
-void Rest::read(const QDomElement& de)
+void Rest::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!ChordRest::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       QPointF off(userOff());
       setUserOffset(off.x(), off.y());

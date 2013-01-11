@@ -98,16 +98,16 @@ void Lyrics::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Lyrics::read(const QDomElement& de)
+void Lyrics::read(XmlReader& e)
       {
       int   iEndTick = 0;           // used for backward compatibility
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "no")
-                  _no = val.toInt();
+                  _no = e.readInt();
             else if (tag == "syllabic") {
+                  QString val(e.readElementText());
                   if (val == "single")
                         _syllabic = SINGLE;
                   else if (val == "begin")
@@ -122,17 +122,17 @@ void Lyrics::read(const QDomElement& de)
             else if (tag == "endTick") {          // obsolete
                   // store <endTick> tag value until a <ticks> tag has been read
                   // which positions this lyrics element in the score
-                  iEndTick = val.toInt();
+                  iEndTick = e.readInt();
                   }
             else if (tag == "ticks")
-                  _ticks = val.toInt();
+                  _ticks = e.readInt();
             else if (tag == "Number") {
                   _verseNumber = new Text(score());
                   _verseNumber->read(e);
                   _verseNumber->setParent(this);
                   }
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       // if any endTick, make it relative to current tick
       if (iEndTick) {

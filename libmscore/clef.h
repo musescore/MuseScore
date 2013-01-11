@@ -102,7 +102,7 @@ class Clef : public Element {
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml&) const;
 
       virtual void addElement(Element* e, qreal x, qreal y);

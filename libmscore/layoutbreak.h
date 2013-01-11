@@ -56,7 +56,7 @@ class LayoutBreak : public Element {
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       Measure* measure() const            { return (Measure*)parent();   }
       qreal pause() const                 { return _pause;               }
       void setPause(qreal v)              { _pause = v;                  }

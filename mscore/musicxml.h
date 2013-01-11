@@ -209,7 +209,7 @@ class MusicXml {
       int move;
       Volta* lastVolta;
 
-      QDomDocument* doc;
+      XmlReader doc;
       int tick;                                 ///< Current position in MuseScore time
       int maxtick;                              ///< Maxtick of a measure, used to calculate measure len
       int prevtick;                             ///< Previous notes tick (used to insert additional notes to chord)
@@ -250,25 +250,25 @@ class MusicXml {
       //-----------------------------
 
       void doCredits();
-      void direction(Measure* measure, int staff, QDomElement node);
-      void scorePartwise(QDomElement);
-      void xmlPartList(QDomElement);
-      void xmlPart(QDomElement, QString id);
-      void xmlScorePart(QDomElement node, QString id, int& parts);
-      Measure* xmlMeasure(Part*, QDomElement, int, int measureLen);
-      void xmlAttributes(Measure*, int stave, QDomElement node);
-      void xmlLyric(int trk, QDomElement e,
+      void direction(Measure* measure, int staff, XmlReader& node);
+      void scorePartwise(XmlReader&);
+      void xmlPartList(XmlReader&);
+      void xmlPart(XmlReader&, QString id);
+      void xmlScorePart(XmlReader&, QString id, int& parts);
+      Measure* xmlMeasure(Part*, XmlReader&, int, int measureLen);
+      void xmlAttributes(Measure*, int stave, XmlReader& node);
+      void xmlLyric(int trk, XmlReader& e,
                     QMap<int, Lyrics*>& numbrdLyrics,
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
-      void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, QDomElement node);
-      void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
-      int xmlClef(QDomElement, int staffIdx, Measure*);
-      void initVoiceMapperAndMapVoices(QDomElement e);
+      void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, XmlReader& node);
+      void xmlNote(Measure*, int stave, const QString& partId, XmlReader& node);
+      void xmlHarmony(XmlReader& node, int tick, Measure* m, int staff);
+      int xmlClef(XmlReader&, int staffIdx, Measure*);
+      void initVoiceMapperAndMapVoices(XmlReader& e);
 
 public:
-      MusicXml(QDomDocument* d);
+      MusicXml(XmlReader* d);
       void import(Score*);
       };
 

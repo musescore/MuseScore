@@ -87,7 +87,7 @@ class Ottava : public TextLine {
       int pitchShift() const { return _pitchShift; }
       virtual void endEdit();
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement& de);
+      virtual void read(XmlReader& de);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

@@ -39,16 +39,16 @@ void Icon::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Icon::read(const QDomElement& de)
+void Icon::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "action")
-                  _action = strdup(e.text().toLatin1().data());
+                  _action = strdup(e.readElementText().toLatin1().data());
             else if (tag == "subtype")
-                  _subtype = e.text().toInt();
+                  _subtype = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

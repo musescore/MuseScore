@@ -169,9 +169,9 @@ void Bracket::write(Xml& xml) const
 //   Bracket::read
 //---------------------------------------------------------
 
-void Bracket::read(const QDomElement& de)
+void Bracket::read(XmlReader& e)
       {
-      QString t(de.attribute("type", "Normal"));
+      QString t(e.attribute("type", "Normal"));
 
       if (t == "Normal")
             setSubtype(BRACKET_NORMAL);
@@ -180,11 +180,11 @@ void Bracket::read(const QDomElement& de)
       else
             qDebug("unknown brace type <%s>\n", t.toLatin1().data());
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "level")
-                  _column = e.text().toInt();
+      while (e.readNextStartElement()) {
+            if (e.name() == "level")
+                  _column = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
