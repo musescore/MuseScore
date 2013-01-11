@@ -150,31 +150,31 @@ const char* propertyName(P_ID id)
 // getProperty
 //---------------------------------------------------------
 
-QVariant getProperty(P_ID id, const QDomElement& e)
+QVariant getProperty(P_ID id, XmlReader& e)
       {
-      const QString& value(e.text());
       switch(propertyType(id)) {
             case T_BOOL:
-                  return QVariant(bool(value.toInt()));
+                  return QVariant(bool(e.readInt()));
             case T_SUBTYPE:
             case T_INT:
-                  return QVariant(value.toInt());
+                  return QVariant(e.readInt());
             case T_REAL:
             case T_SREAL:
-                  return QVariant(value.toDouble());
+                  return QVariant(e.readDouble());
             case T_FRACTION:
-                  return QVariant::fromValue(readFraction(e));
+                  return QVariant::fromValue(e.readFraction());
             case T_COLOR:
-                  return QVariant(readColor(e));
+                  return QVariant(e.readColor());
             case T_POINT:
-                  return QVariant(readPoint(e));
+                  return QVariant(e.readPoint());
             case T_SCALE:
             case T_SIZE:
-                  return QVariant(readSize(e));
+                  return QVariant(e.readSize());
             case T_STRING:
-                  return QVariant(value);
+                  return QVariant(e.readElementText());
             case T_DIRECTION:
                   {
+                  QString value(e.readElementText());
                   if (value == "up")
                         return QVariant(MScore::UP);
                   else if (value == "down")
@@ -185,6 +185,7 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                   break;
             case T_DIRECTION_H:
                   {
+                  QString value(e.readElementText());
                   if (value == "left")
                         return QVariant(MScore::DH_LEFT);
                   else if (value == "right")
@@ -193,7 +194,8 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                         return QVariant(MScore::DH_AUTO);
                   }
                   break;
-            case T_LAYOUT_BREAK:
+            case T_LAYOUT_BREAK: {
+                  QString value(e.readElementText());
                   if (value == "line")
                         return QVariant(int(LAYOUT_BREAK_LINE));
                   if (value == "page")
@@ -201,18 +203,23 @@ QVariant getProperty(P_ID id, const QDomElement& e)
                   if (value == "section")
                         return QVariant(int(LAYOUT_BREAK_SECTION));
                   qDebug("getProperty: invalid T_LAYOUT_BREAK: <%s>", qPrintable(value));
+                  }
                   break;
-            case T_VALUE_TYPE:
+            case T_VALUE_TYPE: {
+                  QString value(e.readElementText());
                   if (value == "offset")
                         return QVariant(int(MScore::OFFSET_VAL));
                   else if (value == "user")
                         return QVariant(int(MScore::USER_VAL));
+                  }
                   break;
-            case T_PLACEMENT:
+            case T_PLACEMENT: {
+                  QString value(e.readElementText());
                   if (value == "above")
                         return QVariant(int(Element::ABOVE));
                   else if (value == "below")
                         return QVariant(int(Element::BELOW));
+                  }
                   break;
             case T_BEAM_MODE:             // TODO
                   return QVariant(int(0));

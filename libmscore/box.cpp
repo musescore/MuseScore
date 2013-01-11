@@ -180,30 +180,29 @@ void Box::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Box::read(const QDomElement& de)
+void Box::read(XmlReader& e)
       {
       _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
       bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& text(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "height")
-                  _boxHeight = Spatium(text.toDouble());
+                  _boxHeight = Spatium(e.readDouble());
             else if (tag == "width")
-                  _boxWidth = Spatium(text.toDouble());
+                  _boxWidth = Spatium(e.readDouble());
             else if (tag == "topGap")
-                  _topGap = text.toDouble();
+                  _topGap = e.readDouble();
             else if (tag == "bottomGap")
-                  _bottomGap = text.toDouble();
+                  _bottomGap = e.readDouble();
             else if (tag == "leftMargin")
-                  _leftMargin = text.toDouble();
+                  _leftMargin = e.readDouble();
             else if (tag == "rightMargin")
-                  _rightMargin = text.toDouble();
+                  _rightMargin = e.readDouble();
             else if (tag == "topMargin")
-                  _topMargin = text.toDouble();
+                  _topMargin = e.readDouble();
             else if (tag == "bottomMargin")
-                  _bottomMargin = text.toDouble();
+                  _bottomMargin = e.readDouble();
             else if (tag == "Text") {
                   Text* t;
                   if (type() == TBOX) {
@@ -224,31 +223,10 @@ void Box::read(const QDomElement& de)
                   add(s);
                   }
             else if (tag == "Image") {
-                  // look ahead for image type
-                  QString path;
-                  QDomElement ee = e.firstChildElement("path");
-                  if (!ee.isNull())
-                        path = ee.text();
-                  Image* image = 0;
-                  QString s(path.toLower());
-                  if (s.endsWith(".svg"))
-                        image = new SvgImage(score());
-                  else
-                        if (s.endsWith(".jpg")
-                     || s.endsWith(".png")
-                     || s.endsWith(".gif")
-                     || s.endsWith(".xpm")
-                        ) {
-                        image = new RasterImage(score());
-                        }
-                  else {
-                        qDebug("unknown image format <%s>\n", path.toLatin1().data());
-                        }
-                  if (image) {
-                        image->setTrack(score()->curTrack);
-                        image->read(e);
-                        add(image);
-                        }
+                  Image* image = new Image(score());
+                  image->setTrack(score()->curTrack);
+                  image->read(e);
+                  add(image);
                   }
             else if (tag == "FretDiagram") {
                   FretDiagram* f = new FretDiagram(score());
@@ -272,8 +250,10 @@ void Box::read(const QDomElement& de)
                   add(vb);
                   keepMargins = true;     // in old file, box nesting used outer box margins
                   }
+            else if (Element::readProperties(e))
+                  ;
             else
-                  domError(e);
+                  e.unknown();
             }
 
       // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:

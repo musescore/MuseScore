@@ -45,7 +45,7 @@ class Icon : public Element {
       const char* action() const         { return _action;           }
       QIcon icon() const                 { return _icon;             }
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       };
 
 #endif

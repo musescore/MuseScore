@@ -59,12 +59,11 @@ Staff* Part::staff(int idx) const
 //   read
 //---------------------------------------------------------
 
-void Part::read(const QDomElement& de)
+void Part::read(XmlReader& e)
       {
       int rstaff = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "Staff") {
                   Staff* staff = new Staff(_score, this, rstaff);
                   _score->staves().push_back(staff);
@@ -75,15 +74,15 @@ void Part::read(const QDomElement& de)
             else if (tag == "Instrument")
                   instr(0)->read(e);
             else if (tag == "name")
-                  instr(0)->setLongName(QTextDocumentFragment::fromHtml(val));
+                  instr(0)->setLongName(QTextDocumentFragment::fromHtml(e.readElementText()));
             else if (tag == "shortName")
-                  instr(0)->setShortName(QTextDocumentFragment::fromHtml(val));
+                  instr(0)->setShortName(QTextDocumentFragment::fromHtml(e.readElementText()));
             else if (tag == "trackName")
-                  _partName = val;
+                  _partName = e.readElementText();
             else if (tag == "show")
-                  _show = val.toInt();
+                  _show = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();

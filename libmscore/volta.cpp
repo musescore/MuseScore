@@ -103,20 +103,20 @@ QString Volta::text() const
 //   read
 //---------------------------------------------------------
 
-void Volta::read(const QDomElement& de)
+void Volta::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
+      qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      setId(de.attribute("id", "-1").toInt());
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+
+      setId(e.intAttribute("id", -1));
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(VoltaType(e.text().toInt()));
+                  setSubtype(VoltaType(e.readInt()));
             else if (tag == "text")            // obsolete
-                  setText(e.text());
+                  setText(e.readElementText());
             else if (tag == "endings") {
-                  QString s = e.text();
+                  QString s = e.readElementText();
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
                   _endings.clear();
                   foreach(const QString& l, sl) {
@@ -125,7 +125,7 @@ void Volta::read(const QDomElement& de)
                         }
                   }
             else if (!TextLine::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

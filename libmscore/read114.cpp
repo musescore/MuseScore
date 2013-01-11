@@ -60,22 +60,21 @@ static SymId resolveSymCompatibility(SymId i, QString programVersion)
 //   Staff::read114
 //---------------------------------------------------------
 
-void Staff::read114(const QDomElement& de, ClefList& _clefList)
+void Staff::read114(XmlReader& e, ClefList& _clefList)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "type") {
-                  StaffType* st = score()->staffType(val.toInt());
+                  StaffType* st = score()->staffType(e.readInt());
                   if (st)
                         _staffType = st;
                   }
             else if (tag == "lines")
-                  setLines(val.toInt());
+                  setLines(e.readInt());
             else if (tag == "small")
-                  setSmall(val.toInt());
+                  setSmall(e.readInt());
             else if (tag == "invisible")
-                  setInvisible(val.toInt());
+                  setInvisible(e.readInt());
             else if (tag == "slashStyle")
                   ;                       // obsolete: setSlashStyle(v);
             else if (tag == "cleflist")
@@ -84,16 +83,16 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
                   _keymap->read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
-                  b._bracket = BracketType(e.attribute("type", "-1").toInt());
-                  b._bracketSpan = e.attribute("span", "0").toInt();
+                  b._bracket = BracketType(e.intAttribute("type", -1));
+                  b._bracketSpan = e.intAttribute("span", 0);
                   _brackets.append(b);
                   }
             else if (tag == "barLineSpan")
-                  _barLineSpan = val.toInt();
+                  _barLineSpan = e.readInt();
             else if (tag == "distOffset")
-                  _userDist = e.text().toDouble() * spatium();
+                  _userDist = e.readDouble() * spatium();
             else if (tag == "linkedTo") {
-                  int v = val.toInt() - 1;
+                  int v = e.readInt() - 1;
                   //
                   // if this is an excerpt, link staff to parentScore()
                   //
@@ -112,7 +111,7 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -120,12 +119,11 @@ void Staff::read114(const QDomElement& de, ClefList& _clefList)
 //   Part::read114
 //---------------------------------------------------------
 
-void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
+void Part::read114(XmlReader& e, QList<ClefList*>& clefList)
       {
       int rstaff = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "Staff") {
                   Staff* staff = new Staff(_score, this, rstaff);
                   _score->staves().push_back(staff);
@@ -160,11 +158,11 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
                   delete t;
                   }
             else if (tag == "trackName")
-                  _partName = val;
+                  _partName = e.readElementText();
             else if (tag == "show")
-                  _show = val.toInt();
+                  _show = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();
@@ -185,33 +183,32 @@ void Part::read114(const QDomElement& de, QList<ClefList*>& clefList)
 //    return false on error
 //---------------------------------------------------------
 
-Score::FileError Score::read114(const QDomElement& de)
+Score::FileError Score::read114(XmlReader& e)
       {
       spanner = 0;
 
       QList<ClefList*> clefListList;
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
-      for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+
+      while (e.readNextStartElement()) {
             curTrack = -1;
-            const QString& tag(ee.tagName());
-            const QString& val(ee.text());
-            int i = val.toInt();
+            const QStringRef& tag(e.name());
             if (tag == "Staff")
-                  readStaff(ee);
+                  readStaff(e);
             else if (tag == "KeySig") {
                   KeySig* ks = new KeySig(this);
-                  ks->read(ee);
+                  ks->read(e);
                   customKeysigs.append(ks);
                   }
             else if (tag == "StaffType") {
-                  int idx        = ee.attribute("idx").toInt();
+                  int idx        = e.intAttribute("idx");
                   StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
                         st = ost->clone();
                   else {
-                        QString group  = ee.attribute("group", "pitched");
+                        QString group  = e.attribute("group", "pitched");
                         if (group == "percussion")
                               st  = new StaffTypePercussion();
                         else if (group == "tablature")
@@ -219,47 +216,45 @@ Score::FileError Score::read114(const QDomElement& de)
                         else
                               st  = new StaffTypePitched();
                         }
-                  st->read(ee);
+                  st->read(e);
                   st->setBuildin(false);
                   addStaffType(idx, st);
                   }
             else if (tag == "siglist")
-                  _sigmap->read(ee, _fileDivision);
+                  _sigmap->read(e, _fileDivision);
             else if (tag == "tempolist")        // obsolete
-                  ;           // tempomap()->read(ee, _fileDivision);
+                  e.skipCurrentElement();       // tempomap()->read(ee, _fileDivision);
             else if (tag == "programVersion") {
-                  _mscoreVersion = val;
-                  parseVersion(val);
+                  _mscoreVersion = e.readElementText();
+                  parseVersion(_mscoreVersion);
                   }
             else if (tag == "programRevision")
-                  _mscoreRevision = val.toInt();
-            else if (tag == "Mag" || tag == "MagIdx" || tag == "xoff" || tag == "yoff") {
-                  // obsolete
-                  ;
-                  }
+                  _mscoreRevision = e.readInt();
+            else if (tag == "Mag" || tag == "MagIdx" || tag == "xoff" || tag == "yoff")
+                  e.skipCurrentElement();       // obsolete
             else if (tag == "playMode")
-                  _playMode = PlayMode(i);
+                  _playMode = PlayMode(e.readInt());
             else if (tag == "SyntiSettings") {
                   _syntiState.clear();
-                  _syntiState.read(ee);
+                  _syntiState.read(e);
                   }
             else if (tag == "Spatium")
-                  _style.setSpatium (val.toDouble() * MScore::DPMM); // obsolete, moved to Style
+                  _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
-                  setPageNumberOffset(i);
+                  setPageNumberOffset(e.readInt());
             else if (tag == "Division")
-                  _fileDivision = i;
+                  _fileDivision = e.readInt();
             else if (tag == "showInvisible")
-                  _showInvisible = i;
+                  _showInvisible = e.readInt();
             else if (tag == "showUnprintable")
-                  _showUnprintable = i;
+                  _showUnprintable = e.readInt();
             else if (tag == "showFrames")
-                  _showFrames = i;
+                  _showFrames = e.readInt();
             else if (tag == "showMargins")
-                  _showPageborders = i;
+                  _showPageborders = e.readInt();
             else if (tag == "Style") {
                   qreal sp = _style.spatium();
-                  _style.load(ee);
+                  _style.load(e);
                   if (_layoutMode == LayoutFloat) {
                         // style should not change spatium in
                         // float mode
@@ -268,7 +263,7 @@ Score::FileError Score::read114(const QDomElement& de)
                   }
             else if (tag == "TextStyle") {
                   TextStyle s;
-                  s.read(ee);
+                  s.read(e);
                   // settings for _reloff::x and _reloff::y in old formats
                   // is now included in style; setting them to 0 fixes most
                   // cases of backward compatibility
@@ -280,42 +275,42 @@ Score::FileError Score::read114(const QDomElement& de)
                   if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
                         PageFormat pf;
                         pf.copy(*pageFormat());
-                        pf.read(ee);
+                        pf.read(e);
                         setPageFormat(pf);
                         }
+                  else
+                        e.skipCurrentElement();
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
-                  text->read(ee);
+                  text->read(e);
                   setMetaTag("copyright", text->getText());
                   delete text;
                   }
             else if (tag == "movement-number")
-                  setMetaTag("movementNumber", val);
+                  setMetaTag("movementNumber", e.readElementText());
             else if (tag == "movement-title")
-                  setMetaTag("movementTitle", val);
+                  setMetaTag("movementTitle", e.readElementText());
             else if (tag == "work-number")
-                  setMetaTag("workNumber", val);
+                  setMetaTag("workNumber", e.readElementText());
             else if (tag == "work-title")
-                  setMetaTag("workTitle", val);
+                  setMetaTag("workTitle", e.readElementText());
             else if (tag == "source")
-                  setMetaTag("source", val);
+                  setMetaTag("source", e.readElementText());
             else if (tag == "metaTag") {
-                  QString name = ee.attribute("name");
-                  setMetaTag(name, val);
+                  QString name = e.attribute("name");
+                  setMetaTag(name, e.readElementText());
                   }
             else if (tag == "Part") {
                   Part* part = new Part(this);
-                  part->read114(ee, clefListList);
+                  part->read114(e, clefListList);
                   _parts.push_back(part);
                   }
-            else if (tag == "Symbols")          // obsolete
-                  ;
-            else if (tag == "cursorTrack")      // obsolete
-                  ;
+            else if (tag == "Symbols" || tag == "cursorTrack")          // obsolete
+                  e.skipCurrentElement();
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
-                  slur->read(ee);
+                  slur->read(e);
                   slur->setNext(spanner);
                   spanner = slur;
                   }
@@ -328,37 +323,37 @@ Score::FileError Score::read114(const QDomElement& de)
                   ;
                   }
             else if (tag == "Excerpt") {
-                  Excerpt* e = new Excerpt(this);
-                  e->read(ee);
-                  _excerpts.append(e);
+                  Excerpt* ex = new Excerpt(this);
+                  ex->read(e);
+                  _excerpts.append(ex);
                   }
             else if (tag == "Beam") {
                   Beam* beam = new Beam(this);
-                  beam->read(ee);
+                  beam->read(e);
                   beam->setParent(0);
                   // _beams.append(beam);
                   }
             else if (tag == "Score") {          // recursion
                   Score* s = new Score(style());
                   s->setParentScore(this);
-                  s->read(ee);
+                  s->read(e);
                   addExcerpt(s);
                   }
             else if (tag == "PageList") {
-                  for (QDomElement e = ee.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-                        if (e.tagName() == "Page") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Page") {
                               Page* page = new Page(this);
                               _pages.append(page);
                               page->read(e);
                               }
                         else
-                              domError(e);
+                              e.unknown();
                         }
                   }
             else if (tag == "name")
-                  setName(val);
+                  setName(e.readElementText());
             else
-                  domError(ee);
+                  e.unknown();
             }
 
       for (int idx = 0; idx < _staves.size(); ++idx) {
@@ -406,6 +401,7 @@ Score::FileError Score::read114(const QDomElement& de)
             }
       qDeleteAll(clefListList);
 
+#if 0 // TODOx
       //
       // scan spanner in a II. pass
       //
@@ -472,6 +468,7 @@ Score::FileError Score::read114(const QDomElement& de)
                         }
                   }
             }
+#endif
 
       // check slurs
       for(Spanner* s = spanner; s; s = s->next()) {

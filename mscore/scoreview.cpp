@@ -5063,19 +5063,7 @@ void ScoreView::cmdRepeatSelection()
       QApplication::clipboard()->setMimeData(mimeData);
 
       QByteArray data(mimeData->data(mimeType));
-
-// qDebug("repeat <%s>", data.data());
-
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(data, &err, &line, &column)) {
-            qDebug("error reading paste data at line %d column %d: %s",
-               line, column, qPrintable(err));
-            qDebug("%s", data.data());
-            return;
-            }
-      docName = "--";
+      XmlReader xml(data);
 
       int dStaff = selection.staffStart();
       Segment* endSegment = selection.endSegment();
@@ -5087,7 +5075,7 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  _score->pasteStaff(doc.documentElement(), cr);
+                  _score->pasteStaff(xml, cr);
                   _score->setLayoutAll(true);
                   _score->endCmd();
                   }

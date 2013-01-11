@@ -145,24 +145,13 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
                                             const QUrl& /* identifier */, const QSourceLocation& sourceLocation)
       {
       // convert description from html to text
-      QDomDocument desc;
-      QString contentError;
-      int contentLine;
-      int contentColumn;
-      if (!desc.setContent(description, false, &contentError, &contentLine,
-                           &contentColumn)) {
-            qDebug(qPrintable(QString("ValidatorMessageHandler: could not parse validation error line %1 column %2: %3")
-                              .arg(contentLine)
-                              .arg(contentColumn)
-                              .arg(contentError)));
-            return;
-            }
-      QDomElement e = desc.documentElement();
-      if (e.tagName() != "html") {
+      XmlReader e(description);
+
+      if (e.readNextStartElement() != "html") {
             qDebug("ValidatorMessageHandler: description is not html");
             return;
             }
-      QString descText = e.text();
+      QString descText = e.value();
 
       QString strType;
       switch (type) {

@@ -14,6 +14,8 @@
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
+class XmlReader;
+
 //------------------------------------------------------------------------
 //   Element Properties
 //    accessible through
@@ -140,7 +142,7 @@ enum P_TYPE {
       T_PLACEMENT
       };
 
-extern QVariant getProperty(P_ID type, const QDomElement& e);
+extern QVariant getProperty(P_ID type, XmlReader& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
 

@@ -79,17 +79,7 @@ void Score::cmdPaste(MuseScoreView* view)
             }
       if (selection().isSingle() && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
-            QDomDocument doc;
-            int line, column;
-            QString err;
-            if (!doc.setContent(data, &err, &line, &column)) {
-                  qDebug("error reading paste data at line %d column %d: %s",
-                     line, column, qPrintable(err));
-                  qDebug("%s", data.data());
-                  return;
-                  }
-            docName = "--";
-            QDomElement e = doc.documentElement();
+            XmlReader e(data);
             QPointF dragOffset;
             Fraction duration(1, 4);
             Element::ElementType type = Element::readType(e, &dragOffset, &duration);
@@ -133,17 +123,8 @@ void Score::cmdPaste(MuseScoreView* view)
 
             QByteArray data(ms->data(mimeStaffListFormat));
 // qDebug("paste <%s>", data.data());
-            QDomDocument doc;
-            int line, column;
-            QString err;
-            if (!doc.setContent(data, &err, &line, &column)) {
-                  qDebug("error reading paste data at line %d column %d: %s",
-                     line, column, qPrintable(err));
-                  qDebug("%s", data.data());
-                  return;
-                  }
-            docName = "--";
-            pasteStaff(doc.documentElement(), cr);
+            XmlReader e(data);
+            pasteStaff(e, cr);
             }
       else if (ms->hasFormat(mimeSymbolListFormat) && selection().isSingle()) {
             qDebug("cannot paste symbol list to element");
@@ -160,7 +141,7 @@ void Score::cmdPaste(MuseScoreView* view)
 //   pasteStaff
 //---------------------------------------------------------
 
-void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
+void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       {
       beams.clear();
       spanner = 0;
@@ -172,16 +153,17 @@ void Score::pasteStaff(const QDomElement& de, ChordRest* dst)
             }
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
-      for (QDomElement e = de; !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() != "StaffList") {
-                  domError(e);
+
+      while (e.readNextStartElement()) {
+            if (e.name() != "StaffList") {
+                  e.unknown();
                   continue;
                   }
 
-            int tickStart     = e.attribute("tick","0").toInt();
-            int tickLen       = e.attribute("len", "0").toInt();
-            int srcStaffStart = e.attribute("staff", "0").toInt();
-            int staves        = e.attribute("staves", "0").toInt();
+            int tickStart     = e.intAttribute("tick", 0);
+            int tickLen       = e.intAttribute("len", 0);
+            int srcStaffStart = e.intAttribute("staff", 0);
+            int staves        = e.intAttribute("staves", 0);
             curTick           = tickStart;
 
             QSet<int> blackList;
@@ -195,28 +177,28 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         }
                   }
             bool pasted = false;
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  if (ee.tagName() != "Staff") {
-                        domError(ee);
+            while (e.readNextStartElement()) {
+                  if (e.name() != "Staff") {
+                        e.unknown();
                         continue;
                         }
-                  int srcStaffIdx = ee.attribute("id", "0").toInt();
+                  int srcStaffIdx = e.attribute("id", "0").toInt();
                   if (blackList.contains(srcStaffIdx))
                         continue;
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
                   tuplets.clear();
-                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
+                  while (e.readNextStartElement()) {
                         pasted = true;
-                        const QString& tag(eee.tagName());
+                        const QStringRef& tag(e.name());
 
                         if (tag == "tick")
-                              curTick = eee.text().toInt();
+                              curTick = e.readInt();
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
                               tuplet->setTrack(curTrack);
-                              tuplet->read(eee);
+                              tuplet->read(e);
                               int tick = curTick - tickStart + dstTick;
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
@@ -225,15 +207,15 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               }
                         else if (tag == "Slur") {
                               Slur* slur = new Slur(this);
-                              slur->read(eee);
+                              slur->read(e);
                               slur->setTrack(dstStaffIdx * VOICES);
                               slur->setNext(spanner);
                               spanner = slur;
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
-                              ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
+                              ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag.toString(), this));
                               cr->setTrack(curTrack);
-                              cr->read(eee);
+                              cr->read(e);
                               cr->setSelected(false);
                               int voice = cr->voice();
                               int track = dstStaffIdx * VOICES + voice;
@@ -248,9 +230,9 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "Trill"
                            || tag == "TextLine"
                            || tag == "Volta") {
-                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
+                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), this));
                               sp->setTrack(dstStaffIdx * VOICES);
-                              sp->read(eee);
+                              sp->read(e);
                               int tick = curTick - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::SegChordRest, tick);
@@ -259,7 +241,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               localSpanner.insert(sp->id(), sp);
                               }
                         else if (tag == "endSpanner") {
-                              int id = eee.attribute("id").toInt();
+                              int id = e.intAttribute("id");
                               Spanner* e = localSpanner.value(id, 0);
                               if (e) {
                                     localSpanner.remove(id);
@@ -287,7 +269,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         else if (tag == "Lyrics") {
                               Lyrics* lyrics = new Lyrics(this);
                               lyrics->setTrack(curTrack);
-                              lyrics->read(eee);
+                              lyrics->read(e);
                               lyrics->setTrack(dstStaffIdx * VOICES);
                               int tick = curTick - tickStart + dstTick;
                               Segment* segment = tick2segment(tick);
@@ -303,7 +285,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(curTrack);
-                              harmony->read(eee);
+                              harmony->read(e);
                               harmony->setTrack(dstStaffIdx * VOICES);
                               //transpose
                               Part* partDest = staff(dstStaffIdx)->part();
@@ -333,20 +315,20 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "StaffText"
                            || tag == "TempoText"
                            ) {
-                              Element* e = Element::name2Element(tag, this);
-                              e->setTrack(dstStaffIdx * VOICES);
+                              Element* el = Element::name2Element(tag.toString(), this);
+                              el->setTrack(dstStaffIdx * VOICES);
 
                               int tick = curTick - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
-                              e->setParent(seg);
-                              e->read(eee);
+                              el->setParent(seg);
+                              el->read(e);
 
-                              undoAddElement(e);
+                              undoAddElement(el);
                               }
                         else if (tag == "Clef") {
                               Clef* clef = new Clef(this);
-                              clef->read(eee);
+                              clef->read(e);
                               clef->setTrack(dstStaffIdx * VOICES);
                               int tick = curTick - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
@@ -358,7 +340,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               }
                         else if (tag == "Breath") {
                               Breath* breath = new Breath(this);
-                              breath->read(eee);
+                              breath->read(e);
                               breath->setTrack(dstStaffIdx * VOICES);
                               int tick = curTick - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
@@ -370,7 +352,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               // ignore bar line
                               }
                         else
-                              domError(eee);
+                              e.unknown();
                         }
 
                   foreach (Tuplet* tuplet, tuplets) {
@@ -401,7 +383,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         _selection.setState(SEL_RANGE);
                   }
             }
-      printf("====end paste\n");
       for (Spanner* sp = spanner; sp;) {
             Spanner* spNext = sp->next();
             printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());

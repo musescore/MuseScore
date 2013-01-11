@@ -85,7 +85,7 @@ class Hairpin : public SLine {
       void undoSetDynRange(DynamicRange t);
 
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       virtual QVariant getProperty(P_ID id) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

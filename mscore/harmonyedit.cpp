@@ -494,6 +494,7 @@ void HarmonyCanvas::dropEvent(QDropEvent* event)
 
 void HarmonyCanvas::dragEnterEvent(QDragEnterEvent* event)
       {
+#if 0  // TODOx
       const QMimeData* data = event->mimeData();
       if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray a = data->data(mimeSymbolFormat);
@@ -519,6 +520,7 @@ void HarmonyCanvas::dragEnterEvent(QDragEnterEvent* event)
                   dragElement->layout();
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------

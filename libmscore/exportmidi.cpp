@@ -40,11 +40,11 @@ void ExportMidi::writeHeader()
       if (mf.tracks()->isEmpty())
             return;
       MidiTrack* track  = mf.tracks()->front();
-#if 0 // TODOxx
       MeasureBase* measure  = cs->first();
 
+#if 0 // TODO
       foreach (const Element* e, *measure->el()) {
-            if (e->type() == TEXT) {
+            if (e->type() == Element::TEXT) {
                   const Text* text = (const Text*)(e);
                   QString str = text->getText();
                   int len     = str.length() + 1;
@@ -82,6 +82,7 @@ void ExportMidi::writeHeader()
                   }
             }
 #endif
+
       //--------------------------------------------
       //    write time signature
       //--------------------------------------------
@@ -178,7 +179,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TempoMap* tempomap = cs->tempomap();
-      int relTempo = tempomap->relTempo();      
+      int relTempo = tempomap->relTempo();
       foreach(const RepeatSegment* rs, *cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;

@@ -148,11 +148,11 @@ class FiguredBassItem : public Element {
       virtual ElementType           type() const      { return INVALID; }
       virtual void      draw(QPainter* painter) const;
       virtual void      layout();
-      virtual void      read(const QDomElement&);
+      virtual void      read(XmlReader&);
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
-      void              readMusicXML(const QDomElement& de, bool paren, bool& extend);
+      void              readMusicXML(XmlReader& de, bool paren, bool& extend);
       void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
       bool              startsWithParenthesis() const;
 
@@ -203,7 +203,7 @@ struct FiguredBassFont {
       QChar             displayParenthesis[5];
       QChar             displayDigit[2][10][4];
 
-      bool read(const QDomElement&);
+      bool read(XmlReader&);
 };
 
 //---------------------------------------------------------
@@ -249,13 +249,13 @@ class FiguredBass : public Text {
       virtual void      draw(QPainter* painter) const;
       virtual void      endEdit();
       virtual void      layout();
-      virtual void      read(const QDomElement&);
+      virtual void      read(XmlReader&);
       virtual void      setSelected(bool f);
       virtual void      setVisible(bool f);
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
-      bool              readMusicXML(const QDomElement& de, int divisions, bool& extend);
+      bool              readMusicXML(XmlReader& de, int divisions, bool& extend);
       void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
 
 //DEBUG

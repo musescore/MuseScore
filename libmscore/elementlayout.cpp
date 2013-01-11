@@ -131,12 +131,12 @@ void ElementLayout::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool ElementLayout::readProperties(const QDomElement& e)
+bool ElementLayout::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "halign") {
+            const QString& val(e.readElementText());
             _align &= ~(ALIGN_HCENTER | ALIGN_RIGHT);
             if (val == "center")
                   _align |= ALIGN_HCENTER;
@@ -148,6 +148,7 @@ bool ElementLayout::readProperties(const QDomElement& e)
                   qDebug("Text::readProperties: unknown alignment: <%s>\n", qPrintable(val));
             }
       else if (tag == "valign") {
+            const QString& val(e.readElementText());
             _align &= ~(ALIGN_VCENTER | ALIGN_BOTTOM | ALIGN_BASELINE);
             if (val == "center")
                   _align |= ALIGN_VCENTER;
@@ -161,22 +162,23 @@ bool ElementLayout::readProperties(const QDomElement& e)
                   qDebug("Text::readProperties: unknown alignment: <%s>\n", qPrintable(val));
             }
       else if (tag == "xoffset") {
-            qreal xo = val.toDouble();
+            qreal xo = e.readDouble();
             if (offsetType() == OFFSET_ABS)
                   xo /= INCH;
             setXoff(xo);
             }
       else if (tag == "yoffset") {
-            qreal yo = val.toDouble();
+            qreal yo = e.readDouble();
             if (offsetType() == OFFSET_ABS)
                   yo /= INCH;
             setYoff(yo);
             }
       else if (tag == "rxoffset")
-            setRxoff(val.toDouble());
+            setRxoff(e.readDouble());
       else if (tag == "ryoffset")
-            setRyoff(val.toDouble());
+            setRyoff(e.readDouble());
       else if (tag == "offsetType") {
+            const QString& val(e.readElementText());
             OffsetType ot = OFFSET_ABS;
             if (val == "spatium" || val == "1")
                   ot = OFFSET_SPATIUM;

@@ -24,6 +24,7 @@
 #include "fraction.h"
 
 class Xml;
+class XmlReader;
 
 //-------------------------------------------------------------------
 //   Time Signature Event
@@ -37,7 +38,7 @@ class SigEvent {
       int _bar;               ///< precomputed value
 
    public:
-      int read(const QDomElement&, int fileDivision);
+      int read(XmlReader&, int fileDivision);
       void write(Xml&, int) const;
 
       SigEvent() : _timesig(0, 0) {}       ///< default SigEvent is invalid
@@ -75,7 +76,7 @@ class TimeSigMap : public std::map<const int, SigEvent > {
 
       void del(int tick);
 
-      void read(const QDomElement&, int fileDiv);
+      void read(XmlReader&, int fileDiv);
       void write(Xml&) const;
       void dump() const;
 

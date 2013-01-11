@@ -108,6 +108,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
 
 void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       {
+#if 0 // TODOx
       if (MScore::debugMode)
             qDebug("dragEnterEvent");
       double _spatium = score()->spatium();
@@ -227,6 +228,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       qDebug("unknown drop format: formats:");
       foreach(const QString& s, formats)
             qDebug("  <%s>", qPrintable(s));
+#endif
       }
 
 //---------------------------------------------------------
@@ -400,6 +402,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
+#if 0 // TODOx
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
       DropData dropData;
@@ -648,6 +651,7 @@ if (MScore::debugMode)
             mscore->endCmd();
             }
       setDropTarget(0); // this also resets dropRectangle and dropAnchor
+#endif
       }
 
 //---------------------------------------------------------

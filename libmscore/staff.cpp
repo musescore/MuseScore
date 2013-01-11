@@ -411,13 +411,12 @@ void Staff::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Staff::read(const QDomElement& de)
+void Staff::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "type") {
-                  StaffType* st = score()->staffType(val.toInt());
+                  StaffType* st = score()->staffType(e.readInt());
                   if (st) {
                         _staffType = st;
                         // set default barLineTo according to staff type (1-line staff bar lines are special)
@@ -426,19 +425,20 @@ void Staff::read(const QDomElement& de)
                         }
                   }
             else if (tag == "small")
-                  setSmall(val.toInt());
+                  setSmall(e.readInt());
             else if (tag == "invisible")
-                  setInvisible(val.toInt());
+                  setInvisible(e.readInt());
             else if (tag == "keylist")
                   _keymap->read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
-                  b._bracket = BracketType(e.attribute("type", "-1").toInt());
-                  b._bracketSpan = e.attribute("span", "0").toInt();
+                  b._bracket = BracketType(e.intAttribute("type", -1));
+                  b._bracketSpan = e.intAttribute("span", 0);
                   _brackets.append(b);
+                  e.skipCurrentElement();
                   }
             else if (tag == "barLineSpan") {
-                  _barLineSpan = val.toInt();
+                  _barLineSpan = e.readInt();
                   int defaultSpan = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                   _barLineFrom = e.attribute("from", QString::number(defaultSpan)).toInt();
 // WARNING: following statement assume staff type is correctly set
@@ -448,12 +448,12 @@ void Staff::read(const QDomElement& de)
                   defaultSpan = _barLineSpan <= 1 ?
                               (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2)
                               : UNKNOWN_BARLINE_TO;
-                  _barLineTo = e.attribute("to", QString::number(defaultSpan)).toInt();
+                  _barLineTo = e.intAttribute("to", defaultSpan);
                   }
             else if (tag == "distOffset")
-                  _userDist = e.text().toDouble() * spatium();
+                  _userDist = e.readDouble() * spatium();
             else if (tag == "linkedTo") {
-                  int v = val.toInt() - 1;
+                  int v = e.readInt() - 1;
                   //
                   // if this is an excerpt, link staff to parentScore()
                   //
@@ -472,7 +472,7 @@ void Staff::read(const QDomElement& de)
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

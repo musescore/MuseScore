@@ -47,17 +47,16 @@ Tablature::Tablature(int numFrets, QList<int>& strings)
 //   read
 //---------------------------------------------------------
 
-void Tablature::read(const QDomElement& de)
+void Tablature::read(XmlReader& e)
       {
-
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "frets")
-                  _frets = e.text().toInt();
+                  _frets = e.readInt();
             else if (tag == "string")
-                  stringTable.append(e.text().toInt());
+                  stringTable.append(e.readInt());
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -280,14 +279,14 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
 //   Read MusicXML
 //---------------------------------------------------------
 
-void Tablature::readMusicXML(const QDomElement& de)
+void Tablature::readMusicXML(XmlReader& e)
       {
       _frets = 25;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            int val = e.text().toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "staff-lines") {
+                  int val = e.readInt();
                   if (val > 0) {
                         // resize the string table and init with zeroes
                         stringTable = QVector<int>(val).toList();
@@ -296,21 +295,20 @@ void Tablature::readMusicXML(const QDomElement& de)
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
                   }
             else if (tag == "staff-tuning") {
-                  int     line   = e.attribute("line").toInt();
+                  int     line   = e.intAttribute("line");
                   QString step;
                   int     alter  = 0;
                   int     octave = 0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        int val = ee.text().toInt();
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "tuning-alter")
-                              alter = val;
+                              alter = e.readInt();
                         else if (tag == "tuning-octave")
-                              octave = val;
+                              octave = e.readInt();
                         else if (tag == "tuning-step")
-                              step = ee.text();
+                              step = e.readElementText();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   if (0 < line && line <= stringTable.size()) {
                         int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);

@@ -333,26 +333,15 @@ void EditDrumset::load()
       if (!fp.open(QIODevice::ReadOnly))
             return;
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&fp, false, &err, &line, &column)) {
-            qDebug("error reading file %s at line %d column %d: %s\n",
-               qPrintable(name), line, column, qPrintable(err));
-            return;
-            }
-
-      docName = name;
+      XmlReader e(&fp);
       nDrumset.clear();
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        QString val(ee.text());
-                        if (tag == "Drum")
-                              nDrumset.load(ee);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Drum")
+                              nDrumset.load(e);
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }

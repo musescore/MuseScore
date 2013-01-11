@@ -301,46 +301,43 @@ void KeySig::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void KeySig::read(const QDomElement& de)
+void KeySig::read(XmlReader& e)
       {
       _sig = KeySigEvent();   // invalidate _sig
       int subtype = 0;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "KeySym") {
                   KeySym* ks = new KeySym;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        const QString& val(ee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "sym")
-                              ks->sym = val.toInt();
+                              ks->sym = e.readInt();
                         else if (tag == "pos")
-                              ks->spos = readPoint(ee);
+                              ks->spos = e.readPoint();
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   keySymbols.append(ks);
                   }
             else if (tag == "showCourtesySig")
-		      _showCourtesy = val.toInt();
+		      _showCourtesy = e.readInt();
             else if (tag == "showNaturals")
-		      _showNaturals = val.toInt();
+		      _showNaturals = e.readInt();
             else if (tag == "accidental")
-                  _sig.setAccidentalType(val.toInt());
+                  _sig.setAccidentalType(e.readInt());
             else if (tag == "natural")
-                  _sig.setNaturalType(val.toInt());
+                  _sig.setNaturalType(e.readInt());
             else if (tag == "custom")
-                  _sig.setCustomType(val.toInt());
+                  _sig.setCustomType(e.readInt());
             else if (tag == "subtype")
-                  subtype = val.toInt();
+                  subtype = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
-      if (_sig.invalid() && subtype) {
+      if (_sig.invalid() && subtype)
             _sig.initFromSubtype(subtype);     // for backward compatibility
-            }
       }
 
 //---------------------------------------------------------

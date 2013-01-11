@@ -196,20 +196,22 @@ void Articulation::setSubtype(ArticulationType idx)
 //   read
 //---------------------------------------------------------
 
-void Articulation::read(const QDomElement& de)
+void Articulation::read(XmlReader& e)
       {
       setSubtype(Articulation_Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(val);
-            else if (tag == "channel")
+                  setSubtype(e.readElementText());
+            else if (tag == "channel") {
                   _channelName = e.attribute("name");
+                  e.readNext();
+                  }
             else if (tag == "anchor")
-                  _anchor = ArticulationAnchor(val.toInt());
+                  _anchor = ArticulationAnchor(e.readInt());
             else if (tag == "direction") {
                   MScore::Direction dir = MScore::AUTO;
+                  QString val = e.readElementText();
                   if (val == "up")
                         dir = MScore::UP;
                   else if (val == "down")
@@ -217,11 +219,11 @@ void Articulation::read(const QDomElement& de)
                   else if (val == "auto")
                         dir = MScore::AUTO;
                   else
-                        domError(e);
+                        e.unknown();
                   setDirection(dir);
                   }
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -387,32 +387,30 @@ void FiguredBassItem::write(Xml& xml) const
 //   FiguredBassItem read()
 //---------------------------------------------------------
 
-void FiguredBassItem::read(const QDomElement& de)
-{
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            int   iVal = val.toInt();
+void FiguredBassItem::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
-            if(tag == "brackets") {
-                  parenth[0] = (Parenthesis)e.attribute("b0").toInt();
-                  parenth[1] = (Parenthesis)e.attribute("b1").toInt();
-                  parenth[2] = (Parenthesis)e.attribute("b2").toInt();
-                  parenth[3] = (Parenthesis)e.attribute("b3").toInt();
-                  parenth[4] = (Parenthesis)e.attribute("b4").toInt();
+            if (tag == "brackets") {
+                  parenth[0] = (Parenthesis)e.intAttribute("b0");
+                  parenth[1] = (Parenthesis)e.intAttribute("b1");
+                  parenth[2] = (Parenthesis)e.intAttribute("b2");
+                  parenth[3] = (Parenthesis)e.intAttribute("b3");
+                  parenth[4] = (Parenthesis)e.intAttribute("b4");
                   }
-            else if(tag == "prefix")
-                  _prefix = (Modifier)iVal;
-            else if(tag == "digit")
-                  _digit = iVal;
-            else if(tag == "suffix")
-                  _suffix = (Modifier)iVal;
+            else if (tag == "prefix")
+                  _prefix = (Modifier)(e.readInt());
+            else if (tag == "digit")
+                  _digit = e.readInt();
+            else if (tag == "suffix")
+                  _suffix = (Modifier)(e.readInt());
             else if(tag == "continuationLine")
-                  _contLine = iVal;
-            else if(!Element::readProperties(e))
-                  domError(e);
+                  _contLine = e.readInt();
+            else if (!Element::readProperties(e))
+                  e.unknown();
             }
-}
+      }
 
 //---------------------------------------------------------
 //   FiguredBassItem layout()
@@ -770,27 +768,26 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 // node instead of for each individual <figure> node.
 //---------------------------------------------------------
 
-void FiguredBassItem::readMusicXML(const QDomElement& de, bool paren, bool& extend)
+void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
       {
       // read the <figure> node de
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            int   iVal = val.toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "extend")
                   extend = true;
             else if (tag == "figure-number") {
                   // MusicXML spec states figure-number is a number
                   // MuseScore can only handle single digit
+                  int iVal = e.readInt();
                   if (1 <= iVal && iVal <= 9)
                         _digit = iVal;
                   }
             else if (tag == "prefix")
-                  _prefix = MusicXML2Modifier(val);
+                  _prefix = MusicXML2Modifier(e.readElementText());
             else if (tag == "suffix")
-                  _suffix = MusicXML2Modifier(val);
+                  _suffix = MusicXML2Modifier(e.readElementText());
             else
-                  domError(e);
+                  e.unknown();
             }
       // set parentheses
       if (paren) {
@@ -901,17 +898,16 @@ void FiguredBass::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void FiguredBass::read(const QDomElement& de)
+void FiguredBass::read(XmlReader& e)
       {
-      QString normalizedText = QString();
+      QString normalizedText;
       int idx = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            if(tag == "ticks")
-                  setTicks(val.toInt());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "ticks")
+                  setTicks(e.readInt());
             else if(tag == "onNote")
-                  setOnNote(val.toInt() != 0l);
+                  setOnNote(e.readInt() != 0l);
             else if (tag == "FiguredBassItem") {
                   FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
                   pItem->setTrack(track());
@@ -924,7 +920,7 @@ void FiguredBass::read(const QDomElement& de)
                   normalizedText.append(pItem->normalizedText());
                   }
             else if(!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       setText(normalizedText);                  // this is the text to show while editing
       }
@@ -1303,78 +1299,71 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 
-bool FiguredBassFont::read(const QDomElement &de)
-{
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            if(val.size() < 1)
-                  return false;
-
+bool FiguredBassFont::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "family")
-                  family = val;
-            else if(tag == "displayName")
-                  displayName = val;
-            else if(tag == "defaultPitch")
-                  defPitch = val.toDouble();
-            else if(tag == "defaultLineHeight")
-                  defLineHeight = val.toDouble();
-            else if(tag == "parenthesisRoundOpen")
-                  displayParenthesis[1] = val[0];
-            else if(tag == "parenthesisRoundClosed")
-                  displayParenthesis[2] = val[0];
-            else if(tag == "parenthesisSquareOpen")
-                  displayParenthesis[3] = val[0];
-            else if(tag == "parenthesisSquareClosed")
-                  displayParenthesis[4] = val[0];
-            else if(tag == "doubleflat")
-                  displayAccidental[1] = val[0];
-            else if(tag == "flat")
-                  displayAccidental[2] = val[0];
-            else if(tag == "natural")
-                  displayAccidental[3] = val[0];
-            else if(tag == "sharp")
-                  displayAccidental[4] = val[0];
-            else if(tag == "doublesharp")
-                  displayAccidental[5] = val[0];
-            else if(tag == "digit") {
-                  int digit = e.attribute("value").toInt();
-                  if(digit < 1 || digit > 9)
+                  family = e.readElementText();
+            else if (tag == "displayName")
+                  displayName = e.readElementText();
+            else if (tag == "defaultPitch")
+                  defPitch = e.readDouble();
+            else if (tag == "defaultLineHeight")
+                  defLineHeight = e.readDouble();
+            else if (tag == "parenthesisRoundOpen")
+                  displayParenthesis[1] = e.readElementText()[0];
+            else if (tag == "parenthesisRoundClosed")
+                  displayParenthesis[2] = e.readElementText()[0];
+            else if (tag == "parenthesisSquareOpen")
+                  displayParenthesis[3] = e.readElementText()[0];
+            else if (tag == "parenthesisSquareClosed")
+                  displayParenthesis[4] = e.readElementText()[0];
+            else if (tag == "doubleflat")
+                  displayAccidental[1] = e.readElementText()[0];
+            else if (tag == "flat")
+                  displayAccidental[2] = e.readElementText()[0];
+            else if (tag == "natural")
+                  displayAccidental[3] = e.readElementText()[0];
+            else if (tag == "sharp")
+                  displayAccidental[4] = e.readElementText()[0];
+            else if (tag == "doublesharp")
+                  displayAccidental[5] = e.readElementText()[0];
+            else if (tag == "digit") {
+                  int digit = e.intAttribute("value");
+                  if (digit < 1 || digit > 9)
                         return false;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        const QString& val(ee.text());
-                        if(val.size() < 1)
-                              return false;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "simple")
-                              displayDigit[0][digit][0] = val[0];
+                              displayDigit[0][digit][0] = e.readElementText()[0];
                         else if (tag == "crossed")
-                              displayDigit[0][digit][1] = val[0];
+                              displayDigit[0][digit][1] = e.readElementText()[0];
                         else if (tag == "backslashed")
-                              displayDigit[0][digit][2] = val[0];
+                              displayDigit[0][digit][2] = e.readElementText()[0];
                         else if (tag == "slashed")
-                              displayDigit[0][digit][3] = val[0];
+                              displayDigit[0][digit][3] = e.readElementText()[0];
                         else if (tag == "simpleHistoric")
-                              displayDigit[1][digit][0] = val[0];
+                              displayDigit[1][digit][0] = e.readElementText()[0];
                         else if (tag == "crossedHistoric")
-                              displayDigit[1][digit][1] = val[0];
+                              displayDigit[1][digit][1] = e.readElementText()[0];
                         else if (tag == "backslashedHistoric")
-                              displayDigit[1][digit][2] = val[0];
+                              displayDigit[1][digit][2] = e.readElementText()[0];
                         else if (tag == "slashedHistoric")
-                              displayDigit[1][digit][3] = val[0];
+                              displayDigit[1][digit][3] = e.readElementText()[0];
                         else {
-                              domError(ee);
+                              e.unknown();
                               return false;
                               }
                         }
                   }
             else {
-                  domError(e);
+                  e.unknown();
                   return false;
                   }
             }
       return true;
-}
+      }
 
 //---------------------------------------------------------
 //   Read Configuration File
@@ -1384,7 +1373,7 @@ bool FiguredBassFont::read(const QDomElement &de)
 //---------------------------------------------------------
 
 bool FiguredBass::readConfigFile(const QString& fileName)
-{
+      {
       QString     path;
 
       if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
@@ -1402,48 +1391,36 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       else
             path = fileName;
 
-      QFileInfo fi(path);
       QFile f(path);
-
-      if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
+      if (!f.open(QIODevice::ReadOnly)) {
             QString s = QT_TRANSLATE_NOOP("file", "cannot open figured bass description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
 qDebug("FiguredBass::read failed: <%s>\n", qPrintable(path));
             return false;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error reading figured bass font description %1 at line %2 column %3: %4\n");
-            MScore::lastError = s.arg(f.fileName()).arg(line).arg(column).arg(err);
-            return false;
-            }
-      docName = f.fileName();
-
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
                   // QString version = e.attribute(QString("version"));
                   // QStringList sl = version.split('.');
                   // int _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
 
-                  for (QDomElement de = e.firstChildElement(); !de.isNull();  de = de.nextSiblingElement()) {
-                        const QString& tag(de.tagName());
-                        if (tag == "font") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "font") {
                               FiguredBassFont f;
-                              if(f.read(de))
+                              if (f.read(e))
                                     g_FBFonts.append(f);
                               else
                                     return false;
                               }
                         else
-                              domError(de);
+                              e.unknown();
                         }
                   return true;
                   }
             }
       return false;
-}
+      }
 
 //---------------------------------------------------------
 //   Get Font Names
@@ -1499,16 +1476,16 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
 // Set extend to true if extend elements were found
 //---------------------------------------------------------
 
-bool FiguredBass::readMusicXML(const QDomElement& de, int divisions, bool& extend)
+bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
       {
       extend = false;
-      bool parentheses = (de.attribute("parentheses") == "yes");
+      bool parentheses = e.attribute("parentheses") == "yes";
       QString normalizedText;
       int idx = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "duration") {
+                  QString val(e.readElementText());
                   bool ok = true;
                   int duration = val.toInt(&ok);
                   if (ok) {
@@ -1530,12 +1507,12 @@ bool FiguredBass::readMusicXML(const QDomElement& de, int divisions, bool& exten
                         extend = true;
                   items.append(*pItem);
                   // add item normalized text
-                  if(!normalizedText.isEmpty())
+                  if (!normalizedText.isEmpty())
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
             else {
-                  domError(e);
+                  e.unknown();
                   return false;
                   }
             }

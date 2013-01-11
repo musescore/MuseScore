@@ -270,9 +270,7 @@ Event& Event::operator=(const Event& s)
       return *this;
       }
 
-// void Event::write(MidiFile* mf) const { d->write(mf);  }
 void Event::write(Xml& xml) const     { d->write(xml); }
-// void Event::read(QDomElement e)       { d->read(e);    }
 
 bool Event::isChannelEvent() const    { return d->isChannelEvent(); }
 

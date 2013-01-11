@@ -85,7 +85,7 @@ class SlurSegment : public SpannerSegment {
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
       void write(Xml& xml, int no) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
       virtual void reset();
       void setSlurOffset(int i, const QPointF& val) { ups[i].off = val;  }
       QPointF slurOffset(int i) const               { return ups[i].off; }
@@ -134,7 +134,7 @@ class SlurTie : public Spanner {
       virtual bool contains(const QPointF&) const     { return false; }  // not selectable
 
       void writeProperties(Xml& xml) const;
-      bool readProperties(const QDomElement&);
+      bool readProperties(XmlReader&);
 
       virtual void reset();
 
@@ -168,7 +168,7 @@ class Slur : public SlurTie {
       virtual Slur* clone() const      { return new Slur(*this); }
       virtual ElementType type() const { return SLUR; }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void layout();
       virtual void setTrack(int val);
       virtual void slurPos(SlurPos*);
@@ -203,7 +203,7 @@ class Tie : public SlurTie {
       Note* startNote() const             { return (Note*)startElement(); }
       Note* endNote() const               { return (Note*)endElement();   }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void layout();
       virtual void slurPos(SlurPos*);
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF());

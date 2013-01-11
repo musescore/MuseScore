@@ -42,7 +42,7 @@ class DurationElement : public Element {
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
-      bool readProperties(const QDomElement& e);
+      bool readProperties(XmlReader& e);
       void writeProperties(Xml& xml) const;
       void writeTuplet(Xml& xml);
 

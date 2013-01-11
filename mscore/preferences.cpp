@@ -1658,46 +1658,37 @@ bool Preferences::readPluginList()
             qDebug("cannot open plugins file <%s>\n", qPrintable(f.fileName()));
             return false;
             }
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      docName = f.fileName();
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString error;
-            error.sprintf("error reading session file %s at line %d column %d: %s\n",
-               qPrintable(docName), line, column, qPrintable(err));
-            return false;
-            }
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "Plugin") {
                               PluginDescription d;
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull();  eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
                                     if (tag == "path")
-                                          d.path = eee.text();
+                                          d.path = e.readElementText();
                                     else if (tag == "load")
-                                          d.load = eee.text().toInt();
+                                          d.load = e.readInt();
                                     else if (tag == "SC")
-                                          d.shortcut.read(eee);
+                                          d.shortcut.read(e);
                                     else if (tag == "version")
-                                          d.version = eee.text();
+                                          d.version = e.readElementText();
                                     else if (tag == "description")
-                                          d.description = eee.text();
+                                          d.description = e.readElementText();
                                     else
-                                          domError(eee);
+                                          e.unknown();
                                     }
                               if (d.path.endsWith(".qml"))
                                     pluginList.append(d);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       return true;
       }

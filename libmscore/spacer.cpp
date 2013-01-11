@@ -166,15 +166,16 @@ void Spacer::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Spacer::read(const QDomElement& de)
+void Spacer::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "subtype")
-                  _subtype = SpacerType(e.text().toInt());
-            else if (e.tagName() == "space")
-                  _gap = e.text().toDouble() * spatium();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  _subtype = SpacerType(e.readInt());
+            else if (tag == "space")
+                  _gap = e.readDouble() * spatium();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       layout0();
       }

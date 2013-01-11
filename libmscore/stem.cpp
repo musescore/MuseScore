@@ -188,15 +188,16 @@ void Stem::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Stem::read(const QDomElement& de)
+void Stem::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "userLen")
-                  _userLen = e.text().toDouble() * spatium();
-            else if (e.tagName() == "subtype")        // obsolete
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "userLen")
+                  _userLen = e.readDouble() * spatium();
+            else if (tag == "subtype")        // obsolete
                   ;
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (_userLen < 0.0)
             _userLen = -_userLen;

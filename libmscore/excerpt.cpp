@@ -41,18 +41,18 @@
 //   read
 //---------------------------------------------------------
 
-void Excerpt::read(const QDomElement& de)
+void Excerpt::read(XmlReader& e)
       {
       const QList<Part*>& pl = _score->parts();
       QString name;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag = e.tagName();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
             if (tag == "name")
-                  name = e.text();
+                  name = e.readElementText();
             else if (tag == "title")
-                  _title = e.text().trimmed();
+                  _title = e.readElementText().trimmed();
             else if (tag == "part") {
-                  int partIdx = e.text().toInt();
+                  int partIdx = e.readInt();
                   if (partIdx < 0 || partIdx >= pl.size())
                         qDebug("Excerpt::read: bad part index");
                   else

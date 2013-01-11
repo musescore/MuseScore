@@ -15,6 +15,7 @@
 #define __NOTEEVENT_H__
 
 class Xml;
+class XmlReader;
 
 //---------------------------------------------------------
 //    NoteEvent
@@ -29,7 +30,7 @@ class NoteEvent {
       NoteEvent() : _pitch(0), _ontime(0), _len(1000) {}
       NoteEvent(int a, int b, int c) : _pitch(a), _ontime(b), _len(c) {}
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml& xml) const;
 
       int  pitch() const     { return _pitch; }
