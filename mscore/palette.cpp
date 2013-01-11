@@ -698,6 +698,7 @@ void Palette::dragMoveEvent(QDragMoveEvent* ev)
 
 void Palette::dropEvent(QDropEvent* event)
       {
+#if 0 // TODOx
       Element* e = 0;
       QString name;
 
@@ -728,26 +729,18 @@ void Palette::dropEvent(QDropEvent* event)
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray data(event->mimeData()->data(mimeSymbolFormat));
-            QDomDocument doc;
-            int line, column;
-            QString err;
-            if (!doc.setContent(data, &err, &line, &column)) {
-                  qDebug("error reading drag data\n");
-                  return;
-                  }
-            docName = "--";
-            QDomElement el = doc.documentElement();
+            XmlReader e(data);
             QPointF dragOffset;
             Fraction duration;
-            Element::ElementType type = Element::readType(el, &dragOffset, &duration);
+            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
 
             if (type == Element::IMAGE) {
                   // look ahead for image type
                   QString path;
-                  for (QDomElement ee = el.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "path") {
-                              path = ee.text();
+                              path = e.value();
                               break;
                               }
                         }
@@ -766,7 +759,7 @@ void Palette::dropEvent(QDropEvent* event)
                         qDebug("Palette::dropEvent(): unknown image format <%s>", qPrintable(path));
                         }
                   if (image) {
-                        image->read(el);
+                        image->read(l);
                         e = image;
                         }
                   }
@@ -830,6 +823,7 @@ void Palette::dropEvent(QDropEvent* event)
             resize(QSize(width(), heightForWidth(width())));
             emit changed();
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -883,36 +877,23 @@ void Palette::write(Xml& xml, const QString& name) const
 
 bool Palette::read(QFile* qf)
       {
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(qf, false, &err, &line, &column)) {
-            QString error;
-            error.sprintf("error reading palette  %s at line %d column %d: %s\n",
-               qPrintable(qf->fileName()), line, column, qPrintable(err));
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load Palette failed:"),
-               error,
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return false;
-            }
-      docName = qf->fileName();
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  QString version = e.attribute(QString("version"));
+      XmlReader e(qf);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
                   QStringList sl = version.split('.');
                   int versionId = sl[0].toInt() * 100 + sl[1].toInt();
                   gscore->setMscVersion(versionId);
 
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "Palette") {
-                              QString name = ee.attribute("name", "");
+                              QString name = e.attribute("name");
                               setName(name);
-                              read(ee);
+                              read(e);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }
@@ -925,6 +906,7 @@ bool Palette::read(QFile* qf)
 
 void Palette::read(const QString& p)
       {
+#if 0 // TODOx
       QString path(p);
       if (!path.endsWith(".mpal"))
             path += ".mpal";
@@ -1011,6 +993,7 @@ void Palette::read(const QString& p)
                         }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -1099,99 +1082,95 @@ void Palette::write(const QString& p)
 //   read
 //---------------------------------------------------------
 
-void Palette::read(QDomElement e)
+void Palette::read(XmlReader& e)
       {
-      QString name = e.attribute("name", "");
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString text(e.text());
-            if (tag == "gridWidth")
-                  hgrid = text.toDouble();
-            else if (tag == "gridHeight")
-                  vgrid = text.toDouble();
-            else if (tag == "mag")
-                  extraMag = text.toDouble();
-            else if (tag == "grid")
-                  _drawGrid = text.toInt();
-            else if (tag == "yoffset")
-                  _yOffset = text.toDouble();
-            else if (tag == "drumPalette")      // obsolete
-                  ;
-            else if (tag == "Cell") {
-                  if (e.firstChildElement().isNull())
-                        append(0, "");
-                  else {
-                        QString name = e.attribute("name", "");
-                        bool drawStaff = false;
-                        double xoffset = 0.0;
-                        double yoffset = 0.0;
-                        qreal mag   = 1.0;
-                        for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                              QString tag(ee.tagName());
-                              if (tag == "staff")
-                                    drawStaff = ee.text().toInt();
-                              else if (tag == "xoffset")
-                                    xoffset = ee.text().toDouble();
-                              else if (tag == "yoffset")
-                                    yoffset = ee.text().toDouble();
-                              else if (tag == "mag")
-                                    mag = ee.text().toDouble();
-                              else if (tag == "tag")
-                                    tag = ee.text();
-                              else if (tag == "Image") {
-                                    // look ahead for image type
-                                    QString path;
-                                    for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                          QString tag(eee.tagName());
-                                          if (tag == "path") {
-                                                path = eee.text();
-                                                break;
-                                                }
+      QString name = e.attribute("name");
+      while (e.readNextStartElement()) {
+            const QStringRef& t(e.name());
+            if (t == "gridWidth")
+                  hgrid = e.readDouble();
+            else if (t == "gridHeight")
+                  vgrid = e.readDouble();
+            else if (t == "mag")
+                  extraMag = e.readDouble();
+            else if (t == "grid")
+                  _drawGrid = e.readInt();
+            else if (t == "yoffset")
+                  _yOffset = e.readDouble();
+            else if (t == "drumPalette")      // obsolete
+                  e.skipCurrentElement();
+            else if (t == "Cell") {
+                  QString name   = e.attribute("name");
+                  bool drawStaff = false;
+                  double xoffset = 0.0;
+                  double yoffset = 0.0;
+                  qreal mag   = 1.0;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& t(e.name());
+                        if (t == "staff")
+                              drawStaff = e.readInt();
+                        else if (t == "xoffset")
+                              xoffset = e.readDouble();
+                        else if (t == "yoffset")
+                              yoffset = e.readDouble();
+                        else if (t == "mag")
+                              mag = e.readDouble();
+//TODOx                        else if (t == "tag")
+//                              tag = e.value();
+                        else if (t == "Image") {
+                              // look ahead for image type
+#if 0 // TODOx
+                              QString path;
+                              while (e.readNextStartElement()) {
+                                    if (e.name() == "path") {
+                                          path = e.value();
+                                          break;
                                           }
-                                    Image* image = 0;
-                                    QString s(path.toLower());
-                                    if (s.endsWith(".svg"))
-                                          image = new SvgImage(gscore);
-                                    else
-                                          if (s.endsWith(".jpg")
-                                       || s.endsWith(".png")
-                                       || s.endsWith(".gif")
-                                       || s.endsWith(".xpm")
-                                          )
-                                          image = new RasterImage(gscore);
-                                    else {
-                                          qDebug("Palette::read: unknown image format <%s>", path.toLatin1().data());
-                                          }
-                                    if (image) {
-                                          image->read(ee);
-                                          append(image, name);
-                                          }
+                                    }
+                              Image* image = 0;
+                              QString s(path.toLower());
+                              if (s.endsWith(".svg"))
+                                    image = new SvgImage(gscore);
+                              else
+                                    if (s.endsWith(".jpg")
+                                 || s.endsWith(".png")
+                                 || s.endsWith(".gif")
+                                 || s.endsWith(".xpm")
+                                    )
+                                    image = new RasterImage(gscore);
+                              else {
+                                    qDebug("Palette::read: unknown image format <%s>", path.toLatin1().data());
+                                    }
+                              if (image) {
+                                    image->read(ee);
+                                    append(image, name);
+                                    }
+#endif
+                              }
+                        else {
+                              Element* element = Element::name2Element(t.toString(), gscore);
+                              if (element == 0) {
+                                    e.unknown();
+                                    return;
                                     }
                               else {
-                                    Element* element = Element::name2Element(tag, gscore);
-                                    if (element == 0) {
-                                          domError(ee);
-                                          return;
+                                    element->read(e);
+                                    if (element->type() == Element::ICON) {
+                                          Icon* icon = static_cast<Icon*>(element);
+                                          QIcon qicon(getAction(icon->action())->icon());
+                                          icon->setAction(icon->action(), qicon);
                                           }
-                                    else {
-                                          element->read(ee);
-                                          if (element->type() == Element::ICON) {
-                                                Icon* icon = static_cast<Icon*>(element);
-                                                QIcon qicon(getAction(icon->action())->icon());
-                                                icon->setAction(icon->action(), qicon);
-                                                }
-                                          append(element, name);
-                                          }
+                                    append(element, name);
                                     }
                               }
-                        cells.back()->drawStaff = drawStaff;
-                        cells.back()->xoffset   = xoffset;
-                        cells.back()->yoffset   = yoffset;
-                        cells.back()->mag       = mag;
                         }
+                  cells.back()->drawStaff = drawStaff;
+                  cells.back()->xoffset   = xoffset;
+                  cells.back()->yoffset   = yoffset;
+                  cells.back()->mag       = mag;
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -1661,19 +1640,19 @@ void PaletteBox::write(Xml& xml)
 //    return false on error
 //---------------------------------------------------------
 
-bool PaletteBox::read(QDomElement e)
+bool PaletteBox::read(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "Palette") {
                   Palette* p = new Palette();
-                  QString name = e.attribute("name", "");
+                  QString name = e.attribute("name");
                   p->setName(name);
                   p->read(e);
                   addPalette(p);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       return true;
       }

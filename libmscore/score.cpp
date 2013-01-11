@@ -2126,18 +2126,9 @@ Score* Score::clone()
 
       buffer.close();
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-// qDebug("buffer <%s>\n", buffer.buffer().data());
-      if (!doc.setContent(buffer.buffer(), &err, &line, &column)) {
-            qDebug("error cloning score %d/%d: %s\n<%s>\n",
-               line, column, err.toLatin1().data(), buffer.buffer().data());
-            return 0;
-            }
+      XmlReader r(buffer.buffer());
       Score* score = new Score(style());
-      docName = "--";
-      score->read1(doc.documentElement(), true);
+      score->read1(r, true);
 
       score->renumberMeasures();
 

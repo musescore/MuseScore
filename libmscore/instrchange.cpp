@@ -45,14 +45,14 @@ void InstrumentChange::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void InstrumentChange::read(const QDomElement& de)
+void InstrumentChange::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "Instrument")
                   _instrument.read(e);
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

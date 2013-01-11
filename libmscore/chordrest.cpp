@@ -221,14 +221,14 @@ void ChordRest::writeProperties(Xml& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool ChordRest::readProperties(const QDomElement& e)
+bool ChordRest::readProperties(XmlReader& e)
       {
       if (DurationElement::readProperties(e))
             return true;
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
+      const QStringRef& tag(e.name());
 
       if (tag == "BeamMode") {
+            QString val(e.readElementText());
             int bm = BEAM_AUTO;
             if (val == "auto")
                   bm = BEAM_AUTO;
@@ -254,17 +254,16 @@ bool ChordRest::readProperties(const QDomElement& e)
             add(atr);
             }
       else if (tag == "leadingSpace") {
-//            if (MScore::debugMode)
-                  qDebug("ChordRest: leadingSpace obsolete"); // _extraLeadingSpace = Spatium(val.toDouble());
+            qDebug("ChordRest: leadingSpace obsolete"); // _extraLeadingSpace = Spatium(val.toDouble());
             }
       else if (tag == "trailingSpace") {
-//            if (MScore::debugMode)
-                  qDebug("ChordRest: trailingSpace obsolete"); // _extraTrailingSpace = Spatium(val.toDouble());
+            qDebug("ChordRest: trailingSpace obsolete"); // _extraTrailingSpace = Spatium(val.toDouble());
             }
       else if (tag == "Beam") {
             Beam* beam = 0;
+            int id = e.readInt();
             foreach(Beam* b, score()->beams) {
-                  if (b->id() == val.toInt()) {
+                  if (b->id() == id) {
                         beam = b;
                         break;
                         }
@@ -272,13 +271,13 @@ bool ChordRest::readProperties(const QDomElement& e)
             if (beam)
                   beam->add(this);        // also calls this->setBeam(beam)
             else
-                  qDebug("Beam id %d not found", val.toInt());
+                  qDebug("Beam id %d not found", id);
             }
       else if (tag == "small")
-            _small = val.toInt();
+            _small = e.readInt();
       else if (tag == "Slur") {
-            int id = e.attribute("number").toInt();
-            QString type = e.attribute("type");
+            int id = e.intAttribute("number");
+            QString type(e.attribute("type"));
             Slur* slur = 0;
             for (Spanner* s = score()->spanner; s; s = s->next()) {
                   if (s->id() == id) {
@@ -300,9 +299,10 @@ bool ChordRest::readProperties(const QDomElement& e)
                   else
                         qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                   }
+            e.readNext();
             }
       else if (tag == "durationType") {
-            setDurationType(val);
+            setDurationType(e.readElementText());
             if (durationType().type() != TDuration::V_MEASURE) {
                   if ((type() == REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
@@ -329,10 +329,10 @@ bool ChordRest::readProperties(const QDomElement& e)
                   }
             }
       else if (tag == "duration")
-            setDuration(readFraction(e));
+            setDuration(e.readFraction());
       else if (tag == "ticklen") {      // obsolete (version < 1.12)
             int mticks = score()->sigmap()->timesig(score()->curTick).timesig().ticks();
-            int i = val.toInt();
+            int i = e.readInt();
             if (i == 0)
                   i = mticks;
             // if ((type() == REST) && (mticks == i || (durationType()==TDuration::V_WHOLE && mticks != 1920))) {
@@ -347,11 +347,11 @@ bool ChordRest::readProperties(const QDomElement& e)
                   }
             }
       else if (tag == "dots")
-            setDots(val.toInt());
+            setDots(e.readInt());
       else if (tag == "move")
-            _staffMove = val.toInt();
+            _staffMove = e.readInt();
       else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag, score());
+            Element* element = Element::name2Element(tag.toString(), score());
             element->setTrack(score()->curTrack);
             element->read(e);
             add(element);

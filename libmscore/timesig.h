@@ -76,7 +76,7 @@ class TimeSig : public Element {
 
       void draw(QPainter*) const;
       void write(Xml& xml) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void layout();
       Space space() const;
 

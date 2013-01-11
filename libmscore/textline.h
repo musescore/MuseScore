@@ -88,9 +88,9 @@ class TextLine : public SLine {
       virtual void layout();
 
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       void writeProperties(Xml& xml, const TextLine* proto = 0) const;
-      bool readProperties(const QDomElement& node);
+      bool readProperties(XmlReader& node);
 
       bool beginHook() const                  { return _beginHook;            }
       bool endHook() const                    { return _endHook;              }

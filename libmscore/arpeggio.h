@@ -54,7 +54,7 @@ class Arpeggio : public Element {
       virtual void updateGrips(int*, QRectF*) const;
       virtual bool edit(MuseScoreView*, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&);
 
-      void read(const QDomElement& e);
+      void read(XmlReader& e);
       void write(Xml& xml) const;
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }

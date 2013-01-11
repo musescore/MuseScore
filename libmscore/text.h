@@ -97,9 +97,9 @@ class Text : public SimpleText {
       void addChar(int code, QTextCursor* cur = 0);
       void setBlockFormat(const QTextBlockFormat&);
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       void writeProperties(Xml& xml, bool writeText = true) const;
-      bool readProperties(const QDomElement& node);
+      bool readProperties(XmlReader& node);
       virtual void layout();
       void layout1();
       virtual QPainterPath shape() const;

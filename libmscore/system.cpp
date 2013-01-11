@@ -971,10 +971,10 @@ void System::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void System::read(const QDomElement& de)
+void System::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "BarLine") {
                   _barLine = new BarLine(score());
@@ -983,7 +983,7 @@ void System::read(const QDomElement& de)
                   _barLine->setParent(this);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

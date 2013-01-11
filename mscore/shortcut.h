@@ -15,6 +15,7 @@
 #define __SHORTCUT_H__
 
 class Xml;
+class XmlReader;
 
 enum ShortcutFlags {
       A_SCORE = 0x1, A_CMD = 0x2
@@ -101,7 +102,7 @@ class Shortcut {
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
       void write(Xml&) const;
-      void read(const QDomElement&);
+      void read(XmlReader&);
 
       static void init();
       static void load();

@@ -149,33 +149,36 @@ void SyntiState::write(Xml& xml) const
 //   SyntiSettings::read
 //---------------------------------------------------------
 
-void SyntiState::read(QDomElement e)
+void SyntiState::read(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString name = e.attribute("name");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            QString name(e.attribute("name"));
             if (tag == "f") {
-                  double val = e.attribute("val").toDouble();
+                  double val = e.doubleAttribute("val");
                   append(SyntiParameter(name, val));
+                  e.skipCurrentElement();
                   }
-            else if (tag == "s")
+            else if (tag == "s") {
                   append(SyntiParameter(name, e.attribute("val")));
+                  e.skipCurrentElement();
+                  }
             else if (tag == "Synth") {
                   // obsolete
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "f") {
-                              double val = ee.attribute("val").toDouble();
+                              double val = e.doubleAttribute("val");
                               append(SyntiParameter(name, val));
                               }
                         else if (tag == "s")
-                              append(SyntiParameter(name, ee.attribute("val")));
+                              append(SyntiParameter(name, e.attribute("val")));
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -116,22 +116,21 @@ void Dynamic::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Dynamic::read(const QDomElement& de)
+void Dynamic::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag = e.tagName();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
             if (tag == "subtype")
-                  setSubtype(e.text());
+                  setSubtype(e.readElementText());
             else if (tag == "velocity")
-                  _velocity = e.text().toInt();
+                  _velocity = e.readInt();
             else if (tag == "dynType")
-                  _dynRange = DynamicRange(e.text().toInt());
+                  _dynRange = DynamicRange(e.readInt());
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
-      if (score()->mscVersion() < 118) {
+      if (score()->mscVersion() < 118)
             setTextStyleType(TEXT_STYLE_DYNAMICS2);
-            }
       }
 
 //---------------------------------------------------------

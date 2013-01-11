@@ -38,7 +38,7 @@ class Bend : public Element {
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement& e);
+      virtual void read(XmlReader& e);
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }

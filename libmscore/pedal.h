@@ -43,7 +43,7 @@ class Pedal : public TextLine {
       Pedal(Score* s);
       virtual Pedal* clone() const     { return new Pedal(*this); }
       virtual ElementType type() const { return PEDAL; }
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       LineSegment* createLineSegment();
       virtual void setYoff(qreal);
       };

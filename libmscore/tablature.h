@@ -39,9 +39,9 @@ public:
       int         strings() const         { return stringTable.size(); }
       QList<int>  stringList() const      { return stringTable; }
       int         frets() const           { return _frets; }
-      void        read(const QDomElement&);
+      void        read(XmlReader&);
       void        write(Xml&) const;
-      void        readMusicXML(const QDomElement& de);
+      void        readMusicXML(XmlReader& de);
       void        writeMusicXML(Xml& xml) const;
       };
 

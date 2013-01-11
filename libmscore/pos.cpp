@@ -326,17 +326,15 @@ void Pos::write(Xml& xml, const char* name) const
 //   read
 //---------------------------------------------------------
 
-void Pos::read(QDomNode node)
+void Pos::read(XmlReader& e)
       {
       sn = -1;
-
-      const QDomElement& e = node.toElement();
       if (e.hasAttribute("tick")) {
-            _tick = e.attribute("tick").toInt();
+            _tick = e.intAttribute("tick");
             _type = TICKS;
             }
       if (e.hasAttribute("frame")) {
-            _frame = e.attribute("frame").toInt();
+            _frame = e.intAttribute("frame");
             _type = FRAMES;
             }
       }
@@ -408,20 +406,19 @@ void PosLen::write(Xml& xml, const char* name) const
 //   read
 //---------------------------------------------------------
 
-void PosLen::read(QDomNode node)
+void PosLen::read(XmlReader& e)
       {
-      const QDomElement& e = node.toElement();
       QString s;
       if (e.hasAttribute("tick")) {
             setType(TICKS);
-            setTick(e.attribute("tick").toInt());
+            setTick(e.intAttribute("tick"));
             }
       if (e.hasAttribute("sample")) {
             setType(FRAMES);
-            setFrame(e.attribute("sample").toInt());
+            setFrame(e.intAttribute("sample"));
             }
       if (e.hasAttribute("len")) {
-            int n = e.attribute("len").toInt();
+            int n = e.intAttribute("len");
             if (type() == TICKS)
                   setLenTick(n);
             else
@@ -517,12 +514,13 @@ void PosLen::setPos(const Pos& pos)
 //   operator==
 //---------------------------------------------------------
 
-bool PosLen::operator==(const PosLen& pl) const {
-  if(type()==TICKS)
-    return (_lenTick==pl._lenTick && Pos::operator==((const Pos&)pl));
-  else
-    return (_lenFrame==pl._lenFrame && Pos::operator==((const Pos&)pl));
-}
+bool PosLen::operator==(const PosLen& pl) const
+      {
+      if (type() == TICKS)
+            return (_lenTick == pl._lenTick && Pos::operator==((const Pos&)pl));
+      else
+            return (_lenFrame==pl._lenFrame && Pos::operator==((const Pos&)pl));
+      }
 
 //---------------------------------------------------------
 //   mbt

@@ -201,21 +201,20 @@ void KeyList::write(Xml& xml, const char* name) const
 //   KeyList::read
 //---------------------------------------------------------
 
-void KeyList::read(const QDomElement& de, Score* cs)
+void KeyList::read(XmlReader& e, Score* cs)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            if (tag == "key") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "key") {
                   KeySigEvent ke;
-                  int tick = e.attribute("tick", "0").toInt();
+                  int tick = e.intAttribute("tick", 0);
                   if (e.hasAttribute("custom"))
-                        ke.setCustomType(e.attribute("custom").toInt());
+                        ke.setCustomType(e.intAttribute("custom"));
                   else
-                        ke.setAccidentalType(e.attribute("idx").toInt());
+                        ke.setAccidentalType(e.intAttribute("idx"));
                   (*this)[cs->fileDivision(tick)] = ke;
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

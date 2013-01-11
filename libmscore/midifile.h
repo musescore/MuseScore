@@ -50,7 +50,7 @@ class MidiTrack {
       int _program;
 
    protected:
-      void readXml(QDomElement);
+      void readXml(XmlReader&);
 
    public:
       int maxPitch;
@@ -146,7 +146,7 @@ class MidiFile {
       MidiFile();
       bool read(QIODevice*);
       bool write(QIODevice*);
-      void readXml(QDomElement);
+      void readXml(XmlReader&);
 
       QList<MidiTrack*>* tracks()   { return &_tracks;  }
       MidiType midiType() const     { return _midiType; }

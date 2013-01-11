@@ -44,31 +44,31 @@ LineSegment::LineSegment(const LineSegment& s)
 //   readProperties
 //---------------------------------------------------------
 
-bool LineSegment::readProperties(const QDomElement& e)
+bool LineSegment::readProperties(XmlReader& e)
       {
-      const QString& tag(e.tagName());
+      const QStringRef& tag(e.name());
       if (tag == "subtype")
-            setSubtype(SpannerSegmentType(e.text().toInt()));
+            setSubtype(SpannerSegmentType(e.readInt()));
       else if (tag == "off1")       // obsolete
-            setUserOff(readPoint(e) * spatium());
+            setUserOff(e.readPoint() * spatium());
       else if (tag == "off2")
-            setUserOff2(readPoint(e) * spatium());
+            setUserOff2(e.readPoint() * spatium());
       else if (tag == "pos") {
             if (score()->mscVersion() > 114) {
                   qreal _spatium = spatium();
                   setUserOff(QPointF());
-                  setReadPos(readPoint(e) * _spatium);
+                  setReadPos(e.readPoint() * _spatium);
                   }
             }
       else if (tag == "pos") {
-            QPointF rp = readPoint(e) * spatium();
+            QPointF rp = e.readPoint() * spatium();
             if ((score()->mscVersion() <= 114) && (type() == VOLTA_SEGMENT)) {
                   rp.ry() -= spatium();
                   }
             setReadPos(rp);
             }
       else if (!Element::readProperties(e)) {
-            domError(e);
+            e.unknown();
             return false;
             }
       return true;
@@ -78,10 +78,10 @@ bool LineSegment::readProperties(const QDomElement& e)
 //   read
 //---------------------------------------------------------
 
-void LineSegment::read(const QDomElement& e)
+void LineSegment::read(XmlReader& e)
       {
-      for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement())
-            readProperties(ee);
+      while (e.readNextStartElement())
+            readProperties(e);
       }
 
 //---------------------------------------------------------
@@ -699,31 +699,29 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
 //   readProperties
 //---------------------------------------------------------
 
-bool SLine::readProperties(const QDomElement& e)
+bool SLine::readProperties(XmlReader& e)
       {
       if (Element::readProperties(e))
             return true;
-      const QString& tag(e.tagName());
-      const QString& val(e.text());
-      int i = val.toInt();
+      const QStringRef& tag(e.name());
 
       if (tag == "tick2")           // obsolete
-            __setTick2(score()->fileDivision(i));
+            __setTick2(score()->fileDivision(e.readInt()));
       else if (tag == "tick")       // obsolete
-            __setTick1(score()->fileDivision(i));
+            __setTick1(score()->fileDivision(e.readInt()));
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);
             add(ls);
             }
       else if (tag == "track")
-            setTrack(i);
+            setTrack(e.readInt());
       else if (tag == "length")
-            setLen(val.toDouble());
+            setLen(e.readDouble());
       else if (tag == "diagonal")
-            setDiagonal(i);
+            setDiagonal(e.readInt());
       else if (tag == "anchor")
-            setAnchor(Anchor(i));
+            setAnchor(Anchor(e.readInt()));
       else
             return false;
       return true;
@@ -772,16 +770,16 @@ void SLine::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void SLine::read(const QDomElement& de)
+void SLine::read(XmlReader& e)
       {
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
       spannerSegments().clear();
-      setId(de.attribute("id", "-1").toInt());
+      setId(e.intAttribute("id", -1));
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      while (e.readNextStartElement()) {
             if (!SLine::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

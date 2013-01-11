@@ -57,7 +57,7 @@ class Drumset {
       int shortcut(int pitch) const            { return _drum[pitch].shortcut;       }
 
       void save(Xml&);
-      void load(const QDomElement&);
+      void load(XmlReader&);
       void clear();
       int nextPitch(int);
       int prevPitch(int);

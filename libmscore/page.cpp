@@ -465,26 +465,25 @@ QString PageFormat::name() const
 //      </page-layout>
 //---------------------------------------------------------
 
-void PageFormat::read(const QDomElement& de)
+void PageFormat::read(XmlReader& e)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
       bool landscape = false;
       QString type;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            int i = val.toInt();
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "pageFormat")            // obsolete
-                  setSize(getPaperSize(val));
+                  setSize(getPaperSize(e.readElementText()));
             else if (tag == "landscape")        // obsolete
-                  landscape = i;
+                  landscape = e.readInt();
             else if (tag == "page-margins") {
                   type = e.attribute("type","both");
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        qreal val = ee.text().toDouble() * 0.5 / PPI;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        qreal val = e.readDouble() * 0.5 / PPI;
                         if (tag == "left-margin")
                               lm = val;
                         else if (tag == "right-margin")
@@ -494,7 +493,7 @@ void PageFormat::read(const QDomElement& de)
                         else if (tag == "bottom-margin")
                               bm = val;
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   _twosided = type == "odd" || type == "even";
                   if (type == "odd" || type == "both") {
@@ -511,13 +510,13 @@ void PageFormat::read(const QDomElement& de)
                         }
                   }
             else if (tag == "page-height")
-                  _size.rheight() = val.toDouble() * 0.5 / PPI;
+                  _size.rheight() = e.readDouble() * 0.5 / PPI;
             else if (tag == "page-width")
-                  _size.rwidth() = val.toDouble() * .5 / PPI;
+                  _size.rwidth() = e.readDouble() * .5 / PPI;
             else if (tag == "page-offset")            // obsolete, moved to Score
-                  ; // score->setPageNumberOffset(val.toInt());
+                  e.readElementText();  // score->setPageNumberOffset(val.toInt());
             else
-                  domError(e);
+                  e.unknown();
             }
       if (landscape)
             _size.transpose();
@@ -542,19 +541,19 @@ void PageFormat::read(const QDomElement& de)
 //    sizes are given in units of 1/10 spatium;
 //---------------------------------------------------------
 
-void PageFormat::readMusicXML(const QDomElement& de, qreal conversion)
+void PageFormat::readMusicXML(XmlReader& e, qreal conversion)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "page-margins") {
                   QString type = e.attribute("type","both");
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag(ee.tagName());
-                        qreal val = ee.text().toDouble() * conversion;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        qreal val = e.readDouble() * conversion;
                         if (tag == "left-margin")
                               lm = val;
                         else if (tag == "right-margin")
@@ -564,7 +563,7 @@ void PageFormat::readMusicXML(const QDomElement& de, qreal conversion)
                         else if (tag == "bottom-margin")
                               bm = val;
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   _twosided = type == "odd" || type == "even";
                   if (type == "odd" || type == "both") {
@@ -581,11 +580,11 @@ void PageFormat::readMusicXML(const QDomElement& de, qreal conversion)
                         }
                   }
             else if (tag == "page-height")
-                  _size.rheight() = val.toDouble() * conversion;
+                  _size.rheight() = e.readDouble() * conversion;
             else if (tag == "page-width")
-                  _size.rwidth() = val.toDouble() * conversion;
+                  _size.rwidth() = e.readDouble() * conversion;
             else
-                  domError(e);
+                  e.unknown();
             }
       qreal w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
       qreal w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
@@ -797,16 +796,16 @@ void Page::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Page::read(const QDomElement& de)
+void Page::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "System") {
+      while (e.readNextStartElement()) {
+            if (e.name() == "System") {
                   System* system = new System(score());
                   score()->systems()->append(system);
                   system->read(e);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

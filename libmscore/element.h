@@ -393,10 +393,10 @@ class Element : public QObject {
 
       void writeProperty(Xml& xml, P_ID id) const;
       void writeProperties(Xml& xml) const;
-      bool readProperties(const QDomElement&);
+      bool readProperties(XmlReader&);
 
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
 
       virtual QRectF drag(const EditData&);
       virtual void endDrag()                  {}
@@ -443,7 +443,7 @@ class Element : public QObject {
       void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
 
-      static ElementType readType(QDomElement& node, QPointF*, Fraction*);
+      static ElementType readType(XmlReader& node, QPointF*, Fraction*);
 
       QByteArray mimeData(const QPointF&) const;
 /**
@@ -599,7 +599,7 @@ class Line : public Element {
 
       virtual void draw(QPainter*) const;
       void writeProperties(Xml& xml) const;
-      bool readProperties(const QDomElement&);
+      bool readProperties(XmlReader&);
       void dump() const;
 
       Spatium len()    const { return _len; }

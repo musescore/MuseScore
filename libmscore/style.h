@@ -100,8 +100,8 @@ class TextStyle {
       void setBackgroundColor(const QColor& v);
       void write(Xml& xml) const;
       void writeProperties(Xml& xml) const;
-      void read(const QDomElement& v);
-      bool readProperties(const QDomElement& v);
+      void read(XmlReader& v);
+      bool readProperties(XmlReader& v);
       QFont font(qreal space) const;
       QFont fontPx(qreal spatium) const;
       QRectF bbox(qreal space, const QString& s) const;
@@ -394,7 +394,7 @@ class MStyle {
       int      valueI(StyleIdx idx) const;
 
       bool load(QFile* qf);
-      void load(const QDomElement& e);
+      void load(XmlReader& e);
       void save(Xml& xml, bool optimize);
       const PageFormat* pageFormat() const;
       void setPageFormat(const PageFormat& pf);

@@ -69,7 +69,7 @@ class KeySig : public Element {
       Space space() const;
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       //@ -7 (flats) -- +7 (sharps)
       Q_INVOKABLE int keySignature() const { return _sig.accidentalType(); }    // -7 - +7
       int customType() const              { return _sig.customType(); }

@@ -217,17 +217,17 @@ void TimeSigMap::write(Xml& xml) const
 //   TimeSigMap::read
 //---------------------------------------------------------
 
-void TimeSigMap::read(const QDomElement& de, int fileDivision)
+void TimeSigMap::read(XmlReader& e, int fileDivision)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "sig") {
                   SigEvent t;
                   int tick = t.read(e, fileDivision);
                   (*this)[tick] = t;
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       normalize();
       }
@@ -259,29 +259,28 @@ void SigEvent::write(Xml& xml, int tick) const
 //   SigEvent::read
 //---------------------------------------------------------
 
-int SigEvent::read(const QDomElement& de, int fileDivision)
+int SigEvent::read(XmlReader& e, int fileDivision)
       {
-      int tick  = de.attribute("tick", "0").toInt();
+      int tick  = e.intAttribute("tick", 0);
       tick      = tick * MScore::division / fileDivision;
 
       int numerator = 1;
       int denominator = 1;
       int denominator2 = -1;
       int numerator2   = -1;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            int i = e.text().toInt();
 
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "nom")
-                  numerator = i;
+                  numerator = e.readInt();
             else if (tag == "denom")
-                  denominator = i;
+                  denominator = e.readInt();
             else if (tag == "nom2")
-                  numerator2 = i;
+                  numerator2 = e.readInt();
             else if (tag == "denom2")
-                  denominator2 = i;
+                  denominator2 = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       if ((numerator2 == -1) || (denominator2 == -1)) {
             numerator2   = numerator;

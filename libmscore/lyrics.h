@@ -30,7 +30,7 @@ class Lyrics : public Text {
       Q_OBJECT
       Q_PROPERTY(Syllabic syllabic READ syllabic WRITE setSyllabic)
       Q_ENUMS(Syllabic)
-      
+
    public:
       enum Syllabic { SINGLE, BEGIN, END, MIDDLE };
 
@@ -61,7 +61,7 @@ class Lyrics : public Text {
       virtual void layout();
 
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       void setNo(int n);
       int no() const                { return _no; }
       void setSyllabic(Syllabic s)  { _syllabic = s; }

@@ -18,20 +18,18 @@
 //   read
 //---------------------------------------------------------
 
-void NoteEvent::read(const QDomElement& de)
+void NoteEvent::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
-            int i = val.toInt();
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "pitch")
-                  _pitch = i;
+                  _pitch = e.readInt();
             else if (tag == "ontime")
-                  _ontime = i;
+                  _ontime = e.readInt();
             else if (tag == "len")
-                  _len = i;
+                  _len = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

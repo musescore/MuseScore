@@ -34,7 +34,7 @@ class NoteDot : public Element {
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void layout();
       };
 

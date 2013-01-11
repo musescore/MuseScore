@@ -15,6 +15,7 @@
 #define __AUDIO_H__
 
 class Xml;
+class XmlReader;
 
 //---------------------------------------------------------
 //   Audio
@@ -32,7 +33,7 @@ class Audio {
       QByteArray data()                  { return _data; }
       void setData(const QByteArray& ba) { _data = ba;   }
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml&) const;
       };
 

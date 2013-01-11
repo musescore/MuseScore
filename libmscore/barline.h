@@ -62,7 +62,7 @@ class BarLine : public Element {
       virtual BarLine* clone() const   { return new BarLine(*this); }
       virtual ElementType type() const { return BAR_LINE; }
       virtual void write(Xml& xml) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void draw(QPainter*) const;
       virtual Space space() const;
       virtual QPointF pagePos() const;      ///< position in canvas coordinates

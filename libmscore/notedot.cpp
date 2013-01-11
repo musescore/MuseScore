@@ -63,12 +63,12 @@ void NoteDot::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void NoteDot::read(const QDomElement& de)
+void NoteDot::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "name")    // obsolete
-                  ;
+      while (e.readNextStartElement()) {
+            if (e.name() == "name")    // obsolete
+                  e.readElementText();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }

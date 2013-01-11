@@ -174,15 +174,15 @@ void Score::write(Xml& xml, bool selectionOnly)
 //   readStaff
 //---------------------------------------------------------
 
-void Score::readStaff(const QDomElement& de)
+void Score::readStaff(XmlReader& e)
       {
       MeasureBase* mb = first();
-      int staff       = de.attribute("id", "1").toInt() - 1;
+      int staff       = e.intAttribute("id", 1) - 1;
       curTick         = 0;
       curTrack        = staff * VOICES;
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "Measure") {
                   Measure* measure = 0;
@@ -227,13 +227,13 @@ void Score::readStaff(const QDomElement& de)
                   curTick = measure->tick() + measure->ticks();
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
+                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag.toString(), this));
                   mb->read(e);
                   mb->setTick(curTick);
                   add(mb);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -569,33 +569,25 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
             }
       QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
-      QDomDocument container;
-      int line, column;
-      QString err;
-      if (!container.setContent(cbuf, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("loadCompressedMsc: read container error: %s\n", qPrintable(error));
-            return FILE_BAD_FORMAT;
-            }
+      QString rootfile;
+      XmlReader e(cbuf);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
-      // extract first rootfile
-      QDomNodeList nl = container.elementsByTagName("rootfile");
-      if (nl.isEmpty()) {
-            qDebug("can't find rootfile in: %s", qPrintable(name));
+printf("read container <%s>\n", tag.toUtf8().data());
+            if (tag == "rootfile") {
+                  rootfile = e.attribute("full-path");
+                  e.skipCurrentElement();
+                  }
+            else if (tag == "file") {
+                  QString image(e.readElementText());
+                  QByteArray dbuf = uz.fileData(image);
+printf("read file <%s> %d bytes\n", qPrintable(image), dbuf.size());
+                  imageStore.add(image, dbuf);
+                  }
+            }
+      if (rootfile.isEmpty())
             return FILE_NO_ROOTFILE;
-            }
-      QDomElement e = nl.at(0).toElement();
-      QString rootfile = e.attribute("full-path");
-
-      nl = container.elementsByTagName("file");
-      for (int i = 0; i < nl.size(); ++i) {
-            QString image = nl.at(i).toElement().text();
-            QByteArray dbuf = uz.fileData(image);
-            imageStore.add(image, dbuf);
-            }
 
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
@@ -608,18 +600,11 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
                         }
                   }
             }
+      e.clear();
+      e.addData(dbuf);
+      e.setDocName(info.completeBaseName());
 
-      QDomDocument doc;
-      if (!doc.setContent(dbuf, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("error: %s", qPrintable(error));
-            return FILE_BAD_FORMAT;
-            }
-      docName = info.completeBaseName();
-      FileError retval = read1(doc.documentElement(), ignoreVersionError);
+      FileError retval = read1(e, ignoreVersionError);
 
 #ifdef OMR
       //
@@ -668,17 +653,8 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
             return FILE_OPEN_ERROR;
             }
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(&f, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error reading file %1 at line %2 column %3: %4\n");
-            MScore::lastError = s.arg(f.fileName()).arg(line).arg(column).arg(err);
-            return FILE_BAD_FORMAT;
-            }
-      f.close();
-      docName = f.fileName();
-      return read1(doc.documentElement(), ignoreVersionError);
+      XmlReader xml(&f);
+      return read1(xml, ignoreVersionError);
       }
 
 //---------------------------------------------------------
@@ -738,11 +714,12 @@ void Score::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
+Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
       {
       _elinks.clear();
-      for (QDomElement e = de; !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
                   const QString& version = e.attribute("version");
                   QStringList sl = version.split('.');
                   _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
@@ -757,28 +734,27 @@ Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
 
                   if (_mscVersion <= 114)
                         return read114(e);
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        const QString& tag = ee.tagName();
-                        const QString& val = ee.text();
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
                         if (tag == "programVersion") {
-                              _mscoreVersion = val;
-                              parseVersion(val);
+                              _mscoreVersion = e.readElementText();
+                              parseVersion(_mscoreVersion);
                               }
                         else if (tag == "programRevision")
-                              _mscoreRevision = val.toInt();
+                              _mscoreRevision = e.readInt();
                         else if (tag == "Score")
-                              read(ee);
+                              read(e);
                         else if (tag == "Revision") {
                               Revision* revision = new Revision;
                               revision->read(e);
                               _revisions->add(revision);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       int id = 1;
       foreach(LinkedElements* le, _elinks)
@@ -796,32 +772,31 @@ Score::FileError Score::read1(const QDomElement& de, bool ignoreVersionError)
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read(const QDomElement& de)
+bool Score::read(XmlReader& e)
       {
       spanner = 0;
 
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
-      for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+
+      while (e.readNextStartElement()) {
             curTrack = -1;
-            const QString& tag(ee.tagName());
-            const QString& val(ee.text());
-            int i = val.toInt();
+            const QStringRef& tag(e.name());
             if (tag == "Staff")
-                  readStaff(ee);
+                  readStaff(e);
             else if (tag == "KeySig") {
                   KeySig* ks = new KeySig(this);
-                  ks->read(ee);
+                  ks->read(e);
                   customKeysigs.append(ks);
                   }
             else if (tag == "StaffType") {
-                  int idx        = ee.attribute("idx").toInt();
+                  int idx        = e.intAttribute("idx");
                   StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost)
                         st = ost->clone();
                   else {
-                        QString group  = ee.attribute("group", "pitched");
+                        QString group  = e.attribute("group", "pitched");
                         if (group == "percussion")
                               st  = new StaffTypePercussion();
                         else if (group == "tablature")
@@ -829,35 +804,36 @@ bool Score::read(const QDomElement& de)
                         else
                               st  = new StaffTypePitched();
                         }
-                  st->read(ee);
+                  st->read(e);
                   st->setBuildin(false);
                   addStaffType(idx, st);
                   }
             else if (tag == "siglist")
-                  _sigmap->read(ee, _fileDivision);
+                  _sigmap->read(e, _fileDivision);
             else if (tag == "programVersion") {
-                  _mscoreVersion = val;
-                  parseVersion(val);
+                  _mscoreVersion = e.readElementText();
+                  parseVersion(_mscoreVersion);
                   }
             else if (tag == "programRevision")
-                  _mscoreRevision = val.toInt();
+                  _mscoreRevision = e.readInt();
             else if (tag == "Omr") {
 #ifdef OMR
                   _omr = new Omr(this);
-                  _omr->read(ee);
+                  _omr->read(e);
 #endif
                   }
             else if (tag == "Audio") {
                   _audio = new Audio;
-                  _audio->read(ee);
+                  _audio->read(e);
                   }
             else if (tag == "showOmr")
-                  _showOmr = i;
+                  _showOmr = e.readInt();
             else if (tag == "playMode")
-                  _playMode = PlayMode(i);
+                  _playMode = PlayMode(e.readInt());
             else if (tag == "LayerTag") {
-                  int id = ee.attribute("id").toInt();
-                  const QString& tag = ee.attribute("tag");
+                  int id = e.intAttribute("id");
+                  const QString& tag = e.attribute("tag");
+                  QString val(e.readElementText());
                   if (id >= 0 && id < 32) {
                         _layerTags[id] = tag;
                         _layerTagComments[id] = val;
@@ -865,33 +841,33 @@ bool Score::read(const QDomElement& de)
                   }
             else if (tag == "Layer") {
                   Layer layer;
-                  layer.name = ee.attribute("name");
-                  layer.tags = ee.attribute("mask").toUInt();
+                  layer.name = e.attribute("name");
+                  layer.tags = e.attribute("mask").toUInt();
                   _layer.append(layer);
                   }
             else if (tag == "currentLayer")
-                  _currentLayer = val.toInt();
+                  _currentLayer = e.readInt();
             else if (tag == "SyntiSettings") {
                   _syntiState.clear();
-                  _syntiState.read(ee);
+                  _syntiState.read(e);
                   }
             else if (tag == "Spatium")
-                  _style.setSpatium (val.toDouble() * MScore::DPMM); // obsolete, moved to Style
+                  _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
-                  setPageNumberOffset(i);
+                  setPageNumberOffset(e.readInt());
             else if (tag == "Division")
-                  _fileDivision = i;
+                  _fileDivision = e.readInt();
             else if (tag == "showInvisible")
-                  _showInvisible = i;
+                  _showInvisible = e.readInt();
             else if (tag == "showUnprintable")
-                  _showUnprintable = i;
+                  _showUnprintable = e.readInt();
             else if (tag == "showFrames")
-                  _showFrames = i;
+                  _showFrames = e.readInt();
             else if (tag == "showMargins")
-                  _showPageborders = i;
+                  _showPageborders = e.readInt();
             else if (tag == "Style") {
                   qreal sp = _style.spatium();
-                  _style.load(ee);
+                  _style.load(e);
                   // if (_layoutMode == LayoutFloat || _layoutMode == LayoutSystem) {
                   if (_layoutMode == LayoutFloat) {
                         // style should not change spatium in
@@ -901,67 +877,79 @@ bool Score::read(const QDomElement& de)
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
-                  text->read(ee);
+                  text->read(e);
                   setMetaTag("copyright", text->getText());
                   delete text;
                   }
             else if (tag == "movement-number")
-                  setMetaTag("movementNumber", val);
+                  setMetaTag("movementNumber", e.readElementText());
             else if (tag == "movement-title")
-                  setMetaTag("movementTitle", val);
+                  setMetaTag("movementTitle", e.readElementText());
             else if (tag == "work-number")
-                  setMetaTag("workNumber", val);
+                  setMetaTag("workNumber", e.readElementText());
             else if (tag == "work-title")
-                  setMetaTag("workTitle", val);
+                  setMetaTag("workTitle", e.readElementText());
             else if (tag == "source")
-                  setMetaTag("source", val);
+                  setMetaTag("source", e.readElementText());
             else if (tag == "metaTag") {
-                  QString name = ee.attribute("name");
-                  setMetaTag(name, val);
+                  QString name = e.attribute("name");
+                  setMetaTag(name, e.readElementText());
                   }
             else if (tag == "Part") {
                   Part* part = new Part(this);
-                  part->read(ee);
+                  part->read(e);
                   _parts.push_back(part);
                   }
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
-                  slur->read(ee);
+                  slur->read(e);
                   slur->setNext(spanner);
                   spanner = slur;
                   }
             else if (tag == "Excerpt") {
-                  Excerpt* e = new Excerpt(this);
-                  e->read(ee);
-                  _excerpts.append(e);
+                  Excerpt* ex = new Excerpt(this);
+                  ex->read(e);
+                  _excerpts.append(ex);
                   }
             else if (tag == "Beam") {
                   Beam* beam = new Beam(this);
-                  beam->read(ee);
+                  beam->read(e);
                   beam->setParent(0);
                   // _beams.append(beam);
                   }
             else if (tag == "Score") {          // recursion
                   Score* s = new Score(style());
                   s->setParentScore(this);
-                  s->read(ee);
+                  s->read(e);
                   addExcerpt(s);
                   }
             else if (tag == "PageList") {
-                  for (QDomElement e = ee.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-                        if (e.tagName() == "Page") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Page") {
                               Page* page = new Page(this);
                               _pages.append(page);
                               page->read(e);
                               }
                         else
-                              domError(e);
+                              e.unknown();
                         }
                   }
             else if (tag == "name")
-                  setName(val);
+                  setName(e.readElementText());
+            else if (tag == "page-layout") {    // obsolete
+                  if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
+                        PageFormat pf;
+                        pf.copy(*pageFormat());
+                        pf.read(e);
+                        setPageFormat(pf);
+                        }
+                  else
+                        e.skipCurrentElement();
+                  }
+            else if (tag == "cursorTrack")
+                  e.skipCurrentElement();
             else
-                  domError(ee);
+                  e.unknown();
             }
 
       // check slurs
@@ -1134,43 +1122,31 @@ QByteArray Score::readCompressedToBuffer()
 
       QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
-      QDomDocument container;
-      int line, column;
-      QString err;
-      if (!container.setContent(cbuf, false, &err, &line, &column)) {
-            QString col, ln;
-            col.setNum(column);
-            ln.setNum(line);
-            QString error = err + "\n at line " + ln + " column " + col;
-            qDebug("error: %s\n", qPrintable(error));
-            return QByteArray();
-            }
-
-      // extract first rootfile
-      QString rootfile = "";
+      XmlReader e(cbuf);
+      QString rootfile;
       QList<QString> images;
-      for (QDomElement e = container.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() != "container") {
-                  domError(e);
+
+      while (e.readNextStartElement()) {
+            if (e.name() != "container") {
+                  e.unknown();
                   continue;
                   }
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  if (ee.tagName() != "rootfiles") {
-                        domError(ee);
+            while (e.readNextStartElement()) {
+                  if (e.name() != "rootfiles") {
+                        e.unknown();
                         continue;
                         }
-                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                        const QString& tag(eee.tagName());
-                        const QString& val(eee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
 
                         if (tag == "rootfile") {
                               if (rootfile.isEmpty())
-                                    rootfile = eee.attribute(QString("full-path"));
+                                    rootfile = e.attribute("full-path");
                               }
                         else if (tag == "file")
-                              images.append(val);
+                              images.append(e.readElementText());
                         else
-                              domError(eee);
+                              e.unknown();
                         }
                   }
             }
@@ -1392,8 +1368,9 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
 //    search complete Dom for tuplet id
 //---------------------------------------------------------
 
-Tuplet* Score::searchTuplet(const QDomElement& de, int id)
+Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       {
+#if 0 // TODOx
       QDomElement e = de;
       QDomDocument doc = e.ownerDocument();
 
@@ -1440,6 +1417,7 @@ Tuplet* Score::searchTuplet(const QDomElement& de, int id)
                         }
                   }
             }
+#endif
       return 0;
       }
 

@@ -792,20 +792,19 @@ void Segment::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Segment::read(const QDomElement& de)
+void Segment::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "subtype")
-                  _subtype = SegmentType(val.toInt());
+                  _subtype = SegmentType(e.readInt());
             else if (tag == "leadingSpace")
-                  _extraLeadingSpace = Spatium(val.toDouble());
+                  _extraLeadingSpace = Spatium(e.readDouble());
             else if (tag == "trailingSpace")
-                  _extraTrailingSpace = Spatium(val.toDouble());
+                  _extraTrailingSpace = Spatium(e.readDouble());
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

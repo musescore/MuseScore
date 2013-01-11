@@ -94,7 +94,7 @@ class Tuplet : public DurationElement {
       virtual void layout();
       Text* number() const { return _number; }
 
-      void read(const QDomElement&);
+      void read(XmlReader&);
       void write(Xml&) const;
 
       virtual void reset();

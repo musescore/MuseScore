@@ -39,27 +39,29 @@ void NamedEventList::write(Xml& xml, const QString& n) const
 //   read
 //---------------------------------------------------------
 
-void NamedEventList::read(const QDomElement& de)
+void NamedEventList::read(XmlReader& e)
       {
-      name = de.attribute("name");
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      name = e.attribute("name");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "program") {
                   Event ev(ME_CONTROLLER);
                   ev.setController(CTRL_PROGRAM);
-                  ev.setValue(e.attribute("value", "0").toInt());
+                  ev.setValue(e.intAttribute("value", 0));
                   events.append(ev);
+                  e.skipCurrentElement();
                   }
             else if (tag == "controller") {
                   Event ev(ME_CONTROLLER);
-                  ev.setController(e.attribute("ctrl", "0").toInt());
-                  ev.setValue(e.attribute("value", "0").toInt());
+                  ev.setController(e.intAttribute("ctrl", 0));
+                  ev.setValue(e.intAttribute("value", 0));
                   events.append(ev);
+                  e.skipCurrentElement();
                   }
             else if (tag == "descr")
-                  descr = e.text();
+                  descr = e.readElementText();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -182,7 +184,7 @@ void InstrumentData::write(Xml& xml) const
 //   InstrumentData::read
 //---------------------------------------------------------
 
-void InstrumentData::read(const QDomElement& de)
+void InstrumentData::read(XmlReader& e)
       {
       int program = -1;
       int bank    = 0;
@@ -193,46 +195,45 @@ void InstrumentData::read(const QDomElement& de)
       bool customDrumset = false;
 
       _channel.clear();
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "longName") {
-                  int pos = e.attribute("pos", "0").toInt();
+                  int pos = e.intAttribute("pos", 0);
                   QTextDocumentFragment longName = QTextDocumentFragment::fromHtml(Xml::htmlToString(e));
                   _longNames.append(StaffNameDoc(longName, pos));
                   }
             else if (tag == "shortName") {
-                  int pos = e.attribute("pos", "0").toInt();
+                  int pos = e.intAttribute("pos", 0);
                   QTextDocumentFragment shortName = QTextDocumentFragment::fromHtml(Xml::htmlToString(e));
                   _shortNames.append(StaffNameDoc(shortName, pos));
                   }
             else if (tag == "trackName")
-                  _trackName = val;
+                  _trackName = e.readElementText();
             else if (tag == "minPitch") {      // obsolete
-                  _minPitchP = _minPitchA = val.toInt();
+                  _minPitchP = _minPitchA = e.readInt();
                   }
             else if (tag == "maxPitch") {       // obsolete
-                  _maxPitchP = _maxPitchA = val.toInt();
+                  _maxPitchP = _maxPitchA = e.readInt();
                   }
             else if (tag == "minPitchA")
-                  _minPitchA = val.toInt();
+                  _minPitchA = e.readInt();
             else if (tag == "minPitchP")
-                  _minPitchP = val.toInt();
+                  _minPitchP = e.readInt();
             else if (tag == "maxPitchA")
-                  _maxPitchA = val.toInt();
+                  _maxPitchA = e.readInt();
             else if (tag == "maxPitchP")
-                  _maxPitchP = val.toInt();
+                  _maxPitchP = e.readInt();
             else if (tag == "transposition") {    // obsolete
-                  _transpose.chromatic = val.toInt();
-                  _transpose.diatonic = chromatic2diatonic(val.toInt());
+                  _transpose.chromatic = e.readInt();
+                  _transpose.diatonic = chromatic2diatonic(_transpose.chromatic);
                   }
             else if (tag == "transposeChromatic")
-                  _transpose.chromatic = val.toInt();
+                  _transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
-                  _transpose.diatonic = val.toInt();
+                  _transpose.diatonic = e.readInt();
             else if (tag == "useDrumset") {
-                  _useDrumset = val.toInt();
+                  _useDrumset = e.readInt();
                   if (_useDrumset)
                         _drumset = new Drumset(*smDrumset);
                   }
@@ -267,19 +268,19 @@ void InstrumentData::read(const QDomElement& de)
                   _channel.append(a);
                   }
             else if (tag == "chorus")     // obsolete
-                  chorus = val.toInt();
+                  chorus = e.readInt();
             else if (tag == "reverb")     // obsolete
-                  reverb = val.toInt();
+                  reverb = e.readInt();
             else if (tag == "midiProgram")  // obsolete
-                  program = val.toInt();
+                  program = e.readInt();
             else if (tag == "volume")     // obsolete
-                  volume = val.toInt();
+                  volume = e.readInt();
             else if (tag == "pan")        // obsolete
-                  pan = val.toInt();
+                  pan = e.readInt();
             else if (tag == "midiChannel")      // obsolete
                   ;
             else
-                  domError(e);
+                  e.unknown();
             }
       if (_channel.isEmpty()) {      // for backward compatibility
             Channel a;
@@ -391,21 +392,21 @@ void Channel::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Channel::read(const QDomElement& de)
+void Channel::read(XmlReader& e)
       {
       synti = 0;
-      name = de.attribute("name");
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      name = e.attribute("name");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "program") {
-                  program = e.attribute("value", "-1").toInt();
+                  program = e.intAttribute("value", -1);
                   if (program == -1)
-                        program = val.toInt();
+                        program = e.readInt();
+                  e.skipCurrentElement();
                   }
             else if (tag == "controller") {
-                  int value = e.attribute("value", 0).toInt();
-                  int ctrl  = e.attribute("ctrl", 0).toInt();
+                  int value = e.intAttribute("value", 0);
+                  int ctrl  = e.intAttribute("ctrl", 0);
                   switch (ctrl) {
                         case CTRL_HBANK:
                               bank = (value << 7) + (bank & 0x7f);
@@ -436,6 +437,7 @@ void Channel::read(const QDomElement& de)
                               }
                               break;
                         }
+                  e.skipCurrentElement();
                   }
             else if (tag == "Articulation") {
                   MidiArticulation a;
@@ -448,22 +450,19 @@ void Channel::read(const QDomElement& de)
                   midiActions.append(a);
                   }
             else if (tag == "synti") {
-                  if (val == "Aeolus")
+                  if (e.readElementText() == "Aeolus")
                         synti = 1;
                   else
                         synti = 0;
                   }
-            else if (tag == "descr") {
-                  descr = e.text();
-                  }
-            else if (tag == "mute") {
-                  mute = val.toInt();
-                  }
-            else if (tag == "solo") {
-                  solo = val.toInt();
-                  }
+            else if (tag == "descr")
+                  descr = e.readElementText();
+            else if (tag == "mute")
+                  mute = e.readInt();
+            else if (tag == "solo")
+                  solo = e.readInt();
             else
-                  domError(e);
+                  e.unknown();
             }
       updateInitList();
       }
@@ -555,26 +554,27 @@ void MidiArticulation::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void MidiArticulation::read(const QDomElement& de)
+void MidiArticulation::read(XmlReader& e)
       {
-      name = de.attribute("name");
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            QString text(e.text());
+      name = e.attribute("name");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "velocity") {
+                  QString text(e.readElementText());
                   if (text.endsWith("%"))
                         text = text.left(text.size()-1);
                   velocity = text.toInt();
                   }
             else if (tag == "gateTime") {
+                  QString text(e.readElementText());
                   if (text.endsWith("%"))
                         text = text.left(text.size()-1);
                   gateTime = text.toInt();
                   }
             else if (tag == "descr")
-                  descr = e.text();
+                  descr = e.readElementText();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 
@@ -774,7 +774,7 @@ bool Instrument::operator==(const Instrument& s) const
 //   read
 //---------------------------------------------------------
 
-void Instrument::read(const QDomElement& e)
+void Instrument::read(XmlReader& e)
       {
       d->read(e);
       }

@@ -1845,10 +1845,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 //   Measure::read
 //---------------------------------------------------------
 
-void Measure::read(const QDomElement& de, int staffIdx)
+void Measure::read(XmlReader& e, int staffIdx)
       {
-//      QList<Tuplet*> tuplets;
-
       Segment* segment = 0;
       qreal _spatium = spatium();
       bool irregular;
@@ -1864,18 +1862,18 @@ void Measure::read(const QDomElement& de, int staffIdx)
             }
 
       // tick is obsolete
-      if (de.hasAttribute("tick"))
-            score()->curTick = score()->fileDivision(de.attribute("tick").toInt());
+      if (e.hasAttribute("tick"))
+            score()->curTick = score()->fileDivision(e.intAttribute("tick"));
       setTick(score()->curTick);
 
       const SigEvent& sigEvent = score()->sigmap()->timesig(tick());
       _timesig  = sigEvent.nominal();
-      if (de.hasAttribute("len")) {
-            QStringList sl = de.attribute("len").split('/');
+      if (e.hasAttribute("len")) {
+            QStringList sl = e.attribute("len").split('/');
             if (sl.size() == 2)
                   _len = Fraction(sl[0].toInt(), sl[1].toInt());
             else
-                  qDebug("illegal measure size <%s>", qPrintable(de.attribute("len")));
+                  qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
             score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
             score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
@@ -1888,13 +1886,11 @@ void Measure::read(const QDomElement& de, int staffIdx)
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
-            if (tag == "tick") {
-                  score()->curTick = val.toInt();
-                  }
+            if (tag == "tick")
+                  score()->curTick = e.readInt();
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(score()->curTrack);
@@ -2029,32 +2025,33 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   }
             else if (tag == "endSpanner") {
                   int id = e.attribute("id").toInt();
-                  Spanner* e = score()->findSpanner(id);
-                  if (e) {
-                        if (e->anchor() == Spanner::ANCHOR_MEASURE) {
-                              e->setEndElement(this);
-                              addSpannerBack(e);
+                  Spanner* spanner = score()->findSpanner(id);
+                  if (spanner) {
+                        if (spanner->anchor() == Spanner::ANCHOR_MEASURE) {
+                              spanner->setEndElement(this);
+                              addSpannerBack(spanner);
                               }
                         else {
                               segment = getSegment(Segment::SegChordRest, score()->curTick);
-                              e->setEndElement(segment);
-                              segment->addSpannerBack(e);
+                              spanner->setEndElement(segment);
+                              segment->addSpannerBack(spanner);
                               }
-                        if (e->type() == OTTAVA) {
-                              Ottava* o = static_cast<Ottava*>(e);
+                        if (spanner->type() == OTTAVA) {
+                              Ottava* o = static_cast<Ottava*>(spanner);
                               int shift = o->pitchShift();
                               Staff* st = o->staff();
                               int tick1 = static_cast<Segment*>(o->startElement())->tick();
                               st->pitchOffsets().setPitchOffset(tick1, shift);
                               st->pitchOffsets().setPitchOffset(segment->tick(), 0);
                               }
-                        else if (e->type() == HAIRPIN) {
-                              Hairpin* hp = static_cast<Hairpin*>(e);
+                        else if (spanner->type() == HAIRPIN) {
+                              Hairpin* hp = static_cast<Hairpin*>(spanner);
                               score()->updateHairpin(hp);
                               }
                         }
                   else
                         qDebug("Measure::read(): cannot find spanner %d", id);
+                  e.readNext();
                   }
             else if (tag == "HairPin"
                || tag == "Pedal"
@@ -2062,7 +2059,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), score()));
                   sp->setNext(score()->spanner);
                   score()->spanner = sp;
                   sp->setTrack(staffIdx * VOICES);
@@ -2194,51 +2191,30 @@ void Measure::read(const QDomElement& de, int staffIdx)
                || tag == "StaffState"
                || tag == "FiguredBass"
                ) {
-                  Element* el = Element::name2Element(tag, score());
+                  Element* el = Element::name2Element(tag.toString(), score());
                   el->setTrack(score()->curTrack);
                   el->read(e);
                   segment = getSegment(Segment::SegChordRest, score()->curTick);
                   segment->add(el);
                   }
             else if (tag == "Image") {
-                  // look ahead for image type
-                  QString path;
-                  QDomElement ee = e.firstChildElement("path");
-                  if (!ee.isNull())
-                        path = ee.text();
-                  Image* image = 0;
-                  QString s(path.toLower());
-                  if (s.endsWith(".svg"))
-                        image = new SvgImage(score());
-                  else
-                        if (s.endsWith(".jpg")
-                     || s.endsWith(".png")
-                     || s.endsWith(".gif")
-                     || s.endsWith(".xpm")
-                        ) {
-                        image = new RasterImage(score());
-                        }
-                  else {
-                        qDebug("unknown image format <%s>", path.toLatin1().data());
-                        }
-                  if (image) {
-                        image->setTrack(score()->curTrack);
-                        image->read(e);
-                        Segment* s = getSegment(Segment::SegChordRest, score()->curTick);
-                        s->add(image);
-                        }
+                  Image* image = new Image(score());
+                  image->setTrack(score()->curTrack);
+                  image->read(e);
+                  Segment* s = getSegment(Segment::SegChordRest, score()->curTick);
+                  s->add(image);
                   }
 
             //----------------------------------------------------
             else if (tag == "stretch")
-                  _userStretch = val.toDouble();
+                  _userStretch = e.readDouble();
             else if (tag == "LayoutBreak") {
                   LayoutBreak* lb = new LayoutBreak(score());
                   lb->read(e);
                   add(lb);
                   }
             else if (tag == "noOffset")
-                  _noOffset = val.toInt();
+                  _noOffset = e.readInt();
             else if (tag == "irregular")
                   _irregular = true;
             else if (tag == "breakMultiMeasureRest")
@@ -2251,10 +2227,12 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   tuplet->read(e);
                   score()->tuplets.append(tuplet);
                   }
-            else if (tag == "startRepeat")
+            else if (tag == "startRepeat") {
                   _repeatFlags |= RepeatStart;
+                  e.readNext();
+                  }
             else if (tag == "endRepeat") {
-                  _repeatCount = val.toInt();
+                  _repeatCount = e.readInt();
                   _repeatFlags |= RepeatEnd;
                   }
             else if (tag == "Slur") {
@@ -2272,7 +2250,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  staves[staffIdx]->_vspacerDown->setGap(val.toDouble() * _spatium);
+                  staves[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "vspacer" || tag == "vspacerUp") {
                   if (staves[staffIdx]->_vspacerUp == 0) {
@@ -2281,12 +2259,12 @@ void Measure::read(const QDomElement& de, int staffIdx)
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  staves[staffIdx]->_vspacerUp->setGap(val.toDouble() * _spatium);
+                  staves[staffIdx]->_vspacerUp->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "visible")
-                  staves[staffIdx]->_visible = val.toInt();
+                  staves[staffIdx]->_visible = e.readInt();
             else if (tag == "slashStyle")
-                  staves[staffIdx]->_slashStyle = val.toInt();
+                  staves[staffIdx]->_slashStyle = e.readInt();
             else if (tag == "Beam") {
                   Beam* beam = new Beam(score());
                   beam->setTrack(score()->curTrack);
@@ -2302,7 +2280,7 @@ void Measure::read(const QDomElement& de, int staffIdx)
                   _noText->setParent(this);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       if (staffIdx == 0) {
             Segment* s = last();

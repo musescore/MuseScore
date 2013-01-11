@@ -20,6 +20,44 @@
 #include "property.h"
 
 //---------------------------------------------------------
+//   XmlReader
+//---------------------------------------------------------
+
+class XmlReader : public QXmlStreamReader {
+      QString docName;  // used for error reporting
+
+   public:
+      XmlReader(const QByteArray& d) : QXmlStreamReader(d) {};
+      XmlReader(QFile*);
+      XmlReader(QIODevice* d) : QXmlStreamReader(d) {}
+
+      void unknown() const;
+
+      void error(int, int);
+
+      // attribute helper routines:
+      QString attribute(const char* s) const { return attributes().value(s).toString(); }
+      QString attribute(const char* s, const QString&) const;
+      int intAttribute(const char* s) const;
+      int intAttribute(const char* s, int _default) const;
+      double doubleAttribute(const char* s) const;
+      double doubleAttribute(const char* s, double _default) const;
+      bool hasAttribute(const char* s) const;
+
+      // helper routines based on readElementText():
+      int readInt()         { return readElementText().toInt();    }
+      int readInt(bool* ok) { return readElementText().toInt(ok);  }
+      double readDouble()   { return readElementText().toDouble(); }
+      QPointF readPoint();
+      QSizeF readSize();
+      QRectF readRect();
+      QColor readColor();
+      Fraction readFraction();
+
+      void setDocName(const QString& s) { docName = s; }
+      };
+
+//---------------------------------------------------------
 //   Xml
 //---------------------------------------------------------
 
@@ -72,18 +110,11 @@ class Xml : public QTextStream {
       void dump(int len, const unsigned char* p);
 
       static QString xmlString(const QString&);
-      static void htmlToString(const QDomElement&, int level, QString*);
-      static QString htmlToString(const QDomElement&);
+      static void htmlToString(XmlReader&, int level, QString*);
+      static QString htmlToString(XmlReader&);
       };
 
-extern PlaceText readPlacement(const QDomElement&);
-extern Fraction  readFraction(const QDomElement&);
+extern PlaceText readPlacement(XmlReader&);
 extern QString docName;
-extern QPointF readPoint(const QDomElement&);
-extern QSizeF readSize(const QDomElement&);
-extern QRectF readRectF(const QDomElement&);
-extern QColor readColor(const QDomElement&);
-extern void domError(const QDomElement&);
-extern void domNotImplemented(const QDomElement&);
 #endif
 

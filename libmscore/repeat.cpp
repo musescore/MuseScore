@@ -188,17 +188,19 @@ MarkerType Marker::markerType(const QString& s) const
 //   read
 //---------------------------------------------------------
 
-void Marker::read(const QDomElement& de)
+void Marker::read(XmlReader& e)
       {
       MarkerType mt = MARKER_SEGNO;
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "label") {
-                  setLabel(e.text());
-                  mt = markerType(e.text());
+                  QString s(e.readElementText());
+                  setLabel(s);
+                  mt = markerType(s);
                   }
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       switch (mt) {
             case MARKER_SEGNO:
@@ -323,18 +325,18 @@ int Jump::jumpType() const
 //   read
 //---------------------------------------------------------
 
-void Jump::read(const QDomElement& de)
+void Jump::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "jumpTo")
-                  _jumpTo = e.text();
+                  _jumpTo = e.readElementText();
             else if (tag == "playUntil")
-                  _playUntil = e.text();
+                  _playUntil = e.readElementText();
             else if (tag == "continueAt")
-                  _continueAt = e.text();
+                  _continueAt = e.readElementText();
             else if (!Text::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       setTextStyle(score()->textStyle(TEXT_STYLE_REPEAT_RIGHT));
       }

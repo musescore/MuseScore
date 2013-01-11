@@ -76,7 +76,7 @@ class Articulation : public Element {
 
       virtual void layout();
 
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;
 
       virtual void reset();

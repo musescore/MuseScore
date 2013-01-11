@@ -44,7 +44,7 @@ class Breath : public Element {
       virtual void draw(QPainter*) const;
       virtual void layout();
       virtual void write(Xml&) const;
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual QPointF pagePos() const;      ///< position in page coordinates
       };
 

@@ -53,21 +53,20 @@ void LayoutBreak::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void LayoutBreak::read(const QDomElement& de)
+void LayoutBreak::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setProperty(P_LAYOUT_BREAK, ::getProperty(P_LAYOUT_BREAK, e));
             else if (tag == "pause")
-                  _pause = val.toDouble();
+                  _pause = e.readDouble();
             else if (tag == "startWithLongNames")
-                  _startWithLongNames = val.toInt();
+                  _startWithLongNames = e.readInt();
             else if (tag == "startWithMeasureOne")
-                  _startWithMeasureOne = val.toInt();
+                  _startWithMeasureOne = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       layout0();
       }

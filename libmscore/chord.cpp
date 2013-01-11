@@ -759,39 +759,39 @@ void Chord::write(Xml& xml) const
 //   Chord::readNote
 //---------------------------------------------------------
 
-void Chord::readNote(const QDomElement& de)
+void Chord::readNote(XmlReader& e)
       {
       Note* note = new Note(score());
-      note->setPitch(de.attribute("pitch").toInt());
-      if (de.hasAttribute("ticks")) {
-            int ticks  = de.attribute("ticks").toInt();
+      note->setPitch(e.intAttribute("pitch"));
+      if (e.hasAttribute("ticks")) {
+            int ticks  = e.intAttribute("ticks");
             TDuration d;
             d.setVal(ticks);
             setDurationType(d);
             }
       int tpc = INVALID_TPC;
-      if (de.hasAttribute("tpc"))
-            tpc = de.attribute("tpc").toInt();
+      if (e.hasAttribute("tpc"))
+            tpc = e.intAttribute("tpc");
 
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
+            QString val(e.readElementText());
             if (tag == "StemDirection") {
                   if (val == "up")
                         _stemDirection = MScore::UP;
                   else if (val == "down")
                         _stemDirection = MScore::DOWN;
                   else
-                        _stemDirection = MScore::Direction(val.toInt());
+                        _stemDirection = MScore::Direction(e.readInt());
                   }
             else if (tag == "pitch")
-                  note->setPitch(val.toInt());
+                  note->setPitch(e.readInt());
             else if (tag == "prefix") {
                   qDebug("read Note:: prefix: TODO\n");
                   }
             else if (tag == "line")
-                  note->setLine(val.toInt());
+                  note->setLine(e.readInt());
             else if (tag == "Tie") {
                   Tie* _tieFor = new Tie(score());
                   _tieFor->setTrack(track());
@@ -807,9 +807,9 @@ void Chord::readNote(const QDomElement& de)
                   note->add(f);
                   }
             else if (tag == "move")
-                  setStaffMove(val.toInt());
+                  setStaffMove(e.readInt());
             else if (!ChordRest::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       if (!tpcIsValid(tpc))
             note->setTpc(tpc);
@@ -822,11 +822,10 @@ void Chord::readNote(const QDomElement& de)
 //   Chord::read
 //---------------------------------------------------------
 
-void Chord::read(const QDomElement& de)
+void Chord::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "Note") {
                   Note* note = new Note(score());
@@ -836,17 +835,28 @@ void Chord::read(const QDomElement& de)
                   note->read(e);
                   add(note);
                   }
-            else if (tag == "appoggiatura")
+            else if (tag == "appoggiatura") {
                   _noteType = NOTE_APPOGGIATURA;
-            else if (tag == "acciaccatura")
+                  e.readNext();
+                  }
+            else if (tag == "acciaccatura") {
                   _noteType = NOTE_ACCIACCATURA;
-            else if (tag == "grace4")
+                  e.readNext();
+                  }
+            else if (tag == "grace4") {
                   _noteType = NOTE_GRACE4;
-            else if (tag == "grace16")
+                  e.readNext();
+                  }
+            else if (tag == "grace16") {
                   _noteType = NOTE_GRACE16;
-            else if (tag == "grace32")
+                  e.readNext();
+                  }
+            else if (tag == "grace32") {
                   _noteType = NOTE_GRACE32;
+                  e.readNext();
+                  }
             else if (tag == "StemDirection") {
+                  QString val(e.readElementText());
                   if (val == "up")
                         _stemDirection = MScore::UP;
                   else if (val == "down")
@@ -855,7 +865,7 @@ void Chord::read(const QDomElement& de)
                         _stemDirection = MScore::Direction(val.toInt());
                   }
             else if (tag == "noStem")
-                  _noStem = val.toInt();
+                  _noStem = e.readInt();
             else if (tag == "Arpeggio") {
                   _arpeggio = new Arpeggio(score());
                   _arpeggio->setTrack(track());
@@ -892,7 +902,7 @@ void Chord::read(const QDomElement& de)
                   add(cl);
                   }
             else if (!ChordRest::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -130,7 +130,7 @@ private:
       void setSmall(bool val)             { _small = val;           }
       void undoSetSmall(bool val);
 
-      virtual void read(const QDomElement&);
+      virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;
 
       virtual QVariant getProperty(P_ID propertyId) const;

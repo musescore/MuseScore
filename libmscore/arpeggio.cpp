@@ -64,21 +64,20 @@ void Arpeggio::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Arpeggio::read(const QDomElement& de)
+void Arpeggio::read(XmlReader& e)
       {
-      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            const QString& tag(e.tagName());
-            const QString& val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = ArpeggioType(val.toInt());
+                  _subtype = ArpeggioType(e.readInt());
             else if (tag == "userLen1")
-                  _userLen1 = Spatium(val.toDouble());
+                  _userLen1 = Spatium(e.readDouble());
             else if (tag == "userLen2")
-                  _userLen2 = Spatium(val.toDouble());
+                  _userLen2 = Spatium(e.readDouble());
             else if (tag == "span")
-                  _span = val.toInt();
+                  _span = e.readInt();
             else if (!Element::readProperties(e))
-                  domError(e);
+                  e.unknown();
             }
       }
 
