@@ -1234,6 +1234,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                   if (ots) {
                         TimeSig* timesig = new TimeSig(*ots);
                         timesig->setTrack(i * VOICES);
+                        timesig->setSig(ots->sig(), ots->subtype());
                         score()->undoAddElement(timesig);
                         }
                   }
