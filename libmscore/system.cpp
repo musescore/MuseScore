@@ -360,7 +360,11 @@ void System::layout2()
 
       if (_barLine) {
             _barLine->setSpan(lastStaffIdx + 1);
-            _barLine->setSpanTo( (score()->staff(lastStaffIdx)->lines()-1)*2 );
+            // First barline of a single line staff shoul be 2sp below the single line
+            if (score()->staff(lastStaffIdx)->lines() == 1)
+                _barLine->setSpanTo(4); // = 2*2sp.
+            else
+                _barLine->setSpanTo( (score()->staff(lastStaffIdx)->lines()-1)*2 );
             _barLine->layout();
             }
 
