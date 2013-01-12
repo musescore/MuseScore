@@ -42,7 +42,7 @@ class DurationElement : public Element {
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
-      bool readProperties(const QDomElement& e, QList<Tuplet*>*, const QList<Spanner*>*);
+      bool readProperties(const QDomElement& e);
       void writeProperties(Xml& xml) const;
       void writeTuplet(Xml& xml);
 

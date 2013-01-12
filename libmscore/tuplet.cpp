@@ -522,7 +522,7 @@ void Tuplet::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Tuplet::read(const QDomElement& de, QList<Tuplet*>* tuplets, const QList<Spanner*>* spanner)
+void Tuplet::read(const QDomElement& de)
       {
       int bl = -1;
       _id    = de.attribute("id", "0").toInt();
@@ -564,7 +564,7 @@ void Tuplet::read(const QDomElement& de, QList<Tuplet*>* tuplets, const QList<Sp
                   }
             else if (tag == "baseLen")            // obsolete
                   bl = val.toInt();
-            else if (!DurationElement::readProperties(e, tuplets, spanner))
+            else if (!DurationElement::readProperties(e))
                   domError(e);
             }
       Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());

@@ -2062,7 +2062,7 @@ void GuitarPro5::readNote(int string, Note* note)
       if (noteBits & 0x80) {              // fingering
             int a = readUChar();
             int b = readUChar();
-            qDebug("   Fingering=========%d %d\n", a, b);
+            qDebug("   Fingering=========%d %d", a, b);
             }
       if (noteBits & 0x1)
             skip(8);

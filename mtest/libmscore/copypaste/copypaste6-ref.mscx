@@ -91,6 +91,17 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -101,8 +112,10 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
+            <Tie>
+              </Tie>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -112,11 +125,8 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <Slur id="2">
-          </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="2"/>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -127,10 +137,9 @@
           <span>1</span>
           </BarLine>
         </Measure>
-      <Measure number="2">
+      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="2"/>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -157,16 +166,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
@@ -176,8 +175,17 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Tie>
+              </Tie>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -190,15 +198,8 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
             </Note>
           </Chord>
         <BarLine>

@@ -54,7 +54,7 @@ void Excerpt::read(const QDomElement& de)
             else if (tag == "part") {
                   int partIdx = e.text().toInt();
                   if (partIdx < 0 || partIdx >= pl.size())
-                        qDebug("Excerpt::read: bad part index\n");
+                        qDebug("Excerpt::read: bad part index");
                   else
                         _parts.append(pl.at(partIdx));
                   }
@@ -232,7 +232,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           }
 #if 1
                                     else {
-                                          qDebug("cloneSpanner(measure): cannot find spanner <%s> %d track %d\n",
+                                          qDebug("cloneSpanner(measure): cannot find spanner <%s> %d track %d",
                                              s->name(), m->no(), srcTrack);
                                           }
 #endif
@@ -286,7 +286,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ns->addSpannerBack(nspanner);
                                           }
                                     else {
-                                          qDebug("cloneSpanner(seg): cannot find spanner\n");
+                                          qDebug("cloneSpanner(seg): cannot find spanner");
                                           }
                                     }
 
@@ -355,7 +355,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 ncr->addSlurBack(slur);
                                                 }
                                           else {
-                                                qDebug("cloneStave: cannot find slur\n");
+                                                qDebug("cloneStave: cannot find slur");
                                                 }
                                           }
 
@@ -370,6 +370,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                       Tie* tie = new Tie(score);
                                                       nn->setTieFor(tie);
                                                       tie->setStartNote(nn);
+                                                      tie->setTrack(nn->track());
                                                       tieMap.add(on->tieFor(), tie);
                                                       }
                                                 if (on->tieBack()) {
@@ -379,7 +380,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                             tie->setEndNote(nn);
                                                             }
                                                       else {
-                                                            qDebug("cloneStave: cannot find tie\n");
+                                                            qDebug("cloneStave: cannot find tie");
                                                             }
                                                       }
                                                 }
@@ -486,7 +487,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           ncr->addSlurBack(slur);
                                           }
                                     else {
-                                          qDebug("cloneStave: cannot find slur\n");
+                                          qDebug("cloneStave: cannot find slur");
                                           }
                                     }
                               foreach (Element* e, seg->annotations()) {
@@ -509,6 +510,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 Tie* tie = new Tie(score);
                                                 nn->setTieFor(tie);
                                                 tie->setStartNote(nn);
+                                                tie->setTrack(nn->track());
                                                 tieMap.add(on->tieFor(), tie);
                                                 }
                                           if (on->tieBack()) {
@@ -518,7 +520,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       tie->setEndNote(nn);
                                                       }
                                                 else {
-                                                      qDebug("cloneStave: cannot find tie\n");
+                                                      qDebug("cloneStave: cannot find tie");
                                                       }
                                                 }
                                           }
