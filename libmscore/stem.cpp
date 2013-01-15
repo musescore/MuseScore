@@ -138,7 +138,6 @@ void Stem::draw(QPainter* painter) const
       if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
             return;
 
-      bool useTab = false;
       Staff* st = staff();
       bool useTab = st && st->isTabStaff();
 
