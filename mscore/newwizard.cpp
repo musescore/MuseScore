@@ -38,6 +38,7 @@
 #include "libmscore/sym.h"
 
 extern Palette* newKeySigPalette();
+extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
 //---------------------------------------------------------
 //   InstrumentWizard
@@ -73,6 +74,10 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
 
 void InstrumentWizard::buildTemplateList()
       {
+      // clear search if instrument list is updated
+      search->clear();
+      filterInstruments(instrumentList);
+
       populateInstrumentList(instrumentList, showMore->isChecked());
       }
 
@@ -896,3 +901,21 @@ bool NewWizard::useTemplate() const
       return field("useTemplate").toBool();
       }
 
+//---------------------------------------------------------
+//   on_search_textChanged
+//---------------------------------------------------------
+
+void InstrumentWizard::on_search_textChanged(const QString &searchPhrase)
+      {
+      filterInstruments(instrumentList, searchPhrase);
+      }
+
+//---------------------------------------------------------
+//   on_clearSearch_clicked
+//---------------------------------------------------------
+
+void InstrumentWizard::on_clearSearch_clicked()
+      {
+      search->clear();
+      filterInstruments (instrumentList);
+      }
