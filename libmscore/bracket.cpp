@@ -344,7 +344,7 @@ bool Bracket::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers
                   BracketType bt = staff()->bracket(_column);
                   staff()->setBracket(_column, NO_BRACKET);
                   staff()->setBracket(l, bt);
-                  staff()->setBracketSpan(l, _firstStaff - _lastStaff + 1);
+                  staff()->setBracketSpan(l, _lastStaff - _firstStaff + 1);
                   score()->moveBracket(staffIdx(), _column, l);
                   score()->setLayoutAll(true);
                   break;
