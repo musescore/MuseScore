@@ -72,7 +72,9 @@ Element* MTest::writeReadElement(Element* element)
 // printf("%s\n", buffer.buffer().data());
 
       XmlReader e(buffer.buffer());
-      QString tag(e.readNextStartElement());
+      e.readNextStartElement();
+      QString tag(e.name().toString());
+// printf("read tag %s\n", qPrintable(tag));
       element = Element::name2Element(e.name().toString(), score);
       element->read(e);
       return element;

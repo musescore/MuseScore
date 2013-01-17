@@ -271,32 +271,10 @@ void Symbol::read(XmlReader& e)
                   add(s);
                   }
             else if (tag == "Image") {
-#if 0 // TODOx
-                  // look ahead for image type
+                  Image* image = new Image(score());
                   QString path;
-                  QDomElement ee = e.firstChildElement("path");
-                  if (!ee.isNull())
-                        path = ee.text();
-                  Image* image = 0;
-                  QString s(path.toLower());
-                  if (s.endsWith(".svg"))
-                        image = new SvgImage(score());
-                  else
-                        if (s.endsWith(".jpg")
-                     || s.endsWith(".png")
-                     || s.endsWith(".gif")
-                     || s.endsWith(".xpm")
-                        ) {
-                        image = new RasterImage(score());
-                        }
-                  else {
-                        qDebug("unknown image format <%s>\n", path.toLatin1().data());
-                        }
-                  if (image) {
-                        image->read(e);
-                        add(image);
-                        }
-#endif
+                  image->read(e);
+                  add(image);
                   }
             else if (tag == "small" || tag == "subtype")
                   ;

@@ -2215,10 +2215,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "noOffset")
                   _noOffset = e.readInt();
-            else if (tag == "irregular")
+            else if (tag == "irregular") {
                   _irregular = true;
-            else if (tag == "breakMultiMeasureRest")
+                  e.readNext();
+                  }
+            else if (tag == "breakMultiMeasureRest") {
                   _breakMultiMeasureRest = true;
+                  e.readNext();
+                  }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());
                   tuplet->setTrack(score()->curTrack);
@@ -2279,6 +2283,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   _noText->read(e);
                   _noText->setParent(this);
                   }
+            else if (Element::readProperties(e))
+                  ;
             else
                   e.unknown();
             }

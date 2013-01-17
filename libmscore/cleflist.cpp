@@ -69,6 +69,7 @@ void ClefList::read(XmlReader& e, Score* cs)
                   int tick    = e.intAttribute("tick", 0);
                   ClefType ct = Clef::clefType(e.attribute("idx", "0"));
                   insert(cs->fileDivision(tick), ClefTypeList(ct, ct));
+                  e.readNext();
                   }
             else
                   e.unknown();
