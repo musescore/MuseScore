@@ -157,7 +157,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       while (e.readNextStartElement()) {
             if (e.name() != "StaffList") {
                   e.unknown();
-                  continue;
+                  break;
                   }
 
             int tickStart     = e.intAttribute("tick", 0);
@@ -180,11 +180,13 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
             while (e.readNextStartElement()) {
                   if (e.name() != "Staff") {
                         e.unknown();
-                        continue;
+                        break;
                         }
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  if (blackList.contains(srcStaffIdx))
+                  if (blackList.contains(srcStaffIdx)) {
+                        e.skipCurrentElement();
                         continue;
+                        }
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
@@ -242,28 +244,29 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
-                              Spanner* e = localSpanner.value(id, 0);
-                              if (e) {
+                              Spanner* spanner = localSpanner.value(id, 0);
+                              if (spanner) {
                                     localSpanner.remove(id);
                                     int tick = curTick - tickStart + dstTick;
                                     Measure* m = tick2measure(tick);
                                     Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
-                                    e->setEndElement(seg);
-                                    seg->addSpannerBack(e);
-                                    undoAddElement(e);
-                                    if (e->type() == Element::OTTAVA) {
-                                          Ottava* o = static_cast<Ottava*>(e);
+                                    spanner->setEndElement(seg);
+                                    seg->addSpannerBack(spanner);
+                                    undoAddElement(spanner);
+                                    if (spanner->type() == Element::OTTAVA) {
+                                          Ottava* o = static_cast<Ottava*>(spanner);
                                           int shift = o->pitchShift();
                                           Staff* st = o->staff();
                                           int tick1 = static_cast<Segment*>(o->startElement())->tick();
                                           st->pitchOffsets().setPitchOffset(tick1, shift);
                                           st->pitchOffsets().setPitchOffset(tick, 0);
                                           }
-                                    else if (e->type() == Element::HAIRPIN) {
-                                          Hairpin* hp = static_cast<Hairpin*>(e);
+                                    else if (spanner->type() == Element::HAIRPIN) {
+                                          Hairpin* hp = static_cast<Hairpin*>(spanner);
                                           updateHairpin(hp);
                                           }
                                     }
+                              e.readNext();
                               }
 
                         else if (tag == "Lyrics") {
@@ -349,7 +352,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               undoAddElement(breath);
                               }
                         else if (tag == "BarLine") {
-                              // ignore bar line
+                              e.skipCurrentElement();    // ignore bar line
                               }
                         else
                               e.unknown();
