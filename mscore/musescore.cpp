@@ -3349,6 +3349,7 @@ bool MuseScore::restoreSession(bool always)
                               if (!always)
                                     return false;
                               cleanExit = true;
+                              e.readNext();
                               }
                         else if (tag == "dirty") {
                               QMessageBox::StandardButton b = QMessageBox::question(0,
@@ -3359,6 +3360,7 @@ bool MuseScore::restoreSession(bool always)
                                  );
                               if (b != QMessageBox::Yes)
                                     return false;
+                              e.readNext();
                               }
                         else if (tag == "Score") {
                               QString name;
