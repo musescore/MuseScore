@@ -529,21 +529,37 @@ void Xml::tag(const char* name, const QWidget* g)
       }
 
 //---------------------------------------------------------
-//   xmlString
+//   toHtml
 //---------------------------------------------------------
 
-QString Xml::xmlString(const QString& ss)
+QString Xml::xmlString(const QString& s)
       {
-      QString s(ss);
-      s.replace('&',  "&amp;");
-      s.replace('<',  "&lt;");
-      s.replace('>',  "&gt;");
-      s.replace('\'', "&apos;");
-      s.replace('"',  "&quot;");
-      return s;
+      QString escaped;
+      escaped.reserve(s.size());
+      for (int i = 0; i < s.size(); ++i) {
+            QChar c = s.at(i);
+            switch(c.unicode()) {
+                  case '<':
+                        escaped.append(QLatin1String("&lt;"));
+                        break;
+                  case '>':
+                        escaped.append(QLatin1String("&gt;"));
+                        break;
+                  case '&':
+                        escaped.append(QLatin1String("&amp;"));
+                        break;
+                  case '\"':
+                        escaped.append(QLatin1String("&quot;"));
+                        break;
+                  default:
+                        escaped += QChar(c);
+                        break;
+                  }
+            }
+      return escaped;
       }
 
- //---------------------------------------------------------
+//---------------------------------------------------------
 //   dump
 //---------------------------------------------------------
 

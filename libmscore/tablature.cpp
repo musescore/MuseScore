@@ -275,6 +275,7 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
       return pitch;
       }
 
+#if 0
 //---------------------------------------------------------
 //   Read MusicXML
 //---------------------------------------------------------
@@ -327,6 +328,7 @@ void Tablature::readMusicXML(XmlReader& e)
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   Write MusicXML

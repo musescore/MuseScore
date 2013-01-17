@@ -85,9 +85,7 @@ class PageFormat : public QObject {
 
       QString name() const;
       void read(XmlReader&);
-      void readMusicXML(XmlReader&, qreal);
       void write(Xml&) const;
-      void writeMusicXML(Xml&, qreal) const;
       qreal evenLeftMargin() const        { return _evenLeftMargin;   }
       qreal oddLeftMargin() const         { return _oddLeftMargin;    }
       qreal evenTopMargin() const         { return _evenTopMargin;    }
