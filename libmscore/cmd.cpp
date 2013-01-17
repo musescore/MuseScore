@@ -1580,8 +1580,10 @@ bool Score::processMidiInput()
             _layoutAll = true;
             endCmd();
             //after relayout
-            foreach(MuseScoreView* v, viewer)
-                  v->adjustCanvasPosition(n, false);
+            if (n) {
+                  foreach(MuseScoreView* v, viewer)
+                        v->adjustCanvasPosition(n, false);
+                  }
             return true;
             }
       return false;

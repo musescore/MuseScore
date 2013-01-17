@@ -634,7 +634,7 @@ QString Xml::htmlToString(XmlReader& e)
       QString s;
       if (e.readNextStartElement()) {
             htmlToString(e, 0, &s);
-            printf("====HTML<%s>====\n", qPrintable(s));
+//            printf("====HTML<%s>====\n", qPrintable(s));
             e.skipCurrentElement();
             }
       return s;
