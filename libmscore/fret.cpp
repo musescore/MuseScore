@@ -493,7 +493,7 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
             func(data, _harmony);
       }
 
-
+#if 0
 //---------------------------------------------------------
 //   Read MusicXML
 //
@@ -558,6 +558,7 @@ void FretDiagram::readMusicXML(XmlReader& e)
                   e.unknown();
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   Write MusicXML

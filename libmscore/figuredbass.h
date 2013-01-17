@@ -16,6 +16,7 @@
 
 #include "segment.h"
 #include "text.h"
+#include "libmscore/figuredbass.h"
 
 /*---------------------------------------------------------
 NOTE ON ARCHITECTURE
@@ -54,6 +55,8 @@ so it is directly derived from Element and returns INVALID as type.
 FiguredBass might require formatting (discouraged, but might be necessary for very uncommon cases)
 and it is edited (via the normalized text); so it is derived from Text.
 ---------------------------------------------------------*/
+
+#define FBIDigitNone    0
 
 //---------------------------------------------------------
 //   @@ FiguredBassItem
@@ -133,7 +136,6 @@ class FiguredBassItem : public Element {
 
       void              setDisplayText(const QString& s)    { _displayText = s;       }
       // read / write MusicXML support
-      FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
       QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
    public:
@@ -142,6 +144,8 @@ class FiguredBassItem : public Element {
       ~FiguredBassItem();
 
       FiguredBassItem &operator=(const FiguredBassItem&);
+
+      FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
       // standard re-implemented virtual functions
       virtual FiguredBassItem*      clone() const     { return new FiguredBassItem(*this); }
@@ -152,7 +156,7 @@ class FiguredBassItem : public Element {
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
-      void              readMusicXML(XmlReader& de, bool paren, bool& extend);
+//      void              readMusicXML(XmlReader& de, bool paren, bool& extend);
       void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
       bool              startsWithParenthesis() const;
 
@@ -162,10 +166,13 @@ class FiguredBassItem : public Element {
 
       // getters / setters
       Modifier          prefix() const                { return _prefix;       }
+      void              setPrefix(const Modifier& v)  { _prefix = v;          }
       void              undoSetPrefix(Modifier pref);
       int               digit() const                 { return _digit;        }
+      void              setDigit(int val)             { _digit = val;         }
       void              undoSetDigit(int digit);
       Modifier          suffix() const                { return _suffix;       }
+      void              setSuffix(const Modifier& v)  { _suffix = v;          }
       void              undoSetSuffix(Modifier suff);
       bool              contLine() const              { return _contLine;     }
       void              undoSetContLine(bool val);
@@ -174,6 +181,13 @@ class FiguredBassItem : public Element {
       Parenthesis       parenth3()                    { return parenth[2];    }
       Parenthesis       parenth4()                    { return parenth[3];    }
       Parenthesis       parenth5()                    { return parenth[4];    }
+
+      void              setParenth1(Parenthesis v)    { parenth[0] = v;    }
+      void              setParenth2(Parenthesis v)    { parenth[1] = v;    }
+      void              setParenth3(Parenthesis v)    { parenth[2] = v;    }
+      void              setParenth4(Parenthesis v)    { parenth[3] = v;    }
+      void              setParenth5(Parenthesis v)    { parenth[4] = v;    }
+
       void              undoSetParenth1(Parenthesis par);
       void              undoSetParenth2(Parenthesis par);
       void              undoSetParenth3(Parenthesis par);
@@ -284,6 +298,8 @@ Q_INVOKABLE FiguredBassItem* addItem();
       virtual QVariant  getProperty(P_ID propertyId) const;
       virtual bool      setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant  propertyDefault(P_ID) const;
+
+      void appendItem(const FiguredBassItem& item) {  items.append(item); }
       };
 
 #endif

@@ -145,13 +145,24 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
                                             const QUrl& /* identifier */, const QSourceLocation& sourceLocation)
       {
       // convert description from html to text
-      XmlReader e(description);
-
-      if (e.readNextStartElement() != "html") {
+      QDomDocument desc;
+      QString contentError;
+      int contentLine;
+      int contentColumn;
+      if (!desc.setContent(description, false, &contentError, &contentLine,
+                           &contentColumn)) {
+            qDebug(qPrintable(QString("ValidatorMessageHandler: could not parse validation error line %1 column %2: %3")
+                              .arg(contentLine)
+                              .arg(contentColumn)
+                              .arg(contentError)));
+            return;
+            }
+      QDomElement e = desc.documentElement();
+      if (e.tagName() != "html") {
             qDebug("ValidatorMessageHandler: description is not html");
             return;
             }
-      QString descText = e.value();
+      QString descText = e.text();
 
       QString strType;
       switch (type) {
@@ -173,3 +184,63 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
             errors += "\n";
       errors += errorStr;
       }
+
+//---------------------------------------------------------
+//   printDomElementPath
+//---------------------------------------------------------
+
+static QString domElementPath(const QDomElement& e)
+      {
+      QString s;
+      QDomNode dn(e);
+      while (!dn.parentNode().isNull()) {
+            dn = dn.parentNode();
+            const QDomElement& e = dn.toElement();
+            const QString k(e.tagName());
+            if (!s.isEmpty())
+                  s += ":";
+            s += k;
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
+//   domError
+//---------------------------------------------------------
+
+void domError(const QDomElement& e)
+      {
+      QString m;
+      QString s = domElementPath(e);
+      if (!docName.isEmpty())
+            m = QString("<%1>:").arg(docName);
+      int ln = e.lineNumber();
+      if (ln != -1)
+            m += QString("line:%1 ").arg(ln);
+      int col = e.columnNumber();
+      if (col != -1)
+            m += QString("col:%1 ").arg(col);
+      m += QString("%1: Unknown Node <%2>, type %3").arg(s).arg(e.tagName()).arg(e.nodeType());
+      if (e.isText())
+            m += QString("  text node <%1>").arg(e.toText().data());
+      qDebug("%s", qPrintable(m));
+      }
+
+//---------------------------------------------------------
+//   domNotImplemented
+//---------------------------------------------------------
+
+void domNotImplemented(const QDomElement& e)
+      {
+      if (!MScore::debugMode)
+            return;
+      QString s = domElementPath(e);
+      if (!docName.isEmpty())
+            qDebug("<%s>:", qPrintable(docName));
+      qDebug("%s: Node not implemented: <%s>, type %d\n",
+         qPrintable(s), qPrintable(e.tagName()), e.nodeType());
+      if (e.isText())
+            qDebug("  text node <%s>\n", qPrintable(e.toText().data()));
+      }
+
+

@@ -90,7 +90,6 @@ class Beam : public Element {
       bool isEmpty() const                { return _elements.isEmpty(); }
       virtual void add(ChordRest* a);
       virtual void remove(ChordRest* a);
-      void writeMusicXml(Xml& xml, ChordRest* cr) const;
       virtual void move(qreal, qreal);
       virtual void draw(QPainter*) const;
       bool up() const                     { return _up; }

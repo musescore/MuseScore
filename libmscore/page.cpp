@@ -526,72 +526,6 @@ void PageFormat::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read
-//  <page-layout>
-//      <page-height>
-//      <page-width>
-//      <page-margins>
-//         <left-margin>28.3465</left-margin>
-//         <right-margin>28.3465</right-margin>
-//         <top-margin>28.3465</top-margin>
-//         <bottom-margin>56.6929</bottom-margin>
-//         </page-margins>
-//      </page-layout>
-//
-//    sizes are given in units of 1/10 spatium;
-//---------------------------------------------------------
-
-void PageFormat::readMusicXML(XmlReader& e, qreal conversion)
-      {
-      qreal _oddRightMargin  = 0.0;
-      qreal _evenRightMargin = 0.0;
-
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "page-margins") {
-                  QString type = e.attribute("type","both");
-                  qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        qreal val = e.readDouble() * conversion;
-                        if (tag == "left-margin")
-                              lm = val;
-                        else if (tag == "right-margin")
-                              rm = val;
-                        else if (tag == "top-margin")
-                              tm = val;
-                        else if (tag == "bottom-margin")
-                              bm = val;
-                        else
-                              e.unknown();
-                        }
-                  _twosided = type == "odd" || type == "even";
-                  if (type == "odd" || type == "both") {
-                        _oddLeftMargin   = lm;
-                        _oddRightMargin  = rm;
-                        _oddTopMargin    = tm;
-                        _oddBottomMargin = bm;
-                        }
-                  if (type == "even" || type == "both") {
-                        _evenLeftMargin   = lm;
-                        _evenRightMargin  = rm;
-                        _evenTopMargin    = tm;
-                        _evenBottomMargin = bm;
-                        }
-                  }
-            else if (tag == "page-height")
-                  _size.rheight() = e.readDouble() * conversion;
-            else if (tag == "page-width")
-                  _size.rwidth() = e.readDouble() * conversion;
-            else
-                  e.unknown();
-            }
-      qreal w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
-      qreal w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
-      _printableWidth = qMax(w1, w2);     // silently adjust right margins
-      }
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -624,39 +558,6 @@ void PageFormat::write(Xml& xml) const
       xml.tag("right-margin",  oddRightMargin() * t);
       xml.tag("top-margin",    oddTopMargin() * t);
       xml.tag("bottom-margin", oddBottomMargin() * t);
-      xml.etag();
-
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   writeMusicXML
-//---------------------------------------------------------
-
-void PageFormat::writeMusicXML(Xml& xml, qreal conversion) const
-      {
-      xml.stag("page-layout");
-
-      //qreal t = 2 * PPI * 10 / 9;
-
-      xml.tag("page-height", _size.height() * conversion);
-      xml.tag("page-width", _size.width() * conversion);
-      QString type("both");
-      if (_twosided) {
-            type = "even";
-            xml.stag(QString("page-margins type=\"%1\"").arg(type));
-            xml.tag("left-margin",   evenLeftMargin() * conversion);
-            xml.tag("right-margin",  evenRightMargin() * conversion);
-            xml.tag("top-margin",    evenTopMargin() * conversion);
-            xml.tag("bottom-margin", evenBottomMargin() * conversion);
-            xml.etag();
-            type = "odd";
-            }
-      xml.stag(QString("page-margins type=\"%1\"").arg(type));
-      xml.tag("left-margin",   oddLeftMargin() * conversion);
-      xml.tag("right-margin",  oddRightMargin() * conversion);
-      xml.tag("top-margin",    oddTopMargin() * conversion);
-      xml.tag("bottom-margin", oddBottomMargin() * conversion);
       xml.etag();
 
       xml.etag();

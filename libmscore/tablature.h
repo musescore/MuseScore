@@ -38,10 +38,12 @@ public:
       int         getPitch(int string, int fret) const;
       int         strings() const         { return stringTable.size(); }
       QList<int>  stringList() const      { return stringTable; }
+      QList<int>&  stringList()           { return stringTable; }
       int         frets() const           { return _frets; }
+      void        setFrets(int val)       { _frets = val; }
       void        read(XmlReader&);
       void        write(Xml&) const;
-      void        readMusicXML(XmlReader& de);
+//      void        readMusicXML(XmlReader& de);
       void        writeMusicXML(Xml& xml) const;
       };
 
