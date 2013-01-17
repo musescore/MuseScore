@@ -272,7 +272,6 @@ void Profile::write()
 
 void Profile::read()
       {
-#if 0 // TODOx
       if (_path.isEmpty() || !QFile(_path).exists()) {
             PaletteBox* paletteBox = mscore->getPaletteBox();
             paletteBox->clear();
@@ -281,43 +280,34 @@ void Profile::read()
             }
       QZipReader f(_path);
       QByteArray ba = f.fileData("META-INF/container.xml");
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(ba, false, &err, &line, &column)) {
-            QString error = QString("error reading profile container.xml at line %2 column %3: %4")
-               .arg(line).arg(column).arg(err);
-            QMessageBox::warning(0,
-                  QWidget::tr("MuseScore: Load Style failed:"),
-                  error,
-                  QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
+
+      XmlReader e(ba);
+
       // extract first rootfile
       QString rootfile = "";
       QList<QString> images;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() != "container") {
-                  domError(e);
-                  continue;
+      while (e.readNextStartElement()) {
+            if (e.name() != "container") {
+                  e.unknown();
+                  break;
                   }
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  if (ee.tagName() != "rootfiles") {
-                        domError(ee);
-                        continue;
+            while (e.readNextStartElement()) {
+                  if (e.name() != "rootfiles") {
+                        e.unknown();
+                        break;
                         }
-                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                        const QString& tag(eee.tagName());
-                        const QString& val(eee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
 
                         if (tag == "rootfile") {
                               if (rootfile.isEmpty())
-                                    rootfile = eee.attribute(QString("full-path"));
+                                    rootfile = e.attribute("full-path");
+                              e.readNext();
                               }
                         else if (tag == "file")
-                              images.append(val);
+                              images.append(e.readElementText());
                         else
-                              domError(eee);
+                              e.unknown();
                         }
                   }
             }
@@ -333,40 +323,28 @@ void Profile::read()
             }
 
       ba = f.fileData(rootfile);
-      if (!doc.setContent(ba, false, &err, &line, &column)) {
-            QString error = QString("error reading profile %1 at line %2 column %3: %4")
-               .arg(_path).arg(line).arg(column).arg(err);
-            QMessageBox::warning(0,
-                  QWidget::tr("MuseScore: Load Style failed:"),
-                  error,
-                  QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
+      e.clear();
+      e.addData(ba);
 
-      docName = _path;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  QString version = e.attribute(QString("version"));
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
                   QStringList sl = version.split('.');
                   // _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        QString val(ee.text());
-                        if (tag == "Profile")
-                              read(ee);
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Profile")
+                              read(e);
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
             }
-#endif
       }
 
 void Profile::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-
             if (tag == "name")
                   _name = e.readElementText();
             else if (tag == "PaletteBox") {
