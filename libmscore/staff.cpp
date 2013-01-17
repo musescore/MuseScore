@@ -432,10 +432,10 @@ void Staff::read(XmlReader& e)
                   _keymap->read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
-                  b._bracket = BracketType(e.intAttribute("type", -1));
+                  b._bracket     = BracketType(e.intAttribute("type", -1));
                   b._bracketSpan = e.intAttribute("span", 0);
                   _brackets.append(b);
-                  e.skipCurrentElement();
+                  e.readNext();
                   }
             else if (tag == "barLineSpan") {
                   _barLineSpan = e.readInt();
