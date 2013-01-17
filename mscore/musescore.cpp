@@ -2024,12 +2024,10 @@ static bool processNonGui()
                         }
                   return true;
                   }
-#if 0 // TODOx
             if (fn.endsWith(".xml"))
                   return saveXml(cs, fn);
             if (fn.endsWith(".mxl"))
                   return saveMxl(cs, fn);
-#endif
             if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))

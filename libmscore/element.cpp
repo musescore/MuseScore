@@ -78,6 +78,7 @@
 #include "rehearsalmark.h"
 #include "notedot.h"
 #include "textframe.h"
+#include "image.h"
 
 // extern bool showInvisible;
 
@@ -1295,13 +1296,13 @@ Element* Element::create(ElementType type, Score* score)
             case MEASURE:           return new Measure(score);
             case TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
             case OSSIA:               return new Ossia(score);
+            case IMAGE:             return new Image(score);
 
             case TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
 
             case SLUR_SEGMENT:
             case STEM_SLASH:
             case LINE:
-            case IMAGE:
             case TIE:
             case PAGE:
             case BEAM:

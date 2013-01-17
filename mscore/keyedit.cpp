@@ -189,21 +189,11 @@ void KeyCanvas::mouseReleaseEvent(QMouseEvent*)
 
 void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
       {
-#if 0 // TODOx
       const QMimeData* data = event->mimeData();
       if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray a = data->data(mimeSymbolFormat);
 
-            QDomDocument doc;
-            int line, column;
-            QString err;
-            if (!doc.setContent(a, &err, &line, &column)) {
-                  qDebug("error reading drag data at %d/%d: %s\n<%s>\n",
-                     line, column, err.toLatin1().data(), a.data());
-                  return;
-                  }
-            docName = "--";
-            QDomElement e = doc.documentElement();
+            XmlReader e(a);
 
             QPointF dragOffset;
             Fraction duration;
@@ -224,7 +214,6 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
                         qDebug("   %s\n", qPrintable(s));
                   }
             }
-#endif
       }
 
 //---------------------------------------------------------
