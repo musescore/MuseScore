@@ -59,6 +59,8 @@ bool LineSegment::readProperties(XmlReader& e)
                   setUserOff(QPointF());
                   setReadPos(e.readPoint() * _spatium);
                   }
+            else
+                  e.readNext();
             }
       else if (tag == "pos") {
             QPointF rp = e.readPoint() * spatium();

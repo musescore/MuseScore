@@ -574,7 +574,6 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-printf("read container <%s>\n", tag.toUtf8().data());
             if (tag == "rootfile") {
                   rootfile = e.attribute("full-path");
                   e.skipCurrentElement();
@@ -582,7 +581,6 @@ printf("read container <%s>\n", tag.toUtf8().data());
             else if (tag == "file") {
                   QString image(e.readElementText());
                   QByteArray dbuf = uz.fileData(image);
-printf("read file <%s> %d bytes\n", qPrintable(image), dbuf.size());
                   imageStore.add(image, dbuf);
                   }
             }
