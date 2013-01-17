@@ -76,7 +76,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "slashStyle")
-                  ;                       // obsolete: setSlashStyle(v);
+                  e.skipCurrentElement();       // obsolete: setSlashStyle(v);
             else if (tag == "cleflist")
                   _clefList.read(e, _score);
             else if (tag == "keylist")
@@ -86,6 +86,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
                   b._bracket = BracketType(e.intAttribute("type", -1));
                   b._bracketSpan = e.intAttribute("span", 0);
                   _brackets.append(b);
+                  e.readNext();
                   }
             else if (tag == "barLineSpan")
                   _barLineSpan = e.readInt();
@@ -187,7 +188,9 @@ Score::FileError Score::read114(XmlReader& e)
       {
       spanner = 0;
 
+      QList<Spanner*> spannerList;
       QList<ClefList*> clefListList;
+
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
 
@@ -320,7 +323,10 @@ Score::FileError Score::read114(XmlReader& e)
                 || (tag == "Volta")
                 || (tag == "Trill")
                 || (tag == "Pedal")) {
-                  ;
+                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag.toString(), this));
+                  s->setTrack(0);
+                  s->read(e);
+                  spannerList.append(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -401,77 +407,62 @@ Score::FileError Score::read114(XmlReader& e)
             }
       qDeleteAll(clefListList);
 
-#if 0 // TODOx
-      //
-      // scan spanner in a II. pass
-      //
-      for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-            const QString& tag(ee.tagName());
-            if ((tag == "HairPin")
-                || (tag == "Ottava")
-                || (tag == "TextLine")
-                || (tag == "Volta")
-                || (tag == "Trill")
-                || (tag == "Pedal")) {
-                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
-                  s->setTrack(0);
-                  s->read(ee);
+      foreach(Spanner* s, spannerList) {
+            s->setTrack(0);
 
-                 if ((tag == "Ottava")
-                  || (tag == "TextLine")
-                  || (tag == "Volta")
-                  || (tag == "Pedal")) {
+            if (s->type() == Element::OTTAVA
+                  || (s->type() == Element::TEXTLINE)
+                  || (s->type() == Element::VOLTA)
+                  || (s->type() == Element::PEDAL)) {
                       TextLine* tl = static_cast<TextLine*>(s);
                       tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
                       tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
                       tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                       }
 
-                  int tick2 = s->__tick2();
-                  Segment* s1 = tick2segment(curTick);
-                  Segment* s2 = tick2segment(tick2);
-                  if (s1 == 0 || s2 == 0) {
-                        qDebug("cannot place %s at tick %d - %d",
-                           s->name(), s->__tick1(), tick2);
-                        continue;
+            int tick2 = s->__tick2();
+            Segment* s1 = tick2segment(curTick);
+            Segment* s2 = tick2segment(tick2);
+            if (s1 == 0 || s2 == 0) {
+                  qDebug("cannot place %s at tick %d - %d",
+                     s->name(), s->__tick1(), tick2);
+                  continue;
+                  }
+            if (s->type() == Element::VOLTA) {
+                  Volta* volta = static_cast<Volta*>(s);
+                  volta->setAnchor(Spanner::ANCHOR_MEASURE);
+                  volta->setStartMeasure(s1->measure());
+                  Measure* m2 = s2->measure();
+                  if (s2->tick() == m2->tick())
+                        m2 = m2->prevMeasure();
+                  volta->setEndMeasure(m2);
+                  s1->measure()->add(s);
+                  int n = volta->spannerSegments().size();
+                  if (n) {
+                        // volta->setYoff(-styleS(ST_voltaHook).val());
+                        // LineSegment* ls = volta->segmentAt(0);
+                        // ls->setReadPos(QPointF());
                         }
-                  if (s->type() == Element::VOLTA) {
-                        Volta* volta = static_cast<Volta*>(s);
-                        volta->setAnchor(Spanner::ANCHOR_MEASURE);
-                        volta->setStartMeasure(s1->measure());
-                        Measure* m2 = s2->measure();
-                        if (s2->tick() == m2->tick())
-                              m2 = m2->prevMeasure();
-                        volta->setEndMeasure(m2);
-                        s1->measure()->add(s);
-                        int n = volta->spannerSegments().size();
-                        if (n) {
-                              // volta->setYoff(-styleS(ST_voltaHook).val());
-                              // LineSegment* ls = volta->segmentAt(0);
-                              // ls->setReadPos(QPointF());
-                              }
-                        }
-                  else {
-                        s->setStartElement(s1);
-                        s->setEndElement(s2);
-                        s1->add(s);
-                        }
-                  if (s->type() == Element::OTTAVA) {
-                        // fix ottava position
-                        Ottava* volta = static_cast<Ottava*>(s);
-                        int n = volta->spannerSegments().size();
-                        for (int i = 0; i < n; ++i) {
-                              LineSegment* seg = volta->segmentAt(i);
-                              if (!seg->userOff().isNull())
-                                    seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
-                              }
+                  }
+            else {
+                  s->setStartElement(s1);
+                  s->setEndElement(s2);
+                  s1->add(s);
+                  }
+            if (s->type() == Element::OTTAVA) {
+                  // fix ottava position
+                  Ottava* volta = static_cast<Ottava*>(s);
+                  int n = volta->spannerSegments().size();
+                  for (int i = 0; i < n; ++i) {
+                        LineSegment* seg = volta->segmentAt(i);
+                        if (!seg->userOff().isNull())
+                              seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
                         }
                   }
             }
-#endif
 
       // check slurs
-      for(Spanner* s = spanner; s; s = s->next()) {
+      for (Spanner* s = spanner; s; s = s->next()) {
             if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);

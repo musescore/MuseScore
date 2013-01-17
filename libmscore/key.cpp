@@ -212,6 +212,7 @@ void KeyList::read(XmlReader& e, Score* cs)
                   else
                         ke.setAccidentalType(e.intAttribute("idx"));
                   (*this)[cs->fileDivision(tick)] = ke;
+                  e.readNext();
                   }
             else
                   e.unknown();
