@@ -631,11 +631,12 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
 
 QString Xml::htmlToString(XmlReader& e)
       {
-      e.readNextStartElement();
       QString s;
-      htmlToString(e, 0, &s);
-//      printf("====HTML<%s>====\n", qPrintable(s));
-      e.skipCurrentElement();
+      if (e.readNextStartElement()) {
+            htmlToString(e, 0, &s);
+            printf("====HTML<%s>====\n", qPrintable(s));
+            e.skipCurrentElement();
+            }
       return s;
       }
 

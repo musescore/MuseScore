@@ -278,7 +278,7 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "pan")        // obsolete
                   pan = e.readInt();
             else if (tag == "midiChannel")      // obsolete
-                  ;
+                  e.skipCurrentElement();
             else
                   e.unknown();
             }
@@ -402,7 +402,8 @@ void Channel::read(XmlReader& e)
                   program = e.intAttribute("value", -1);
                   if (program == -1)
                         program = e.readInt();
-                  e.skipCurrentElement();
+                  else
+                        e.readNext();
                   }
             else if (tag == "controller") {
                   int value = e.intAttribute("value", 0);
@@ -437,7 +438,7 @@ void Channel::read(XmlReader& e)
                               }
                               break;
                         }
-                  e.skipCurrentElement();
+                  e.readNext();
                   }
             else if (tag == "Articulation") {
                   MidiArticulation a;
