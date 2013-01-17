@@ -108,7 +108,6 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
 
 void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       {
-#if 0 // TODOx
       if (MScore::debugMode)
             qDebug("dragEnterEvent");
       double _spatium = score()->spatium();
@@ -130,71 +129,15 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (MScore::debugMode)
                   qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
 
-            QDomDocument doc;
-            int line, column;
-            QString err;
-            if (!doc.setContent(a, &err, &line, &column)) {
-                  qDebug("error reading drag data at %d/%d: %s\n<%s>",
-                     line, column, err.toLatin1().data(), a.data());
-                  return;
-                  }
-            docName = "--";
-            QDomElement e = doc.documentElement();
-
+            XmlReader e(a);
             dragOffset = QPoint();
             Fraction duration;  // dummy
             Element::ElementType type = Element::readType(e, &dragOffset, &duration);
 
-            Element* el = 0;
-            if (type == Element::IMAGE) {
-                  // look ahead for image type
-                  QString path;
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        if (tag == "path") {
-                              path = ee.text();
-                              break;
-                              }
-                        }
-                  Image* image = 0;
-                  QString lp(path.toLower());
-
-                  if (lp.endsWith(".svg"))
-                        image = new SvgImage(score());
-                  else
-                        if (lp.endsWith(".jpg")
-                     || lp.endsWith(".png")
-                     || lp.endsWith(".gif")
-                     || lp.endsWith(".xpm")
-                        )
-                        image = new RasterImage(score());
-                  else {
-                        qDebug("unknown image format <%s>", path.toLatin1().data());
-                        }
-                  el = image;
-                  }
-            else {
-                  el = Element::create(type, score());
-                  if (el) {
-                        if (type == Element::BAR_LINE || type == Element::ARPEGGIO || type == Element::BRACKET)
-                              el->setHeight(_spatium * 5);
-                        else if (el->isText()) {
-#if 0
-                              Text* text = static_cast<Text*>(el);
-                              // QString sname = text->styleName();
-                              // if (!text->styled() && !sname.isEmpty()) {         // TODO
-                              if (!text->styled()) {
-                                    // check if we can transform text into styled text
-                                    MStyle* s = score()->style();
-                                    TextStyleType st = s->textStyleType(sname);
-                                    if (st != TEXT_STYLE_INVALID)
-                                          text->setTextStyle(st);
-                                    }
-#endif
-                              }
-                        }
-                  }
+            Element* el = Element::create(type, score());
             if (el) {
+                  if (type == Element::BAR_LINE || type == Element::ARPEGGIO || type == Element::BRACKET)
+                        el->setHeight(_spatium * 5);
                   dragElement = el;
                   dragElement->setParent(0);
                   dragElement->read(e);
@@ -228,7 +171,6 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       qDebug("unknown drop format: formats:");
       foreach(const QString& s, formats)
             qDebug("  <%s>", qPrintable(s));
-#endif
       }
 
 //---------------------------------------------------------
@@ -402,7 +344,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
-#if 0 // TODOx
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
       DropData dropData;
@@ -544,21 +485,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             QUrl u = ul.front();
             if (u.scheme() == "file") {
                   QFileInfo fi(u.path());
-                  Image* s = 0;
-                  QString suffix = fi.suffix().toLower();
-                  if (suffix == "svg")
-                        s = new SvgImage(score());
-                  else if (suffix == "jpg"
-                     || suffix == "png"
-                     || suffix == "gif"
-                     || suffix == "xpm"
-                     )
-                        s = new RasterImage(score());
-                  else {
-                        if (MScore::debugMode)
-                              qDebug("drop: unknown suffix %s\n", qPrintable(suffix));
-                        return;
-                        }
+                  Image* s = new Image(score());
                   _score->startCmd();
                   QString str(u.toLocalFile());
                   s->load(str);
@@ -615,15 +542,6 @@ if (MScore::debugMode)
 
 // qDebug("drop <%s>", data.data());
 
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(data, &err, &line, &column)) {
-            qWarning("error reading drag data at %d/%d: %s\n   %s\n",
-               line, column, qPrintable(err), data.data());
-            return;
-            }
-      docName = "--";
       Element* el = elementAt(pos);
       if (el == 0 || el->type() != Element::MEASURE) {
             setDropTarget(0);
@@ -636,6 +554,7 @@ if (MScore::debugMode)
             }
       else if (etype == Element::MEASURE_LIST || etype == Element::STAFF_LIST) {
             _score->startCmd();
+            XmlReader xml(data);
             System* s = measure->system();
             int idx   = s->y2staff(pos.y());
             if (idx != -1) {
@@ -643,7 +562,7 @@ if (MScore::debugMode)
                   // assume there is always a ChordRest segment
                   while (seg->subtype() != Segment::SegChordRest)
                         seg = seg->next();
-                  score()->pasteStaff(doc.documentElement(), (ChordRest*)(seg->element(idx * VOICES)));
+                  score()->pasteStaff(xml, (ChordRest*)(seg->element(idx * VOICES)));
                   }
             event->acceptProposedAction();
             _score->setLayoutAll(true);
@@ -651,7 +570,6 @@ if (MScore::debugMode)
             mscore->endCmd();
             }
       setDropTarget(0); // this also resets dropRectangle and dropAnchor
-#endif
       }
 
 //---------------------------------------------------------

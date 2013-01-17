@@ -698,7 +698,6 @@ void Palette::dragMoveEvent(QDragMoveEvent* ev)
 
 void Palette::dropEvent(QDropEvent* event)
       {
-#if 0 // TODOx
       Element* e = 0;
       QString name;
 
@@ -708,18 +707,7 @@ void Palette::dropEvent(QDropEvent* event)
             QUrl u = ul.front();
             if (u.scheme() == "file") {
                   QFileInfo fi(u.path());
-                  Image* s = 0;
-                  QString suffix(fi.suffix().toLower());
-                  if (suffix == "svg")
-                        s = new SvgImage(gscore);
-                  else if (suffix == "jpg"
-                     || suffix == "png"
-                     || suffix == "gif"
-                     || suffix == "xpm"
-                        )
-                        s = new RasterImage(gscore);
-                  else
-                        return;
+                  Image* s = new Image(gscore);
                   QString filePath(u.toLocalFile());
                   s->load(filePath);
                   e = s;
@@ -729,63 +717,35 @@ void Palette::dropEvent(QDropEvent* event)
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray data(event->mimeData()->data(mimeSymbolFormat));
-            XmlReader e(data);
+            XmlReader xml(data);
             QPointF dragOffset;
             Fraction duration;
-            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+            Element::ElementType type = Element::readType(xml, &dragOffset, &duration);
 
-            if (type == Element::IMAGE) {
-                  // look ahead for image type
-                  QString path;
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "path") {
-                              path = e.value();
-                              break;
-                              }
-                        }
-                  Image* image = 0;
-                  QString s(path.toLower());
-                  if (s.endsWith(".svg"))
-                        image = new SvgImage(gscore);
-                  else
-                        if (s.endsWith(".jpg")
-                     || s.endsWith(".png")
-                     || s.endsWith(".gif")
-                     || s.endsWith(".xpm")
-                        )
-                        image = new RasterImage(gscore);
-                  else {
-                        qDebug("Palette::dropEvent(): unknown image format <%s>", qPrintable(path));
-                        }
-                  if (image) {
-                        image->read(l);
-                        e = image;
-                        }
-                  }
-            else if (type == Element::SYMBOL) {
-                  Symbol* s = new Symbol(gscore);
-                  s->read(el);
-                  e = s;
+            if (type == Element::SYMBOL) {
+                  Symbol* symbol = new Symbol(gscore);
+                  symbol->read(xml);
+                  e = symbol;
                   }
             else {
                   e = Element::create(type, gscore);
-                  if (e)
-                        e->read(el);
-                  if (e->type() == Element::TEXTLINE
-                     || e->type() == Element::HAIRPIN
-                     || e->type() == Element::VOLTA
-                     || e->type() == Element::OTTAVA
-                     || e->type() == Element::PEDAL
-                     || e->type() == Element::TRILL
-                     ) {
-                        SLine* tl = static_cast<SLine*>(e);
-                        tl->setLen(gscore->spatium() * 7);
-                        tl->setTrack(0);
-                        }
-                  else if (e->type() == Element::SLUR || e->type() == Element::TIE) {
-                        SlurTie* st = static_cast<SlurTie*>(e);
-                        st->setTrack(0);
+                  if (e) {
+                        e->read(xml);
+                        if (e->type() == Element::TEXTLINE
+                           || e->type() == Element::HAIRPIN
+                           || e->type() == Element::VOLTA
+                           || e->type() == Element::OTTAVA
+                           || e->type() == Element::PEDAL
+                           || e->type() == Element::TRILL
+                           ) {
+                              SLine* tl = static_cast<SLine*>(e);
+                              tl->setLen(gscore->spatium() * 7);
+                              tl->setTrack(0);
+                              }
+                        else if (e->type() == Element::SLUR || e->type() == Element::TIE) {
+                              SlurTie* st = static_cast<SlurTie*>(e);
+                              st->setTrack(0);
+                              }
                         }
                   }
             }
@@ -823,7 +783,6 @@ void Palette::dropEvent(QDropEvent* event)
             resize(QSize(width(), heightForWidth(width())));
             emit changed();
             }
-#endif
       }
 
 //---------------------------------------------------------
@@ -906,50 +865,39 @@ bool Palette::read(QFile* qf)
 
 void Palette::read(const QString& p)
       {
-#if 0 // TODOx
       QString path(p);
       if (!path.endsWith(".mpal"))
             path += ".mpal";
 
       QZipReader f(path);
       QByteArray ba = f.fileData("META-INF/container.xml");
-      QDomDocument doc;
-      int line, column;
-      QString err;
-      if (!doc.setContent(ba, false, &err, &line, &column)) {
-            QString error = QString("error reading palette container.xml at line %2 column %3: %4")
-               .arg(line).arg(column).arg(err);
-            QMessageBox::warning(0,
-                  QWidget::tr("MuseScore: Load Palette failed:"),
-                  error,
-                  QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
+
+      XmlReader e(ba);
       // extract first rootfile
       QString rootfile = "";
       QList<QString> images;
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() != "container") {
-                  domError(e);
-                  continue;
+      while (e.readNextStartElement()) {
+            if (e.name() != "container") {
+                  e.unknown();
+                  break;;
                   }
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                  if (ee.tagName() != "rootfiles") {
-                        domError(ee);
-                        continue;
+            while (e.readNextStartElement()) {
+                  if (e.name() != "rootfiles") {
+                        e.unknown();
+                        break;
                         }
-                  for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                        const QString& tag(eee.tagName());
-                        const QString& val(eee.text());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
 
                         if (tag == "rootfile") {
                               if (rootfile.isEmpty())
-                                    rootfile = eee.attribute(QString("full-path"));
+                                    rootfile = e.attribute("full-path");
+                              e.readNext();
                               }
                         else if (tag == "file")
-                              images.append(val);
+                              images.append(e.readElementText());
                         else
-                              domError(eee);
+                              e.unknown();
                         }
                   }
             }
@@ -965,35 +913,28 @@ void Palette::read(const QString& p)
             }
 
       ba = f.fileData(rootfile);
-      if (!doc.setContent(ba, false, &err, &line, &column)) {
-            QString error = QString("error reading profile %1 at line %2 column %3: %4")
-               .arg(path).arg(line).arg(column).arg(err);
-            QMessageBox::warning(0,
-                  QWidget::tr("MuseScore: Load Style failed:"),
-                  error,
-                  QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
-      for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "museScore") {
-                  QString version = e.attribute(QString("version"));
+      e.clear();
+      e.addData(ba);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
                   QStringList sl = version.split('.');
                   int versionId = sl[0].toInt() * 100 + sl[1].toInt();
                   gscore->setMscVersion(versionId);
 
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        if (tag == "Palette") {
-                              QString name = ee.attribute("name", "");
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Palette") {
+                              QString name = e.attribute("name");
                               setName(name);
-                              read(ee);
+                              read(e);
                               }
                         else
-                              domError(ee);
+                              e.unknown();
                         }
                   }
+            else
+                  e.unknown();
             }
-#endif
       }
 
 //---------------------------------------------------------
@@ -1115,38 +1056,8 @@ void Palette::read(XmlReader& e)
                               yoffset = e.readDouble();
                         else if (t == "mag")
                               mag = e.readDouble();
-//TODOx                        else if (t == "tag")
+//TODOxx                        else if (t == "tag")
 //                              tag = e.value();
-                        else if (t == "Image") {
-                              // look ahead for image type
-#if 0 // TODOx
-                              QString path;
-                              while (e.readNextStartElement()) {
-                                    if (e.name() == "path") {
-                                          path = e.value();
-                                          break;
-                                          }
-                                    }
-                              Image* image = 0;
-                              QString s(path.toLower());
-                              if (s.endsWith(".svg"))
-                                    image = new SvgImage(gscore);
-                              else
-                                    if (s.endsWith(".jpg")
-                                 || s.endsWith(".png")
-                                 || s.endsWith(".gif")
-                                 || s.endsWith(".xpm")
-                                    )
-                                    image = new RasterImage(gscore);
-                              else {
-                                    qDebug("Palette::read: unknown image format <%s>", path.toLatin1().data());
-                                    }
-                              if (image) {
-                                    image->read(ee);
-                                    append(image, name);
-                                    }
-#endif
-                              }
                         else {
                               Element* element = Element::name2Element(t.toString(), gscore);
                               if (element == 0) {
