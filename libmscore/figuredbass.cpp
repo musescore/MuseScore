@@ -18,8 +18,6 @@
 #include "system.h"
 #include "segment.h"
 
-#define FBIDigitNone    0
-
 // the array of configured fonts
 static QList<FiguredBassFont> g_FBFonts;
 
@@ -768,6 +766,7 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 // node instead of for each individual <figure> node.
 //---------------------------------------------------------
 
+#if 0
 void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
       {
       // read the <figure> node de
@@ -807,6 +806,7 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
                   parenth[1] = ParenthesisRoundClosed; // after prefix
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   Write MusicXML
@@ -1476,6 +1476,7 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
 // Set extend to true if extend elements were found
 //---------------------------------------------------------
 
+#if 0
 bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
       {
       extend = false;
@@ -1520,6 +1521,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
       bool res = !normalizedText.isEmpty();
       return res;
       }
+#endif
 
 //---------------------------------------------------------
 //   hasParentheses

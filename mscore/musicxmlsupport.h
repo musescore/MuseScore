@@ -132,4 +132,7 @@ private:
       QString errors;
       };
 
+extern void domError(const QDomElement&);
+extern void domNotImplemented(const QDomElement&);
+
 #endif

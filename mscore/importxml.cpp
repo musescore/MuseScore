@@ -1144,6 +1144,62 @@ static void determineMeasureStart(const QVector<int>& ml, QVector<int>& ms)
 #endif
       }
 
+//---------------------------------------------------------
+//   readPageFormat
+//---------------------------------------------------------
+
+static void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
+      {
+      qreal _oddRightMargin  = 0.0;
+      qreal _evenRightMargin = 0.0;
+      QSizeF size;
+
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            if (tag == "page-margins") {
+                  QString type = e.attribute("type","both");
+                  qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
+                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                        const QString& tag(ee.tagName());
+                        qreal val = ee.text().toDouble() * conversion;
+                        if (tag == "left-margin")
+                              lm = val;
+                        else if (tag == "right-margin")
+                              rm = val;
+                        else if (tag == "top-margin")
+                              tm = val;
+                        else if (tag == "bottom-margin")
+                              bm = val;
+                        else
+                              domError(ee);
+                        }
+                  pf->setTwosided(type == "odd" || type == "even");
+                  if (type == "odd" || type == "both") {
+                        pf->setOddLeftMargin(lm);
+                        _oddRightMargin = rm;
+                        pf->setOddTopMargin(tm);
+                        pf->setOddBottomMargin(bm);
+                        }
+                  if (type == "even" || type == "both") {
+                        pf->setEvenLeftMargin(lm);
+                        _evenRightMargin = rm;
+                        pf->setEvenTopMargin(tm);
+                        pf->setEvenBottomMargin(bm);
+                        }
+                  }
+            else if (tag == "page-height")
+                  size.rheight() = val.toDouble() * conversion;
+            else if (tag == "page-width")
+                  size.rwidth() = val.toDouble() * conversion;
+            else
+                  domError(e);
+            }
+      pf->setSize(size);
+      qreal w1 = size.width() - pf->oddLeftMargin() - _oddRightMargin;
+      qreal w2 = size.width() - pf->evenLeftMargin() - _evenRightMargin;
+      pf->setPrintableWidth(qMax(w1, w2));     // silently adjust right margins
+      }
 
 //---------------------------------------------------------
 //   scorePartwise
@@ -1313,7 +1369,7 @@ void MusicXml::scorePartwise(QDomElement ee)
 
                   if (preferences.musicxmlImportLayout) {
                         PageFormat pf;
-                        pf.readMusicXML(pageLayoutElement, millimeter / (tenths * INCH) );
+                        readPageFormat(&pf, pageLayoutElement, millimeter / (tenths * INCH));
                         score->setPageFormat(pf);
                         }
                   score->setDefaultsRead(true); // TODO only if actually succeeded ?
@@ -2108,6 +2164,108 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       }
 
 //---------------------------------------------------------
+//   readFiguredBassItem
+//---------------------------------------------------------
+
+static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
+   bool paren, bool& extend)
+      {
+      // read the <figure> node de
+      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            int   iVal = val.toInt();
+            if (tag == "extend")
+                  extend = true;
+            else if (tag == "figure-number") {
+                  // MusicXML spec states figure-number is a number
+                  // MuseScore can only handle single digit
+                  if (1 <= iVal && iVal <= 9)
+                        fgi->setDigit(iVal);
+                  }
+            else if (tag == "prefix")
+                  fgi->setPrefix(fgi->MusicXML2Modifier(val));
+            else if (tag == "suffix")
+                  fgi->setSuffix(fgi->MusicXML2Modifier(val));
+            else
+                  domError(e);
+            }
+      // set parentheses
+      if (paren) {
+            // parenthesis open
+            if (fgi->prefix() != FiguredBassItem::ModifierNone)
+                  fgi->setParenth1(FiguredBassItem::ParenthesisRoundOpen); // before prefix
+            else if (fgi->digit() != FBIDigitNone)
+                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundOpen); // before digit
+            else if (fgi->suffix() != FiguredBassItem::ModifierNone)
+                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundOpen); // before suffix
+            // parenthesis close
+            if (fgi->suffix() != FiguredBassItem::ModifierNone)
+                  fgi->setParenth4(FiguredBassItem::ParenthesisRoundClosed); // after suffix
+            else if (fgi->digit() != FBIDigitNone)
+                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundClosed); // after digit
+            else if (fgi->prefix() != FiguredBassItem::ModifierNone)
+                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundClosed); // after prefix
+            }
+      }
+
+//---------------------------------------------------------
+//   Read MusicXML
+//
+// Set the FiguredBass state based on the MusicXML <figured-bass> node de.
+// Note that onNote and ticks must be set by the MusicXML importer,
+// as the required context is not present in the items DOM tree.
+// Exception: if a <duration> element is present, tick can be set.
+// Return true if valid, non-empty figure(s) are found
+// Set extend to true if extend elements were found
+//---------------------------------------------------------
+
+static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, bool& extend)
+      {
+      extend = false;
+      bool parentheses = (de.attribute("parentheses") == "yes");
+      QString normalizedText;
+      int idx = 0;
+      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            const QString& val(e.text());
+            if (tag == "duration") {
+                  bool ok = true;
+                  int duration = val.toInt(&ok);
+                  if (ok) {
+                        duration *= MScore::division;
+                        duration /= divisions;
+                        fb->setTicks(duration);
+                        }
+                  else
+                        qDebug("MusicXml-Import: bad duration value: <%s>",
+                               qPrintable(val));
+                  }
+            else if (tag == "figure") {
+                  bool figureExtend = false;
+                  FiguredBassItem * pItem = new FiguredBassItem(fb->score(), idx++);
+                  pItem->setTrack(fb->track());
+                  pItem->setParent(fb);
+                  readFiguredBassItem(pItem, e, parentheses, figureExtend);
+                  if (figureExtend)
+                        extend = true;
+                  fb->appendItem(*pItem);
+                  // add item normalized text
+                  if(!normalizedText.isEmpty())
+                        normalizedText.append('\n');
+                  normalizedText.append(pItem->normalizedText());
+                  }
+            else {
+                  domError(e);
+                  return false;
+                  }
+            }
+      fb->setText(normalizedText);                  // this is the text to show while editing
+      bool res = !normalizedText.isEmpty();
+      return res;
+      }
+
+//---------------------------------------------------------
 //   xmlMeasure
 //---------------------------------------------------------
 
@@ -2371,7 +2529,8 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                         figBassExtend = false;
                         bool mustkeep = false;
                         figBass = new FiguredBass(score);
-                        mustkeep = figBass->readMusicXML(e, divisions, figBassExtend);
+                        // mustkeep = figBass->readMusicXML(e, divisions, figBassExtend);
+                        mustkeep = readFigBass(figBass, e, divisions, figBassExtend);
                         // qDebug("xmlMeaure: fb mustkeep %d extend %d", mustkeep, figBassExtend);
                         if (!mustkeep) {
                               delete figBass;
@@ -3187,6 +3346,60 @@ static void setStaffLines(Score* score, int staffIdx, int stafflines)
       }
 
 //---------------------------------------------------------
+//   readTablature
+//---------------------------------------------------------
+
+static void readTablature(Tablature* t, QDomElement de)
+      {
+      t->setFrets(25);
+
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            int val = e.text().toInt();
+            if (tag == "staff-lines") {
+                  if (val > 0) {
+                        // resize the string table and init with zeroes
+                        t->stringList() = QVector<int>(val).toList();
+                        }
+                  else
+                        qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
+                  }
+            else if (tag == "staff-tuning") {
+                  int     line   = e.attribute("line").toInt();
+                  QString step;
+                  int     alter  = 0;
+                  int     octave = 0;
+                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                        const QString& tag(ee.tagName());
+                        int val = ee.text().toInt();
+                        if (tag == "tuning-alter")
+                              alter = val;
+                        else if (tag == "tuning-octave")
+                              octave = val;
+                        else if (tag == "tuning-step")
+                              step = ee.text();
+                        else
+                              domError(ee);
+                        }
+                  if (0 < line && line <= t->stringList().size()) {
+                        int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
+                        if (pitch >= 0)
+                              t->stringList()[line - 1] = pitch;
+                        else
+                              qDebug("Tablature::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
+                                     line, qPrintable(step), alter, octave);
+                        }
+                  }
+            else if (tag == "capo") {
+                  ; // not supported: silently ignored
+                  }
+            else {
+                  ; // others silently ignored
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   xmlStaffDetails
 //---------------------------------------------------------
 
@@ -3215,7 +3428,7 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
             setStaffLines(score, staffIdx, stafflines);
 
       if (t) {
-            t->readMusicXML(e);
+            readTablature(t, e);
             Instrument* i = score->staff(staff)->part()->instr();
             i->setTablature(t);
             }
@@ -5098,6 +5311,55 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 #endif
       }
 
+//---------------------------------------------------------
+//   readFretDiagram
+//---------------------------------------------------------
+
+static void readFretDiagram(FretDiagram* fd, QDomElement de)
+      {
+       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            const QString& tag(e.tagName());
+            int val = e.text().toInt();
+            if (tag == "frame-frets") {
+                  if (val > 0)
+                        fd->setFrets(val);
+                  else
+                        qDebug("FretDiagram::readMusicXML: illegal frame-fret %d", val);
+                  }
+            else if (tag == "frame-note") {
+                  int fret   = -1;
+                  int string = -1;
+                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                        const QString& tag(ee.tagName());
+                        int val = ee.text().toInt();
+                        if (tag == "fret")
+                              fret = val;
+                        else if (tag == "string")
+                              string = val;
+                        else
+                              domError(ee);
+                        }
+                  qDebug("FretDiagram::readMusicXML string %d fret %d", string, fret);
+                  if (string > 0) {
+                        if (fret == 0)
+                              fd->setMarker(fd->strings() - string, 79 /* ??? */);
+                        else if (fret > 0)
+                              fd->setDot(fd->strings() - string, fret);
+                        }
+                  }
+            else if (tag == "frame-strings") {
+                  if (val > 0) {
+                        fd->setStrings(val);
+                        for (int i = 0; i < val; ++i)
+                              fd->setMarker(i, 88 /* ??? */);
+                        }
+                  else
+                        qDebug("FretDiagram::readMusicXML: illegal frame-strings %d", val);
+                  }
+            else
+                  domError(e);
+            }
+      }
 
 //---------------------------------------------------------
 //   xmlHarmony
@@ -5226,7 +5488,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   FretDiagram* fd = new FretDiagram(score);
                   fd->setTrack(staff * VOICES);
                   // read frame into FretDiagram
-                  fd->readMusicXML(e);
+                  readFretDiagram(fd, e);
                   Segment* s = measure->getSegment(Segment::SegChordRest, tick);
                   s->add(fd);
                   }

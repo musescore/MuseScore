@@ -198,7 +198,7 @@ add_executable ( ${ExecutableName}
       waveview.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       inspectorHairpin.cpp qmlplugin.cpp
-#      musicxmlsupport.cpp exportxml.cpp importxml.cpp
+      musicxmlsupport.cpp exportxml.cpp importxml.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

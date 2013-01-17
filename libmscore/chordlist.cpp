@@ -417,6 +417,7 @@ void ChordList::read(XmlReader& e)
                               cs.name    = e.attribute("name");
                               cs.code    = e.intAttribute("code");
                               symbols.insert(cs.name, cs);
+                              e.readNext();
                               }
                         else if (e.name() == "mag")
                               f.mag = e.readDouble();
