@@ -896,6 +896,39 @@ void ExportMusicXml::calcDivisions()
       }
 
 //---------------------------------------------------------
+//   writePageFormat
+//---------------------------------------------------------
+
+static void writePageFormat(const PageFormat* pf, Xml& xml, double conversion)
+      {
+      xml.stag("page-layout");
+
+      //qreal t = 2 * PPI * 10 / 9;
+
+      xml.tag("page-height", pf->size().height() * conversion);
+      xml.tag("page-width", pf->size().width() * conversion);
+      QString type("both");
+      if (pf->twosided()) {
+            type = "even";
+            xml.stag(QString("page-margins type=\"%1\"").arg(type));
+            xml.tag("left-margin",   pf->evenLeftMargin() * conversion);
+            xml.tag("right-margin",  pf->evenRightMargin() * conversion);
+            xml.tag("top-margin",    pf->evenTopMargin() * conversion);
+            xml.tag("bottom-margin", pf->evenBottomMargin() * conversion);
+            xml.etag();
+            type = "odd";
+            }
+      xml.stag(QString("page-margins type=\"%1\"").arg(type));
+      xml.tag("left-margin",   pf->oddLeftMargin() * conversion);
+      xml.tag("right-margin",  pf->oddRightMargin() * conversion);
+      xml.tag("top-margin",    pf->oddTopMargin() * conversion);
+      xml.tag("bottom-margin", pf->oddBottomMargin() * conversion);
+      xml.etag();
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
 
@@ -910,7 +943,7 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       xml.etag();
       const PageFormat* pf = s->pageFormat();
       if (pf)
-            pf->writeMusicXML(xml, INCH / millimeters * tenths);
+            writePageFormat(pf, xml, INCH / millimeters * tenths);
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
       xml.etag();
@@ -1879,6 +1912,52 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
       }
 
 //---------------------------------------------------------
+//   writeBeam
+//---------------------------------------------------------
+
+static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
+      {
+      const QList<ChordRest*>& elements = b->elements();
+      int idx = elements.indexOf(cr);
+      if (idx == -1) {
+            qDebug("Beam::writeMusicXml(): cannot find ChordRest\n");
+            return;
+            }
+      int blp = -1; // beam level previous chord
+      int blc = -1; // beam level current chord
+      int bln = -1; // beam level next chord
+      // find beam level previous chord
+      for (int i = idx - 1; blp == -1 && i >= 0; --i) {
+            ChordRest* crst = elements[i];
+            if (crst->type() == Element::CHORD)
+                  blp = (static_cast<Chord*>(crst))->beams();
+            }
+      // find beam level current chord
+      if (cr->type() == Element::CHORD)
+            blc = (static_cast<Chord*>(cr))->beams();
+      // find beam level next chord
+      for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
+            ChordRest* crst = elements[i];
+            if (crst->type() == Element::CHORD)
+                  bln = (static_cast<Chord*>(crst))->beams();
+            }
+      for (int i = 1; i <= blc; ++i) {
+            QString s;
+            if (blp < i && bln >= i) s = "begin";
+            else if (blp < i && bln < i) {
+                  if (bln > 0) s = "forward hook";
+                  else if (blp > 0) s = "backward hook";
+                  }
+            else if (blp >= i && bln < i)
+                  s = "end";
+            else if (blp >= i && bln >= i)
+                  s = "continue";
+            if (s != "")
+                  xml.tag(QString("beam number=\"%1\"").arg(i), s);
+            }
+      }
+
+//---------------------------------------------------------
 //   chord
 //---------------------------------------------------------
 
@@ -2154,7 +2233,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             //    <beam number="1">forward hook</beam>
 
             if (note == nl.front() && chord->beam())
-                  chord->beam()->writeMusicXml(xml, chord);
+                  writeBeam(xml, chord, chord->beam());
 
             Notations notations;
             Technical technical;
