@@ -399,6 +399,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       if (!range.canWrite(ns))
             return false;
 
+//      range.check();
+
       undo(new RemoveMeasures(fm, lm));
       //
       // calculate number of required measures = nm
@@ -408,12 +410,16 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       int nm       = (k.numerator() + k.denominator() - 1)/ k.denominator();
 
       Fraction nd(nm * ns.numerator(), ns.denominator()); // total new duration
+
+      // evtl. we have to fill the last measure
       Fraction fill = nd - range.duration();
-      range.fill(fill);
+      if (!fill.isZero())
+            range.fill(fill);
 
       Measure* nfm = 0;
       Measure* nlm = 0;
 
+      // create destination measures
       int tick = 0;
       for (int i = 0; i < nm; ++i) {
             Measure* m = new Measure(this);

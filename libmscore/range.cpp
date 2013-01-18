@@ -230,7 +230,8 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
 
 void TrackList::appendGap(const Fraction& d)
       {
-      if (!isEmpty() && (back()->type() == Element::REST)) {
+      Element* e = isEmpty() ? 0 : back();
+      if (e && (e->type() == Element::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
             dd          += d;
@@ -241,6 +242,7 @@ void TrackList::appendGap(const Fraction& d)
             Rest* rest = new Rest(0);
             rest->setDuration(d);
             QList<Element*>::append(rest);
+            _duration   += d;
             }
       }
 
@@ -253,44 +255,44 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
       int tick = fs->tick();
       int gap  = 0;
       const Segment* s;
-      for (s = fs; s; s = s->next1()) {
+      for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(track);
-            if (e && !e->generated()) {
-                  if (e->isChordRest()) {
-                        DurationElement* de = static_cast<DurationElement*>(e);
-                        gap = s->tick() - tick;
-                        if (de->tuplet()) {
-                              Tuplet* tuplet = de->tuplet();
-                              if (tuplet->elements().front() != de) {
-                                    qDebug("TrackList::read: cannot start in middle of tuplet");
-                                    abort();
-                                    }
-                              de = tuplet;
-
-                              // find last chord/rest in (possibly nested) tuplet:
-                              DurationElement* nde = tuplet;
-                              while (nde) {
-                                    nde = tuplet->elements().back();
-                                    if (nde->type() != Element::TUPLET)
-                                          break;
-                                    }
-                              s = static_cast<ChordRest*>(nde)->segment();
-                              // continue with first chord/rest after tuplet
+            if (!e || e->generated())
+                  continue;
+            if (e->isChordRest()) {
+                  DurationElement* de = static_cast<DurationElement*>(e);
+                  gap = s->tick() - tick;
+                  if (de->tuplet()) {
+                        Tuplet* tuplet = de->tuplet();
+                        if (tuplet->elements().front() != de) {
+                              qDebug("TrackList::read: cannot start in middle of tuplet");
+                              abort();
                               }
-                        if (gap)
-                              appendGap(Fraction::fromTicks(gap));
-                        append(de, map);
-                        // add duration to ticks if not grace note
-                        if (!(de->type() == Element::CHORD && static_cast<Chord*>(de)->isGrace()))
-                              tick += de->duration().ticks();;
+                        de = tuplet;
+
+                        // find last chord/rest in (possibly nested) tuplet:
+                        DurationElement* nde = tuplet;
+                        while (nde) {
+                              nde = tuplet->elements().back();
+                              if (nde->type() != Element::TUPLET)
+                                    break;
+                              }
+                        s = static_cast<ChordRest*>(nde)->segment();
+                        // continue with first chord/rest after tuplet
                         }
-                  else if (e->type() == Element::BAR_LINE)
-                        ;
-                  else
-                        append(e, map);
+                  if (gap) {
+                        appendGap(Fraction::fromTicks(gap));
+                        tick += gap;
+                        }
+                  append(de, map);
+                  // add duration to ticks if not grace note
+                  if (!(de->type() == Element::CHORD && static_cast<Chord*>(de)->isGrace()))
+                        tick += de->duration().ticks();;
                   }
-            if (s == es)
-                  break;
+            else if (e->type() == Element::BAR_LINE)
+                  ;
+            else
+                  append(e, map);
             }
       gap = es->tick() - tick;
       if (gap)
@@ -411,7 +413,7 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
       Score* score     = m->score();
       Fraction rest    = m->len();
       Segment* segment = 0;
-      int n = size();
+      int n            = size();
 
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
@@ -438,15 +440,14 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
 
                   bool firstCRinSplit = true;
                   while (duration.numerator() > 0) {
-                        // handle full measure rest
                         if (e->type() == Element::REST
                            && (duration >= rest || e == back())
-                           && rest == m->len())
+                           && (rest == m->len()))
                               {
-                              segment = m->getSegment(e, m->tick() + pos.ticks());
                               //
                               // handle full measure rest
                               //
+                              segment = m->getSegment(e, m->tick() + pos.ticks());
                               if ((track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::V_MEASURE);
@@ -472,8 +473,8 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     r->setTrack(track);
                                     segment->add(r);
                                     duration -= d;
-                                    rest -= d;
-                                    pos += d;
+                                    rest     -= d;
+                                    pos      += d;
                                     }
                               else if (e->type() == Element::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
@@ -499,10 +500,8 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     }
                               else if (e->type() == Element::TUPLET) {
                                     writeTuplet(static_cast<Tuplet*>(e), m, m->tick() + pos.ticks());
-                                    duration -= d;
-                                    rest     -= d;
-                                    pos      += d;
                                     }
+
                               if (e->isChordRest() && firstCRinSplit) {
                                     ChordRest* src = static_cast<ChordRest*>(e);
                                     writeSpanner(track, src, dst, segment, map);
@@ -514,8 +513,27 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     rest = m->len();
                                     pos  = Fraction();
                                     }
-                              else
-                                    rest = Fraction();
+                              else {
+                                    if (!duration.isZero()) {
+                                          qDebug("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
+                                             track, duration.numerator(), duration.denominator());
+                                          ++i;
+                                          printf("%d elements missing\n", n-i);
+                                          for (; i < n; ++i) {
+                                                Element* e = at(i);
+                                                printf("    <%s>\n", e->name());
+                                                if (e->isChordRest()) {
+                                                      ChordRest* cr = static_cast<ChordRest*>(e);
+                                                      printf("       %d/%d\n",
+                                                         cr->duration().numerator(),
+                                                         cr->duration().denominator());
+                                                      }
+                                                }
+                                          rest     = Fraction();
+                                          duration = Fraction();
+                                          abort();
+                                          }
+                                    }
                               }
                         firstCRinSplit = false;
                         }
@@ -628,6 +646,35 @@ bool ScoreRange::write(int track, Measure* m) const
 #endif
       return true;
       }
+
+#if 0
+//---------------------------------------------------------
+//   check
+//---------------------------------------------------------
+
+void ScoreRange::check() const
+      {
+      int n = tracks.size();
+      for (int i = 0; i < n; ++i) {
+            Fraction d;
+            const TrackList* dl = tracks[i];
+            int nn = dl->size();
+            for (int ii = 0; ii < nn; ++ii) {
+                  Element* e = dl->at(ii);
+                  if (e->isDurationElement()) {
+                        Fraction duration = static_cast<const DurationElement*>(e)->duration();
+                        d += duration;
+                        }
+                  }
+            d.reduce();
+            qDebug("ScoreRange check %2d: %d/%d  %d elements",
+               i, d.numerator(), d.denominator(), dl->size());
+            d = dl->duration().reduced();
+            qDebug("                     %d/%d",
+               d.numerator(), d.denominator());
+            }
+      }
+#endif
 
 //---------------------------------------------------------
 //   fill

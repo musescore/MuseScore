@@ -82,6 +82,7 @@ Clef::Clef(const Clef& c)
       curClefType       = c.curClefType;
       curLines          = c.curLines;
       curLineDist       = c.curLineDist;
+      layout1();
       }
 
 //---------------------------------------------------------
