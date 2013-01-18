@@ -323,7 +323,7 @@ Score::FileError Score::read114(XmlReader& e)
                 || (tag == "Volta")
                 || (tag == "Trill")
                 || (tag == "Pedal")) {
-                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag.toString(), this));
+                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->setTrack(0);
                   s->read(e);
                   spannerList.append(s);

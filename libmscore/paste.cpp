@@ -215,7 +215,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               spanner = slur;
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
-                              ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag.toString(), this));
+                              ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
                               cr->setTrack(curTrack);
                               cr->read(e);
                               cr->setSelected(false);
@@ -232,7 +232,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "Trill"
                            || tag == "TextLine"
                            || tag == "Volta") {
-                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), this));
+                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setTrack(dstStaffIdx * VOICES);
                               sp->read(e);
                               int tick = curTick - tickStart + dstTick;
@@ -318,7 +318,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "StaffText"
                            || tag == "TempoText"
                            ) {
-                              Element* el = Element::name2Element(tag.toString(), this);
+                              Element* el = Element::name2Element(tag, this);
                               el->setTrack(dstStaffIdx * VOICES);
 
                               int tick = curTick - tickStart + dstTick;

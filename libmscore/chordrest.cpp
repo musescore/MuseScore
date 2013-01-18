@@ -351,7 +351,7 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "move")
             _staffMove = e.readInt();
       else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag.toString(), score());
+            Element* element = Element::name2Element(tag, score());
             element->setTrack(score()->curTrack);
             element->read(e);
             add(element);

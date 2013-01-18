@@ -1172,19 +1172,23 @@ Element::ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
    Fraction* duration)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag = e.name();
-            if (tag == "dragOffset")
-                  *dragOffset = e.readPoint();
-            else if (tag == "duration")
-                  *duration = e.readFraction();
-            else {
-                  ElementType type = name2type(tag.toString());
-                  if (type == INVALID)
-                        break;
-                  return type;
+            if (e.name() == "Element")
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag = e.name();
+                        if (tag == "dragOffset")
+                              *dragOffset = e.readPoint();
+                        else if (tag == "duration")
+                              *duration = e.readFraction();
+                        else {
+                              ElementType type = name2type(tag);
+                              if (type == INVALID)
+                                    break;
+                              return type;
+                        }
                   }
+            else
+                  e.unknown();
             }
-      e.unknown();
       return INVALID;
       }
 
@@ -1347,13 +1351,13 @@ const char* Element::name(ElementType type)
 //   name2type
 //---------------------------------------------------------
 
-Element::ElementType Element::name2type(const QString& s)
+Element::ElementType Element::name2type(const QStringRef& s)
       {
       for (int i = 0; i < MAXTYPE; ++i) {
             if (s == elementNames[i])
                   return ElementType(i);
             }
-qDebug("name2type: invalid type <%s>\n", qPrintable(s));
+qDebug("name2type: invalid type <%s>\n", s.toUtf8().data());
       return INVALID;
       }
 
@@ -1361,7 +1365,7 @@ qDebug("name2type: invalid type <%s>\n", qPrintable(s));
 //   name2Element
 //---------------------------------------------------------
 
-Element* Element::name2Element(const QString& s, Score* sc)
+Element* Element::name2Element(const QStringRef& s, Score* sc)
       {
       ElementType type = Element::name2type(s);
       if (type == INVALID)
