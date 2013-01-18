@@ -497,8 +497,8 @@ class Element : public QObject {
 
       static const char* name(ElementType type);
       Q_INVOKABLE static Element* create(ElementType type, Score*);
-      static ElementType name2type(const QString&);
-      static Element* name2Element(const QString&, Score*);
+      static ElementType name2type(const QStringRef&);
+      static Element* name2Element(const QStringRef&, Score*);
 
       void setFlag(ElementFlag f, bool v)  {
             if (v)

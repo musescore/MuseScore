@@ -863,7 +863,7 @@ void Note::read(XmlReader& e)
                         qDebug("Note::read(): cannot find spanner %d", id);
                   }
             else if (tag == "TextLine") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), score()));
+                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(track());
                   sp->read(e);
                   sp->setAnchor(Spanner::ANCHOR_NOTE);
