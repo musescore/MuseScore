@@ -71,6 +71,7 @@ class ScoreRange {
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
       void fill(const Fraction&);
+//      void check() const;
       };
 
 #endif
