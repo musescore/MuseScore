@@ -1059,7 +1059,7 @@ void Palette::read(XmlReader& e)
 //TODOxx                        else if (t == "tag")
 //                              tag = e.value();
                         else {
-                              Element* element = Element::name2Element(t.toString(), gscore);
+                              Element* element = Element::name2Element(t, gscore);
                               if (element == 0) {
                                     e.unknown();
                                     return;

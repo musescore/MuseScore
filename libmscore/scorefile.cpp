@@ -227,7 +227,7 @@ void Score::readStaff(XmlReader& e)
                   curTick = measure->tick() + measure->ticks();
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag.toString(), this));
+                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
                   mb->read(e);
                   mb->setTick(curTick);
                   add(mb);
