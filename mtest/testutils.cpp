@@ -75,7 +75,7 @@ Element* MTest::writeReadElement(Element* element)
       e.readNextStartElement();
       QString tag(e.name().toString());
 // printf("read tag %s\n", qPrintable(tag));
-      element = Element::name2Element(e.name().toString(), score);
+      element = Element::name2Element(e.name(), score);
       element->read(e);
       return element;
       }
