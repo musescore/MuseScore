@@ -2059,7 +2059,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag.toString(), score()));
+                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setNext(score()->spanner);
                   score()->spanner = sp;
                   sp->setTrack(staffIdx * VOICES);
@@ -2191,7 +2191,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "StaffState"
                || tag == "FiguredBass"
                ) {
-                  Element* el = Element::name2Element(tag.toString(), score());
+                  Element* el = Element::name2Element(tag, score());
                   el->setTrack(score()->curTrack);
                   el->read(e);
                   segment = getSegment(Segment::SegChordRest, score()->curTick);
