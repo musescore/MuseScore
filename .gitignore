@@ -15,3 +15,4 @@ DocLib
 build.qt5
 *.sfd~
 /.project
+mscore/revision.h
