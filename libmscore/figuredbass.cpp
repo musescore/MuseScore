@@ -396,6 +396,7 @@ void FiguredBassItem::read(XmlReader& e)
                   parenth[2] = (Parenthesis)e.intAttribute("b2");
                   parenth[3] = (Parenthesis)e.intAttribute("b3");
                   parenth[4] = (Parenthesis)e.intAttribute("b4");
+                  e.readNext();
                   }
             else if (tag == "prefix")
                   _prefix = (Modifier)(e.readInt());
