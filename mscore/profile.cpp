@@ -303,6 +303,7 @@ void Profile::read()
                               if (rootfile.isEmpty())
                                     rootfile = e.attribute("full-path");
                               e.readNext();
+                              e.readNext();
                               }
                         else if (tag == "file")
                               images.append(e.readElementText());
@@ -328,8 +329,8 @@ void Profile::read()
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
-                  QString version = e.attribute("version");
-                  QStringList sl = version.split('.');
+//                  QString version = e.attribute("version");
+//                  QStringList sl = version.split('.');
                   // _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
                   while (e.readNextStartElement()) {
                         if (e.name() == "Profile")
