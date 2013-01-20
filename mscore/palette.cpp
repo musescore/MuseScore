@@ -1025,7 +1025,7 @@ void Palette::write(const QString& p)
 
 void Palette::read(XmlReader& e)
       {
-      QString name = e.attribute("name");
+//      QString name = e.attribute("name");
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
