@@ -133,6 +133,7 @@ void TremoloBar::read(XmlReader& e)
                   pv.pitch   = e.intAttribute("pitch");
                   pv.vibrato = e.intAttribute("vibrato");
                   _points.append(pv);
+                  e.readNext();
                   }
             else
                   e.unknown();
