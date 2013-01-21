@@ -99,6 +99,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       if (staff == 0)
             return;
       Score* _score = staff->score();
+      setFrameShape(QFrame::NoFrame);
 
       QRectF r1;
       r1.setCoords(-1000000.0, 0.0, 480.0, 1000000.0);
@@ -234,8 +235,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 PianoView::PianoView()
    : QGraphicsView()
       {
-      setLineWidth(0);
-      setMidLineWidth(0);
+      setFrameShape(QFrame::NoFrame);
       setScene(new QGraphicsScene);
       setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);
