@@ -11,7 +11,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <assert.h>
 #include "score.h"
 #include "utils.h"
 #include "key.h"
@@ -143,9 +142,6 @@ void Score::cmdPaste(MuseScoreView* view)
 
 void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       {
-      beams.clear();
-      spanner = 0;
-      QMap<int, Spanner*> localSpanner;
       static const Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
             for (Spanner* e = s->spannerFor(); e; e = e->next())
@@ -164,7 +160,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             int tickLen       = e.intAttribute("len", 0);
             int srcStaffStart = e.intAttribute("staff", 0);
             int staves        = e.intAttribute("staves", 0);
-            curTick           = tickStart;
+            e.setTick(tickStart);
 
             QSet<int> blackList;
             for (int i = 0; i < staves; ++i) {
@@ -190,40 +186,39 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
-                  tuplets.clear();
+                  e.tuplets().clear();
                   while (e.readNextStartElement()) {
                         pasted = true;
                         const QStringRef& tag(e.name());
 
                         if (tag == "tick")
-                              curTick = e.readInt();
+                              e.setTick(e.readInt());
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
-                              tuplet->setTrack(curTrack);
+                              tuplet->setTrack(e.track());
                               tuplet->read(e);
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
-                              tuplets.append(tuplet);
+                              e.addTuplet(tuplet);
                               }
                         else if (tag == "Slur") {
                               Slur* slur = new Slur(this);
                               slur->read(e);
                               slur->setTrack(dstStaffIdx * VOICES);
-                              slur->setNext(spanner);
-                              spanner = slur;
+                              e.addSpanner(slur);
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
-                              cr->setTrack(curTrack);
+                              cr->setTrack(e.track());
                               cr->read(e);
                               cr->setSelected(false);
                               int voice = cr->voice();
                               int track = dstStaffIdx * VOICES + voice;
                               cr->setTrack(track);
-                              int tick = curTick - tickStart + dstTick;
-                              curTick += cr->actualTicks();
+                              int tick = e.tick() - tickStart + dstTick;
+                              e.setTick(e.tick() + cr->actualTicks());
                               pasteChordRest(cr, tick);
                               }
                         else if (tag == "HairPin"
@@ -235,19 +230,19 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setTrack(dstStaffIdx * VOICES);
                               sp->read(e);
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::SegChordRest, tick);
                               sp->setStartElement(segment);
                               sp->setParent(segment);
-                              localSpanner.insert(sp->id(), sp);
+                              e.addSpanner(sp);
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
-                              Spanner* spanner = localSpanner.value(id, 0);
+                              Spanner* spanner = e.findSpanner(id);
                               if (spanner) {
-                                    localSpanner.remove(id);
-                                    int tick = curTick - tickStart + dstTick;
+                                    e.spanner().removeOne(spanner);
+                                    int tick = e.tick() - tickStart + dstTick;
                                     Measure* m = tick2measure(tick);
                                     Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
                                     spanner->setEndElement(seg);
@@ -271,10 +266,10 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
 
                         else if (tag == "Lyrics") {
                               Lyrics* lyrics = new Lyrics(this);
-                              lyrics->setTrack(curTrack);
+                              lyrics->setTrack(e.track());
                               lyrics->read(e);
                               lyrics->setTrack(dstStaffIdx * VOICES);
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Segment* segment = tick2segment(tick);
                               if (segment) {
                                     lyrics->setParent(segment);
@@ -287,7 +282,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               }
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
-                              harmony->setTrack(curTrack);
+                              harmony->setTrack(e.track());
                               harmony->read(e);
                               harmony->setTrack(dstStaffIdx * VOICES);
                               //transpose
@@ -302,7 +297,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
                                     }
 
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
                               harmony->setParent(seg);
@@ -321,7 +316,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Element* el = Element::name2Element(tag, this);
                               el->setTrack(dstStaffIdx * VOICES);
 
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
                               el->setParent(seg);
@@ -333,7 +328,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Clef* clef = new Clef(this);
                               clef->read(e);
                               clef->setTrack(dstStaffIdx * VOICES);
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               if (m->tick() && m->tick() == tick)
                                     m = m->prevMeasure();
@@ -345,7 +340,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Breath* breath = new Breath(this);
                               breath->read(e);
                               breath->setTrack(dstStaffIdx * VOICES);
-                              int tick = curTick - tickStart + dstTick;
+                              int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::SegBreath, tick);
                               breath->setParent(segment);
@@ -358,7 +353,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               e.unknown();
                         }
 
-                  foreach (Tuplet* tuplet, tuplets) {
+                  foreach (Tuplet* tuplet, e.tuplets()) {
                         if (tuplet->elements().isEmpty()) {
                               // this should not happen and is a sign of input file corruption
                               qDebug("Measure:pasteStaff(): empty tuplet");
@@ -386,8 +381,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         _selection.setState(SEL_RANGE);
                   }
             }
-      for (Spanner* sp = spanner; sp;) {
-            Spanner* spNext = sp->next();
+      foreach(Spanner* sp, e.spanner()) {
             printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());
             if (sp->startElement() == 0 || sp->endElement() == 0) {
                   // spanner is not copied complete, lets remove it:
@@ -421,9 +415,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         }
                   delete sp;
                   }
-            sp = spNext;
             }
-      spanner = 0;
       connectTies();
       }
 
