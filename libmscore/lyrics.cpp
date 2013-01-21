@@ -136,7 +136,7 @@ void Lyrics::read(XmlReader& e)
             }
       // if any endTick, make it relative to current tick
       if (iEndTick) {
-            _ticks = iEndTick - score()->curTick;
+            _ticks = iEndTick - e.tick();
             // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
             }
       }

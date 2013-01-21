@@ -247,6 +247,8 @@ class MusicXml {
 
       QMap<QString, MusicXMLDrumset> drumsets;   ///< Drumset for each part
 
+      QList<Beam*> beams;                       // moved from Score(), required?
+
       //-----------------------------
 
       void doCredits();
@@ -266,6 +268,7 @@ class MusicXml {
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void initVoiceMapperAndMapVoices(QDomElement e);
+      void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam);
 
 public:
       MusicXml(QDomDocument* d);

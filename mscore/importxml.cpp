@@ -4750,7 +4750,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
+void MusicXml::handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
       {
       if (!cr) return;
       // create a new beam
@@ -4759,7 +4759,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
             beam = new Beam(cr->score());
             beam->setTrack(cr->track());
             beam->setBeamDirection(sd);
-            cr->score()->beams.prepend(beam);
+            beams.prepend(beam);          // required?
             }
       // add ChordRest to beam
       if (beam) beam->add(cr);
