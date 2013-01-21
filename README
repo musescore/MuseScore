@@ -67,12 +67,21 @@ Program Documentation:
 
 Test:
       Type
-            cd build/mscore
-            mscore
+            cd build.release/mscore
+            ./mscore
 
       to start mscore. On first invocation a demofile
       is shown. You probably want to change that in the
       "preferences" dialog.
+
+Debug:
+      A debug version can be built by doing "make debug" above,
+      instead of "make release".
+
+      To test the debug version, type
+
+            cd build.debug/mscore
+            ./mscore
 
 =================================================================
       Contact
