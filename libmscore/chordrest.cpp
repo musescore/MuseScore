@@ -260,14 +260,8 @@ bool ChordRest::readProperties(XmlReader& e)
             qDebug("ChordRest: trailingSpace obsolete"); // _extraTrailingSpace = Spatium(val.toDouble());
             }
       else if (tag == "Beam") {
-            Beam* beam = 0;
             int id = e.readInt();
-            foreach(Beam* b, score()->beams) {
-                  if (b->id() == id) {
-                        beam = b;
-                        break;
-                        }
-                  }
+            Beam* beam = e.findBeam(id);
             if (beam)
                   beam->add(this);        // also calls this->setBeam(beam)
             else
@@ -278,15 +272,10 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "Slur") {
             int id = e.intAttribute("number");
             QString type(e.attribute("type"));
-            Slur* slur = 0;
-            for (Spanner* s = score()->spanner; s; s = s->next()) {
-                  if (s->id() == id) {
-                        slur = static_cast<Slur*>(s);
-                        break;
-                        }
-                  }
+            Slur* slur = static_cast<Slur*>(e.findSpanner(id));
             if (!slur)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
+
             else {
                   if (type == "start") {
                         slur->setStartElement(this);
@@ -323,15 +312,15 @@ bool ChordRest::readProperties(XmlReader& e)
                   }
             else {
                   if (score()->mscVersion() < 115) {
-                        SigEvent e = score()->sigmap()->timesig(score()->curTick);
-                        setDuration(e.timesig());
+                        SigEvent event = score()->sigmap()->timesig(e.tick());
+                        setDuration(event.timesig());
                         }
                   }
             }
       else if (tag == "duration")
             setDuration(e.readFraction());
       else if (tag == "ticklen") {      // obsolete (version < 1.12)
-            int mticks = score()->sigmap()->timesig(score()->curTick).timesig().ticks();
+            int mticks = score()->sigmap()->timesig(e.tick()).timesig().ticks();
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
@@ -352,7 +341,7 @@ bool ChordRest::readProperties(XmlReader& e)
             _staffMove = e.readInt();
       else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
             Element* element = Element::name2Element(tag, score());
-            element->setTrack(score()->curTrack);
+            element->setTrack(e.track());
             element->read(e);
             add(element);
             }

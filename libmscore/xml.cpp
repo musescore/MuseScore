@@ -13,6 +13,9 @@
 
 #include "xml.h"
 #include "layoutbreak.h"
+#include "spanner.h"
+#include "beam.h"
+#include "tuplet.h"
 
 QString docName;
 
@@ -24,6 +27,29 @@ XmlReader::XmlReader(QFile* d)
    : QXmlStreamReader(d)
       {
       docName = d->fileName();
+      _tick  = 0;
+      _track = 0;
+      }
+
+XmlReader::XmlReader(const QByteArray& d)
+   : QXmlStreamReader(d)
+      {
+      _tick  = 0;
+      _track = 0;
+      }
+
+XmlReader::XmlReader(QIODevice* d)
+   : QXmlStreamReader(d)
+      {
+      _tick  = 0;
+      _track = 0;
+      }
+
+XmlReader::XmlReader(const QString& d)
+   : QXmlStreamReader(d)
+      {
+      _tick  = 0;
+      _track = 0;
       }
 
 //---------------------------------------------------------
@@ -183,6 +209,48 @@ void XmlReader::unknown() const
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
       abort();
+      }
+
+//---------------------------------------------------------
+//   findSpanner
+//---------------------------------------------------------
+
+Spanner* XmlReader::findSpanner(int id) const
+      {
+      int n = _spanner.size();
+      for (int i = 0; i < n; ++i) {
+            if (_spanner.at(i)->id() == id)
+                  return _spanner.at(i);
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   findBeam
+//---------------------------------------------------------
+
+Beam* XmlReader::findBeam(int id) const
+      {
+      int n = _beams.size();
+      for (int i = 0; i < n; ++i) {
+            if (_beams.at(i)->id() == id)
+                  return _beams.at(i);
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   findTuplet
+//---------------------------------------------------------
+
+Tuplet* XmlReader::findTuplet(int id) const
+      {
+      int n = _tuplets.size();
+      for (int i = 0; i < n; ++i) {
+            if (_tuplets.at(i)->id() == id)
+                  return _tuplets.at(i);
+            }
+      return 0;
       }
 
 //---------------------------------------------------------

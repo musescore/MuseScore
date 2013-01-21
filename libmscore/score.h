@@ -429,13 +429,6 @@ class Score : public QObject {
    public:
       void setDirty(bool val);
 
-      // read context
-      int curTick;                  // for read optimizations
-      int curTrack;
-      Spanner* spanner;
-      QList<Beam*> beams;
-      QList<Tuplet*> tuplets;
-
       void rebuildBspTree();
       bool noStaves() const         { return _staves.empty(); }
       void insertPart(Part*, int);

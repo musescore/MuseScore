@@ -224,7 +224,7 @@ void Box::read(XmlReader& e)
                   }
             else if (tag == "Image") {
                   Image* image = new Image(score());
-                  image->setTrack(score()->curTrack);
+                  image->setTrack(e.track());
                   image->read(e);
                   add(image);
                   }
