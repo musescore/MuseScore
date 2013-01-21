@@ -1308,8 +1308,14 @@ int StyleData::textStyleType(const QString& name) const
 void StyleData::setTextStyle(const TextStyle& ts)
       {
       for (int i = 0; i < _textStyles.size(); ++i) {
-            if (_textStyles[i].name() == ts.name() || (_textStyles[i].name() == "Lyricist" && ts.name() == "Poet")) {
+            if (_textStyles[i].name() == ts.name()) {
                   _textStyles[i] = ts;
+                  return;
+                  }
+            // convert 1.2 Poet to Lyricist
+            if (_textStyles[i].name() == "Lyricist" && ts.name() == "Poet") {
+                  _textStyles[i] = ts;
+                  _textStyles[i].setName("Lyricist");
                   return;
                   }
             }
