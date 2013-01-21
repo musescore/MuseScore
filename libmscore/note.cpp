@@ -320,20 +320,55 @@ int Note::noteHead() const
 
 //---------------------------------------------------------
 //   headWidth
+//
+//    returns the width of the note head symbol
+//    or the width of the string representation of the fret mark
 //---------------------------------------------------------
 
 qreal Note::headWidth() const
       {
-      return symbols[score()->symIdx()][noteHead()].width(magS());
+      qreal val = symbols[score()->symIdx()][noteHead()].width(magS());
+      if (_small)
+            val *= score()->styleD(ST_smallNoteMag);
+      return val;
+      }
+
+qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
+      {
+      qreal val;
+      if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+            qreal mags = magS();
+            QFont f = tab->fretFont();
+            int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
+            f.setPixelSize(size);
+            QFontMetricsF fm(f);
+            QString s = tab->fretString(_fret, _ghost);
+            val  = fm.width(s) * mags;
+            if (_small)
+                  val *= score()->styleD(ST_smallNoteMag);
+      }
+      else
+            val = headWidth();
+      return val;
       }
 
 //---------------------------------------------------------
 //   headHeight
+//
+//    returns the height of the note head symbol
+//    or the height of the string representation of the fret mark
 //---------------------------------------------------------
 
 qreal Note::headHeight() const
       {
       return symbols[score()->symIdx()][noteHead()].height(magS());
+      }
+
+qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
+      {
+      if(tab && _fret != FRET_NONE && _string != STRING_NONE)
+            return tab->fretBoxH() * magS();
+      return headHeight();
       }
 
 //---------------------------------------------------------
@@ -1213,17 +1248,8 @@ void Note::layout()
       if (useTablature) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal mags = magS();
-//            QFont f(tab->fretFontName());
-            QFont f = tab->fretFont();
-            int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
-            f.setPixelSize(size);
-            QFontMetricsF fm(f);
-//            // when using letters, "+(_fret > 8)" skips 'j'
-//            QString s = _ghost ? "X" :
-//                        ( tab->useNumbers() ? QString::number(_fret) : QString('a' + _fret + (_fret > 8)) );
-            QString s = tab->fretString(_fret, _ghost);
-            qreal w  = fm.width(s) * mags;
-            // center string name to note head
+            qreal w = tabHeadWidth(tab);
+            // centre fret string to note head
             qreal xo = (headWidth() - w) * .5;
             bbox().setRect(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
