@@ -1352,13 +1352,14 @@ void Chord::layout()
 
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
       bool  useTab     = false;
+      StaffTypeTablature* tab = 0;
 
       if (staff() && staff()->isTabStaff()) {
             //
             // TABLATURE STAVES
             //
             useTab = true;
-            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            tab = (StaffTypeTablature*)staff()->staffType();
             qreal lineDist = tab->lineDistance().val();
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
@@ -1526,7 +1527,7 @@ void Chord::layout()
       int n = _notes.size();
       for (int i = 0; i < n; ++i) {
             Note* note = _notes.at(i);
-            qreal lhw = note->headWidth();
+            qreal lhw = useTab ? note->tabHeadWidth(tab) : note->headWidth();
             qreal rr = 0.0;
             if (note->mirror()) {
                   if (up())
