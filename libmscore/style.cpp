@@ -1312,6 +1312,12 @@ void StyleData::setTextStyle(const TextStyle& ts)
                   _textStyles[i] = ts;
                   return;
                   }
+            // convert 1.2 Poet to Lyricist
+            if (_textStyles[i].name() == "Lyricist" && ts.name() == "Poet") {
+                  _textStyles[i] = ts;
+                  _textStyles[i].setName("Lyricist");
+                  return;
+                  }
             }
       _textStyles.append(ts);
       }
