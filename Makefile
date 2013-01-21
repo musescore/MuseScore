@@ -35,7 +35,7 @@ release: revision
       make -j ${CPUS};                           \
 
 
-debug:
+debug: revision
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
