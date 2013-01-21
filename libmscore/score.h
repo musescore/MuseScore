@@ -374,6 +374,7 @@ class Score : public QObject {
       void moveDown(Chord*);
 
       void moveInputPos(Segment* s);
+      void moveToPrevInputPos();
       void moveToNextInputPos();
 
       void padToggle(int n);
