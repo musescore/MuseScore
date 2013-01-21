@@ -52,7 +52,6 @@
 
 void Score::write(Xml& xml, bool selectionOnly)
       {
-      spanner = 0;
       xml.stag("Score");
 
 #ifdef OMR
@@ -178,8 +177,8 @@ void Score::readStaff(XmlReader& e)
       {
       MeasureBase* mb = first();
       int staff       = e.intAttribute("id", 1) - 1;
-      curTick         = 0;
-      curTrack        = staff * VOICES;
+      e.setTick(0);
+      e.setTrack(staff * VOICES);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -188,7 +187,7 @@ void Score::readStaff(XmlReader& e)
                   Measure* measure = 0;
                   if (staff == 0) {
                         measure = new Measure(this);
-                        measure->setTick(curTick);
+                        measure->setTick(e.tick());
                         add(measure);
                         if (_mscVersion < 115) {
                               const SigEvent& ev = sigmap()->timesig(measure->tick());
@@ -219,17 +218,17 @@ void Score::readStaff(XmlReader& e)
                         if (measure == 0) {
                               qDebug("Score::readStaff(): missing measure!\n");
                               measure = new Measure(this);
-                              measure->setTick(curTick);
+                              measure->setTick(e.tick());
                               add(measure);
                               }
                         }
                   measure->read(e, staff);
-                  curTick = measure->tick() + measure->ticks();
+                  e.setTick(measure->tick() + measure->ticks());
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                   MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
                   mb->read(e);
-                  mb->setTick(curTick);
+                  mb->setTick(e.tick());
                   add(mb);
                   }
             else
@@ -772,13 +771,11 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
 
 bool Score::read(XmlReader& e)
       {
-      spanner = 0;
-
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
 
       while (e.readNextStartElement()) {
-            curTrack = -1;
+            e.setTrack(-1);
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
@@ -901,8 +898,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
-                  slur->setNext(spanner);
-                  spanner = slur;
+                  e.addSpanner(slur);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -951,7 +947,7 @@ bool Score::read(XmlReader& e)
             }
 
       // check slurs
-      for (Spanner* s = spanner; s; s = s->next()) {
+      foreach(Spanner* s, e.spanner()) {
             if (!s->startElement() || !s->endElement()) {
                   qDebug("remove incomplete Spanner %s", s->name());
                   switch (s->anchor()) {
@@ -1015,7 +1011,6 @@ bool Score::read(XmlReader& e)
                   qDebug("Slur references bad: %d %d", n1, n2);
 #endif
             }
-      spanner = 0;
       connectTies();
 
       searchSelectedElements();
@@ -1316,35 +1311,19 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
 #endif
                         cr->writeTuplet(xml);
                         for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
-                              bool found = false;
-                              for (Spanner* sp = spanner; sp; sp = sp->next()) {
-                                    if (sp == slur) {
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              if (!found) {
+                              if (!xml.spanner().contains(slur)) {
                                     Q_ASSERT(slur->type() == Element::SLUR);
                                     slur->setId(xml.spannerId++);
                                     slur->write(xml);
-                                    slur->setNext(spanner);
-                                    spanner = slur;
+                                    xml.addSpanner(slur);
                                     }
                               }
                         for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
-                              bool found = false;
-                              for (Spanner* sp = spanner; sp; sp = sp->next()) {
-                                    if (sp == slur) {
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              if (!found) {
+                              if (!xml.spanner().contains(slur)) {
                                     Q_ASSERT(slur->type() == Element::SLUR);
                                     slur->setId(xml.spannerId++);
                                     slur->write(xml);
-                                    slur->setNext(spanner);
-                                    spanner = slur;
+                                    xml.addSpanner(slur);
                                     }
                               }
                         }

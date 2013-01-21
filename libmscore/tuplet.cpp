@@ -604,8 +604,6 @@ void Tuplet::add(Element* e)
                   {
                   DurationElement* de = static_cast<DurationElement*>(e);
                   int tick = de->tick();
-                  if (tick == -1)
-                        tick = score()->curTick;
                   if (tick != -1) {
                         for (int i = 0; i < _elements.size(); ++i) {
                               if (_elements[i]->tick() > tick) {

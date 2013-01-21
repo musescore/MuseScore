@@ -19,6 +19,10 @@
 #include "fraction.h"
 #include "property.h"
 
+class Spanner;
+class Beam;
+class Tuplet;
+
 //---------------------------------------------------------
 //   XmlReader
 //---------------------------------------------------------
@@ -26,11 +30,18 @@
 class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
+      // Score read context (for read optimizations):
+      int _tick;
+      int _track;
+      QList<Spanner*> _spanner;
+      QList<Beam*>    _beams;
+      QList<Tuplet*>  _tuplets;
+
    public:
-      XmlReader(const QByteArray& d) : QXmlStreamReader(d) {};
       XmlReader(QFile*);
-      XmlReader(QIODevice* d) : QXmlStreamReader(d) {}
-      XmlReader(const QString& d) : QXmlStreamReader(d) {}
+      XmlReader(const QByteArray& d);
+      XmlReader(QIODevice* d);
+      XmlReader(const QString& d);
 
       void unknown() const;
 
@@ -56,6 +67,22 @@ class XmlReader : public QXmlStreamReader {
       Fraction readFraction();
 
       void setDocName(const QString& s) { docName = s; }
+
+      int tick()  const           { return _tick;  }
+      void setTick(int val)       { _tick = val; }
+      int track() const           { return _track; }
+      void setTrack(int val)      { _track = val; }
+      void addSpanner(Spanner* s) { _spanner.append(s); }
+      void addTuplet(Tuplet* s)   { _tuplets.append(s); }
+      void addBeam(Beam* s)       { _beams.append(s); }
+
+      Spanner* findSpanner(int) const;
+      Beam* findBeam(int) const;
+      Tuplet* findTuplet(int) const;
+
+      QList<Spanner*>& spanner() { return _spanner; }
+      QList<Tuplet*>& tuplets()  { return _tuplets; }
+      QList<Beam*>& beams()      { return _beams; }
       };
 
 //---------------------------------------------------------
@@ -67,6 +94,7 @@ class Xml : public QTextStream {
 
       QList<QString> stack;
       void putLevel();
+      QList<Spanner*> _spanner;
 
    public:
       int curTick;            // used to optimize output
@@ -81,6 +109,8 @@ class Xml : public QTextStream {
       int tupletId;
       int beamId;
       int spannerId;
+      QList<Spanner*>& spanner() { return _spanner; }
+      void addSpanner(Spanner* s) { _spanner.append(s); }
 
       Xml(QIODevice* dev);
       Xml();

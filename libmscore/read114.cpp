@@ -186,8 +186,6 @@ void Part::read114(XmlReader& e, QList<ClefList*>& clefList)
 
 Score::FileError Score::read114(XmlReader& e)
       {
-      spanner = 0;
-
       QList<Spanner*> spannerList;
       QList<ClefList*> clefListList;
 
@@ -195,7 +193,7 @@ Score::FileError Score::read114(XmlReader& e)
             setMscVersion(parentScore()->mscVersion());
 
       while (e.readNextStartElement()) {
-            curTrack = -1;
+            e.setTrack(-1);
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
@@ -314,8 +312,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
-                  slur->setNext(spanner);
-                  spanner = slur;
+                  e.addSpanner(slur);
                   }
             else if ((tag == "HairPin")
                 || (tag == "Ottava")
@@ -421,7 +418,7 @@ Score::FileError Score::read114(XmlReader& e)
                       }
 
             int tick2 = s->__tick2();
-            Segment* s1 = tick2segment(curTick);
+            Segment* s1 = tick2segment(e.tick());
             Segment* s2 = tick2segment(tick2);
             if (s1 == 0 || s2 == 0) {
                   qDebug("cannot place %s at tick %d - %d",
@@ -462,7 +459,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       // check slurs
-      for (Spanner* s = spanner; s; s = s->next()) {
+      foreach(Spanner* s, e.spanner()) {
             if (s->type() != Element::SLUR)
                   continue;
             Slur* slur = static_cast<Slur*>(s);
@@ -501,7 +498,6 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
-      spanner = 0;
       connectTies();
 
       //

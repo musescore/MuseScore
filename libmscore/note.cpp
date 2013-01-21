@@ -905,8 +905,7 @@ void Note::read(XmlReader& e)
                   sp->setStartElement(this);
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  sp->setNext(score()->spanner);
-                  score()->spanner = sp;
+                  e.addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   ; // _onTimeType = readValueType(e);

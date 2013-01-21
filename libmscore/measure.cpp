@@ -1863,8 +1863,8 @@ void Measure::read(XmlReader& e, int staffIdx)
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
-            score()->curTick = score()->fileDivision(e.intAttribute("tick"));
-      setTick(score()->curTick);
+            e.setTick(score()->fileDivision(e.intAttribute("tick")));
+      setTick(e.tick());
 
       const SigEvent& sigEvent = score()->sigmap()->timesig(tick());
       _timesig  = sigEvent.nominal();
@@ -1890,17 +1890,17 @@ void Measure::read(XmlReader& e, int staffIdx)
             const QStringRef& tag(e.name());
 
             if (tag == "tick")
-                  score()->curTick = e.readInt();
+                  e.setTick(e.readInt());
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
-                  barLine->setTrack(score()->curTrack);
+                  barLine->setTrack(e.track());
                   barLine->read(e);
-                  if ((score()->curTick != tick()) && (score()->curTick != (tick() + ticks()))) {
+                  if ((e.tick() != tick()) && (e.tick() != (tick() + ticks()))) {
                         // this is a mid measure bar line
-                        segment = getSegment(Segment::SegBarLine, score()->curTick);
+                        segment = getSegment(Segment::SegBarLine, e.tick());
                         }
                   else if (barLine->subtype() == START_REPEAT)
-                        segment = getSegment(Segment::SegStartRepeatBarLine, score()->curTick);
+                        segment = getSegment(Segment::SegStartRepeatBarLine, e.tick());
                   else {
                         // setEndBarLineType(barLine->barLineType(), false, barLine->visible(), barLine->color());
                         setEndBarLineType(barLine->subtype(), false, true, Qt::black);
@@ -1908,21 +1908,21 @@ void Measure::read(XmlReader& e, int staffIdx)
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
                               }
-                        segment = getSegment(Segment::SegEndBarLine, score()->curTick);
+                        segment = getSegment(Segment::SegEndBarLine, e.tick());
                         }
                   segment->add(barLine);
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
-                  chord->setTrack(score()->curTrack);
+                  chord->setTrack(e.track());
                   chord->read(e);
 
                   if (chord->noteType() != NOTE_NORMAL
                      && segment
                      && segment->subtype() == Segment::SegChordRest
-                     && segment->tick() == score()->curTick
-                     && segment->element(score()->curTrack)
-                     && segment->element(score()->curTrack)->type() == CHORD
+                     && segment->tick() == e.tick()
+                     && segment->element(e.track())
+                     && segment->element(e.track())->type() == CHORD
                      )
                         {
                         //
@@ -1937,7 +1937,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment = s;
                         }
                   else
-                        segment = getSegment(chord, score()->curTick);
+                        segment = getSegment(chord, e.tick());
                   Fraction ts(timeStretch * chord->globalDuration());
                   int crticks = chord->noteType() != NOTE_NORMAL ? 0 : ts.ticks();
                   if (chord->tremolo() && chord->tremolo()->subtype() < 6) {
@@ -1960,7 +1960,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               int track = chord->track();
                               Segment* ss = 0;
                               for (Segment* ps = first(Segment::SegChordRest); ps; ps = ps->next(Segment::SegChordRest)) {
-                                    if (ps->tick() >= score()->curTick)
+                                    if (ps->tick() >= e.tick())
                                           break;
                                     if (ps->element(track))
                                           ss = ps;
@@ -1979,15 +1979,15 @@ void Measure::read(XmlReader& e, int staffIdx)
                               else {
                                     qDebug("tremolo: first note not found");
                                     }
-                              score()->curTick += crticks / 2;
+                              e.setTick(e.tick() + crticks / 2);
                               }
                         else {
                               tremolo->setParent(chord);
-                              score()->curTick += crticks;
+                              e.setTick(e.tick() + crticks);
                               }
                         }
                   else {
-                        score()->curTick += crticks;
+                        e.setTick(e.tick() + crticks);
                         }
                   segment->add(chord);
                   }
@@ -1995,32 +1995,32 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Rest* rest = new Rest(score());
                   rest->setDurationType(TDuration::V_MEASURE);
                   rest->setDuration(timesig()/timeStretch);
-                  rest->setTrack(score()->curTrack);
+                  rest->setTrack(e.track());
                   rest->read(e);
 
-                  segment = getSegment(rest, score()->curTick);
+                  segment = getSegment(rest, e.tick());
                   segment->add(rest);
                   if (!rest->duration().isValid())     // hack
                         rest->setDuration(timesig()/timeStretch);
                   Fraction ts(timeStretch * rest->globalDuration());
 
-                  score()->curTick += ts.ticks();
+                  e.setTick(e.tick() + ts.ticks());
                   }
             else if (tag == "Note") {                 // obsolete
                   Chord* chord = new Chord(score());
-                  chord->setTrack(score()->curTrack);
+                  chord->setTrack(e.track());
                   chord->readNote(e);
-                  segment = getSegment(chord, score()->curTick);
+                  segment = getSegment(chord, e.tick());
                   segment->add(chord);
 
                   Fraction ts(timeStretch * chord->globalDuration());
-                  score()->curTick += ts.ticks();
+                  e.setTick(e.tick() + ts.ticks());
                   }
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score());
-                  breath->setTrack(score()->curTrack);
+                  breath->setTrack(e.track());
                   breath->read(e);
-                  segment = getSegment(Segment::SegBreath, score()->curTick);
+                  segment = getSegment(Segment::SegBreath, e.tick());
                   segment->add(breath);
                   }
             else if (tag == "endSpanner") {
@@ -2032,7 +2032,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               addSpannerBack(spanner);
                               }
                         else {
-                              segment = getSegment(Segment::SegChordRest, score()->curTick);
+                              segment = getSegment(Segment::SegChordRest, e.tick());
                               spanner->setEndElement(segment);
                               segment->addSpannerBack(spanner);
                               }
@@ -2060,11 +2060,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "TextLine"
                || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
-                  sp->setNext(score()->spanner);
-                  score()->spanner = sp;
+                  e.addSpanner(sp);
                   sp->setTrack(staffIdx * VOICES);
                   sp->read(e);
-                  segment = getSegment(Segment::SegChordRest, score()->curTick);
+                  segment = getSegment(Segment::SegChordRest, e.tick());
                   if (sp->anchor() == Spanner::ANCHOR_SEGMENT) {
                         sp->setStartElement(segment);
                         segment->add(sp);
@@ -2076,15 +2075,15 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());
-                  rm->setTrack(score()->curTrack);
+                  rm->setTrack(e.track());
                   rm->read(e);
-                  segment = getSegment(Segment::SegChordRest, score()->curTick);
+                  segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(rm);
-                  score()->curTick += ticks();
+                  e.setTick(e.tick() + ticks());
                   }
             else if (tag == "Clef") {
                   Clef* clef = new Clef(score());
-                  clef->setTrack(score()->curTrack);
+                  clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
                   if (segment && segment->next() && segment->next()->subtype() == Segment::SegClef) {
@@ -2092,28 +2091,28 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   else if (segment && segment != first()) {
                         Segment* ns;
-                        if (score()->curTick == tick())
+                        if (e.tick() == tick())
                               ns = first();
                         else {
                               // ??
                               // Segment* ns = segment->next();
                               ns = segment;
-                              while (ns && ns->tick() < score()->curTick)
+                              while (ns && ns->tick() < e.tick())
                                     ns = ns->next();
                               }
-                        segment = new Segment(this, Segment::SegClef, score()->curTick);
+                        segment = new Segment(this, Segment::SegClef, e.tick());
                         _segments.insert(segment, ns);
                         }
                   else {
-                        segment = getSegment(Segment::SegClef, score()->curTick);
+                        segment = getSegment(Segment::SegClef, e.tick());
                         }
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
                   TimeSig* ts = new TimeSig(score());
-                  ts->setTrack(score()->curTrack);
+                  ts->setTrack(e.track());
                   ts->read(e);
-                  segment = getSegment(Segment::SegTimeSig, score()->curTick);
+                  segment = getSegment(Segment::SegTimeSig, e.tick());
                   segment->add(ts);
 
                   if (score()->mscVersion() > 114) {
@@ -2136,18 +2135,18 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "KeySig") {
                   KeySig* ks = new KeySig(score());
-                  ks->setTrack(score()->curTrack);
+                  ks->setTrack(e.track());
                   ks->read(e);
-                  int tick = score()->curTick;
+                  int tick = e.tick();
                   segment = getSegment(Segment::SegKeySig, tick);
                   segment->add(ks);
                   staff->setKey(tick, ks->keySigEvent());
                   }
             else if (tag == "Lyrics") {                           // obsolete
                   Lyrics* lyrics = new Lyrics(score());
-                  lyrics->setTrack(score()->curTrack);
+                  lyrics->setTrack(e.track());
                   lyrics->read(e);
-                  segment       = getSegment(Segment::SegChordRest, score()->curTick);
+                  segment       = getSegment(Segment::SegChordRest, e.tick());
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(lyrics->track()));
                   if (!cr)
                         qDebug("Internal Error: no Chord/Rest for lyrics");
@@ -2156,14 +2155,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Text") {
                   Text* t = new Text(score());
-                  t->setTrack(score()->curTrack);
+                  t->setTrack(e.track());
                   t->read(e);
                   //previous versions stored measure number, delete it
                   if(t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER) {
                         delete t;
                       }
                   else {
-                        segment = getSegment(Segment::SegChordRest, score()->curTick);
+                        segment = getSegment(Segment::SegChordRest, e.tick());
                         segment->add(t);
                         }
                   }
@@ -2173,10 +2172,10 @@ void Measure::read(XmlReader& e, int staffIdx)
 
             else if (tag == "Dynamic") {
                   Dynamic* dyn = new Dynamic(score());
-                  dyn->setTrack(score()->curTrack);
+                  dyn->setTrack(e.track());
                   dyn->read(e);
                   dyn->resetType(); // for backward compatibility
-                  segment = getSegment(Segment::SegChordRest, score()->curTick);
+                  segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(dyn);
                   }
             else if (tag == "Harmony"
@@ -2192,16 +2191,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "FiguredBass"
                ) {
                   Element* el = Element::name2Element(tag, score());
-                  el->setTrack(score()->curTrack);
+                  el->setTrack(e.track());
                   el->read(e);
-                  segment = getSegment(Segment::SegChordRest, score()->curTick);
+                  segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(el);
                   }
             else if (tag == "Image") {
                   Image* image = new Image(score());
-                  image->setTrack(score()->curTrack);
+                  image->setTrack(e.track());
                   image->read(e);
-                  Segment* s = getSegment(Segment::SegChordRest, score()->curTick);
+                  Segment* s = getSegment(Segment::SegChordRest, e.tick());
                   s->add(image);
                   }
 
@@ -2225,11 +2224,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());
-                  tuplet->setTrack(score()->curTrack);
-                  tuplet->setTick(score()->curTick);
+                  tuplet->setTrack(e.track());
+                  tuplet->setTick(e.tick());
                   tuplet->setParent(this);
                   tuplet->read(e);
-                  score()->tuplets.append(tuplet);
+                  e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {
                   _repeatFlags |= RepeatStart;
@@ -2241,11 +2240,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Slur") {
                   Slur* slur = new Slur(score());
-                  slur->setTrack(score()->curTrack);
+                  slur->setTrack(e.track());
                   slur->read(e);
-                  slur->setNext(score()->spanner);
-                  slur->setNext(score()->spanner);
-                  score()->spanner = slur;
+                  e.addSpanner(slur);
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
@@ -2271,10 +2268,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   staves[staffIdx]->_slashStyle = e.readInt();
             else if (tag == "Beam") {
                   Beam* beam = new Beam(score());
-                  beam->setTrack(score()->curTrack);
+                  beam->setTrack(e.track());
                   beam->read(e);
                   beam->setParent(0);
-                  score()->beams.prepend(beam);
+                  e.addBeam(beam);
                   }
             else if (tag == "Segment")
                   segment->read(e);
@@ -2327,7 +2324,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
 
             }
-      foreach (Tuplet* tuplet, score()->tuplets) {
+      foreach (Tuplet* tuplet, e.tuplets()) {
             if (tuplet->elements().isEmpty()) {
                   // this should not happen and is a sign of input file corruption
                   qDebug("Measure:read(): empty tuplet, input file corrupted?");

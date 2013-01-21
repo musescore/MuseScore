@@ -95,15 +95,13 @@ bool DurationElement::readProperties(XmlReader& e)
       if (tag == "Tuplet") {
             // setTuplet(0);
             int i = e.readInt();
-            foreach(Tuplet* t, score()->tuplets) {
-                  if (t->id() == i) {
-                        setTuplet(t);
-                        if (!score()->undo()->active())  // HACK, also added in Undo::AddElement()
-                              t->add(this);
-                        break;
-                        }
+            Tuplet* t = e.findTuplet(i);
+            if (t) {
+                  setTuplet(t);
+                  if (!score()->undo()->active())  // HACK, also added in Undo::AddElement()
+                        t->add(this);
                   }
-            if (tuplet() == 0) {
+            else {
                   qDebug("DurationElement:read(): Tuplet id %d not found", i);
                   Tuplet* t = score()->searchTuplet(e, i);
                   if (t) {
@@ -111,7 +109,7 @@ bool DurationElement::readProperties(XmlReader& e)
                         setTuplet(t);
                         if (!score()->undo()->active())     // HACK
                               t->add(this);
-                        score()->tuplets.append(t);
+                        e.addTuplet(t);
                         }
                   }
             }

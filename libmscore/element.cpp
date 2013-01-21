@@ -687,7 +687,7 @@ bool Element::readProperties(XmlReader& e)
       else if (tag == "tick") {
             int val = e.readInt();
             if (type() != SYMBOL)   // hack for 1.2
-                  score()->curTick = score()->fileDivision(val);
+                  e.setTick(score()->fileDivision(val));
             }
       else if (tag == "offset") {         // ??obsolete -> used for volta
             qreal _spatium = spatium();
