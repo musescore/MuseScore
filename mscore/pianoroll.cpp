@@ -116,6 +116,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       gv  = new PianoView;
       gv->scale(xmag, 1.0);
       gv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      gv->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       hsb = new QScrollBar(Qt::Horizontal);
       connect(gv->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
@@ -128,24 +129,25 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       hbox->addWidget(gv);
 
       split = new QSplitter(Qt::Vertical);
-      split->setLineWidth(0);
-      split->setMidLineWidth(0);
+      split->setFrameShape(QFrame::NoFrame);
+//      split->setLineWidth(0);
+//      split->setMidLineWidth(0);
 
-      QWidget* split1 = new QWidget;
+      QWidget* split1 = new QWidget;      // piano - pianoview
       split1->setLayout(hbox);
       split->addWidget(split1);
 
       QGridLayout* layout = new QGridLayout;
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
-      mainWidget->setLayout(layout);
       layout->setColumnMinimumWidth(0, pianoWidth + 5);
       layout->setSpacing(0);
-      layout->addWidget(tb,    0, 1, 1, 1);
+      layout->addWidget(tb,    0, 0, 1, 2);
       layout->addWidget(ruler, 1, 1);
       layout->addWidget(split, 2, 0, 1, 2);
       layout->addWidget(hsb,   3, 1);
 
+      mainWidget->setLayout(layout);
       setCentralWidget(mainWidget);
 
       connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
