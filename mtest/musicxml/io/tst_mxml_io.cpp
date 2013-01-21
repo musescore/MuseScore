@@ -51,6 +51,7 @@ private slots:
       void arpGliss1() { mxmlIoTest("testArpGliss1"); }
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
+      void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void dalSegno() { mxmlIoTest("testDalSegno"); }
