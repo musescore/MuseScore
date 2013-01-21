@@ -21,8 +21,6 @@
 #include "ruler.h"
 #include "libmscore/score.h"
 
-static const int MAP_OFFSET = 2;
-
 QPixmap* Ruler::markIcon[3];
 
 static const char* rmark_xpm[]={
@@ -169,7 +167,7 @@ void Ruler::setXpos(int val)
 
 Pos Ruler::pix2pos(int x) const
       {
-      int val = lrint((x + _xpos - MAP_OFFSET)/_xmag - 480);
+      int val = lrint((x + _xpos)/_xmag - 480);
       if (val < 0)
             val = 0;
       return Pos(_score->tempomap(), _score->sigmap(), val, _timeType);
@@ -181,7 +179,7 @@ Pos Ruler::pix2pos(int x) const
 
 int Ruler::pos2pix(const Pos& p) const
       {
-      return lrint((p.time(_timeType)+480) * _xmag) + MAP_OFFSET - _xpos;
+      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 1;
       }
 
 //---------------------------------------------------------
@@ -191,7 +189,7 @@ int Ruler::pos2pix(const Pos& p) const
 void Ruler::paintEvent(QPaintEvent* e)
       {
       QPainter p(this);
-//      p.fillRect(e->rect(), Qt::yellow);
+//    p.fillRect(e->rect(), Qt::yellow);  // debug
 
       const QRect& r = e->rect();
 
@@ -202,7 +200,7 @@ void Ruler::paintEvent(QPaintEvent* e)
       int x  = r.x();
       int w  = r.width();
       int y  = rulerHeight - 16;
-      int h  = 14;
+      int h  = 16; // 14;
       int y1 = r.y();
       int rh = r.height();
       if (y1 < rulerHeight) {
@@ -211,8 +209,8 @@ void Ruler::paintEvent(QPaintEvent* e)
             }
       int y2 = y1 + rh;
 
-      if (x < (MAP_OFFSET - _xpos))
-            x = MAP_OFFSET - _xpos;
+      if (x < (-_xpos))
+            x = -_xpos;
 
       Pos pos1 = pix2pos(x);
       Pos pos2 = pix2pos(x+w);
@@ -293,7 +291,8 @@ void Ruler::paintEvent(QPaintEvent* e)
       if (_cursor.valid()) {
             int xp = pos2pix(_cursor);
             if (xp >= x && xp < x+w)
-                  p.drawLine(xp, 0, xp, rulerHeight-1);
+//                  p.drawLine(xp, 0, xp, rulerHeight-1);
+                  p.drawLine(xp, 0, xp, rulerHeight);
             }
       static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
       for (int i = 0; i < 3; ++i) {
