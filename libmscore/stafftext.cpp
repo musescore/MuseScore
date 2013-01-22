@@ -82,6 +82,7 @@ void StaffText::read(XmlReader& e)
                         a.midiActionNames.append(name);
                         _channelActions.append(a);
                         }
+                  e.readNext();
                   }
             else if (tag == "channelSwitch" || tag == "articulationChange") {
                   int voice = e.intAttribute("voice", -1);
@@ -93,11 +94,14 @@ void StaffText::read(XmlReader& e)
                         for (int i = 0; i < VOICES; ++i)
                               _channelNames[i] = e.attribute("name");
                         }
+                  e.readNext();
                   }
             else if (tag == "aeolus") {
                   int group = e.intAttribute("group", -1);
                   if (group >= 0 && group <= 4)
                         aeolusStops[group] = e.readInt();
+                  else
+                        e.readNext();
                   _setAeolusStops = true;
                   }
             else if (!Text::readProperties(e))
