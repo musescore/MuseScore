@@ -723,9 +723,9 @@ void Note::read(XmlReader& e)
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, ::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeOffset")
-                  ; // TODO setOnTimeUserOffset(val.toInt());
+                  e.skipCurrentElement(); // TODO setOnTimeUserOffset(val.toInt());
             else if (tag == "offTimeOffset")
-                  ; // TODO setOffTimeUserOffset(val.toInt());
+                  e.skipCurrentElement(); // TODO setOffTimeUserOffset(val.toInt());
             else if (tag == "head")
                   setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
@@ -908,11 +908,11 @@ void Note::read(XmlReader& e)
                   e.addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
-                  ; // _onTimeType = readValueType(e);
+                  e.skipCurrentElement(); // _onTimeType = readValueType(e);
             else if (tag == "offTimeType")                  // obsolete
-                  ; // _offTimeType = readValueType(e);
+                  e.skipCurrentElement(); // _offTimeType = readValueType(e);
             else if (tag == "tick")                         // bad input file
-                  ;
+                  e.skipCurrentElement();
             else if (Element::readProperties(e))
                   ;
             else
