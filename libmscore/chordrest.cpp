@@ -255,9 +255,11 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "leadingSpace") {
             qDebug("ChordRest: leadingSpace obsolete"); // _extraLeadingSpace = Spatium(val.toDouble());
+            e.skipCurrentElement();
             }
       else if (tag == "trailingSpace") {
             qDebug("ChordRest: trailingSpace obsolete"); // _extraTrailingSpace = Spatium(val.toDouble());
+            e.skipCurrentElement();
             }
       else if (tag == "Beam") {
             int id = e.readInt();
