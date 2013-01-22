@@ -2243,7 +2243,7 @@ bool Score::appendScore(Score* score)
 
 void Score::splitStaff(int staffIdx, int splitPoint)
       {
-      qDebug("split staff %d point %d\n", staffIdx, splitPoint);
+      qDebug("split staff %d point %d", staffIdx, splitPoint);
 
       //
       // create second staff
@@ -2266,7 +2266,9 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       clef->setParent(seg);
       undoAddElement(clef);
 
-      undoChangeBarLineSpan(s, p->nstaves(), 0, staff(staffIdx+p->nstaves())->lines()-1);
+      int n = p->nstaves();
+      Staff* nstaff = staff(staffIdx + n - 1);
+      undoChangeBarLineSpan(s, n, 0, nstaff->lines() - 1);
       adjustBracketsIns(staffIdx+1, staffIdx+2);
       undoChangeKeySig(ns, 0, s->key(0));
 
