@@ -150,7 +150,6 @@ Score* createExcerpt(const QList<Part*>& parts)
       score->setPlaylistDirty(true);
       score->rebuildMidiMapping();
       score->updateChannel();
-
       score->setLayoutAll(true);
       score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
       score->doLayout();

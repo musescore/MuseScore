@@ -191,6 +191,8 @@ class Note : public Element {
 
       int playTicks() const;
 
+      void dropEvent(QDropEvent *e);
+
       qreal headWidth() const;
       qreal headHeight() const;
       qreal tabHeadWidth(StaffTypeTablature* tab = 0) const;
@@ -290,7 +292,9 @@ class Note : public Element {
 //      void setBend(Bend* b)               { _bend = b;    }
 
       int customizeVelocity(int velo) const;
-      Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
+
+      Q_INVOKABLE NoteDot* dot(int n)  { return _dots[n];           }
+      void updatePitch(int pitch, int tcp);
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);

@@ -802,5 +802,9 @@
     <seq>Alt+9</seq>
     <seq>Alt+K</seq>
     </SC>
+    <SC>
+      <key>delete-accidental</key>
+      <seq>Alt+Del</seq>
+      </SC>
   </Shortcuts>
 

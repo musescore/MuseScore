@@ -72,6 +72,7 @@
 #include "cursor.h"
 #include "rendermidi.h"
 
+
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
 QSize  scoreSize(950, 500);
@@ -356,7 +357,7 @@ Score::Score(const MStyle* s)
    : _selection(this)
       {
       init();
-      _tempomap = new TempoMap;
+       _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
       _style    = *s;
       }
@@ -2098,16 +2099,31 @@ void Score::cmdUpdateNotes()
 
 void Score::updateAccidentals(Measure* m, int staffIdx)
       {
-// qDebug("updateAccidentals measure %d staff %d\n", m->no(), staffIdx);
+      if(updateAcc2)
+            return;
+        // qDebug("updateAccidentals measure %d staff %d\n", m->no(), staffIdx);
       Staff* st = staff(staffIdx);
       AccidentalState as;      // list of already set accidentals for this measure
       as.init(st->keymap()->key(m->tick()));
+           for (Segment* segment = m->first(); segment; segment = segment->next()) {
+                 if (segment->subtype() & (Segment::SegChordRestGrace))
+                      m->updateAccidentals(segment, staffIdx, &as);
+       }
+}
 
-      for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->subtype() & (Segment::SegChordRestGrace))
-                  m->updateAccidentals(segment, staffIdx, &as);
-            }
-      }
+//---------------------------------------------------------
+//   updatePitches
+//---------------------------------------------------------
+
+void Score::updatePitches(Segment* segment, int staffIdx, int pitch, int tpc, int line, Accidental::AccidentalType accidental)
+       {
+       Measure* m = segment->measure();
+       // qDebug("updateAccidentals measure %d staff %d\n", m->no(), staffIdx);
+       for (Segment* seg = segment->next(); seg; seg = seg->next()) {           // alters the following notes on the same line
+             if (seg->subtype() & (Segment::SegChordRestGrace))
+                    m->updatePitches(seg, staffIdx, pitch, tpc, line, accidental);
+       }
+}
 
 //---------------------------------------------------------
 //   clone
