@@ -1378,6 +1378,7 @@ void MuseScore::setCurrentView(int tabIdx, int idx)
             }
       }
 
+
 //---------------------------------------------------------
 //   setCurrentScoreView
 //---------------------------------------------------------
@@ -4354,7 +4355,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             delete est;
             }
       else {
-            if (cv) {
+             if (cv) {
                   cv->setFocus();
                   cv->cmd(a);
                   }
