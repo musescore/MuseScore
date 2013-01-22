@@ -356,8 +356,10 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         else if (tag == "BarLine") {
                               e.skipCurrentElement();    // ignore bar line
                               }
-                        else
-                              e.unknown();
+                        else {
+                              qDebug("PasteStaff: element %s not handled", tag.toUtf8().data());
+                              e.skipCurrentElement();    // ignore
+                              }
                         }
 
                   foreach (Tuplet* tuplet, e.tuplets()) {
