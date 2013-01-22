@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/split/pitchsplit1.mscx plitchsplit1-ref.mscx
+
