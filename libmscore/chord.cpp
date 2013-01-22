@@ -302,17 +302,17 @@ QPointF Chord::stemPos() const
 
 //---------------------------------------------------------
 //   stemPosX
-//    return chord coordinates
+//    return page coordinates
 //---------------------------------------------------------
 
 qreal Chord::stemPosX() const
       {
+      qreal x = pageX();
       if (staff() && staff()->isTabStaff()) {
             QPointF p = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium();
-            return p.x();
+            x += p.x();
             }
-      qreal x = pageX();
-      if (_up)
+      else if (_up)
             x += symbols[score()->symIdx()][quartheadSym].width(magS());
       return x;
       }

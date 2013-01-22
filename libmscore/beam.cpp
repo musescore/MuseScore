@@ -1785,6 +1785,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   y1 = by + _pagePos.y();
                   }
 
+            if (staff()->isTabStaff())          // for some reason, this is only need for TAB's
+                  stem->setPos(stemPos - c->pagePos());
             stem->setLen(y2 - y1);
 
             //
