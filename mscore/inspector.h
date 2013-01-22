@@ -403,6 +403,7 @@ class Inspector : public QDockWidget {
       InspectorBase* ie;
       Element* _element;
       QList<Element*> _el;
+      bool _inspectorEdit;                // set to true when an edit originates from within the inspector itself
 
       virtual void closeEvent(QCloseEvent*);
 
@@ -416,8 +417,10 @@ class Inspector : public QDockWidget {
       Inspector(QWidget* parent = 0);
       void setElement(Element*);
       void setElementList(const QList<Element*>&);
-      Element* element() const { return _element; }
-      const QList<Element*>& el() const { return _el; }
+      Element* element() const            { return _element; }
+      const QList<Element*>& el() const   { return _el; }
+      bool inspectorEdit() const          { return _inspectorEdit; }
+      void setInspectorEdit(bool val)     { _inspectorEdit = val; }
       };
 
 #endif
