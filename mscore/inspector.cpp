@@ -82,6 +82,7 @@ Inspector::Inspector(QWidget* parent)
       mainWidget->setLayout(layout);
       ie        = 0;
       _element  = 0;
+      _inspectorEdit = false;
       layout->addStretch(10);
       }
 
@@ -113,6 +114,14 @@ void Inspector::reset()
 
 void Inspector::setElement(Element* e)
       {
+      // if the element is being set again because of an edit originated
+      // from within the inspector itself, do nothing
+      if(_inspectorEdit) {                // if within an inspector-originated edit
+            _inspectorEdit = false;       // reset flag
+            if(_element == e)             // if element is not changing...
+                  return;                 // ...do nothing
+      }
+
       if (e == 0 || _element == 0 || (e->type() != _element->type())) {
             if (ie)
                   ie->deleteLater();
@@ -338,6 +347,8 @@ void InspectorElementElement::apply()
          &&  visible->isChecked() == e->visible())
             return;
 
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       if (mscore->state() == STATE_EDIT) {
             if (e->color() != color->color()) {
                   ChangeProperty cp(e, P_COLOR, color->color());
@@ -507,6 +518,8 @@ void InspectorArticulation::apply()
       if (o == a->pos() && anchor == a->anchor() && d == a->direction())
             return;
 
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       score->startCmd();
       if (o != a->pos())
             score->undoChangeProperty(a, P_USER_OFF, o - a->ipos());
@@ -553,6 +566,8 @@ void InspectorSpacer::apply()
       Score* score   = spacer->score();
       qreal space    = sp.height->value() * spacer->spatium();
       if (space != spacer->gap()) {
+            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                            // do not set element values again
             score->startCmd();
             score->undoChangeProperty(spacer, P_SPACE, space);
             score->endCmd();
@@ -645,6 +660,8 @@ void InspectorSegment::apply()
       {
       if (!dirty())
             return;
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       Score* score = segment->score();
       score->startCmd();
       qreal val = leadingSpace->value();
@@ -792,6 +809,8 @@ bool InspectorNoteBase::dirty() const
 
 void InspectorNoteBase::apply()
       {
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       Score* score = note->score();
       score->startCmd();
       bool b = small->isChecked();
@@ -1264,6 +1283,8 @@ void InspectorRest::apply()
 
       bool val = small->isChecked();
       if (val != rest->small()) {
+            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                            // do not set element values again
             Score* score     = rest->score();
             score->startCmd();
             score->undoChangeProperty(rest, P_SMALL, val);
@@ -1319,6 +1340,8 @@ void InspectorTimeSig::apply()
 
       bool val = showCourtesy->isChecked();
       if (val != sig->showCourtesySig()) {
+            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                            // do not set element values again
             Score* score = sig->score();
             score->startCmd();
             score->undoChangeProperty(sig, P_SHOW_COURTESY, val);
@@ -1385,6 +1408,8 @@ void InspectorKeySig::apply()
       bool sc = showCourtesy->isChecked();
       bool sn = showNaturals->isChecked();
       if (sc != sig->showCourtesy() || sn != sig->showNaturals()) {
+            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                            // do not set element values again
             Score* score = sig->score();
             score->startCmd();
             if (sc != sig->showCourtesy())
@@ -1440,6 +1465,8 @@ void InspectorClef::apply()
 
       bool val = showCourtesy->isChecked();
       if (val != clef->showCourtesy()) {
+            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                            // do not set element values again
             Score* score = clef->score();
             score->startCmd();
             score->undoChangeProperty(clef, P_SHOW_COURTESY, val);
@@ -1628,6 +1655,8 @@ void InspectorChord::apply()
       {
       if (!dirty())
             return;
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       Score* score = chord->score();
       score->startCmd();
       if (small->isChecked() != chord->small())
@@ -1767,6 +1796,8 @@ void InspectorBarLine::apply()
       BarLine*    bl = static_cast<BarLine*>(inspector->element());
       Score*      score = bl->score();
 
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
       score->startCmd();
 
       // type
