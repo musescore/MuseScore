@@ -199,15 +199,7 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
                                     }
                               }
                         else {
-                              int k=1;
-                              if (-1>=magStep>=-4){
-                                    for (int i=0;i>magStep;i--){
-                                          k *= 2;
-                                    }
-                              }
-                              else{
-                                    k = 32;
-                              }
+                              int k = 1 << -magStep;
 
                               int n = (MScore::division * 4) / stick.timesig().timesig().denominator();
                               for (int i = 0; i < k; ++i) {
