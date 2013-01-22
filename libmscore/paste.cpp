@@ -121,7 +121,7 @@ void Score::cmdPaste(MuseScoreView* view)
                   }
 
             QByteArray data(ms->data(mimeStaffListFormat));
-// qDebug("paste <%s>", data.data());
+qDebug("paste <%s>", data.data());
             XmlReader e(data);
             pasteStaff(e, cr);
             }
@@ -345,6 +345,13 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Segment* segment = m->undoGetSegment(Segment::SegBreath, tick);
                               breath->setParent(segment);
                               undoAddElement(breath);
+                              }
+                        else if (tag == "Beam") {
+                              Beam* beam = new Beam(this);
+                              beam->setTrack(e.track());
+                              beam->read(e);
+                              beam->setParent(0);
+                              e.addBeam(beam);
                               }
                         else if (tag == "BarLine") {
                               e.skipCurrentElement();    // ignore bar line
