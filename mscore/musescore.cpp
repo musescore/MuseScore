@@ -2912,6 +2912,7 @@ AboutBoxDialog::AboutBoxDialog()
 //---------------------------------------------------------
 //   copyRevisionToClipboard
 //---------------------------------------------------------
+
 void AboutBoxDialog::copyRevisionToClipboard()
       {
       QClipboard* cb = QApplication::clipboard();
