@@ -73,6 +73,7 @@ add_library (
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
       exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
+      bsymbol.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (
