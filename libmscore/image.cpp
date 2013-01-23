@@ -301,7 +301,7 @@ void Image::write(Xml& xml) const
       //          if the Save As path is different, image relative path will be wrong!
       //
       QString relativeFilePath= QString();
-      if(!_linkPath.isEmpty() && _linkIsValid) {
+      if (!_linkPath.isEmpty() && _linkIsValid) {
             QFileInfo fi(_linkPath);
             // _score->fileInfo()->canonicalPath() would be better
             // but we are saving under a temp file name and the 'final' file
@@ -310,7 +310,7 @@ void Image::write(Xml& xml) const
             QString scorePath = _score->fileInfo()->absolutePath();
             QString imgFPath  = fi.canonicalFilePath();
             // if imgFPath is in (or below) the directory of scorePath
-            if(imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+            if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
                   // relative img path is the part exceeding scorePath
                   imgFPath.remove(0, scorePath.size());
                   if(imgFPath.startsWith('/'))
@@ -323,10 +323,10 @@ void Image::write(Xml& xml) const
                   fi.setFile(scorePath);
                   scorePath = fi.path();
                   // if imgFPath is in (or below) the directory up the score directory
-                  if(imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+                  if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
                         // relative img path is the part exceeding new scorePath plus "../"
                         imgFPath.remove(0, scorePath.size());
-                        if(!imgFPath.startsWith('/'))
+                        if (!imgFPath.startsWith('/'))
                               imgFPath.prepend('/');
                         imgFPath.prepend("..");
                         relativeFilePath = imgFPath;
@@ -334,11 +334,11 @@ void Image::write(Xml& xml) const
                   }
             }
       // if no match, use full _linkPath
-      if(relativeFilePath.isEmpty())
+      if (relativeFilePath.isEmpty())
             relativeFilePath = _linkPath;
 
       xml.stag("Image");
-      Element::writeProperties(xml);
+      BSymbol::writeProperties(xml);
       // keep old "path" tag, for backward compatibility and because it is used elsewhere
       // (for instance by Box:read(), Measure:read(), Note:read(), ...)
       xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
@@ -377,7 +377,7 @@ void Image::read(XmlReader& e)
                   _linkPath = e.readElementText();
             else if (tag == "subtype")    // obsolete
                   e.skipCurrentElement();
-            else if (!Element::readProperties(e))
+            else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
 
