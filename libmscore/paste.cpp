@@ -121,7 +121,7 @@ void Score::cmdPaste(MuseScoreView* view)
                   }
 
             QByteArray data(ms->data(mimeStaffListFormat));
-qDebug("paste <%s>", data.data());
+// qDebug("paste <%s>", data.data());
             XmlReader e(data);
             pasteStaff(e, cr);
             }
@@ -535,3 +535,4 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             undoAddCR(cr, measure, tick);
             }
       }
+

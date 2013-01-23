@@ -473,7 +473,7 @@ bool Text::readProperties(XmlReader& e)
                   setTextStyleType(st);
             }
       else if (tag == "styleName")          // obsolete, unstyled text
-            ; // _styleName = val;
+            e.skipCurrentElement(); // _styleName = val;
       else if (tag == "data")                  // obsolete
             _doc->setHtml(e.readElementText());
       else if (tag == "html") {

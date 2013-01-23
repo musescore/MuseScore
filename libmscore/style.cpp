@@ -474,7 +474,6 @@ StyleData::StyleData()
             StyleVal(ST_propertyDistanceHead, Spatium(1.0)),
             StyleVal(ST_propertyDistanceStem, Spatium(1.8)),
             StyleVal(ST_propertyDistance,     Spatium(1.0)),
-//            StyleVal(ST_pageFillLimit,        qreal(0.7)),
             StyleVal(ST_lastSystemFillLimit,  qreal(0.3)),
 
             StyleVal(ST_hairpinY, Spatium(8)),
@@ -579,8 +578,6 @@ StyleData::StyleData()
             StyleVal(ST_tremoloBoxHeight, Spatium(0.65)),
             StyleVal(ST_tremoloStrokeWidth, Spatium(0.35)),
             StyleVal(ST_tremoloDistance, Spatium(0.8))
-
-
             };
 
       for (int idx = 0; idx < ST_STYLES; ++idx)
@@ -900,8 +897,8 @@ bool TextStyleData::readProperties(XmlReader& e)
             e.skipCurrentElement();
       else if (ElementLayout::readProperties(e))
             ;
-      else if (tag == "sizeIsSpatiumDependent")
-            sizeIsSpatiumDependent = e.readDouble();
+      else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent")
+            sizeIsSpatiumDependent = e.readInt();
       else if (tag == "frameWidth") {
             hasFrame = true;
             frameWidthMM = e.readDouble();
@@ -1007,7 +1004,10 @@ void StyleData::load(XmlReader& e)
                               int idx2;
                               for (idx2 = 0; idx2 < ARTICULATIONS; ++idx2) {
                                     ArticulationInfo& ai =  Articulation::articulationList[idx2];
-                                    if (tag == ai.name + "Anchor") {
+                                    if (tag == ai.name + "Anchor"
+                                       || (tag == "U" + ai.name + "Anchor")
+                                       || (tag == "D" + ai.name + "Anchor")
+                                       ) {
                                           _articulationAnchor[idx2] = ArticulationAnchor(val.toInt());
                                           break;
                                           }
