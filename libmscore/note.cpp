@@ -1042,6 +1042,10 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == FRET_DIAGRAM));
       }
 
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
 Element* Note::drop(const DropData& data)
       {
       Element* e = data.element;

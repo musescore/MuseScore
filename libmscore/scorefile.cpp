@@ -493,42 +493,6 @@ bool Score::loadStyle(const QString& fn)
       }
 
 //---------------------------------------------------------
-//   loadPartsStyle (ise parts-style)
-//---------------------------------------------------------
-
-/*bool Score::loadPartsStyle(const QString& fn)
-      {
-      QFile f(fn);
-      if (f.open(QIODevice::ReadOnly)) {
-            MStyle st = _partsStyle;
-            if (st.load(&f)) {
-                  // _undo->push(new ChangeStyle(this, st));
-                  return true;
-                  }
-            }
-      MScore::lastError = strerror(errno);
-      return false;
-      }*/
-
-//---------------------------------------------------------
-//   getPartsStyle (ise parts-style)
-//---------------------------------------------------------
-
-/*bool Score::getPartsStyle()
-      {
-      QFile f(fn);
-      if (f.open(QIODevice::ReadOnly)) {
-            MStyle st = _partsStyle;
-            if (st.load(&f)) {
-                  // _undo->push(new ChangeStyle(this, st));
-                  return true;
-                  }
-            }
-      MScore::lastError = strerror(errno);
-      return false;
-      }*/
-
-//---------------------------------------------------------
 //   saveStyle
 //---------------------------------------------------------
 
