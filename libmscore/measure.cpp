@@ -1851,6 +1851,8 @@ void Measure::read(XmlReader& e, int staffIdx)
       qreal _spatium = spatium();
       bool irregular;
 
+      e.tuplets().clear();
+
       for (int n = staves.size(); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;

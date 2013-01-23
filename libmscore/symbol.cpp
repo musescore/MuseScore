@@ -20,143 +20,6 @@
 #include "page.h"
 #include "score.h"
 #include "image.h"
-#include "segment.h"
-#include "mscore.h"
-
-//---------------------------------------------------------
-//   BSymbol
-//---------------------------------------------------------
-
-BSymbol::BSymbol(Score* s)
-   : Element(s)
-      {
-      _z = SYMBOL * 100;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      }
-
-BSymbol::BSymbol(const BSymbol& s)
-   : Element(s), ElementLayout(s)
-      {
-      _z = s._z;
-      foreach(Element* e, s._leafs) {
-            Element* ee = e->clone();
-            ee->setParent(this);
-            _leafs.append(ee);
-            }
-      }
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void BSymbol::add(Element* e)
-      {
-      if (e->type() == SYMBOL || e->type() == IMAGE) {
-            e->setParent(this);
-            _leafs.append(e);
-            static_cast<BSymbol*>(e)->setZ(z() - 1);    // draw on top of parent
-            }
-      else
-            qDebug("BSymbol::add: unsupported type %s\n", e->name());
-      }
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
-
-void BSymbol::remove(Element* e)
-      {
-      if (e->type() == SYMBOL || e->type() == IMAGE) {
-            if (!_leafs.removeOne(e))
-                  qDebug("BSymbol::remove: element <%s> not found\n", e->name());
-            }
-      else
-            qDebug("BSymbol::remove: unsupported type %s\n", e->name());
-      }
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
-      {
-      func(data, this);
-      foreach (Element* e, _leafs)
-            e->scanElements(data, func, all);
-      }
-
-//---------------------------------------------------------
-//   acceptDrop
-//---------------------------------------------------------
-
-bool BSymbol::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
-      {
-      int type = e->type();
-      return type == SYMBOL || type == IMAGE;
-      }
-
-//---------------------------------------------------------
-//   drop
-//---------------------------------------------------------
-
-Element* BSymbol::drop(const DropData& data)
-      {
-      Element* el = data.element;
-      if (el->type() == SYMBOL || el->type() == IMAGE) {
-            el->setParent(this);
-            QPointF p = data.pos - pagePos() - data.dragOffset;
-            el->setUserOff(p);
-            score()->undoAddElement(el);
-            return el;
-            }
-      else
-            delete el;
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void BSymbol::layout()
-      {
-      foreach(Element* e, _leafs)
-            e->layout();
-      adjustReadPos();
-      }
-
-//---------------------------------------------------------
-//   drag
-//---------------------------------------------------------
-
-QRectF BSymbol::drag(const EditData& data)
-      {
-      QRectF r(canvasBoundingRect());
-      foreach(const Element* e, _leafs)
-            r |= e->canvasBoundingRect();
-
-      qreal x = data.pos.x();
-      qreal y = data.pos.y();
-
-      qreal _spatium = spatium();
-      if (data.hRaster) {
-            qreal hRaster = _spatium / MScore::hRaster();
-            int n = lrint(x / hRaster);
-            x = hRaster * n;
-            }
-      if (data.vRaster) {
-            qreal vRaster = _spatium / MScore::vRaster();
-            int n = lrint(y / vRaster);
-            y = vRaster * n;
-            }
-
-      setUserOff(QPointF(x, y));
-
-      r |= canvasBoundingRect();
-      foreach(const Element* e, _leafs)
-            r |= e->canvasBoundingRect();
-      return r;
-      }
 
 //---------------------------------------------------------
 //   Symbol
@@ -231,9 +94,7 @@ void Symbol::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("name", Sym::id2name(_sym));
-      Element::writeProperties(xml);
-      foreach(const Element* e, leafs())
-            e->write(xml);
+      BSymbol::writeProperties(xml);
       xml.etag();
       }
 
@@ -278,7 +139,7 @@ void Symbol::read(XmlReader& e)
                   }
             else if (tag == "small" || tag == "subtype")
                   ;
-            else if (!Element::readProperties(e))
+            else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
       if (s == noSym)
@@ -353,14 +214,14 @@ QPointF BSymbol::canvasPos() const
 //---------------------------------------------------------
 
 FSymbol::FSymbol(Score* s)
-  : Element(s)
+  : BSymbol(s)
       {
       _code = 0;
       _font.setStyleStrategy(QFont::NoFontMerging);
       }
 
 FSymbol::FSymbol(const FSymbol& s)
-  : Element(s)
+  : BSymbol(s)
       {
       _font = s._font;
       _code = s._code;
@@ -393,7 +254,7 @@ void FSymbol::write(Xml& xml) const
       xml.tag("font",     _font.family());
       xml.tag("fontsize", _font.pixelSize());
       xml.tag("code",     _code);
-      Element::writeProperties(xml);
+      BSymbol::writeProperties(xml);
       xml.etag();
       }
 
@@ -411,7 +272,7 @@ void FSymbol::read(XmlReader& e)
                   _font.setPixelSize(e.readInt());
             else if (tag == "code")
                   _code = e.readInt();
-            else if (!Element::readProperties(e))
+            else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
       setPos(QPointF());

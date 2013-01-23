@@ -586,7 +586,7 @@ void SLine::layout()
                   }
             else {
                   int n = segCount - segmentsNeeded;
-                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
+//                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
                   for (int i = 0; i < n; ++i) {
                         if (spannerSegments().isEmpty()) {
                               qDebug("SLine::layout(): no segment %d, %d expected", i, n);

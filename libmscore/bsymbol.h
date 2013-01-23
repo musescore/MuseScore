@@ -29,6 +29,7 @@ class BSymbol : public Element, public ElementLayout {
       int _z;                     ///< stacking order when drawing or selecting;
                                   ///< elements are drawn from high number to low number;
                                   ///< default is type() * 100;
+      bool _systemFlag;
 
    public:
       BSymbol(Score* s);
@@ -44,6 +45,9 @@ class BSymbol : public Element, public ElementLayout {
       virtual void layout();
       virtual QRectF drag(const EditData& pos);
 
+      void writeProperties(Xml& xml) const;
+      bool readProperties(XmlReader&);
+
       const QList<Element*>& leafs() const { return _leafs; }
       QList<Element*>& leafs()             { return _leafs; }
       virtual QPointF pagePos() const;
@@ -52,6 +56,8 @@ class BSymbol : public Element, public ElementLayout {
       Segment* segment() const            { return (Segment*)parent(); }
       virtual int z() const               { return _z; }
       void setZ(int val)                  { _z = val;  }
+      bool systemFlag() const             { return _systemFlag; }
+      void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
 
 #endif

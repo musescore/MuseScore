@@ -54,7 +54,7 @@ void SlurMap::check()
       foreach(const Slur2& s2, map) {
             Slur* slur = s2.n;
             if (slur->endElement() == 0) {
-                  qDebug("slur end element missing %p new %p\n", s2.o, s2.n);
+                  qDebug("slur end element missing %p new %p", s2.o, s2.n);
                   static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
                   delete slur;
                   }

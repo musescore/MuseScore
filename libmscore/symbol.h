@@ -59,7 +59,7 @@ class Symbol : public BSymbol {
 ///   Symbol constructed from a font glyph.
 //---------------------------------------------------------
 
-class FSymbol : public Element {
+class FSymbol : public BSymbol {
       Q_OBJECT
 
       QFont _font;
