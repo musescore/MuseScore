@@ -357,7 +357,7 @@ Score::Score(const MStyle* s)
    : _selection(this)
       {
       init();
-       _tempomap = new TempoMap;
+      _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
       _style    = *s;
       }
