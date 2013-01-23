@@ -485,10 +485,12 @@ QPointF SLine::linePos(int grip, System** sys)
                   // anchor() == ANCHOR_MEASURE
                   Measure* m;
                   if (grip == GRIP_LINE_START) {
+                        Q_ASSERT(startElement()->type() == MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
                         }
                   else {
+                        Q_ASSERT(endElement()->type() == MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
                         if (type() == VOLTA) {
@@ -504,6 +506,7 @@ QPointF SLine::linePos(int grip, System** sys)
                                     }
                               }
                         }
+                  Q_ASSERT(m->system());
                   *sys = m->system();
                   }
                   break;
@@ -519,7 +522,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   }
 
             case Spanner::ANCHOR_CHORD:
-                  qDebug("Sline::linePos(): anchor not implemented\n");
+                  qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
 

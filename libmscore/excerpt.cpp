@@ -232,8 +232,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           }
 #if 1
                                     else {
-                                          qDebug("cloneSpanner(measure): cannot find spanner <%s> %d track %d",
-                                             s->name(), m->no(), srcTrack);
+                                          qDebug("cloneSpanner(measure): (%d) cannot find spanner %p <%s> %d track %d",
+                                             m->tick(), s, s->name(), m->no(), srcTrack);
                                           }
 #endif
                                     }
@@ -252,7 +252,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               else
                                     ns = nm->getSegment(oseg->subtype(), oseg->tick());
 
-                              for(Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
+                              for (Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
                                           continue;
                                     Spanner* nspanner = static_cast<Spanner*>(spanner->linkedClone());
@@ -273,8 +273,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           nspanner->setStartElement(nm);
                                     ns->addSpannerFor(nspanner);
                                     spannerMap.add(spanner, nspanner);
+                                    printf("  addSpanner old %p new %p\n", spanner, nspanner);
                                     }
-                              for(Spanner* spanner = oseg->spannerBack(); spanner; spanner = spanner->next()) {
+                              for (Spanner* spanner = oseg->spannerBack(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
                                           continue;
                                     Spanner* nspanner = spannerMap.findNew(spanner);
@@ -286,7 +287,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ns->addSpannerBack(nspanner);
                                           }
                                     else {
-                                          qDebug("cloneSpanner(seg): cannot find spanner");
+                                          qDebug("cloneSpanner(seg): cannot find spanner old %p", spanner);
                                           }
                                     }
 
