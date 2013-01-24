@@ -48,7 +48,7 @@ class Part : public QObject {
       void initFromInstrTemplate(const InstrumentTemplate*);
 
       void read(XmlReader&);
-      void read114(XmlReader&, QList<ClefList*>&);
+      void read114(XmlReader&);
       void write(Xml& xml) const;
       int nstaves() const                       { return _staves.size(); }
       QList<Staff*>* staves()                   { return &_staves; }
