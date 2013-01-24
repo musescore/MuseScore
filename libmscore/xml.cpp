@@ -254,6 +254,21 @@ Tuplet* XmlReader::findTuplet(int id) const
       }
 
 //---------------------------------------------------------
+//   addTuplet
+//---------------------------------------------------------
+
+void XmlReader::addTuplet(Tuplet* s)
+      {
+      Tuplet* t = findTuplet(s->id());
+      if (t) {
+            qDebug("Tuplet %d already read", s->id());
+            delete s;
+            return;
+            }
+      _tuplets.append(s);
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 

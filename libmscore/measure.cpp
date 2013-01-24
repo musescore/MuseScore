@@ -2329,7 +2329,8 @@ void Measure::read(XmlReader& e, int staffIdx)
       foreach (Tuplet* tuplet, e.tuplets()) {
             if (tuplet->elements().isEmpty()) {
                   // this should not happen and is a sign of input file corruption
-                  qDebug("Measure:read(): empty tuplet, input file corrupted?");
+                  qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
+                     tuplet->id(), tuplet);
                   delete tuplet;
                   }
             else

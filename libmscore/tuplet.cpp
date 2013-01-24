@@ -600,25 +600,27 @@ void Tuplet::add(Element* e)
                   break;
             case CHORD:
             case REST:
-            case TUPLET:
-                  {
+            case TUPLET: {
+                  bool found = false;
                   DurationElement* de = static_cast<DurationElement*>(e);
                   int tick = de->tick();
                   if (tick != -1) {
                         for (int i = 0; i < _elements.size(); ++i) {
                               if (_elements[i]->tick() > tick) {
                                     _elements.insert(i, de);
-                                    return;
+                                    found = true;
+                                    break;
                                     }
                               }
                         }
-                  _elements.append(de);
+                  if (!found)
+                        _elements.append(de);
                   de->setTuplet(this);
-                  }
 
                   // the tick position of a tuplet is the tick position of its
                   // first element:
                   setTick(_elements.front()->tick());
+                  }
                   break;
 
             default:

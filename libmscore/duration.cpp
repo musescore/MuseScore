@@ -98,8 +98,9 @@ bool DurationElement::readProperties(XmlReader& e)
             Tuplet* t = e.findTuplet(i);
             if (t) {
                   setTuplet(t);
-                  if (!score()->undo()->active())  // HACK, also added in Undo::AddElement()
+                  if (!score()->undo()->active()) {  // HACK, also added in Undo::AddElement()
                         t->add(this);
+                        }
                   }
             else {
                   qDebug("DurationElement:read(): Tuplet id %d not found", i);
