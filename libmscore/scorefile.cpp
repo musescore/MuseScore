@@ -1271,6 +1271,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                     xml.curTick = segment->tick();
                                     needTick = false;
                                     }
+                              Q_ASSERT(e->id() != -1);
                               xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
                               }
                         }

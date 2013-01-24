@@ -136,13 +136,13 @@ Segment::Segment(const Segment& s)
       empty = s.empty;           // cached value
       _tick = s._tick;
 
-      foreach(Element* e, s._annotations) {
+      foreach (Element* e, s._annotations) {
             Element* ne = e->clone();
             add(ne);
             }
 
       _elist.reserve(s._elist.size());
-      foreach(Element* e, s._elist) {
+      foreach (Element* e, s._elist) {
             Element* ne = 0;
             if (e) {
                   ne = e->clone();
