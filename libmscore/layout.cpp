@@ -2666,7 +2666,7 @@ qreal Score::computeMinWidth(Segment* fs) const
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
-                              if (pSeg->subtype() == Segment::SegClef)
+                              if (pt == Segment::SegClef)
                                     minDistance = styleP(ST_clefBarlineDistance);
                               else
                                     stretchDistance = styleP(ST_noteBarDistance);

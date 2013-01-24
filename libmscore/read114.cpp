@@ -321,6 +321,10 @@ Score::FileError Score::read114(XmlReader& e)
             KeyList* km = s->keymap();
             for (ciKeyList i = km->begin(); i != km->end(); ++i) {
                   int tick = i->first;
+                  if (tick < 0) {
+                        qDebug("read114: Key tick %d", tick);
+                        continue;
+                        }
                   KeySigEvent ke = i->second;
                   Measure* m = tick2measure(tick);
                   Segment* seg = m->getSegment(Segment::SegKeySig, tick);
@@ -415,7 +419,6 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             else {
-printf("spanner %s %d-%d\n", s->name(), s1->tick(), s2->tick());
                   s->setStartElement(s1);
                   s->setEndElement(s2);
                   s1->add(s);
@@ -428,47 +431,6 @@ printf("spanner %s %d-%d\n", s->name(), s1->tick(), s2->tick());
                         LineSegment* seg = volta->segmentAt(i);
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
-                        }
-                  }
-            }
-
-      // check slurs
-      foreach(Spanner* s, e.spanner()) {
-            if (s->type() != Element::SLUR)
-                  continue;
-            Slur* slur = static_cast<Slur*>(s);
-
-            if (!slur->startElement() || !slur->endElement()) {
-                  qDebug("incomplete Slur");
-                  if (slur->startElement()) {
-                        qDebug("  front %d", static_cast<ChordRest*>(slur->startElement())->tick());
-                        static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                        }
-                  if (slur->endElement()) {
-                        qDebug("  back %d", static_cast<ChordRest*>(slur->endElement())->tick());
-                        static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
-                        }
-                  }
-            else {
-                  ChordRest* cr1 = (ChordRest*)(slur->startElement());
-                  ChordRest* cr2 = (ChordRest*)(slur->endElement());
-                  if (cr1->tick() > cr2->tick()) {
-                        qDebug("Slur invalid start-end tick %d-%d", cr1->tick(), cr2->tick());
-                        slur->setStartElement(cr2);
-                        slur->setEndElement(cr1);
-                        }
-                  int n1 = 0;
-                  int n2 = 0;
-                  for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
-                        if (s == slur)
-                              ++n1;
-                        }
-                  for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
-                        if (s == slur)
-                              ++n2;
-                        }
-                  if (n1 != 1 || n2 != 1) {
-                        qDebug("Slur references bad: %d %d", n1, n2);
                         }
                   }
             }

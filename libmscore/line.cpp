@@ -610,6 +610,7 @@ void SLine::layout()
             if (system->isVbox())
                   continue;
             LineSegment* seg = segmentAt(segIdx++);
+            seg->setTrack(track());       // DEBUG
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();

@@ -341,9 +341,11 @@ Fraction TDuration::fraction() const
             default:          z = 0; n = 0; break;    // zero+invalid fraction
             }
       Fraction a(z, n);
-      for (int i = 0; i < _dots; ++i) {
-            n *= 2;
-            a += Fraction(z, n);
+      if (a.isValid()) {
+            for (int i = 0; i < _dots; ++i) {
+                  n *= 2;
+                  a += Fraction(z, n);
+                  }
             }
       return a;
       }

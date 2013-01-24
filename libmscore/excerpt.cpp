@@ -273,7 +273,6 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           nspanner->setStartElement(nm);
                                     ns->addSpannerFor(nspanner);
                                     spannerMap.add(spanner, nspanner);
-                                    printf("  addSpanner old %p new %p\n", spanner, nspanner);
                                     }
                               for (Spanner* spanner = oseg->spannerBack(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
