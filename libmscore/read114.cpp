@@ -98,7 +98,7 @@ void Part::read114(XmlReader& e)
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   ClefList* cl = new ClefList;
-                  clefListList().append(cl);
+                  e.clefListList().append(cl);
                   staff->read114(e, *cl);
                   ++rstaff;
                   }
@@ -290,7 +290,7 @@ Score::FileError Score::read114(XmlReader& e)
             Staff* s = _staves[idx];
             int track = idx * VOICES;
 
-            ClefList* cl = clefListList().at(idx);
+            ClefList* cl = e.clefListList().at(idx);
             for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
@@ -329,7 +329,7 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
-      qDeleteAll(clefListList());
+      qDeleteAll(e.clefListList());
 
       foreach(Spanner* s, e.spanner()) {
             s->setTrack(0);
