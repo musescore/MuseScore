@@ -191,7 +191,7 @@ void Measure::setScore(Score* score)
       MeasureBase::setScore(score);
       for (Segment* s = first(); s; s = s->next())
             s->setScore(score);
-      for(Spanner* s = _spannerFor; s; s = s->next())
+      for (Spanner* s = _spannerFor; s; s = s->next())
             s->setScore(score);
       }
 
@@ -1819,14 +1819,15 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
-      for(Spanner* e = _spannerFor; e; e = e->next()) {
+      for (Spanner* e = _spannerFor; e; e = e->next()) {
             if (e->track() >= strack && e->track() < etrack && !e->generated()) {
                   e->setId(++xml.spannerId);
                   e->write(xml);
                   }
             }
-      for(Spanner* e = _spannerBack; e; e = e->next()) {
+      for (Spanner* e = _spannerBack; e; e = e->next()) {
             if (e->track() >= strack && e->track() < etrack && !e->generated()) {
+                  Q_ASSERT(e->id() != -1);
                   xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
                   }
             }
@@ -1835,9 +1836,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   el->write(xml);
                   }
             }
-
-      int track = staff * VOICES;
-      score()->writeSegments(xml, this, track, track+VOICES, first(), last()->next1(), writeSystemElements);
+      score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements);
       xml.etag();
       }
 

@@ -286,9 +286,17 @@ Score::FileError Score::read114(XmlReader& e)
                   e.unknown();
             }
 
-      for (int idx = 0; idx < _staves.size(); ++idx) {
+      int n = nstaves();
+      for (int idx = 0; idx < n; ++idx) {
             Staff* s = _staves[idx];
             int track = idx * VOICES;
+
+            // check barLineSpan
+            if (s->barLineSpan() > (n - idx)) {
+                  qDebug("read114: invalid bar line span %d (max %d)",
+                     s->barLineSpan(), n - idx);
+                  s->setBarLineSpan(n - idx);
+                  }
 
             ClefList* cl = e.clefListList().at(idx);
             for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
@@ -335,17 +343,18 @@ Score::FileError Score::read114(XmlReader& e)
             s->setTrack(0);
 
             if (s->type() == Element::OTTAVA
-                  || (s->type() == Element::TEXTLINE)
-                  || (s->type() == Element::VOLTA)
-                  || (s->type() == Element::PEDAL)) {
-                      TextLine* tl = static_cast<TextLine*>(s);
-                      tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
-                      tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
-                      tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
-                      }
+               || (s->type() == Element::TEXTLINE)
+               || (s->type() == Element::VOLTA)
+               || (s->type() == Element::PEDAL))
+                  {
+                  TextLine* tl = static_cast<TextLine*>(s);
+                  tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
+                  tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
+                  tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
+                  }
 
-            int tick2 = s->__tick2();
-            Segment* s1 = tick2segment(e.tick());
+            int tick2   = s->__tick2();
+            Segment* s1 = tick2segment(s->__tick1());
             Segment* s2 = tick2segment(tick2);
             if (s1 == 0 || s2 == 0) {
                   qDebug("cannot place %s at tick %d - %d",
@@ -369,8 +378,44 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             else if (s->type() == Element::SLUR) {
+                  Slur* slur = static_cast<Slur*>(s);
+
+                  if (!slur->startElement() || !slur->endElement()) {
+                        qDebug("incomplete Slur");
+                        if (slur->startElement()) {
+                              qDebug("  front %d", static_cast<ChordRest*>(slur->startElement())->tick());
+                              static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
+                              }
+                        if (slur->endElement()) {
+                              qDebug("  back %d", static_cast<ChordRest*>(slur->endElement())->tick());
+                              static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
+                              }
+                        }
+                  else {
+                        ChordRest* cr1 = (ChordRest*)(slur->startElement());
+                        ChordRest* cr2 = (ChordRest*)(slur->endElement());
+                        if (cr1->tick() > cr2->tick()) {
+                              qDebug("Slur invalid start-end tick %d-%d", cr1->tick(), cr2->tick());
+                              slur->setStartElement(cr2);
+                              slur->setEndElement(cr1);
+                              }
+                        int n1 = 0;
+                        int n2 = 0;
+                        for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
+                              if (s == slur)
+                                    ++n1;
+                              }
+                        for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
+                              if (s == slur)
+                                    ++n2;
+                              }
+                        if (n1 != 1 || n2 != 1) {
+                              qDebug("Slur references bad: %d %d", n1, n2);
+                              }
+                        }
                   }
             else {
+printf("spanner %s %d-%d\n", s->name(), s1->tick(), s2->tick());
                   s->setStartElement(s1);
                   s->setEndElement(s2);
                   s1->add(s);
