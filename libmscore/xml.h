@@ -22,6 +22,7 @@
 class Spanner;
 class Beam;
 class Tuplet;
+class ClefList;
 
 //---------------------------------------------------------
 //   XmlReader
