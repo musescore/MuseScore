@@ -706,8 +706,6 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
 
 bool SLine::readProperties(XmlReader& e)
       {
-      if (Element::readProperties(e))
-            return true;
       const QStringRef& tag(e.name());
 
       if (tag == "tick2")           // obsolete
@@ -727,6 +725,8 @@ bool SLine::readProperties(XmlReader& e)
             setDiagonal(e.readInt());
       else if (tag == "anchor")
             setAnchor(Anchor(e.readInt()));
+      else if (Element::readProperties(e))
+            ;
       else
             return false;
       return true;
