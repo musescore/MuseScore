@@ -411,7 +411,14 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             Staff* srcStaff = oscore->staff(map[dstStaffIdx]);
             Staff* dstStaff = score->staff(dstStaffIdx);
             if (srcStaff->primaryStaff()) {
-                  dstStaff->setBarLineSpan(srcStaff->barLineSpan());
+                  int span = srcStaff->barLineSpan();
+                  int sIdx = srcStaff->idx();
+                  int eIdx = sIdx + span;
+                  for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
+                        if (!map.contains(staffIdx))
+                             --span;
+                        }
+                  dstStaff->setBarLineSpan(span);
                   int idx = 0;
                   foreach(BracketItem bi, srcStaff->brackets()) {
                         dstStaff->setBracket(idx, bi._bracket);

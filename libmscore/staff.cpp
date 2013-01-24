@@ -370,7 +370,7 @@ KeySigEvent Staff::key(int tick) const
 void Staff::write(Xml& xml) const
       {
       int idx = score()->staffIdx(this);
-      xml.stag(QString("Staff id=\"%1\"").arg(idx+1));
+      xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
       if (linkedStaves()) {
             Score* s = score();
             if (s->parentScore())
@@ -387,13 +387,19 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
+
       // for economy and consistency, only output "from" and "to" attributes if different from default
       int defaultLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
       int defaultLineTo;
       if (_barLineSpan == 0)                    // if no bar line at all
             defaultLineTo = _barLineTo;         // whatever the current spanTo is, use as default
       else {                                    // if some bar line, default is the default for span target staff
-            int targetStaffLines = score()->staff(idx+_barLineSpan-1)->lines();
+            int targetStaffIdx = idx + _barLineSpan - 1;
+            if (targetStaffIdx >= score()->nstaves()) {
+                  qFatal("bad _barLineSpan %d for staff %d (nstaves %d)",
+                     _barLineSpan, idx, score()->nstaves());
+                  }
+            int targetStaffLines = score()->staff(targetStaffIdx)->lines();
             defaultLineTo = (targetStaffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (targetStaffLines-1) * 2);
             }
       if (_barLineSpan != 1 || _barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo) {
