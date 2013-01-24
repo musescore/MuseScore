@@ -7,34 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>535</width>
-    <height>372</height>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string notr="true">Elements:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QTreeWidget" name="sel">
-     <column>
-      <property name="text">
-       <string notr="true">Element</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Subtype</string>
-      </property>
-     </column>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QGroupBox" name="MeasureBase_2">
      <property name="title">
@@ -452,6 +431,90 @@
            <string notr="true">breakMMRest</string>
           </property>
          </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string notr="true">Elements:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTreeWidget" name="sel">
+        <column>
+         <property name="text">
+          <string notr="true">Element</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">Subtype</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>spannerFor</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTreeWidget" name="spannerFor">
+            <column>
+             <property name="text">
+              <string notr="true">Element</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">Subtype</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>spannerBack</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTreeWidget" name="spannerBack">
+            <column>
+             <property name="text">
+              <string notr="true">Element</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">Subtype</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
