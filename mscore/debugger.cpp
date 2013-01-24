@@ -734,6 +734,20 @@ void MeasureView::setElement(Element* e)
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.sel->addTopLevelItem(item);
             }
+      for (Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {
+            QTreeWidgetItem* item = new QTreeWidgetItem;
+            item->setText(0, sp->name());
+            void* p = (void*) sp;
+            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
+            mb.spannerFor->addTopLevelItem(item);
+            }
+      for (Spanner* sp = m->spannerBack(); sp; sp = sp->next()) {
+            QTreeWidgetItem* item = new QTreeWidgetItem;
+            item->setText(0, sp->name());
+            void* p = (void*) sp;
+            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
+            mb.spannerBack->addTopLevelItem(item);
+            }
       mb.prevButton->setEnabled(m->prev());
       mb.nextButton->setEnabled(m->next());
       }
