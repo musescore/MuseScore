@@ -38,21 +38,15 @@
 
 static SymId resolveSymCompatibility(SymId i, QString programVersion)
       {
-      if(!programVersion.isEmpty() && programVersion < "1.1")
-          i = SymId(i + 5);
+      if (!programVersion.isEmpty() && programVersion < "1.1")
+            i = SymId(i + 5);
       switch(i) {
-            case 197:
-                  return pedalPedSym;
-            case 191:
-                  return pedalasteriskSym;
-            case 193:
-                  return pedaldotSym;
-            case 192:
-                  return pedaldashSym;
-            case 139:
-                  return trillSym;
-            default:
-                  return noSym;
+            case 197:   return pedalPedSym;
+            case 191:   return pedalasteriskSym;
+            case 193:   return pedaldotSym;
+            case 192:   return pedaldashSym;
+            case 139:   return trillSym;
+            default:    return noSym;
             }
       }
 
@@ -64,19 +58,14 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "type") {
-                  StaffType* st = score()->staffType(e.readInt());
-                  if (st)
-                        _staffType = st;
-                  }
-            else if (tag == "lines")
+            if (tag == "lines")
                   setLines(e.readInt());
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "slashStyle")
-                  e.skipCurrentElement();       // obsolete: setSlashStyle(v);
+                  e.skipCurrentElement();
             else if (tag == "cleflist")
                   _clefList.read(e, _score);
             else if (tag == "keylist")
@@ -90,27 +79,6 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
                   }
             else if (tag == "barLineSpan")
                   _barLineSpan = e.readInt();
-            else if (tag == "distOffset")
-                  _userDist = e.readDouble() * spatium();
-            else if (tag == "linkedTo") {
-                  int v = e.readInt() - 1;
-                  //
-                  // if this is an excerpt, link staff to parentScore()
-                  //
-                  if (score()->parentScore()) {
-                        Staff* st = score()->parentScore()->staff(v);
-                        if (st)
-                              linkTo(st);
-                        else {
-                              qDebug("staff %d not found in parent", v);
-                              }
-                        }
-                  else {
-                        int idx = score()->staffIdx(this);
-                        if (v < idx)
-                              linkTo(score()->staff(v));
-                        }
-                  }
             else
                   e.unknown();
             }
@@ -120,7 +88,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
 //   Part::read114
 //---------------------------------------------------------
 
-void Part::read114(XmlReader& e, QList<ClefList*>& clefList)
+void Part::read114(XmlReader& e)
       {
       int rstaff = 0;
       while (e.readNextStartElement()) {
@@ -130,7 +98,7 @@ void Part::read114(XmlReader& e, QList<ClefList*>& clefList)
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   ClefList* cl = new ClefList;
-                  clefList.append(cl);
+                  clefListList().append(cl);
                   staff->read114(e, *cl);
                   ++rstaff;
                   }
@@ -177,18 +145,13 @@ void Part::read114(XmlReader& e, QList<ClefList*>& clefList)
             }
       }
 
-
 //---------------------------------------------------------
 //   read114
 //    import old version 1.2 files
-//    return false on error
 //---------------------------------------------------------
 
 Score::FileError Score::read114(XmlReader& e)
       {
-      QList<Spanner*> spannerList;
-      QList<ClefList*> clefListList;
-
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
 
@@ -202,36 +165,21 @@ Score::FileError Score::read114(XmlReader& e)
                   ks->read(e);
                   customKeysigs.append(ks);
                   }
-            else if (tag == "StaffType") {
-                  int idx        = e.intAttribute("idx");
-                  StaffType* ost = staffType(idx);
-                  StaffType* st;
-                  if (ost)
-                        st = ost->clone();
-                  else {
-                        QString group  = e.attribute("group", "pitched");
-                        if (group == "percussion")
-                              st  = new StaffTypePercussion();
-                        else if (group == "tablature")
-                              st  = new StaffTypeTablature();
-                        else
-                              st  = new StaffTypePitched();
-                        }
-                  st->read(e);
-                  st->setBuildin(false);
-                  addStaffType(idx, st);
-                  }
             else if (tag == "siglist")
                   _sigmap->read(e, _fileDivision);
-            else if (tag == "tempolist")        // obsolete
-                  e.skipCurrentElement();       // tempomap()->read(ee, _fileDivision);
             else if (tag == "programVersion") {
                   _mscoreVersion = e.readElementText();
                   parseVersion(_mscoreVersion);
                   }
             else if (tag == "programRevision")
                   _mscoreRevision = e.readInt();
-            else if (tag == "Mag" || tag == "MagIdx" || tag == "xoff" || tag == "yoff")
+            else if (tag == "Mag"
+               || tag == "MagIdx"
+               || tag == "xoff"
+               || tag == "tempolist"
+               || tag == "Symbols"
+               || tag == "cursorTrack"
+               || tag == "yoff")
                   e.skipCurrentElement();       // obsolete
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
@@ -240,15 +188,13 @@ Score::FileError Score::read114(XmlReader& e)
                   _syntiState.read(e);
                   }
             else if (tag == "Spatium")
-                  _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
-            else if (tag == "page-offset")            // obsolete, moved to Score
+                  _style.setSpatium (e.readDouble() * MScore::DPMM);
+            else if (tag == "page-offset")
                   setPageNumberOffset(e.readInt());
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
                   _showInvisible = e.readInt();
-            else if (tag == "showUnprintable")
-                  _showUnprintable = e.readInt();
             else if (tag == "showFrames")
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
@@ -304,11 +250,9 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             else if (tag == "Part") {
                   Part* part = new Part(this);
-                  part->read114(e, clefListList);
+                  part->read114(e);
                   _parts.push_back(part);
                   }
-            else if (tag == "Symbols" || tag == "cursorTrack")          // obsolete
-                  e.skipCurrentElement();
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
@@ -323,7 +267,7 @@ Score::FileError Score::read114(XmlReader& e)
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->setTrack(0);
                   s->read(e);
-                  spannerList.append(s);
+                  e.addSpanner(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -336,23 +280,6 @@ Score::FileError Score::read114(XmlReader& e)
                   beam->setParent(0);
                   // _beams.append(beam);
                   }
-            else if (tag == "Score") {          // recursion
-                  Score* s = new Score(style());
-                  s->setParentScore(this);
-                  s->read(e);
-                  addExcerpt(s);
-                  }
-            else if (tag == "PageList") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Page") {
-                              Page* page = new Page(this);
-                              _pages.append(page);
-                              page->read(e);
-                              }
-                        else
-                              e.unknown();
-                        }
-                  }
             else if (tag == "name")
                   setName(e.readElementText());
             else
@@ -363,7 +290,7 @@ Score::FileError Score::read114(XmlReader& e)
             Staff* s = _staves[idx];
             int track = idx * VOICES;
 
-            ClefList* cl = clefListList[idx];
+            ClefList* cl = clefListList().at(idx);
             for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
@@ -402,9 +329,9 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
-      qDeleteAll(clefListList);
+      qDeleteAll(clefListList());
 
-      foreach(Spanner* s, spannerList) {
+      foreach(Spanner* s, e.spanner()) {
             s->setTrack(0);
 
             if (s->type() == Element::OTTAVA
@@ -440,6 +367,8 @@ Score::FileError Score::read114(XmlReader& e)
                         // LineSegment* ls = volta->segmentAt(0);
                         // ls->setReadPos(QPointF());
                         }
+                  }
+            else if (s->type() == Element::SLUR) {
                   }
             else {
                   s->setStartElement(s1);

@@ -277,7 +277,6 @@ bool ChordRest::readProperties(XmlReader& e)
             Slur* slur = static_cast<Slur*>(e.findSpanner(id));
             if (!slur)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
-
             else {
                   if (type == "start") {
                         slur->setStartElement(this);
@@ -684,6 +683,12 @@ void ChordRest::layoutArticulations()
 
 void ChordRest::addSpannerBack(Spanner* e)
       {
+      for (Spanner* spanner = _spannerBack; spanner; spanner = spanner->next()) {
+            if (spanner == e) {
+                  qDebug("ChordRest::addSpannerBack: spanner already in list");
+                  return;
+                  }
+            }
       e->setNext(_spannerBack);
       _spannerBack = e;
       }
@@ -716,6 +721,12 @@ bool ChordRest::removeSpannerBack(Spanner* e)
 
 void ChordRest::addSpannerFor(Spanner* e)
       {
+      for (Spanner* spanner = _spannerFor; spanner; spanner = spanner->next()) {
+            if (spanner == e) {
+                  qDebug("ChordRest::addSpannerFor: spanner already in list");
+                  return;
+                  }
+            }
       e->setNext(_spannerFor);
       _spannerFor = e;
       }
