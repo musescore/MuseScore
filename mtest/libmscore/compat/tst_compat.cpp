@@ -55,6 +55,7 @@ void TestCompat::compat_data()
 
       QTest::newRow("notes") <<  "notes";       // notes.mscx notes-ref.mscx
       QTest::newRow("keysig") << "keysig";
+      QTest::newRow("hairpin") << "hairpin";
       QTest::newRow("articulations") << "articulations";
       }
 
