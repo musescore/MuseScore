@@ -78,8 +78,8 @@ Spanner::Spanner(Score* s)
       _endElement   = 0;
       _anchor       = ANCHOR_SEGMENT;
       _id           = 0;
-      _tick1        = 0;
-      _tick2        = 0;
+      _tick1        = -1;
+      _tick2        = -1;
       oStartElement = 0;
       oEndElement   = 0;
       }

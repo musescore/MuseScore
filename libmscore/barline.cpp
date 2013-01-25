@@ -102,15 +102,16 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   system = static_cast<System*>(parent());
                   measure = system->firstMeasure();
                   }
+            if (measure) {
+                  StaffLines* l1 = measure->staffLines(staffIdx1);
+                  StaffLines* l2 = measure->staffLines(staffIdx2);
 
-            StaffLines* l1   = measure->staffLines(staffIdx1);
-            StaffLines* l2   = measure->staffLines(staffIdx2);
-
-            qreal yp = system ? system->staff(staffIdx1)->y() : 0.0;
-            *y1 = l1->y1() - yp;
-            *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
-            *y2 = l2->y1() - yp;
-            *y2 += (_spanTo   * score()->staff(staffIdx2)->lineDistance() * _spatium) / 2;
+                  qreal yp = system ? system->staff(staffIdx1)->y() : 0.0;
+                  *y1 = l1->y1() - yp;
+                  *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
+                  *y2 = l2->y1() - yp;
+                  *y2 += (_spanTo   * score()->staff(staffIdx2)->lineDistance() * _spatium) / 2;
+                  }
             }
       else {
             // for use in palette
