@@ -547,7 +547,7 @@ void Note::remove(Element* e)
 
 QPointF Note::stemPos(bool upFlag) const
       {
-      QPointF pt(pagePos());
+      QPointF pt(parent()->pagePos() + ipos());
       if (_mirror)
             upFlag = !upFlag;
       if (upFlag)

@@ -1762,32 +1762,23 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2 = stemPos.y();
             qreal fuzz = _spatium * .1;
-            if (y2 < y1) {
-                  // search bottom beam
-                  qreal by = -1000000.0;
-                  foreach(QLineF* l, beamSegments) {
-                        if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
-                              qreal y = (x2 - l->x1()) * slope + l->y1();
-                              by = qMax(by, y);
-                              }
+
+            qreal by = y2 < y1 ? -1000000 : 1000000;
+            foreach(const QLineF* l, beamSegments) {
+                  if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
+                        qreal y = (x2 - l->x1()) * slope + l->y1();
+                        by = y2 < y1 ? qMax(by, y) : qMin(by, y);
                         }
-                  y1 = by + _pagePos.y();
                   }
-            else {
-                  // search top beam
-                  qreal by = 1000000.0;
-                  foreach(QLineF* l, beamSegments) {
-                        if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
-                              qreal y = (x2 - l->x1()) * slope + l->y1();
-                              by = qMin(by, y);
-                              }
-                        }
-                  y1 = by + _pagePos.y();
+            if (by == -1000000 || by == 1000000) {
+                  printf("BeamSegment not found: x %f  %f-%f\n",
+                     x2, beamSegments.front()->x1(),
+                     beamSegments.back()->x2());
                   }
+            stem->setLen(y2 - (by + _pagePos.y()));
 
             if (staff()->isTabStaff())          // for some reason, this is only need for TAB's
                   stem->setPos(stemPos - c->pagePos());
-            stem->setLen(y2 - y1);
 
             //
             // layout stem slash for acciacatura
@@ -1878,8 +1869,10 @@ void Beam::read(XmlReader& e)
       _id = e.intAttribute("id");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "StemDirection")
+            if (tag == "StemDirection") {
                   setProperty(P_STEM_DIRECTION, ::getProperty(P_STEM_DIRECTION, e));
+                  e.readNext();
+                  }
             else if (tag == "distribute")
                   setDistribute(e.readInt());
             else if (tag == "growLeft")
@@ -1910,11 +1903,10 @@ void Beam::read(XmlReader& e)
 
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
-                        qreal v = e.readDouble() * _spatium;
                         if (tag == "y1")
-                              f->py1[idx] = v;
+                              f->py1[idx] = e.readDouble() * _spatium;
                         else if (tag == "y2")
-                              f->py2[idx] = v;
+                              f->py2[idx] = e.readDouble() * _spatium;
                         else
                               e.unknown();
                         }
