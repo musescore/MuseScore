@@ -195,7 +195,7 @@ void Stem::read(XmlReader& e)
             if (tag == "userLen")
                   _userLen = e.readDouble() * spatium();
             else if (tag == "subtype")        // obsolete
-                  ;
+                  e.skipCurrentElement();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
