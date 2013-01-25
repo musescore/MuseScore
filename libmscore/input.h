@@ -34,7 +34,6 @@ class InputState {
       Segment*    _segment;         // current segment
       int         _string;          // visual string selected for input (TAB staves only)
       bool        _repitchMode;
-      bool        _moveBeforeAdding;
 
    public:
       bool rest;              // rest mode
@@ -70,9 +69,6 @@ class InputState {
 
       bool repitchMode() const            { return _repitchMode;    }
       void setRepitchMode(bool val)       { _repitchMode = val;     }
-
-      bool moveBeforeAdding() const       { return _moveBeforeAdding;    }
-      void setMoveBeforeAdding(bool val)  { _moveBeforeAdding = val;     }
 
       StaffGroup staffGroup() const;
       };
