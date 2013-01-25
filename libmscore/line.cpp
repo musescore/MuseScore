@@ -62,6 +62,7 @@ bool LineSegment::readProperties(XmlReader& e)
             else
                   e.readNext();
             }
+#if 0
       else if (tag == "pos") {
             QPointF rp = e.readPoint() * spatium();
             if ((score()->mscVersion() <= 114) && (type() == VOLTA_SEGMENT)) {
@@ -69,6 +70,7 @@ bool LineSegment::readProperties(XmlReader& e)
                   }
             setReadPos(rp);
             }
+#endif
       else if (!Element::readProperties(e)) {
             e.unknown();
             return false;
@@ -718,8 +720,6 @@ bool SLine::readProperties(XmlReader& e)
             ls->read(e);
             add(ls);
             }
-      else if (tag == "track")
-            setTrack(e.readInt());
       else if (tag == "length")
             setLen(e.readDouble());
       else if (tag == "diagonal")

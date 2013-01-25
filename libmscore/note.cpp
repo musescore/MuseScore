@@ -542,7 +542,8 @@ void Note::remove(Element* e)
 
 //---------------------------------------------------------
 //   stemPos
-//    return in page coordinates
+//    return in page coordinates the stem position for
+//    the normal note position (without user offset)
 //---------------------------------------------------------
 
 QPointF Note::stemPos(bool upFlag) const
