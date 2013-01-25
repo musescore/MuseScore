@@ -265,9 +265,24 @@ Score::FileError Score::read114(XmlReader& e)
                 || (tag == "Trill")
                 || (tag == "Pedal")) {
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
-                  s->setTrack(0);
                   s->read(e);
-                  e.addSpanner(s);
+                  if (s->track() == -1)
+                        s->setTrack(e.track());
+                  else
+                        e.setTrack(s->track());       // update current track
+                  if (s->__tick1() == -1)
+                        s->__setTick1(e.tick());
+                  else
+                        e.setTick(s->__tick1());      // update current tick
+                  if (s->__tick2() == -1) {
+                        delete s;
+                        qDebug("invalid spanner %s tick2: %d\n",
+                           s->name(), s->__tick2());
+                        }
+                  else
+                        e.addSpanner(s);
+                  // qDebug("Spanner <%s> %d %d track %d", s->name(),
+                  //   s->__tick1(), s->__tick2(), s->track());
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -344,8 +359,6 @@ Score::FileError Score::read114(XmlReader& e)
       qDeleteAll(e.clefListList());
 
       foreach(Spanner* s, e.spanner()) {
-            s->setTrack(0);
-
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)
@@ -357,12 +370,11 @@ Score::FileError Score::read114(XmlReader& e)
                   tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                   }
 
-            int tick2   = s->__tick2();
             Segment* s1 = tick2segment(s->__tick1());
-            Segment* s2 = tick2segment(tick2);
+            Segment* s2 = tick2segment(s->__tick2());
             if (s1 == 0 || s2 == 0) {
                   qDebug("cannot place %s at tick %d - %d",
-                     s->name(), s->__tick1(), tick2);
+                     s->name(), s->__tick1(), s->__tick2());
                   continue;
                   }
             if (s->type() == Element::VOLTA) {

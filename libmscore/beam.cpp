@@ -1771,9 +1771,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             if (by == -1000000 || by == 1000000) {
-                  printf("BeamSegment not found: x %f  %f-%f\n",
-                     x2, beamSegments.front()->x1(),
-                     beamSegments.back()->x2());
+                  if (beamSegments.isEmpty())
+                        qDebug("no BeamSegments");
+                  else {
+                        qDebug("BeamSegment not found: x %f  %f-%f",
+                           x2, beamSegments.front()->x1(),
+                           beamSegments.back()->x2());
+                        }
                   }
             stem->setLen(y2 - (by + _pagePos.y()));
 
