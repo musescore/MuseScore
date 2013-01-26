@@ -1472,12 +1472,12 @@ void Chord::layout()
                   qreal hw = note->headWidth();
 
                   if (note->mirror())
-                        if (_up)
+                        if (stem() && _up)
                               x = stemX - stemWidth5 * 2;
                         else
                               x = stemX - hw + stemWidth5 * 2;
                   else {
-                        if (_up)
+                        if (stem() && _up)
                               x = stemX - hw;
                         else
                               x = 0.0;
