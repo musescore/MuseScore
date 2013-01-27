@@ -688,7 +688,7 @@ Note* Chord::selectedNote() const
       {
       Note* note = 0;
       int n = _notes.size();
-      for (int i = 0; i < n; ++n) {
+      for (int i = 0; i < n; ++i) {
             Note* n = _notes.at(i);
             if (n->selected()) {
                   if (note)
