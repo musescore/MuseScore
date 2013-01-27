@@ -29,7 +29,6 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
-//#include <QKeyEvent>        //ise Acidentals
 class TempoMap;
 struct TEvent;
 class SigEvent;

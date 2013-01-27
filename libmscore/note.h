@@ -191,8 +191,6 @@ class Note : public Element {
 
       int playTicks() const;
 
- //     void dropEvent(QDropEvent *e);
-
       qreal headWidth() const;
       qreal headHeight() const;
       qreal tabHeadWidth(StaffTypeTablature* tab = 0) const;
