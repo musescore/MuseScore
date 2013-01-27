@@ -1663,8 +1663,74 @@ Element* Score::move(const QString& cmd)
             cr = selection().lastChordRest();
       if (cr == 0 && inputState().noteEntryMode)
             cr = inputState().cr();
-      if (cr == 0)
-            return 0;
+
+      // no chord/rest found? look for another type of element
+      if (cr == 0) {
+            Element* el  = 0;
+            Element* trg = 0;
+            // retrieve last element of section list
+            if (!selection().elements().isEmpty())
+                  el = selection().elements().last();
+            if(!el)                             // no element, no party!
+                  return 0;
+            // get parent of element and process accordingly:
+            // trg is the element to select on "next-chord" cmd
+            // cr is the ChordRest to move from on other cmd's
+            int track = el->track();            // keep note of element track
+            el = el->parent();
+            switch (el->type()) {
+                  case Element::NOTE:           // a note is a valid target
+                        trg = el;
+                        cr  = static_cast<Note*>(el)->chord();
+                        break;
+                  case Element::CHORD:          // a chord or a rest are valid targets
+                  case Element::REST:
+                        trg = el;
+                        cr  = static_cast<ChordRest*>(trg);
+                        break;
+                  case Element::SEGMENT: {      // from segment go to top chordrest in segment
+                        Segment* seg  = static_cast<Segment*>(el);
+                        // if segment is not chord/rest or grace, move to next chord/rest or grace segment
+                        if (!seg->isChordRest() && !seg->isGrace()) {
+                              seg = seg->next1(Segment::SegChordRestGrace);
+                              if (seg == 0)     // if none found, reutrn failure
+                                    return 0;
+                              }
+                        // segment for sure contains chords/rests,
+                        int size = seg->elist().size();
+                        // if segment has a chord/rest in original element track, use it
+                        if(track > -1 && track < size && seg->element(track)) {
+                              trg  = seg->element(track);
+                              cr = static_cast<ChordRest*>(trg);
+                              break;
+                              }
+                        // if not, get topmost chord/rest
+                        for (int i = 0; i < size; i++)
+                              if (seg->element(i)) {
+                                    trg  = seg->element(i);
+                                    cr = static_cast<ChordRest*>(trg);
+                                    break;
+                                    }
+                        break;
+                        }
+                  default:                      // on anything else, return failure
+                        return 0;
+                  }
+
+            // if something found and command is forward, the element found is the destination
+            if (trg && cmd == "next-chord") {
+                  // if chord, go to topmost note
+                  if (trg->type() == Element::CHORD)
+                        trg = static_cast<Chord*>(trg)->upNote();
+                  _playNote = true;
+                  select(trg, SELECT_SINGLE, 0);
+                  return trg;
+                  }
+            // if no chordrest found, do nothing
+            if(cr == 0)
+                  return 0;
+            // if some chordrest found, continue with default processing
+            }
 
       Element* el = 0;
       if (cmd == "next-chord") {
