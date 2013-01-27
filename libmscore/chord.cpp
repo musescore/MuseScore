@@ -1455,7 +1455,9 @@ void Chord::layout()
             adjustReadPos();
 
             qreal stemWidth5;
-            qreal stemX = _up ? symbols[score()->symIdx()][quartheadSym].width(magS()) : 0.0;
+            qreal noteWidth = _notes.size() ? _notes.at(0)->headWidth() :
+                        symbols[score()->symIdx()][quartheadSym].width(magS());
+            qreal stemX = _up ? noteWidth : 0.0;
             if (stem()) {
                   stemWidth5 = stem()->lineWidth() * .5;
                   _stem->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
