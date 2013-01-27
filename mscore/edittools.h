@@ -28,6 +28,7 @@ class EditTools : public QDockWidget {
       QDoubleSpinBox* _editY;
       QLabel* xLabel;
       QLabel* yLabel;
+      bool _localEdit;              // set to mark an edit originating from within EditTools itself
 
    private slots:
       void editXChanged(double);
