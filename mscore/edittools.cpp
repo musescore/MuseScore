@@ -68,6 +68,7 @@ EditTools::EditTools(QWidget* parent)
       _editY->setSingleStep(.1);
       xLabel = new QLabel(tr("x:"), this);
       yLabel = new QLabel(tr("y:"), this);
+      _localEdit = false;
       tb->addWidget(xLabel);
       tb->addWidget(_editX);
       tb->addWidget(yLabel);
@@ -105,8 +106,10 @@ void EditTools::updateTools()
 
 void EditTools::editXChanged(double val)
       {
-      if (mscore->currentScoreView())
+      if (mscore->currentScoreView()) {
+            _localEdit = true;
             mscore->currentScoreView()->setEditPos(QPointF(val, _editY->value()));
+            }
       }
 
 //---------------------------------------------------------
@@ -115,16 +118,25 @@ void EditTools::editXChanged(double val)
 
 void EditTools::editYChanged(double val)
       {
-      if (mscore->currentScoreView())
+      if (mscore->currentScoreView()) {
+            _localEdit = true;
             mscore->currentScoreView()->setEditPos(QPointF(_editX->value(), val));
+            }
       }
 
 //---------------------------------------------------------
-//   setEditX
+//   setEditPos
 //---------------------------------------------------------
 
 void EditTools::setEditPos(const QPointF& pt)
       {
+      // if change originates from within this EditTools and data are the same, do nothing
+      if(_localEdit) {
+            _localEdit = false;           // any change is no longer local
+            // check current values and do nothing if no change
+            if(qAbs(pt.x() - _editX->value()) < 0.001 && qAbs(pt.y() - _editY->value()) < 0.001)
+                  return;
+      }
       _editX->blockSignals(true);
       _editY->blockSignals(true);
       _editX->setValue(pt.x());
