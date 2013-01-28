@@ -201,7 +201,7 @@ class Note : public Element {
       NoteHeadGroup headGroup() const     { return _headGroup; }
       NoteHeadType headType() const       { return _headType;  }
       void setHeadGroup(NoteHeadGroup val);
-      void setHeadType(NoteHeadType t)    { _headType = t;     }
+      void setHeadType(NoteHeadType t);
 
       int pitch() const                   { return _pitch;    }
       void setPitch(int val);
