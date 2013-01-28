@@ -77,8 +77,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_barNoteDistance,Spatium(.6)),
       StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
-//    StyleVal(ST_measureSpacing,1.2),
-      StyleVal(ST_measureSpacing, 1.0),
+      StyleVal(ST_measureSpacing,1.2),
 
       StyleVal(ST_staffLineWidth,Spatium(0.08)),
       StyleVal(ST_ledgerLineWidth,Spatium(0.12)),
@@ -527,30 +526,7 @@ Score::FileError Score::read114(XmlReader& e)
                   tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                   }
 
-            Segment* s1 = tick2segment(s->__tick1());
-            Segment* s2 = tick2segment(s->__tick2());
-            if (s1 == 0 || s2 == 0) {
-                  qDebug("cannot place %s at tick %d - %d",
-                     s->name(), s->__tick1(), s->__tick2());
-                  continue;
-                  }
-            if (s->type() == Element::VOLTA) {
-                  Volta* volta = static_cast<Volta*>(s);
-                  volta->setAnchor(Spanner::ANCHOR_MEASURE);
-                  volta->setStartMeasure(s1->measure());
-                  Measure* m2 = s2->measure();
-                  if (s2->tick() == m2->tick())
-                        m2 = m2->prevMeasure();
-                  volta->setEndMeasure(m2);
-                  s1->measure()->add(s);
-                  int n = volta->spannerSegments().size();
-                  if (n) {
-                        // volta->setYoff(-styleS(ST_voltaHook).val());
-                        // LineSegment* ls = volta->segmentAt(0);
-                        // ls->setReadPos(QPointF());
-                        }
-                  }
-            else if (s->type() == Element::SLUR) {
+            if (s->type() == Element::SLUR) {
                   Slur* slur = static_cast<Slur*>(s);
 
                   if (!slur->startElement() || !slur->endElement()) {
@@ -588,10 +564,36 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             else {
-                  s->setStartElement(s1);
-                  s->setEndElement(s2);
-                  s1->add(s);
+                  Segment* s1 = tick2segment(s->__tick1());
+                  Segment* s2 = tick2segment(s->__tick2());
+                  if (s1 == 0 || s2 == 0) {
+                        qDebug("cannot place %s at tick %d - %d",
+                           s->name(), s->__tick1(), s->__tick2());
+                        continue;
+                        }
+                  if (s->type() == Element::VOLTA) {
+                        Volta* volta = static_cast<Volta*>(s);
+                        volta->setAnchor(Spanner::ANCHOR_MEASURE);
+                        volta->setStartMeasure(s1->measure());
+                        Measure* m2 = s2->measure();
+                        if (s2->tick() == m2->tick())
+                              m2 = m2->prevMeasure();
+                        volta->setEndMeasure(m2);
+                        s1->measure()->add(s);
+                        int n = volta->spannerSegments().size();
+                        if (n) {
+                              // volta->setYoff(-styleS(ST_voltaHook).val());
+                              // LineSegment* ls = volta->segmentAt(0);
+                              // ls->setReadPos(QPointF());
+                              }
+                        }
+                  else {
+                        s->setStartElement(s1);
+                        s->setEndElement(s2);
+                        s1->add(s);
+                        }
                   }
+
             if (s->type() == Element::OTTAVA) {
                   // fix ottava position
                   Ottava* volta = static_cast<Ottava*>(s);
