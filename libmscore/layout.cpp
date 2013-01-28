@@ -975,7 +975,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   m->createEndBarLines();       // TODO: type not set right here
                   if (isFirstMeasure) {
                         firstMeasure = m;
-                        addSystemHeader(m, !isFirstSystem);
+                        addSystemHeader(m, isFirstSystem);
                         ww = m->minWidth2();
                         }
                   else
@@ -1200,7 +1200,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   Measure* m = static_cast<Measure*>(curMeasure);
                   m->createEndBarLines();       // TODO: type not set right here
                   if (isFirstMeasure) {
-                        addSystemHeader(m, !isFirstSystem);
+                        addSystemHeader(m, isFirstSystem);
                         ww = m->minWidth2();
                         }
                   else
