@@ -113,6 +113,8 @@ void Symbol::read(XmlReader& e)
                   QString val(e.readElementText());
                   if (val == "acc dot")               // compatibility hack
                         val = "accordion.accDot";
+                  else if (val == "acc old ee")
+                        val = "accordion.accOldEE";
                   s = Sym::name2id(val);
                   if (s == noSym) {
                         // if symbol name not found, fall back to mnames
