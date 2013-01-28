@@ -502,8 +502,11 @@ bool Text::readProperties(XmlReader& e)
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
                   if (_doc == 0)
                         createDoc();
-                  _doc->setHtml(s);
-                  if (isSimpleText()) {
+                  // import instrument names as unstyled html
+                  if (_styleIndex != TEXT_STYLE_INSTRUMENT_SHORT
+                     && _styleIndex != TEXT_STYLE_INSTRUMENT_LONG
+                     && isSimpleText()) {
+                        _doc->setHtml(s);
                         QString s = _doc->toPlainText();
                         delete _doc;
                         _doc = 0;

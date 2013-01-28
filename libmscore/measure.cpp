@@ -3062,14 +3062,14 @@ void Measure::layoutX(qreal stretch)
                   else {
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
-                              minDistance = score()->styleP(ST_clefLeftMargin);
+                              minDistance = score()->styleS(ST_clefLeftMargin).val() * _spatium;
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
                               if (pt == Segment::SegClef)
-                                    minDistance = score()->styleP(ST_clefBarlineDistance);
+                                    minDistance = score()->styleS(ST_clefBarlineDistance).val() * _spatium;
                               else
-                                    stretchDistance = score()->styleP(ST_noteBarDistance);
+                                    stretchDistance = score()->styleS(ST_noteBarDistance).val() * _spatium;
                               if (e == 0) {
                                     // look for barline
                                     for (int i = track - VOICES; i >= 0; i -= VOICES) {
