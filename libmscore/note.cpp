@@ -311,11 +311,15 @@ int Note::noteHead() const
             hg = 1;
             ht = 2;       // default quarter head
             }
+      if (_headType != HEAD_AUTO)
+            ht = _headType;
 
-      if (_headType == HEAD_AUTO)
-            return noteHeads[hg][int(_headGroup)][ht];
-      else
-            return noteHeads[hg][int(_headGroup)][_headType];
+      int t = noteHeads[hg][int(_headGroup)][ht];
+      if (t == -1) {
+            qDebug("invalid note head %d/%d", _headGroup, _headType);
+            t = noteHeads[hg][0][ht];
+            }
+      return t;
       }
 
 //---------------------------------------------------------
@@ -327,7 +331,8 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      qreal val = symbols[score()->symIdx()][noteHead()].width(magS());
+      int head = noteHead();
+      qreal val = symbols[score()->symIdx()][head].width(magS());
       if (_small)
             val *= score()->styleD(ST_smallNoteMag);
       return val;
@@ -1922,6 +1927,16 @@ void Note::undoSetDotPosition(MScore::Direction val)
 void Note::undoSetHeadGroup(NoteHeadGroup val)
       {
       undoChangeProperty(P_HEAD_GROUP, val);
+      }
+
+//---------------------------------------------------------
+//   setHeadType
+//---------------------------------------------------------
+
+void Note::setHeadType(NoteHeadType t)
+      {
+      Q_ASSERT(t >= 0 && t < HEAD_TYPES);
+      _headType = t;
       }
 
 //---------------------------------------------------------
