@@ -31,6 +31,160 @@
 #include "box.h"
 #include "dynamic.h"
 #include "drumset.h"
+#include "style.h"
+
+//---------------------------------------------------------
+//   style114
+//---------------------------------------------------------
+
+static const StyleVal style114[] = {
+      StyleVal(ST_staffUpperBorder, Spatium(7.0)),
+      StyleVal(ST_staffLowerBorder, Spatium(7.0)),
+      StyleVal(ST_staffDistance, Spatium(6.5)),
+      StyleVal(ST_akkoladeDistance, Spatium(6.5)),
+//      StyleVal(ST_systemDistance, Spatium(9.25)),
+      StyleVal(ST_lyricsDistance, Spatium(2)),
+      StyleVal(ST_lyricsMinBottomDistance, Spatium(2)),
+      StyleVal(ST_systemFrameDistance, Spatium(7.0)),
+      StyleVal(ST_frameSystemDistance, Spatium(1.0)),
+      StyleVal(ST_minMeasureWidth, Spatium(4.0)),
+
+      StyleVal(ST_barWidth, Spatium(0.16)),
+      StyleVal(ST_doubleBarWidth, Spatium(0.16)),
+      StyleVal(ST_endBarWidth, Spatium(0.3)),
+      StyleVal(ST_doubleBarDistance, Spatium(0.30)),
+      StyleVal(ST_endBarDistance, Spatium(0.30)),
+      StyleVal(ST_repeatBarTips, false),
+      StyleVal(ST_startBarlineSingle, false),
+      StyleVal(ST_startBarlineMultiple, true),
+
+      StyleVal(ST_bracketWidth, Spatium(0.35)),
+      StyleVal(ST_bracketDistance, Spatium(0.25)),
+
+      StyleVal(ST_clefLeftMargin, Spatium(0.5)),
+      StyleVal(ST_keysigLeftMargin, Spatium(0.5)),
+      StyleVal(ST_timesigLeftMargin, Spatium(0.5)),
+
+      StyleVal(ST_clefKeyRightMargin, Spatium(1.75)),
+      StyleVal(ST_clefBarlineDistance, Spatium(0.18)),
+      StyleVal(ST_stemWidth, Spatium(0.13)),
+      StyleVal(ST_shortenStem, true),
+      StyleVal(ST_shortStemProgression, Spatium(0.25)),
+      StyleVal(ST_shortestStem,Spatium(2.25)),
+      StyleVal(ST_beginRepeatLeftMargin,Spatium(1.0)),
+      StyleVal(ST_minNoteDistance,Spatium(0.4)),
+//      StyleVal(ST_barNoteDistance,Spatium(1.2)),
+      StyleVal(ST_barNoteDistance,Spatium(.6)),
+      StyleVal(ST_noteBarDistance,Spatium(1.0)),
+
+//    StyleVal(ST_measureSpacing,1.2),
+      StyleVal(ST_measureSpacing, 1.0),
+
+      StyleVal(ST_staffLineWidth,Spatium(0.08)),
+      StyleVal(ST_ledgerLineWidth,Spatium(0.12)),
+      StyleVal(ST_akkoladeWidth,Spatium(1.6)),
+      StyleVal(ST_accidentalDistance,Spatium(0.22)),
+      StyleVal(ST_accidentalNoteDistance,Spatium(0.22)),
+      StyleVal(ST_beamWidth,Spatium(0.48)),
+      StyleVal(ST_beamDistance,0.5),
+      StyleVal(ST_beamMinLen,Spatium(1.25)),
+      StyleVal(ST_beamMinSlope,0.05),
+
+      StyleVal(ST_beamMaxSlope,0.2),
+      StyleVal(ST_maxBeamTicks, MScore::division),
+      StyleVal(ST_dotNoteDistance,Spatium(0.35)),
+      StyleVal(ST_dotRestDistance,Spatium(0.25)),
+      StyleVal(ST_dotDotDistance,Spatium(0.5)),
+      StyleVal(ST_propertyDistanceHead,Spatium(1.0)),
+      StyleVal(ST_propertyDistanceStem,Spatium(0.5)),
+      StyleVal(ST_propertyDistance,Spatium(1.0)),
+//      StyleVal(ST_pageFillLimit,0.7),
+      StyleVal(ST_lastSystemFillLimit,0.3),
+
+      StyleVal(ST_hairpinHeight,Spatium(1.2)),
+      StyleVal(ST_hairpinContHeight,Spatium(0.5)),
+      StyleVal(ST_hairpinWidth,Spatium(0.13)),
+      StyleVal(ST_showPageNumber,true),
+      StyleVal(ST_showPageNumberOne,false),
+      StyleVal(ST_pageNumberOddEven,true),
+      StyleVal(ST_showMeasureNumber,true),
+      StyleVal(ST_showMeasureNumberOne,false),
+      StyleVal(ST_measureNumberInterval,5),
+      StyleVal(ST_measureNumberSystem,true),
+
+      StyleVal(ST_measureNumberAllStaffs,false),
+      StyleVal(ST_smallNoteMag,0.7),
+      StyleVal(ST_graceNoteMag,0.7),
+      StyleVal(ST_smallStaffMag,0.7),
+      StyleVal(ST_smallClefMag,0.8),
+      StyleVal(ST_genClef,true),
+      StyleVal(ST_genKeysig,true),
+      StyleVal(ST_genTimesig,true),
+      StyleVal(ST_genCourtesyTimesig, true),
+      StyleVal(ST_genCourtesyKeysig, true),
+
+      StyleVal(ST_useGermanNoteNames, false),
+      StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
+      StyleVal(ST_concertPitch, false),
+      StyleVal(ST_createMultiMeasureRests, false),
+      StyleVal(ST_minEmptyMeasures, 2),
+      StyleVal(ST_minMMRestWidth, Spatium(4)),
+      StyleVal(ST_hideEmptyStaves, false),
+      StyleVal(ST_stemDir1, MScore::UP),
+      StyleVal(ST_stemDir2, MScore::DOWN),
+      StyleVal(ST_stemDir3, MScore::UP),
+      StyleVal(ST_stemDir4, MScore::DOWN),
+
+      StyleVal(ST_gateTime, 100),
+      StyleVal(ST_tenutoGateTime, 100),
+      StyleVal(ST_staccatoGateTime, 50),
+      StyleVal(ST_slurGateTime, 100),
+#if 0
+      StyleVal(ST_UfermataAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DfermataAnchor, int(A_BOTTOM_STAFF)),
+      StyleVal(ST_UshortfermataAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DshortfermataAnchor, int(A_BOTTOM_STAFF)),
+      StyleVal(ST_UlongfermataAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DlongfermataAnchor, int(A_BOTTOM_STAFF)),
+      StyleVal(ST_UverylongfermataAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DverylongfermataAnchor, int(A_BOTTOM_STAFF)),
+
+      StyleVal(ST_ThumbAnchor, int(A_CHORD)),
+      StyleVal(ST_SforzatoaccentAnchor, int(A_CHORD)),
+      StyleVal(ST_EspressivoAnchor, int(A_CHORD)),
+      StyleVal(ST_StaccatoAnchor, int(A_CHORD)),
+      StyleVal(ST_UstaccatissimoAnchor, int(A_CHORD)),
+      StyleVal(ST_DstaccatissimoAnchor, int(A_CHORD)),
+      StyleVal(ST_TenutoAnchor, int(A_CHORD)),
+      StyleVal(ST_UportatoAnchor, int(A_CHORD)),
+      StyleVal(ST_DportatoAnchor, int(A_CHORD)),
+      StyleVal(ST_UmarcatoAnchor, int(A_CHORD)),
+      StyleVal(ST_DmarcatoAnchor, int(A_CHORD)),
+      StyleVal(ST_OuvertAnchor, int(A_CHORD)),
+      StyleVal(ST_PlusstopAnchor, int(A_CHORD)),
+      StyleVal(ST_UpbowAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DownbowAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_ReverseturnAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_TurnAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_TrillAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_PrallAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_MordentAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_PrallPrallAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_PrallMordentAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_UpPrallAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DownPrallAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_UpMordentAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_DownMordentAnchor, int(A_TOP_STAFF)),
+      StyleVal(ST_SnappizzicatoAnchor, int(A_CHORD)),
+#endif
+
+      StyleVal(ST_ArpeggioNoteDistance, Spatium(.5)),
+      StyleVal(ST_ArpeggioLineWidth, Spatium(.18)),
+      StyleVal(ST_ArpeggioHookLen, Spatium(.8)),
+      StyleVal(ST_FixMeasureNumbers, 0),
+      StyleVal(ST_FixMeasureWidth, false)
+      };
+
 
 //---------------------------------------------------------
 //   resolveSymCompatibility
@@ -154,6 +308,9 @@ Score::FileError Score::read114(XmlReader& e)
       {
       if (parentScore())
             setMscVersion(parentScore()->mscVersion());
+
+      for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
+            style()->set(style114[i]);
 
       while (e.readNextStartElement()) {
             e.setTrack(-1);
