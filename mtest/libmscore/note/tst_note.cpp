@@ -13,6 +13,7 @@
 
 #include <QtTest/QtTest>
 
+#include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
@@ -123,7 +124,7 @@ void TestNote::note()
             }
 
   // headType
-      for (int i = 0; i < 5; ++i) {
+      for (int i = 0; i < HEAD_TYPES; ++i) {
             note->setHeadType(Note::NoteHeadType(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
@@ -251,7 +252,7 @@ void TestNote::note()
             }
 
   // headType
-      for (int i = 0; i < 5; ++i) {
+      for (int i = 0; i < HEAD_TYPES; ++i) {
             note->setProperty(P_HEAD_TYPE, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
