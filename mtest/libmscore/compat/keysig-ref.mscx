@@ -6,6 +6,17 @@
     <Division>480</Division>
     <Style>
       <lyricsDistance>2</lyricsDistance>
+      <frameSystemDistance>1</frameSystemDistance>
+      <minMeasureWidth>4</minMeasureWidth>
+      <endBarDistance>0.3</endBarDistance>
+      <bracketWidth>0.35</bracketWidth>
+      <bracketDistance>0.25</bracketDistance>
+      <clefLeftMargin>0.5</clefLeftMargin>
+      <minNoteDistance>0.4</minNoteDistance>
+      <barNoteDistance>0.6</barNoteDistance>
+      <beamWidth>0.48</beamWidth>
+      <beamMinLen>1.25</beamMinLen>
+      <propertyDistanceStem>0.5</propertyDistanceStem>
       <voltaY>-2</voltaY>
       <page-layout>
         <page-height>1683.78</page-height>
@@ -43,8 +54,6 @@
           </System>
         <System>
           </System>
-        <System>
-          </System>
         </Page>
       </PageList>
     <Part>
@@ -58,13 +67,13 @@
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
 </style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Voice<!--EndFragment--></p></body></html>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'Times New Roman'; font-size:12pt;">Voice</span><!--EndFragment--></p></body></html>
           </longName>
         <shortName pos="0">
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
 </style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Vo.<!--EndFragment--></p></body></html>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'Times New Roman'; font-size:12pt;">Vo.</span><!--EndFragment--></p></body></html>
           </shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/compat/articulations-test.mscx articulations-ref.mscx
-cp ../../../build.debug/mtest/libmscore/compat/keysig-test.mscx keysig-ref.mscx
-cp ../../../build.debug/mtest/libmscore/compat/notes-test.mscx notes-ref.mscx
+P=../../../build.debug/mtest/libmscore/compat
+
+cp $P/articulations-test.mscx articulations-ref.mscx
+cp $P/keysig-test.mscx keysig-ref.mscx
+cp $P/hairpin-test.mscx hairpin-ref.mscx
+cp $P/notes-test.mscx notes-ref.mscx
 
