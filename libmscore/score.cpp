@@ -1626,7 +1626,11 @@ void Score::removeElement(Element* element)
             case Element::TREMOLO:
             case Element::ARTICULATION:
             case Element::ARPEGGIO:
-                  ::createPlayEvents(static_cast<Chord*>(element->parent()));
+                  {
+                  Element* cr = element->parent();
+                  if (cr->type() == Element::CHORD)
+                         ::createPlayEvents(static_cast<Chord*>(cr));
+                  }
                   break;
 
             default:
