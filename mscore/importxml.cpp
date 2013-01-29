@@ -3342,7 +3342,7 @@ static void setStaffLines(Score* score, int staffIdx, int stafflines)
       score->staff(staffIdx)->addBracket(b);
       // Following barLineTo value differs from the default set in staff.cpp,
       // but results in the same barlines as the new score wizard.
-      score->staff(staffIdx)->setBarLineTo(stafflines * 2);
+      score->staff(staffIdx)->setBarLineTo((stafflines-1) * 2);
       }
 
 //---------------------------------------------------------
