@@ -25,7 +25,7 @@ PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
 #VERSION   = 2.0
 
-release: revision
+release:
 	mkdir build.release;                       \
       cd build.release;                          \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
@@ -35,7 +35,7 @@ release: revision
       make -j ${CPUS};                           \
 
 
-debug: revision
+debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
@@ -94,13 +94,13 @@ clean:
 revision:
 	@git rev-parse --short HEAD > mscore/revision.h
 
-version: revision
+version:
 	@echo ${VERSION}
 
-install: release revision
+install: release
 	cd build.release; make install
 
-installdebug: debug revision
+installdebug: debug
 	cd build.debug; make install
 
 #
