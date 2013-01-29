@@ -1,0 +1,2 @@
+#!/bin/sh
+git rev-parse --short HEAD >mscore/revision.h
