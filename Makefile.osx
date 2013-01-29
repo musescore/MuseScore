@@ -58,7 +58,7 @@ lrelease:
 revision:
 	@git rev-parse --short HEAD > mscore/revision.h
 
-version: revision
+version:
 	@echo ${VERSION}
 
 install:

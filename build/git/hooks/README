@@ -1,0 +1,10 @@
+Copy the post-checkout file from build/git/hooks/ into .git/hooks/ in order
+for git to update mscore/revision.h with the branch number automatically when
+checking out:
+
+$ cp -p build/git/hooks/post-checkout .git/hooks/
+
+This only needs doing once, and then removes the need to do "make revision"
+manually for setting the correct revision number after doing a checkout.
+
+This works for Linux, Windows (MinGW) and OSX.
