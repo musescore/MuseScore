@@ -17,7 +17,6 @@
  \file
  Definition of Score class.
 */
-
 #include "input.h"
 #include "mscore.h"
 #include "style.h"
@@ -30,7 +29,6 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
-
 class TempoMap;
 struct TEvent;
 class SigEvent;
@@ -853,6 +851,9 @@ class Score : public QObject {
       void updateNotes();
       void cmdUpdateNotes();
       void updateAccidentals(Measure* m, int staffIdx);
+      bool updateAcc2;
+      void updatePitches(Segment*, int, int, int, int, Accidental::AccidentalType);
+      void setKeyState(Qt::KeyboardModifiers ks)              {keyState = ks;}
       QHash<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);

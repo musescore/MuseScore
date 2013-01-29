@@ -312,6 +312,14 @@ int ScoreTab::currentIndex() const
 
 void ScoreTab::setCurrentIndex(int idx)
       {
+    /*foreach(Score* sc, scoreList) {
+        if(scoreList->indexOf(sc) == currentIndex())
+            disconnect
+        if(scoreList->indexOf(sc) == idx)
+            connect
+                    this->
+*/
+
       if (currentIndex() == idx)
             setCurrent(idx);
       else

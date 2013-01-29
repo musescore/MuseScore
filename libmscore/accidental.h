@@ -142,8 +142,8 @@ private:
       static AccidentalType name2subtype(const QString&);
       };
 
-Q_DECLARE_METATYPE(Accidental::AccidentalRole)
-Q_DECLARE_METATYPE(Accidental::AccidentalType)
+//Q_DECLARE_METATYPE(Accidental::AccidentalRole)
+//Q_DECLARE_METATYPE(Accidental::AccidentalType)
 
 //---------------------------------------------------------
 //   @@ AccidentalBracket
