@@ -766,7 +766,7 @@ void InspectorNoteBase::setElement(Note* n)
                   headGroupIndex = i;
             }
       noteHeadGroup->setCurrentIndex(headGroupIndex);
-      noteHeadType->setCurrentIndex(int(note->headType()));
+      noteHeadType->setCurrentIndex(int(note->headType())+1);   // NoteHeadType goes from -1 while combo box goes from 0
       tuning->setValue(note->tuning());
       int val = note->veloOffset();
       velocity->setValue(val);
@@ -796,7 +796,7 @@ bool InspectorNoteBase::dirty() const
 //         || note->onTimeUserOffset()  != ontimeOffset->value()
 //         || note->offTimeUserOffset() != offtimeOffset->value()
          || note->headGroup()         != noteHeadGroup->itemData(noteHeadGroup->currentIndex())
-         || note->headType()          != noteHeadType->currentIndex()
+         || note->headType()          != (noteHeadType->currentIndex()-1)     // NoteHeadType goes from -1 while combo box goes from 0
          || note->tuning()            != tuning->value()
          || note->veloOffset()        != velocity->value()
          || note->veloType()          != velocityType->currentIndex()
@@ -831,7 +831,7 @@ void InspectorNoteBase::apply()
       val = noteHeadGroup->itemData(noteHeadGroup->currentIndex()).toInt();
       if (note->headGroup() != val)
             score->undoChangeProperty(note, P_HEAD_GROUP, val);
-      val = noteHeadType->currentIndex();
+      val = noteHeadType->currentIndex()-1;                       // NoteHeadType goes from -1 while combo box goes from 0
       if (note->headType() != val)
             score->undoChangeProperty(note, P_HEAD_TYPE, val);
       if (note->tuning() != tuning->value())
