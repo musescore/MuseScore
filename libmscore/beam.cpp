@@ -1522,6 +1522,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       else
             setMag(1.0);
 
+      int n = crl.size();
+
       if (staff()->isTabStaff()) {
             qreal y;                // vert. pos. of beam, relative to staff (top line = 0)
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
@@ -1553,10 +1555,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   // set stem direction for every chord
                   //
-                  foreach (ChordRest* cr, crl) {
-                        if (cr->type() != CHORD)
+                  for (int i = 0; i < n; ++i) {
+                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        if (c->type() != CHORD)
                               continue;
-                        Chord* c = static_cast<Chord*>(cr);
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
@@ -1572,13 +1574,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal beamY   = 0.0;  // y position of main beam start
                   qreal y1   = -200000;
                   qreal y2   = 200000;
-                  foreach(const ChordRest* cr, crl) {
-                        if (cr->type() == CHORD) {
-                              const Chord* c = static_cast<const Chord*>(cr);
-                              qreal y  = c->upNote()->pagePos().y();
-                              y1       = qMax(y1, y);
-                              y2       = qMin(y2, y);
-                              }
+                  for (int i = 0; i < n; ++i) {
+                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        if (c->type() != CHORD)
+                              continue;
+                        qreal y  = c->upNote()->pagePos().y();
+                        y1       = qMax(y1, y);
+                        y2       = qMin(y2, y);
                         }
                   if (y1 > y2)
                         beamY = y2 + (y1 - y2) * .5;
@@ -1589,10 +1591,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   // set stem direction for every chord
                   //
-                  foreach(ChordRest* cr, crl) {
-                        if (cr->type() != CHORD)
+                  for (int i = 0; i < n; ++i) {
+                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        if (c->type() != CHORD)
                               continue;
-                        Chord* c = static_cast<Chord*>(cr);
                         qreal y  = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
                         if (c->up() != nup) {
@@ -1604,10 +1606,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                   qreal yDownMax = -300000;
                   qreal yUpMin   = 300000;
-                  foreach(const ChordRest* cr, crl) {
-                        if (cr->type() != CHORD)
+
+                  for (int i = 0; i < n; ++i) {
+                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        if (c->type() != CHORD)
                               continue;
-                        const Chord* c = static_cast<const Chord*>(cr);
                         bool _up = c->up();
                         qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
                         if (_up)
@@ -1636,7 +1639,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //---------------------------------------------
 
       qreal x1 = crl[0]->stemPosX() - pageX();
-      int n    = crl.size();
 
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
@@ -1745,10 +1747,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //  create stems
       //
       for (int i = 0; i < n; ++i) {
-            ChordRest* cr  = crl[i];
-            if (cr->type() != CHORD)
+            Chord* c = static_cast<Chord*>(crl[i]);
+            if (c->type() != CHORD)
                   continue;
-            Chord* c = static_cast<Chord*>(cr);
             Stem* stem = c->stem();
             if (!stem) {
                   stem = new Stem(score());
@@ -1764,7 +1765,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            foreach(const QLineF* l, beamSegments) {
+            foreach (const QLineF* l, beamSegments) {
                   if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
@@ -1780,6 +1781,18 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             stem->setLen(y2 - (by + _pagePos.y()));
+            {
+            bool _up = c->up();
+            qreal stemWidth5 = stem->lineWidth() * .5;
+            qreal noteWidth  = c->notes().size() ? c->notes().at(0)->headWidth() :
+               symbols[score()->symIdx()][quartheadSym].width(magS());
+            qreal stemX;
+            if (_up)
+                  stemX = noteWidth - stemWidth5;
+            else
+                  stemX = stemWidth5;
+            stem->rxpos() = stemX;
+            }
 
             if (staff()->isTabStaff())          // for some reason, this is only need for TAB's
                   stem->setPos(stemPos - c->pagePos());
