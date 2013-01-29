@@ -641,6 +641,9 @@ void Chord::computeUp()
             else
                   _up = true;
             }
+      else if (staffMove()) {
+            _up = staffMove() > 0;
+            }
       else if (measure()->mstaff(staffIdx())->hasVoices) {
             switch(voice()) {
                   case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
