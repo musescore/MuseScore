@@ -1,10 +1,32 @@
-Copy the post-checkout file from build/git/hooks/ into .git/hooks/ in order
-for git to update mscore/revision.h with the branch number automatically when
-checking out:
+Handling of mscore/revision.h
+-----------------------------
+
+The copy of mscore/revision.h in the git repository is just a default, to
+prevent build failures from a freshly cloned or checked-out repo. It contains
+the string "Unknown" instead of a build number.
+
+It is always possible to update mscore/revision.h with the build number
+of the current checked-out branch by doing "make revision". However, the
+updated mscore/revision.h should never be commited back to git. This can
+be prevented manually by restoring the original value before committing,
+with "git checkout -- mscore/revision.h"
+
+But there is an easier way to achieve all this automatically...
+
+The post-checkout script in this directory should be installed as a hook in
+git, and will update mscore/revision.h with the branch number automatically
+when checking out a new branch.
+
+The hook also does "git update-index --assume-unchanged mscore/revision.h",
+so that git does not expect the updated mscore/revision.h file to be staged
+or committed. It also stops it from showing up in "git diff" or "git status".
+
+To install the hook from this directory, do:
+
+$ cp -p post-checkout ../../../.git/hooks/
+
+Alternatively from the top-level directory, do:
 
 $ cp -p build/git/hooks/post-checkout .git/hooks/
 
-This only needs doing once, and then removes the need to do "make revision"
-manually for setting the correct revision number after doing a checkout.
-
-This works for Linux, Windows (MinGW) and OSX.
+This only needs doing once, and works for Linux, Windows (MinGW) and OSX.
