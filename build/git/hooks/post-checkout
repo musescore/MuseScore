@@ -1,2 +1,7 @@
 #!/bin/sh
-git rev-parse --short HEAD >mscore/revision.h
+# only do this for branch-level checkouts
+case $3 in
+1)    git update-index --assume-unchanged mscore/revision.h
+      git rev-parse --short HEAD >mscore/revision.h
+      ;;
+esac
