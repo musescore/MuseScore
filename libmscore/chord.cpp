@@ -1381,7 +1381,8 @@ void Chord::layout()
                   _hook = 0;
                   }
             // if stem is required but missing, add it
-            else if(/*durationType().hasStem() &&*/ _stem == 0)
+            // stem position and length are set in Chord:layoutStem()
+            else if (_stem == 0)
                   setStem(new Stem(score()));
             // unconditionally delete grace slashes
             delete _stemSlash;
