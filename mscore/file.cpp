@@ -104,6 +104,8 @@ extern Score::FileError importOve(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
+extern bool savePositions(Score*, const QString& name);
+
 //---------------------------------------------------------
 //   paintElements
 //---------------------------------------------------------
@@ -1512,6 +1514,7 @@ bool MuseScore::exportFile()
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+      fl.append(tr("Segment Positions (*.pos)"));
       QString saveDialogTitle = tr("MuseScore: Export");
 
       QSettings settings;
@@ -1546,7 +1549,7 @@ bool MuseScore::exportFile()
 #ifdef HAS_AUDIOFILE
                         "wav", "flac", "ogg",
 #endif
-                        "mp3"
+                        "mp3", "pos"
                         };
                   ext = extensions[idx];
                   }
@@ -1727,6 +1730,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 #endif
       else if (ext == "mp3")
             rv = saveMp3(cs, fn);
+      else if (ext == "pos") {
+            // save positions of segments
+            rv = savePositions(cs, fn);
+            }
       else {
             qDebug("internal error: unsupported extension <%s>\n",
                qPrintable(ext));

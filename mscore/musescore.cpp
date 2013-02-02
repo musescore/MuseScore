@@ -108,6 +108,7 @@ QString styleName;
 QString revision;
 
 extern void initStaffTypes();
+extern bool savePositions(Score*, const QString& name);
 
 // Mac-Applications don't have menubar icons:
 #ifdef Q_WS_MAC
@@ -2052,6 +2053,8 @@ static bool processNonGui()
 #endif
             if (fn.endsWith(".mp3"))
                   return mscore->saveMp3(cs, fn);
+            if (fn.endsWith(".pos"))
+                  return savePositions(cs, fn);
             else {
                   qDebug("dont know how to convert to %s", qPrintable(outFileName));
                   return false;
