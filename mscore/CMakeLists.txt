@@ -199,6 +199,7 @@ add_executable ( ${ExecutableName}
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       inspectorHairpin.cpp qmlplugin.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp
+      savePositions.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
