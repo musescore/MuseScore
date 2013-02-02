@@ -25,7 +25,6 @@ static QHash<void*, int> segs;
 
 static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
       {
-printf("saveMeasureEvents\n");
       for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             int tick = s->tick() + offset;
             int id = segs[(void*)s];
@@ -39,6 +38,7 @@ printf("saveMeasureEvents\n");
 
 //---------------------------------------------------------
 //   savePositions
+//    output in 100 dpi
 //---------------------------------------------------------
 
 bool savePositions(Score* score, const QString& name)
@@ -51,6 +51,7 @@ bool savePositions(Score* score, const QString& name)
             }
       Xml xml(&fp);
       xml.header();
+      xml.stag("score");
       xml.stag("elements");
       int id = 0;
       for (Segment* s = score->firstMeasure()->first(Segment::SegChordRest);
@@ -62,10 +63,13 @@ bool savePositions(Score* score, const QString& name)
                   if (e)
                         sx = qMax(sx, e->width());
                   }
+            qreal ndpi = 100.0 / MScore::DPI;
 
-            int sy   = s->measure()->system()->height();
-            int x    = s->pagePos().x();
-            int y    = s->pagePos().y();
+            sx      *= ndpi;
+            int sy   = s->measure()->system()->height() * ndpi;
+            int x    = s->pagePos().x() * ndpi;
+            int y    = s->pagePos().y() * ndpi;
+
             Page* p  = s->measure()->system()->page();
             int page = score->pageIdx(p);
 
@@ -103,6 +107,8 @@ bool savePositions(Score* score, const QString& name)
                   }
             }
       xml.etag();
+
+      xml.etag(); // score
       return true;
       }
 
