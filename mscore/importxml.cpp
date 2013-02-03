@@ -2168,13 +2168,13 @@ void MusicXml::xmlPart(QDomElement e, QString id)
 //---------------------------------------------------------
 
 static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
-   bool paren, bool& extend)
+                                bool paren, bool& extend)
       {
       // read the <figure> node de
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
-            int   iVal = val.toInt();
+            int iVal = val.toInt();
             if (tag == "extend")
                   extend = true;
             else if (tag == "figure-number") {
@@ -2194,18 +2194,18 @@ static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
       if (paren) {
             // parenthesis open
             if (fgi->prefix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth1(FiguredBassItem::ParenthesisRoundOpen); // before prefix
+                  fgi->setParenth1(FiguredBassItem::ParenthesisRoundOpen);  // before prefix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundOpen); // before digit
+                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundOpen);  // before digit
             else if (fgi->suffix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundOpen); // before suffix
+                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundOpen);  // before suffix
             // parenthesis close
             if (fgi->suffix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth4(FiguredBassItem::ParenthesisRoundClosed); // after suffix
+                  fgi->setParenth4(FiguredBassItem::ParenthesisRoundClosed);  // after suffix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundClosed); // after digit
+                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundClosed);  // after digit
             else if (fgi->prefix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundClosed); // after prefix
+                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundClosed);  // after prefix
             }
       }
 
@@ -2226,7 +2226,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
       bool parentheses = (de.attribute("parentheses") == "yes");
       QString normalizedText;
       int idx = 0;
-      for (QDomElement e = de.firstChildElement(); !e.isNull();  e = e.nextSiblingElement()) {
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
             if (tag == "duration") {
@@ -2243,7 +2243,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
                   }
             else if (tag == "figure") {
                   bool figureExtend = false;
-                  FiguredBassItem * pItem = new FiguredBassItem(fb->score(), idx++);
+                  FiguredBassItem* pItem = new FiguredBassItem(fb->score(), idx++);
                   pItem->setTrack(fb->track());
                   pItem->setParent(fb);
                   readFiguredBassItem(pItem, e, parentheses, figureExtend);
@@ -2251,7 +2251,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
                         extend = true;
                   fb->appendItem(*pItem);
                   // add item normalized text
-                  if(!normalizedText.isEmpty())
+                  if (!normalizedText.isEmpty())
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
@@ -3332,16 +3332,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       }
 
 //---------------------------------------------------------
-//   setStaffLines - set bracket and barline span for a single staff
+//   setStaffLines - set stafflines and barline span for a single staff
 //---------------------------------------------------------
 
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
       {
       score->staff(staffIdx)->setLines(stafflines);
-      BracketItem b(NO_BRACKET, 0);
-      score->staff(staffIdx)->addBracket(b);
-      // Following barLineTo value differs from the default set in staff.cpp,
-      // but results in the same barlines as the new score wizard.
       score->staff(staffIdx)->setBarLineTo((stafflines-1) * 2);
       }
 
@@ -3365,10 +3361,10 @@ static void readTablature(Tablature* t, QDomElement de)
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
                   }
             else if (tag == "staff-tuning") {
-                  int     line   = e.attribute("line").toInt();
+                  int line   = e.attribute("line").toInt();
                   QString step;
-                  int     alter  = 0;
-                  int     octave = 0;
+                  int alter  = 0;
+                  int octave = 0;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         const QString& tag(ee.tagName());
                         int val = ee.text().toInt();
@@ -3409,23 +3405,28 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
       int staffIdx = staff;
       if (number != -1)
             staffIdx += number - 1;
+      bool hasStafflines = false;
       int stafflines = 5;
       for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-            if (ee.tagName() == "staff-lines")
+            if (ee.tagName() == "staff-lines") {
+                  hasStafflines = true;
                   stafflines = ee.text().toInt();
+                  }
             else if (ee.tagName() == "staff-tuning")
                   ;  // ignore here (but prevent error message), handled by Tablature::readMusicXML
             else
                   domNotImplemented(ee);
             }
 
-      if (number == -1) {
-            int staves = score->staff(staff)->part()->nstaves();
-            for (int i = 0; i < staves; ++i)
-                  setStaffLines(score, staffIdx+i, stafflines);
+      if (hasStafflines) {
+            if (number == -1) {
+                  int staves = score->staff(staff)->part()->nstaves();
+                  for (int i = 0; i < staves; ++i)
+                        setStaffLines(score, staffIdx+i, stafflines);
+                  }
+            else
+                  setStaffLines(score, staffIdx, stafflines);
             }
-      else
-            setStaffLines(score, staffIdx, stafflines);
 
       if (t) {
             readTablature(t, e);
@@ -5317,7 +5318,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
 
 static void readFretDiagram(FretDiagram* fd, QDomElement de)
       {
-       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+      for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             int val = e.text().toInt();
             if (tag == "frame-frets") {
