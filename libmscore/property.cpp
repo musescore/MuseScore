@@ -55,8 +55,6 @@ static const PropertyData propertyList[] = {
       { P_DISTRIBUTE,          "distribute",    T_BOOL },
       { P_MIRROR_HEAD,         "mirror",        T_DIRECTION_H },
       { P_DOT_POSITION,        "dotPosition",   T_DIRECTION },
-      { P_ONTIME_OFFSET,       "onTimeOffset",  T_INT },
-      { P_OFFTIME_OFFSET,      "offTimeOffset", T_INT },
       { P_TUNING,              "tuning",        T_REAL },
       { P_PAUSE,               "pause",         T_REAL },
       { P_BARLINE_SPAN,        "",              T_INT },
