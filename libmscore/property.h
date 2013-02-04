@@ -49,8 +49,6 @@ enum P_ID {
       P_DISTRIBUTE,
       P_MIRROR_HEAD,
       P_DOT_POSITION,
-      P_ONTIME_OFFSET,
-      P_OFFTIME_OFFSET,
       P_TUNING,
       P_PAUSE,
       P_BARLINE_SPAN,
