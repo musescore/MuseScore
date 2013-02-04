@@ -319,14 +319,20 @@ else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
       endif (MINGW)
 endif (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 
+string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
+
+message("${CMAKE_CXX_COMPILER}
+   -x c++-header -g  ${FLAGS}
+   ${a}
+   -o all.h.gch all.h")
+
 add_custom_command(
  OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch
  COMMAND ${CMAKE_CXX_COMPILER}
-   -x c++-header -g  ${FLAGS}
-   -I${QT_HEADERS_DIR}
-   -o all.h.gch all.h
+   -x c++-header -g  ${FLAGS} -I ${INC} -o all.h.gch all.h
  DEPENDS ${PROJECT_BINARY_DIR}/all.h
  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+ VERBATIM
  )
 set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
 
