@@ -30,13 +30,13 @@ class MuseScoreCore
       Score* currentScore() const        { return cs; }
       void setCurrentScore(Score* score) { cs = score; }
 
-      bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext) { return false; }
-      virtual void cmd(QAction* a) {}
+      bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/) { return false; }
+      virtual void cmd(QAction* /*a*/) {}
       virtual void setCurrentView(int tabIdx, int idx) = 0;
 
       virtual int appendScore(Score* s) { scoreList.append(s); return 0;  }
       virtual void endCmd() {}
-      virtual Score* openScore(const QString& fn) {return 0;}
+      virtual Score* openScore(const QString& /*fn*/) {return 0;}
       QList<Score*>& scores() { return scoreList; }
       };
 
