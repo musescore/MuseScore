@@ -50,7 +50,7 @@ qt5:
          then                                          \
             mkdir build.qt5;                         \
             cd build.qt5;                            \
-            export PATH=/home/ws/qt/qt5/qtbase/bin:${PATH};        \
+            export PATH=$(HOME)/Qt5.0.1/5.0.1/gcc_64/bin:${PATH};        \
             cmake -DCMAKE_BUILD_TYPE=DEBUG -DBUILD_SCRIPTGEN=NO        \
             	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
             	   ..; 		             \

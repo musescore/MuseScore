@@ -129,18 +129,7 @@ set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTXMLPATTERNS TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
 
-find_package(Qt4 "4.8")
-
-if (NOT QT4_FOUND)
-      message(FATAL_ERROR "Fatal error: QT (version >= 4.8.0) required."
-         " Cmake tries to detect QT4 by searching for 'qmake' in your PATH."
-         "If you have QT4 installed, make sure qmake is found in your PATH. "
-         "If you compiled QT4 yourself make sure your new qmake is found"
-         " _first_ in your PATH."
-         )
-else (NOT QT4_FOUND)
-      message("Qt lib found at ${QT_LIBRARY_DIR}")
-endif (NOT QT4_FOUND)
+find_package(Qt4 "4.8" REQUIRED QtCore QtGui QtXml QtSvg QtNetwork QtWebkit QtDeclarative)
 
 include(${QT_USE_FILE})
 
