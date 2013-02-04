@@ -448,7 +448,7 @@ class Score : public QObject {
 
       Score();
       Score(const MStyle*);
-      Score(Score*);                // used for excerpts
+      Score(Score*); // used for excerpts
       ~Score();
 
       Score* clone();
@@ -470,8 +470,7 @@ class Score : public QObject {
 
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
-      Staff* staff(int n) const              { return _staves.at(n); }
-
+      Staff* staff(int n) const              { return (_staves.size() > n) ? _staves.at(n) : 0; }
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
@@ -853,6 +852,8 @@ class Score : public QObject {
       void updateNotes();
       void cmdUpdateNotes();
       void updateAccidentals(Measure* m, int staffIdx);
+      bool updateAcc2;                                              // ise Accidentals
+      void updatePitches(Segment*, int, int, int, int, Accidental::AccidentalType);  // ise Accidentals
       QHash<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);
