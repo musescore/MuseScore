@@ -648,7 +648,7 @@ ScoreView::ScoreView(QWidget* parent)
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
-      _cursor     = new Cursor;
+      _cursor     = new TextCursor;
       shadowNote  = 0;
       grips       = 0;
       origEditObject   = 0;
