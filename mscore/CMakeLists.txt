@@ -203,6 +203,8 @@ add_executable ( ${ExecutableName}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
+      musescoreCore.h
+      driver.h
       )
 
 if (APPLE)
