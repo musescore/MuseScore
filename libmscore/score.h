@@ -470,7 +470,7 @@ class Score : public QObject {
 
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
-      Staff* staff(int n) const              { return _staves.at(n); }
+      Staff* staff(int n) const              { return (n < _staves.size()) ? _staves.at(n) : 0; }
 
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
