@@ -3411,9 +3411,9 @@ void Score::addText(const QString& type, const QString& txt)
 //   newCursor
 //---------------------------------------------------------
 
-PluginCursor* Score::newCursor()
+Cursor* Score::newCursor()
       {
-      return new PluginCursor(this);
+      return new Cursor(this);
       }
 
 

@@ -88,7 +88,7 @@ class Fingering;
 class QPainter;
 class FiguredBass;
 class UndoCommand;
-class PluginCursor;
+class Cursor;
 struct PageContext;
 class BarLine;
 
@@ -921,7 +921,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
-      Q_INVOKABLE PluginCursor* newCursor();
+      Q_INVOKABLE Cursor* newCursor();
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
