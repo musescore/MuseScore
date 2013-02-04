@@ -29,16 +29,17 @@ class TestTimesig : public QObject, public MTest
 
    private slots:
       void initTestCase() { initMTest(); }
-      void timesig1();
+      void timesig01();
       };
 
 //---------------------------------------------------------
-//   timesig1
+///   timesig01
+///   add a 3/4 time signature in the second measure
 //---------------------------------------------------------
 
-void TestTimesig::timesig1()
+void TestTimesig::timesig01()
       {
-      Score* score = readScore(DIR + "timesig1.mscx");
+      Score* score = readScore(DIR + "timesig01.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -47,7 +48,7 @@ void TestTimesig::timesig1()
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, "timesig1.mscx", DIR + "timesig1-ref.mscx"));
+      QVERIFY(saveCompareScore(score, "timesig01.mscx", DIR + "timesig01-ref.mscx"));
       delete score;
       }
 

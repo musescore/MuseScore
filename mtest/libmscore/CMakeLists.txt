@@ -12,7 +12,7 @@
 #=============================================================================
 
 subdirs(
-      hairpin note compat link measure beam split join pitchsplit
+      hairpin note compat link measure beam split join splitstaff
       timesig layout element midi dynamic plugins copypaste
       )
 
