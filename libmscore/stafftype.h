@@ -346,6 +346,7 @@ class StaffTypeTablature : public StaffType {
 
       // utility functions for tab specially managed elements
       QPointF     chordStemPos(const Chord * chord) const;
+      qreal       chordStemPosX(const Chord * /*chord*/) const    { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
       QPointF     chordStemPosBeam(const  Chord * chord) const;
       qreal       chordStemLength(const Chord *chord) const;
 
