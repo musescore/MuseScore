@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/measure/measure1-1.mscx measure1-1o.mscx
-cp ../../../build.debug/mtest/libmscore/measure/measure1-2.mscx measure1-2o.mscx
-cp ../../../build.debug/mtest/libmscore/measure/measure1-3.mscx measure1-3o.mscx
+cp ../../../build.debug/mtest/libmscore/measure/measure01-1.mscx measure1-1-ref.mscx
+cp ../../../build.debug/mtest/libmscore/measure/measure01-2.mscx measure1-2-ref.mscx
+cp ../../../build.debug/mtest/libmscore/measure/measure01-3.mscx measure1-3-ref.mscx
