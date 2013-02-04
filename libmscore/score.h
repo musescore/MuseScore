@@ -448,7 +448,7 @@ class Score : public QObject {
 
       Score();
       Score(const MStyle*);
-      Score(Score*);                // used for excerpts
+      Score(Score*); // used for excerpts
       ~Score();
 
       Score* clone();
@@ -471,7 +471,6 @@ class Score : public QObject {
       int staffIdx(const Part*) const;
       int staffIdx(const Staff* staff) const { return _staves.indexOf((Staff*)staff, 0); }
       Staff* staff(int n) const              { return (_staves.size() > n) ? _staves.at(n) : 0; }
-
 
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
