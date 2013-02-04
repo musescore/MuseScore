@@ -33,13 +33,13 @@ class TestSplit : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void split1() { split("split.mscx",  "split-ref.mscx"); }
-      void split2() { split("split1.mscx", "split1-ref.mscx"); }
-      void split3() { split("split2.mscx", "split2-ref.mscx"); }
-      void split4() { split("split3.mscx", "split3-ref.mscx"); }
-      void split5() { split("split4.mscx", "split4-ref.mscx"); }
-      void split6() { split("split5.mscx", "split5-ref.mscx", 6); }
-      void split7() { split("split6.mscx", "split6-ref.mscx"); }
+      void split01() { split("split01.mscx", "split01-ref.mscx"); }
+      void split02() { split("split02.mscx", "split02-ref.mscx"); }
+      void split03() { split("split03.mscx", "split03-ref.mscx"); }
+      void split04() { split("split04.mscx", "split04-ref.mscx"); }
+      void split05() { split("split05.mscx", "split05-ref.mscx"); }
+      void split06() { split("split06.mscx", "split06-ref.mscx", 6); }
+      void split07() { split("split07.mscx", "split07-ref.mscx"); }
       };
 
 //---------------------------------------------------------

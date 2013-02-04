@@ -18,48 +18,48 @@
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 
-#define DIR QString("libmscore/pitchsplit/")
+#define DIR QString("libmscore/splitstaff/")
 
 //---------------------------------------------------------
-//   TestPitchSplit
+//   TestSplitStaff
 //---------------------------------------------------------
 
-class TestPitchSplit : public QObject, public MTest
+class TestSplitStaff : public QObject, public MTest
       {
       Q_OBJECT
 
-      void pitchsplit(int);
+      void splitstaff(int);
 
    private slots:
       void initTestCase();
-      void pitchsplit1() { pitchsplit(1); }
+      void splitstaff01() { splitstaff(1); }
       };
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
-void TestPitchSplit::initTestCase()
+void TestSplitStaff::initTestCase()
       {
       initMTest();
       }
 
 //---------------------------------------------------------
-//   pitchsplit
+///   splitstaff
 //---------------------------------------------------------
 
-void TestPitchSplit::pitchsplit(int idx)
+void TestSplitStaff::splitstaff(int idx)
       {
-      Score* score = readScore(DIR + QString("pitchsplit%1.mscx").arg(idx));
+      Score* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
       score->doLayout();
       score->splitStaff(0, 60);
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, QString("pitchsplit%1.mscx").arg(idx),
-         DIR + QString("pitchsplit%1-ref.mscx").arg(idx)));
+      QVERIFY(saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
+         DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
       delete score;
       }
 
-QTEST_MAIN(TestPitchSplit)
-#include "tst_pitchsplit.moc"
+QTEST_MAIN(TestSplitStaff)
+#include "tst_splitstaff.moc"
 

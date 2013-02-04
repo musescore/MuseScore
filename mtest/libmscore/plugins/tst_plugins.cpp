@@ -31,8 +31,8 @@ class TestPlugins : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void test1();
-      void test2();
+      void plugins01();
+      void plugins02();
       };
 
 //---------------------------------------------------------
@@ -47,12 +47,13 @@ void TestPlugins::initTestCase()
       }
 
 //---------------------------------------------------------
-//   test1
+///   plugin01
+///   Create a QML item and retrieve its coordinates
 //---------------------------------------------------------
 
-void TestPlugins::test1()
+void TestPlugins::plugins01()
       {
-      QString path = root + DIR + "test1.qml";
+      QString path = root + DIR + "plugins01.qml";
       QDeclarativeComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
@@ -72,12 +73,13 @@ void TestPlugins::test1()
       }
 
 //---------------------------------------------------------
-//   test2
+///   plugin02
+///   Create a MuseScore plugin and get width and height of the dialog
 //---------------------------------------------------------
 
-void TestPlugins::test2()
+void TestPlugins::plugins02()
       {
-      QString path = root + DIR + "test2.qml";
+      QString path = root + DIR + "plugins02.qml";
       QDeclarativeComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();

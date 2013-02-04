@@ -11,7 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-set(TARGET tst_pitchsplit)
+set(TARGET tst_splitstaff)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

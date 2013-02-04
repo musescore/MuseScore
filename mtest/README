@@ -1,0 +1,8 @@
+Test cases convention
+
+Tests are grouped in directories by feature (like libmscore or mxl). 
+In these directories, each subdirectory represent a test suite for a particular sub feature.
+
+A test suite directory for a test suite should be descriptive. The CPP file for the tests should use the same name than the directory "tst_foo.cpp". It's good practise to include a README file in a test suite directory.
+
+A test suite CPP files contains a signal per test case. Each signal should be called fooXX with XX being incremental. If a test case refers to a file and ref file, they should be call fooXX.mscx and foo-ref.mscx. A test case should not reuse a file from another test case.
