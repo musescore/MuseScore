@@ -1254,9 +1254,7 @@ void Note::layout()
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             qreal mags = magS();
             qreal w = tabHeadWidth(tab);
-            // centre fret string to note head
-            qreal xo = (headWidth() - w) * .5;
-            bbox().setRect(xo, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+            bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
