@@ -268,6 +268,7 @@ bool StyleHelper::hasAlphaChannel( const QWidget* widget ) const
       else
             return false;
 #else
+      Q_UNUSED(widget)
       return compositingActive();
 #endif
       }
