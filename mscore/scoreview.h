@@ -56,17 +56,17 @@ enum {
       };
 
 //---------------------------------------------------------
-//   Cursor
+//   TextCursor
 //---------------------------------------------------------
 
-class Cursor {
+class TextCursor {
       QRectF _rect;
       bool _visible;
       QColor _color;
       int _tick;
 
    public:
-      Cursor()                       { _visible = false; }
+      TextCursor()                       { _visible = false; }
       QRectF rect() const            { return _rect;     }
       void setRect(const QRectF& r)  { _rect = r;        }
       bool visible() const           { return _visible;  }
@@ -180,7 +180,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       Text* _editText;
 
       //--input state:
-      Cursor* _cursor;
+      TextCursor* _cursor;
       ShadowNote* shadowNote;
 
       Lasso* lasso;           ///< temporarily drawn lasso selection
