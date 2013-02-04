@@ -31,10 +31,10 @@
 #include "cursor.h"
 
 //---------------------------------------------------------
-//   Cursor
+//   PluginCursor
 //---------------------------------------------------------
 
-Cursor::Cursor(Score* s)
+PluginCursor::PluginCursor(Score* s)
    : QObject(0)
       {
       _score                 = s;
@@ -48,7 +48,7 @@ Cursor::Cursor(Score* s)
 //   rewind
 //---------------------------------------------------------
 
-void Cursor::rewind(int type)
+void PluginCursor::rewind(int type)
       {
       if (type == 0) {
             _segment = 0;
@@ -79,7 +79,7 @@ void Cursor::rewind(int type)
 //    return false if end of score is reached
 //---------------------------------------------------------
 
-bool Cursor::next()
+bool PluginCursor::next()
       {
       if (!_segment)
             return false;
@@ -96,7 +96,7 @@ bool Cursor::next()
 //    return false if end of score is reached
 //---------------------------------------------------------
 
-bool Cursor::nextMeasure()
+bool PluginCursor::nextMeasure()
       {
       if (_segment == 0)
             return false;
@@ -116,7 +116,7 @@ bool Cursor::nextMeasure()
 //   add
 //---------------------------------------------------------
 
-void Cursor::add(Element* s)
+void PluginCursor::add(Element* s)
       {
       if (!_segment)
             return;
@@ -134,7 +134,7 @@ void Cursor::add(Element* s)
 //   addNote
 //---------------------------------------------------------
 
-Note* Cursor::addNote(int pitch)
+Note* PluginCursor::addNote(int pitch)
       {
       return _score->addPitch(pitch, false);
       }
@@ -143,7 +143,7 @@ Note* Cursor::addNote(int pitch)
 //   setDuration
 //---------------------------------------------------------
 
-void Cursor::setDuration(int z, int n)
+void PluginCursor::setDuration(int z, int n)
       {
       TDuration d(Fraction(z, n));
       if (!d.isValid())
@@ -155,7 +155,7 @@ void Cursor::setDuration(int z, int n)
 //   tick
 //---------------------------------------------------------
 
-int Cursor::tick()
+int PluginCursor::tick()
       {
       return (_segment) ? _segment->tick() : 0;
       }
@@ -164,7 +164,7 @@ int Cursor::tick()
 //   time
 //---------------------------------------------------------
 
-double Cursor::time()
+double PluginCursor::time()
       {
       return _score->utick2utime(tick()) * 1000;
       }
@@ -173,7 +173,7 @@ double Cursor::time()
 //   element
 //---------------------------------------------------------
 
-Element* Cursor::element() const
+Element* PluginCursor::element() const
       {
       return _segment ? _segment->element(_track) : 0;
       }
@@ -182,7 +182,7 @@ Element* Cursor::element() const
 //   setTrack
 //---------------------------------------------------------
 
-void Cursor::setTrack(int v)
+void PluginCursor::setTrack(int v)
       {
       _track = v;
       int tracks = _score->nstaves() * VOICES;
@@ -197,7 +197,7 @@ void Cursor::setTrack(int v)
 //   setStaffIdx
 //---------------------------------------------------------
 
-void Cursor::setStaffIdx(int v)
+void PluginCursor::setStaffIdx(int v)
       {
       _track = v * VOICES + _track % VOICES;
       int tracks = _score->nstaves() * VOICES;
@@ -212,7 +212,7 @@ void Cursor::setStaffIdx(int v)
 //   setVoice
 //---------------------------------------------------------
 
-void Cursor::setVoice(int v)
+void PluginCursor::setVoice(int v)
       {
       _track = (_track / VOICES) * VOICES + v;
       int tracks = _score->nstaves() * VOICES;
@@ -227,7 +227,7 @@ void Cursor::setVoice(int v)
 //   staffIdx
 //---------------------------------------------------------
 
-int Cursor::staffIdx() const
+int PluginCursor::staffIdx() const
       {
       return _track / VOICES;
       }
@@ -236,7 +236,7 @@ int Cursor::staffIdx() const
 //   voice
 //---------------------------------------------------------
 
-int Cursor::voice() const
+int PluginCursor::voice() const
       {
       return _track % VOICES;
       }
@@ -246,7 +246,7 @@ int Cursor::voice() const
 //    go to first segment at or after _segment which has notes / rests in _track
 //---------------------------------------------------------
 
-inline void Cursor::firstChordRestInTrack()
+inline void PluginCursor::firstChordRestInTrack()
       {
       while (_segment && _segment->element(_track) == 0)
             _segment = _segment->next1(Segment::SegChordRestGrace);

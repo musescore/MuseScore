@@ -32,7 +32,7 @@ class StaffText;
 class Measure;
 
 //---------------------------------------------------------
-//   @@ Cursor
+//   @@ PluginCursor
 //   @P track    int          current track
 //   @P staffIdx int          current staff (track * 4)
 //   @P voice    int          current voice (track % 4)
@@ -43,7 +43,7 @@ class Measure;
 //   @P score    Score*       associated score
 //---------------------------------------------------------
 
-class Cursor : public QObject {
+class PluginCursor : public QObject {
       Q_OBJECT
       Q_PROPERTY(int track          READ track         WRITE setTrack)
       Q_PROPERTY(int staffIdx       READ staffIdx      WRITE setStaffIdx)
@@ -67,8 +67,8 @@ class Cursor : public QObject {
       void firstChordRestInTrack();
 
    public:
-      Cursor(Score* c = 0);
-      Cursor(Score*, bool);
+      PluginCursor(Score* c = 0);
+      PluginCursor(Score*, bool);
 
       Score* score() const                    { return _score;    }
       void setScore(Score* s)                 { _score = s; }
