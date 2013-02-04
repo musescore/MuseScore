@@ -93,7 +93,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void startEdit();
       virtual void startEdit(Element*, int);
       virtual Element* elementNear(QPointF);
-      virtual void drawBackground(QPainter* p, const QRectF& r) const {}
+      virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
       };
 
 #endif
