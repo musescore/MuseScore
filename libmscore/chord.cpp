@@ -1368,7 +1368,9 @@ void Chord::layout()
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
                   note->layout();
-                  note->setPos(0.0, _spatium * tab->physStringToVisual(note->string()) * lineDist);
+                  // centre fret string on stem
+                  qreal x = tab->chordStemPosX(this) * _spatium - note->bbox().width()*0.5;
+                  note->setPos(x, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
             // if tab type is stemless or duration longer than half (if halves have stems) or duration longer than crochet
