@@ -38,9 +38,9 @@ class TestMidi : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void midi1();
-      void midi2();
-      void midi3();
+      void midi01();
+      void midi02();
+      void midi03();
       };
 
 //---------------------------------------------------------
@@ -164,10 +164,11 @@ bool compareScores(Score* score1, Score* score2)
       }
 
 //---------------------------------------------------------
-//   midi1
+///   midi01
+///   write/read midi file with timesig 4/4
 //---------------------------------------------------------
 
-void TestMidi::midi1()
+void TestMidi::midi01()
       {
       MCursor c;
       c.createScore("test1a");
@@ -203,11 +204,11 @@ void TestMidi::midi1()
       }
 
 //---------------------------------------------------------
-//   midi2
-//    write/read midi file with timesig 3/4
+///   midi02
+///   write/read midi file with timesig 3/4
 //---------------------------------------------------------
 
-void TestMidi::midi2()
+void TestMidi::midi02()
       {
       MCursor c;
       c.createScore("test2a");
@@ -243,10 +244,11 @@ void TestMidi::midi2()
       }
 
 //---------------------------------------------------------
-//   midi3
+///   midi03
+///   write/read midi file with key sig
 //---------------------------------------------------------
 
-void TestMidi::midi3()
+void TestMidi::midi03()
       {
       MCursor c;
       c.createScore("test3a");

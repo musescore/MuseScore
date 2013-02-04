@@ -33,13 +33,13 @@ class TestJoin : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void join1() { join("join.mscx",  "join-ref.mscx"); }
-      void join2() { join("join1.mscx", "join1-ref.mscx"); }
-      void join3() { join("join2.mscx", "join2-ref.mscx"); }
-      void join4() { join("join3.mscx", "join3-ref.mscx"); }
-      void join5() { join("join4.mscx", "join4-ref.mscx"); }
-      void join6() { join("join5.mscx", "join5-ref.mscx", 1); }
-      void join7() { join("join6.mscx", "join6-ref.mscx"); }
+      void join01() { join("join01.mscx", "join01-ref.mscx"); }
+      void join02() { join("join02.mscx", "join02-ref.mscx"); }
+      void join03() { join("join03.mscx", "join03-ref.mscx"); }
+      void join04() { join("join04.mscx", "join04-ref.mscx"); }
+      void join05() { join("join05.mscx", "join05-ref.mscx"); }
+      void join06() { join("join06.mscx", "join06-ref.mscx", 1); }
+      void join07() { join("join07.mscx", "join07-ref.mscx"); }
       };
 
 //---------------------------------------------------------

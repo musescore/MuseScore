@@ -28,21 +28,21 @@ class TestCopyPaste : public QObject, public MTest
       {
       Q_OBJECT
 
-      void copypaste(int);
+      void copypaste(const char*);
 
    private slots:
       void initTestCase();
-      void copypaste1() { copypaste(1); }       // start slur
-      void copypaste2() { copypaste(2); }       // end slur
-      void copypaste3() { copypaste(3); }       // slur
-      void copypaste4() { copypaste(4); }       // start tie
-      void copypaste5() { copypaste(5); }       // end tie
-      void copypaste6() { copypaste(6); }       // tie
-      void copypaste7() { copypaste(7); }       // start ottava
-      void copypaste8() { copypaste(8); }       // end ottava
-      void copypaste9() { copypaste(9); }       // ottava
-      void copypaste10() { copypaste(10); }     // two slurs
-      void copypaste11() { copypaste(11); }     // grace notes
+      void copypaste01() { copypaste("01"); }       // start slur
+      void copypaste02() { copypaste("02"); }       // end slur
+      void copypaste03() { copypaste("03"); }       // slur
+      void copypaste04() { copypaste("04"); }       // start tie
+      void copypaste05() { copypaste("05"); }       // end tie
+      void copypaste06() { copypaste("06"); }       // tie
+      void copypaste07() { copypaste("07"); }       // start ottava
+      void copypaste08() { copypaste("08"); }       // end ottava
+      void copypaste09() { copypaste("09"); }       // ottava
+      void copypaste10() { copypaste("10"); }       // two slurs
+      void copypaste11() { copypaste("11"); }       // grace notes
       };
 
 //---------------------------------------------------------
@@ -58,7 +58,7 @@ void TestCopyPaste::initTestCase()
 //   copypaste
 //---------------------------------------------------------
 
-void TestCopyPaste::copypaste(int idx)
+void TestCopyPaste::copypaste(const char* idx)
       {
       Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
       score->doLayout();
