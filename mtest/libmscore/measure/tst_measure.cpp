@@ -56,12 +56,12 @@ void TestMeasure::initTestCase()
       }
 
 //---------------------------------------------------------
-//   insertMeasureMiddle
+///   insertMeasureMiddle
 //---------------------------------------------------------
 
 void TestMeasure::insertMeasureMiddle()
       {
-      Score* score = readScore(DIR + "measure1.mscx");
+      Score* score = readScore(DIR + "measure01.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -70,17 +70,17 @@ void TestMeasure::insertMeasureMiddle()
       score->startCmd();
       score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
-      QVERIFY(saveCompareScore(score, "measure1-1.mscx", DIR + "measure1-1o.mscx"));
+      QVERIFY(saveCompareScore(score, "measure01-1.mscx", DIR + "measure01-1-ref.mscx"));
       delete score;
       }
 
 //---------------------------------------------------------
-//   insertMeasureBegin
+///   insertMeasureBegin
 //---------------------------------------------------------
 
 void TestMeasure::insertMeasureBegin()
       {
-      Score* score = readScore(DIR + "measure1.mscx");
+      Score* score = readScore(DIR + "measure01.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -89,17 +89,17 @@ void TestMeasure::insertMeasureBegin()
       score->startCmd();
       score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
-      QVERIFY(saveCompareScore(score, "measure1-2.mscx", DIR + "measure1-2o.mscx"));
+      QVERIFY(saveCompareScore(score, "measure01-2.mscx", DIR + "measure01-2-ref.mscx"));
       delete score;
       }
 
 //---------------------------------------------------------
-//   insertMeasureEnd
+///   insertMeasureEnd
 //---------------------------------------------------------
 
 void TestMeasure::insertMeasureEnd()
       {
-      Score* score = readScore(DIR + "measure1.mscx");
+      Score* score = readScore(DIR + "measure01.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -107,7 +107,7 @@ void TestMeasure::insertMeasureEnd()
       score->startCmd();
       score->insertMeasure(Element::MEASURE, 0);
       score->endCmd();
-      QVERIFY(saveCompareScore(score, "measure1-3.mscx", DIR + "measure1-3o.mscx"));
+      QVERIFY(saveCompareScore(score, "measure01-3.mscx", DIR + "measure01-3-ref.mscx"));
       delete score;
       }
 
@@ -117,7 +117,7 @@ void TestMeasure::insertMeasureEnd()
 
 void TestMeasure::minWidth()
       {
-      Score* score = readScore(DIR + "measure2.mscx");
+      Score* score = readScore(DIR + "measure02.mscx");
       score->doLayout();
       int n = score->systems()->size();
       int measuresSystem[n];
