@@ -350,13 +350,12 @@ void FretDiagram::read(XmlReader& e)
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            int val = e.readInt();
             if (tag == "strings")
-                  _strings = val;
+                  _strings = e.readInt();
             else if (tag == "frets")
-                  _frets = val;
+                  _frets = e.readInt();
             else if (tag == "fretOffset")
-                  _fretOffset = val;
+                  _fretOffset = e.readInt();
             else if (tag == "string") {
                   int no = e.intAttribute("no");
                   while (e.readNextStartElement()) {
