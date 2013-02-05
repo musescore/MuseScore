@@ -694,7 +694,9 @@ MuseScore::MuseScore()
 
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("edit-info"));
-      _fileMenu->addAction(getAction("media"));
+
+      if(enableExperimental)
+            _fileMenu->addAction(getAction("media"));
 
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("print"));
