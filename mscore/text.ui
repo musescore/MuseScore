@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>553</width>
-    <height>239</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,6 +27,9 @@
        <layout class="QGridLayout" name="gridLayout">
         <item row="1" column="5">
          <widget class="QDoubleSpinBox" name="yoffset">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
           <property name="maximum">
            <double>10000.000000000000000</double>
           </property>
@@ -34,6 +37,9 @@
         </item>
         <item row="2" column="3">
          <widget class="QDoubleSpinBox" name="rxoffset">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
           <property name="maximum">
            <double>10000.000000000000000</double>
           </property>
@@ -41,6 +47,9 @@
         </item>
         <item row="2" column="5">
          <widget class="QDoubleSpinBox" name="ryoffset">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
           <property name="maximum">
            <double>10000.000000000000000</double>
           </property>
@@ -48,6 +57,9 @@
         </item>
         <item row="1" column="3">
          <widget class="QDoubleSpinBox" name="xoffset">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
           <property name="maximum">
            <double>10000.000000000000000</double>
           </property>
