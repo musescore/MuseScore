@@ -4458,7 +4458,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         if (tie) {
                               qDebug("Tie already active");
                               }
-                        else {
+                        else if (note){
                               tie = new Tie(score);
                               qDebug("use Tie %p", tie);
                               note->setTieFor(tie);
