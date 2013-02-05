@@ -463,7 +463,8 @@ void AlbumManager::printClicked()
 
 void AlbumManager::createScoreClicked()
       {
-      album->createScore();
+      if (album)
+            album->createScore();
       }
 
 //---------------------------------------------------------
