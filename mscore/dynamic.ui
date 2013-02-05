@@ -55,6 +55,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="subType">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
           <property name="maximum">
            <number>999999</number>
           </property>
