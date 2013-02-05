@@ -91,6 +91,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       double _spatium   = 20.0 * mag;
       double lw1        = _spatium * 0.08;
       int fretOffset    = diagram->fretOffset();
+      qDebug("fretOffset %d", fretOffset);
       double lw2        = fretOffset ? lw1 : _spatium * 0.2;
       double stringDist = _spatium * .7;
       double fretDist   = _spatium * .8;
@@ -166,6 +167,8 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             p.drawEllipse(QRectF(x, y, dotd, dotd));
             }
       if (fretOffset > 0) {
+          p.setPen(pen);
+          qDebug("stringDist %f fretDist %f", stringDist, fretDist);
             p.drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
                Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(fretOffset+1));
