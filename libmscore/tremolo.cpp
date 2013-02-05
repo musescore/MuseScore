@@ -47,7 +47,7 @@ void Tremolo::draw(QPainter* painter) const
             QPen pen(curColor(), point(score()->styleS(ST_stemWidth)));
             painter->setPen(pen);
             qreal _spatium = spatium();
-            painter->drawLine(QLineF(x, -_spatium*.5, x, bbox().height() + _spatium));
+            painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
             }
       }
 
@@ -101,7 +101,11 @@ void Tremolo::layout()
             path.closeSubpath();
             ty += td;
             }
-      setbbox(path.boundingRect());
+
+      QRectF rect = path.boundingRect();
+      if ((parent() == 0) && !twoNotes())
+            rect.setHeight(rect.height() + _spatium);
+      setbbox(rect);
 
       _chord1 = static_cast<Chord*>(parent());
       if (_chord1 == 0)
