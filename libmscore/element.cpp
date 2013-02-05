@@ -420,8 +420,9 @@ void Element::change(Element* o, Element* n)
 
 Staff* Element::staff() const
       {
-      if (_track == -1)
+      if (_track == -1 || score()->staves().isEmpty())
             return 0;
+
       return score()->staff(staffIdx());
       }
 
