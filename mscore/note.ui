@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>479</width>
-    <height>256</height>
+    <width>525</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,11 +50,17 @@
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="pitch">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
         <property name="maximum">
          <number>127</number>
@@ -76,6 +82,9 @@
         <property name="toolTip">
          <string>head index</string>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -96,6 +105,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="2">
@@ -112,6 +124,9 @@
        <widget class="QSpinBox" name="headGroup">
         <property name="toolTip">
          <string>note head group</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
         <property name="maximum">
          <number>5</number>
@@ -141,6 +156,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
         <property name="minimum">
          <number>-99</number>
@@ -193,6 +211,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="1" column="2">
@@ -207,6 +228,9 @@
       </item>
       <item row="1" column="3">
        <widget class="QSpinBox" name="velo">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
         <property name="maximum">
          <number>127</number>
         </property>
@@ -269,6 +293,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
         <property name="minimum">
          <double>-1000.000000000000000</double>
         </property>
@@ -299,6 +326,9 @@
       </item>
       <item row="7" column="1">
        <widget class="QSpinBox" name="string">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
         <property name="specialValueText">
          <string>invalid</string>
         </property>
@@ -322,6 +352,9 @@
       </item>
       <item row="7" column="3">
        <widget class="QSpinBox" name="fret">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
         <property name="specialValueText">
          <string>invalid</string>
         </property>
