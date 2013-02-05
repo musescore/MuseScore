@@ -394,6 +394,7 @@ AlbumManager::AlbumManager(QWidget* parent)
       add->setEnabled(false);
       print->setEnabled(false);
       albumName->setEnabled(false);
+      createScore->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -531,6 +532,7 @@ void AlbumManager::setAlbum(Album* a)
       albumName->setEnabled(true);
       add->setEnabled(true);
       print->setEnabled(true);
+      createScore->setEnabled(true);
       }
 
 //---------------------------------------------------------
