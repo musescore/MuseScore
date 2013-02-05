@@ -130,15 +130,28 @@ Palette* MuseScore::newFramePalette()
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
-      static const IconAction bpa[] = {
-            { ICON_VFRAME,   "insert-vbox" },
-            { ICON_HFRAME,   "insert-hbox" },
-            { ICON_TFRAME,   "insert-textframe" },
-            { ICON_FFRAME,   "insert-fretframe" },
-            { ICON_MEASURE,  "insert-measure" },
-            { -1, ""}
-            };
-      populateIconPalette(sp, bpa);
+      if(enableExperimental) {
+            static const IconAction bpa[] = {
+                  { ICON_VFRAME,   "insert-vbox" },
+                  { ICON_HFRAME,   "insert-hbox" },
+                  { ICON_TFRAME,   "insert-textframe" },
+                  { ICON_FFRAME,   "insert-fretframe" },
+                  { ICON_MEASURE,  "insert-measure" },
+                  { -1, ""}
+                  };
+            populateIconPalette(sp, bpa);
+            }
+      else {
+            static const IconAction bpa[] = {
+                  { ICON_VFRAME,   "insert-vbox" },
+                  { ICON_HFRAME,   "insert-hbox" },
+                  { ICON_TFRAME,   "insert-textframe" },
+                  { ICON_MEASURE,  "insert-measure" },
+                  { -1, ""}
+                };
+            populateIconPalette(sp, bpa);
+            }
+
       return sp;
       }
 
@@ -1022,7 +1035,8 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       frames->addAction(getAction("insert-hbox"));
       frames->addAction(getAction("insert-vbox"));
       frames->addAction(getAction("insert-textframe"));
-      frames->addAction(getAction("insert-fretframe"));
+      if(enableExperimental)
+            frames->addAction(getAction("insert-fretframe"));
       frames->addSeparator();
       frames->addAction(getAction("append-hbox"));
       frames->addAction(getAction("append-vbox"));
