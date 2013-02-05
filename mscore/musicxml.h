@@ -240,14 +240,11 @@ class MusicXml {
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
       BeamMode beamMode;                         ///< Current beam mode
-      Beam* beam;                                ///< Current beam mode
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults
 
       QMap<QString, MusicXMLDrumset> drumsets;   ///< Drumset for each part
-
-      QList<Beam*> beams;                       // moved from Score(), required?
 
       //-----------------------------
 
@@ -264,11 +261,10 @@ class MusicXml {
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, QDomElement node);
+      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QDomElement node);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void initVoiceMapperAndMapVoices(QDomElement e);
-      void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam);
 
 public:
       MusicXml(QDomDocument* d);
@@ -276,7 +272,7 @@ public:
       };
 
 //---------------------------------------------------------
-//   XmlChorExtension
+//   XmlChordExtension
 //---------------------------------------------------------
 
 struct XmlChordExtension {
