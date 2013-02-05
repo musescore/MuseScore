@@ -479,7 +479,6 @@ MusicXml::MusicXml(QDomDocument* d)
       doc(d),
       maxLyrics(0),
       beamMode(BEAM_NO),
-      beam(0),
       pageWidth(0),
       pageHeight(0)
       {
@@ -2265,6 +2264,66 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
       return res;
       }
 
+
+//---------------------------------------------------------
+//   removeBeam -- // beam mode for all elements and remove the beam
+//---------------------------------------------------------
+
+static void removeBeam(Beam*& beam)
+      {
+      for (int i = 0; i < beam->elements().size(); ++i)
+            beam->elements().at(i)->setBeamMode(BEAM_NO);
+      delete beam;
+      beam = 0;
+      }
+
+//---------------------------------------------------------
+//   handleBeamAndStemDir
+//---------------------------------------------------------
+
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
+      {
+      if (!cr) return;
+      // create a new beam
+      // currently only required when stem direction is explicit
+      if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
+            // if currently in a beam, delete it
+            if (beam) {
+                  qDebug("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
+                  removeBeam(beam);
+                  }
+            // create a new beam
+            beam = new Beam(cr->score());
+            beam->setTrack(cr->track());
+            beam->setBeamDirection(sd);
+            }
+      // add ChordRest to beam
+      if (beam) {
+            // verify still in the same track (switching voices in the middle of a beam is not supported)
+            // and in a beam ...
+            // (note no check is done on correct order of beam begin/continue/end)
+            if (cr->track() == beam->track()
+                && (bm == BEAM_BEGIN || bm == BEAM_MID || bm == BEAM_END)) {
+                  // ... and actually add cr to the beam
+                  beam->add(cr);
+                  }
+            else {
+                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %d -> abort beam",
+                         beam->track(), cr->track(), bm);
+                  // ... or reset beam mode for all elements and remove the beam
+                  removeBeam(beam);
+                  }
+            }
+      // if no beam, set stem direction on chord itself
+      if (!beam) {
+            static_cast<Chord*>(cr)->setStemDirection(sd);
+            cr->setBeamMode(BEAM_NO);
+            }
+      // terminate the currect beam and add to the score
+      if (beam && bm == BEAM_END)
+            beam = 0;
+      }
+
 //---------------------------------------------------------
 //   xmlMeasure
 //---------------------------------------------------------
@@ -2285,6 +2344,8 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       Fraction noteTypeTickFr;
       // maximum "tick" within this measure as fraction
       Fraction maxNoteTypeTickFr;
+      // current beam
+      Beam* beam = 0;
 
       if (staves == 0) {
             qDebug("no staves!");
@@ -2333,7 +2394,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             if (e.tagName() == "attributes")
                   xmlAttributes(measure, staff, e.firstChildElement());
             else if (e.tagName() == "note") {
-                  xmlNote(measure, staff, part->id(), e);
+                  xmlNote(measure, staff, part->id(), beam, e);
                   moveTick(measure->tick(), tick, maxtick, noteTypeTickFr, divisions, e);
 #ifdef DEBUG_TICK
                   qDebug(" after inserting note tick=%d", tick);
@@ -2547,6 +2608,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
              measure->tick(), maxtick, lastMeasureLen, measureLen,
              fractionTSig.ticks(), qPrintable(fractionTSig.print()));
 #endif
+
+      // can't have beams extending into the next measure
+      if (beam)
+            removeBeam(beam);
 
       // TODO:
       // - how to handle fractionTSig.isZero (shouldn't happen ?)
@@ -4748,32 +4813,6 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 
 
 //---------------------------------------------------------
-//   handleBeamAndStemDir
-//---------------------------------------------------------
-
-void MusicXml::handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam)
-      {
-      if (!cr) return;
-      // create a new beam
-      // currently only required when stem direction is explicit
-      if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
-            beam = new Beam(cr->score());
-            beam->setTrack(cr->track());
-            beam->setBeamDirection(sd);
-            beams.prepend(beam);          // required?
-            }
-      // add ChordRest to beam
-      if (beam) beam->add(cr);
-      // if no beam, set stem direction on chord itself
-      if (!beam) static_cast<Chord*>(cr)->setStemDirection(sd);
-      // terminate the currect beam
-      if (bm == BEAM_END) {
-            beam = 0;
-            }
-      }
-
-
-//---------------------------------------------------------
 //   findLastFiguredBass
 //---------------------------------------------------------
 
@@ -4808,7 +4847,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
  \a Staff is the number of first staff of the part this note belongs to.
  */
 
-void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomElement e)
+void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, QDomElement e)
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -5096,8 +5135,14 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, QDomE
                   cr->setDots(dots);
                   cr->setDuration(cr->durationType().fraction());
                   }
-            if (beamMode == BEAM_BEGIN || beamMode == BEAM_MID)
-                  cr->setBeamMode(BEAM_MID);
+            if (beam) {
+                  if (beam->track() == track) {
+                        cr->setBeamMode(BEAM_MID);
+                        beam->add(cr);
+                        }
+                  else
+                        removeBeam(beam);
+                  }
             else
                   cr->setBeamMode(BEAM_NO);
             cr->setTrack(track);
