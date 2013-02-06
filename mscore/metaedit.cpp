@@ -32,7 +32,6 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       setupUi(this);
       score = s;
 
-      date->setDate(score->creationDate());
       level->setValue(score->mscVersion());
       version->setText(score->mscoreVersion());
       revision->setValue(score->mscoreRevision());

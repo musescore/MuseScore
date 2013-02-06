@@ -246,7 +246,6 @@ class Score : public QObject {
       QReadWriteLock _layoutLock;
       QList<MuseScoreView*> viewer;
 
-      QDate _creationDate;
       QString _mscoreVersion;
       int _mscoreRevision;
 
@@ -862,7 +861,6 @@ class Score : public QObject {
       int pageNumberOffset() const          { return _pageNumberOffset; }
       void setPageNumberOffset(int v)       { _pageNumberOffset = v; }
 
-      const QDate& creationDate() const     { return _creationDate;  }
       QString mscoreVersion() const         { return _mscoreVersion; }
       int mscoreRevision() const            { return _mscoreRevision; }
       void setMscoreVersion(const QString& val) { _mscoreVersion = val; }

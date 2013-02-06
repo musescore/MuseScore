@@ -104,7 +104,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            if (!_testMode  || i.key() != "platform")
+            if (!_testMode  || i.key() != "platform" || i.key() != "creationDate")
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
 
@@ -530,9 +530,11 @@ bool Score::saveStyle(const QString& name)
 //---------------------------------------------------------
 
 extern QString revision;
+extern bool enableTestMode;
 
 void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
+      setTestMode(enableTestMode);
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
