@@ -18,7 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "profile.h"
+#include "workspace.h"
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/imageStore.h"
@@ -29,29 +29,29 @@
 #include "palette.h"
 
 static bool profilesRead = false;
-static QList<Profile*> _profiles;
-Profile* profile;
+static QList<Workspace*> _profiles;
+Workspace* profile;
 
 //---------------------------------------------------------
-//   showProfileMenu
+//   showWorkspaceMenu
 //---------------------------------------------------------
 
-void MuseScore::showProfileMenu()
+void MuseScore::showWorkspaceMenu()
       {
       if (profiles == 0) {
             profiles = new QActionGroup(this);
             profiles->setExclusive(true);
-            connect(profiles, SIGNAL(triggered(QAction*)), SLOT(changeProfile(QAction*)));
+            connect(profiles, SIGNAL(triggered(QAction*)), SLOT(changeWorkspace(QAction*)));
             }
       else {
             foreach(QAction* a, profiles->actions())
                   profiles->removeAction(a);
             }
-      menuProfiles->clear();
+      menuWorkspaces->clear();
 
-      const QList<Profile*> pl = Profile::profiles();
+      const QList<Workspace*> pl = Workspace::profiles();
 //      QAction* active = 0;
-      foreach (Profile* p, pl) {
+      foreach (Workspace* p, pl) {
             QAction* a = profiles->addAction(p->name());
             a->setCheckable(true);
             a->setData(p->path());
@@ -59,30 +59,30 @@ void MuseScore::showProfileMenu()
 //                  active = a;
                   a->setChecked(true);
                   }
-            menuProfiles->addAction(a);
+            menuWorkspaces->addAction(a);
             }
-      menuProfiles->addSeparator();
-      QAction* a = new QAction(tr("New Profile"), this);
-      connect(a, SIGNAL(triggered()), SLOT(createNewProfile()));
-      menuProfiles->addAction(a);
-      deleteProfileAction = new QAction(tr("Delete Profile"), this);
-      connect(deleteProfileAction, SIGNAL(triggered()), SLOT(deleteProfile()));
-      menuProfiles->addAction(deleteProfileAction);
+      menuWorkspaces->addSeparator();
+      QAction* a = new QAction(tr("New Workspace"), this);
+      connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
+      menuWorkspaces->addAction(a);
+      deleteWorkspaceAction = new QAction(tr("Delete Workspace"), this);
+      connect(deleteWorkspaceAction, SIGNAL(triggered()), SLOT(deleteWorkspace()));
+      menuWorkspaces->addAction(deleteWorkspaceAction);
       }
 
 //---------------------------------------------------------
-//   createNewProfile
+//   createNewWorkspace
 //---------------------------------------------------------
 
-void MuseScore::createNewProfile()
+void MuseScore::createNewWorkspace()
       {
-      QString s = QInputDialog::getText(this, tr("MuseScore: Read Profile Name"),
-         tr("Profile Name:"));
+      QString s = QInputDialog::getText(this, tr("MuseScore: Read Workspace Name"),
+         tr("Workspace Name:"));
       if (s.isEmpty())
             return;
       for (;;) {
             bool notFound = true;
-            foreach(Profile* p, Profile::profiles()) {
+            foreach(Workspace* p, Workspace::profiles()) {
                   if (p->name() == s) {
                         notFound = false;
                         break;
@@ -90,7 +90,7 @@ void MuseScore::createNewProfile()
                   }
             if (!notFound) {
                   s = QInputDialog::getText(this,
-                     tr("MuseScore: Read Profile Name"),
+                     tr("MuseScore: Read Workspace Name"),
                      QString(tr("'%1' does already exist,\nplease choose a different name:")).arg(s)
                      );
                   if (s.isEmpty())
@@ -100,15 +100,15 @@ void MuseScore::createNewProfile()
                   break;
             }
       profile->save();
-      profile = Profile::createNewProfile(s);
+      profile = Workspace::createNewWorkspace(s);
       preferences.profile = profile->name();
       }
 
 //---------------------------------------------------------
-//   deleteProfile
+//   deleteWorkspace
 //---------------------------------------------------------
 
-void MuseScore::deleteProfile()
+void MuseScore::deleteWorkspace()
       {
       if (!profiles)
             return;
@@ -116,8 +116,8 @@ void MuseScore::deleteProfile()
       if (!a)
             return;
       preferences.dirty = true;
-      Profile* profile = 0;
-      foreach(Profile* p, Profile::profiles()) {
+      Workspace* profile = 0;
+      foreach(Workspace* p, Workspace::profiles()) {
             if (p->name() == a->text()) {
                   profile = p;
                   break;
@@ -125,25 +125,25 @@ void MuseScore::deleteProfile()
             }
       if (!profile)
             return;
-      Profile::profiles().removeOne(profile);
+      Workspace::profiles().removeOne(profile);
       QFile f(profile->path());
       f.remove();
 //TODO:??      delete profile;
-      profile             = Profile::profiles().first();
+      profile             = Workspace::profiles().first();
       preferences.profile = profile->name();
       }
 
 //---------------------------------------------------------
-//   changeProfile
+//   changeWorkspace
 //---------------------------------------------------------
 
-void MuseScore::changeProfile(QAction* a)
+void MuseScore::changeWorkspace(QAction* a)
       {
       preferences.profile = a->text();
       preferences.dirty = true;
-      foreach(Profile* p, Profile::profiles()) {
+      foreach(Workspace* p, Workspace::profiles()) {
             if (p->name() == a->text()) {
-                  changeProfile(p);
+                  changeWorkspace(p);
                   return;
                   }
             }
@@ -151,10 +151,10 @@ void MuseScore::changeProfile(QAction* a)
       }
 
 //---------------------------------------------------------
-//   changeProfile
+//   changeWorkspace
 //---------------------------------------------------------
 
-void MuseScore::changeProfile(Profile* p)
+void MuseScore::changeWorkspace(Workspace* p)
       {
       profile->save();
       p->read();
@@ -162,19 +162,19 @@ void MuseScore::changeProfile(Profile* p)
       }
 
 //---------------------------------------------------------
-//   initProfile
+//   initWorkspace
 //---------------------------------------------------------
 
-void initProfile()
+void initWorkspace()
       {
-      foreach(Profile* p, Profile::profiles()) {
+      foreach(Workspace* p, Workspace::profiles()) {
             if (p->name() == preferences.profile) {
                   profile = p;
                   break;
                   }
             }
       if (profile == 0) {
-            profile = new Profile;
+            profile = new Workspace;
             profile->setName("default");
             }
       }
@@ -185,15 +185,15 @@ void initProfile()
 
 static void writeFailed(const QString& _path)
       {
-      QString s = mscore->tr("Open Profile File\n") + _path + mscore->tr("\nfailed: ");
-      QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Profile file"), s);
+      QString s = mscore->tr("Open Workspace File\n") + _path + mscore->tr("\nfailed: ");
+      QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Workspace file"), s);
       }
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
-void Profile::write()
+void Workspace::write()
       {
       QString ext(".profile");
       if (_path.isEmpty()) {
@@ -251,7 +251,7 @@ void Profile::write()
       xml.clipboardmode = true;
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      xml.stag("Profile");
+      xml.stag("Workspace");
       xml.tag("name", _name);
       PaletteBox* pb = mscore->getPaletteBox();
       pb->write(xml);
@@ -270,7 +270,7 @@ void Profile::write()
 //   read
 //---------------------------------------------------------
 
-void Profile::read()
+void Workspace::read()
       {
       if (_path.isEmpty() || !QFile(_path).exists()) {
             PaletteBox* paletteBox = mscore->getPaletteBox();
@@ -333,7 +333,7 @@ void Profile::read()
 //                  QStringList sl = version.split('.');
                   // _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
                   while (e.readNextStartElement()) {
-                        if (e.name() == "Profile")
+                        if (e.name() == "Workspace")
                               read(e);
                         else
                               e.unknown();
@@ -342,7 +342,7 @@ void Profile::read()
             }
       }
 
-void Profile::read(XmlReader& e)
+void Workspace::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -362,7 +362,7 @@ void Profile::read(XmlReader& e)
 //   save
 //---------------------------------------------------------
 
-void Profile::save()
+void Workspace::save()
       {
       PaletteBox* pb = mscore->getPaletteBox();
       if (pb && pb->dirty())
@@ -373,7 +373,7 @@ void Profile::save()
 //   profiles
 //---------------------------------------------------------
 
-QList<Profile*>& Profile::profiles()
+QList<Workspace*>& Workspace::profiles()
       {
       if (!profilesRead) {
             QString s = dataPath + "/profiles";
@@ -383,7 +383,7 @@ QList<Profile*>& Profile::profiles()
             QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
             foreach (QString s, pl) {
-                  Profile* p = new Profile;
+                  Workspace* p = new Workspace;
                   p->setPath(dataPath + "/profiles/" + s);
                   p->setName(QFileInfo(s).baseName());
                   _profiles.append(p);
@@ -394,12 +394,12 @@ QList<Profile*>& Profile::profiles()
       }
 
 //---------------------------------------------------------
-//   createNewProfile
+//   createNewWorkspace
 //---------------------------------------------------------
 
-Profile* Profile::createNewProfile(const QString& name)
+Workspace* Workspace::createNewWorkspace(const QString& name)
       {
-      Profile* p = new Profile(*profile);
+      Workspace* p = new Workspace(*profile);
       p->setName(name);
       p->setPath("");
       p->setDirty(false);
