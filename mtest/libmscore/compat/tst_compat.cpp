@@ -57,6 +57,7 @@ void TestCompat::compat_data()
       QTest::newRow("keysig") << "keysig";
       QTest::newRow("hairpin") << "hairpin";
       QTest::newRow("articulations") << "articulations";
+      QTest::newRow("textstyles") << "textstyles";
       }
 
 //---------------------------------------------------------

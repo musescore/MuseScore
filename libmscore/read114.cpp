@@ -367,11 +367,11 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "TextStyle") {
                   TextStyle s;
                   s.read(e);
-                  // settings for _reloff::x and _reloff::y in old formats
-                  // is now included in style; setting them to 0 fixes most
-                  // cases of backward compatibility
-                  s.setRxoff(0);
-                  s.setRyoff(0);
+
+                  // Change 1.2 Poet to Lyricist
+                  if (s.name() == "Poet")
+                        s.setName("Lyricist");
+
                   _style.setTextStyle(s);
                   }
             else if (tag == "page-layout") {
