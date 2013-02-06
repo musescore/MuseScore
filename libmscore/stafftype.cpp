@@ -582,7 +582,7 @@ void StaffTypeTablature::setFretMetrics()
       if(!_onLines)
             _fretYOffset -= lineDistance().val()*MScore::DPI*SPATIUM20 / 2.0;
 
-      // from _fretYOffset, compute _charBoxH and _charBoxY
+      // from _fretYOffset, compute _fretBoxH and _fretBoxY
       _fretBoxH = bb.height();
       _fretBoxY = bb.y()  + _fretYOffset;
 
