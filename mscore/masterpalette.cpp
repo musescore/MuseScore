@@ -15,6 +15,7 @@
 #include "masterpalette.h"
 #include "symboldialog.h"
 #include "palette.h"
+#include "keyedit.h"
 #include "libmscore/score.h"
 #include "libmscore/clef.h"
 #include "libmscore/fingering.h"
@@ -107,7 +108,10 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newBracketsPalette());
       addPalette(MuseScore::newArticulationsPalette());
-      addPalette(MuseScore::newAccidentalsPalette());
+
+//      addPalette(MuseScore::newAccidentalsPalette());
+      stack->addWidget(new KeyEditor);
+
       addPalette(MuseScore::newDynamicsPalette());
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newNoteHeadsPalette());
