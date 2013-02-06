@@ -57,6 +57,7 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       _frets      = f._frets;
       _fretOffset = f._fretOffset;
       _maxFrets   = f._maxFrets;
+      maxStrings  = f.maxStrings;
       _dots       = 0;
       _marker     = 0;
       _fingering  = 0;
@@ -86,9 +87,9 @@ FretDiagram::FretDiagram(const FretDiagram& f)
 
 FretDiagram::~FretDiagram()
       {
-      delete _dots;
-      delete _marker;
-      delete _fingering;
+      delete[] _dots;
+      delete[] _marker;
+      delete[] _fingering;
       }
 
 #if 1
@@ -164,7 +165,7 @@ void FretDiagram::setStrings(int n)
             memcpy(ndots, _dots, _strings);
             for (int i = _strings; i < n; ++i)
                   ndots[i] = 0;
-            delete _dots;
+            delete[] _dots;
             _dots = ndots;
             }
       if (_marker) {
@@ -172,7 +173,7 @@ void FretDiagram::setStrings(int n)
             memcpy(nmarker, _marker, _strings);
             for (int i = _strings; i < n; ++i)
                   nmarker[i] = 0;
-            delete _marker;
+            delete[] _marker;
             _marker = nmarker;
             }
       if (_fingering) {
@@ -180,7 +181,7 @@ void FretDiagram::setStrings(int n)
             memcpy(nfingering, _fingering, _strings);
             for (int i = _strings; i < n; ++i)
                   nfingering[i] = 0;
-            delete _fingering;
+            delete[] _fingering;
             _fingering = nfingering;
             }
       _strings = n;
@@ -340,14 +341,6 @@ void FretDiagram::write(Xml& xml) const
 
 void FretDiagram::read(XmlReader& e)
       {
-      delete _dots;
-      delete _marker;
-      delete _fingering;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
-      _fretOffset = 0;
-
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "strings")
@@ -502,16 +495,6 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
 void FretDiagram::readMusicXML(XmlReader& e)
       {
       qDebug("FretDiagram::readMusicXML");
-
-      // TODO: is this required ?
-      delete _dots;
-      delete _marker;
-      delete _fingering;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
-      _fretOffset = 0;
-      // end TODO: is this required ?
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

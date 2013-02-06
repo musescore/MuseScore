@@ -47,7 +47,7 @@ FretDiagramProperties::FretDiagramProperties(FretDiagram* _fd, QWidget* parent)
       diagramScrollBar->setValue(fd->fretOffset());
 
       connect(strings, SIGNAL(valueChanged(int)), SLOT(stringsChanged(int)));
-      connect(frets, SIGNAL(valueChanged(int)), SLOT(fretsChanged(int)));
+      connect(frets,   SIGNAL(valueChanged(int)), SLOT(fretsChanged(int)));
       connect(diagramScrollBar, SIGNAL(valueChanged(int)), SLOT(fretOffsetChanged(int)));
       }
 
