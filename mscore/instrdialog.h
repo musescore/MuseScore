@@ -101,6 +101,9 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
       void buildTemplateList();
       virtual void accept();
 
+      void on_search_textChanged(const QString &searchPhrase);
+      void on_clearSearch_clicked();
+
    public:
       InstrumentsDialog(QWidget* parent = 0);
       void setScore(Score* s) { cs = s; }
