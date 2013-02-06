@@ -638,7 +638,12 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'D':
-                              d += _score->creationDate().toString(Qt::DefaultLocaleShortDate);
+                              {
+                              QString creationDate = score()->metaTag("creationDate");
+                              if(!creationDate.isNull()) {
+                                    d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
+                                    }
+                              }
                               break;
                         case '$':
                               d += '$';
