@@ -32,6 +32,7 @@ extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 bool noGui = true;
 QString revision;
+bool enableTestMode;
 
 Score* score;
 MuseScoreCore* mscoreCore;
