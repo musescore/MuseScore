@@ -127,6 +127,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             delete cell;
             cells[i] = 0;
             emit changed();
+            update();
             }
       else if (action == contextAction) {
             PaletteCell* c = cells[i];
