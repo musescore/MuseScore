@@ -269,8 +269,11 @@ Chord::~Chord()
       delete _stemSlash;
       delete _stem;
       delete _hook;
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+      for (LedgerLine* ll = _ledgerLines; ll;) {
+            LedgerLine* llNext = ll->next();
             delete ll;
+            ll = llNext;
+            }
       qDeleteAll(_notes);
       }
 
