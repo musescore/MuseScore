@@ -22,6 +22,7 @@
 #define __GLOBALS_H__
 
 extern bool enableExperimental;
+extern bool enableTestMode;
 // extern bool scriptDebug;
 extern bool noSeq;            ///< Dont use sequencer; cmd line option.
 extern bool noMidi;           ///< Dont use midi; cmd line option.
