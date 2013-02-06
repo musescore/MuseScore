@@ -1819,8 +1819,10 @@ void MuseScore::removeTab(int i)
 
       if (checkDirty(score))
             return;
-      if (seq->score() == score)
+      if (seq->score() == score) {
+            seq->stop();
             seq->setScoreView(0);
+            }
 
       int idx1      = tab1->currentIndex();
       bool firstTab = tab1->view(idx1) == cv;
