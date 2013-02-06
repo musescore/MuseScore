@@ -86,6 +86,7 @@ MuseScore* mscore;
 MuseScoreCore* mscoreCore;
 
 bool enableExperimental = false;
+bool enableTestMode = false;
 
 QString dataPath;
 QString iconPath, iconGroup;
@@ -1319,6 +1320,7 @@ static void usage()
         "   -i        load icons from INSTALLPATH/icons\n"
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings directory\n"
+        "   -t        set testMode flag for all files\n"
         );
       exit(-1);
       }
@@ -2238,6 +2240,11 @@ int main(int argc, char* av[])
                               QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
                               dataPath = path;
                               }
+                        }
+                        break;
+                  case 't':
+                        {
+                        enableTestMode = true;
                         }
                         break;
                   default:
