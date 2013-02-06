@@ -1025,7 +1025,6 @@ void Palette::write(const QString& p)
 
 void Palette::read(XmlReader& e)
       {
-//      QString name = e.attribute("name");
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
@@ -1042,7 +1041,9 @@ void Palette::read(XmlReader& e)
                   e.skipCurrentElement();
             else if (t == "Cell") {
                   QString name   = e.attribute("name");
-                  bool drawStaff = false;
+                  Element* element = 0;
+                  QString tag;
+                  bool   drawStaff = false;
                   double xoffset = 0.0;
                   double yoffset = 0.0;
                   qreal mag   = 1.0;
@@ -1056,10 +1057,10 @@ void Palette::read(XmlReader& e)
                               yoffset = e.readDouble();
                         else if (t == "mag")
                               mag = e.readDouble();
-//TODOxx                        else if (t == "tag")
-//                              tag = e.value();
+                        else if (t == "tag")
+                              tag = e.readElementText();
                         else {
-                              Element* element = Element::name2Element(t, gscore);
+                              element = Element::name2Element(t, gscore);
                               if (element == 0) {
                                     e.unknown();
                                     return;
@@ -1075,10 +1076,15 @@ void Palette::read(XmlReader& e)
                                     }
                               }
                         }
-                  cells.back()->drawStaff = drawStaff;
-                  cells.back()->xoffset   = xoffset;
-                  cells.back()->yoffset   = yoffset;
-                  cells.back()->mag       = mag;
+                  if (!element)
+                        cells.append(new PaletteCell());    // add empty cell
+                  else {
+                        cells.back()->tag       = tag;
+                        cells.back()->drawStaff = drawStaff;
+                        cells.back()->xoffset   = xoffset;
+                        cells.back()->yoffset   = yoffset;
+                        cells.back()->mag       = mag;
+                        }
                   }
             else
                   e.unknown();
@@ -1613,6 +1619,7 @@ PaletteCellProperties::PaletteCellProperties(PaletteCell* p, QWidget* parent)
       xoffset->setValue(cell->xoffset);
       yoffset->setValue(cell->yoffset);
       scale->setValue(cell->mag);
+      drawStaff->setChecked(cell->drawStaff);
       name->setText(p->name);
       }
 
@@ -1626,5 +1633,6 @@ void PaletteCellProperties::accept()
       cell->yoffset = yoffset->value();
       cell->mag     = scale->value();
       cell->name    = name->text();
+      cell->drawStaff = drawStaff->isChecked();
       QDialog::accept();
       }
