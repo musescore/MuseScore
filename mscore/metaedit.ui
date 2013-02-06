@@ -63,23 +63,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>Creation Date:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDateEdit" name="date">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>

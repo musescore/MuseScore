@@ -276,7 +276,6 @@ void Score::init()
       _layer.append(l);
       _layerTags[0]   = "default";
 
-      _creationDate   = QDate::currentDate();
 #ifdef Q_WS_WIN
       _metaTags.insert("platform", "WIN");
 #endif
@@ -292,6 +291,7 @@ void Score::init()
       _metaTags.insert("workTitle", "");
       _metaTags.insert("source", "");
       _metaTags.insert("copyright", "");
+      _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 
       _revisions      = new Revisions;
       _symIdx         = 0;
