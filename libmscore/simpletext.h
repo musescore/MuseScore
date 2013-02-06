@@ -88,6 +88,7 @@ class SimpleText : public Element {
       int frameRound() const         { return textStyle().frameRound(); }
       bool circle() const            { return textStyle().circle(); }
       Align align() const            { return textStyle().align(); }
+      const QString& firstLine() const;
       };
 
 #endif
