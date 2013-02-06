@@ -534,7 +534,8 @@ extern bool enableTestMode;
 
 void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      setTestMode(enableTestMode);
+      if(!testMode())
+            setTestMode(enableTestMode);
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
