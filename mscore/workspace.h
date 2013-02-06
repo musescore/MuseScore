@@ -18,22 +18,22 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __PROFILE_H__
-#define __PROFILE_H__
+#ifndef __WORKSPACE_H__
+#define __WORKSPACE_H__
 
 class XmlReader;
 
 //---------------------------------------------------------
-//   Profile
+//   Workspace
 //---------------------------------------------------------
 
-class Profile {
+class Workspace {
       QString _name;
       QString _path;
       bool _dirty;
 
    public:
-      Profile() {}
+      Workspace() {}
       QString path() const           { return _path;  }
       void setPath(const QString& s) { _path = s;     }
       QString name() const           { return _name;  }
@@ -46,10 +46,10 @@ class Profile {
       void read(XmlReader&);
       void read();
 
-      static QList<Profile*>& profiles();
-      static Profile* createNewProfile(const QString& name);
+      static QList<Workspace*>& profiles();
+      static Workspace* createNewWorkspace(const QString& name);
       };
 
-extern Profile* profile;
-extern void initProfile();
+extern Workspace* profile;
+extern void initWorkspace();
 #endif

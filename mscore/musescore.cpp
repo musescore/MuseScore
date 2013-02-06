@@ -57,7 +57,7 @@
 #include "editraster.h"
 #include "pianotools.h"
 #include "mediadialog.h"
-#include "profile.h"
+#include "workspace.h"
 #include "webpage.h"
 #include "selectdialog.h"
 #include "transposedialog.h"
@@ -747,9 +747,9 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("debugger"));
 
       menuEdit->addSeparator();
-      menuProfiles = new QMenu(tr("Pr&ofiles"));
-      connect(menuProfiles, SIGNAL(aboutToShow()), SLOT(showProfileMenu()));
-      menuEdit->addMenu(menuProfiles);
+      menuWorkspaces = new QMenu(tr("W&orkspaces"));
+      connect(menuWorkspaces, SIGNAL(aboutToShow()), SLOT(showWorkspaceMenu()));
+      menuEdit->addMenu(menuWorkspaces);
 
       QAction* pref = menuEdit->addAction(tr("&Preferences..."), this, SLOT(startPreferenceDialog()));
       pref->setMenuRole(QAction::PreferencesRole);
@@ -2378,7 +2378,7 @@ int main(int argc, char* av[])
 
       if (!converterMode)
             qApp->setWindowIcon(*icons[window_ICON]);
-      initProfile();
+      initWorkspace();
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
@@ -2643,7 +2643,7 @@ void MuseScore::changeState(ScoreState val)
             menu->setEnabled(enable);
             }
 
-      menuProfiles->setEnabled(enable);
+      menuWorkspaces->setEnabled(enable);
 
       transportTools->setEnabled(enable && !noSeq);
       cpitchTools->setEnabled(enable);

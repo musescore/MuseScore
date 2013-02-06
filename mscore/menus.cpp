@@ -65,7 +65,7 @@
 #include "libmscore/chordline.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/instrchange.h"
-#include "profile.h"
+#include "workspace.h"
 #include "libmscore/icon.h"
 #include "libmscore/accidental.h"
 #include "libmscore/harmony.h"
@@ -778,7 +778,7 @@ Palette* MuseScore::newLinesPalette()
       trill->setSubtype("prallprall");
       trill->setLen(w);
       sp->append(trill, qApp->translate("lines", "Prallprall line"));
-      
+
       trill = new Trill(gscore);
       trill->setSubtype("pure");
       trill->setLen(w);
