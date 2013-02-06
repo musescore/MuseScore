@@ -68,7 +68,7 @@ class ChordStyleEditor;
 class Navigator;
 class PianoTools;
 class MediaDialog;
-class Profile;
+class Workspace;
 class AlbumManager;
 class WebPageDockWidget;
 class ChordList;
@@ -323,9 +323,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* hRasterAction;
       QAction* vRasterAction;
 
-      QMenu* menuProfiles;
+      QMenu* menuWorkspaces;
       QActionGroup* profiles;
-      QAction* deleteProfileAction;
+      QAction* deleteWorkspaceAction;
 
       bool inChordEditor;
 
@@ -431,11 +431,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscTriggerPlugin(QString list);
       void oscColorNote(QVariantList list);
 #endif
-      void createNewProfile();
-      void deleteProfile();
-      void showProfileMenu();
-      void changeProfile(QAction*);
-      void changeProfile(Profile* p);
+      void createNewWorkspace();
+      void deleteWorkspace();
+      void showWorkspaceMenu();
+      void changeWorkspace(QAction*);
+      void changeWorkspace(Workspace* p);
       void switchLayer(const QString&);
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
