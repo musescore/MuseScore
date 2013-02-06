@@ -38,7 +38,7 @@ QTextCursor* Text::_cursor;
 void Text::createDoc()
       {
       _doc = new QTextDocument(0);
-      _doc->setDocumentMargin(-2.0);
+      _doc->setDocumentMargin(0);
       _doc->setUseDesignMetrics(true);
       _doc->setUndoRedoEnabled(true);
       _doc->documentLayout()->setProperty("cursorWidth", QVariant(2));
@@ -197,9 +197,10 @@ void Text::layout1()
       if (styled() && !_editMode)
             SimpleText::layout();
       else {
+            QPointF o(textStyle().offset(spatium()));
+
             _doc->setDefaultFont(textStyle().font(spatium()));
             qreal w = -1.0;
-            QPointF o(textStyle().offset(spatium()));
 
             if (parent() && layoutToParentWidth()) {
                   Element* e = parent();
@@ -221,12 +222,31 @@ void Text::layout1()
 
             QSizeF size(_doc->size());
 
-            if (align() & ALIGN_BOTTOM)
+            if (align() & ALIGN_BOTTOM) {
+                  o.ry() += 3;
                   o.ry() -= size.height();
+#if 0
+                  if (_editMode) {
+                        QFontMetricsF fm(textStyle().font(spatium()));
+                        QRectF r1(fm.boundingRect(SimpleText::firstLine()));
+                        QRectF r(fm.tightBoundingRect(SimpleText::firstLine()));
+                        o.ry() -= (r1.height() - r.height()) * .5;
+                        }
+#endif
+                  }
             else if (align() & ALIGN_VCENTER)
                   o.ry() -= (size.height() * .5);
             else if (align() & ALIGN_BASELINE)
                   o.ry() -= baseLine();
+            else {
+                  if (_editMode) {
+                        QFontMetricsF fm(textStyle().font(spatium()));
+                        QRectF r1(fm.boundingRect(SimpleText::firstLine()));
+                        QRectF r(fm.tightBoundingRect(SimpleText::firstLine()));
+                        o.ry() -= (r1.height() - r.height()) * .5;
+                        o.ry() -= 2;
+                        }
+                  }
 
             if (align() & ALIGN_RIGHT)
                   o.rx() -= size.width();
@@ -831,12 +851,14 @@ QPainterPath Text::shape() const
 
 qreal Text::baseLine() const
       {
-      if (styled())
+      if (styled() && !_editMode)
             return SimpleText::baseLine();
       for (QTextBlock tb = _doc->begin(); tb.isValid(); tb = tb.next()) {
             const QTextLayout* tl = tb.layout();
-            if (tl->lineCount())
-                  return (tl->lineAt(0).ascent() + tl->position().y());
+            if (tl->lineCount()) {
+                  return (tl->lineAt(0).ascent() + tl->lineAt(0).leading()
+                     + tl->position().y());
+                  }
             }
       return 0.0;
       }
