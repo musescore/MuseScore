@@ -41,6 +41,8 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/stafftype.h"
 
+void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
+
 //---------------------------------------------------------
 //   StaffListItem
 //---------------------------------------------------------
@@ -233,6 +235,10 @@ void populateInstrumentList(QTreeWidget* instrumentList, bool extended)
 
 void InstrumentsDialog::buildTemplateList()
       {
+      // clear search if instrument list is updated
+      search->clear();
+      filterInstruments(instrumentList, search->text());
+
       populateInstrumentList(instrumentList, showMore->isChecked());
       }
 
@@ -875,3 +881,48 @@ void InstrumentsDialog::on_loadButton_clicked()
       buildTemplateList();
       }
 
+//---------------------------------------------------------
+//   filterInstruments
+//---------------------------------------------------------
+
+void filterInstruments(QTreeWidget* instrumentList, const QString &searchPhrase)
+      {
+      QTreeWidgetItem* item = 0;
+
+      for (int idx = 0; (item = instrumentList->topLevelItem(idx)); ++idx) {
+            int numMatchedChildren = 0;
+            QTreeWidgetItem* ci = 0;
+
+            for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
+                  // replace the unicode b (accidential) so a search phrase of "bb" would give Bb Trumpet...
+                  QString text = ci->text(0).replace(QChar(0x266d), QChar('b'));
+                  bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive);
+                  ci->setHidden(!isMatch);
+
+                  if (isMatch)
+                        numMatchedChildren++;
+                  }
+
+            item->setHidden(numMatchedChildren == 0);
+            item->setExpanded(numMatchedChildren > 0 && !searchPhrase.isEmpty());
+            }
+      }
+
+//---------------------------------------------------------
+//   on_search_textChanged
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_search_textChanged(const QString &searchPhrase)
+      {
+      filterInstruments(instrumentList, searchPhrase);
+      }
+
+//---------------------------------------------------------
+//   on_clearSearch_clicked
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_clearSearch_clicked()
+      {
+      search->clear();
+      filterInstruments (instrumentList);
+      }
