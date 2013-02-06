@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>329</height>
+    <width>463</width>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="strings"/>
+        <widget class="QSpinBox" name="strings">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>16</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
@@ -43,7 +50,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="frets"/>
+        <widget class="QSpinBox" name="frets">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>40</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
