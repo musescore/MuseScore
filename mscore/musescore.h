@@ -326,6 +326,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuWorkspaces;
       QActionGroup* profiles;
       QAction* deleteWorkspaceAction;
+      QAction* resetWorkspaceAction;
 
       bool inChordEditor;
 
@@ -433,6 +434,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 #endif
       void createNewWorkspace();
       void deleteWorkspace();
+      void resetWorkspace();
       void showWorkspaceMenu();
       void changeWorkspace(QAction*);
       void changeWorkspace(Workspace* p);
@@ -460,7 +462,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl);
       void instrumentChanged();
-      void showMasterPalette();
+      void showMasterPalette(const QString& = 0);
       void selectionChanged(int);
 
    public:

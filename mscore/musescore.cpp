@@ -3669,8 +3669,8 @@ PaletteBox* MuseScore::getPaletteBox()
                               return paletteBox;
                         }
                   }
-#endif
             populatePalette();
+#endif
             }
       return paletteBox;
       }
