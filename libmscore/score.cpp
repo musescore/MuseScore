@@ -697,7 +697,6 @@ void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
       _updateAll     = true;
-      _dirty         = true;
       end();
       }
 
@@ -709,7 +708,6 @@ void Score::setShowUnprintable(bool v)
       {
       _showUnprintable = v;
       _updateAll      = true;
-      _dirty          = true;
       end();
       }
 
@@ -721,7 +719,6 @@ void Score::setShowFrames(bool v)
       {
       _showFrames = v;
       _updateAll  = true;
-      _dirty      = true;
       end();
       }
 
@@ -733,7 +730,6 @@ void Score::setShowPageborders(bool v)
       {
       _showPageborders = v;
       _updateAll = true;
-      _dirty     = true;
       end();
       }
 
