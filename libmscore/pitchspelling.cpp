@@ -57,11 +57,6 @@ int step2tpc(int step, AccidentalVal alter)
       return spellings[i];
       }
 
-int step2tpc(int step)
-      {
-      return step2tpc(step);
-      }
-
 static const int tpcByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
 // step    C        D        E        F        G        A        B        Key
       { TPC_C_B, TPC_D_B, TPC_E_B, TPC_F_B, TPC_G_B, TPC_A_B, TPC_B_B}, // Cb
@@ -732,10 +727,10 @@ void Score::spellNotelist(QList<Note*>& notes)
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   pitch2tpc2
 //---------------------------------------------------------
-
 int pitch2tpc2(int pitch, bool preferSharp)
       {
       int step = pitch % 12;
@@ -748,41 +743,35 @@ int pitch2tpc2(int pitch, bool preferSharp)
             };
       return ptab[preferSharp ? 0 : 1][step];
       }
+#endif
+// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, 0, PREFER_FLATS)
+// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, 0, PREFER_SHARPS)
 
 //---------------------------------------------------------
 //   pitch2tpc
 //    preferred pitch spelling depending on key
-//    key -7 - +7
+//    key -7 to +7
+//
+// The value of prefer sets the preferred mix of flats and sharps
+// for pitches that are non-diatonic in the key specified, by
+// positioning the window along the tpc sequence.
+//
+// Scale tones are the range shown in [ ].
+// A value of 8 (PREFER_FLATS) specifies 5b 2b 6b 3b 7b [4 1 5 2 6 3 7]
+// A value of 11 (PREFER_NEAREST) specifies 3b 7b [4 1 5 2 6 3 7] 4# 1# 5#
+// A value of 13 (PREFER_SHARPS) specifies [4 1 5 2 6 3 7] 4# 1# 5# 2# 6#
+//
+// Examples for PREFER_NEAREST (n indicates explicit natural):
+// C major will use Eb Bb [F C G D A E B] F# C# G#.
+// E major will use Gn Dn [A E B F# C# G# D#] A# E# B#.
+// F# major will use An En [B F# C# G# D# A# E#] B# Fx Cx.
+// Eb major will use Gb Db [Ab Eb Bb F C G D] An En Bn.
+// Gb major will use Bbb Fb [Cb Gb Db Ab Eb Bb F] Cn Gn Dn.
 //---------------------------------------------------------
 
-int pitch2tpc(int pitch, int key)
+int pitch2tpc(int pitch, int key, int prefer)
       {
-      int step = pitch % 12;
-
-      // ======TODO: fill table with reasonable values ===========
-
-      static int ptab[15][12] = {
-//              c  c#   d  d#   e   f  f#   g  g#   a  a#   b
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Ces
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Ges
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Des
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // As
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Es
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // B
-            {  14,  9, 16, 11, 18, 13,  8, 15, 10, 17, 12,  7 },     // F
-
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // C
-
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // G
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // D
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // A
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // E
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // H
-            {  14, 21, 16, 23, 18, 25, 20, 15, 22, 17, 24, 19 },     // Fis
-            {  26, 21, 16, 23, 18, 25, 20, 15, 22, 17, 24, 19 },     // Cis
-            };
-// qDebug("pitch2tpc %d(%d) %d = %d\n", pitch, step, key, ptab[key+7][step]);
-      return ptab[key+7][step];
+      return (pitch * 7 + 26 - (prefer + key)) % 12 + (prefer + key);
       }
 
 //---------------------------------------------------------

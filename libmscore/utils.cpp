@@ -629,7 +629,7 @@ int absStep(int tpc, int pitch)
 
 int absStep(int pitch)
       {
-      int tpc = pitch2tpc(pitch);
+      int tpc = pitch2tpc(pitch, 0, PREFER_NEAREST);
       return absStep(tpc, pitch);
       }
 
