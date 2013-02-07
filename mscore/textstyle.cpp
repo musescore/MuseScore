@@ -35,6 +35,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       cs     = score;
       styles = cs->style()->textStyles();

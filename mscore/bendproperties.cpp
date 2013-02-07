@@ -35,6 +35,8 @@ BendProperties::BendProperties(Bend* b, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       bend = b;
       bendCanvas->setPoints(bend->points());
       bendTypes = new QButtonGroup(this);

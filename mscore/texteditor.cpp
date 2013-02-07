@@ -28,6 +28,7 @@
 TextEditor::TextEditor(QWidget* parent)
    : QDialog(parent)
       {
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QVBoxLayout* vl = new QVBoxLayout;
       setLayout(vl);
       QFrame* f = new QFrame;

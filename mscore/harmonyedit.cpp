@@ -41,6 +41,8 @@ ChordStyleEditor::ChordStyleEditor(QWidget* parent)
       {
       setupUi(this);
       setWindowTitle(tr("MuseScore: Chord Style Editor"));
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       fileButton->setIcon(*icons[fileOpen_ICON]);
       chordList = 0;
       score = 0;

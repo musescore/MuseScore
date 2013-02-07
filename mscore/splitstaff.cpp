@@ -28,5 +28,6 @@ SplitStaff::SplitStaff(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       splitPoint->setValue(60);
       }

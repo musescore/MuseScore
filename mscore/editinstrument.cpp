@@ -30,6 +30,7 @@ EditInstrument::EditInstrument(QWidget* parent)
       {
       lt = new InstrumentTemplate;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(minPitch, SIGNAL(valueChanged(int)), SLOT(valueChanged()));
       connect(maxPitch, SIGNAL(valueChanged(int)), SLOT(valueChanged()));
       }

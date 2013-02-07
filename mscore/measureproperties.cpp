@@ -33,6 +33,7 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setMeasure(_m);
       staves->verticalHeader()->hide();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));

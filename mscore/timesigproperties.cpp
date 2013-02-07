@@ -29,6 +29,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());

@@ -28,6 +28,7 @@ SlurProperties::SlurProperties(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       }
 
 //---------------------------------------------------------

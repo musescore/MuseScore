@@ -36,6 +36,7 @@ JumpProperties::JumpProperties(Jump* jp, QWidget* parent)
       {
       jump = jp;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       jumpTo->setText(jump->jumpTo());
       playUntil->setText(jump->playUntil());
       continueAt->setText(jump->continueAt());
@@ -62,6 +63,7 @@ MarkerProperties::MarkerProperties(Marker* mk, QWidget* parent)
       {
       marker = mk;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       label->setText(marker->label());
       connect(this, SIGNAL(accepted()), SLOT(saveValues()));
       }

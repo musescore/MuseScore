@@ -84,6 +84,7 @@ EditTempo::EditTempo(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       if (tempoListInit) {
             tempoListInit = false;
             for (unsigned i = 0; i < sizeof(tempos)/sizeof(*tempos); ++i) {

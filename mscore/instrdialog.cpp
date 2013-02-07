@@ -188,6 +188,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       {
       editInstrument = 0;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = 0;
 
       QAction* a = getAction("instruments");

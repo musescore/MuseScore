@@ -31,6 +31,7 @@ HairpinProperties::HairpinProperties(Hairpin* h, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       hairpin = h;
       veloChange->setValue(hairpin->veloChange());
       int tick1 = static_cast<Segment*>(hairpin->startElement())->tick();

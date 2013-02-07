@@ -43,6 +43,8 @@ SynthControl::SynthControl(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       saveReverbPreset->setIcon(*icons[fileSave_ICON]);
       saveChorusPreset->setIcon(*icons[fileSave_ICON]);
 

@@ -29,6 +29,7 @@ SectionBreakProperties::SectionBreakProperties(LayoutBreak* lb, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _pause->setValue(lb->pause());
       _startWithLongNames->setChecked(lb->startWithLongNames());
       _startWithMeasureOne->setChecked(lb->startWithMeasureOne());

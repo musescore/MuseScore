@@ -29,6 +29,7 @@ EditPitch::EditPitch(QWidget *parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tableWidget->setCurrentCell(4, 0);                    // select centre C by default
       }
 
@@ -36,6 +37,7 @@ EditPitch::EditPitch(QWidget *parent, int midiCode)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tableWidget->setCurrentCell(9-(midiCode/12), midiCode%12);
       }
 

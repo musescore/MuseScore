@@ -33,6 +33,7 @@ TempoProperties::TempoProperties(TempoText* tt, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tempoText = tt;
       tempo->setValue(tempoText->tempo() * 60.0);
       followText->setChecked(tempoText->followText());
