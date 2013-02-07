@@ -58,6 +58,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
       oDrumset = ds;
       nDrumset = *ds;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       drumNote->setGrid(70, 80);
       drumNote->setDrawGrid(false);

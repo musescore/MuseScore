@@ -42,6 +42,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs     = s;
       lstyle = *s->style();
       setModal(true);

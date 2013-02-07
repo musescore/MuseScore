@@ -39,6 +39,8 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       articulation = na;
 
       ChordRest* cr = articulation->chordRest();

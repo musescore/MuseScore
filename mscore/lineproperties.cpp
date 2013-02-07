@@ -69,6 +69,7 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tl = l;
 
       populateLineSymbolComboBox(beginSymbol);

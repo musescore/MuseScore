@@ -83,6 +83,7 @@ InstrumentListEditor::InstrumentListEditor(QWidget* parent)
       setWindowTitle(tr("MuseScore: Mixer"));
       setWidgetResizable(true);
       setWindowFlags(Qt::Dialog);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QWidget* area = new QWidget(this);
       vb = new QVBoxLayout;
       vb->setMargin(0);

@@ -46,6 +46,7 @@ ChordEditor::ChordEditor(Chord* c, QWidget* parent)
       {
       _chord = c;
       setWindowTitle(QString("MuseScore: Chord Articulation"));
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       // save original events
       int notes = _chord->notes().size();

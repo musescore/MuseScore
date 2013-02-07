@@ -30,6 +30,7 @@ EditStringData::EditStringData(QWidget *parent, QList<int> * strings, int * fret
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _strings = strings;
       // if any string, insert into string list control and select the first one
       if(_strings->size()) {

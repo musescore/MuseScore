@@ -37,6 +37,8 @@ ChordEdit::ChordEdit(Score* s, QWidget* parent)
       score    = s;
 
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       // note that rootGroup button identifiers map conveniently
       // onto all possible tpc2step return values: don't change
       rootGroup = new QButtonGroup(this);

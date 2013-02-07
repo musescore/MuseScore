@@ -32,6 +32,8 @@ BoxProperties::BoxProperties(Box* b, QWidget* parent)
       {
       _box = b;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       qreal _spatium = b->spatium();
 
       if (b->type() == Element::HBOX) {     // enable width and set it to box width

@@ -1577,6 +1577,7 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       {
       palette = p;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       name->setText(palette->name());
       cellWidth->setValue(palette->gridWidth());
       cellHeight->setValue(palette->gridHeight());
@@ -1608,6 +1609,7 @@ PaletteCellProperties::PaletteCellProperties(PaletteCell* p, QWidget* parent)
       {
       cell = p;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       xoffset->setValue(cell->xoffset);
       yoffset->setValue(cell->yoffset);
       scale->setValue(cell->mag);

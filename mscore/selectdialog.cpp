@@ -36,6 +36,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       e = _e;
       type->setText(e->name());
 //TODO      subtype->setText(e->subtypeName());

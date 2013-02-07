@@ -41,6 +41,7 @@ TupletProperties::TupletProperties(Tuplet* t, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       tuplet = t;
       switch(tuplet->numberType()) {
             case Tuplet::SHOW_NUMBER:

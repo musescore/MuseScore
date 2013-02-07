@@ -45,6 +45,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       {
       staff = s;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       Part* part = staff->part();
       instrument = *part->instr();

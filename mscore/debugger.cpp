@@ -130,7 +130,7 @@ Debugger::Debugger(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
-//      setWindowTitle(tr("MuseScore: Debugger"));
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       for (int i = 0; i < Element::MAXTYPE; ++i)
             elementViews[i] = 0;

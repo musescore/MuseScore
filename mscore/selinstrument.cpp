@@ -32,6 +32,7 @@ SelectInstrument::SelectInstrument(const Instrument& instrument, QWidget* parent
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       currentInstrument->setText(instrument.trackName());
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);

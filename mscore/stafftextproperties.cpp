@@ -47,6 +47,7 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       staffText = st;
 
       vb[0][0] = voice1_1;
