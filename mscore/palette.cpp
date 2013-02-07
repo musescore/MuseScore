@@ -72,23 +72,24 @@ Palette::Palette(QWidget* parent)
       currentIdx    = -1;
       selectedIdx   = -1;
       _yOffset      = 0.0;
-      hgrid         = 50;
-      vgrid         = 60;
+      setGrid(50, 60);
       _drawGrid     = false;
       _selectable   = false;
       setMouseTracking(true);
-      QSizePolicy policy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-      policy.setHeightForWidth(true);
-      setSizePolicy(policy);
-      setSizeIncrement(QSize(hgrid, vgrid));
-      setBaseSize(QSize(hgrid, vgrid));
       setReadOnly(false);
+      _moreElements = true;   // Debug
+      setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
       }
 
 Palette::~Palette()
       {
       foreach(PaletteCell* cell, cells)
             delete cell;
+      }
+
+void Palette::resizeEvent(QResizeEvent* e)
+      {
+      setFixedHeight(heightForWidth(e->size().width()));
       }
 
 //---------------------------------------------------------
@@ -107,14 +108,28 @@ void Palette::setReadOnly(bool val)
 
 void Palette::contextMenuEvent(QContextMenuEvent* event)
       {
+      int i = idx(event->pos());
+      if (i == -1) {
+            if (_moreElements) {
+                  // palette context menu
+                  QMenu menu;
+                  QAction* moreAction = menu.addAction(tr("more Elements..."));
+                  QAction* action = menu.exec(mapToGlobal(event->pos()));
+                  if (action == moreAction) {
+                        emit displayMore(_name);
+                        }
+                  return;
+                  }
+            }
+
       if (_readOnly)
             return;
-      int i = idx(event->pos());
-      if (i == -1)
-            return;
       QMenu menu;
-      QAction* clearAction = menu.addAction(tr("Clear"));
+      QAction* clearAction   = menu.addAction(tr("Clear"));
       QAction* contextAction = menu.addAction(tr("Properties..."));
+      QAction* moreAction = 0;
+      if (_moreElements)
+            moreAction = menu.addAction(tr("more Elements..."));
       if (cells[i] && cells[i]->readOnly)
             clearAction->setEnabled(false);
 
@@ -122,12 +137,12 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
       if (action == clearAction) {
             PaletteCell* cell = cells[i];
-            if (cell)
+            if (cell) {
                   delete cell->element;
-            delete cell;
+                  delete cell;
+                  }
             cells[i] = 0;
             emit changed();
-            update();
             }
       else if (action == contextAction) {
             PaletteCell* c = cells[i];
@@ -135,20 +150,22 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
                   return;
             PaletteCellProperties props(c);
             if (props.exec()) {
-                  update();
                   emit changed();
                   }
             }
+      else if (moreAction && (action == moreAction))
+            emit displayMore(_name);
+
       bool sizeChanged = false;
       while (!cells.isEmpty() && cells.back() == 0) {
             cells.removeLast();
             sizeChanged = true;
             }
       if (sizeChanged) {
-            resize(QSize(width(), heightForWidth(width())));
-            ((QWidget*)parent())->updateGeometry();
-            update();
+            setFixedHeight(heightForWidth(width()));
+            updateGeometry();
             }
+      update();
       }
 
 //---------------------------------------------------------
@@ -159,8 +176,11 @@ void Palette::setGrid(int hh, int vv)
       {
       hgrid = hh;
       vgrid = vv;
-      setSizeIncrement(QSize(hgrid, vgrid));
-      setBaseSize(QSize(hgrid, vgrid));
+      QSize s(hgrid, vgrid);
+      setSizeIncrement(s);
+      setBaseSize(s);
+      setMinimumSize(s);
+      updateGeometry();
       }
 
 //---------------------------------------------------------
@@ -446,6 +466,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
             Icon* icon = static_cast<Icon*>(s);
             connect(getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             }
+      updateGeometry();
       return cell;
       }
 
@@ -781,7 +802,12 @@ void Palette::dropEvent(QDropEvent* event)
             }
       if (ok) {
             event->acceptProposedAction();
-            resize(QSize(width(), heightForWidth(width())));
+            while (!cells.isEmpty() && cells.back() == 0) {
+                  cells.removeLast();
+                  }
+            setFixedHeight(heightForWidth(width()));
+            updateGeometry();
+            update();
             emit changed();
             }
       }
@@ -1124,12 +1150,15 @@ int Palette::heightForWidth(int w) const
       int c = w / hgrid;
       if (c <= 0)
             c = 1;
-      int r = (cells.size() + c - 1) / c;
-      if (r <= 0)
-            r = 1;
-      if ((w % hgrid) == 0)
-            ++r;
-      return r * vgrid;
+      int size = cells.size();
+      if (_moreElements)
+            size += 1;
+      int rows = (size + c - 1) / c;
+      if (rows <= 0)
+            rows = 1;
+      qreal mag = PALETTE_SPATIUM * extraMag;
+      int h = lrint(_yOffset * 2 * mag);
+      return rows * vgrid + h;
       }
 
 //---------------------------------------------------------
@@ -1139,7 +1168,7 @@ int Palette::heightForWidth(int w) const
 QSize Palette::sizeHint() const
       {
       int h = heightForWidth(width());
-      return QSize(hgrid, h);
+      return QSize((width() / hgrid) * hgrid, h);
       }
 
 //---------------------------------------------------------
@@ -1167,58 +1196,55 @@ void Palette::actionToggled(bool /*val*/)
 //   PaletteBoxButton
 //---------------------------------------------------------
 
-PaletteBoxButton::PaletteBoxButton(PaletteScrollArea* sa, Palette* p, QWidget* parent)
+PaletteBoxButton::PaletteBoxButton(Palette* p, QWidget* parent)
    : QToolButton(parent)
       {
       palette = p;
-      scrollArea = sa;
       setCheckable(true);
       setFocusPolicy(Qt::NoFocus);
       connect(this, SIGNAL(clicked(bool)), this, SLOT(showPalette(bool)));
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-//      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      QMenu* menu = new QMenu;
-      connect(menu, SIGNAL(aboutToShow()), SLOT(beforePulldown()));
-      setArrowType(Qt::RightArrow);
+      setText(palette->name());
       setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-      QAction* action;
-
-      action = menu->addAction(tr("Palette Properties..."));
-      connect(action, SIGNAL(triggered()), SLOT(propertiesTriggered()));
-
-      action = menu->addAction(tr("Insert new Palette..."));
-      connect(action, SIGNAL(triggered()), SLOT(newTriggered()));
-
-      action = menu->addAction(tr("Move Palette Up"));
-      connect(action, SIGNAL(triggered()), SLOT(upTriggered()));
-
-      action = menu->addAction(tr("Move Palette Down"));
-      connect(action, SIGNAL(triggered()), SLOT(downTriggered()));
-
-      editAction = menu->addAction(tr("Enable Editing"));
-      editAction->setCheckable(true);
-      connect(editAction, SIGNAL(triggered(bool)), SLOT(enableEditing(bool)));
-
-      menu->addSeparator();
-      action = menu->addAction(tr("Save Palette"));
-      connect(action, SIGNAL(triggered()), SLOT(saveTriggered()));
-      action = menu->addAction(tr("Load Palette"));
-      connect(action, SIGNAL(triggered()), SLOT(loadTriggered()));
-
-      menu->addSeparator();
-      action = menu->addAction(tr("Delete Palette"));
-      connect(action, SIGNAL(triggered()), SLOT(deleteTriggered()));
-      setMenu(menu);
+      // setArrowType(Qt::RightArrow);
+      showPalette(false);
       }
 
-//---------------------------------------------------------
-//   beforePulldown
-//---------------------------------------------------------
-
-void PaletteBoxButton::beforePulldown()
+void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       {
-      editAction->setChecked(!palette->readOnly());
+      QMenu menu;
+
+      QAction* actionProperties = menu.addAction(tr("Palette Properties..."));
+      QAction* actionInsert     = menu.addAction(tr("Insert new Palette..."));
+      QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
+      QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
+      QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
+      actionEdit->setChecked(!palette->readOnly());
+
+      menu.addSeparator();
+      QAction* actionSave = menu.addAction(tr("Save Palette"));
+      QAction* actionLoad = menu.addAction(tr("Load Palette"));
+
+      menu.addSeparator();
+      QAction* actionDelete = menu.addAction(tr("Delete Palette"));
+
+      QAction* action = menu.exec(mapToGlobal(event->pos()));
+      if (action == actionProperties)
+            propertiesTriggered();
+      else if (action == actionInsert)
+            newTriggered();
+      else if (action == actionUp)
+            upTriggered();
+      else if (action == actionDown)
+            downTriggered();
+      else if (action == actionEdit)
+            enableEditing(action->isChecked());
+      else if (action == actionSave)
+            saveTriggered();
+      else if (action == actionLoad)
+            loadTriggered();
+      else if (action == actionDelete)
+            deleteTriggered();
       }
 
 //---------------------------------------------------------
@@ -1250,7 +1276,7 @@ void PaletteBoxButton::showPalette(bool visible)
             // close all palettes
             emit closeAll();
             }
-      scrollArea->setVisible(visible);
+      palette->setVisible(visible);
       setChecked(visible);
       setArrowType(visible ? Qt::DownArrow : Qt::RightArrow );
       }
@@ -1267,312 +1293,6 @@ void PaletteBoxButton::paintEvent(QPaintEvent*)
       initStyleOption(&opt);
       opt.features &= (~QStyleOptionToolButton::HasMenu);
       p.drawComplexControl(QStyle::CC_ToolButton, opt);
-      }
-
-//---------------------------------------------------------
-//   PaletteScrollArea
-//---------------------------------------------------------
-
-PaletteScrollArea::PaletteScrollArea(Palette* w, QWidget* parent)
-   : QScrollArea(parent)
-      {
-      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-      setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-      setWidget(w);
-      setWidgetResizable(false);
-      _restrictHeight = true;
-      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-      }
-
-//---------------------------------------------------------
-//   resizeEvent
-//---------------------------------------------------------
-
-void PaletteScrollArea::resizeEvent(QResizeEvent* re)
-      {
-      QScrollArea::resizeEvent(re);       // necessary?
-
-      Palette* palette = static_cast<Palette*>(widget());
-      int h = palette->heightForWidth(width());
-      palette->resize(QSize(width(), h));
-      if (_restrictHeight) {
-            setMaximumHeight(h+6);
-            }
-      }
-
-//---------------------------------------------------------
-//   PaletteBox
-//---------------------------------------------------------
-
-PaletteBox::PaletteBox(QWidget* parent)
-   : QDockWidget(tr("Palettes"), parent)
-      {
-      setObjectName("palette-box");
-      setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-      QWidget* mainWidget = new QWidget;
-      mainWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      vbox = new QVBoxLayout;
-      vbox->setMargin(0);
-      vbox->setSpacing(1);    // 2
-      vbox->addStretch();
-      mainWidget->setLayout(vbox);
-      setWidget(mainWidget);
-      connect(mainWidget, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenu(const QPoint&)));
-      mainWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-      _dirty = false;
-      }
-
-//---------------------------------------------------------
-//   contextMenu
-//---------------------------------------------------------
-
-void PaletteBox::contextMenu(const QPoint& pt)
-      {
-      QMenu menu(this);
-      menu.setSeparatorsCollapsible(false);
-      QAction* titel = menu.addSeparator();
-      titel->setText(tr("Palette Operations"));
-
-      QAction* b = menu.addAction(tr("Single Palette Mode"));
-      b->setCheckable(true);
-      b->setChecked(preferences.singlePalette);
-
-      QAction* a = menu.addAction(tr("Reset to factory defaults"));
-// obsoleted by profile:
-//      QString s(dataPath + "/" + "mscore-palette.xml");
-//      QFile f(s);
-//      if (!f.exists() && !_dirty)
-//            a->setEnabled(false);
-
-      QAction* ra = menu.exec(mapToGlobal(pt));
-      if (a == ra) {
-//            if (f.exists())
-//                  QFile::remove(s);
-            clear();
-            mscore->populatePalette();      // hack
-            _dirty = true;                  // save profile
-            }
-      else if (b == ra) {
-            preferences.singlePalette = b->isChecked();
-            preferences.dirty = true;
-            }
-      }
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void PaletteBox::clear()
-      {
-      int n = vbox->count() - 1;    // do not delete last spacer item
-      while (n--) {
-            QLayoutItem* item = vbox->takeAt(0);
-            if (item->widget())
-                  item->widget()->hide();
-            delete item;
-            }
-      vbox->invalidate();
-      }
-
-//---------------------------------------------------------
-//   addPalette
-//---------------------------------------------------------
-
-void PaletteBox::addPalette(Palette* w)
-      {
-      PaletteScrollArea* sa = new PaletteScrollArea(w);
-      PaletteBoxButton* b   = new PaletteBoxButton(sa, w);
-
-      sa->setVisible(false);
-      b->setText(w->name());
-      int slotIdx = vbox->count() - 1;
-      vbox->insertWidget(slotIdx, b);
-      vbox->insertWidget(slotIdx+1, sa, 1000);
-      b->setId(slotIdx);
-      connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
-      connect(b, SIGNAL(closeAll()), SLOT(closeAll()));
-      connect(w, SIGNAL(changed()), SLOT(setDirty()));
-      }
-
-//---------------------------------------------------------
-//   newPalette
-//---------------------------------------------------------
-
-Palette* PaletteBox::newPalette(const QString& name, int slot)
-      {
-      Palette* p = new Palette;
-      p->setReadOnly(false);
-      PaletteScrollArea* sa = new PaletteScrollArea(p);
-      PaletteBoxButton* b   = new PaletteBoxButton(sa, p);
-      sa->setVisible(false);
-      p->setName(name);
-      b->setText(p->name());
-      vbox->insertWidget(slot, b);
-      vbox->insertWidget(slot+1, sa, 1000);
-      connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
-      connect(p, SIGNAL(changed()), SLOT(setDirty()));
-      for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
-            static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
-      return p;
-      }
-
-//---------------------------------------------------------
-//   paletteCmd
-//---------------------------------------------------------
-
-void PaletteBox::paletteCmd(int cmd, int slot)
-      {
-      QLayoutItem* item = vbox->itemAt(slot);
-      PaletteBoxButton* b = static_cast<PaletteBoxButton*>(item->widget());
-
-      switch(cmd) {
-            case PALETTE_DELETE:
-                  {
-                  vbox->removeItem(item);
-                  b->deleteLater();      // this is the button widget
-                  delete item;
-                  item = vbox->itemAt(slot);
-                  vbox->removeItem(item);
-                  delete item->widget();
-                  delete item;
-                  for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
-                        static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
-                  }
-                  break;
-            case PALETTE_SAVE:
-                  {
-                  PaletteScrollArea* sa = static_cast<PaletteScrollArea*>(vbox->itemAt(slot+1)->widget());
-                  Palette* palette = static_cast<Palette*>(sa->widget());
-                  QString path = mscore->getPaletteFilename(false);
-                  if (!path.isEmpty())
-                        palette->write(path);
-                  }
-                  break;
-
-            case PALETTE_LOAD:
-                  {
-                  QString path = mscore->getPaletteFilename(true);
-                  if (!path.isEmpty()) {
-                        QFileInfo fi(path);
-                        Palette* palette = newPalette(fi.baseName(), slot);
-                        palette->read(path);
-                        }
-                  }
-                  break;
-
-            case PALETTE_NEW:
-                  newPalette(tr("new Palette"), slot);
-                  // fall through
-
-            case PALETTE_EDIT:
-                  {
-                  PaletteScrollArea* sa = static_cast<PaletteScrollArea*>(vbox->itemAt(slot+1)->widget());
-                  Palette* palette = static_cast<Palette*>(sa->widget());
-                  QLayoutItem* item = vbox->itemAt(slot);
-                  b = static_cast<PaletteBoxButton*>(item->widget());
-
-                  PaletteProperties pp(palette, 0);
-                  int rv = pp.exec();
-                  if (rv == 1) {
-                        _dirty = true;
-                        b->setText(palette->name());
-                        palette->update();
-                        }
-                  }
-                  break;
-            case PALETTE_UP:
-                  if (slot) {
-                        QLayoutItem* i1 = vbox->itemAt(slot);
-                        QLayoutItem* i2 = vbox->itemAt(slot+1);
-                        vbox->removeItem(i1);
-                        vbox->removeItem(i2);
-                        vbox->insertWidget(slot-2, i2->widget());
-                        vbox->insertWidget(slot-2, i1->widget());
-                        delete i1;
-                        delete i2;
-                        for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
-                              static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
-                        }
-                  break;
-
-            case PALETTE_DOWN:
-                  if (slot < (vbox->count() - 3)) {
-                        QLayoutItem* i1 = vbox->itemAt(slot);
-                        QLayoutItem* i2 = vbox->itemAt(slot+1);
-                        vbox->removeItem(i1);
-                        vbox->removeItem(i2);
-                        vbox->insertWidget(slot+2, i2->widget());
-                        vbox->insertWidget(slot+2, i1->widget());
-                        delete i1;
-                        delete i2;
-                        for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
-                              static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
-                        }
-                  break;
-
-            }
-
-      _dirty = true;
-      }
-
-//---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void PaletteBox::closeEvent(QCloseEvent* ev)
-      {
-      emit paletteVisible(false);
-      QWidget::closeEvent(ev);
-      }
-
-//---------------------------------------------------------
-//   closeAll
-//---------------------------------------------------------
-
-void PaletteBox::closeAll()
-      {
-      for (int i = 0; i < (vbox->count() - 1); i += 2) {
-            PaletteBoxButton* b = static_cast<PaletteBoxButton*> (vbox->itemAt(i)->widget() );
-            b->showPalette(false);
-            }
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void PaletteBox::write(Xml& xml)
-      {
-      xml.stag("PaletteBox");
-      for (int i = 0; i < (vbox->count() - 1); i += 2) {
-            PaletteBoxButton* b = static_cast<PaletteBoxButton*>(vbox->itemAt(i)->widget());
-            PaletteScrollArea* sa = static_cast<PaletteScrollArea*>(vbox->itemAt(i + 1)->widget());
-            Palette* p = static_cast<Palette*>(sa->widget());
-            p->write(xml, b->text());
-            }
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//    return false on error
-//---------------------------------------------------------
-
-bool PaletteBox::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "Palette") {
-                  Palette* p = new Palette();
-                  QString name = e.attribute("name");
-                  p->setName(name);
-                  p->read(e);
-                  addPalette(p);
-                  }
-            else
-                  e.unknown();
-            }
-      return true;
       }
 
 //---------------------------------------------------------
@@ -1637,3 +1357,36 @@ void PaletteCellProperties::accept()
       cell->drawStaff = drawStaff->isChecked();
       QDialog::accept();
       }
+
+//---------------------------------------------------------
+// PaletteScrollArea
+//---------------------------------------------------------
+
+PaletteScrollArea::PaletteScrollArea(Palette* w, QWidget* parent)
+   : QScrollArea(parent)
+      {
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+      setWidget(w);
+      setWidgetResizable(false);
+      _restrictHeight = true;
+      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+      }
+
+//---------------------------------------------------------
+// resizeEvent
+//---------------------------------------------------------
+
+void PaletteScrollArea::resizeEvent(QResizeEvent* re)
+      {
+            QScrollArea::resizeEvent(re); // necessary?
+
+            Palette* palette = static_cast<Palette*>(widget());
+            int h = palette->heightForWidth(width());
+            palette->resize(QSize(width(), h));
+            if (_restrictHeight) {
+                        setMaximumHeight(h+6);
+                        }
+            }
+
+

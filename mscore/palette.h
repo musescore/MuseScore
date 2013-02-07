@@ -26,7 +26,6 @@ class Sym;
 class Xml;
 class XmlReader;
 class Palette;
-class PaletteScrollArea;
 
 #include "ui_palette.h"
 #include "ui_cellproperties.h"
@@ -95,13 +94,13 @@ class PaletteBoxButton : public QToolButton {
       friend class PaletteBox;
 
       Palette* palette;
-      PaletteScrollArea* scrollArea;
       QAction* editAction;
 
       int id;
 
       virtual void changeEvent(QEvent*);
       virtual void paintEvent( QPaintEvent * );
+      virtual void contextMenuEvent(QContextMenuEvent*);
 
    private slots:
       void deleteTriggered()     { emit paletteCmd(PALETTE_DELETE, id);  }
@@ -111,7 +110,6 @@ class PaletteBoxButton : public QToolButton {
       void upTriggered()         { emit paletteCmd(PALETTE_UP, id);      }
       void downTriggered()       { emit paletteCmd(PALETTE_DOWN, id);    }
       void newTriggered()        { emit paletteCmd(PALETTE_NEW, id);     }
-      void beforePulldown();
       void enableEditing(bool);
       void showPalette(bool);
 
@@ -120,7 +118,7 @@ class PaletteBoxButton : public QToolButton {
       void closeAll();
 
    public:
-      PaletteBoxButton(PaletteScrollArea*, Palette*, QWidget* parent = 0);
+      PaletteBoxButton(Palette*, QWidget* parent = 0);
       void setId(int v) { id = v; }
       };
 
@@ -131,8 +129,8 @@ class PaletteBoxButton : public QToolButton {
 class PaletteBox : public QDockWidget {
       Q_OBJECT
 
-      QVBoxLayout* vbox;
       bool _dirty;
+      QVBoxLayout* vbox;
 
       virtual void closeEvent(QCloseEvent*);
       Palette* newPalette(const QString& name, int slot);
@@ -140,8 +138,9 @@ class PaletteBox : public QDockWidget {
    private slots:
       void paletteCmd(int, int);
       void setDirty() { _dirty = true; }
-      void contextMenu(const QPoint&);
+//      void contextMenu(const QPoint&);
       void closeAll();
+      void displayMore(const QString& paletteName);
 
    signals:
       void paletteVisible(bool);
@@ -156,7 +155,7 @@ class PaletteBox : public QDockWidget {
       };
 
 //---------------------------------------------------------
-//   PaletteScrollArea
+//    PaletteScrollArea
 //---------------------------------------------------------
 
 class PaletteScrollArea : public QScrollArea {
@@ -167,8 +166,8 @@ class PaletteScrollArea : public QScrollArea {
 
    public:
       PaletteScrollArea(Palette* w, QWidget* parent = 0);
-      bool restrictHeight() const      { return _restrictHeight; }
-      void setRestrictHeight(bool val) { _restrictHeight = val;  }
+      bool restrictHeight() const { return _restrictHeight; }
+      void setRestrictHeight(bool val) { _restrictHeight = val; }
       };
 
 //---------------------------------------------------------
@@ -194,6 +193,8 @@ class Palette : public QWidget {
       bool _readOnly;
       qreal _yOffset;         // in spatium units of "gscore"
 
+      bool _moreElements;
+
       void redraw(const QRect&);
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
@@ -201,6 +202,7 @@ class Palette : public QWidget {
       virtual void mouseMoveEvent(QMouseEvent*);
       virtual void leaveEvent(QEvent*);
       virtual bool event(QEvent*);
+      virtual void resizeEvent(QResizeEvent*);
 
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dragMoveEvent(QDragMoveEvent*);
@@ -218,6 +220,8 @@ class Palette : public QWidget {
       void startDragElement(Element*);
       void boxClicked(int);
       void changed();
+      void moreButtonClicked();
+      void displayMore(const QString& paletteName);
 
    public:
       Palette(QWidget* parent = 0);
@@ -253,11 +257,14 @@ class Palette : public QWidget {
       int rows() const;
       int size() const               { return cells.size(); }
       void setCellReadOnly(int c, bool v) { cells[c]->readOnly = v; }
-      int heightForWidth(int) const;
       QString name() const           { return _name;        }
       void setName(const QString& s) { _name = s;           }
       int gridWidth() const          { return hgrid;        }
       int gridHeight() const         { return vgrid;        }
+      bool moreElements() const      { return _moreElements; }
+      void setMoreElements(bool val) { _moreElements = val; }
+
+      virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
       };
 
