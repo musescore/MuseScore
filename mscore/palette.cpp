@@ -113,7 +113,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             if (_moreElements) {
                   // palette context menu
                   QMenu menu;
-                  QAction* moreAction = menu.addAction(tr("more Elements..."));
+                  QAction* moreAction = menu.addAction(tr("Show More..."));
                   QAction* action = menu.exec(mapToGlobal(event->pos()));
                   if (action == moreAction) {
                         emit displayMore(_name);
@@ -129,7 +129,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       QAction* contextAction = menu.addAction(tr("Properties..."));
       QAction* moreAction = 0;
       if (_moreElements)
-            moreAction = menu.addAction(tr("more Elements..."));
+            moreAction = menu.addAction(tr("Show More..."));
       if (cells[i] && cells[i]->readOnly)
             clearAction->setEnabled(false);
 
@@ -1215,7 +1215,7 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       QMenu menu;
 
       QAction* actionProperties = menu.addAction(tr("Palette Properties..."));
-      QAction* actionInsert     = menu.addAction(tr("Insert new Palette..."));
+      QAction* actionInsert     = menu.addAction(tr("Insert New Palette..."));
       QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
       QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
       QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
