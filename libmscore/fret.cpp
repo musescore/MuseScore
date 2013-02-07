@@ -162,7 +162,7 @@ void FretDiagram::setStrings(int n)
       maxStrings = n;
       if (_dots) {
             char* ndots = new char[n];
-            memcpy(ndots, _dots, _strings);
+            memcpy(ndots, _dots, n);
             for (int i = _strings; i < n; ++i)
                   ndots[i] = 0;
             delete[] _dots;
@@ -170,15 +170,15 @@ void FretDiagram::setStrings(int n)
             }
       if (_marker) {
             char* nmarker = new char[n];
-            memcpy(nmarker, _marker, _strings);
+            memcpy(nmarker, _marker, n);
             for (int i = _strings; i < n; ++i)
-                  nmarker[i] = 0;
+                  nmarker[i] = 'O';
             delete[] _marker;
             _marker = nmarker;
             }
       if (_fingering) {
             char* nfingering = new char[n];
-            memcpy(nfingering, _fingering, _strings);
+            memcpy(nfingering, _fingering, n);
             for (int i = _strings; i < n; ++i)
                   nfingering[i] = 0;
             delete[] _fingering;
