@@ -33,6 +33,15 @@ static QList<Workspace*> _profiles;
 Workspace* profile;
 
 //---------------------------------------------------------
+//   resetWorkspace
+//---------------------------------------------------------
+
+void MuseScore::resetWorkspace()
+      {
+      profile->read();
+      }
+
+//---------------------------------------------------------
 //   showWorkspaceMenu
 //---------------------------------------------------------
 
@@ -50,13 +59,11 @@ void MuseScore::showWorkspaceMenu()
       menuWorkspaces->clear();
 
       const QList<Workspace*> pl = Workspace::profiles();
-//      QAction* active = 0;
       foreach (Workspace* p, pl) {
             QAction* a = profiles->addAction(p->name());
             a->setCheckable(true);
             a->setData(p->path());
             if (a->text() == preferences.profile) {
-//                  active = a;
                   a->setChecked(true);
                   }
             menuWorkspaces->addAction(a);
@@ -65,9 +72,14 @@ void MuseScore::showWorkspaceMenu()
       QAction* a = new QAction(tr("New Workspace"), this);
       connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
       menuWorkspaces->addAction(a);
+
       deleteWorkspaceAction = new QAction(tr("Delete Workspace"), this);
       connect(deleteWorkspaceAction, SIGNAL(triggered()), SLOT(deleteWorkspace()));
       menuWorkspaces->addAction(deleteWorkspaceAction);
+
+      resetWorkspaceAction = new QAction(tr("Reset Workspace"), this);
+      connect(resetWorkspaceAction, SIGNAL(triggered()), SLOT(resetWorkspace()));
+      menuWorkspaces->addAction(resetWorkspaceAction);
       }
 
 //---------------------------------------------------------

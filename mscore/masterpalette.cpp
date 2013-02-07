@@ -47,7 +47,7 @@ extern Palette* newAccidentalsPalette();
 //   showMasterPalette
 //---------------------------------------------------------
 
-void MuseScore::showMasterPalette()
+void MuseScore::showMasterPalette(const QString& s)
       {
       QAction* a = getAction("masterpalette");
 
@@ -56,6 +56,9 @@ void MuseScore::showMasterPalette()
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       masterPalette->setVisible(a->isChecked());
+      if (!s.isEmpty())
+            masterPalette->selectItem(s);
+      masterPalette->show();
       }
 
 //---------------------------------------------------------
@@ -73,6 +76,20 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
       sp->setReadOnly(true);
       stack->addWidget(psa);
       return sp;
+      }
+
+//---------------------------------------------------------
+//   selectItem
+//---------------------------------------------------------
+
+void MasterPalette::selectItem(const QString& s)
+      {
+      for (int idx = 0; idx < listWidget->count(); ++idx) {
+            if (listWidget->item(idx)->text() == s) {
+                  listWidget->setCurrentItem(listWidget->item(idx));
+                  break;
+                  }
+            }
       }
 
 //---------------------------------------------------------
