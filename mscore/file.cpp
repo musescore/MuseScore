@@ -1507,14 +1507,15 @@ bool MuseScore::exportFile()
       fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      fl.append(tr("LilyPond Format (*.ly)"));
+      if(enableExperimental)
+            fl.append(tr("LilyPond Format (*.ly)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("Flac Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
-      fl.append(tr("Segment Positions (*.pos)"));
+
       QString saveDialogTitle = tr("MuseScore: Export");
 
       QSettings settings;
@@ -1580,13 +1581,15 @@ bool MuseScore::exportParts()
       fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      fl.append(tr("LilyPond Format (*.ly)"));
+      if(enableExperimental)
+            fl.append(tr("LilyPond Format (*.ly)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("Flac Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+
       QString saveDialogTitle = tr("MuseScore: Export Parts");
 
       QSettings settings;
