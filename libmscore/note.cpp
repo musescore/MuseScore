@@ -271,7 +271,7 @@ void Note::undoSetPitch(int p)
 void Note::setTpcFromPitch()
       {
       KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-      _tpc    = pitch2tpc(_pitch, key.accidentalType());
+      _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
 // qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d\n", pitch(), chord()->tick(), key.accidentalType(), _tpc);
       }
 
@@ -995,7 +995,7 @@ void Note::endDrag()
             int key     = staff->key(tick).accidentalType();
             // determine new pitch of dragged note
             nPitch      = line2pitch(nLine, clef, key);
-            tpc         = pitch2tpc(nPitch, key);
+            tpc         = pitch2tpc(nPitch, key, PREFER_NEAREST);
             // undefined for non-tablature staves
             nString     = -1;
             nFret       = -1;
@@ -1378,7 +1378,8 @@ void Note::layout10(AccidentalState* as)
             if (_accidental && _accidental->role() == Accidental::ACC_USER) {
                   acci = _accidental->subtype();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
-                        int ntpc = pitch2tpc2(_pitch, acci == Accidental::ACC_SHARP);
+                        // TODO - what about double flat and double sharp?
+                        int ntpc = pitch2tpc(_pitch, 0, acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
 //                              setColor(QColor(255, 0, 0));
