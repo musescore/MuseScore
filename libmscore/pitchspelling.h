@@ -39,6 +39,7 @@ const int   PITCH_DELTA_OCTAVE      = 12; // the delta in pitch value to go 1 oc
 const int   STEP_DELTA_OCTAVE       = 7;  // the number of steps in an octave
 const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (= a fifth = 4 steps)
 
+#if 0
 //---------------------------------------------------------
 //   pitch2tpc
 //    Returns a default tpc for a given midi pitch.
@@ -51,8 +52,12 @@ inline static int pitch2tpc(int pitch)
       }
 
 int pitch2tpc2(int pitch, bool preferSharp);
+#endif
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, 0, PREFER_NEAREST)
 
-extern int pitch2tpc(int pitch, int key);
+enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
+
+extern int pitch2tpc(int pitch, int key, int prefer);
 
 extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);

@@ -1975,9 +1975,9 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 		Harmony* harmony = new Harmony(score_);
 
 		harmony->setTrack(track);
-		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot()));
+		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), 0, PREFER_NEAREST));     // XXX - check
 		if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass()));
+			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), 0, PREFER_NEAREST));     // XXX - check
 		}
 		const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
 		if(d != 0){
