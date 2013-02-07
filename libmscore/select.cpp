@@ -207,6 +207,12 @@ void Selection::clear()
             _score->addRefresh(e->canvasBoundingRect());
             }
       _el.clear();
+      _startSegment  = 0;
+      _endSegment    = 0;
+      _activeSegment = 0;
+      _staffStart     = 0;
+      _staffEnd       = 0;
+      _activeTrack    = 0;
       setState(SEL_NONE);
       }
 
