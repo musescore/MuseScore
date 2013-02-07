@@ -57,6 +57,7 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
       score = s;

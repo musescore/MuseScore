@@ -40,8 +40,9 @@ PlayPanel::PlayPanel(QWidget* parent)
       cachedTimePosition = -1;
       cs                 = 0;
       setupUi(this);
-      setScore(0);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      setScore(0);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       metronomeButton->setDefaultAction(getAction("metronome"));

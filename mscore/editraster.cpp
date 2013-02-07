@@ -29,6 +29,7 @@ EditRaster::EditRaster(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       hraster->setValue(MScore::hRaster());
       vraster->setValue(MScore::vRaster());
       }

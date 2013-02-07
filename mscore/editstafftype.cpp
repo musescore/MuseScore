@@ -36,6 +36,8 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       staff = st;
       Score* score = staff->score();
       // copy types from score and set as non-built-in

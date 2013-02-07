@@ -35,6 +35,7 @@ PageSettings::PageSettings(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
       NScrollArea* sa = new NScrollArea;

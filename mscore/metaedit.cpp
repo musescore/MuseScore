@@ -30,6 +30,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       score = s;
 
       level->setValue(score->mscVersion());

@@ -29,6 +29,7 @@ GlissandoProperties::GlissandoProperties(Glissando* g, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       glissando = g;
       showText->setChecked(glissando->showText());
       text->setText(glissando->text());

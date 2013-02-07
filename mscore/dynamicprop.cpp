@@ -30,6 +30,7 @@ DynamicProperties::DynamicProperties(Dynamic* d, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       dynamic = d;
       velocity->setValue(dynamic->velocity());
       switch(dynamic->dynRange()) {

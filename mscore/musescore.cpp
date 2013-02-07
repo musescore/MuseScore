@@ -135,7 +135,8 @@ void MuseScore::cmdInsertMeasures()
 InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
    : QDialog(parent)
       {
-	setupUi(this);
+      setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       }
 
 //---------------------------------------------------------
@@ -1613,8 +1614,9 @@ void MuseScore::cmdAppendMeasures()
 
 MeasuresDialog::MeasuresDialog(QWidget* parent)
    : QDialog(parent)
-	{
+      {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       }
 
 //---------------------------------------------------------
@@ -2076,7 +2078,8 @@ static bool processNonGui()
 StartDialog::StartDialog(QWidget* parent)
   : QDialog(parent)
       {
-	setupUi(this);
+      setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowTitle(tr("MuseScore Startup Dialog"));
       connect(createScore, SIGNAL(clicked()), SLOT(createScoreClicked()));
       connect(loadScore, SIGNAL(clicked()), SLOT(loadScoreClicked()));
@@ -3930,7 +3933,7 @@ void MuseScore::transpose()
             return;
       if (cs->selection().state() != SEL_RANGE) {
             QMessageBox::StandardButton sb = QMessageBox::question(mscore,
-               tr("MuseScore: transpose"),
+               tr("MuseScore: Transpose"),
                tr("There is nothing selected. Transpose whole score?"),
                QMessageBox::Yes | QMessageBox::Cancel,
                QMessageBox::Yes

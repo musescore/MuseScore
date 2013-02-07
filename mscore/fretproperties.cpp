@@ -38,6 +38,7 @@ FretDiagramProperties::FretDiagramProperties(FretDiagram* _fd, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       fd = _fd;
       frets->setValue(fd->frets());
       strings->setValue(fd->strings());

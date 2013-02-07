@@ -376,6 +376,7 @@ AlbumManager::AlbumManager(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       album = 0;
       connect(add,         SIGNAL(clicked()), SLOT(addClicked()));

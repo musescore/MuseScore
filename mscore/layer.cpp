@@ -31,6 +31,7 @@ LayerManager::LayerManager(Score* s, QWidget* parent)
       {
       score = s;
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       for (int i = 0; i < 31; ++i) {
             QTableWidgetItem* item = new QTableWidgetItem(score->layerTags()[i+1]);
