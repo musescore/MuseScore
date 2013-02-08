@@ -1455,7 +1455,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (view->magIdx() == MAG_FREE)
             mag->setMag(view->mag());
       else
-            mag->setMagIdx(view->magIdx());
+            mag->setCurrentIndex(view->magIdx());
 
       setWindowTitle("MuseScore: " + cs->name());
 
