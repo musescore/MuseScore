@@ -324,9 +324,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* vRasterAction;
 
       QMenu* menuWorkspaces;
-      QActionGroup* profiles;
-      QAction* deleteWorkspaceAction;
-      QAction* resetWorkspaceAction;
+      QActionGroup* workspaces;
 
       bool inChordEditor;
 
@@ -435,6 +433,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void createNewWorkspace();
       void deleteWorkspace();
       void resetWorkspace();
+      void undoWorkspace();
       void showWorkspaceMenu();
       void changeWorkspace(QAction*);
       void changeWorkspace(Workspace* p);

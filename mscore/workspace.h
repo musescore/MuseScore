@@ -46,10 +46,10 @@ class Workspace {
       void read(XmlReader&);
       void read();
 
-      static QList<Workspace*>& profiles();
+      static QList<Workspace*>& workspaces();
       static Workspace* createNewWorkspace(const QString& name);
       };
 
-extern Workspace* profile;
+extern Workspace* workspace;
 extern void initWorkspace();
 #endif

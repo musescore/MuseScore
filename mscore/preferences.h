@@ -174,7 +174,7 @@ struct Preferences {
 
       int exportAudioSampleRate;
 
-      QString profile;
+      QString workspace;
 
       bool firstStartWeb;
 

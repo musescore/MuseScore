@@ -402,7 +402,7 @@ MuseScore::MuseScore()
       inChordEditor         = false;
       networkManager        = 0;
 
-      profiles              = 0;
+      workspaces              = 0;
 
       _midiRecordId         = -1;
       _fullscreen           = false;
@@ -2768,7 +2768,7 @@ void MuseScore::writeSettings()
             settings.setValue("splitter", splitter->saveState());
 //            }
       settings.endGroup();
-      profile->save();
+      workspace->save();
       if (keyEditor && keyEditor->dirty())
             keyEditor->save();
       if (chordStyleEditor)
