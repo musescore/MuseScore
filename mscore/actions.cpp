@@ -2178,6 +2178,12 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show staff type editor")
          ),
     Shortcut(
+         STATE_NORMAL,
+         A_CMD,
+         "delete-accidental",
+         QT_TRANSLATE_NOOP("action","Delete Selected Accidentals")
+         ),
+    Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "add-noteline",

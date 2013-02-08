@@ -291,6 +291,7 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
+      void updatePitch(int pitch, int tcp);
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);
