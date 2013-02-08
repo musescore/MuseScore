@@ -332,7 +332,8 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(mscore awl bww2mxml share
       fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
-add_subdirectory(mtest EXCLUDE_FROM_ALL)
+# add_subdirectory(mtest EXCLUDE_FROM_ALL)
+add_subdirectory(mtest)
 add_subdirectory(manual)
 
 if (USE_SYSTEM_QTSINGLEAPPLICATION)
