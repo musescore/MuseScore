@@ -18,7 +18,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-subdirs( templates wallpaper locale styles sound manual)
+subdirs(templates wallpaper locale styles sound manual workspaces)
 
 install (DIRECTORY
       plugins
