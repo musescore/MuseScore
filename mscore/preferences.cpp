@@ -228,7 +228,7 @@ void Preferences::init()
 
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
-      profile                 = "default";
+      workspace                 = "default";
 
       firstStartWeb = true;
       };
@@ -360,7 +360,7 @@ void Preferences::write()
       s.setValue("nativeDialogs", nativeDialogs);
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
-      s.setValue("profile", profile);
+      s.setValue("workspace", workspace);
 
       s.setValue("firstStartWeb", firstStartWeb);
 
@@ -531,7 +531,7 @@ void Preferences::read()
       nativeDialogs    = s.value("nativeDialogs", nativeDialogs).toBool();
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
-      profile          = s.value("profile", profile).toString();
+      workspace          = s.value("workspace", workspace).toString();
 
       firstStartWeb = s.value("firstStartWeb", true).toBool();
 

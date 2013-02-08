@@ -28,9 +28,9 @@
 #include "preferences.h"
 #include "palette.h"
 
-static bool profilesRead = false;
-static QList<Workspace*> _profiles;
-Workspace* profile;
+static bool workspacesRead = false;
+static QList<Workspace*> _workspaces;
+Workspace* workspace;
 
 //---------------------------------------------------------
 //   resetWorkspace
@@ -38,7 +38,17 @@ Workspace* profile;
 
 void MuseScore::resetWorkspace()
       {
-      profile->read();
+      // TODO
+      workspace->read();
+      }
+
+//---------------------------------------------------------
+//   undoWorkspace
+//---------------------------------------------------------
+
+void MuseScore::undoWorkspace()
+      {
+      workspace->read();
       }
 
 //---------------------------------------------------------
@@ -47,39 +57,43 @@ void MuseScore::resetWorkspace()
 
 void MuseScore::showWorkspaceMenu()
       {
-      if (profiles == 0) {
-            profiles = new QActionGroup(this);
-            profiles->setExclusive(true);
-            connect(profiles, SIGNAL(triggered(QAction*)), SLOT(changeWorkspace(QAction*)));
+      if (workspaces == 0) {
+            workspaces = new QActionGroup(this);
+            workspaces->setExclusive(true);
+            connect(workspaces, SIGNAL(triggered(QAction*)), SLOT(changeWorkspace(QAction*)));
             }
       else {
-            foreach(QAction* a, profiles->actions())
-                  profiles->removeAction(a);
+            foreach(QAction* a, workspaces->actions())
+                  workspaces->removeAction(a);
             }
       menuWorkspaces->clear();
 
-      const QList<Workspace*> pl = Workspace::profiles();
+      const QList<Workspace*> pl = Workspace::workspaces();
       foreach (Workspace* p, pl) {
-            QAction* a = profiles->addAction(p->name());
+            QAction* a = workspaces->addAction(p->name());
             a->setCheckable(true);
             a->setData(p->path());
-            if (a->text() == preferences.profile) {
+            if (a->text() == preferences.workspace) {
                   a->setChecked(true);
                   }
             menuWorkspaces->addAction(a);
             }
       menuWorkspaces->addSeparator();
-      QAction* a = new QAction(tr("New Workspace"), this);
+      QAction* a = new QAction(tr("New"), this);
       connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
       menuWorkspaces->addAction(a);
 
-      deleteWorkspaceAction = new QAction(tr("Delete Workspace"), this);
-      connect(deleteWorkspaceAction, SIGNAL(triggered()), SLOT(deleteWorkspace()));
-      menuWorkspaces->addAction(deleteWorkspaceAction);
+      a = new QAction(tr("Delete"), this);
+      connect(a, SIGNAL(triggered()), SLOT(deleteWorkspace()));
+      menuWorkspaces->addAction(a);
 
-      resetWorkspaceAction = new QAction(tr("Reset Workspace"), this);
-      connect(resetWorkspaceAction, SIGNAL(triggered()), SLOT(resetWorkspace()));
-      menuWorkspaces->addAction(resetWorkspaceAction);
+      a = new QAction(tr("Undo Changes"), this);
+      connect(a, SIGNAL(triggered()), SLOT(undoWorkspace()));
+      menuWorkspaces->addAction(a);
+
+      a = new QAction(tr("Reset to advanced"), this);
+      connect(a, SIGNAL(triggered()), SLOT(resetWorkspace()));
+      menuWorkspaces->addAction(a);
       }
 
 //---------------------------------------------------------
@@ -94,7 +108,7 @@ void MuseScore::createNewWorkspace()
             return;
       for (;;) {
             bool notFound = true;
-            foreach(Workspace* p, Workspace::profiles()) {
+            foreach(Workspace* p, Workspace::workspaces()) {
                   if (p->name() == s) {
                         notFound = false;
                         break;
@@ -111,9 +125,9 @@ void MuseScore::createNewWorkspace()
             else
                   break;
             }
-      profile->save();
-      profile = Workspace::createNewWorkspace(s);
-      preferences.profile = profile->name();
+      workspace->save();
+      workspace = Workspace::createNewWorkspace(s);
+      preferences.workspace = workspace->name();
       }
 
 //---------------------------------------------------------
@@ -122,27 +136,27 @@ void MuseScore::createNewWorkspace()
 
 void MuseScore::deleteWorkspace()
       {
-      if (!profiles)
+      if (!workspaces)
             return;
-      QAction* a = profiles->checkedAction();
+      QAction* a = workspaces->checkedAction();
       if (!a)
             return;
       preferences.dirty = true;
-      Workspace* profile = 0;
-      foreach(Workspace* p, Workspace::profiles()) {
+      Workspace* workspace = 0;
+      foreach(Workspace* p, Workspace::workspaces()) {
             if (p->name() == a->text()) {
-                  profile = p;
+                  workspace = p;
                   break;
                   }
             }
-      if (!profile)
+      if (!workspace)
             return;
-      Workspace::profiles().removeOne(profile);
-      QFile f(profile->path());
+      Workspace::workspaces().removeOne(workspace);
+      QFile f(workspace->path());
       f.remove();
-//TODO:??      delete profile;
-      profile             = Workspace::profiles().first();
-      preferences.profile = profile->name();
+//TODO:??      delete workspace;
+      workspace             = Workspace::workspaces().first();
+      preferences.workspace = workspace->name();
       }
 
 //---------------------------------------------------------
@@ -151,15 +165,15 @@ void MuseScore::deleteWorkspace()
 
 void MuseScore::changeWorkspace(QAction* a)
       {
-      preferences.profile = a->text();
+      preferences.workspace = a->text();
       preferences.dirty = true;
-      foreach(Workspace* p, Workspace::profiles()) {
+      foreach(Workspace* p, Workspace::workspaces()) {
             if (p->name() == a->text()) {
                   changeWorkspace(p);
                   return;
                   }
             }
-      qDebug("   profile not found");
+      qDebug("   workspace not found");
       }
 
 //---------------------------------------------------------
@@ -168,9 +182,9 @@ void MuseScore::changeWorkspace(QAction* a)
 
 void MuseScore::changeWorkspace(Workspace* p)
       {
-      profile->save();
+      workspace->save();
       p->read();
-      profile = p;
+      workspace = p;
       }
 
 //---------------------------------------------------------
@@ -179,15 +193,15 @@ void MuseScore::changeWorkspace(Workspace* p)
 
 void initWorkspace()
       {
-      foreach(Workspace* p, Workspace::profiles()) {
-            if (p->name() == preferences.profile) {
-                  profile = p;
+      foreach(Workspace* p, Workspace::workspaces()) {
+            if (p->name() == preferences.workspace) {
+                  workspace = p;
                   break;
                   }
             }
-      if (profile == 0) {
-            profile = new Workspace;
-            profile->setName("default");
+      if (workspace == 0) {
+            workspace = new Workspace;
+            workspace->setName("default");
             }
       }
 
@@ -207,16 +221,16 @@ static void writeFailed(const QString& _path)
 
 void Workspace::write()
       {
-      QString ext(".profile");
+      QString ext(".workspace");
       if (_path.isEmpty()) {
             QDir dir;
             dir.mkpath(dataPath);
-            _path = dataPath + "/profiles";
+            _path = dataPath + "/workspaces";
             dir.mkpath(_path);
             _path += "/" + _name + ext;
             }
       QZipWriter f(_path);
-      f.setCompressionPolicy(QZipWriter::NeverCompress);
+//      f.setCompressionPolicy(QZipWriter::NeverCompress);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
          | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
@@ -234,7 +248,7 @@ void Workspace::write()
       xml.header();
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString("profile.xml")));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString("workspace.xml")));
       xml.etag();
       foreach (ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(gscore))
@@ -269,7 +283,7 @@ void Workspace::write()
       pb->write(xml);
       xml.etag();
       xml.etag();
-      f.addFile("profile.xml", cbuf.data());
+      f.addFile("workspace.xml", cbuf.data());
       cbuf.close();
       }
 
@@ -382,27 +396,27 @@ void Workspace::save()
       }
 
 //---------------------------------------------------------
-//   profiles
+//   workspaces
 //---------------------------------------------------------
 
-QList<Workspace*>& Workspace::profiles()
+QList<Workspace*>& Workspace::workspaces()
       {
-      if (!profilesRead) {
-            QString s = dataPath + "/profiles";
+      if (!workspacesRead) {
+            QString s = dataPath + "/workspaces";
             QDir dir(s);
             QStringList nameFilters;
-            nameFilters << "*.profile";
+            nameFilters << "*.workspace";
             QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
             foreach (QString s, pl) {
                   Workspace* p = new Workspace;
-                  p->setPath(dataPath + "/profiles/" + s);
+                  p->setPath(dataPath + "/workspaces/" + s);
                   p->setName(QFileInfo(s).baseName());
-                  _profiles.append(p);
+                  _workspaces.append(p);
                   }
-            profilesRead = true;
+            workspacesRead = true;
             }
-      return _profiles;
+      return _workspaces;
       }
 
 //---------------------------------------------------------
@@ -411,12 +425,12 @@ QList<Workspace*>& Workspace::profiles()
 
 Workspace* Workspace::createNewWorkspace(const QString& name)
       {
-      Workspace* p = new Workspace(*profile);
+      Workspace* p = new Workspace(*workspace);
       p->setName(name);
       p->setPath("");
       p->setDirty(false);
       p->write();
-      _profiles.append(p);
+      _workspaces.append(p);
       return p;
       }
 

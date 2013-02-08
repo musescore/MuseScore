@@ -805,7 +805,7 @@ void MuseScore::showPalette(bool visible)
       {
       QAction* a = getAction("toggle-palette");
       if (paletteBox == 0)
-            profile->read();
+            workspace->read();
       if (paletteBox)   // read failed?
             paletteBox->setVisible(visible);
       a->setChecked(visible);
