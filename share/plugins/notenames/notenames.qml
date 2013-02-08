@@ -23,23 +23,41 @@ MuseScore {
 
    onRun: {
       if (typeof curScore === 'undefined')
-         Qt.quit();
+        Qt.quit();
 
-      var cursor = curScore.newCursor();
+      var cursor     = curScore.newCursor();
+      cursor.rewind(1);
+      var startStaff = cursor.staffIdx;
+      cursor.rewind(2);
+      var endStaff   = cursor.staffIdx;
+      var endTick    = cursor.tick; // if no selection, end of score
+      var fullScore  = false;
+      if (!cursor.segment) { // no selection
+        fullScore   = true;
+        startStaff  = 0; // start with 1st staff
+        endStaff    = curScore.nstaves; // and end with last
+      }
+      console.log(startStaff + " - " + endStaff + " - " + endTick)
 
-      for (var staff = 0; staff < curScore.nstaves; ++staff) {
-        for (var voice = 0; voice < 4; ++voice) {
+      for (var staff = startStaff; staff <= endStaff; staff++) {
+        for (var voice = 0; voice < 4; voice++) {
+          cursor.rewind(1); // beginning of selection
+          cursor.voice    = voice;
           cursor.staffIdx = staff;
-          cursor.voice = voice;
-          cursor.rewind(0);  // set cursor to first chord/rest
 
-          while (cursor.segment) {
+          if (fullScore)  // no selection
+            cursor.rewind(0); // beginning of score
+
+          while (cursor.segment && (fullScore || cursor.tick < endTick)) {
             if (cursor.element && cursor.element.type == Element.CHORD) {
               var text  = newElement(Element.STAFF_TEXT);
-              for (var i = 0; i < cursor.element.notes.length; i++) {
+              var notes = cursor.element.notes;
+
+              for (var i = 0; i < notes.length; i++) {
                 if ( i > 0 )
                    text.text += ",";           
-                switch (cursor.element.notes[i].tpc) {
+
+                switch (notes[i].tpc) {
                   case -1: text.text += qsTr("Fbb"); break;
                   case 0:  text.text += qsTr("Cbb"); break;
                   case 1:  text.text += qsTr("Gbb"); break;
@@ -84,7 +102,7 @@ MuseScore {
 // you might need to come up with suitable translations 
 // only #, b, natural and possibly also ## seem to be available in UNICODE
                 if (false) {
-                  switch (cursor.element.notes[i].userAccidental) {
+                  switch (notes[i].userAccidental) {
                      case 0:                                            break;
                      case 1:  text.text += qsTr("#");                   break;
                      case 2:  text.text += qsTr("b");                   break;
@@ -122,7 +140,7 @@ MuseScore {
                    case 2: text.pos.y = -1; break;
                    case 3: text.pos.y = 12; break;
                 }
-                if ((voice == 0) && (cursor.element.notes[0].pitch > 83))
+                if ((voice == 0) && (notes[0].pitch > 83))
                   text.pos.x = 1;
                 cursor.add(text);
               } // end for note
