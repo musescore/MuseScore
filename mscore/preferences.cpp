@@ -917,29 +917,30 @@ void PreferenceDialog::updateValues()
 #ifdef USE_PORTAUDIO
       if (usePortaudio) {
             Portaudio* audio = static_cast<Portaudio*>(seq->getDriver());
+            if (audio) {
+                  QStringList apis = audio->apiList();
+                  portaudioApi->addItems(apis);
+                  portaudioApi->setCurrentIndex(audio->currentApi());
 
-            QStringList apis = audio->apiList();
-            portaudioApi->addItems(apis);
-            portaudioApi->setCurrentIndex(audio->currentApi());
+                  QStringList devices = audio->deviceList(audio->currentApi());
+                  portaudioDevice->addItems(devices);
+                  portaudioDevice->setCurrentIndex(audio->currentDevice());
 
-            QStringList devices = audio->deviceList(audio->currentApi());
-            portaudioDevice->addItems(devices);
-            portaudioDevice->setCurrentIndex(audio->currentDevice());
-
-            connect(portaudioApi, SIGNAL(activated(int)), SLOT(portaudioApiActivated(int)));
+                  connect(portaudioApi, SIGNAL(activated(int)), SLOT(portaudioApiActivated(int)));
 #ifdef USE_PORTMIDI
-            PortMidiDriver* midiDriver = static_cast<PortMidiDriver*>(audio->mididriver());
-            if(midiDriver){
-                QStringList midiInputs = midiDriver->deviceInList();
-                int curMidiInIdx = 0;
-                for(int i = 0; i < midiInputs.size(); ++i) {
-                      portMidiInput->addItem(midiInputs.at(i), i);
-                      if (midiInputs.at(i) == prefs.portMidiInput)
-                            curMidiInIdx = i;
-                      }
-                portMidiInput->setCurrentIndex(curMidiInIdx);
-                }
+                  PortMidiDriver* midiDriver = static_cast<PortMidiDriver*>(audio->mididriver());
+                  if(midiDriver){
+                        QStringList midiInputs = midiDriver->deviceInList();
+                        int curMidiInIdx = 0;
+                        for(int i = 0; i < midiInputs.size(); ++i) {
+                              portMidiInput->addItem(midiInputs.at(i), i);
+                              if (midiInputs.at(i) == prefs.portMidiInput)
+                                    curMidiInIdx = i;
+                              }
+                        portMidiInput->setCurrentIndex(curMidiInIdx);
+                        }
 #endif
+                  }
             }
 #endif
 
