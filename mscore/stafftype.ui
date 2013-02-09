@@ -357,7 +357,7 @@
               <item>
                <widget class="QPushButton" name="pushFullConfig">
                 <property name="text">
-                 <string>« Full Configur. </string>
+                 <string>« Full Configuration</string>
                 </property>
                </widget>
               </item>
