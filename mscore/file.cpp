@@ -1507,8 +1507,6 @@ bool MuseScore::exportFile()
       fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      if(enableExperimental)
-            fl.append(tr("LilyPond Format (*.ly)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("Flac Audio (*.flac)"));
@@ -1546,11 +1544,11 @@ bool MuseScore::exportFile()
             int idx = fl.indexOf(selectedFilter);
             if (idx != -1) {
                   static const char* extensions[] = {
-                        "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg", "ly",
+                        "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg",
 #ifdef HAS_AUDIOFILE
                         "wav", "flac", "ogg",
 #endif
-                        "mp3", "pos"
+                        "mp3"
                         };
                   ext = extensions[idx];
                   }
@@ -1581,8 +1579,6 @@ bool MuseScore::exportParts()
       fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      if(enableExperimental)
-            fl.append(tr("LilyPond Format (*.ly)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("Flac Audio (*.flac)"));
@@ -1626,7 +1622,7 @@ bool MuseScore::exportParts()
                   int idx = fl.indexOf(selectedFilter);
                   if (idx != -1) {
                         static const char* extensions[] = {
-                              "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg", "ly",
+                              "mscx", "xml", "mxl", "mid", "pdf", "ps", "png", "svg",
 #ifdef HAS_AUDIOFILE
                               "wav", "flac", "ogg",
 #endif
