@@ -32,6 +32,7 @@
 #include "libmscore/page.h"
 #include "mixer.h"
 #include "palette.h"
+#include "palettebox.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrtemplate.h"
@@ -2383,7 +2384,7 @@ int main(int argc, char* av[])
 
       if (!converterMode)
             qApp->setWindowIcon(*icons[window_ICON]);
-      initWorkspace();
+      Workspace::initWorkspace();
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
@@ -2768,7 +2769,7 @@ void MuseScore::writeSettings()
             settings.setValue("splitter", splitter->saveState());
 //            }
       settings.endGroup();
-      workspace->save();
+      Workspace::currentWorkspace->save();
       if (keyEditor && keyEditor->dirty())
             keyEditor->save();
       if (chordStyleEditor)

@@ -20,6 +20,7 @@
 
 #include "libmscore/score.h"
 #include "palette.h"
+#include "palettebox.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
@@ -805,7 +806,7 @@ void MuseScore::showPalette(bool visible)
       {
       QAction* a = getAction("toggle-palette");
       if (paletteBox == 0)
-            workspace->read();
+            Workspace::currentWorkspace->read();
       if (paletteBox)   // read failed?
             paletteBox->setVisible(visible);
       a->setChecked(visible);

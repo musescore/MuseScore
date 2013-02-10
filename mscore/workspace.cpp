@@ -27,20 +27,11 @@
 #include "libmscore/qzipwriter_p.h"
 #include "preferences.h"
 #include "palette.h"
+#include "palettebox.h"
 
-static bool workspacesRead = false;
-static QList<Workspace*> _workspaces;
-Workspace* workspace;
-
-//---------------------------------------------------------
-//   resetWorkspace
-//---------------------------------------------------------
-
-void MuseScore::resetWorkspace()
-      {
-      // TODO
-      workspace->read();
-      }
+bool Workspace::workspacesRead = false;
+QList<Workspace*> Workspace::_workspaces;
+Workspace* Workspace::currentWorkspace;
 
 //---------------------------------------------------------
 //   undoWorkspace
@@ -48,7 +39,8 @@ void MuseScore::resetWorkspace()
 
 void MuseScore::undoWorkspace()
       {
-      workspace->read();
+      Workspace::currentWorkspace->read();
+      Workspace::currentWorkspace->setDirty(false);
       }
 
 //---------------------------------------------------------
@@ -73,26 +65,23 @@ void MuseScore::showWorkspaceMenu()
             QAction* a = workspaces->addAction(p->name());
             a->setCheckable(true);
             a->setData(p->path());
-            if (a->text() == preferences.workspace) {
-                  a->setChecked(true);
-                  }
+            a->setChecked(a->text() == preferences.workspace);
             menuWorkspaces->addAction(a);
             }
+
       menuWorkspaces->addSeparator();
       QAction* a = new QAction(tr("New"), this);
       connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Delete"), this);
+      a->setDisabled(Workspace::currentWorkspace->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(deleteWorkspace()));
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Undo Changes"), this);
+      a->setDisabled(Workspace::currentWorkspace->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(undoWorkspace()));
-      menuWorkspaces->addAction(a);
-
-      a = new QAction(tr("Reset to advanced"), this);
-      connect(a, SIGNAL(triggered()), SLOT(resetWorkspace()));
       menuWorkspaces->addAction(a);
       }
 
@@ -125,9 +114,9 @@ void MuseScore::createNewWorkspace()
             else
                   break;
             }
-      workspace->save();
-      workspace = Workspace::createNewWorkspace(s);
-      preferences.workspace = workspace->name();
+      Workspace::currentWorkspace->save();
+      Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
+//      preferences.workspace = workspace->name();
       }
 
 //---------------------------------------------------------
@@ -182,26 +171,28 @@ void MuseScore::changeWorkspace(QAction* a)
 
 void MuseScore::changeWorkspace(Workspace* p)
       {
-      workspace->save();
+      Workspace::currentWorkspace->save();
       p->read();
-      workspace = p;
+      Workspace::currentWorkspace = p;
       }
 
 //---------------------------------------------------------
 //   initWorkspace
 //---------------------------------------------------------
 
-void initWorkspace()
+void Workspace::initWorkspace()
       {
       foreach(Workspace* p, Workspace::workspaces()) {
+printf("initWorkspace <%s> <%s>\n", qPrintable(p->name()),
+               qPrintable(preferences.workspace));
             if (p->name() == preferences.workspace) {
-                  workspace = p;
+                  currentWorkspace = p;
                   break;
                   }
             }
-      if (workspace == 0) {
-            workspace = new Workspace;
-            workspace->setName("default");
+      if (currentWorkspace == 0) {
+            currentWorkspace = new Workspace;
+            currentWorkspace->setName("buildin");
             }
       }
 
@@ -213,6 +204,17 @@ static void writeFailed(const QString& _path)
       {
       QString s = mscore->tr("Open Workspace File\n") + _path + mscore->tr("\nfailed: ");
       QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Workspace file"), s);
+      }
+
+//---------------------------------------------------------
+//   Workspace
+//---------------------------------------------------------
+
+Workspace::Workspace()
+   : QObject(0)
+      {
+      _dirty = false;
+      _readOnly = false;
       }
 
 //---------------------------------------------------------
@@ -230,7 +232,6 @@ void Workspace::write()
             _path += "/" + _name + ext;
             }
       QZipWriter f(_path);
-//      f.setCompressionPolicy(QZipWriter::NeverCompress);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
          | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
@@ -304,6 +305,9 @@ void Workspace::read()
             mscore->populatePalette();
             return;
             }
+      QFileInfo fi(_path);
+      _readOnly = !fi.isWritable();
+
       QZipReader f(_path);
       QByteArray ba = f.fileData("META-INF/container.xml");
 
@@ -355,9 +359,6 @@ void Workspace::read()
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
-//                  QString version = e.attribute("version");
-//                  QStringList sl = version.split('.');
-                  // _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
                   while (e.readNextStartElement()) {
                         if (e.name() == "Workspace")
                               read(e);
@@ -378,6 +379,11 @@ void Workspace::read(XmlReader& e)
                   PaletteBox* paletteBox = mscore->getPaletteBox();
                   paletteBox->clear();
                   paletteBox->read(e);
+                  QList<Palette*> pl = paletteBox->palettes();
+                  foreach (Palette* p, pl) {
+                        p->setSystemPalette(_readOnly);
+                        connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
+                        }
                   }
             else
                   e.unknown();
@@ -390,8 +396,10 @@ void Workspace::read(XmlReader& e)
 
 void Workspace::save()
       {
+      if (_readOnly)
+            return;
       PaletteBox* pb = mscore->getPaletteBox();
-      if (pb && pb->dirty())
+      if (pb)
             write();
       }
 
@@ -402,17 +410,32 @@ void Workspace::save()
 QList<Workspace*>& Workspace::workspaces()
       {
       if (!workspacesRead) {
-            QString s = dataPath + "/workspaces";
-            QDir dir(s);
+            QStringList path;
+            path << mscoreGlobalShare + "workspaces";
+            path << dataPath + "/workspaces";
             QStringList nameFilters;
             nameFilters << "*.workspace";
-            QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
-            foreach (QString s, pl) {
-                  Workspace* p = new Workspace;
-                  p->setPath(dataPath + "/workspaces/" + s);
-                  p->setName(QFileInfo(s).baseName());
-                  _workspaces.append(p);
+            foreach(QString s, path) {
+                  QDir dir(s);
+                  QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+
+                  foreach (QString entry, pl) {
+                        Workspace* p = 0;
+                        QFileInfo fi(s + "/" + entry);
+                        QString name(fi.baseName());
+                        foreach(Workspace* w, _workspaces) {
+                              if (w->name() == name) {
+                                    p = w;
+                                    break;
+                                    }
+                              }
+                        if (!p)
+                              p = new Workspace;
+                        p->setPath(s + "/" + entry);
+                        p->setName(name);
+                        _workspaces.append(p);
+                        }
                   }
             workspacesRead = true;
             }
@@ -425,7 +448,7 @@ QList<Workspace*>& Workspace::workspaces()
 
 Workspace* Workspace::createNewWorkspace(const QString& name)
       {
-      Workspace* p = new Workspace(*workspace);
+      Workspace* p = new Workspace;
       p->setName(name);
       p->setPath("");
       p->setDirty(false);
