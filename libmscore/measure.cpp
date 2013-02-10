@@ -615,10 +615,10 @@ void Measure::layout2()
       //
       for (Segment* s = first(st); s; s = s->next(st)) {
             for (int track = 0; track < tracks; ++track) {
-                  if (!score()->staff(track / VOICES)->show()) {
-                        track += 4;
-                        continue;
-                        }
+                if ((track % VOICES) == 0 && !score()->staff(track/VOICES)->show()) {
+                                       track += VOICES-1;
+                                       continue;
+                                       }
                   Element* el = s->element(track);
                   if (el) {
                         ChordRest* cr = static_cast<ChordRest*>(el);
