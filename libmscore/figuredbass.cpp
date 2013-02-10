@@ -120,7 +120,7 @@ bool FiguredBassItem::parse(QString& str)
       // suffix cannot combine with empty digit
       if( (_prefix != ModifierNone && _suffix != ModifierNone)
             || (_prefix == ModifierNone && _digit == FBIDigitNone && _suffix == ModifierNone && !_contLine)
-            || ( (_suffix == ModifierPlus || _suffix == ModifierBackslash || _suffix == ModifierSlash)
+            || ( (_suffix == ModifierCross || _suffix == ModifierBackslash || _suffix == ModifierSlash)
                   && _digit == FBIDigitNone) )
             return false;
       return true;
@@ -171,12 +171,13 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                         }
                   *dest = ModifierSharp;
                   break;
-            // '+', '\\' and '/' go into the suffix
             case '+':
-                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
+                  // accept '+' as both a prefix and a suffix for harmony notation
+                  if(*dest != ModifierNone)           // cannot combine with any other accidental
                         return -1;
-                  _suffix = ModifierPlus;
+                  *dest = ModifierCross;
                   break;
+            // '\\' and '/' go into the suffix
             case '\\':
                   if(_suffix != ModifierNone)         // cannot combine with any other accidental
                         return -1;
@@ -297,6 +298,9 @@ QString FiguredBassItem::normalizedText() const
             case ModifierSharp:
                   str.append('#');
                   break;
+            case ModifierCross:
+                  str.append('+');
+                  break;
             case ModifierDoubleFlat:
                   str.append("bb");
                   break;
@@ -331,7 +335,7 @@ QString FiguredBassItem::normalizedText() const
             case ModifierSharp:
                   str.append('#');
                   break;
-            case ModifierPlus:
+            case ModifierCross:
                   str.append('+');
                   break;
             case ModifierBackslash:
@@ -460,9 +464,9 @@ void FiguredBassItem::layout()
             x1 = fm.width(str);
             // if suffix is a combining shape, combine it with digit
             // unless there is a parenthesis in between
-            if( (_suffix == ModifierPlus || _suffix == ModifierBackslash || _suffix == ModifierSlash)
+            if( (_suffix == ModifierCross || _suffix == ModifierBackslash || _suffix == ModifierSlash)
                         && parenth[2] == ParenthesisNone)
-                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(ModifierPlus-1)]);
+                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(ModifierCross-1)]);
             else
                   str.append(g_FBFonts.at(font).displayDigit[style][_digit][0]);
             // if some digit, the string from here onward 'hangs' to the right of the note
@@ -475,7 +479,7 @@ void FiguredBassItem::layout()
       // suffix
       // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
       if( _suffix != ModifierNone
-                  && ( (_suffix != ModifierPlus && _suffix != ModifierBackslash && _suffix != ModifierSlash)
+                  && ( (_suffix != ModifierCross && _suffix != ModifierBackslash && _suffix != ModifierSlash)
                         || _digit == FBIDigitNone
                         || parenth[2] != ParenthesisNone) )
             str.append(g_FBFonts.at(font).displayAccidental[_suffix]);
@@ -576,7 +580,7 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
       int   val = v.toInt();
       switch(propertyId) {
             case P_FBPREFIX:
-                  if(val < ModifierNone || val >= ModifierPlus)
+                  if(val < ModifierNone || val > ModifierCross)
                         return false;
                   _prefix = (Modifier)val;
                   break;
@@ -646,7 +650,7 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
 
 void FiguredBassItem::undoSetPrefix(Modifier pref)
       {
-      if(pref < ModifierPlus) {
+      if(pref <= ModifierCross) {
             score()->undoChangeProperty(this, P_FBPREFIX, (int)pref);
             // if setting some prefix and there is a suffix already, clear suffix
             if(pref != ModifierNone && _suffix != ModifierNone)
@@ -751,7 +755,7 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
             case ModifierNatural:     return "natural";
             case ModifierSharp:       return "sharp";
             case ModifierDoubleSharp: return "double-sharp";
-            case ModifierPlus:        return ""; // TODO TBD
+            case ModifierCross:       return ""; // TODO TBD
             case ModifierBackslash:   return ""; // TODO TBD
             case ModifierSlash:       return "slash";
             case NumOfModifiers:      return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
@@ -1304,6 +1308,7 @@ bool FiguredBassFont::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
+
             if (tag == "family")
                   family = e.readElementText();
             else if (tag == "displayName")
@@ -1321,37 +1326,43 @@ bool FiguredBassFont::read(XmlReader& e)
             else if (tag == "parenthesisSquareClosed")
                   displayParenthesis[4] = e.readElementText()[0];
             else if (tag == "doubleflat")
-                  displayAccidental[1] = e.readElementText()[0];
+                  displayAccidental[FiguredBassItem::ModifierDoubleFlat]= e.readElementText()[0];
             else if (tag == "flat")
-                  displayAccidental[2] = e.readElementText()[0];
+                  displayAccidental[FiguredBassItem::ModifierFlat]      = e.readElementText()[0];
             else if (tag == "natural")
-                  displayAccidental[3] = e.readElementText()[0];
+                  displayAccidental[FiguredBassItem::ModifierNatural]   = e.readElementText()[0];
             else if (tag == "sharp")
-                  displayAccidental[4] = e.readElementText()[0];
+                  displayAccidental[FiguredBassItem::ModifierSharp]     = e.readElementText()[0];
             else if (tag == "doublesharp")
-                  displayAccidental[5] = e.readElementText()[0];
+                  displayAccidental[FiguredBassItem::ModifierDoubleSharp]= e.readElementText()[0];
+            else if (tag == "cross")
+                  displayAccidental[FiguredBassItem::ModifierCross]     = e.readElementText()[0];
+            else if (tag == "backslash")
+                  displayAccidental[FiguredBassItem::ModifierBackslash] = e.readElementText()[0];
+            else if (tag == "slash")
+                  displayAccidental[FiguredBassItem::ModifierSlash]     = e.readElementText()[0];
             else if (tag == "digit") {
                   int digit = e.intAttribute("value");
-                  if (digit < 1 || digit > 9)
+                  if (digit < 0 || digit > 9)
                         return false;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "simple")
-                              displayDigit[0][digit][0] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
                         else if (tag == "crossed")
-                              displayDigit[0][digit][1] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
                         else if (tag == "backslashed")
-                              displayDigit[0][digit][2] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
                         else if (tag == "slashed")
-                              displayDigit[0][digit][3] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
                         else if (tag == "simpleHistoric")
-                              displayDigit[1][digit][0] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
                         else if (tag == "crossedHistoric")
-                              displayDigit[1][digit][1] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
                         else if (tag == "backslashedHistoric")
-                              displayDigit[1][digit][2] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
                         else if (tag == "slashedHistoric")
-                              displayDigit[1][digit][3] = e.readElementText()[0];
+                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
                         else {
                               e.unknown();
                               return false;
@@ -1363,13 +1374,14 @@ bool FiguredBassFont::read(XmlReader& e)
                   return false;
                   }
             }
+      displayParenthesis[0] = displayAccidental[FiguredBassItem::ModifierNone] = ' ';
       return true;
       }
 
 //---------------------------------------------------------
 //   Read Configuration File
 //
-//    reads a confoiguration and appends read data to g_FBFonts
+//    reads a configuration and appends read data to g_FBFonts
 //    resets everythings and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
