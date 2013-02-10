@@ -58,6 +58,7 @@ void TestCompat::compat_data()
       QTest::newRow("hairpin") << "hairpin";
       QTest::newRow("articulations") << "articulations";
       QTest::newRow("textstyles") << "textstyles";
+      QTest::newRow("title") << "title";
       }
 
 //---------------------------------------------------------
