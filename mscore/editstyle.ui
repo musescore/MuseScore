@@ -157,7 +157,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>14</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3665,14 +3665,33 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>Figured Bass</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_32" stretch="0,1,0,2">
+         <layout class="QVBoxLayout" name="verticalLayout_32">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <layout class="QFormLayout" name="formLayout_8">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-              </property>
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="spinFBLineHeight">
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="suffix">
+                 <string>%</string>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>500</number>
+                </property>
+                <property name="singleStep">
+                 <number>10</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="labelFBFont">
                 <property name="text">
@@ -3686,10 +3705,25 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="comboFBFont">
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::AdjustToContents</enum>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>-25.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>25.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.500000000000000</double>
+                </property>
+                <property name="value">
+                 <double>6.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -3725,41 +3759,6 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="labelFBVertPos">
-                <property name="text">
-                 <string>Vertical position:</string>
-                </property>
-                <property name="textFormat">
-                 <enum>Qt::PlainText</enum>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="suffix">
-                 <string>sp</string>
-                </property>
-                <property name="minimum">
-                 <double>-25.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>25.000000000000000</double>
-                </property>
-                <property name="singleStep">
-                 <double>0.500000000000000</double>
-                </property>
-                <property name="value">
-                 <double>6.000000000000000</double>
-                </property>
-               </widget>
-              </item>
               <item row="3" column="0">
                <widget class="QLabel" name="labelFBLineHeight">
                 <property name="text">
@@ -3773,25 +3772,37 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="spinFBLineHeight">
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelFBVertPos">
+                <property name="text">
+                 <string>Vertical position:</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::PlainText</enum>
+                </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
-                <property name="suffix">
-                 <string>%</string>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboFBFont">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::AdjustToContents</enum>
                 </property>
-                <property name="minimum">
-                 <number>1</number>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_98">
+                <property name="text">
+                 <string>from top of staff</string>
                 </property>
-                <property name="maximum">
-                 <number>500</number>
-                </property>
-                <property name="singleStep">
-                 <number>10</number>
-                </property>
-                <property name="value">
-                 <number>100</number>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="label_99">
+                <property name="text">
+                 <string>of font height</string>
                 </property>
                </widget>
               </item>
@@ -3811,6 +3822,29 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupFBAlign">
+            <property name="title">
+             <string>Alignment</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_11">
+             <item>
+              <widget class="QRadioButton" name="radioFBTop">
+               <property name="text">
+                <string>Top</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioFBBottom">
+               <property name="text">
+                <string>Bottom</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer_17">
@@ -4160,11 +4194,13 @@ p, li { white-space: pre-wrap; }
   <tabstop>staffDistance</tabstop>
   <tabstop>akkoladeDistance</tabstop>
   <tabstop>minSystemDistance</tabstop>
+  <tabstop>maxSystemDistance</tabstop>
   <tabstop>lyricsDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>systemFrameDistance</tabstop>
   <tabstop>frameSystemDistance</tabstop>
+  <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
   <tabstop>genTimesig</tabstop>
   <tabstop>genKeysig</tabstop>
@@ -4271,13 +4307,19 @@ p, li { white-space: pre-wrap; }
   <tabstop>ottavaY</tabstop>
   <tabstop>ottavaHook</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
+  <tabstop>pedalY</tabstop>
+  <tabstop>trillY</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
   <tabstop>chordDescriptionFile</tabstop>
   <tabstop>chordDescriptionFileButton</tabstop>
+  <tabstop>harmonyY</tabstop>
+  <tabstop>harmonyFretDist</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
   <tabstop>spinFBLineHeight</tabstop>
+  <tabstop>radioFBTop</tabstop>
+  <tabstop>radioFBBottom</tabstop>
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
   <tabstop>propertyDistanceHead</tabstop>
@@ -4286,12 +4328,12 @@ p, li { white-space: pre-wrap; }
   <tabstop>articulationTable</tabstop>
   <tabstop>tableWidget</tabstop>
   <tabstop>voice1Up</tabstop>
-  <tabstop>voice1Down</tabstop>
   <tabstop>voice2Up</tabstop>
-  <tabstop>voice2Down</tabstop>
   <tabstop>voice3Up</tabstop>
-  <tabstop>voice3Down</tabstop>
   <tabstop>voice4Up</tabstop>
+  <tabstop>voice1Down</tabstop>
+  <tabstop>voice2Down</tabstop>
+  <tabstop>voice3Down</tabstop>
   <tabstop>voice4Down</tabstop>
  </tabstops>
  <resources/>
