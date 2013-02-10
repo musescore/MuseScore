@@ -91,8 +91,6 @@ enum PaletteCommand {
 class PaletteBoxButton : public QToolButton {
       Q_OBJECT
 
-      friend class PaletteBox;
-
       Palette* palette;
       QAction* editAction;
 
@@ -111,6 +109,8 @@ class PaletteBoxButton : public QToolButton {
       void downTriggered()       { emit paletteCmd(PALETTE_DOWN, id);    }
       void newTriggered()        { emit paletteCmd(PALETTE_NEW, id);     }
       void enableEditing(bool);
+
+   public slots:
       void showPalette(bool);
 
    signals:
@@ -120,38 +120,6 @@ class PaletteBoxButton : public QToolButton {
    public:
       PaletteBoxButton(Palette*, QWidget* parent = 0);
       void setId(int v) { id = v; }
-      };
-
-//---------------------------------------------------------
-//   PaletteBox
-//---------------------------------------------------------
-
-class PaletteBox : public QDockWidget {
-      Q_OBJECT
-
-      bool _dirty;
-      QVBoxLayout* vbox;
-
-      virtual void closeEvent(QCloseEvent*);
-      Palette* newPalette(const QString& name, int slot);
-
-   private slots:
-      void paletteCmd(int, int);
-      void setDirty() { _dirty = true; }
-//      void contextMenu(const QPoint&);
-      void closeAll();
-      void displayMore(const QString& paletteName);
-
-   signals:
-      void paletteVisible(bool);
-
-   public:
-      PaletteBox(QWidget* parent = 0);
-      void addPalette(Palette*);
-      bool dirty() const      { return _dirty; }
-      void write(Xml&);
-      bool read(XmlReader&);
-      void clear();
       };
 
 //---------------------------------------------------------
@@ -191,6 +159,7 @@ class Palette : public QWidget {
       bool _drawGrid;
       bool _selectable;
       bool _readOnly;
+      bool _systemPalette;
       qreal _yOffset;         // in spatium units of "gscore"
 
       bool _moreElements;
@@ -249,6 +218,10 @@ class Palette : public QWidget {
       void setSelected(int idx)      { selectedIdx = idx;  }
       bool readOnly() const          { return _readOnly;   }
       void setReadOnly(bool val);
+
+      bool systemPalette() const     { return _systemPalette; }
+      void setSystemPalette(bool val);
+
       void setMag(qreal val)         { extraMag = val;     }
       qreal mag() const              { return extraMag;    }
       void setYOffset(qreal val)     { _yOffset = val;     }

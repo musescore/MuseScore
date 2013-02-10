@@ -32,9 +32,9 @@ Normally, a FiguredBass element is assumed to be styled with an internally maint
 in this way upon creation and upon layout().
 - - - -
 FiguredBassItem contains the actually f.b. info; it is made of 4 parts (in this order):
-1) prefix: one of [nothing, doubleflat, flat, natural, sharp, doublesharp]
+1) prefix: one of [nothing, doubleflat, flat, natural, sharp, doublesharp, cross]
 2) digit: one digit from 1 to 9
-3) suffix: one of [nothing, doubleflat, flat, natural, sharp, doublesharp, plus, backslash, slash]
+3) suffix: one of [nothing, doubleflat, flat, natural, sharp, doublesharp, cross, backslash, slash]
 4) contLine: true if the item has a continuation line (whose length is determined by parent's _ticks)
 and 5 parenthesis flags, one for each position before, between and after the four parts above:
 each of them may contain one of [nothing, roundOpen, roundClosed, squaredOpen, squaredClosed].
@@ -56,7 +56,7 @@ FiguredBass might require formatting (discouraged, but might be necessary for ve
 and it is edited (via the normalized text); so it is derived from Text.
 ---------------------------------------------------------*/
 
-#define FBIDigitNone    0
+#define FBIDigitNone    -1
 
 //---------------------------------------------------------
 //   @@ FiguredBassItem
@@ -101,7 +101,7 @@ class FiguredBassItem : public Element {
             ModifierNatural,
             ModifierSharp,
             ModifierDoubleSharp,
-            ModifierPlus,
+            ModifierCross,
             ModifierBackslash,
             ModifierSlash,
                   NumOfModifiers
@@ -114,6 +114,18 @@ class FiguredBassItem : public Element {
             ParenthesisSquaredClosed,
                   NumOfParentheses
       };
+      enum Styles {
+            StyleModern = 0,
+            StyleHistoric,
+                  NumOfStyles
+            };
+      enum Combinations {
+            CombSimple = 0,
+            CombCrossed,
+            CombBackslashed,
+            CombSlashed,
+                  NumOfCombinations
+            };
 
    private:
 
@@ -201,8 +213,8 @@ class FiguredBassItem : public Element {
       virtual QVariant  propertyDefault(P_ID) const;
 };
 
-Q_DECLARE_METATYPE(FiguredBassItem::Modifier)
-Q_DECLARE_METATYPE(FiguredBassItem::Parenthesis)
+Q_DECLARE_METATYPE(FiguredBassItem::Modifier);
+Q_DECLARE_METATYPE(FiguredBassItem::Parenthesis);
 
 //---------------------------------------------------------
 //   FiguredBassFont
@@ -213,9 +225,9 @@ struct FiguredBassFont {
       QString           displayName;
       qreal             defPitch;
       qreal             defLineHeight;
-      QChar             displayAccidental[6];
-      QChar             displayParenthesis[5];
-      QChar             displayDigit[2][10][4];
+      QChar             displayAccidental[FiguredBassItem::NumOfModifiers];
+      QChar             displayParenthesis[FiguredBassItem::NumOfParentheses];
+      QChar             displayDigit[FiguredBassItem::NumOfStyles][10][FiguredBassItem::NumOfCombinations];
 
       bool read(XmlReader&);
 };

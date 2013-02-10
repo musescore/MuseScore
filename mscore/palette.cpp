@@ -77,7 +77,8 @@ Palette::Palette(QWidget* parent)
       _selectable   = false;
       setMouseTracking(true);
       setReadOnly(false);
-      _moreElements = true;   // Debug
+      setSystemPalette(false);
+      _moreElements = false;
       setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
       }
 
@@ -87,9 +88,24 @@ Palette::~Palette()
             delete cell;
       }
 
+//---------------------------------------------------------
+//   resizeEvent
+//---------------------------------------------------------
+
 void Palette::resizeEvent(QResizeEvent* e)
       {
       setFixedHeight(heightForWidth(e->size().width()));
+      }
+
+//---------------------------------------------------------
+//   setSystemPalette
+//---------------------------------------------------------
+
+void Palette::setSystemPalette(bool val)
+      {
+      _systemPalette = val;
+      if (val)
+            setReadOnly(true);
       }
 
 //---------------------------------------------------------

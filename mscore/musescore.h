@@ -432,7 +432,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 #endif
       void createNewWorkspace();
       void deleteWorkspace();
-      void resetWorkspace();
       void undoWorkspace();
       void showWorkspaceMenu();
       void changeWorkspace(QAction*);

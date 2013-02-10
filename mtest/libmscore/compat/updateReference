@@ -7,4 +7,5 @@ cp $P/keysig-test.mscx keysig-ref.mscx
 cp $P/hairpin-test.mscx hairpin-ref.mscx
 cp $P/notes-test.mscx notes-ref.mscx
 cp $P/textstyles-test.mscx textstyles-ref.mscx
+cp $P/title-test.mscx title-ref.mscx
 
