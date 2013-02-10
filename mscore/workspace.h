@@ -27,29 +27,39 @@ class XmlReader;
 //   Workspace
 //---------------------------------------------------------
 
-class Workspace {
+class Workspace : public QObject {
+      Q_OBJECT
+
+      static QList<Workspace*> _workspaces;
+
       QString _name;
       QString _path;
       bool _dirty;
+      bool _readOnly;
+
+   public slots:
+      void setDirty(bool val = true) { _dirty = val;    }
 
    public:
-      Workspace() {}
+      Workspace();
       QString path() const           { return _path;  }
       void setPath(const QString& s) { _path = s;     }
       QString name() const           { return _name;  }
       void setName(const QString& s) { _name = s;     }
       bool dirty() const             { return _dirty; }
-      void setDirty(bool v)          { _dirty = v;    }
 
       void save();
       void write();
       void read(XmlReader&);
       void read();
+      bool readOnly() const          { return _readOnly; }
 
+      static void initWorkspace();
+      static Workspace* currentWorkspace;
       static QList<Workspace*>& workspaces();
       static Workspace* createNewWorkspace(const QString& name);
+      static bool workspacesRead;
       };
 
-extern Workspace* workspace;
-extern void initWorkspace();
 #endif
+

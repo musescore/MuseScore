@@ -12,6 +12,7 @@
 //=============================================================================
 
 #include "palette.h"
+#include "palettebox.h"
 #include "musescore.h"
 #include "preferences.h"
 #include "libmscore/xml.h"
@@ -38,44 +39,12 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setWidget(paletteList);
       vbox = new QVBoxLayout;
       paletteList->setLayout(vbox);
-      _dirty = false;
+//      _dirty = false;
       vbox->setMargin(0);
       vbox->setSpacing(1);
       vbox->addStretch();
       paletteList->show();
-
-//      connect(sa, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenu(const QPoint&)));
       }
-
-#if 0
-//---------------------------------------------------------
-//   contextMenu
-//---------------------------------------------------------
-
-void PaletteBox::contextMenu(const QPoint& pt)
-      {
-      QMenu menu(this);
-      menu.setSeparatorsCollapsible(false);
-      QAction* titel = menu.addSeparator();
-      titel->setText(tr("Palette Operations"));
-
-      QAction* b = menu.addAction(tr("Single Palette Mode"));
-      b->setCheckable(true);
-      b->setChecked(preferences.singlePalette);
-
-      QAction* a  = menu.addAction(tr("Reset to factory defaults"));
-      QAction* ra = menu.exec(mapToGlobal(pt));
-      if (a == ra) {
-            clear();
-            mscore->populatePalette();      // hack
-            _dirty = true;                  // save profile
-            }
-      else if (b == ra) {
-            preferences.singlePalette = b->isChecked();
-            preferences.dirty = true;
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   clear
@@ -109,7 +78,7 @@ void PaletteBox::addPalette(Palette* w)
 
       connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
       connect(b, SIGNAL(closeAll()), SLOT(closeAll()));
-      connect(w, SIGNAL(changed()), SLOT(setDirty()));
+      connect(w, SIGNAL(changed()), SIGNAL(changed()));
       }
 
 //---------------------------------------------------------
@@ -153,6 +122,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   delete item;
                   for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
                         static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
+                  emit changed();
                   }
                   break;
             case PALETTE_SAVE:
@@ -172,6 +142,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                         palette->read(path);
                         }
                   }
+                  emit changed();
                   break;
 
             case PALETTE_NEW:
@@ -183,11 +154,12 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   PaletteProperties pp(palette, 0);
                   int rv = pp.exec();
                   if (rv == 1) {
-                        _dirty = true;
+                        emit changed();
                         b->setText(palette->name());
                         palette->update();
                         }
                   }
+                  emit changed();
                   break;
             case PALETTE_UP:
                   if (slot) {
@@ -201,6 +173,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                         delete i2;
                         for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
                               static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
+                        emit changed();
                         }
                   break;
 
@@ -216,12 +189,11 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                         delete i2;
                         for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
                               static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
+                        emit changed();
                         }
                   break;
 
             }
-
-      _dirty = true;
       }
 
 //---------------------------------------------------------
@@ -260,6 +232,18 @@ void PaletteBox::write(Xml& xml)
             palette->write(xml, b->text());
             }
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   palettes
+//---------------------------------------------------------
+
+QList<Palette*> PaletteBox::palettes()const
+      {
+      QList<Palette*> pl;
+      for (int i = 0; i < (vbox->count() - 1); i += 2)
+            pl.append(static_cast<Palette*>(vbox->itemAt(i+1)->widget()));
+      return pl;
       }
 
 //---------------------------------------------------------

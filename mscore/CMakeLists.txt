@@ -93,7 +93,7 @@ QT4_WRAP_CPP (mocs
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
-      inspectorHairpin.h qmlplugin.h
+      inspectorHairpin.h qmlplugin.h palettebox.h workspace.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
