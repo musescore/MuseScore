@@ -267,7 +267,7 @@ void System::layout(qreal xo1)
       //---------------------------------------------------
 
       int idx = 0;
-      foreach (Part* p, score()->parts()) {
+      foreach (const Part* p, score()->parts()) {
             SysStaff* s = staff(idx);
             int nstaves = p->nstaves();
             if (s->show() && p->show()) {
@@ -328,7 +328,9 @@ void System::layout2()
             SysStaff* s    = _staves[staffIdx];
             qreal distDown = score()->styleS(downDistance).val() * _spatium + userDist;
             qreal distUp   = 0.0;
-            foreach(MeasureBase* m, ml) {
+            int n = ml.size();
+            for (int i = 0; i < n; ++i) {
+                  MeasureBase* m = ml.at(i);
                   distDown = qMax(distDown, m->distanceDown(staffIdx));
                   distUp   = qMax(distUp,   m->distanceUp(staffIdx));
                   }
@@ -348,7 +350,10 @@ void System::layout2()
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       setHeight(systemHeight);
-      foreach(MeasureBase* m, ml) {
+
+      int n = ml.size();
+      for (int i = 0; i < n; ++i) {
+            MeasureBase* m = ml.at(i);
             if (m->type() == MEASURE) {
                   m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
                   }
@@ -374,7 +379,9 @@ void System::layout2()
       //  layout brackets vertical position
       //---------------------------------------------------
 
-      foreach (Bracket* b, _brackets) {
+      n = _brackets.size();
+      for (int i = 0; i < n; ++i) {
+            Bracket* b = _brackets.at(i);
             qreal sy = _staves[b->firstStaff()]->bbox().top();
             qreal ey = _staves[b->lastStaff()]->bbox().bottom();
             b->rypos() = sy;
@@ -387,10 +394,14 @@ void System::layout2()
       //---------------------------------------------------
 
       int staffIdx = 0;
-      foreach(Part* p, score()->parts()) {
+      n = score()->parts().size();
+      for (int i = 0; i < n; ++i) {
+            Part* p = score()->parts().at(i);
             SysStaff* s = staff(staffIdx);
             int nstaves = p->nstaves();
-            foreach (InstrumentName* t, s->instrumentNames) {
+            int nn = s->instrumentNames.size();
+            for (int k = 0; k < nn; ++k) {
+                  InstrumentName* t = s->instrumentNames.at(k);
                   //
                   // override Text->layout()
                   //

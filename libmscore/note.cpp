@@ -209,8 +209,9 @@ Note::Note(const Note& n)
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
 
-      foreach(Element* e, n._el)
-            add(e->clone());
+      int nn = n._el.size();
+      for (int i = 0; i < nn; ++i)
+            add(n._el.at(i)->clone());
       _playEvents = n._playEvents;
 
       if (n._tieFor) {
@@ -417,7 +418,9 @@ void Note::addSpanner(Spanner* l)
       if (e)
             static_cast<Note*>(e)->addSpannerBack(l);
       addSpannerFor(l);
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
+      int n = l->spannerSegments().size();
+      for (int i = 0; i < n; ++i) {
+            SpannerSegment* ss = l->spannerSegments().at(i);
             Q_ASSERT(ss->spanner() == l);
             if (ss->system())
                   ss->system()->add(ss);
@@ -438,7 +441,9 @@ void Note::removeSpanner(Spanner* l)
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
             // abort();
             }
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
+      int n = l->spannerSegments().size();
+      for (int i = 0; i < n; ++i) {
+            SpannerSegment* ss = l->spannerSegments().at(i);
             if (ss->system())
                   ss->system()->remove(ss);
             }
@@ -475,7 +480,9 @@ void Note::add(Element* e)
       		setTieFor(tie);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(tie);
-                  foreach(SpannerSegment* ss, tie->spannerSegments()) {
+                  int n = tie->spannerSegments().size();
+                  for (int i = 0; i < n; ++i) {
+                        SpannerSegment* ss = tie->spannerSegments().at(i);
                         if (ss->system())
                               ss->system()->add(ss);
                         }
@@ -523,7 +530,9 @@ void Note::remove(Element* e)
                   setTieFor(0);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(0);
-                  foreach(SpannerSegment* ss, tie->spannerSegments()) {
+                  int n = tie->spannerSegments().size();
+                  for (int i = 0; i < n; ++i) {
+                        SpannerSegment* ss = tie->spannerSegments().at(i);
                         Q_ASSERT(ss->spanner() == tie);
                         if (ss->system())
                               ss->system()->remove(ss);
