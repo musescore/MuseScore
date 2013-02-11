@@ -275,7 +275,7 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(           // internal style
-         TR( "Dynamics2"), "MScore1", 12, false, false, false,
+         TR( "Dynamics2"), "MScore",  12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(

@@ -399,7 +399,6 @@ if (APPLE)
      install (FILES
       ../fonts/gonville-20.otf
       ../fonts/mscore-20.otf
-      ../fonts/mscore1-20.ttf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerifMscore.ttf
       ../fonts/FreeSans.ttf

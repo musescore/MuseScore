@@ -136,12 +136,12 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             return;
             }
 
-      if (_readOnly)
-            return;
       QMenu menu;
       QAction* clearAction   = menu.addAction(tr("Clear"));
       QAction* contextAction = menu.addAction(tr("Properties..."));
-      QAction* moreAction = menu.addAction(tr("Show More..."));
+      clearAction->setEnabled(!_readOnly);
+      contextAction->setEnabled(!_readOnly);
+      QAction* moreAction    = menu.addAction(tr("Show More..."));
       moreAction->setEnabled(_moreElements);
 
       if (cells[i] && cells[i]->readOnly)

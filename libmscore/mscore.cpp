@@ -139,7 +139,6 @@ void MScore::init()
 #if !defined(Q_WS_MAC) && !defined(Q_WS_UIKIT)
       static const char* fonts[] = {
             "mscore-20.otf",
-            "mscore1-20.ttf",
             "MuseJazz.ttf",
             "FreeSans.ttf",
             "FreeSerifMscore.ttf",
