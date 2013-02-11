@@ -252,6 +252,18 @@ void Text::layout1()
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
+            else {
+                  if (_editMode) {
+                        QFontMetricsF fm(textStyle().font(spatium()));
+                        QString s = SimpleText::firstLine();
+                        if (!s.isEmpty()) {
+                              QChar c = s[0];
+                              qreal lb = fm.leftBearing(c);
+                              if (lb < 0.0)
+                                    o.rx() += -lb;
+                              }
+                        }
+                  }
 
             bbox().setRect(0.0, 0.0, size.width(), size.height());
             _doc->setModified(false);
