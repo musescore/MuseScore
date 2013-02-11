@@ -5,7 +5,6 @@
       <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
       <file alias="fonts/gonville-20.otf">../fonts/gonville-20.otf</file>
       <file alias="fonts/mscore-20.otf">../fonts/mscore-20.otf</file>
-      <file alias="fonts/mscore1-20.ttf">../fonts/mscore1-20.ttf</file>
       <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
       <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
       <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
