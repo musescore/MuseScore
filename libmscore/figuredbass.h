@@ -302,6 +302,7 @@ Q_INVOKABLE FiguredBassItem* addItem();
                                                             return _lineLenghts.at(idx);
                                                           return 0;   }
       bool              onNote() const          { return _onNote; }
+      int               numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return static_cast<Segment*>(parent()); }
       int               ticks() const           { return _ticks;  }

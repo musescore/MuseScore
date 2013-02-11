@@ -346,6 +346,7 @@ void EditStyle::getValues()
       lstyle.set(ST_figuredBassFontSize,   size);
       lstyle.set(ST_figuredBassYOffset,    vPos);
       lstyle.set(ST_figuredBassLineHeight, ((double)spinFBLineHeight->value()) / 100.0);
+      lstyle.set(ST_figuredBassAlignment,  radioFBTop->isChecked() ? 0 : 1);
       lstyle.set(ST_figuredBassStyle,      radioFBModern->isChecked() ? 0 : 1);
       // copy to text style data relevant to it (LineHeight and Style are not in text style);
       // offsetType is necessarily OFFSET_SPATIUM
@@ -511,6 +512,8 @@ void EditStyle::setValues()
       doubleSpinFBSize->setValue(lstyle.value(ST_figuredBassFontSize).toDouble());
       doubleSpinFBVertPos->setValue(lstyle.value(ST_figuredBassYOffset).toDouble());
       spinFBLineHeight->setValue(lstyle.valueS(ST_figuredBassLineHeight).val() * 100.0);
+      radioFBTop->setChecked(lstyle.valueI(ST_figuredBassAlignment) == 0);
+      radioFBBottom->setChecked(lstyle.valueI(ST_figuredBassAlignment) == 1);
       radioFBModern->setChecked(lstyle.valueI(ST_figuredBassStyle) == 0);
       radioFBHistoric->setChecked(lstyle.valueI(ST_figuredBassStyle) == 1);
 
