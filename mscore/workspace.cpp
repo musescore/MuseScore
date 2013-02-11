@@ -286,7 +286,6 @@ void Workspace::write()
       cbuf.close();
       }
 
-      f.close();
       if (f.status() != QZipWriter::NoError)
             writeFailed(_path);
       }
