@@ -165,6 +165,8 @@ QRectF Rest::drag(const QPointF& s)
 bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
+      if (type == ARTICULATION && this->type() == Element::REPEAT_MEASURE)
+            return false;
       if (
          (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_SBEAM)
          || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_MBEAM)
