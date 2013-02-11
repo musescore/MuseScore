@@ -154,6 +154,7 @@ enum StyleIdx {
       ST_figuredBassFontSize,
       ST_figuredBassYOffset,
       ST_figuredBassLineHeight,
+      ST_figuredBassAlignment,
       ST_figuredBassStyle,
       ST_systemFrameDistance,
       ST_frameSystemDistance,
