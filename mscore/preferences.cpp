@@ -423,7 +423,7 @@ void Preferences::read()
       MScore::soundFont = s.value("soundFont", MScore::soundFont).toString();
       if (MScore::soundFont == ":/data/piano1.sf2") {
             // silently change to new default sound font
-            MScore::soundFont = MScore::globalShare() + "sound/TimGM6mb.sf2";
+            MScore::soundFont = MScore::globalShare() + "sound/fluid.sf3";
             }
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
