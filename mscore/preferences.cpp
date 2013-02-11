@@ -668,7 +668,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
-      connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
+
       connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
 
       recordButtons = new QButtonGroup(this);
@@ -698,10 +698,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
       connect(sfOpenButton,           SIGNAL(clicked()), SLOT(selectSoundFont()));
-
-      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
-      connect(pluginLoad, SIGNAL(toggled(bool)), SLOT(pluginLoadToggled(bool)));
       updateRemote();
       }
 
@@ -1015,22 +1011,6 @@ void PreferenceDialog::updateValues()
             idx = 0;
       exportAudioSampleRate->setCurrentIndex(idx);
 
-      //
-      //  update plugin manager
-      //
-      prefs.updatePluginList();
-      pluginList->clear();
-
-      n = prefs.pluginList.size();
-      for (int i = 0; i < n; ++i) {
-            const PluginDescription& d = prefs.pluginList[i];
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
-            item->setData(Qt::UserRole, i);
-            }
-      if (n) {
-            pluginList->setCurrentRow(0);
-            pluginListItemChanged(pluginList->item(0), 0);
-            }
       sfChanged = false;
       }
 
@@ -1695,6 +1675,7 @@ bool Preferences::readPluginList()
       return true;
       }
 
+
 //---------------------------------------------------------
 //   writePluginList
 //---------------------------------------------------------
@@ -1775,65 +1756,6 @@ void Preferences::updatePluginList()
       foreach(QString pluginPath, pluginPathList) {
             ::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
-      }
-
-//---------------------------------------------------------
-//   pluginListItemChanged
-//---------------------------------------------------------
-
-void PreferenceDialog::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem*)
-      {
-      if (!item)
-            return;
-      int idx = item->data(Qt::UserRole).toInt();
-      const PluginDescription& d = prefs.pluginList[idx];
-      QFileInfo fi(d.path);
-      pluginName->setText(fi.baseName());
-      pluginPath->setText(fi.absolutePath());
-      pluginLoad->setChecked(d.load);
-      pluginVersion->setText(d.version);
-      pluginShortcut->setText(d.shortcut.keysToString());
-      pluginDescription->setText(d.description);
-      }
-
-//---------------------------------------------------------
-//   pluginLoadToggled
-//---------------------------------------------------------
-
-void PreferenceDialog::pluginLoadToggled(bool val)
-      {
-      QListWidgetItem* item = pluginList->currentItem();
-      if (!item)
-            return;
-      int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = &prefs.pluginList[idx];
-      d->load = val;
-      prefs.dirty = true;
-      }
-
-//---------------------------------------------------------
-//   definePluginShortcutClicked
-//---------------------------------------------------------
-
-void PreferenceDialog::definePluginShortcutClicked()
-      {
-      QListWidgetItem* item = pluginList->currentItem();
-      if (!item)
-            return;
-      int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* pd = &preferences.pluginList[idx];
-      Shortcut* s = &pd->shortcut;
-      ShortcutCaptureDialog sc(s, localShortcuts, this);
-      int rv = sc.exec();
-      if (rv == 0)            // abort
-            return;
-      if (rv == 2)            // replace
-            s->clear();
-      s->addShortcut(sc.getKey());
-      QAction* action = s->action();
-      action->setShortcuts(s->keys());
-      pluginShortcut->setText(s->keysToString());
-      prefs.dirty = true;
       }
 
 //---------------------------------------------------------
