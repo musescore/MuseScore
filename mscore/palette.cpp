@@ -1238,13 +1238,21 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
       QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
       actionEdit->setChecked(!palette->readOnly());
+      bool _systemPalette = palette->systemPalette();
+      actionProperties->setDisabled(_systemPalette);
+      actionInsert->setDisabled(_systemPalette);
+      actionUp->setDisabled(_systemPalette);
+      actionDown->setDisabled(_systemPalette);
+      actionEdit->setDisabled(_systemPalette);
 
       menu.addSeparator();
       QAction* actionSave = menu.addAction(tr("Save Palette"));
       QAction* actionLoad = menu.addAction(tr("Load Palette"));
+      actionLoad->setDisabled(_systemPalette);
 
       menu.addSeparator();
       QAction* actionDelete = menu.addAction(tr("Delete Palette"));
+      actionDelete->setDisabled(_systemPalette);
 
       QAction* action = menu.exec(mapToGlobal(event->pos()));
       if (action == actionProperties)

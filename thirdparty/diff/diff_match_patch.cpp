@@ -1355,7 +1355,7 @@ QList<Diff> diff_match_patch::diff_fromDelta(const QString &text1,
     // Each token begins with a one character parameter which specifies the
     // operation of this token (delete, insert, equality).
     QString param = safeMid(token, 1);
-    switch (token[0].toAscii()) {
+    switch (token[0].toLatin1()) {
       case '+':
         param = QUrl::fromPercentEncoding(qPrintable(param));
         diffs.append(Diff(INSERT, param));
@@ -2046,7 +2046,7 @@ QList<Patch> diff_match_patch::patch_fromText(const QString &textline) {
         text.removeFirst();
         continue;
       }
-      sign = text.front()[0].toAscii();
+      sign = text.front()[0].toLatin1();
       line = safeMid(text.front(), 1);
       line = line.replace("+", "%2B");  // decode would change all "+" to " "
       line = QUrl::fromPercentEncoding(qPrintable(line));
