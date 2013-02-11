@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>298</width>
-    <height>174</height>
+    <width>304</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,11 +82,25 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="showGrid">
-     <property name="text">
-      <string>Show Grid</string>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="topMargin">
+      <number>0</number>
      </property>
-    </widget>
+     <item>
+      <widget class="QCheckBox" name="showGrid">
+       <property name="text">
+        <string>Show Grid</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="moreElements">
+       <property name="text">
+        <string>show 'more Elements'</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

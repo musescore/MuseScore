@@ -39,7 +39,6 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setWidget(paletteList);
       vbox = new QVBoxLayout;
       paletteList->setLayout(vbox);
-//      _dirty = false;
       vbox->setMargin(0);
       vbox->setSpacing(1);
       vbox->addStretch();
@@ -261,7 +260,6 @@ bool PaletteBox::read(XmlReader& e)
                   p->setName(name);
                   p->read(e);
                   addPalette(p);
-                  p->setMoreElements(true);
                   connect(p, SIGNAL(displayMore(const QString&)),
                      SLOT(displayMore(const QString&)));
                   }
