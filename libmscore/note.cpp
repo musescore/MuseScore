@@ -1379,7 +1379,8 @@ void Note::layout10(AccidentalState* as)
                   acci = _accidental->subtype();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
                         // TODO - what about double flat and double sharp?
-                        int ntpc = pitch2tpc(_pitch, 0, acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
+                        // TODO - does this need to be key-aware?
+                        int ntpc = pitch2tpc(_pitch, KEY_C, acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
 //                              setColor(QColor(255, 0, 0));
