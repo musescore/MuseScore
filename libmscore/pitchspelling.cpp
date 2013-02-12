@@ -727,23 +727,10 @@ void Score::spellNotelist(QList<Note*>& notes)
             }
       }
 
-#if 0
 //---------------------------------------------------------
 //   pitch2tpc2
 //---------------------------------------------------------
-int pitch2tpc2(int pitch, bool preferSharp)
-      {
-      int step = pitch % 12;
 
-      static int ptab[15][12] = {
-//              c  c#   d  d#   e   f  f#   g  g#   a  a#   b
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },    // sharp
-//              c  db  d  eb   e   f  gb   g  ab   a  bb   b
-            {  14, 9, 16, 11, 18, 13, 8 , 15, 10, 17, 12, 19 },     // flat
-            };
-      return ptab[preferSharp ? 0 : 1][step];
-      }
-#endif
 // pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, 0, PREFER_FLATS)
 // pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, 0, PREFER_SHARPS)
 
