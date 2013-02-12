@@ -731,8 +731,8 @@ void Score::spellNotelist(QList<Note*>& notes)
 //   pitch2tpc2
 //---------------------------------------------------------
 
-// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, 0, PREFER_FLATS)
-// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, 0, PREFER_SHARPS)
+// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, KEY_C, PREFER_FLATS)
+// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, KEY_C, PREFER_SHARPS)
 
 //---------------------------------------------------------
 //   pitch2tpc
