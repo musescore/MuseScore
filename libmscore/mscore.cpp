@@ -122,7 +122,7 @@ void MScore::init()
       lastError           = "";
 
       layoutBreakColor    = Qt::green;
-      soundFont           = _globalShare + "sound/TimGM6mb.sf2";
+      soundFont           = _globalShare + "sound/fluid.sf3";
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();
