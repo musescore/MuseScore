@@ -314,10 +314,8 @@ void Workspace::read()
       QString rootfile = "";
       QList<QString> images;
       while (e.readNextStartElement()) {
-            if (e.name() != "container") {
+            if (e.name() != "container")
                   e.unknown();
-                  break;
-                  }
             while (e.readNextStartElement()) {
                   if (e.name() != "rootfiles") {
                         e.unknown();
@@ -325,7 +323,6 @@ void Workspace::read()
                         }
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
-
                         if (tag == "rootfile") {
                               if (rootfile.isEmpty())
                                     rootfile = e.attribute("full-path");
@@ -415,6 +412,7 @@ QList<Workspace*>& Workspace::workspaces()
 
             foreach(QString s, path) {
                   QDir dir(s);
+// printf("workspaces: look in <%s>\n", qPrintable(s));
                   QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
                   foreach (QString entry, pl) {
@@ -429,6 +427,7 @@ QList<Workspace*>& Workspace::workspaces()
                               }
                         if (!p)
                               p = new Workspace;
+// printf("workspaces: found in <%s>\n", qPrintable(s + "/" + entry));
                         p->setPath(s + "/" + entry);
                         p->setName(name);
                         _workspaces.append(p);

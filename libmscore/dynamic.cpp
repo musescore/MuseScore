@@ -21,42 +21,51 @@
 #include "style.h"
 #include "mscore.h"
 
-//
-// see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
-//
-Dyn dynList[] = {
+//-----------------------------------------------------------------------------
+//   Dyn
+//    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
+//-----------------------------------------------------------------------------
+
+struct Dyn {
+      int velocity;      ///< associated midi velocity (0-127, -1 = none)
+      bool accent;       ///< if true add velocity to current chord velocity
+      const char* tag;   // name of dynamics, eg. "fff"
+      const char* text;  // utf8 text of dynamic
+      };
+
+static Dyn dynList[] = {
       // dynamic:
-      Dyn( -1,  true,  "other-dynamics"),
-      Dyn(  1,  false, "pppppp"),
-      Dyn(  5,  false, "ppppp"),
-      Dyn( 10,  false, "pppp"),
-      Dyn( 16,  false, "ppp"),
-      Dyn( 33,  false, "pp"),
-      Dyn( 49,  false, "p"),
-      Dyn( 64,  false, "mp"),
-      Dyn( 80,  false, "mf"),
-      Dyn( 96,  false, "f"),
-      Dyn(112,  false, "ff"),
-      Dyn(126,  false, "fff"),
-      Dyn(127,  false, "ffff"),
-      Dyn(127,  false, "fffff"),
-      Dyn(127,  false, "ffffff"),
+      {  -1,  true,  "other-dynamics", ""                                                       },
+      {   1,  false, "pppppp", u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f" },
+      {   5,  false, "ppppp",  u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f"           },
+      {  10,  false, "pppp",   u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f"                     },
+      {  16,  false, "ppp",    u8"\U0001d18f\U0001d18f\U0001d18f"                               },
+      {  33,  false, "pp",     u8"\U0001d18f\U0001d18f"                                         },
+      {  49,  false, "p",      u8"\U0001d18f"                                                   },
+      {  64,  false, "mp",     u8"\U0001d190\U0001d18f"                                         },
+      {  80,  false, "mf",     u8"\U0001d190\U0001d191"                                         },
+      {  96,  false, "f",      u8"\U0001d191"                                                   },
+      { 112,  false, "ff",     u8"\U0001d191\U0001d191"                                         },
+      { 126,  false, "fff",    u8"\U0001d191\U0001d191\U0001d191"                               },
+      { 127,  false, "ffff",   u8"\U0001d191\U0001d191\U0001d191\U0001d191"                     },
+      { 127,  false, "fffff",  u8"\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191"           },
+      { 127,  false, "ffffff", u8"\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191" },
 
       // accents:
-      Dyn( 0,   true,  "fp"),
-      Dyn( 0,   true,  "sf"),
-      Dyn( 0,   true,  "sfz"),
-      Dyn( 0,   true,  "sff"),
-      Dyn( 0,   true,  "sffz"),
-      Dyn( 0,   true,  "sfp"),
-      Dyn( 0,   true,  "sfpp"),
-      Dyn( 0,   true,  "rfz"),
-      Dyn( 0,   true,  "rf"),
-      Dyn( 0,   true,  "fz"),
-      Dyn( 0,   true,  "m"),
-      Dyn( 0,   true,  "r"),
-      Dyn( 0,   true,  "s"),
-      Dyn( 0,   true,  "z"),
+      {  0,   true,  "fp",     u8"\U0001d191\U0001d18f"},
+      {  0,   true,  "sf",     u8"\U0001d18d\U0001d191"},
+      {  0,   true,  "sfz",    u8"\U0001d18d\U0001d191\U0001d18e"},
+      {  0,   true,  "sff",    u8"\U0001d18d\U0001d191\U0001d191"},
+      {  0,   true,  "sffz",   u8"\U0001d18d\U0001d191\U0001d191\U0001d18e"},
+      {  0,   true,  "sfp",    u8"\U0001d18d\U0001d191\U0001d18f"},
+      {  0,   true,  "sfpp",   u8"\U0001d18d\U0001d191\U0001d18f\U0001d18f"},
+      {  0,   true,  "rfz",    u8"\U0001d18c\U0001d191\U0001d18e"},
+      {  0,   true,  "rf",     u8"\U0001d18c\U0001d191"},
+      {  0,   true,  "fz",     u8"\U0001d191\U0001d18e"},
+      {  0,   true,  "m",      u8"\U0001d190"},
+      {  0,   true,  "r",      u8"\U0001d18c"},
+      {  0,   true,  "s",      u8"\U0001d18d"},
+      {  0,   true,  "z",      u8"\U0001d18e"},
       };
 
 //---------------------------------------------------------
@@ -69,7 +78,8 @@ Dynamic::Dynamic(Score* s)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
-      setSubtype(0);
+      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      _subtype  = DYNAMIC_OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -129,8 +139,7 @@ void Dynamic::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (score()->mscVersion() < 118)
-            setTextStyleType(TEXT_STYLE_DYNAMICS2);
+      setTextStyleType(TEXT_STYLE_DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -154,27 +163,17 @@ void Dynamic::layout()
 //   setSubtype
 //---------------------------------------------------------
 
-void Dynamic::setSubtype(int idx)
-      {
-      setTextStyleType(idx == 0 ? TEXT_STYLE_DYNAMICS : TEXT_STYLE_DYNAMICS2);
-      _subtype = idx;
-      }
-
-//---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
 void Dynamic::setSubtype(const QString& tag)
       {
       int n = sizeof(dynList)/sizeof(*dynList);
       for (int i = 1; i < n; ++i) {
             if (dynList[i].tag == tag) {
-                  setSubtype(i);
-                  setText(tag);
+                  setSubtype(DynamicType(i));
+                  setText(QString::fromUtf8(dynList[i].text));
                   return;
                   }
             }
-      setSubtype(0);
+      setSubtype(DYNAMIC_OTHER);
       setText(tag);
       }
 
@@ -193,7 +192,6 @@ QString Dynamic::subtypeName() const
 
 void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
       {
-//      setSubtype(0);
       Text::startEdit(v, p);
       }
 
@@ -260,7 +258,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
 
 bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_DYNAMIC_RANGE:
                   _dynRange = DynamicRange(v.toInt());
                   break;
@@ -268,7 +266,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
                   _velocity = v.toInt();
                   break;
             case P_SUBTYPE:
-                  _subtype = v.toInt();
+                  _subtype = DynamicType(v.toInt());
                   break;
             default:
                   if (!Text::setProperty(propertyId, v))
