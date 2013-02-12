@@ -122,7 +122,7 @@ void MScore::init()
       lastError           = "";
 
       layoutBreakColor    = Qt::green;
-      soundFont           = _globalShare + "sound/TimGM6mb.sf2";
+      soundFont           = _globalShare + "sound/fluid.sf3";
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();
@@ -139,7 +139,6 @@ void MScore::init()
 #if !defined(Q_WS_MAC) && !defined(Q_WS_UIKIT)
       static const char* fonts[] = {
             "mscore-20.otf",
-            "mscore1-20.ttf",
             "MuseJazz.ttf",
             "FreeSans.ttf",
             "FreeSerifMscore.ttf",

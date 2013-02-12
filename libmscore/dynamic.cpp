@@ -193,7 +193,7 @@ QString Dynamic::subtypeName() const
 
 void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
       {
-      setSubtype(0);
+//      setSubtype(0);
       Text::startEdit(v, p);
       }
 

@@ -491,15 +491,20 @@ void FiguredBassItem::layout()
 
       // position the text so that [x1<-->x2] is centered below the note
       x = x - (x1+x2) * 0.5;
+      // vertical position
       h = fm.lineSpacing();
       h *= score()->styleD(ST_figuredBassLineHeight);
+      if (score()->styleI(ST_figuredBassAlignment) == 0)          // top alignment: stack down from first item
+            y = h * ord;
+      else                                                        // bottom alignment: stack up from last item
+            y = -h * (figuredBass()->numOfItems() - ord);
+      setPos(x, y);
+      // determine bbox from text width and from longest cont. line
       w = fm.width(str);
       textWidth = w;
       int lineLen;
       if(_contLine && (lineLen=figuredBass()->lineLength(0)) > w)
             w = lineLen;
-      y = h * ord;
-      setPos(x, y);
       bbox().setRect(0, 0, w, h);
       }
 

@@ -901,7 +901,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
 
 QStringList MuseScore::getSoundFont(const QString& d)
       {
-      QString filter = tr("SoundFont Files (*.sf2 *.SF2);;All (*)");
+      QString filter = tr("SoundFont Files (*.sf2 *.SF2 *.sf3);;All (*)");
 
       QFileInfo mySoundFonts(preferences.mySoundFontsPath);
       if (mySoundFonts.isRelative())

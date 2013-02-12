@@ -19,6 +19,8 @@ running only one for debug purpose
 
 To see how the CI environment is doing it check `.travis.yml` and `build/run_tests.sh`
 
+**Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
+
 Test cases convention
 ====================
 

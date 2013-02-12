@@ -81,6 +81,7 @@ class EditTools;
 class Sym;
 class MasterPalette;
 class PluginCreator;
+class PluginManager;
 
 struct PluginDescription;
 
@@ -630,9 +631,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newBarLinePalette();
       static Palette* newLinesPalette();
 
-      Inspector* getInspector() { return inspector; }
+      Inspector* getInspector()           { return inspector; }
       QDeclarativeEngine* qml();
-      PluginCreator* getPluginCreator() { return pluginCreator; }
+      PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       };
 
