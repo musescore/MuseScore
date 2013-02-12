@@ -84,7 +84,7 @@ class FiguredBassItem : public Element {
       Q_PROPERTY(Modifier     prefix            READ prefix       WRITE undoSetPrefix)
       Q_PROPERTY(int          digit             READ digit        WRITE undoSetDigit)
       Q_PROPERTY(Modifier     suffix            READ suffix       WRITE undoSetSuffix)
-      Q_PROPERTY(bool         continuationLine  READ contLine     WRITE undoSetContLine)
+      Q_PROPERTY(ContLine     continuationLine  READ contLine     WRITE undoSetContLine)
       Q_PROPERTY(Parenthesis  parenthesis1      READ parenth1     WRITE undoSetParenth1)
       Q_PROPERTY(Parenthesis  parenthesis2      READ parenth2     WRITE undoSetParenth2)
       Q_PROPERTY(Parenthesis  parenthesis3      READ parenth3     WRITE undoSetParenth3)
@@ -114,6 +114,12 @@ class FiguredBassItem : public Element {
             ParenthesisSquaredClosed,
                   NumOfParentheses
       };
+      enum ContLine {
+            ContLineNone = 0,
+            ContLineSimple,                     // cont. line stops at f.b. element end
+            ContLineExtended                    // cont. line joins with next element, if possible
+      };
+
       enum Styles {
             StyleModern = 0,
             StyleHistoric,
@@ -137,7 +143,7 @@ class FiguredBassItem : public Element {
       Modifier          _prefix;                // the accidental coming before the body
       int               _digit;                 // the main digit (if present)
       Modifier          _suffix;                // the accidental coming after the body
-      bool              _contLine;              // wether the item has continuation line or not
+      ContLine          _contLine;              // whether the item has continuation line or not
       Parenthesis       parenth[5];             // each of the parenthesis: before, between and after parts
       qreal             textWidth;              // the text width (in raster units), set during layout()
                                                 //    used by draw()
@@ -186,7 +192,7 @@ class FiguredBassItem : public Element {
       Modifier          suffix() const                { return _suffix;       }
       void              setSuffix(const Modifier& v)  { _suffix = v;          }
       void              undoSetSuffix(Modifier suff);
-      bool              contLine() const              { return _contLine;     }
+      ContLine          contLine() const              { return _contLine;     }
       void              undoSetContLine(bool val);
       Parenthesis       parenth1()                    { return parenth[0];    }
       Parenthesis       parenth2()                    { return parenth[1];    }
@@ -307,6 +313,9 @@ Q_INVOKABLE FiguredBassItem* addItem();
       Segment *         segment() const         { return static_cast<Segment*>(parent()); }
       int               ticks() const           { return _ticks;  }
       void              setTicks(int val)       { _ticks = val;   }
+
+      qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
+      FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any
 
       virtual QVariant  getProperty(P_ID propertyId) const;
       virtual bool      setProperty(P_ID propertyId, const QVariant&);
