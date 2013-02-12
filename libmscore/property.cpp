@@ -107,7 +107,7 @@ static const PropertyData propertyList[] = {
 
       { P_FBDIGIT,             "digit",         T_INT    },
       { P_FBSUFFIX,            "suffix",        T_INT    },
-      { P_FBCONTINUATIONLINE,  "continuationLine", T_BOOL},
+      { P_FBCONTINUATIONLINE,  "continuationLine", T_INT },
       { P_FBPARENTHESIS1,      "",              T_INT    },
       { P_FBPARENTHESIS2,      "",              T_INT    },
       { P_FBPARENTHESIS3,      "",              T_INT    },
