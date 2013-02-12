@@ -202,6 +202,7 @@ class Palette : public QWidget {
          const QString tag = QString(), qreal mag = 1.0);
       PaletteCell* append(SymId sym);
 
+      void emitChanged()             { emit changed(); }
       void setGrid(int, int);
       Element* element(int idx);
       void setDrawGrid(bool val)     { _drawGrid = val; }

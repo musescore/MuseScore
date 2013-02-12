@@ -19,7 +19,7 @@
 #=============================================================================
 
 install(FILES
-      TimGM6mb.sf2
+      fluid.sf3
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 

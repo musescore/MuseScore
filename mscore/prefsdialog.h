@@ -70,9 +70,6 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectPluginsDirectory();
       void selectSoundFontsDirectory();
       void selectImagesDirectory();
-      void definePluginShortcutClicked();
-      void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
-      void pluginLoadToggled(bool);
       void printShortcutsClicked();
 
    signals:

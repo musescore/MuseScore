@@ -49,6 +49,7 @@ StyleType styleTypes[] = {
       StyleType("figuredBassFontSize",     ST_DOUBLE),      // in pt
       StyleType("figuredBassYOffset",      ST_DOUBLE),      // in sp
       StyleType("figuredBassLineHeight",   ST_DOUBLE),      // in % of normal height
+      StyleType("figuredBassAlignment",    ST_INT),         // 0 = top, 1 = bottom
       StyleType("figuredBassStyle" ,       ST_INT),         // 0=modern, 1=historic
       StyleType("systemFrameDistance",     ST_SPATIUM),     // dist. between staff and vertical box
       StyleType("frameSystemDistance",     ST_SPATIUM),     // dist. between vertical box and next system
@@ -274,7 +275,7 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(           // internal style
-         TR( "Dynamics2"), "MScore1", 12, false, false, false,
+         TR( "Dynamics2"), "MScore",  12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(
@@ -420,6 +421,7 @@ StyleData::StyleData()
             StyleVal(ST_figuredBassFontSize, qreal(8.0)),
             StyleVal(ST_figuredBassYOffset, Spatium(6.0)),
             StyleVal(ST_figuredBassLineHeight, qreal(1.0)),
+            StyleVal(ST_figuredBassAlignment, 0),
             StyleVal(ST_figuredBassStyle, 0),
             StyleVal(ST_systemFrameDistance, Spatium(7.0)),
             StyleVal(ST_frameSystemDistance, Spatium(7.0)),
@@ -454,7 +456,7 @@ StyleData::StyleData()
             StyleVal(ST_barNoteDistance,Spatium(1.2)),
             StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
-            //38
+            //43
             StyleVal(ST_measureSpacing, qreal(1.2)),
             StyleVal(ST_staffLineWidth,Spatium(0.08)),      // 0.09375
             StyleVal(ST_ledgerLineWidth,Spatium(0.12)),     // 0.1875
@@ -494,7 +496,7 @@ StyleData::StyleData()
             StyleVal(ST_measureNumberInterval, 5),
             StyleVal(ST_measureNumberSystem, true),
 
-            //68
+            //77
             StyleVal(ST_measureNumberAllStaffs,false),
             StyleVal(ST_smallNoteMag, qreal(.7)),
             StyleVal(ST_graceNoteMag, qreal(0.7)),
@@ -531,7 +533,7 @@ StyleData::StyleData()
             StyleVal(ST_FixMeasureNumbers, 0),
             StyleVal(ST_FixMeasureWidth, false),
 
-            //100
+            //109
             StyleVal(ST_SlurEndWidth, Spatium(.07)),
             StyleVal(ST_SlurMidWidth, Spatium(.15)),
             StyleVal(ST_SlurDottedWidth, Spatium(.1)),

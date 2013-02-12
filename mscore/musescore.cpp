@@ -69,6 +69,7 @@
 #include "omrpanel.h"
 #include "shortcut.h"
 #include "pluginCreator.h"
+#include "pluginManager.h"
 #include "plugins.h"
 #include "helpBrowser.h"
 #include "drumtools.h"
@@ -956,9 +957,12 @@ MuseScore::MuseScore()
 
       QMenu* menuPlugins = mb->addMenu(tr("&Plugins"));
       menuPlugins->setObjectName("Plugins");
+      menuPlugins->addAction(getAction("plugin-manager"));
+
       a = getAction("plugin-creator");
       a->setCheckable(true);
       menuPlugins->addAction(a);
+
       menuPlugins->addSeparator();
 
       //---------------------
@@ -1823,7 +1827,7 @@ void MuseScore::removeTab(int i)
       if (checkDirty(score))
             return;
       if (seq->score() == score) {
-            seq->stop();
+            seq->stopWait();
             seq->setScoreView(0);
             }
 
@@ -4262,6 +4266,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showWebPanel(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
+      else if (cmd == "plugin-manager") {
+            PluginManager pm(0);
+            pm.exec();
+            }
       else if (cmd == "media")
             showMediaDialog();
       else if (cmd == "page-settings")
