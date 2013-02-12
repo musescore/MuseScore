@@ -14,6 +14,38 @@
    <string>MuseScore: Parts</string>
   </property>
   <layout class="QGridLayout">
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="editGroup">
+     <property name="title">
+      <string>Edit Part:</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Part Title:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="title"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Instrument:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QListWidget" name="partList"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
@@ -53,8 +85,8 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="newAllButton" >
-          <property name="text" >
+         <widget class="QPushButton" name="newAllButton">
+          <property name="text">
            <string>New All</string>
           </property>
          </widget>
@@ -71,93 +103,46 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="editGroup">
-     <property name="title">
-      <string>Edit Part:</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Part Title:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="title"/>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Instrument:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QListWidget" name="partList"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="0" colspan="2">
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QPushButton" name="createExcerpt">
-       <property name="text">
-        <string>Create Part</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="createAllExcerpts" >
-       <property name="text" >
-        <string>Create All Parts</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
    <receiver>ExcerptsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>600</x>
-     <y>324</y>
+     <x>524</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
-     <x>423</x>
-     <y>295</y>
+     <x>329</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ExcerptsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>597</x>
+     <y>327</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>287</y>
     </hint>
    </hints>
   </connection>
