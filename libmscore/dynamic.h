@@ -20,19 +20,6 @@
 class Measure;
 class Segment;
 
-//---------------------------------------------------------
-//   Dyn
-//---------------------------------------------------------
-
-struct Dyn {
-      int velocity;           ///< associated midi velocity (0-127, -1 = none)
-      bool accent;            ///< if true add velocity to current chord velocity
-      const char* tag;
-
-      Dyn(int velo, bool a, const char* t)
-         : velocity(velo), accent(a), tag(t) {}
-      };
-
 //-----------------------------------------------------------------------------
 //   @@ Dynamic
 ///   dynamics marker; determines midi velocity
@@ -44,7 +31,41 @@ class Dynamic : public Text {
       Q_OBJECT
       Q_PROPERTY(DynamicRange type READ dynRange  WRITE undoSetDynRange)
 
-      int _subtype;
+   public:
+      enum DynamicType {
+            DYNAMIC_OTHER,
+            DYNAMIC_pppppp,
+            DYNAMIC_ppppp,
+            DYNAMIC_pppp,
+            DYNAMIC_ppp,
+            DYNAMIC_pp,
+            DYNAMIC_p,
+            DYNAMIC_mp,
+            DYNAMIC_mf,
+            DYNAMIC_f,
+            DYNAMIC_ff,
+            DYNAMIC_fff,
+            DYNAMIC_ffff,
+            DYNAMIC_fffff,
+            DYNAMIC_ffffff,
+            DYNAMIC_fp,
+            DYNAMIC_sf,
+            DYNAMIC_sfz,
+            DYNAMIC_sff,
+            DYNAMIC_sffz,
+            DYNAMIC_sfp,
+            DYNAMIC_sfpp,
+            DYNAMIC_rfz,
+            DYNAMIC_rf,
+            DYNAMIC_fz,
+            DYNAMIC_m,
+            DYNAMIC_r,
+            DYNAMIC_s,
+            DYNAMIC_z
+            };
+
+   private:
+      DynamicType _subtype;
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
@@ -58,10 +79,10 @@ class Dynamic : public Text {
       Segment* segment() const         { return (Segment*)parent(); }
       Measure* measure() const         { return (Measure*)parent()->parent(); }
 
-      void setSubtype(int val);
+      void setSubtype(DynamicType val) { _subtype = val; }
       void setSubtype(const QString&);
       QString subtypeName() const;
-      int subtype() const { return _subtype; }
+      DynamicType subtype() const      { return _subtype; }
 
       virtual void layout();
       virtual void write(Xml& xml) const;
@@ -85,5 +106,4 @@ class Dynamic : public Text {
       QVariant propertyDefault(P_ID id) const;
       };
 
-extern Dyn dynList[];
 #endif

@@ -271,12 +271,16 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(
-         TR( "Dynamics"), ff, 12, false, true, false,
+         TR( "Dynamics"), ff, 12, false,
+         false,                                 // italic?
+         false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
+#if 0
       AS(TextStyle(           // internal style
-         TR( "Dynamics2"), "MScore",  12, false, false, false,
+         TR( "Dynamics2"), ff,  12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
+#endif
 
       AS(TextStyle(
          TR( "Technik"), ff, 12, false, true, false,
@@ -1299,6 +1303,8 @@ int StyleData::textStyleType(const QString& name) const
             if (_textStyles[i].name() == name)
                   return i;
             }
+      if (name == "Dynamics2")
+            return TEXT_STYLE_DYNAMICS;
       qDebug("TextStyleType <%s> not found", qPrintable(name));
       return TEXT_STYLE_UNKNOWN;
       }

@@ -19,7 +19,26 @@
 #=============================================================================
 
 project(mscore)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+
+#
+#     Check for gcc compiler >= 4.7
+#
+if (CMAKE_COMPILER_IS_GNUCXX)
+      message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
+      string(REGEX MATCH "([0-9]*)\\.([0-9]*)\\.([0-9]*)" major ${CMAKE_CXX_COMPILER_VERSION})
+
+      set(major ${CMAKE_MATCH_1})
+      set(minor ${CMAKE_MATCH_2})
+      set(patch ${CMAKE_MATCH_3})
+
+      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 7)))
+            message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
+                  " >= 4.7 required")
+      endif (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 7)))
+
+endif (CMAKE_COMPILER_IS_GNUCXX)
+
 
 cmake_policy(SET CMP0003 NEW)
 
@@ -287,33 +306,28 @@ add_custom_command(
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
-set(CMAKE_CXX_FLAGS_DEBUG   "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -g")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -O2 -DNDEBUG")
 
 if (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
       if (MINGW)
-            set(FLAGS -DQT_DEBUG -DQT_DLL)
+            set(FLAGS -std=c++0x -DQT_DEBUG -DQT_DLL)
       else (MINGW)
       	if(APPLE)
-            	set (FLAGS -O0 -DQT_DEBUG)
+            	set (FLAGS -std=c++0x -O0 -DQT_DEBUG)
             else (APPLE)
-            	set (FLAGS -DQT_DEBUG)
+            	set (FLAGS -std=c++0x -DQT_DEBUG)
             endif(APPLE)
       endif (MINGW)
 else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
       if (MINGW)
-            set(FLAGS -O2 -DNDEBUG -DQT_DLL -DQT_NO_DEBUG)
+            set(FLAGS -std=c++0x -O2 -DNDEBUG -DQT_DLL -DQT_NO_DEBUG)
       else (MINGW)
-            set(FLAGS -O2 -DNDEBUG -DQT_NO_DEBUG)
+            set(FLAGS -std=c++0x -O2 -DNDEBUG -DQT_NO_DEBUG)
       endif (MINGW)
 endif (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
-
-message("${CMAKE_CXX_COMPILER}
-   -x c++-header -g  ${FLAGS}
-   ${a}
-   -o all.h.gch all.h")
 
 add_custom_command(
  OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch

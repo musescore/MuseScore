@@ -96,7 +96,6 @@ void TextPalette::populate()
       {
       bool musical = musicalSymbols->isChecked();
 
-//      QFont f(musical ? "MScore1" : "FreeSerif");
       QFont f("FreeSerifMscore");
 
       f.setPixelSize(40);
@@ -121,23 +120,16 @@ void TextPalette::populate()
                   // 16 bit
                   //
                   tb->setFont(f);
-#if QT_VERSION >= 0x040800
-                  if (fm.inFontUcs4(code))
-#else
-                  if (fm.inFont(code) || (code & 0xffff0000))
-#endif
-                        {
+                  if (fm.inFontUcs4(code)) {
                         rowEmpty = false;
                         QString ss;
                         if (code & 0xffff0000) {
-                              ss = QChar(QChar::highSurrogate(code));
+                              ss  = QChar(QChar::highSurrogate(code));
                               ss += QChar(QChar::lowSurrogate(code));
-                              tb->setToolTip(QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
                               }
-                        else {
+                        else
                               ss = QChar(code);
-                              tb->setToolTip(QString("0x%1").arg(code, 4, 16, QLatin1Char('0')));
-                              }
+                        tb->setToolTip(QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
                         tb->setIcon(codeIcon(ss, f));
                         tb->setIconSize(QSize(25, 25));
                         sg->setId(tb, code);

@@ -268,7 +268,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             EventMap events;
             cs->renderPart(&events, part);
 
-            for (EventMap::const_iterator i = events.begin(); i != events.end(); ++i) {
+            for (auto i = events.begin(); i != events.end(); ++i) {
                   Event event = i.value();
                   if (event.channel() != channel)
                         continue;
