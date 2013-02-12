@@ -225,14 +225,6 @@ void Text::layout1()
             if (align() & ALIGN_BOTTOM) {
                   o.ry() += 3;
                   o.ry() -= size.height();
-#if 0
-                  if (_editMode) {
-                        QFontMetricsF fm(textStyle().font(spatium()));
-                        QRectF r1(fm.boundingRect(SimpleText::firstLine()));
-                        QRectF r(fm.tightBoundingRect(SimpleText::firstLine()));
-                        o.ry() -= (r1.height() - r.height()) * .5;
-                        }
-#endif
                   }
             else if (align() & ALIGN_VCENTER)
                   o.ry() -= (size.height() * .5);
@@ -1323,8 +1315,8 @@ void Text::clear()
 
 void Text::setTextStyleType(int st)
       {
-      if (st == _styleIndex)
-            return;
+//      if (st == _styleIndex)
+//            return;
       _styleIndex = st;
       if (st != TEXT_STYLE_UNKNOWN)
             setTextStyle(score()->textStyle(st));
