@@ -61,6 +61,8 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
 
       QString createName(const QString&);
 
+      virtual void accept();
+
    private slots:
       void deleteClicked();
       void newClicked();
@@ -69,7 +71,6 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void partDoubleClicked(QListWidgetItem*);
       void partClicked(QListWidgetItem*);
       void createExcerptClicked();
-      void createAllExcerptsClicked();
       void createExcerptClicked(QListWidgetItem*);
       void titleChanged(const QString&);
 

@@ -72,20 +72,15 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
-      createExcerpt->setEnabled(false);
 
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
       connect(excerptList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(excerptChanged(QListWidgetItem*, QListWidgetItem*)));
-      connect(excerptList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-         SLOT(createExcerptClicked(QListWidgetItem*)));
-      connect(createAllExcerpts, SIGNAL(clicked()), SLOT(createAllExcerptsClicked()));
       connect(partList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
          SLOT(partDoubleClicked(QListWidgetItem*)));
       connect(partList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(partClicked(QListWidgetItem*)));
-      connect(createExcerpt, SIGNAL(clicked()), SLOT(createExcerptClicked()));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
 //      if (!sel->isEmpty())
@@ -195,7 +190,6 @@ void ExcerptsDialog::newAllClicked()
 
 void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
       {
-      createExcerpt->setEnabled(true);
       bool b;
       if (cur) {
             Excerpt* e = ((ExcerptItem*)cur)->excerpt();
@@ -281,22 +275,6 @@ qDebug("  already there %d %d\n", i, n);
       }
 
 //---------------------------------------------------------
-//   createAllExcerptsClicked
-//---------------------------------------------------------
-
-void ExcerptsDialog::createAllExcerptsClicked()
-      {
-      int n = excerptList->count();
-      for (int i = 0; i < n; ++i) {
-            excerptList->setCurrentRow(i);
-            QListWidgetItem* cur = excerptList->currentItem();
-            if (cur == 0)
-                  continue;
-            createExcerptClicked(cur);
-            }
-      }
-
-//---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
 
@@ -336,5 +314,22 @@ void ExcerptsDialog::titleChanged(const QString& s)
       Excerpt* excerpt = ((ExcerptItem*)cur)->excerpt();
       excerpt->setTitle(s);
       cur->setText(s);
+      }
+
+//---------------------------------------------------------
+//   accept
+//---------------------------------------------------------
+
+void ExcerptsDialog::accept()
+      {
+      int n = excerptList->count();
+      for (int i = 0; i < n; ++i) {
+            excerptList->setCurrentRow(i);
+            QListWidgetItem* cur = excerptList->currentItem();
+            if (cur == 0)
+                  continue;
+            createExcerptClicked(cur);
+            }
+      QDialog::accept();
       }
 
