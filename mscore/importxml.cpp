@@ -5241,7 +5241,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   // get pitch from instrument definition in drumset instead
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
-                  note->setTpc(pitch2tpc(pitch, 0, PREFER_NEAREST)); // TODO: necessary ? // XXX - check
+		  // TODO - does this need to be key-aware?
+                  note->setTpc(pitch2tpc(pitch, KEY_C, PREFER_NEAREST)); // TODO: necessary ?
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);

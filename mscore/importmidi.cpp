@@ -1083,8 +1083,9 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
                                     Event mn = nl[i];
                         		Note* note = new Note(score);
                                     NoteEvent ne;
-                                    note->setPitch(mn.pitch(), pitch2tpc(mn.pitch(), 0, PREFER_NEAREST));   // XXX - check
-                  	      	chord->add(note);
+                                    // TODO - does this need to be key-aware?
+                                    note->setPitch(mn.pitch(), pitch2tpc(mn.pitch(), KEY_C, PREFER_NEAREST));
+                                    chord->add(note);
                                     int ontime  = (mn.noquantOntime() - tick) * 1000 / actualTicks;
                                     int offtime = mn.noquantOntime() + mn.noquantDuration() - tick;
                                     offtime = offtime * 1000 / actualTicks;
