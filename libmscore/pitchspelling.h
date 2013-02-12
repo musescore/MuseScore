@@ -45,7 +45,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 
-// pitch2tpc(pitch) replaced by pitch2tpc(pitch, 0, PREFER_NEAREST)
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, PREFER_NEAREST)
 
 enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
 
