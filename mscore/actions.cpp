@@ -2003,6 +2003,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action", "Plugin Creator")
          ),
       Shortcut(
+         STATE_ALL,
+         0,
+         "plugin-manager",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action", "Plugin Manager")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_FOTO,
          0,
          "inspector",

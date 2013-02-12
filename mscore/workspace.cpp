@@ -183,8 +183,6 @@ void MuseScore::changeWorkspace(Workspace* p)
 void Workspace::initWorkspace()
       {
       foreach(Workspace* p, Workspace::workspaces()) {
-printf("initWorkspace <%s> <%s>\n", qPrintable(p->name()),
-               qPrintable(preferences.workspace));
             if (p->name() == preferences.workspace) {
                   currentWorkspace = p;
                   break;
@@ -288,7 +286,6 @@ void Workspace::write()
       cbuf.close();
       }
 
-      f.close();
       if (f.status() != QZipWriter::NoError)
             writeFailed(_path);
       }

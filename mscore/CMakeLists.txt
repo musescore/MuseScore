@@ -61,7 +61,7 @@ QT4_WRAP_UI (ui_headers
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
-      box.ui
+      box.ui pluginManager.ui
       ${SCRIPT_UI}
       )
 
@@ -93,7 +93,7 @@ QT4_WRAP_CPP (mocs
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
-      inspectorHairpin.h qmlplugin.h palettebox.h workspace.h
+      inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -199,7 +199,7 @@ add_executable ( ${ExecutableName}
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       inspectorHairpin.cpp qmlplugin.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp
-      savePositions.cpp
+      savePositions.cpp pluginManager.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
@@ -399,7 +399,6 @@ if (APPLE)
      install (FILES
       ../fonts/gonville-20.otf
       ../fonts/mscore-20.otf
-      ../fonts/mscore1-20.ttf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerifMscore.ttf
       ../fonts/FreeSans.ttf

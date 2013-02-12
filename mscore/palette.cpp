@@ -126,26 +126,24 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       {
       int i = idx(event->pos());
       if (i == -1) {
-            if (_moreElements) {
-                  // palette context menu
-                  QMenu menu;
-                  QAction* moreAction = menu.addAction(tr("Show More..."));
-                  QAction* action = menu.exec(mapToGlobal(event->pos()));
-                  if (action == moreAction) {
-                        emit displayMore(_name);
-                        }
-                  return;
-                  }
+            // palette context menu
+            QMenu menu;
+            QAction* moreAction = menu.addAction(tr("Show More..."));
+            moreAction->setEnabled(_moreElements);
+            QAction* action = menu.exec(mapToGlobal(event->pos()));
+            if (action == moreAction)
+                  emit displayMore(_name);
+            return;
             }
 
-      if (_readOnly)
-            return;
       QMenu menu;
       QAction* clearAction   = menu.addAction(tr("Clear"));
       QAction* contextAction = menu.addAction(tr("Properties..."));
-      QAction* moreAction = 0;
-      if (_moreElements)
-            moreAction = menu.addAction(tr("Show More..."));
+      clearAction->setEnabled(!_readOnly);
+      contextAction->setEnabled(!_readOnly);
+      QAction* moreAction    = menu.addAction(tr("Show More..."));
+      moreAction->setEnabled(_moreElements);
+
       if (cells[i] && cells[i]->readOnly)
             clearAction->setEnabled(false);
 
@@ -841,6 +839,8 @@ void Palette::write(Xml& xml, const QString& name) const
             xml.tag("mag", extraMag);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
+
+      xml.tag("moreElements", _moreElements);
       if (_yOffset != 0.0)
             xml.tag("yoffset", _yOffset);
 
@@ -1078,6 +1078,8 @@ void Palette::read(XmlReader& e)
                   extraMag = e.readDouble();
             else if (t == "grid")
                   _drawGrid = e.readInt();
+            else if (t == "moreElements")
+                  _moreElements = e.readInt();
             else if (t == "yoffset")
                   _yOffset = e.readDouble();
             else if (t == "drumPalette")      // obsolete
@@ -1236,13 +1238,21 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
       QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
       actionEdit->setChecked(!palette->readOnly());
+      bool _systemPalette = palette->systemPalette();
+      actionProperties->setDisabled(_systemPalette);
+      actionInsert->setDisabled(_systemPalette);
+      actionUp->setDisabled(_systemPalette);
+      actionDown->setDisabled(_systemPalette);
+      actionEdit->setDisabled(_systemPalette);
 
       menu.addSeparator();
       QAction* actionSave = menu.addAction(tr("Save Palette"));
       QAction* actionLoad = menu.addAction(tr("Load Palette"));
+      actionLoad->setDisabled(_systemPalette);
 
       menu.addSeparator();
       QAction* actionDelete = menu.addAction(tr("Delete Palette"));
+      actionDelete->setDisabled(_systemPalette);
 
       QAction* action = menu.exec(mapToGlobal(event->pos()));
       if (action == actionProperties)
@@ -1325,6 +1335,7 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       cellWidth->setValue(palette->gridWidth());
       cellHeight->setValue(palette->gridHeight());
       showGrid->setChecked(palette->drawGrid());
+      moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
       mag->setValue(palette->mag());
       }
@@ -1338,8 +1349,10 @@ void PaletteProperties::accept()
       palette->setName(name->text());
       palette->setGrid(cellWidth->value(), cellHeight->value());
       palette->setDrawGrid(showGrid->isChecked());
+      palette->setMoreElements(moreElements->isChecked());
       palette->setYOffset(elementOffset->value());
       palette->setMag(mag->value());
+      palette->emitChanged();
       QDialog::accept();
       }
 
