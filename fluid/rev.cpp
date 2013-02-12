@@ -141,7 +141,7 @@ void Reverb::process(int n, float* in, float* l, float* r)
             float outL = 0.0;
             float outR = 0.0;
 
-            float input = (in[k] * 2.0 + DC_OFFSET) * gain;
+            float input = ((in[k] * 2.0) * gain) + DC_OFFSET;
 
             for (int i = 0; i < numcombs; i++) {      // Accumulate comb filters in parallel
                   outL += combL[i].process(input);
