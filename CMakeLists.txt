@@ -21,25 +21,6 @@
 project(mscore)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 
-#
-#     Check for gcc compiler >= 4.6
-#
-if (CMAKE_COMPILER_IS_GNUCXX)
-      message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
-      string(REGEX MATCH "([0-9]*)\\.([0-9]*)\\.([0-9]*)" major ${CMAKE_CXX_COMPILER_VERSION})
-
-      set(major ${CMAKE_MATCH_1})
-      set(minor ${CMAKE_MATCH_2})
-      set(patch ${CMAKE_MATCH_3})
-
-      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 6)))
-            message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.6 required")
-      endif (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 7)))
-
-endif (CMAKE_COMPILER_IS_GNUCXX)
-
-
 cmake_policy(SET CMP0003 NEW)
 
 # for debugging the make system uncomment next line:
@@ -75,6 +56,7 @@ endif (OMR)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
+      set (CMAKE_CXX_COMPILER_ID "Clang")
       # Currently, just 'ppc', 'i386' or 'ppc i386' are useful architectures,
       # because the Flash-Player is not yet available as a 64-bit version.
       # Flash is required for displaying the videos of MuseScore-Connect.
@@ -97,6 +79,24 @@ if (APPLE)
       find_library(CoreServicesFW        NAMES CoreServices)
       set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW})
 endif (APPLE)
+
+#
+#     Check for gcc compiler >= 4.6
+#
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+      message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
+      string(REGEX MATCH "([0-9]*)\\.([0-9]*)\\.([0-9]*)" major ${CMAKE_CXX_COMPILER_VERSION})
+
+      set(major ${CMAKE_MATCH_1})
+      set(minor ${CMAKE_MATCH_2})
+      set(patch ${CMAKE_MATCH_3})
+
+      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 6)))
+            message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
+                  " >= 4.6 required")
+      endif()
+
+endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 
