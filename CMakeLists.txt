@@ -22,7 +22,7 @@ project(mscore)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 
 #
-#     Check for gcc compiler >= 4.7
+#     Check for gcc compiler >= 4.6
 #
 if (CMAKE_COMPILER_IS_GNUCXX)
       message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
@@ -32,9 +32,9 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       set(minor ${CMAKE_MATCH_2})
       set(patch ${CMAKE_MATCH_3})
 
-      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 7)))
+      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 6)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.7 required")
+                  " >= 4.6 required")
       endif (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 7)))
 
 endif (CMAKE_COMPILER_IS_GNUCXX)
