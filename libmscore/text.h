@@ -93,8 +93,8 @@ class Text : public SimpleText {
       QTextCursor* startCursorEdit();
       void endCursorEdit();
       virtual void endEdit();
-      void addSymbol(const SymCode&, QTextCursor* c = 0);
-      void addChar(int code, QTextCursor* cur = 0);
+      void addSymbol(const SymCode&);
+      void addChar(int code);
       void setBlockFormat(const QTextBlockFormat&);
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);

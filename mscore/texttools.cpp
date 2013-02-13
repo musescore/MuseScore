@@ -228,10 +228,12 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools()
       {
-      blockAllSignals(true);
-      QTextCursor* cursor = _textElement->cursor();
+      if (_textElement->styled())   // TODO
+            return;
 
-      QTextCharFormat format = cursor->charFormat();
+      blockAllSignals(true);
+      QTextCursor* cursor      = _textElement->cursor();
+      QTextCharFormat format   = cursor->charFormat();
       QTextBlockFormat bformat = cursor->blockFormat();
 
       QFont f(format.font());
