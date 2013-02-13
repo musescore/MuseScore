@@ -148,7 +148,7 @@ void Text::setHtml(const QString& s)
 
 QString Text::getText() const
       {
-      return (styled() && !_editMode) ? SimpleText::getText() : _doc->toPlainText();
+      return styled() ? SimpleText::getText() : _doc->toPlainText();
       }
 
 //---------------------------------------------------------
@@ -194,7 +194,7 @@ void Text::layout()
 
 void Text::layout1()
       {
-      if (styled() && !_editMode)
+      if (styled())
             SimpleText::layout();
       else {
             QPointF o(textStyle().offset(spatium()));
@@ -230,32 +230,11 @@ void Text::layout1()
                   o.ry() -= (size.height() * .5);
             else if (align() & ALIGN_BASELINE)
                   o.ry() -= baseLine();
-            else {
-                  if (_editMode) {
-                        QFontMetricsF fm(textStyle().font(spatium()));
-                        QRectF r1(fm.boundingRect(SimpleText::firstLine()));
-                        QRectF r(fm.tightBoundingRect(SimpleText::firstLine()));
-                        o.ry() -= (r1.height() - r.height()) * .5;
-                        o.ry() -= 2;
-                        }
-                  }
 
             if (align() & ALIGN_RIGHT)
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
-            else {
-                  if (_editMode) {
-                        QFontMetricsF fm(textStyle().font(spatium()));
-                        QString s = SimpleText::firstLine();
-                        if (!s.isEmpty()) {
-                              QChar c = s[0];
-                              qreal lb = fm.leftBearing(c);
-                              if (lb < 0.0)
-                                    o.rx() += -lb;
-                              }
-                        }
-                  }
 
             bbox().setRect(0.0, 0.0, size.width(), size.height());
             _doc->setModified(false);
@@ -323,7 +302,7 @@ QRectF Text::pageRectangle() const
 void Text::draw(QPainter* painter) const
       {
       drawFrame(painter);
-      if (styled() && !_editMode) {
+      if (styled()) {
             SimpleText::draw(painter);
             return;
             }
@@ -349,17 +328,7 @@ void Text::draw(QPainter* painter) const
             return;
       c.palette.setColor(QPalette::Text, textColor());
 
-#if 1
-      // make it thread save
-      {
-      QWriteLocker locker(&docRenderLock);
-      QScopedPointer<QTextDocument> __doc(_doc->clone());
-      __doc.data()->documentLayout()->draw(painter, c);
-      // _doc->documentLayout()->draw(painter, c);
-      }
-#else
       _doc->documentLayout()->draw(painter, c);
-#endif
       }
 
 //---------------------------------------------------------
@@ -600,13 +569,11 @@ void Text::spatiumChanged(qreal oldVal, qreal newVal)
 //   startEdit
 //---------------------------------------------------------
 
-void Text::startEdit(MuseScoreView*, const QPointF& p)
+void Text::startEdit(MuseScoreView* view, const QPointF& p)
       {
-      _editMode = true;
       if (styled()) {
-            createDoc();
-            setUnstyledText(SimpleText::getText());
-            layout();
+            SimpleText::startEdit(view, p);
+            return;
             }
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
@@ -621,16 +588,17 @@ void Text::startEdit(MuseScoreView*, const QPointF& p)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Text::edit(MuseScoreView*, int /*grip*/, int key, Qt::KeyboardModifiers modifiers, const QString& s)
+bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers modifiers, const QString& s)
       {
+      if (styled())
+            return SimpleText::edit(view, grip, key, modifiers, s);
       if (MScore::debugMode)
             qDebug("Text::edit(%p) key 0x%x mod 0x%x\n", this, key, int(modifiers));
       if (!_editMode || !_cursor) {
             qDebug("Text::edit(%p): not in edit mode: %d %p\n", this, _editMode, _cursor);
             return false;
             }
-      bool lo = type() == INSTRUMENT_NAME;
-      score()->setLayoutAll(lo);
+      score()->setLayoutAll(type() == INSTRUMENT_NAME);
       static const qreal w = 2.0; // 8.0 / view->matrix().m11();
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
 
@@ -799,7 +767,8 @@ bool Text::replaceSpecialChars()
             // do not go beyond the cursor
             if (cur.selectionEnd() > _cursor->selectionEnd())
                   continue;
-            addSymbol(sym, &cur);
+//            addSymbol(sym, &cur); // TODO
+            addSymbol(sym);
             return true;
             }
       return false;
@@ -811,6 +780,11 @@ bool Text::replaceSpecialChars()
 
 void Text::moveCursorToEnd()
       {
+      if (styled()) {
+            SimpleText::moveCursorToEnd();
+            return;
+            }
+
       if (_cursor)
             _cursor->movePosition(QTextCursor::End);
       }
@@ -821,6 +795,11 @@ void Text::moveCursorToEnd()
 
 void Text::moveCursor(int col)
       {
+      if (styled()) {
+            SimpleText::moveCursor(col);
+            return;
+            }
+
       if (_cursor)
             _cursor->setPosition(col);
       }
@@ -855,7 +834,7 @@ QPainterPath Text::shape() const
 
 qreal Text::baseLine() const
       {
-      if (styled() && !_editMode)
+      if (styled())
             return SimpleText::baseLine();
       for (QTextBlock tb = _doc->begin(); tb.isValid(); tb = tb.next()) {
             const QTextLayout* tl = tb.layout();
@@ -890,12 +869,15 @@ qreal Text::lineHeight() const
 //   addSymbol
 //---------------------------------------------------------
 
-void Text::addSymbol(const SymCode& s, QTextCursor* cur)
+void Text::addSymbol(const SymCode& s)
       {
-      if (cur == 0)
-            cur = _cursor;
+      if (styled()) {
+            SimpleText::addSymbol(s);
+            return;
+            }
+
       if (s.fontId >= 0) {
-            QTextCharFormat nFormat(cur->charFormat());
+            QTextCharFormat nFormat(_cursor->charFormat());
             nFormat.setFontFamily(fontId2font(s.fontId).family());
             QString ss;
             if (s.code >= 0x10000) {
@@ -904,10 +886,10 @@ void Text::addSymbol(const SymCode& s, QTextCursor* cur)
                   }
             else
                   ss = QChar(s.code);
-            cur->insertText(ss, nFormat);
+            _cursor->insertText(ss, nFormat);
             }
       else
-            cur->insertText(QChar(s.code));
+            _cursor->insertText(QChar(s.code));
       score()->setLayoutAll(true);
       score()->end();
       }
@@ -916,11 +898,12 @@ void Text::addSymbol(const SymCode& s, QTextCursor* cur)
 //   addChar
 //---------------------------------------------------------
 
-void Text::addChar(int code, QTextCursor* cur)
+void Text::addChar(int code)
       {
-      if (cur == 0)
-            cur = _cursor;
-
+      if (styled()) {
+            SimpleText::addChar(code);
+            return;
+            }
       QString ss;
       if (code & 0xffff0000) {
             ss = QChar(QChar::highSurrogate(code));
@@ -928,7 +911,7 @@ void Text::addChar(int code, QTextCursor* cur)
             }
       else
             ss = QChar(code);
-      cur->insertText(ss);
+      _cursor->insertText(ss);
       score()->setLayoutAll(true);
       score()->end();
       }
@@ -951,6 +934,8 @@ void Text::setBlockFormat(const QTextBlockFormat& bf)
 
 bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       {
+      if (styled())
+            return SimpleText::setCursor(p, mode);
       QPointF pt  = p - canvasPos();
       if (!bbox().contains(pt))
             return false;
@@ -1367,10 +1352,14 @@ QTextCursor* Text::startCursorEdit()
 
 void Text::endEdit()
       {
-      _editMode = false;
-      endCursorEdit();
-      layoutEdit();
-      textChanged();
+      if (styled())
+            SimpleText::endEdit();
+      else {
+            _editMode = false;
+            endCursorEdit();
+            layoutEdit();
+            textChanged();
+            }
       }
 
 //---------------------------------------------------------
@@ -1381,11 +1370,6 @@ void Text::endCursorEdit()
       {
       delete _cursor;
       _cursor = 0;
-      if (styled()) {
-            SimpleText::setText(_doc->toPlainText());
-            delete _doc;
-            _doc = 0;
-            }
       }
 
 //---------------------------------------------------------
