@@ -20,7 +20,7 @@ class QPainter;
 class TextStyle;
 
 extern void initSymbols(int);
-extern int symIdx2fontId(int symIdx); 
+extern int symIdx2fontId(int symIdx);
 extern QFont fontId2font(int id);
 
 enum SymbolType {
@@ -353,7 +353,8 @@ class Sym {
       int code() const                     { return _code;    }
       int getFontId() const                { return fontId;   }
       int setFontId(int v)                 { return fontId = v;   }
-      void draw(QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(QPainter* painter, qreal mag) const;
+      void draw(QPainter* painter, qreal mag, const QPointF& pos) const;
       void draw(QPainter* painter, qreal mag, const QPointF& pos, int n) const;
       void setAttach(const QPointF& r)     { _attach = r; }
       bool isValid() const                 { return _code != 0; }
