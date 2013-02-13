@@ -22,6 +22,16 @@ class MuseScoreView;
 struct SymCode;
 
 //---------------------------------------------------------
+//   TCursor
+//---------------------------------------------------------
+
+class TCursor {
+   public:
+      int line;
+      int column;
+      };
+
+//---------------------------------------------------------
 //   TLine
 //---------------------------------------------------------
 
@@ -45,6 +55,10 @@ class SimpleText : public Element {
       QRectF frame;           // calculated in layout()
 
       bool _layoutToParentWidth;
+      bool _editMode;
+      static TCursor _cursor;
+      QRectF cursorRect() const;
+      QString& curLine();
 
    protected:
       TextStyle _textStyle;
@@ -89,6 +103,20 @@ class SimpleText : public Element {
       bool circle() const            { return textStyle().circle(); }
       Align align() const            { return textStyle().align(); }
       const QString& firstLine() const;
+
+      void startEdit(MuseScoreView*, const QPointF&);
+      void endEdit();
+      bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
+      void moveCursorToEnd();
+      void moveCursor(int col);
+      void addSymbol(const SymCode&);
+      void addChar(int code);
+      bool deletePreviousChar();
+      bool deleteChar();
+      bool movePosition(QTextCursor::MoveOperation op,
+         QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+      bool setCursor(const QPointF& p,
+         QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       };
 
 #endif
