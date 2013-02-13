@@ -245,12 +245,17 @@ void Text::layout1()
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
             else {
-                  if (_editMode) {
+                  if (styled() && _editMode) {
+                        //
+                        // this does not work for codepoints > 0xffff
+                        // (musical symbols)
+                        //
                         QFontMetricsF fm(textStyle().font(spatium()));
                         QString s = SimpleText::firstLine();
                         if (!s.isEmpty()) {
                               QChar c = s[0];
                               qreal lb = fm.leftBearing(c);
+printf("lb %f\n", lb);
                               if (lb < 0.0)
                                     o.rx() += -lb;
                               }

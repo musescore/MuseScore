@@ -23,7 +23,7 @@ static bool symbolsInitialized[2] = { false, false };
 
 QMap<const char*, SymCode*> charReplaceMap;
 
-static QReadWriteLock gLock;
+// static QReadWriteLock gLock;
 QHash<QString, SymId> Sym::lnhash;
 QVector<const char*> Sym::symNames;
 QVector<QString> Sym::symUserNames;
@@ -420,13 +420,27 @@ void Sym::draw(QPainter* painter, qreal mag, const QPointF& pos) const
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
 #ifdef USE_GLYPHS
-      {
-      QWriteLocker locker(&gLock);
       painter->drawGlyphRun(pos * imag, glyphs);
-      }
 #else
       painter->setFont(font());
       painter->drawText(pos * imag, toString());
+#endif
+      painter->scale(imag, imag);
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Sym::draw(QPainter* painter, qreal mag) const
+      {
+      qreal imag = 1.0 / mag;
+      painter->scale(mag, mag);
+#ifdef USE_GLYPHS
+      painter->drawGlyphRun(QPointF(), glyphs);
+#else
+      painter->setFont(font());
+      painter->drawText(QPointF(), toString());
 #endif
       painter->scale(imag, imag);
       }

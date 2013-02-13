@@ -44,9 +44,6 @@
 
 #cmakedefine Q_WS_UIKIT
 
-#define USE_BSP         true
-
-#if QT_VERSION >= 0x040800
-//#define USE_GLYPHS  1
-#endif
+#define USE_BSP     true
+#define USE_GLYPHS  true
 

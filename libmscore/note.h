@@ -146,6 +146,7 @@ class Note : public Element {
 
       NoteHeadGroup _headGroup;
       NoteHeadType _headType;
+
       MScore::ValueType _veloType;
       short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
 
