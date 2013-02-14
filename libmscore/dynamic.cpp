@@ -130,8 +130,9 @@ void Dynamic::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
-            if (tag == "subtype")
+            if (tag == "subtype") {
                   setSubtype(e.readElementText());
+                  }
             else if (tag == "velocity")
                   _velocity = e.readInt();
             else if (tag == "dynType")
@@ -166,7 +167,7 @@ void Dynamic::layout()
 void Dynamic::setSubtype(const QString& tag)
       {
       int n = sizeof(dynList)/sizeof(*dynList);
-      for (int i = 1; i < n; ++i) {
+      for (int i = 0; i < n; ++i) {
             if (dynList[i].tag == tag) {
                   setSubtype(DynamicType(i));
                   setText(QString::fromUtf8(dynList[i].text));
@@ -196,21 +197,12 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
       }
 
 //---------------------------------------------------------
-//   resetType
-//---------------------------------------------------------
-
-void Dynamic::resetType()
-      {
-      setSubtype(getText());
-      }
-
-//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
 void Dynamic::reset()
       {
-      resetType();
+//      setSubtype(getText());
       Text::reset();
       }
 
