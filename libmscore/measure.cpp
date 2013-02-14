@@ -2176,7 +2176,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Dynamic* dyn = new Dynamic(score());
                   dyn->setTrack(e.track());
                   dyn->read(e);
-                  dyn->resetType(); // for backward compatibility
+                  if (score()->mscVersion() <= 114)
+                        dyn->setSubtype(dyn->getText());
                   segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(dyn);
                   }
