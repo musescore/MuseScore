@@ -132,9 +132,9 @@ bool PortMidiDriver::init()
 
       PmError error = Pm_OpenInput(&inputStream,
          inputId,
-         DRIVER_INFO, INPUT_BUFFER_SIZE,
+         (void*)DRIVER_INFO, INPUT_BUFFER_SIZE,
          ((long (*)(void*)) Pt_Time),
-         TIME_INFO);
+         (void*)TIME_INFO);
       if (error != pmNoError) {
             const char* p = Pm_GetErrorText(error);
             qDebug("PortMidi: open input (id=%d) failed: %s\n", int(inputId), p);
