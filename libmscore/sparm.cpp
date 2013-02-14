@@ -19,20 +19,20 @@
 //=============================================================================
 
 #include "libmscore/xml.h"
-#include "sparm_p.h"
+#include "sparm.h"
 
 //---------------------------------------------------------
-//   SyntiParameterData
+//   SyntiParameter
 //---------------------------------------------------------
 
-SyntiParameterData::SyntiParameterData()
+SyntiParameter::SyntiParameter()
       {
       _id   = -1;
       _type = SP_FLOAT;
       _fval = 0.0;
       }
 
-SyntiParameterData::SyntiParameterData(const QString& name, float val)
+SyntiParameter::SyntiParameter(const QString& name, float val)
       {
       _id = -1;
       _name = name;
@@ -40,7 +40,7 @@ SyntiParameterData::SyntiParameterData(const QString& name, float val)
       _fval = val;
       }
 
-SyntiParameterData::SyntiParameterData(int i, const QString& name, float val)
+SyntiParameter::SyntiParameter(int i, const QString& name, float val)
       {
       _id   = i;
       _name = name;
@@ -48,7 +48,7 @@ SyntiParameterData::SyntiParameterData(int i, const QString& name, float val)
       _fval = val;
       }
 
-SyntiParameterData::SyntiParameterData(const QString& name, const QString& val)
+SyntiParameter::SyntiParameter(const QString& name, const QString& val)
       {
       _id   = -1;
       _name = name;
@@ -56,7 +56,7 @@ SyntiParameterData::SyntiParameterData(const QString& name, const QString& val)
       _sval = val;
       }
 
-SyntiParameterData::SyntiParameterData(int i, const QString& name, const QString& val)
+SyntiParameter::SyntiParameter(int i, const QString& name, const QString& val)
       {
       _id   = i;
       _name = name;
@@ -64,8 +64,7 @@ SyntiParameterData::SyntiParameterData(int i, const QString& name, const QString
       _sval = val;
       }
 
-SyntiParameterData::SyntiParameterData(const SyntiParameterData& pd)
-   : QSharedData(pd)
+SyntiParameter::SyntiParameter(const SyntiParameter& pd)
       {
       _id   = pd._id;
       _name = pd._name;
@@ -82,15 +81,9 @@ SyntiParameterData::SyntiParameterData(const SyntiParameterData& pd)
             }
       }
 
-SyntiParameter& SyntiParameter::operator=(const SyntiParameter& sp)
+bool SyntiParameter::operator==(const SyntiParameter& sp) const
       {
-      d = sp.d;
-      return *this;
-      }
-
-bool SyntiParameterData::operator==(const SyntiParameterData& sp) const
-      {
-      if (_id == -1 ? (_name != sp._name) : (_id != sp._id))
+      if (_name != sp._name)
             return false;
       switch(_type) {
             case SP_FLOAT:
@@ -105,7 +98,7 @@ bool SyntiParameterData::operator==(const SyntiParameterData& sp) const
 //   write
 //---------------------------------------------------------
 
-void SyntiParameterData::write(Xml& xml) const
+void SyntiParameter::write(Xml& xml) const
       {
       if (_type == SP_FLOAT)
             xml.tagE(QString("f name=\"%1\" val=\"%3\"").arg(_name).arg(_fval));
@@ -118,7 +111,7 @@ void SyntiParameterData::write(Xml& xml) const
 //    for debugging
 //---------------------------------------------------------
 
-void SyntiParameterData::print() const
+void SyntiParameter::print() const
       {
       SParmId spid(_id);
       if (_type == SP_FLOAT) {
@@ -183,188 +176,6 @@ void SyntiState::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   SyntiParameter
-//---------------------------------------------------------
-
-SyntiParameter::SyntiParameter()
-      {
-      d = new SyntiParameterData;
-      }
-
-SyntiParameter::SyntiParameter(const SyntiParameter& sp)
-   : d(sp.d)
-      {
-      }
-
-SyntiParameter::SyntiParameter(const QString& name, float val)
-      {
-      d = new SyntiParameterData(name, val);
-      }
-
-SyntiParameter::SyntiParameter(int id, const QString& name, float val)
-      {
-      d = new SyntiParameterData(id, name, val);
-      }
-
-SyntiParameter::SyntiParameter(const QString& name, const QString& val)
-      {
-      d = new SyntiParameterData(name, val);
-      }
-
-SyntiParameter::SyntiParameter(int id, const QString& name, const QString& val)
-      {
-      d = new SyntiParameterData(id, name, val);
-      }
-
-SyntiParameter::~SyntiParameter()
-      {
-      }
-
-//---------------------------------------------------------
-//   type
-//---------------------------------------------------------
-
-SyntiParameterType SyntiParameter::type() const
-      {
-      return d->_type;
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void SyntiParameter::write(Xml& xml) const
-      {
-      d->write(xml);
-      }
-
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
-
-const QString& SyntiParameter::name() const
-      {
-      return d->_name;
-      }
-
-void SyntiParameter::setName(const QString& s)
-      {
-      d->_name = s;
-      }
-
-//---------------------------------------------------------
-//   id
-//---------------------------------------------------------
-
-int SyntiParameter::id() const
-      {
-      return d->_id;
-      }
-
-//---------------------------------------------------------
-//   setId
-//---------------------------------------------------------
-
-void SyntiParameter::setId(int v)
-      {
-      d->_id = v;
-      }
-
-//---------------------------------------------------------
-//   sval
-//---------------------------------------------------------
-
-QString SyntiParameter::sval() const
-      {
-      return d->_sval;
-      }
-
-//---------------------------------------------------------
-//   set
-//---------------------------------------------------------
-
-void SyntiParameter::set(const QString& s)
-      {
-      d->_sval = s;
-      }
-
-void SyntiParameter::set(float v)
-      {
-      d->_fval = v;
-      }
-
-void SyntiParameter::set(const QString& s, float v, float min, float max)
-      {
-      d->_name = s;
-      d->_fval = v;
-      d->_min  = min;
-      d->_max  = max;
-      }
-
-//---------------------------------------------------------
-//   fval
-//---------------------------------------------------------
-
-float SyntiParameter::fval() const
-      {
-      return d->_fval;
-      }
-
-//---------------------------------------------------------
-//   min
-//---------------------------------------------------------
-
-float SyntiParameter::min() const
-      {
-      return d->_min;
-      }
-
-//---------------------------------------------------------
-//   max
-//---------------------------------------------------------
-
-float SyntiParameter::max() const
-      {
-      return d->_max;
-      }
-
-//---------------------------------------------------------
-//   setRange
-//---------------------------------------------------------
-
-void SyntiParameter::setRange(float a, float b)
-      {
-      d->_min = a;
-      d->_max = b;
-      }
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool SyntiParameter::operator==(const SyntiParameter& sp) const
-      {
-      return d->operator==(*sp.d);
-      }
-
-//---------------------------------------------------------
-//   print
-//---------------------------------------------------------
-
-void SyntiParameter::print() const
-      {
-      d->print();
-      }
-
-//---------------------------------------------------------
-//   SyntiState
-//---------------------------------------------------------
-
-SyntiState::SyntiState()
-      {
-      }
-
-//---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
@@ -378,5 +189,17 @@ bool SyntiState::operator==(const SyntiState& st) const
                   return false;
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+
+void SyntiParameter::set(const QString& s, float val, float min, float max)
+      {
+      _sval = s;
+      _fval = val;
+      _min = min;
+      _max = max;
       }
 

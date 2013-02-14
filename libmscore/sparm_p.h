@@ -24,33 +24,6 @@
 #include "sparm.h"
 
 //---------------------------------------------------------
-//   SParmId
-//---------------------------------------------------------
-
-struct SParmId {
-      union {
-            struct {
-                  unsigned syntiId:2;
-                  unsigned subsystemId:4;
-                  unsigned paramId:16;
-                  };
-            unsigned val;
-            };
-      SParmId(int v) : val(v) {}
-      SParmId(int a, int b, int c) {
-            val         = 0;
-            syntiId     = a;
-            subsystemId = b;
-            paramId     = c;
-            }
-      };
-
-enum {
-      FLUID_ID  = 0,
-      AEOLUS_ID = 1
-      };
-
-//---------------------------------------------------------
 //   SyntiParameterData
 //---------------------------------------------------------
 

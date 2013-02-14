@@ -21,8 +21,6 @@
 QVector<Sym> symbols[2];
 static bool symbolsInitialized[2] = { false, false };
 
-QMap<const char*, SymCode*> charReplaceMap;
-
 // static QReadWriteLock gLock;
 QHash<QString, SymId> Sym::lnhash;
 QVector<const char*> Sym::symNames;
@@ -284,26 +282,6 @@ static SymbolNames lilypondNames[] = {
       { tabclef2Sym,          QT_TRANSLATE_NOOP("symbol", "tab2 clef"),            "clefs.tab2" },
       };
 
-static SymCode pSymbols[] = {
-      SymCode(0xa9,   -1, "(C)", SYMBOL_COPYRIGHT),
-      SymCode(0x00BC, -1, "1/4", SYMBOL_FRACTION),
-      SymCode(0x00BD, -1, "1/2", SYMBOL_FRACTION),
-      SymCode(0x00BE, -1, "3/4", SYMBOL_FRACTION),
-      SymCode(0x2153, -1, "1/3", SYMBOL_FRACTION),
-      SymCode(0x2154, -1, "2/3", SYMBOL_FRACTION),
-      SymCode(0x2155, -1, "1/5", SYMBOL_FRACTION),
-      SymCode(0x2156, -1, "2/5", SYMBOL_FRACTION),
-      SymCode(0x2157, -1, "3/5", SYMBOL_FRACTION),
-      SymCode(0x2158, -1, "4/5", SYMBOL_FRACTION),
-      SymCode(0x2159, -1, "1/6", SYMBOL_FRACTION),
-      SymCode(0x215A, -1, "5/6", SYMBOL_FRACTION),
-      SymCode(0x215B, -1, "1/8", SYMBOL_FRACTION),
-      SymCode(0x215C, -1, "3/8", SYMBOL_FRACTION),
-      SymCode(0x215D, -1, "5/8", SYMBOL_FRACTION),
-      SymCode(0x215E, -1, "7/8", SYMBOL_FRACTION),
-      SymCode(-1, -1)    // indicates end
-      };
-
 //---------------------------------------------------------
 //   symIdx2fontId
 //---------------------------------------------------------
@@ -332,8 +310,6 @@ QFont fontId2font(int fontId)
 #endif
             if (fontId == 0)
                   f->setFamily("MScore");
-            else if (fontId == 1)
-                  f->setFamily("MScore1");
             else if (fontId == 2) {
                   f->setFamily("FreeSerif");
                   size = 8.0; //  * MScore::DPI / PPI;
@@ -341,8 +317,11 @@ QFont fontId2font(int fontId)
                   size = size * MScore::DPI / PPI;
 #endif
                   }
-            else
+            else if (fontId == 3)
                   f->setFamily("Gonville-20");
+            else
+                  qFatal("illegal font id %d", fontId);
+
             f->setStyleStrategy(QFont::NoFontMerging);
 #ifdef USE_GLYPHS
             f->setPointSizeF(size);
@@ -589,12 +568,6 @@ void Sym::init()
       symUserNames[letterTSym]      = symNames[letterTSym]    = "T";
       symUserNames[letterSSym]      = symNames[letterSSym]    = "S";
       symUserNames[letterPSym]      = symNames[letterPSym]    = "P";
-
-      for (unsigned i = 0; pSymbols[i].code != -1; ++i) {
-            if (pSymbols[i].code == 0 || pSymbols[i].text == 0)
-                  continue;
-            charReplaceMap.insert(pSymbols[i].text, &pSymbols[i]);
-            }
       }
 
 //---------------------------------------------------------
