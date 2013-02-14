@@ -66,11 +66,12 @@ class SimpleText : public Element {
       void drawFrame(QPainter* painter) const;
       QColor textColor() const;
       void layoutFrame();
+      virtual void draw(QPainter*) const;
 
    public:
       SimpleText(Score*);
       SimpleText(const SimpleText&);
-      ~SimpleText();
+      ~SimpleText() {}
 
       SimpleText &operator=(const SimpleText&);
 
@@ -81,7 +82,8 @@ class SimpleText : public Element {
       void setText(const QString& s);
       QString getText() const;
 
-      virtual void draw(QPainter*) const;
+      bool editMode() const               { return _editMode; }
+      void setEditMode(bool val)          { _editMode = val;  }
 
       virtual void layout();
       qreal lineSpacing() const;
@@ -107,8 +109,6 @@ class SimpleText : public Element {
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
-      void moveCursorToEnd();
-      void moveCursor(int col);
       void addChar(int code);
       bool deletePreviousChar();
       bool deleteChar();
@@ -116,6 +116,8 @@ class SimpleText : public Element {
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       bool setCursor(const QPointF& p,
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+      void moveCursorToEnd()   { movePosition(QTextCursor::Start); };
+      void moveCursorToStart() { movePosition(QTextCursor::End); };
       };
 
 #endif

@@ -2095,7 +2095,6 @@ void EditText::undoRedo()
             oldText = s;
             }
       else {
-            text->textChanged();
             if (text->type() == Element::TEMPO_TEXT) {
                   TempoText* tt = static_cast<TempoText*>(text);
                   tt->score()->setTempo(tt->segment(), tt->tempo());
