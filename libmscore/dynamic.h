@@ -101,7 +101,7 @@ class Dynamic : public Text {
       virtual QLineF dragAnchor() const;
 
       QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
+      bool     setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
       };
 
