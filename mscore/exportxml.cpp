@@ -2979,19 +2979,40 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
       QString t = dyn->getText();
+      Dynamic::DynamicType st = dyn->subtype();
+
       directionTag(xml, attr, dyn);
       xml.stag("direction-type");
-      if (t == "p" || t == "pp" || t == "ppp" || t == "pppp" || t == "ppppp" || t == "pppppp"
-          || t == "f" || t == "ff" || t == "fff" || t == "ffff" || t == "fffff" || t == "ffffff"
-          || t == "mp" || t == "mf" || t == "sf" || t == "sfp" || t == "sfpp" || t == "fp"
-          || t == "rf" || t == "rfz" || t == "sfz" || t == "sffz" || t == "fz") {
+      if (   st == Dynamic::DYNAMIC_p
+          || st == Dynamic::DYNAMIC_pp
+          || st == Dynamic::DYNAMIC_ppp
+          || st == Dynamic::DYNAMIC_pppp
+          || st == Dynamic::DYNAMIC_ppppp
+          || st == Dynamic::DYNAMIC_pppppp
+          || st == Dynamic::DYNAMIC_f
+          || st == Dynamic::DYNAMIC_ff
+          || st == Dynamic::DYNAMIC_fff
+          || st == Dynamic::DYNAMIC_ffff
+          || st == Dynamic::DYNAMIC_fffff
+          || st == Dynamic::DYNAMIC_ffffff
+          || st == Dynamic::DYNAMIC_mp
+          || st == Dynamic::DYNAMIC_mf
+          || st == Dynamic::DYNAMIC_sf
+          || st == Dynamic::DYNAMIC_sfp
+          || st == Dynamic::DYNAMIC_sfpp
+          || st == Dynamic::DYNAMIC_fp
+          || st == Dynamic::DYNAMIC_rf
+          || st == Dynamic::DYNAMIC_rfz
+          || st == Dynamic::DYNAMIC_sfz
+          || st == Dynamic::DYNAMIC_sffz
+          || st == Dynamic::DYNAMIC_fz) {
             xml.stag("dynamics");
-            xml.tagE(t.toLatin1().data());
+            xml.tagE(dyn->subtypeName());
             xml.etag();
             }
-      else if (t == "m" || t == "z") {
+      else if (st == Dynamic::DYNAMIC_m || st == Dynamic::DYNAMIC_z) {
             xml.stag("dynamics");
-            xml.tag("other-dynamics", t);
+            xml.tag("other-dynamics", dyn->subtypeName());
             xml.etag();
             }
       else
