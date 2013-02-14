@@ -1388,8 +1388,8 @@ void TextView::textChanged()
 void TextView::setElement(Element* e)
       {
       Text* te = (Text*)e;
-      tb.textStyle->clear();
 
+      tb.textStyle->clear();
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
@@ -1400,7 +1400,6 @@ void TextView::setElement(Element* e)
       tb.rxoffset->setValue(te->reloff().x());
       tb.ryoffset->setValue(te->reloff().y());
       tb.offsetType->setCurrentIndex(int(te->offsetType()));
-printf("text style %d\n", te->textStyleType());
       tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
@@ -1514,12 +1513,19 @@ void DynamicView::setElement(Element* e)
       {
       Dynamic* dynamic = (Dynamic*)e;
 
-//      tb.style->clear();
-//      foreach (TextStyle* s, dynamic->score()->textStyles())
-//            tb.style->addItem(s->name);
-      tb.text->setText(dynamic->getText());
-//      tb.xoffset->setValue(dynamic->styleOffset().x());
-//      tb.yoffset->setValue(dynamic->styleOffset().y());
+      tb.textStyle->clear();
+      for (int i = 0; i < TEXT_STYLES; ++i)
+            tb.textStyle->addItem(e->score()->textStyle(i).name());
+
+      tb.text->setPlainText(dynamic->getText());
+      tb.xoffset->setValue(dynamic->xoff());
+      tb.yoffset->setValue(dynamic->yoff());
+      tb.rxoffset->setValue(dynamic->reloff().x());
+      tb.ryoffset->setValue(dynamic->reloff().y());
+      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
+      tb.textStyle->setCurrentIndex(dynamic->textStyleType());
+      tb.styled->setChecked(dynamic->styled());
+      tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
       bl.subType->setValue(dynamic->subtype());
