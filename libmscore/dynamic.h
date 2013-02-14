@@ -92,7 +92,6 @@ class Dynamic : public Text {
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void reset();
 
-      void resetType();
       void setVelocity(int v);
       int velocity() const;
       DynamicRange dynRange() const    { return _dynRange; }
