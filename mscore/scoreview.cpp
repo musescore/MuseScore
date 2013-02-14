@@ -4217,7 +4217,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       if (end)
             ((Lyrics*)editObject)->moveCursorToEnd();
       else
-            ((Lyrics*)editObject)->moveCursor(0);
+            ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
       _score->end2();
@@ -4326,7 +4326,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (end)
             ((Lyrics*)editObject)->moveCursorToEnd();
       else
-            ((Lyrics*)editObject)->moveCursor(0);
+            ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
       _score->end2();

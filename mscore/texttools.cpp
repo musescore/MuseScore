@@ -535,6 +535,7 @@ void TextTools::styleChanged(int idx)
       baselineAlign->setEnabled(unstyled);
       vcenterAlign->setEnabled(unstyled);
       blockAllSignals(false);
+      updateText();
       }
 
 //---------------------------------------------------------

@@ -430,7 +430,7 @@ void Harmony::setHarmony(const QString& s)
 
 qreal Harmony::baseLine() const
       {
-      return (_editMode || textList.isEmpty()) ? Text::baseLine() : 0.0;
+      return (editMode() || textList.isEmpty()) ? Text::baseLine() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -529,7 +529,7 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      if (_editMode || textList.isEmpty())
+      if (editMode() || textList.isEmpty())
             Text::layout1();
       else {
             // textStyle().layout(this);
@@ -588,7 +588,7 @@ QPainterPath Harmony::shape() const
 void Harmony::draw(QPainter* painter) const
       {
       painter->setPen(curColor());
-      if (_editMode || textList.isEmpty()) {
+      if (editMode() || textList.isEmpty()) {
             Text::draw(painter);
             return;
             }

@@ -91,7 +91,6 @@ Text::Text(Score* s)
       {
       setFlag(ELEMENT_MOVABLE, true);
       _doc        = 0;
-      _editMode   = false;
       _styleIndex = TEXT_STYLE_DEFAULT;
       }
 
@@ -103,7 +102,6 @@ Text::Text(const Text& e)
       else
             _doc = 0;
       _styleIndex = e._styleIndex;
-      _editMode   = false;
       }
 
 Text::~Text()
@@ -121,7 +119,6 @@ void Text::setText(const QString& s)
             SimpleText::setText(s);
       else
             setUnstyledText(s);
-      textChanged();
       }
 
 //---------------------------------------------------------
@@ -151,7 +148,6 @@ void Text::setUnstyledText(const QString& s)
       tf.setFont(textStyle().font(spatium()));
       c.setBlockCharFormat(tf);
       c.insertText(s);
-      textChanged();
       }
 
 //---------------------------------------------------------
@@ -172,7 +168,6 @@ void Text::setHtml(const QString& s)
       setUnstyled();
       _doc->clear();
       _doc->setHtml(s);
-      textChanged();
       }
 
 //---------------------------------------------------------
@@ -604,11 +599,11 @@ void Text::spatiumChanged(qreal oldVal, qreal newVal)
 
 void Text::startEdit(MuseScoreView* view, const QPointF& p)
       {
+      setEditMode(true);
       if (styled()) {
             SimpleText::startEdit(view, p);
             return;
             }
-      _editMode = true;
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
       setCursor(p);
@@ -628,8 +623,8 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
             return SimpleText::edit(view, grip, key, modifiers, s);
       if (MScore::debugMode)
             qDebug("Text::edit(%p) key 0x%x mod 0x%x\n", this, key, int(modifiers));
-      if (!_editMode || !_cursor) {
-            qDebug("Text::edit(%p): not in edit mode: %d %p", this, _editMode, _cursor);
+      if (!editMode() || !_cursor) {
+            qDebug("Text::edit(%p): not in edit mode: %d %p", this, editMode(), _cursor);
             return false;
             }
       score()->setLayoutAll(type() == INSTRUMENT_NAME);
@@ -807,6 +802,21 @@ void Text::replaceSpecialChars()
       }
 
 //---------------------------------------------------------
+//   moveCursorToStart
+//---------------------------------------------------------
+
+void Text::moveCursorToStart()
+      {
+      if (styled()) {
+            SimpleText::moveCursorToStart();
+            return;
+            }
+
+      if (_cursor)
+            _cursor->movePosition(QTextCursor::Start);
+      }
+
+//---------------------------------------------------------
 //   moveCursorToEnd
 //---------------------------------------------------------
 
@@ -819,21 +829,6 @@ void Text::moveCursorToEnd()
 
       if (_cursor)
             _cursor->movePosition(QTextCursor::End);
-      }
-
-//---------------------------------------------------------
-//   moveCursor
-//---------------------------------------------------------
-
-void Text::moveCursor(int col)
-      {
-      if (styled()) {
-            SimpleText::moveCursor(col);
-            return;
-            }
-
-      if (_cursor)
-            _cursor->setPosition(col);
       }
 
 //---------------------------------------------------------
@@ -1308,7 +1303,7 @@ void Text::setTextStyleType(int st)
       _styleIndex = st;
       if (st != TEXT_STYLE_UNKNOWN)
             setTextStyle(score()->textStyle(st));
-      if (_doc && !_doc->isEmpty() && !_editMode) {
+      if (_doc && !_doc->isEmpty() && !editMode()) {
             SimpleText::setText(_doc->toPlainText());
             delete _doc;
             _doc = 0;
@@ -1324,11 +1319,11 @@ void Text::setUnstyled()
       if (!styled())
             return;
       _styleIndex = TEXT_STYLE_UNSTYLED;
-      if (_editMode)
-            return;
       createDoc();
       if (!SimpleText::isEmpty())
             setUnstyledText(SimpleText::getText());
+      if (editMode())
+            _cursor = new QTextCursor(_doc);
       }
 
 //---------------------------------------------------------
@@ -1355,13 +1350,12 @@ QTextCursor* Text::startCursorEdit()
 
 void Text::endEdit()
       {
+      setEditMode(false);
       if (styled())
             SimpleText::endEdit();
       else {
-            _editMode = false;
             endCursorEdit();
             layoutEdit();
-            textChanged();
             }
       }
 
