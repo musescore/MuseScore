@@ -93,7 +93,6 @@ class Text : public SimpleText {
       QTextCursor* startCursorEdit();
       void endCursorEdit();
       virtual void endEdit();
-      void addSymbol(const SymCode&);
       void addChar(int code);
       void setBlockFormat(const QTextBlockFormat&);
       virtual void write(Xml& xml) const;
@@ -115,7 +114,7 @@ class Text : public SimpleText {
       virtual qreal baseLine() const;
       virtual void paste();
 
-      bool replaceSpecialChars();
+      void replaceSpecialChars();
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
 
       void dragTo(const QPointF&p);

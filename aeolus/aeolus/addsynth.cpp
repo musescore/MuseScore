@@ -106,7 +106,7 @@ void N_func::clrv (int i)
       if ((j >= 0) && (k <= M)) {
             d = (_v [k] - _v [j]) / (k - j);
             for (i = j + 1; i < k; i++)
-                  _v [i] = _v [i] = _v [j] + (i - j) * d;
+                  _v [i] = _v [j] + (i - j) * d;
             }
       else if (j >= 0) {
             d = _v [j];
