@@ -23,28 +23,6 @@ extern void initSymbols(int);
 extern int symIdx2fontId(int symIdx);
 extern QFont fontId2font(int id);
 
-enum SymbolType {
-      SYMBOL_UNKNOWN,
-      SYMBOL_COPYRIGHT,
-      SYMBOL_FRACTION
-      };
-
-//---------------------------------------------------------
-//   SymCode
-//---------------------------------------------------------
-
-struct SymCode {
-      int code;
-      int fontId;
-      const char* text;
-      SymbolType type;
-      bool show;
-      SymCode(int c, int id, const char* t = 0, SymbolType type = SYMBOL_UNKNOWN, bool show = true)
-         : code(c), fontId(id), text(t), type(type), show(show) {}
-      };
-
-extern QMap<const char*, SymCode*> charReplaceMap;
-
 //---------------------------------------------------------
 //   SymId
 //---------------------------------------------------------

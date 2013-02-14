@@ -27,7 +27,40 @@
 #include "mscore.h"
 #include "textframe.h"
 
-QReadWriteLock docRenderLock;
+enum SymbolType {
+      SYMBOL_UNKNOWN,
+      SYMBOL_COPYRIGHT,
+      SYMBOL_FRACTION
+      };
+
+//---------------------------------------------------------
+//   SymCode
+//---------------------------------------------------------
+
+struct SymCode {
+      int code;
+      const char* text;
+      SymbolType type;
+      };
+
+SymCode charReplaceMap[] = {
+      { 0xa9,   "(C)", SYMBOL_COPYRIGHT },
+      { 0x00BC, "1/4", SYMBOL_FRACTION  },
+      { 0x00BD, "1/2", SYMBOL_FRACTION  },
+      { 0x00BE, "3/4", SYMBOL_FRACTION  },
+      { 0x2153, "1/3", SYMBOL_FRACTION  },
+      { 0x2154, "2/3", SYMBOL_FRACTION  },
+      { 0x2155, "1/5", SYMBOL_FRACTION  },
+      { 0x2156, "2/5", SYMBOL_FRACTION  },
+      { 0x2157, "3/5", SYMBOL_FRACTION  },
+      { 0x2158, "4/5", SYMBOL_FRACTION  },
+      { 0x2159, "1/6", SYMBOL_FRACTION  },
+      { 0x215A, "5/6", SYMBOL_FRACTION  },
+      { 0x215B, "1/8", SYMBOL_FRACTION  },
+      { 0x215C, "3/8", SYMBOL_FRACTION  },
+      { 0x215D, "5/8", SYMBOL_FRACTION  },
+      { 0x215E, "7/8", SYMBOL_FRACTION  }
+      };
 
 QTextCursor* Text::_cursor;
 
@@ -747,31 +780,29 @@ void Text::layoutEdit()
 //   replaceSpecialChars
 //---------------------------------------------------------
 
-bool Text::replaceSpecialChars()
+void Text::replaceSpecialChars()
       {
-      QTextCursor startCur = *_cursor;
-      foreach (const char* s, charReplaceMap.keys()) {
-            SymCode sym = *charReplaceMap.value(s);
-            switch (sym.type) {
-                  case SYMBOL_FRACTION:
-                        if (!MScore::replaceFractions)
-                              continue;
-                        break;
-                  default:
-                        ;
-                  }
-            QTextCursor cur = _doc->find(s, _cursor->position() - 1 - strlen(s),
-                  QTextDocument::FindWholeWords);
+      for (const SymCode& sym : charReplaceMap) {
+            if (sym.type == SYMBOL_FRACTION && !MScore::replaceFractions)
+                  continue;
+            const char* s = sym.text;
+            QTextCursor cur = _doc->find(s, _cursor->position() - 1 - strlen(s), QTextDocument::FindWholeWords);
             if (cur.isNull())
                   continue;
+
             // do not go beyond the cursor
             if (cur.selectionEnd() > _cursor->selectionEnd())
                   continue;
-//            addSymbol(sym, &cur); // TODO
-            addSymbol(sym);
-            return true;
+            int code = sym.code;
+            QString ss;
+            if (code & 0xffff0000) {
+                  ss = QChar(QChar::highSurrogate(code));
+                  ss += QChar(QChar::lowSurrogate(code));
+                  }
+            else
+                  ss = QChar(code);
+            cur.insertText(ss);
             }
-      return false;
       }
 
 //---------------------------------------------------------
@@ -863,35 +894,6 @@ qreal Text::lineSpacing() const
 qreal Text::lineHeight() const
       {
       return QFontMetricsF(textStyle().font(spatium())).height();
-      }
-
-//---------------------------------------------------------
-//   addSymbol
-//---------------------------------------------------------
-
-void Text::addSymbol(const SymCode& s)
-      {
-      if (styled()) {
-            SimpleText::addSymbol(s);
-            return;
-            }
-
-      if (s.fontId >= 0) {
-            QTextCharFormat nFormat(_cursor->charFormat());
-            nFormat.setFontFamily(fontId2font(s.fontId).family());
-            QString ss;
-            if (s.code >= 0x10000) {
-                  ss = QChar(QChar::highSurrogate(s.code));
-                  ss += QChar(QChar::lowSurrogate(s.code));
-                  }
-            else
-                  ss = QChar(s.code);
-            _cursor->insertText(ss, nFormat);
-            }
-      else
-            _cursor->insertText(QChar(s.code));
-      score()->setLayoutAll(true);
-      score()->end();
       }
 
 //---------------------------------------------------------

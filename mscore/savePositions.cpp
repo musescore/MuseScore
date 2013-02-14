@@ -88,7 +88,6 @@ bool savePositions(Score* score, const QString& name)
 
       xml.stag("events");
       score->updateRepeatList(true);
-      Measure* lastMeasure = 0;
       foreach(const RepeatSegment* rs, *score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
@@ -99,7 +98,6 @@ bool savePositions(Score* score, const QString& name)
 //                        saveMeasureEvents(xml, lastMeasure, tickOffset + offset);
 //                        }
 //                  else {
-                        lastMeasure = m;
                         saveMeasureEvents(xml, m, tickOffset);
 //                        }
                   if (m->tick() + m->ticks() >= endTick)

@@ -40,9 +40,9 @@ void ExportMidi::writeHeader()
       if (mf.tracks()->isEmpty())
             return;
       MidiTrack* track  = mf.tracks()->front();
+#if 0 // TODO
       MeasureBase* measure  = cs->first();
 
-#if 0 // TODO
       foreach (const Element* e, *measure->el()) {
             if (e->type() == Element::TEXT) {
                   const Text* text = (const Text*)(e);

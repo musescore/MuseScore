@@ -198,8 +198,6 @@ void Page::draw(QPainter* painter) const
       {
       if (score()->layoutMode() != LayoutPage)
             return;
-      extern QReadWriteLock docRenderLock;
-      QWriteLocker locker(&docRenderLock);
       //
       // draw header/footer
       //
