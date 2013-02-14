@@ -608,6 +608,7 @@ void Text::startEdit(MuseScoreView* view, const QPointF& p)
             SimpleText::startEdit(view, p);
             return;
             }
+      _editMode = true;
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
       setCursor(p);
@@ -628,7 +629,7 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
       if (MScore::debugMode)
             qDebug("Text::edit(%p) key 0x%x mod 0x%x\n", this, key, int(modifiers));
       if (!_editMode || !_cursor) {
-            qDebug("Text::edit(%p): not in edit mode: %d %p\n", this, _editMode, _cursor);
+            qDebug("Text::edit(%p): not in edit mode: %d %p", this, _editMode, _cursor);
             return false;
             }
       score()->setLayoutAll(type() == INSTRUMENT_NAME);
