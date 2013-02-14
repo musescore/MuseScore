@@ -40,7 +40,6 @@ class Text : public SimpleText {
       bool isSimpleText() const;
 
    protected:
-      bool _editMode;
       static QTextCursor* _cursor;
       bool setCursor(const QPointF& p, QTextCursor::MoveMode mm = QTextCursor::MoveAnchor);
 
@@ -48,6 +47,8 @@ class Text : public SimpleText {
       Text(Score* = 0);
       Text(const Text&);
       ~Text();
+
+      virtual void draw(QPainter*) const;
 
       Text &operator=(const Text&);
       virtual Text* clone() const         { return new Text(*this); }
@@ -86,8 +87,6 @@ class Text : public SimpleText {
       void setBold(bool);
       void setSize(qreal);
 
-      virtual void draw(QPainter*) const;
-
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString&);
       QTextCursor* startCursorEdit();
@@ -105,8 +104,8 @@ class Text : public SimpleText {
       virtual bool mousePress(const QPointF&, QMouseEvent* ev);
       qreal lineSpacing() const;
       qreal lineHeight() const;
+      void moveCursorToStart();
       void moveCursorToEnd();
-      void moveCursor(int val);
 
       virtual QLineF dragAnchor() const;
 
@@ -118,7 +117,6 @@ class Text : public SimpleText {
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
 
       void dragTo(const QPointF&p);
-      bool editMode() const               { return _editMode; }
 
       bool styled() const                 { return _styleIndex != -1; }
       int textStyleType() const           { return _styleIndex; }
@@ -132,8 +130,6 @@ class Text : public SimpleText {
       virtual void styleChanged();
       virtual void setScore(Score* s);
       friend class TextProperties;
-
-      virtual void textChanged()          {}
 
       QTextCursor* cursor()               { return _cursor; }
       QTextDocument* doc() const          { return _doc;    }

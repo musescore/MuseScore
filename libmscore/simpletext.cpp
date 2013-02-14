@@ -45,10 +45,6 @@ SimpleText::SimpleText(const SimpleText& st)
       _editMode            = false;
       }
 
-SimpleText::~SimpleText()
-      {
-      }
-
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -76,7 +72,7 @@ QRectF SimpleText::cursorRect() const
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       int line   = _cursor.line;
-      qreal lh   = lineHeight();
+//      qreal lh   = lineHeight();
       QPointF pt = _layout[line].pos;
       qreal xo   = fm.width(_layout[line].text.left(_cursor.column));
 
@@ -313,7 +309,6 @@ void SimpleText::startEdit(MuseScoreView*, const QPointF& pt)
       {
       _cursor.line   = 0;
       _cursor.column = 0;
-      _editMode      = true;
       setCursor(pt);
       }
 
@@ -323,7 +318,6 @@ void SimpleText::startEdit(MuseScoreView*, const QPointF& pt)
 
 void SimpleText::endEdit()
       {
-      _editMode = false;
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       _text.clear();
@@ -497,19 +491,31 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
       {
       switch(op) {
             case QTextCursor::Left:
-                  if (_cursor.column == 0)
-                        return false;
-                  if (curLine().at(_cursor.column-1).isLowSurrogate())
+                  if (_cursor.column == 0) {
+                        if (_cursor.line == 0)
+                              return false;
+                        --_cursor.line;
+                        _cursor.column = curLine().size();
+                        }
+                  else {
+                        if (curLine().at(_cursor.column-1).isLowSurrogate())
+                              --_cursor.column;
                         --_cursor.column;
-                  --_cursor.column;
+                        }
                   break;
 
             case QTextCursor::Right:
-                  if (_cursor.column >= curLine().size())
-                        return false;
-                  if (curLine().at(_cursor.column).isHighSurrogate())
+                  if (_cursor.column >= curLine().size()) {
+                        if (_cursor.line >= _layout.size()-1)
+                              return false;
+                        ++_cursor.line;
+                        _cursor.column = 0;
+                        }
+                  else {
+                        if (curLine().at(_cursor.column).isHighSurrogate())
+                              ++_cursor.column;
                         ++_cursor.column;
-                  ++_cursor.column;
+                        }
                   break;
 
             case QTextCursor::Up:
@@ -529,7 +535,7 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
                   break;
 
             case QTextCursor::Start:
-                  _cursor.line = 0;
+                  _cursor.line   = 0;
                   _cursor.column = 0;
                   break;
 
@@ -537,29 +543,12 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
                   _cursor.line = _layout.size() - 1;
                   _cursor.column = curLine().size();
                   break;
+
             default:
                   qDebug("SimpleText::movePosition: not implemented");
                   return false;
             }
       return true;
-      }
-
-//---------------------------------------------------------
-//   moveCursorToEnd
-//---------------------------------------------------------
-
-void SimpleText::moveCursorToEnd()
-      {
-      printf("moveCursorToEnd\n");
-      }
-
-//---------------------------------------------------------
-//   moveCursor
-//---------------------------------------------------------
-
-void SimpleText::moveCursor(int col)
-      {
-      printf("moveCursor\n");
       }
 
 //---------------------------------------------------------
@@ -608,5 +597,6 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       score()->setUpdateAll(true);
+      return true;
       }
 
