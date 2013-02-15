@@ -94,18 +94,6 @@ void ScoreView::startEdit()
             editObject->layout();
             editObject->startEdit(this, startMove);
             }
-      mscore->setEditState(editObject);
-      if (origEditObject->isText()) {
-            Text* t = static_cast<Text*>(editObject);
-            mscore->textTools()->setText(t);
-            mscore->textTools()->updateTools();
-            mscore->textTools()->show();
-            }
-      else {
-            mscore->editTools()->setElement(editObject);
-            mscore->editTools()->updateTools();
-            mscore->editTools()->show();
-            }
       curGrip = -1;
       updateGrips();
       _score->rebuildBspTree();     // we replaced elements
@@ -118,9 +106,6 @@ void ScoreView::startEdit()
 
 void ScoreView::endEdit()
       {
-      mscore->editTools()->hide();
-      mscore->textTools()->hide();
-
       setDropTarget(0);
       if (!editObject) {
             origEditObject = 0;
@@ -228,7 +213,6 @@ void ScoreView::endEdit()
       _score->endCmd();
       mscore->endCmd();
 
-//      _score->deselect(origEditObject);
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
             _score->select(curElement);

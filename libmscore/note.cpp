@@ -2048,6 +2048,10 @@ void Note::addSpannerFor(Spanner* e)
       _spannerFor = e;
       }
 
+//---------------------------------------------------------
+//   removeSpannerFor
+//---------------------------------------------------------
+
 bool Note::removeSpannerFor(Spanner* e)
       {
       Spanner* sp = _spannerFor;
