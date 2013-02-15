@@ -175,7 +175,7 @@ QtSingleApplication::QtSingleApplication(const QString &appId, int &argc, char *
     sysInit(appId);
 }
 
-
+#if 0
 /*!
     Creates a QtSingleApplication object. The application identifier
     will be QCoreApplication::applicationFilePath(). \a argc, \a
@@ -186,7 +186,7 @@ QtSingleApplication::QtSingleApplication(int &argc, char **argv, Type type)
 {
     sysInit();
 }
-
+#endif
 
 #if defined(Q_WS_X11)
 /*!
