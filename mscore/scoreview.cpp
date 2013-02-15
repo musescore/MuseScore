@@ -2849,8 +2849,6 @@ void ScoreView::startNoteEntry()
       mscore->enableInputToolbar(enable);
 
       _score->inputState().noteEntryMode = true;
-//      _score->moveCursor();
-//      setCursorOn(true);
       _score->inputState().rest = false;
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
@@ -2861,13 +2859,10 @@ void ScoreView::startNoteEntry()
 
       const InputState is = _score->inputState();
       Staff* staff = _score->staff(is.track() / VOICES);
-      switch( staff->staffType()->group()) {
+      switch (staff->staffType()->group()) {
             case PITCHED_STAFF:
-                  mscore->changeState(STATE_NOTE_ENTRY_PITCHED);
                   break;
-            case TAB_STAFF:
-            {
-                  mscore->changeState(STATE_NOTE_ENTRY_TAB);
+            case TAB_STAFF: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
                   // set InputState::_string to note visual string
@@ -2877,9 +2872,8 @@ void ScoreView::startNoteEntry()
                         }
                   _score->inputState().setString(strg);
                   break;
-            }
+                  }
             case PERCUSSION_STAFF:
-                  mscore->changeState(STATE_NOTE_ENTRY_DRUM);
                   break;
             }
 
@@ -3682,6 +3676,7 @@ ScoreState ScoreView::mscoreState() const
 
 void ScoreView::enterState()
       {
+      mscore->changeState(mscoreState());
       if (MScore::debugMode)
             qDebug("%p enterState <%s>", this, qPrintable(sender()->objectName()));
       }

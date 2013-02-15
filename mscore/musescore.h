@@ -453,7 +453,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
       void setNormalState()    { changeState(STATE_NORMAL); }
-      void setEditState(Element*);
       void setPlayState()      { changeState(STATE_PLAY); }
       void setSearchState()    { changeState(STATE_SEARCH); }
       void checkForUpdate();
@@ -517,11 +516,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
+
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
+      void updateInputState(Score*);
+
       bool readLanguages(const QString& path);
-      void setRevision(QString& r){rev = r;}
-      QString revision() {return rev;}
+      void setRevision(QString& r)  {rev = r;}
+      QString revision()            {return rev;}
       Q_INVOKABLE void newFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
@@ -560,8 +562,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
 
-      void updateInputState(Score*);
-
       void tupletDialog();
       void selectSimilar(Element*, bool);
       void selectElementDialog(Element* e);
@@ -578,7 +578,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
       bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
 
-//      Score::FileError readScore(Score*, QString name, bool ignoreVersionError);
       Score* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
