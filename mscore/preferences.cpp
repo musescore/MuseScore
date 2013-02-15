@@ -574,11 +574,6 @@ void Preferences::read()
       s.endGroup();
 
       readPluginList();
-      int n = pluginList.size();
-      for (int i = 0; i < n; ++i) {
-            const PluginDescription& d = pluginList[i];
-printf("read plugin %d %s %d\n", i, qPrintable(d.path), d.load);
-            }
       }
 
 //---------------------------------------------------------

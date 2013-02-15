@@ -53,6 +53,7 @@ class Workspace : public QObject {
       void read(XmlReader&);
       void read();
       bool readOnly() const          { return _readOnly; }
+      void setReadOnly(bool val)     { _readOnly = val;  }
 
       static void initWorkspace();
       static Workspace* currentWorkspace;
