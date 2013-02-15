@@ -277,8 +277,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       ScoreView* viewer = mscore->currentScoreView();
 
 
-      if (viewer->mscoreState() != STATE_EDIT && viewer->mscoreState() != STATE_LYRICS_EDIT) // Already in startCmd in this case
-          score->startCmd();
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_TEXT_EDIT) { // Already in startCmd in this case
+            score->startCmd();
+            }
       if (sel.state() == SEL_LIST) {
             foreach(Element* e, sel.elements())
                   applyDrop(score, viewer, e, element);
@@ -313,8 +316,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             }
       else
             qDebug("unknown selection state\n");
-      if (viewer->mscoreState() != STATE_EDIT && viewer->mscoreState() != STATE_LYRICS_EDIT) //Already in startCmd mode in this case
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
+            }
       mscore->endCmd();
       }
 

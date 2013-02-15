@@ -120,7 +120,7 @@ Shortcut Shortcut::sc[] = {
           fileNew_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_LYRICS_EDIT | STATE_PLAY,
          A_SCORE,
          "print",
          QT_TRANSLATE_NOOP("action","Print..."),
@@ -129,7 +129,7 @@ Shortcut Shortcut::sc[] = {
           print_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT,
          0,
          "undo",
          Qt::ApplicationShortcut,
@@ -139,7 +139,7 @@ Shortcut Shortcut::sc[] = {
           undo_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT,
          0,
          "redo",
          Qt::ApplicationShortcut,
@@ -797,7 +797,8 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Decrescendo")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EXIT | STATE_LYRICS_EDIT
+            | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
          0,
          "escape",
          QT_TRANSLATE_NOOP("action","Escape")
@@ -1653,7 +1654,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Edit Element")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_EDIT,
          0,
          "reset",
          QT_TRANSLATE_NOOP("action","Reset"),

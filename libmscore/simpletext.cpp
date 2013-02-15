@@ -415,13 +415,38 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
                   s = "-";
                   break;
 
+            case Qt::Key_F:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d191");
+                  break;
+            case Qt::Key_M:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d190");
+                  break;
+            case Qt::Key_P:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18f");
+                  break;
+            case Qt::Key_Z:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18e");
+                  break;
+            case Qt::Key_S:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18d");
+                  break;
+            case Qt::Key_R:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18c");
+                  break;
+
             default:
                   break;
             }
 
       if (!s.isEmpty()) {
             curLine().insert(_cursor.column, s);
-            ++_cursor.column;
+            _cursor.column += s.size();
             }
 
       layout();
@@ -591,6 +616,8 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       const QString& s(curLine());
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       for (int col = 0; col < s.size(); ++col) {
+            if (s.at(col).isLowSurrogate())
+                  continue;
             if (x + fm.width(s.left(col))  > pt.x()) {
                   _cursor.column = col;
                   break;
