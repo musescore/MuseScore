@@ -1236,7 +1236,13 @@ void MuseScore::setEditState(Element* e)
       {
       if (inspector)
             inspector->setElement(e);
-      changeState(STATE_EDIT);
+
+      if (e && (e->type() == Element::LYRICS))
+            changeState(STATE_LYRICS_EDIT);
+      if (e && e->isText())
+            changeState(STATE_TEXT_EDIT);
+      else
+            changeState(STATE_EDIT);
       }
 
 //---------------------------------------------------------
@@ -2695,8 +2701,15 @@ void MuseScore::changeState(ScoreState val)
                   _modeText->show();
                   break;
             case STATE_EDIT:
-            case STATE_LYRICS_EDIT:
                   _modeText->setText(tr("edit mode"));
+                  _modeText->show();
+                  break;
+            case STATE_TEXT_EDIT:
+                  _modeText->setText(tr("text edit mode"));
+                  _modeText->show();
+                  break;
+            case STATE_LYRICS_EDIT:
+                  _modeText->setText(tr("lyrics edit mode"));
                   _modeText->show();
                   break;
             case STATE_PLAY:
@@ -3057,7 +3070,9 @@ void MuseScore::setPos(int t)
 
 void MuseScore::undo()
       {
-      if (_sstate == STATE_EDIT || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate == STATE_EDIT
+         || _sstate == STATE_LYRICS_EDIT
+         || _sstate == STATE_TEXT_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
@@ -3088,7 +3103,9 @@ void MuseScore::undo()
 
 void MuseScore::redo()
       {
-      if (_sstate == STATE_EDIT || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate == STATE_EDIT
+         || _sstate == STATE_TEXT_EDIT
+         || _sstate == STATE_LYRICS_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
@@ -3522,6 +3539,7 @@ const char* stateName(ScoreState s)
             case STATE_NOTE_ENTRY_TAB:     return "STATE_NOTE_ENTRY_TAB";
             case STATE_NOTE_ENTRY:         return "STATE_NOTE_ENTRY";
             case STATE_EDIT:               return "STATE_EDIT";
+            case STATE_TEXT_EDIT:          return "STATE_TEXT_EDIT";
             case STATE_LYRICS_EDIT:        return "STATE_LYRICS_EDIT";
             case STATE_PLAY:               return "STATE_PLAY";
             case STATE_SEARCH:             return "STATE_SEARCH";

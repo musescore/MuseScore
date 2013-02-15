@@ -3660,10 +3660,11 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (sm->configuration().contains(states[EDIT])) {
-            if (editObject && editObject->type() == Element::LYRICS)
+            if (editObject && (editObject->type() == Element::LYRICS))
                   return STATE_LYRICS_EDIT;
-            else
-                  return STATE_EDIT;
+            else if (editObject && editObject->isText())
+                  return STATE_TEXT_EDIT;
+            return STATE_EDIT;
             }
       if (sm->configuration().contains(states[FOTOMODE]))
             return STATE_FOTO;
