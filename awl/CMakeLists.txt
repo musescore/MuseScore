@@ -73,7 +73,8 @@ set_target_properties (
 ADD_DEPENDENCIES(awl mops1)
 ADD_DEPENDENCIES(awl mops2)
 
-if (NOT MINGW AND NOT APPLE)
+# if (NOT MINGW AND NOT APPLE)
+if (FALSE)
 QT4_WRAP_CPP (mocs2
       aslider.h
       knob.h
@@ -129,4 +130,5 @@ set_target_properties(awlplugin
 #target_link_libraries (ltest awlplugin msynth al ${QT_LIBRARIES})
 
 
-endif (NOT MINGW AND NOT APPLE)
+# endif (NOT MINGW AND NOT APPLE)
+endif (FALSE)

@@ -21,6 +21,9 @@
 project(mscore)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 
+include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
+include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
+
 cmake_policy(SET CMP0003 NEW)
 
 # for debugging the make system uncomment next line:
@@ -148,9 +151,8 @@ set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTXMLPATTERNS TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
 
-find_package(Qt4 "4.8" REQUIRED QtCore QtGui QtXml QtSvg QtNetwork QtWebkit QtDeclarative)
-
-include(${QT_USE_FILE})
+# find_package(Qt4 "4.8" REQUIRED QtCore QtGui QtXml QtSvg QtNetwork QtWebkit QtDeclarative)
+# include(${QT_USE_FILE})
 
 ##
 ## alsa >= 1.0.0
@@ -292,7 +294,8 @@ if (NOT MINGW AND NOT APPLE)
 #     set library search path for runtime linker to load the same
 #     qt libraries as we used at compile time
 #
-set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath,${QT_LIBRARY_DIR}")
+set (QT_LIBRARY_DIR "/home/ws/Qt5.0.1/5.0.1/gcc_64/lib")
+set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${QT_LIBRARY_DIR}")
 endif (NOT MINGW AND NOT APPLE)
 
 #
@@ -306,45 +309,27 @@ add_custom_command(
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
+set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
-
-if (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
-      if (MINGW)
-            set(FLAGS -std=gnu++0x -DQT_DEBUG -DQT_DLL)
-      else (MINGW)
-            if(APPLE)
-                  set (FLAGS -std=gnu++0x -O0 -DQT_DEBUG)
-            else (APPLE)
-                  set (FLAGS -std=gnu++0x -DQT_DEBUG)
-            endif(APPLE)
-      endif (MINGW)
-else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
-      if (MINGW)
-            set(FLAGS -std=gnu++0x -O2 -DNDEBUG -DQT_DLL -DQT_NO_DEBUG)
-      else (MINGW)
-            set(FLAGS -std=gnu++0x -O2 -DNDEBUG -DQT_NO_DEBUG)
-      endif (MINGW)
-endif (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
 
 add_custom_command(
  OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch
  COMMAND ${CMAKE_CXX_COMPILER}
-   -x c++-header -g  ${FLAGS} -I ${INC} -o all.h.gch all.h
+   -x c++-header -std=gnu++0x -g  -fPIE -DQT_DISABLE_DEPRECATED_BEFORE=0 -I ${INC} -o all.h.gch all.h
  DEPENDS ${PROJECT_BINARY_DIR}/all.h
  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
  VERBATIM
  )
 set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
 
-
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 
 subdirs(mscore awl bww2mxml share
-      fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
+      fluid msynth libmscore mstyle thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
@@ -443,9 +428,7 @@ include (InstallRequiredSystemLibraries)
   set(CPACK_DEBIAN_PACKAGE_NAME         "mscore")
   set(CPACK_DEBIAN_PACKAGE_VERSION      "${Mscore_VERSION_FULL}-0ubuntu0.1")
   set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-
   set(CPACK_DEBIAN_PACKAGE_DEPENDS    "libqt4-core (>= 4.4), libqt4-gui (>= 4.4)")
-
   set(CPACK_DEBIAN_PACKAGE_MAINTAINER   "tsmithe@ubuntu.com")
   set(CPACK_DEBIAN_PACKAGE_SECTION      "devel")
   set(CPACK_DEBIAN_PACKAGE_PRIORITY     "optional")
