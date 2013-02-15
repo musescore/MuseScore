@@ -207,6 +207,8 @@ add_executable ( ${ExecutableName}
       driver.h
       )
 
+qt5_use_modules(${ExecutableName} Gui Widgets Network)
+
 if (APPLE)
       set_target_properties (mscore
          PROPERTIES
@@ -347,7 +349,6 @@ else (MINGW)
       mscore
       PROPERTIES
          COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
-         LINK_FLAGS "-L${QT_LIBRARY_DIR}"
       )
    if (HAS_AUDIOFILE)
        target_link_libraries(mscore sndfile)

@@ -8719,7 +8719,8 @@ QIcon MgStyle::standardIconImplementation(StandardPixmap standardIcon,
                               }
 
                         default:
-                        return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
+                        return QCommonStyle::standardIcon( standardIcon, option, widget );
+//                        return QIcon(); // QCommonStyle::standardIconImplementation( standardIcon, option, widget );
                     }
           }
 

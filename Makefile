@@ -25,12 +25,17 @@ PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
 #VERSION   = 2.0
 
+#
+# change path to include your Qt5 installation
+#
+BINPATH      = $(HOME)/Qt5.0.1/5.0.1/gcc_64/bin:${PATH};        \
+
 release:
-	mkdir build.release;                       \
+	if test ! -d build.release; then mkdir build.release; fi; \
       cd build.release;                          \
+      export PATH=${BINPATH}                     \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
-  	   ..; 			                   \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;   \
       make lrelease;                             \
       make -j ${CPUS};                           \
 
@@ -38,26 +43,12 @@ release:
 debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
+      export PATH=${BINPATH}                                \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
-  	   ..; 		                                    \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;              \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
 
-
-qt5:
-	if test ! -d build.qt5;                        \
-         then                                          \
-            mkdir build.qt5;                         \
-            cd build.qt5;                            \
-            export PATH=$(HOME)/Qt5.0.1/5.0.1/gcc_64/bin:${PATH};        \
-            cmake -DCMAKE_BUILD_TYPE=DEBUG -DBUILD_SCRIPTGEN=NO        \
-            	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-            	   ..; 		             \
-            make -j ${CPUS};                           \
-         else                                          \
-            echo "build directory does already exist, please remove first with 'make clean'";       \
-         fi
 
 #
 #  win32

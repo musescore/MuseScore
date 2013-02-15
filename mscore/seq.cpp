@@ -1256,6 +1256,7 @@ void SeqMsgFifo::enqueue(const SeqMsg& msg)
                   break;
             qwc.wait(&mutex,100);
             }
+      mutex.unlock();
       if (i == n) {
             qDebug("===SeqMsgFifo: overflow\n");
             return;

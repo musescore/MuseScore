@@ -476,7 +476,7 @@ MuseScore::MuseScore()
       QLayout* mlayout = new QVBoxLayout;
       mlayout->setMargin(0);
       mlayout->setSpacing(0);
-      mainWindow->setLayout(mlayout);
+//      mainWindow->setLayout(mlayout);
 
       QWidget* mainScore = new QWidget;
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -2337,7 +2337,6 @@ int main(int argc, char* av[])
             sc->show();
             qApp->processEvents();
             }
-
       if (!converterMode) {
             switch(preferences.globalStyle) {
                   case STYLE_DARK: {
@@ -2359,7 +2358,6 @@ int main(int argc, char* av[])
                         break;
                   }
             }
-
       synti = new MasterSynth();
       seq   = new Seq();
       MScore::seq = seq;

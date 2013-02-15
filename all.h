@@ -73,6 +73,7 @@
 #include <QTextList>
 #include <QTextFrameFormat>
 #include <QClipboard>
+#include <QPlainTextEdit>
 
 #include <QDateTimeEdit>
 #include <QInputDialog>
@@ -144,6 +145,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QNetworkCookie>
 #include <QNetworkCookieJar>
 #include <QHostAddress>
 #include <QUdpSocket>

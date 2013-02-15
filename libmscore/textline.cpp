@@ -418,7 +418,7 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
       if (proto == 0 || proto->lineWidth() != _lineWidth)
             xml.tag("lineWidth", _lineWidth.val());
       if (proto == 0 || proto->lineStyle() != _lineStyle)
-            xml.tag("lineStyle", _lineStyle);
+            xml.tag("lineStyle", int(_lineStyle));
       if (proto == 0 || proto->lineColor() != _lineColor)
             xml.tag("lineColor", _lineColor);
       if (proto == 0 || proto->beginTextPlace() != _beginTextPlace)

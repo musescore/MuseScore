@@ -174,13 +174,17 @@
         }
     }
 
-    //________________________________________________
-    void TransitionWidget::grabBackground( QPixmap& pixmap, QWidget* widget, QRect& rect ) const
-    {
-        if( !widget ) return;
+//---------------------------------------------------------
+//   grabBackground
+//---------------------------------------------------------
 
-        QWidgetList widgets;
-        if( widget->autoFillBackground() )
+void TransitionWidget::grabBackground(QPixmap& pixmap, QWidget* widget, QRect& rect) const
+      {
+      if (!widget)
+            return;
+
+      QWidgetList widgets;
+      if( widget->autoFillBackground() )
         { widgets.push_back( widget ); }
 
         QWidget *parent(0);
@@ -226,28 +230,32 @@
             parent->style()->drawPrimitive ( QStyle::PE_Widget, &option, &p, parent );
         }
 
-        p.end();
+      p.end();
 
-        // draw all widgets in parent list
-        // backward
-        QPaintEvent event(rect);
-        for( int i = widgets.size() - 1; i>=0; i-- )
-        {
+      // draw all widgets in parent list
+      // backward
+      QPaintEvent event(rect);
+      for (int i = widgets.size() - 1; i>=0; i--) {
             QWidget* w = widgets.at(i);
-            QPainter::setRedirected( w, &pixmap, widget->mapTo(w, rect.topLeft() ) );
-            event = QPaintEvent(QRect( QPoint(), rect.size()));
-            QCoreApplication::sendEvent(w, &event);
-            QPainter::restoreRedirected(w);
-        }
+            w->render(&pixmap, rect.topLeft());
+//            QPainter::setRedirected(w, &pixmap, widget->mapTo(w, rect.topLeft()));
+//            event = QPaintEvent(QRect(QPoint(), rect.size()));
+//            QCoreApplication::sendEvent(w, &event);
+//            QPainter::restoreRedirected(w);
+            }
+      }
 
-    }
+//---------------------------------------------------------
+//   grabWidget
+//---------------------------------------------------------
 
-    //________________________________________________
-    void TransitionWidget::grabWidget( QPixmap& pixmap, QWidget* widget, QRect& rect ) const
-    { widget->render( &pixmap, pixmap.rect().topLeft(), rect, QWidget::DrawChildren ); }
+void TransitionWidget::grabWidget( QPixmap& pixmap, QWidget* widget, QRect& rect ) const
+      {
+      widget->render( &pixmap, pixmap.rect().topLeft(), rect, QWidget::DrawChildren );
+      }
 
-    //________________________________________________
-    void TransitionWidget::fade( const QPixmap& source, QPixmap& target, qreal opacity, const QRect& rect ) const
+//________________________________________________
+void TransitionWidget::fade( const QPixmap& source, QPixmap& target, qreal opacity, const QRect& rect ) const
     {
 
         if( target.isNull() || target.size() != size() )
