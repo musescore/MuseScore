@@ -27,33 +27,32 @@
 
 #include "splitterengine.h"
 
-    //____________________________________________________________
-    bool SplitterEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool SplitterEngine::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
-        if( !data_.contains( widget ) ) { data_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() ); }
+      if ( !widget ) return false;
+      if ( !data_.contains( widget ) ) {
+            data_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() );
+            }
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool SplitterEngine::updateState( const QPaintDevice* object, bool value )
-    {
-        PaintDeviceDataMap<WidgetStateData>::Value data( SplitterEngine::data( object ) );
-        return ( data && data.data()->updateState( value ) );
-    }
+//____________________________________________________________
+bool SplitterEngine::updateState( const QPaintDevice* object, bool value ) {
+      PaintDeviceDataMap<WidgetStateData>::Value data( SplitterEngine::data( object ) );
+      return ( data && data.data()->updateState( value ) );
+      }
 
-    //____________________________________________________________
-    bool SplitterEngine::isAnimated( const QPaintDevice* object )
-    {
+//____________________________________________________________
+bool SplitterEngine::isAnimated( const QPaintDevice* object ) {
 
-        PaintDeviceDataMap<WidgetStateData>::Value data( SplitterEngine::data( object ) );
-        return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
+      PaintDeviceDataMap<WidgetStateData>::Value data( SplitterEngine::data( object ) );
+      return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
 
-    }
+      }
 
 

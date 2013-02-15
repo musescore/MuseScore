@@ -27,77 +27,72 @@
 #include <assert.h>
 #include "progressbardata.h"
 
-    //______________________________________________
-    ProgressBarData::ProgressBarData( QObject* parent, QWidget* target, int duration ):
-        GenericData( parent, target, duration ),
-        startValue_(0),
-        endValue_(0)
-    {
+//______________________________________________
+ProgressBarData::ProgressBarData( QObject* parent, QWidget* target, int duration ):
+      GenericData( parent, target, duration ),
+      startValue_(0),
+      endValue_(0) {
 
-        target->installEventFilter( this );
+      target->installEventFilter( this );
 
-        // set animation curve shape
-        animation().data()->setEasingCurve( QEasingCurve::InOutQuad );
+      // set animation curve shape
+      animation().data()->setEasingCurve( QEasingCurve::InOutQuad );
 
-        // make sure target is a progressbar and store relevant values
-        QProgressBar* progress = qobject_cast<QProgressBar*>( target );
-        assert( progress );
-        setStartValue( progress->value() );
-        setEndValue( progress->value() );
+      // make sure target is a progressbar and store relevant values
+      QProgressBar* progress = qobject_cast<QProgressBar*>( target );
+      assert( progress );
+      setStartValue( progress->value() );
+      setEndValue( progress->value() );
 
-        // setup connections
-        connect( target, SIGNAL( valueChanged( int ) ), SLOT( valueChanged( int ) ) );
+      // setup connections
+      connect( target, SIGNAL( valueChanged( int ) ), SLOT( valueChanged( int ) ) );
 
-    }
+      }
 
-    //______________________________________________
-    bool ProgressBarData::eventFilter( QObject* object, QEvent* event )
-    {
+//______________________________________________
+bool ProgressBarData::eventFilter( QObject* object, QEvent* event ) {
 
-        if( !( enabled() && object && object == target().data() ) ) return AnimationData::eventFilter( object, event );
-        switch( event->type() )
-        {
-            case QEvent::Show:
-            {
+      if ( !( enabled() && object && object == target().data() ) ) return AnimationData::eventFilter( object, event );
+      switch ( event->type() ) {
+            case QEvent::Show: {
 
-                // reset start and end value
-                QProgressBar* progress = static_cast<QProgressBar*>( target().data() );
-                setStartValue( progress->value() );
-                setEndValue( progress->value() );
-                break;
+                  // reset start and end value
+                  QProgressBar* progress = static_cast<QProgressBar*>( target().data() );
+                  setStartValue( progress->value() );
+                  setEndValue( progress->value() );
+                  break;
+
+                  }
+
+            case QEvent::Hide: {
+                  if ( animation().data()->isRunning() ) {
+                        animation().data()->stop();
+                        }
+                  break;
+                  }
+
+            default:
+                  break;
 
             }
 
-            case QEvent::Hide:
-            {
-                if( animation().data()->isRunning() )
-                { animation().data()->stop(); }
-                break;
-            }
+      return AnimationData::eventFilter( object, event );
 
-            default: break;
+      }
 
-        }
+//______________________________________________
+void ProgressBarData::valueChanged( int value ) {
 
-        return AnimationData::eventFilter( object, event );
+      // do nothing if not enabled
+      if ( !enabled() ) return;
 
-    }
+      // do nothing if progress is invalid
+      QProgressBar* progress = static_cast<QProgressBar*>( target().data() );
+      if ( !( progress && progress->maximum() != progress->minimum() ) ) return;
 
-    //______________________________________________
-    void ProgressBarData::valueChanged( int value )
-    {
-
-        // do nothing if not enabled
-        if( !enabled() ) return;
-
-        // do nothing if progress is invalid
-        QProgressBar* progress = static_cast<QProgressBar*>( target().data() );
-        if( !( progress && progress->maximum() != progress->minimum() ) ) return;
-
-        // update start and end values
-        bool isRunning( animation().data()->isRunning() );
-        if( isRunning )
-        {
+      // update start and end values
+      bool isRunning( animation().data()->isRunning() );
+      if ( isRunning ) {
 
             // in case next value arrives while animation is running,
             // end animation, set value immediately
@@ -107,21 +102,21 @@
             animation().data()->stop();
             setOpacity(0);
 
-            if( target() ) target().data()->update();
+            if ( target() ) target().data()->update();
 
             return;
 
-        }
+            }
 
-        setStartValue( endValue() );
-        setEndValue( value );
+      setStartValue( endValue() );
+      setEndValue( value );
 
-        // start animation only if target is enabled, visible, not running,
-        // and if end and start values are different enough
-        // (with end value being larger than start value)
-        if( !(target() && target().data()->isEnabled() && target().data()->isVisible()) ) return;
-        if( isRunning || endValue()-startValue() < 2 ) return;
+      // start animation only if target is enabled, visible, not running,
+      // and if end and start values are different enough
+      // (with end value being larger than start value)
+      if ( !(target() && target().data()->isEnabled() && target().data()->isVisible()) ) return;
+      if ( isRunning || endValue() - startValue() < 2 ) return;
 
-        animation().data()->start();
+      animation().data()->start();
 
-    }
+      }

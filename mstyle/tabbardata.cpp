@@ -29,95 +29,91 @@
 #include "tabbardata.h"
 
 
-    //______________________________________________
-    TabBarData::TabBarData( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target )
-    {
+//______________________________________________
+TabBarData::TabBarData( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ) {
 
-        current_.animation_ = new Animation( duration, this );
-        setupAnimation( currentIndexAnimation(), "currentOpacity" );
-        currentIndexAnimation().data()->setDirection( Animation::Forward );
+      current_.animation_ = new Animation( duration, this );
+      setupAnimation( currentIndexAnimation(), "currentOpacity" );
+      currentIndexAnimation().data()->setDirection( Animation::Forward );
 
-        previous_.animation_ = new Animation( duration, this );
-        setupAnimation( previousIndexAnimation(), "previousOpacity" );
-        previousIndexAnimation().data()->setDirection( Animation::Backward );
+      previous_.animation_ = new Animation( duration, this );
+      setupAnimation( previousIndexAnimation(), "previousOpacity" );
+      previousIndexAnimation().data()->setDirection( Animation::Backward );
 
-    }
+      }
 
-    //______________________________________________
-    Animation::Pointer TabBarData::animation( const QPoint& position ) const
-    {
+//______________________________________________
+Animation::Pointer TabBarData::animation( const QPoint& position ) const {
 
-        if( !enabled() ) return Animation::Pointer();
+      if ( !enabled() ) return Animation::Pointer();
 
-        const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
-        if( !local ) return Animation::Pointer();
+      const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
+      if ( !local ) return Animation::Pointer();
 
-        int index( local->tabAt( position ) );
-        if( index < 0 ) return Animation::Pointer();
-        else if( index == currentIndex() ) return currentIndexAnimation();
-        else if( index == previousIndex() ) return previousIndexAnimation();
-        else return Animation::Pointer();
+      int index( local->tabAt( position ) );
+      if ( index < 0 ) return Animation::Pointer();
+      else if ( index == currentIndex() ) return currentIndexAnimation();
+      else if ( index == previousIndex() ) return previousIndexAnimation();
+      else return Animation::Pointer();
 
-    }
+      }
 
-    //______________________________________________
-    bool TabBarData::updateState( const QPoint& position , bool hovered )
-    {
+//______________________________________________
+bool TabBarData::updateState( const QPoint& position , bool hovered ) {
 
-        if( !enabled() ) return false;
+      if ( !enabled() ) return false;
 
-        const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
-        if( !local ) return false;
+      const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
+      if ( !local ) return false;
 
-        int index( local->tabAt( position ) );
-        if( index < 0 ) return false;
+      int index( local->tabAt( position ) );
+      if ( index < 0 ) return false;
 
-        if( hovered )
-        {
+      if ( hovered ) {
 
 
-            if( index != currentIndex() )
-            {
+            if ( index != currentIndex() ) {
 
-                if( currentIndex() >= 0 )
-                {
-                    setPreviousIndex( currentIndex() );
-                    setCurrentIndex( -1 );
-                    previousIndexAnimation().data()->restart();
-                }
+                  if ( currentIndex() >= 0 ) {
+                        setPreviousIndex( currentIndex() );
+                        setCurrentIndex( -1 );
+                        previousIndexAnimation().data()->restart();
+                        }
 
-                setCurrentIndex( index );
-                currentIndexAnimation().data()->restart();
-                return true;
+                  setCurrentIndex( index );
+                  currentIndexAnimation().data()->restart();
+                  return true;
 
-            } else return false;
+                  }
+            else return false;
 
-        } else if( index == currentIndex() ) {
+            }
+      else if ( index == currentIndex() ) {
 
             setPreviousIndex( currentIndex() );
             setCurrentIndex( -1 );
             previousIndexAnimation().data()->restart();
             return true;
 
-        } else return false;
+            }
+      else return false;
 
-    }
+      }
 
-    //______________________________________________
-    qreal TabBarData::opacity( const QPoint& position ) const
-    {
+//______________________________________________
+qreal TabBarData::opacity( const QPoint& position ) const {
 
-        if( !enabled() ) return OpacityInvalid;
+      if ( !enabled() ) return OpacityInvalid;
 
-        const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
-        if( !local ) return OpacityInvalid;
+      const QTabBar* local( qobject_cast<const QTabBar*>( target().data() ) );
+      if ( !local ) return OpacityInvalid;
 
-        int index( local->tabAt( position ) );
-        if( index < 0 ) return OpacityInvalid;
-        else if( index == currentIndex() ) return currentOpacity();
-        else if( index == previousIndex() ) return previousOpacity();
-        else return OpacityInvalid;
+      int index( local->tabAt( position ) );
+      if ( index < 0 ) return OpacityInvalid;
+      else if ( index == currentIndex() ) return currentOpacity();
+      else if ( index == previousIndex() ) return previousOpacity();
+      else return OpacityInvalid;
 
-    }
+      }
 

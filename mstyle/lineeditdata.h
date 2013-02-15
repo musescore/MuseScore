@@ -29,107 +29,109 @@
 
 #include "transitiondata.h"
 
-    //! generic data
-    class LineEditData: public TransitionData
-    {
+//! generic data
+class LineEditData: public TransitionData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        LineEditData( QObject*, QLineEdit*, int );
+            //! constructor
+            LineEditData( QObject*, QLineEdit*, int );
 
-        //! destructor
-        virtual ~LineEditData( void )
-        {}
+            //! destructor
+            virtual ~LineEditData( void )
+                  {}
 
-        //! event filter
-        bool eventFilter( QObject*, QEvent* );
+            //! event filter
+            bool eventFilter( QObject*, QEvent* );
 
-        //! returns true if animations are locked
-        bool isLocked( void ) const
-        { return animationLockTimer_.isActive(); }
+            //! returns true if animations are locked
+            bool isLocked( void ) const {
+                  return animationLockTimer_.isActive();
+                  }
 
-        //! start lock animation timer
-        void lockAnimations( void )
-        { animationLockTimer_.start( lockTime_, this ); }
+            //! start lock animation timer
+            void lockAnimations( void ) {
+                  animationLockTimer_.start( lockTime_, this );
+                  }
 
-        //! start lock animation timer
-        void unlockAnimations( void )
-        { animationLockTimer_.stop(); }
+            //! start lock animation timer
+            void unlockAnimations( void ) {
+                  animationLockTimer_.stop();
+                  }
 
-        protected slots:
+      protected slots:
 
-        //! text edited
-        virtual void textEdited( void );
+            //! text edited
+            virtual void textEdited( void );
 
-        //! selection changed
-        virtual void selectionChanged( void );
+            //! selection changed
+            virtual void selectionChanged( void );
 
-        //! text changed
-        virtual void textChanged( void );
+            //! text changed
+            virtual void textChanged( void );
 
-        //! initialize animation
-        virtual bool initializeAnimation( void );
+            //! initialize animation
+            virtual bool initializeAnimation( void );
 
-        //! animate
-        virtual bool animate( void );
+            //! animate
+            virtual bool animate( void );
 
-        //! called when target is destroyed
-        virtual void targetDestroyed( void );
+            //! called when target is destroyed
+            virtual void targetDestroyed( void );
 
-        protected:
+      protected:
 
-        //! timer event
-        virtual void timerEvent( QTimerEvent* );
+            //! timer event
+            virtual void timerEvent( QTimerEvent* );
 
-        //! target rect
-        /*! return rect corresponding to the area to be updated when animating */
-        QRect targetRect( void ) const
-        {
-            if( !target_ ) return QRect();
-            QRect out( target_.data()->rect() );
-            if( hasClearButton_ && clearButtonRect_.isValid() )
-            { out.setRight( clearButtonRect_.left() ); }
+            //! target rect
+            /*! return rect corresponding to the area to be updated when animating */
+            QRect targetRect( void ) const {
+                  if ( !target_ ) return QRect();
+                  QRect out( target_.data()->rect() );
+                  if ( hasClearButton_ && clearButtonRect_.isValid() ) {
+                        out.setRight( clearButtonRect_.left() );
+                        }
 
-            return out;
-        }
+                  return out;
+                  }
 
-        //! check if target has clear button
-        void checkClearButton( void );
+            //! check if target has clear button
+            void checkClearButton( void );
 
-        private:
+      private:
 
-        //! lock time (milliseconds
-        static const int lockTime_;
+            //! lock time (milliseconds
+            static const int lockTime_;
 
-        //! timer used to disable animations when triggered too early
-        QBasicTimer animationLockTimer_;
+            //! timer used to disable animations when triggered too early
+            QBasicTimer animationLockTimer_;
 
-        //! needed to start animations out of parent paintEvent
-        QBasicTimer timer_;
+            //! needed to start animations out of parent paintEvent
+            QBasicTimer timer_;
 
-        //! target
-        QWeakPointer<QLineEdit> target_;
+            //! target
+            QWeakPointer<QLineEdit> target_;
 
-        //! true if target has clean button
-        bool hasClearButton_;
+            //! true if target has clean button
+            bool hasClearButton_;
 
-        //! clear button rect
-        QRect clearButtonRect_;
+            //! clear button rect
+            QRect clearButtonRect_;
 
-        //! true if text was manually edited
-        /*! needed to trigger animation only on programatically enabled text */
-        bool edited_;
+            //! true if text was manually edited
+            /*! needed to trigger animation only on programatically enabled text */
+            bool edited_;
 
-        //! old text
-        QString text_;
+            //! old text
+            QString text_;
 
-        //! widget rect
-        /*! needed to properly handle QLabel geometry changes */
-        QRect widgetRect_;
+            //! widget rect
+            /*! needed to properly handle QLabel geometry changes */
+            QRect widgetRect_;
 
-    };
+      };
 
 #endif

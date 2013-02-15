@@ -26,84 +26,79 @@
 
 #include "progressbarengine.h"
 
-    //_______________________________________________
-    bool ProgressBarEngine::registerWidget( QWidget* widget )
-    {
+//_______________________________________________
+bool ProgressBarEngine::registerWidget( QWidget* widget ) {
 
-        // check enability
-        if( !widget ) return false;
+      // check enability
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) ) data_.insert( widget, new ProgressBarData( this, widget, duration() ), enabled() );
-        if( busyIndicatorEnabled() && !dataSet_.contains( widget ) ) dataSet_.insert( widget );
+      // create new data class
+      if ( !data_.contains( widget ) ) data_.insert( widget, new ProgressBarData( this, widget, duration() ), enabled() );
+      if ( busyIndicatorEnabled() && !dataSet_.contains( widget ) ) dataSet_.insert( widget );
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
 
-        return true;
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool ProgressBarEngine::isAnimated( const QObject* object )
-    {
+//____________________________________________________________
+bool ProgressBarEngine::isAnimated( const QObject* object ) {
 
-        DataMap<ProgressBarData>::Value data( ProgressBarEngine::data( object ) );
-        return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
+      DataMap<ProgressBarData>::Value data( ProgressBarEngine::data( object ) );
+      return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
 
-    }
+      }
 
-    //____________________________________________________________
-    void ProgressBarEngine::setBusyStepDuration( int value )
-    {
-        if( busyStepDuration_ == value ) return;
-        busyStepDuration_ = value;
+//____________________________________________________________
+void ProgressBarEngine::setBusyStepDuration( int value ) {
+      if ( busyStepDuration_ == value ) return;
+      busyStepDuration_ = value;
 
-        // restart timer with specified time
-        if( timer_.isActive() )
-        {
+      // restart timer with specified time
+      if ( timer_.isActive() ) {
             timer_.stop();
             timer_.start( busyStepDuration(), this );
-        }
+            }
 
-    }
+      }
 
-    //_______________________________________________
-    void ProgressBarEngine::timerEvent( QTimerEvent* event )
-    {
+//_______________________________________________
+void ProgressBarEngine::timerEvent( QTimerEvent* event ) {
 
-        // check enability and timer
-        if( !(busyIndicatorEnabled() && event->timerId() == timer_.timerId() ) )
-        { return BaseEngine::timerEvent( event ); }
+      // check enability and timer
+      if ( !(busyIndicatorEnabled() && event->timerId() == timer_.timerId() ) ) {
+            return BaseEngine::timerEvent( event );
+            }
 
-        bool animated( false );
+      bool animated( false );
 
-        // loop over objects in map
-        for( ProgressBarSet::iterator iter = dataSet_.begin(); iter != dataSet_.end(); ++iter )
-        {
+      // loop over objects in map
+      for ( ProgressBarSet::iterator iter = dataSet_.begin(); iter != dataSet_.end(); ++iter ) {
 
             // cast to progressbar
             QProgressBar* progressBar( qobject_cast<QProgressBar*>( *iter ) );
 
             // check cast, visibility and range
-            if( progressBar && progressBar->isVisible() && progressBar->minimum() == 0 && progressBar->maximum() == 0  )
-            {
+            if ( progressBar && progressBar->isVisible() && progressBar->minimum() == 0 && progressBar->maximum() == 0  ) {
 
-                // update animation flag
-                animated = true;
+                  // update animation flag
+                  animated = true;
 
-                // update value
-                progressBar->setValue(progressBar->value()+1);
-                progressBar->update();
+                  // update value
+                  progressBar->setValue(progressBar->value() + 1);
+                  progressBar->update();
 
+                  }
             }
-        }
 
-        if( !animated ) timer_.stop();
+      if ( !animated ) timer_.stop();
 
-    }
+      }
 
-    //____________________________________________________________
-    DataMap<ProgressBarData>::Value ProgressBarEngine::data( const QObject* object )
-    { return data_.find( object ).data(); }
+//____________________________________________________________
+DataMap<ProgressBarData>::Value ProgressBarEngine::data( const QObject* object ) {
+      return data_.find( object ).data();
+      }
 

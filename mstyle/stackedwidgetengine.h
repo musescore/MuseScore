@@ -31,51 +31,49 @@
 #include "datamap.h"
 #include "stackedwidgetdata.h"
 
-    //! used for simple widgets
-    class StackedWidgetEngine: public BaseEngine
-    {
+//! used for simple widgets
+class StackedWidgetEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        StackedWidgetEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            StackedWidgetEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~StackedWidgetEngine( void )
-        {}
+            //! destructor
+            virtual ~StackedWidgetEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QStackedWidget* );
+            //! register widget
+            virtual bool registerWidget( QStackedWidget* );
 
-        //! duration
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! duration
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! maps
-        DataMap<StackedWidgetData> data_;
+            //! maps
+            DataMap<StackedWidgetData> data_;
 
-    };
+      };
 
 #endif
