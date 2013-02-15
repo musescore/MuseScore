@@ -31,66 +31,65 @@
 #include "datamap.h"
 #include "tabbardata.h"
 
-    //! stores tabbar hovered action and timeLine
-    class TabBarEngine: public BaseEngine
-    {
+//! stores tabbar hovered action and timeLine
+class TabBarEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        TabBarEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            TabBarEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~TabBarEngine( void )
-        {}
+            //! destructor
+            virtual ~TabBarEngine( void )
+                  {}
 
-        //! register tabbar
-        virtual bool registerWidget( QWidget* );
+            //! register tabbar
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget hover state is changed
-        virtual bool updateState( const QObject*, const QPoint&, bool );
+            //! true if widget hover state is changed
+            virtual bool updateState( const QObject*, const QPoint&, bool );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object, const QPoint& point )
-        {
-            if( DataMap<TabBarData>::Value data = data_.find( object ) )
-            { if( Animation::Pointer animation = data.data()->animation( point ) ) return animation.data()->isRunning(); }
-            return false;
-        }
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object, const QPoint& point ) {
+                  if ( DataMap<TabBarData>::Value data = data_.find( object ) ) {
+                        if ( Animation::Pointer animation = data.data()->animation( point ) ) return animation.data()->isRunning();
+                        }
+                  return false;
+                  }
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, const QPoint& point )
-        { return isAnimated( object, point ) ? data_.find( object ).data()->opacity( point ) : AnimationData::OpacityInvalid; }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, const QPoint& point ) {
+                  return isAnimated( object, point ) ? data_.find( object ).data()->opacity( point ) : AnimationData::OpacityInvalid;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<TabBarData> data_;
+            //! data map
+            DataMap<TabBarData> data_;
 
-    };
+      };
 
 #endif

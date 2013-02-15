@@ -28,189 +28,195 @@
 
 #include "animation.h"
 
-    //! temporary widget used to perform smooth transition between one widget state and another
-    class TransitionWidget: public QWidget
-    {
+//! temporary widget used to perform smooth transition between one widget state and another
+class TransitionWidget: public QWidget {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        //! declare opacity property
-        Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
+            //! declare opacity property
+            Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
-        public:
+      public:
 
-        //! shortcut to painter
-        typedef QWeakPointer<TransitionWidget> Pointer;
+            //! shortcut to painter
+            typedef QWeakPointer<TransitionWidget> Pointer;
 
-        //! constructor
-        TransitionWidget( QWidget* parent, int duration );
+            //! constructor
+            TransitionWidget( QWidget* parent, int duration );
 
-        //! destructor
-        virtual ~TransitionWidget( void )
-        {}
+            //! destructor
+            virtual ~TransitionWidget( void )
+                  {}
 
-        //!@name flags
-        //@{
-        enum Flag
-        {
-            None = 0,
-            GrabFromWindow = 1<<0,
-            Transparent = 1<<1,
-            PaintOnWidget = 1<<2
-        };
+            //!@name flags
+            //@{
+            enum Flag {
+                  None = 0,
+                  GrabFromWindow = 1 << 0,
+                  Transparent = 1 << 1,
+                  PaintOnWidget = 1 << 2
+                  };
 
-        Q_DECLARE_FLAGS(Flags, Flag)
+            Q_DECLARE_FLAGS(Flags, Flag)
 
-        void setFlags( Flags value )
-        { flags_ = value; }
+            void setFlags( Flags value ) {
+                  flags_ = value;
+                  }
 
-        void setFlag( Flag flag, bool value = true )
-        {
-            if( value ) flags_ |= flag;
-            else flags_ &= (~flag);
-        }
+            void setFlag( Flag flag, bool value = true ) {
+                  if ( value ) flags_ |= flag;
+                  else flags_ &= (~flag);
+                  }
 
-        bool testFlag( Flag flag ) const
-        { return flags_.testFlag( flag ); }
+            bool testFlag( Flag flag ) const {
+                  return flags_.testFlag( flag );
+                  }
 
-        //@}
+            //@}
 
-        //! duration
-        void setDuration( int duration )
-        {
-            if( animation_ )
-            { animation_.data()->setDuration( duration ); }
-        }
+            //! duration
+            void setDuration( int duration ) {
+                  if ( animation_ ) {
+                        animation_.data()->setDuration( duration );
+                        }
+                  }
 
-        //! duration
-        int duration( void ) const
-        { return ( animation_ ) ? animation_.data()->duration() : 0; }
+            //! duration
+            int duration( void ) const {
+                  return ( animation_ ) ? animation_.data()->duration() : 0;
+                  }
 
-        //!@name opacity
-        //@{
+            //!@name opacity
+            //@{
 
-        virtual qreal opacity( void ) const
-        { return opacity_; }
+            virtual qreal opacity( void ) const {
+                  return opacity_;
+                  }
 
-        virtual void setOpacity( qreal value )
-        {
-            if( opacity_ == value ) return;
-            opacity_ = value;
-            update();
-        }
+            virtual void setOpacity( qreal value ) {
+                  if ( opacity_ == value ) return;
+                  opacity_ = value;
+                  update();
+                  }
 
-        //@}
+            //@}
 
-        //@name pixmaps handling
-        //@{
+            //@name pixmaps handling
+            //@{
 
-        //! start
-        void resetStartPixmap( void )
-        { setStartPixmap( QPixmap() ); }
+            //! start
+            void resetStartPixmap( void ) {
+                  setStartPixmap( QPixmap() );
+                  }
 
-        //! start
-        void setStartPixmap( QPixmap pixmap )
-        { startPixmap_ = pixmap; }
+            //! start
+            void setStartPixmap( QPixmap pixmap ) {
+                  startPixmap_ = pixmap;
+                  }
 
-        //! start
-        const QPixmap& startPixmap( void ) const
-        { return startPixmap_; }
+            //! start
+            const QPixmap& startPixmap( void ) const {
+                  return startPixmap_;
+                  }
 
-        //! end
-        void resetEndPixmap( void )
-        { setEndPixmap( QPixmap() ); }
+            //! end
+            void resetEndPixmap( void ) {
+                  setEndPixmap( QPixmap() );
+                  }
 
-        //! end
-        void setEndPixmap( QPixmap pixmap )
-        {
-            endPixmap_ = pixmap;
-            currentPixmap_ = pixmap;
-        }
+            //! end
+            void setEndPixmap( QPixmap pixmap ) {
+                  endPixmap_ = pixmap;
+                  currentPixmap_ = pixmap;
+                  }
 
-        //! start
-        const QPixmap& endPixmap( void ) const
-        { return endPixmap_; }
+            //! start
+            const QPixmap& endPixmap( void ) const {
+                  return endPixmap_;
+                  }
 
-        //! current
-        const QPixmap& currentPixmap( void ) const
-        { return currentPixmap_; }
+            //! current
+            const QPixmap& currentPixmap( void ) const {
+                  return currentPixmap_;
+                  }
 
-        //@}
+            //@}
 
-        //! grap pixmap
-        QPixmap grab( QWidget* = 0, QRect = QRect() );
+            //! grap pixmap
+            QPixmap grab( QWidget* = 0, QRect = QRect() );
 
-        //! true if animated
-        virtual bool isAnimated( void ) const
-        { return animation_.data()->isRunning(); }
+            //! true if animated
+            virtual bool isAnimated( void ) const {
+                  return animation_.data()->isRunning();
+                  }
 
-        //! end animation
-        virtual void endAnimation( void )
-        { if( animation_.data()->isRunning() ) animation_.data()->stop(); }
+            //! end animation
+            virtual void endAnimation( void ) {
+                  if ( animation_.data()->isRunning() ) animation_.data()->stop();
+                  }
 
-        //! animate transition
-        virtual void animate( void )
-        {
-            endAnimation();
-            animation_.data()->start();
-        }
+            //! animate transition
+            virtual void animate( void ) {
+                  endAnimation();
+                  animation_.data()->start();
+                  }
 
-        //! true if paint is enabled
-        static bool paintEnabled( void );
+            //! true if paint is enabled
+            static bool paintEnabled( void );
 
-        signals:
+      signals:
 
-        //! emmitted when animation is finished/aborder
-        void finished( void );
+            //! emmitted when animation is finished/aborder
+            void finished( void );
 
-        protected:
+      protected:
 
-        //! paint event
-        virtual void paintEvent( QPaintEvent* );
+            //! paint event
+            virtual void paintEvent( QPaintEvent* );
 
-        //! grab widget background
-        /*!
-        Background is not rendered properly using QWidget::render.
-        Use home-made grabber instead. This is directly inspired from bespin.
-        Copyright (C) 2007 Thomas Luebking <thomas.luebking@web.de>
-        */
-        virtual void grabBackground( QPixmap&, QWidget*, QRect& ) const;
+            //! grab widget background
+            /*!
+            Background is not rendered properly using QWidget::render.
+            Use home-made grabber instead. This is directly inspired from bespin.
+            Copyright (C) 2007 Thomas Luebking <thomas.luebking@web.de>
+            */
+            virtual void grabBackground( QPixmap&, QWidget*, QRect& ) const;
 
-        //! grab widget
-        virtual void grabWidget( QPixmap&, QWidget*, QRect& ) const;
+            //! grab widget
+            virtual void grabWidget( QPixmap&, QWidget*, QRect& ) const;
 
-        //! fade pixmap
-        virtual void fade( const QPixmap& source, QPixmap& target, qreal opacity, const QRect& ) const;
+            //! fade pixmap
+            virtual void fade( const QPixmap& source, QPixmap& target, qreal opacity, const QRect& ) const;
 
-        private:
+      private:
 
-        //! Flags
-        Flags flags_;
+            //! Flags
+            Flags flags_;
 
-        //! paint enabled
-        static bool paintEnabled_;
+            //! paint enabled
+            static bool paintEnabled_;
 
-        //! internal transition animation
-        Animation::Pointer animation_;
+            //! internal transition animation
+            Animation::Pointer animation_;
 
-        //! animation starting pixmap
-        QPixmap startPixmap_;
+            //! animation starting pixmap
+            QPixmap startPixmap_;
 
-        //! animation starting pixmap
-        QPixmap endPixmap_;
+            //! animation starting pixmap
+            QPixmap endPixmap_;
 
-        //! local start pixmap (used for fading)
-        QPixmap localStartPixmap_;
+            //! local start pixmap (used for fading)
+            QPixmap localStartPixmap_;
 
-        //! local end pixmap (used for fading)
-        QPixmap localEndPixmap_;
+            //! local end pixmap (used for fading)
+            QPixmap localEndPixmap_;
 
-        //! current pixmap
-        QPixmap currentPixmap_;
+            //! current pixmap
+            QPixmap currentPixmap_;
 
-        //! current state opacity
-        qreal opacity_;
+            //! current state opacity
+            qreal opacity_;
 
-    };
+      };
 
 #endif

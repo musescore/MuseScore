@@ -29,55 +29,59 @@
 
 #include "genericdata.h"
 
-    //! generic data
-    class ProgressBarData: public GenericData
-    {
+//! generic data
+class ProgressBarData: public GenericData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ProgressBarData( QObject* parent, QWidget* widget, int duration );
+            //! constructor
+            ProgressBarData( QObject* parent, QWidget* widget, int duration );
 
-        //! destructor
-        virtual ~ProgressBarData( void )
-        {}
+            //! destructor
+            virtual ~ProgressBarData( void )
+                  {}
 
-        //! event filter
-        virtual bool eventFilter( QObject*, QEvent* );
+            //! event filter
+            virtual bool eventFilter( QObject*, QEvent* );
 
-        //! progressbar value (during animation)
-        virtual int value( void ) const
-        { return startValue() + opacity()*( endValue() - startValue() ); }
+            //! progressbar value (during animation)
+            virtual int value( void ) const {
+                  return startValue() + opacity() * ( endValue() - startValue() );
+                  }
 
-        protected slots:
+      protected slots:
 
-        //! triggered by progressBar::valueChanged
-        void valueChanged( int );
+            //! triggered by progressBar::valueChanged
+            void valueChanged( int );
 
-        protected:
+      protected:
 
-        const int& startValue( void ) const
-        { return startValue_; }
+            const int& startValue( void ) const {
+                  return startValue_;
+                  }
 
-        void setStartValue( int value )
-        { startValue_ = value; }
+            void setStartValue( int value ) {
+                  startValue_ = value;
+                  }
 
-        const int& endValue( void ) const
-        { return endValue_; }
+            const int& endValue( void ) const {
+                  return endValue_;
+                  }
 
-        void setEndValue( int value )
-        { endValue_ = value; }
+            void setEndValue( int value ) {
+                  endValue_ = value;
+                  }
 
-        private:
+      private:
 
-        //! animation starting value
-        int startValue_;
+            //! animation starting value
+            int startValue_;
 
-        //! animation ending value
-        int endValue_;
+            //! animation ending value
+            int endValue_;
 
-    };
+      };
 
 #endif

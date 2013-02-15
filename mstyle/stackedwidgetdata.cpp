@@ -26,48 +26,46 @@
 
 #include "stackedwidgetdata.h"
 
-    //______________________________________________________
-    StackedWidgetData::StackedWidgetData( QObject* parent, QStackedWidget* target, int duration ):
-        TransitionData( parent, target, duration ),
-        target_( target ),
-        index_( target->currentIndex() )
-    {
+//______________________________________________________
+StackedWidgetData::StackedWidgetData( QObject* parent, QStackedWidget* target, int duration ):
+      TransitionData( parent, target, duration ),
+      target_( target ),
+      index_( target->currentIndex() ) {
 
-        // configure transition
-        connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
-        connect( target_.data(), SIGNAL( currentChanged( int ) ), SLOT( animate() ) );
+      // configure transition
+      connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
+      connect( target_.data(), SIGNAL( currentChanged( int ) ), SLOT( animate() ) );
 
-        // disable focus
-        transition().data()->setAttribute(Qt::WA_NoMousePropagation, true);
-        transition().data()->setFlag(TransitionWidget::PaintOnWidget, true);
+      // disable focus
+      transition().data()->setAttribute(Qt::WA_NoMousePropagation, true);
+      transition().data()->setFlag(TransitionWidget::PaintOnWidget, true);
 
-        setMaxRenderTime( 50 );
+      setMaxRenderTime( 50 );
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool StackedWidgetData::initializeAnimation( void )
-    {
+//___________________________________________________________________
+bool StackedWidgetData::initializeAnimation( void ) {
 
-        // check enability
-        if( !( target_ && target_.data()->isVisible() ) )
-        { return false; }
+      // check enability
+      if ( !( target_ && target_.data()->isVisible() ) ) {
+            return false;
+            }
 
-        // check index
-        if( target_.data()->currentIndex() == index_ )
-        { return false; }
+      // check index
+      if ( target_.data()->currentIndex() == index_ ) {
+            return false;
+            }
 
-        // do not animate if either index or currentIndex is not valid
-        // but update index_ none the less
-        if( target_.data()->currentIndex() < 0 || index_ < 0 )
-        {
+      // do not animate if either index or currentIndex is not valid
+      // but update index_ none the less
+      if ( target_.data()->currentIndex() < 0 || index_ < 0 ) {
             index_ = target_.data()->currentIndex();
             return false;
-        }
+            }
 
-        // get old widget (matching index_) and initialize transition
-        if( QWidget *widget = target_.data()->widget( index_ ) )
-        {
+      // get old widget (matching index_) and initialize transition
+      if ( QWidget* widget = target_.data()->widget( index_ ) ) {
 
             transition().data()->setOpacity( 0 );
             startClock();
@@ -77,59 +75,57 @@
             index_ = target_.data()->currentIndex();
             return !slow();
 
-        } else {
+            }
+      else {
 
             index_ = target_.data()->currentIndex();
             return false;
 
-        }
+            }
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool StackedWidgetData::animate( void )
-    {
+//___________________________________________________________________
+bool StackedWidgetData::animate( void ) {
 
-        // check enability
-        if( !enabled() ) return false;
+      // check enability
+      if ( !enabled() ) return false;
 
-        // initialize animation
-        if( !initializeAnimation() ) return false;
+      // initialize animation
+      if ( !initializeAnimation() ) return false;
 
-        // show transition widget
-        transition().data()->show();
-        transition().data()->raise();
-        transition().data()->animate();
-        return true;
+      // show transition widget
+      transition().data()->show();
+      transition().data()->raise();
+      transition().data()->animate();
+      return true;
 
-    }
+      }
 
-    //___________________________________________________________________
-    void StackedWidgetData::finishAnimation( void )
-    {
-        // disable updates on currentWidget
-        if( target_ && target_.data()->currentWidget() )
-        { target_.data()->currentWidget()->setUpdatesEnabled( false ); }
+//___________________________________________________________________
+void StackedWidgetData::finishAnimation( void ) {
+      // disable updates on currentWidget
+      if ( target_ && target_.data()->currentWidget() ) {
+            target_.data()->currentWidget()->setUpdatesEnabled( false );
+            }
 
-        // hide transition
-        transition().data()->hide();
+      // hide transition
+      transition().data()->hide();
 
-        // reenable updates and repaint
-        if( target_ && target_.data()->currentWidget() )
-        {
+      // reenable updates and repaint
+      if ( target_ && target_.data()->currentWidget() ) {
             target_.data()->currentWidget()->setUpdatesEnabled( true );
             target_.data()->currentWidget()->repaint();
-        }
+            }
 
-        // invalidate start widget
-        transition().data()->resetStartPixmap();
+      // invalidate start widget
+      transition().data()->resetStartPixmap();
 
-    }
+      }
 
-    //___________________________________________________________________
-    void StackedWidgetData::targetDestroyed( void )
-    {
-        setEnabled( false );
-        target_.clear();
-    }
+//___________________________________________________________________
+void StackedWidgetData::targetDestroyed( void ) {
+      setEnabled( false );
+      target_.clear();
+      }
 

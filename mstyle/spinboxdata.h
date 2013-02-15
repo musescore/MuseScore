@@ -29,133 +29,129 @@
 
 #include "animationdata.h"
 
-    //! handles spinbox arrows hover
-    class SpinBoxData: public AnimationData
-    {
+//! handles spinbox arrows hover
+class SpinBoxData: public AnimationData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        //! declare opacity property
-        Q_PROPERTY( qreal upArrowOpacity READ upArrowOpacity WRITE setUpArrowOpacity )
-        Q_PROPERTY( qreal downArrowOpacity READ downArrowOpacity WRITE setDownArrowOpacity )
+            //! declare opacity property
+            Q_PROPERTY( qreal upArrowOpacity READ upArrowOpacity WRITE setUpArrowOpacity )
+            Q_PROPERTY( qreal downArrowOpacity READ downArrowOpacity WRITE setDownArrowOpacity )
 
-        public:
+      public:
 
-        //! constructor
-        SpinBoxData( QObject*, QWidget*, int );
+            //! constructor
+            SpinBoxData( QObject*, QWidget*, int );
 
-        //! destructor
-        virtual ~SpinBoxData( void )
-        {}
+            //! destructor
+            virtual ~SpinBoxData( void )
+                  {}
 
-        //! animation state
-        virtual bool updateState( QStyle::SubControl subControl, bool value )
-        {
-            if( subControl == QStyle::SC_SpinBoxUp ) return upArrowData_.updateState( value );
-            else if( subControl == QStyle::SC_SpinBoxDown ) return downArrowData_.updateState( value );
-            else return false;
-        }
+            //! animation state
+            virtual bool updateState( QStyle::SubControl subControl, bool value ) {
+                  if ( subControl == QStyle::SC_SpinBoxUp ) return upArrowData_.updateState( value );
+                  else if ( subControl == QStyle::SC_SpinBoxDown ) return downArrowData_.updateState( value );
+                  else return false;
+                  }
 
-        //! animation state
-        virtual bool isAnimated( QStyle::SubControl subControl ) const
-        {
-            return(
-                ( subControl == QStyle::SC_SpinBoxUp && upArrowAnimation().data()->isRunning() ) ||
-                ( subControl == QStyle::SC_SpinBoxDown && downArrowAnimation().data()->isRunning() ) );
-        }
-
-        //! opacity
-        virtual qreal opacity( QStyle::SubControl subControl ) const
-        {
-            if( subControl == QStyle::SC_SpinBoxUp ) return upArrowOpacity();
-            else if( subControl == QStyle::SC_SpinBoxDown ) return downArrowOpacity();
-            else return OpacityInvalid;
-        }
-
-        //! duration
-        virtual void setDuration( int duration )
-        {
-            upArrowAnimation().data()->setDuration( duration );
-            downArrowAnimation().data()->setDuration( duration );
-        }
-
-        //!@name up arrow animation
-        //@{
-
-        //! opacity
-        qreal upArrowOpacity( void ) const
-        { return upArrowData_.opacity_; }
-
-        //! opacity
-        void setUpArrowOpacity( qreal value )
-        {
-            if( upArrowData_.opacity_ == value ) return;
-            upArrowData_.opacity_ = value;
-            setDirty();
-        }
-
-        //! animation
-        Animation::Pointer upArrowAnimation( void ) const
-        { return upArrowData_.animation_; }
-
-        //@}
-
-        //!@name down arrow animation
-        //@{
-
-        //! opacity
-        qreal downArrowOpacity( void ) const
-        { return downArrowData_.opacity_; }
-
-        //! opacity
-        void setDownArrowOpacity( qreal value )
-        {
-            if( downArrowData_.opacity_ == value ) return;
-            downArrowData_.opacity_ = value;
-            setDirty();
-        }
-
-        //! animation
-        Animation::Pointer downArrowAnimation( void ) const
-        { return downArrowData_.animation_; }
-
-        //@}
-
-        private:
-
-        //! container for needed animation data
-        class Data
-        {
-
-            public:
-
-            //! default constructor
-            Data( void ):
-                state_( false ),
-                opacity_(0)
-                {}
-
-            //! state
-            bool updateState( bool );
-
-            //! arrow state
-            bool state_;
-
-            //! animation
-            Animation::Pointer animation_;
+            //! animation state
+            virtual bool isAnimated( QStyle::SubControl subControl ) const {
+                  return(
+                              ( subControl == QStyle::SC_SpinBoxUp && upArrowAnimation().data()->isRunning() ) ||
+                              ( subControl == QStyle::SC_SpinBoxDown && downArrowAnimation().data()->isRunning() ) );
+                  }
 
             //! opacity
-            qreal opacity_;
+            virtual qreal opacity( QStyle::SubControl subControl ) const {
+                  if ( subControl == QStyle::SC_SpinBoxUp ) return upArrowOpacity();
+                  else if ( subControl == QStyle::SC_SpinBoxDown ) return downArrowOpacity();
+                  else return OpacityInvalid;
+                  }
 
-        };
+            //! duration
+            virtual void setDuration( int duration ) {
+                  upArrowAnimation().data()->setDuration( duration );
+                  downArrowAnimation().data()->setDuration( duration );
+                  }
 
-        //! up arrow data
-        Data upArrowData_;
+            //!@name up arrow animation
+            //@{
 
-        //! down arrow data
-        Data downArrowData_;
+            //! opacity
+            qreal upArrowOpacity( void ) const {
+                  return upArrowData_.opacity_;
+                  }
 
-    };
+            //! opacity
+            void setUpArrowOpacity( qreal value ) {
+                  if ( upArrowData_.opacity_ == value ) return;
+                  upArrowData_.opacity_ = value;
+                  setDirty();
+                  }
+
+            //! animation
+            Animation::Pointer upArrowAnimation( void ) const {
+                  return upArrowData_.animation_;
+                  }
+
+            //@}
+
+            //!@name down arrow animation
+            //@{
+
+            //! opacity
+            qreal downArrowOpacity( void ) const {
+                  return downArrowData_.opacity_;
+                  }
+
+            //! opacity
+            void setDownArrowOpacity( qreal value ) {
+                  if ( downArrowData_.opacity_ == value ) return;
+                  downArrowData_.opacity_ = value;
+                  setDirty();
+                  }
+
+            //! animation
+            Animation::Pointer downArrowAnimation( void ) const {
+                  return downArrowData_.animation_;
+                  }
+
+            //@}
+
+      private:
+
+            //! container for needed animation data
+            class Data {
+
+                  public:
+
+                        //! default constructor
+                        Data( void ):
+                              state_( false ),
+                              opacity_(0)
+                              {}
+
+                        //! state
+                        bool updateState( bool );
+
+                        //! arrow state
+                        bool state_;
+
+                        //! animation
+                        Animation::Pointer animation_;
+
+                        //! opacity
+                        qreal opacity_;
+
+                  };
+
+            //! up arrow data
+            Data upArrowData_;
+
+            //! down arrow data
+            Data downArrowData_;
+
+      };
 
 
 #endif

@@ -30,43 +30,42 @@
 #include "transitiondata.h"
 
 
-    //! generic data
-    class StackedWidgetData: public TransitionData
-    {
+//! generic data
+class StackedWidgetData: public TransitionData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        StackedWidgetData( QObject*, QStackedWidget*, int );
+            //! constructor
+            StackedWidgetData( QObject*, QStackedWidget*, int );
 
-        //! destructor
-        virtual ~StackedWidgetData( void )
-        {}
+            //! destructor
+            virtual ~StackedWidgetData( void )
+                  {}
 
-        protected slots:
+      protected slots:
 
-        //! initialize animation
-        virtual bool initializeAnimation( void );
+            //! initialize animation
+            virtual bool initializeAnimation( void );
 
-        //! animate
-        virtual bool animate( void );
+            //! animate
+            virtual bool animate( void );
 
-        //! finish animation
-        virtual void finishAnimation( void );
+            //! finish animation
+            virtual void finishAnimation( void );
 
-        //! called when target is destroyed
-        virtual void targetDestroyed( void );
+            //! called when target is destroyed
+            virtual void targetDestroyed( void );
 
-        private:
+      private:
 
-        //! target
-        QWeakPointer<QStackedWidget> target_;
+            //! target
+            QWeakPointer<QStackedWidget> target_;
 
-        //! current index
-        int index_;
+            //! current index
+            int index_;
 
-    };
+      };
 
 #endif

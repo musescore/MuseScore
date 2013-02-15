@@ -26,137 +26,127 @@
 
 #include "menubarengine.h"
 
-    //____________________________________________________________
-    MenuBarEngineV1::MenuBarEngineV1( QObject* parent, MenuBarBaseEngine* other ):
-        MenuBarBaseEngine( parent )
-    {
-        if( other )
-        {
-            foreach( QWidget* widget,  other->registeredWidgets() )
-            { registerWidget( widget ); }
-        }
-    }
+//____________________________________________________________
+MenuBarEngineV1::MenuBarEngineV1( QObject* parent, MenuBarBaseEngine* other ):
+      MenuBarBaseEngine( parent ) {
+      if ( other ) {
+            foreach( QWidget * widget,  other->registeredWidgets() ) {
+                  registerWidget( widget );
+                  }
+            }
+      }
 
-    //____________________________________________________________
-    bool MenuBarEngineV1::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool MenuBarEngineV1::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) ) data_.insert( widget, new MenuBarDataV1( this, widget, duration() ), enabled() );
+      // create new data class
+      if ( !data_.contains( widget ) ) data_.insert( widget, new MenuBarDataV1( this, widget, duration() ), enabled() );
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool MenuBarEngineV1::isAnimated( const QObject* object, const QPoint& position )
-    {
-        DataMap<MenuBarDataV1>::Value data( data_.find( object ) );
-        if( !data ) return false;
-        if( Animation::Pointer animation = data.data()->animation( position ) ) return animation.data()->isRunning();
-        else return false;
-    }
+//____________________________________________________________
+bool MenuBarEngineV1::isAnimated( const QObject* object, const QPoint& position ) {
+      DataMap<MenuBarDataV1>::Value data( data_.find( object ) );
+      if ( !data ) return false;
+      if ( Animation::Pointer animation = data.data()->animation( position ) ) return animation.data()->isRunning();
+      else return false;
+      }
 
-    //____________________________________________________________
-    BaseEngine::WidgetList MenuBarEngineV1::registeredWidgets( void ) const
-    {
+//____________________________________________________________
+BaseEngine::WidgetList MenuBarEngineV1::registeredWidgets( void ) const {
 
-        WidgetList out ;
+      WidgetList out ;
 
-        // the typedef is needed to make Krazy happy
-        typedef DataMap<MenuBarDataV1>::Value Value;
-        foreach( const Value& value, data_ )
-        { if( value ) out.insert( value.data()->target().data() ); }
+      // the typedef is needed to make Krazy happy
+      typedef DataMap<MenuBarDataV1>::Value Value;
+      foreach( const Value & value, data_ ) {
+            if ( value ) out.insert( value.data()->target().data() );
+            }
 
-        return out;
+      return out;
 
-    }
+      }
 
-    //____________________________________________________________
-    MenuBarEngineV2::MenuBarEngineV2( QObject* parent, MenuBarBaseEngine* other ):
-        MenuBarBaseEngine( parent ),
-        followMouseDuration_( 150 )
-    {
-        if( other )
-        {
-            foreach( QWidget* widget, other->registeredWidgets() )
-            { registerWidget( widget ); }
-        }
-    }
+//____________________________________________________________
+MenuBarEngineV2::MenuBarEngineV2( QObject* parent, MenuBarBaseEngine* other ):
+      MenuBarBaseEngine( parent ),
+      followMouseDuration_( 150 ) {
+      if ( other ) {
+            foreach( QWidget * widget, other->registeredWidgets() ) {
+                  registerWidget( widget );
+                  }
+            }
+      }
 
-    //____________________________________________________________
-    bool MenuBarEngineV2::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool MenuBarEngineV2::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) )
-        {
+      // create new data class
+      if ( !data_.contains( widget ) ) {
             DataMap<MenuBarDataV2>::Value value( new MenuBarDataV2( this, widget, duration() ) );
             value.data()->setFollowMouseDuration( followMouseDuration() );
             data_.insert( widget, value, enabled() );
-        }
+            }
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 
 
-    //____________________________________________________________
-    bool MenuBarEngineV2::isAnimated( const QObject* object, const QPoint& )
-    {
-        if( !enabled() ) return false;
-        DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
-        if( !data ) return false;
-        if( data.data()->animation() && data.data()->animation().data()->isRunning() ) return true;
-        else if( Animation::Pointer animation = data.data()->progressAnimation() ) return animation.data()->isRunning();
-        else return false;
+//____________________________________________________________
+bool MenuBarEngineV2::isAnimated( const QObject* object, const QPoint& ) {
+      if ( !enabled() ) return false;
+      DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
+      if ( !data ) return false;
+      if ( data.data()->animation() && data.data()->animation().data()->isRunning() ) return true;
+      else if ( Animation::Pointer animation = data.data()->progressAnimation() ) return animation.data()->isRunning();
+      else return false;
 
-    }
+      }
 
-    //____________________________________________________________
-    QRect MenuBarEngineV2::currentRect( const QObject* object, const QPoint& )
-    {
-        if( !enabled() ) return QRect();
-        DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
-        return data ? data.data()->currentRect():QRect();
-    }
+//____________________________________________________________
+QRect MenuBarEngineV2::currentRect( const QObject* object, const QPoint& ) {
+      if ( !enabled() ) return QRect();
+      DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
+      return data ? data.data()->currentRect() : QRect();
+      }
 
-    //____________________________________________________________
-    QRect MenuBarEngineV2::animatedRect( const QObject* object )
-    {
-        if( !enabled() ) return QRect();
-        DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
-        return data ? data.data()->animatedRect():QRect();
+//____________________________________________________________
+QRect MenuBarEngineV2::animatedRect( const QObject* object ) {
+      if ( !enabled() ) return QRect();
+      DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
+      return data ? data.data()->animatedRect() : QRect();
 
-    }
+      }
 
-    //____________________________________________________________
-    bool MenuBarEngineV2::isTimerActive( const QObject* object )
-    {
-        if( !enabled() ) return false;
-        DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
-        return data ? data.data()->timer().isActive():false;
-    }
+//____________________________________________________________
+bool MenuBarEngineV2::isTimerActive( const QObject* object ) {
+      if ( !enabled() ) return false;
+      DataMap<MenuBarDataV2>::Value data( data_.find( object ) );
+      return data ? data.data()->timer().isActive() : false;
+      }
 
-    //____________________________________________________________
-    BaseEngine::WidgetList MenuBarEngineV2::registeredWidgets( void ) const
-    {
+//____________________________________________________________
+BaseEngine::WidgetList MenuBarEngineV2::registeredWidgets( void ) const {
 
-        WidgetList out;
+      WidgetList out;
 
-        // the typedef is needed to make Krazy happy
-        typedef DataMap<MenuBarDataV2>::Value Value;
-        foreach( const Value& value, data_ )
-        { if( value ) out.insert( value.data()->target().data() ); }
+      // the typedef is needed to make Krazy happy
+      typedef DataMap<MenuBarDataV2>::Value Value;
+      foreach( const Value & value, data_ ) {
+            if ( value ) out.insert( value.data()->target().data() );
+            }
 
-        return out;
+      return out;
 
-    }
+      }

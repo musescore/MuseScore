@@ -31,81 +31,79 @@
 #include "datamap.h"
 #include "widgetstatedata.h"
 
-    //! QToolBox animation engine
-    class ToolBoxEngine: public BaseEngine
-    {
+//! QToolBox animation engine
+class ToolBoxEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ToolBoxEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            ToolBoxEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~ToolBoxEngine( void )
-        {}
+            //! destructor
+            virtual ~ToolBoxEngine( void )
+                  {}
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        //! register widget
-        virtual bool registerWidget( QWidget* );
+            //! register widget
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget hover state is changed
-        virtual bool updateState( const QPaintDevice*, bool );
+            //! true if widget hover state is changed
+            virtual bool updateState( const QPaintDevice*, bool );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QPaintDevice* );
+            //! true if widget is animated
+            virtual bool isAnimated( const QPaintDevice* );
 
-        //! animation opacity
-        virtual qreal opacity( const QPaintDevice* object )
-        { return isAnimated( object ) ? data( object ).data()->opacity(): AnimationData::OpacityInvalid; }
+            //! animation opacity
+            virtual qreal opacity( const QPaintDevice* object ) {
+                  return isAnimated( object ) ? data( object ).data()->opacity() : AnimationData::OpacityInvalid;
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* data )
-        {
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* data ) {
 
-            if( !data ) return false;
+                  if ( !data ) return false;
 
-            // reinterpret_cast is safe here since only the address is used to find
-            // data in the map
-            return data_.unregisterWidget( reinterpret_cast<QPaintDevice*>(data) );
+                  // reinterpret_cast is safe here since only the address is used to find
+                  // data in the map
+                  return data_.unregisterWidget( reinterpret_cast<QPaintDevice*>(data) );
 
-        }
+                  }
 
-        protected:
+      protected:
 
-        //! returns data associated to widget
-        PaintDeviceDataMap<WidgetStateData>::Value data( const QPaintDevice* object )
-        { return data_.find( object ).data(); }
+            //! returns data associated to widget
+            PaintDeviceDataMap<WidgetStateData>::Value data( const QPaintDevice* object ) {
+                  return data_.find( object ).data();
+                  }
 
-        private:
+      private:
 
-        //! engine enability
-        bool enabled_;
+            //! engine enability
+            bool enabled_;
 
-        //! animation duration
-        int duration_;
+            //! animation duration
+            int duration_;
 
-        //! map
-        PaintDeviceDataMap<WidgetStateData> data_;
+            //! map
+            PaintDeviceDataMap<WidgetStateData> data_;
 
-    };
+      };
 
 #endif

@@ -29,99 +29,106 @@
 
 #include "transitionwidget.h"
 
-    //! generic data
-    class TransitionData: public QObject
-    {
+//! generic data
+class TransitionData: public QObject {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        TransitionData( QObject* parent, QWidget* target, int );
+            //! constructor
+            TransitionData( QObject* parent, QWidget* target, int );
 
-        //! destructor
-        virtual ~TransitionData( void );
+            //! destructor
+            virtual ~TransitionData( void );
 
-        //! enability
-        virtual void setEnabled( bool value )
-        { enabled_ = value; }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  enabled_ = value;
+                  }
 
-        //! enability
-        virtual bool enabled( void ) const
-        { return enabled_; }
+            //! enability
+            virtual bool enabled( void ) const {
+                  return enabled_;
+                  }
 
-        //! duration
-        virtual void setDuration( int duration )
-        { transition().data()->setDuration( duration ); }
+            //! duration
+            virtual void setDuration( int duration ) {
+                  transition().data()->setDuration( duration );
+                  }
 
-        //! max render time
-        void setMaxRenderTime( int value )
-        { maxRenderTime_ = value; }
+            //! max render time
+            void setMaxRenderTime( int value ) {
+                  maxRenderTime_ = value;
+                  }
 
-        //! max renderTime
-        const int& maxRenderTime( void ) const
-        { return maxRenderTime_; }
+            //! max renderTime
+            const int& maxRenderTime( void ) const {
+                  return maxRenderTime_;
+                  }
 
-        //! start clock
-        void startClock( void )
-        {
-            if( clock_.isNull() ) clock_.start();
-            else clock_.restart();
-        }
+            //! start clock
+            void startClock( void ) {
+                  if ( clock_.isNull() ) clock_.start();
+                  else clock_.restart();
+                  }
 
-        //! check if rendering is two slow
-        bool slow( void ) const
-        { return !( clock_.isNull() || clock_.elapsed() <= maxRenderTime() ); }
+            //! check if rendering is two slow
+            bool slow( void ) const {
+                  return !( clock_.isNull() || clock_.elapsed() <= maxRenderTime() );
+                  }
 
-        protected slots:
+      protected slots:
 
-        //! initialize animation
-        virtual bool initializeAnimation( void ) = 0;
+            //! initialize animation
+            virtual bool initializeAnimation( void ) = 0;
 
-        //! animate
-        virtual bool animate( void ) = 0;
+            //! animate
+            virtual bool animate( void ) = 0;
 
-        //! finish animation
-        virtual void finishAnimation( void )
-        {
-            if( transition() )
-            { transition().data()->hide(); }
-        }
+            //! finish animation
+            virtual void finishAnimation( void ) {
+                  if ( transition() ) {
+                        transition().data()->hide();
+                        }
+                  }
 
-        protected:
+      protected:
 
-        //! transition widget
-        virtual const TransitionWidget::Pointer& transition( void ) const
-        { return transition_; }
+            //! transition widget
+            virtual const TransitionWidget::Pointer& transition( void ) const {
+                  return transition_;
+                  }
 
-        //! used to avoid recursion when grabbing widgets
-        void setRecursiveCheck( bool value )
-        { recursiveCheck_ = value; }
+            //! used to avoid recursion when grabbing widgets
+            void setRecursiveCheck( bool value ) {
+                  recursiveCheck_ = value;
+                  }
 
-        //! used to avoid recursion when grabbing widgets
-        bool recursiveCheck( void ) const
-        { return recursiveCheck_; }
+            //! used to avoid recursion when grabbing widgets
+            bool recursiveCheck( void ) const {
+                  return recursiveCheck_;
+                  }
 
-        private:
+      private:
 
-        //! enability
-        bool enabled_;
+            //! enability
+            bool enabled_;
 
-        //! used to avoid recursion when grabbing widgets
-        bool recursiveCheck_;
+            //! used to avoid recursion when grabbing widgets
+            bool recursiveCheck_;
 
-        //! timer used to detect slow rendering
-        QTime clock_;
+            //! timer used to detect slow rendering
+            QTime clock_;
 
-        //! max render time
-        /*! used to detect slow rendering */
-        int maxRenderTime_;
+            //! max render time
+            /*! used to detect slow rendering */
+            int maxRenderTime_;
 
-        //! animation handling
-        TransitionWidget::Pointer transition_;
+            //! animation handling
+            TransitionWidget::Pointer transition_;
 
-    };
+      };
 
 #endif
 
