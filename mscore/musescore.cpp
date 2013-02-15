@@ -74,6 +74,8 @@
 #include "helpBrowser.h"
 #include "drumtools.h"
 #include "editstafftype.h"
+#include "texttools.h"
+#include "edittools.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -1229,23 +1231,6 @@ void MuseScore::updateInspector()
       }
 
 //---------------------------------------------------------
-//   setEditState
-//---------------------------------------------------------
-
-void MuseScore::setEditState(Element* e)
-      {
-      if (inspector)
-            inspector->setElement(e);
-
-      if (e && (e->type() == Element::LYRICS))
-            changeState(STATE_LYRICS_EDIT);
-      if (e && e->isText())
-            changeState(STATE_TEXT_EDIT);
-      else
-            changeState(STATE_EDIT);
-      }
-
-//---------------------------------------------------------
 //   appendScore
 //    append score to project list
 //---------------------------------------------------------
@@ -1386,12 +1371,11 @@ void MuseScore::setCurrentScoreView(int idx)
 void MuseScore::setCurrentView(int tabIdx, int idx)
       {
       if (idx == -1)
-            setCurrentScoreView((ScoreView*)0);
+            setCurrentScoreView(nullptr);
       else {
             ScoreTab* tab = tabIdx ? tab2 : tab1;
-            if (tab) {
+            if (tab)
                   tab->setCurrentIndex(idx);
-                  }
             }
       }
 
@@ -1443,6 +1427,14 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             if (inspector)
                   inspector->setElement(0);
             viewModeCombo->setEnabled(false);
+            if (_textTools)
+                  _textTools->hide();
+            if (_editTools)
+                  _editTools->hide();
+            if (_pianoTools)
+                  _pianoTools->hide();
+            if (_drumTools)
+                  _drumTools->hide();
             return;
             }
       viewModeCombo->setEnabled(true);
@@ -1452,6 +1444,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             viewModeCombo->setCurrentIndex(1);
 
       selectionChanged(cs->selection().state());
+
+// printf("setCurrentScoreView\n");
+      _sstate = STATE_DISABLED; // defeat optimization
       changeState(view->mscoreState());
 
       view->setFocus(Qt::OtherFocusReason);
@@ -1854,12 +1849,10 @@ void MuseScore::removeTab(int i)
       cs = 0;
       cv = 0;
       int n = scoreList.size();
-      if (n == 0) {
-            setCurrentScoreView((ScoreView*)0);
-            }
-      else {
+      if (n == 0)
+            setCurrentScoreView(nullptr);
+      else
             setCurrentScoreView((firstTab ? tab1 : tab2)->view());
-            }
       writeSessionFile(false);
       if (!tmpName.isEmpty()) {
             QFile f(tmpName);
@@ -2324,7 +2317,7 @@ int main(int argc, char* av[])
       MScore::init();                          // initialize libmscore
 
       if (MScore::debugMode)
-            printf("DPI %f\n", MScore::DPI);
+            qDebug("DPI %f", MScore::DPI);
 
       preferences.readDefaultStyle();
 
@@ -2610,7 +2603,7 @@ void MuseScore::clipboardChanged()
 
 void MuseScore::changeState(ScoreState val)
       {
-//      printf("MuseScore::changeState: %s\n", stateName(val));
+// printf("MuseScore::changeState: %s\n", stateName(val));
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
 
@@ -2764,6 +2757,31 @@ void MuseScore::changeState(ScoreState val)
       bool noteEntry = val == STATE_NOTE_ENTRY_PITCHED || val == STATE_NOTE_ENTRY_TAB || val == STATE_NOTE_ENTRY_DRUM;
       a->setChecked(noteEntry);
       _sstate = val;
+
+      Element* e = 0;
+      if (_sstate == STATE_LYRICS_EDIT || _sstate == STATE_TEXT_EDIT
+         || _sstate == STATE_EDIT) {
+            if (cv)
+                  e = cv->getEditObject();
+            }
+      if (!e) {
+            editTools()->hide();
+            textTools()->hide();
+            }
+      else {
+            if (e->isText()) {
+                  textTools()->setText(static_cast<Text*>(e));
+                  textTools()->updateTools();
+                  textTools()->show();
+                  }
+            else {
+                  editTools()->setElement(e);
+                  editTools()->updateTools();
+                  editTools()->show();
+                  }
+            if (inspector)
+                  inspector->setElement(e);
+            }
       }
 
 //---------------------------------------------------------

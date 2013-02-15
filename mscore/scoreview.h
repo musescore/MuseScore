@@ -66,7 +66,7 @@ class TextCursor {
       int _tick;
 
    public:
-      TextCursor()                       { _visible = false; }
+      TextCursor()                   { _visible = false; }
       QRectF rect() const            { return _rect;     }
       void setRect(const QRectF& r)  { _rect = r;        }
       bool visible() const           { return _visible;  }
@@ -239,7 +239,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassEndEdit();
       void cmdInsertNote(int note);
       void cmdAddPitch(int note, bool addFlag);
-//      void cmdAddPitch1(int, bool, int step);
       void cmdAddFret(int fret);
       void cmdAddChordName();
       void cmdAddText(int style);
@@ -361,6 +360,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddSlur();
       void cmdAddNoteLine();
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
+
       bool noteEntryMode() const;
       bool editMode() const;
       bool fotoMode() const;
