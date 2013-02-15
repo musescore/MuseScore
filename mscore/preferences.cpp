@@ -1726,7 +1726,6 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
             it.next();
             QFileInfo fi = it.fileInfo();
             QString path(fi.absoluteFilePath());
-            printf("   <%s>\n", qPrintable(path));
             if (fi.isFile()) {
                   if (path.endsWith(".qml")) {
                         bool alreadyInList = false;
@@ -1752,7 +1751,6 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
 
 void Preferences::updatePluginList()
       {
-      pluginList.clear();
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
