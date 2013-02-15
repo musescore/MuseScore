@@ -31,211 +31,209 @@
 #include "datamap.h"
 #include "menudata.h"
 
-    //! stores menu hovered action and timeLine
-    class MenuBaseEngine: public BaseEngine
-    {
-        Q_OBJECT
+//! stores menu hovered action and timeLine
+class MenuBaseEngine: public BaseEngine {
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        MenuBaseEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            MenuBaseEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~MenuBaseEngine( void )
-        {}
+            //! destructor
+            virtual ~MenuBaseEngine( void )
+                  {}
 
-        //! register menubar
-        virtual bool registerWidget( QWidget* ) = 0;
+            //! register menubar
+            virtual bool registerWidget( QWidget* ) = 0;
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject*, WidgetIndex )
-        { return false; }
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject*, WidgetIndex ) {
+                  return false;
+                  }
 
-        //! opacity
-        virtual qreal opacity( const QObject*, WidgetIndex )
-        { return -1; }
+            //! opacity
+            virtual qreal opacity( const QObject*, WidgetIndex ) {
+                  return -1;
+                  }
 
-        //! return 'hover' rect position when widget is animated
-        virtual QRect currentRect( const QObject*, WidgetIndex )
-        { return QRect(); }
+            //! return 'hover' rect position when widget is animated
+            virtual QRect currentRect( const QObject*, WidgetIndex ) {
+                  return QRect();
+                  }
 
-        //! return 'hover' rect position when widget is animated
-        virtual QRect animatedRect( const QObject* )
-        { return QRect(); }
+            //! return 'hover' rect position when widget is animated
+            virtual QRect animatedRect( const QObject* ) {
+                  return QRect();
+                  }
 
-        //! timer associated to the data
-        virtual bool isTimerActive( const QObject* )
-        { return false; }
+            //! timer associated to the data
+            virtual bool isTimerActive( const QObject* ) {
+                  return false;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value ) = 0;
+            //! enability
+            virtual void setEnabled( bool value ) = 0;
 
-        //! duration
-        virtual void setDuration( int ) = 0;
+            //! duration
+            virtual void setDuration( int ) = 0;
 
-        //! duration
-        virtual void setFollowMouseDuration( int )
-        {}
+            //! duration
+            virtual void setFollowMouseDuration( int )
+                  {}
 
-    };
+      };
 
-    //! stores menu hovered action and timeLine
-    class MenuEngineV1: public MenuBaseEngine
-    {
-        Q_OBJECT
+//! stores menu hovered action and timeLine
+class MenuEngineV1: public MenuBaseEngine {
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        MenuEngineV1( QObject* parent ):
-        MenuBaseEngine( parent )
-        {}
+            //! constructor
+            MenuEngineV1( QObject* parent ):
+                  MenuBaseEngine( parent )
+                  {}
 
-        //! constructor
-        MenuEngineV1( QObject* parent, MenuBaseEngine* other );
+            //! constructor
+            MenuEngineV1( QObject* parent, MenuBaseEngine* other );
 
-        //! destructor
-        virtual ~MenuEngineV1( void )
-        {}
+            //! destructor
+            virtual ~MenuEngineV1( void )
+                  {}
 
-        //! register menubar
-        virtual bool registerWidget( QWidget* );
+            //! register menubar
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object, WidgetIndex index );
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object, WidgetIndex index );
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, WidgetIndex index )
-        {
-            if( !isAnimated( object, index ) ) return AnimationData::OpacityInvalid;
-            else return data_.find(object).data()->opacity( index );
-        }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, WidgetIndex index ) {
+                  if ( !isAnimated( object, index ) ) return AnimationData::OpacityInvalid;
+                  else return data_.find(object).data()->opacity( index );
+                  }
 
-        //! return 'hover' rect position when widget is animated
-        virtual QRect currentRect( const QObject* object, WidgetIndex index )
-        {
-            if( !isAnimated( object, index ) ) return QRect();
-            else return data_.find(object).data()->currentRect( index );
-        }
+            //! return 'hover' rect position when widget is animated
+            virtual QRect currentRect( const QObject* object, WidgetIndex index ) {
+                  if ( !isAnimated( object, index ) ) return QRect();
+                  else return data_.find(object).data()->currentRect( index );
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int duration )
-        {
-            BaseEngine::setDuration( duration );
-            data_.setDuration( duration );
-        }
+            //! duration
+            virtual void setDuration( int duration ) {
+                  BaseEngine::setDuration( duration );
+                  data_.setDuration( duration );
+                  }
 
-        //! return list of registered widgets
-        virtual WidgetList registeredWidgets( void ) const;
+            //! return list of registered widgets
+            virtual WidgetList registeredWidgets( void ) const;
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<MenuDataV1> data_;
+            //! data map
+            DataMap<MenuDataV1> data_;
 
-    };
+      };
 
-    //! stores menu hovered action and timeLine
-    class MenuEngineV2: public MenuBaseEngine
-    {
+//! stores menu hovered action and timeLine
+class MenuEngineV2: public MenuBaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        MenuEngineV2( QObject* parent ):
-        MenuBaseEngine( parent )
-        {}
+            //! constructor
+            MenuEngineV2( QObject* parent ):
+                  MenuBaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~MenuEngineV2( void )
-        {}
+            //! destructor
+            virtual ~MenuEngineV2( void )
+                  {}
 
-        //! constructor
-        MenuEngineV2( QObject* parent, MenuBaseEngine* other );
+            //! constructor
+            MenuEngineV2( QObject* parent, MenuBaseEngine* other );
 
-        //! register menu
-        virtual bool registerWidget( QWidget* );
+            //! register menu
+            virtual bool registerWidget( QWidget* );
 
-        //! return timeLine associated to action at given position, if any
-        virtual bool isAnimated( const QObject*, WidgetIndex );
+            //! return timeLine associated to action at given position, if any
+            virtual bool isAnimated( const QObject*, WidgetIndex );
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, WidgetIndex index )
-        {
-            if( !isAnimated( object, index ) ) return AnimationData::OpacityInvalid;
-            else return data_.find(object).data()->opacity();
-        }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, WidgetIndex index ) {
+                  if ( !isAnimated( object, index ) ) return AnimationData::OpacityInvalid;
+                  else return data_.find(object).data()->opacity();
+                  }
 
-        //! return 'hover' rect position when widget is animated
-        virtual QRect currentRect( const QObject* object, WidgetIndex index );
+            //! return 'hover' rect position when widget is animated
+            virtual QRect currentRect( const QObject* object, WidgetIndex index );
 
-        //! return 'hover' rect position when widget is animated
-        virtual QRect animatedRect( const QObject* );
+            //! return 'hover' rect position when widget is animated
+            virtual QRect animatedRect( const QObject* );
 
-        //! timer associated to the data
-        virtual bool isTimerActive( const QObject* );
+            //! timer associated to the data
+            virtual bool isTimerActive( const QObject* );
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        //! duration
-        virtual int followMouseDuration( void ) const
-        { return followMouseDuration_; }
+            //! duration
+            virtual int followMouseDuration( void ) const {
+                  return followMouseDuration_;
+                  }
 
-        //! duration
-        virtual void setFollowMouseDuration( int duration )
-        {
-            followMouseDuration_ = duration;
-            foreach( const DataMap<MenuDataV2>::Value& value, data_.values() )
-            { if( value ) value.data()->setFollowMouseDuration( duration ); }
-        }
+            //! duration
+            virtual void setFollowMouseDuration( int duration ) {
+                  followMouseDuration_ = duration;
+                  foreach( const DataMap<MenuDataV2>::Value & value, data_.values() ) {
+                        if ( value ) value.data()->setFollowMouseDuration( duration );
+                        }
+                  }
 
-        //! return list of registered widgets
-        virtual WidgetList registeredWidgets( void ) const;
+            //! return list of registered widgets
+            virtual WidgetList registeredWidgets( void ) const;
 
-        protected slots:
+      protected slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! follow mouse animation duration
-        int followMouseDuration_;
+            //! follow mouse animation duration
+            int followMouseDuration_;
 
-        //! data map
-        DataMap<MenuDataV2> data_;
+            //! data map
+            DataMap<MenuDataV2> data_;
 
-    };
+      };
 
 #endif

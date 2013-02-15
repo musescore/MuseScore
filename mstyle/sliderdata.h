@@ -29,45 +29,46 @@
 
 #include "genericdata.h"
 
-    //! scrollbar data
-    class SliderData: public GenericData
-    {
+//! scrollbar data
+class SliderData: public GenericData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        SliderData( QObject* parent, QWidget* target, int duration ):
-        GenericData( parent, target, duration ),
-        sliderHovered_( false )
-        {}
+            //! constructor
+            SliderData( QObject* parent, QWidget* target, int duration ):
+                  GenericData( parent, target, duration ),
+                  sliderHovered_( false )
+                  {}
 
-        //! destructor
-        virtual ~SliderData( void )
-        {}
+            //! destructor
+            virtual ~SliderData( void )
+                  {}
 
-        //! update state
-        virtual bool updateState( bool );
+            //! update state
+            virtual bool updateState( bool );
 
-        protected:
+      protected:
 
-        //! hover
-        virtual bool sliderHovered( void ) const
-        { return sliderHovered_; }
+            //! hover
+            virtual bool sliderHovered( void ) const {
+                  return sliderHovered_;
+                  }
 
-        //! hover
-        virtual void setSliderHovered( bool value )
-        { sliderHovered_ = value; }
+            //! hover
+            virtual void setSliderHovered( bool value ) {
+                  sliderHovered_ = value;
+                  }
 
-        //! update slider
-        virtual void updateSlider( QStyle::SubControl );
+            //! update slider
+            virtual void updateSlider( QStyle::SubControl );
 
-        private:
+      private:
 
-        //! true when slider is hovered
-        bool sliderHovered_;
+            //! true when slider is hovered
+            bool sliderHovered_;
 
-    };
+      };
 
 #endif

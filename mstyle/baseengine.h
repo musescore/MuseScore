@@ -27,62 +27,66 @@
 #ifndef __BASEENGINE_H__
 #define __BASEENGINE_H__
 
-    //! base class for all animation engines
-    /*! it is used to store configuration values used by all animations stored in the engine */
-    class BaseEngine: public QObject
-    {
+//! base class for all animation engines
+/*! it is used to store configuration values used by all animations stored in the engine */
+class BaseEngine: public QObject {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        typedef QWeakPointer<BaseEngine> Pointer;
+            typedef QWeakPointer<BaseEngine> Pointer;
 
-        //! constructor
-        BaseEngine( QObject* parent ):
-        QObject( parent ),
-        enabled_( true ),
-        duration_( 200 )
-        {}
+            //! constructor
+            BaseEngine( QObject* parent ):
+                  QObject( parent ),
+                  enabled_( true ),
+                  duration_( 200 )
+                  {}
 
-        //! destructor
-        virtual ~BaseEngine( void )
-        {}
+            //! destructor
+            virtual ~BaseEngine( void )
+                  {}
 
-        //! enability
-        virtual void setEnabled( bool value )
-        { enabled_ = value; }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  enabled_ = value;
+                  }
 
-        //! enability
-        virtual bool enabled( void ) const
-        { return enabled_; }
+            //! enability
+            virtual bool enabled( void ) const {
+                  return enabled_;
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        { duration_ = value; }
+            //! duration
+            virtual void setDuration( int value ) {
+                  duration_ = value;
+                  }
 
-        //! duration
-        virtual int duration( void ) const
-        { return duration_; }
+            //! duration
+            virtual int duration( void ) const {
+                  return duration_;
+                  }
 
-        //! unregister widget
-        virtual bool unregisterWidget( QObject* object ) = 0;
+            //! unregister widget
+            virtual bool unregisterWidget( QObject* object ) = 0;
 
-        //! list of widgets
-        typedef QSet<QWidget*> WidgetList;
+            //! list of widgets
+            typedef QSet<QWidget*> WidgetList;
 
-        //! returns registered widgets
-        virtual WidgetList registeredWidgets( void ) const
-        { return WidgetList(); }
+            //! returns registered widgets
+            virtual WidgetList registeredWidgets( void ) const {
+                  return WidgetList();
+                  }
 
-        private:
+      private:
 
-        //! engine enability
-        bool enabled_;
+            //! engine enability
+            bool enabled_;
 
-        //! animation duration
-        int duration_;
+            //! animation duration
+            int duration_;
 
-    };
+      };
 
 #endif

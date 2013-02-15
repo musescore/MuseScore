@@ -26,24 +26,22 @@
 
 #include "tabbarengine.h"
 
-    //____________________________________________________________
-    bool TabBarEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool TabBarEngine::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) ) data_.insert( widget, new TabBarData( this, widget, duration() ), enabled() );
+      // create new data class
+      if ( !data_.contains( widget ) ) data_.insert( widget, new TabBarData( this, widget, duration() ), enabled() );
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool TabBarEngine::updateState( const QObject* object, const QPoint& position, bool value )
-    {
-        DataMap<TabBarData>::Value data( data_.find( object ) );
-        return ( data && data.data()->updateState( position, value ) );
-    }
+//____________________________________________________________
+bool TabBarEngine::updateState( const QObject* object, const QPoint& position, bool value ) {
+      DataMap<TabBarData>::Value data( data_.find( object ) );
+      return ( data && data.data()->updateState( position, value ) );
+      }

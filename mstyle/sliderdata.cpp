@@ -29,41 +29,38 @@
 Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider*);
 
 
-    //______________________________________________
-    bool SliderData::updateState( bool state )
-    {
-        if( state == sliderHovered_ ) return false;
-        updateSlider( state ? QStyle::SC_SliderHandle : QStyle::SC_None );
-        return true;
-    }
+//______________________________________________
+bool SliderData::updateState( bool state ) {
+      if ( state == sliderHovered_ ) return false;
+      updateSlider( state ? QStyle::SC_SliderHandle : QStyle::SC_None );
+      return true;
+      }
 
-    //_____________________________________________________________________
-    void SliderData::updateSlider( QStyle::SubControl hoverControl )
-    {
+//_____________________________________________________________________
+void SliderData::updateSlider( QStyle::SubControl hoverControl ) {
 
-        if( hoverControl == QStyle::SC_SliderHandle )
-        {
+      if ( hoverControl == QStyle::SC_SliderHandle ) {
 
-            if( !sliderHovered() ) {
-                setSliderHovered( true );
-                if( enabled() )
-                {
-                    animation().data()->setDirection( Animation::Forward );
-                    if( !animation().data()->isRunning() ) animation().data()->start();
-                } else setDirty();
+            if ( !sliderHovered() ) {
+                  setSliderHovered( true );
+                  if ( enabled() ) {
+                        animation().data()->setDirection( Animation::Forward );
+                        if ( !animation().data()->isRunning() ) animation().data()->start();
+                        }
+                  else setDirty();
+                  }
+
             }
+      else {
 
-        } else {
+            if ( sliderHovered() ) {
+                  setSliderHovered( false );
+                  if ( enabled() ) {
+                        animation().data()->setDirection( Animation::Backward );
+                        if ( !animation().data()->isRunning() ) animation().data()->start();
+                        }
+                  else setDirty();
+                  }
 
-            if( sliderHovered() )
-            {
-                setSliderHovered( false );
-                if( enabled() )
-                {
-                    animation().data()->setDirection( Animation::Backward );
-                    if( !animation().data()->isRunning() ) animation().data()->start();
-                } else setDirty();
             }
-
-        }
-    }
+      }

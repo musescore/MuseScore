@@ -31,94 +31,92 @@
 #include "datamap.h"
 #include "scrollbardata.h"
 
-    //! stores scrollbar hovered action and timeLine
-    class ScrollBarEngine: public BaseEngine
-    {
+//! stores scrollbar hovered action and timeLine
+class ScrollBarEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ScrollBarEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            ScrollBarEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~ScrollBarEngine( void )
-        {}
+            //! destructor
+            virtual ~ScrollBarEngine( void )
+                  {}
 
-        //! register scrollbar
-        virtual bool registerWidget( QWidget* );
+            //! register scrollbar
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object, QStyle::SubControl control );
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object, QStyle::SubControl control );
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, QStyle::SubControl control )
-        { return isAnimated( object, control ) ? data_.find( object ).data()->opacity( control ):AnimationData::OpacityInvalid; }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, QStyle::SubControl control ) {
+                  return isAnimated( object, control ) ? data_.find( object ).data()->opacity( control ) : AnimationData::OpacityInvalid;
+                  }
 
-        //! return true if given subcontrol is hovered
-        virtual bool isHovered( const QObject* object, QStyle::SubControl control )
-        {
-            if( DataMap<ScrollBarData>::Value data = data_.find( object ) ) return data.data()->isHovered( control );
-            else return false;
-        }
+            //! return true if given subcontrol is hovered
+            virtual bool isHovered( const QObject* object, QStyle::SubControl control ) {
+                  if ( DataMap<ScrollBarData>::Value data = data_.find( object ) ) return data.data()->isHovered( control );
+                  else return false;
+                  }
 
-        //! control rect associated to object
-        virtual QRect subControlRect( const QObject* object, QStyle::SubControl control )
-        {
-            if( DataMap<ScrollBarData>::Value data = data_.find( object ) ) return data.data()->subControlRect( control );
-            else return QRect();
-        }
+            //! control rect associated to object
+            virtual QRect subControlRect( const QObject* object, QStyle::SubControl control ) {
+                  if ( DataMap<ScrollBarData>::Value data = data_.find( object ) ) return data.data()->subControlRect( control );
+                  else return QRect();
+                  }
 
-        //! control rect
-        virtual void setSubControlRect( const QObject* object, QStyle::SubControl control, const QRect& rect )
-        {
-            if( DataMap<ScrollBarData>::Value data = data_.find( object ) )
-            { data.data()->setSubControlRect( control, rect ); }
-        }
+            //! control rect
+            virtual void setSubControlRect( const QObject* object, QStyle::SubControl control, const QRect& rect ) {
+                  if ( DataMap<ScrollBarData>::Value data = data_.find( object ) ) {
+                        data.data()->setSubControlRect( control, rect );
+                        }
+                  }
 
-        //! control rect
-        virtual void updateState( const QObject* object, bool state )
-        {
-            if( DataMap<ScrollBarData>::Value data = data_.find( object ) )
-            { data.data()->updateState( state ); }
-        }
+            //! control rect
+            virtual void updateState( const QObject* object, bool state ) {
+                  if ( DataMap<ScrollBarData>::Value data = data_.find( object ) ) {
+                        data.data()->updateState( state );
+                        }
+                  }
 
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            /*
-            do not disable the map directly, because the contained OxygenScrollbarData
-            are also used in non animated mode to store scrollbar arrows rect. However
-            do disable all contains DATA object, in order to prevent actual animations
-            */
-            foreach( const DataMap<ScrollBarData>::Value data, data_ )
-            { if( data ) data.data()->setEnabled( value ); }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  /*
+                  do not disable the map directly, because the contained OxygenScrollbarData
+                  are also used in non animated mode to store scrollbar arrows rect. However
+                  do disable all contains DATA object, in order to prevent actual animations
+                  */
+                  foreach( const DataMap<ScrollBarData>::Value data, data_ ) {
+                        if ( data ) data.data()->setEnabled( value );
+                        }
 
-        }
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<ScrollBarData> data_;
+            //! data map
+            DataMap<ScrollBarData> data_;
 
-    };
+      };
 
 #endif

@@ -26,26 +26,24 @@
 
 #include "spinboxdata.h"
 
-    //________________________________________________
-    SpinBoxData::SpinBoxData( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target )
-    {
-        upArrowData_.animation_ = new Animation( duration, this );
-        downArrowData_.animation_ = new Animation( duration, this );
-        setupAnimation( upArrowAnimation(), "upArrowOpacity" );
-        setupAnimation( downArrowAnimation(), "downArrowOpacity" );
-    }
+//________________________________________________
+SpinBoxData::SpinBoxData( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ) {
+      upArrowData_.animation_ = new Animation( duration, this );
+      downArrowData_.animation_ = new Animation( duration, this );
+      setupAnimation( upArrowAnimation(), "upArrowOpacity" );
+      setupAnimation( downArrowAnimation(), "downArrowOpacity" );
+      }
 
-    //______________________________________________
-    bool SpinBoxData::Data::updateState( bool value )
-    {
-        if( state_ == value ) return false;
-        else {
+//______________________________________________
+bool SpinBoxData::Data::updateState( bool value ) {
+      if ( state_ == value ) return false;
+      else {
 
             state_ = value;
             animation_.data()->setDirection( state_ ? Animation::Forward : Animation::Backward );
-            if( !animation_.data()->isRunning() ) animation_.data()->start();
+            if ( !animation_.data()->isRunning() ) animation_.data()->start();
             return true;
 
-        }
-    }
+            }
+      }

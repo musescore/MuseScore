@@ -31,51 +31,49 @@
 #include "datamap.h"
 #include "labeldata.h"
 
-    //! used for simple widgets
-    class LabelEngine: public BaseEngine
-    {
+//! used for simple widgets
+class LabelEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        LabelEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            LabelEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~LabelEngine( void )
-        {}
+            //! destructor
+            virtual ~LabelEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QLabel* );
+            //! register widget
+            virtual bool registerWidget( QLabel* );
 
-        //! duration
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! duration
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! maps
-        DataMap<LabelData> data_;
+            //! maps
+            DataMap<LabelData> data_;
 
-    };
+      };
 
 #endif

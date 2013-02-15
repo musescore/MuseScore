@@ -31,55 +31,56 @@
 #include "animation.h"
 
 
-    //! generic data
-    class GenericData: public AnimationData
-    {
+//! generic data
+class GenericData: public AnimationData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        //! declare opacity property
-        Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
+            //! declare opacity property
+            Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
-        public:
+      public:
 
-        //! constructor
-        GenericData( QObject* parent, QWidget* widget, int duration );
+            //! constructor
+            GenericData( QObject* parent, QWidget* widget, int duration );
 
-        //! destructor
-        virtual ~GenericData( void )
-        {}
+            //! destructor
+            virtual ~GenericData( void )
+                  {}
 
-        //! return animation object
-        virtual const Animation::Pointer& animation() const
-        { return animation_; }
+            //! return animation object
+            virtual const Animation::Pointer& animation() const {
+                  return animation_;
+                  }
 
-        //! duration
-        virtual void setDuration( int duration )
-        { animation_.data()->setDuration( duration ); }
+            //! duration
+            virtual void setDuration( int duration ) {
+                  animation_.data()->setDuration( duration );
+                  }
 
-        //! opacity
-        virtual qreal opacity( void ) const
-        { return opacity_; }
+            //! opacity
+            virtual qreal opacity( void ) const {
+                  return opacity_;
+                  }
 
-        //! opacity
-        virtual void setOpacity( qreal value )
-        {
+            //! opacity
+            virtual void setOpacity( qreal value ) {
 
-            if( opacity_ == value ) return;
+                  if ( opacity_ == value ) return;
 
-            opacity_ = value;
-            setDirty();
+                  opacity_ = value;
+                  setDirty();
 
-        }
+                  }
 
-        private:
+      private:
 
-        //! animation handling
-        Animation::Pointer animation_;
+            //! animation handling
+            Animation::Pointer animation_;
 
-        //! opacity variable
-        qreal opacity_;
+            //! opacity variable
+            qreal opacity_;
 
-    };
+      };
 
 #endif
