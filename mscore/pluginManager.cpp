@@ -38,41 +38,20 @@ PluginManager::PluginManager(QWidget* parent)
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
-      updateValues();
-      }
 
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
+      prefs.updatePluginList();
 
-void PluginManager::accept()
-      {
-printf("pluginManager::apply()\n");
-      if (shortcutsChanged) {
-            shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
-                  Shortcut* os = Shortcut::getShortcut(s->key());
-                  if (os) {
-                        if (!os->compareKeys(*s))
-                              os->setKeys(s->keys());
+      // update "load" flag
+      for (int n = 0; n < preferences.pluginList.size(); ++n) {
+            PluginDescription& d = preferences.pluginList[n];
+            for (int k = 0; k < prefs.pluginList.size(); ++k) {
+                  PluginDescription& dd = prefs.pluginList[k];
+                  if (d.path == dd.path) {
+                        dd.load = d.load;
+                        break;
                         }
                   }
-            Shortcut::dirty = true;
             }
-      QDialog::accept();
-      }
-
-//---------------------------------------------------------
-//   updateValues
-//---------------------------------------------------------
-
-void PluginManager::updateValues()
-      {
-      //
-      //  update plugin manager
-      //
-      prefs.updatePluginList();
-      pluginList->clear();
 
       int n = prefs.pluginList.size();
       for (int i = 0; i < n; ++i) {
@@ -84,8 +63,28 @@ void PluginManager::updateValues()
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
+      }
+
+//---------------------------------------------------------
+//   apply
+//---------------------------------------------------------
+
+void PluginManager::accept()
+      {
+      if (shortcutsChanged) {
+            shortcutsChanged = false;
+            foreach(const Shortcut* s, localShortcuts) {
+                  Shortcut* os = Shortcut::getShortcut(s->key());
+                  if (os) {
+                        if (!os->compareKeys(*s))
+                              os->setKeys(s->keys());
+                        }
+                  }
+            Shortcut::dirty = true;
+            }
       preferences = prefs;
       preferences.write();
+      QDialog::accept();
       }
 
 //---------------------------------------------------------
