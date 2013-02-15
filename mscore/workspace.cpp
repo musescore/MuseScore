@@ -116,7 +116,7 @@ void MuseScore::createNewWorkspace()
             }
       Workspace::currentWorkspace->save();
       Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
-//      preferences.workspace = workspace->name();
+      preferences.workspace = Workspace::currentWorkspace->name();
       }
 
 //---------------------------------------------------------
@@ -143,9 +143,9 @@ void MuseScore::deleteWorkspace()
       Workspace::workspaces().removeOne(workspace);
       QFile f(workspace->path());
       f.remove();
-//TODO:??      delete workspace;
-      workspace             = Workspace::workspaces().first();
-      preferences.workspace = workspace->name();
+      delete workspace;
+      Workspace::currentWorkspace = Workspace::workspaces().first();
+      preferences.workspace = Workspace::currentWorkspace->name();
       }
 
 //---------------------------------------------------------
@@ -412,7 +412,6 @@ QList<Workspace*>& Workspace::workspaces()
 
             foreach(QString s, path) {
                   QDir dir(s);
-// printf("workspaces: look in <%s>\n", qPrintable(s));
                   QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
                   foreach (QString entry, pl) {
@@ -427,9 +426,9 @@ QList<Workspace*>& Workspace::workspaces()
                               }
                         if (!p)
                               p = new Workspace;
-// printf("workspaces: found in <%s>\n", qPrintable(s + "/" + entry));
                         p->setPath(s + "/" + entry);
                         p->setName(name);
+                        p->setReadOnly(!fi.isWritable());
                         _workspaces.append(p);
                         }
                   }
