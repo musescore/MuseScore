@@ -40,19 +40,6 @@ PluginManager::PluginManager(QWidget* parent)
       shortcutsChanged = false;
 
       prefs.updatePluginList();
-
-      // update "load" flag
-      for (int n = 0; n < preferences.pluginList.size(); ++n) {
-            PluginDescription& d = preferences.pluginList[n];
-            for (int k = 0; k < prefs.pluginList.size(); ++k) {
-                  PluginDescription& dd = prefs.pluginList[k];
-                  if (d.path == dd.path) {
-                        dd.load = d.load;
-                        break;
-                        }
-                  }
-            }
-
       int n = prefs.pluginList.size();
       for (int i = 0; i < n; ++i) {
             const PluginDescription& d = prefs.pluginList[i];
