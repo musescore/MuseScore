@@ -163,7 +163,6 @@ set(_qt_modules
   Designer
   Concurrent
   Xml
-  XmlPatterns
   UiTools
   Qml
   Quick1
