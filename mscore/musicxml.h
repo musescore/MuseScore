@@ -231,7 +231,6 @@ class MusicXml {
       void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QDomElement node);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
-      void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore::Direction sd, Beam*& beam);
 
 public:
       MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1);
