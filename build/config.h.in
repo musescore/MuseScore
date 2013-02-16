@@ -45,5 +45,7 @@
 #cmakedefine Q_WS_UIKIT
 
 #define USE_BSP     true
-#define USE_GLYPHS  true
+
+// does not work on windows/mac:
+//#define USE_GLYPHS  true
 
