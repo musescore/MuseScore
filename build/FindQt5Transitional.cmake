@@ -24,7 +24,6 @@ if (Qt5Core_FOUND)
         WebKit
         WebKitWidgets
         OpenGL
-        V8
       )
     foreach(_component ${_components})
       find_package(Qt5${_component})
