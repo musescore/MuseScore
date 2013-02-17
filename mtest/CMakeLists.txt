@@ -35,6 +35,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
