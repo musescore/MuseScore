@@ -294,7 +294,7 @@ if (NOT MINGW AND NOT APPLE)
 #     set library search path for runtime linker to load the same
 #     qt libraries as we used at compile time
 #
-set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}")
+set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
 endif (NOT MINGW AND NOT APPLE)
 
 #
