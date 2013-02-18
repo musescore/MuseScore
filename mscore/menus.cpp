@@ -1053,6 +1053,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("rehearsalmark-text"));
       text->addSeparator();
       text->addAction(getAction("lyrics"));
+      text->addAction(getAction("figured-bass"));
       text->addAction(getAction("tempo"));
 
       popup->addSeparator();
