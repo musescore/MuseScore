@@ -375,16 +375,8 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
       bool rv = Text::edit(view, grip, key, mod, s);
       QString str = getText();
       int root, base;
-      QTextCharFormat tf;
-      if (!str.isEmpty() && !parseHarmony(str, &root, &base)) {
-            // if text cannot be recognized, then underline with
-            // red squiggle
-            tf.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-            tf.setUnderlineColor(Qt::red);
-            }
-      QTextCursor c(doc());
-      c.select(QTextCursor::Document);
-      c.setCharFormat(tf);
+      bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base);
+      spellCheckUnderline(badSpell);
       return rv;
       }
 
