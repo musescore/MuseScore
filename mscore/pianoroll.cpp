@@ -283,8 +283,9 @@ void PianorollEditor::updateSelection()
 
 void PianorollEditor::selectionChanged()
       {
+printf("===PianorollEditor::selectionChanged\n");
+
       updateSelection();
-//      _score->blockSignals(true);
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
             QGraphicsItem* item = items[0];
@@ -305,7 +306,6 @@ void PianorollEditor::selectionChanged()
             }
       _score->setUpdateAll();
       _score->end();
-//      _score->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -314,7 +314,7 @@ void PianorollEditor::selectionChanged()
 
 void PianorollEditor::changeSelection(int)
       {
-//      gv->scene()->blockSignals(true);
+      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
       foreach(QGraphicsItem* item, il) {
@@ -322,7 +322,7 @@ void PianorollEditor::changeSelection(int)
             if (note)
                   item->setSelected(note->selected());
             }
-//      gv->scene()->blockSignals(false);
+      gv->scene()->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -617,7 +617,7 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
-      // printf("PianorollEditor::updateAll()\n");
+      gv->update();
       }
 
 //---------------------------------------------------------

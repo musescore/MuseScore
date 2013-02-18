@@ -31,6 +31,7 @@ class PianoItem : public QGraphicsRectItem {
 
    public:
       PianoItem(Note*, NoteEvent*);
+      virtual ~PianoItem() {}
       };
 
 //---------------------------------------------------------
@@ -68,6 +69,7 @@ class PianoView : public QGraphicsView {
 
    public slots:
       void moveLocator(int);
+      void update();
 
    public:
       PianoView();
