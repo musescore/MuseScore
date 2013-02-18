@@ -51,7 +51,6 @@ SimpleText::SimpleText(const SimpleText& st)
 
 void SimpleText::draw(QPainter* p) const
       {
-      drawFrame(p);
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
       p->setPen(textColor());
@@ -72,7 +71,6 @@ QRectF SimpleText::cursorRect() const
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       int line   = _cursor.line;
-//      qreal lh   = lineHeight();
       QPointF pt = _layout[line].pos;
       qreal xo   = fm.width(_layout[line].text.left(_cursor.column));
 

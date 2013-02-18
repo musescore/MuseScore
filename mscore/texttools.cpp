@@ -230,6 +230,7 @@ void TextTools::updateTools()
       {
       if (!_textElement->editMode()) {
             qDebug("TextTools::updateTools(): not in edit mode");
+            abort();
             return;
             }
       if (_textElement->styled())   // TODO
