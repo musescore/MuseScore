@@ -228,6 +228,10 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools()
       {
+      if (!_textElement->editMode()) {
+            qDebug("TextTools::updateTools(): not in edit mode");
+            return;
+            }
       if (_textElement->styled())   // TODO
             return;
 

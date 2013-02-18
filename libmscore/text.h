@@ -33,6 +33,7 @@ class Text : public SimpleText {
 
       QTextDocument* _doc;
       int _styleIndex;        // set to -1 if not styled
+      static QTextCursor* _cursor;
 
       void createDoc();
       void setUnstyledText(const QString& s);
@@ -40,7 +41,6 @@ class Text : public SimpleText {
       bool isSimpleText() const;
 
    protected:
-      static QTextCursor* _cursor;
       bool setCursor(const QPointF& p, QTextCursor::MoveMode mm = QTextCursor::MoveAnchor);
 
    public:
