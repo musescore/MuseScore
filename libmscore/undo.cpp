@@ -2065,7 +2065,7 @@ void EditText::undo()
       {
       if (!text->styled()) {
             for (int i = 0; i < undoLevel; ++i)
-                  text->doc()->undo();
+                  text->undo();
             }
       undoRedo();
       }
@@ -2078,7 +2078,7 @@ void EditText::redo()
       {
       if (!text->styled()) {
             for (int i = 0; i < undoLevel; ++i)
-                  text->doc()->redo();
+                  text->redo();
             }
       undoRedo();
       }

@@ -443,12 +443,7 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             default:
                   break;
             }
-
-      if (!s.isEmpty()) {
-            curLine().insert(_cursor.column, s);
-            _cursor.column += s.size();
-            }
-
+      insertText(s);
       layout();
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
@@ -464,6 +459,18 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             score()->addRefresh(refresh.adjusted(-w, -w, w, w));
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   insertText
+//---------------------------------------------------------
+
+void SimpleText::insertText(const QString& s)
+      {
+      if (!s.isEmpty()) {
+            curLine().insert(_cursor.column, s);
+            _cursor.column += s.size();
+            }
       }
 
 //---------------------------------------------------------
