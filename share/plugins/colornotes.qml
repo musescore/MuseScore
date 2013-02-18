@@ -17,7 +17,7 @@ import MuseScore 1.0
 MuseScore {
       version:  "1.0"
       description: "This demo plugin colors notes in the selection depending on pitch"
-      menuPath: "Plugins.colornotes"
+      menuPath: "Plugins.Notes.Color Notes"
  
       property variant colors : [
                "#e21c48", "#f26622", "#f99d1c",
