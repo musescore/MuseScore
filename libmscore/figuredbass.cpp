@@ -969,12 +969,14 @@ void FiguredBass::layout()
       {
       qreal       y;
 
-//      if(items.size()) {
-            TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
-                        false, false, false, ALIGN_LEFT | ALIGN_TOP);
-            st.setSizeIsSpatiumDependent(true);
-            setTextStyle(st);
-//            }
+      Text::layout();                     // Text and/or SimpleText may expect some internal data to be setup
+
+      // force 'our' style
+      TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+                  false, false, false, ALIGN_LEFT | ALIGN_TOP);
+      st.setSizeIsSpatiumDependent(true);
+      setTextStyle(st);
+
       layoutLines();
 
       // vertical position
