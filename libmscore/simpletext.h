@@ -118,6 +118,8 @@ class SimpleText : public Element {
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       void moveCursorToEnd()   { movePosition(QTextCursor::Start); };
       void moveCursorToStart() { movePosition(QTextCursor::End); };
+
+      void insertText(const QString&);
       };
 
 #endif

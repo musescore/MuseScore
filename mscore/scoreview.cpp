@@ -2327,9 +2327,9 @@ void ScoreView::editCopy()
             // store selection as plain text
             //
             Text* text = static_cast<Text*>(editObject);
-            QTextCursor* tcursor = text->cursor();
-            if (tcursor && tcursor->hasSelection())
-                  QApplication::clipboard()->setText(tcursor->selectedText(), QClipboard::Clipboard);
+            QString s = text->selection();
+            if (!s.isEmpty())
+                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
             }
       }
 

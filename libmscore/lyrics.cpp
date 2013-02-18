@@ -243,7 +243,7 @@ void Lyrics::paste()
       if (sl.isEmpty())
             return;
 
-      cursor()->insertText(sl[0]);
+      insertText(sl[0]);
       layout();
       score()->setLayoutAll(true);
       score()->end();

@@ -131,8 +131,30 @@ class Text : public SimpleText {
       virtual void setScore(Score* s);
       friend class TextProperties;
 
-      QTextCursor* cursor()               { return _cursor; }
-      QTextDocument* doc() const          { return _doc;    }
+      void spellCheckUnderline(bool);
+      void insertText(const QString& s);
+      void undo();
+      void redo();
+      QString selection() const;
+      QFont curFont() const;
+      bool curItalic() const;
+      bool curBold() const;
+      bool curUnderline() const;
+      bool curSubscript() const;
+      bool curSuperscript() const;
+
+      void setCurFontPointSize(double value);
+      void setCurFontFamily(const QString& s);
+      void setCurUnderline(bool val);
+      void setCurItalic(bool val);
+      void setCurBold(bool val);
+      void setCurSuperscript(bool val);
+      void setCurSubscript(bool val);
+      void setCurHalign(int val);
+      void orderedList();
+      void unorderedList();
+      void indentLess();
+      void indentMore();
 
       virtual bool systemFlag() const;
 
@@ -141,3 +163,4 @@ class Text : public SimpleText {
       };
 
 #endif
+
