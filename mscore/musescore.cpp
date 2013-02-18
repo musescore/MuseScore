@@ -2607,8 +2607,8 @@ void MuseScore::changeState(ScoreState val)
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
 
-      if (_sstate == val)
-            return;
+//      if (_sstate == val)
+//            return;
       foreach (const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
             if (!a)

@@ -1730,7 +1730,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   e = e->parent();
             Text* text = static_cast<Text*>(editObject);
             QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
-            p.setPen(QPen(QBrush(Qt::blue), 2.0 / matrix().m11()));  // 2 pixel pen size
+            p.setPen(QPen(QBrush(Qt::lightGray), 2.0 / matrix().m11()));  // 2 pixel pen size
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
             }
@@ -4318,6 +4318,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       _score->select(lyrics, SELECT_SINGLE, 0);
       startEdit(lyrics, -1);
+      mscore->changeState(mscoreState());
+
       adjustCanvasPosition(lyrics, false);
       if (end)
             ((Lyrics*)editObject)->moveCursorToEnd();
@@ -4407,6 +4409,8 @@ void ScoreView::lyricsMinus()
 
       _score->select(lyrics, SELECT_SINGLE, 0);
       startEdit(lyrics, -1);
+      mscore->changeState(mscoreState());
+
       adjustCanvasPosition(lyrics, false);
       ((Lyrics*)editObject)->moveCursorToEnd();
 
@@ -4496,6 +4500,8 @@ void ScoreView::lyricsUnderscore()
 
       _score->select(lyrics, SELECT_SINGLE, 0);
       startEdit(lyrics, -1);
+      mscore->changeState(mscoreState());
+
       adjustCanvasPosition(lyrics, false);
       ((Lyrics*)editObject)->moveCursorToEnd();
 
@@ -4526,6 +4532,8 @@ void ScoreView::lyricsReturn()
       _score->undoAddElement(lyrics);
       _score->select(lyrics, SELECT_SINGLE, 0);
       startEdit(lyrics, -1);
+      mscore->changeState(mscoreState());
+
       adjustCanvasPosition(lyrics, false);
       _score->setLayoutAll(true);
       _score->end2();
@@ -4653,6 +4661,8 @@ void ScoreView::chordTab(bool back)
 
       _score->select(cn, SELECT_SINGLE, 0);
       startEdit(cn, -1);
+      mscore->changeState(mscoreState());
+
       adjustCanvasPosition(cn, false);
       ((Harmony*)editObject)->moveCursorToEnd();
 
@@ -5255,6 +5265,7 @@ Found:
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
       startEdit(fbNew, -1);
+      mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
@@ -5299,6 +5310,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       if(bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
+      mscore->changeState(mscoreState());
       startEdit(fbNew, -1);
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();

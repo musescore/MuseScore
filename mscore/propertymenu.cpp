@@ -41,7 +41,7 @@
 #include "jumpproperties.h"
 #include "selinstrument.h"
 #include "chordedit.h"
-#include "chordeditor.h"
+#include "pianoroll.h"
 #include "editstyle.h"
 #include "editstaff.h"
 #include "measureproperties.h"
@@ -676,10 +676,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
-            ChordEditor ce(note->chord());
-            mscore->disableCommands(true);
-            ce.exec();
-            mscore->disableCommands(false);
+            mscore->editInPianoroll(note->staff());
+
+//            PianorollEditor ce(note->chord());
+//            PianorollEditor ce;
+//            mscore->disableCommands(true);
+//            ce.exec();
+//            mscore->disableCommands(false);
             }
       else if (cmd == "style") {
             EditStyle es(e->score(), 0);
