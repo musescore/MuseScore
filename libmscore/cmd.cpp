@@ -1198,8 +1198,8 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
             _is.pitch = newPitch;
 
-            if ( (oNote->pitch() != newPitch) || (oNote->tpc() != newTpc) )
-                  undoChangePitch(oNote, newPitch, newTpc, oNote->line()/*, fret, string*/);
+            if ((oNote->pitch() != newPitch) || (oNote->tpc() != newTpc))
+                  undoChangePitch(oNote, newPitch, newTpc, oNote->line());
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
             else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
@@ -1219,6 +1219,9 @@ void Score::upDown(bool up, UpDownMode mode)
             // play new note with velocity 80 for 0.3 sec:
             _playNote = true;
             }
+      _selection.clear();
+      foreach(Note* note, el)
+            _selection.add(note);
       _selection.updateState();     // accidentals may have changed
       }
 
