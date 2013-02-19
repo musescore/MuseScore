@@ -24,7 +24,7 @@
 struct MidiPatch;
 class Event;
 
-#include "stdint.h"
+#include <stdint.h>
 #include "msynth/synti.h"
 #include "libmscore/midipatch.h"
 
