@@ -16,6 +16,7 @@
 
 #include "elementlayout.h"
 #include "simpletext.h"
+#include "mscore.h"
 
 class MuseScoreView;
 class TextProp;
@@ -32,7 +33,7 @@ class Text : public SimpleText {
       Q_PROPERTY(QString text READ getText WRITE setText)
 
       QTextDocument* _doc;
-      int _styleIndex;        // set to -1 if not styled
+      int _styleIndex;        // set to TEXT_STYLE_UNSTYLED if not styled
       static QTextCursor* _cursor;
 
       void createDoc();
@@ -118,7 +119,7 @@ class Text : public SimpleText {
 
       void dragTo(const QPointF&p);
 
-      bool styled() const                 { return _styleIndex != -1; }
+      bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
       int textStyleType() const           { return _styleIndex; }
       void setTextStyleType(int);
       void setUnstyled();

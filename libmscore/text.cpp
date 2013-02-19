@@ -987,7 +987,10 @@ void Text::paste()
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
             qDebug("Text::paste() <%s>\n", qPrintable(txt));
-      _cursor->insertText(txt);
+      if (styled())
+            SimpleText::insertText(txt);
+      else
+            _cursor->insertText(txt);
       layoutEdit();
       bool lo = type() == INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
@@ -1506,6 +1509,8 @@ QString Text::selection() const
             if (_cursor && _cursor->hasSelection())
                   s = _cursor->selectedText();
             }
+      else
+            return SimpleText::selectedText();
       return s;
       }
 
