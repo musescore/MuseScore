@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2009-2011 Werner Schweer
+//  Copyright (C) 2009-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -283,8 +283,6 @@ void PianorollEditor::updateSelection()
 
 void PianorollEditor::selectionChanged()
       {
-printf("===PianorollEditor::selectionChanged\n");
-
       updateSelection();
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
@@ -297,7 +295,7 @@ printf("===PianorollEditor::selectionChanged\n");
             _score->select(0, SELECT_SINGLE, 0);
             }
       else {
-            _score->select(0, SELECT_SINGLE, 0);
+            _score->deselectAll();
             foreach(QGraphicsItem* item, items) {
                   Note* note = static_cast<Note*>(item->data(0).value<void*>());
                   if (note)
