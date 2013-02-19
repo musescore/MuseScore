@@ -1260,6 +1260,8 @@ void Score::changeAccidental(Accidental::AccidentalType idx)
 
 void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       {
+      if(qApp->keyboardModifiers() == Qt::AltModifier)
+            updateAcc2 = true;
       QList<Staff*> staffList;
       Staff* ostaff = note->chord()->staff();
       LinkedStaves* linkedStaves = ostaff->linkedStaves();
@@ -1370,6 +1372,15 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                               }
                         }
                   }
+
+            //
+            // change pitches and tpc's for
+            // whole measure
+            //
+            if(updateAcc2)
+                  score->updatePitches(s, staffIdx, note->pitch(), note->tpc(), note->line(), accidental);
+            updateAcc2 = false;
+
             //
             // recalculate needed accidentals for
             // whole measure
@@ -2151,6 +2162,13 @@ void Score::cmd(const QAction* a)
             changeAccidental(Accidental::ACC_FLAT);
       else if (cmd == "flat2")
             changeAccidental(Accidental::ACC_FLAT2);
+      else if (cmd == "delete-accidental") {
+            updateAcc2 = true;
+            foreach(Element* el, selection().elements()) {
+                if(el->type() == Element::ACCIDENTAL)
+                  changeAccidental(static_cast<Note*>(el->parent()), Accidental::ACC_NONE);
+                }
+            }
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")

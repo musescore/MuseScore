@@ -852,6 +852,8 @@ class Score : public QObject {
       void updateNotes();
       void cmdUpdateNotes();
       void updateAccidentals(Measure* m, int staffIdx);
+      bool updateAcc2;
+      void updatePitches(Segment*, int, int, int, int, Accidental::AccidentalType);
       QHash<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);
