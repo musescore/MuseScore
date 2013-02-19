@@ -1069,7 +1069,7 @@ void Seq::sendEvent(const Event& ev)
 
 void Seq::nextMeasure()
       {
-      EventMap::const_iterator i = playPos;
+      EventMap::const_iterator i = events.upperBound(cs->playPos());
       const Note* note = 0;
       for (;;) {
             if (i.value().type() == ME_NOTEON) {
@@ -1097,8 +1097,9 @@ void Seq::nextMeasure()
 
 void Seq::nextChord()
       {
-      int tick = playPos.key();
-      for (EventMap::const_iterator i = playPos; i != events.constEnd(); ++i) {
+      EventMap::const_iterator i = events.upperBound(cs->playPos());
+      int tick = i.key();
+      for (; i != events.constEnd(); ++i) {
             if (i.value().type() != ME_NOTEON)
                   continue;
             const Event& n = i.value();
@@ -1115,7 +1116,7 @@ void Seq::nextChord()
 
 void Seq::prevMeasure()
       {
-      EventMap::const_iterator i = playPos;
+      EventMap::const_iterator i = events.upperBound(cs->playPos());
       const Note* note = 0;
       for (;;) {
             if (i.value().type() == ME_NOTEON) {
@@ -1147,7 +1148,7 @@ void Seq::prevChord()
       {
       int tick  = playPos.key();
       //find the chord just before playpos
-      EventMap::const_iterator i = playPos;
+      EventMap::const_iterator i = events.upperBound(cs->playPos());
       for (;;) {
             if (i.value().type() == ME_NOTEON) {
                   const Event& n = i.value();
