@@ -27,8 +27,13 @@ struct SymCode;
 
 class TCursor {
    public:
+      int selectLine;         // start of selection
+      int selectColumn;
+
       int line;
       int column;
+
+      bool hasSelection() const { return (selectLine != line) || (selectColumn != column); }
       };
 
 //---------------------------------------------------------
@@ -59,6 +64,7 @@ class SimpleText : public Element {
       static TCursor _cursor;
       QRectF cursorRect() const;
       QString& curLine();
+      void drawSelection(QPainter*, const QRectF&) const;
 
    protected:
       TextStyle _textStyle;
@@ -118,6 +124,8 @@ class SimpleText : public Element {
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       void moveCursorToEnd()   { movePosition(QTextCursor::Start); };
       void moveCursorToStart() { movePosition(QTextCursor::End); };
+
+      QString selectedText() const;
 
       void insertText(const QString&);
       };
