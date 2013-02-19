@@ -288,8 +288,7 @@ if (MINGW)
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
    install_files ( /bin .dll
-      ${CROSS}/bin/mingwm10.dll
-      ${CROSS}/bin/libgcc_s_dw2-1.dll
+      ${CROSS}/bin/libgcc_s_sjlj-1.dll
       ${CROSS}/lib/portaudio.dll
       ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libogg.dll
