@@ -233,9 +233,6 @@ void TextTools::updateTools()
             abort();
             return;
             }
-      if (_textElement->styled())   // TODO
-            return;
-
       blockAllSignals(true);
 
       QFont f(_textElement->curFont());
