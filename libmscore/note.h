@@ -143,6 +143,7 @@ class Note : public Element {
       bool dragMode;
       bool _mirror;           ///< True if note is mirrored at stem.
       bool _small;
+      mutable bool _mark;     // for use in sequencer
 
       NoteHeadGroup _headGroup;
       NoteHeadType _headType;
@@ -328,6 +329,9 @@ class Note : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+
+      bool mark() const             { return _mark;   }
+      void setMark(bool v) const    { _mark = v;   }
       };
 
 Q_DECLARE_METATYPE(Note::NoteHeadGroup)

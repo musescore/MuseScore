@@ -37,6 +37,7 @@ class Part;
 struct Channel;
 class ScoreView;
 class MasterSynth;
+class Segment;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -52,15 +53,20 @@ struct SeqMsg {
       union {
             int intVal;
             qreal realVal;
-            } data;
+            };
       Event event;
+
+      SeqMsg() {}
+      SeqMsg(int _id, int val) : id(_id), intVal(val) {}
+      SeqMsg(int _id, qreal val) : id(_id), realVal(val) {}
+      SeqMsg(int _id, const Event& e) : id(_id), event(e) {}
       };
 
 //---------------------------------------------------------
 //   SeqMsgFifo
 //---------------------------------------------------------
 
-static const int SEQ_MSG_FIFO_SIZE = 512;
+static const int SEQ_MSG_FIFO_SIZE = 1024*8;
 
 class SeqMsgFifo : public FifoBase {
       SeqMsg messages[SEQ_MSG_FIFO_SIZE];
@@ -79,6 +85,8 @@ class SeqMsgFifo : public FifoBase {
 
 class Seq : public QObject, public Sequencer {
       Q_OBJECT
+
+      mutable QMutex mutex;
 
       Score* cs;
       ScoreView* cv;
@@ -121,6 +129,8 @@ class Seq : public QObject, public Sequencer {
       void playEvent(const Event&);
       void guiToSeq(const SeqMsg& msg);
       void metronome(unsigned n, float* l);
+      void seek(int utick, Segment* seg);
+      void unmarkNotes();
 
    private slots:
       void seqMessage(int msg);
@@ -193,7 +203,6 @@ class Seq : public QObject, public Sequencer {
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
       void eventToGui(Event);
-      void processToGuiMessages();
       void stopNoteTimer();
       };
 

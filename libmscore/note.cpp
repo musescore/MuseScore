@@ -168,6 +168,7 @@ Note::Note(Score* s)
       _dots[1]           = 0;
       _dots[2]           = 0;
       _playEvents.append(NoteEvent());    // add default play event
+      _mark             = 0;
       }
 
 Note::~Note()
@@ -228,6 +229,7 @@ Note::Note(const Note& n)
                   add(new NoteDot(*n._dots[i]));
             }
       _lineOffset = n._lineOffset;
+      _mark      = n._mark;
       }
 
 //---------------------------------------------------------
@@ -578,7 +580,24 @@ void Note::draw(QPainter* painter) const
       {
       if (_hidden)
             return;
-      painter->setPen(curColor());
+
+      QColor c;
+      if (score() && score()->printing())
+            c = (color() == MScore::defaultColor) ? Qt::black : color();
+      else if (!visible())
+            c = Qt::gray;
+      else {
+            if (flag(ELEMENT_DROP_TARGET))
+                  c = MScore::dropColor;
+            else if (selected() || _mark) {
+                  if (track() == -1)
+                        c = MScore::selectColor[0];
+                  else
+                        c = MScore::selectColor[voice()];
+                  }
+            }
+
+      painter->setPen(c);
       bool tablature = staff() && staff()->isTabStaff();
 
       // tablature

@@ -44,7 +44,6 @@ class EventData : public QSharedData {
       void setNoquantOntime(int v)   {  _noquantOntime = v;          }
       int noquantDuration() const    { return  _noquantDuration;     }
       void setNoquantDuration(int v) {  _noquantDuration = v;        }
-
       int type() const               { return  _type;                }
       void setType(int v)            {  _type = v;                   }
       int ontime() const             { return  _ontime;              }
