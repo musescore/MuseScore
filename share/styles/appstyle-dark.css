@@ -8,7 +8,7 @@ QPushButton {
       color: white
       }
 QToolTip {
-      color: black;
+      color: white;
       opacity: 200;
       }
 PlayPanel QLabel#posLabel       {
