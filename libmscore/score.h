@@ -566,6 +566,7 @@ class Score : public QObject {
       void setLayoutAll(bool val);
       bool layoutAll() const           { return _layoutAll; }
       void addRefresh(const QRectF& r) { refresh |= r;     }
+      const QRectF& getRefresh() const { return refresh;     }
 
       void changeVoice(int);
 
