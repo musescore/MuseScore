@@ -270,6 +270,7 @@ class Measure : public MeasureBase {
       void layoutChords0(Segment* segment, int startTrack);
       void layoutChords10(Segment* segment, int startTrack, AccidentalState*);
       void updateAccidentals(Segment* segment, int staffIdx, AccidentalState*);
+      void updatePitches(Segment* segment, int staffIdx, int pitch, int tcp, int line, int newAccType);
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
