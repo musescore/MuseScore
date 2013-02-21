@@ -110,9 +110,9 @@ void TempoMap::normalize()
 
 void TempoMap::dump() const
       {
-      qDebug("\nTempoMap:\n");
+      qDebug("\nTempoMap:");
       for (ciTEvent i = begin(); i != end(); ++i)
-            qDebug("%6d tempo: %f time: %f\n",
+            qDebug("%6d tempo: %f time: %f",
                i->first, i->second.tempo, i->second.time);
       }
 
@@ -155,7 +155,8 @@ void TempoMap::del(int tick)
       {
       iTEvent e = find(tick);
       if (e == end()) {
-            qDebug("TempoMap::del event at (%d): not found\n", tick);
+            qDebug("TempoMap::del event at (%d): not found", tick);
+            abort();
             return;
             }
       erase(e);
@@ -236,7 +237,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
             delta = qreal(tick - ptick);
             }
       else
-            qDebug("TempoMap: empty\n");
+            qDebug("TempoMap: empty");
       if (sn)
             *sn = _tempoSN;
       time += delta / (MScore::division * tempo * _relTempo);

@@ -618,7 +618,7 @@ class Score : public QObject {
       Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       void fixTicks();
-      void addArticulation(Element*, Articulation* atr);
+      bool addArticulation(Element*, Articulation* atr);
 
       bool playlistDirty();
       void setPlaylistDirty(bool val) { _playlistDirty = val; }

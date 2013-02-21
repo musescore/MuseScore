@@ -1238,7 +1238,8 @@ void Score::addArticulation(ArticulationType attr)
             if (el->type() == Element::NOTE || el->type() == Element::CHORD) {
                   Articulation* na = new Articulation(this);
                   na->setSubtype(attr);
-                  addArticulation(el, na);
+                  if (!addArticulation(el, na))
+                        delete na;
                   }
             }
       }
@@ -1385,28 +1386,25 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
 //   addArticulation
 //---------------------------------------------------------
 
-void Score::addArticulation(Element* el, Articulation* atr)
+bool Score::addArticulation(Element* el, Articulation* a)
       {
       ChordRest* cr;
       if (el->type() == Element::NOTE)
-            cr = static_cast<ChordRest*>(((Note*)el)->chord());
-      else if (el->type() == Element::REST)
+            cr = static_cast<ChordRest*>(static_cast<Note*>(el)->chord());
+      else if (el->type() == Element::REST
+         || el->type() == Element::CHORD
+         || el->type() == Element::REPEAT_MEASURE)
             cr = static_cast<ChordRest*>(el);
-      else if (el->type() == Element::CHORD)
-            cr = static_cast<ChordRest*>(el);
-      else {
-            delete atr;
-            return;
-            }
-      atr->setParent(cr);
-      Articulation* oa = cr->hasArticulation(atr);
-      if (oa) {
-            delete atr;
-            atr = 0;
-            undoRemoveElement(oa);
-            }
       else
-            undoAddElement(atr);
+            return false;
+      Articulation* oa = cr->hasArticulation(a);
+      if (oa) {
+            undoRemoveElement(oa);
+            return false;
+            }
+      a->setParent(cr);
+      undoAddElement(a);
+      return true;
       }
 
 //---------------------------------------------------------
