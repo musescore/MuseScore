@@ -2191,6 +2191,12 @@ Shortcut Shortcut::sc[] = {
          "add-noteline",
          QT_TRANSLATE_NOOP("action","Note anchored Textline")
          ),
+    Shortcut(
+         STATE_NORMAL,
+         0,
+         "lock",
+         QT_TRANSLATE_NOOP("action","Lock Score")
+         ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
