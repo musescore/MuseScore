@@ -325,7 +325,6 @@ bool ChordRest::readProperties(XmlReader& e)
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
-            // if ((type() == REST) && (mticks == i || (durationType()==TDuration::V_WHOLE && mticks != 1920))) {
             if ((type() == REST) && (mticks == i)) {
                   setDurationType(TDuration::V_MEASURE);
                   setDuration(Fraction::fromTicks(i));
