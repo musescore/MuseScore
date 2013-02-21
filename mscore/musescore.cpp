@@ -3779,13 +3779,9 @@ void MuseScore::networkFinished(QNetworkReply* reply)
             QUrl url = reply->url();
             QString path = url.path();
             qDebug("Path <%s>", qPrintable(path));
-            if(path.endsWith(".pdf") || path.endsWith(".mscz"))
-                  name = path.section('/',-1);
-        	  else
-                  name = "unknown.mscz";
+            QFileInfo fi(path);
+            name = fi.fileName();
             }
-
-      // attachment; filename="Bilder_einer_Ausstellung.mscz"
 
       qDebug("header <%s>", qPrintable(s));
       qDebug("name <%s>", qPrintable(name));

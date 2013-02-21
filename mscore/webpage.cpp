@@ -33,6 +33,20 @@
 static const char* staticUrl = "http://connect.musescore.com";
 
 //---------------------------------------------------------
+//   MyNetworkAccessManager
+//---------------------------------------------------------
+
+QNetworkReply * MyNetworkAccessManager::createRequest(Operation op,
+                                          const QNetworkRequest & req,
+                                          QIODevice * outgoingData)
+      {
+      QNetworkRequest new_req(req);
+      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toAscii());
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
+      return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
+      }
+
+//---------------------------------------------------------
 //   MyWebPage
 //---------------------------------------------------------
 
@@ -82,14 +96,6 @@ QObject* MyWebPage::createPlugin(
       }
 
 //---------------------------------------------------------
-//   userAgentForUrl
-//---------------------------------------------------------
-
-QString MyWebPage::userAgentForUrl(const QUrl &url) const {
-      return QString("MuseScore %1").arg(VERSION).toLatin1();
-      }
-
-//---------------------------------------------------------
 //   MyWebView
 //---------------------------------------------------------
 
@@ -102,6 +108,8 @@ MyWebView::MyWebView(QWidget *parent):
       // object-tags correctly.
 
       m_page.setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+      QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
+      m_page.setNetworkAccessManager(networkManager);
       setPage(&m_page);
 
       //set cookie jar for persistent cookies
@@ -121,14 +129,6 @@ MyWebView::~MyWebView()
       disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyAndClose(bool)));
       disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyAndFirst(bool)));
       disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyStatic(bool)));
-      }
-
-void MyWebView::load ( const QNetworkRequest & request, QNetworkAccessManager::Operation operation, const QByteArray & body)
-      {
-      QNetworkRequest new_req(request);
-      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toLatin1());
-      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toLatin1());
-      QWebView::load( new_req, operation, body);
       }
 
 //---------------------------------------------------------
@@ -200,7 +200,7 @@ void MyWebView::link(const QUrl& url)
       {
       QString path(url.path());
       QFileInfo fi(path);
-      if (fi.suffix() == "mscz")
+      if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl")
             mscore->loadFile(url);
       else if(url.host().startsWith("connect."))
             load(QNetworkRequest(url));
@@ -300,7 +300,6 @@ void WebPageDockWidget::load()
       web->load(QNetworkRequest(webUrl()));
       }
 
-#if QT_VERSION >= 0x040800
 bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName)
       {
       qDebug("saveCurrentOnline");
@@ -389,7 +388,6 @@ void WebPageDockWidget::saveOnlineFinished() {
             }
       reply->deleteLater();
       }
-#endif
 
 bool WebPageDockWidget::setCurrentScoreSource(QString source)
       {
