@@ -1120,7 +1120,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 void Score::undoRemoveElement(Element* element)
       {
       QList<Segment*> segments;
-      foreach(Element* e, element->linkList()) {
+      foreach (Element* e, element->linkList()) {
             undo(new RemoveElement(e));
             if (e->type() == Element::KEYSIG)                  // TODO: should be done in undo()/redo()
                   e->score()->cmdUpdateNotes();
