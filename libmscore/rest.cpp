@@ -202,12 +202,14 @@ Element* Rest::drop(const DropData& data)
       Element* e = data.element;
       switch (e->type()) {
             case ARTICULATION:
-                  if (static_cast<Articulation*>(e)->subtype() == Articulation_Fermata)
-                        score()->addArticulation(this, static_cast<Articulation*>(e));
-                  else {
+                  {
+                  Articulation* a = static_cast<Articulation*>(e);
+                  if (a->subtype() != Articulation_Fermata
+                     || !score()->addArticulation(this, a)) {
                         delete e;
                         e = 0;
                         }
+                  }
                   return e;
 
             case CHORD:
