@@ -827,7 +827,7 @@ void Seq::collectEvents()
       cs->renderMidi(&events);
       endTick = 0;
       if (!events.empty()) {
-            EventMap::const_iterator e = events.constEnd();
+            auto e = events.constEnd();
             --e;
             endTick = e.key();
             }
@@ -1019,19 +1019,11 @@ void Seq::sendEvent(const Event& ev)
 
 void Seq::nextMeasure()
       {
-      Measure* m = 0;
-      int tick = guiPos.key();
-      for (auto i = guiPos; i != events.constEnd(); ++i) {
-            if ((i.value().type() == ME_NOTEON) && (i.key() > tick) && i.value().velo()) {
-                  Segment* s  = i.value().note()->chord()->segment();
-                  Measure* mm = s->measure();
-                  if (m == 0)
-                        m = mm;
-                  else if (m != mm) {
-                        seek(i.key(), s);
-                        break;
-                        }
-                  }
+      Measure* m = cs->tick2measure(guiPos.key());
+      if (m) {
+            if (m->nextMeasure())
+                  m = m->nextMeasure();
+            seek(m->tick());
             }
       }
 
@@ -1056,9 +1048,13 @@ void Seq::nextChord()
 
 void Seq::prevMeasure()
       {
-      Measure* m = cs->tick2measure(guiPos.key());
+      auto i = guiPos;
+      if (i == events.begin())
+            return;
+      --i;
+      Measure* m = cs->tick2measure(i.key());
       if (m) {
-            if (m->prevMeasure())
+            if ((i.key() == m->tick()) && m->prevMeasure())
                   m = m->prevMeasure();
             seek(m->tick());
             }

@@ -802,5 +802,9 @@
     <seq>Alt+9</seq>
     <seq>Alt+K</seq>
     </SC>
+  <SC>
+    <key>lock</key>
+    <seq>Shift+Ctrl+L</seq>
+    </SC>
   </Shortcuts>
 
