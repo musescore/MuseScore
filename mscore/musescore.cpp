@@ -2353,6 +2353,11 @@ int main(int argc, char* av[])
                         p.setColor(QPalette::ButtonText,    Qt::white);
                         p.setColor(QPalette::BrightText,    Qt::black);
                         QApplication::setPalette(p);
+
+                        QPalette palette = QToolTip::palette();
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(Qt::darkGray));
+                        QToolTip::setPalette(palette);
+
                         break;
                         }
                   case STYLE_NATIVE:
