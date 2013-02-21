@@ -1510,7 +1510,7 @@ void Element::undoChangeProperty(P_ID id, const QVariant& val)
 
 bool Element::isChordRest() const
       {
-      return type() == REST || type() == CHORD;
+      return type() == REST || type() == CHORD || type() == REPEAT_MEASURE;
       }
 
 //---------------------------------------------------------
