@@ -52,6 +52,7 @@
 #include "pitchspelling.h"
 #include "tempotext.h"
 #include "dynamic.h"
+#include "repeat.h"
 
 //---------------------------------------------------------
 //   getSelectedNote
@@ -1116,7 +1117,6 @@ void Score::deleteItem(Element* el)
                               rest->setDurationType(chord->durationType());
                               }
                         select(rest, SELECT_SINGLE, 0);
-//                        segment->measure()->setDirty();
                         }
                   else  {
                         // remove segment if empty
@@ -1126,6 +1126,19 @@ void Score::deleteItem(Element* el)
                         }
                   }
                   break;
+
+            case Element::REPEAT_MEASURE:
+                  {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(el);
+                  removeChordRest(rm, false);
+                  Rest* rest = new Rest(this);
+                  rest->setDurationType(TDuration::V_MEASURE);
+                  rest->setDuration(rm->measure()->len());
+                  rest->setTrack(rm->track());
+                  rest->setParent(rm->parent());
+                  Segment* segment = rm->segment();
+                  undoAddCR(rest, segment->measure(), segment->tick());
+                  }
 
             case Element::REST:
                   //
