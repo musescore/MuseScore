@@ -195,7 +195,7 @@ class EditTransition : public QMouseEventTransition
 
    protected:
       virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event) || canvas->getOrigEditObject())
+            if (!QMouseEventTransition::eventTest(event) ) // || canvas->getOrigEditObject()) // this caused issue: double click on certain elements disables editing
                   return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
