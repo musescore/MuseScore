@@ -27,7 +27,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -324,6 +324,9 @@
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="chorusSpeedBox">
+             <property name="suffix">
+              <string extracomment="short for hertz (frequency)">hz</string>
+             </property>
              <property name="maximum">
               <double>5.000000000000000</double>
              </property>
@@ -354,6 +357,9 @@
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="chorusDepthBox">
+             <property name="suffix">
+              <string extracomment="short for millisecond">ms</string>
+             </property>
              <property name="maximum">
               <double>10.000000000000000</double>
              </property>
