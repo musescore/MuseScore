@@ -1005,7 +1005,7 @@ void ChordRest::add(Element* e)
 
 void ChordRest::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
@@ -1017,7 +1017,6 @@ void ChordRest::remove(Element* e)
                         }
                   }
                   break;
-//            case FIGURED_BASS:
             case LYRICS:
                   {
                   for (int i = 0; i < _lyricsList.size(); ++i) {
