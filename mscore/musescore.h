@@ -524,7 +524,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       bool readLanguages(const QString& path);
       void setRevision(QString& r)  {rev = r;}
-      QString revision()            {return rev;}
+      Q_INVOKABLE QString revision()            {return rev;}
+      Q_INVOKABLE QString version()            {return VERSION;}
       Q_INVOKABLE void newFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
