@@ -131,7 +131,6 @@ Chorus::Chorus(float sr)
 void Chorus::reset()
       {
       memset(chorusbuf, 0, MAX_SAMPLES * sizeof(*chorusbuf));
-      number_blocks = 0;
       number_blocks = FLUID_CHORUS_DEFAULT_N;
       level         = FLUID_CHORUS_DEFAULT_LEVEL;
       speed_Hz      = FLUID_CHORUS_DEFAULT_SPEED;
