@@ -50,6 +50,7 @@ enum ScoreState {
       STATE_PLAY               = 1 <<  8,
       STATE_SEARCH             = 1 <<  9,
       STATE_FOTO               = 1 << 10,
+      STATE_LOCK               = 1 << 11,
 
       STATE_NOTE_ENTRY = STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
       STATE_ALL        = -1

@@ -12,6 +12,7 @@
 
 #include <fenv.h>
 
+#include "config.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
@@ -2598,6 +2599,16 @@ void MuseScore::clipboardChanged()
       }
 
 //---------------------------------------------------------
+//   showModeText
+//---------------------------------------------------------
+
+void MuseScore::showModeText(const QString& s)
+      {
+      _modeText->setText(s);
+      _modeText->show();
+      }
+
+//---------------------------------------------------------
 //   changeState
 //---------------------------------------------------------
 
@@ -2636,7 +2647,7 @@ void MuseScore::changeState(ScoreState val)
       if (val != STATE_SEARCH && searchDialog)
             searchDialog->hide();
 
-      bool enable = val != STATE_DISABLED;
+      bool enable = (val != STATE_DISABLED) && (val != STATE_LOCK);
 
       // disabling top level menu entries does not
       // work for MAC
@@ -2666,8 +2677,7 @@ void MuseScore::changeState(ScoreState val)
 
       switch(val) {
             case STATE_DISABLED:
-                  _modeText->setText(tr("no score"));
-                  _modeText->show();
+                  showModeText(tr("no score"));
                   if (debugger)
                         debugger->hide();
                   showPianoKeyboard(false);
@@ -2678,41 +2688,36 @@ void MuseScore::changeState(ScoreState val)
                         searchDialog->hide();
                   break;
             case STATE_NOTE_ENTRY_PITCHED:
-                  _modeText->setText(tr("NOTE entry mode"));
-                  _modeText->show();
+                  showModeText(tr("NOTE entry mode"));
                   break;
             case STATE_NOTE_ENTRY_DRUM:
                   {
-                  _modeText->setText(tr("DRUM entry mode"));
-                  _modeText->show();
+                  showModeText(tr("DRUM entry mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
                   }
                   break;
             case STATE_NOTE_ENTRY_TAB:
-                  _modeText->setText(tr("TAB entry mode"));
-                  _modeText->show();
+                  showModeText(tr("TAB entry mode"));
                   break;
             case STATE_EDIT:
-                  _modeText->setText(tr("edit mode"));
-                  _modeText->show();
+                  showModeText(tr("edit mode"));
                   break;
             case STATE_TEXT_EDIT:
-                  _modeText->setText(tr("text edit mode"));
-                  _modeText->show();
+                  showModeText(tr("text edit mode"));
                   break;
             case STATE_LYRICS_EDIT:
-                  _modeText->setText(tr("lyrics edit mode"));
-                  _modeText->show();
+                  showModeText(tr("lyrics edit mode"));
                   break;
             case STATE_PLAY:
-                  _modeText->setText(tr("play"));
-                  _modeText->show();
+                  showModeText(tr("play"));
                   break;
             case STATE_FOTO:
-                  _modeText->setText(tr("foto mode"));
-                  _modeText->show();
+                  showModeText(tr("foto mode"));
                   updateInspector();
+                  break;
+            case STATE_LOCK:
+                  showModeText(tr("Score Locked"));
                   break;
             case STATE_SEARCH:
                   if (searchDialog == 0) {
@@ -2744,8 +2749,7 @@ void MuseScore::changeState(ScoreState val)
                   searchCombo->clearEditText();
                   searchCombo->setFocus();
                   searchDialog->show();
-                  _modeText->setText(tr("Find"));
-                  _modeText->show();
+                  showModeText(tr("Find"));
                   break;
             default:
                   qFatal("MuseScore::changeState: illegal state %d", val);
@@ -4414,6 +4418,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   score->endCmd();
                   }
             delete est;
+            }
+      else if (cmd == "lock") {
+            if (_sstate == STATE_LOCK)
+                  changeState(STATE_NORMAL);
+            else
+                  changeState(STATE_LOCK);
             }
       else {
             if (cv) {

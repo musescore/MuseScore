@@ -388,6 +388,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
       void updateInspector();
+      void showModeText(const QString&);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
