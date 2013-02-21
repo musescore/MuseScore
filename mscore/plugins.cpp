@@ -571,8 +571,10 @@ void collectPluginMetaInformation(PluginDescription* d)
             return;
             }
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-      d->version      = item->version();
-      d->description  = item->description();
+      if (item) {
+            d->version      = item->version();
+            d->description  = item->description();
+            }
       delete obj;
       }
 
