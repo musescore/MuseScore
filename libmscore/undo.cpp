@@ -1124,7 +1124,7 @@ void Score::undoRemoveElement(Element* element)
             undo(new RemoveElement(e));
             if (e->type() == Element::KEYSIG)                  // TODO: should be done in undo()/redo()
                   e->score()->cmdUpdateNotes();
-            if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
+            if (!(e->isChordRest() || (e->type() == Element::REPEAT_MEASURE)) && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
                         segments.append(s);

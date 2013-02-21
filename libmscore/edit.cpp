@@ -1154,6 +1154,21 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
+            case Element::REPEAT_MEASURE:
+                  {
+                  ChordRest* cr = static_cast<ChordRest*>(el);
+                  Measure* m1 = cr->measure();
+                  Segment* seg = cr->segment();
+                  removeChordRest(cr, false);
+                  Rest* rest = new Rest(this, TDuration(TDuration::V_MEASURE));
+                  rest->setDuration(Fraction(m1->len()));
+                  rest->setTrack(el->track());
+                  rest->setParent(cr->parent());
+                  undoAddCR(rest, seg->measure(), seg->tick());
+                  select(rest, SELECT_SINGLE, 0);
+                  }
+                  break;
+
             case Element::MEASURE:
                   {
                   Measure* measure = static_cast<Measure*>(el);
@@ -1326,6 +1341,8 @@ void Score::cmdDeleteSelection()
                               f = cr->duration();
                               }
                         else {
+                              if (cr->type() == Element::REPEAT_MEASURE)
+                                    f += s1->measure()->len();
                               removeChordRest(cr, true);
                               f += cr->duration();
                               }
