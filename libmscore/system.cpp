@@ -460,13 +460,18 @@ void System::clear()
 
 void System::setInstrumentNames(bool longName)
       {
+      //
+      // remark: add/remove instrument names is not undo/redoable
+      //         as add/remove of systems is not undoable
+      //
       if (isVbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()) {
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        score()->undoRemoveElement(t);
+                        //score()->undoRemoveElement(t);
+                        score()->removeElement(t);
                   }
             return;
             }
@@ -476,7 +481,8 @@ void System::setInstrumentNames(bool longName)
             Staff* s        = score()->staff(staffIdx);
             if (!s->isTop()) {
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        score()->undoRemoveElement(t);
+                        //score()->undoRemoveElement(t);
+                        score()->removeElement(t);
                   continue;
                   }
 
@@ -493,14 +499,16 @@ void System::setInstrumentNames(bool longName)
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
                         iname->setSubtype(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
-                        score()->undoAddElement(iname);
+                        // score()->undoAddElement(iname);
+                        score()->addElement(iname);
                         }
                   iname->setText(sn.name);
                   iname->setLayoutPos(sn.pos);
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)
-                  score()->undoRemoveElement(staff->instrumentNames[idx]);
+                  // score()->undoRemoveElement(staff->instrumentNames[idx]);
+                  score()->removeElement(staff->instrumentNames[idx]);
             }
       }
 
@@ -544,8 +552,10 @@ void System::add(Element* el)
       el->setParent(this);
       switch(el->type()) {
             case INSTRUMENT_NAME:
+// qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
                   _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
                   break;
+
             case BEAM:
                   score()->add(el);
                   break;
