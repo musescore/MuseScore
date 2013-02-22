@@ -893,8 +893,9 @@ FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
       setOnNote(true);
-      TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
-                  false, false, false, ALIGN_LEFT | ALIGN_TOP);
+      setTextStyleType(TEXT_STYLE_FIGURED_BASS);
+      TextStyle st("figBass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+                  false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)), OFFSET_SPATIUM);
       st.setSizeIsSpatiumDependent(true);
       setTextStyle(st);
       setTicks(0);
@@ -924,9 +925,16 @@ void FiguredBass::write(Xml& xml) const
             xml.tag("onNote", onNote());
       if (ticks() > 0)
             xml.tag("ticks", ticks());
+      if (textStyleType() != TEXT_STYLE_FIGURED_BASS) {
+            if (textStyleType() == TEXT_STYLE_UNSTYLED)
+                  Text::writeProperties(xml, true);
+            else
+                  xml.tag("style", textStyleType());
+            }
       foreach(FiguredBassItem item, items)
             item.write(xml);
-      Element::writeProperties(xml);
+      if (textStyleType() != TEXT_STYLE_UNSTYLED)
+            Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -942,7 +950,7 @@ void FiguredBass::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "ticks")
                   setTicks(e.readInt());
-            else if(tag == "onNote")
+            else if (tag == "onNote")
                   setOnNote(e.readInt() != 0l);
             else if (tag == "FiguredBassItem") {
                   FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
@@ -955,10 +963,14 @@ void FiguredBass::read(XmlReader& e)
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
-            else if(!Element::readProperties(e))
+            else if (tag == "style")
+                  setTextStyleType(e.readInt());
+            else if (!Text::readProperties(e))
                   e.unknown();
             }
-      setText(normalizedText);                  // this is the text to show while editing
+      // if text is styled, set normalized text
+      if(textStyleType() != TEXT_STYLE_UNSTYLED)
+            setText(normalizedText);            // this is the text to show while editing
       }
 
 //---------------------------------------------------------
@@ -967,18 +979,23 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
       {
-      qreal       y;
+//      qreal       y;
 
+      // if 'our' style, force 'our' style data from FiguredBass parameters
+      if(textStyleType() == TEXT_STYLE_FIGURED_BASS) {
+            TextStyle st("figBass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+                        false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)),
+                        OFFSET_SPATIUM);
+            st.setSizeIsSpatiumDependent(true);
+            setTextStyle(st);
+            }
       Text::layout();                     // Text and/or SimpleText may expect some internal data to be setup
-
-      // force 'our' style
-      TextStyle st("local", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
-                  false, false, false, ALIGN_LEFT | ALIGN_TOP);
-      st.setSizeIsSpatiumDependent(true);
-      setTextStyle(st);
-
       layoutLines();
 
+      // if style has been changed (or text not styled), do nothing else, keeping default laying out and formatting
+      if(textStyleType() != TEXT_STYLE_FIGURED_BASS)
+            return;
+/* already taken into account by Text::layout()
       // vertical position
       y = 0;                                          // default vert. pos.
       // if a staff exists for this F.B., use its y position
@@ -992,7 +1009,7 @@ void FiguredBass::layout()
                   }
             }
       y += point(score()->styleS(ST_figuredBassYOffset));
-
+*/
       // bounding box
       if(editMode()) {
             qreal             h, w, w1;
@@ -1010,12 +1027,12 @@ void FiguredBass::layout()
             h *= score()->styleD(ST_figuredBassLineHeight);
             h *= (list.size() > 1 ? list.size() : 1);      // at least 1 line
             // ready to set position and bbox
-            setPos(0, y);
+//            setPos(0, y);
             bbox().setRect(0-2, 0-2, w+4, h+4);
             }
       else
             {
-            setPos(0, y);
+//            setPos(0, y);
             bbox().setRect(0, 0, _lineLenghts.at(0), 0);
             // if element could be parsed into items, layout each element
             if(items.size() > 0) {
@@ -1025,12 +1042,9 @@ void FiguredBass::layout()
                         addbbox(items[i].bbox().translated(items[i].pos()));
                         }
                   }
-            else
-                  // if not, fall back to standard Text layout
-                  Text::layout();
             }
 
-      adjustReadPos();
+//      adjustReadPos();            // already taken into account by Text::layout()
       }
 
 //---------------------------------------------------------
@@ -1122,7 +1136,8 @@ void FiguredBass::draw(QPainter* painter) const
                         painter->drawLine(0.0, -2, len, -2);      // -2: 2 rast. un. above digits
                         }
             }
-      if(editMode())
+      // if in edit mode or with custom style, use default drawing
+      if(editMode() || textStyleType() != TEXT_STYLE_FIGURED_BASS)
             Text::draw(painter);
       else {
             if(items.size() < 1)
@@ -1176,8 +1191,11 @@ void FiguredBass::endEdit()
                   normalizedText.append('\n');
             normalizedText.append(pItem->normalizedText());
             }
-      setText(normalizedText);                  // if all items parsed, replaced entered text with normal. text
-      layout();
+      // if all items parsed and text is styled, replaced entered text with normalized text
+      if(textStyleType() != TEXT_STYLE_UNSTYLED) {
+            setText(normalizedText);
+            layout();
+            }
       }
 
 //---------------------------------------------------------

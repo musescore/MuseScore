@@ -3507,7 +3507,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             m = static_cast<const Segment*>(el)->measure();
       else if (el->type() == Element::LYRICS)
             m = static_cast<const Lyrics*>(el)->measure();
-      else if (el->type() == Element::HARMONY && el->parent()->type() == Element::SEGMENT)
+      else if ( (el->type() == Element::HARMONY || el->type() == Element::FIGURED_BASS)
+         && el->parent()->type() == Element::SEGMENT)
             m = static_cast<const Segment*>(el->parent())->measure();
       else if (el->type() == Element::HARMONY && el->parent()->type() == Element::FRET_DIAGRAM
          && el->parent()->parent()->type() == Element::SEGMENT)
