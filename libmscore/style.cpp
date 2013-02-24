@@ -226,9 +226,11 @@ static const QString ff("FreeSerifMscore");
 void initStyle(MStyle* s)
       {
       // this is an empty style, no offsets are allowed
-      // dont show this style in editor
+      // never show this style
       AS(TextStyle(
-         "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE));
+         "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), false,
+               Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false, QColor(Qt::black),
+               QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS));
 
       AS(TextStyle(
          TR("Title"), ff, 24, false, false, false,
@@ -279,7 +281,10 @@ void initStyle(MStyle* s)
 #if 0
       AS(TextStyle(           // internal style
          TR( "Dynamics2"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true,
+         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false,           // default params
+         QColor(Qt::black), QColor(255, 255, 255, 0),                               // default params
+         TextStyle::HIDE_ALWAYS));
 #endif
 
       AS(TextStyle(
@@ -325,7 +330,10 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Chordname"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true,
+         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
+         false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
+         TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
 
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
@@ -394,7 +402,10 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
       TR("Figured Bass"), "MScoreBC", 8, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, QPointF(), true));
+         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, QPointF(), true,
+         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
+         false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
+         TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
 
 #undef MM
 #undef OA
@@ -662,25 +673,27 @@ StyleData::~StyleData()
 TextStyle::TextStyle()
       {
       d = new TextStyleData;
+      _hidden = HIDE_NEVER;
       }
 
-TextStyle::TextStyle(
-   QString _name, QString _family, qreal _size,
+TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    bool _bold, bool _italic, bool _underline,
    Align _align,
    const QPointF& _off, OffsetType _ot, const QPointF& _roff,
    bool sd,
    Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
-   QColor fg, QColor bg)
+   QColor fg, QColor bg, Hidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
          _bold, _italic, _underline, _align, _off, _ot, _roff,
          sd, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
+      _hidden = hidden;
       }
 
 TextStyle::TextStyle(const TextStyle& s)
    : d(s.d)
       {
+      _hidden = s._hidden;
       }
 TextStyle::~TextStyle()
       {
@@ -693,6 +706,7 @@ TextStyle::~TextStyle()
 TextStyle& TextStyle::operator=(const TextStyle& s)
       {
       d = s.d;
+//      _hidden = s._hidden;
       return *this;
       }
 
