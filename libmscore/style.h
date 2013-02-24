@@ -31,7 +31,17 @@ class TextStyleData;
 //---------------------------------------------------------
 
 class TextStyle {
+   public:
+      enum Hidden {
+            HIDE_NEVER     = 0,
+            HIDE_IN_EDITOR = 1,
+            HIDE_IN_LISTS  = 2,
+            HIDE_ALWAYS    = 0xFFFF
+            };
+
+   private:
       QSharedDataPointer<TextStyleData> d;
+      Hidden _hidden;               // read-only parameter for text style visibility in various program places
 
    public:
       TextStyle();
@@ -44,11 +54,13 @@ class TextStyle {
          bool sd = false,
          Spatium fw = Spatium(0.0), Spatium pw = Spatium(0.0), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
-         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0));
+         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), Hidden hidden = HIDE_NEVER);
 
       TextStyle(const TextStyle&);
       ~TextStyle();
       TextStyle& operator=(const TextStyle&);
+
+      friend class TextStyleDialog;             // allow TextStyleDialog to access _hidden without making it globally writeable
 
       QString name() const;
       QString family() const;
@@ -98,6 +110,7 @@ class TextStyle {
       void setSystemFlag(bool v);
       void setForegroundColor(const QColor& v);
       void setBackgroundColor(const QColor& v);
+      Hidden hidden() const   { return _hidden; }
       void write(Xml& xml) const;
       void writeProperties(Xml& xml) const;
       void read(XmlReader& v);

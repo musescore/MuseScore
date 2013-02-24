@@ -67,8 +67,14 @@ void TextProp::setScore(bool os, Score* score)
       else {
             textGroup->setVisible(false);
             styles->clear();
-            foreach(const TextStyle& st, score->style()->textStyles())
-                  styles->addItem(st.name());
+
+            const QList<TextStyle>& scoreStyles = score->style()->textStyles();
+            int n = scoreStyles.size();
+            for (int i = 0; i < n; ++i) {
+                  // if style not hidden in this context, add to combo with index in score style list as userData
+                  if ( !(scoreStyles.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                        styles->addItem(scoreStyles.at(i).name(), i);
+                  }
             }
       }
 
@@ -101,7 +107,10 @@ void TextProp::setTextStyleType(int st)
       {
       if (st == TEXT_STYLE_UNKNOWN || st == TEXT_STYLE_UNSTYLED)
             st = TEXT_STYLE_TITLE;
-      styles->setCurrentIndex(st);
+      st = styles->findData(st);          // find a combo item with that style idx
+      if (st < 0)                         // if none found...
+            st = 0;                       // ...=> first combo item
+      styles->setCurrentIndex(st);        // set current combo item
       }
 
 //---------------------------------------------------------
@@ -110,7 +119,7 @@ void TextProp::setTextStyleType(int st)
 
 int TextProp::textStyleType() const
       {
-      return styles->currentIndex();
+      return styles->itemData(styles->currentIndex()).toInt();
       }
 
 //---------------------------------------------------------
@@ -152,7 +161,7 @@ void TextProp::setTextStyle(const TextStyle& s)
       else
             alignTop->setChecked(true);
 
-      QString str;
+//      QString str;
       if (s.offsetType() == OFFSET_ABS) {
             xOffset->setValue(s.offset().x() * INCH);
             yOffset->setValue(s.offset().y() * INCH);

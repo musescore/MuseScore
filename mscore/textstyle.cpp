@@ -43,8 +43,12 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
 
       textNames->clear();
       for (int i = 0; i < styles.size(); ++i) {
-            const TextStyle& s = styles.at(i);
-            textNames->addItem(qApp->translate("MuseScore", s.name().toLatin1().data()));
+//            const TextStyle& s = styles.at(i);
+            if ( (styles.at(i).hidden() & TextStyle::HIDE_IN_EDITOR) == 0) {
+                  int count = textNames->count();
+                  textNames->addItem(qApp->translate("MuseScore", styles.at(i).name().toLatin1().data()));
+                  textNames->item(count)->setData(Qt::UserRole, i);
+                  }
             }
 
       connect(bb, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
@@ -72,7 +76,8 @@ void TextStyleDialog::nameSelected(int n)
       if (current != -1)
             saveStyle(current);
       current = n;
-      tp->setTextStyle(styles[current]);
+      int listIdx = textNames->item(n)->data(Qt::UserRole).toInt();
+      tp->setTextStyle(styles[listIdx]);
       }
 
 //---------------------------------------------------------
@@ -81,13 +86,11 @@ void TextStyleDialog::nameSelected(int n)
 
 void TextStyleDialog::saveStyle(int n)
       {
+      int listIdx = textNames->item(n)->data(Qt::UserRole).toInt();
       TextStyle st = tp->textStyle();
-      // set data members not set by TextProp::textStyle()
-      st.setName(styles[n].name());
-// TextProp::textStyle() now deals with sizeIsSpatiumDependent
-// Following statement defeats additions to TextProp::textStyle()
-//      st.setSizeIsSpatiumDependent(styles[n].sizeIsSpatiumDependent());
-      styles[n] = st;
+      st._hidden = styles.at(listIdx).hidden();
+      st.setName(styles.at(listIdx).name());    // set data members not set by TextProp::textStyle()
+      styles[listIdx] = st;                     // store style into local style list
       }
 
 //---------------------------------------------------------
@@ -122,16 +125,20 @@ void TextStyleDialog::apply()
       {
       saveStyle(current);                 // update local copy of style list
 
-      int n = cs->style()->textStyles().size();
-      for (int i = 0; i < n; ++i) {
-            const TextStyle& os = cs->textStyle(i);
-            const TextStyle& ns = styles[i];
-            if (os != ns) {
-                  cs->undo(new ChangeTextStyle(cs, ns));
+      int count = textNames->count();
+      int numOfStyles = cs->style()->textStyles().size();
+      for (int i = 0; i < count; ++i) {
+            int listIdx = textNames->item(i)->data(Qt::UserRole).toInt();
+            if(listIdx < numOfStyles) {         // style already exists in score text styles
+                  const TextStyle& os = cs->textStyle(listIdx);
+                  const TextStyle& ns = styles[listIdx];
+                  if (os != ns) {
+                        cs->undo(new ChangeTextStyle(cs, ns));
+                        }
                   }
+            else                                // style does not exist in score text styles yet
+                  cs->undo(new AddTextStyle(cs, styles[listIdx]));
             }
-      for (int i = n; i < styles.size(); ++i)
-            cs->undo(new AddTextStyle(cs, styles[i]));
       cs->end2();
       cs->end();
       }
@@ -171,11 +178,14 @@ void TextStyleDialog::newClicked()
       //
       QString name = textNames->currentItem()->text();
       TextStyle newStyle = cs->textStyle(name);
-
-      textNames->addItem(s);
       newStyle.setName(s);
+
+      int count = textNames->count();
+      int listIdx = styles.count();
       styles.append(newStyle);
-      textNames->setCurrentItem(textNames->item(textNames->count()-1));
+      textNames->addItem(s);
+      textNames->item(count)->setData(Qt::UserRole, listIdx);
+      textNames->setCurrentRow(count);
       cs->setDirty(true);
       mscore->endCmd();
       }
