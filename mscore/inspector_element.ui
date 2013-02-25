@@ -7,13 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>160</width>
-    <height>155</height>
+    <height>138</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="elementName">
      <property name="font">
@@ -45,6 +51,9 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="offsetX">
        <property name="sizePolicy">
@@ -141,7 +150,7 @@
      <item row="0" column="1">
       <widget class="Awl::ColorLabel" name="color">
        <property name="frameShape">
-        <set>QFrame::Box</set>
+        <enum>QFrame::Box</enum>
        </property>
       </widget>
      </item>
