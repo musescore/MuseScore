@@ -60,8 +60,8 @@ TextTools::TextTools(QWidget* parent)
       tb->addWidget(textStyles);
 
       showKeyboard = getAction("show-keys");
-      tb->addAction(showKeyboard);
       showKeyboard->setCheckable(true);
+      tb->addAction(showKeyboard);
 
       typefaceBold = tb->addAction(*icons[textBold_ICON], "");
       typefaceBold->setToolTip(tr("bold"));
@@ -463,6 +463,7 @@ void TextTools::styleChanged(int comboIdx)
 
 void TextTools::showKeyboardClicked(bool val)
       {
+printf("showKeyboardClicked %d\n", val);
       if (val) {
             if (textPalette == 0)
                   textPalette = new TextPalette(mscore);

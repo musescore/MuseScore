@@ -753,12 +753,14 @@ void Score::undoAddElement(Element* element)
       Element::ElementType et = element->type();
 
 
+      //
       // some elements are replicated for all parts regardless of
       // linking:
+      //
 
       if (et == Element::REHEARSAL_MARK) {
-            foreach(Excerpt* excerpt, rootScore()->excerpts())
-                  staffList.append(excerpt->score()->staff(0));
+            foreach(Score* s, scoreList())
+                  staffList.append(s->staff(0));
 
             foreach(Staff* staff, staffList) {
                   Score* score = staff->score();

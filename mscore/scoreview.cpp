@@ -1176,21 +1176,6 @@ void ScoreView::updateGrips()
       if (!editObject->isText())
             mscore->editTools()->setEditPos(pt);
 
-#if 0
-      double x, y;
-      if (grips) {
-            x = grip[curGrip].center().x() - editObject->gripAnchor(curGrip).x();
-            y = grip[curGrip].center().y() - editObject->gripAnchor(curGrip).y();
-            }
-      else {
-            x = editObject->userOff().x();
-            y = editObject->userOff().y();
-            }
-      double _spatium = score()->spatium();
-      mscore->setEditX(x / _spatium);
-      mscore->setEditY(y / _spatium);
-#endif
-
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())
             setDropAnchor(QLineF(anchor + pageOffset, grip[curGrip].center()));
