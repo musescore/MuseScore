@@ -69,20 +69,6 @@ int DurationElement::actualTicks() const
       return Fraction(staff()->timeStretch(tick()) * globalDuration()).ticks();
       }
 
-#if 0
-//---------------------------------------------------------
-//   properties
-//---------------------------------------------------------
-
-QList<Prop> DurationElement::properties(Xml& xml, bool /*clipboardmode*/) const
-      {
-      QList<Prop> pl = Element::properties(xml);
-      if (tuplet())
-            pl.append(Prop("Tuplet", tuplet()->id()));
-      return pl;
-      }
-#endif
-
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
