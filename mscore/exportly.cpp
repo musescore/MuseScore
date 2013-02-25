@@ -78,6 +78,8 @@ using std::cout;
 #include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/marker.h"
+#include "libmscore/jump.h"
 #include "musescore.h"
 
 static  const int MAX_SLURS = 8;
@@ -491,20 +493,20 @@ void ExportLy::bracktest()
 
 void ExportLy::instructionJump(Jump* jp)
 {
-  int jtp = jp->jumpType();
+  JumpType jtp = jp->jumpType();
   QString words = "\n    \\once\\override Score.RehearsalMark #'self-alignment-X = #RIGHT \n      ";
 
-  if (jtp == JUMP_DC)
+  if (jtp == JumpType::DC)
     words += "\\mark \"Da capo\" ";
-  else if (jtp == JUMP_DC_AL_FINE)
+  else if (jtp == JumpType::DC_AL_FINE)
     words += "\\DCalfine ";
-  else if (jtp == JUMP_DC_AL_CODA)
+  else if (jtp == JumpType::DC_AL_CODA)
     words += "\\DCalcoda";
-  else if (jtp == JUMP_DS_AL_CODA)
+  else if (jtp == JumpType::DS_AL_CODA)
     words += "\\DSalcoda";
-  else if (jtp == JUMP_DS_AL_FINE)
+  else if (jtp == JumpType::DS_AL_FINE)
     words += "\\DSalfine";
-  else if (jtp == JUMP_DS)
+  else if (jtp == JumpType::DS)
     words += "\\mark \\markup{Dal segno \\raise #2 \\halign#-1 \\musicglyph #\"scripts.segno\"}";
   else
     qDebug("jump type=%d not implemented\n", jtp);
@@ -519,21 +521,21 @@ void ExportLy::instructionJump(Jump* jp)
 
 void ExportLy::instructionMarker(Marker* m)
 {
-  int mtp = m->markerType();
+  MarkerType mtp = m->markerType();
   QString words = "";
-  if (mtp == MARKER_CODA)
+  if (mtp == MarkerType::CODA)
       words = "\\theCoda ";
-  else if (mtp == MARKER_CODETTA)
+  else if (mtp == MarkerType::CODETTA)
      	words = "\\codetta";
-  else if (mtp == MARKER_SEGNO)
+  else if (mtp == MarkerType::SEGNO)
       words = "\\thesegno";
-  else if (mtp == MARKER_FINE)
+  else if (mtp == MarkerType::FINE)
 	words = "\\fine";
-  else if (mtp == MARKER_TOCODA)
+  else if (mtp == MarkerType::TOCODA)
 	words = "\\gotocoda ";
-  else if (mtp == MARKER_VARCODA)
+  else if (mtp == MarkerType::VARCODA)
 	words = "\\varcodasign ";
-  else if (mtp == MARKER_USER)
+  else if (mtp == MarkerType::USER)
 	qDebug("unknown user marker\n");
   else
     qDebug("marker type=%d not implemented\n", mtp);
@@ -551,22 +553,22 @@ void ExportLy::instructionMarker(Marker* m)
 
 QString ExportLy::primitiveJump(Jump* jp)
 {
-  int jtp = jp->jumpType();
+  JumpType jtp = jp->jumpType();
   QString words = "";
 
   cout << "primitivejump\n";
 
-  if (jtp == JUMP_DC)
+  if (jtp == JumpType::DC)
      	words = "Da capo";
-  else if (jtp == JUMP_DC_AL_FINE)
+  else if (jtp == JumpType::DC_AL_FINE)
       words = "D.C. al fine";
-  else if (jtp == JUMP_DC_AL_CODA)
+  else if (jtp == JumpType::DC_AL_CODA)
 	words = "D.C. al coda";
-  else if (jtp == JUMP_DS_AL_CODA)
+  else if (jtp == JumpType::DS_AL_CODA)
 	words = "D.S. al coda";
-  else if (jtp == JUMP_DS_AL_FINE)
+  else if (jtp == JumpType::DS_AL_FINE)
 	words = "D.S. al fine";
-  else if (jtp == JUMP_DS)
+  else if (jtp == JumpType::DS)
       words = "Dal segnoX \\musicglyph #\"scripts.segno\"";
   else
     qDebug("jump type=%d not implemented\n", jtp);
@@ -580,22 +582,22 @@ QString ExportLy::primitiveJump(Jump* jp)
 
 QString ExportLy::primitiveMarker(Marker* m)
 {
-  int mtp = m->markerType();
+  MarkerType mtp = m->markerType();
   QString words = "";
-  if (mtp == MARKER_CODA) //the coda
+  if (mtp == MarkerType::CODA) //the coda
     //    words = "\\line{\\halign #-0.75\\noBreak \\codaspace \\resumeStaff \\showClefKey \musicglyph #\"scripts.coda\" \\musicglyph #\"scripts.coda\"}";
     words = "\\line{\\halign #-0.75 \\musicglyph #\"scripts.coda\" \\musicglyph #\"scripts.coda\"}";
-  else if (mtp == MARKER_CODETTA)
+  else if (mtp == MarkerType::CODETTA)
      	words = "\\line {\\musicglyph #\"scripts.coda\" \\hspace #-1.3 \\musicglyph #\"scripts.coda\"} } \n";
-  else if (mtp == MARKER_SEGNO)
+  else if (mtp == MarkerType::SEGNO)
       words = "\\musicglyph #\"scripts.segno\"";
-  else if (mtp == MARKER_FINE)
+  else if (mtp == MarkerType::FINE)
 	words =  "{\"Fine\"} \\mark \\markup {\\musicglyph #\"scripts.ufermata\" } \\bar \"\bar \"||\" } \n";
-  else if (mtp == MARKER_TOCODA)
+  else if (mtp == MarkerType::TOCODA)
 	words = "\\musicglyph #\"scripts.coda\"";
-  else if (mtp == MARKER_VARCODA)
+  else if (mtp == MarkerType::VARCODA)
     words = "\\musicglyph#\"scripts.varcoda\"";
-  else if (mtp == MARKER_USER)
+  else if (mtp == MarkerType::USER)
 	qDebug("unknown user marker\n");
   else
     qDebug("marker type=%d not implemented\n", mtp);
@@ -1748,9 +1750,9 @@ void ExportLy::findMarkerAtMeasureStart(Measure* m)
        if (tp == Element::MARKER)
   	 { //only markers, not jumps, are used at measure start.
 	   Marker* ma = (Marker*) dir;
-	   int mtp = ma->markerType();
+	   MarkerType mtp = ma->markerType();
 	   //discard markers which belong at measure end:
-	   if (!(mtp == MARKER_FINE || mtp == MARKER_TOCODA))
+	   if (!(mtp == MarkerType::FINE || mtp == MarkerType::TOCODA))
 	     {
 	       cout << "marker found at measure: " << measurenumber << "\n";
 	       //	       instructionMarker(ma);
@@ -1794,9 +1796,9 @@ void ExportLy::jumpAtMeasureStop(Measure* m)
 	    else if (tp == Element::MARKER)
 	      {
 		Marker* ma = (Marker*) dir;
-		int mtp = ma->markerType();
+		MarkerType mtp = ma->markerType();
 		//only print markers which belong at measure end:
-		if (mtp == MARKER_FINE || mtp == MARKER_TOCODA)
+		if (mtp == MarkerType::FINE || mtp == MarkerType::TOCODA)
 		  {
 		    //print the marker in part one
 		    instructionMarker(ma);

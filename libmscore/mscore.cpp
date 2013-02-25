@@ -23,6 +23,9 @@
 #include "volta.h"
 #include "ottava.h"
 #include "trill.h"
+#include "repeat.h"
+#include "jump.h"
+#include "marker.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
@@ -86,6 +89,8 @@ void MScore::init()
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
       qRegisterMetaType<Element::DynamicRange>("DynamicRange");
+      qRegisterMetaType<JumpType>("JumpType");
+      qRegisterMetaType<MarkerType>("MarkerType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

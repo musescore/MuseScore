@@ -123,6 +123,10 @@ static const PropertyData propertyList[] = {
       { P_PLACEMENT,           "placement",     T_PLACEMENT    },
       { P_VELOCITY,            "velocity",      T_INT    },
 
+      { P_JUMP_TO,             "jumpTo",        T_STRING },
+      { P_PLAY_UNTIL,          "playUntil",     T_STRING },
+      { P_CONTINUE_AT,         "continueAt",    T_STRING },
+
       { P_END,                 "",              T_INT    }
       };
 
