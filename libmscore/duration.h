@@ -52,7 +52,7 @@ class DurationElement : public Element {
       virtual int tick() const = 0;
       int actualTicks() const;
 
-      Fraction duration() const           { return _duration; }
+      virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;
       void setDuration(const Fraction& f) { _duration = f;    }
       void setDuration(int ticks)         { _duration = Fraction::fromTicks(ticks); }

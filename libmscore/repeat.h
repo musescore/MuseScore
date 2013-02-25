@@ -36,6 +36,7 @@ class RepeatMeasure : public Rest {
       virtual ElementType type() const      { return REPEAT_MEASURE; }
       virtual void draw(QPainter*) const;
       virtual void layout();
+      virtual Fraction duration() const;
       };
 
 enum MarkerType {

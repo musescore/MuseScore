@@ -1451,8 +1451,7 @@ void Score::add(Element* el)
                   break;
 
             default:
-                  qDebug("Score::add() invalid element <%s>\n", el->name());
-                  delete el;
+                  qFatal("Score::add() invalid element <%s>\n", el->name());
                   break;
             }
       }
