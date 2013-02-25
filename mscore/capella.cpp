@@ -439,7 +439,7 @@ qDebug("readCapVoice 1\n");
                                     pitch = 0;
 
                               note->setPitch(pitch);
-                              note->setTpc(pitch2tpc(pitch, key));
+                              note->setTpc(pitch2tpc(pitch, key, PREFER_NEAREST));
 // TODO: compute tpc from pitch & line
                               // note->setTpc(tpc);
 
