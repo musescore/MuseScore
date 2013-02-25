@@ -1376,9 +1376,10 @@ void Chord::layout()
                   note->setPos(x, _spatium * tab->physStringToVisual(note->string()) * lineDist);
                   note->layout2();
                   }
-            // if tab type is stemless or duration longer than half (if halves have stems) or duration longer than crochet
+            // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
+            // or duration longer than half (if halves have stems) or duration longer than crochet
             // remove stems
-            if (tab->slashStyle() || durationType().type() <
+            if (tab->slashStyle() || _noStem || durationType().type() <
                         (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
                   delete _stem;
                   delete _hook;
