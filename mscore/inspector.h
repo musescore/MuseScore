@@ -403,7 +403,8 @@ class Inspector : public QDockWidget {
       InspectorBase* ie;
       Element* _element;
       QList<Element*> _el;
-      bool _inspectorEdit;                // set to true when an edit originates from within the inspector itself
+      bool _inspectorEdit;   // set to true when an edit originates from
+                             // within the inspector itself
 
       virtual void closeEvent(QCloseEvent*);
 

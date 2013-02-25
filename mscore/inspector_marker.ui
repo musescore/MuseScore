@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InspectorMarker</class>
+ <widget class="QWidget" name="InspectorMarker">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>287</width>
+    <height>93</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Marker Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="QComboBox" name="subtype">
+       <item>
+        <property name="text">
+         <string>Segno</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Segno Variation</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Coda</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Coda Variation</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Codetta</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fine</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>To Coda</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>User defined</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Label</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="jumpLabel"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections/>
+</ui>

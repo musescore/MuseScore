@@ -42,8 +42,7 @@ QT4_WRAP_UI (ui_headers
       measureproperties.ui segment.ui text.ui textpalette.ui timedialog.ui
       symboldialog.ui dynamic.ui tuplet.ui shortcutcapturedialog.ui slurtie.ui
       slur.ui editdrumset.ui editstaff.ui line.ui linesegment.ui
-      voltaproperties.ui timesigproperties.ui
-      jumpproperties.ui markerproperties.ui boxproperties.ui
+      voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       chordedit.ui transposedialog.ui tempoproperties.ui
       lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui
@@ -61,7 +60,7 @@ QT4_WRAP_UI (ui_headers
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
-      box.ui pluginManager.ui
+      box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui
       ${SCRIPT_UI}
       )
 
@@ -76,8 +75,7 @@ QT4_WRAP_CPP (mocs
       measureproperties.h seq.h textpalette.h textstyle.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
-      voltaproperties.h timesigproperties.h
-      jumpproperties.h markerproperties.h boxproperties.h newwizard.h
+      voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
       transposedialog.h chordedit.h tempoproperties.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h voiceselector.h
@@ -94,6 +92,7 @@ QT4_WRAP_CPP (mocs
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
+      inspectorJump.h inspectorMarker.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -190,8 +189,7 @@ add_executable ( ${ExecutableName}
       articulationprop.cpp textprop.cpp dynamicprop.cpp
       fretproperties.cpp sectionbreakprop.cpp hairpinprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
-      layer.cpp jumpproperties.cpp selectdialog.cpp
-      propertymenu.cpp shortcut.cpp bb.cpp
+      layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
@@ -199,7 +197,7 @@ add_executable ( ${ExecutableName}
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
       inspectorHairpin.cpp qmlplugin.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
-      savePositions.cpp pluginManager.cpp
+      savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
