@@ -37,8 +37,6 @@
 #include "slurproperties.h"
 #include "glissandoproperties.h"
 #include "fretproperties.h"
-#include "markerproperties.h"
-#include "jumpproperties.h"
 #include "selinstrument.h"
 #include "chordedit.h"
 #include "pianoroll.h"
@@ -323,14 +321,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
                   }
             popup->addAction(tr("Chord Articulation..."))->setData("articulation");
-            }
-      else if (e->type() == Element::MARKER) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Marker Properties..."))->setData("marker-props");
-            }
-      else if (e->type() == Element::JUMP) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Jump Properties..."))->setData("jump-props");
             }
       else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() == LAYOUT_BREAK_SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
@@ -692,14 +682,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             EditStyle es(e->score(), 0);
             es.setPage(EditStyle::PAGE_NOTE);
             es.exec();
-            }
-      else if (cmd == "marker-props") {
-            MarkerProperties rp(static_cast<Marker*>(e));
-            rp.exec();
-            }
-      else if (cmd == "jump-props") {
-            JumpProperties rp(static_cast<Jump*>(e));
-            rp.exec();
             }
       else if (cmd == "break-props") {
             LayoutBreak* lb = static_cast<LayoutBreak*>(e);

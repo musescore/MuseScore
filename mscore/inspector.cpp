@@ -20,6 +20,8 @@
 #include "inspectorOttava.h"
 #include "inspectorTrill.h"
 #include "inspectorHairpin.h"
+#include "inspectorMarker.h"
+#include "inspectorJump.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -79,6 +81,7 @@ Inspector::Inspector(QWidget* parent)
       sa->setWidget(mainWidget);
 
       layout = new QVBoxLayout;
+      layout->setSpacing(0);
       mainWidget->setLayout(layout);
       ie        = 0;
       _element  = 0;
@@ -116,11 +119,12 @@ void Inspector::setElement(Element* e)
       {
       // if the element is being set again because of an edit originated
       // from within the inspector itself, do nothing
-      if(_inspectorEdit) {                // if within an inspector-originated edit
+
+      if (_inspectorEdit) {               // if within an inspector-originated edit
             _inspectorEdit = false;       // reset flag
-            if(_element == e)             // if element is not changing...
+            if (_element == e)            // if element is not changing...
                   return;                 // ...do nothing
-      }
+            }
 
       if (e == 0 || _element == 0 || (e->type() != _element->type())) {
             if (ie)
@@ -183,6 +187,12 @@ void Inspector::setElement(Element* e)
                         break;
                   case Element::BAR_LINE:
                         ie = new InspectorBarLine(this);
+                        break;
+                  case Element::JUMP:
+                        ie = new InspectorJump(this);
+                        break;
+                  case Element::MARKER:
+                        ie = new InspectorMarker(this);
                         break;
                   default:
                         ie = new InspectorElement(this);
@@ -400,6 +410,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       {
       QWidget* w = new QWidget;
       vb.setupUi(w);
+      layout->setSpacing(0);
       layout->addWidget(w);
 
       iList[0].t = P_TOP_GAP;
