@@ -84,6 +84,7 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
+#include "textpalette.h"
 
 #include "msynth/synti.h"
 
@@ -115,6 +116,7 @@ QString revision;
 
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
+extern TextPalette* textPalette;
 
 // Mac-Applications don't have menubar icons:
 #ifdef Q_WS_MAC
@@ -1428,8 +1430,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             if (inspector)
                   inspector->setElement(0);
             viewModeCombo->setEnabled(false);
-            if (_textTools)
+            if (_textTools) {
                   _textTools->hide();
+                  if (textPalette)
+                        textPalette->hide();
+                  }
             if (_editTools)
                   _editTools->hide();
             if (_pianoTools)
@@ -2776,6 +2781,8 @@ void MuseScore::changeState(ScoreState val)
       if (!e) {
             editTools()->hide();
             textTools()->hide();
+            if (textPalette)
+                  textPalette->hide();
             }
       else {
             if (e->isText()) {
