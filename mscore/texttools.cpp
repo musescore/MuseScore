@@ -173,18 +173,24 @@ void TextTools::setText(Text* te)
       textStyles->blockSignals(true);
       _textElement = te;
       textStyles->clear();
-      textStyles->addItem(tr("unstyled"));
+      textStyles->addItem(tr("unstyled"), TEXT_STYLE_UNSTYLED);
 
       const QList<TextStyle>& ts = te->score()->style()->textStyles();
 
       int n = ts.size();
-      for (int i = 1; i < n; ++i)                     // skip default style
-            textStyles->addItem(ts[i].name());
-      int idx = 0;
-      if (te->styled())
-            idx = te->textStyleType();
-      textStyles->setCurrentIndex(idx);
-      styleChanged(idx);
+      for (int i = 0; i < n; ++i) {
+            if ( !(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  textStyles->addItem(ts.at(i).name(), i);
+            }
+      int comboIdx = 0;
+      if (te->styled()) {
+            int styleIdx = te->textStyleType();
+            comboIdx = textStyles->findData(styleIdx);
+            if (comboIdx < 0)
+                  comboIdx = 0;
+            }
+      textStyles->setCurrentIndex(comboIdx);
+      styleChanged(comboIdx);
       Align align = _textElement->align();
       if (align & ALIGN_HCENTER)
             hcenterAlign->setChecked(true);
@@ -420,16 +426,18 @@ void TextTools::superscriptClicked(bool val)
 //   styleChanged
 //---------------------------------------------------------
 
-void TextTools::styleChanged(int idx)
+void TextTools::styleChanged(int comboIdx)
       {
       blockAllSignals(true);
-      bool styled = idx != 0;
+      int styleIdx = textStyles->itemData(comboIdx).toInt();
+      if (styleIdx < 0)
+            styleIdx = TEXT_STYLE_UNSTYLED;
+      bool unstyled = (styleIdx == TEXT_STYLE_UNSTYLED);
 
-      if (styled)
-            _textElement->setTextStyleType(idx);
-      else
+      if (unstyled)
             _textElement->setUnstyled();
-      bool unstyled = !styled;
+      else
+            _textElement->setTextStyleType(styleIdx);
       typefaceSize->setEnabled(unstyled);
       typefaceFamily->setEnabled(unstyled);
       typefaceBold->setEnabled(unstyled);
