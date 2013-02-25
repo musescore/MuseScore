@@ -14,10 +14,11 @@
 #include "repeatlist.h"
 #include "score.h"
 #include "measure.h"
-#include "repeat.h"
 #include "tempo.h"
 #include "volta.h"
 #include "segment.h"
+#include "marker.h"
+#include "jump.h"
 
 //---------------------------------------------------------
 //   searchVolta

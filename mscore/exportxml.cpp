@@ -68,7 +68,8 @@
 #include "libmscore/keysig.h"
 #include "libmscore/bracket.h"
 #include "libmscore/arpeggio.h"
-#include "libmscore/repeat.h"
+#include "libmscore/jump.h"
+#include "libmscore/marker.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
 #include "libmscore/harmony.h"
@@ -3100,32 +3101,32 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
 
 static void directionJump(Xml& xml, const Jump* const jp)
       {
-      int jtp = jp->jumpType();
+      JumpType jtp = jp->jumpType();
       QString words = "";
       QString type  = "";
       QString sound = "";
-      if (jtp == JUMP_DC) {
+      if (jtp == JumpType::DC) {
             if (jp->getText() == "")
                   words = "D.C.";
             else
                   words = jp->getText();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JUMP_DC_AL_FINE) {
+      else if (jtp == JumpType::DC_AL_FINE) {
             if (jp->getText() == "")
                   words = "D.C. al Fine";
             else
                   words = jp->getText();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JUMP_DC_AL_CODA) {
+      else if (jtp == JumpType::DC_AL_CODA) {
             if (jp->getText() == "")
                   words = "D.C. al Coda";
             else
                   words = jp->getText();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JUMP_DS_AL_CODA) {
+      else if (jtp == JumpType::DS_AL_CODA) {
             if (jp->getText() == "")
                   words = "D.S. al Coda";
             else
@@ -3135,7 +3136,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
-      else if (jtp == JUMP_DS_AL_FINE) {
+      else if (jtp == JumpType::DS_AL_FINE) {
             if (jp->getText() == "")
                   words = "D.S. al Fine";
             else
@@ -3145,7 +3146,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
-      else if (jtp == JUMP_DS) {
+      else if (jtp == JumpType::DS) {
             words = "D.S.";
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
@@ -3171,11 +3172,11 @@ static void directionJump(Xml& xml, const Jump* const jp)
 
 static void directionMarker(Xml& xml, const Marker* const m)
       {
-      int mtp = m->markerType();
+      MarkerType mtp = m->markerType();
       QString words = "";
       QString type  = "";
       QString sound = "";
-      if (mtp == MARKER_CODA) {
+      if (mtp == MarkerType::CODA) {
             type = "coda";
             if (m->label() == "")
                   sound = "coda=\"1\"";
@@ -3184,18 +3185,18 @@ static void directionMarker(Xml& xml, const Marker* const m)
                   // sound = "coda=\"" + m->label() + "\"";
                   sound = "coda=\"coda\"";
             }
-      else if (mtp == MARKER_SEGNO) {
+      else if (mtp == MarkerType::SEGNO) {
             type = "segno";
             if (m->label() == "")
                   sound = "segno=\"1\"";
             else
                   sound = "segno=\"" + m->label() + "\"";
             }
-      else if (mtp == MARKER_FINE) {
+      else if (mtp == MarkerType::FINE) {
             words = "Fine";
             sound = "fine=\"yes\"";
             }
-      else if (mtp == MARKER_TOCODA) {
+      else if (mtp == MarkerType::TOCODA) {
             if (m->getText() == "")
                   words = "To Coda";
             else
@@ -3276,19 +3277,19 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
                                           {
                                           // filter out the markers at measure Start
                                           const Marker* const mk = static_cast<const Marker* const>(e);
-                                          int mtp = mk->markerType();
+                                          MarkerType mtp = mk->markerType();
 #ifdef DEBUG_REPEATS
                                           qDebug("repeatAtMeasureStart: marker type %d", mtp);
 #endif
-                                          if (   mtp == MARKER_SEGNO
-                                                 || mtp == MARKER_CODA
+                                          if (   mtp == MarkerType::SEGNO
+                                                 || mtp == MarkerType::CODA
                                                  ) {
                                                 qDebug(" -> handled");
                                                 attr.doAttr(xml, false);
                                                 directionMarker(xml, mk);
                                                 }
-                                          else if (   mtp == MARKER_FINE
-                                                      || mtp == MARKER_TOCODA
+                                          else if (   mtp == MarkerType::FINE
+                                                      || mtp == MarkerType::TOCODA
                                                       ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> ignored");
@@ -3352,20 +3353,20 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
                                           {
                                           // filter out the markers at measure stop
                                           const Marker* const mk = static_cast<const Marker* const>(e);
-                                          int mtp = mk->markerType();
+                                          MarkerType mtp = mk->markerType();
 #ifdef DEBUG_REPEATS
                                           qDebug("repeatAtMeasureStop: marker type %d", mtp);
 #endif
-                                          if (   mtp == MARKER_FINE
-                                                 || mtp == MARKER_TOCODA
+                                          if (   mtp == MarkerType::FINE
+                                                 || mtp == MarkerType::TOCODA
                                                  ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> handled");
 #endif
                                                 directionMarker(xml, mk);
                                                 }
-                                          else if (   mtp == MARKER_SEGNO
-                                                      || mtp == MARKER_CODA
+                                          else if (   mtp == MarkerType::SEGNO
+                                                      || mtp == MarkerType::CODA
                                                       ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> ignored");

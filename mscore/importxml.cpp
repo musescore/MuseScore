@@ -101,6 +101,8 @@
 #include "libmscore/tablature.h"
 #include "libmscore/drumset.h"
 #include "libmscore/beam.h"
+#include "libmscore/jump.h"
+#include "libmscore/marker.h"
 #include "importxmlfirstpass.h"
 
 //---------------------------------------------------------
@@ -2560,52 +2562,52 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   // avoid duplicated code
                   m->setTextStyleType(TEXT_STYLE_REPEAT_LEFT);
                   // apparently this MUST be after setTextStyle
-                  m->setMarkerType(MARKER_SEGNO);
+                  m->setMarkerType(MarkerType::SEGNO);
                   }
             else if (repeat == "coda") {
                   m = new Marker(score);
                   m->setTextStyleType(TEXT_STYLE_REPEAT_LEFT);
-                  m->setMarkerType(MARKER_CODA);
+                  m->setMarkerType(MarkerType::CODA);
                   }
             else if (repeat == "fine") {
                   m = new Marker(score);
                   m->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  m->setMarkerType(MARKER_FINE);
+                  m->setMarkerType(MarkerType::FINE);
                   }
             else if (repeat == "toCoda") {
                   m = new Marker(score);
                   m->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  m->setMarkerType(MARKER_TOCODA);
+                  m->setMarkerType(MarkerType::TOCODA);
                   }
             else if (repeat == "daCapo") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DC);
+                  jp->setJumpType(JumpType::DC);
                   }
             else if (repeat == "daCapoAlCoda") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DC_AL_CODA);
+                  jp->setJumpType(JumpType::DC_AL_CODA);
                   }
             else if (repeat == "daCapoAlFine") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DC_AL_FINE);
+                  jp->setJumpType(JumpType::DC_AL_FINE);
                   }
             else if (repeat == "dalSegno") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DS);
+                  jp->setJumpType(JumpType::DS);
                   }
             else if (repeat == "dalSegnoAlCoda") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DS_AL_CODA);
+                  jp->setJumpType(JumpType::DS_AL_CODA);
                   }
             else if (repeat == "dalSegnoAlFine") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  jp->setJumpType(JUMP_DS_AL_FINE);
+                  jp->setJumpType(JumpType::DS_AL_FINE);
                   }
             if (jp) {
                   jp->setTrack((staff + rstaff) * VOICES);

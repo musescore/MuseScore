@@ -61,6 +61,8 @@
 #include "libmscore/volta.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/marker.h"
+#include "libmscore/jump.h"
 
 class MeasureToTick {
 public:
@@ -2053,49 +2055,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		switch(type) {
 		case OVE::Repeat_Segno:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MARKER_SEGNO);
+		    marker->setMarkerType(MarkerType::SEGNO);
 		    e = marker;
 			break;
 		}
 		case OVE::Repeat_Coda:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MARKER_CODA);
+		    marker->setMarkerType(MarkerType::CODA);
 		    e = marker;
 			break;
 		}
 		case OVE::Repeat_DSAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JUMP_DS_AL_CODA);
+            jp->setJumpType(JumpType::DS_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DSAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JUMP_DS_AL_FINE);
+            jp->setJumpType(JumpType::DS_AL_FINE);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JUMP_DC_AL_CODA);
+            jp->setJumpType(JumpType::DC_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JUMP_DC_AL_FINE);
+            jp->setJumpType(JumpType::DC_AL_FINE);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_ToCoda:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MARKER_TOCODA);
+			m->setMarkerType(MarkerType::TOCODA);
 			e = m;
 			break;
 		}
 		case OVE::Repeat_Fine:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MARKER_FINE);
+			m->setMarkerType(MarkerType::FINE);
 			e = m;
 			break;
 		}

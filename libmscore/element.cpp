@@ -79,6 +79,8 @@
 #include "notedot.h"
 #include "textframe.h"
 #include "image.h"
+#include "marker.h"
+#include "jump.h"
 
 // extern bool showInvisible;
 
