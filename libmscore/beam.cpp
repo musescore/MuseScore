@@ -1714,28 +1714,25 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                                     len = -len;
                               else {
                                     // if inside group
-                                    Fraction a  = crl[c1-1]->duration();
-                                    Fraction b  = cr1->duration();
-                                    Fraction c  = crl[c1+1]->duration();
-                                    Fraction ab = (a + b).reduced();
-                                    Fraction bc = (b + c).reduced();
-
-                                    // if previous + current chord (a + b) is shorter
-                                    // than current + next chord (b + c),
-                                    // turn beam to left side
-                                    if (ab.denominator() < bc.denominator())
+                                    // PRO: this algorithm is simple(r) and finds the right direction in
+                                    // the great majority of cases, without attempting to 'understand'
+                                    // neither the rhythm nor the time signature
+                                    // CON: it fails in some highly subdivided tuplets (9-plet or more) or sub-tuplets.
+                                    // Compute the position in the measure of the end of this
+                                    // (i.e. of the beginning of next chord)
+                                    int measTick = cr1->measure()->tick();
+                                    int tickNext = crl[c1+1]->tick() - measTick;
+                                    // determine the tick length of a chord with one beam level less than this
+                                    // (i.e. twice the ticks of this)
+                                    int tickMod  = (tickNext - (crl[c1]->tick() - measTick)) * 2;
+                                    // if this completes, within the measure, a unit of tickMod length, flip beam to left
+                                    // (allow some tolerance for tick rounding in tuplets
+                                    // without tuplet tolerance, could be simplified to:)
+//                                  if (tickNext % tickMod == 0)
+#define BEAM_TUPLET_TOLERANCE 6
+                                    int mod = tickNext % tickMod;
+                                    if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
                                           len = -len;
-                                    // if same length
-                                    else if (ab.denominator() == bc.denominator()) {
-                                          // compute previous chord's position in measure
-                                          int measTick = cr1->measure()->tick();
-                                          int tickPrev = crl[c1-1]->tick() - measTick;
-                                          // if the previous chord falls on a measure division equal
-                                          // to a + b duration (modulus of position in measure is 0),
-                                          // turn beam to left side
-                                          if ( (tickPrev % ab.ticks()) == 0)
-                                                len = -len;
-                                          }
                                     }
                               bool stemUp = cr1->up();
                               if (stemUp && len > 0)
