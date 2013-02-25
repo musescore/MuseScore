@@ -72,6 +72,8 @@
 #include "libmscore/harmony.h"
 #include "libmscore/rehearsalmark.h"
 #include "shortcut.h"
+#include "libmscore/marker.h"
+#include "libmscore/jump.h"
 
 extern bool useFactorySettings;
 
@@ -293,56 +295,56 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(rm, tr("Repeat measure sign"));
 
       Marker* mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_SEGNO);
+      mk->setMarkerType(MarkerType::SEGNO);
       sp->append(mk, tr("Segno"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_VARSEGNO);
+      mk->setMarkerType(MarkerType::VARSEGNO);
       PaletteCell* cell = sp->append(mk, tr("Segno Variation"), "", 0.6);
       cell->yoffset = -2;
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_CODA);
+      mk->setMarkerType(MarkerType::CODA);
       sp->append(mk, tr("Coda"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_VARCODA);
+      mk->setMarkerType(MarkerType::VARCODA);
       sp->append(mk, tr("Varied coda"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_CODETTA);
+      mk->setMarkerType(MarkerType::CODETTA);
       sp->append(mk, tr("Codetta"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_FINE);
+      mk->setMarkerType(MarkerType::FINE);
       sp->append(mk, tr("Fine"));
 
       Jump* jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DC);
+      jp->setJumpType(JumpType::DC);
       sp->append(jp, tr("Da Capo"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DC_AL_FINE);
+      jp->setJumpType(JumpType::DC_AL_FINE);
       sp->append(jp, tr("Da Capo al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DC_AL_CODA);
+      jp->setJumpType(JumpType::DC_AL_CODA);
       sp->append(jp, tr("Da Capo al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DS_AL_CODA);
+      jp->setJumpType(JumpType::DS_AL_CODA);
       sp->append(jp, tr("D.S al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DS_AL_FINE);
+      jp->setJumpType(JumpType::DS_AL_FINE);
       sp->append(jp, tr("D.S al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JUMP_DS);
+      jp->setJumpType(JumpType::DS);
       sp->append(jp, tr("D.S"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MARKER_TOCODA);
+      mk->setMarkerType(MarkerType::TOCODA);
       sp->append(mk, tr("To Coda"));
       return sp;
       }

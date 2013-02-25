@@ -74,7 +74,8 @@
 #include "libmscore/fret.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/slur.h"
-#include "libmscore/repeat.h"
+#include "libmscore/jump.h"
+#include "libmscore/marker.h"
 
 //---------------------------------------------------------
 //   genPropertyMenu1

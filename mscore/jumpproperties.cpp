@@ -18,12 +18,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "libmscore/repeat.h"
-#include "libmscore/sym.h"
-#include "libmscore/score.h"
-#include "libmscore/system.h"
-#include "libmscore/measure.h"
-#include "globals.h"
+#include "libmscore/jump.h"
+#include "libmscore/marker.h"
 #include "jumpproperties.h"
 #include "markerproperties.h"
 
@@ -49,9 +45,9 @@ JumpProperties::JumpProperties(Jump* jp, QWidget* parent)
 
 void JumpProperties::saveValues()
       {
-      jump->setJumpTo(jumpTo->text());
-      jump->setPlayUntil(playUntil->text());
-      jump->setContinueAt(continueAt->text());
+      jump->undoSetJumpTo(jumpTo->text());
+      jump->undoSetPlayUntil(playUntil->text());
+      jump->undoSetContinueAt(continueAt->text());
       }
 
 //---------------------------------------------------------
@@ -74,6 +70,6 @@ MarkerProperties::MarkerProperties(Marker* mk, QWidget* parent)
 
 void MarkerProperties::saveValues()
       {
-      marker->setLabel(label->text());
+      marker->undoSetLabel(label->text());
       }
 

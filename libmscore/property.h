@@ -117,6 +117,12 @@ enum P_ID {
       P_PLACEMENT,
       P_VELOCITY,
 
+      P_JUMP_TO,
+      P_PLAY_UNTIL,
+      P_CONTINUE_AT,
+      P_LABEL,
+      P_MARKER_TYPE,
+
       P_END
       };
 
