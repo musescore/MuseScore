@@ -56,7 +56,6 @@
 #include "articulation.h"
 #include "noteevent.h"
 #include "slur.h"
-// #include "excerpt.h"
 #include "tempotext.h"
 #include "instrchange.h"
 #include "box.h"
@@ -67,6 +66,8 @@
 #include "sequencer.h"
 #include "breath.h"
 #include "fingering.h"
+#include "rehearsalmark.h"
+#include "excerpt.h"
 
 extern Measure* tick2measure(int tick);
 
@@ -750,6 +751,42 @@ void Score::undoAddElement(Element* element)
             ostaff = element->staff();
 
       Element::ElementType et = element->type();
+
+
+      // some elements are replicated for all parts regardless of
+      // linking:
+
+      if (et == Element::REHEARSAL_MARK) {
+            foreach(Excerpt* excerpt, rootScore()->excerpts())
+                  staffList.append(excerpt->score()->staff(0));
+
+            foreach(Staff* staff, staffList) {
+                  Score* score = staff->score();
+                  int staffIdx = score->staffIdx(staff);
+                  Element* ne;
+                  if (staff == ostaff)
+                        ne = element;
+                  else {
+                        ne = element->linkedClone();
+                        ne->setScore(score);
+                        ne->setSelected(false);
+                        ne->setTrack(staffIdx * VOICES + element->voice());
+                        }
+                  if (element->type() == Element::REHEARSAL_MARK) {
+                        RehearsalMark* d  = static_cast<RehearsalMark*>(element);
+                        Segment* segment  = d->segment();
+                        int tick          = segment->tick();
+                        Measure* m        = score->tick2measure(tick);
+                        Segment* seg      = m->findSegment(Segment::SegChordRest, tick);
+                        RehearsalMark* nd = static_cast<RehearsalMark*>(ne);
+                        int ntrack        = staffIdx * VOICES + d->voice();
+                        nd->setTrack(ntrack);
+                        nd->setParent(seg);
+                        undo(new AddElement(nd));
+                        }
+                  }
+            return;
+            }
 
       if (et == Element::FINGERING
          || et == Element::IMAGE
