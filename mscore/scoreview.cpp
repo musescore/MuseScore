@@ -2798,7 +2798,8 @@ void ScoreView::cmd(const QAction* a)
 
       else
             _score->cmd(a);
-      _score->processMidiInput();
+      if (_score->processMidiInput())
+            mscore->endCmd();
       }
 
 //---------------------------------------------------------
