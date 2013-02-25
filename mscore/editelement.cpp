@@ -29,8 +29,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/textframe.h"
 
-extern TextPalette* textPalette;
-
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -120,13 +118,7 @@ void ScoreView::endEdit()
       if (mscore->getInspector())
             mscore->getInspector()->setElement(0);
 
-      if (editObject->isText()) {
-            if (textPalette) {
-                  textPalette->hide();
-                  mscore->textTools()->kbAction()->setChecked(false);
-                  }
-            }
-      else if (editObject->isSegment()) {
+      if (editObject->isSegment()) {
             Spanner* spanner  = static_cast<SpannerSegment*>(editObject)->spanner();
             Spanner* original = static_cast<SpannerSegment*>(origEditObject)->spanner();
 

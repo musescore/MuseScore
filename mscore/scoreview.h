@@ -177,7 +177,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       int grips;                    // number of used grips
       Element* origEditObject;
       Element* editObject;         ///< Valid in edit mode
-      Text* _editText;
 
       //--input state:
       TextCursor* _cursor;

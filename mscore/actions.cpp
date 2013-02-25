@@ -1698,7 +1698,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show Page Margins")
          ),
       Shortcut(
-         STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_TEXT_EDIT | STATE_LYRICS_EDIT,
          0,
          "show-keys",
          QT_TRANSLATE_NOOP("action","Insert Special Characters..."),
