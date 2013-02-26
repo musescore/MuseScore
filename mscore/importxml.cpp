@@ -1964,12 +1964,13 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       if (implicit == "yes")
             measure->setIrregular(true);
 
+      int cv = 0; // current voice for chords, default is 0
 
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "attributes")
                   xmlAttributes(measure, staff, e.firstChildElement());
             else if (e.tagName() == "note") {
-                  xmlNote(measure, staff, part->id(), beam, e);
+                  xmlNote(measure, staff, part->id(), beam, cv, e);
                   moveTick(measure->tick(), tick, maxtick, noteTypeTickFr, divisions, e);
 #ifdef DEBUG_TICK
                   qDebug(" after inserting note tick=%d", tick);
@@ -4424,7 +4425,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
  \a Staff is the number of first staff of the part this note belongs to.
  */
 
-void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, QDomElement e)
+void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, int& currentVoice, QDomElement e)
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -4433,8 +4434,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       QDomNode pn = e; // TODO remove pn
       QDomElement org_e = e; // save e for later
       QDomElement domElemNotations;
-      voice = 0;
-      move  = 0;
+      int voice = 0;
+      int move  = 0;
 
       bool rest    = false;
       int relStaff = 0;
@@ -4480,6 +4481,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             // silently ignore others (will be handled later)
             }
 
+      // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
+      if (!chord)
+            // remember voice
+            currentVoice = voice;
+      else
+            // use voice from last note w/o <chord>
+            voice = currentVoice;
 
       // Musicxml voices are counted for all staffs of an
       // instrument. They are not limited. In mscore voices are associated
