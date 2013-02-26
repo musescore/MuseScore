@@ -946,11 +946,11 @@ void ExportLy::storeChord(struct InstructionAnchor chordanchor)
 
 void ExportLy::tempoText(TempoText* text)
       {
-	QString temptekst = text->getText();
+	QString temptekst = text->text();
 	double met = text->tempo();
 	int metronome;
 	metronome = (int) (met * 60);
-	out << "\\tempo \""  << text->getText() << "\" " <<  timedenom << " = " << metronome << "  ";
+	out << "\\tempo \""  << text->text() << "\" " <<  timedenom << " = " << metronome << "  ";
       }
 
 
@@ -966,8 +966,8 @@ void ExportLy::words(Text* text)
        findTextProperties(text,style,size);
        //todo: find exact mscore-position of text and not only anchorpoint, and position accordingly in lily.
 //TODO     if ((text->subtypeName() != "RehearsalMark"))
-       // if (text->getText() != "")
-       out << "^\\markup {" << style<< " \"" << text->getText() << "\"} ";
+       // if (text->text() != "")
+       out << "^\\markup {" << style<< " \"" << text->text() << "\"} ";
      //     qDebug("tekst %s\n", tekst.toLatin1().data());
       }
 
@@ -1048,7 +1048,7 @@ void ExportLy::pedal(Pedal* pd, int tick)
 //---------------------------------------------------------
 void ExportLy::dynamic(Dynamic* dyn, int nop)
 {
-  QString t = dyn->getText();
+  QString t = dyn->text();
   if (t == "p" || t == "pp" || t == "ppp" || t == "pppp" || t == "ppppp" || t == "pppppp"
       || t == "f" ||
       t == "ff" || t == "fff" || t == "ffff" || t == "fffff" || t == "ffffff"
@@ -1171,7 +1171,7 @@ void ExportLy::textLine(Element* instruction, int tick, bool pre)
 	    }
 	  if (tekstlinje->beginText())
 	    {
-	      QString linetext = tekstlinje->beginText()->getText();
+	      QString linetext = tekstlinje->beginText()->text();
 	      Text* tekst = (Text*) tekstlinje->beginText();
 	      QString tekststyle = "";
 	      findTextProperties(tekst, tekststyle, fontsize);
@@ -1459,7 +1459,7 @@ void ExportLy::handlePreInstruction(Element * el)
 		    bool ok = false;
 		    // int dec=0;
 		    QString c;
-		    c=tekst->getText();
+		    c=tekst->text();
 		    // dec = c.toInt(&ok, 10);
 		    if (ok) rehearsalnumbers=true;
 		    Element* elm = 0;
@@ -1538,7 +1538,7 @@ void ExportLy::handleElement(Element* el)
 			if (wholemeasurerest)
 			    {
 				Text* wmtx = (Text*) instruction;
-				wholemeasuretext = wmtx->getText();
+				wholemeasuretext = wmtx->text();
 			    }
 			else
 			    words((Text*) instruction);
@@ -2734,12 +2734,12 @@ void ExportLy::findFingerAndStringno(Note* note, int &fingix, int &stringix, QSt
                   if (text->textStyleType() == TEXT_STYLE_FINGERING) {
 	                  fingix++;
       	            Text* f = (Text*)e;
-	                  fingarray[fingix] = f->getText();
+	                  fingarray[fingix] = f->text();
 	                  }
                   else if (text->textStyleType() == TEXT_STYLE_STRING_NUMBER) {
                         stringix++;
                         Text * s = (Text*)e;
-                        stringarray[stringix] = s->getText();
+                        stringarray[stringix] = s->text();
                         }
                   }
             }
@@ -3562,7 +3562,7 @@ void ExportLy::findLyrics()
 			    }
 			}
 
-		      QString lyriks = (lix)->getText();
+		      QString lyriks = (lix)->text();
 
           //  escape '"' character
           if (lyriks.contains('"'))
@@ -4644,7 +4644,7 @@ void ExportLy::writeScoreTitles()
   foreach(const Element* e, *m->el()) {
     if (e->type() != TEXT)
       continue;
-    QString s = ((Text*)e)->getText();
+    QString s = ((Text*)e)->text();
     indentF();
     switch(e->subtype()) {
     case TEXT_TITLE:

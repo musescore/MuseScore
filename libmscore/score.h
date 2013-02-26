@@ -509,6 +509,8 @@ class Score : public QObject {
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
+      UndoStack* undo() const;
+      void undo(UndoCommand* cmd) const;
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
@@ -736,8 +738,6 @@ class Score : public QObject {
       void adjustBracketsDel(int sidx, int eidx);
       void adjustBracketsIns(int sidx, int eidx);
       void renumberMeasures();
-      UndoStack* undo() const;
-      void undo(UndoCommand* cmd) const;
 
       void endUndoRedo();
       Measure* searchLabel(const QString& s);

@@ -61,7 +61,9 @@ class SimpleText : public Element {
 
       bool _layoutToParentWidth;
       bool _editMode;
-      static TCursor _cursor;
+
+      static TCursor _cursor;       // used during editing
+
       QRectF cursorRect() const;
       QString& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
@@ -85,8 +87,8 @@ class SimpleText : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setText(const QString& s);
-      QString getText() const;
+      void setText(const QString& s)      { _text = s;    }
+      QString text() const                { return _text; }
 
       bool editMode() const               { return _editMode; }
       void setEditMode(bool val)          { _editMode = val;  }

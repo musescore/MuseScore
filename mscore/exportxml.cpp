@@ -986,7 +986,7 @@ void ExportMusicXml::credits(Xml& xml)
                                         text->styled(),
                                         text->textStyleType(),
                                         qPrintable(text->textStyle().name()),
-                                        qPrintable(text->getText()),
+                                        qPrintable(text->text()),
                                         text->pagePos().x(),
                                         text->pagePos().y()
                                         );
@@ -1027,13 +1027,13 @@ void ExportMusicXml::credits(Xml& xml)
                   if (text->styled()) {
                         QString styleName = text->textStyle().name();
                         if (styleName == "Title")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->getText());
+                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
                         else if (styleName == "Subtitle")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->getText());
+                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
                         else if (styleName == "Composer")
-                              creditWords(xml, w - rm, ty, fs, "right", "top", text->getText());
+                              creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
                         else if (styleName == "Lyricist")
-                              creditWords(xml, lm, ty, fs, "left", "top", text->getText());
+                              creditWords(xml, lm, ty, fs, "left", "top", text->text());
                         else
                               qDebug("credits: text style %s not supported", qPrintable(styleName));
                         }
@@ -2258,7 +2258,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                         Text* f = (Text*)e;
                         notations.tag(xml);
                         technical.tag(xml);
-                        QString t = f->getText();
+                        QString t = f->text();
                         if (f->textStyleType() == TEXT_STYLE_FINGERING) {
                               // p, i, m, a, c represent the plucking finger
                               if (t == "p" || t == "i" || t == "m" || t == "a" || t == "c")
@@ -2690,7 +2690,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
       QString metroLeft;  // left part of metronome
       QString metroRight; // right part of metronome
       QString wordsRight; // words right of metronome
-      if (findMetronome(text->getText(), wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
+      if (findMetronome(text->text(), wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft != "") {
                   xml.stag("direction-type");
                   xml.tag("words", wordsLeft);
@@ -2725,7 +2725,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
             }
       else {
             xml.stag("direction-type");
-            xml.tag("words", text->getText());
+            xml.tag("words", text->text());
             xml.etag();
             }
       }
@@ -2733,7 +2733,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
 void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->getText()));
+      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->text()));
       */
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
@@ -2758,13 +2758,13 @@ void ExportMusicXml::words(Text const* const text, int staff)
       /*
       qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xoff=%g yoff=%g text='%s'",
              text->userOff().x(), text->userOff().y(), text->xoff(), text->yoff(),
-             text->getText().toUtf8().data());
+             text->text().toUtf8().data());
       */
       directionTag(xml, attr, text);
       if (text->type() == Element::REHEARSAL_MARK) {
             // TODO: check if dead code (see rehearsal below)
             xml.stag("direction-type");
-            xml.tag("rehearsal", text->getText());
+            xml.tag("rehearsal", text->text());
             xml.etag();
             }
       else
@@ -2780,7 +2780,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
       directionTag(xml, attr, rmk);
       xml.stag("direction-type");
-      xml.tag("rehearsal", rmk->getText());
+      xml.tag("rehearsal", rmk->text());
       xml.etag();
       directionETag(xml, staff);
       }
@@ -2953,7 +2953,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       directionTag(xml, attr, tl);
       if (tl->beginText() && tl->tick() == tick) {
             xml.stag("direction-type");
-            xml.tag("words", tl->beginText()->getText());
+            xml.tag("words", tl->beginText()->text());
             xml.etag();
             }
       xml.stag("direction-type");
@@ -2979,7 +2979,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
-      QString t = dyn->getText();
+      QString t = dyn->text();
       Dynamic::DynamicType st = dyn->subtype();
 
       directionTag(xml, attr, dyn);
@@ -3080,7 +3080,7 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                                     qDebug("unknown syllabic %d\n", syl);
                               }
                         xml.tag("syllabic", s);
-                        xml.tag("text", (l)->getText());
+                        xml.tag("text", (l)->text());
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"
@@ -3106,41 +3106,41 @@ static void directionJump(Xml& xml, const Jump* const jp)
       QString type  = "";
       QString sound = "";
       if (jtp == JumpType::DC) {
-            if (jp->getText() == "")
+            if (jp->text() == "")
                   words = "D.C.";
             else
-                  words = jp->getText();
+                  words = jp->text();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == JumpType::DC_AL_FINE) {
-            if (jp->getText() == "")
+            if (jp->text() == "")
                   words = "D.C. al Fine";
             else
-                  words = jp->getText();
+                  words = jp->text();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == JumpType::DC_AL_CODA) {
-            if (jp->getText() == "")
+            if (jp->text() == "")
                   words = "D.C. al Coda";
             else
-                  words = jp->getText();
+                  words = jp->text();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == JumpType::DS_AL_CODA) {
-            if (jp->getText() == "")
+            if (jp->text() == "")
                   words = "D.S. al Coda";
             else
-                  words = jp->getText();
+                  words = jp->text();
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
       else if (jtp == JumpType::DS_AL_FINE) {
-            if (jp->getText() == "")
+            if (jp->text() == "")
                   words = "D.S. al Fine";
             else
-                  words = jp->getText();
+                  words = jp->text();
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
             else
@@ -3197,10 +3197,10 @@ static void directionMarker(Xml& xml, const Marker* const m)
             sound = "fine=\"yes\"";
             }
       else if (mtp == MarkerType::TOCODA) {
-            if (m->getText() == "")
+            if (m->text() == "")
                   words = "To Coda";
             else
-                  words = m->getText();
+                  words = m->text();
             if (m->label() == "")
                   sound = "tocoda=\"1\"";
             else
@@ -4483,7 +4483,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             //
             xml.stag("direction");
             xml.stag("direction-type");
-            xml.tag("words default-y=\"100\"", h->getText());
+            xml.tag("words default-y=\"100\"", h->text());
             xml.etag();
             xml.etag();
             }

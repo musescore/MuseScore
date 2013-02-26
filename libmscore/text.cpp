@@ -171,12 +171,12 @@ void Text::setHtml(const QString& s)
       }
 
 //---------------------------------------------------------
-//   getText
+//   text
 //---------------------------------------------------------
 
-QString Text::getText() const
+QString Text::text() const
       {
-      return styled() ? SimpleText::getText() : _doc->toPlainText();
+      return styled() ? SimpleText::text() : _doc->toPlainText();
       }
 
 //---------------------------------------------------------
@@ -395,7 +395,7 @@ void Text::writeProperties(Xml& xml, bool writeText) const
             _textStyle.writeProperties(xml);
       if (writeText) {
             if (styled())
-                  xml.tag("text", getText());
+                  xml.tag("text", text());
             else {
                   xml.stag("html-data");
                   xml.writeHtml(_doc->toHtml("utf-8"));
@@ -1270,7 +1270,7 @@ void Text::styleChanged()
       if (styled()) {
             if (_styleIndex != TEXT_STYLE_UNKNOWN)
                   setTextStyle(score()->textStyle(_styleIndex));
-            setText(getText());     // destroy formatting
+            setText(text());     // destroy formatting
             score()->setLayoutAll(true);
             }
       }
@@ -1338,7 +1338,7 @@ void Text::setUnstyled()
       _styleIndex = TEXT_STYLE_UNSTYLED;
       createDoc();
       if (!SimpleText::isEmpty())
-            setUnstyledText(SimpleText::getText());
+            setUnstyledText(SimpleText::text());
       if (editMode())
             _cursor = new QTextCursor(_doc);
       }
@@ -1392,7 +1392,7 @@ void Text::endCursorEdit()
 
 bool Text::isEmpty() const
       {
-      return styled() ? SimpleText::getText().isEmpty() : _doc->isEmpty();
+      return styled() ? SimpleText::text().isEmpty() : _doc->isEmpty();
       }
 
 //---------------------------------------------------------
@@ -1412,9 +1412,18 @@ void Text::setModified(bool v)
 QTextDocumentFragment Text::getFragment() const
       {
       if (styled())
-            return QTextDocumentFragment::fromPlainText(getText());
+            return QTextDocumentFragment::fromPlainText(text());
       else
             return QTextDocumentFragment(_doc);
+      }
+
+//---------------------------------------------------------
+//   undoSetText
+//---------------------------------------------------------
+
+void Text::undoSetText(const QString& s)
+      {
+      score()->undoChangeProperty(this, P_TEXT, s);
       }
 
 //---------------------------------------------------------
@@ -1426,6 +1435,9 @@ QVariant Text::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_TEXT_STYLE:
                   return QVariant(_styleIndex);
+            case P_TEXT:
+                  return text();
+
             default:
                   return Element::getProperty(propertyId);
             }
@@ -1443,6 +1455,9 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
             case P_TEXT_STYLE:
                   _styleIndex = v.toInt();
                   setGenerated(false);
+                  break;
+            case P_TEXT:
+                  setText(v.toString());
                   break;
             default:
                   rv = Element::setProperty(propertyId, v);

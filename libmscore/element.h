@@ -403,7 +403,7 @@ class Element : public QObject {
       virtual QLineF dragAnchor() const       { return QLineF(); }
 
       virtual bool isEditable() const         { return !_generated; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) {}
+      virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void editDrag(const EditData&);
       virtual void endEditDrag()                               {}
@@ -528,6 +528,7 @@ class Element : public QObject {
       virtual bool setProperty(P_ID, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
       void undoChangeProperty(P_ID, const QVariant&);
+      void undoPushProperty(P_ID);
       };
 
 //---------------------------------------------------------

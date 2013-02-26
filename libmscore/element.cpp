@@ -753,6 +753,15 @@ void Element::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Element::startEdit(MuseScoreView*, const QPointF&)
+      {
+      undoPushProperty(P_USER_OFF);
+      }
+
+//---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
@@ -1504,6 +1513,16 @@ QVariant Element::propertyDefault(P_ID id) const
 void Element::undoChangeProperty(P_ID id, const QVariant& val)
       {
       score()->undoChangeProperty(this, id, val);
+      }
+
+//---------------------------------------------------------
+//   undoPushProperty
+//---------------------------------------------------------
+
+void Element::undoPushProperty(P_ID id)
+      {
+      QVariant val = getProperty(id);
+      score()->undo()->push1(new ChangeProperty(this, id, val));
       }
 
 //---------------------------------------------------------
