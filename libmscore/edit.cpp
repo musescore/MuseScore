@@ -362,6 +362,7 @@ Note* Score::addNote(Chord* chord, int pitch)
       note->setPitch(pitch);
       note->setTpcFromPitch();
       undoAddElement(note);
+      _playNote = true;
       select(note, SELECT_SINGLE, 0);
       return note;
       }
@@ -379,6 +380,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       if (note->tpc() == INVALID_TPC)
             note->setTpcFromPitch();
       undoAddElement(note);
+      _playNote = true;
       select(note, SELECT_SINGLE, 0);
       return note;
       }
