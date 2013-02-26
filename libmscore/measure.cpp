@@ -2177,7 +2177,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   dyn->setTrack(e.track());
                   dyn->read(e);
                   if (score()->mscVersion() <= 114)
-                        dyn->setSubtype(dyn->getText());
+                        dyn->setSubtype(dyn->text());
                   segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(dyn);
                   }

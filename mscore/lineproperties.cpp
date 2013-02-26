@@ -113,8 +113,8 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       continueSymbolX->setEnabled(bt);
       continueSymbolY->setEnabled(bt);
 
-      beginText->setText(tl->beginText() ? tl->beginText()->getText() : "");
-      continueText->setText(tl->continueText() ? tl->continueText()->getText() : "");
+      beginText->setText(tl->beginText() ? tl->beginText()->text() : "");
+      continueText->setText(tl->continueText() ? tl->continueText()->text() : "");
 
       setLineSymbolComboBox(beginSymbol, tl->beginSymbol());
       setLineSymbolComboBox(continueSymbol, tl->continueSymbol());

@@ -373,7 +373,7 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mod, const QString& s)
       {
       bool rv = Text::edit(view, grip, key, mod, s);
-      QString str = getText();
+      QString str = text();
       int root, base;
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base);
       spellCheckUnderline(badSpell);
@@ -387,7 +387,7 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(getText());
+      setHarmony(text());
       layout();
       }
 

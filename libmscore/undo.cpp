@@ -240,6 +240,16 @@ void UndoStack::push(UndoCommand* cmd)
       }
 
 //---------------------------------------------------------
+//   push1
+//---------------------------------------------------------
+
+void UndoStack::push1(UndoCommand* cmd)
+      {
+      if (curCmd)
+            curCmd->appendChild(cmd);
+      }
+
+//---------------------------------------------------------
 //   pop
 //---------------------------------------------------------
 
@@ -2129,7 +2139,7 @@ void EditText::redo()
 void EditText::undoRedo()
       {
       if (text->styled()) {
-            QString s = text->getText();
+            QString s = text->text();
             text->setText(oldText);
             oldText = s;
             }

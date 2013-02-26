@@ -96,7 +96,7 @@ void Volta::setText(const QString& s)
 
 QString Volta::text() const
       {
-      return beginText()->getText();
+      return beginText()->text();
       }
 
 //---------------------------------------------------------

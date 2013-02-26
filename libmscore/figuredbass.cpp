@@ -1016,7 +1016,7 @@ void FiguredBass::layout()
             QFontMetricsF     fm(textStyle().font(spatium()));
             // box width
             w = 0;
-            QStringList list = getText().split('\n');
+            QStringList list = text().split('\n');
             foreach(QString str, list) {
                   w1 = fm.width(str);
                   if(w1 > w)
@@ -1165,7 +1165,7 @@ void FiguredBass::endEdit()
       int         idx;
 
       Text::endEdit();
-      QString txt = getText();
+      QString txt = text();
       if(txt.isEmpty()) {                       // if no text, nothing to do
             return;
             }

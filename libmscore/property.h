@@ -84,6 +84,7 @@ enum P_ID {
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
       P_TEXT_STYLE,
+      P_TEXT,
       P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
