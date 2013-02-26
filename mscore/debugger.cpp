@@ -1394,7 +1394,7 @@ void TextView::setElement(Element* e)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       ShowElementBase::setElement(e);
-      tb.text->setPlainText(te->getText());
+      tb.text->setPlainText(te->text());
       tb.xoffset->setValue(te->xoff());
       tb.yoffset->setValue(te->yoff());
       tb.rxoffset->setValue(te->reloff().x());
@@ -1517,7 +1517,7 @@ void DynamicView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
-      tb.text->setPlainText(dynamic->getText());
+      tb.text->setPlainText(dynamic->text());
       tb.xoffset->setValue(dynamic->xoff());
       tb.yoffset->setValue(dynamic->yoff());
       tb.rxoffset->setValue(dynamic->reloff().x());

@@ -172,9 +172,8 @@ add_executable ( ${ExecutableName}
       simplebutton.cpp musedata.cpp exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      chordedit.cpp excerptsdialog.cpp
-      metaedit.cpp magbox.cpp voiceselector.cpp capella.cpp
-      exportaudio.cpp palettebox.cpp
+      chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
+      voiceselector.cpp capella.cpp exportaudio.cpp palettebox.cpp
       textproperties.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
@@ -195,7 +194,7 @@ add_executable ( ${ExecutableName}
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
-      inspectorHairpin.cpp qmlplugin.cpp
+      inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       ${OMR_FILES}

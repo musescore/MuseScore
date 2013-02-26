@@ -2287,7 +2287,7 @@ static void metronome(QDomElement e, Text* t)
       {
       if (!t) return;
       bool textAdded = false;
-      QString tempoText = t->getText();
+      QString tempoText = t->text();
 
       QString parenth = e.attribute("parentheses");
       if (parenth == "yes")
@@ -3372,13 +3372,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
             else if (e.tagName() == "text")
-                  l->setText(l->getText()+e.text());
+                  l->setText(l->text()+e.text());
             else if (e.tagName() == "elision")
                   if (e.text().isEmpty()) {
-                        l->setText(l->getText()+" ");
+                        l->setText(l->text()+" ");
                         }
                   else {
-                        l->setText(l->getText()+e.text());
+                        l->setText(l->text()+e.text());
                         }
             else if (e.tagName() == "extend")
                   ;

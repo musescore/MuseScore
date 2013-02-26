@@ -37,7 +37,7 @@ void ScoreView::startEdit(Element* e)
       {
       if (e->type() == Element::TBOX)
             e = static_cast<TBox*>(e)->getText();
-      origEditObject = e;
+      editObject = e;
       sm->postEvent(new CommandEvent("edit"));
       _score->end();
       }
@@ -48,7 +48,7 @@ void ScoreView::startEdit(Element* e)
 
 void ScoreView::startEdit(Element* element, int startGrip)
       {
-      origEditObject = element;
+      editObject = element;
       startEdit();
       if (startGrip == -1)
             curGrip = grips-1;
@@ -67,10 +67,9 @@ void ScoreView::startEdit()
       setFocus();
       if (!_score->undo()->active())
             _score->startCmd();
-      _score->deselectAll();
 
-      if (origEditObject->isSegment()) {        // if spanner segment
-            SpannerSegment* ss = (SpannerSegment*)origEditObject;
+      if (editObject->isSegment()) {        // if spanner segment
+            SpannerSegment* ss = (SpannerSegment*)editObject;
             Spanner* spanner   = ss->spanner();
             Spanner* clone     = static_cast<Spanner*>(spanner->clone());
             clone->setLinks(spanner->links());
@@ -80,21 +79,10 @@ void ScoreView::startEdit()
             editObject->startEdit(this, startMove);
             _score->undoChangeElement(spanner, clone);
             }
-      else {
-            foreach(Element* e, origEditObject->linkList()) {
-                  Element* ce = e->clone();
-                  if (e == origEditObject) {
-                        editObject = ce;
-                        editObject->setSelected(true);
-                        }
-                  _score->undoChangeElement(e, ce);
-                  }
-            editObject->layout();
+      else
             editObject->startEdit(this, startMove);
-            }
       curGrip = -1;
       updateGrips();
-      _score->rebuildBspTree();     // we replaced elements
       _score->end();
       }
 
@@ -105,10 +93,8 @@ void ScoreView::startEdit()
 void ScoreView::endEdit()
       {
       setDropTarget(0);
-      if (!editObject) {
-            origEditObject = 0;
+      if (!editObject)
             return;
-            }
 
       _score->addRefresh(editObject->canvasBoundingRect());
       for (int i = 0; i < grips; ++i)
@@ -119,6 +105,7 @@ void ScoreView::endEdit()
             mscore->getInspector()->setElement(0);
 
       if (editObject->isSegment()) {
+#if 0
             Spanner* spanner  = static_cast<SpannerSegment*>(editObject)->spanner();
             Spanner* original = static_cast<SpannerSegment*>(origEditObject)->spanner();
 
@@ -192,6 +179,7 @@ void ScoreView::endEdit()
                         score()->undo(new ChangeSpannerAnchor(lspanner, lse, lee));
                         }
                   }
+#endif
             }
       _score->addRefresh(editObject->canvasBoundingRect());
 
@@ -211,7 +199,6 @@ void ScoreView::endEdit()
             _score->end();
             }
       editObject     = 0;
-      origEditObject = 0;
       grips          = 0;
       }
 

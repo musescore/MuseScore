@@ -121,7 +121,8 @@ class UndoStack {
       bool active() const           { return curCmd != 0; }
       void beginMacro();
       void endMacro(bool rollback);
-      void push(UndoCommand*);
+      void push(UndoCommand*);      // push & execute
+      void push1(UndoCommand*);
       void pop();
       void setClean();
       bool canUndo() const          { return curIdx > 0;           }

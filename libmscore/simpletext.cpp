@@ -256,22 +256,18 @@ void SimpleText::layout()
                         }
                   }
             else {
-                  foreach(QString s, sl)
+                  foreach (QString s, sl)
                         _layout.append(TLine(s));
                   }
             }
-      int n = _layout.size();
-      if (!n) {
-            setPos(QPointF());
-            setbbox(QRectF());
-            return;
-            }
-
+      if (_layout.isEmpty())
+            _layout.append(TLine());
       QPointF o(_textStyle.offset(spatium()));
 
       QRectF bb;
       qreal lh = lineHeight();
       qreal ly = .0;
+      int n = _layout.size();
       for (int i = 0; i < n; ++i) {
             TLine* t = &_layout[i];
 
@@ -354,32 +350,17 @@ qreal SimpleText::baseLine() const
       }
 
 //---------------------------------------------------------
-//   setText
-//---------------------------------------------------------
-
-void SimpleText::setText(const QString& s)
-      {
-      _text = s;
-      }
-
-//---------------------------------------------------------
-//   getText
-//---------------------------------------------------------
-
-QString SimpleText::getText() const
-      {
-      return _text;
-      }
-
-//---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
 void SimpleText::startEdit(MuseScoreView*, const QPointF& pt)
       {
+      if (_layout.isEmpty())
+            layout();
       _cursor.line   = 0;
       _cursor.column = 0;
       setCursor(pt);
+      undoPushProperty(P_TEXT);
       }
 
 //---------------------------------------------------------
@@ -540,6 +521,7 @@ void SimpleText::insertText(const QString& s)
       if (!s.isEmpty()) {
             curLine().insert(_cursor.column, s);
             _cursor.column += s.size();
+            _cursor.selectColumn = _cursor.column;
             }
       }
 
@@ -567,6 +549,8 @@ bool SimpleText::deletePreviousChar()
             curLine().remove(_cursor.column-1, 1);
             --_cursor.column;
             }
+      _cursor.selectLine   = _cursor.line;
+      _cursor.selectColumn = _cursor.column;
       return true;
       }
 
@@ -581,6 +565,8 @@ bool SimpleText::deleteChar()
       if (curLine().at(_cursor.column-1).isHighSurrogate())
             curLine().remove(_cursor.column, 1);
       curLine().remove(_cursor.column, 1);
+      _cursor.selectLine   = _cursor.line;
+      _cursor.selectColumn = _cursor.column;
       return true;
       }
 

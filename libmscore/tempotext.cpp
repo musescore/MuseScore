@@ -90,7 +90,7 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = getText();
+      QString s = text();
 
       static const TempoPattern tp[] = {
             TempoPattern("\\xd834\\xdd5f = (\\d+)", 1.0/60.0),      // 1/4

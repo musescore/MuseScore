@@ -175,8 +175,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       int curGrip;
       QRectF grip[MAX_GRIPS];       // edit "grips"
       int grips;                    // number of used grips
-      Element* origEditObject;
-      Element* editObject;         ///< Valid in edit mode
+      Element* editObject;          ///< Valid in edit mode
 
       //--input state:
       TextCursor* _cursor;
@@ -338,8 +337,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void zoom(int step, const QPoint& pos);
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QMouseEvent* ev);
-      void setOrigEditObject(Element* e) { origEditObject = e; }
-      Element* getOrigEditObject()       { return origEditObject; }
       void editKey(QKeyEvent*);
       bool editKeyLyrics(QKeyEvent*);
       void dragScoreView(QMouseEvent* ev);
@@ -427,8 +424,9 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       OmrView* omrView() const    { return _omrView; }
       void setOmrView(OmrView* v) { _omrView = v;    }
-      Element* getEditObject()    { return editObject; }
       Lasso* fotoLasso() const    { return _foto;    }
+      Element* getEditObject()    { return editObject; }
+      void setEditObject(Element* e) { editObject = e; }
       };
 
 //---------------------------------------------------------

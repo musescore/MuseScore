@@ -30,7 +30,7 @@ struct SymCode;
 
 class Text : public SimpleText {
       Q_OBJECT
-      Q_PROPERTY(QString text READ getText WRITE setText)
+      Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QTextDocument* _doc;
       int _styleIndex;        // set to TEXT_STYLE_UNSTYLED if not styled
@@ -55,11 +55,12 @@ class Text : public SimpleText {
       virtual Text* clone() const         { return new Text(*this); }
       virtual ElementType type() const    { return TEXT; }
 
-      void setText(const QString& s);
+      void setText(const QString&);
+      void undoSetText(const QString&);
       void setText(const QTextDocumentFragment&);
       void setHtml(const QString& s);
 
-      QString getText() const;
+      QString text() const;
       QString getHtml() const;
       QTextDocumentFragment getFragment() const;
 
