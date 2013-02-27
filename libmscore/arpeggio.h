@@ -31,13 +31,15 @@ class Arpeggio : public Element {
       Q_OBJECT
 
       ArpeggioType _subtype;
-      Spatium _userLen1;
-      Spatium _userLen2;
+      qreal _userLen1;
+      qreal _userLen2;
       qreal _height;
       int _span;              // spanning staves
 
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       virtual QLineF dragAnchor() const;
       virtual QPointF gripAnchor(int) const;
+      virtual void startEdit(MuseScoreView*, const QPointF&);
 
    public:
       Arpeggio(Score* s);
@@ -58,8 +60,15 @@ class Arpeggio : public Element {
       void write(Xml& xml) const;
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }
-
       void setHeight(qreal);
+
+      qreal userLen1() const    { return _userLen1; }
+      qreal userLen2() const    { return _userLen2; }
+      void setUserLen1(qreal v) { _userLen1 = v; }
+      void setUserLen2(qreal v) { _userLen2 = v; }
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
 #endif

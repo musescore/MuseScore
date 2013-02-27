@@ -779,11 +779,11 @@ Segment* Measure::getSegment(Element* e, int tick)
 ///   If the segment does not exist, it is created.
 //---------------------------------------------------------
 
-Segment* Measure::getSegment(Segment::SegmentType st, int t)
+Segment* Measure::getSegment(Segment::SegmentType st, int tick)
       {
-      Segment* s = findSegment(st, t);
+      Segment* s = findSegment(st, tick);
       if (!s) {
-            s = new Segment(this, st, t);
+            s = new Segment(this, st, tick);
             add(s);
             }
       return s;
@@ -890,56 +890,48 @@ void Measure::add(Element* el)
                         }
                   int t  = seg->tick();
                   Segment::SegmentType st = seg->subtype();
-                  if (seg->prev() || seg->next()) {
-                        //
-                        // undo operation
-                        //
-                        _segments.insert(seg);
+                  Segment* s;
+                  if (st == Segment::SegGrace) {
+                        for (s = first(); s && s->tick() < t; s = s->next())
+                              ;
+                        if (s && (s->tick() > t)) {
+                              seg->setParent(this);
+                              _segments.insert(seg, s);
+                              break;
+                              }
+                        if (s && s->subtype() != Segment::SegChordRest) {
+                              for (; s && s->subtype() != Segment::SegEndBarLine
+                                 && s->subtype() != Segment::SegChordRest; s = s->next())
+                                    ;
+                              }
                         }
                   else {
-                        Segment* s;
-                        if (st == Segment::SegGrace) {
-                              for (s = first(); s && s->tick() < t; s = s->next())
-                                    ;
-                              if (s && (s->tick() > t)) {
-                                    seg->setParent(this);
-                                    _segments.insert(seg, s);
-                                    break;
-                                    }
-                              if (s && s->subtype() != Segment::SegChordRest) {
-                                    for (; s && s->subtype() != Segment::SegEndBarLine
-                                       && s->subtype() != Segment::SegChordRest; s = s->next())
-                                          ;
-                                    }
-                              }
-                        else {
-                              for (s = first(); s && s->tick() < t; s = s->next())
-                                    ;
-                              if (s) {
-                                    if (st == Segment::SegChordRest) {
-                                          while (s && s->subtype() != st && s->tick() == t) {
-                                                if (s->subtype() == Segment::SegEndBarLine)
-                                                      break;
-                                                s = s->next();
-                                                }
-                                          }
-                                    else {
-                                          while (s && s->subtype() <= st) {
-                                                if (s->next() && s->next()->tick() != t)
-                                                      break;
-                                                s = s->next();
-                                                }
-                                          //
-                                          // place breath _after_ chord
-                                          //
-                                          if (s && st == Segment::SegBreath)
-                                                s = s->next();
+                        for (s = first(); s && s->tick() < t; s = s->next())
+                              ;
+                        if (s) {
+                              if (st == Segment::SegChordRest) {
+                                    while (s && s->subtype() != st && s->tick() == t) {
+                                          if (s->subtype() == Segment::SegEndBarLine)
+                                                break;
+                                          s = s->next();
                                           }
                                     }
+                              else {
+                                    while (s && s->subtype() <= st) {
+                                          if (s->next() && s->next()->tick() != t)
+                                                break;
+                                          s = s->next();
+                                          }
+                                    //
+                                    // place breath _after_ chord
+                                    //
+                                    if (s && st == Segment::SegBreath)
+                                          s = s->next();
+                                    }
                               }
-                        seg->setParent(this);
-                        _segments.insert(seg, s);
                         }
+                  seg->setParent(this);
+                  _segments.insert(seg, s);
                   if ((seg->subtype() == Segment::SegTimeSig) && seg->element(0)) {
 #if 0
                         Fraction nfraction(static_cast<TimeSig*>(seg->element(0))->getSig());

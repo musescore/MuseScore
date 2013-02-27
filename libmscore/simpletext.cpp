@@ -377,6 +377,13 @@ void SimpleText::endEdit()
                   _text += "\n";
             _text += tl.text;
             }
+      if (links()) {
+            foreach(Element* e, *links()) {
+                  if (e == this)
+                        continue;
+                  e->undoChangeProperty(P_TEXT, _text);
+                  }
+            }
       }
 
 //---------------------------------------------------------
