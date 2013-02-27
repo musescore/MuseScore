@@ -494,8 +494,11 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
                         }
                   if (!m || m->type() == Element::MEASURE)
                         break;
-                  while (m->type() != Element::MEASURE)
+                  while (m->type() != Element::MEASURE) {
                         m = m->next();
+                        if (!m)
+                              break;
+                        }
                   fm1 = static_cast<Measure*>(m);
                   if (fm1 == 0)
                         break;
