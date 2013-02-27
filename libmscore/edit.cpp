@@ -1172,20 +1172,28 @@ void Score::deleteItem(Element* el)
                   BarLine* bl  = static_cast<BarLine*>(el);
                   if (bl->parent()->type() != Element::SEGMENT)
                         break;
-                  Segment* seg = static_cast<Segment*>(bl->parent());
-                  Measure* m   = seg->measure();
-                  if (seg->subtype() == Segment::SegStartRepeatBarLine)
-                        undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatStart);
-                  else if (seg->subtype() == Segment::SegBarLine)
-                        undoRemoveElement(el);
-                  else if (seg->subtype() == Segment::SegEndBarLine) {
-                        if (m->endBarLineType() != NORMAL_BAR) {
-                              undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatEnd);
-                              Measure* nm = m->nextMeasure();
-                              if (nm)
-                                    undoChangeRepeatFlags(nm, nm->repeatFlags() & ~RepeatStart);
-                              undoChangeEndBarLineType(m, NORMAL_BAR);
-                              m->setEndBarLineGenerated(true);
+                  Segment* seg   = static_cast<Segment*>(bl->parent());
+                  bool normalBar = seg->measure()->endBarLineType() == NORMAL_BAR;
+                  int tick       = seg->tick();
+                  Segment::SegmentType segType = seg->subtype();
+
+                  foreach(Score* score, scoreList()) {
+                        Measure* m   = score->tick2measure(tick);
+                        if (m->tick() >= tick)
+                              m = m->prevMeasure();
+                        if (segType == Segment::SegStartRepeatBarLine)
+                              undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatStart);
+                        else if (segType == Segment::SegBarLine)
+                              undoRemoveElement(el);
+                        else if (segType == Segment::SegEndBarLine) {
+                              if (!normalBar) {
+                                    undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatEnd);
+                                    Measure* nm = m->nextMeasure();
+                                    if (nm)
+                                          undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
+                                    undoChangeEndBarLineType(m, NORMAL_BAR);
+                                    m->setEndBarLineGenerated(true);
+                                    }
                               }
                         }
                   }

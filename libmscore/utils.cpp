@@ -41,11 +41,11 @@ QRectF handleRect(const QPointF& pos)
 
 Measure* Score::tick2measure(int tick) const
       {
+      Measure* lm = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            int st = m->tick();
-            int l  = m->ticks();
-            if (tick >= st && tick < (st+l))
-                  return m;
+            if (tick < m->tick())
+                  return lm;
+            lm = m;
             }
       if (firstMeasure() && (tick == lastMeasure()->tick() + lastMeasure()->ticks()))
             return lastMeasure();

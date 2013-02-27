@@ -21,6 +21,7 @@
 
 struct PropertyData {
       P_ID id;
+      bool link;              // change for linked elements
       const char* name;       // xml name of property
       P_TYPE type;
       };
@@ -30,110 +31,115 @@ struct PropertyData {
 //
 //
 static const PropertyData propertyList[] = {
-      { P_SUBTYPE,             "subtype",       T_INT   },
-      { P_SELECTED,            "selected",      T_BOOL  },
-      { P_COLOR,               "color",         T_COLOR },
-      { P_VISIBLE,             "visible",       T_BOOL  },
-      { P_SMALL,               "small",         T_BOOL  },
-      { P_SHOW_COURTESY,       "",              T_INT   },
-      { P_LINE_TYPE,           "",              T_INT   },
-      { P_PITCH,               "pitch",         T_INT },
-      { P_TPC,                 "tpc",           T_INT },
-      { P_HEAD_TYPE,           "headType",      T_INT },
+      { P_SUBTYPE,             false, "subtype",       T_INT   },
+      { P_SELECTED,            false, "selected",      T_BOOL  },
+      { P_COLOR,               false, "color",         T_COLOR },
+      { P_VISIBLE,             false, "visible",       T_BOOL  },
+      { P_SMALL,               false, "small",         T_BOOL  },
+      { P_SHOW_COURTESY,       false, "",              T_INT   },
+      { P_LINE_TYPE,           false, "",              T_INT   },
+      { P_PITCH,               false, "pitch",         T_INT },
+      { P_TPC,                 false, "tpc",           T_INT },
+      { P_HEAD_TYPE,           false, "headType",      T_INT },
 
-      { P_HEAD_GROUP,          "head",          T_INT },
-      { P_VELO_TYPE,           "veloType",      T_VALUE_TYPE },
-      { P_VELO_OFFSET,         "velocity",      T_INT },
-      { P_ARTICULATION_ANCHOR, "",              T_INT },
-      { P_DIRECTION,           "direction",     T_DIRECTION },
-      { P_STEM_DIRECTION,      "StemDirection", T_DIRECTION },
-      { P_NO_STEM,             "",              T_INT },
-      { P_SLUR_DIRECTION,      "",              T_INT },
-      { P_LEADING_SPACE,       "",              T_INT },
-      { P_TRAILING_SPACE,      "",              T_INT },
+      { P_HEAD_GROUP,          false, "head",          T_INT },
+      { P_VELO_TYPE,           false, "veloType",      T_VALUE_TYPE },
+      { P_VELO_OFFSET,         false, "velocity",      T_INT },
+      { P_ARTICULATION_ANCHOR, false, "",              T_INT },
+      { P_DIRECTION,           false, "direction",     T_DIRECTION },
+      { P_STEM_DIRECTION,      false, "StemDirection", T_DIRECTION },
+      { P_NO_STEM,             false, "",              T_INT },
+      { P_SLUR_DIRECTION,      false, "",              T_INT },
+      { P_LEADING_SPACE,       false, "",              T_INT },
+      { P_TRAILING_SPACE,      false, "",              T_INT },
 
-      { P_DISTRIBUTE,          "distribute",    T_BOOL },
-      { P_MIRROR_HEAD,         "mirror",        T_DIRECTION_H },
-      { P_DOT_POSITION,        "dotPosition",   T_DIRECTION },
-      { P_TUNING,              "tuning",        T_REAL },
-      { P_PAUSE,               "pause",         T_REAL },
-      { P_BARLINE_SPAN,        "",              T_INT },
-      { P_USER_OFF,            0,               T_POINT },
-      { P_FRET,                "fret",          T_INT   },
+      { P_DISTRIBUTE,          false, "distribute",    T_BOOL },
+      { P_MIRROR_HEAD,         false, "mirror",        T_DIRECTION_H },
+      { P_DOT_POSITION,        false, "dotPosition",   T_DIRECTION },
+      { P_TUNING,              false, "tuning",        T_REAL },
+      { P_PAUSE,               false, "pause",         T_REAL },
+      { P_BARLINE_SPAN,        false, "",              T_INT },
+      { P_USER_OFF,            false, 0,               T_POINT },
+      { P_FRET,                false, "fret",          T_INT   },
 
-      { P_STRING,              "string",        T_INT   },
-      { P_GHOST,               "ghost",         T_BOOL  },
-      { P_TIMESIG_NOMINAL,     0,               T_FRACTION },
-      { P_TIMESIG_ACTUAL,      0,               T_FRACTION },
-      { P_NUMBER_TYPE,         "numberType",    T_INT   },
-      { P_BRACKET_TYPE,        "bracketType",   T_INT   },
-      { P_NORMAL_NOTES,        "normalNotes",   T_INT   },
-      { P_ACTUAL_NOTES,        "actualNotes",   T_INT   },
-      { P_P1,                  "p1",            T_POINT },
-      { P_P2,                  "p2",            T_POINT },
+      { P_STRING,              false, "string",        T_INT   },
+      { P_GHOST,               false, "ghost",         T_BOOL  },
+      { P_TIMESIG_NOMINAL,     false, 0,               T_FRACTION },
+      { P_TIMESIG_ACTUAL,      false, 0,               T_FRACTION },
+      { P_NUMBER_TYPE,         false, "numberType",    T_INT   },
+      { P_BRACKET_TYPE,        false, "bracketType",   T_INT   },
+      { P_NORMAL_NOTES,        false, "normalNotes",   T_INT   },
+      { P_ACTUAL_NOTES,        false, "actualNotes",   T_INT   },
+      { P_P1,                  false, "p1",            T_POINT },
+      { P_P2,                  false, "p2",            T_POINT },
 
-      { P_GROW_LEFT,           "growLeft",      T_REAL  },
-      { P_GROW_RIGHT,          "growRight",     T_REAL  },
-      { P_BOX_HEIGHT,          "height",        T_REAL  },
-      { P_BOX_WIDTH,           "width",         T_REAL  },
-      { P_TOP_GAP,             "topGap",        T_SREAL },
-      { P_BOTTOM_GAP,          "bottomGap",     T_SREAL },
-      { P_LEFT_MARGIN,         "leftMargin",    T_REAL  },
-      { P_RIGHT_MARGIN,        "rightMargin",   T_REAL  },
-      { P_TOP_MARGIN,          "topMargin",     T_REAL  },
-      { P_BOTTOM_MARGIN,       "bottomMargin",  T_REAL  },
+      { P_GROW_LEFT,           false, "growLeft",      T_REAL  },
+      { P_GROW_RIGHT,          false, "growRight",     T_REAL  },
+      { P_BOX_HEIGHT,          false, "height",        T_REAL  },
+      { P_BOX_WIDTH,           false, "width",         T_REAL  },
+      { P_TOP_GAP,             false, "topGap",        T_SREAL },
+      { P_BOTTOM_GAP,          false, "bottomGap",     T_SREAL },
+      { P_LEFT_MARGIN,         false, "leftMargin",    T_REAL  },
+      { P_RIGHT_MARGIN,        false, "rightMargin",   T_REAL  },
+      { P_TOP_MARGIN,          false, "topMargin",     T_REAL  },
+      { P_BOTTOM_MARGIN,       false, "bottomMargin",  T_REAL  },
 
-      { P_LAYOUT_BREAK,        "subtype",       T_LAYOUT_BREAK },
-      { P_AUTOSCALE,           "autoScale",     T_BOOL   },
-      { P_SIZE,                "size",            T_SIZE },
-      { P_SCALE,               0,                 T_SCALE  },
-      { P_LOCK_ASPECT_RATIO,   "lockAspectRatio", T_BOOL },
-      { P_SIZE_IS_SPATIUM,     "sizeIsSpatium",   T_BOOL },
+      { P_LAYOUT_BREAK,        false, "subtype",       T_LAYOUT_BREAK },
+      { P_AUTOSCALE,           false, "autoScale",     T_BOOL   },
+      { P_SIZE,                false, "size",            T_SIZE },
+      { P_SCALE,               false, 0,                 T_SCALE  },
+      { P_LOCK_ASPECT_RATIO,   false, "lockAspectRatio", T_BOOL },
+      { P_SIZE_IS_SPATIUM,     false, "sizeIsSpatium",   T_BOOL },
 
-      { P_TEXT_STYLE,          "textStyle",       T_INT  },
-      { P_TEXT,                0,               T_STRING },
-      { P_HTML_TEXT,           0,               T_STRING },
+      { P_TEXT_STYLE,          false, "textStyle",       T_INT  },
+      { P_TEXT,                false, 0,               T_STRING },
+      { P_HTML_TEXT,           false, 0,               T_STRING },
 
-      { P_USER_MODIFIED,       0,               T_BOOL   },
-      { P_BEAM_POS,            0,               T_POINT  },
-      { P_BEAM_MODE,           "BeamMode",      T_BEAM_MODE  },
+      { P_USER_MODIFIED,       false, 0,               T_BOOL   },
+      { P_BEAM_POS,            false, 0,               T_POINT  },
+      { P_BEAM_MODE,           false, "BeamMode",      T_BEAM_MODE  },
 
-      { P_USER_LEN,            "",              T_REAL   },
-      { P_SPACE,               "space",         T_REAL   },
-      { P_TEMPO,               "tempo",         T_REAL   },
-      { P_TEMPO_FOLLOW_TEXT,   "followText",    T_BOOL   },
-      { P_ACCIDENTAL_BRACKET,  "bracket",       T_BOOL   },
-      { P_NUMERATOR_STRING,    "textN",         T_STRING },
-      { P_DENOMINATOR_STRING,  "textD",         T_STRING },
-      { P_SHOW_NATURALS,       "showNaturals",  T_BOOL   },
-      { P_BREAK_HINT,          "",              T_BOOL   },
-      { P_FBPREFIX,            "prefix",        T_INT    },
+      { P_USER_LEN,            false, "",              T_REAL   },
+      { P_SPACE,               false, "space",         T_REAL   },
+      { P_TEMPO,               false, "tempo",         T_REAL   },
+      { P_TEMPO_FOLLOW_TEXT,   false, "followText",    T_BOOL   },
+      { P_ACCIDENTAL_BRACKET,  false, "bracket",       T_BOOL   },
+      { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
+      { P_DENOMINATOR_STRING,  false, "textD",         T_STRING },
+      { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
+      { P_BREAK_HINT,          false, "",              T_BOOL   },
+      { P_FBPREFIX,            false, "prefix",        T_INT    },
 
-      { P_FBDIGIT,             "digit",         T_INT    },
-      { P_FBSUFFIX,            "suffix",        T_INT    },
-      { P_FBCONTINUATIONLINE,  "continuationLine", T_INT },
-      { P_FBPARENTHESIS1,      "",              T_INT    },
-      { P_FBPARENTHESIS2,      "",              T_INT    },
-      { P_FBPARENTHESIS3,      "",              T_INT    },
-      { P_FBPARENTHESIS4,      "",              T_INT    },
-      { P_FBPARENTHESIS5,      "",              T_INT    },
-      { P_VOLTA_TYPE,          "",              T_INT    },
-      { P_OTTAVA_TYPE,         "",              T_INT    },
+      { P_FBDIGIT,             false, "digit",         T_INT    },
+      { P_FBSUFFIX,            false, "suffix",        T_INT    },
+      { P_FBCONTINUATIONLINE,  false, "continuationLine", T_INT },
+      { P_FBPARENTHESIS1,      false, "",              T_INT    },
+      { P_FBPARENTHESIS2,      false, "",              T_INT    },
+      { P_FBPARENTHESIS3,      false, "",              T_INT    },
+      { P_FBPARENTHESIS4,      false, "",              T_INT    },
+      { P_FBPARENTHESIS5,      false, "",              T_INT    },
+      { P_VOLTA_TYPE,          false, "",              T_INT    },
+      { P_OTTAVA_TYPE,         false, "",              T_INT    },
 
-      { P_TRILL_TYPE,          "",              T_INT    },
-      { P_HAIRPIN_TYPE,        "",              T_INT    },
-      { P_VELO_CHANGE,         "",              T_INT    },
-      { P_DYNAMIC_RANGE,       "dynType",       T_INT    },
-      { P_PLACEMENT,           "placement",     T_PLACEMENT    },
-      { P_VELOCITY,            "velocity",      T_INT    },
+      { P_TRILL_TYPE,          false, "",              T_INT    },
+      { P_HAIRPIN_TYPE,        false, "",              T_INT    },
+      { P_VELO_CHANGE,         false, "",              T_INT    },
+      { P_DYNAMIC_RANGE,       false, "dynType",       T_INT    },
+      { P_PLACEMENT,           false, "placement",     T_PLACEMENT    },
+      { P_VELOCITY,            false, "velocity",      T_INT    },
 
-      { P_JUMP_TO,             "jumpTo",        T_STRING },
-      { P_PLAY_UNTIL,          "playUntil",     T_STRING },
-      { P_CONTINUE_AT,         "continueAt",    T_STRING },
-      { P_LABEL,               "label",         T_STRING },
-      { P_MARKER_TYPE,         0,               T_INT    },
+      { P_JUMP_TO,             false, "jumpTo",        T_STRING },
+      { P_PLAY_UNTIL,          false, "playUntil",     T_STRING },
+      { P_CONTINUE_AT,         false, "continueAt",    T_STRING },
+      { P_LABEL,               false, "label",         T_STRING },
+      { P_MARKER_TYPE,         false, 0,               T_INT    },
 
-      { P_END,                 "",              T_INT    }
+      { P_ARP_USER_LEN1,       false, 0,               T_REAL   },
+      { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
+
+      { P_REPEAT_FLAGS,        false, 0,               T_INT    },
+
+      { P_END,                 false, "",              T_INT    }
       };
 
 //---------------------------------------------------------
@@ -143,6 +149,15 @@ static const PropertyData propertyList[] = {
 P_TYPE propertyType(P_ID id)
       {
       return propertyList[id].type;
+      }
+
+//---------------------------------------------------------
+//   propertyLink
+//---------------------------------------------------------
+
+bool propertyLink(P_ID id)
+      {
+      return propertyList[id].link;
       }
 
 //---------------------------------------------------------

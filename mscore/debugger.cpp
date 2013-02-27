@@ -301,9 +301,8 @@ void Debugger::updateList(Score* s)
                               new ElementItem(si, in);
                         }
 
-                  foreach (MeasureBase* mb, system->measures()) {
+                  for (MeasureBase* mb = system->measures().front(); mb; mb = mb->next()) {
                         ElementItem* mi = new ElementItem(si, mb);
-
                         addMeasureBaseToList(mi, mb);
 
                         if (mb->type() != Element::MEASURE)
@@ -429,6 +428,8 @@ void Debugger::updateList(Score* s)
                                     }
 #endif
                               }
+                        if (mb == system->measures().back())
+                              break;
 #if 0 // TODOxxx
                         foreach(Tuplet* tuplet, *measure->tuplets()) {
 					ElementItem* item = new ElementItem(mi, tuplet);

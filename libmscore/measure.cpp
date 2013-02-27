@@ -2631,15 +2631,6 @@ void Measure::setEndBarLineType(BarLineType val, bool g, bool visible, QColor co
       }
 
 //---------------------------------------------------------
-//   setRepeatFlags
-//---------------------------------------------------------
-
-void Measure::setRepeatFlags(int val)
-      {
-      _repeatFlags = val;
-      }
-
-//---------------------------------------------------------
 //   sortStaves
 //---------------------------------------------------------
 
@@ -3689,6 +3680,9 @@ QVariant Measure::getProperty(P_ID propertyId) const
             case P_TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
                   break;
+            case P_REPEAT_FLAGS:
+                  return repeatFlags();
+                  break;
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -3706,6 +3700,9 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
                   break;
             case P_TIMESIG_ACTUAL:
                   _len = value.value<Fraction>();
+                  break;
+            case P_REPEAT_FLAGS:
+                  setRepeatFlags(value.toInt());
                   break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
