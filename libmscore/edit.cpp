@@ -1212,7 +1212,13 @@ void Score::cmdDeleteSelectedMeasures()
       MeasureBase* is   = selection().startSegment()->measure();
       int startIdx      = measureIdx(is);
       Segment* seg      = selection().endSegment();
-      MeasureBase* ie   = seg ? seg->measure() : lastMeasure();
+      MeasureBase* ie;
+      // choose the correct last measure based on the end segment
+      // this depends on whether a whole measure is selected or only a few notes within it
+      if (seg)
+            ie = !seg->prev() ? seg->measure()->prev() : seg->measure();
+      else
+            ie = lastMeasure();
       int endIdx        = measureIdx(ie);
 
       // createEndBar if last measure is deleted
