@@ -84,6 +84,10 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(MuseScoreView*, const QPointF&)
       {
       editMode = true;
+      if (type() == HBOX)
+            undoPushProperty(P_BOX_WIDTH);
+      else
+            undoPushProperty(P_BOX_HEIGHT);
       }
 
 //---------------------------------------------------------

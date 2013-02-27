@@ -604,6 +604,7 @@ void Text::startEdit(MuseScoreView* view, const QPointF& p)
             SimpleText::startEdit(view, p);
             return;
             }
+      undoPushProperty(P_HTML_TEXT);
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
       setCursor(p);
@@ -1373,6 +1374,14 @@ void Text::endEdit()
       else {
             endCursorEdit();
             layoutEdit();
+
+            if (links()) {
+                  foreach(Element* e, *links()) {
+                        if (e == this)
+                              continue;
+                        e->undoChangeProperty(P_HTML_TEXT, getHtml());
+                        }
+                  }
             }
       }
 
@@ -1435,6 +1444,8 @@ QVariant Text::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_TEXT_STYLE:
                   return QVariant(_styleIndex);
+            case P_HTML_TEXT:
+                  return getHtml();
             case P_TEXT:
                   return text();
 
@@ -1458,6 +1469,9 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_TEXT:
                   setText(v.toString());
+                  break;
+            case P_HTML_TEXT:
+                  setHtml(v.toString());
                   break;
             default:
                   rv = Element::setProperty(propertyId, v);

@@ -89,7 +89,11 @@ static const PropertyData propertyList[] = {
       { P_SCALE,               0,                 T_SCALE  },
       { P_LOCK_ASPECT_RATIO,   "lockAspectRatio", T_BOOL },
       { P_SIZE_IS_SPATIUM,     "sizeIsSpatium",   T_BOOL },
+
       { P_TEXT_STYLE,          "textStyle",       T_INT  },
+      { P_TEXT,                0,               T_STRING },
+      { P_HTML_TEXT,           0,               T_STRING },
+
       { P_USER_MODIFIED,       0,               T_BOOL   },
       { P_BEAM_POS,            0,               T_POINT  },
       { P_BEAM_MODE,           "BeamMode",      T_BEAM_MODE  },
@@ -126,6 +130,8 @@ static const PropertyData propertyList[] = {
       { P_JUMP_TO,             "jumpTo",        T_STRING },
       { P_PLAY_UNTIL,          "playUntil",     T_STRING },
       { P_CONTINUE_AT,         "continueAt",    T_STRING },
+      { P_LABEL,               "label",         T_STRING },
+      { P_MARKER_TYPE,         0,               T_INT    },
 
       { P_END,                 "",              T_INT    }
       };
