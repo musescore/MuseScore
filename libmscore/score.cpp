@@ -2814,7 +2814,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int etick = tick + m->ticks();
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStartSegment(m->tick2segment(tick, true));
-                        _selection.setEndSegment(tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         }
                   else {
                         select(0, SELECT_SINGLE, 0);
@@ -2853,10 +2853,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
-                        //_selection.setStartSegment(m->tick2segment(tick, true));
-                        _selection.setStartSegment(m->first());
-                        // _selection.setEndSegment(tick2segment(etick, true));
-                        _selection.setEndSegment(m->last());
+                        _selection.setStartSegment(m->tick2segment(tick, true));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                         }
                   else if (_selection.state() == SEL_RANGE) {
                         if (staffIdx < _selection.staffStart())
@@ -2868,14 +2866,14 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               activeIsFirst = true;
                               }
                         else if (etick >= _selection.tickEnd())
-                              _selection.setEndSegment(tick2segment(etick, true));
+                              _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                         else {
                               if (_selection.activeSegment() == _selection.startSegment()) {
                                     _selection.setStartSegment(m->tick2segment(tick, true));
                                     activeIsFirst = true;
                                     }
                               else
-                                    _selection.setEndSegment(tick2segment(etick, true));
+                                    _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                               }
                         }
                   else if (_selection.isSingle()) {
