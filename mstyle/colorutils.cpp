@@ -182,7 +182,11 @@ QColor ColorUtils::tint(const QColor& base, const QColor& color, qreal amount) {
             return base;
       if (amount >= 1.0)
             return color;
+#ifdef Q_WS_MAC
+      if (isnan(amount))
+#else      
       if (std::isnan(amount))
+#endif
             return base;
 
       double ri = contrastRatio(base, color);
@@ -210,7 +214,11 @@ QColor ColorUtils::mix(const QColor& c1, const QColor& c2, qreal bias) {
             return c1;
       if (bias >= 1.0)
             return c2;
+#ifdef Q_WS_MAC
+      if (isnan(bias))
+#else      
       if (std::isnan(bias))
+#endif
             return c1;
 
       qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
