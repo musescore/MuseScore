@@ -171,8 +171,6 @@ class MusicXml {
       TextLine* dashes[MAX_DASHES];
 
       Tie* tie;
-      int voice;
-      int move;
       Volta* lastVolta;
 
       QDomDocument* doc;
@@ -228,7 +226,7 @@ class MusicXml {
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QDomElement node);
+      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, int& currentVoice, QDomElement node);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
 
