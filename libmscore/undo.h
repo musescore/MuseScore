@@ -381,20 +381,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeRepeatFlags
-//---------------------------------------------------------
-
-class ChangeRepeatFlags : public UndoCommand {
-      Measure* measure;
-      int flags;
-      void flip();
-
-   public:
-      ChangeRepeatFlags(Measure*, int flags);
-      UNDO_NAME("ChangeRepeatFlags");
-      };
-
-//---------------------------------------------------------
 //   ChangeVoltaEnding
 //---------------------------------------------------------
 

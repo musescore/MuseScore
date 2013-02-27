@@ -130,6 +130,8 @@ enum P_ID {
       P_ARP_USER_LEN1,
       P_ARP_USER_LEN2,
 
+      P_REPEAT_FLAGS,
+
       P_END
       };
 
@@ -156,6 +158,7 @@ enum P_TYPE {
 extern QVariant getProperty(P_ID type, XmlReader& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
+extern bool propertyLink(P_ID id);
 
 #endif
 

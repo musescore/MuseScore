@@ -337,8 +337,16 @@ void SaveState::redo()
 
 void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st)
       {
-      if (e->getProperty(t) != st)
-            undo(new ChangeProperty(e, t, st));
+      if (propertyLink(t) && e->links()) {
+            foreach(Element* e, *e->links()) {
+                  if (e->getProperty(t) != st)
+                        undo(new ChangeProperty(e, t, st));
+                  }
+            }
+      else {
+            if (e->getProperty(t) != st)
+                  undo(new ChangeProperty(e, t, st));
+            }
       }
 
 //---------------------------------------------------------
@@ -674,15 +682,6 @@ void Score::undoInsertStaff(Staff* staff, int idx)
 void Score::undoMove(Element* e, const QPointF& pt)
       {
       undo(new MoveElement(e, pt));
-      }
-
-//---------------------------------------------------------
-//   undoChangeRepeatFlags
-//---------------------------------------------------------
-
-void Score::undoChangeRepeatFlags(Measure* m, int flags)
-      {
-      undo(new ChangeRepeatFlags(m, flags));
       }
 
 //---------------------------------------------------------
@@ -1786,25 +1785,6 @@ void ChangeMeasureLen::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeRepeatFlags
-//---------------------------------------------------------
-
-ChangeRepeatFlags::ChangeRepeatFlags(Measure* m, int f)
-      {
-      measure = m;
-      flags   = f;
-      }
-
-void ChangeRepeatFlags::flip()
-      {
-      int tmp = measure->repeatFlags();
-      measure->setRepeatFlags(flags);
-//      measure->score()->setLayout(measure);
-      measure->score()->setLayoutAll(true);
-      flags = tmp;
-      }
-
-//---------------------------------------------------------
 //   ChangeVoltaEnding
 //---------------------------------------------------------
 
@@ -2791,25 +2771,25 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case BROKEN_BAR:
                   case DOTTED_BAR:
                         {
-                        s->undoChangeRepeatFlags(measure, measure->repeatFlags() & ~RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() & ~RepeatEnd);
                         if (nm)
-                              s->undoChangeRepeatFlags(nm, nm->repeatFlags() & ~RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
                         s->undoChangeEndBarLineType(measure, barType);
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
                   case START_REPEAT:
-                        s->undoChangeRepeatFlags(measure, measure->repeatFlags() | RepeatStart);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatStart);
                         break;
                   case END_REPEAT:
-                        s->undoChangeRepeatFlags(measure, measure->repeatFlags() | RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatEnd);
                         if (nm)
-                              s->undoChangeRepeatFlags(nm, nm->repeatFlags() & ~RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
                         break;
                   case END_START_REPEAT:
-                        s->undoChangeRepeatFlags(measure, measure->repeatFlags() | RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatEnd);
                         if (nm)
-                              s->undoChangeRepeatFlags(nm, nm->repeatFlags() | RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() | RepeatStart);
                         break;
                   }
             }
