@@ -50,6 +50,7 @@ class TestParts : public QObject, public MTest
 
    private slots:
       void initTestCase();
+
       void createPart1();
       void createPart2();
 
