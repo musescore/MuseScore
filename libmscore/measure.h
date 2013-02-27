@@ -245,7 +245,7 @@ class Measure : public MeasureBase {
       void createVoice(int track);
       void adjustToLen(Fraction);
       int repeatFlags() const                   { return _repeatFlags; }
-      void setRepeatFlags(int val);
+      void setRepeatFlags(int val)              { _repeatFlags = val;  }
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
       void exchangeVoice(int, int, int, int);
