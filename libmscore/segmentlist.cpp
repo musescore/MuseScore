@@ -78,9 +78,6 @@ void SegmentList::check()
 
 void SegmentList::insert(Segment* e, Segment* el)
       {
-      if (e->score()->undoRedo())
-            qFatal("SegmentList:insert <%s, tick %d> in undo/redo",
-               e->subTypeName(), e->tick());
       if (el == 0)
             push_back(e);
       else if (el == first())
@@ -101,8 +98,6 @@ void SegmentList::insert(Segment* e, Segment* el)
 
 void SegmentList::remove(Segment* el)
       {
-      if (el->score()->undoRedo())
-            qFatal("SegmentList:remove in undo/redo");
       --_size;
       if (el == _first) {
             _first = _first->next();

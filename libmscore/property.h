@@ -83,8 +83,11 @@ enum P_ID {
       P_SCALE,
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
+
       P_TEXT_STYLE,
       P_TEXT,
+      P_HTML_TEXT,
+
       P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
@@ -123,6 +126,9 @@ enum P_ID {
       P_CONTINUE_AT,
       P_LABEL,
       P_MARKER_TYPE,
+
+      P_ARP_USER_LEN1,
+      P_ARP_USER_LEN2,
 
       P_END
       };
