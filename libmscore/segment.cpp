@@ -484,9 +484,9 @@ void Segment::add(Element* el)
             case CHORD:
             case REST:
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d",
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
                            el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track);
+                           score()->sigmap()->pos(tick()), tick(), track, score());
                         ChordRest* cr = static_cast<ChordRest*>(el);
                         ChordRest* cr1  = static_cast<ChordRest*>(_elist[track]);
                         qDebug("   %d/%d -> %d/%d",
