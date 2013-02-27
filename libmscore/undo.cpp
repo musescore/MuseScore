@@ -68,6 +68,7 @@
 #include "fingering.h"
 #include "rehearsalmark.h"
 #include "excerpt.h"
+#include "stafftext.h"
 
 extern Measure* tick2measure(int tick);
 
@@ -767,7 +768,9 @@ void Score::undoAddElement(Element* element)
       // linking:
       //
 
-      if (et == Element::REHEARSAL_MARK) {
+      if ((et == Element::REHEARSAL_MARK)
+         || ((et == Element::STAFF_TEXT) && static_cast<StaffText*>(element)->systemFlag())
+         ) {
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
 
@@ -783,17 +786,17 @@ void Score::undoAddElement(Element* element)
                         ne->setSelected(false);
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
-                  if (element->type() == Element::REHEARSAL_MARK) {
-                        RehearsalMark* d  = static_cast<RehearsalMark*>(element);
-                        Segment* segment  = d->segment();
+                  if (element->type() == Element::REHEARSAL_MARK
+                     || element->type() == Element::STAFF_TEXT
+                     ) {
+                        Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
                         Measure* m        = score->tick2measure(tick);
                         Segment* seg      = m->findSegment(Segment::SegChordRest, tick);
-                        RehearsalMark* nd = static_cast<RehearsalMark*>(ne);
-                        int ntrack        = staffIdx * VOICES + d->voice();
-                        nd->setTrack(ntrack);
-                        nd->setParent(seg);
-                        undo(new AddElement(nd));
+                        int ntrack        = staffIdx * VOICES + element->voice();
+                        ne->setTrack(ntrack);
+                        ne->setParent(seg);
+                        undo(new AddElement(ne));
                         }
                   }
             return;
@@ -836,6 +839,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::VOLTA
          && et != Element::BREATH
          && et != Element::DYNAMIC
+         && et != Element::STAFF_TEXT
          && et != Element::SYMBOL)
             ) {
             undo(new AddElement(element));
@@ -898,41 +902,21 @@ void Score::undoAddElement(Element* element)
                         }
                   undo(new AddElement(na));
                   }
-            else if (element->type() == Element::DYNAMIC) {
-                  Dynamic* d       = static_cast<Dynamic*>(element);
-                  Segment* segment = d->segment();
+            //
+            // elements with Segment as parent
+            //
+            else if (element->type() == Element::SYMBOL
+               || element->type() == Element::IMAGE
+               || element->type() == Element::DYNAMIC
+               || element->type() == Element::STAFF_TEXT) {
+                  Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
                   Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
-                  Dynamic* nd      = static_cast<Dynamic*>(ne);
-                  int ntrack       = staffIdx * VOICES + d->voice();
-                  nd->setTrack(ntrack);
-                  nd->setParent(seg);
-                  undo(new AddElement(nd));
-                  }
-            else if (element->type() == Element::SYMBOL) {
-                  Symbol* d        = static_cast<Symbol*>(element);
-                  Segment* segment = d->segment();
-                  int tick         = segment->tick();
-                  Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
-                  Symbol* nd       = static_cast<Symbol*>(ne);
-                  int ntrack       = staffIdx * VOICES + d->voice();
-                  nd->setTrack(ntrack);
-                  nd->setParent(seg);
-                  undo(new AddElement(nd));
-                  }
-            else if (element->type() == Element::IMAGE) {
-                  Image* d         = static_cast<Image*>(element);
-                  Segment* segment = d->segment();
-                  int tick         = segment->tick();
-                  Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
-                  Image* nd        = static_cast<Image*>(ne);
-                  int ntrack       = staffIdx * VOICES + d->voice();
-                  nd->setTrack(ntrack);
-                  nd->setParent(seg);
-                  undo(new AddElement(nd));
+                  int ntrack       = staffIdx * VOICES + element->voice();
+                  ne->setTrack(ntrack);
+                  ne->setParent(seg);
+                  undo(new AddElement(ne));
                   }
             else if (element->type() == Element::SLUR) {
                   Slur* slur     = static_cast<Slur*>(element);
