@@ -4243,13 +4243,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (!arpeggioType.isEmpty()) {
             Arpeggio* a = new Arpeggio(score);
             if (arpeggioType == "none")
-                  a->setSubtype(ARP_NORMAL);
+                  a->setSubtype(ArpeggioType::NORMAL);
             else if (arpeggioType == "up")
-                  a->setSubtype(ARP_UP);
+                  a->setSubtype(ArpeggioType::UP);
             else if (arpeggioType == "down")
-                  a->setSubtype(ARP_DOWN);
+                  a->setSubtype(ArpeggioType::DOWN);
             else if (arpeggioType == "non-arpeggiate")
-                  a->setSubtype(ARP_BRACKET);
+                  a->setSubtype(ArpeggioType::BRACKET);
             else {
                   qDebug("unknown arpeggio type %s", arpeggioType.toLatin1().data());
                   delete a;

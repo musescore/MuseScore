@@ -1806,11 +1806,11 @@ void OveToMScore::convertArticulation(
         // there can be only one
         if (!(static_cast<Chord*>(cr))->arpeggio()) {
         	Arpeggio* a = new Arpeggio(score_);
-        	a->setSubtype(ARP_NORMAL);
+        	a->setSubtype(ArpeggioType::NORMAL);
 /*      	if (art->getPlacementAbove()){
-				a->setSubtype(ARP_UP);
+				a->setSubtype(ArpeggioType::UP);
 			}else {
-				a->setSubtype(ARP_DOWN);
+				a->setSubtype(ARpeggioType::DOWN);
 			}*/
             cr->add(a);
         }

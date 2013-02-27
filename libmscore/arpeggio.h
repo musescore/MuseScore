@@ -19,8 +19,8 @@
 class Chord;
 class QPainter;
 
-enum ArpeggioType {
-      ARP_NORMAL, ARP_UP, ARP_DOWN, ARP_BRACKET, ARP_UP_STRAIGHT, ARP_DOWN_STRAIGHT
+enum class ArpeggioType {
+      NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
       };
 
 //---------------------------------------------------------
