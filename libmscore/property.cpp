@@ -47,7 +47,7 @@ static const PropertyData propertyList[] = {
       { P_VELO_OFFSET,         false, "velocity",      T_INT },
       { P_ARTICULATION_ANCHOR, false, "",              T_INT },
       { P_DIRECTION,           false, "direction",     T_DIRECTION },
-      { P_STEM_DIRECTION,      false, "StemDirection", T_DIRECTION },
+      { P_STEM_DIRECTION,      true,  "StemDirection", T_DIRECTION },
       { P_NO_STEM,             false, "",              T_INT },
       { P_SLUR_DIRECTION,      false, "",              T_INT },
       { P_LEADING_SPACE,       false, "",              T_INT },
