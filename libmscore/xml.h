@@ -77,6 +77,7 @@ class XmlReader : public QXmlStreamReader {
       void addSpanner(Spanner* s) { _spanner.append(s); }
       void addTuplet(Tuplet* s);
       void addBeam(Beam* s)       { _beams.append(s); }
+      void removeSpanner(Spanner* s) { _spanner.removeOne(s); }
 
       Spanner* findSpanner(int) const;
       Beam* findBeam(int) const;

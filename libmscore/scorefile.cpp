@@ -978,6 +978,7 @@ bool Score::read(XmlReader& e)
                                     ChordRest* cr = static_cast<ChordRest*>(s->endElement());
                                     cr->removeSpannerBack(s);
                                     }
+                              e.removeSpanner(s);
                               delete s;
                               break;
 
