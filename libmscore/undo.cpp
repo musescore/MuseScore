@@ -800,8 +800,8 @@ void Score::undoAddElement(Element* element)
             }
 
       if (et == Element::FINGERING
-         || et == Element::IMAGE
-         || et == Element::SYMBOL
+         || (et == Element::IMAGE  && element->parent()->type() != Element::SEGMENT)
+         || (et == Element::SYMBOL && element->parent()->type() != Element::SEGMENT)
          || et == Element::NOTE
             ) {
             Element* parent       = element->parent();
@@ -835,7 +835,8 @@ void Score::undoAddElement(Element* element)
          && et != Element::TEXTLINE
          && et != Element::VOLTA
          && et != Element::BREATH
-         && et != Element::DYNAMIC)
+         && et != Element::DYNAMIC
+         && et != Element::SYMBOL)
             ) {
             undo(new AddElement(element));
             return;
@@ -904,6 +905,30 @@ void Score::undoAddElement(Element* element)
                   Measure* m       = score->tick2measure(tick);
                   Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
                   Dynamic* nd      = static_cast<Dynamic*>(ne);
+                  int ntrack       = staffIdx * VOICES + d->voice();
+                  nd->setTrack(ntrack);
+                  nd->setParent(seg);
+                  undo(new AddElement(nd));
+                  }
+            else if (element->type() == Element::SYMBOL) {
+                  Symbol* d        = static_cast<Symbol*>(element);
+                  Segment* segment = d->segment();
+                  int tick         = segment->tick();
+                  Measure* m       = score->tick2measure(tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
+                  Symbol* nd       = static_cast<Symbol*>(ne);
+                  int ntrack       = staffIdx * VOICES + d->voice();
+                  nd->setTrack(ntrack);
+                  nd->setParent(seg);
+                  undo(new AddElement(nd));
+                  }
+            else if (element->type() == Element::IMAGE) {
+                  Image* d         = static_cast<Image*>(element);
+                  Segment* segment = d->segment();
+                  int tick         = segment->tick();
+                  Measure* m       = score->tick2measure(tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
+                  Image* nd        = static_cast<Image*>(ne);
                   int ntrack       = staffIdx * VOICES + d->voice();
                   nd->setTrack(ntrack);
                   nd->setParent(seg);
