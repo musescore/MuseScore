@@ -1832,21 +1832,20 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
 
 static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations& notations)
       {
-      int st = arp->subtype();
-      switch (st) {
-            case 0:
+      switch (arp->subtype()) {
+            case ArpeggioType::NORMAL:
                   notations.tag(xml);
                   xml.tagE("arpeggiate");
                   break;
-            case 1:
+            case ArpeggioType::UP:
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"up\"");
                   break;
-            case 2:
+            case ArpeggioType::DOWN:
                   notations.tag(xml);
                   xml.tagE("arpeggiate direction=\"down\"");
                   break;
-            case 3:
+            case ArpeggioType::BRACKET:
                   if (front) {
                         notations.tag(xml);
                         xml.tagE("non-arpeggiate type=\"bottom\"");
@@ -1857,7 +1856,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations
                         }
                   break;
             default:
-                  qDebug("unknown arpeggio subtype %d\n", st);
+                  qDebug("unknown arpeggio subtype %d\n", int(arp->subtype()));
                   break;
             }
       }
