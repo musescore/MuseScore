@@ -635,7 +635,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             int l = 1000 / notes;
 
             int start, end, step;
-            bool up = chord->arpeggio()->subtype() != ARP_DOWN;
+            bool up = chord->arpeggio()->subtype() != ArpeggioType::DOWN;
             if (up) {
                   start = 0;
                   end   = notes;

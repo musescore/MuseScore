@@ -2877,7 +2877,7 @@ bool ExportLy::arpeggioTest(Chord* chord)
   if (chord->arpeggio())
     {
       arp=true;
-      int subtype = chord->arpeggio()->subtype();
+      int subtype = int(chord->arpeggio()->subtype());
       switch (subtype)
 	{
 	case 0:

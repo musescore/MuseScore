@@ -28,7 +28,7 @@ Arpeggio::Arpeggio(Score* s)
   : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _subtype = ARP_NORMAL;
+      _subtype = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span = 1;
       }
@@ -50,7 +50,7 @@ void Arpeggio::write(Xml& xml) const
       {
       xml.stag("Arpeggio");
       Element::writeProperties(xml);
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", int(_subtype));
       if (_userLen1 != 0.0)
             xml.tag("userLen1", _userLen1 / spatium());
       if (_userLen2 != 0.0)
@@ -90,17 +90,17 @@ void Arpeggio::layout()
       qreal y1 = - _userLen1;
       qreal y2 = _height + _userLen2;
       switch (subtype()) {
-            case ARP_NORMAL:
-            case ARP_UP:
-            case ARP_DOWN:
+            case ArpeggioType::NORMAL:
+            case ArpeggioType::UP:
+            case ArpeggioType::DOWN:
             default:
                   bbox().setRect(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1);
                   return;
-            case ARP_UP_STRAIGHT:
-            case ARP_DOWN_STRAIGHT:
+            case ArpeggioType::UP_STRAIGHT:
+            case ArpeggioType::DOWN_STRAIGHT:
                   bbox().setRect(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1);
                   return;
-            case ARP_BRACKET:
+            case ArpeggioType::BRACKET:
                   {
                   qreal _spatium = spatium();
                   qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
@@ -125,16 +125,18 @@ void Arpeggio::draw(QPainter* p) const
       qreal x1;
       qreal m = magS();
       switch (subtype()) {
-            case ARP_NORMAL:
+            case ArpeggioType::NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
                         symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
-            case ARP_UP:
+
+            case ArpeggioType::UP:
                   symbols[score()->symIdx()][arpeggioarrowupSym].draw(p, m, QPointF(0.0, y1));
                   for (qreal y = y1 + _spatium; y < y2; y += _spatium)
                         symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
-            case ARP_DOWN:
+
+            case ArpeggioType::DOWN:
                   {
                   qreal y = y1;
                   for (; y < y2 - _spatium; y += _spatium)
@@ -142,7 +144,8 @@ void Arpeggio::draw(QPainter* p) const
                   symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, m, QPointF(0.0, y));
                   }
                   break;
-            case ARP_UP_STRAIGHT:
+
+            case ArpeggioType::UP_STRAIGHT:
                   y1-= _spatium * .5;
                   x1 = _spatium * .5;
                   symbols[score()->symIdx()][close11arrowHeadSym].draw(p, m, QPointF(x1, y1 - (_spatium * .5)));
@@ -153,7 +156,8 @@ void Arpeggio::draw(QPainter* p) const
                   p->drawLine(QLineF(x1, y1, x1, y2));
                   p->restore();
                   break;
-            case ARP_DOWN_STRAIGHT:
+
+            case ArpeggioType::DOWN_STRAIGHT:
                   y1-= _spatium;
                   y2-= _spatium * .5;
                   x1 = _spatium * .5;
@@ -165,7 +169,8 @@ void Arpeggio::draw(QPainter* p) const
                   p->drawLine(QLineF(x1, y1, x1, y2));
                   p->restore();
                   break;
-            case ARP_BRACKET:
+
+            case ArpeggioType::BRACKET:
                   {
                   y1 = - _userLen1;
                   y2 = _height + _userLen2;
