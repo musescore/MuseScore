@@ -190,7 +190,7 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
             case P_JUMP_TO:
             case P_PLAY_UNTIL:
             case P_CONTINUE_AT:
-                  return QString();
+                  return QString("");
 
             default:
                   break;

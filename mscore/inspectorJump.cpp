@@ -23,61 +23,18 @@
 InspectorJump::InspectorJump(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
       QWidget* w = new QWidget;
-      iJump.setupUi(w);
+      b.setupUi(w);
       layout->addWidget(w);
-      connect(iJump.jumpTo,     SIGNAL(textChanged(const QString&)), SLOT(apply()));
-      connect(iJump.playUntil,  SIGNAL(textChanged(const QString&)), SLOT(apply()));
-      connect(iJump.continueAt, SIGNAL(textChanged(const QString&)), SLOT(apply()));
-      }
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
+      iList[0] = InspectorItem(P_COLOR,       b.color,      b.resetColor);
+      iList[1] = InspectorItem(P_VISIBLE,     b.visible,    b.resetVisible);
+      iList[2] = InspectorItem(P_USER_OFF, 0, b.offsetX,    b.resetX);
+      iList[3] = InspectorItem(P_USER_OFF, 1, b.offsetY,    b.resetY);
+      iList[4] = InspectorItem(P_JUMP_TO,     b.jumpTo,     b.resetJumpTo);
+      iList[5] = InspectorItem(P_PLAY_UNTIL,  b.playUntil,  b.resetPlayUntil);
+      iList[6] = InspectorItem(P_CONTINUE_AT, b.continueAt, b.resetContinueAt);
 
-void InspectorJump::setElement(Element* e)
-      {
-      Jump* jump = static_cast<Jump*>(e);
-      iElement->setElement(jump);
-
-      iJump.jumpTo->blockSignals(true);
-      iJump.playUntil->blockSignals(true);
-      iJump.continueAt->blockSignals(true);
-
-      iJump.jumpTo->setText(jump->jumpTo());
-      iJump.playUntil->setText(jump->playUntil());
-      iJump.continueAt->setText(jump->continueAt());
-
-      iJump.jumpTo->blockSignals(false);
-      iJump.playUntil->blockSignals(false);
-      iJump.continueAt->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorJump::apply()
-      {
-      Jump* jump = static_cast<Jump*>(inspector->element());
-
-      if (iJump.jumpTo->text() != jump->jumpTo()
-         || iJump.playUntil->text() != jump->playUntil()
-         || iJump.continueAt->text() != jump->continueAt()) {
-            Score* score = jump->score();
-            score->startCmd();
-
-            if (iJump.jumpTo->text() != jump->jumpTo())
-                  score->undoChangeProperty(jump, P_JUMP_TO, iJump.jumpTo->text());
-            if (iJump.playUntil->text() != jump->playUntil())
-                  score->undoChangeProperty(jump, P_PLAY_UNTIL, iJump.playUntil->text());
-            if (iJump.continueAt->text() != jump->continueAt())
-                  score->undoChangeProperty(jump, P_CONTINUE_AT, iJump.continueAt->text());
-
-            score->endCmd();
-            mscore->endCmd();
-            }
+      mapSignals();
       }
 
