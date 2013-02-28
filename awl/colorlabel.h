@@ -29,6 +29,8 @@ namespace Awl {
 
 class ColorLabel : public QFrame {
       Q_OBJECT
+      Q_PROPERTY(QColor color READ color WRITE setColor)
+
       QColor _color;
       QPixmap* _pixmap;
 

@@ -60,7 +60,7 @@ QT4_WRAP_UI (ui_headers
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
-      box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui
+      box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       ${SCRIPT_UI}
       )
 
@@ -92,7 +92,7 @@ QT4_WRAP_CPP (mocs
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
-      inspectorJump.h inspectorMarker.h
+      inspectorJump.h inspectorMarker.h inspectorGlissando.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -197,6 +197,7 @@ add_executable ( ${ExecutableName}
       inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
+      inspectorGlissando.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

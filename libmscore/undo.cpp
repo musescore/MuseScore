@@ -69,6 +69,7 @@
 #include "rehearsalmark.h"
 #include "excerpt.h"
 #include "stafftext.h"
+#include "chordline.h"
 
 extern Measure* tick2measure(int tick);
 
@@ -806,6 +807,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::IMAGE  && element->parent()->type() != Element::SEGMENT)
          || (et == Element::SYMBOL && element->parent()->type() != Element::SEGMENT)
          || et == Element::NOTE
+         || et == Element::GLISSANDO
             ) {
             Element* parent       = element->parent();
             LinkedElements* links = parent->links();
@@ -827,7 +829,9 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      if (ostaff == 0 || (et != Element::ARTICULATION
+      if (ostaff == 0 || (
+         et    != Element::ARTICULATION
+         && et != Element::CHORDLINE
          && et != Element::SLUR
          && et != Element::TIE
          && et != Element::NOTE
@@ -901,6 +905,22 @@ void Score::undoAddElement(Element* element)
                         na->setParent(bl);
                         }
                   undo(new AddElement(na));
+                  }
+            else if (element->type() == Element::CHORDLINE) {
+                  ChordLine* a     = static_cast<ChordLine*>(element);
+                  Segment* segment = a->chord()->segment();
+                  int tick         = segment->tick();
+                  Measure* m       = score->tick2measure(tick);
+                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
+                  if (seg == 0) {
+                        qDebug("undoAddSegment: segment not found");
+                        break;
+                        }
+                  int ntrack    = staffIdx * VOICES + a->voice();
+                  ne->setTrack(ntrack);
+                  ChordRest* ncr = static_cast<ChordRest*>(seg->element(ntrack));
+                  ne->setParent(ncr);
+                  undo(new AddElement(ne));
                   }
             //
             // elements with Segment as parent

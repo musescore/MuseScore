@@ -16,10 +16,15 @@
 
 #include "element.h"
 
-#define GLISS_STRAIGHT  0
-#define GLISS_WAVY      1
-
 class Note;
+
+//---------------------------------------------------------
+//   GlissandoType
+//---------------------------------------------------------
+
+enum class GlissandoType {
+      STRAIGHT, WAVY
+      };
 
 //---------------------------------------------------------
 //   @@ Glissando
@@ -28,17 +33,23 @@ class Note;
 class Glissando : public Element {
       Q_OBJECT
 
-      int _subtype;
+      Q_PROPERTY(GlissandoType subtype READ subtype  WRITE undoSetSubtype)
+      Q_PROPERTY(QString text          READ text     WRITE undoSetText)
+      Q_PROPERTY(bool showText         READ showText WRITE undoSetShowText)
+
+      GlissandoType _subtype;
       QLineF line;
       QString _text;
       bool _showText;
 
    public:
       Glissando(Score* s);
+      Glissando(const Glissando&);
+
       virtual Glissando* clone() const { return new Glissando(*this); }
       virtual ElementType type() const { return GLISSANDO; }
-      int subtype() const    { return _subtype; }
-      void setSubtype(int v) { _subtype = v;    }
+      GlissandoType subtype() const    { return _subtype; }
+      void setSubtype(GlissandoType v) { _subtype = v;    }
       virtual Space space() const;
 
       virtual void draw(QPainter*) const;
@@ -52,6 +63,14 @@ class Glissando : public Element {
       void setText(const QString& t) { _text = t;        }
       bool showText() const          { return _showText; }
       void setShowText(bool v)       { _showText = v;    }
+
+      void undoSetSubtype(GlissandoType);
+      void undoSetText(const QString&);
+      void undoSetShowText(bool);
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 #endif
