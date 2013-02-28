@@ -772,6 +772,8 @@ void Score::undoAddElement(Element* element)
 
       if ((et == Element::REHEARSAL_MARK)
          || ((et == Element::STAFF_TEXT) && static_cast<StaffText*>(element)->systemFlag())
+         || (et == Element::JUMP)
+         || (et == Element::MARKER)
          ) {
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
@@ -788,8 +790,10 @@ void Score::undoAddElement(Element* element)
                         ne->setSelected(false);
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
-                  if (element->type() == Element::REHEARSAL_MARK
-                     || element->type() == Element::STAFF_TEXT
+                  if (et == Element::REHEARSAL_MARK
+                     || et == Element::STAFF_TEXT
+                     || (et == Element::JUMP)
+                     || (et == Element::MARKER)
                      ) {
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
