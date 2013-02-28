@@ -11,30 +11,31 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_JUMP_H__
-#define __INSPECTOR_JUMP_H__
+#ifndef __INSPECTOR_GLISSANDO_H__
+#define __INSPECTOR_GLISSANDO_H__
 
 #include "inspector.h"
-#include "ui_inspector_jump.h"
+#include "ui_inspector_glissando.h"
 #include "libmscore/property.h"
 
 //---------------------------------------------------------
-//   InspectorJump
+//   InspectorGlissando
 //---------------------------------------------------------
 
-class InspectorJump : public InspectorBase {
+class InspectorGlissando : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorJump iJump;
+      Ui::InspectorGlissando b;
 
-   public slots:
-      virtual void apply();
+      static const int _inspectorItems = 7;
+      InspectorItem iList[_inspectorItems];
+
+   protected:
+      virtual const InspectorItem& item(int idx) const { return iList[idx];      }
+      virtual int inspectorItems() const               { return _inspectorItems; }
 
    public:
-      InspectorJump(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
+      InspectorGlissando(QWidget* parent);
       };
 
 #endif

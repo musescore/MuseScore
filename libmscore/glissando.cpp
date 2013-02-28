@@ -27,12 +27,22 @@
 Glissando::Glissando(Score* s)
   : Element(s)
       {
-      _subtype = GLISS_STRAIGHT;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _text = "gliss.";
-      _showText = true;
+
+      _subtype       = GlissandoType::STRAIGHT;
+      _text          = "gliss.";
+      _showText      = true;
       qreal _spatium = spatium();
       setSize(QSizeF(_spatium * 2, _spatium * 4));    // for use in palettes
+      }
+
+Glissando::Glissando(const Glissando& g)
+   : Element(g)
+      {
+      _subtype  = g._subtype;
+      line      = g.line;
+      _text     = g._text;
+      _showText = g._showText;
       }
 
 //---------------------------------------------------------
@@ -42,9 +52,8 @@ Glissando::Glissando(Score* s)
 void Glissando::layout()
       {
       Chord* chord = static_cast<Chord*>(parent());
-      if (chord == 0) {
+      if (chord == 0)
             return;
-            }
       Note* anchor2   = chord->upNote();
       Segment* s = chord->segment();
       s = s->prev1();
@@ -107,7 +116,7 @@ void Glissando::write(Xml& xml) const
       xml.stag("Glissando");
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", int(_subtype));
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -126,7 +135,7 @@ void Glissando::read(XmlReader& e)
                   _text = e.readElementText();
                   }
             else if (tag == "subtype")
-                  _subtype = e.readInt();
+                  _subtype = GlissandoType(e.readInt());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -154,10 +163,10 @@ void Glissando::draw(QPainter* painter) const
       qreal wi = asin(-h / l) * 180.0 / M_PI;
       painter->rotate(-wi);
 
-      if (subtype() == GLISS_STRAIGHT) {
+      if (subtype() == GlissandoType::STRAIGHT) {
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
-      else if (subtype() == GLISS_WAVY) {
+      else if (subtype() == GlissandoType::WAVY) {
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
@@ -195,5 +204,95 @@ void Glissando::setSize(const QSizeF& s)
       {
       line = QLineF(0.0, s.height(), s.width(), 0.0);
       setbbox(QRectF(QPointF(), s));
+      }
+
+//---------------------------------------------------------
+//   undoSetSubtype
+//---------------------------------------------------------
+
+void Glissando::undoSetSubtype(GlissandoType t)
+      {
+      score()->undoChangeProperty(this, P_GLISS_TYPE, int(t));
+      }
+
+//---------------------------------------------------------
+//   undoSetText
+//---------------------------------------------------------
+
+void Glissando::undoSetText(const QString& s)
+      {
+      score()->undoChangeProperty(this, P_GLISS_TEXT, s);
+      }
+
+//---------------------------------------------------------
+//   undoSetShowText
+//---------------------------------------------------------
+
+void Glissando::undoSetShowText(bool f)
+      {
+      score()->undoChangeProperty(this, P_GLISS_SHOW_TEXT, f);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Glissando::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_GLISS_TYPE:
+                  return int(subtype());
+            case P_GLISS_TEXT:
+                  return text();
+            case P_GLISS_SHOW_TEXT:
+                  return showText();
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_GLISS_TYPE:
+                  setSubtype(GlissandoType(v.toInt()));
+                  break;
+            case P_GLISS_TEXT:
+                  setText(v.toString());
+                  break;
+            case P_GLISS_SHOW_TEXT:
+                  setShowText(v.toBool());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Glissando::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_GLISS_TYPE:
+                  return int(GlissandoType::STRAIGHT);
+            case P_GLISS_TEXT:
+                  return "gliss.";
+            case P_GLISS_SHOW_TEXT:
+                  return true;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
       }
 

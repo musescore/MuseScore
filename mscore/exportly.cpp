@@ -2031,7 +2031,7 @@ void ExportLy::buildGlissandoList(int strack, int etrack)
 		      Element* prevel = seg->prev()->element(st); //(st);
 		      Chord* prevchord = (Chord*)prevel;
 		      glisstable[glisscount].chord = prevchord;
-		      glisstable[glisscount].type = cd->glissando()->subtype();
+		      glisstable[glisscount].type = int(cd->glissando()->subtype());
 		      glisstable[glisscount].glisstext = cd->glissando()->text();
 		      glisstable[glisscount].tick = prevchord->tick();
 		    }

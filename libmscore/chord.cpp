@@ -1735,6 +1735,7 @@ Element* Chord::drop(const DropData& data)
 
             case CHORDLINE:
                   e->setParent(this);
+                  e->setTrack(track());
                   score()->undoAddElement(e);
                   break;
 
