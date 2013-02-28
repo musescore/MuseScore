@@ -25,16 +25,17 @@
 class InspectorJump : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorJump iJump;
+      Ui::InspectorJump b;
 
-   public slots:
-      virtual void apply();
+      static const int _inspectorItems = 7;
+      InspectorItem iList[_inspectorItems];
+
+   protected:
+      virtual const InspectorItem& item(int idx) const { return iList[idx];      }
+      virtual int inspectorItems() const               { return _inspectorItems; }
 
    public:
       InspectorJump(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 #endif

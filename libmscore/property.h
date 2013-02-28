@@ -46,7 +46,7 @@ enum P_ID {
       P_LEADING_SPACE,
       P_TRAILING_SPACE,
 
-      P_DISTRIBUTE,
+/*20*/P_DISTRIBUTE,
       P_MIRROR_HEAD,
       P_DOT_POSITION,
       P_TUNING,
@@ -54,9 +54,9 @@ enum P_ID {
       P_BARLINE_SPAN,
       P_USER_OFF,
       P_FRET,
-
       P_STRING,
       P_GHOST,
+
       P_TIMESIG_NOMINAL,
       P_TIMESIG_ACTUAL,
       P_NUMBER_TYPE,
@@ -65,9 +65,9 @@ enum P_ID {
       P_ACTUAL_NOTES,
       P_P1,
       P_P2,
-
       P_GROW_LEFT,
       P_GROW_RIGHT,
+
       P_BOX_HEIGHT,
       P_BOX_WIDTH,
       P_TOP_GAP,
@@ -76,18 +76,16 @@ enum P_ID {
       P_RIGHT_MARGIN,
       P_TOP_MARGIN,
       P_BOTTOM_MARGIN,
-
       P_LAYOUT_BREAK,
       P_AUTOSCALE,
+
       P_SIZE,
       P_SCALE,
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
-
       P_TEXT_STYLE,
       P_TEXT,
       P_HTML_TEXT,
-
       P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
@@ -120,18 +118,15 @@ enum P_ID {
       P_DYNAMIC_RANGE,
       P_PLACEMENT,
       P_VELOCITY,
-
       P_JUMP_TO,
       P_PLAY_UNTIL,
       P_CONTINUE_AT,
       P_LABEL,
-      P_MARKER_TYPE,
 
+      P_MARKER_TYPE,
       P_ARP_USER_LEN1,
       P_ARP_USER_LEN2,
-
       P_REPEAT_FLAGS,
-
       P_GLISS_TYPE,
       P_GLISS_TEXT,
       P_GLISS_SHOW_TEXT,

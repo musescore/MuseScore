@@ -70,6 +70,7 @@
 #include "excerpt.h"
 #include "stafftext.h"
 #include "chordline.h"
+#include "tremolo.h"
 
 extern Measure* tick2measure(int tick);
 
@@ -844,6 +845,8 @@ void Score::undoAddElement(Element* element)
          && et != Element::BREATH
          && et != Element::DYNAMIC
          && et != Element::STAFF_TEXT
+         && et != Element::TREMOLO
+         && et != Element::ARPEGGIO
          && et != Element::SYMBOL)
             ) {
             undo(new AddElement(element));
@@ -957,6 +960,38 @@ void Score::undoAddElement(Element* element)
                   nslur->setEndElement(c2);
                   nslur->setParent(0);
                   undo(new AddElement(nslur));
+                  }
+            else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
+                  Tremolo* tremolo = static_cast<Tremolo*>(element);
+                  ChordRest* cr1 = static_cast<ChordRest*>(tremolo->chord1());
+                  ChordRest* cr2 = static_cast<ChordRest*>(tremolo->chord2());
+                  Segment* s1    = cr1->segment();
+                  Segment* s2    = cr2->segment();
+                  Measure* m1    = s1->measure();
+                  Measure* m2    = s2->measure();
+                  Measure* nm1   = score->tick2measure(m1->tick());
+                  Measure* nm2   = score->tick2measure(m2->tick());
+                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
+                  Segment* ns2   = nm2->findSegment(s2->subtype(), s2->tick());
+                  Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
+                  Chord* c2      = static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice()));
+                  Tremolo* ntremolo = static_cast<Tremolo*>(ne);
+                  ntremolo->setChords(c1, c2);
+                  ntremolo->setParent(c1);
+                  undo(new AddElement(ntremolo));
+                  }
+            else if (
+               (element->type() == Element::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes())
+               || (element->type() == Element::ARPEGGIO))
+                  {
+                  ChordRest* cr = static_cast<ChordRest*>(element->parent());
+                  Segment* s    = cr->segment();
+                  Measure* m    = s->measure();
+                  Measure* nm   = score->tick2measure(m->tick());
+                  Segment* ns   = nm->findSegment(s->subtype(), s->tick());
+                  Chord* c1     = static_cast<Chord*>(ns->element(staffIdx * VOICES + cr->voice()));
+                  ne->setParent(c1);
+                  undo(new AddElement(ne));
                   }
             else if (element->type() == Element::TIE) {
                   Tie* tie       = static_cast<Tie*>(element);
