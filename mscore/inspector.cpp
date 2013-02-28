@@ -22,6 +22,7 @@
 #include "inspectorHairpin.h"
 #include "inspectorMarker.h"
 #include "inspectorJump.h"
+#include "inspectorGlissando.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -193,6 +194,9 @@ void Inspector::setElement(Element* e)
                         break;
                   case Element::MARKER:
                         ie = new InspectorMarker(this);
+                        break;
+                  case Element::GLISSANDO:
+                        ie = new InspectorGlissando(this);
                         break;
                   default:
                         ie = new InspectorElement(this);

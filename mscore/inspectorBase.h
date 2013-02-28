@@ -28,6 +28,9 @@ struct InspectorItem {
       int sv;           // subvalue; example for T_SIZE: 0 - width 1 - height
       QWidget* w;
       QToolButton* r;
+      InspectorItem() {}
+      InspectorItem(P_ID _t, QWidget* _w, QToolButton* _r) : t(_t), w(_w), r(_r) {}
+      InspectorItem(P_ID _t, int _sv, QWidget* _w, QToolButton* _r) : t(_t), sv(_sv), w(_w), r(_r) {}
       };
 
 //---------------------------------------------------------

@@ -2339,7 +2339,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 			ChordRest* cr = measure->findChordRest(absTick, track);
 			if(cr != 0){
 		        Glissando* g = new Glissando(score_);
-		        g->setSubtype(1);
+		        g->setSubtype(GlissandoType::WAVY);
 		        cr->add(g);
 			}
 		}

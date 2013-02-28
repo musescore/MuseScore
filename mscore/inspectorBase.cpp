@@ -41,19 +41,21 @@ InspectorBase::InspectorBase(QWidget* parent)
 
 QVariant InspectorBase::getValue(int idx) const
       {
-      const InspectorItem& ii = item(idx);
-      QWidget* w              = ii.w;
+      QWidget* w = item(idx).w;
 
-      switch (propertyType(ii.t)) {
-            case T_SIZE:
-            case T_POINT:
-            case T_SCALE:
-            case T_SREAL:
-            case T_REAL:      return w->property("value");
-            case T_DIRECTION: return w->property("currentIndex");
-            case T_BOOL:      return w->property("checked");
-            default:
-                  abort();
+      if (qobject_cast<QDoubleSpinBox*>(w))
+            return w->property("value");
+      else if (qobject_cast<QComboBox*>(w))
+            return w->property("currentIndex");
+      else if (qobject_cast<QCheckBox*>(w))
+            return w->property("checked");
+      else if (qobject_cast<QLineEdit*>(w))
+            return w->property("text");
+      else if (qobject_cast<Awl::ColorLabel*>(w))
+            return static_cast<Awl::ColorLabel*>(w)->color();
+      else  {
+            qDebug("not supported widget");
+            abort();
             }
       return QVariant();
       }
@@ -67,22 +69,19 @@ void InspectorBase::setValue(int idx, const QVariant& val)
       const InspectorItem& ii = item(idx);
       QWidget* w        = ii.w;
 
-      switch (propertyType(ii.t)) {
-            case T_SIZE:
-            case T_POINT:
-            case T_SCALE:
-            case T_SREAL:
-            case T_REAL:
-                  static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
-                  break;
-            case T_DIRECTION:
-                  static_cast<QComboBox*>(w)->setCurrentIndex(val.toInt());
-                  break;
-            case T_BOOL:
-                  static_cast<QCheckBox*>(w)->setChecked(val.toBool());
-                  break;
-            default:
-                  abort();
+      if (qobject_cast<QDoubleSpinBox*>(w))
+            static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
+      else if (qobject_cast<QComboBox*>(w))
+            static_cast<QComboBox*>(w)->setCurrentIndex(val.toInt());
+      else if (qobject_cast<QCheckBox*>(w))
+            static_cast<QCheckBox*>(w)->setChecked(val.toBool());
+      else if (qobject_cast<QLineEdit*>(w))
+            static_cast<QLineEdit*>(w)->setText(val.toString());
+      else if (qobject_cast<Awl::ColorLabel*>(w))
+            static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
+      else  {
+            qDebug("not supported widget");
+            abort();
             }
       }
 
@@ -148,10 +147,9 @@ void InspectorBase::valueChanged(int idx)
 void InspectorBase::setElement(Element* e)
       {
       for (int i = 0; i < inspectorItems(); ++i) {
-            QWidget*     w = item(i).w;
-            QToolButton* r = item(i).r;
-            P_ID id        = item(i).t;
-            P_TYPE pt      = propertyType(id);
+            QWidget* w = item(i).w;
+            P_ID id    = item(i).t;
+            P_TYPE pt  = propertyType(id);
             QVariant val;
             if (pt == T_SIZE || pt == T_SCALE) {
                   QSizeF sz = e->getProperty(id).toSizeF();
@@ -174,6 +172,7 @@ void InspectorBase::setElement(Element* e)
             setValue(i, val);
             w->blockSignals(false);
 
+            QToolButton* r = item(i).r;
             if (r)
                   r->setEnabled(!isDefault(i));
             }
@@ -240,19 +239,19 @@ void InspectorBase::resetClicked(int i)
       QVariant def = e->propertyDefault(id);
       QWidget* w   = item(i).w;
 
-       switch (propertyType(id)) {
-            case T_SREAL:
-            case T_REAL:
-                  static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
-                  break;
-            case T_DIRECTION:
-                  static_cast<QComboBox*>(w)->setCurrentIndex(def.toInt());
-                  break;
-            case T_BOOL:
-                  static_cast<QCheckBox*>(w)->setChecked(def.toBool());
-                  break;
-            default:
-                  abort();
+      if (qobject_cast<QDoubleSpinBox*>(w))
+            static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
+      else if (qobject_cast<QComboBox*>(w))
+            static_cast<QComboBox*>(w)->setCurrentIndex(def.toInt());
+      else if (qobject_cast<QCheckBox*>(w))
+            static_cast<QCheckBox*>(w)->setChecked(def.toBool());
+      else if (qobject_cast<QLineEdit*>(w))
+            static_cast<QLineEdit*>(w)->setText(def.toString());
+      else if (qobject_cast<Awl::ColorLabel*>(w))
+            static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
+      else  {
+            qDebug("not supported widget");
+            abort();
             }
       }
 
@@ -263,29 +262,26 @@ void InspectorBase::resetClicked(int i)
 void InspectorBase::mapSignals()
       {
       for (int i = 0; i < inspectorItems(); ++i) {
-            QToolButton* b = item(i).r;
-            if (b) {
-                  connect(b, SIGNAL(clicked()), resetMapper, SLOT(map()));
-                  resetMapper->setMapping(b, i);
+            QToolButton* resetButton = item(i).r;
+            if (resetButton) {
+                  connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
+                  resetMapper->setMapping(resetButton, i);
                   }
             QWidget* w = item(i).w;
             valueMapper->setMapping(w, i);
-            switch (propertyType(item(i).t)) {
-                  case T_REAL:
-                  case T_SREAL:
-                  case T_SIZE:
-                  case T_POINT:
-                  case T_SCALE:
-                        connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
-                        break;
-                  case T_DIRECTION:
-                        connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
-                        break;
-                  case T_BOOL:
-                        connect(w, SIGNAL(toggled(bool)), valueMapper, SLOT(map()));
-                        break;
-                  default:
-                        abort();
+            if (qobject_cast<QDoubleSpinBox*>(w))
+                  connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
+            else if (qobject_cast<QComboBox*>(w))
+                  connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
+            else if (qobject_cast<QCheckBox*>(w))
+                  connect(w, SIGNAL(toggled(bool)), valueMapper, SLOT(map()));
+            else if (qobject_cast<QLineEdit*>(w))
+                  connect(w, SIGNAL(textChanged(const QString&)), valueMapper, SLOT(map()));
+            else if (qobject_cast<Awl::ColorLabel*>(w))
+                  connect(w, SIGNAL(colorChanged(QColor)), valueMapper, SLOT(map()));
+            else  {
+                  qDebug("not supported widget");
+                  abort();
                   }
             }
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));

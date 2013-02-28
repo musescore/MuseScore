@@ -132,6 +132,10 @@ enum P_ID {
 
       P_REPEAT_FLAGS,
 
+      P_GLISS_TYPE,
+      P_GLISS_TEXT,
+      P_GLISS_SHOW_TEXT,
+
       P_END
       };
 

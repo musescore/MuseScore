@@ -1450,7 +1450,7 @@ void Element::undoSetPlacement(Placement v)
 
 QVariant Element::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_COLOR:     return _color;
             case P_VISIBLE:   return _visible;
             case P_SELECTED:  return _selected;
@@ -1499,7 +1499,16 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Element::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_PLACEMENT:     return BELOW;
+            case P_VISIBLE:
+                  return true;
+            case P_COLOR:
+                  return MScore::defaultColor;
+            case P_PLACEMENT:
+                  return BELOW;
+            case P_SELECTED:
+                  return false;
+            case P_USER_OFF:
+                  return QPointF();
             default:    // not all properties have a default
                   break;
             }
