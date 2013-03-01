@@ -1053,6 +1053,15 @@ void ChordRest::removeDeleteBeam()
       }
 
 //---------------------------------------------------------
+//   undoSetBeamMode
+//---------------------------------------------------------
+
+void ChordRest::undoSetBeamMode(BeamMode mode)
+      {
+      undoChangeProperty(P_BEAM_MODE, int(mode));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
