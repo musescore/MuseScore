@@ -231,7 +231,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       void lyricsMinus();
       void lyricsUnderscore();
       void harmonyEndEdit();
-      void chordTab(bool back);
+      void harmonyTab(bool meas, bool back);
+      void harmonyBeatsTab(bool back);
+      void harmonyTicksTab(int ticks);
       void figuredBassTab(bool meas, bool back);
       void figuredBassTicksTab(int ticks);
       void figuredBassEndEdit();
