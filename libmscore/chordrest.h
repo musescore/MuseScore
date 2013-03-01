@@ -33,11 +33,13 @@ class Spanner;
 ///    Virtual base class. Chords and rests can be part of a beam
 //
 //   @P durationType int
+//   @P beamMode     BeamMode
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
       Q_OBJECT
-      Q_PROPERTY(int durationType READ durationTypeTicks WRITE setDurationType);
+      Q_PROPERTY(int durationType  READ durationTypeTicks WRITE setDurationType);
+      Q_PROPERTY(BeamMode beamMode READ beamMode          WRITE undoSetBeamMode);
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -73,6 +75,7 @@ class ChordRest : public DurationElement {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       void setBeamMode(BeamMode m)              { _beamMode = m;    }
+      void undoSetBeamMode(BeamMode m);
       BeamMode beamMode() const                 { return _beamMode; }
 
       void setBeam(Beam* b);
