@@ -545,11 +545,14 @@ void FiguredBassItem::draw(QPainter* painter) const
       qreal lineEndX = 0.0;
       if (_contLine > ContLineNone) {
             qreal _spatium = spatium();
-            qreal lineStartX   = textWidth;           // by default, line starts right after text
+            qreal lineStartX   = textWidth;                       // by default, line starts right after text
             if (lineStartX > 0.0)
-                  lineStartX += _spatium * 0.1;       // if some text, give some room after it
-            lineEndX = figuredBass()->lineLength(0);  // by default, line ends where FB ends
-            // extended cont.line and no closing parenthesis: look at next FB element
+                  lineStartX += _spatium * 0.1;                   // if some text, give some room after it
+            lineEndX = figuredBass()->printedLineLength();        // by default, line ends
+            if(lineEndX - lineStartX < 1.0)                       // if line length < 1 sp, ignore it
+                  lineEndX = 0.0;
+
+            // if extended cont.line and no closing parenthesis: look at next FB element
             if (_contLine > ContLineSimple && parenth[4] == ParenthesisNone) {
                   FiguredBass * nextFB;
                   // if there is a contiguous FB element
@@ -561,10 +564,15 @@ void FiguredBassItem::draw(QPainter* painter) const
                         // if an additional cont. line has been found, extend up to its initial X coord
                         if (nextContPageX > 0)
                               lineEndX = nextContPageX - pgPos.x() + _spatium*0.125;  // with a little bit of overlap
+                        else
+                              lineEndX = figuredBass()->lineLength(0);              // if none found, draw to the duration end
                         }
                   }
-            qreal h = bbox().height() * 0.875;
-            painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
+            // if some line, draw it
+            if (lineEndX > 0.0) {
+                  qreal h = bbox().height() * 0.875;
+                  painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
+                  }
             }
 
       // closing cont.line parenthesis
@@ -1061,7 +1069,8 @@ NoLen:
             _lineLenghts[0] = 0;
             return;
             }
-// Adapted from System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx) (system.cpp, line 829 and foll)
+
+      ChordRest * lastCR;                                   // the last ChordRest of this
       Segment *   nextSegm;                                 // the Segment beyond this' segment
       int         nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
@@ -1078,12 +1087,20 @@ NoLen:
                         break;
                   nextSegm = nextSegm->next();
                   }
+            // locate the last ChordRest of this
+            if (nextSegm)
+                  lastCR = nextSegm->prev1()->nextChordRest(track(), true);
             }
       if (m == 0 || nextSegm == 0) {
             qDebug("FiguredBass layout: no segment found for tick %d\n", nextTick);
             goto NoLen;
             }
 
+      // get length of printed lines from horiz. page position of lastCR
+      // (enter a bit 'into' the ChordRest for clarity)
+      _printedLineLength = lastCR->pageX() - pageX() + 1.5*spatium();
+
+      // get duration indicator line(s) from page position of nextSegm
       QList<System*>* systems = score()->systems();
       System* s1  = segment()->measure()->system();
       System* s2  = nextSegm->measure()->system();
