@@ -1321,6 +1321,7 @@ static void usage()
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings directory\n"
         "   -t        set testMode flag for all files\n"
+        "   -w        write buildin workspace\n"
         );
       exit(-1);
       }
@@ -2180,6 +2181,8 @@ int main(int argc, char* av[])
       QStringList argv =  QCoreApplication::arguments();
       argv.removeFirst();
 
+      bool writeWorkspaceFile = false;
+
       for (int i = 0; i < argv.size();) {
             QString s = argv[i];
             if (s[0] != '-') {
@@ -2237,6 +2240,10 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         styleFile = argv.takeAt(i + 1);
+                        break;
+                  case 'w':
+                        writeWorkspaceFile = true;
+                        converterMode = true;
                         break;
                   case 'F':
                         useFactorySettings = true;
@@ -2369,7 +2376,6 @@ int main(int argc, char* av[])
                         break;
                   }
             }
-
       synti = new MasterSynth();
       seq   = new Seq();
       MScore::seq = seq;
@@ -2402,6 +2408,11 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
+
+      if (writeWorkspaceFile) {
+            Workspace::writeBuildinWorkspace();
+            return 0;
+            }
 
       if (!noSeq) {
             if (!seq->init()) {
@@ -3940,7 +3951,7 @@ RecordButton::RecordButton(QWidget* parent)
       {
       setCheckable(true);
       defaultAction()->setCheckable(true);
-      setToolTip(tr("record"));
+      setToolTip(qApp->translate("RecordButton", "record"));
       }
 
 //---------------------------------------------------------
@@ -3951,7 +3962,7 @@ GreendotButton::GreendotButton(QWidget* parent)
    : SimpleButton(":/data/greendot.svg", ":/data/darkgreendot.svg", parent)
       {
       setCheckable(true);
-      setToolTip(tr("record"));
+      setToolTip(qApp->translate("GreendotButton", "record"));
       }
 
 //---------------------------------------------------------

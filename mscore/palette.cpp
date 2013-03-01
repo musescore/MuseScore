@@ -665,7 +665,8 @@ bool Palette::event(QEvent* ev)
                   return false;
             if (cells[idx] == 0)
                   return false;
-            QToolTip::showText(he->globalPos(), cells[idx]->name, this);
+            QToolTip::showText(he->globalPos(),
+               qApp->translate("Palette", cells[idx]->name.toUtf8()), this);
             return false;
             }
       return QWidget::event(ev);
@@ -992,8 +993,9 @@ void Palette::read(const QString& p)
 
 static void writeFailed(const QString& path)
       {
-      QString s = mscore->tr("Open Palette File\n") + path + mscore->tr("\nfailed: ");
-      QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Palette file"), s);
+      QString s = qApp->translate("Palette", "Open Palette File\n") + path
+         + qApp->translate("Palette", "\nfailed: ");
+      QMessageBox::critical(mscore, qApp->translate("Palette", "MuseScore: Writing Palette file"), s);
       }
 
 //---------------------------------------------------------
@@ -1228,7 +1230,7 @@ PaletteBoxButton::PaletteBoxButton(Palette* p, QWidget* parent)
       setFocusPolicy(Qt::NoFocus);
       connect(this, SIGNAL(clicked(bool)), this, SLOT(showPalette(bool)));
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      setText(palette->name());
+      setText(qApp->translate("Palette", palette->name().toUtf8()));
       setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       // setArrowType(Qt::RightArrow);
       showPalette(false);
