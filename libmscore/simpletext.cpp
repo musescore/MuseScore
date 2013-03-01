@@ -355,10 +355,10 @@ qreal SimpleText::baseLine() const
 
 void SimpleText::startEdit(MuseScoreView*, const QPointF& pt)
       {
-      if (_layout.isEmpty())
-            layout();
       _cursor.line   = 0;
       _cursor.column = 0;
+      if (_layout.isEmpty())
+            layout();
       setCursor(pt);
       undoPushProperty(P_TEXT);
       }
