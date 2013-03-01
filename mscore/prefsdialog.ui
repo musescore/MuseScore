@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>845</width>
-    <height>622</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -601,6 +601,9 @@
           </item>
           <item row="0" column="1" colspan="2">
            <widget class="QCheckBox" name="nativeDialogs">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>use native file dialogs</string>
             </property>
@@ -2788,8 +2791,6 @@
    <header>recordbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

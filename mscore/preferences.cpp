@@ -18,6 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include <iostream>
 #include "config.h"
 #include "libmscore/xml.h"
 #include "libmscore/score.h"
@@ -109,7 +110,7 @@ void Preferences::init()
       bgUseColor         = true;
       fgUseColor         = false;
       bgWallpaper        = QString();
-      fgWallpaper        = ":/data/paper5.png";
+      fgWallpaper        = ":/data/paper3.png";
       fgColor.setRgb(255, 255, 255);
       iconHeight         = 25;
       iconWidth          = 20;
@@ -529,6 +530,7 @@ void Preferences::read()
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
 
       nativeDialogs    = s.value("nativeDialogs", nativeDialogs).toBool();
+      std::cout << "NativeDialogs = " << nativeDialogs << "\n";
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
@@ -1333,6 +1335,7 @@ void PreferenceDialog::apply()
       prefs.mySoundFontsPath   = mySoundFonts->text();
 
       prefs.nativeDialogs      = nativeDialogs->isChecked();
+      std::cout << "NativeDialogs End = " << prefs.nativeDialogs << "\n";
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 

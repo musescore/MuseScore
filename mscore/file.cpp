@@ -2290,4 +2290,3 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       return true;
       }
 
-
