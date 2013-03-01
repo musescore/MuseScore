@@ -555,52 +555,54 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-
-      Measure* nfm = fm;
-      if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
-            //
-            // Set time signature of all measures up to next
-            // time signature. Do not touch measure contents.
-            //
-            for (Measure* m = fm; m; m = m->nextMeasure()) {
-                  if ((m != fm) && m->first(Segment::SegTimeSig))
-                        break;
-                  bool changeActual = m->len() == m->timesig();
-                  undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                  if (changeActual)
-                        undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
-                  }
-            }
-      else {
-            //
-            // rewrite all measures up to the next time signature
-            //
-            if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
-                  // handle upbeat
-                  undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                  rewriteMeasures(fm->nextMeasure(), ns);
+      foreach(Score* score, scoreList()) {
+            Measure* fm = score->tick2measure(tick);
+            Measure* nfm = fm;
+            if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
+                  //
+                  // Set time signature of all measures up to next
+                  // time signature. Do not touch measure contents.
+                  //
+                  for (Measure* m = fm; m; m = m->nextMeasure()) {
+                        if ((m != fm) && m->first(Segment::SegTimeSig))
+                              break;
+                        bool changeActual = m->len() == m->timesig();
+                        undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        if (changeActual)
+                              undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
+                        }
                   }
             else {
-                  rewriteMeasures(fm, ns);
-                  nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                  //
+                  // rewrite all measures up to the next time signature
+                  //
+                  if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
+                        // handle upbeat
+                        undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        score->rewriteMeasures(fm->nextMeasure(), ns);
+                        }
+                  else {
+                        score->rewriteMeasures(fm, ns);
+                        nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                        }
                   }
-            }
 
-      seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
-      int n = _staves.size();
-      for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-            TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
-            if (nsig == 0) {
-                  nsig = new TimeSig(this);
-                  nsig->setTrack(staffIdx * VOICES);
-                  nsig->setParent(seg);
-                  nsig->setSig(ts->sig(), ts->subtype());
-                  undoAddElement(nsig);
-                  }
-            else {
-                  undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
-                        ts->numeratorString(), ts->denominatorString(), ts->subtype()));
-                  nsig->setDropTarget(0);       // DEBUG
+            seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
+            int n = score->nstaves();
+            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                  TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
+                  if (nsig == 0) {
+                        nsig = new TimeSig(this);
+                        nsig->setTrack(staffIdx * VOICES);
+                        nsig->setParent(seg);
+                        nsig->setSig(ts->sig(), ts->subtype());
+                        undoAddElement(nsig);
+                        }
+                  else {
+                        undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
+                              ts->numeratorString(), ts->denominatorString(), ts->subtype()));
+                        nsig->setDropTarget(0);       // DEBUG
+                        }
                   }
             }
       delete ts;
