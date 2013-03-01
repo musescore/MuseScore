@@ -258,6 +258,7 @@ class FiguredBass : public Text {
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
       int               _ticks;                 // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
+      qreal             _printedLineLength;     // the length of lines actually printed (i.e. continuation lines)
       void              layoutLines();
       bool              hasParentheses() const; // read / write MusicXML support
 
@@ -307,6 +308,7 @@ Q_INVOKABLE FiguredBassItem* addItem();
       qreal             lineLength(int idx) const     {   if(_lineLenghts.size() > idx)
                                                             return _lineLenghts.at(idx);
                                                           return 0;   }
+      qreal             printedLineLength() const     { return _printedLineLength; }
       bool              onNote() const          { return _onNote; }
       int               numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
