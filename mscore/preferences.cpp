@@ -358,7 +358,6 @@ void Preferences::write()
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
-      s.setValue("nativeDialogs", nativeDialogs);
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
@@ -529,8 +528,6 @@ void Preferences::read()
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
 
-      nativeDialogs    = s.value("nativeDialogs", nativeDialogs).toBool();
-      std::cout << "NativeDialogs = " << nativeDialogs << "\n";
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
@@ -1002,7 +999,6 @@ void PreferenceDialog::updateValues()
       myPlugins->setText(prefs.myPluginsPath);
       mySoundFonts->setText(prefs.mySoundFontsPath);
 
-      nativeDialogs->setChecked(prefs.nativeDialogs);
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
       for (;idx < n; ++idx) {
@@ -1334,8 +1330,6 @@ void PreferenceDialog::apply()
       prefs.myPluginsPath      = myPlugins->text();
       prefs.mySoundFontsPath   = mySoundFonts->text();
 
-      prefs.nativeDialogs      = nativeDialogs->isChecked();
-      std::cout << "NativeDialogs End = " << prefs.nativeDialogs << "\n";
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
