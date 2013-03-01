@@ -200,8 +200,9 @@ void Workspace::initWorkspace()
 
 static void writeFailed(const QString& _path)
       {
-      QString s = mscore->tr("Open Workspace File\n") + _path + mscore->tr("\nfailed: ");
-      QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Workspace file"), s);
+      QString s = qApp->translate("Workspace", "Open Workspace File\n") + _path
+         + qApp->translate("Workspace", "\nfailed: ");
+      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace file"), s);
       }
 
 //---------------------------------------------------------
@@ -221,8 +222,8 @@ Workspace::Workspace()
 
 void Workspace::write()
       {
-      QString ext(".workspace");
       if (_path.isEmpty()) {
+            QString ext(".workspace");
             QDir dir;
             dir.mkpath(dataPath);
             _path = dataPath + "/workspaces";
@@ -450,5 +451,21 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       p->write();
       _workspaces.append(p);
       return p;
+      }
+
+//---------------------------------------------------------
+//   writeBuildinWorkspace
+//---------------------------------------------------------
+
+void Workspace::writeBuildinWorkspace()
+      {
+      PaletteBox* paletteBox = mscore->getPaletteBox();
+      paletteBox->clear();
+      mscore->populatePalette();
+
+      Workspace ws;
+      ws.setName("advanced");
+      ws.setPath("advanced.workspace");
+      ws.write();
       }
 

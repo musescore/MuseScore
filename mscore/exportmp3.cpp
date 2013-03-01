@@ -75,7 +75,7 @@ bool MP3Exporter::findLibrary()
             return false;
 
       QString libPath = QFileDialog::getOpenFileName(
-           0, mscore->tr("Where is %1 ?").arg(getLibraryName()),
+           0, qApp->translate("MP3Exporter", "Where is %1 ?").arg(getLibraryName()),
            path,
            getLibraryTypeString());
 
@@ -129,8 +129,8 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
       // If not successful, must ask the user
       if (!validLibraryLoaded()) {
             qDebug("(Maybe) ask user for library\n");
-            int ret = QMessageBox::question(0, mscore->tr("Save as MP3"),
-                  mscore->tr("MuseScore does not export MP3 files directly, but instead uses \n"
+            int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
+                  qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses \n"
                    "the freely available LAME library.  You must obtain %1 \n"
                    "separately, and then locate the file for MuseScore.\n"
                    "You only need to do this once.\n\n"
