@@ -143,8 +143,8 @@ int Tablature::fret(int pitch, int string) const
       }
 
 //---------------------------------------------------------
-//   fretChord
-//    Assigns fretting to all the notes of the chord,
+//   fretChords
+//    Assigns fretting to all the notes of each chord in the same segment of chord
 //    re-using existing fretting wherever possible
 //
 //    Minimizes fret conflicts (multiple notes on the same string)
@@ -153,7 +153,7 @@ int Tablature::fret(int pitch, int string) const
 //    a separate string
 //---------------------------------------------------------
 
-void Tablature::fretChord(Chord * chord) const
+void Tablature::fretChords(Chord * chord) const
       {
       int   nFret, nNewFret, nTempFret;
       int   nString, nNewString, nTempString;
@@ -167,16 +167,25 @@ void Tablature::fretChord(Chord * chord) const
       for(nString=0; nString<strings(); nString++)
             bUsed[nString] = false;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
+      Segment* seg = chord->segment();
       QMap<int, Note *> sortedNotes;
       int   idx = 0;
       int   key;
-      foreach(Note * note, chord->notes()) {
-            key = note->string()*100000;
-            if(key < 0)                         // in case string is -1
-                  key = -key;
-            key -= note->pitch() * 100 + idx;  // disambiguate notes of equal pitch
-            sortedNotes.insert(key, note);
-            idx++;
+      // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
+      int trk;
+      int trkFrom = (chord->track() / VOICES) * VOICES;
+      int trkTo   = trkFrom + VOICES;
+      for(trk = trkFrom; trk < trkTo; ++trk) {
+            Element* ch = seg->elist().at(trk);
+            if (ch && ch->type() == Element::CHORD)
+                  foreach(Note * note, static_cast<Chord*>(ch)->notes()) {
+                        key = note->string()*100000;
+                        if(key < 0)                         // in case string is -1
+                              key = -key;
+                        key -= note->pitch() * 100 + idx;  // disambiguate notes of equal pitch
+                        sortedNotes.insert(key, note);
+                        idx++;
+                        }
             }
 
       // scan chord notes from highest, matching with strings from the highest
