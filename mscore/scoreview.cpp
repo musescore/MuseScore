@@ -4152,16 +4152,6 @@ void ScoreView::changeVoice(int voice)
 void ScoreView::harmonyEndEdit()
       {
       Harmony* harmony = static_cast<Harmony*>(editObject);
-      if (!harmony->parent() || harmony->parent()->type() != Element::SEGMENT){
-            qDebug("harmonyTab: no segment parent");
-            return;
-            }
-      Segment* segment = static_cast<Segment*>(harmony->parent());
-      if (segment == 0) {
-            qDebug("harmonyTicksTab: no segment");
-            return;
-            }
-
 
       if (harmony->isEmpty())
             _score->undoRemoveElement(harmony);
