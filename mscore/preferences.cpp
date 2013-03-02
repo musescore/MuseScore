@@ -18,7 +18,6 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <iostream>
 #include "config.h"
 #include "libmscore/xml.h"
 #include "libmscore/score.h"
@@ -110,7 +109,7 @@ void Preferences::init()
       bgUseColor         = true;
       fgUseColor         = false;
       bgWallpaper        = QString();
-      fgWallpaper        = ":/data/paper3.png";
+      fgWallpaper        = ":/data/paper5.png";
       fgColor.setRgb(255, 255, 255);
       iconHeight         = 25;
       iconWidth          = 20;
