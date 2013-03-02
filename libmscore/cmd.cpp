@@ -1263,7 +1263,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         refret = true;
                         }
                   if (refret)
-                        tab->fretChord(oNote->chord());
+                        tab->fretChords(oNote->chord());
                   }
 
             // play new note with velocity 80 for 0.3 sec:
