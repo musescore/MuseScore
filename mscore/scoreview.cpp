@@ -4395,7 +4395,7 @@ void ScoreView::cmdAddFret(int fret)
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
             return;
-      if (is.segment() == 0 || is.cr() == 0) {
+      if (is.segment() == 0 /*|| is.cr() == 0*/) {
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
