@@ -3405,10 +3405,10 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                  continue;
 
             // TAB_STAFF is different, as each note has to be fretted
-            // in the context of the whole chord
+            // in the context of the all of the chords of the whole segment
 
             if (staffGroup == TAB_STAFF) {
-                  instrument->tablature()->fretChord(chord);
+                  instrument->tablature()->fretChords(chord);
                   continue;               // skip other staff type cases
                   }
 
