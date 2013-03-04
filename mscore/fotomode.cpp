@@ -649,7 +649,15 @@ bool ScoreView::fotoRectHit(const QPoint& pos)
 
 bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       {
-      QString fn = mscore->getFotoFilename();
+      QStringList fl;
+      fl.append(tr("PNG Bitmap Graphic (*.png)"));
+      fl.append(tr("PDF File (*.pdf)"));
+      fl.append(tr("Encapsulated PostScript File (*.eps)"));
+      fl.append(tr("Scalable Vector Graphic (*.svg)"));
+
+      QString selectedFilter;
+      QString filter = fl.join(";;");
+      QString fn = mscore->getFotoFilename(filter, &selectedFilter);
 
       if (fn.isEmpty())
             return false;
@@ -657,11 +665,28 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       QFileInfo fi(fn);
       mscore->lastSaveDirectory = fi.absolutePath();
 
-      QString ext = fi.suffix();
+      QString ext;
+      if (selectedFilter.isEmpty()) {
+            ext = fi.suffix();
+            }
+      else {
+            int idx = fl.indexOf(selectedFilter);
+            if (idx != -1) {
+                  static const char* extensions[] = {
+                        "png", "pdf", "eps", "svg"
+                        };
+                  ext = extensions[idx];
+                  }
+            }
+
       if (ext.isEmpty()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
             return false;
             }
+
+      if (fi.suffix() != ext)
+            fn += "." + ext;
+
       bool transparent = preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / MScore::DPI;
