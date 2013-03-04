@@ -3064,6 +3064,7 @@ void Score::lassoSelectEnd()
 
       if (_selection.elements().isEmpty()) {
             _selection.setState(SEL_NONE);
+            _updateAll = true;
             return;
             }
       _selection.setState(SEL_LIST);
