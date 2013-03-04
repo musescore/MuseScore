@@ -1131,14 +1131,8 @@ QString MuseScore::getAudioFile(const QString& d)
 //   getFotoFilename
 //---------------------------------------------------------
 
-QString MuseScore::getFotoFilename()
+QString MuseScore::getFotoFilename(QString& filter, QString* selectedFilter)
       {
-      QString filter =
-         tr("PNG Bitmap Graphic (*.png);;")+
-         tr("PDF File (*.pdf);;")+
-         tr("Encapsulated PostScript File (*.eps);;")+
-         tr("Scalable Vector Graphic (*.svg);;");
-
       QString title       = tr("MuseScore: Save Image");
 
       QFileInfo myImages(preferences.myImagesPath);
@@ -1152,7 +1146,8 @@ QString MuseScore::getFotoFilename()
                this,
                title,
                defaultPath,
-               filter
+               filter,
+               selectedFilter
                );
             return fn;
             }
@@ -1183,6 +1178,7 @@ QString MuseScore::getFotoFilename()
 
       if (saveImageDialog->exec()) {
             QStringList result = saveImageDialog->selectedFiles();
+            *selectedFilter = saveImageDialog->selectedNameFilter();
             return result.front();
             }
       return QString();
