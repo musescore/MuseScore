@@ -599,13 +599,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QCheckBox" name="nativeDialogs">
-            <property name="text">
-             <string>use native file dialogs</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
