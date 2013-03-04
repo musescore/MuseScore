@@ -548,7 +548,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getSaveScoreName(const QString& title,
          QString& name, const QString& filter, QString* selectedFilter, bool selectFolder);
       QString getStyleFilename(bool open, const QString& title = QString());
-      QString getFotoFilename();
+      QString getFotoFilename(QString& filter, QString *selectedFilter);
       QString getChordStyleFilename(bool open);
       QStringList getSoundFont(const QString&);
       QString getScanFile(const QString&);
