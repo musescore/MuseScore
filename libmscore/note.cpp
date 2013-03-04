@@ -350,8 +350,6 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
             QFontMetricsF fm(f);
             QString s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
-            if (_small)
-                  val *= score()->styleD(ST_smallNoteMag);
       }
       else
             val = headWidth();
