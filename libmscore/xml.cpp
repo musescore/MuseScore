@@ -634,6 +634,30 @@ QString Xml::xmlString(const QString& s)
                   case '\"':
                         escaped.append(QLatin1String("&quot;"));
                         break;
+                  case 0x00:
+                  case 0x01:
+                  case 0x02:
+                  case 0x03:
+                  case 0x04:
+                  case 0x05:
+                  case 0x06:
+                  case 0x07:
+                  case 0x08:
+                  case 0x0B:
+                  case 0x0C:
+                  case 0x0E:
+                  case 0x0F:
+                  case 0x10:
+                  case 0x11:
+                  case 0x12:
+                  case 0x13:
+                  case 0x14:
+                  case 0x15:
+                  case 0x16:
+                  case 0x17:
+                  case 0x18:
+                  case 0x19:
+                        break;
                   default:
                         escaped += QChar(c);
                         break;
