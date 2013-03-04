@@ -1000,7 +1000,6 @@ void PreferenceDialog::updateValues()
       myPlugins->setText(prefs.myPluginsPath);
       mySoundFonts->setText(prefs.mySoundFontsPath);
 
-      nativeDialogs->setChecked(prefs.nativeDialogs);
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
       for (;idx < n; ++idx) {
@@ -1332,7 +1331,6 @@ void PreferenceDialog::apply()
       prefs.myPluginsPath      = myPlugins->text();
       prefs.mySoundFontsPath   = mySoundFonts->text();
 
-      prefs.nativeDialogs      = nativeDialogs->isChecked();
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
