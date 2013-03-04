@@ -336,8 +336,6 @@ qreal Note::headWidth() const
       {
       int head = noteHead();
       qreal val = symbols[score()->symIdx()][head].width(magS());
-      if (_small)
-            val *= score()->styleD(ST_smallNoteMag);
       return val;
       }
 
