@@ -357,7 +357,6 @@ void Preferences::write()
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
-      s.setValue("nativeDialogs", nativeDialogs);
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
@@ -528,7 +527,6 @@ void Preferences::read()
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
 
-      nativeDialogs    = s.value("nativeDialogs", nativeDialogs).toBool();
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
