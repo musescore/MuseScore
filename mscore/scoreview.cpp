@@ -2142,8 +2142,29 @@ Element* ScoreView::elementNear(QPointF p)
 //   drawDebugInfo
 //---------------------------------------------------------
 
-static void drawDebugInfo(QPainter& p, const Element* e)
+static void drawDebugInfo(QPainter& p, const Element* _e)
       {
+      const Element* e = _e;
+      if (e->type() == Element::NOTE) {
+            e = e->parent();
+            const ChordRest* cr = static_cast<const ChordRest*>(e);
+            p.setPen(Qt::red);
+            p.setBrush(Qt::NoBrush);
+            QRectF bb = cr->bbox();
+            qreal x1, y1, x2, y2;
+            bb.getCoords(&x1, &y1, &x2, &y2);
+
+            QPointF pos(e->pagePos());
+            p.translate(pos);
+            Space sp = cr->space();
+            QRectF r;
+printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
+            r.setCoords(-sp.lw(), y1, sp.rw(), y2);
+            p.drawRect(r);
+            p.translate(-pos);
+            return;
+            }
+
       //
       //  draw bounding box rectangle for all
       //  selected Elements

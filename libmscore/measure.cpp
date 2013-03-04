@@ -2891,15 +2891,11 @@ qreal Measure::minWidth1() const
       if (_minWidth1 == 0.0) {
             Segment* s = first();
             Segment::SegmentTypes st = Segment::SegClef | Segment::SegKeySig | Segment::SegStartRepeatBarLine;
-            for (;;) {
-                  if ((s->subtype() & st)
-                     && s->next()
-                     && (!s->element(0) || s->element(0)->generated())
-                     ) {
-                        s = s->next();
-                        }
-                  else
-                        break;
+            while ((s->subtype() & st)
+               && s->next()
+               && (!s->element(0) || s->element(0)->generated())
+               ) {
+                  s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s);
             }
@@ -2955,11 +2951,11 @@ void Measure::layoutX(qreal stretch)
 
       int segmentIdx = 0;
       qreal x        = 0.0;
-      if (system()->firstMeasure() == this && system()->barLine()) {
-            x += BarLine::layoutWidth(score(), system()->barLine()->subtype(), system()->barLine()->magS());
-            }
       int minTick    = 100000;
       int ntick      = tick() + ticks();   // position of next measure
+
+      if (system()->firstMeasure() == this && system()->barLine())
+            x += BarLine::layoutWidth(score(), system()->barLine()->subtype(), system()->barLine()->magS());
 
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
@@ -3012,7 +3008,7 @@ void Measure::layoutX(qreal stretch)
                                     qreal sp        = score()->styleS(ST_barNoteDistance).val() * _spatium;
                                     sp             += elsp;
                                     minDistance     = qMax(minDistance, sp);
-                                    stretchDistance = sp * .7;
+                                    // stretchDistance = sp * .7;
                                     }
                               else if (pt & (Segment::SegChordRestGrace)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
