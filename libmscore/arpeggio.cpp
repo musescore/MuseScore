@@ -31,6 +31,8 @@ Arpeggio::Arpeggio(Score* s)
       _subtype = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span = 1;
+      _userLen1 = 0.0;
+      _userLen2 = 0.0;
       }
 
 //---------------------------------------------------------
