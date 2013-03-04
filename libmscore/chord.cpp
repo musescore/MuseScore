@@ -1354,9 +1354,6 @@ void Chord::layout()
 
       qreal lx         = 0.0;
       Note*  upnote    = upNote();
-      qreal headWidth  = symbols[score()->symIdx()][quartheadSym].width(magS());
-
-      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
       bool  useTab     = false;
       StaffTypeTablature* tab = 0;
 
@@ -1380,7 +1377,7 @@ void Chord::layout()
             // or duration longer than half (if halves have stems) or duration longer than crochet
             // remove stems
             if (tab->slashStyle() || _noStem || durationType().type() <
-                        (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
+               (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
                   delete _stem;
                   delete _hook;
                   _stem = 0;
@@ -1499,8 +1496,11 @@ void Chord::layout()
                   note->rxpos() = x;
 
                   Accidental* accidental = note->accidental();
-                  if (accidental)
-                        x = accidental->x() + x - minNoteDistance;
+                  if (accidental) {
+                        // qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+                        // x = accidental->x() + x - minNoteDistance;
+                        x = accidental->x();
+                        }
                   if (x < lx)
                         lx = x;
                   }
@@ -1553,7 +1553,7 @@ void Chord::layout()
                   rr = lhw;
             if (rr > rrr)
                   rrr = rr;
-            qreal xx = note->pos().x() + headWidth + pos().x();
+            qreal xx = note->pos().x() + lhw + pos().x();
             if (xx > dotPosX())
                   setDotPosX(xx);
             }
@@ -1566,9 +1566,15 @@ void Chord::layout()
             }
 
       if (_hook) {
-            _hook->layout();
-            if (up() && !useTab)
-                  rrr += _hook->width() + minNoteDistance;
+            if (beam()) {
+                  delete _hook;
+                  _hook = 0;
+                  }
+            else {
+                  _hook->layout();
+                  if (up() && !useTab)
+                        rrr += _hook->width();
+                  }
             }
 
       if (_noteType != NOTE_NORMAL) {
