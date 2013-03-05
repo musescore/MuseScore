@@ -1652,8 +1652,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         for (; i < n; ++i) {
                               ChordRest* c = crl[i];
                               int l = c->durationType().hooks() - 1;
-                              bool b32 = (beamLevel >= 1) && (c->beamMode() == BEAM_BEGIN32);
-                              bool b64 = (beamLevel >= 2) && (c->beamMode() == BEAM_BEGIN64);
+                              bool b32 = (beamLevel >= 1) && (c->beamMode() == BeamMode::BEGIN32);
+                              bool b64 = (beamLevel >= 2) && (c->beamMode() == BeamMode::BEGIN64);
                               if (l >= beamLevel && (b32 || b64)) {
                                     ++i;
                                     break;
@@ -2062,8 +2062,8 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
 bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == ICON) && ((static_cast<Icon*>(e)->subtype() == ICON_FBEAM1)
-         || (static_cast<Icon*>(e)->subtype() == ICON_FBEAM2));
+      return (e->type() == ICON) && ((static_cast<Icon*>(e)->iconType() == ICON_FBEAM1)
+         || (static_cast<Icon*>(e)->iconType() == ICON_FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2078,11 +2078,11 @@ Element* Beam::drop(const DropData& data)
       qreal g1;
       qreal g2;
 
-      if (e->subtype() == ICON_FBEAM1) {
+      if (e->iconType() == ICON_FBEAM1) {
             g1 = 1.0;
             g2 = 0.0;
             }
-      else if (e->subtype() == ICON_FBEAM2) {
+      else if (e->iconType() == ICON_FBEAM2) {
             g1 = 0.0;
             g2 = 1.0;
             }

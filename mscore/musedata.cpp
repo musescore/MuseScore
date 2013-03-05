@@ -313,44 +313,44 @@ void MuseData::readNote(Part* part, const QString& s)
                   closeSlur(3, tick, staff, voice);
             else if (an[i] == '.') {
                   Articulation* atr = new Articulation(score);
-                  atr->setSubtype(Articulation_Staccato);
+                  atr->setArticulationType(Articulation_Staccato);
                   chord->add(atr);
                   }
             else if (an[i] == '_') {
                   Articulation* atr = new Articulation(score);
-                  atr->setSubtype(Articulation_Tenuto);
+                  atr->setArticulationType(Articulation_Tenuto);
                   chord->add(atr);
                   }
             else if (an[i] == 'v') {
                   Articulation* atr = new Articulation(score);
-                  atr->setSubtype(Articulation_Upbow);
+                  atr->setArticulationType(Articulation_Upbow);
                   chord->add(atr);
                   }
             else if (an[i] == 'n') {
                   Articulation* atr = new Articulation(score);
-                  atr->setSubtype(Articulation_Downbow);
+                  atr->setArticulationType(Articulation_Downbow);
                   chord->add(atr);
                   }
             else if (an[i] == 't') {
                   Articulation* atr = new Articulation(score);
-                  atr->setSubtype(Articulation_Trill);
+                  atr->setArticulationType(Articulation_Trill);
                   chord->add(atr);
                   }
             else if (an[i] == 'F') {
                   Articulation* atr = new Articulation(score);
                   atr->setUp(true);
-                  atr->setSubtype(Articulation_Fermata);
+                  atr->setArticulationType(Articulation_Fermata);
                   chord->add(atr);
                   }
             else if (an[i] == 'E') {
                   Articulation* atr = new Articulation(score);
                   atr->setUp(false);
-                  atr->setSubtype(Articulation_Fermata);
+                  atr->setArticulationType(Articulation_Fermata);
                   chord->add(atr);
                   }
             else if (an[i] == 'O') {
                   // Articulation* atr = new Articulation(score);
-                  // atr->setSubtype(Articulation_Downbow);
+                  // atr->setArticulationType(Articulation_Downbow);
                   // chord->add(atr);
                   qDebug("%06d: open string '%c' not implemented\n", tick, an[i].toLatin1());
                   }
@@ -383,7 +383,7 @@ void MuseData::readNote(Part* part, const QString& s)
             }
       if (!dynamics.isEmpty()) {
             Dynamic* dyn = new Dynamic(score);
-            dyn->setSubtype(dynamics);
+            dyn->setDynamicType(dynamics);
             dyn->setTrack(gstaff * VOICES);
             Segment* s = measure->getSegment(Segment::SegChordRest, tick);
             s->add(dyn);

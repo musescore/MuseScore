@@ -32,7 +32,7 @@ enum StaffStateType {
 class StaffState : public Element {
       Q_OBJECT
 
-      StaffStateType _subtype;
+      StaffStateType _staffStateType;
       qreal lw;
       QPainterPath path;
 
@@ -46,10 +46,10 @@ class StaffState : public Element {
       virtual StaffState* clone() const { return new StaffState(*this); }
       virtual ElementType type() const   { return STAFF_STATE; }
 
-      void setSubtype(const QString&);
-      void setSubtype(StaffStateType st)    { _subtype = st; }
-      StaffStateType subtype() const        { return _subtype; }
-      QString subtypeName() const;
+      void setStaffStateType(const QString&);
+      void setStaffStateType(StaffStateType st) { _staffStateType = st; }
+      StaffStateType staffStateType() const     { return _staffStateType; }
+      QString staffStateTypeName() const;
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);

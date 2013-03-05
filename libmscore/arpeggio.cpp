@@ -28,7 +28,7 @@ Arpeggio::Arpeggio(Score* s)
   : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _subtype = ArpeggioType::NORMAL;
+      _arpeggioType = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span = 1;
       _userLen1 = 0.0;
@@ -52,7 +52,7 @@ void Arpeggio::write(Xml& xml) const
       {
       xml.stag("Arpeggio");
       Element::writeProperties(xml);
-      xml.tag("subtype", int(_subtype));
+      xml.tag("subtype", int(_arpeggioType));
       if (_userLen1 != 0.0)
             xml.tag("userLen1", _userLen1 / spatium());
       if (_userLen2 != 0.0)
@@ -71,7 +71,7 @@ void Arpeggio::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = ArpeggioType(e.readInt());
+                  _arpeggioType = ArpeggioType(e.readInt());
             else if (tag == "userLen1")
                   _userLen1 = e.readDouble() * spatium();
             else if (tag == "userLen2")
@@ -91,7 +91,7 @@ void Arpeggio::layout()
       {
       qreal y1 = - _userLen1;
       qreal y2 = _height + _userLen2;
-      switch (subtype()) {
+      switch (arpeggioType()) {
             case ArpeggioType::NORMAL:
             case ArpeggioType::UP:
             case ArpeggioType::DOWN:
@@ -126,7 +126,7 @@ void Arpeggio::draw(QPainter* p) const
       qreal y2 = _height  + _userLen2;
       qreal x1;
       qreal m = magS();
-      switch (subtype()) {
+      switch (arpeggioType()) {
             case ArpeggioType::NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
                         symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));

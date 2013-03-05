@@ -240,17 +240,17 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns;
-                              if (oseg->subtype() == Segment::SegGrace) {
+                              if (oseg->segmentType() == Segment::SegGrace) {
                                     int gl = 0;
                                     for (Segment* ms = oseg->next(); ms; ms = ms->next()) {
                                           ++gl;
-                                          if (ms->subtype() != Segment::SegGrace)
+                                          if (ms->segmentType() != Segment::SegGrace)
                                                 break;
                                           }
                                     ns = nm->getGraceSegment(oseg->tick(), gl);
                                     }
                               else
-                                    ns = nm->getSegment(oseg->subtype(), oseg->tick());
+                                    ns = nm->getSegment(oseg->segmentType(), oseg->tick());
 
                               for (Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
@@ -392,7 +392,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
             foreach(Element* e, *mb->el()) {
                   if (e->type() == Element::LAYOUT_BREAK) {
-                        LayoutBreakType st = static_cast<LayoutBreak*>(e)->subtype();
+                        LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LAYOUT_BREAK_PAGE || st == LAYOUT_BREAK_LINE)
                               continue;
                         }

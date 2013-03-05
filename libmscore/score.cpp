@@ -520,7 +520,7 @@ void Score::fixTicks()
                   Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegBreath;
 
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        if (s->subtype() == Segment::SegBreath) {
+                        if (s->segmentType() == Segment::SegBreath) {
                               setPause(s->tick(), .1);
                               }
                         else {
@@ -814,7 +814,7 @@ Note* prevNote(Note* n)
       int startTrack = staff * VOICES + n->voice() - 1;
       int endTrack   = 0;
       while (seg) {
-            if (seg->subtype() == Segment::SegChordRest) {
+            if (seg->segmentType() == Segment::SegChordRest) {
                   for (int track = startTrack; track >= endTrack; --track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == Element::CHORD)
@@ -844,7 +844,7 @@ Note* nextNote(Note* n)
       int startTrack = staff * VOICES + n->voice() + 1;
       int endTrack   = staff * VOICES + VOICES;
       while (seg) {
-            if (seg->subtype() == Segment::SegChordRest) {
+            if (seg->segmentType() == Segment::SegChordRest) {
                   for (int track = startTrack; track < endTrack; ++track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == Element::CHORD) {
@@ -1093,7 +1093,7 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
       {
       if (s == 0)
             return 0;
-      assert(s->subtype() == Segment::SegChordRest);
+      assert(s->segmentType() == Segment::SegChordRest);
       // Segment* s1 = s;
       ChordRest* cr1;
       for (Segment* s1 = s; s1; s1 = s1->prev(Segment::SegChordRest)) {
@@ -2075,7 +2075,7 @@ void Score::updateNotes()
                   tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
 
                   for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->subtype() & (Segment::SegChordRestGrace)))
+                        if (!(segment->segmentType() & (Segment::SegChordRestGrace)))
                               continue;
                         m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
                         }
@@ -2108,7 +2108,7 @@ void Score::updateAccidentals(Measure* m, int staffIdx)
       as.init(st->keymap()->key(m->tick()));
 
       for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->subtype() & (Segment::SegChordRestGrace))
+            if (segment->segmentType() & (Segment::SegChordRestGrace))
                   m->updateAccidentals(segment, staffIdx, &as);
             }
       }
@@ -2149,7 +2149,7 @@ Score* Score::clone()
                         Element* e = s->element(track);
                         if (e->generated())
                               continue;
-                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);

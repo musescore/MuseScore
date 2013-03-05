@@ -1232,7 +1232,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = segment->tick() != xml.curTick;
-                  if ((segment->subtype() == Segment::SegEndBarLine)
+                  if ((segment->segmentType() == Segment::SegEndBarLine)
                      && (e == 0)
                      && writeSystemElements
                      && ((track % VOICES) == 0)) {
@@ -1332,7 +1332,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                     }
                               }
                         }
-                  if ((segment->subtype() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
+                  if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");
                         xml.tag("subtype", m->endBarLineType());
                         xml.tag("visible", m->endBarLineVisible());

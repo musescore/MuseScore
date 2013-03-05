@@ -21,8 +21,12 @@ class Xml;
 class Volta;
 class Measure;
 
-enum VoltaType {
-      VOLTA_OPEN, VOLTA_CLOSED
+//---------------------------------------------------------
+//   VoltaType
+//---------------------------------------------------------
+
+enum class VoltaType {
+      OPEN, CLOSED
       };
 
 extern void vdebug(int n);
@@ -45,20 +49,17 @@ class VoltaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Volta
-//   @P subtype   enum VoltaType VOLTA_OPEN, VOLTA_CLOSED
+//   @P voltaType enum VoltaType OPEN, CLOSED
 //---------------------------------------------------------
 
 class Volta : public TextLine {
       Q_OBJECT
       Q_ENUMS(VoltaType)
 
-   public:
-      enum VoltaType { VOLTA_OPEN, VOLTA_CLOSED };
-
    private:
-      Q_PROPERTY(VoltaType subtype READ subtype WRITE undoSetSubtype)
+      Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)
 
-      VoltaType _subtype;
+      VoltaType _voltaType;
       QList<int> _endings;
 
    public:
@@ -77,9 +78,9 @@ class Volta : public TextLine {
       void setText(const QString& s);
       QString text() const;
 
-      void setSubtype(VoltaType val);
-      void undoSetSubtype(VoltaType val);
-      VoltaType subtype() const            { return _subtype; }
+      void setVoltaType(VoltaType val);
+      void undoSetVoltaType(VoltaType val);
+      VoltaType voltaType() const            { return _voltaType; }
 
       bool hasEnding(int repeat) const;
       Measure* startMeasure() const    { return (Measure*)startElement(); }
@@ -93,7 +94,7 @@ class Volta : public TextLine {
       virtual void setYoff(qreal);
       };
 
-Q_DECLARE_METATYPE(Volta::VoltaType)
+Q_DECLARE_METATYPE(VoltaType)
 
 #endif
 

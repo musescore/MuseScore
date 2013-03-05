@@ -264,7 +264,7 @@ void Measure::remove(Segment* el)
       for (int track = 0; track < tracks; track += VOICES) {
             if (!el->element(track))
                   continue;
-            if (el->subtype() == Segment::SegKeySig)
+            if (el->segmentType() == Segment::SegKeySig)
                   score()->staff(track/VOICES)->setUpdateKeymap(true);
             }
       _segments.remove(el);
@@ -499,7 +499,7 @@ qreal Measure::tick2pos(int tck) const
       int tick1 = tick();
       int tick2 = tick1;
       for (s = first(); s; s = s->next()) {
-            if (s->subtype() != Segment::SegChordRest)
+            if (s->segmentType() != Segment::SegChordRest)
                   continue;
             x2 = s->x();
             tick2 = s->tick();
@@ -660,7 +660,7 @@ Chord* Measure::findChord(int tick, int track, int gl)
             if (seg->tick() < tick)
                   return 0;
             if (seg->tick() == tick) {
-                  if (seg->subtype() == Segment::SegGrace)
+                  if (seg->segmentType() == Segment::SegGrace)
                         graces++;
                   Element* el = seg->element(track);
                   if (el && el->type() == CHORD && graces == gl)
@@ -701,9 +701,9 @@ Segment* Measure::tick2segment(int tick, bool grace) const
       {
       for (Segment* s = first(); s; s = s->next()) {
             if (s->tick() == tick) {
-                  if (grace && (s->subtype() == Segment::SegGrace))
+                  if (grace && (s->segmentType() == Segment::SegGrace))
                         return s;
-                  if (s->subtype() == Segment::SegChordRest)
+                  if (s->segmentType() == Segment::SegChordRest)
                         return s;
                   }
             if (s->tick() > tick)
@@ -727,7 +727,7 @@ Segment* Measure::findSegment(Segment::SegmentType st, int t)
             ;
 
       for (Segment* ss = s; ss && ss->tick() == t; ss = ss->next()) {
-            if (ss->subtype() == st)
+            if (ss->segmentType() == st)
                   return ss;
             }
       return 0;
@@ -759,7 +759,7 @@ Segment* Measure::getSegment(Element* e, int tick)
             if (s) {
                   if (s->element(e->track())) {
                         s = s->next();
-                        if (s && s->subtype() == Segment::SegGrace && !s->element(e->track()))
+                        if (s && s->segmentType() == Segment::SegGrace && !s->element(e->track()))
                               return s;
                         }
                   else
@@ -824,7 +824,7 @@ Segment* Measure::getGraceSegment(int t, int gl)
       Segment* sCr = s;
       // count SegGrace segments
       for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
-            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
+            if ((ss->segmentType() == Segment::SegGrace) && (ss->tick() == t))
                   nGraces++;
             }
  	    //create grace segment if necessary
@@ -837,7 +837,7 @@ Segment* Measure::getGraceSegment(int t, int gl)
 
       int graces = 0;
       for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
-            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == t))
+            if ((ss->segmentType() == Segment::SegGrace) && (ss->tick() == t))
                   graces++;
             if (gl == graces)
                   return ss;
@@ -871,9 +871,9 @@ void Measure::add(Element* el)
             case SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
-                  if (sp->subtype() == SPACER_UP)
+                  if (sp->spacerType() == SPACER_UP)
                         staves[el->staffIdx()]->_vspacerUp = sp;
-                  else if (sp->subtype() == SPACER_DOWN)
+                  else if (sp->spacerType() == SPACER_DOWN)
                         staves[el->staffIdx()]->_vspacerDown = sp;
                   }
                   break;
@@ -881,7 +881,7 @@ void Measure::add(Element* el)
                   {
                   Segment* seg = static_cast<Segment*>(el);
                   int tracks = staves.size() * VOICES;
-                  if (seg->subtype() == Segment::SegKeySig) {
+                  if (seg->segmentType() == Segment::SegKeySig) {
                         for (int track = 0; track < tracks; track += VOICES) {
                               if (!seg->element(track))
                                     continue;
@@ -889,7 +889,7 @@ void Measure::add(Element* el)
                               }
                         }
                   int t  = seg->tick();
-                  Segment::SegmentType st = seg->subtype();
+                  Segment::SegmentType st = seg->segmentType();
                   Segment* s;
                   if (st == Segment::SegGrace) {
                         for (s = first(); s && s->tick() < t; s = s->next())
@@ -899,9 +899,9 @@ void Measure::add(Element* el)
                               _segments.insert(seg, s);
                               break;
                               }
-                        if (s && s->subtype() != Segment::SegChordRest) {
-                              for (; s && s->subtype() != Segment::SegEndBarLine
-                                 && s->subtype() != Segment::SegChordRest; s = s->next())
+                        if (s && s->segmentType() != Segment::SegChordRest) {
+                              for (; s && s->segmentType() != Segment::SegEndBarLine
+                                 && s->segmentType() != Segment::SegChordRest; s = s->next())
                                     ;
                               }
                         }
@@ -910,14 +910,14 @@ void Measure::add(Element* el)
                               ;
                         if (s) {
                               if (st == Segment::SegChordRest) {
-                                    while (s && s->subtype() != st && s->tick() == t) {
-                                          if (s->subtype() == Segment::SegEndBarLine)
+                                    while (s && s->segmentType() != st && s->tick() == t) {
+                                          if (s->segmentType() == Segment::SegEndBarLine)
                                                 break;
                                           s = s->next();
                                           }
                                     }
                               else {
-                                    while (s && s->subtype() <= st) {
+                                    while (s && s->segmentType() <= st) {
                                           if (s->next() && s->next()->tick() != t)
                                                 break;
                                           s = s->next();
@@ -932,7 +932,7 @@ void Measure::add(Element* el)
                         }
                   seg->setParent(this);
                   _segments.insert(seg, s);
-                  if ((seg->subtype() == Segment::SegTimeSig) && seg->element(0)) {
+                  if ((seg->segmentType() == Segment::SegTimeSig) && seg->element(0)) {
 #if 0
                         Fraction nfraction(static_cast<TimeSig*>(seg->element(0))->getSig());
                         setTimesig2(nfraction);
@@ -994,9 +994,9 @@ void Measure::remove(Element* el)
                   break;
 
             case SPACER:
-                  if (static_cast<Spacer*>(el)->subtype() == SPACER_DOWN)
+                  if (static_cast<Spacer*>(el)->spacerType() == SPACER_DOWN)
                         staves[el->staffIdx()]->_vspacerDown = 0;
-                  else if (static_cast<Spacer*>(el)->subtype() == SPACER_UP)
+                  else if (static_cast<Spacer*>(el)->spacerType() == SPACER_UP)
                         staves[el->staffIdx()]->_vspacerUp = 0;
                   break;
 
@@ -1083,7 +1083,7 @@ void Measure::moveTicks(int diff)
       {
       setTick(tick() + diff);
       for (Segment* segment = first(); segment; segment = segment->next()) {
-            if (segment->subtype() & (Segment::SegEndBarLine | Segment::SegTimeSigAnnounce))
+            if (segment->segmentType() & (Segment::SegEndBarLine | Segment::SegTimeSigAnnounce))
                   segment->setTick(tick() + ticks());
             }
       }
@@ -1226,7 +1226,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                   if (ots) {
                         TimeSig* timesig = new TimeSig(*ots);
                         timesig->setTrack(i * VOICES);
-                        timesig->setSig(ots->sig(), ots->subtype());
+                        timesig->setSig(ots->sig(), ots->timeSigType());
                         score()->undoAddElement(timesig);
                         }
                   }
@@ -1382,7 +1382,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                   viewer->setDropRectangle(r);
                   // search segment list backwards for segchordrest
                   for (Segment* seg = last(); seg; seg = seg->prev()) {
-                        if (seg->subtype() != Segment::SegChordRest)
+                        if (seg->segmentType() != Segment::SegChordRest)
                               continue;
                         // SegChordRest found, check if it contains anything in this staff
                         for (int track = idx * VOICES; track < idx * VOICES + VOICES; ++track)
@@ -1395,7 +1395,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                   }
                   return false;
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                         case ICON_HFRAME:
                         case ICON_TFRAME:
@@ -1413,7 +1413,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                         return false;
                   viewer->setDropRectangle(r);
                   for (Segment* seg = first(); seg; seg = seg->next()) {
-                        if (seg->subtype() == Segment::SegChordRest) {
+                        if (seg->segmentType() == Segment::SegChordRest) {
                               if (mrpx < seg->pos().x())
                                     return true;
                               }
@@ -1533,9 +1533,9 @@ qDebug("drop staffList");
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (
-                        (lb->subtype() == LAYOUT_BREAK_PAGE && _pageBreak)
-                     || (lb->subtype() == LAYOUT_BREAK_LINE && _lineBreak)
-                     || (lb->subtype() == LAYOUT_BREAK_SECTION && _sectionBreak)
+                        (lb->layoutBreakType() == LAYOUT_BREAK_PAGE && _pageBreak)
+                     || (lb->layoutBreakType() == LAYOUT_BREAK_LINE && _lineBreak)
+                     || (lb->layoutBreakType() == LAYOUT_BREAK_SECTION && _sectionBreak)
                      ) {
                         //
                         // if break already set
@@ -1544,11 +1544,11 @@ qDebug("drop staffList");
                         break;
                         }
                   // make sure there is only LAYOUT_BREAK_LINE or LAYOUT_BREAK_PAGE
-                  if ((lb->subtype() != LAYOUT_BREAK_SECTION) && (_pageBreak || _lineBreak)) {
+                  if ((lb->layoutBreakType() != LAYOUT_BREAK_SECTION) && (_pageBreak || _lineBreak)) {
                         foreach(Element* le, _el) {
                               if (le->type() == LAYOUT_BREAK
-                                 && (static_cast<LayoutBreak*>(le)->subtype() == LAYOUT_BREAK_LINE
-                                  || static_cast<LayoutBreak*>(le)->subtype() == LAYOUT_BREAK_PAGE)) {
+                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LAYOUT_BREAK_LINE
+                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LAYOUT_BREAK_PAGE)) {
                                     score()->undoChangeElement(le, e);
                                     break;
                                     }
@@ -1583,7 +1583,7 @@ qDebug("drop staffList");
                         }
                   // if dropped bar line refers to line subtype
                   else {
-                        score()->undoChangeBarLine(this, bl->subtype());
+                        score()->undoChangeBarLine(this, bl->barLineType());
                         delete e;
                         }
                   break;
@@ -1597,7 +1597,7 @@ qDebug("drop staffList");
                   //
                   _score->select(0, SELECT_SINGLE, 0);
                   for (Segment* s = first(); s; s = s->next()) {
-                        if (s->subtype() & Segment::SegChordRestGrace) {
+                        if (s->segmentType() & Segment::SegChordRestGrace) {
                               int strack = staffIdx * VOICES;
                               int etrack = strack + VOICES;
                               for (int track = strack; track < etrack; ++track) {
@@ -1626,7 +1626,7 @@ qDebug("drop staffList");
                   }
 
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                               score()->insertMeasure(VBOX, this);
                               break;
@@ -1680,7 +1680,7 @@ void Measure::adjustToLen(Fraction nf)
       if (nl > ol) {
             // move EndBarLine
             for (Segment* s = first(); s; s = s->next()) {
-                  if (s->subtype() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
+                  if (s->segmentType() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
                         s->setTick(tick() + nl);
                         }
                   }
@@ -1893,11 +1893,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // this is a mid measure bar line
                         segment = getSegment(Segment::SegBarLine, e.tick());
                         }
-                  else if (barLine->subtype() == START_REPEAT)
+                  else if (barLine->barLineType() == START_REPEAT)
                         segment = getSegment(Segment::SegStartRepeatBarLine, e.tick());
                   else {
                         // setEndBarLineType(barLine->barLineType(), false, barLine->visible(), barLine->color());
-                        setEndBarLineType(barLine->subtype(), false, true, Qt::black);
+                        setEndBarLineType(barLine->barLineType(), false, true, Qt::black);
                         if(!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
@@ -1913,7 +1913,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 
                   if (chord->noteType() != NOTE_NORMAL
                      && segment
-                     && segment->subtype() == Segment::SegChordRest
+                     && segment->segmentType() == Segment::SegChordRest
                      && segment->tick() == e.tick()
                      && segment->element(e.track())
                      && segment->element(e.track())->type() == CHORD
@@ -1923,7 +1923,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // handle grace note after chord
                         //
                         Segment* s = new Segment(this);
-                        s->setSubtype(Segment::SegChordRest);
+                        s->setSegmentType(Segment::SegChordRest);
                         s->setTick(segment->tick());
                         s->setPrev(segment);
                         s->setNext(segment->next());
@@ -1934,13 +1934,13 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment = getSegment(chord, e.tick());
                   Fraction ts(timeStretch * chord->globalDuration());
                   int crticks = chord->noteType() != NOTE_NORMAL ? 0 : ts.ticks();
-                  if (chord->tremolo() && chord->tremolo()->subtype() < 6) {
+                  if (chord->tremolo() && chord->tremolo()->tremoloType() < TREMOLO_R8) {
                         //
                         // old style tremolo found
                         //
                         Tremolo* tremolo = chord->tremolo();
                         TremoloType st;
-                        switch (tremolo->subtype()) {
+                        switch (tremolo->tremoloType()) {
                               default:
                               case OLD_TREMOLO_R8:  st = TREMOLO_R8;  break;
                               case OLD_TREMOLO_R16: st = TREMOLO_R16; break;
@@ -1949,7 +1949,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               case OLD_TREMOLO_C16: st = TREMOLO_C16; break;
                               case OLD_TREMOLO_C32: st = TREMOLO_C32; break;
                               }
-                        tremolo->setSubtype(st);
+                        tremolo->setTremoloType(st);
                         if (tremolo->twoNotes()) {
                               int track = chord->track();
                               Segment* ss = 0;
@@ -2080,7 +2080,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (segment && segment->next() && segment->next()->subtype() == Segment::SegClef) {
+                  if (segment && segment->next() && segment->next()->segmentType() == Segment::SegClef) {
                         segment = segment->next();
                         }
                   else if (segment && segment != first()) {
@@ -2137,6 +2137,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   staff->setKey(tick, ks->keySigEvent());
                   }
             else if (tag == "Lyrics") {                           // obsolete
+e.skipCurrentElement();
+#if 0
                   Lyrics* lyrics = new Lyrics(score());
                   lyrics->setTrack(e.track());
                   lyrics->read(e);
@@ -2146,6 +2148,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         qDebug("Internal Error: no Chord/Rest for lyrics");
                   else
                         cr->add(lyrics);
+#endif
                   }
             else if (tag == "Text") {
                   Text* t = new Text(score());
@@ -2169,7 +2172,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   dyn->setTrack(e.track());
                   dyn->read(e);
                   if (score()->mscVersion() <= 114)
-                        dyn->setSubtype(dyn->text());
+                        dyn->setDynamicType(dyn->text());
                   segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(dyn);
                   }
@@ -2242,7 +2245,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSubtype(SPACER_DOWN);
+                        spacer->setSpacerType(SPACER_DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
@@ -2251,7 +2254,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerUp") {
                   if (staves[staffIdx]->_vspacerUp == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSubtype(SPACER_UP);
+                        spacer->setSpacerType(SPACER_UP);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
@@ -2282,9 +2285,9 @@ void Measure::read(XmlReader& e, int staffIdx)
             }
       if (staffIdx == 0) {
             Segment* s = last();
-            if (s && s->subtype() == Segment::SegBarLine) {
+            if (s && s->segmentType() == Segment::SegBarLine) {
                   BarLine* b = static_cast<BarLine*>(s->element(0));
-                  setEndBarLineType(b->subtype(), false, b->visible(), b->color());
+                  setEndBarLineType(b->barLineType(), false, b->visible(), b->color());
                   // s->remove(b);
                   // delete b;
                   }
@@ -2294,7 +2297,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       //
       int ticks1 = 0;
       for (Segment* s = last(); s; s = s->prev()) {
-            if (s->subtype() == Segment::SegChordRest) {
+            if (s->segmentType() == Segment::SegChordRest) {
                   if (s->element(0)) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
                         if (cr->type() == REPEAT_MEASURE)
@@ -2312,9 +2315,9 @@ void Measure::read(XmlReader& e, int staffIdx)
             for (Segment* s = last(); s; s = s->prev()) {
                   if (s->tick() < tick() + ticks())
                         break;
-                  if (s->subtype() == Segment::SegBarLine) {
+                  if (s->segmentType() == Segment::SegBarLine) {
                         qDebug("reduce BarLine to EndBarLine");
-                        s->setSubtype(Segment::SegEndBarLine);
+                        s->setSegmentType(Segment::SegEndBarLine);
                         }
                   }
 
@@ -2405,7 +2408,7 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Measure::createVoice(int track)
       {
       for (Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() != Segment::SegChordRest)
+            if (s->segmentType() != Segment::SegChordRest)
                   continue;
             if (s->element(track) == 0)
                   score()->setRest(s->tick(), track, len(), true, 0);
@@ -2433,7 +2436,7 @@ bool Measure::setStartRepeatBarLine(bool val)
                   // no barline were we need one:
                   bl = new BarLine(score());
                   bl->setTrack(track);
-                  bl->setSubtype(START_REPEAT);
+                  bl->setBarLineType(START_REPEAT);
                   if (s == 0) {
                         if (score()->undoRedo()) {
                               return false;
@@ -2544,7 +2547,7 @@ bool Measure::createEndBarLines()
                         bl->setVisible(_endBarLineVisible);
                         bl->setColor(_endBarLineColor);
                         bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
-                        bl->setSubtype(et);
+                        bl->setBarLineType(et);
                         bl->setParent(seg);
                         bl->setTrack(track);
                         score()->undoAddElement(bl);
@@ -2553,13 +2556,13 @@ bool Measure::createEndBarLines()
                   else {
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
-                        if (bl->subtype() != et && !bl->customSubtype()) {
+                        if (bl->barLineType() != et && !bl->customSubtype()) {
                               score()->undoChangeProperty(bl, P_SUBTYPE, et);
                               bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
                               changed = true;
                               }
                         // or clear custom subtype flag if same type as measure
-                        if (bl->subtype() == et && bl->customSubtype())
+                        if (bl->barLineType() == et && bl->customSubtype())
                               bl->setCustomSubtype(false);
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),
@@ -2687,7 +2690,7 @@ void Measure::checkMultiVoices(int staffIdx)
       int etrack = staffIdx * VOICES + VOICES;
       staves[staffIdx]->hasVoices = false;
       for (Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() != Segment::SegChordRest)
+            if (s->segmentType() != Segment::SegChordRest)
                   continue;
             for (int track = strack; track < etrack; ++track) {
                   if (s->element(track)) {
@@ -2705,7 +2708,7 @@ void Measure::checkMultiVoices(int staffIdx)
 bool Measure::hasVoice(int track) const
       {
       for (Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() != Segment::SegChordRest)
+            if (s->segmentType() != Segment::SegChordRest)
                   continue;
             if (s->element(track))
                   return true;
@@ -2877,7 +2880,7 @@ void Measure::setDirty()
 bool Measure::systemHeader() const
       {
       Segment* s = first();
-      return s && (s->subtype() == Segment::SegClef) && s->element(0) && s->element(0)->generated();
+      return s && (s->segmentType() == Segment::SegClef) && s->element(0) && s->element(0)->generated();
       }
 
 //---------------------------------------------------------
@@ -2891,7 +2894,7 @@ qreal Measure::minWidth1() const
       if (_minWidth1 == 0.0) {
             Segment* s = first();
             Segment::SegmentTypes st = Segment::SegClef | Segment::SegKeySig | Segment::SegStartRepeatBarLine;
-            while ((s->subtype() & st)
+            while ((s->segmentType() & st)
                && s->next()
                && (!s->element(0) || s->element(0)->generated())
                ) {
@@ -2926,7 +2929,7 @@ void Measure::layoutX(qreal stretch)
 
       int segs = 0;
       for (const Segment* s = first(); s; s = s->next()) {
-            if (s->subtype() == Segment::SegClef && (s != first()))
+            if (s->segmentType() == Segment::SegClef && (s != first()))
                   continue;
             ++segs;
             }
@@ -2955,7 +2958,7 @@ void Measure::layoutX(qreal stretch)
       int ntick      = tick() + ticks();   // position of next measure
 
       if (system()->firstMeasure() == this && system()->barLine())
-            x += BarLine::layoutWidth(score(), system()->barLine()->subtype(), system()->barLine()->magS());
+            x += BarLine::layoutWidth(score(), system()->barLine()->barLineType(), system()->barLine()->magS());
 
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
@@ -2967,7 +2970,7 @@ void Measure::layoutX(qreal stretch)
       for (; s; s = s->next(), ++segmentIdx) {
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
-            if ((s->subtype() == Segment::SegClef) && (s != first())) {
+            if ((s->segmentType() == Segment::SegClef) && (s != first())) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                         if (!score()->staff(staffIdx)->show())
@@ -2982,11 +2985,11 @@ void Measure::layoutX(qreal stretch)
                   continue;
                   }
             bool rest2[nstaves+1];
-            Segment::SegmentType segType    = s->subtype();
+            Segment::SegmentType segType = s->segmentType();
             types[segmentIdx]      = segType;
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
+            int pt                 = pSeg ? pSeg->segmentType() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                   if (!score()->staff(staffIdx)->show())
@@ -3095,11 +3098,11 @@ void Measure::layoutX(qreal stretch)
                   if (rest2[staffIdx])
                         rest[staffIdx] -= segmentWidth;
                   }
-            if ((s->subtype() == Segment::SegChordRest)) {
+            if ((s->segmentType() == Segment::SegChordRest)) {
                   const Segment* nseg = s;
                   for (;;) {
                         nseg = nseg->next();
-                        if (nseg == 0 || nseg->subtype() == Segment::SegChordRest)
+                        if (nseg == 0 || nseg->segmentType() == Segment::SegChordRest)
                               break;
                         }
                   int nticks = (nseg ? nseg->tick() : ntick) - s->tick();
@@ -3219,7 +3222,7 @@ void Measure::layoutX(qreal stretch)
 
       int seg = 0;
       for (Segment* s = first(); s; s = s->next(), ++seg) {
-            if ((s->subtype() == Segment::SegClef) && (s != first())) {
+            if ((s->segmentType() == Segment::SegClef) && (s != first())) {
                   s->setPos(xpos[seg], 0.0);
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                         if (!score()->staff(staffIdx)->show())
@@ -3261,7 +3264,7 @@ void Measure::layoutX(qreal stretch)
                                     Segment* ls = last();
                                     qreal eblw = 0.0;
                                     int t = (track / VOICES) * VOICES;
-                                    if (ls->subtype() == Segment::SegEndBarLine) {
+                                    if (ls->segmentType() == Segment::SegEndBarLine) {
                                           Element* e = ls->element(t);
                                           if (!e)
                                                 e = ls->element(0);
@@ -3355,12 +3358,12 @@ void Measure::layoutStage1()
             for (Segment* segment = first(); segment; segment = segment->next()) {
                   Element* e = segment->element(track);
 
-                  if (segment->subtype() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig)) {
+                  if (segment->segmentType() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig)) {
                         if (e && !e->generated())
                               setBreakMMRest(true);
                         }
 
-                  if (segment->subtype() & Segment::SegChordRestGrace)
+                  if (segment->segmentType() & Segment::SegChordRestGrace)
                         layoutChords0(segment, staffIdx * VOICES);
                   }
             }
@@ -3500,7 +3503,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
 
       for (Segment* oseg = first(); oseg; oseg = oseg->next()) {
             Segment* s = new Segment(m);
-            s->setSubtype(oseg->subtype());
+            s->setSegmentType(oseg->segmentType());
             s->setRtick(oseg->rtick());
             m->_segments.push_back(s);
             for (int track = 0; track < tracks; ++track) {

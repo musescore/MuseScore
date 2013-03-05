@@ -28,7 +28,7 @@ class QPainter;
 class Bracket : public Element {
       Q_OBJECT
 
-      BracketType _subtype;
+      BracketType _bracketType;
 
       qreal h2;
 
@@ -44,9 +44,9 @@ class Bracket : public Element {
       Bracket(Score*);
       virtual Bracket* clone() const   { return new Bracket(*this); }
 
-      virtual ElementType type() const { return BRACKET;  }
-      BracketType subtype() const      { return _subtype; }
-      void setSubtype(BracketType t)   { _subtype = t;    }
+      virtual ElementType type() const   { return BRACKET;  }
+      BracketType bracketType() const    { return _bracketType; }
+      void setBracketType(BracketType t) { _bracketType = t;    }
 
       int firstStaff() const           { return _firstStaff; }
       void setFirstStaff(int val)      { _firstStaff = val;  }

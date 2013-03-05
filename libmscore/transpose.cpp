@@ -418,7 +418,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
                   }
             for (Segment* s = firstSegment(); s; s = s->next1()) {
-                  if (s->subtype() != Segment::SegKeySig)
+                  if (s->segmentType() != Segment::SegKeySig)
                         continue;
                   if (s->tick() < tickStart)
                         continue;

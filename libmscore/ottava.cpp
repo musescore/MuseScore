@@ -41,8 +41,8 @@ void OttavaSegment::layout()
 Ottava::Ottava(Score* s)
    : TextLine(s)
       {
-      _subtype = OttavaType(-1);
-      setSubtype(OTTAVA_8VA);
+      _ottavaType = OttavaType(-1);
+      setOttavaType(OTTAVA_8VA);
       }
 
 //---------------------------------------------------------
@@ -57,15 +57,15 @@ void Ottava::layout()
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setOttavaType
 //---------------------------------------------------------
 
-void Ottava::setSubtype(OttavaType val)
+void Ottava::setOttavaType(OttavaType val)
       {
-      if (val == _subtype)
+      if (val == _ottavaType)
             return;
       setEndHook(true);
-      _subtype = val;
+      _ottavaType = val;
 
       Spatium hook(score()->styleS(ST_ottavaHook));
 
@@ -141,7 +141,7 @@ void Ottava::endEdit()
 void Ottava::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", subtype());
+      xml.tag("subtype", ottavaType());
       TextLine::writeProperties(xml);
       xml.etag();
       }
@@ -158,7 +158,7 @@ void Ottava::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(OttavaType(e.readInt()));
+                  setOttavaType(OttavaType(e.readInt()));
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
@@ -172,7 +172,7 @@ QVariant Ottava::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_OTTAVA_TYPE:
-                  return subtype();
+                  return ottavaType();
             default:
                   break;
             }
@@ -187,7 +187,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
             case P_OTTAVA_TYPE:
-                  setSubtype(OttavaType(val.toInt()));
+                  setOttavaType(OttavaType(val.toInt()));
                   break;
             default:
                   if (!TextLine::setProperty(propertyId, val))
@@ -214,10 +214,10 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   undoSetSubtype
+//   undoSetOttavaType
 //---------------------------------------------------------
 
-void Ottava::undoSetSubtype(OttavaType val)
+void Ottava::undoSetOttavaType(OttavaType val)
       {
       score()->undoChangeProperty(this, P_OTTAVA_TYPE, val);
       }

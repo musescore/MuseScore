@@ -25,7 +25,7 @@ enum InstrumentNameType {
 //---------------------------------------------------------
 
 class InstrumentName : public Text  {
-      InstrumentNameType _subtype;
+      InstrumentNameType _instrumentNameType;
       int _layoutPos;
 
    public:
@@ -35,10 +35,10 @@ class InstrumentName : public Text  {
       int layoutPos() const      { return _layoutPos; }
       void setLayoutPos(int val) { _layoutPos = val;  }
 
-      QString subtypeName() const;
-      InstrumentNameType subtype() const { return _subtype; }
-      void setSubtype(InstrumentNameType v);
-      void setSubtype(const QString& s);
+      QString instrumentNameTypeName() const;
+      InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
+      void setInstrumentNameType(InstrumentNameType v);
+      void setInstrumentNameType(const QString& s);
       };
 
 #endif

@@ -29,7 +29,7 @@
 void Icon::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _iconType);
       if (_action)
             xml.tag("action", _action);
       xml.etag();
@@ -46,7 +46,7 @@ void Icon::read(XmlReader& e)
             if (tag == "action")
                   _action = strdup(e.readElementText().toLatin1().data());
             else if (tag == "subtype")
-                  _subtype = e.readInt();
+                  _iconType = e.readInt();
             else
                   e.unknown();
             }

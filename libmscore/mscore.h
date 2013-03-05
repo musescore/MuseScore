@@ -165,18 +165,19 @@ enum OffsetType {
 //   BeamMode
 //---------------------------------------------------------
 
-enum BeamMode {
-      BEAM_AUTO    = 0,
-      BEAM_BEGIN   = 0x01,
-      BEAM_MID     = 0x02,
-      BEAM_END     = 0x04,
-      BEAM_NO      = 0x08,
-      BEAM_BEGIN32 = 0x10,
-      BEAM_BEGIN64 = 0x20,
-      BEAM_INVALID = -1
+enum class BeamMode {
+      AUTO    = 0,
+      BEGIN   = 0x01,
+      MID     = 0x02,
+      END     = 0x04,
+      NO      = 0x08,
+      BEGIN32 = 0x10,
+      BEGIN64 = 0x20,
+      INVALID = -1
       };
 
-#define beamModeMid(a) (a & (BEAM_MID | BEAM_BEGIN32 | BEAM_BEGIN64))
+// #define beamModeMid(a) (a & (BeamMode::MID | BeamMode::BEGIN32 | BeamMode::BEGIN64))
+#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
 
 //---------------------------------------------------------
 //   TransposeDirection
@@ -409,6 +410,9 @@ class MScore : public QObject {
 Q_DECLARE_METATYPE(MScore::ValueType)
 Q_DECLARE_METATYPE(MScore::Direction)
 Q_DECLARE_METATYPE(MScore::DirectionH)
+
+Q_ENUMS(DirectionH)
+Q_DECLARE_METATYPE(BeamMode)
 
 static const int HEAD_TYPES = 4;
 

@@ -913,10 +913,6 @@ qreal Text::lineHeight() const
 
 void Text::addChar(int code)
       {
-      if (styled()) {
-            SimpleText::addChar(code);
-            return;
-            }
       QString ss;
       if (code & 0xffff0000) {
             ss = QChar(QChar::highSurrogate(code));
@@ -924,6 +920,10 @@ void Text::addChar(int code)
             }
       else
             ss = QChar(code);
+      if (styled()) {
+            SimpleText::insertText(ss);
+            return;
+            }
       _cursor->insertText(ss);
       score()->setLayoutAll(true);
       score()->end();

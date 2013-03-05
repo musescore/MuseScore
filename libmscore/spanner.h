@@ -31,7 +31,7 @@ enum SpannerSegmentType {
 class SpannerSegment : public Element {
       Q_OBJECT
 
-      SpannerSegmentType _subtype;
+      SpannerSegmentType _spannerSegmentType;
       Spanner* _spanner;
 
    public:
@@ -41,8 +41,8 @@ class SpannerSegment : public Element {
       Spanner* spanner() const              { return _spanner;            }
       Spanner* setSpanner(Spanner* val)     { return _spanner = val;      }
 
-      void setSubtype(SpannerSegmentType s) { _subtype = s;               }
-      SpannerSegmentType subtype() const    { return _subtype;            }
+      void setSpannerSegmentType(SpannerSegmentType s) { _spannerSegmentType = s;               }
+      SpannerSegmentType spannerSegmentType() const    { return _spannerSegmentType;            }
 
       void setSystem(System* s);
       System* system() const                { return (System*)parent();   }

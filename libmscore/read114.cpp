@@ -615,26 +615,26 @@ Score::FileError Score::read114(XmlReader& e)
             int tracks = nstaves() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->subtype() != Segment::SegChordRest)
+                        if (s->segmentType() != Segment::SegChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
                               switch(cr->beamMode()) {
-                                    case BEAM_AUTO:
-                                    case BEAM_BEGIN:
-                                    case BEAM_END:
-                                    case BEAM_NO:
+                                    case BeamMode::AUTO:
+                                    case BeamMode::BEGIN:
+                                    case BeamMode::END:
+                                    case BeamMode::NO:
                                           break;
-                                    case BEAM_MID:
-                                    case BEAM_BEGIN32:
-                                    case BEAM_BEGIN64:
-                                          cr->setBeamMode(BEAM_BEGIN);
+                                    case BeamMode::MID:
+                                    case BeamMode::BEGIN32:
+                                    case BeamMode::BEGIN64:
+                                          cr->setBeamMode(BeamMode::BEGIN);
                                           break;
-                                    case BEAM_INVALID:
+                                    case BeamMode::INVALID:
                                           if (cr->type() == Element::CHORD)
-                                                cr->setBeamMode(BEAM_AUTO);
+                                                cr->setBeamMode(BeamMode::AUTO);
                                           else
-                                                cr->setBeamMode(BEAM_NO);
+                                                cr->setBeamMode(BeamMode::NO);
                                           break;
                                     }
                               break;

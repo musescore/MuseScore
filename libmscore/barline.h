@@ -40,7 +40,7 @@ class QPainter;
 class BarLine : public Element {
       Q_OBJECT
 
-      BarLineType _subtype;
+      BarLineType _barLineType;
       bool _customSpan;
       bool _customSubtype;
       int _span;
@@ -96,10 +96,10 @@ class BarLine : public Element {
       ElementList* el()                { return &_el; }
       const ElementList* el() const    { return &_el; }
 
-      QString subtypeName() const;
-      void setSubtype(const QString& s);
-      void setSubtype(BarLineType i)   { _subtype = i;      }
-      BarLineType subtype() const      { return _subtype;  }
+      QString barLineTypeName() const;
+      void setBarLineType(const QString& s);
+      void setBarLineType(BarLineType i) { _barLineType = i;      }
+      BarLineType barLineType() const    { return _barLineType;  }
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

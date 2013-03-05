@@ -538,7 +538,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //  ignore if there is already a timesig
             //  with same values
             //
-            if ((ots->subtype() == ts->subtype())
+            if ((ots->timeSigType() == ts->timeSigType())
                && (ots->sig().identical(ts->sig()))
                && (ots->stretch() == ts->stretch())) {
                   delete ts;
@@ -595,12 +595,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         nsig = new TimeSig(this);
                         nsig->setTrack(staffIdx * VOICES);
                         nsig->setParent(seg);
-                        nsig->setSig(ts->sig(), ts->subtype());
+                        nsig->setSig(ts->sig(), ts->timeSigType());
                         undoAddElement(nsig);
                         }
                   else {
                         undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
-                              ts->numeratorString(), ts->denominatorString(), ts->subtype()));
+                              ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
                         nsig->setDropTarget(0);       // DEBUG
                         }
                   }
@@ -910,7 +910,7 @@ void Score::cmdAddHairpin(bool decrescendo)
             return;
 
       Hairpin* pin = new Hairpin(this);
-      pin->setSubtype(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
+      pin->setHairpinType(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
       pin->setTrack(cr1->track());
       pin->setStartElement(cr1->segment());
       pin->setEndElement(cr2->segment());
@@ -924,12 +924,12 @@ void Score::cmdAddHairpin(bool decrescendo)
 //   cmdSetBeamMode
 //---------------------------------------------------------
 
-void Score::cmdSetBeamMode(int mode)
+void Score::cmdSetBeamMode(BeamMode mode)
       {
       ChordRest* cr = getSelectedChordRest();
       if (cr == 0)
             return;
-      cr->setBeamMode(BeamMode(mode));
+      cr->setBeamMode(mode);
       _layoutAll = true;
       }
 
@@ -972,14 +972,14 @@ void Score::cmdFlip()
                   undoChangeProperty(slur, P_SLUR_DIRECTION, dir);
                   }
             else if (e->type() == Element::HAIRPIN_SEGMENT) {
-                  int st = static_cast<Hairpin*>(e)->subtype() == 0 ? 1 : 0;
+                  int st = static_cast<Hairpin*>(e)->hairpinType() == 0 ? 1 : 0;
                   e->score()->undoChangeProperty(e, P_SUBTYPE, st);
                   }
             else if (e->type() == Element::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (a->subtype() == Articulation_Staccato
-                     || a->subtype() == Articulation_Tenuto
-                     || a->subtype() == Articulation_Sforzatoaccent) {
+                  if (a->articulationType() == Articulation_Staccato
+                     || a->articulationType() == Articulation_Tenuto
+                     || a->articulationType() == Articulation_Sforzatoaccent) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == A_TOP_CHORD)
                               aa = A_BOTTOM_CHORD;
@@ -1068,9 +1068,9 @@ void Score::deleteItem(Element* el)
             case Element::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
                   InstrumentName* in = static_cast<InstrumentName*>(el);
-                  if (in->subtype() == INSTRUMENT_NAME_LONG)
+                  if (in->instrumentNameType() == INSTRUMENT_NAME_LONG)
                         undo(new ChangeInstrumentLong(0, part, QList<StaffNameDoc>()));
-                  else if (in->subtype() == INSTRUMENT_NAME_SHORT)
+                  else if (in->instrumentNameType() == INSTRUMENT_NAME_SHORT)
                         undo(new ChangeInstrumentShort(0, part, QList<StaffNameDoc>()));
                   }
                   break;
@@ -1180,7 +1180,7 @@ void Score::deleteItem(Element* el)
                   Segment* seg   = static_cast<Segment*>(bl->parent());
                   bool normalBar = seg->measure()->endBarLineType() == NORMAL_BAR;
                   int tick       = seg->tick();
-                  Segment::SegmentType segType = seg->subtype();
+                  Segment::SegmentType segType = seg->segmentType();
 
                   foreach(Score* score, scoreList()) {
                         Measure* m   = score->tick2measure(tick);
@@ -1281,10 +1281,10 @@ void Score::cmdDeleteSelection()
             Segment* s2 = selection().endSegment();
 
             Segment* ss1 = s1;
-            if (ss1->subtype() != Segment::SegChordRest)
+            if (ss1->segmentType() != Segment::SegChordRest)
                   ss1 = ss1->next1(Segment::SegChordRest);
             bool fullMeasure = ss1 && (ss1->measure()->first(Segment::SegChordRest) == ss1)
-                  && (s2 == 0 || (s2->subtype() == Segment::SegEndBarLine));
+                  && (s2 == 0 || (s2->segmentType() == Segment::SegEndBarLine));
 
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
@@ -1295,12 +1295,12 @@ void Score::cmdDeleteSelection()
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s != s2; s = s->next1()) {
                         if (s->element(track) &&
-                           ((s->subtype() == Segment::SegBreath)
-                           || (s->subtype() == Segment::SegGrace))) {
+                           ((s->segmentType() == Segment::SegBreath)
+                           || (s->segmentType() == Segment::SegGrace))) {
                               deleteItem(s->element(track));
                               continue;
                               }
-                        if (s->subtype() != Segment::SegChordRest || !s->element(track))
+                        if (s->segmentType() != Segment::SegChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (tick == -1) {
@@ -1495,10 +1495,10 @@ void Score::colorItem(Element* element)
                   refresh |= e->abbox();
                   if (e->type() == Element::BAR_LINE) {
                         Element* ep = e->parent();
-                        if (ep->type() == Element::SEGMENT && static_cast<Segment*>(ep)->subtype() == Segment::SegEndBarLine) {
+                        if (ep->type() == Element::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::SegEndBarLine) {
                               Measure* m = static_cast<Segment*>(ep)->measure();
                               BarLine* bl = static_cast<BarLine*>(e);
-                              m->setEndBarLineType(bl->subtype(), false, e->visible(), e->color());
+                              m->setEndBarLineType(bl->barLineType(), false, e->visible(), e->color());
                               }
                         }
                   }

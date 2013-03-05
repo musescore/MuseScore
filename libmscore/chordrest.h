@@ -1,4 +1,4 @@
-//=============================================================================
+
 //  MuseScore
 //  Music Composition & Notation
 //  $Id: chordrest.h 5585 2012-04-28 09:11:33Z wschweer $
@@ -38,8 +38,8 @@ class Spanner;
 
 class ChordRest : public DurationElement {
       Q_OBJECT
-      Q_PROPERTY(int durationType  READ durationTypeTicks WRITE setDurationType);
-      Q_PROPERTY(BeamMode beamMode READ beamMode          WRITE undoSetBeamMode);
+      Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
+      Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming

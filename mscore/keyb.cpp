@@ -313,11 +313,11 @@ void MuseScore::updateInputState(Score* score)
       getAction("grace16")->setChecked(is.noteType == NOTE_GRACE16);
       getAction("grace32")->setChecked(is.noteType == NOTE_GRACE32);
 
-      getAction("beam-start")->setChecked(is.beamMode == BEAM_BEGIN);
-      getAction("beam-mid")->setChecked(is.beamMode   == BEAM_MID);
-      getAction("no-beam")->setChecked(is.beamMode    == BEAM_NO);
-      getAction("beam32")->setChecked(is.beamMode     == BEAM_BEGIN32);
-      getAction("auto-beam")->setChecked(is.beamMode  == BEAM_AUTO);
+      getAction("beam-start")->setChecked(is.beamMode == BeamMode::BEGIN);
+      getAction("beam-mid")->setChecked(is.beamMode   == BeamMode::MID);
+      getAction("no-beam")->setChecked(is.beamMode    == BeamMode::NO);
+      getAction("beam32")->setChecked(is.beamMode     == BeamMode::BEGIN32);
+      getAction("auto-beam")->setChecked(is.beamMode  == BeamMode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
 

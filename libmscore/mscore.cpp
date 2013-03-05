@@ -85,12 +85,13 @@ void MScore::init()
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
-      qRegisterMetaType<Volta::VoltaType>("VoltaType");
+      qRegisterMetaType<VoltaType>("VoltaType");
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
       qRegisterMetaType<Element::DynamicRange>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<MarkerType>("MarkerType");
+      qRegisterMetaType<BeamMode>("BeamMode");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

@@ -36,13 +36,13 @@ void TrillSegment::draw(QPainter* painter) const
       qreal x2   = pos2().x();
 
       painter->setPen(curColor());
-      if (subtype() == SEGMENT_SINGLE || subtype() == SEGMENT_BEGIN) {
+      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
             int sym = 0;
             qreal x0 = 0.0, x1 = 0.0, y = 0.0;
             int n = 0;
             QRectF b1;
 
-            switch(trill()->subtype()) {
+            switch(trill()->trillType()) {
                   case Trill::TRILL_LINE:
                         sym  = trillSym;
                         b1   = symbols[idx][sym].bbox(mag);
@@ -150,7 +150,7 @@ Element* TrillSegment::drop(const DropData& data)
 Trill::Trill(Score* s)
   : SLine(s)
       {
-      _subtype = TRILL_LINE;
+      _trillType = TRILL_LINE;
       }
 
 //---------------------------------------------------------
@@ -238,7 +238,7 @@ LineSegment* Trill::createLineSegment()
 void Trill::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", subtypeName());
+      xml.tag("subtype", trillTypeName());
       SLine::writeProperties(xml);
       foreach(Element* e, _el)
             e->write(xml);
@@ -258,7 +258,7 @@ void Trill::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(e.readElementText());
+                  setTrillType(e.readElementText());
             else if (tag == "Accidental") {
                   Accidental* a = new Accidental(score());
                   a->read(e);
@@ -270,32 +270,32 @@ void Trill::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setTrillType
 //---------------------------------------------------------
 
-void Trill::setSubtype(const QString& s)
+void Trill::setTrillType(const QString& s)
       {
       if (s == "trill" || s == "0")
-            _subtype = TRILL_LINE;
+            _trillType = TRILL_LINE;
       else if (s == "upprall")
-            _subtype = UPPRALL_LINE;
+            _trillType = UPPRALL_LINE;
       else if (s == "downprall")
-            _subtype = DOWNPRALL_LINE;
+            _trillType = DOWNPRALL_LINE;
       else if (s == "prallprall")
-            _subtype = PRALLPRALL_LINE;
+            _trillType = PRALLPRALL_LINE;
       else if (s == "pure")
-            _subtype = PURE_LINE;
+            _trillType = PURE_LINE;
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   trillTypeName
 //---------------------------------------------------------
 
-QString Trill::subtypeName() const
+QString Trill::trillTypeName() const
       {
-      switch(subtype()) {
+      switch(trillType()) {
             case TRILL_LINE:
                   return "trill";
             case UPPRALL_LINE:
@@ -307,7 +307,7 @@ QString Trill::subtypeName() const
             case PURE_LINE:
                   return "pure";
             default:
-                  qDebug("unknown Trill subtype %d", subtype());
+                  qDebug("unknown Trill subtype %d", trillType());
                   return "?";
             }
       }
@@ -332,7 +332,7 @@ QVariant Trill::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_TRILL_TYPE:
-                  return subtype();
+                  return trillType();
             default:
                   break;
             }
@@ -347,7 +347,7 @@ bool Trill::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
             case P_TRILL_TYPE:
-                  setSubtype(TrillType(val.toInt()));
+                  setTrillType(TrillType(val.toInt()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, val))
@@ -374,10 +374,10 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   undoSetSubtype
+//   undoSetTrillType
 //---------------------------------------------------------
 
-void Trill::undoSetSubtype(TrillType val)
+void Trill::undoSetTrillType(TrillType val)
       {
       score()->undoChangeProperty(this, P_TRILL_TYPE, val);
       }

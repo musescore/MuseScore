@@ -29,7 +29,7 @@ Glissando::Glissando(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
 
-      _subtype       = GlissandoType::STRAIGHT;
+      _glissandoType = GlissandoType::STRAIGHT;
       _text          = "gliss.";
       _showText      = true;
       qreal _spatium = spatium();
@@ -39,10 +39,10 @@ Glissando::Glissando(Score* s)
 Glissando::Glissando(const Glissando& g)
    : Element(g)
       {
-      _subtype  = g._subtype;
-      line      = g.line;
-      _text     = g._text;
-      _showText = g._showText;
+      _glissandoType = g._glissandoType;
+      line           = g.line;
+      _text          = g._text;
+      _showText      = g._showText;
       }
 
 //---------------------------------------------------------
@@ -58,7 +58,7 @@ void Glissando::layout()
       Segment* s = chord->segment();
       s = s->prev1();
       while (s) {
-            if ((s->subtype() & (Segment::SegChordRestGrace)) && s->element(track()))
+            if ((s->segmentType() & (Segment::SegChordRestGrace)) && s->element(track()))
                   break;
             s = s->prev1();
             }
@@ -116,7 +116,7 @@ void Glissando::write(Xml& xml) const
       xml.stag("Glissando");
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
-      xml.tag("subtype", int(_subtype));
+      xml.tag("subtype", int(_glissandoType));
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -135,7 +135,7 @@ void Glissando::read(XmlReader& e)
                   _text = e.readElementText();
                   }
             else if (tag == "subtype")
-                  _subtype = GlissandoType(e.readInt());
+                  _glissandoType = GlissandoType(e.readInt());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -163,10 +163,10 @@ void Glissando::draw(QPainter* painter) const
       qreal wi = asin(-h / l) * 180.0 / M_PI;
       painter->rotate(-wi);
 
-      if (subtype() == GlissandoType::STRAIGHT) {
+      if (glissandoType() == GlissandoType::STRAIGHT) {
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
-      else if (subtype() == GlissandoType::WAVY) {
+      else if (glissandoType() == GlissandoType::WAVY) {
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
@@ -207,10 +207,10 @@ void Glissando::setSize(const QSizeF& s)
       }
 
 //---------------------------------------------------------
-//   undoSetSubtype
+//   undoSetGlissandoType
 //---------------------------------------------------------
 
-void Glissando::undoSetSubtype(GlissandoType t)
+void Glissando::undoSetGlissandoType(GlissandoType t)
       {
       score()->undoChangeProperty(this, P_GLISS_TYPE, int(t));
       }
@@ -241,7 +241,7 @@ QVariant Glissando::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_GLISS_TYPE:
-                  return int(subtype());
+                  return int(glissandoType());
             case P_GLISS_TEXT:
                   return text();
             case P_GLISS_SHOW_TEXT:
@@ -260,7 +260,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_GLISS_TYPE:
-                  setSubtype(GlissandoType(v.toInt()));
+                  setGlissandoType(GlissandoType(v.toInt()));
                   break;
             case P_GLISS_TEXT:
                   setText(v.toString());

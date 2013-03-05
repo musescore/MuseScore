@@ -25,16 +25,16 @@ class Chord;
 class Hook : public Symbol {
       Q_OBJECT
 
-      int _subtype;
+      int _hookType;
 
    public:
       Hook(Score*);
       virtual Hook* clone() const      { return new Hook(*this); }
       virtual ElementType type() const { return HOOK; }
-      void setSubtype(int v);
-      int subtype() const { return _subtype; }
+      void setHookType(int v);
+      int hookType() const             { return _hookType; }
       virtual void layout();
-      Chord* chord() const            { return (Chord*)parent(); }
+      Chord* chord() const             { return (Chord*)parent(); }
       };
 
 #endif

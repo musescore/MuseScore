@@ -407,7 +407,7 @@ MusicXml::MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1)
       doc(d),
       pass1(p1),
       maxLyrics(0),
-      beamMode(BEAM_NO),
+      beamMode(BeamMode::NO),
       pageWidth(0),
       pageHeight(0)
       {
@@ -1847,7 +1847,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
 static void removeBeam(Beam*& beam)
       {
       for (int i = 0; i < beam->elements().size(); ++i)
-            beam->elements().at(i)->setBeamMode(BEAM_NO);
+            beam->elements().at(i)->setBeamMode(BeamMode::NO);
       delete beam;
       beam = 0;
       }
@@ -1861,7 +1861,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
       if (!cr) return;
       // create a new beam
       // currently only required when stem direction is explicit
-      if (bm == BEAM_BEGIN && sd != MScore::AUTO) {
+      if (bm == BeamMode::BEGIN && sd != MScore::AUTO) {
             // if currently in a beam, delete it
             if (beam) {
                   qDebug("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
@@ -1878,7 +1878,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
             // and in a beam ...
             // (note no check is done on correct order of beam begin/continue/end)
             if (cr->track() == beam->track()
-                && (bm == BEAM_BEGIN || bm == BEAM_MID || bm == BEAM_END)) {
+                && (bm == BeamMode::BEGIN || bm == BeamMode::MID || bm == BeamMode::END)) {
                   // ... and actually add cr to the beam
                   beam->add(cr);
                   }
@@ -1892,10 +1892,10 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
       // if no beam, set stem direction on chord itself
       if (!beam) {
             static_cast<Chord*>(cr)->setStemDirection(sd);
-            cr->setBeamMode(BEAM_NO);
+            cr->setBeamMode(BeamMode::NO);
             }
       // terminate the currect beam and add to the score
-      if (beam && bm == BEAM_END)
+      if (beam && bm == BeamMode::END)
             beam = 0;
       }
 
@@ -1998,7 +1998,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                             && (newSystem == "yes" || newPage == "yes")) {
                               LayoutBreak* lb = new LayoutBreak(score);
                               lb->setTrack(staff * VOICES);
-                              lb->setSubtype(
+                              lb->setLayoutBreakType(
                                     newSystem == "yes" ? LAYOUT_BREAK_LINE : LAYOUT_BREAK_PAGE
                                     );
                               pm->add(lb);
@@ -2044,21 +2044,21 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                         BarLine* barLine = new BarLine(score);
                         bool visible = true;
                         if (barStyle == "light-heavy" && repeat == "backward") {
-                              barLine->setSubtype(END_REPEAT);
+                              barLine->setBarLineType(END_REPEAT);
                               }
                         else if (barStyle == "heavy-light" && repeat == "forward") {
-                              barLine->setSubtype(START_REPEAT);
+                              barLine->setBarLineType(START_REPEAT);
                               }
                         else if (barStyle == "light-heavy" && repeat.isEmpty())
-                              barLine->setSubtype(END_BAR);
+                              barLine->setBarLineType(END_BAR);
                         else if (barStyle == "regular")
-                              barLine->setSubtype(NORMAL_BAR);
+                              barLine->setBarLineType(NORMAL_BAR);
                         else if (barStyle == "dashed")
-                              barLine->setSubtype(BROKEN_BAR);
+                              barLine->setBarLineType(BROKEN_BAR);
                         else if (barStyle == "dotted")
-                              barLine->setSubtype(DOTTED_BAR);
+                              barLine->setBarLineType(DOTTED_BAR);
                         else if (barStyle == "light-light")
-                              barLine->setSubtype(DOUBLE_BAR);
+                              barLine->setBarLineType(DOUBLE_BAR);
                         /*
                         else if (barStyle == "heavy-light")
                               ;
@@ -2066,31 +2066,31 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                               ;
                         */
                         else if (barStyle == "none") {
-                              barLine->setSubtype(NORMAL_BAR);
+                              barLine->setBarLineType(NORMAL_BAR);
                               visible = false;
                               }
                         else if (barStyle == "") {
                               if (repeat == "backward")
-                                    barLine->setSubtype(END_REPEAT);
+                                    barLine->setBarLineType(END_REPEAT);
                               else if (repeat == "forward")
-                                    barLine->setSubtype(START_REPEAT);
+                                    barLine->setBarLineType(START_REPEAT);
                               else
                                     qDebug("ImportXml: warning: empty bar type");
                               }
                         else
                               qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());
                         barLine->setTrack(staff * VOICES);
-                        if (barLine->subtype() == START_REPEAT) {
+                        if (barLine->barLineType() == START_REPEAT) {
                               measure->setRepeatFlags(RepeatStart);
                               }
-                        else if (barLine->subtype() == END_REPEAT) {
+                        else if (barLine->barLineType() == END_REPEAT) {
                               measure->setRepeatFlags(RepeatEnd);
                               }
                         else {
                               if (loc == "right")
-                                    measure->setEndBarLineType(barLine->subtype(), false, visible);
+                                    measure->setEndBarLineType(barLine->barLineType(), false, visible);
                               else if (measure->prevMeasure())
-                                    measure->prevMeasure()->setEndBarLineType(barLine->subtype(), false, visible);
+                                    measure->prevMeasure()->setEndBarLineType(barLine->barLineType(), false, visible);
                               }
                         }
                   if (!(endingNumber.isEmpty() && endingType.isEmpty())) {
@@ -2128,7 +2128,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
-                                                lastVolta->setSubtype(Volta::VOLTA_CLOSED);
+                                                lastVolta->setVoltaType(VoltaType::CLOSED);
                                                 lastVolta->setEndElement(measure);
                                                 measure->addSpannerBack(lastVolta);
                                                 lastVolta = 0;
@@ -2139,7 +2139,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           }
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
-                                                lastVolta->setSubtype(Volta::VOLTA_OPEN);
+                                                lastVolta->setVoltaType(VoltaType::OPEN);
                                                 lastVolta->setEndElement(measure);
                                                 measure->addSpannerBack(lastVolta);
                                                 lastVolta = 0;
@@ -2743,7 +2743,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
             for (QStringList::Iterator it = dynamics.begin(); it != dynamics.end(); ++it ) {
                   Dynamic* dyn = new Dynamic(score);
-                  dyn->setSubtype(*it);
+                  dyn->setDynamicType(*it);
                   if (!dynaVelocity.isEmpty()) {
                         int dynaValue = round(dynaVelocity.toDouble() * 0.9);
                         if (dynaValue > 127)
@@ -2768,7 +2768,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else {
                         hairpin = new Hairpin(score);
-                        hairpin->setSubtype(type == "crescendo"
+                        hairpin->setHairpinType(type == "crescendo"
                                             ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
                         hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
 
@@ -2948,10 +2948,10 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         else {
                               ottava = new Ottava(score);
                               ottava->setTrack((staff + rstaff) * VOICES);
-                              if (type == "down" && ottavasize ==  8) ottava->setSubtype(Ottava::OTTAVA_8VA);
-                              if (type == "down" && ottavasize == 15) ottava->setSubtype(Ottava::OTTAVA_15MA);
-                              if (type ==   "up" && ottavasize ==  8) ottava->setSubtype(Ottava::OTTAVA_8VB);
-                              if (type ==   "up" && ottavasize == 15) ottava->setSubtype(Ottava::OTTAVA_15MB);
+                              if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::OTTAVA_8VA);
+                              if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::OTTAVA_15MA);
+                              if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::OTTAVA_8VB);
+                              if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::OTTAVA_15MB);
                               if (placement == "") placement = "above";  // set default
                               setSLinePlacement(ottava,
                                                 score->spatium(), placement,
@@ -3803,7 +3803,7 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
 static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QString dir)
       {
       Articulation* na = new Articulation(cr->score());
-      na->setSubtype(articSym);
+      na->setArticulationType(articSym);
       if (dir == "up") {
             na->setUp(true);
             na->setAnchor(A_TOP_STAFF);
@@ -4243,15 +4243,15 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (!arpeggioType.isEmpty()) {
             Arpeggio* a = new Arpeggio(score);
             if (arpeggioType == "none")
-                  a->setSubtype(ArpeggioType::NORMAL);
+                  a->setArpeggioType(ArpeggioType::NORMAL);
             else if (arpeggioType == "up")
-                  a->setSubtype(ArpeggioType::UP);
+                  a->setArpeggioType(ArpeggioType::UP);
             else if (arpeggioType == "down")
-                  a->setSubtype(ArpeggioType::DOWN);
+                  a->setArpeggioType(ArpeggioType::DOWN);
             else if (arpeggioType == "non-arpeggiate")
-                  a->setSubtype(ArpeggioType::BRACKET);
+                  a->setArpeggioType(ArpeggioType::BRACKET);
             else {
-                  qDebug("unknown arpeggio type %s", arpeggioType.toLatin1().data());
+                  qDebug("unknown arpeggio type %s", qPrintable(arpeggioType));
                   delete a;
                   a = 0;
                   }
@@ -4267,9 +4267,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (!glissandoType.isEmpty()) {
             Glissando* g = new Glissando(score);
             if (glissandoType == "slide")
-                  g->setSubtype(GlissandoType::STRAIGHT);
+                  g->setGlissandoType(GlissandoType::STRAIGHT);
             else if (glissandoType == "glissando")
-                  g->setSubtype(GlissandoType::WAVY);
+                  g->setGlissandoType(GlissandoType::WAVY);
             else {
                   qDebug("unknown glissando type %s", glissandoType.toLatin1().data());
                   delete g;
@@ -4316,7 +4316,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             Breath* b = new Breath(score);
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
-            b->setSubtype(breath);
+            b->setBreathType(breath);
             Segment* seg = measure->getSegment(Segment::SegBreath, tick);
             seg->add(b);
             }
@@ -4326,10 +4326,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(score);
                         switch (tremolo) {
-                              case 1: t->setSubtype(TREMOLO_R8); break;
-                              case 2: t->setSubtype(TREMOLO_R16); break;
-                              case 3: t->setSubtype(TREMOLO_R32); break;
-                              case 4: t->setSubtype(TREMOLO_R64); break;
+                              case 1: t->setTremoloType(TREMOLO_R8); break;
+                              case 2: t->setTremoloType(TREMOLO_R16); break;
+                              case 3: t->setTremoloType(TREMOLO_R32); break;
+                              case 4: t->setTremoloType(TREMOLO_R64); break;
                               }
                         cr->add(t);
                         }
@@ -4341,10 +4341,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         if (tremStart) {
                               Tremolo* t = new Tremolo(score);
                               switch (tremolo) {
-                                    case 1: t->setSubtype(TREMOLO_C8); break;
-                                    case 2: t->setSubtype(TREMOLO_C16); break;
-                                    case 3: t->setSubtype(TREMOLO_C32); break;
-                                    case 4: t->setSubtype(TREMOLO_C64); break;
+                                    case 1: t->setTremoloType(TREMOLO_C8); break;
+                                    case 2: t->setTremoloType(TREMOLO_C16); break;
+                                    case 3: t->setTremoloType(TREMOLO_C32); break;
+                                    case 4: t->setTremoloType(TREMOLO_C64); break;
                                     }
                               t->setChords(tremStart, static_cast<Chord*>(cr));
                               // fixup chord duration and type
@@ -4366,13 +4366,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (chordLineType != "") {
             ChordLine* cl = new ChordLine(score);
             if (chordLineType == "falloff")
-                  cl->setSubtype(CHORDLINE_FALL);
+                  cl->setChordLineType(CHORDLINE_FALL);
             if (chordLineType == "doit")
-                  cl->setSubtype(CHORDLINE_DOIT);
+                  cl->setChordLineType(CHORDLINE_DOIT);
             if (chordLineType == "plop")
-                  cl->setSubtype(CHORDLINE_PLOP);
+                  cl->setChordLineType(CHORDLINE_PLOP);
             if (chordLineType == "scoop")
-                  cl->setSubtype(CHORDLINE_SCOOP);
+                  cl->setChordLineType(CHORDLINE_SCOOP);
             note->chord()->add(cl);
             }
 
@@ -4381,7 +4381,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       // TODO remove duplicate code (see MusicXml::direction)
       for (QStringList::Iterator it = dynamics.begin(); it != dynamics.end(); ++it ) {
             Dynamic* dyn = new Dynamic(score);
-            dyn->setSubtype(*it);
+            dyn->setDynamicType(*it);
             if (hasYoffset) dyn->setYoff(yoffset);
             addElement(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
                        rx, ry, 0 /*offset */, measure, tick);
@@ -4439,7 +4439,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       bool rest    = false;
       int relStaff = 0;
-      BeamMode bm  = BEAM_NO;
+      BeamMode bm  = BeamMode::NO;
       MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
@@ -4616,11 +4616,11 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   int beamNo = e.attribute(QString("number"), "1").toInt();
                   if (beamNo == 1) {
                         if (s == "begin")
-                              bm = BEAM_BEGIN;
+                              bm = BeamMode::BEGIN;
                         else if (s == "end")
-                              bm = BEAM_END;
+                              bm = BeamMode::END;
                         else if (s == "continue")
-                              bm = BEAM_MID;
+                              bm = BeamMode::MID;
                         else if (s == "backward hook")
                               ;
                         else if (s == "forward hook")
@@ -4722,14 +4722,14 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   }
             if (beam) {
                   if (beam->track() == track) {
-                        cr->setBeamMode(BEAM_MID);
+                        cr->setBeamMode(BeamMode::MID);
                         beam->add(cr);
                         }
                   else
                         removeBeam(beam);
                   }
             else
-                  cr->setBeamMode(BEAM_NO);
+                  cr->setBeamMode(BeamMode::NO);
             cr->setTrack(track);
             static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
@@ -4840,7 +4840,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
             if (editorial || cautionary || parentheses) {
                   Accidental* a = new Accidental(score);
-                  a->setSubtype(accidental);
+                  a->setAccidentalType(accidental);
                   a->setHasBracket(cautionary || parentheses);
                   a->setRole(Accidental::ACC_USER);
                   note->add(a);
@@ -4854,8 +4854,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             // note->setAccidentalType(accidental);
 
             // remember beam mode last non-grace note
-            // bm == BEAM_NO means no <beam> was found
-            if (!grace && bm != BEAM_NO)
+            // bm == BeamMode::NO means no <beam> was found
+            if (!grace && bm != BeamMode::NO)
                   beamMode = bm;
 
             // handle beam

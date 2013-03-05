@@ -34,7 +34,7 @@ enum SpacerType {
 class Spacer : public Element {
       Q_OBJECT
 
-      SpacerType _subtype;
+      SpacerType _spacerType;
       qreal _gap;
 
       QPainterPath path;
@@ -46,9 +46,8 @@ class Spacer : public Element {
       Spacer(const Spacer&);
       virtual Spacer* clone() const    { return new Spacer(*this); }
       virtual ElementType type() const { return SPACER; }
-      SpacerType subtype() const { return _subtype; }
-      void subtype(SpacerType t) { _subtype = t;    }
-      void setSubtype(SpacerType val);
+      SpacerType spacerType() const    { return _spacerType; }
+      void setSpacerType(SpacerType t) { _spacerType = t; }
 
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
