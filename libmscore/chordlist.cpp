@@ -415,7 +415,7 @@ void ChordList::read(XmlReader& e)
                               ChordSymbol cs;
                               cs.fontIdx = fontIdx;
                               cs.name    = e.attribute("name");
-                              cs.code    = ee.attribute("code").toInt(0, 0);
+                              cs.code    = e.attribute("code").toInt(0, 0);
                               symbols.insert(cs.name, cs);
                               e.readNext();
                               }
