@@ -385,6 +385,7 @@ class Element : public QObject {
       virtual qreal baseLine() const          { return -height();       }
 
       virtual ElementType type() const = 0;
+      virtual int subType() const             { return type(); }  // for select gui
       bool isChordRest() const;
       bool isDurationElement() const;
       bool isSLine() const;
