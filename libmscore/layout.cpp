@@ -258,8 +258,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             int l1 = aclist[0].note->line();
             int l2 = note->line();
 
-            int st1   = aclist[0].note->accidental()->subtype();
-            int st2   = acc->subtype();
+            int st1   = aclist[0].note->accidental()->accidentalType();
+            int st2   = acc->accidentalType();
             int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
 
             if (qAbs(l1-l2) > ldiff) {
@@ -286,8 +286,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   int l3 = aclist[n].note->line();
                   qreal x = 0.0;
 
-                  int st1 = aclist[i-1].note->accidental()->subtype();
-                  int st2 = acc->subtype();
+                  int st1 = aclist[i-1].note->accidental()->accidentalType();
+                  int st2 = acc->accidentalType();
 
                   int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
                   if (qAbs(l1-l2) <= ldiff) {   // overlap accidental above
@@ -297,7 +297,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               x = aclist[i-1].x;
                         }
 
-                  ldiff = acc->subtype() == Accidental::ACC_FLAT ? 4 : 5;
+                  ldiff = acc->accidentalType() == Accidental::ACC_FLAT ? 4 : 5;
                   if (qAbs(l2-l3) <= ldiff) {       // overlap accidental below
                         if (aclist[n].x < x)
                               x = aclist[n].x;
@@ -339,7 +339,7 @@ void Score::layoutStage2()
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;
 
-            BeamMode bm = BEAM_AUTO;
+            BeamMode bm = BeamMode::AUTO;
             Segment::SegmentTypes st = Segment::SegChordRestGrace;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
@@ -363,10 +363,10 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
-                  if (segment->subtype() == Segment::SegGrace) {
+                  if (segment->segmentType() == Segment::SegGrace) {
                         Segment* nseg = segment->next();
                         if (nseg
-                           && nseg->subtype() == Segment::SegGrace
+                           && nseg->segmentType() == Segment::SegGrace
                            && nseg->element(track)
                            && cr->durationType().hooks()
                            && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks())
@@ -387,7 +387,7 @@ void Score::layoutStage2()
                                           break;
                                     b->add(cr);
                                     s = nseg->next();
-                                    if (!s || (s->subtype() != Segment::SegGrace) || !s->element(track)
+                                    if (!s || (s->segmentType() != Segment::SegGrace) || !s->element(track)
                                        || !static_cast<ChordRest*>(s->element(track))->durationType().hooks())
                                           break;
                                     }
@@ -403,7 +403,7 @@ void Score::layoutStage2()
                               }
                         continue;
                         }
-                  if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BEAM_NO)) {
+                  if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NO)) {
                         if (beam) {
                               beam->layout1();
                               beam = 0;
@@ -418,7 +418,7 @@ void Score::layoutStage2()
                   bool beamEnd = false;
                   if (beam) {
                         ChordRest* le = beam->elements().back();
-                        if ((!beamModeMid(bm) && (le->tuplet() != cr->tuplet())) || (bm == BEAM_BEGIN)) {
+                        if ((!beamModeMid(bm) && (le->tuplet() != cr->tuplet())) || (bm == BeamMode::BEGIN)) {
                               beamEnd = true;
                               }
                         else if (!beamModeMid(bm)) {
@@ -437,7 +437,7 @@ void Score::layoutStage2()
                               cr = 0;
 
                               // is cr the last beam element?
-                              if (bm == BEAM_END) {
+                              if (bm == BeamMode::END) {
                                     beam->layout1();
                                     beam = 0;
                                     }
@@ -476,8 +476,8 @@ void Score::layoutStage2()
                               if (!beamModeMid(bm)
                                    &&
                                    (endBeam(measure->timesig(), cr, a1)
-                                   || bm == BEAM_BEGIN
-                                   || (a1->segment()->subtype() != cr->segment()->subtype())
+                                   || bm == BeamMode::BEGIN
+                                   || (a1->segment()->segmentType() != cr->segment()->segmentType())
                                    || (a1->tick() + a1->actualTicks() < cr->tick())
                                    )
                                  ) {
@@ -567,7 +567,7 @@ void Score::doLayout()
                         Element* e = s->element(track);
                         if (e == 0 || e->generated())
                               continue;
-                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
@@ -695,7 +695,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
-                  if (seg->subtype() == Segment::SegChordRest)
+                  if (seg->segmentType() == Segment::SegChordRest)
                         break;
                   Element* el = seg->element(strack);
                   if (!el)
@@ -982,9 +982,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         ww = m->minWidth1();
 
                   Segment* s = m->last();
-                  if ((s->subtype() == Segment::SegEndBarLine) && s->element(0)) {
+                  if ((s->segmentType() == Segment::SegEndBarLine) && s->element(0)) {
                         BarLine*    bl = static_cast<BarLine*>(s->element(0));
-                        BarLineType ot = bl->subtype();
+                        BarLineType ot = bl->barLineType();
                         BarLineType nt = m->endBarLineType();
 
                         if (m->repeatFlags() & RepeatEnd)
@@ -1329,7 +1329,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
             //    - set size of clefs to small
             //
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                  Segment::SegmentType st = seg->subtype();
+                  Segment::SegmentType st = seg->segmentType();
                   if (st == Segment::SegEndBarLine)
                         continue;
                   if (st == Segment::SegStartRepeatBarLine && m != sm) {
@@ -2588,7 +2588,7 @@ qreal Score::computeMinWidth(Segment* fs) const
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
 
-            if ((s->subtype() == Segment::SegClef) && (s != fs)) {
+            if ((s->segmentType() == Segment::SegClef) && (s != fs)) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                         if (!staff(staffIdx)->show())
@@ -2603,10 +2603,10 @@ qreal Score::computeMinWidth(Segment* fs) const
                   continue;
                   }
             bool rest2[_nstaves+1];
-            Segment::SegmentType segType    = s->subtype();
+            Segment::SegmentType segType = s->segmentType();
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
-            int pt                 = pSeg ? pSeg->subtype() : Segment::SegBarLine;
+            int pt                 = pSeg ? pSeg->segmentType() : Segment::SegBarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                   if (!staff(staffIdx)->show())

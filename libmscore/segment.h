@@ -34,7 +34,7 @@ class System;
 ///   A segment holds all vertical aligned staff elements.
 ///   Segments are typed and contain only Elements of the same type.
 //
-//    @P subtype SegmentType
+//    @P segmentType SegmentType
 //------------------------------------------------------------------------
 
 /**
@@ -54,7 +54,7 @@ class System;
 
 class Segment : public Element {
       Q_OBJECT
-      Q_PROPERTY(SegmentType subtype READ subtype WRITE setSubtype)
+      Q_PROPERTY(SegmentType segmentType READ segmentType WRITE setSegmentType)
       Q_ENUMS(SegmentType)
 
    public:
@@ -82,7 +82,7 @@ class Segment : public Element {
       mutable bool empty;           // cached value
       mutable bool _written;        // used for write()
 
-      SegmentType _subtype;
+      SegmentType _segmentType;
       int _tick;
       Spatium _extraLeadingSpace;
       Spatium _extraTrailingSpace;
@@ -150,14 +150,14 @@ class Segment : public Element {
       void sortStaves(QList<int>& dst);
       const char* subTypeName() const;
       static SegmentType segmentType(ElementType type);
-      SegmentType subtype() const                { return _subtype; }
-      void setSubtype(SegmentType t)             { _subtype = t; }
+      SegmentType segmentType() const            { return _segmentType; }
+      void setSegmentType(SegmentType t)         { _segmentType = t; }
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
-      bool isChordRest() const                   { return _subtype == SegChordRest; }
-      bool isGrace() const                       { return _subtype == SegGrace; }
+      bool isChordRest() const                   { return _segmentType == SegChordRest; }
+      bool isGrace() const                       { return _segmentType == SegGrace; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start

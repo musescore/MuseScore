@@ -43,7 +43,7 @@
 
 const char* Segment::subTypeName() const
       {
-      switch(subtype()) {
+      switch(segmentType()) {
             case SegClef:                 return "Clef";
             case SegKeySig:               return "Key Signature";
             case SegTimeSig:              return "Time Signature";
@@ -113,7 +113,7 @@ Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
       setParent(m);
-      setSubtype(st);
+      setSegmentType(st);
       setTick(t);
       init();
       empty = true;
@@ -220,7 +220,7 @@ Segment* Segment::next1() const
 Segment* Segment::next1(SegmentTypes types) const
       {
       for (Segment* s = next1(); s; s = s->next1()) {
-            if (s->subtype() & types)
+            if (s->segmentType() & types)
                   return s;
             }
       return 0;
@@ -234,7 +234,7 @@ Segment* Segment::next1(SegmentTypes types) const
 Segment* Segment::next(SegmentTypes types) const
       {
       for (Segment* s = next(); s; s = s->next()) {
-            if (s->subtype() & types)
+            if (s->segmentType() & types)
                   return s;
             }
       return 0;
@@ -248,7 +248,7 @@ Segment* Segment::next(SegmentTypes types) const
 Segment* Segment::prev(SegmentTypes types) const
       {
       for (Segment* s = prev(); s; s = s->prev()) {
-            if (s->subtype() & types)
+            if (s->segmentType() & types)
                   return s;
             }
       return 0;
@@ -273,7 +273,7 @@ Segment* Segment::prev1() const
 Segment* Segment::prev1(SegmentTypes types) const
       {
       for (Segment* s = prev1(); s; s = s->prev1()) {
-            if (s->subtype() & types)
+            if (s->segmentType() & types)
                   return s;
             }
       return 0;
@@ -288,7 +288,7 @@ Segment* Segment::nextCR(int track) const
       {
       Segment* seg = next1();
       for (; seg; seg = seg->next1()) {
-            if (seg->subtype() == SegChordRest) {
+            if (seg->segmentType() == SegChordRest) {
                   if (track != -1 && !seg->element(track))
                         continue;
                   return seg;
@@ -453,7 +453,7 @@ void Segment::add(Element* el)
                   break;
 
             case STAFF_STATE:
-                  if (static_cast<StaffState*>(el)->subtype() == STAFF_STATE_INSTRUMENT) {
+                  if (static_cast<StaffState*>(el)->staffStateType() == STAFF_STATE_INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
                         Part* part = el->staff()->part();
                         part->setInstrument(ss->instrument(), tick());
@@ -584,7 +584,7 @@ void Segment::remove(Element* el)
                   break;
 
             case STAFF_STATE:
-                  if (static_cast<StaffState*>(el)->subtype() == STAFF_STATE_INSTRUMENT) {
+                  if (static_cast<StaffState*>(el)->staffStateType() == STAFF_STATE_INSTRUMENT) {
                         Part* part = el->staff()->part();
                         part->removeInstrument(tick());
                         }
@@ -740,7 +740,7 @@ void Segment::setTick(int t)
 
 const QList<Lyrics*>* Segment::lyricsList(int staffIdx) const
       {
-      if (!(subtype() & (SegChordRestGrace))) {
+      if (!(segmentType() & (SegChordRestGrace))) {
             if (MScore::debugMode)
                   qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;
@@ -781,7 +781,7 @@ void Segment::write(Xml& xml) const
       if (_extraLeadingSpace.isZero() && _extraTrailingSpace.isZero())
             return;
       xml.stag(name());
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _segmentType);
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.tag("trailingSpace", _extraTrailingSpace.val());
       xml.etag();
@@ -797,7 +797,7 @@ void Segment::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "subtype")
-                  _subtype = SegmentType(e.readInt());
+                  _segmentType = SegmentType(e.readInt());
             else if (tag == "leadingSpace")
                   _extraLeadingSpace = Spatium(e.readDouble());
             else if (tag == "trailingSpace")
@@ -842,7 +842,7 @@ bool Segment::setProperty(P_ID propertyId, const QVariant& v)
 
 bool Segment::splitsTuplet() const
       {
-      if (subtype() != SegChordRest)
+      if (segmentType() != SegChordRest)
             return false;
       int tracks = score()->nstaves() * VOICES;
       for (int track = 0; track < tracks; ++track) {

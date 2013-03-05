@@ -533,7 +533,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
    MScore::Direction stemDirection)
       {
-      if (segment->subtype() == Segment::SegGrace) {
+      if (segment->segmentType() == Segment::SegGrace) {
             Chord* chord = static_cast<Chord*>(segment->element(track));
             if (chord->notes().size() == 1) {
                   Note* note = chord->upNote();
@@ -546,7 +546,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   }
             return segment;
             }
-      assert(segment->subtype() == Segment::SegChordRest);
+      assert(segment->segmentType() == Segment::SegChordRest);
 
       int tick      = segment->tick();
       Element* nr   = 0;
@@ -676,7 +676,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
       int nextTick = segment->tick();
 
       for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRestGrace)) {
-            if (seg->subtype() == Segment::SegGrace) {
+            if (seg->segmentType() == Segment::SegGrace) {
                   if (seg->element(track)) {
                         undoRemoveElement(seg->element(track));
                         if (seg->isEmpty() && seg != firstSegment)
@@ -828,7 +828,7 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       int track = staffIdx * VOICES;
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
-            if (seg->subtype() & Segment::SegGrace) {
+            if (seg->segmentType() & Segment::SegGrace) {
                   seg = seg->next1(Segment::SegChordRest);
                   if (!seg || !seg->element(track)) {
                         qDebug("makeGap1: no chord/rest at %d staff %d", tick, staffIdx);
@@ -1287,7 +1287,7 @@ void Score::addArticulation(ArticulationType attr)
       foreach(Element* el, selection().elements()) {
             if (el->type() == Element::NOTE || el->type() == Element::CHORD) {
                   Articulation* na = new Articulation(this);
-                  na->setSubtype(attr);
+                  na->setArticulationType(attr);
                   if (!addArticulation(el, na))
                         delete na;
                   }
@@ -1366,7 +1366,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
 
                   Accidental* a = new Accidental(this);
                   a->setParent(note);
-                  a->setSubtype(accidental);
+                  a->setAccidentalType(accidental);
                   a->setRole(Accidental::ACC_USER);
                   undoAddElement(a);
                   }
@@ -1387,7 +1387,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   }
             else {
                   m   = score->tick2measure(measure->tick());
-                  s   = m->findSegment(segment->subtype(), segment->tick());
+                  s   = m->findSegment(segment->segmentType(), segment->tick());
                   }
             int staffIdx  = score->staffIdx(st);
             Chord* chord  = static_cast<Chord*>(s->element(staffIdx * VOICES + voice));
@@ -1580,12 +1580,12 @@ void Score::cmdResetBeamMode()
                   if (cr == 0)
                         continue;
                   if (cr->type() == Element::CHORD) {
-                        if (cr->beamMode() != BEAM_AUTO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BEAM_AUTO));
+                        if (cr->beamMode() != BeamMode::AUTO)
+                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::AUTO));
                         }
                   else if (cr->type() == Element::REST) {
-                        if (cr->beamMode() != BEAM_NO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BEAM_NO));
+                        if (cr->beamMode() != BeamMode::NO)
+                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::NO));
                         }
                   }
             }
@@ -1794,7 +1794,7 @@ Element* Score::move(const QString& cmd)
                   // if _is._segment is first chord/rest segment in measure
                   // make sure "m" points to previous measure
                   //
-                  while (s && s->subtype() != Segment::SegChordRest)
+                  while (s && s->segmentType() != Segment::SegChordRest)
                         s = s->prev1();
                   if (s == 0)
                         return 0;
@@ -1802,7 +1802,7 @@ Element* Score::move(const QString& cmd)
 
                   int track  = _is.track();
                   for (; s; s = s->prev1()) {
-                        if (s->subtype() != Segment::SegChordRest)
+                        if (s->segmentType() != Segment::SegChordRest)
                               continue;
                         if (s->element(track) || s->measure() != m)
                               break;
@@ -2185,13 +2185,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "pad-dotdot")
             padToggle(PAD_DOTDOT);
       else if (cmd == "beam-start")
-            cmdSetBeamMode(BEAM_BEGIN);
+            cmdSetBeamMode(BeamMode::BEGIN);
       else if (cmd == "beam-mid")
-            cmdSetBeamMode(BEAM_MID);
+            cmdSetBeamMode(BeamMode::MID);
       else if (cmd == "no-beam")
-            cmdSetBeamMode(BEAM_NO);
+            cmdSetBeamMode(BeamMode::NO);
       else if (cmd == "beam-32")
-            cmdSetBeamMode(BEAM_BEGIN32);
+            cmdSetBeamMode(BeamMode::BEGIN32);
       else if (cmd == "sharp2")
             changeAccidental(Accidental::ACC_SHARP2);
       else if (cmd == "sharp")
@@ -2252,7 +2252,7 @@ void Score::cmd(const QAction* a)
                   Measure* measure = static_cast<Measure*>(e->parent()->parent());
                   if (!measure->lineBreak()) {
                         LayoutBreak* lb = new LayoutBreak(this);
-                        lb->setSubtype(type);
+                        lb->setLayoutBreakType(type);
                         lb->setTrack(-1);       // this are system elements
                         lb->setParent(measure);
                         undoAddElement(lb);
@@ -2260,7 +2260,7 @@ void Score::cmd(const QAction* a)
                   else {
                         // remove line break
                         foreach(Element* e, *measure->el()) {
-                              if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() ==type) {
+                              if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                                     undoRemoveElement(e);
                                     break;
                                     }

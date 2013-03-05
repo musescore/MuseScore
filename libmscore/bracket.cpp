@@ -28,7 +28,7 @@
 Bracket::Bracket(Score* s)
    : Element(s)
       {
-      _subtype    = BRACKET_AKKOLADE;
+      _bracketType    = BRACKET_AKKOLADE;
       h2          = 3.5 * spatium();
       _column     = 0;
       _span       = 0;
@@ -54,7 +54,7 @@ void Bracket::setHeight(qreal h)
 qreal Bracket::width() const
       {
       qreal w;
-      if (subtype() == BRACKET_AKKOLADE)
+      if (bracketType() == BRACKET_AKKOLADE)
             w = point(score()->styleS(ST_akkoladeWidth) + score()->styleS(ST_akkoladeBarDistance));
       else
             w = point(score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
@@ -71,7 +71,7 @@ void Bracket::layout()
       if (h2 == 0.0)
             return;
 
-      if (subtype() == BRACKET_AKKOLADE) {
+      if (bracketType() == BRACKET_AKKOLADE) {
             qreal w = point(score()->styleS(ST_akkoladeWidth));
 
 #define XM(a) (a+700)*w/700
@@ -100,7 +100,7 @@ void Bracket::layout()
             path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0
             setbbox(path.boundingRect());
             }
-      else if (subtype() == BRACKET_NORMAL) {
+      else if (bracketType() == BRACKET_NORMAL) {
             qreal mags = 1.0;
             qreal _spatium = spatium();
             int idx = score()->symIdx();
@@ -120,12 +120,12 @@ void Bracket::layout()
 
 void Bracket::draw(QPainter* painter) const
       {
-      if (subtype() == BRACKET_AKKOLADE) {
+      if (bracketType() == BRACKET_AKKOLADE) {
             painter->setPen(Qt::NoPen);
             painter->setBrush(QBrush(curColor()));
             painter->drawPath(path);
             }
-      else if (subtype() == BRACKET_NORMAL) {
+      else if (bracketType() == BRACKET_NORMAL) {
             qreal h = 2 * h2 + yoff;
             qreal _spatium = spatium();
             qreal w = score()->styleS(ST_bracketWidth).val() * _spatium;
@@ -149,7 +149,7 @@ void Bracket::draw(QPainter* painter) const
 
 void Bracket::write(Xml& xml) const
       {
-      switch(subtype()) {
+      switch(bracketType()) {
             case BRACKET_AKKOLADE:
                   xml.stag("Bracket type=\"Akkolade\"");
                   break;
@@ -174,11 +174,11 @@ void Bracket::read(XmlReader& e)
       QString t(e.attribute("type", "Normal"));
 
       if (t == "Normal")
-            setSubtype(BRACKET_NORMAL);
+            setBracketType(BRACKET_NORMAL);
       else if (t == "Akkolade")
-            setSubtype(BRACKET_AKKOLADE);
+            setBracketType(BRACKET_AKKOLADE);
       else
-            qDebug("unknown brace type <%s>\n", t.toLatin1().data());
+            qDebug("unknown brace type <%s>", qPrintable(t));
 
       while (e.readNextStartElement()) {
             if (e.name() == "level")

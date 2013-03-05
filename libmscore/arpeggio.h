@@ -30,7 +30,7 @@ enum class ArpeggioType {
 class Arpeggio : public Element {
       Q_OBJECT
 
-      ArpeggioType _subtype;
+      ArpeggioType _arpeggioType;
       qreal _userLen1;
       qreal _userLen2;
       qreal _height;
@@ -43,12 +43,12 @@ class Arpeggio : public Element {
 
    public:
       Arpeggio(Score* s);
-      virtual Arpeggio* clone() const  { return new Arpeggio(*this); }
-      virtual ElementType type() const { return ARPEGGIO; }
-      ArpeggioType subtype() const     { return _subtype; }
-      void setSubtype(ArpeggioType v)  { _subtype = v;    }
+      virtual Arpeggio* clone() const      { return new Arpeggio(*this); }
+      virtual ElementType type() const     { return ARPEGGIO; }
+      ArpeggioType arpeggioType() const    { return _arpeggioType; }
+      void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 
-      Chord* chord() const             { return (Chord*)parent(); }
+      Chord* chord() const                 { return (Chord*)parent(); }
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }

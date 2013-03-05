@@ -4679,7 +4679,7 @@ void ScoreView::cmdRepeatSelection()
       int dStaff = selection.staffStart();
       Segment* endSegment = selection.endSegment();
 
-      if (endSegment && endSegment->subtype() != Segment::SegChordRest)
+      if (endSegment && endSegment->segmentType() != Segment::SegChordRest)
             endSegment = endSegment->next1(Segment::SegChordRest);
       if (endSegment && endSegment->element(dStaff * VOICES)) {
             Element* e = endSegment->element(dStaff * VOICES);
@@ -4746,7 +4746,7 @@ void ScoreView::search(int n)
             adjustCanvasPosition(measure, true);
             int tracks = _score->nstaves() * VOICES;
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                  if (segment->subtype() != Segment::SegChordRest)
+                  if (segment->segmentType() != Segment::SegChordRest)
                         continue;
                   int track;
                   for (track = 0; track < tracks; ++track) {

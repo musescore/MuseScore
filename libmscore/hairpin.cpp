@@ -42,9 +42,9 @@ void HairpinSegment::layout()
       len     = sqrt(x * x + y * y);
       t.rotateRadians(asin(y/len));
 
-      if (hairpin()->subtype() == 0) {
+      if (hairpin()->hairpinType() == 0) {
             // crescendo
-            switch (subtype()) {
+            switch (spannerSegmentType()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_BEGIN:
                         l1.setLine(.0, .0, len, h1);
@@ -59,7 +59,7 @@ void HairpinSegment::layout()
             }
       else {
             // decrescendo
-            switch(subtype()) {
+            switch(spannerSegmentType()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_END:
                         l1.setLine(.0,  h1, len, 0.0);
@@ -102,7 +102,7 @@ void HairpinSegment::draw(QPainter* painter) const
 Hairpin::Hairpin(Score* s)
    : SLine(s)
       {
-      _subtype     = CRESCENDO;
+      _hairpinType = CRESCENDO;
       _veloChange  = 10;
       _dynRange    = DYNAMIC_PART;
       }
@@ -134,7 +134,7 @@ LineSegment* Hairpin::createLineSegment()
 void Hairpin::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _hairpinType);
       xml.tag("veloChange", _veloChange);
       writeProperty(xml, P_DYNAMIC_RANGE);
       writeProperty(xml, P_PLACEMENT);
@@ -156,7 +156,7 @@ void Hairpin::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = HairpinType(e.readInt());
+                  _hairpinType = HairpinType(e.readInt());
             else if (tag == "veloChange")
                   _veloChange = e.readInt();
             else if (tag == "dynType")
@@ -167,10 +167,10 @@ void Hairpin::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   undoSetSubtype
+//   undoSetHairpinType
 //---------------------------------------------------------
 
-void Hairpin::undoSetSubtype(HairpinType val)
+void Hairpin::undoSetHairpinType(HairpinType val)
       {
       score()->undoChangeProperty(this, P_HAIRPIN_TYPE, val);
       }
@@ -201,7 +201,7 @@ QVariant Hairpin::getProperty(P_ID id) const
       {
       switch(id) {
             case P_HAIRPIN_TYPE:
-                  return _subtype;
+                  return _hairpinType;
             case P_VELO_CHANGE:
                   return _veloChange;
             case P_DYNAMIC_RANGE:
@@ -219,7 +219,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
       switch(id) {
             case P_HAIRPIN_TYPE:
-                  _subtype = HairpinType(v.toInt());
+                  _hairpinType = HairpinType(v.toInt());
                   setGenerated(false);
                   break;
             case P_VELO_CHANGE:

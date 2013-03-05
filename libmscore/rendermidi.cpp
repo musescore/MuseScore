@@ -635,7 +635,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             int l = 1000 / notes;
 
             int start, end, step;
-            bool up = chord->arpeggio()->subtype() != ArpeggioType::DOWN;
+            bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN;
             if (up) {
                   start = 0;
                   end   = notes;
@@ -659,7 +659,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
 
 //qDebug("Chord");
             foreach (Articulation* a, chord->articulations()) {
-                  ArticulationType type = a->subtype();
+                  ArticulationType type = a->articulationType();
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &ell[k];
 
@@ -781,7 +781,7 @@ void createPlayEvents(Chord* chord)
       Segment* s = chord->segment();
       while (s->prev()) {
             s = s->prev();
-            if (s->subtype() != Segment::SegGrace)
+            if (s->segmentType() != Segment::SegGrace)
                   break;
             Element* cr = s->element(chord->track());
             if (cr && cr->type() == Element::CHORD)

@@ -425,7 +425,7 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             case STAFF_TEXT:
                   return true;
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                         case ICON_TFRAME:
                         case ICON_FFRAME:
@@ -450,9 +450,9 @@ Element* Box::drop(const DropData& data)
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (_pageBreak || _lineBreak) {
                         if (
-                           (lb->subtype() == LAYOUT_BREAK_PAGE && _pageBreak)
-                           || (lb->subtype() == LAYOUT_BREAK_LINE && _lineBreak)
-                           || (lb->subtype() == LAYOUT_BREAK_SECTION && _sectionBreak)
+                           (lb->layoutBreakType() == LAYOUT_BREAK_PAGE && _pageBreak)
+                           || (lb->layoutBreakType() == LAYOUT_BREAK_LINE && _lineBreak)
+                           || (lb->layoutBreakType() == LAYOUT_BREAK_SECTION && _sectionBreak)
                            ) {
                               //
                               // if break already set
@@ -485,7 +485,7 @@ Element* Box::drop(const DropData& data)
                   }
 
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                               score()->insertMeasure(VBOX, this);
                               break;

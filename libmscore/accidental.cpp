@@ -74,10 +74,10 @@ Accidental::Accidental(Score* s)
    : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _hasBracket = false;
-      _role       = ACC_AUTO;
-      _small      = false;
-      _subtype    = ACC_NONE;
+      _hasBracket     = false;
+      _role           = ACC_AUTO;
+      _small          = false;
+      _accidentalType = ACC_NONE;
       }
 
 //---------------------------------------------------------
@@ -205,7 +205,7 @@ void Accidental::read(XmlReader& e)
                                      i = 0;
                                      break;
                                }
-                        setSubtype(AccidentalType(i));
+                        setAccidentalType(AccidentalType(i));
                         }
                   else
                         setSubtype(text);
@@ -237,7 +237,7 @@ void Accidental::write(Xml& xml) const
             xml.tag("role", _role);
       if (_small)
             xml.tag("small", _small);
-      xml.tag("subtype", accList[_subtype].tag);
+      xml.tag("subtype", accList[_accidentalType].tag);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -248,7 +248,7 @@ void Accidental::write(Xml& xml) const
 
 const char* Accidental::subtypeUserName() const
       {
-      return accList[subtype()].name;
+      return accList[accidentalType()].name;
       }
 
 //---------------------------------------------------------
@@ -260,11 +260,11 @@ void Accidental::setSubtype(const QString& tag)
       int n = sizeof(accList)/sizeof(*accList);
       for (int i = 0; i < n; ++i) {
             if (accList[i].tag == tag) {
-                  setSubtype(AccidentalType(i));
+                  setAccidentalType(AccidentalType(i));
                   return;
                   }
             }
-      setSubtype(ACC_NONE);
+      setAccidentalType(ACC_NONE);
       }
 
 //---------------------------------------------------------
@@ -273,7 +273,7 @@ void Accidental::setSubtype(const QString& tag)
 
 int Accidental::symbol() const
       {
-      return accList[subtype()].sym;
+      return accList[accidentalType()].sym;
       }
 
 //---------------------------------------------------------

@@ -67,7 +67,7 @@ const char* Capella::errmsg[] = {
 static void addDynamic(Score* score, Segment* s, int track, const char* name)
       {
       Dynamic* d = new Dynamic(score);
-      d->setSubtype(name);
+      d->setDynamicType(name);
       d->setTrack(track);
       s->add(d);
       }
@@ -82,7 +82,7 @@ static int levelofGraceSeg(Measure* m,int tick)
       Segment* seglist = m->findSegment(Segment::SegGrace,tick);
       // count SegGrace segments
       for (Segment* ss = seglist; ss && ss->tick() == tick; ss = ss->prev()) {
-            if ((ss->subtype() == Segment::SegGrace) && (ss->tick() == tick))
+            if ((ss->segmentType() == Segment::SegGrace) && (ss->tick() == tick))
                   nGraces++;
             }
       return nGraces;
@@ -613,7 +613,7 @@ qDebug("readCapVoice 2\n");
                               if (seg) {
                                     int n = so->nNotes;
                                     for (seg = seg->next1(); seg; seg = seg->next1()) {
-                                          if (seg->subtype() != Segment::SegChordRest)
+                                          if (seg->segmentType() != Segment::SegChordRest)
                                                 continue;
                                           if (seg->element(track))
                                                 --n;
@@ -851,7 +851,7 @@ qDebug("  ReadCapStaff %d/%d\n", cstaff->numerator, 1 << cstaff->log2Denom);
             Measure* m = score->tick2measure(mtick-1);
             if (m && !m->lineBreak()) {
                   LayoutBreak* lb = new LayoutBreak(score);
-                  lb->setSubtype(LAYOUT_BREAK_LINE);
+                  lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
                   lb->setTrack(-1);       // this are system elements
                   m->add(lb);
                   }

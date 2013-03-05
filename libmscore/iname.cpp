@@ -21,42 +21,38 @@
 InstrumentName::InstrumentName(Score* s)
    : Text(s)
       {
-      setSubtype(INSTRUMENT_NAME_SHORT);
+      setInstrumentNameType(INSTRUMENT_NAME_SHORT);
       _layoutPos = 0;
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   instrumentNameTypeName
 //---------------------------------------------------------
 
-QString InstrumentName::subtypeName() const
+QString InstrumentName::instrumentNameTypeName() const
       {
-      if (subtype() == INSTRUMENT_NAME_SHORT)
+      if (instrumentNameType() == INSTRUMENT_NAME_SHORT)
             return QString("short");
       return QString("long");
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setInstrumentNameType
 //---------------------------------------------------------
 
-void InstrumentName::setSubtype(const QString& s)
+void InstrumentName::setInstrumentNameType(const QString& s)
       {
       if (s == "short")
-            setSubtype(INSTRUMENT_NAME_SHORT);
+            setInstrumentNameType(INSTRUMENT_NAME_SHORT);
       if (s == "long")
-            setSubtype(INSTRUMENT_NAME_LONG);
+            setInstrumentNameType(INSTRUMENT_NAME_LONG);
       else
             qDebug("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
       }
 
-//---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
-void InstrumentName::setSubtype(InstrumentNameType st)
+void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
-      _subtype = st;
+      _instrumentNameType = st;
       if (st == INSTRUMENT_NAME_SHORT)
             setTextStyleType(TEXT_STYLE_INSTRUMENT_SHORT);
       else

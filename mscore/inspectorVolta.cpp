@@ -42,7 +42,7 @@ void InspectorVolta::setElement(Element* e)
       Volta* volta = voltaSegment->volta();
 
       iVolta.subtype->blockSignals(true);
-      iVolta.subtype->setCurrentIndex(int(volta->subtype()));
+      iVolta.subtype->setCurrentIndex(int(volta->voltaType()));
       iVolta.subtype->blockSignals(false);
       }
 
@@ -55,12 +55,12 @@ void InspectorVolta::apply()
       VoltaSegment* voltaSegment = static_cast<VoltaSegment*>(inspector->element());
 
       Volta* volta = voltaSegment->volta();
-      Volta::VoltaType vt = volta->subtype();
-      Volta::VoltaType nt = Volta::VoltaType(iVolta.subtype->currentIndex());
+      VoltaType vt = volta->voltaType();
+      VoltaType nt = VoltaType(iVolta.subtype->currentIndex());
       if (vt != nt) {
             Score* score = volta->score();
             score->startCmd();
-            score->undoChangeProperty(volta, P_VOLTA_TYPE, nt);
+            score->undoChangeProperty(volta, P_VOLTA_TYPE, int(nt));
             score->endCmd();
             mscore->endCmd();
             }

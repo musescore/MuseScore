@@ -276,7 +276,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-naturals");
                   }
             }
-      else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->subtype() == STAFF_STATE_INSTRUMENT) {
+      else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == Element::SLUR_SEGMENT) {
@@ -322,7 +322,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
-      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() == LAYOUT_BREAK_SECTION) {
+      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LAYOUT_BREAK_SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
             }
       else if (e->type() == Element::INSTRUMENT_CHANGE) {
@@ -519,7 +519,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e), !ts->showCourtesySig(), ts->sig(),
-                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->subtype()));
+                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -532,9 +532,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                      || r.denominatorString() != ts->denominatorString()
                      || r.sig() != ts->sig()
                      || stretchChanged
-                     || r.subtype() != ts->subtype()) {
+                     || r.timeSigType() != ts->timeSigType()) {
                         score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
-                           r.numeratorString(), r.denominatorString(), r.subtype()));
+                           r.numeratorString(), r.denominatorString(), r.timeSigType()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
                         }

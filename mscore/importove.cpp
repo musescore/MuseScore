@@ -655,7 +655,7 @@ void OveToMScore::convertTrackElements(int track) {
 				if(ottava == 0) {
 					ottava = new Ottava(score_);
                     ottava->setTrack(track * VOICES);
-                    ottava->setSubtype(OctaveShiftTypeToInt(octave->getOctaveShiftType()));
+                    ottava->setOttavaType(OctaveShiftTypeToInt(octave->getOctaveShiftType()));
 
                     int y_off = 0;
                 	switch (octave->getOctaveShiftType()) {
@@ -721,7 +721,7 @@ void OveToMScore::convertLineBreak(){
 				if ((int)line->getBeginBar() + (int)line->getBarCount()-1 == measure->no()) {
 					LayoutBreak* lb = new LayoutBreak(score_);
 					lb->setTrack(0);
-					lb->setSubtype(LAYOUT_BREAK_LINE);
+					lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
 					measure->add(lb);
 				}
 			}
@@ -1522,7 +1522,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 		}
 
 		// beam
-		BeamMode bm = container->getIsRest() ? BEAM_NO : BEAM_AUTO;
+		BeamMode bm = container->getIsRest() ? BeamMode::NO : BeamMode::AUTO;
 		if(container->getInBeam()){
 			OVE::MeasurePos pos = container->start()->shiftMeasure(0);
 			OVE::MusicData* data = getCrossMeasureElementByPos(part, staff, pos, container->getVoice(), OVE::MusicData_Beam);
@@ -1533,13 +1533,13 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				OVE::MeasurePos stopPos = beam->stop()->shiftMeasure(beam->start()->getMeasure());
 
 				if(startPos == pos){
-					bm = BEAM_BEGIN;
+					bm = BeamMode::BEGIN;
 				}
 				else if(stopPos == pos){
-					bm = BEAM_END;
+					bm = BeamMode::END;
 				}
 				else{
-					bm = BEAM_MID;
+					bm = BeamMode::MID;
 				}
 			}
 		}
@@ -1602,7 +1602,7 @@ void OveToMScore::convertArticulation(
 	case OVE::Articulation_Major_Trill :
 	case OVE::Articulation_Minor_Trill :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Trill);
+		a->setArticulationType(Articulation_Trill);
 		cr->add(a);
 		break;
 	}
@@ -1612,19 +1612,19 @@ void OveToMScore::convertArticulation(
 	case OVE::Articulation_Inverted_Short_Mordent :
 	case OVE::Articulation_Inverted_Long_Mordent :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Prall);
+		a->setArticulationType(Articulation_Prall);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Short_Mordent :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Mordent);
+		a->setArticulationType(Articulation_Mordent);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Turn :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Turn);
+		a->setArticulationType(Articulation_Turn);
 		cr->add(a);
 		break;
 	}
@@ -1633,117 +1633,117 @@ void OveToMScore::convertArticulation(
 //	case OVE::Articulation_Natural_Accidental_For_Trill :
 	case OVE::Articulation_Tremolo_Eighth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setSubtype(TREMOLO_R8);
+		t->setTremoloType(TREMOLO_R8);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Sixteenth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setSubtype(TREMOLO_R16);
+		t->setTremoloType(TREMOLO_R16);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Thirty_Second :{
 		Tremolo* t = new Tremolo(score_);
-		t->setSubtype(TREMOLO_R32);
+		t->setTremoloType(TREMOLO_R32);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Sixty_Fourth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setSubtype(TREMOLO_R64);
+		t->setTremoloType(TREMOLO_R64);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Marcato :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Sforzatoaccent);
+		a->setArticulationType(Articulation_Sforzatoaccent);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Marcato_Dot :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Sforzatoaccent);
+		a->setArticulationType(Articulation_Sforzatoaccent);
 		cr->add(a);
 
 		a = new Articulation(score_);
-		a->setSubtype(Articulation_Staccato);
+		a->setArticulationType(Articulation_Staccato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Heavy_Attack :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Sforzatoaccent);
+		a->setArticulationType(Articulation_Sforzatoaccent);
 		cr->add(a);
 
 		a = new Articulation(score_);
-		a->setSubtype(Articulation_Tenuto);
+		a->setArticulationType(Articulation_Tenuto);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_SForzando :{
 		Articulation* a = new Articulation(score_);
             a->setUp(true);
-		a->setSubtype(Articulation_Marcato);
+		a->setArticulationType(Articulation_Marcato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_SForzando_Inverted :{
 		Articulation* a = new Articulation(score_);
             a->setUp(false);
-		a->setSubtype(Articulation_Marcato);
+		a->setArticulationType(Articulation_Marcato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_SForzando_Dot :{
 		Articulation* a = new Articulation(score_);
             a->setUp(true);
-		a->setSubtype(Articulation_Marcato);
+		a->setArticulationType(Articulation_Marcato);
 		cr->add(a);
 
 		a = new Articulation(score_);
-		a->setSubtype(Articulation_Staccato);
+		a->setArticulationType(Articulation_Staccato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_SForzando_Dot_Inverted :{
 		Articulation* a = new Articulation(score_);
             a->setUp(false);
-		a->setSubtype(Articulation_Marcato);
+		a->setArticulationType(Articulation_Marcato);
 		cr->add(a);
 
 		a = new Articulation(score_);
-		a->setSubtype(Articulation_Staccato);
+		a->setArticulationType(Articulation_Staccato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Heavier_Attack :{
 		Articulation* a = new Articulation(score_);
             a->setUp(true);
-		a->setSubtype(Articulation_Marcato);
+		a->setArticulationType(Articulation_Marcato);
 		cr->add(a);
 
 		a = new Articulation(score_);
-		a->setSubtype(Articulation_Tenuto);
+		a->setArticulationType(Articulation_Tenuto);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Staccatissimo :{
 		Articulation* a = new Articulation(score_);
             a->setUp(true);
-		a->setSubtype(Articulation_Staccatissimo);
+		a->setArticulationType(Articulation_Staccatissimo);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Staccato :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Staccato);
+		a->setArticulationType(Articulation_Staccato);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Tenuto :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Tenuto);
+		a->setArticulationType(Articulation_Tenuto);
 		cr->add(a);
 		break;
 	}
@@ -1759,26 +1759,26 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Up_Bow :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Upbow);
+		a->setArticulationType(Articulation_Upbow);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Down_Bow :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Downbow);
+		a->setArticulationType(Articulation_Downbow);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Up_Bow_Inverted :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Upbow);
+		a->setArticulationType(Articulation_Upbow);
 		a->setUserYoffset(5.3);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Down_Bow_Inverted :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Downbow);
+		a->setArticulationType(Articulation_Downbow);
 		a->setUserYoffset(5.3);
 		cr->add(a);
 		break;
@@ -1798,7 +1798,7 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Plus_Sign :{
 		Articulation* a = new Articulation(score_);
-		a->setSubtype(Articulation_Plusstop);
+		a->setArticulationType(Articulation_Plusstop);
 		cr->add(a);
 		break;
 	}
@@ -1806,7 +1806,7 @@ void OveToMScore::convertArticulation(
         // there can be only one
         if (!(static_cast<Chord*>(cr))->arpeggio()) {
         	Arpeggio* a = new Arpeggio(score_);
-        	a->setSubtype(ArpeggioType::NORMAL);
+        	a->setArpeggioType(ArpeggioType::NORMAL);
 /*      	if (art->getPlacementAbove()){
 				a->setSubtype(ArpeggioType::UP);
 			}else {
@@ -1820,19 +1820,19 @@ void OveToMScore::convertArticulation(
 	case OVE::Articulation_Fermata :{
 		Articulation* a = new Articulation(score_);
             a->setUp(true);
-		a->setSubtype(Articulation_Fermata);
+		a->setArticulationType(Articulation_Fermata);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Fermata_Inverted :{
 		Articulation* a = new Articulation(score_);
             a->setUp(false);
-		a->setSubtype(Articulation_Fermata);
+		a->setArticulationType(Articulation_Fermata);
 		cr->add(a);
 		break;
 	}
 	case OVE::Articulation_Pedal_Down :{
-		if(pedal_) {
+		if (pedal_) {
 			delete pedal_;
 			pedal_ = 0;
 		}
@@ -2144,7 +2144,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
                         s1->add(volta);
                         }
 
-			volta->setSubtype(Volta::VOLTA_CLOSED);
+			volta->setVoltaType(VoltaType::CLOSED);
 			volta->setText(ending->getText());
 
 			volta->endings().clear();
@@ -2290,7 +2290,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
 		int absTick = mtt_->getTick(measure->no(), dynamicPtr->getTick());
 		Dynamic* dynamic = new Dynamic(score_);
 
-		dynamic->setSubtype(OveDynamics_To_Dynamics(dynamicPtr->getDynamicsType()));
+		dynamic->setDynamicType(OveDynamics_To_Dynamics(dynamicPtr->getDynamicsType()));
 		dynamic->setTrack(track);
 
 		Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
@@ -2339,7 +2339,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 			ChordRest* cr = measure->findChordRest(absTick, track);
 			if(cr != 0){
 		        Glissando* g = new Glissando(score_);
-		        g->setSubtype(GlissandoType::WAVY);
+		        g->setGlissandoType(GlissandoType::WAVY);
 		        cr->add(g);
 			}
 		}
@@ -2395,7 +2395,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 		if(absTick2 > absTick) {
 			Hairpin* hp = new Hairpin(score_);
 
-			hp->setSubtype(OveWedgeType_To_Type(wedgePtr->getWedgeType()));
+			hp->setHairpinType(OveWedgeType_To_Type(wedgePtr->getWedgeType()));
 			//hp->setYoff(wedgePtr->getYOffset());
 			hp->setTrack(track);
 

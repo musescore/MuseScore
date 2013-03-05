@@ -42,7 +42,7 @@ void InspectorOttava::setElement(Element* e)
       Ottava* ottava = ottavaSegment->ottava();
 
       iOttava.subtype->blockSignals(true);
-      iOttava.subtype->setCurrentIndex(int(ottava->subtype()));
+      iOttava.subtype->setCurrentIndex(int(ottava->ottavaType()));
       iOttava.subtype->blockSignals(false);
       }
 
@@ -55,7 +55,7 @@ void InspectorOttava::apply()
       OttavaSegment* ottavaSegment = static_cast<OttavaSegment*>(inspector->element());
 
       Ottava* ottava = ottavaSegment->ottava();
-      Ottava::OttavaType vt = ottava->subtype();
+      Ottava::OttavaType vt = ottava->ottavaType();
       Ottava::OttavaType nt = Ottava::OttavaType(iOttava.subtype->currentIndex());
       if (vt != nt) {
             Score* score = ottava->score();

@@ -33,11 +33,11 @@ enum class GlissandoType {
 class Glissando : public Element {
       Q_OBJECT
 
-      Q_PROPERTY(GlissandoType subtype READ subtype  WRITE undoSetSubtype)
-      Q_PROPERTY(QString text          READ text     WRITE undoSetText)
-      Q_PROPERTY(bool showText         READ showText WRITE undoSetShowText)
+      Q_PROPERTY(GlissandoType glissandoType READ glissandoType  WRITE undoSetGlissandoType)
+      Q_PROPERTY(QString text                READ text     WRITE undoSetText)
+      Q_PROPERTY(bool showText               READ showText WRITE undoSetShowText)
 
-      GlissandoType _subtype;
+      GlissandoType _glissandoType;
       QLineF line;
       QString _text;
       bool _showText;
@@ -46,10 +46,10 @@ class Glissando : public Element {
       Glissando(Score* s);
       Glissando(const Glissando&);
 
-      virtual Glissando* clone() const { return new Glissando(*this); }
-      virtual ElementType type() const { return GLISSANDO; }
-      GlissandoType subtype() const    { return _subtype; }
-      void setSubtype(GlissandoType v) { _subtype = v;    }
+      virtual Glissando* clone() const       { return new Glissando(*this); }
+      virtual ElementType type() const       { return GLISSANDO; }
+      GlissandoType glissandoType() const    { return _glissandoType; }
+      void setGlissandoType(GlissandoType v) { _glissandoType = v;    }
       virtual Space space() const;
 
       virtual void draw(QPainter*) const;
@@ -64,7 +64,7 @@ class Glissando : public Element {
       bool showText() const          { return _showText; }
       void setShowText(bool v)       { _showText = v;    }
 
-      void undoSetSubtype(GlissandoType);
+      void undoSetGlissandoType(GlissandoType);
       void undoSetText(const QString&);
       void undoSetShowText(bool);
 

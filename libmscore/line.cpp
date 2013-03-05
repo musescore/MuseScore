@@ -48,7 +48,7 @@ bool LineSegment::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "subtype")
-            setSubtype(SpannerSegmentType(e.readInt()));
+            setSpannerSegmentType(SpannerSegmentType(e.readInt()));
       else if (tag == "off1")       // obsolete
             setUserOff(e.readPoint() * spatium());
       else if (tag == "off2")
@@ -182,7 +182,7 @@ QPointF LineSegment::pagePos() const
 
 QPointF LineSegment::gripAnchor(int grip) const
       {
-      if (subtype() == SEGMENT_MIDDLE) {
+      if (spannerSegmentType() == SEGMENT_MIDDLE) {
             qreal y = system()->staffY(staffIdx());
             qreal x;
             switch(grip) {
@@ -219,15 +219,15 @@ QPointF LineSegment::gripAnchor(int grip) const
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
       if (!((modifiers & Qt::ShiftModifier)
-         && ((subtype() == SEGMENT_SINGLE)
-              || (subtype() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
-              || (subtype() == SEGMENT_END && curGrip == GRIP_LINE_END))))
+         && ((spannerSegmentType() == SEGMENT_SINGLE)
+              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
+              || (spannerSegmentType() == SEGMENT_END && curGrip == GRIP_LINE_END))))
             return false;
 
       LineSegment* ls = 0;
       SLine* l        = line();
       bool bspDirty   = false;
-      SpannerSegmentType st = subtype();
+      SpannerSegmentType st = spannerSegmentType();
       int track   = l->track();
 
       if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
@@ -497,10 +497,10 @@ QPointF SLine::linePos(int grip, System** sys)
                         x = m->pos().x() + m->bbox().right();
                         if (type() == VOLTA) {
                               Segment* seg = m->last();
-                              if (seg->subtype() == Segment::SegEndBarLine) {
+                              if (seg->segmentType() == Segment::SegEndBarLine) {
                                     Element* e = seg->element(0);
                                     if (e && e->type() == BAR_LINE) {
-                                          if (static_cast<BarLine*>(e)->subtype() == START_REPEAT)
+                                          if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
                                                 x -= e->width() - _spatium * .5;
                                           else
                                                 x -= _spatium * .5;
@@ -623,26 +623,26 @@ void SLine::layout()
 
             if (sysIdx1 == sysIdx2) {
                   // single segment
-                  seg->setSubtype(SEGMENT_SINGLE);
+                  seg->setSpannerSegmentType(SEGMENT_SINGLE);
                   seg->setPos(p1);
                   // seg->setPos2(QPointF(p2.x() - p1.x(), 0.0));
                   seg->setPos2(p2 - p1);
                   }
             else if (i == sysIdx1) {
                   // start segment
-                  seg->setSubtype(SEGMENT_BEGIN);
+                  seg->setSpannerSegmentType(SEGMENT_BEGIN);
                   seg->setPos(p1);
                   seg->setPos2(QPointF(x2 - p1.x(), 0.0));
                   }
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
-                  seg->setSubtype(SEGMENT_MIDDLE);
+                  seg->setSpannerSegmentType(SEGMENT_MIDDLE);
                   seg->setPos(QPointF(x1, y));
                   seg->setPos2(QPointF(x2 - x1, 0.0));
                   }
             else if (i == sysIdx2) {
                   // end segment
-                  seg->setSubtype(SEGMENT_END);
+                  seg->setSpannerSegmentType(SEGMENT_END);
                   seg->setPos(QPointF(x1, y));
                   seg->setPos2(QPointF(p2.x() - x1, 0.0));
                   }
@@ -696,7 +696,7 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
       for (int i = 0; i < n; ++i) {
             const LineSegment* seg = segmentAt(i);
             xml.stag("Segment");
-            xml.tag("subtype", seg->subtype());
+            xml.tag("subtype", seg->spannerSegmentType());
             xml.tag("off2", seg->userOff2() / _spatium);
             seg->Element::writeProperties(xml);
             xml.etag();

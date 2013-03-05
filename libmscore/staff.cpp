@@ -218,7 +218,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
       for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
             if (s->tick() > tick)
                   break;
-            if (s->subtype() != Segment::SegClef)
+            if (s->segmentType() != Segment::SegClef)
                   continue;
             if (s->element(track) && !s->element(track)->generated())
                   ctl = static_cast<Clef*>(s->element(track))->clefTypeList();

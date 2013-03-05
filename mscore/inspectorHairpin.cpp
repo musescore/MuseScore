@@ -42,7 +42,7 @@ void InspectorHairpin::setElement(Element* e)
       Hairpin* hairpin = hairpinSegment->hairpin();
 
       iHairpin.subtype->blockSignals(true);
-      iHairpin.subtype->setCurrentIndex(int(hairpin->subtype()));
+      iHairpin.subtype->setCurrentIndex(int(hairpin->hairpinType()));
       iHairpin.subtype->blockSignals(false);
       iHairpin.dynRange->setCurrentIndex(int(hairpin->dynRange()));
       iHairpin.veloChange->setValue(hairpin->veloChange());
@@ -57,7 +57,7 @@ void InspectorHairpin::apply()
       HairpinSegment* hairpinSegment = static_cast<HairpinSegment*>(inspector->element());
 
       Hairpin* hairpin = hairpinSegment->hairpin();
-      Hairpin::HairpinType vt = hairpin->subtype();
+      Hairpin::HairpinType vt = hairpin->hairpinType();
       Hairpin::HairpinType nt = Hairpin::HairpinType(iHairpin.subtype->currentIndex());
       if (vt != nt) {
             Score* score = hairpin->score();

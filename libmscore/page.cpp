@@ -838,7 +838,7 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
                   continue;
             Segment* ns = segment->next();
             for (; ns; ns = ns->next()) {
-                  if (ns->subtype() != Segment::SegChordRest)
+                  if (ns->segmentType() != Segment::SegChordRest)
                         continue;
                   if (ns->element(track)
                      || ns->element(track+1)

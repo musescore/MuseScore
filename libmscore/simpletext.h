@@ -117,7 +117,6 @@ class SimpleText : public Element {
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
-      void addChar(int code);
       bool deletePreviousChar();
       bool deleteChar();
       bool movePosition(QTextCursor::MoveOperation op,

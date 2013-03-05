@@ -856,7 +856,7 @@ void Note::read(XmlReader& e)
                               case 33: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
                               case 34: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
                               }
-                        _accidental->setSubtype(at);
+                        _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
                         _accidental->setRole(Accidental::ACC_USER);
                         hasAccidental = true;   // we now have an accidental
@@ -1048,18 +1048,18 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == CHORD
          || type == HARMONY
          || type == DYNAMIC
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_ACCIACCATURA)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_APPOGGIATURA)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE4)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE8B)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE16)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE32)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_AUTOBEAM)
+         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
+         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
          || (type == SYMBOL)
          || (type == CLEF)
          || (type == BAR_LINE)
@@ -1114,7 +1114,7 @@ Element* Note::drop(const DropData& data)
                   return e;
 
             case ACCIDENTAL:
-                  score()->changeAccidental(this, static_cast<Accidental*>(e)->subtype());
+                  score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
                   if (_accidental)
                         return e;
                   break;
@@ -1165,7 +1165,7 @@ Element* Note::drop(const DropData& data)
 
             case ICON:
                   {
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NOTE_ACCIACCATURA, false, MScore::division/2);
                               break;
@@ -1215,7 +1215,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if ((s->subtype() == Segment::SegChordRest || s->subtype() == Segment::SegGrace) && s->element(track()))
+                        if ((s->segmentType() == Segment::SegChordRest || s->segmentType() == Segment::SegGrace) && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1234,7 +1234,7 @@ Element* Note::drop(const DropData& data)
                   e->setParent(cr1);
                   // in TAB, use straight line with no text
                   if (staff()->isTabStaff()) {
-                        (static_cast<Glissando*>(e))->setSubtype(GlissandoType::STRAIGHT);
+                        (static_cast<Glissando*>(e))->setGlissandoType(GlissandoType::STRAIGHT);
                         (static_cast<Glissando*>(e))->setShowText(false);
                         }
                   score()->undoAddElement(e);
@@ -1390,7 +1390,7 @@ void Note::layout10(AccidentalState* as)
 
             Accidental::AccidentalType acci = Accidental::ACC_NONE;
             if (_accidental && _accidental->role() == Accidental::ACC_USER) {
-                  acci = _accidental->subtype();
+                  acci = _accidental->accidentalType();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
                         // TODO - what about double flat and double sharp?
                         // TODO - does this need to be key-aware?
@@ -1421,7 +1421,7 @@ void Note::layout10(AccidentalState* as)
                         _accidental->setGenerated(true);
                         add(_accidental);
                         }
-                  _accidental->setSubtype(acci);
+                  _accidental->setAccidentalType(acci);
                   }
             else {
                   if (_accidental) {
@@ -1659,7 +1659,7 @@ void Note::updateAccidental(AccidentalState* as)
             // in case tpc was changed
 
             Accidental::AccidentalType newUserAcc;
-            switch (_accidental->subtype()) {
+            switch (_accidental->accidentalType()) {
                   case Accidental::ACC_FLAT2:
                   case Accidental::ACC_FLAT:
                   case Accidental::ACC_NATURAL:
@@ -1676,7 +1676,7 @@ void Note::updateAccidental(AccidentalState* as)
                         else
                               newUserAcc = Accidental::ACC_SHARP2;
 
-                        if (_accidental->subtype() != newUserAcc)
+                        if (_accidental->accidentalType() != newUserAcc)
                               acci = Accidental::ACC_NONE; // don't use this any more
                         else {
                               acci = newUserAcc; // keep it
@@ -1690,7 +1690,7 @@ void Note::updateAccidental(AccidentalState* as)
                         break;
                   default:
                         // keep it
-                        acci = _accidental->subtype();
+                        acci = _accidental->accidentalType();
                   }
             }
       if (acci == Accidental::ACC_NONE)  {
@@ -1710,13 +1710,13 @@ void Note::updateAccidental(AccidentalState* as)
             if (_accidental == 0) {
                   Accidental* a = new Accidental(score());
                   a->setParent(this);
-                  a->setSubtype(acci);
+                  a->setAccidentalType(acci);
                   score()->undoAddElement(a);
                   }
-            else if (_accidental->subtype() != acci) {
+            else if (_accidental->accidentalType() != acci) {
                   Accidental* a = new Accidental(score());
                   a->setParent(this);
-                  a->setSubtype(acci);
+                  a->setAccidentalType(acci);
                   score()->undoChangeElement(_accidental, a);
                   }
             }
