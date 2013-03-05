@@ -86,9 +86,9 @@ void updateNoteLines(Segment* segment, int track)
       if (staff->isDrumStaff() || staff->isTabStaff())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if (s->subtype() == Segment::SegClef && s->element(track) && !s->element(track)->generated())
+            if (s->segmentType() == Segment::SegClef && s->element(track) && !s->element(track)->generated())
                   break;
-            if (s->subtype() != Segment::SegChordRest)
+            if (s->segmentType() != Segment::SegChordRest)
                   continue;
             for (int t = track; t < track + VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
@@ -472,10 +472,10 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   }
 
             int tick = seg->tick();
-            Segment* segment = measure->findSegment(seg->subtype(), seg->tick());
+            Segment* segment = measure->findSegment(seg->segmentType(), seg->tick());
             if (segment) {
-                  if (segment->subtype() != Segment::SegClef) {
-                        if (segment->prev() && segment->prev()->subtype() == Segment::SegClef) {
+                  if (segment->segmentType() != Segment::SegClef) {
+                        if (segment->prev() && segment->prev()->segmentType() == Segment::SegClef) {
                               segment = segment->prev();
                              }
                         else {
@@ -549,7 +549,7 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
       Segment* segment = static_cast<Segment*>(e->parent());
       Measure* measure = segment->measure();
       Measure* m       = score->tick2measure(measure->tick());
-      Segment* s       = m->findSegment(segment->subtype(), segment->tick());
+      Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
       int staffIdx     = score->staffIdx(nstaff);
       return s->element(staffIdx * VOICES + e->voice());
       }
@@ -955,8 +955,8 @@ void Score::undoAddElement(Element* element)
                   Measure* m2    = s2->measure();
                   Measure* nm1   = score->tick2measure(m1->tick());
                   Measure* nm2   = score->tick2measure(m2->tick());
-                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
-                  Segment* ns2   = nm2->findSegment(s2->subtype(), s2->tick());
+                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
+                  Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice()));
                   Slur* nslur    = static_cast<Slur*>(ne);
@@ -975,8 +975,8 @@ void Score::undoAddElement(Element* element)
                   Measure* m2    = s2->measure();
                   Measure* nm1   = score->tick2measure(m1->tick());
                   Measure* nm2   = score->tick2measure(m2->tick());
-                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
-                  Segment* ns2   = nm2->findSegment(s2->subtype(), s2->tick());
+                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
+                  Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice()));
                   Tremolo* ntremolo = static_cast<Tremolo*>(ne);
@@ -992,7 +992,7 @@ void Score::undoAddElement(Element* element)
                   Segment* s    = cr->segment();
                   Measure* m    = s->measure();
                   Measure* nm   = score->tick2measure(m->tick());
-                  Segment* ns   = nm->findSegment(s->subtype(), s->tick());
+                  Segment* ns   = nm->findSegment(s->segmentType(), s->tick());
                   Chord* c1     = static_cast<Chord*>(ns->element(staffIdx * VOICES + cr->voice()));
                   ne->setParent(c1);
                   undo(new AddElement(ne));
@@ -1007,8 +1007,8 @@ void Score::undoAddElement(Element* element)
                   Segment* s2    = cr2 ? cr2->segment() : 0;
                   Measure* nm1   = score->tick2measure(s1->tick());
                   Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
-                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
-                  Segment* ns2   = nm2 ? nm2->findSegment(s2->subtype(), s2->tick()) : 0;
+                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
+                  Segment* ns2   = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice())) : 0;
                   Note* nn1      = c1->findNote(n1->pitch());
@@ -1028,7 +1028,7 @@ void Score::undoAddElement(Element* element)
                   Segment* s1    = is->segment();
                   Measure* m1    = s1->measure();
                   Measure* nm1   = score->tick2measure(m1->tick());
-                  Segment* ns1   = nm1->findSegment(s1->subtype(), s1->tick());
+                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
                   undo(new AddElement(nis));
@@ -1052,8 +1052,8 @@ void Score::undoAddElement(Element* element)
                               Measure* m2  = s2->measure();
                               Measure* nm1 = score->tick2measure(m1->tick());
                               Measure* nm2 = score->tick2measure(m2->tick());
-                              e1           = nm1->findSegment(s1->subtype(), s1->tick());
-                              e2           = nm2->findSegment(s2->subtype(), s2->tick());
+                              e1           = nm1->findSegment(s1->segmentType(), s1->tick());
+                              e2           = nm2->findSegment(s2->segmentType(), s2->tick());
                               }
                               break;
                         case Spanner::ANCHOR_MEASURE:
@@ -1841,8 +1841,8 @@ void ChangeMeasureLen::flip()
       //
       int endTick = measure->tick() + len.ticks();
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->subtype() != Segment::SegEndBarLine
-               && segment->subtype() != Segment::SegTimeSigAnnounce)
+            if (segment->segmentType() != Segment::SegEndBarLine
+               && segment->segmentType() != Segment::SegTimeSigAnnounce)
                   continue;
             segment->setTick(endTick);
             }
@@ -2631,7 +2631,7 @@ void ChangeTimesig::flip()
       Fraction f2       = timesig->stretch();
       QString numStr    = timesig->numeratorString();
       QString denStr    = timesig->denominatorString();
-      TimeSigType st    = timesig->subtype();
+      TimeSigType st    = timesig->timeSigType();
 
       timesig->setShowCourtesySig(showCourtesy);
       timesig->setSig(sig, subtype);

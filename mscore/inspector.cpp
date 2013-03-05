@@ -1761,13 +1761,13 @@ void InspectorBarLine::setElement(Element* e)
             type->setCurrentIndex(0);
             }
       // if same as parent measure, set combo to Measure default
-      else if (bl->subtype() == measureBarLineType) {
+      else if (bl->barLineType() == measureBarLineType) {
             type->setCurrentIndex(0);
             }
       // if custom type, set combo to item corresponding to bar line type
       else
             for (int i = 1; i < type->count(); i++)
-                  if (type->itemData(i) == bl->subtype()) {
+                  if (type->itemData(i) == bl->barLineType()) {
                         type->setCurrentIndex(i);
                         break;
                         }
@@ -1819,7 +1819,7 @@ void InspectorBarLine::apply()
       int currType = type->itemData(type->currentIndex()).toInt();
       if(currType == BARLINE_TYPE_DEFAULT)
             currType = measureBarLineType;
-      if (currType != bl->subtype())
+      if (currType != bl->barLineType())
             score->undoChangeProperty(bl, P_SUBTYPE, currType);
       // if value reverted to measure default, update combo box
       if(!bl->customSubtype())

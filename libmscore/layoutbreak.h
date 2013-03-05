@@ -32,7 +32,7 @@ enum LayoutBreakType {
 class LayoutBreak : public Element {
       Q_OBJECT
 
-      LayoutBreakType _subtype;
+      LayoutBreakType _layoutBreakType;
       qreal lw;
       QPainterPath path;
       qreal _pause;
@@ -50,8 +50,8 @@ class LayoutBreak : public Element {
       virtual ElementType type() const { return LAYOUT_BREAK; }
       virtual bool systemFlag() const  { return true;  }
 
-      void setSubtype(LayoutBreakType);
-      LayoutBreakType subtype() const  { return _subtype; }
+      void setLayoutBreakType(LayoutBreakType);
+      LayoutBreakType layoutBreakType() const  { return _layoutBreakType; }
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);

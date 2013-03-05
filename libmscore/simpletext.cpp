@@ -497,11 +497,15 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
                   if (modifiers & Qt::ControlModifier)
                         s = QString::fromUtf8(u8"\U0001d18c");
                   break;
-
             default:
                   break;
             }
-      insertText(s);
+      if (!s.isEmpty()) {
+            if (!s[0].isPrint())
+                  s = "";
+            else
+                  insertText(s);
+            }
       layout();
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
@@ -648,25 +652,6 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
             _cursor.selectColumn = _cursor.column;
             }
       return true;
-      }
-
-//---------------------------------------------------------
-//   addChar
-//---------------------------------------------------------
-
-void SimpleText::addChar(int code)
-      {
-      QString ss;
-      if (code & 0xffff0000) {
-            ss  = QChar(QChar::highSurrogate(code));
-            ss += QChar(QChar::lowSurrogate(code));
-            }
-      else
-            ss = QChar(code);
-      curLine().insert(_cursor.column, ss);
-      _cursor.column += ss.size();
-      score()->setLayoutAll(true);
-      score()->end();
       }
 
 //---------------------------------------------------------

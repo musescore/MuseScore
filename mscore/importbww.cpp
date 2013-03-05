@@ -302,9 +302,9 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             if (lastVolta) {
                   qDebug("adding volta\n");
                   if (ending == 1)
-                        lastVolta->setSubtype(Volta::VOLTA_CLOSED);
+                        lastVolta->setVoltaType(VoltaType::CLOSED);
                   else
-                        lastVolta->setSubtype(Volta::VOLTA_OPEN);
+                        lastVolta->setVoltaType(VoltaType::OPEN);
                   lastVolta->setEndElement(currentMeasure);
                   currentMeasure->addSpannerBack(lastVolta);
                   lastVolta = 0;
@@ -317,7 +317,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       if (mef.lastOfSystem) {
             LayoutBreak* lb = new LayoutBreak(score);
             lb->setTrack(0);
-            lb->setSubtype(LAYOUT_BREAK_LINE);
+            lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
             currentMeasure->add(lb);
             }
 
@@ -365,7 +365,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       qDebug() << "duration:" << durationType.name();
       if (triplet != ST_NONE) ticks = 2 * ticks / 3;
 
-      BeamMode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? BEAM_BEGIN : BEAM_AUTO;
+      BeamMode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? BeamMode::BEGIN : BeamMode::AUTO;
       MScore::Direction sd = MScore::AUTO;
 
       // create chord

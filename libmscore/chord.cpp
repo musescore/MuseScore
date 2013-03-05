@@ -1121,7 +1121,7 @@ void Chord::layoutStem1()
                   score()->undoAddElement(hook);
                   }
             _hook->setMag(mag());
-            _hook->setSubtype(hookIdx);
+            _hook->setHookType(hookIdx);
             }
       else if (_hook)
             score()->undoRemoveElement(_hook);
@@ -1149,7 +1149,7 @@ void Chord::layoutStem()
                   if (tab->stemsDown())
                         hookIdx = -hookIdx;
                   if (hookIdx) {
-                        _hook->setSubtype(hookIdx);
+                        _hook->setHookType(hookIdx);
                         _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
                         _hook->setMag(mag()*score()->styleD(ST_smallNoteMag));
                         _hook->adjustReadPos();
@@ -1862,7 +1862,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal x         = centerX();
       qreal y = 0.0;
 
-      int st = a->subtype();
+      ArticulationType st = a->articulationType();
 
       if (st == Articulation_Tenuto || st == Articulation_Staccato) {
             bool bottom;
@@ -2023,7 +2023,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 void Chord::reset()
       {
       score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
-      score()->undoChangeProperty(this, P_BEAM_MODE, int(BEAM_AUTO));
+      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::AUTO));
       createPlayEvents(this);
       ChordRest::reset();
       }

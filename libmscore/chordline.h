@@ -34,7 +34,7 @@ enum ChordLineType {
 class ChordLine : public Element {
       Q_OBJECT
 
-      ChordLineType _subtype;
+      ChordLineType _chordLineType;
       QPainterPath path;
       bool modified;
 
@@ -44,9 +44,9 @@ class ChordLine : public Element {
 
       virtual ChordLine* clone() const { return new ChordLine(*this); }
       virtual ElementType type() const { return CHORDLINE; }
-      virtual void setSubtype(ChordLineType);
-      ChordLineType subtype() const    { return _subtype; }
-      Chord* chord() const             { return (Chord*)(parent()); }
+      virtual void setChordLineType(ChordLineType);
+      ChordLineType chordLineType() const { return _chordLineType; }
+      Chord* chord() const                { return (Chord*)(parent()); }
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;

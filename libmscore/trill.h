@@ -41,7 +41,7 @@ class TrillSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Trill
-//   @P subtype   enum TrillType TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
+//   @P trillType   enum TrillType TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
 //---------------------------------------------------------
 
 class Trill : public SLine {
@@ -54,8 +54,8 @@ class Trill : public SLine {
             };
 
    private:
-      Q_PROPERTY(TrillType subtype READ subtype WRITE undoSetSubtype)
-      TrillType _subtype;
+      Q_PROPERTY(TrillType trillType READ trillType WRITE undoSetTrillType)
+      TrillType _trillType;
       ElementList _el;        // accidentals etc.
 
    public:
@@ -70,11 +70,11 @@ class Trill : public SLine {
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
 
-      void setSubtype(const QString& s);
-      void undoSetSubtype(TrillType val);
-      void setSubtype(TrillType tt)     { _subtype = tt; }
-      TrillType subtype() const         { return _subtype; }
-      QString subtypeName() const;
+      void setTrillType(const QString& s);
+      void undoSetTrillType(TrillType val);
+      void setTrillType(TrillType tt)     { _trillType = tt; }
+      TrillType trillType() const         { return _trillType; }
+      QString trillTypeName() const;
 
       Segment* segment() const          { return (Segment*)parent(); }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);

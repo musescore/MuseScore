@@ -360,7 +360,7 @@ class Score : public QObject {
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
       ChordRest* prevMeasure(ChordRest* element);
-      void cmdSetBeamMode(int);
+      void cmdSetBeamMode(BeamMode);
       void cmdFlip();
       Note* getSelectedNote();
       Note* upAlt(Element*);
@@ -377,8 +377,6 @@ class Score : public QObject {
       void moveToNextInputPos();
 
       void padToggle(int n);
-
-//      void cmdAddPitch(int note, bool addFlag);
 
       void addTempo();
       void addMetronome();

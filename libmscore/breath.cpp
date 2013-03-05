@@ -32,7 +32,7 @@ int Breath::symList[Breath::breathSymbols] = {
 Breath::Breath(Score* s)
   : Element(s)
       {
-      _subtype = 0;
+      _breathType = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       }
 
@@ -42,7 +42,7 @@ Breath::Breath(Score* s)
 
 void Breath::layout()
       {
-      setbbox(symbols[score()->symIdx()][symList[subtype()]].bbox(magS()));
+      setbbox(symbols[score()->symIdx()][symList[breathType()]].bbox(magS()));
       }
 
 //---------------------------------------------------------
@@ -52,7 +52,7 @@ void Breath::layout()
 void Breath::write(Xml& xml) const
       {
       xml.stag("Breath");
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _breathType);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -65,7 +65,7 @@ void Breath::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "subtype")
-                  _subtype = e.readInt();
+                  _breathType = e.readInt();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -78,7 +78,7 @@ void Breath::read(XmlReader& e)
 void Breath::draw(QPainter* p) const
       {
       p->setPen(curColor());
-      symbols[score()->symIdx()][symList[subtype()]].draw(p, magS());
+      symbols[score()->symIdx()][symList[breathType()]].draw(p, magS());
       }
 
 //---------------------------------------------------------

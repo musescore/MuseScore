@@ -31,16 +31,16 @@
 class Icon : public Element {
       Q_OBJECT
 
-      int _subtype;
+      int _iconType;
       const char* _action;
       QIcon _icon;
 
    public:
-      Icon(Score* s) : Element(s), _subtype(0), _action(0) { }
-      virtual Icon* clone() const        { return new Icon(*this);   }
-      virtual ElementType type() const   { return ICON;              }
-      int subtype() const                { return _subtype;          }
-      void setSubtype(int val)           { _subtype = val;           }
+      Icon(Score* s) : Element(s), _iconType(0), _action(0) { }
+      virtual Icon* clone() const        { return new Icon(*this);    }
+      virtual ElementType type() const   { return ICON;               }
+      int iconType() const               { return _iconType;          }
+      void setIconType(int val)          { _iconType = val;           }
       void setAction(const char* s, const QIcon& i)   { _action = s; _icon = i;  }
       const char* action() const         { return _action;           }
       QIcon icon() const                 { return _icon;             }

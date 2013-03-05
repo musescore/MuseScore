@@ -802,7 +802,7 @@ void SegmentView::setElement(Element* e)
 
       Segment* s = (Segment*)e;
       ShowElementBase::setElement(e);
-      int st = s->subtype();
+      int st = s->segmentType();
       int idx;
       for (idx = 0; idx < 11; ++idx) {
             if ((1 << idx) == st)
@@ -1483,7 +1483,7 @@ void BarLineView::setElement(Element* e)
       {
       BarLine* barline = (BarLine*)e;
       ShowElementBase::setElement(e);
-      bl.subType->setValue(barline->subtype());
+      bl.subType->setValue(barline->barLineType());
       bl.span->setValue(barline->span());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());
@@ -1529,7 +1529,7 @@ void DynamicView::setElement(Element* e)
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
-      bl.subType->setValue(dynamic->subtype());
+      bl.subType->setValue(dynamic->dynamicType());
       }
 
 //---------------------------------------------------------
@@ -2074,7 +2074,7 @@ void VoltaSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2103,7 +2103,7 @@ void LineSegmentView::setElement(Element* e)
       LineSegment* vs = (LineSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2681,7 +2681,7 @@ void TextLineSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());

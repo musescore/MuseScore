@@ -187,7 +187,7 @@ void System::layout(qreal xo1)
                               b->setParent(this);
                               b->setTrack(track);
                               b->setLevel(i);
-                              b->setSubtype(s->bracket(i));
+                              b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
                               score()->undoAddElement(b);
                               }
@@ -498,7 +498,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        iname->setSubtype(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
+                        iname->setInstrumentNameType(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
                         // score()->undoAddElement(iname);
                         score()->addElement(iname);
                         }
@@ -574,7 +574,7 @@ void System::add(Element* el)
                         b->setLevel(level);
                         b->setSpan(1);
                         }
-                  b->staff()->setBracket(level,     b->subtype());
+                  b->staff()->setBracket(level,     b->bracketType());
                   b->staff()->setBracketSpan(level, b->span());
                   _brackets.append(b);
                   }

@@ -36,7 +36,7 @@ TimeSig::TimeSig(Score* s)
       customText = false;
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
-      _subtype   = TSIG_NORMAL;
+      _timeSigType   = TSIG_NORMAL;
       customText = false;
       needLayout = true;
       }
@@ -53,7 +53,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
             }
       if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
             customText = false;
-      _subtype = st;
+      _timeSigType = st;
       layout1();
       }
 
@@ -117,8 +117,8 @@ void TimeSig::setDenominatorString(const QString& a)
 void TimeSig::write(Xml& xml) const
       {
       xml.stag("TimeSig");
-      if (subtype() != TSIG_NORMAL)
-            xml.tag("subtype", subtype());
+      if (timeSigType() != TSIG_NORMAL)
+            xml.tag("subtype", timeSigType());
       Element::writeProperties(xml);
 
       xml.tag("sigN",  _sig.numerator());
@@ -179,7 +179,7 @@ void TimeSig::read(XmlReader& e)
                            + ((i >>  6) & 0x3f), i & 0x3f), TSIG_NORMAL);
                         }
                   else
-                        _subtype = i;
+                        _timeSigType = i;
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesySig = e.readInt();
@@ -201,12 +201,12 @@ void TimeSig::read(XmlReader& e)
       if (old) {
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
-            if (subtype() == 0x40000104)
-                  _subtype = TSIG_FOUR_FOUR;
-            else if (subtype() == 0x40002084)
-                  _subtype = TSIG_ALLA_BREVE;
+            if (timeSigType() == 0x40000104)
+                  _timeSigType = TSIG_FOUR_FOUR;
+            else if (timeSigType() == 0x40002084)
+                  _timeSigType = TSIG_ALLA_BREVE;
             else
-                  _subtype = TSIG_NORMAL;
+                  _timeSigType = TSIG_NORMAL;
             }
       needLayout = true;
       }
@@ -225,7 +225,7 @@ void TimeSig::layout1()
 
       qreal lineDist    = 1.0;            // assume dimensions a standard staff
       int    numOfLines = 5;
-      TimeSigType st    = subtype();
+      TimeSigType st    = timeSigType();
 
       if (staff()) {
             StaffType* staffType = staff()->staffType();
@@ -333,7 +333,7 @@ Space TimeSig::space() const
 
 void TimeSig::setFrom(const TimeSig* ts)
       {
-      _subtype           = ts->subtype();
+      _timeSigType       = ts->timeSigType();
       _numeratorString   = ts->_numeratorString;
       _denominatorString = ts->_denominatorString;
       _sig               = ts->_sig;

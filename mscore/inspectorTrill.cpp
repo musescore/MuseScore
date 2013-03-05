@@ -42,7 +42,7 @@ void InspectorTrill::setElement(Element* e)
       Trill* trill = trillSegment->trill();
 
       iTrill.subtype->blockSignals(true);
-      iTrill.subtype->setCurrentIndex(int(trill->subtype()));
+      iTrill.subtype->setCurrentIndex(int(trill->trillType()));
       iTrill.subtype->blockSignals(false);
       }
 
@@ -55,7 +55,7 @@ void InspectorTrill::apply()
       TrillSegment* trillSegment = static_cast<TrillSegment*>(inspector->element());
 
       Trill* trill = trillSegment->trill();
-      Trill::TrillType vt = trill->subtype();
+      Trill::TrillType vt = trill->trillType();
       Trill::TrillType nt = Trill::TrillType(iTrill.subtype->currentIndex());
       if (vt != nt) {
             Score* score = trill->score();

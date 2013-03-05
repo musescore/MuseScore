@@ -562,7 +562,7 @@ if (MScore::debugMode)
             if (idx != -1) {
                   Segment* seg = measure->first();
                   // assume there is always a ChordRest segment
-                  while (seg->subtype() != Segment::SegChordRest)
+                  while (seg->segmentType() != Segment::SegChordRest)
                         seg = seg->next();
                   score()->pasteStaff(xml, (ChordRest*)(seg->element(idx * VOICES)));
                   }
@@ -598,7 +598,7 @@ void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
 bool ScoreView::dropCanvas(Element* e)
       {
       if (e->type() == Element::ICON) {
-            switch(static_cast<Icon*>(e)->subtype()) {
+            switch(static_cast<Icon*>(e)->iconType()) {
                   case ICON_VFRAME:
                         score()->insertMeasure(Element::VBOX, 0);
                         break;

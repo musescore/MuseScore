@@ -983,7 +983,7 @@ void ExportLy::hairpin(Hairpin* hp, int tick)
   // hairpin start and end and not only anchorpoint, and position
   // accordingly in lily.
 	int art=2;
-	art=hp->subtype();
+	art=hp->hairpinType();
 	if (hp->tick() == tick)
 	  {
 	    if (art == 0) //diminuendo
@@ -1001,7 +1001,7 @@ void ExportLy::hairpin(Hairpin* hp, int tick)
 
 void ExportLy::ottava(Ottava* ot, int tick)
 {
-  int st = ot->subtype();
+  int st = ot->ottavaType();
   if (ot->tick() == tick)
     {
       switch(st) {
@@ -2031,7 +2031,7 @@ void ExportLy::buildGlissandoList(int strack, int etrack)
 		      Element* prevel = seg->prev()->element(st); //(st);
 		      Chord* prevchord = (Chord*)prevel;
 		      glisstable[glisscount].chord = prevchord;
-		      glisstable[glisscount].type = int(cd->glissando()->subtype());
+		      glisstable[glisscount].type = int(cd->glissando()->glissandoType());
 		      glisstable[glisscount].glisstext = cd->glissando()->text();
 		      glisstable[glisscount].tick = prevchord->tick();
 		    }
@@ -2167,7 +2167,7 @@ void ExportLy::findStartRepNoBarline(int &i, Measure* m)
  // loop over all measure relative segments in this measure
   for (Segment* seg = m->first(); seg; seg = seg->next())
     {
-      if (seg->subtype() == Segment::SegStartRepeatBarLine)
+      if (seg->segmentType() == Segment::SegStartRepeatBarLine)
 	{
 	  i++; // insert at next slot of voltarray
 	  voltarray[i].voltart = startrepeat;
@@ -2346,10 +2346,10 @@ void ExportLy::writeClef(int clef)
 
 void ExportLy::writeTimeSig(TimeSig* sig)
 {
-  int st = sig->subtype();
+  int st     = sig->timeSigType();
   Fraction f = sig->sig();
-  timedenom = f.denominator();
-  z1        = f.numerator();
+  timedenom  = f.denominator();
+  z1         = f.numerator();
 
   //lilypond writes 4/4 as C by default, so only check for cut.
   if (st == TSIG_ALLA_BREVE)
@@ -2594,7 +2594,7 @@ void ExportLy::writeArticulation(ChordRest* c)
 {
   foreach(Articulation* a, c->articulations())
     {
-      switch(a->subtype())
+      switch(a->articulationType())
 	{
 	case Articulation_Fermata:
         if (a->up())
@@ -2683,7 +2683,7 @@ void ExportLy::writeArticulation(ChordRest* c)
 	  out << "\\downmordent ";
 	  break;
 	default:
-	  qDebug("unsupported note attribute %d\n", a->subtype());
+	  qDebug("unsupported note attribute %d\n", int(a->articulationType()));
 	  break;
 	}// end switch
     }// end foreach
@@ -2699,7 +2699,7 @@ void ExportLy::writeTremolo(Chord * chord)
   if (chord->tremolo())
     {
       Tremolo * tr = chord->tremolo();
-      int st = tr->subtype();
+      int st = tr->tremoloType();
       switch (st)
 	{
 	case TREMOLO_R8:
@@ -2877,7 +2877,7 @@ bool ExportLy::arpeggioTest(Chord* chord)
   if (chord->arpeggio())
     {
       arp=true;
-      int subtype = int(chord->arpeggio()->subtype());
+      int subtype = int(chord->arpeggio()->arpeggioType());
       switch (subtype)
 	{
 	case 0:
@@ -3409,7 +3409,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
   Element*  nextelem;
   nextelem= nextseg->element(track);
 
-  while (!(nextseg->subtype() == Segment::SegEndBarLine))//  and !(nextseg->subtype() == Segment::SegEndBarLine)))
+  while (!(nextseg->segmentType() == Segment::SegEndBarLine))//  and !(nextseg->segmentType() == Segment::SegEndBarLine)))
     {
       //go to next segment, check if it is chord or end of measure.
       if (nextseg->isChordRest())	break;
@@ -3419,7 +3419,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   //if it is not on this track, continue until end we find segment
   //containing element of this track, or end of measure
-  while ((nextelem==0) and (!(nextseg->subtype() == Segment::SegEndBarLine)))
+  while ((nextelem==0) and (!(nextseg->segmentType() == Segment::SegEndBarLine)))
     {
       nextseg = nextseg->next();
       nextelem = nextseg->element(track);
@@ -3427,7 +3427,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   // if next segment contains element of this track, check for end of
   // measure and chordorrest.
-  if ((nextseg->subtype() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
+  if ((nextseg->segmentType() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
     {
       // probably superfluous as we have previously checked for
       // element on this track (!=0)

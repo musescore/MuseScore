@@ -28,12 +28,12 @@ Hook::Hook(Score* s)
       }
 
 //---------------------------------------------------------
-//   setIdx
+//   setHookType
 //---------------------------------------------------------
 
-void Hook::setSubtype(int i)
+void Hook::setHookType(int i)
       {
-      _subtype = i;
+      _hookType = i;
       switch(i) {
             case 0:    break;
             case 1:    setSym(eighthflagSym);        break;
