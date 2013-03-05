@@ -251,7 +251,7 @@ Score* TestParts::doAddBreath()
       DropData dd;
       dd.view = 0;
       Breath* b = new Breath(score);
-      b->setSubtype(0);
+      b->setBreathType(0);
       dd.element = b;
 
       score->startCmd();
