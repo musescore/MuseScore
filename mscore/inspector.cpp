@@ -84,9 +84,9 @@ Inspector::Inspector(QWidget* parent)
       layout = new QVBoxLayout;
       layout->setSpacing(0);
       mainWidget->setLayout(layout);
-      ie        = 0;
-      _element  = 0;
       _inspectorEdit = false;
+      ie             = 0;
+      _element       = 0;
       layout->addStretch(10);
       }
 
@@ -106,10 +106,8 @@ void Inspector::closeEvent(QCloseEvent* ev)
 
 void Inspector::reset()
       {
-      if (ie) {
-            ie->setElement(_element);
-            // ie->apply();
-            }
+      if (ie)
+            ie->setElement();
       }
 
 //---------------------------------------------------------
@@ -118,16 +116,26 @@ void Inspector::reset()
 
 void Inspector::setElement(Element* e)
       {
-      // if the element is being set again because of an edit originated
-      // from within the inspector itself, do nothing
+      QList<Element*> el;
+      if (e)
+            el.append(e);
+      setElements(el);
+      }
 
-      if (_inspectorEdit) {               // if within an inspector-originated edit
-            _inspectorEdit = false;       // reset flag
-            if (_element == e)            // if element is not changing...
-                  return;                 // ...do nothing
+//---------------------------------------------------------
+//   setElements
+//---------------------------------------------------------
+
+void Inspector::setElements(const QList<Element*>& l)
+      {
+      if (_inspectorEdit) {          // if within an inspector-originated edit
+            _inspectorEdit = false;  // reset flag
+            if (_el == l)            // if element is not changing...
+                  return;            // ...do nothing
             }
-
-      if (e == 0 || _element == 0 || (e->type() != _element->type())) {
+      Element* e = l.isEmpty() ? 0 : l[0];
+      if (e == 0 || _element == 0 || (_el != l)) {
+            _el = l;
             if (ie)
                   ie->deleteLater();
             ie = 0;
@@ -135,90 +143,87 @@ void Inspector::setElement(Element* e)
 
             if (_element == 0)
                   return;
-            switch(_element->type()) {
-                  case Element::FBOX:
-                  case Element::TBOX:
-                  case Element::VBOX:
-                        ie = new InspectorVBox(this);
-                        break;
-                  case Element::HBOX:
-                        ie = new InspectorHBox(this);
-                        break;
-                  case Element::ARTICULATION:
-                        ie = new InspectorArticulation(this);
-                        break;
-                  case Element::SPACER:
-                        ie = new InspectorSpacer(this);
-                        break;
-                  case Element::NOTE:
-                        ie = new InspectorNote(this);
-                        break;
-                  case Element::REST:
-                        ie = new InspectorRest(this);
-                        break;
-                  case Element::CLEF:
-                        ie = new InspectorClef(this);
-                        break;
-                  case Element::TIMESIG:
-                        ie = new InspectorTimeSig(this);
-                        break;
-                  case Element::KEYSIG:
-                        ie = new InspectorKeySig(this);
-                        break;
-                  case Element::BEAM:
-                        ie = new InspectorBeam(this);
-                        break;
-                  case Element::IMAGE:
-                        ie = new InspectorImage(this);
-                        break;
-                  case Element::LASSO:
-                        ie = new InspectorLasso(this);
-                        break;
-                  case Element::VOLTA_SEGMENT:
-                        ie = new InspectorVolta(this);
-                        break;
-                  case Element::OTTAVA_SEGMENT:
-                        ie = new InspectorOttava(this);
-                        break;
-                  case Element::TRILL_SEGMENT:
-                        ie = new InspectorTrill(this);
-                        break;
-                  case Element::HAIRPIN_SEGMENT:
-                        ie = new InspectorHairpin(this);
-                        break;
-                  case Element::BAR_LINE:
-                        ie = new InspectorBarLine(this);
-                        break;
-                  case Element::JUMP:
-                        ie = new InspectorJump(this);
-                        break;
-                  case Element::MARKER:
-                        ie = new InspectorMarker(this);
-                        break;
-                  case Element::GLISSANDO:
-                        ie = new InspectorGlissando(this);
-                        break;
-                  default:
-                        ie = new InspectorElement(this);
-                        break;
+
+            bool sameTypes = true;
+            foreach(Element* ee, _el) {
+                  if (_element->type() != ee->type())
+                        sameTypes = false;
+                  }
+            if (!sameTypes)
+                  ie = new InspectorGroupElement(this);
+            else {
+                  switch(_element->type()) {
+                        case Element::FBOX:
+                        case Element::TBOX:
+                        case Element::VBOX:
+                              ie = new InspectorVBox(this);
+                              break;
+                        case Element::HBOX:
+                              ie = new InspectorHBox(this);
+                              break;
+                        case Element::ARTICULATION:
+                              ie = new InspectorArticulation(this);
+                              break;
+                        case Element::SPACER:
+                              ie = new InspectorSpacer(this);
+                              break;
+                        case Element::NOTE:
+                              ie = new InspectorNote(this);
+                              break;
+                        case Element::REST:
+                              ie = new InspectorRest(this);
+                              break;
+                        case Element::CLEF:
+                              ie = new InspectorClef(this);
+                              break;
+                        case Element::TIMESIG:
+                              ie = new InspectorTimeSig(this);
+                              break;
+                        case Element::KEYSIG:
+                              ie = new InspectorKeySig(this);
+                              break;
+                        case Element::BEAM:
+                              ie = new InspectorBeam(this);
+                              break;
+                        case Element::IMAGE:
+                              ie = new InspectorImage(this);
+                              break;
+                        case Element::LASSO:
+                              ie = new InspectorLasso(this);
+                              break;
+                        case Element::VOLTA_SEGMENT:
+                              ie = new InspectorVolta(this);
+                              break;
+                        case Element::OTTAVA_SEGMENT:
+                              ie = new InspectorOttava(this);
+                              break;
+                        case Element::TRILL_SEGMENT:
+                              ie = new InspectorTrill(this);
+                              break;
+                        case Element::HAIRPIN_SEGMENT:
+                              ie = new InspectorHairpin(this);
+                              break;
+                        case Element::BAR_LINE:
+                              ie = new InspectorBarLine(this);
+                              break;
+                        case Element::JUMP:
+                              ie = new InspectorJump(this);
+                              break;
+                        case Element::MARKER:
+                              ie = new InspectorMarker(this);
+                              break;
+                        case Element::GLISSANDO:
+                              ie = new InspectorGlissando(this);
+                              break;
+                        default:
+                              ie = new InspectorElement(this);
+                              break;
+                        }
                   }
             layout->insertWidget(0, ie);
             }
       _element = e;
-      ie->setElement(_element);
-      }
-
-//---------------------------------------------------------
-//   setElementList
-//---------------------------------------------------------
-
-void Inspector::setElementList(const QList<Element*>& el)
-      {
-      ie->deleteLater();
-      ie = new InspectorGroupElement(this);
-      layout->insertWidget(0, ie);
-      _element = 0;
-      _el = el;
+      ie->setElement();
       }
 
 //---------------------------------------------------------
@@ -392,17 +397,18 @@ void InspectorElementElement::apply()
 InspectorElement::InspectorElement(QWidget* parent)
    : InspectorBase(parent)
       {
-      ie = new InspectorElementElement(this);
-      layout->addWidget(ie);
-      }
+      QWidget* w = new QWidget;
+      b.setupUi(w);
+      layout->addWidget(w);
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
+      iList = {
+            { P_COLOR,    0, false, b.color,      b.resetColor   },
+            { P_VISIBLE,  0, false, b.visible,    b.resetVisible },
+            { P_USER_OFF, 0, false, b.offsetX,    b.resetX       },
+            { P_USER_OFF, 1, false, b.offsetY,    b.resetY       }
+            };
 
-void InspectorElement::setElement(Element* e)
-      {
-      ie->setElement(e);
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -414,37 +420,17 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       {
       QWidget* w = new QWidget;
       vb.setupUi(w);
-      layout->setSpacing(0);
       layout->addWidget(w);
 
-      iList[0].t = P_TOP_GAP;
-      iList[0].w = vb.topGap;
-      iList[0].r = vb.resetTopGap;
-
-      iList[1].t = P_BOTTOM_GAP;
-      iList[1].w = vb.bottomGap;
-      iList[1].r = vb.resetBottomGap;
-
-      iList[2].t = P_LEFT_MARGIN;
-      iList[2].w = vb.leftMargin;
-      iList[2].r = vb.resetLeftMargin;
-
-      iList[3].t = P_RIGHT_MARGIN;
-      iList[3].w = vb.rightMargin;
-      iList[3].r = vb.resetRightMargin;
-
-      iList[4].t = P_TOP_MARGIN;
-      iList[4].w = vb.topMargin;
-      iList[4].r = vb.resetTopMargin;
-
-      iList[5].t = P_BOTTOM_MARGIN;
-      iList[5].w = vb.bottomMargin;
-      iList[5].r = vb.resetBottomMargin;
-
-      iList[6].t = P_BOX_HEIGHT;
-      iList[6].w = vb.height;
-      iList[6].r = 0;
-
+      iList = {
+            { P_TOP_GAP,       0, false, vb.topGap,       vb.resetTopGap       },
+            { P_BOTTOM_GAP,    0, false, vb.bottomGap,    vb.resetBottomGap    },
+            { P_LEFT_MARGIN,   0, false, vb.leftMargin,   vb.resetLeftMargin   },
+            { P_RIGHT_MARGIN,  0, false, vb.rightMargin,  vb.resetRightMargin  },
+            { P_TOP_MARGIN,    0, false, vb.topMargin,    vb.resetTopMargin    },
+            { P_BOTTOM_MARGIN, 0, false, vb.bottomMargin, vb.resetBottomMargin },
+            { P_BOX_HEIGHT,    0, false, vb.height,       0                    }
+            };
       mapSignals();
       }
 
@@ -459,17 +445,11 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       hb.setupUi(w);
       layout->addWidget(w);
 
-      iList[0].t = P_TOP_GAP;
-      iList[0].w = hb.leftGap;
-      iList[0].r = hb.resetLeftGap;
-
-      iList[1].t = P_BOTTOM_GAP;
-      iList[1].w = hb.rightGap;
-      iList[1].r = hb.resetRightGap;
-
-      iList[2].t = P_BOX_WIDTH;
-      iList[2].w = hb.width;
-      iList[2].r = 0;
+      iList = {
+            { P_TOP_GAP,    0, false, hb.leftGap,  hb.resetLeftGap  },
+            { P_BOTTOM_GAP, 0, false, hb.rightGap, hb.resetRightGap },
+            { P_BOX_WIDTH,  0, false, hb.width,    0                }
+            };
 
       mapSignals();
       }
@@ -481,69 +461,22 @@ InspectorHBox::InspectorHBox(QWidget* parent)
 InspectorArticulation::InspectorArticulation(QWidget* parent)
    : InspectorBase(parent)
       {
+      QWidget* w1 = new QWidget;
+      e.setupUi(w1);
+      layout->addWidget(w1);
       QWidget* w = new QWidget;
-
       ar.setupUi(w);
       layout->addWidget(w);
-      connect(ar.x,         SIGNAL(valueChanged(double)),     SLOT(apply()));
-      connect(ar.y,         SIGNAL(valueChanged(double)),     SLOT(apply()));
-      connect(ar.direction, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      connect(ar.anchor,    SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      }
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorArticulation::setElement(Element* e)
-      {
-      Articulation* a = static_cast<Articulation*>(e);
-      qreal _spatium = e->score()->spatium();
-      ar.elementName->setText(e->name());
-      ar.x->blockSignals(true);
-      ar.y->blockSignals(true);
-      ar.direction->blockSignals(true);
-      ar.anchor->blockSignals(true);
-
-      ar.x->setValue(a->pos().x() / _spatium);
-      ar.y->setValue(a->pos().y() / _spatium);
-      ar.direction->setCurrentIndex(int(a->direction()));
-      ar.anchor->setCurrentIndex(int(a->anchor()));
-
-      ar.x->blockSignals(false);
-      ar.y->blockSignals(false);
-      ar.direction->blockSignals(false);
-      ar.anchor->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorArticulation::apply()
-      {
-      Articulation* a = static_cast<Articulation*>(inspector->element());
-      Score* score    = a->score();
-      qreal _spatium  = score->spatium();
-
-      QPointF o(ar.x->value() * _spatium, ar.y->value() * _spatium);
-      MScore::Direction d = MScore::Direction(ar.direction->currentIndex());
-      ArticulationAnchor anchor = ArticulationAnchor(ar.anchor->currentIndex());
-
-      if (o == a->pos() && anchor == a->anchor() && d == a->direction())
-            return;
-
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      score->startCmd();
-      if (o != a->pos())
-            score->undoChangeProperty(a, P_USER_OFF, o - a->ipos());
-      if (anchor != a->anchor())
-            score->undoChangeProperty(a, P_ARTICULATION_ANCHOR, int(anchor));
-      if (d != a->direction())
-            score->undoChangeProperty(a, P_DIRECTION, int(d));
-      score->endCmd();
-      mscore->endCmd();
+      iList = {
+            { P_COLOR,               0, false, e.color,        e.resetColor      },
+            { P_VISIBLE,             0, false, e.visible,      e.resetVisible    },
+            { P_USER_OFF,            0, false, e.offsetX,      e.resetX          },
+            { P_USER_OFF,            1, false, e.offsetY,      e.resetY          },
+            { P_ARTICULATION_ANCHOR, 0, false, ar.anchor,      ar.resetAnchor    },
+            { P_DIRECTION,           0, false, ar.direction,   ar.resetDirection }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -554,40 +487,13 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
    : InspectorBase(parent)
       {
       QWidget* w = new QWidget;
-
       sp.setupUi(w);
       layout->addWidget(w);
-      connect(sp.height, SIGNAL(valueChanged(double)), SLOT(apply()));
-      }
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorSpacer::setElement(Element* e)
-      {
-      Spacer* spacer = static_cast<Spacer*>(e);
-      sp.elementName->setText(e->name());
-      sp.height->setValue(spacer->gap() / spacer->spatium());
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorSpacer::apply()
-      {
-      Spacer* spacer = static_cast<Spacer*>(inspector->element());
-      Score* score   = spacer->score();
-      qreal space    = sp.height->value() * spacer->spatium();
-      if (space != spacer->gap()) {
-            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                            // do not set element values again
-            score->startCmd();
-            score->undoChangeProperty(spacer, P_SPACE, space);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_SPACE, 0, false, sp.height, sp.resetHeight  }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -1135,12 +1041,12 @@ InspectorNote::InspectorNote(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 
-void InspectorNote::setElement(Element* e)
+void InspectorNote::setElement()
       {
-      Note* note = static_cast<Note*>(e);
+      Note* note = static_cast<Note*>(inspector->element());
       Segment* segment = note->chord()->segment();
 
-      iElement->setElement(e);
+      iElement->setElement(note);
       iNote->setElement(note);
       iChord->setElement(note->chord());
       iSegment->setElement(segment);
@@ -1261,51 +1167,26 @@ void InspectorNote::beamClicked()
 InspectorRest::InspectorRest(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      iSegment = new InspectorSegment(this);
+      QWidget* w1 = new QWidget;
+      e.setupUi(w1);
+      layout->addWidget(w1);
+      QWidget* w2 = new QWidget;
+      s.setupUi(w2);
+      layout->addWidget(w2);
+      QWidget* w3 = new QWidget;
+      r.setupUi(w3);
+      layout->addWidget(w3);
 
-      layout->addWidget(iElement);
-      QHBoxLayout* l = new QHBoxLayout;
-      small          = new QCheckBox;
-      small->setText(tr("Small"));
-      connect(small, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(small);
-      layout->addLayout(l);
-      layout->addWidget(iSegment);
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorRest::setElement(Element* e)
-      {
-      Rest* rest = static_cast<Rest*>(e);
-      Segment* segment = rest->segment();
-
-      iElement->setElement(rest);
-      iSegment->setElement(segment);
-      small->setChecked(rest->small());
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorRest::apply()
-      {
-      Rest* rest = static_cast<Rest*>(inspector->element());
-
-      bool val = small->isChecked();
-      if (val != rest->small()) {
-            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                            // do not set element values again
-            Score* score     = rest->score();
-            score->startCmd();
-            score->undoChangeProperty(rest, P_SMALL, val);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_COLOR,          0, false, e.color,         e.resetColor         },
+            { P_VISIBLE,        0, false, e.visible,       e.resetVisible       },
+            { P_USER_OFF,       0, false, e.offsetX,       e.resetX             },
+            { P_USER_OFF,       1, false, e.offsetY,       e.resetY             },
+            { P_SMALL,          0, false, r.small,         r.resetSmall         },
+            { P_LEADING_SPACE,  0, true,  s.leadingSpace,  s.resetLeadingSpace  },
+            { P_TRAILING_SPACE, 0, true,  s.trailingSpace, s.resetTrailingSpace }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -1333,9 +1214,9 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 
-void InspectorTimeSig::setElement(Element* e)
+void InspectorTimeSig::setElement()
       {
-      TimeSig* sig = static_cast<TimeSig*>(e);
+      TimeSig* sig = static_cast<TimeSig*>(inspector->element());
       Segment* segment = sig->segment();
 
       iElement->setElement(sig);
@@ -1397,9 +1278,9 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 
-void InspectorKeySig::setElement(Element* e)
+void InspectorKeySig::setElement()
       {
-      KeySig* sig = static_cast<KeySig*>(e);
+      KeySig* sig = static_cast<KeySig*>(inspector->element());
       Segment* segment = sig->segment();
 
       iElement->setElement(sig);
@@ -1443,51 +1324,26 @@ void InspectorKeySig::apply()
 InspectorClef::InspectorClef(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      iSegment = new InspectorSegment(this);
+      QWidget* w1 = new QWidget;
+      e.setupUi(w1);
+      layout->addWidget(w1);
+      QWidget* w2 = new QWidget;
+      s.setupUi(w2);
+      layout->addWidget(w2);
+      QWidget* w3 = new QWidget;
+      c.setupUi(w3);
+      layout->addWidget(w3);
 
-      layout->addWidget(iElement);
-      QHBoxLayout* l   = new QHBoxLayout;
-      showCourtesy = new QCheckBox;
-      showCourtesy->setText(tr("Show Courtesy Clef"));
-      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showCourtesy);
-      layout->addLayout(l);
-      layout->addWidget(iSegment);
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorClef::setElement(Element* e)
-      {
-      Clef* clef = static_cast<Clef*>(e);
-      Segment* segment = clef->segment();
-
-      iElement->setElement(clef);
-      iSegment->setElement(segment);
-      showCourtesy->setChecked(clef->showCourtesy());
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorClef::apply()
-      {
-      Clef* clef = static_cast<Clef*>(inspector->element());
-
-      bool val = showCourtesy->isChecked();
-      if (val != clef->showCourtesy()) {
-            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                            // do not set element values again
-            Score* score = clef->score();
-            score->startCmd();
-            score->undoChangeProperty(clef, P_SHOW_COURTESY, val);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_COLOR,          0, false, e.color,         e.resetColor         },
+            { P_VISIBLE,        0, false, e.visible,       e.resetVisible       },
+            { P_USER_OFF,       0, false, e.offsetX,       e.resetX             },
+            { P_USER_OFF,       1, false, e.offsetY,       e.resetY             },
+            { P_LEADING_SPACE,  0, true,  s.leadingSpace,  s.resetLeadingSpace  },
+            { P_TRAILING_SPACE, 0, true,  s.trailingSpace, s.resetTrailingSpace },
+            { P_SHOW_COURTESY,  0, false, c.showCourtesy,  c.resetShowCourtesy  }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -1744,9 +1600,9 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 
-void InspectorBarLine::setElement(Element* e)
+void InspectorBarLine::setElement()
       {
-      BarLine* bl = static_cast<BarLine*>(e);
+      BarLine* bl = static_cast<BarLine*>(inspector->element());
       Measure* m = static_cast<Segment*>(bl->parent())->measure();
       measureBarLineType = m->endBarLineType();
 

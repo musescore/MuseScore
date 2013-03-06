@@ -23,6 +23,8 @@
 #include "ui_inspector_segment.h"
 #include "ui_inspector_note.h"
 #include "ui_inspector_chord.h"
+#include "ui_inspector_rest.h"
+#include "ui_inspector_clef.h"
 #include "ui_inspector_volta.h"
 
 class Element;
@@ -169,12 +171,10 @@ class InspectorElementElement : public QWidget, Ui::InspectorElement {
 
 class InspectorElement : public InspectorBase {
       Q_OBJECT
-
-      InspectorElementElement* ie;
+      Ui::InspectorElement b;
 
    public:
       InspectorElement(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -183,15 +183,7 @@ class InspectorElement : public InspectorBase {
 
 class InspectorVBox : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorVBox vb;
-
-      static const int _inspectorItems = 7;
-      InspectorItem iList[_inspectorItems];
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
 
    public:
       InspectorVBox(QWidget* parent);
@@ -203,15 +195,7 @@ class InspectorVBox : public InspectorBase {
 
 class InspectorHBox : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorHBox hb;
-
-      static const int _inspectorItems = 3;
-      InspectorItem iList[_inspectorItems];
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
 
    public:
       InspectorHBox(QWidget* parent);
@@ -223,15 +207,11 @@ class InspectorHBox : public InspectorBase {
 
 class InspectorArticulation : public InspectorBase {
       Q_OBJECT
-
+      Ui::InspectorElement e;
       Ui::InspectorArticulation ar;
-
-   public slots:
-      virtual void apply();
 
    public:
       InspectorArticulation(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -240,15 +220,10 @@ class InspectorArticulation : public InspectorBase {
 
 class InspectorSpacer : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorSpacer sp;
-
-   public slots:
-      virtual void apply();
 
    public:
       InspectorSpacer(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -283,7 +258,7 @@ class InspectorNote : public InspectorBase {
 
    public:
       InspectorNote(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
       };
 
 //---------------------------------------------------------
@@ -293,17 +268,12 @@ class InspectorNote : public InspectorBase {
 class InspectorRest : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* small;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorRest    r;
 
    public:
       InspectorRest(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -313,17 +283,12 @@ class InspectorRest : public InspectorBase {
 class InspectorClef : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorClef    c;
 
    public:
       InspectorClef(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -342,7 +307,7 @@ class InspectorTimeSig : public InspectorBase {
 
    public:
       InspectorTimeSig(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
       bool dirty() const;
       };
 
@@ -363,7 +328,7 @@ class InspectorKeySig : public InspectorBase {
 
    public:
       InspectorKeySig(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
       bool dirty() const;
       };
 
@@ -389,7 +354,7 @@ class InspectorBarLine : public InspectorBase {
 
    public:
       InspectorBarLine(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
       };
 
 //---------------------------------------------------------
@@ -401,10 +366,10 @@ class Inspector : public QDockWidget {
 
       QVBoxLayout* layout;
       InspectorBase* ie;
-      Element* _element;
       QList<Element*> _el;
-      bool _inspectorEdit;   // set to true when an edit originates from
-                             // within the inspector itself
+      Element* _element;      // currently displayed element
+      bool _inspectorEdit;    // set to true when an edit originates from
+                              // within the inspector itself
 
       virtual void closeEvent(QCloseEvent*);
 
@@ -417,11 +382,11 @@ class Inspector : public QDockWidget {
    public:
       Inspector(QWidget* parent = 0);
       void setElement(Element*);
-      void setElementList(const QList<Element*>&);
-      Element* element() const            { return _element; }
-      const QList<Element*>& el() const   { return _el; }
+      void setElements(const QList<Element*>&);
+      Element* element() const            { return _element;       }
+      const QList<Element*>& el() const   { return _el;            }
       bool inspectorEdit() const          { return _inspectorEdit; }
-      void setInspectorEdit(bool val)     { _inspectorEdit = val; }
+      void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 
 #endif

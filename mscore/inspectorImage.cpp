@@ -32,37 +32,15 @@ InspectorImage::InspectorImage(QWidget* parent)
       b.setupUi(w);
       layout->addWidget(w);
 
-      iList[AUTOSCALE].t = P_AUTOSCALE;
-      iList[AUTOSCALE].w = b.autoscale;
-      iList[AUTOSCALE].r = b.resetAutoscale;
-
-      iList[SIZE_W].t  = P_SIZE;
-      iList[SIZE_W].sv = 0;
-      iList[SIZE_W].w  = b.sizeWidth;
-      iList[SIZE_W].r  = 0;
-
-      iList[SIZE_H].t  = P_SIZE;
-      iList[SIZE_H].sv = 1;
-      iList[SIZE_H].w  = b.sizeHeight;
-      iList[SIZE_H].r  = 0;
-
-      iList[SCALE_W].t  = P_SCALE;
-      iList[SCALE_W].sv = 0;
-      iList[SCALE_W].w  = b.scaleWidth;
-      iList[SCALE_W].r  = 0;
-
-      iList[SCALE_H].t  = P_SCALE;
-      iList[SCALE_H].sv = 1;
-      iList[SCALE_H].w  = b.scaleHeight;
-      iList[SCALE_H].r  = 0;
-
-      iList[LOCK_RATIO].t = P_LOCK_ASPECT_RATIO;
-      iList[LOCK_RATIO].w = b.lockAspectRatio;
-      iList[LOCK_RATIO].r = b.resetLockAspectRatio;
-
-      iList[SIZE_IS_SPATIUM].t = P_SIZE_IS_SPATIUM;
-      iList[SIZE_IS_SPATIUM].w = b.sizeIsSpatium;
-      iList[SIZE_IS_SPATIUM].r = b.resetSizeIsSpatium;
+      iList = {
+            { P_AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
+            { P_SIZE,              0, false, b.sizeWidth,       0                      },
+            { P_SIZE,              1, false, b.sizeHeight,      0                      },
+            { P_SCALE,             0, false, b.scaleWidth,      0                      },
+            { P_SCALE,             1, false, b.scaleHeight,     0                      },
+            { P_LOCK_ASPECT_RATIO, 0, false, b.lockAspectRatio, b.resetLockAspectRatio },
+            { P_SIZE_IS_SPATIUM,   0, false, b.sizeIsSpatium,   b.resetSizeIsSpatium   }
+            };
 
       mapSignals();
       }
@@ -225,6 +203,6 @@ void InspectorImage::setElement(Element* e)
       iList[SCALE_H].w->setEnabled(v);
       iList[SCALE_W].w->setEnabled(v);
 
-      InspectorBase::setElement(e);
+      InspectorBase::setElement();
       }
 

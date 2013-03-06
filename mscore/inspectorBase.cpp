@@ -93,6 +93,8 @@ bool InspectorBase::isDefault(int idx)
       {
       Element* e = inspector->element();
       const InspectorItem& ii = item(idx);
+      if (ii.parent)
+            e = e->parent();
 
       P_ID id      = ii.t;
       P_TYPE t     = propertyType(id);
@@ -121,7 +123,10 @@ bool InspectorBase::dirty() const
       Element* e = inspector->element();
       for (int i = 0; i < inspectorItems(); ++i) {
             P_ID id = item(i).t;
-            if (e->getProperty(id) != getValue(i))
+            Element* ee = e;
+            if (item(i).parent)
+                  ee = ee->parent();
+            if (ee->getProperty(id) != getValue(i))
                   return true;
             }
       return false;
@@ -136,7 +141,6 @@ void InspectorBase::valueChanged(int idx)
       const InspectorItem& ii = item(idx);
       if (ii.r)
             ii.r->setEnabled(!isDefault(idx));
-//      inspector->enableApply(dirty());
       apply();
       }
 
@@ -144,13 +148,17 @@ void InspectorBase::valueChanged(int idx)
 //   setElement
 //---------------------------------------------------------
 
-void InspectorBase::setElement(Element* e)
+void InspectorBase::setElement()
       {
+      Element* ee = inspector->element();
       for (int i = 0; i < inspectorItems(); ++i) {
             QWidget* w = item(i).w;
             P_ID id    = item(i).t;
             P_TYPE pt  = propertyType(id);
             QVariant val;
+            Element* e = ee;
+            if (item(i).parent)
+                  e = ee->parent();
             if (pt == T_SIZE || pt == T_SCALE) {
                   QSizeF sz = e->getProperty(id).toSizeF();
                   if (item(i).sv == 0)
@@ -184,43 +192,47 @@ void InspectorBase::setElement(Element* e)
 
 void InspectorBase::apply()
       {
-      Element* e   = inspector->element();
-      Score* score = e->score();
+      Score* score = inspector->element()->score();
 
       score->startCmd();
-      for (int i = 0; i < inspectorItems(); ++i) {
-            P_ID id   = item(i).t;
-            P_TYPE pt = propertyType(id);
+      foreach(Element* ee, inspector->el()) {
+            for (int i = 0; i < inspectorItems(); ++i) {
+                  P_ID id   = item(i).t;
+                  P_TYPE pt = propertyType(id);
+                  Element* e = ee;
+                  if (item(i).parent)
+                        e = ee->parent();
 
-            QVariant val1 = e->getProperty(id);
-            if (pt == T_SIZE || pt == T_SCALE) {
-                  qreal v = getValue(i).toDouble();
-                  QSizeF sz = val1.toSizeF();
-                  if (item(i).sv == 0) {
-                        if (sz.width() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())));
+                  QVariant val1 = e->getProperty(id);
+                  if (pt == T_SIZE || pt == T_SCALE) {
+                        qreal v = getValue(i).toDouble();
+                        QSizeF sz = val1.toSizeF();
+                        if (item(i).sv == 0) {
+                              if (sz.width() != v)
+                                    score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())));
+                              }
+                        else {
+                              if (sz.height() != v)
+                                    score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)));
+                              }
+                        }
+                  else if (pt == T_POINT) {
+                        qreal v = getValue(i).toDouble();
+                        QPointF sz = val1.toPointF();
+                        if (item(i).sv == 0) {
+                              if (sz.x() != v)
+                                    score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())));
+                              }
+                        else {
+                              if (sz.y() != v)
+                                    score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
+                              }
                         }
                   else {
-                        if (sz.height() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)));
+                        QVariant val2 = getValue(i);
+                        if (val1 != val2)
+                              score->undoChangeProperty(e, id, val2);
                         }
-                  }
-            else if (pt == T_POINT) {
-                  qreal v = getValue(i).toDouble();
-                  QPointF sz = val1.toPointF();
-                  if (item(i).sv == 0) {
-                        if (sz.x() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())));
-                        }
-                  else {
-                        if (sz.y() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
-                        }
-                  }
-            else {
-                  QVariant val2 = getValue(i);
-                  if (val1 != val2)
-                        score->undoChangeProperty(e, id, val2);
                   }
             }
       score->setLayoutAll(true);
@@ -236,6 +248,8 @@ void InspectorBase::resetClicked(int i)
       {
       Element* e   = inspector->element();
       P_ID id      = item(i).t;
+      if (item(i).parent)
+            e = e->parent();
       QVariant def = e->propertyDefault(id);
       QWidget* w   = item(i).w;
 
@@ -287,12 +301,3 @@ void InspectorBase::mapSignals()
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       }
-//
-//  dummy
-//
-const InspectorItem& InspectorBase::item(int idx) const
-      {
-      static InspectorItem item;
-      return item;
-      }
-

@@ -454,11 +454,8 @@ QColor Element::curColor() const
 
 //---------------------------------------------------------
 //   drag
+///   Return update Rect relative to canvas.
 //---------------------------------------------------------
-
-/**
- Return update Rect relative to canvas.
-*/
 
 QRectF Element::drag(const EditData& data)
       {
