@@ -26,11 +26,9 @@ class Element;
 struct InspectorItem {
       P_ID   t;
       int sv;           // subvalue; example for T_SIZE: 0 - width 1 - height
+      bool parent;
       QWidget* w;
       QToolButton* r;
-      InspectorItem() {}
-      InspectorItem(P_ID _t, QWidget* _w, QToolButton* _r) : t(_t), w(_w), r(_r) {}
-      InspectorItem(P_ID _t, int _sv, QWidget* _w, QToolButton* _r) : t(_t), sv(_sv), w(_w), r(_r) {}
       };
 
 //---------------------------------------------------------
@@ -50,24 +48,24 @@ class InspectorBase : public QWidget {
       void resetClicked(int);
 
    protected:
+      QVector<InspectorItem> iList;
       QVBoxLayout* layout;
       Inspector* inspector;
 
-      virtual const InspectorItem& item(int idx) const;
       virtual void setValue(int idx, const QVariant& val);
-
       QVariant getValue(int idx) const;
-
       bool isDefault(int idx);
-      virtual int inspectorItems() const { return 0; }
+
       void mapSignals();
+      const InspectorItem& item(int idx) const { return iList[idx]; }
+      int inspectorItems() const               { return iList.size(); }
 
    public slots:
       virtual void apply();
 
    public:
       InspectorBase(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
       };
 
 #endif

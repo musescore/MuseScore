@@ -27,13 +27,6 @@ class InspectorJump : public InspectorBase {
 
       Ui::InspectorJump b;
 
-      static const int _inspectorItems = 7;
-      InspectorItem iList[_inspectorItems];
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx];      }
-      virtual int inspectorItems() const               { return _inspectorItems; }
-
    public:
       InspectorJump(QWidget* parent);
       };

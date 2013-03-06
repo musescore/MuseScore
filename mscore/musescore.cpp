@@ -1221,12 +1221,7 @@ void MuseScore::updateInspector()
             else if (state() == STATE_FOTO)
                   inspector->setElement(cv->fotoLasso());
             else {
-                  if (cs->selection().isSingle())
-                        inspector->setElement(cs->selection().element());
-                  else if (cs->selection().state() == SEL_NONE)
-                        inspector->setElement(0);
-                  else
-                        inspector->setElementList(cs->selection().elements());
+                  inspector->setElements(cs->selection().elements());
                   }
             }
       else
