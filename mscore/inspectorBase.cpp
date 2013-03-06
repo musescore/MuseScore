@@ -261,8 +261,10 @@ void InspectorBase::resetClicked(int i)
             static_cast<QCheckBox*>(w)->setChecked(def.toBool());
       else if (qobject_cast<QLineEdit*>(w))
             static_cast<QLineEdit*>(w)->setText(def.toString());
-      else if (qobject_cast<Awl::ColorLabel*>(w))
+      else if (qobject_cast<Awl::ColorLabel*>(w)) {
             static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
+            valueChanged(i);
+            }
       else  {
             qDebug("not supported widget");
             abort();
