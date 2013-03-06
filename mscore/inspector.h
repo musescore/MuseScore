@@ -25,6 +25,8 @@
 #include "ui_inspector_chord.h"
 #include "ui_inspector_rest.h"
 #include "ui_inspector_clef.h"
+#include "ui_inspector_timesig.h"
+#include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
 
 class Element;
@@ -298,17 +300,12 @@ class InspectorClef : public InspectorBase {
 class InspectorTimeSig : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorTimeSig t;
 
    public:
       InspectorTimeSig(QWidget* parent);
-      virtual void setElement();
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -318,18 +315,12 @@ class InspectorTimeSig : public InspectorBase {
 class InspectorKeySig : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-      QCheckBox* showNaturals;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorKeySig k;
 
    public:
       InspectorKeySig(QWidget* parent);
-      virtual void setElement();
-      bool dirty() const;
       };
 
 //---------------------------------------------------------

@@ -1196,54 +1196,26 @@ InspectorRest::InspectorRest(QWidget* parent)
 InspectorTimeSig::InspectorTimeSig(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      iSegment = new InspectorSegment(this);
+      QWidget* w1 = new QWidget;
+      e.setupUi(w1);
+      layout->addWidget(w1);
+      QWidget* w2 = new QWidget;
+      s.setupUi(w2);
+      layout->addWidget(w2);
+      QWidget* w3 = new QWidget;
+      t.setupUi(w3);
+      layout->addWidget(w3);
 
-      layout->addWidget(iElement);
-
-      QHBoxLayout* l = new QHBoxLayout;
-      showCourtesy = new QCheckBox;
-      showCourtesy->setText(tr("Show Courtesy Time Signature"));
-      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showCourtesy);
-      layout->addLayout(l);
-      layout->addWidget(iSegment);
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorTimeSig::setElement()
-      {
-      TimeSig* sig = static_cast<TimeSig*>(inspector->element());
-      Segment* segment = sig->segment();
-
-      iElement->setElement(sig);
-      iSegment->setElement(segment);
-      showCourtesy->blockSignals(true);
-      showCourtesy->setChecked(sig->showCourtesySig());
-      showCourtesy->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorTimeSig::apply()
-      {
-      TimeSig* sig = static_cast<TimeSig*>(inspector->element());
-
-      bool val = showCourtesy->isChecked();
-      if (val != sig->showCourtesySig()) {
-            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                            // do not set element values again
-            Score* score = sig->score();
-            score->startCmd();
-            score->undoChangeProperty(sig, P_SHOW_COURTESY, val);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_COLOR,          0, false, e.color,         e.resetColor         },
+            { P_VISIBLE,        0, false, e.visible,       e.resetVisible       },
+            { P_USER_OFF,       0, false, e.offsetX,       e.resetX             },
+            { P_USER_OFF,       1, false, e.offsetY,       e.resetY             },
+            { P_LEADING_SPACE,  0, true,  s.leadingSpace,  s.resetLeadingSpace  },
+            { P_TRAILING_SPACE, 0, true,  s.trailingSpace, s.resetTrailingSpace },
+            { P_SHOW_COURTESY,  0, false, t.showCourtesy,  t.resetShowCourtesy  }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -1253,68 +1225,27 @@ void InspectorTimeSig::apply()
 InspectorKeySig::InspectorKeySig(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      iSegment = new InspectorSegment(this);
-      layout->addWidget(iElement);
+      QWidget* w1 = new QWidget;
+      e.setupUi(w1);
+      layout->addWidget(w1);
+      QWidget* w2 = new QWidget;
+      s.setupUi(w2);
+      layout->addWidget(w2);
+      QWidget* w3 = new QWidget;
+      k.setupUi(w3);
+      layout->addWidget(w3);
 
-      QHBoxLayout* l = new QHBoxLayout;
-      showCourtesy = new QCheckBox;
-      showCourtesy->setText(tr("Show Courtesy Time Signature"));
-      connect(showCourtesy, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showCourtesy);
-      layout->addLayout(l);
-
-      l = new QHBoxLayout;
-      showNaturals = new QCheckBox;
-      showNaturals->setText(tr("Show Naturals"));
-      connect(showNaturals, SIGNAL(toggled(bool)), SLOT(apply()));
-      l->addWidget(showNaturals);
-      layout->addLayout(l);
-
-      layout->addWidget(iSegment);
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorKeySig::setElement()
-      {
-      KeySig* sig = static_cast<KeySig*>(inspector->element());
-      Segment* segment = sig->segment();
-
-      iElement->setElement(sig);
-      iSegment->setElement(segment);
-      showCourtesy->blockSignals(true);
-      showNaturals->blockSignals(true);
-      showCourtesy->setChecked(sig->showCourtesy());
-      showNaturals->setChecked(sig->showNaturals());
-      showCourtesy->blockSignals(false);
-      showNaturals->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorKeySig::apply()
-      {
-      KeySig* sig = static_cast<KeySig*>(inspector->element());
-
-      bool sc = showCourtesy->isChecked();
-      bool sn = showNaturals->isChecked();
-      if (sc != sig->showCourtesy() || sn != sig->showNaturals()) {
-            mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                            // do not set element values again
-            Score* score = sig->score();
-            score->startCmd();
-            if (sc != sig->showCourtesy())
-                  score->undoChangeProperty(sig, P_SHOW_COURTESY, sc);
-            if (sn != sig->showNaturals())
-                  score->undoChangeProperty(sig, P_SHOW_NATURALS, sn);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_COLOR,          0, false, e.color,         e.resetColor         },
+            { P_VISIBLE,        0, false, e.visible,       e.resetVisible       },
+            { P_USER_OFF,       0, false, e.offsetX,       e.resetX             },
+            { P_USER_OFF,       1, false, e.offsetY,       e.resetY             },
+            { P_LEADING_SPACE,  0, true,  s.leadingSpace,  s.resetLeadingSpace  },
+            { P_TRAILING_SPACE, 0, true,  s.trailingSpace, s.resetTrailingSpace },
+            { P_SHOW_COURTESY,  0, false, k.showCourtesy,  k.resetShowCourtesy  },
+            { P_SHOW_NATURALS,  0, false, k.showNaturals,  k.resetShowNaturals  }
+            };
+      mapSignals();
       }
 
 //---------------------------------------------------------
