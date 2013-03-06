@@ -60,6 +60,9 @@
      <property name="topMargin">
       <number>0</number>
      </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetColor">
        <property name="text">

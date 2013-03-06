@@ -55,8 +55,6 @@ void ScoreView::startDrag()
             foreach(Element* e, _score->selection().elements())
                   e->setStartDragPosition(e->userOff());
             }
-//      QList<Element*> el;
-//      dragElement->scanElements(&el, collectElements);
       _score->end();
       }
 
@@ -140,5 +138,3 @@ void ScoreView::endDrag()
       _score->endCmd();
       mscore->endCmd();
       }
-
-

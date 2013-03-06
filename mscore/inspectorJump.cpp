@@ -27,13 +27,15 @@ InspectorJump::InspectorJump(QWidget* parent)
       b.setupUi(w);
       layout->addWidget(w);
 
-      iList[0] = InspectorItem(P_COLOR,       b.color,      b.resetColor);
-      iList[1] = InspectorItem(P_VISIBLE,     b.visible,    b.resetVisible);
-      iList[2] = InspectorItem(P_USER_OFF, 0, b.offsetX,    b.resetX);
-      iList[3] = InspectorItem(P_USER_OFF, 1, b.offsetY,    b.resetY);
-      iList[4] = InspectorItem(P_JUMP_TO,     b.jumpTo,     b.resetJumpTo);
-      iList[5] = InspectorItem(P_PLAY_UNTIL,  b.playUntil,  b.resetPlayUntil);
-      iList[6] = InspectorItem(P_CONTINUE_AT, b.continueAt, b.resetContinueAt);
+      iList = {
+            { P_COLOR,       0, false, b.color,      b.resetColor      },
+            { P_VISIBLE,     0, false, b.visible,    b.resetVisible    },
+            { P_USER_OFF,    0, false, b.offsetX,    b.resetX          },
+            { P_USER_OFF,    1, false, b.offsetY,    b.resetY          },
+            { P_JUMP_TO,     0, false, b.jumpTo,     b.resetJumpTo     },
+            { P_PLAY_UNTIL,  0, false, b.playUntil,  b.resetPlayUntil  },
+            { P_CONTINUE_AT, 0, false, b.continueAt, b.resetContinueAt }
+            };
 
       mapSignals();
       }

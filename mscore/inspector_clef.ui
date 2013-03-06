@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorGroupElement</class>
- <widget class="QWidget" name="InspectorGroupElement">
+ <class>InspectorClef</class>
+ <widget class="QWidget" name="InspectorClef">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>92</height>
+    <width>206</width>
+    <height>97</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Element Group</string>
+      <string>Clef</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -54,31 +54,24 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="setColor">
+     <item row="0" column="2">
+      <widget class="QToolButton" name="resetShowCourtesy">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
        <property name="text">
-        <string>Set Color</string>
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="Awl::ColorLabel" name="color">
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="setVisible">
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="showCourtesy">
        <property name="text">
-        <string>Set Visible</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="setInvisible">
-       <property name="text">
-        <string>Set Invisible</string>
+        <string>show courtesy</string>
        </property>
       </widget>
      </item>
@@ -86,13 +79,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
-   <header>awl/colorlabel.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

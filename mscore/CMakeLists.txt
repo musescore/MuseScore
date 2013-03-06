@@ -56,11 +56,12 @@ QT4_WRAP_UI (ui_headers
       accidental.ui clef.ui editraster.ui mediadialog.ui textstyle.ui
       album.ui layer.ui articulationbase.ui inspector_element.ui inspector_vbox.ui
       inspector_articulation.ui inspector_spacer.ui inspector_hbox.ui keysig.ui
-      inspector_segment.ui inspector_beam.ui inspector_note.ui
+      inspector_segment.ui inspector_beam.ui inspector_note.ui inspector_rest.ui
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
+      inspector_clef.ui
       ${SCRIPT_UI}
       )
 

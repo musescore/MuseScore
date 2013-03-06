@@ -41,6 +41,6 @@ void InspectorLasso::setElement(Element* e)
       b.sizeWidth->setValue(bb.width() / MScore::DPMM);
       b.sizeHeight->setValue(bb.height() / MScore::DPMM);
 
-      InspectorBase::setElement(e);
+      InspectorBase::setElement();
       }
 
