@@ -479,6 +479,7 @@ QRectF Element::drag(const EditData& data)
             y = vRaster * n;
             }
       setUserOff(QPointF(x, y));
+      setGenerated(false);
       return canvasBoundingRect() | r;
       }
 

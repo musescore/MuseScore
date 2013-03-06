@@ -1011,7 +1011,7 @@ QLineF Text::dragAnchor() const
             Measure* m     = static_cast<Measure*>(parent());
             System* system = m->system();
             qreal yp       = system->staff(staffIdx())->y() + system->y() + system->page()->pos().x();
-            qreal xp       = m->canvasPos().x(); // m->tick2pos(tick()) + m->canvasPos().x();
+            qreal xp       = m->canvasPos().x();
             p1 = QPointF(xp, yp);
             }
       else {

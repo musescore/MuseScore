@@ -595,6 +595,7 @@ void Measure::layout2()
                   QString s(QString("%1").arg(_no + 1));
                   if (_noText == 0) {
                         _noText = new Text(score());
+                        _noText->setTrack(0);
                         _noText->setGenerated(true);
                         _noText->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
                         _noText->setParent(this);
@@ -2154,10 +2155,9 @@ e.skipCurrentElement();
                   Text* t = new Text(score());
                   t->setTrack(e.track());
                   t->read(e);
-                  //previous versions stored measure number, delete it
-                  if(t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER) {
+                  // previous versions stored measure number, delete it
+                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER))
                         delete t;
-                      }
                   else {
                         segment = getSegment(Segment::SegChordRest, e.tick());
                         segment->add(t);
@@ -2276,6 +2276,7 @@ e.skipCurrentElement();
             else if (tag == "MeasureNumber") {
                   _noText = new Text(score());
                   _noText->read(e);
+                  _noText->setTrack(0);
                   _noText->setParent(this);
                   }
             else if (Element::readProperties(e))
