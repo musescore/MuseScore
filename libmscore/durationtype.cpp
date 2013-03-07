@@ -13,6 +13,7 @@
 
 #include "durationtype.h"
 #include "mscore.h"
+#include "note.h"
 
 //---------------------------------------------------------
 //   dots
@@ -125,7 +126,7 @@ qDebug("TDuration::name(): invalid duration type %d", _val);
 
 int TDuration::headType() const
       {
-      int headType = 0;
+      int headType = Note::HEAD_WHOLE;
       switch(_val) {
             case V_256TH:
             case V_128TH:
@@ -134,25 +135,25 @@ int TDuration::headType() const
             case V_16TH:
             case V_EIGHT:
             case V_QUARTER:
-                  headType = 2;
+                  headType = Note::HEAD_QUARTER;
                   break;
             case V_HALF:
-                  headType = 1;
+                  headType = Note::HEAD_HALF;
                   break;
             case V_MEASURE:
             case V_WHOLE:
-                  headType = 0;
+                  headType = Note::HEAD_WHOLE;
                   break;
             case V_BREVE:
-                  headType = 3;
+                  headType = Note::HEAD_BREVIS;
                   break;
             case V_LONG:
-                  headType = 3;
+                  headType = Note::HEAD_BREVIS;
                   break;
             default:
             case V_INVALID:
             case V_ZERO:
-                  headType = 2;
+                  headType = Note::HEAD_QUARTER;
                   break;
             }
       return headType;

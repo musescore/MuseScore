@@ -23,6 +23,7 @@
 #include "inspectorMarker.h"
 #include "inspectorJump.h"
 #include "inspectorGlissando.h"
+#include "inspectorNote.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -74,20 +75,12 @@ Inspector::Inspector(QWidget* parent)
       {
       setObjectName("inspector");
       setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-      QScrollArea* sa = new QScrollArea;
-      sa->setWidgetResizable(true);
-      QWidget* mainWidget = new QWidget;
-      mainWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); //??
+      sa = new QScrollArea;
       setWidget(sa);
-      sa->setWidget(mainWidget);
 
-      layout = new QVBoxLayout;
-      layout->setSpacing(0);
-      mainWidget->setLayout(layout);
       _inspectorEdit = false;
       ie             = 0;
       _element       = 0;
-      layout->addStretch(10);
       }
 
 //---------------------------------------------------------
@@ -220,7 +213,8 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         }
                   }
-            layout->insertWidget(0, ie);
+            sa->setWidget(ie);
+            setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             }
       _element = e;
       ie->setElement();
@@ -399,7 +393,7 @@ InspectorElement::InspectorElement(QWidget* parent)
       {
       QWidget* w = new QWidget;
       b.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_COLOR,    0, false, b.color,      b.resetColor   },
@@ -420,7 +414,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       {
       QWidget* w = new QWidget;
       vb.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_TOP_GAP,       0, false, vb.topGap,       vb.resetTopGap       },
@@ -443,7 +437,7 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       {
       QWidget* w = new QWidget;
       hb.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_TOP_GAP,    0, false, hb.leftGap,  hb.resetLeftGap  },
@@ -463,10 +457,10 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w = new QWidget;
       ar.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_COLOR,               0, false, e.color,        e.resetColor      },
@@ -488,7 +482,7 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       {
       QWidget* w = new QWidget;
       sp.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_SPACE, 0, false, sp.height, sp.resetHeight  }
@@ -595,6 +589,7 @@ void InspectorSegment::apply()
       mscore->endCmd();
       }
 
+#if 0
 static const int heads[] = {
       Note::HEAD_NORMAL, Note::HEAD_CROSS, Note::HEAD_DIAMOND, Note::HEAD_TRIANGLE,
       Note::HEAD_SLASH, Note::HEAD_XCIRCLE, Note::HEAD_DO, Note::HEAD_RE, Note::HEAD_MI, Note::HEAD_FA,
@@ -613,53 +608,8 @@ InspectorNoteBase::InspectorNoteBase(QWidget* parent)
       //
       // fix order of note heads
       //
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
+      for (int i = 0; i < Note::HEAD_GROUPS; ++i)
             noteHeadGroup->setItemData(i, QVariant(heads[i]));
-            }
-      connect(small,              SIGNAL(stateChanged(int)),        SLOT(smallChanged(int)));
-      connect(mirrorHead,         SIGNAL(currentIndexChanged(int)), SLOT(mirrorHeadChanged(int)));
-      connect(dotPosition,        SIGNAL(currentIndexChanged(int)), SLOT(dotPositionChanged(int)));
-      connect(ontimeOffset,       SIGNAL(valueChanged(int)),        SLOT(ontimeOffsetChanged(int)));
-      connect(offtimeOffset,      SIGNAL(valueChanged(int)),        SLOT(offtimeOffsetChanged(int)));
-      connect(resetSmall,         SIGNAL(clicked()), SLOT(resetSmallClicked()));
-      connect(resetMirrorHead,    SIGNAL(clicked()), SLOT(resetMirrorClicked()));
-      connect(resetDotPosition,   SIGNAL(clicked()), SLOT(resetDotPositionClicked()));
-      connect(resetOntimeOffset,  SIGNAL(clicked()), SLOT(resetOntimeOffsetClicked()));
-      connect(resetOfftimeOffset, SIGNAL(clicked()), SLOT(resetOfftimeOffsetClicked()));
-
-      connect(noteHeadGroup,      SIGNAL(currentIndexChanged(int)), SLOT(noteHeadGroupChanged(int)));
-      connect(noteHeadType,       SIGNAL(currentIndexChanged(int)), SLOT(noteHeadTypeChanged(int)));
-      connect(tuning,             SIGNAL(valueChanged(double)),     SLOT(tuningChanged(double)));
-      connect(velocityType,       SIGNAL(currentIndexChanged(int)), SLOT(velocityTypeChanged(int)));
-      connect(velocity,           SIGNAL(valueChanged(int)),        SLOT(velocityChanged(int)));
-
-      connect(resetNoteHeadGroup, SIGNAL(clicked()), SLOT(resetNoteHeadGroupClicked()));
-      connect(resetNoteHeadType,  SIGNAL(clicked()), SLOT(resetNoteHeadTypeClicked()));
-      connect(resetTuning,        SIGNAL(clicked()), SLOT(resetTuningClicked()));
-      connect(resetVelocityType,  SIGNAL(clicked()), SLOT(resetVelocityTypeClicked()));
-      }
-
-//---------------------------------------------------------
-//   block
-//---------------------------------------------------------
-
-void InspectorNoteBase::block(bool val)
-      {
-      small->blockSignals(val);
-      mirrorHead->blockSignals(val);
-      dotPosition->blockSignals(val);
-      ontimeOffset->blockSignals(val);
-      offtimeOffset->blockSignals(val);
-      noteHeadGroup->blockSignals(val);
-      noteHeadType->blockSignals(val);
-      tuning->blockSignals(val);
-      velocity->blockSignals(val);
-      velocityType->blockSignals(val);
-      resetSmall->blockSignals(val);
-      resetMirrorHead->blockSignals(val);
-      resetDotPosition->blockSignals(val);
-      resetOntimeOffset->blockSignals(val);
-      resetOfftimeOffset->blockSignals(val);
       }
 
 //---------------------------------------------------------
@@ -676,8 +626,6 @@ void InspectorNoteBase::setElement(Note* n)
       small->setChecked(note->small());
       mirrorHead->setCurrentIndex(note->userMirror());
       dotPosition->setCurrentIndex(note->dotPosition());
-//      ontimeOffset->setValue(note->onTimeUserOffset());
-//      offtimeOffset->setValue(note->offTimeUserOffset());
 
       int headGroup = note->headGroup();
       int headGroupIndex = 0;
@@ -700,8 +648,6 @@ void InspectorNoteBase::setElement(Note* n)
       resetSmall->setEnabled(note->small());
       resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
       resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
-//      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
-//      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
       block(false);
       }
 
@@ -714,8 +660,6 @@ bool InspectorNoteBase::dirty() const
       return note->small()            != small->isChecked()
          || note->userMirror()        != mirrorHead->currentIndex()
          || note->dotPosition()       != dotPosition->currentIndex()
-//         || note->onTimeUserOffset()  != ontimeOffset->value()
-//         || note->offTimeUserOffset() != offtimeOffset->value()
          || note->headGroup()         != noteHeadGroup->itemData(noteHeadGroup->currentIndex())
          || note->headType()          != (noteHeadType->currentIndex()-1)     // NoteHeadType goes from -1 while combo box goes from 0
          || note->tuning()            != tuning->value()
@@ -743,12 +687,6 @@ void InspectorNoteBase::apply()
       val = dotPosition->currentIndex();
       if (note->dotPosition() != val)
             score->undoChangeProperty(note, P_DOT_POSITION, val);
-//      val = ontimeOffset->value();
-//      if (note->onTimeOffset() != val)
-//            score->undoChangeProperty(note, P_ONTIME_OFFSET, val);
-//      val = offtimeOffset->value();
-//      if (note->offTimeOffset() != val)
-//            score->undoChangeProperty(note, P_OFFTIME_OFFSET, val);
       val = noteHeadGroup->itemData(noteHeadGroup->currentIndex()).toInt();
       if (note->headGroup() != val)
             score->undoChangeProperty(note, P_HEAD_GROUP, val);
@@ -776,76 +714,6 @@ void InspectorNoteBase::smallChanged(int)
       }
 
 //---------------------------------------------------------
-//   mirrorHeadChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::mirrorHeadChanged(int)
-      {
-      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   dotPositionChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::dotPositionChanged(int)
-      {
-      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   ontimeOffsetChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::ontimeOffsetChanged(int)
-      {
-//      resetOntimeOffset->setEnabled(note->onTimeUserOffset());
-      apply();
-      }
-
-//---------------------------------------------------------
-//   offtimeOffsetChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::offtimeOffsetChanged(int)
-      {
-//      resetOfftimeOffset->setEnabled(note->offTimeUserOffset());
-      apply();
-      }
-
-//---------------------------------------------------------
-//   noteHeadGroupChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::noteHeadGroupChanged(int val)
-      {
-      resetNoteHeadGroup->setEnabled(val != 0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   noteHeadTypeChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::noteHeadTypeChanged(int val)
-      {
-      resetNoteHeadType->setEnabled(val != 0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   tuningChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::tuningChanged(double val)
-      {
-      resetTuning->setEnabled(val != 0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
 //   velocityTypeChanged
 //---------------------------------------------------------
 
@@ -869,296 +737,7 @@ void InspectorNoteBase::velocityTypeChanged(int val)
       apply();
       }
 
-//---------------------------------------------------------
-//   velocityChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::velocityChanged(int val)
-      {
-      if (velocityType->currentIndex() == MScore::USER_VAL)
-            _userVelocity = val;
-      else
-            _veloOffset = val;
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetSmall
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetSmallClicked()
-      {
-      small->setChecked(false);
-      }
-
-//---------------------------------------------------------
-//   resetMirrorClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetMirrorClicked()
-      {
-      mirrorHead->setCurrentIndex(0);
-      }
-
-//---------------------------------------------------------
-//   resetDotPositionClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetDotPositionClicked()
-      {
-      dotPosition->setCurrentIndex(0);
-      }
-
-//---------------------------------------------------------
-//   resetOntimeOffsetClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetOntimeOffsetClicked()
-      {
-      ontimeOffset->setValue(0);
-      }
-
-//---------------------------------------------------------
-//   resetOfftimeOffsetClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetOfftimeOffsetClicked()
-      {
-      offtimeOffset->setValue(0);
-      }
-
-//---------------------------------------------------------
-//   resetNoteHeadGroupClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetNoteHeadGroupClicked()
-      {
-      noteHeadGroup->setCurrentIndex(0);
-      }
-
-//---------------------------------------------------------
-//   resetNoteHeadTypeClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetNoteHeadTypeClicked()
-      {
-      noteHeadType->setCurrentIndex(0);
-      }
-
-//---------------------------------------------------------
-//   resetTuningClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetTuningClicked()
-      {
-      tuning->setValue(0.0);
-      }
-
-//---------------------------------------------------------
-//   resetVelocityTypeClicked
-//---------------------------------------------------------
-
-void InspectorNoteBase::resetVelocityTypeClicked()
-      {
-      velocityType->setCurrentIndex(0);
-      }
-
-//---------------------------------------------------------
-//   InspectorNote
-//---------------------------------------------------------
-
-InspectorNote::InspectorNote(QWidget* parent)
-   : InspectorBase(parent)
-      {
-      iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
-
-      iNote    = new InspectorNoteBase(this);
-      layout->addWidget(iNote);
-
-      iChord = new InspectorChord(this);
-      layout->addWidget(iChord);
-
-      iSegment = new InspectorSegment(this);
-      layout->addWidget(iSegment);
-
-      layout->addSpacing(20);
-
-      //
-      // Select
-      //
-      QLabel* l = new QLabel;
-      l->setText(tr("Select"));
-      QFont font(l->font());
-      font.setBold(true);
-      l->setFont(font);
-      l->setAlignment(Qt::AlignHCenter);
-      layout->addWidget(l);
-      QFrame* f = new QFrame;
-      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
-      f->setLineWidth(2);
-      layout->addWidget(f);
-
-      QHBoxLayout* hbox = new QHBoxLayout;
-      dot1 = new QToolButton(this);
-      dot1->setText(tr("Dot1"));
-      dot1->setEnabled(false);
-      hbox->addWidget(dot1);
-      dot2 = new QToolButton(this);
-      dot2->setText(tr("Dot2"));
-      dot2->setEnabled(false);
-      hbox->addWidget(dot2);
-      dot3 = new QToolButton(this);
-      dot3->setText(tr("Dot3"));
-      dot3->setEnabled(false);
-      hbox->addWidget(dot3);
-      hook = new QToolButton(this);
-      hook->setText(tr("Hook"));
-      hook->setEnabled(false);
-      hbox->addWidget(hook);
-      layout->addLayout(hbox);
-
-      hbox = new QHBoxLayout;
-      stem = new QToolButton(this);
-      stem->setText(tr("Stem"));
-      stem->setEnabled(false);
-      hbox->addWidget(stem);
-      beam = new QToolButton(this);
-      beam->setText(tr("Beam"));
-      beam->setEnabled(false);
-      hbox->addWidget(beam);
-      layout->addLayout(hbox);
-
-      connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
-      connect(dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));
-      connect(dot3,     SIGNAL(clicked()),     SLOT(dot3Clicked()));
-      connect(hook,     SIGNAL(clicked()),     SLOT(hookClicked()));
-      connect(stem,     SIGNAL(clicked()),     SLOT(stemClicked()));
-      connect(beam,     SIGNAL(clicked()),     SLOT(beamClicked()));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorNote::setElement()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      Segment* segment = note->chord()->segment();
-
-      iElement->setElement(note);
-      iNote->setElement(note);
-      iChord->setElement(note->chord());
-      iSegment->setElement(segment);
-      dot1->setEnabled(note->dot(0));
-      dot2->setEnabled(note->dot(1));
-      dot3->setEnabled(note->dot(2));
-      stem->setEnabled(note->chord()->stem());
-      hook->setEnabled(note->chord()->hook());
-      beam->setEnabled(note->chord()->beam());
-      }
-
-//---------------------------------------------------------
-//   dot1Clicked
-//---------------------------------------------------------
-
-void InspectorNote::dot1Clicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      NoteDot* dot = note->dot(0);
-      if (dot) {
-            dot->score()->select(dot);
-            inspector->setElement(dot);
-            dot->score()->end();
-            }
-      }
-
-//---------------------------------------------------------
-//   dot2Clicked
-//---------------------------------------------------------
-
-void InspectorNote::dot2Clicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      NoteDot* dot = note->dot(1);
-      if (dot) {
-            dot->score()->select(dot);
-            inspector->setElement(dot);
-            dot->score()->end();
-            }
-      }
-
-//---------------------------------------------------------
-//   dot3Clicked
-//---------------------------------------------------------
-
-void InspectorNote::dot3Clicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      NoteDot* dot = note->dot(2);
-      if (dot) {
-            dot->score()->select(dot);
-            inspector->setElement(dot);
-            dot->score()->end();
-            }
-      }
-
-//---------------------------------------------------------
-//   hookClicked
-//---------------------------------------------------------
-
-void InspectorNote::hookClicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      Hook* hook = note->chord()->hook();
-      if (hook) {
-            note->score()->select(hook);
-            inspector->setElement(hook);
-            note->score()->end();
-            }
-      }
-
-//---------------------------------------------------------
-//   stemClicked
-//---------------------------------------------------------
-
-void InspectorNote::stemClicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      Stem* stem = note->chord()->stem();
-      if (stem) {
-            note->score()->select(stem);
-            inspector->setElement(stem);
-            note->score()->end();
-            }
-      }
-
-//---------------------------------------------------------
-//   beamClicked
-//---------------------------------------------------------
-
-void InspectorNote::beamClicked()
-      {
-      Note* note = static_cast<Note*>(inspector->element());
-      if (note == 0)
-            return;
-      Beam* beam = note->chord()->beam();
-      if (beam) {
-            note->score()->select(beam);
-            inspector->setElement(beam);
-            note->score()->end();
-            }
-      }
+#endif
 
 //---------------------------------------------------------
 //   InspectorRest
@@ -1169,13 +748,13 @@ InspectorRest::InspectorRest(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w2 = new QWidget;
       s.setupUi(w2);
-      layout->addWidget(w2);
+      _layout->addWidget(w2);
       QWidget* w3 = new QWidget;
       r.setupUi(w3);
-      layout->addWidget(w3);
+      _layout->addWidget(w3);
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -1198,13 +777,13 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w2 = new QWidget;
       s.setupUi(w2);
-      layout->addWidget(w2);
+      _layout->addWidget(w2);
       QWidget* w3 = new QWidget;
       t.setupUi(w3);
-      layout->addWidget(w3);
+      _layout->addWidget(w3);
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -1227,13 +806,13 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w2 = new QWidget;
       s.setupUi(w2);
-      layout->addWidget(w2);
+      _layout->addWidget(w2);
       QWidget* w3 = new QWidget;
       k.setupUi(w3);
-      layout->addWidget(w3);
+      _layout->addWidget(w3);
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -1257,13 +836,13 @@ InspectorClef::InspectorClef(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w2 = new QWidget;
       s.setupUi(w2);
-      layout->addWidget(w2);
+      _layout->addWidget(w2);
       QWidget* w3 = new QWidget;
       c.setupUi(w3);
-      layout->addWidget(w3);
+      _layout->addWidget(w3);
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -1496,8 +1075,8 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
-      layout->addSpacing(20);
+      _layout->addWidget(iElement);
+      _layout->addSpacing(20);
 
       // "Type" Combo box
       QHBoxLayout* l = new QHBoxLayout;
@@ -1512,7 +1091,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       connect(type, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       l->addWidget(label);
       l->addWidget(type);
-      layout->addLayout(l);
+      _layout->addLayout(l);
 
       // "Span" combo box
       l = new QHBoxLayout;
@@ -1524,7 +1103,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       connect(span, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       l->addWidget(label);
       l->addWidget(span);
-      layout->addLayout(l);
+      _layout->addLayout(l);
       }
 
 //---------------------------------------------------------

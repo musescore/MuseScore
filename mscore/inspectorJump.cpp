@@ -25,7 +25,7 @@ InspectorJump::InspectorJump(QWidget* parent)
       {
       QWidget* w = new QWidget;
       b.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
 
       iList = {
             { P_COLOR,       0, false, b.color,      b.resetColor      },

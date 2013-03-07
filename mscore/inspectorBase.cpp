@@ -28,15 +28,18 @@ InspectorBase::InspectorBase(QWidget* parent)
       resetMapper = new QSignalMapper(this);
       valueMapper = new QSignalMapper(this);
 
-      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//      setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
       inspector = static_cast<Inspector*>(parent);
-      layout    = new QVBoxLayout;
-      layout->setSizeConstraint(QLayout::SetNoConstraint);
-      setLayout(layout);
+      _layout    = new QVBoxLayout;
+//      _layout->setSizeConstraint(QLayout::SetNoConstraint);
+      _layout->setSpacing(0);
+      _layout->setContentsMargins(0, 0, 0, 0);
+      setLayout(_layout);
       }
 
 //---------------------------------------------------------
 //   getValue
+//    get value from gui element
 //---------------------------------------------------------
 
 QVariant InspectorBase::getValue(int idx) const
@@ -45,8 +48,15 @@ QVariant InspectorBase::getValue(int idx) const
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             return w->property("value");
-      else if (qobject_cast<QComboBox*>(w))
-            return w->property("currentIndex");
+      else if (qobject_cast<QSpinBox*>(w))
+            return w->property("value");
+      else if (qobject_cast<QComboBox*>(w)) {
+            QComboBox* cb = qobject_cast<QComboBox*>(w);
+            int val = cb->currentIndex();
+            if (cb->itemData(val).isValid())
+                  val = cb->itemData(val).toInt();
+            return val;
+            }
       else if (qobject_cast<QCheckBox*>(w))
             return w->property("checked");
       else if (qobject_cast<QLineEdit*>(w))
@@ -54,7 +64,7 @@ QVariant InspectorBase::getValue(int idx) const
       else if (qobject_cast<Awl::ColorLabel*>(w))
             return static_cast<Awl::ColorLabel*>(w)->color();
       else  {
-            qDebug("not supported widget");
+            qDebug("not supported widget %s", w->metaObject()->className());
             abort();
             }
       return QVariant();
@@ -62,6 +72,7 @@ QVariant InspectorBase::getValue(int idx) const
 
 //---------------------------------------------------------
 //   setValue
+//    set gui element value
 //---------------------------------------------------------
 
 void InspectorBase::setValue(int idx, const QVariant& val)
@@ -71,8 +82,21 @@ void InspectorBase::setValue(int idx, const QVariant& val)
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
-      else if (qobject_cast<QComboBox*>(w))
-            static_cast<QComboBox*>(w)->setCurrentIndex(val.toInt());
+      else if (qobject_cast<QSpinBox*>(w))
+            static_cast<QSpinBox*>(w)->setValue(val.toInt());
+      else if (qobject_cast<QComboBox*>(w)) {
+            int ival = val.toInt();
+            QComboBox* cb = qobject_cast<QComboBox*>(w);
+            if (cb->itemData(0).isValid()) {
+                  for (int i = 0; i < cb->count(); ++i) {
+                        if (cb->itemData(i).toInt() == ival) {
+                              ival = i;
+                              break;
+                              }
+                        }
+                  }
+            cb->setCurrentIndex(ival);
+            }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QLineEdit*>(w))
@@ -80,7 +104,7 @@ void InspectorBase::setValue(int idx, const QVariant& val)
       else if (qobject_cast<Awl::ColorLabel*>(w))
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else  {
-            qDebug("not supported widget");
+            qDebug("not supported widget %s", w->metaObject()->className());
             abort();
             }
       }
@@ -93,7 +117,7 @@ bool InspectorBase::isDefault(int idx)
       {
       Element* e = inspector->element();
       const InspectorItem& ii = item(idx);
-      if (ii.parent)
+      for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
 
       P_ID id      = ii.t;
@@ -124,7 +148,7 @@ bool InspectorBase::dirty() const
       for (int i = 0; i < inspectorItems(); ++i) {
             P_ID id = item(i).t;
             Element* ee = e;
-            if (item(i).parent)
+            for (int ii = 0; ii < item(i).parent; ++ii)
                   ee = ee->parent();
             if (ee->getProperty(id) != getValue(i))
                   return true;
@@ -157,8 +181,8 @@ void InspectorBase::setElement()
             P_TYPE pt  = propertyType(id);
             QVariant val;
             Element* e = ee;
-            if (item(i).parent)
-                  e = ee->parent();
+            for (int ii = 0; ii < item(i).parent; ++ii)
+                  e = e->parent();
             if (pt == T_SIZE || pt == T_SCALE) {
                   QSizeF sz = e->getProperty(id).toSizeF();
                   if (item(i).sv == 0)
@@ -200,8 +224,8 @@ void InspectorBase::apply()
                   P_ID id   = item(i).t;
                   P_TYPE pt = propertyType(id);
                   Element* e = ee;
-                  if (item(i).parent)
-                        e = ee->parent();
+                  for (int ii = 0; ii < item(i).parent; ++ii)
+                        e = e->parent();
 
                   QVariant val1 = e->getProperty(id);
                   if (pt == T_SIZE || pt == T_SCALE) {
@@ -248,13 +272,15 @@ void InspectorBase::resetClicked(int i)
       {
       Element* e   = inspector->element();
       P_ID id      = item(i).t;
-      if (item(i).parent)
+      for (int ii = 0; ii < item(i).parent; ++ii)
             e = e->parent();
       QVariant def = e->propertyDefault(id);
       QWidget* w   = item(i).w;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
+      else if (qobject_cast<QSpinBox*>(w))
+            static_cast<QSpinBox*>(w)->setValue(def.toInt());
       else if (qobject_cast<QComboBox*>(w))
             static_cast<QComboBox*>(w)->setCurrentIndex(def.toInt());
       else if (qobject_cast<QCheckBox*>(w))
@@ -266,13 +292,14 @@ void InspectorBase::resetClicked(int i)
             valueChanged(i);
             }
       else  {
-            qDebug("not supported widget");
+            qDebug("not supported widget %s", w->metaObject()->className());
             abort();
             }
       }
 
 //---------------------------------------------------------
 //   mapSignals
+//    initialize inspector panel
 //---------------------------------------------------------
 
 void InspectorBase::mapSignals()
@@ -287,6 +314,8 @@ void InspectorBase::mapSignals()
             valueMapper->setMapping(w, i);
             if (qobject_cast<QDoubleSpinBox*>(w))
                   connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
+            else if (qobject_cast<QSpinBox*>(w))
+                  connect(w, SIGNAL(valueChanged(int)), valueMapper, SLOT(map()));
             else if (qobject_cast<QComboBox*>(w))
                   connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
             else if (qobject_cast<QCheckBox*>(w))
@@ -296,10 +325,11 @@ void InspectorBase::mapSignals()
             else if (qobject_cast<Awl::ColorLabel*>(w))
                   connect(w, SIGNAL(colorChanged(QColor)), valueMapper, SLOT(map()));
             else  {
-                  qDebug("not supported widget");
+                  qDebug("not supported widget %s", w->metaObject()->className());
                   abort();
                   }
             }
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       }
+
