@@ -24,10 +24,10 @@ InspectorMarker::InspectorMarker(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
+      _layout->addWidget(iElement);
       QWidget* w = new QWidget;
       iMarker.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       connect(iMarker.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       connect(iMarker.jumpLabel, SIGNAL(textChanged(const QString&)), SLOT(apply()));
       }

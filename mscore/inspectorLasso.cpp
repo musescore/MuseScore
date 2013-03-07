@@ -24,7 +24,7 @@ InspectorLasso::InspectorLasso(QWidget* parent)
       {
       QWidget* w = new QWidget;
       b.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       }
 
 //---------------------------------------------------------

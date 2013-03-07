@@ -24,10 +24,10 @@ InspectorVolta::InspectorVolta(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
+      _layout->addWidget(iElement);
       QWidget* w = new QWidget;
       iVolta.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       connect(iVolta.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       }
 

@@ -96,51 +96,6 @@ class InspectorChord : public QWidget, Ui::InspectorChord {
       };
 
 //---------------------------------------------------------
-//   InspectorNote
-//---------------------------------------------------------
-
-class InspectorNoteBase : public QWidget, Ui::InspectorNote {
-      Q_OBJECT
-      Note* note;
-      int _userVelocity;
-      int _veloOffset;
-
-      void block(bool);
-
-   private slots:
-      void resetSmallClicked();
-      void resetMirrorClicked();
-      void resetDotPositionClicked();
-      void resetOntimeOffsetClicked();
-      void resetOfftimeOffsetClicked();
-      void resetNoteHeadGroupClicked();
-      void resetNoteHeadTypeClicked();
-      void resetTuningClicked();
-      void resetVelocityTypeClicked();
-
-      void smallChanged(int);
-      void mirrorHeadChanged(int);
-      void dotPositionChanged(int);
-      void ontimeOffsetChanged(int);
-      void offtimeOffsetChanged(int);
-
-      void noteHeadGroupChanged(int);
-      void noteHeadTypeChanged(int);
-      void tuningChanged(double);
-      void velocityTypeChanged(int);
-      void velocityChanged(int);
-
-   signals:
-      void enableApply();
-
-   public:
-      InspectorNoteBase(QWidget* parent = 0);
-      void setElement(Note*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
 //   InspectorElementElement
 //---------------------------------------------------------
 
@@ -226,41 +181,6 @@ class InspectorSpacer : public InspectorBase {
 
    public:
       InspectorSpacer(QWidget* parent);
-      };
-
-//---------------------------------------------------------
-//   InspectorNote
-//---------------------------------------------------------
-
-class InspectorNote : public InspectorBase {
-      Q_OBJECT
-
-      InspectorElementElement* iElement;
-      InspectorNoteBase* iNote;
-      InspectorChord*   iChord;
-      InspectorSegment* iSegment;
-
-      QToolButton* dot1;
-      QToolButton* dot2;
-      QToolButton* dot3;
-      QToolButton* hook;
-      QToolButton* stem;
-      QToolButton* beam;
-
-      void block(bool);
-      bool dirty() const;
-
-   private slots:
-      void dot1Clicked();
-      void dot2Clicked();
-      void dot3Clicked();
-      void hookClicked();
-      void stemClicked();
-      void beamClicked();
-
-   public:
-      InspectorNote(QWidget* parent);
-      virtual void setElement();
       };
 
 //---------------------------------------------------------
@@ -355,7 +275,7 @@ class InspectorBarLine : public InspectorBase {
 class Inspector : public QDockWidget {
       Q_OBJECT
 
-      QVBoxLayout* layout;
+      QScrollArea* sa;
       InspectorBase* ie;
       QList<Element*> _el;
       Element* _element;      // currently displayed element

@@ -25,10 +25,10 @@ InspectorBeam::InspectorBeam(QWidget* parent)
       {
       QWidget* w1 = new QWidget;
       e.setupUi(w1);
-      layout->addWidget(w1);
+      _layout->addWidget(w1);
       QWidget* w2 = new QWidget;
       b.setupUi(w2);
-      layout->addWidget(w2);
+      _layout->addWidget(w2);
 
       iList = {
             { P_COLOR,          0, false, e.color,        e.resetColor        },
