@@ -28,9 +28,7 @@ enum {
 InspectorImage::InspectorImage(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      b.setupUi(w);
-      _layout->addWidget(w);
+      b.setupUi(addWidget());
 
       iList = {
             { P_AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },

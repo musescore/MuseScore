@@ -915,8 +915,14 @@ void BarLine::remove(Element* e)
 
 QVariant BarLine::getProperty(P_ID id) const
       {
-      if (id == P_SUBTYPE)
-            return int(_barLineType);
+      switch (id) {
+            case P_SUBTYPE:
+                  return int(_barLineType);
+            case P_BARLINE_SPAN:
+                  return span();
+            default:
+                  break;
+            }
       return Element::getProperty(id);
       }
 
@@ -926,13 +932,36 @@ QVariant BarLine::getProperty(P_ID id) const
 
 bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
-      if (id == P_SUBTYPE) {
-            _barLineType = BarLineType(v.toInt());
-            setCustomSubtype(parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt());
+      switch(id) {
+            case P_SUBTYPE:
+                  _barLineType = BarLineType(v.toInt());
+                  setCustomSubtype(parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt());
+                  break;
+            case P_BARLINE_SPAN:
+                  setSpan(v.toInt());
+                  break;
+            default:
+                  return Element::setProperty(id, v);
             }
-      else
-            return Element::setProperty(id, v);
       score()->setLayoutAll(true);
       return true;
       }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant BarLine::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_SUBTYPE:
+                  return false;
+            case P_BARLINE_SPAN:
+                  return 1;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
 

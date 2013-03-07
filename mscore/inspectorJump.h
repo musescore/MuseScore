@@ -14,9 +14,9 @@
 #ifndef __INSPECTOR_JUMP_H__
 #define __INSPECTOR_JUMP_H__
 
-#include "inspector.h"
+#include "inspectorBase.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_jump.h"
-#include "libmscore/property.h"
 
 //---------------------------------------------------------
 //   InspectorJump
@@ -25,7 +25,8 @@
 class InspectorJump : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorJump b;
+      Ui::InspectorElement b;
+      Ui::InspectorJump j;
 
    public:
       InspectorJump(QWidget* parent);

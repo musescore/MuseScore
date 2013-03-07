@@ -20,18 +20,22 @@ class MuseScoreView;
 class Segment;
 class QPainter;
 
-#define DEFAULT_BARLINE_TO                (4*2)
-#define MIN_BARLINE_FROMTO_DIST           2
-#define MIN_BARLINE_SPAN_FROMTO           (-2)
+static const int DEFAULT_BARLINE_TO      = 4 * 2;
+static const int MIN_BARLINE_FROMTO_DIST = 2;
+static const int MIN_BARLINE_SPAN_FROMTO = -2;
+
 // bar line span for 1-line staves is special: goes from 2sp above the line to 2sp below the line;
 // for some reason, the single staff line counts as line -1 rather than as line 0
 // thus, 2sp above it is -2 rather than -4 and 2sp below it is 6 rather than 4
 // (see StaffLines::y1() function in element.cpp)
-#define BARLINE_SPAN_1LINESTAFF_FROM      (-2)
-#define BARLINE_SPAN_1LINESTAFF_TO        6
+
+static const int BARLINE_SPAN_1LINESTAFF_FROM = -2;
+static const int BARLINE_SPAN_1LINESTAFF_TO   = 6;
+
 // used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
 // fixed once all staves are read
-#define UNKNOWN_BARLINE_TO                (-4)
+
+static const int UNKNOWN_BARLINE_TO = -4;
 
 //---------------------------------------------------------
 //   @@ BarLine
@@ -45,6 +49,7 @@ class BarLine : public Element {
       bool _customSubtype;
       int _span;
       int _spanFrom, _spanTo;
+
       // static variables used while dragging
       static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
       static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
@@ -103,6 +108,7 @@ class BarLine : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID propertyId) const;
 
       static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);

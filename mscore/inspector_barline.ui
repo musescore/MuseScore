@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorHairpin</class>
- <widget class="QWidget" name="InspectorHairpin">
+ <class>InspectorBarLine</class>
+ <widget class="QWidget" name="InspectorBarLine">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>125</height>
+    <width>274</width>
+    <height>97</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Hairpin</string>
+      <string>Barline</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -54,36 +54,78 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="hairpinType">
+     <item row="1" column="1">
+      <widget class="QComboBox" name="span">
        <item>
         <property name="text">
-         <string>crescendo</string>
+         <string>Staff default</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>decrescendo</string>
+         <string>Tick</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Tick alt.</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Short</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Short alt.</string>
         </property>
        </item>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Subtype:</string>
-       </property>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="type">
+       <item>
+        <property name="text">
+         <string>Measure default</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Normal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dashed</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dotted</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Double</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>End</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic Range:</string>
+        <string>Span:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetVeloChange">
+     <item row="1" column="2">
+      <widget class="QToolButton" name="resetSpan">
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -93,54 +135,18 @@
        <property name="icon">
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Type:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QToolButton" name="resetHairpinType">
-       <property name="toolTip">
-        <string>reset value</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Velo. change:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QSpinBox" name="veloChange"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="dynRange">
-       <item>
-        <property name="text">
-         <string>Staff</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Part</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SYstem</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetDynRange">
+      <widget class="QToolButton" name="resetType">
        <property name="toolTip">
         <string>reset value</string>
        </property>
