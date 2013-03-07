@@ -312,7 +312,7 @@ int Note::noteHead() const
             }
       else {
             hg = 1;
-            ht = 2;       // default quarter head
+            ht = HEAD_QUARTER;
             }
       if (_headType != HEAD_AUTO)
             ht = _headType;
@@ -334,7 +334,7 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      int head = noteHead();
+      int head  = noteHead();
       qreal val = symbols[score()->symIdx()][head].width(magS());
       return val;
       }
@@ -1958,7 +1958,6 @@ void Note::undoSetHeadGroup(NoteHeadGroup val)
 
 void Note::setHeadType(NoteHeadType t)
       {
-      Q_ASSERT(t >= 0 && t < HEAD_TYPES);
       _headType = t;
       }
 

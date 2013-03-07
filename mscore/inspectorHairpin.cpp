@@ -24,10 +24,10 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
+      _layout->addWidget(iElement);
       QWidget* w = new QWidget;
       iHairpin.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       connect(iHairpin.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       }
 

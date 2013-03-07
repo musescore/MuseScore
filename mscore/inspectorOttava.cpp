@@ -24,10 +24,10 @@ InspectorOttava::InspectorOttava(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
+      _layout->addWidget(iElement);
       QWidget* w = new QWidget;
       iOttava.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       connect(iOttava.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       }
 

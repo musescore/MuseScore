@@ -93,7 +93,7 @@ QT4_WRAP_CPP (mocs
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
-      inspectorJump.h inspectorMarker.h inspectorGlissando.h
+      inspectorJump.h inspectorMarker.h inspectorGlissando.h inspectorNote.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -198,7 +198,7 @@ add_executable ( ${ExecutableName}
       inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
-      inspectorGlissando.cpp
+      inspectorGlissando.cpp inspectorNote.cpp
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

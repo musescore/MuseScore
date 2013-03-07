@@ -24,10 +24,10 @@ InspectorTrill::InspectorTrill(QWidget* parent)
    : InspectorBase(parent)
       {
       iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
+      _layout->addWidget(iElement);
       QWidget* w = new QWidget;
       iTrill.setupUi(w);
-      layout->addWidget(w);
+      _layout->addWidget(w);
       connect(iTrill.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
       }
 

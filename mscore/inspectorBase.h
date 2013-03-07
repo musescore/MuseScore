@@ -26,7 +26,7 @@ class Element;
 struct InspectorItem {
       P_ID   t;
       int sv;           // subvalue; example for T_SIZE: 0 - width 1 - height
-      bool parent;
+      int parent;       // apply to parent() element
       QWidget* w;
       QToolButton* r;
       };
@@ -49,7 +49,7 @@ class InspectorBase : public QWidget {
 
    protected:
       QVector<InspectorItem> iList;
-      QVBoxLayout* layout;
+      QVBoxLayout* _layout;
       Inspector* inspector;
 
       virtual void setValue(int idx, const QVariant& val);
