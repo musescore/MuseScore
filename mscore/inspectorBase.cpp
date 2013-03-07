@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -28,10 +28,8 @@ InspectorBase::InspectorBase(QWidget* parent)
       resetMapper = new QSignalMapper(this);
       valueMapper = new QSignalMapper(this);
 
-//      setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
-//      _layout->setSizeConstraint(QLayout::SetNoConstraint);
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 0, 0, 0);
       setLayout(_layout);
@@ -42,9 +40,9 @@ InspectorBase::InspectorBase(QWidget* parent)
 //    get value from gui element
 //---------------------------------------------------------
 
-QVariant InspectorBase::getValue(int idx) const
+QVariant InspectorBase::getValue(const InspectorItem& ii) const
       {
-      QWidget* w = item(idx).w;
+      QWidget* w = ii.w;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             return w->property("value");
@@ -63,10 +61,8 @@ QVariant InspectorBase::getValue(int idx) const
             return w->property("text");
       else if (qobject_cast<Awl::ColorLabel*>(w))
             return static_cast<Awl::ColorLabel*>(w)->color();
-      else  {
-            qDebug("not supported widget %s", w->metaObject()->className());
-            abort();
-            }
+      else
+            qFatal("not supported widget %s", w->metaObject()->className());
       return QVariant();
       }
 
@@ -75,10 +71,9 @@ QVariant InspectorBase::getValue(int idx) const
 //    set gui element value
 //---------------------------------------------------------
 
-void InspectorBase::setValue(int idx, const QVariant& val)
+void InspectorBase::setValue(const InspectorItem& ii, const QVariant& val)
       {
-      const InspectorItem& ii = item(idx);
-      QWidget* w        = ii.w;
+      QWidget* w = ii.w;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
@@ -103,26 +98,23 @@ void InspectorBase::setValue(int idx, const QVariant& val)
             static_cast<QLineEdit*>(w)->setText(val.toString());
       else if (qobject_cast<Awl::ColorLabel*>(w))
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
-      else  {
-            qDebug("not supported widget %s", w->metaObject()->className());
-            abort();
-            }
+      else
+            qFatal("not supported widget %s", w->metaObject()->className());
       }
 
 //---------------------------------------------------------
 //   isDefault
 //---------------------------------------------------------
 
-bool InspectorBase::isDefault(int idx)
+bool InspectorBase::isDefault(const InspectorItem& ii)
       {
       Element* e = inspector->element();
-      const InspectorItem& ii = item(idx);
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
 
       P_ID id      = ii.t;
       P_TYPE t     = propertyType(id);
-      QVariant val = getValue(idx);
+      QVariant val = getValue(ii);
       QVariant def = e->propertyDefault(id);
       if (t == T_SIZE || t == T_SCALE) {
             QSizeF sz = def.toSizeF();
@@ -144,28 +136,14 @@ bool InspectorBase::isDefault(int idx)
 
 bool InspectorBase::dirty() const
       {
-      Element* e = inspector->element();
-      for (int i = 0; i < inspectorItems(); ++i) {
-            P_ID id = item(i).t;
-            Element* ee = e;
-            for (int ii = 0; ii < item(i).parent; ++ii)
-                  ee = ee->parent();
-            if (ee->getProperty(id) != getValue(i))
+      foreach(const InspectorItem& ii, iList) {
+            Element* e = inspector->element();
+            for (int i = 0; i < ii.parent; ++i)
+                  e = e->parent();
+            if (e->getProperty(ii.t) != getValue(ii))
                   return true;
             }
       return false;
-      }
-
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorBase::valueChanged(int idx)
-      {
-      const InspectorItem& ii = item(idx);
-      if (ii.r)
-            ii.r->setEnabled(!isDefault(idx));
-      apply();
       }
 
 //---------------------------------------------------------
@@ -174,92 +152,118 @@ void InspectorBase::valueChanged(int idx)
 
 void InspectorBase::setElement()
       {
-      Element* ee = inspector->element();
-      for (int i = 0; i < inspectorItems(); ++i) {
-            QWidget* w = item(i).w;
-            P_ID id    = item(i).t;
+      foreach (const InspectorItem& ii, iList) {
+            QWidget* w = ii.w;
+            P_ID id    = ii.t;
             P_TYPE pt  = propertyType(id);
-            QVariant val;
-            Element* e = ee;
-            for (int ii = 0; ii < item(i).parent; ++ii)
+
+            Element* e = inspector->element();
+            for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
+
+            QVariant val = e->getProperty(id);
             if (pt == T_SIZE || pt == T_SCALE) {
-                  QSizeF sz = e->getProperty(id).toSizeF();
-                  if (item(i).sv == 0)
+                  QSizeF sz = val.toSizeF();
+                  if (ii.sv == 0)
                         val = QVariant(sz.width());
                   else
                         val = QVariant(sz.height());
                   }
             else if (pt == T_POINT) {
-                  QPointF sz = e->getProperty(id).toPointF();
-                  if (item(i).sv == 0)
+                  QPointF sz = val.toPointF();
+                  if (ii.sv == 0)
                         val = QVariant(sz.x());
                   else
                         val = QVariant(sz.y());
                   }
-            else
-                  val = e->getProperty(id);
 
             w->blockSignals(true);
-            setValue(i, val);
+            setValue(ii, val);
             w->blockSignals(false);
 
-            QToolButton* r = item(i).r;
-            if (r)
-                  r->setEnabled(!isDefault(i));
+            bool valuesAreDifferent = false;
+            if (inspector->el().size() > 1) {
+                  foreach(Element* e, inspector->el()) {
+                        for (int k = 0; k < ii.parent; ++k)
+                              e = e->parent();
+                        if (pt == T_SIZE || pt == T_SCALE) {
+                              QSizeF sz = e->getProperty(id).toSizeF();
+                              if (ii.sv == 0)
+                                    valuesAreDifferent = sz.width() != val.toDouble();
+                              else
+                                    valuesAreDifferent = sz.height() != val.toDouble();
+                              }
+                        else if (pt == T_POINT) {
+                              QPointF sz = e->getProperty(id).toPointF();
+                              if (ii.sv == 0)
+                                    valuesAreDifferent = sz.x() != val.toDouble();
+                              else
+                                    valuesAreDifferent = sz.y() != val.toDouble();
+                              }
+                        else
+                              valuesAreDifferent = e->getProperty(id) != val;
+                        if (valuesAreDifferent)
+                              break;
+                        }
+                  }
+            w->setEnabled(!valuesAreDifferent);
+
+            if (ii.r)
+                  ii.r->setEnabled(!isDefault(ii) || valuesAreDifferent);
             }
       }
 
 //---------------------------------------------------------
-//   apply
+//   valueChanged
 //---------------------------------------------------------
 
-void InspectorBase::apply()
+void InspectorBase::valueChanged(int idx)
       {
-      Score* score = inspector->element()->score();
+      const InspectorItem& ii = iList[idx];
+      if (ii.r)
+            ii.r->setEnabled(!isDefault(ii));
+
+      P_ID id       = ii.t;
+      P_TYPE pt     = propertyType(id);
+      QVariant val2 = getValue(ii);
+      Score* score  = inspector->element()->score();
 
       score->startCmd();
-      foreach(Element* ee, inspector->el()) {
-            for (int i = 0; i < inspectorItems(); ++i) {
-                  P_ID id   = item(i).t;
-                  P_TYPE pt = propertyType(id);
-                  Element* e = ee;
-                  for (int ii = 0; ii < item(i).parent; ++ii)
-                        e = e->parent();
+      foreach (Element* e, inspector->el()) {
+            for (int i = 0; i < ii.parent; ++i)
+                  e = e->parent();
 
-                  QVariant val1 = e->getProperty(id);
-                  if (pt == T_SIZE || pt == T_SCALE) {
-                        qreal v = getValue(i).toDouble();
-                        QSizeF sz = val1.toSizeF();
-                        if (item(i).sv == 0) {
-                              if (sz.width() != v)
-                                    score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())));
-                              }
-                        else {
-                              if (sz.height() != v)
-                                    score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)));
-                              }
-                        }
-                  else if (pt == T_POINT) {
-                        qreal v = getValue(i).toDouble();
-                        QPointF sz = val1.toPointF();
-                        if (item(i).sv == 0) {
-                              if (sz.x() != v)
-                                    score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())));
-                              }
-                        else {
-                              if (sz.y() != v)
-                                    score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
-                              }
+            QVariant val1 = e->getProperty(id);
+            if (pt == T_SIZE || pt == T_SCALE) {
+                  qreal v   = val2.toDouble();
+                  QSizeF sz = val1.toSizeF();
+                  if (ii.sv == 0) {
+                        if (sz.width() != v)
+                              score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())));
                         }
                   else {
-                        QVariant val2 = getValue(i);
-                        if (val1 != val2)
-                              score->undoChangeProperty(e, id, val2);
+                        if (sz.height() != v)
+                              score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)));
                         }
                   }
+            else if (pt == T_POINT) {
+                  qreal v    = val2.toDouble();
+                  QPointF sz = val1.toPointF();
+                  if (ii.sv == 0) {
+                        if (sz.x() != v)
+                              score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())));
+                        }
+                  else {
+                        if (sz.y() != v)
+                              score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
+                        }
+                  }
+            else {
+                  if (val1 != val2)
+                        score->undoChangeProperty(e, id, val2);
+                  }
             }
-      score->setLayoutAll(true);
+      score->setLayoutAll(true);    // ?
       score->endCmd();
       mscore->endCmd();
       }
@@ -271,11 +275,12 @@ void InspectorBase::apply()
 void InspectorBase::resetClicked(int i)
       {
       Element* e   = inspector->element();
-      P_ID id      = item(i).t;
-      for (int ii = 0; ii < item(i).parent; ++ii)
+      const InspectorItem& ii = iList[i];
+      P_ID id      = ii.t;
+      for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
       QVariant def = e->propertyDefault(id);
-      QWidget* w   = item(i).w;
+      QWidget* w   = ii.w;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
@@ -291,10 +296,8 @@ void InspectorBase::resetClicked(int i)
             static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
             valueChanged(i);
             }
-      else  {
-            qDebug("not supported widget %s", w->metaObject()->className());
-            abort();
-            }
+      else
+            qFatal("not supported widget %s", w->metaObject()->className());
       }
 
 //---------------------------------------------------------
@@ -304,13 +307,14 @@ void InspectorBase::resetClicked(int i)
 
 void InspectorBase::mapSignals()
       {
-      for (int i = 0; i < inspectorItems(); ++i) {
-            QToolButton* resetButton = item(i).r;
+      int i = 0;
+      foreach (const InspectorItem& ii, iList) {
+            QToolButton* resetButton = ii.r;
             if (resetButton) {
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
                   resetMapper->setMapping(resetButton, i);
                   }
-            QWidget* w = item(i).w;
+            QWidget* w = ii.w;
             valueMapper->setMapping(w, i);
             if (qobject_cast<QDoubleSpinBox*>(w))
                   connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
@@ -324,10 +328,9 @@ void InspectorBase::mapSignals()
                   connect(w, SIGNAL(textChanged(const QString&)), valueMapper, SLOT(map()));
             else if (qobject_cast<Awl::ColorLabel*>(w))
                   connect(w, SIGNAL(colorChanged(QColor)), valueMapper, SLOT(map()));
-            else  {
-                  qDebug("not supported widget %s", w->metaObject()->className());
-                  abort();
-                  }
+            else
+                  qFatal("not supported widget %s", w->metaObject()->className());
+            ++i;
             }
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));

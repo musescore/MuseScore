@@ -89,14 +89,14 @@ InspectorNote::InspectorNote(QWidget* parent)
             { P_VELO_TYPE,      0, 0, n.velocityType,  n.resetVelocityType  },
             { P_VELO_OFFSET,    0, 0, n.velocity,      n.resetVelocity      },
 
-            { P_USER_OFF,       0, 1, c.offsetX,        c.resetX            },
-            { P_USER_OFF,       1, 1, c.offsetY,        c.resetY            },
-            { P_SMALL,          0, 1, c.small,          c.resetSmall        },
-            { P_NO_STEM,        0, 1, c.stemless,       c.resetStemless     },
-            { P_STEM_DIRECTION, 0, 1, c.stemDirection,  c.resetStemDirection },
+            { P_USER_OFF,       0, 1, c.offsetX,       c.resetX             },
+            { P_USER_OFF,       1, 1, c.offsetY,       c.resetY             },
+            { P_SMALL,          0, 1, c.small,         c.resetSmall         },
+            { P_NO_STEM,        0, 1, c.stemless,      c.resetStemless      },
+            { P_STEM_DIRECTION, 0, 1, c.stemDirection, c.resetStemDirection },
 
-            { P_LEADING_SPACE,  0, 2,  s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 2,  s.trailingSpace, s.resetTrailingSpace }
+            { P_LEADING_SPACE,  0, 2, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_TRAILING_SPACE, 0, 2, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();
