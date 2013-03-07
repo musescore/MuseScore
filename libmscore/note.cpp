@@ -577,22 +577,7 @@ void Note::draw(QPainter* painter) const
       if (_hidden)
             return;
 
-      QColor c;
-      if (score() && score()->printing())
-            c = (color() == MScore::defaultColor) ? Qt::black : color();
-      else if (!visible())
-            c = Qt::gray;
-      else {
-            if (flag(ELEMENT_DROP_TARGET))
-                  c = MScore::dropColor;
-            else if (selected() || _mark) {
-                  if (track() == -1)
-                        c = MScore::selectColor[0];
-                  else
-                        c = MScore::selectColor[voice()];
-                  }
-            }
-
+      QColor c(curColor());
       painter->setPen(c);
       bool tablature = staff() && staff()->isTabStaff();
 
@@ -626,7 +611,7 @@ void Note::draw(QPainter* painter) const
                         painter->restore();
                         }
                   }
-            painter->setPen(curColor());
+            painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
             painter->scale(imag, imag);
             }
