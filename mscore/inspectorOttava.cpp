@@ -23,47 +23,17 @@
 InspectorOttava::InspectorOttava(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      _layout->addWidget(iElement);
-      QWidget* w = new QWidget;
-      iOttava.setupUi(w);
-      _layout->addWidget(w);
-      connect(iOttava.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
+      e.setupUi(addWidget());
+      o.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,       0, 0, e.color,      e.resetColor      },
+            { P_VISIBLE,     0, 0, e.visible,    e.resetVisible    },
+            { P_USER_OFF,    0, 0, e.offsetX,    e.resetX          },
+            { P_USER_OFF,    1, 0, e.offsetY,    e.resetY          },
+            { P_OTTAVA_TYPE, 0, 0, o.ottavaType, o.resetOttavaType }
+            };
+
+      mapSignals();
       }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorOttava::setElement(Element* e)
-      {
-      OttavaSegment* ottavaSegment = static_cast<OttavaSegment*>(e);
-      iElement->setElement(ottavaSegment);
-      Ottava* ottava = ottavaSegment->ottava();
-
-      iOttava.subtype->blockSignals(true);
-      iOttava.subtype->setCurrentIndex(int(ottava->ottavaType()));
-      iOttava.subtype->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorOttava::apply()
-      {
-      OttavaSegment* ottavaSegment = static_cast<OttavaSegment*>(inspector->element());
-
-      Ottava* ottava = ottavaSegment->ottava();
-      Ottava::OttavaType vt = ottava->ottavaType();
-      Ottava::OttavaType nt = Ottava::OttavaType(iOttava.subtype->currentIndex());
-      if (vt != nt) {
-            Score* score = ottava->score();
-            score->startCmd();
-            score->undoChangeProperty(ottava, P_OTTAVA_TYPE, nt);
-            score->endCmd();
-            mscore->endCmd();
-            }
-      }
-
 

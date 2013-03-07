@@ -23,12 +23,8 @@
 InspectorBeam::InspectorBeam(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w2 = new QWidget;
-      b.setupUi(w2);
-      _layout->addWidget(w2);
+      e.setupUi(addWidget());
+      b.setupUi(addWidget());
 
       iList = {
             { P_COLOR,          0, false, e.color,        e.resetColor        },

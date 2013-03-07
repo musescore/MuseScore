@@ -221,179 +221,13 @@ void Inspector::setElements(const QList<Element*>& l)
       }
 
 //---------------------------------------------------------
-//   InspectorElementElement
-//---------------------------------------------------------
-
-InspectorElementElement::InspectorElementElement(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
-      connect(color,        SIGNAL(colorChanged(QColor)), SLOT(colorChanged(QColor)));
-      connect(offsetX,      SIGNAL(valueChanged(double)), SLOT(offsetXChanged(double)));
-      connect(offsetY,      SIGNAL(valueChanged(double)), SLOT(offsetYChanged(double)));
-      connect(visible,      SIGNAL(stateChanged(int)),    SLOT(apply()));
-      connect(resetColor,   SIGNAL(clicked()), SLOT(resetColorClicked()));
-      connect(resetX,       SIGNAL(clicked()), SLOT(resetXClicked()));
-      connect(resetY,       SIGNAL(clicked()), SLOT(resetYClicked()));
-      connect(resetVisible, SIGNAL(clicked()), SLOT(resetVisibleClicked()));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorElementElement::setElement(Element* element)
-      {
-      e = element;
-      elementName->setText(e->name());
-      qreal _spatium = e->score()->spatium();
-
-      color->blockSignals(true);
-      offsetX->blockSignals(true);
-      offsetY->blockSignals(true);
-      visible->blockSignals(true);
-
-      color->setColor(e->color());
-      offsetX->setValue(e->pos().x() / _spatium);
-      offsetY->setValue(e->pos().y() / _spatium);
-      resetColor->setEnabled(e->color() != MScore::defaultColor);
-      resetX->setEnabled(e->userOff().x() != 0.0);
-      resetY->setEnabled(e->userOff().y() != 0.0);
-      visible->setChecked(e->visible());
-
-      visible->blockSignals(false);
-      color->blockSignals(false);
-      offsetX->blockSignals(false);
-      offsetY->blockSignals(false);
-
-      resetVisible->setEnabled(!e->visible());
-      }
-
-//---------------------------------------------------------
-//   colorChanged
-//---------------------------------------------------------
-
-void InspectorElementElement::colorChanged(QColor)
-      {
-      resetColor->setEnabled(color->color() != MScore::defaultColor);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   offsetXChanged
-//---------------------------------------------------------
-
-void InspectorElementElement::offsetXChanged(double)
-      {
-      resetX->setEnabled(offsetX->value() != e->ipos().x());
-      apply();
-      }
-
-//---------------------------------------------------------
-//   offsetYChanged
-//---------------------------------------------------------
-
-void InspectorElementElement::offsetYChanged(double)
-      {
-      resetY->setEnabled(offsetY->value() != e->ipos().y());
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetColorClicked
-//---------------------------------------------------------
-
-void InspectorElementElement::resetColorClicked()
-      {
-      color->setColor(MScore::defaultColor);
-      resetColor->setEnabled(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetXClicked
-//---------------------------------------------------------
-
-void InspectorElementElement::resetXClicked()
-      {
-      qreal _spatium = e->score()->spatium();
-      offsetX->setValue(e->ipos().x() / _spatium);
-      resetX->setEnabled(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetVisibleClicked
-//---------------------------------------------------------
-
-void InspectorElementElement::resetVisibleClicked()
-      {
-      visible->setChecked(true);
-      resetVisible->setEnabled(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetTrailingSpace
-//---------------------------------------------------------
-
-void InspectorElementElement::resetYClicked()
-      {
-      qreal _spatium = e->score()->spatium();
-      offsetY->setValue(e->ipos().y() / _spatium);
-      resetY->setEnabled(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorElementElement::apply()
-      {
-      resetVisible->setEnabled(!visible->isChecked());
-
-      qreal _spatium = e->score()->spatium();
-      if (offsetX->value()        == (e->pos().x() / _spatium)
-         &&  offsetY->value()     == (e->pos().y() / _spatium)
-         &&  color->color()       == e->color()
-         &&  visible->isChecked() == e->visible())
-            return;
-
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      if (mscore->state() == STATE_EDIT) {
-            if (e->color() != color->color()) {
-                  ChangeProperty cp(e, P_COLOR, color->color());
-                  cp.redo();
-                  e->score()->update();
-                  }
-            }
-      else {
-            Score* score = e->score();
-            score->startCmd();
-            QPointF o(offsetX->value() * _spatium, offsetY->value() * _spatium);
-            if (o != e->pos())
-                  score->undoChangeProperty(e, P_USER_OFF, o - e->ipos());
-            if (e->color() != color->color())
-                  score->undoChangeProperty(e, P_COLOR, color->color());
-            if (e->visible() != visible->isChecked())
-                  score->undoChangeProperty(e, P_VISIBLE, visible->isChecked());
-            score->endCmd();
-            mscore->endCmd();
-            }
-      }
-
-//---------------------------------------------------------
 //   InspectorElement
 //---------------------------------------------------------
 
 InspectorElement::InspectorElement(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      b.setupUi(w);
-      _layout->addWidget(w);
+      b.setupUi(addWidget());
 
       iList = {
             { P_COLOR,    0, false, b.color,      b.resetColor   },
@@ -412,9 +246,7 @@ InspectorElement::InspectorElement(QWidget* parent)
 InspectorVBox::InspectorVBox(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      vb.setupUi(w);
-      _layout->addWidget(w);
+      vb.setupUi(addWidget());
 
       iList = {
             { P_TOP_GAP,       0, false, vb.topGap,       vb.resetTopGap       },
@@ -435,9 +267,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
 InspectorHBox::InspectorHBox(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      hb.setupUi(w);
-      _layout->addWidget(w);
+      hb.setupUi(addWidget());
 
       iList = {
             { P_TOP_GAP,    0, false, hb.leftGap,  hb.resetLeftGap  },
@@ -455,12 +285,8 @@ InspectorHBox::InspectorHBox(QWidget* parent)
 InspectorArticulation::InspectorArticulation(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w = new QWidget;
-      ar.setupUi(w);
-      _layout->addWidget(w);
+      e.setupUi(addWidget());
+      ar.setupUi(addWidget());
 
       iList = {
             { P_COLOR,               0, false, e.color,        e.resetColor      },
@@ -480,9 +306,7 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
 InspectorSpacer::InspectorSpacer(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      sp.setupUi(w);
-      _layout->addWidget(w);
+      sp.setupUi(addWidget());
 
       iList = {
             { P_SPACE, 0, false, sp.height, sp.resetHeight  }
@@ -491,270 +315,15 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   InspectorSegment
-//---------------------------------------------------------
-
-InspectorSegment::InspectorSegment(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
-      connect(leadingSpace,       SIGNAL(valueChanged(double)), SLOT(leadingSpaceChanged(double)));
-      connect(trailingSpace,      SIGNAL(valueChanged(double)), SLOT(trailingSpaceChanged(double)));
-      connect(resetLeadingSpace,  SIGNAL(clicked()), SLOT(resetLeadingSpaceClicked()));
-      connect(resetTrailingSpace, SIGNAL(clicked()), SLOT(resetTrailingSpaceClicked()));
-      }
-
-//---------------------------------------------------------
-//   dirty
-//---------------------------------------------------------
-
-bool InspectorSegment::dirty() const
-      {
-      return segment->extraLeadingSpace().val() != leadingSpace->value()
-         || segment->extraTrailingSpace().val() != trailingSpace->value();
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorSegment::setElement(Segment* s)
-      {
-      segment = s;
-      leadingSpace->setValue(segment->extraLeadingSpace().val());
-      trailingSpace->setValue(segment->extraTrailingSpace().val());
-      resetLeadingSpace->setEnabled(leadingSpace->value() != 0.0);
-      resetTrailingSpace->setEnabled(leadingSpace->value() != 0.0);
-      }
-
-//---------------------------------------------------------
-//   leadingSpaceChanged
-//---------------------------------------------------------
-
-void InspectorSegment::leadingSpaceChanged(double)
-      {
-      resetLeadingSpace->setEnabled(leadingSpace->value() != 0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   trailingSpaceChanged
-//---------------------------------------------------------
-
-void InspectorSegment::trailingSpaceChanged(double)
-      {
-      resetTrailingSpace->setEnabled(trailingSpace->value() != 0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetLeadingSpace
-//---------------------------------------------------------
-
-void InspectorSegment::resetLeadingSpaceClicked()
-      {
-      leadingSpace->setValue(0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetTrailingSpace
-//---------------------------------------------------------
-
-void InspectorSegment::resetTrailingSpaceClicked()
-      {
-      trailingSpace->setValue(0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorSegment::apply()
-      {
-      if (!dirty())
-            return;
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      Score* score = segment->score();
-      score->startCmd();
-      qreal val = leadingSpace->value();
-      if (segment->extraLeadingSpace().val() != val)
-            segment->score()->undoChangeProperty(segment, P_LEADING_SPACE, val);
-      val = trailingSpace->value();
-      if (segment->extraTrailingSpace().val() != val)
-            segment->score()->undoChangeProperty(segment, P_TRAILING_SPACE, val);
-      score->endCmd();
-      mscore->endCmd();
-      }
-
-#if 0
-static const int heads[] = {
-      Note::HEAD_NORMAL, Note::HEAD_CROSS, Note::HEAD_DIAMOND, Note::HEAD_TRIANGLE,
-      Note::HEAD_SLASH, Note::HEAD_XCIRCLE, Note::HEAD_DO, Note::HEAD_RE, Note::HEAD_MI, Note::HEAD_FA,
-      Note::HEAD_SOL, Note::HEAD_LA, Note::HEAD_TI,
-      Note::HEAD_BREVIS_ALT
-      };
-
-//---------------------------------------------------------
-//   InspectorNoteBase
-//---------------------------------------------------------
-
-InspectorNoteBase::InspectorNoteBase(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
-      //
-      // fix order of note heads
-      //
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i)
-            noteHeadGroup->setItemData(i, QVariant(heads[i]));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorNoteBase::setElement(Note* n)
-      {
-      _userVelocity = 0;
-      _veloOffset   = 0;
-      note          = n;
-
-      block(true);
-      small->setChecked(note->small());
-      mirrorHead->setCurrentIndex(note->userMirror());
-      dotPosition->setCurrentIndex(note->dotPosition());
-
-      int headGroup = note->headGroup();
-      int headGroupIndex = 0;
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
-            noteHeadGroup->setItemData(i, QVariant(heads[i]));
-            if (headGroup == heads[i])
-                  headGroupIndex = i;
-            }
-      noteHeadGroup->setCurrentIndex(headGroupIndex);
-      noteHeadType->setCurrentIndex(int(note->headType())+1);   // NoteHeadType goes from -1 while combo box goes from 0
-      tuning->setValue(note->tuning());
-      int val = note->veloOffset();
-      velocity->setValue(val);
-      velocityType->setCurrentIndex(int(note->veloType()));
-      if (note->veloType() == MScore::USER_VAL)
-            _userVelocity = val;
-      else
-            _veloOffset = val;
-
-      resetSmall->setEnabled(note->small());
-      resetMirrorHead->setEnabled(note->userMirror() != MScore::DH_AUTO);
-      resetDotPosition->setEnabled(note->dotPosition() != MScore::AUTO);
-      block(false);
-      }
-
-//---------------------------------------------------------
-//   dirty
-//---------------------------------------------------------
-
-bool InspectorNoteBase::dirty() const
-      {
-      return note->small()            != small->isChecked()
-         || note->userMirror()        != mirrorHead->currentIndex()
-         || note->dotPosition()       != dotPosition->currentIndex()
-         || note->headGroup()         != noteHeadGroup->itemData(noteHeadGroup->currentIndex())
-         || note->headType()          != (noteHeadType->currentIndex()-1)     // NoteHeadType goes from -1 while combo box goes from 0
-         || note->tuning()            != tuning->value()
-         || note->veloOffset()        != velocity->value()
-         || note->veloType()          != velocityType->currentIndex()
-         ;
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorNoteBase::apply()
-      {
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      Score* score = note->score();
-      score->startCmd();
-      bool b = small->isChecked();
-      if (note->small() != b)
-            score->undoChangeProperty(note, P_SMALL, b);
-      int val = mirrorHead->currentIndex();
-      if (note->userMirror() != val)
-            score->undoChangeProperty(note, P_MIRROR_HEAD, val);
-      val = dotPosition->currentIndex();
-      if (note->dotPosition() != val)
-            score->undoChangeProperty(note, P_DOT_POSITION, val);
-      val = noteHeadGroup->itemData(noteHeadGroup->currentIndex()).toInt();
-      if (note->headGroup() != val)
-            score->undoChangeProperty(note, P_HEAD_GROUP, val);
-      val = noteHeadType->currentIndex()-1;                       // NoteHeadType goes from -1 while combo box goes from 0
-      if (note->headType() != val)
-            score->undoChangeProperty(note, P_HEAD_TYPE, val);
-      if (note->tuning() != tuning->value())
-            score->undoChangeProperty(note, P_TUNING, tuning->value());
-      if (note->veloOffset() != velocity->value())
-            score->undoChangeProperty(note, P_VELO_OFFSET, velocity->value());
-      if (note->veloType() != velocityType->currentIndex())
-            score->undoChangeProperty(note, P_VELO_TYPE, velocityType->currentIndex());
-      score->endCmd();
-      mscore->endCmd();
-      }
-
-//---------------------------------------------------------
-//   smallChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::smallChanged(int)
-      {
-      resetSmall->setEnabled(small->isChecked());
-      apply();
-      }
-
-//---------------------------------------------------------
-//   velocityTypeChanged
-//---------------------------------------------------------
-
-void InspectorNoteBase::velocityTypeChanged(int val)
-      {
-      switch(val) {
-            case MScore::USER_VAL:
-                  velocity->setEnabled(true);
-                  velocity->setSuffix("");
-                  velocity->setRange(0, 127);
-                  velocity->setValue(_userVelocity);
-                  break;
-            case MScore::OFFSET_VAL:
-                  velocity->setEnabled(true);
-                  velocity->setSuffix("%");
-                  velocity->setRange(-200, 200);
-                  velocity->setValue(_veloOffset);
-                  break;
-            }
-      resetVelocityType->setEnabled(val != 0);
-      apply();
-      }
-
-#endif
-
-//---------------------------------------------------------
 //   InspectorRest
 //---------------------------------------------------------
 
 InspectorRest::InspectorRest(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w2 = new QWidget;
-      s.setupUi(w2);
-      _layout->addWidget(w2);
-      QWidget* w3 = new QWidget;
-      r.setupUi(w3);
-      _layout->addWidget(w3);
+      e.setupUi(addWidget());
+      s.setupUi(addWidget());
+      r.setupUi(addWidget());
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -775,15 +344,9 @@ InspectorRest::InspectorRest(QWidget* parent)
 InspectorTimeSig::InspectorTimeSig(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w2 = new QWidget;
-      s.setupUi(w2);
-      _layout->addWidget(w2);
-      QWidget* w3 = new QWidget;
-      t.setupUi(w3);
-      _layout->addWidget(w3);
+      e.setupUi(addWidget());
+      s.setupUi(addWidget());
+      t.setupUi(addWidget());
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -804,15 +367,9 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
 InspectorKeySig::InspectorKeySig(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w2 = new QWidget;
-      s.setupUi(w2);
-      _layout->addWidget(w2);
-      QWidget* w3 = new QWidget;
-      k.setupUi(w3);
-      _layout->addWidget(w3);
+      e.setupUi(addWidget());
+      s.setupUi(addWidget());
+      k.setupUi(addWidget());
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -834,15 +391,9 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
 InspectorClef::InspectorClef(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      e.setupUi(w1);
-      _layout->addWidget(w1);
-      QWidget* w2 = new QWidget;
-      s.setupUi(w2);
-      _layout->addWidget(w2);
-      QWidget* w3 = new QWidget;
-      c.setupUi(w3);
-      _layout->addWidget(w3);
+      e.setupUi(addWidget());
+      s.setupUi(addWidget());
+      c.setupUi(addWidget());
 
       iList = {
             { P_COLOR,          0, false, e.color,         e.resetColor         },
@@ -854,201 +405,6 @@ InspectorClef::InspectorClef(QWidget* parent)
             { P_SHOW_COURTESY,  0, false, c.showCourtesy,  c.resetShowCourtesy  }
             };
       mapSignals();
-      }
-
-//---------------------------------------------------------
-//   InspectorChord
-//---------------------------------------------------------
-
-InspectorChord::InspectorChord(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
-      connect(small,         SIGNAL(toggled(bool)),            SLOT(smallChanged(bool)));
-      connect(stemless,      SIGNAL(toggled(bool)),            SLOT(stemlessChanged(bool)));
-      connect(stemDirection, SIGNAL(currentIndexChanged(int)), SLOT(stemDirectionChanged(int)));
-      connect(offsetX,       SIGNAL(valueChanged(double)),     SLOT(offsetXChanged(double)));
-      connect(offsetY,       SIGNAL(valueChanged(double)),     SLOT(offsetYChanged(double)));
-
-      connect(resetSmall,    SIGNAL(clicked()),      SLOT(resetSmallClicked()));
-      connect(resetStemless, SIGNAL(clicked()),      SLOT(resetStemlessClicked()));
-      connect(resetStemDirection, SIGNAL(clicked()), SLOT(resetStemDirectionClicked()));
-      connect(resetX,        SIGNAL(clicked()),      SLOT(resetXClicked()));
-      connect(resetY,        SIGNAL(clicked()),      SLOT(resetYClicked()));
-      }
-
-//---------------------------------------------------------
-//   dirty
-//---------------------------------------------------------
-
-bool InspectorChord::dirty() const
-      {
-      return chord->small() != small->isChecked()
-         || chord->noStem() != stemless->isChecked()
-         || chord->stemDirection() != (MScore::Direction)(stemDirection->currentIndex())
-         || chord->userOff().x() != offsetX->value()
-         || chord->userOff().y() != offsetY->value()
-         ;
-      }
-
-//---------------------------------------------------------
-//   block
-//---------------------------------------------------------
-
-void InspectorChord::block(bool val)
-      {
-      small->blockSignals(val);
-      stemless->blockSignals(val);
-      stemDirection->blockSignals(val);
-      offsetX->blockSignals(val);
-      offsetY->blockSignals(val);
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorChord::setElement(Chord* c)
-      {
-      chord = c;
-
-      block(true);
-
-      offsetX->setValue(c->userOff().x());
-      offsetY->setValue(c->userOff().y());
-
-      small->setChecked(chord->small());
-      stemless->setChecked(chord->noStem());
-      stemDirection->setCurrentIndex(chord->stemDirection());
-
-      resetSmall->setEnabled(chord->small());
-      resetStemless->setEnabled(chord->noStem());
-      resetStemDirection->setEnabled(stemDirection->currentIndex() != 0);
-
-      block(false);
-      }
-
-//---------------------------------------------------------
-//   smallChanged
-//---------------------------------------------------------
-
-void InspectorChord::smallChanged(bool val)
-      {
-      resetSmall->setEnabled(val);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   stemlessChanged
-//---------------------------------------------------------
-
-void InspectorChord::stemlessChanged(bool val)
-      {
-      resetStemless->setEnabled(val);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   stemDirectionChanged
-//---------------------------------------------------------
-
-void InspectorChord::stemDirectionChanged(int idx)
-      {
-      resetStemDirection->setEnabled(idx != 0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   offsetXChanged
-//---------------------------------------------------------
-
-void InspectorChord::offsetXChanged(double val)
-      {
-      resetX->setEnabled(val != 0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   offsetYChanged
-//---------------------------------------------------------
-
-void InspectorChord::offsetYChanged(double val)
-      {
-      resetY->setEnabled(val != 0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetSmall
-//---------------------------------------------------------
-
-void InspectorChord::resetSmallClicked()
-      {
-      small->setChecked(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetStemless
-//---------------------------------------------------------
-
-void InspectorChord::resetStemlessClicked()
-      {
-      stemless->setChecked(false);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetStemDirection
-//---------------------------------------------------------
-
-void InspectorChord::resetStemDirectionClicked()
-      {
-      stemDirection->setCurrentIndex(0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetX
-//---------------------------------------------------------
-
-void InspectorChord::resetXClicked()
-      {
-      offsetX->setValue(0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   resetY
-//---------------------------------------------------------
-
-void InspectorChord::resetYClicked()
-      {
-      offsetY->setValue(0.0);
-      apply();
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorChord::apply()
-      {
-      if (!dirty())
-            return;
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      Score* score = chord->score();
-      score->startCmd();
-      if (small->isChecked() != chord->small())
-            score->undoChangeProperty(chord, P_SMALL, small->isChecked());
-      if (stemless->isChecked() != chord->noStem())
-            score->undoChangeProperty(chord, P_NO_STEM, stemless->isChecked());
-      MScore::Direction d = MScore::Direction(stemDirection->currentIndex());
-      if (d != chord->stemDirection())
-            score->undoChangeProperty(chord, P_STEM_DIRECTION, d);
-      score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1074,38 +430,21 @@ int InspectorBarLine::builtinSpans[BARLINE_BUILTIN_SPANS][3] =
 InspectorBarLine::InspectorBarLine(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      _layout->addWidget(iElement);
-      _layout->addSpacing(20);
+      e.setupUi(addWidget());
+      b.setupUi(addWidget());
 
-      // "Type" Combo box
-      QHBoxLayout* l = new QHBoxLayout;
-      QLabel* label = new QLabel(tr("Type:"));
-      type = new QComboBox;
-      type->addItem(tr("Measure default"), BARLINE_TYPE_DEFAULT);
-      type->addItem(tr("Normal"), NORMAL_BAR);
-      type->addItem(tr("Dashed"), BROKEN_BAR);
-      type->addItem(tr("Dotted"), DOTTED_BAR);
-      type->addItem(tr("Double"), DOUBLE_BAR);
-      type->addItem(tr("End"), END_BAR);
-      connect(type, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      l->addWidget(label);
-      l->addWidget(type);
-      _layout->addLayout(l);
-
-      // "Span" combo box
-      l = new QHBoxLayout;
-      label = new QLabel(tr("Span:"));
-      span = new QComboBox;
-      for(int i=0; i < BARLINE_BUILTIN_SPANS; i++)
-            span->addItem(builtinSpanNames[i]);
-      span->addItem(tr("Custom"));
-      connect(span, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      l->addWidget(label);
-      l->addWidget(span);
-      _layout->addLayout(l);
+      iList = {
+            { P_COLOR,          0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,        0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,       0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,       1, 0, e.offsetY,  e.resetY        },
+            { P_SUBTYPE,        0, 0, b.type,     b.resetType     },
+            { P_BARLINE_SPAN,   0, 0, b.span,     b.resetSpan     },
+            };
+      mapSignals();
       }
 
+#if 0
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
@@ -1229,4 +568,5 @@ void InspectorBarLine::apply()
       score->endCmd();
       mscore->endCmd();
       }
+#endif
 

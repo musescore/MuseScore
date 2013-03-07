@@ -62,7 +62,7 @@
       </widget>
      </item>
      <item row="0" column="1" colspan="2">
-      <widget class="QComboBox" name="subtype">
+      <widget class="QComboBox" name="trillType">
        <item>
         <property name="text">
          <string>trill line</string>
@@ -88,6 +88,20 @@
          <string>wavy line</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QToolButton" name="resetTrillType">
+       <property name="toolTip">
+        <string>reset value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
       </widget>
      </item>
     </layout>

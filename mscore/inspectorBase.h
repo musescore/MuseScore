@@ -60,6 +60,7 @@ class InspectorBase : public QWidget {
    public:
       InspectorBase(QWidget* parent);
       virtual void setElement();
+      QWidget* addWidget();
       };
 
 #endif

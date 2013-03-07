@@ -15,6 +15,7 @@
 #define __INSPECTOR_GLISSANDO_H__
 
 #include "inspector.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_glissando.h"
 #include "libmscore/property.h"
 
@@ -25,12 +26,11 @@
 class InspectorGlissando : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorGlissando b;
+      Ui::InspectorElement   e;
+      Ui::InspectorGlissando g;
 
    public:
       InspectorGlissando(QWidget* parent);
       };
 
 #endif
-
-

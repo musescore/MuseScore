@@ -14,9 +14,9 @@
 #ifndef __INSPECTOR_HAIRPIN_H__
 #define __INSPECTOR_HAIRPIN_H__
 
-#include "inspector.h"
+#include "inspectorBase.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_hairpin.h"
-#include "libmscore/property.h"
 
 //---------------------------------------------------------
 //   InspectorHairpin
@@ -25,16 +25,11 @@
 class InspectorHairpin : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorHairpin iHairpin;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorHairpin h;
 
    public:
       InspectorHairpin(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 #endif

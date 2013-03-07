@@ -14,9 +14,9 @@
 #ifndef __INSPECTOR_OTTAVA_H__
 #define __INSPECTOR_OTTAVA_H__
 
-#include "inspector.h"
+#include "inspectorBase.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_ottava.h"
-#include "libmscore/property.h"
 
 //---------------------------------------------------------
 //   InspectorOttava
@@ -25,16 +25,11 @@
 class InspectorOttava : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorOttava iOttava;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorOttava  o;
 
    public:
       InspectorOttava(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 #endif

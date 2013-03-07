@@ -23,48 +23,18 @@
 InspectorHairpin::InspectorHairpin(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      _layout->addWidget(iElement);
-      QWidget* w = new QWidget;
-      iHairpin.setupUi(w);
-      _layout->addWidget(w);
-      connect(iHairpin.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      }
+      e.setupUi(addWidget());
+      h.setupUi(addWidget());
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorHairpin::setElement(Element* e)
-      {
-      HairpinSegment* hairpinSegment = static_cast<HairpinSegment*>(e);
-      iElement->setElement(hairpinSegment);
-      Hairpin* hairpin = hairpinSegment->hairpin();
-
-      iHairpin.subtype->blockSignals(true);
-      iHairpin.subtype->setCurrentIndex(int(hairpin->hairpinType()));
-      iHairpin.subtype->blockSignals(false);
-      iHairpin.dynRange->setCurrentIndex(int(hairpin->dynRange()));
-      iHairpin.veloChange->setValue(hairpin->veloChange());
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorHairpin::apply()
-      {
-      HairpinSegment* hairpinSegment = static_cast<HairpinSegment*>(inspector->element());
-
-      Hairpin* hairpin = hairpinSegment->hairpin();
-      Hairpin::HairpinType vt = hairpin->hairpinType();
-      Hairpin::HairpinType nt = Hairpin::HairpinType(iHairpin.subtype->currentIndex());
-      if (vt != nt) {
-            Score* score = hairpin->score();
-            score->startCmd();
-            score->undoChangeProperty(hairpin, P_HAIRPIN_TYPE, nt);
-            score->endCmd();
-            mscore->endCmd();
-            }
+      iList = {
+            { P_COLOR,         0, 0, e.color,       e.resetColor       },
+            { P_VISIBLE,       0, 0, e.visible,     e.resetVisible     },
+            { P_USER_OFF,      0, 0, e.offsetX,     e.resetX           },
+            { P_USER_OFF,      1, 0, e.offsetY,     e.resetY           },
+            { P_HAIRPIN_TYPE,  0, 0, h.hairpinType, h.resetHairpinType },
+            { P_DYNAMIC_RANGE, 0, 0, h.dynRange,    h.resetDynRange    },
+            { P_VELO_CHANGE,   0, 0, h.veloChange,  h.resetVeloChange  }
+            };
+      mapSignals();
       }
 

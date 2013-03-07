@@ -27,25 +27,10 @@
 InspectorNote::InspectorNote(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w1 = new QWidget;
-      b.setupUi(w1);
-      _layout->addWidget(w1);
-      _layout->addSpacing(20);
-
-      QWidget* w2 = new QWidget;
-      n.setupUi(w2);
-      _layout->addWidget(w2);
-      _layout->addSpacing(20);
-
-      QWidget* w3 = new QWidget;
-      c.setupUi(w3);
-      _layout->addWidget(w3);
-      _layout->addSpacing(20);
-
-      QWidget* w4 = new QWidget;
-      s.setupUi(w4);
-      _layout->addWidget(w4);
-      _layout->addSpacing(20);
+      b.setupUi(addWidget());
+      n.setupUi(addWidget());
+      c.setupUi(addWidget());
+      s.setupUi(addWidget());
 
       static const int heads[] = {
             Note::HEAD_NORMAL,
