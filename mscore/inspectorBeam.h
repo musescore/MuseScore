@@ -33,7 +33,7 @@ class InspectorBeam : public InspectorBase {
       virtual void valueChanged(int idx);
 
    protected:
-      virtual void setValue(int idx, const QVariant& val);
+      virtual void setValue(const InspectorItem&, const QVariant& val);
 
    public:
       InspectorBeam(QWidget* parent);

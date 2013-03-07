@@ -53,20 +53,20 @@ InspectorBeam::InspectorBeam(QWidget* parent)
 void InspectorBeam::valueChanged(int idx)
       {
       if (idx == 8) {
-            bool val = getValue(idx).toBool();
+            bool val = getValue(iList[idx]).toBool();
             iList[9].w->setEnabled(val);
             iList[10].w->setEnabled(val);
             }
       InspectorBase::valueChanged(idx);
       }
 
-void InspectorBeam::setValue(int idx, const QVariant& val)
+void InspectorBeam::setValue(const InspectorItem& ii, const QVariant& val)
       {
-      if (idx == 8) {
+      if (ii.w == b.userPosition) {
             bool enable = val.toBool();
             iList[9].w->setEnabled(enable);
             iList[10].w->setEnabled(enable);
             }
-      InspectorBase::setValue(idx, val);
+      InspectorBase::setValue(ii, val);
       }
 
