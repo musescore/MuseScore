@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2013 Werner Schweer
 //
@@ -23,52 +22,18 @@
 InspectorMarker::InspectorMarker(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      _layout->addWidget(iElement);
-      QWidget* w = new QWidget;
-      iMarker.setupUi(w);
-      _layout->addWidget(w);
-      connect(iMarker.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
-      connect(iMarker.jumpLabel, SIGNAL(textChanged(const QString&)), SLOT(apply()));
+      b.setupUi(addWidget());
+      m.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,       0, false, b.color,      b.resetColor      },
+            { P_VISIBLE,     0, false, b.visible,    b.resetVisible    },
+            { P_USER_OFF,    0, false, b.offsetX,    b.resetX          },
+            { P_USER_OFF,    1, false, b.offsetY,    b.resetY          },
+            { P_MARKER_TYPE, 0, false, m.markerType, m.resetMarkerType },
+            { P_LABEL,       0, false, m.jumpLabel,  m.resetJumpLabel  },
+            };
+
+      mapSignals();
       }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorMarker::setElement(Element* e)
-      {
-      Marker* marker = static_cast<Marker*>(e);
-      iElement->setElement(marker);
-
-      iMarker.subtype->blockSignals(true);
-      iMarker.jumpLabel->blockSignals(true);
-
-      iMarker.subtype->setCurrentIndex(int(marker->markerType()));
-      iMarker.jumpLabel->setText(marker->label());
-
-      iMarker.subtype->blockSignals(false);
-      iMarker.jumpLabel->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorMarker::apply()
-      {
-      Marker* marker = static_cast<Marker*>(inspector->element());
-
-      if (iMarker.subtype->currentIndex() != int(marker->markerType())
-         || iMarker.jumpLabel->text() != marker->label()) {
-            Score* score = marker->score();
-            score->startCmd();
-            score->undoChangeProperty(marker, P_MARKER_TYPE, iMarker.subtype->currentIndex());
-            score->undoChangeProperty(marker, P_LABEL, iMarker.jumpLabel->text());
-            score->endCmd();
-            mscore->endCmd();
-            }
-      }
-
-
 

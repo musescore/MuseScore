@@ -28,99 +28,13 @@
 #include "ui_inspector_timesig.h"
 #include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
+#include "ui_inspector_barline.h"
 
 class Element;
 class Note;
 class Inspector;
 class Segment;
 class Chord;
-
-//---------------------------------------------------------
-//   InspectorSegment
-//---------------------------------------------------------
-
-class InspectorSegment : public QWidget, Ui::InspectorSegment {
-      Q_OBJECT
-      Segment* segment;
-
-   private slots:
-      void resetLeadingSpaceClicked();
-      void resetTrailingSpaceClicked();
-
-      void leadingSpaceChanged(double);
-      void trailingSpaceChanged(double);
-
-   signals:
-      void inspectorVisible(bool);
-      void enableApply();
-
-   public:
-      InspectorSegment(QWidget* parent = 0);
-      void setElement(Segment*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
-//   InspectorChord
-//---------------------------------------------------------
-
-class InspectorChord : public QWidget, Ui::InspectorChord {
-      Q_OBJECT
-      Chord* chord;
-
-      void block(bool);
-
-   private slots:
-      void smallChanged(bool val);
-      void stemlessChanged(bool val);
-      void stemDirectionChanged(int idx);
-      void offsetXChanged(double);
-      void offsetYChanged(double);
-
-      void resetSmallClicked();
-      void resetStemlessClicked();
-      void resetStemDirectionClicked();
-      void resetXClicked();
-      void resetYClicked();
-
-   signals:
-      void inspectorVisible(bool);
-      void enableApply();
-
-   public:
-      InspectorChord(QWidget* parent = 0);
-      void setElement(Chord*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
-//   InspectorElementElement
-//---------------------------------------------------------
-
-class InspectorElementElement : public QWidget, Ui::InspectorElement {
-      Q_OBJECT
-
-      Element* e;
-
-   private slots:
-      void resetColorClicked();
-      void resetXClicked();
-      void resetYClicked();
-      void colorChanged(QColor);
-      void offsetXChanged(double);
-      void offsetYChanged(double);
-      void resetVisibleClicked();
-      void apply();
-
-   signals:
-      void enableApply();
-
-   public:
-      InspectorElementElement(QWidget* parent = 0);
-      void setElement(Element*);
-      };
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -252,20 +166,18 @@ class InspectorKeySig : public InspectorBase {
 class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      QComboBox*  type;
-      QComboBox*  span;
-      int         measureBarLineType;
+      Ui::InspectorElement e;
+      Ui::InspectorBarLine b;
 
-      static QString    builtinSpanNames[BARLINE_BUILTIN_SPANS];
-      static int        builtinSpans[BARLINE_BUILTIN_SPANS][3];
+      static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
+      static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
 
-   public slots:
-      virtual void apply();
+//   public slots:
+//      virtual void apply();
 
    public:
       InspectorBarLine(QWidget* parent);
-      virtual void setElement();
+//      virtual void setElement();
       };
 
 //---------------------------------------------------------

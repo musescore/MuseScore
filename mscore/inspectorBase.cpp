@@ -336,3 +336,14 @@ void InspectorBase::mapSignals()
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       }
 
+//---------------------------------------------------------
+//   addWidget
+//---------------------------------------------------------
+
+QWidget* InspectorBase::addWidget()
+      {
+      QWidget* w = new QWidget;
+      _layout->addWidget(w);
+      _layout->addSpacing(20);
+      return w;
+      }

@@ -23,18 +23,17 @@
 InspectorGlissando::InspectorGlissando(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      b.setupUi(w);
-      _layout->addWidget(w);
+      e.setupUi(addWidget());
+      g.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,           0, false, b.color,    b.resetColor    },
-            { P_VISIBLE,         0, false, b.visible,  b.resetVisible  },
-            { P_USER_OFF,        0, false, b.offsetX,  b.resetX        },
-            { P_USER_OFF,        1, false, b.offsetY,  b.resetY        },
-            { P_GLISS_TYPE,      0, false, b.type,     b.resetType     },
-            { P_GLISS_TEXT,      0, false, b.text,     b.resetText     },
-            { P_GLISS_SHOW_TEXT, 0, false, b.showText, b.resetShowText }
+            { P_COLOR,           0, false, e.color,    e.resetColor    },
+            { P_VISIBLE,         0, false, e.visible,  e.resetVisible  },
+            { P_USER_OFF,        0, false, e.offsetX,  e.resetX        },
+            { P_USER_OFF,        1, false, e.offsetY,  e.resetY        },
+            { P_GLISS_TYPE,      0, false, g.type,     g.resetType     },
+            { P_GLISS_TEXT,      0, false, g.text,     g.resetText     },
+            { P_GLISS_SHOW_TEXT, 0, false, g.showText, g.resetShowText }
             };
 
       mapSignals();

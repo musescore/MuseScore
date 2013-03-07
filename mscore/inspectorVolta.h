@@ -14,9 +14,9 @@
 #ifndef __INSPECTOR_VOLTA_H__
 #define __INSPECTOR_VOLTA_H__
 
-#include "inspector.h"
+#include "inspectorBase.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_volta.h"
-#include "libmscore/property.h"
 
 //---------------------------------------------------------
 //   InspectorVolta
@@ -25,16 +25,11 @@
 class InspectorVolta : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorVolta iVolta;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorVolta v;
 
    public:
       InspectorVolta(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 #endif
