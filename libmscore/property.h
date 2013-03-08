@@ -52,6 +52,8 @@ enum P_ID {
       P_TUNING,
       P_PAUSE,
       P_BARLINE_SPAN,
+      P_BARLINE_SPAN_FROM,
+      P_BARLINE_SPAN_TO,
       P_USER_OFF,
       P_FRET,
       P_STRING,
@@ -126,7 +128,13 @@ enum P_ID {
       P_MARKER_TYPE,
       P_ARP_USER_LEN1,
       P_ARP_USER_LEN2,
+
       P_REPEAT_FLAGS,
+      P_END_BARLINE_TYPE,
+      P_END_BARLINE_VISIBLE,
+      P_END_BARLINE_COLOR,
+      P_MEASURE_NUMBER_MODE,
+
       P_GLISS_TYPE,
       P_GLISS_TEXT,
       P_GLISS_SHOW_TEXT,

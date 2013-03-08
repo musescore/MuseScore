@@ -1991,7 +1991,7 @@ void ChangeSingleBarLineSpan::flip()
       spanTo      = nspanTo;
       barLine->layout();                              // update bbox
       // re-create bar lines for other staves, if span of this bar line decreased
-      if(barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
+      if (barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
             (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
       barLine->score()->addRefresh(barLine->abbox()); // new area of this bar line needs redraw
       }
