@@ -131,6 +131,7 @@ Measure::Measure(Score* s)
       _spannerBack           = 0;
       _no                    = 0;
       _noOffset              = 0;
+      _noMode                = MeasureNumberMode::AUTO;
       _noText                = 0;
       _userStretch           = 1.0;     // ::style->measureSpacing;
       _irregular             = false;
@@ -581,14 +582,20 @@ void Measure::layout2()
       bool smn = false;
 
       if (!_noText || _noText->generated()) {
-            if (score()->styleB(ST_showMeasureNumber)
-               && !_irregular
-               && (_no || score()->styleB(ST_showMeasureNumberOne))) {
-                  if (score()->styleB(ST_measureNumberSystem))
-                        smn = system()->firstMeasure() == this;
-                  else {
-                        smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
-                              ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+            if (_noMode == MeasureNumberMode::SHOW)
+                  smn = true;
+            else if (_noMode == MeasureNumberMode::HIDE)
+                  smn = false;
+            else {
+                  if (score()->styleB(ST_showMeasureNumber)
+                     && !_irregular
+                     && (_no || score()->styleB(ST_showMeasureNumberOne))) {
+                        if (score()->styleB(ST_measureNumberSystem))
+                              smn = system()->firstMeasure() == this;
+                        else {
+                              smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
+                                    ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+                              }
                         }
                   }
             if (smn) {
@@ -1897,7 +1904,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   else if (barLine->barLineType() == START_REPEAT)
                         segment = getSegment(Segment::SegStartRepeatBarLine, e.tick());
                   else {
-                        // setEndBarLineType(barLine->barLineType(), false, barLine->visible(), barLine->color());
                         setEndBarLineType(barLine->barLineType(), false, true, Qt::black);
                         if(!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
@@ -2616,7 +2622,7 @@ bool Measure::createEndBarLines()
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
             // scan this staff again, as it may have its own bar lines (mensurstich(-like) span)
-            if(spanTot > 1 && spanTo <= 0 && span == 0)
+            if (spanTot > 1 && spanTo <= 0 && span == 0)
                   staffIdx--;
             }
       return changed;
@@ -3676,13 +3682,12 @@ QVariant Measure::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
-                  break;
             case P_TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
-                  break;
             case P_REPEAT_FLAGS:
                   return repeatFlags();
-                  break;
+            case P_MEASURE_NUMBER_MODE:
+                  return int(measureNumberMode());
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -3704,6 +3709,9 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             case P_REPEAT_FLAGS:
                   setRepeatFlags(value.toInt());
                   break;
+            case P_MEASURE_NUMBER_MODE:
+                  setMeasureNumberMode(MeasureNumberMode(value.toInt()));
+                  break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
@@ -3714,9 +3722,20 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Measure::propertyDefault(P_ID) const
+QVariant Measure::propertyDefault(P_ID propertyId) const
       {
-      return QVariant();
+      switch(propertyId) {
+            case P_TIMESIG_NOMINAL:
+            case P_TIMESIG_ACTUAL:
+                  return QVariant();
+            case P_REPEAT_FLAGS:
+                  return 0;
+            case P_MEASURE_NUMBER_MODE:
+                  return int(MeasureNumberMode::AUTO);
+            default:
+                  break;
+            }
+      return MeasureBase::getProperty(propertyId);
       }
 
 //---------------------------------------------------------

@@ -151,10 +151,8 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
       int contentColumn;
       if (!desc.setContent(description, false, &contentError, &contentLine,
                            &contentColumn)) {
-            qDebug(qPrintable(QString("ValidatorMessageHandler: could not parse validation error line %1 column %2: %3")
-                              .arg(contentLine)
-                              .arg(contentColumn)
-                              .arg(contentError)));
+            qDebug("ValidatorMessageHandler: could not parse validation error line %d column %d: %s",
+               contentLine, contentColumn, qPrintable(contentError));
             return;
             }
       QDomElement e = desc.documentElement();

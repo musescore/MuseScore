@@ -56,9 +56,11 @@ static const PropertyData propertyList[] = {
       { P_DISTRIBUTE,          false, "distribute",    T_BOOL },
       { P_MIRROR_HEAD,         false, "mirror",        T_DIRECTION_H },
       { P_DOT_POSITION,        false, "dotPosition",   T_DIRECTION },
-      { P_TUNING,              false, "tuning",        T_REAL },
-      { P_PAUSE,               false, "pause",         T_REAL },
-      { P_BARLINE_SPAN,        false, "",              T_INT },
+      { P_TUNING,              false, "tuning",        T_REAL  },
+      { P_PAUSE,               false, "pause",         T_REAL  },
+      { P_BARLINE_SPAN,        false, "",              T_INT   },
+      { P_BARLINE_SPAN_FROM,   false, 0,               T_INT   },
+      { P_BARLINE_SPAN_TO,     false, 0,               T_INT   },
       { P_USER_OFF,            false, 0,               T_POINT },
       { P_FRET,                false, "fret",          T_INT   },
 
@@ -138,6 +140,10 @@ static const PropertyData propertyList[] = {
       { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
 
       { P_REPEAT_FLAGS,        false, 0,               T_INT    },
+      { P_END_BARLINE_TYPE,    false, 0,               T_INT    },
+      { P_END_BARLINE_VISIBLE, false, 0,               T_BOOL   },
+      { P_END_BARLINE_COLOR,   false, 0,               T_COLOR  },
+      { P_MEASURE_NUMBER_MODE, false, 0,               T_INT    },
 
       { P_GLISS_TYPE,          false, 0,               T_INT    },
       { P_GLISS_TEXT,          false, 0,               T_STRING },
