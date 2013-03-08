@@ -55,7 +55,7 @@ StaffListItem::StaffListItem(PartListItem* li)
       setPartIdx(0);
       staffIdx = 0;
       setLinked(false);
-      setClef(CLEF_G);
+      setClef(ClefTypeList(CLEF_G, CLEF_G));
 //      setFlags(flags() | Qt::ItemIsUserCheckable);
       }
 
@@ -66,7 +66,7 @@ StaffListItem::StaffListItem()
       staff    = 0;
       setPartIdx(0);
       staffIdx = 0;
-      setClef(CLEF_G);
+      setClef(ClefTypeList(CLEF_G, CLEF_G));
       setLinked(false);
       }
 
@@ -84,10 +84,10 @@ void StaffListItem::setPartIdx(int val)
 //   setClef
 //---------------------------------------------------------
 
-void StaffListItem::setClef(ClefType val)
+void StaffListItem::setClef(const ClefTypeList& val)
       {
       _clef = val;
-      setText(2, qApp->translate("clefTable", clefTable[_clef].name));
+      setText(2, qApp->translate("clefTable", clefTable[_clef._transposingClef].name));
       }
 
 //---------------------------------------------------------
@@ -188,6 +188,9 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       {
       editInstrument = 0;
       setupUi(this);
+      splitter->setStretchFactor(0, 10);
+      splitter->setStretchFactor(1, 0);
+      splitter->setStretchFactor(2, 100);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = 0;
 
@@ -259,10 +262,12 @@ void InstrumentsDialog::genPartList()
                   sli->staff    = s;
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
-                  if (s->isTabStaff())
-                        sli->setClef(ClefType(cs->styleI(ST_tabClef)));
+                  if (s->isTabStaff()) {
+                        ClefType ct(ClefType(cs->styleI(ST_tabClef)));
+                        sli->setClef(ClefTypeList(ct, ct));
+                        }
                   else
-                        sli->setClef(s->clef(0));
+                        sli->setClef(s->clefTypeList(0));
                   const LinkedStaves* ls = s->linkedStaves();
                   sli->setLinked(ls && !ls->isEmpty());
                   }
@@ -364,7 +369,7 @@ void InstrumentsDialog::on_addButton_clicked()
             sli->staff    = 0;
             sli->setPartIdx(i);
             sli->staffIdx = -1;
-            sli->setClef(it->clefIdx[i]);
+            sli->setClef(it->clefTypes[i]);
             }
       partiturList->setItemExpanded(pli, true);
       partiturList->clearSelection();     // should not be necessary

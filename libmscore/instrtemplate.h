@@ -16,6 +16,7 @@
 
 #include "mscore.h"
 #include "instrument.h"
+#include "clef.h"
 
 class Xml;
 class Part;
@@ -52,7 +53,7 @@ class InstrumentTemplate {
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
 
-      ClefType clefIdx[MAX_STAVES];
+      ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];
       BracketType bracket[MAX_STAVES];            // bracket type (NO_BRACKET)
       int bracketSpan[MAX_STAVES];

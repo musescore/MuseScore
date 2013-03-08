@@ -238,12 +238,14 @@ ClefType Staff::clef(int tick) const
                   break;
             clef = c;
             }
-      return clef == 0 ? _initialClef._concertClef : clef->clefType();
+      if (clef == 0)
+            return score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
+      return clef->clefType();
       }
 
 ClefType Staff::clef(Segment* segment) const
       {
-      ClefType ct = _initialClef._concertClef;
+      ClefType ct = score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
       int track = idx() * VOICES;
       for (;;) {
             segment = segment->prev1(Segment::SegClef);
@@ -300,7 +302,7 @@ void Staff::addClef(Clef* clef)
       {
       if (clef->generated()) {
             if (clef->segment()->tick() == 0)
-                  _initialClef._concertClef = clef->clefType();
+                  _initialClef = clef->clefTypeList();
             return;
             }
       if (clef->segment()->measure() == 0)
@@ -717,11 +719,11 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
             setSmall(false);
-            setInitialClef(t->clefIdx[0]);
+            setInitialClef(t->clefTypes[0]);
             }
       else {
             setSmall(t->smallStaff[cidx]);
-            setInitialClef(t->clefIdx[cidx]);         // initial clef will be fixed to staff-type clef by setStaffType()
+            setInitialClef(t->clefTypes[cidx]);         // initial clef will be fixed to staff-type clef by setStaffType()
             setBracket(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -760,5 +762,19 @@ void Staff::spatiumChanged(qreal oldValue, qreal newValue)
 bool Staff::show() const
       {
       return _part->show();
+      }
+
+//---------------------------------------------------------
+//   setInitialClef
+//---------------------------------------------------------
+
+void Staff::setInitialClef(const ClefTypeList& cl)
+      {
+      _initialClef = cl;
+      }
+
+void Staff::setInitialClef(ClefType ct)
+      {
+      _initialClef = ClefTypeList(ct, ct);
       }
 

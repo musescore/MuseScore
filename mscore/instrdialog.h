@@ -24,6 +24,7 @@
 #include "ui_instrdialog.h"
 #include "globals.h"
 #include "libmscore/mscore.h"
+#include "libmscore/clef.h"
 
 class InstrumentTemplate;
 class Instrument;
@@ -57,7 +58,7 @@ class PartListItem : public QTreeWidgetItem {
 //---------------------------------------------------------
 
 class StaffListItem : public QTreeWidgetItem {
-      ClefType _clef;
+      ClefTypeList _clef;
       int _partIdx;
       bool _linked;
 
@@ -71,10 +72,10 @@ class StaffListItem : public QTreeWidgetItem {
       void setPartIdx(int val);
       int staffIdx;
 
-      void setClef(ClefType val);
-      ClefType clef() const    { return _clef;    }
+      void setClef(const ClefTypeList& val);
+      const ClefTypeList& clef() const { return _clef;    }
       void setLinked(bool val);
-      bool linked() const      { return _linked;  }
+      bool linked() const              { return _linked;  }
       };
 
 //---------------------------------------------------------

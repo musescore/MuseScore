@@ -16,11 +16,9 @@
 #include "style.h"
 #include "sym.h"
 #include "drumset.h"
-#include "clef.h"
 #include "bracket.h"
 #include "utils.h"
 #include "tablature.h"
-#include "mscore.h"
 
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
@@ -112,8 +110,9 @@ InstrumentTemplate::InstrumentTemplate()
       useTablature       = false;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
-            clefIdx[i]     = CLEF_G;      // CLEF_INVALID;
-            staffLines[i]  = 5;           // -1;
+            clefTypes[i]._concertClef = CLEF_G;
+            clefTypes[i]._transposingClef = CLEF_G;
+            staffLines[i]  = 5;
             smallStaff[i]  = false;
             bracket[i]     = NO_BRACKET;
             bracketSpan[i] = 0;
@@ -141,7 +140,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       extended   = t.extended;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
-            clefIdx[i]     = t.clefIdx[i];
+            clefTypes[i]   = t.clefTypes[i];
             staffLines[i]  = t.staffLines[i];
             smallStaff[i]  = t.smallStaff[i];
             bracket[i]     = t.bracket[i];
@@ -198,10 +197,25 @@ void InstrumentTemplate::write(Xml& xml) const
       if (staves > 1)
             xml.tag("staves", staves);
       for (int i = 0; i < staves; ++i) {
-            if (i)
-                  xml.tag(QString("clef staff=\"%1\"").arg(i+1), clefTable[clefIdx[i]].tag);
-            else
-                  xml.tag("clef", clefTable[clefIdx[i]].tag);
+            if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
+                  QString tag = clefTable[clefTypes[i]._concertClef].tag;
+                  if (i)
+                        xml.tag(QString("clef staff=\"%1\"").arg(i+1), tag);
+                  else
+                        xml.tag("clef", tag);
+                  }
+            else {
+                  QString tag1 = clefTable[clefTypes[i]._concertClef].tag;
+                  QString tag2 = clefTable[clefTypes[i]._transposingClef].tag;
+                  if (i) {
+                        xml.tag(QString("concertClef staff=\"%1\"").arg(i+1), tag1);
+                        xml.tag(QString("transposingClef staff=\"%1\"").arg(i+1), tag2);
+                        }
+                  else {
+                        xml.tag("concertClef", tag1);
+                        xml.tag("transposingClef", tag2);
+                        }
+                  }
             if (staffLines[i] != 5) {
                   if (i)
                         xml.tag(QString("stafflines staff=\"%1\"").arg(i+1), staffLines[i]);
@@ -326,17 +340,28 @@ void InstrumentTemplate::read(XmlReader& e)
                   bracketSpan[0] = staves;
                   barlineSpan[0] = staves;
                   }
-            else if (tag == "clef") {
+            else if (tag == "clef") {           // sets both transposing and concert clef
                   int idx = readStaffIdx(e);
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
-                  if (!ok) {
-                        ClefType ct = Clef::clefType(val);
-                        clefIdx[idx] = ct;
-                        }
-                  else
-                        clefIdx[idx] = ClefType(i);
+                  ClefType ct = ok ? ClefType(i) : Clef::clefType(val);
+                  clefTypes[idx]._concertClef = ct;
+                  clefTypes[idx]._transposingClef = ct;
+                  }
+            else if (tag == "concertClef") {
+                  int idx = readStaffIdx(e);
+                  QString val(e.readElementText());
+                  bool ok;
+                  int i = val.toInt(&ok);
+                  clefTypes[idx]._concertClef = ok ? ClefType(i) : Clef::clefType(val);
+                  }
+            else if (tag == "transposingClef") {
+                  int idx = readStaffIdx(e);
+                  QString val(e.readElementText());
+                  bool ok;
+                  int i = val.toInt(&ok);
+                  clefTypes[idx]._transposingClef = ok ? ClefType(i) : Clef::clefType(val);
                   }
             else if (tag == "stafflines") {
                   int idx = readStaffIdx(e);
@@ -449,12 +474,6 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             --barLine;
             }
-      for (int i = 0; i < MAX_STAVES; ++i) {
-            if (clefIdx[i] == CLEF_INVALID)
-                  clefIdx[i] = CLEF_G;
-            if (staffLines[i] == -1)
-                  staffLines[i] = 5;
-            }
       if (channel.isEmpty()) {
             Channel a;
             a.chorus       = 0;
@@ -477,7 +496,7 @@ void InstrumentTemplate::read(XmlReader& e)
             id = trackName.toLower().replace(" ", "-");
 
       if (staves == 0)
-            printf(" 2Instrument: staves == 0 <%s>\n", qPrintable(id));
+            qDebug(" 2Instrument: staves == 0 <%s>", qPrintable(id));
       }
 
 
