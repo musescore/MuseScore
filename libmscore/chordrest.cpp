@@ -1030,8 +1030,8 @@ void ChordRest::remove(Element* e)
                   qDebug("ChordRest::remove: %s %p not found", e->name(), e);
                   break;
             default:
-                  qDebug("ChordRest::remove: unknown element %s", e->name());
-                  break;
+                  qDebug("ChordRest::remove: unknown element <%s>", e->name());
+                  abort();
             }
       }
 
