@@ -83,6 +83,7 @@ void MeasureProperties::setMeasure(Measure* _m)
       count->setValue(n);
       count->setEnabled(m->repeatFlags() & RepeatEnd);
       layoutStretch->setValue(m->userStretch());
+      measureNumberMode->setCurrentIndex(int(m->measureNumberMode()));
       measureNumberOffset->setValue(m->noOffset());
 
       Score* score = m->score();
@@ -197,12 +198,14 @@ void MeasureProperties::apply()
             if (ms->visible() != v || ms->slashStyle() != s)
                   score->undo(new ChangeMStaffProperties(ms, v, s));
             }
+      int mode = measureNumberMode->currentIndex();
       if (isIrregular() != m->irregular()
          || breakMultiMeasureRest->isChecked() != m->breakMultiMeasureRest()
          || repeatCount() != m->repeatCount()
          || layoutStretch->value() != m->userStretch()
          || measureNumberOffset->value() != m->noOffset()
          || m->len() != len()
+         || int(m->measureNumberMode()) != mode
          ) {
             score->undo(new ChangeMeasureProperties(
                m,
@@ -212,6 +215,8 @@ void MeasureProperties::apply()
                measureNumberOffset->value(),
                isIrregular())
                );
+            if (int(m->measureNumberMode()) != mode)
+                  score->undoChangeProperty(m, P_MEASURE_NUMBER_MODE, mode);
             if (m->len() != len()) {
                   m->adjustToLen(len());
                   score->select(m, SELECT_RANGE, 0);

@@ -311,7 +311,7 @@ void BarLine::write(Xml& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", barLineTypeName());
-      if(customSubtype())
+      if (_customSubtype)
             xml.tag("customSubtype", _customSubtype);
       // if any span value is different from staff's, output all values
       if (  (staff() && (  _span != staff()->barLineSpan()
@@ -368,11 +368,11 @@ void BarLine::read(XmlReader& e)
                   if (parent() && parent()->type() == SEGMENT) {
                         Measure* m = static_cast<Segment*>(parent())->measure();
                         if (barLineType() != m->endBarLineType())
-                              setCustomSubtype(true);
+                              _customSubtype = true;
                         }
                   }
             else if (tag == "customSubtype")
-                  setCustomSubtype(e.readInt() != 0);
+                  _customSubtype = e.readInt();
             else if (tag == "span") {
                   _span       = e.readInt();
                   _spanFrom   = e.intAttribute("from", _spanFrom);
@@ -530,7 +530,7 @@ void BarLine::startEdit(MuseScoreView*, const QPointF&)
 
 void BarLine::endEdit()
       {
-      if(ctrlDrag) {                      // if single bar line edit
+      if (ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
             _customSpan       = true;           // mark bar line as custom spanning
             int newSpan       = _span;          // copy edited span values
@@ -920,6 +920,10 @@ QVariant BarLine::getProperty(P_ID id) const
                   return int(_barLineType);
             case P_BARLINE_SPAN:
                   return span();
+            case P_BARLINE_SPAN_FROM:
+                  return spanFrom();
+            case P_BARLINE_SPAN_TO:
+                  return spanTo();
             default:
                   break;
             }
@@ -935,10 +939,16 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       switch(id) {
             case P_SUBTYPE:
                   _barLineType = BarLineType(v.toInt());
-                  setCustomSubtype(parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt());
+                  _customSubtype = parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt();
                   break;
             case P_BARLINE_SPAN:
                   setSpan(v.toInt());
+                  break;
+            case P_BARLINE_SPAN_FROM:
+                  setSpanFrom(v.toInt());
+                  break;
+            case P_BARLINE_SPAN_TO:
+                  setSpanTo(v.toInt());
                   break;
             default:
                   return Element::setProperty(id, v);
@@ -958,6 +968,10 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
                   return false;
             case P_BARLINE_SPAN:
                   return 1;
+            case P_BARLINE_SPAN_FROM:
+                  return 0;
+            case P_BARLINE_SPAN_TO:
+                  return DEFAULT_BARLINE_TO;
             default:
                   break;
             }
