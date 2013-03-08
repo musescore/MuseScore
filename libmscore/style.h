@@ -221,7 +221,6 @@ enum StyleIdx {
       ST_propertyDistanceHead,
       ST_propertyDistanceStem,
       ST_propertyDistance,
-//      ST_pageFillLimit,
       ST_lastSystemFillLimit,
 
       ST_hairpinY,
