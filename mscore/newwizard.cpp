@@ -194,9 +194,9 @@ void InstrumentWizard::on_addButton_clicked()
             sli->setPartIdx(i);
             sli->staffIdx = -1;
             if (i > MAX_STAVES)
-                  sli->setClef(CLEF_G);
+                  sli->setClef(ClefTypeList(CLEF_G, CLEF_G));
             else
-                  sli->setClef(it->clefIdx[i]);
+                  sli->setClef(it->clefTypes[i]);
             }
       partiturList->setItemExpanded(pli, true);
       partiturList->clearSelection();     // should not be necessary

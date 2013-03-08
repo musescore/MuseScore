@@ -960,7 +960,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
             else
                   staffIdx = ss->spanner()->staffIdx();
             if (staffIdx == -1) {
-                  printf("System::scanElements: staffIDx == -1: %s %p\n", ss->spanner()->name(), ss->spanner());
+                  qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
                   staffIdx = 0;
                   }
             if (all || score()->staff(staffIdx)->show())
