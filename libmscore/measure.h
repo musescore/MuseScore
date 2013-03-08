@@ -49,6 +49,7 @@ class Part;
 struct MStaff {
       qreal distanceUp;
       qreal distanceDown;
+      Text* _noText;          ///< Measure number text object
       StaffLines*  lines;
       Spacer* _vspacerUp;
       Spacer* _vspacerDown;
@@ -59,12 +60,16 @@ struct MStaff {
 
       MStaff();
       ~MStaff();
+      MStaff(const MStaff&);
+
       bool visible() const         { return _visible;    }
       void setVisible(bool val)    { _visible = val;     }
       bool slashStyle() const      { return _slashStyle; }
       void setSlashStyle(bool val) { _slashStyle = val;  }
       void setScore(Score*);
       void setTrack(int);
+      Text* noText() const         { return _noText;     }
+      void setNoText(Text* t)      { _noText = t;        }
       };
 
 enum {
@@ -108,7 +113,6 @@ class Measure : public MeasureBase {
       int    _no;             ///< Measure number, counting from zero
       int    _noOffset;       ///< Offset to measure number
       MeasureNumberMode _noMode;
-      Text* _noText;          ///< Measure number text object
 
       qreal _userStretch;
 
@@ -171,7 +175,7 @@ class Measure : public MeasureBase {
       bool irregular() const               { return _irregular;   }
       void setIrregular(bool val)          { _irregular = val;    }
       int noOffset() const                 { return _noOffset;    }
-      Text* noText() const                 { return _noText;      }
+//      Text* noText() const                 { return _noText;      }
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
