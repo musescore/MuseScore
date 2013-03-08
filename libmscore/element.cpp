@@ -492,8 +492,13 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ELEMENT_ON_STAFF) {
-            Q_ASSERT(parent()->type() == SEGMENT);
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+            System* system;
+            if (parent()->type() == SEGMENT)
+                  system = static_cast<Segment*>(parent())->measure()->system();
+            else if (parent()->type() == MEASURE)     // used in measure number
+                  system = static_cast<Measure*>(parent())->system();
+            else
+                  abort();
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
@@ -519,8 +524,13 @@ QPointF Element::canvasPos() const
       if (parent() == 0)
             return p;
       if (_flags & ELEMENT_ON_STAFF) {
-            Q_ASSERT(parent()->type() == SEGMENT);
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+            System* system;
+            if (parent()->type() == SEGMENT)
+                  system = static_cast<Segment*>(parent())->measure()->system();
+            else if (parent()->type() == MEASURE)     // used in measure number
+                  system = static_cast<Measure*>(parent())->system();
+            else
+                  abort();
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)

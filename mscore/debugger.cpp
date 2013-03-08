@@ -321,8 +321,8 @@ void Debugger::updateList(Score* s)
                               foreach(Element* ls, sl->spannerSegments())
                                     new ElementItem(si, ls);
                               }
-                        if (measure->noText())
-                              new ElementItem(mi, measure->noText());
+//                        if (measure->noText())
+//                              new ElementItem(mi, measure->noText());
                         for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                               ElementItem* segItem = new ElementItem(mi, segment);
                               for (int track = 0; track < tracks; ++track) {

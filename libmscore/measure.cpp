@@ -84,6 +84,7 @@
 
 MStaff::MStaff()
       {
+      _noText      = 0;
       distanceUp   = .0;
       distanceDown = .0;
       lines        = 0;
@@ -96,9 +97,23 @@ MStaff::MStaff()
 
 MStaff::~MStaff()
       {
+      delete _noText;
       delete lines;
       delete _vspacerUp;
       delete _vspacerDown;
+      }
+
+MStaff::MStaff(const MStaff& m)
+      {
+      _noText      = 0;
+      distanceUp   = m.distanceUp;
+      distanceDown = m.distanceDown;
+      lines        = m.lines;
+      hasVoices    = m.hasVoices;
+      _vspacerUp   = 0;
+      _vspacerDown = 0;
+      _visible     = m._visible;
+      _slashStyle  = m._slashStyle;
       }
 
 //---------------------------------------------------------
@@ -132,7 +147,6 @@ Measure::Measure(Score* s)
       _no                    = 0;
       _noOffset              = 0;
       _noMode                = MeasureNumberMode::AUTO;
-      _noText                = 0;
       _userStretch           = 1.0;     // ::style->measureSpacing;
       _irregular             = false;
       _breakMultiMeasureRest = false;
@@ -168,7 +182,6 @@ Measure::Measure(const Measure& m)
       _spannerBack           = 0;
       _no                    = m._no;
       _noOffset              = m._noOffset;
-      _noText                = 0;
       _userStretch           = m._userStretch;
 
       _irregular             = m._irregular;
@@ -222,7 +235,6 @@ Measure::~Measure()
             s = ns;
             }
       qDeleteAll(staves);
-      delete _noText;
       }
 
 //---------------------------------------------------------
@@ -581,7 +593,7 @@ void Measure::layout2()
       //
       bool smn = false;
 
-      if (!_noText || _noText->generated()) {
+//      if (!_noText || _noText->generated()) {
             if (_noMode == MeasureNumberMode::SHOW)
                   smn = true;
             else if (_noMode == MeasureNumberMode::HIDE)
@@ -598,25 +610,34 @@ void Measure::layout2()
                               }
                         }
                   }
-            if (smn) {
-                  QString s(QString("%1").arg(_no + 1));
-                  if (_noText == 0) {
-                        _noText = new Text(score());
-                        _noText->setTrack(0);
-                        _noText->setGenerated(true);
-                        _noText->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
-                        _noText->setParent(this);
-                        score()->undoAddElement(_noText);
+            QString s;
+            if (smn)
+                  s = QString("%1").arg(_no + 1);
+
+            int nn = (score()->styleB(ST_measureNumberAllStaffs)) ? n : 1;
+            for (int staffIdx = 0; staffIdx < nn; ++staffIdx) {
+                  MStaff* ms = staves.at(staffIdx);
+                  Text* t = ms->noText();
+                  if (smn) {
+                        if (t == 0) {
+                              t = new Text(score());
+                              t->setFlag(ELEMENT_ON_STAFF, true);
+                              t->setTrack(staffIdx * VOICES);
+                              t->setGenerated(true);
+                              t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
+                              t->setParent(this);
+                              score()->undoAddElement(t);
+                              }
+                        t->setText(s);
+                        t->layout();
+                        smn = score()->styleB(ST_measureNumberAllStaffs);
                         }
-                  _noText->setText(s);
+                  else {
+                        if (t)
+                              score()->undoRemoveElement(t);
+                        }
                   }
-            else {
-                  if (_noText)
-                        score()->undoRemoveElement(_noText);
-                  }
-            }
-      if (_noText)
-            _noText->layout();
+//            }
 
       //
       // slur layout needs articulation layout first
@@ -869,7 +890,7 @@ void Measure::add(Element* el)
 
       switch (type) {
             case TEXT:
-                  _noText = static_cast<Text*>(el);
+                  staves[el->staffIdx()]->setNoText(static_cast<Text*>(el));
                   break;
 
             case TUPLET:
@@ -997,8 +1018,7 @@ void Measure::remove(Element* el)
       setDirty();
       switch(el->type()) {
             case TEXT:
-                  Q_ASSERT(el == _noText);
-                  _noText = 0;
+                  staves[el->staffIdx()]->setNoText(static_cast<Text*>(0));
                   break;
 
             case SPACER:
@@ -1801,14 +1821,22 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
+#if 0
             if (_noText && !_noText->generated()) {
                   xml.stag("MeasureNumber");
                   _noText->writeProperties(xml);
                   xml.etag();
                   }
+#endif
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
+      if (mstaff->noText() && !mstaff->noText()->generated()) {
+            xml.stag("MeasureNumber");
+            mstaff->noText()->writeProperties(xml);
+            xml.etag();
+            }
+
       if (mstaff->_vspacerUp)
             xml.tag("vspacerUp", mstaff->_vspacerUp->gap() / _spatium);
       if (mstaff->_vspacerDown)
@@ -2280,10 +2308,13 @@ e.skipCurrentElement();
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  _noText = new Text(score());
-                  _noText->read(e);
-                  _noText->setTrack(0);
-                  _noText->setParent(this);
+                  Text* noText = new Text(score());
+                  noText->read(e);
+                  noText->setFlag(ELEMENT_ON_STAFF, true);
+                  if (noText->track() == -1)
+                        noText->setTrack(0);
+                  noText->setParent(this);
+                  staves[noText->staffIdx()]->setNoText(noText);
                   }
             else if (Element::readProperties(e))
                   ;
@@ -2380,6 +2411,8 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   func(data, ms->_vspacerUp);
             if (ms->_vspacerDown)
                   func(data, ms->_vspacerDown);
+            if (ms->noText())
+                  func(data, ms->noText());
             }
 
       int tracks = nstaves * VOICES;
@@ -2400,8 +2433,6 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         e->scanElements(data,  func, all);
                   }
             }
-      if (noText())
-            func(data, noText());
       }
 
 //---------------------------------------------------------
@@ -3484,7 +3515,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* spannerMap
 
       m->_no                    = _no;
       m->_noOffset              = _noOffset;
-      m->_noText                = 0;
+//      m->_noText                = 0;
       m->_userStretch           = _userStretch;
       m->_irregular             = _irregular;
       m->_breakMultiMeasureRest = _breakMultiMeasureRest;
