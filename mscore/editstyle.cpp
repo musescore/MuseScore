@@ -215,7 +215,6 @@ void EditStyle::getValues()
       lstyle.set(ST_timesigLeftMargin,       Spatium(timesigLeftMargin->value()));
       lstyle.set(ST_clefKeyRightMargin,      Spatium(clefKeyRightMargin->value()));
       lstyle.set(ST_clefBarlineDistance,     Spatium(clefBarlineDistance->value()));
-//      lstyle.set(ST_beginRepeatLeftMargin,   Spatium(beginRepeatLeftMargin->value()));
       lstyle.set(ST_staffLineWidth,          Spatium(staffLineWidth->value()));
       lstyle.set(ST_beamWidth,               Spatium(beamWidth->value()));
       lstyle.set(ST_beamDistance,            beamDistance->value());
@@ -226,7 +225,6 @@ void EditStyle::getValues()
       lstyle.set(ST_smallStaffMag,           smallStaffSize->value() * 0.01);
       lstyle.set(ST_smallNoteMag,            smallNoteSize->value() * 0.01);
       lstyle.set(ST_smallClefMag,            smallClefSize->value() * 0.01);
-//      lstyle.set(ST_pageFillLimit,           pageFillThreshold->value() * 0.01);
       lstyle.set(ST_lastSystemFillLimit,     lastSystemFillThreshold->value() * 0.01);
       lstyle.set(ST_hairpinY,                Spatium(hairpinY->value()));
       lstyle.set(ST_hairpinWidth,            Spatium(hairpinLineWidth->value()));
@@ -260,6 +258,7 @@ void EditStyle::getValues()
       lstyle.set(ST_accidentalDistance,      Spatium(accidentalDistance->value()));
       lstyle.set(ST_dotNoteDistance,         Spatium(noteDotDistance->value()));
       lstyle.set(ST_dotDotDistance,          Spatium(dotDotDistance->value()));
+      lstyle.set(ST_stemWidth,               Spatium(stemWidth->value()));
       lstyle.set(ST_ledgerLineWidth,         Spatium(ledgerLineWidth->value()));
       lstyle.set(ST_ledgerLineLength,        Spatium(ledgerLineLength->value()));
 
@@ -474,6 +473,7 @@ void EditStyle::setValues()
       accidentalDistance->setValue(lstyle.valueS(ST_accidentalDistance).val());
       noteDotDistance->setValue(lstyle.valueS(ST_dotNoteDistance).val());
       dotDotDistance->setValue(lstyle.valueS(ST_dotDotDistance).val());
+      stemWidth->setValue(lstyle.valueS(ST_stemWidth).val());
       ledgerLineWidth->setValue(lstyle.valueS(ST_ledgerLineWidth).val());
       ledgerLineLength->setValue(lstyle.valueS(ST_ledgerLineLength).val());
 
