@@ -1566,10 +1566,8 @@ void Chord::layout()
             }
 
       if (_hook) {
-            if (beam()) {
-                  delete _hook;
-                  _hook = 0;
-                  }
+            if (beam())
+                  score()->undoRemoveElement(_hook);
             else {
                   _hook->layout();
                   if (up() && !useTab)
