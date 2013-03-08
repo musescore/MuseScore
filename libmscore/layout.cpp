@@ -753,7 +753,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         // create missing clef
                         //
                         clef = new Clef(this);
-                        clef->setClefType(staff->clefTypeList(tick));
                         clef->setTrack(i * VOICES);
                         clef->setGenerated(true);
                         clef->setSmall(false);
@@ -762,9 +761,10 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         Segment* s = m->undoGetSegment(Segment::SegClef, tick);
                         clef->setParent(s);
                         clef->layout();
+                        clef->setClefType(staff->clefTypeList(tick));  // set before add !
                         undoAddElement(clef);
                         }
-                  if (clef->generated())
+                  else if (clef->generated())
                         clef->setClefType(staff->clefTypeList(tick));
                   }
             else {

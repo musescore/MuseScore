@@ -144,8 +144,8 @@ class Staff : public QObject {
       ClefType clef(Segment*) const;
       void addClef(Clef*);
       void removeClef(Clef*);
-      void setInitialClef(const ClefTypeList& cl) { _initialClef = cl; }
-      void setInitialClef(ClefType ct)            { _initialClef = ClefTypeList(ct, ct); }
+      void setInitialClef(const ClefTypeList& cl);
+      void setInitialClef(ClefType ct);
       ClefTypeList initialClef() const            { return _initialClef; }
 
       void addTimeSig(TimeSig*);

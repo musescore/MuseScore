@@ -1819,6 +1819,7 @@
       <description>Bass Saxophone</description>
       <extended>1</extended>
       <clef>G</clef>
+      <concertClef>G8vb</concertClef>
       <barlineSpan>1</barlineSpan>
       <aPitchRange>32-65</aPitchRange>
       <pPitchRange>32-70</pPitchRange>
