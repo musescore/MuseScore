@@ -1,7 +1,8 @@
 before_install:
   # rm the rabbitmq source file since it currently times out and we don't need it
   - "sudo rm -f /etc/apt/sources.list.d/rabbitmq-source.list"
-  - "sudo apt-get update"
+  - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test"
+  - "sudo apt-get -q update"
   - "sudo apt-get install -y libqt4-dev"
   - "sudo apt-get install -y alsa libsndfile1 wget make g++ ant curl cmake"
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
