@@ -1636,61 +1636,35 @@ void Note::updateAccidental(AccidentalState* as)
       {
       _line = absStep(_tpc, _pitch);
 
+      // don't touch accidentals that don't concern tpc such as
+      // quarter tones
+      if (_accidental && 
+            _accidental->accidentalType() > Accidental::ACC_NATURAL) {
+            // calculate the real note line depending on clef
+
+            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
+            int tick = chord()->tick();
+            ClefType clef = s->clef(tick);
+            _line    = relStep(_line, clef);
+            return;
+            }
+
       // calculate accidental
 
       Accidental::AccidentalType acci = Accidental::ACC_NONE;
-      if (_accidental && _accidental->role() == Accidental::ACC_USER) {
-            // check if user accidental fits tpc
-            // in case tpc was changed
 
-            Accidental::AccidentalType newUserAcc;
-            switch (_accidental->accidentalType()) {
-                  case Accidental::ACC_FLAT2:
-                  case Accidental::ACC_FLAT:
-                  case Accidental::ACC_NATURAL:
-                  case Accidental::ACC_SHARP:
-                  case Accidental::ACC_SHARP2:
-                        if (_tpc < 6)
-                              newUserAcc = Accidental::ACC_FLAT2;
-                        else if (_tpc < 13)
-                              newUserAcc = Accidental::ACC_FLAT;
-                        else if (_tpc < 20)
-                              newUserAcc = Accidental::ACC_NATURAL;
-                        else if (_tpc < 27)
-                              newUserAcc = Accidental::ACC_SHARP;
-                        else
-                              newUserAcc = Accidental::ACC_SHARP2;
-
-                        if (_accidental->accidentalType() != newUserAcc)
-                              acci = Accidental::ACC_NONE; // don't use this any more
-                        else {
-                              acci = newUserAcc; // keep it
-                              // if the key signature is changed:
-                              AccidentalVal accVal = tpc2alter(_tpc);
-                              if ((accVal != as->accidentalVal(int(_line)))
-                                  || hidden() || as->tieContext(int(_line)))
-                                    as->setAccidentalVal(int(_line),
-                                                         accVal, _tieBack != 0);
-                              }
-                        break;
-                  default:
-                        // keep it
-                        acci = _accidental->accidentalType();
+      AccidentalVal accVal = tpc2alter(_tpc);
+      if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
+            as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
+            if (_tieBack)
+                  acci = Accidental::ACC_NONE;
+            else {
+                  acci = Accidental::value2subtype(accVal);
+                  if (acci == Accidental::ACC_NONE)
+                        acci = Accidental::ACC_NATURAL;
                   }
             }
-      if (acci == Accidental::ACC_NONE)  {
-            AccidentalVal accVal = tpc2alter(_tpc);
-            if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
-                  as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
-                  if (_tieBack)
-                        acci = Accidental::ACC_NONE;
-                  else {
-                        acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::ACC_NONE)
-                              acci = Accidental::ACC_NATURAL;
-                        }
-                  }
-            }
+
       if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
             if (_accidental == 0) {
                   Accidental* a = new Accidental(score());
@@ -1702,13 +1676,33 @@ void Note::updateAccidental(AccidentalState* as)
                   Accidental* a = new Accidental(score());
                   a->setParent(this);
                   a->setAccidentalType(acci);
+                  // copy accidental role, because transpose works in
+                  // 2 passes (first notes, later keysig)
+                  a->setRole(_accidental->role());
                   score()->undoChangeElement(_accidental, a);
                   }
             }
       else {
-            if (_accidental)
-                  score()->undoRemoveElement(_accidental);
+            if (_accidental) {
+                  // remove this if it was ACC_AUTO:
+                  if (_accidental->role() == Accidental::ACC_AUTO)
+                        score()->undoRemoveElement(_accidental);
+                  else {
+                        // keep it, but update type if needed
+                        acci = Accidental::value2subtype(accVal);
+                        if (acci == Accidental::ACC_NONE)
+                              acci = Accidental::ACC_NATURAL;
+                        if (_accidental->accidentalType() != acci) {
+                              Accidental* a = new Accidental(score());
+                              a->setParent(this);
+                              a->setAccidentalType(acci);
+                              a->setRole(_accidental->role());
+                              score()->undoChangeElement(_accidental, a);
+                              }
+                        }
+                  }
             }
+
       //
       // calculate the real note line depending on clef
       //
