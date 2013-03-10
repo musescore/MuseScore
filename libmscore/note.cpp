@@ -1673,12 +1673,9 @@ void Note::updateAccidental(AccidentalState* as)
                   score()->undoAddElement(a);
                   }
             else if (_accidental->accidentalType() != acci) {
-                  Accidental* a = new Accidental(score());
+                  Accidental* a = _accidental->clone();
                   a->setParent(this);
                   a->setAccidentalType(acci);
-                  // copy accidental role, because transpose works in
-                  // 2 passes (first notes, later keysig)
-                  a->setRole(_accidental->role());
                   score()->undoChangeElement(_accidental, a);
                   }
             }
@@ -1693,10 +1690,9 @@ void Note::updateAccidental(AccidentalState* as)
                         if (acci == Accidental::ACC_NONE)
                               acci = Accidental::ACC_NATURAL;
                         if (_accidental->accidentalType() != acci) {
-                              Accidental* a = new Accidental(score());
+                              Accidental* a = _accidental->clone();
                               a->setParent(this);
                               a->setAccidentalType(acci);
-                              a->setRole(_accidental->role());
                               score()->undoChangeElement(_accidental, a);
                               }
                         }
