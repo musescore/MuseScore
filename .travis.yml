@@ -3,12 +3,9 @@ before_install:
   - "sudo rm -f /etc/apt/sources.list.d/rabbitmq-source.list"
   - "sudo apt-get update"
   - "sudo apt-get install -y libqt4-dev"
-  - "sudo apt-get install -y alsa libsndfile1 wget make g++ ant curl"
+  - "sudo apt-get install -y alsa libsndfile1 wget make g++ ant curl cmake"
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
   - "sudo apt-get install -y lame libmp3lame-dev"
-  - "sudo wget http://www.cmake.org/files/v2.8/cmake-2.8.10.2-Linux-i386.sh"
-  - "sudo chmod a+x cmake-2.8.10.2-Linux-i386.sh"
-  - "sudo ./cmake-2.8.10.2-Linux-i386.sh --skip-license --prefix=/usr"
 before_script: 
   - "make revision"
   - "make debug"
