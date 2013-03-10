@@ -11,7 +11,7 @@ before_install:
   - "sudo apt-get install -y lame libmp3lame-dev"
 before_script: 
   - "make revision"
-  - "make debug"
+  - "make debug CPUS=1"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
   - "make"
