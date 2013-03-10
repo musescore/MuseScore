@@ -1248,8 +1248,13 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
             _is.pitch = newPitch;
 
-            if ((oNote->pitch() != newPitch) || (oNote->tpc() != newTpc))
+            if ((oNote->pitch() != newPitch) || (oNote->tpc() != newTpc)) {
+                  // remove accidental if present to make sure
+                  // user added accidentals are removed here.
+                  if (oNote->accidental())
+                        undoRemoveElement(oNote->accidental());
                   undoChangePitch(oNote, newPitch, newTpc, oNote->line());
+                  }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
             else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
