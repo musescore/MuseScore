@@ -19,9 +19,18 @@
 #=============================================================================
 
 project(mscore)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+
+#minimum tested, report if it works with older
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7) 
 
 cmake_policy(SET CMP0003 NEW)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
+
+include (UsePkgConfig1)
+include (TargetDoc)
+include (FindPulseAudio)
+include (GetCompilerVersion)
 
 # for debugging the make system uncomment next line:
 # set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -84,18 +93,11 @@ endif (APPLE)
 #     Check for gcc compiler >= 4.6
 #
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-      message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
-      string(REGEX MATCH "([0-9]*)\\.([0-9]*)\\.([0-9]*)" major ${CMAKE_CXX_COMPILER_VERSION})
-
-      set(major ${CMAKE_MATCH_1})
-      set(minor ${CMAKE_MATCH_2})
-      set(patch ${CMAKE_MATCH_3})
-
-      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 6)))
+      if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4 
+        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 6)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
                   " >= 4.6 required")
       endif()
-
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
@@ -132,9 +134,6 @@ if (SOUNDFONT3)
       set(OGGVORBIS TRUE)
 endif (SOUNDFONT3)
 
-include ( ${PROJECT_SOURCE_DIR}/build/UsePkgConfig1.cmake )
-include ( ${PROJECT_SOURCE_DIR}/build/TargetDoc.cmake)
-include ( ${PROJECT_SOURCE_DIR}/build/FindPulseAudio.cmake)
 
 ##
 ##  look for Qt4
@@ -456,7 +455,6 @@ include (InstallRequiredSystemLibraries)
 
 if (MINGW)
   set(CPACK_GENERATOR             "NSIS")
-  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
 else (MINGW)
   if (NOT APPLE)
     set(CPACK_GENERATOR             "DEB;TBZ2")
