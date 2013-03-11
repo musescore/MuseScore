@@ -57,13 +57,15 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
             }
 
       // init tab presets
-      //                                                                          clef   bars stemless time  durations                      size off genDur frets                            size off thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-      _tabPresets[TAB_PRESET_GUITAR]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,   true,  false, true,  true,  false, true);
-      _tabPresets[TAB_PRESET_BASS]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_NONE,   true,  false, true,  true,  false, true);
-      _tabPresets[TAB_PRESET_UKULELE] = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
-      _tabPresets[TAB_PRESET_BANDURRIA]=new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _tabPresets[TAB_PRESET_ITALIAN] = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
-      _tabPresets[TAB_PRESET_FRENCH]  = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+      //                                                                               clef   bars stemless time  durations                      size off genDur frets                            size off thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
+      _tabPresets[TAB_PRESET_GUITAR_SIMPLE]= new StaffTypeTablature(QString(), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      _tabPresets[TAB_PRESET_GUITAR_FULL]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _tabPresets[TAB_PRESET_BASS_SIMPLE]  = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      _tabPresets[TAB_PRESET_BASS_FULL]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _tabPresets[TAB_PRESET_UKULELE]      = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+//    _tabPresets[TAB_PRESET_BANDURRIA]    = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _tabPresets[TAB_PRESET_ITALIAN]      = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
+      _tabPresets[TAB_PRESET_FRENCH]       = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
 
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
@@ -117,10 +119,10 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(on_tabMinimShortToggled(bool)));
       connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
       connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
+      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(on_durFontNameChanged(int)));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(updateTabPreview()));
+      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(on_fretFontNameChanged(int)));
       connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updateTabPreview()));
@@ -135,10 +137,12 @@ EditStaffType::~EditStaffType()
       {
       foreach(StaffType* st, staffTypes)
             delete st;
-      delete _tabPresets[TAB_PRESET_GUITAR];
-      delete _tabPresets[TAB_PRESET_BASS];
+      delete _tabPresets[TAB_PRESET_GUITAR_SIMPLE];
+      delete _tabPresets[TAB_PRESET_GUITAR_FULL];
+      delete _tabPresets[TAB_PRESET_BASS_SIMPLE];
+      delete _tabPresets[TAB_PRESET_BASS_FULL];
       delete _tabPresets[TAB_PRESET_UKULELE];
-      delete _tabPresets[TAB_PRESET_BANDURRIA];
+//    delete _tabPresets[TAB_PRESET_BANDURRIA];
       delete _tabPresets[TAB_PRESET_ITALIAN];
       delete _tabPresets[TAB_PRESET_FRENCH];
       }
@@ -494,6 +498,32 @@ void EditStaffType::on_pushQuickConfig_clicked()
       {
       tabDetails->hide();
       tabPresets->show();
+      }
+
+//---------------------------------------------------------
+//   Tabulature duration / fret font name changed
+//
+//    set depending parameters
+//---------------------------------------------------------
+
+void EditStaffType::on_durFontNameChanged(int idx)
+      {
+      qreal size, yOff;
+      if (StaffTypeTablature::fontData(true, idx, 0, 0, &size, &yOff)) {
+            durFontSize->setValue(size);
+            durY->setValue(yOff);
+            }
+      updateTabPreview();
+      }
+
+void EditStaffType::on_fretFontNameChanged(int idx)
+      {
+      qreal size, yOff;
+      if (StaffTypeTablature::fontData(false, idx, 0, 0, &size, &yOff)) {
+            fretFontSize->setValue(size);
+            fretY->setValue(yOff);
+            }
+      updateTabPreview();
       }
 
 //---------------------------------------------------------
