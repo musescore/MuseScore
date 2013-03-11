@@ -386,6 +386,7 @@ void ChordRest::layoutArticulations()
       if (parent() == 0 || _articulations.isEmpty())
             return;
       qreal _spatium  = spatium();
+      qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
       if (type() == CHORD) {
             if (_articulations.size() == 1) {
                   static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
@@ -408,7 +409,7 @@ void ChordRest::layoutArticulations()
                   if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
                      && (st2 == Articulation_Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spatium * .5 : _spatium * .5;
+                        pt.ry() += a1->up() ? -_spStaff * .5 : _spStaff * .5;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
@@ -426,7 +427,7 @@ void ChordRest::layoutArticulations()
                   if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
                      && (st2 == Articulation_Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spatium * .7 : _spatium * .7;
+                        pt.ry() += a1->up() ? -_spStaff * .7 : _spStaff * .7;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
