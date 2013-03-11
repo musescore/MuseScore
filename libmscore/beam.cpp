@@ -1531,11 +1531,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       int n = crl.size();
 
-      if (staff()->isTabStaff() && !((StaffTypeTablature*)staff()->staffType())->stemThrough() ) {
+      StaffTypeTablature* tab = 0;
+      if (staff()->isTabStaff() )
+            tab = (StaffTypeTablature*)staff()->staffType();
+      if (tab && !tab->stemThrough() ) {
             //
             // TAB STAVES with stems beside staves
             qreal y;                // vert. pos. of beam, relative to staff (top line = 0)
-            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+
             if(tab->stemsDown()) {
                   _up   = false;
                   y     = (tab->lines() - 1) * tab->lineDistance().val()
@@ -1697,7 +1700,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // create segment
                               x3 = cr2->stemPosX() - _pagePos.x();
 
-                              if (staff()->isTabStaff()) {
+                              if (tab) {
                                     x2 -= stemWidth * 0.5;
                                     x3 += stemWidth * 0.5;
                                     }
@@ -1743,11 +1746,19 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                                     if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
                                           len = -len;
                                     }
-                              bool stemUp = cr1->up();
-                              if (stemUp && len > 0)
-                                    x2 -= stemWidth;
-                              else if (!stemUp && len < 0)
-                                    x2 += stemWidth;
+                              if (tab) {
+                                    if (len > 0)
+                                          x2 -= stemWidth * 0.5;
+                                    else
+                                          x2 += stemWidth * 0.5;
+                                    }
+                              else {
+                                    bool stemUp = cr1->up();
+                                    if (stemUp && len > 0)
+                                          x2 -= stemWidth;
+                                    else if (!stemUp && len < 0)
+                                          x2 += stemWidth;
+                                    }
                               x3 = x2 + len;
                               }
                         //feathered beams
@@ -1805,7 +1816,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             stem->setLen(y2 - (by + _pagePos.y()));
-            if (!staff()->isTabStaff()) {
+            if (!tab) {
                   bool _up = c->up();
                   qreal stemWidth5 = stem->lineWidth() * .5;
                   qreal noteWidth  = c->notes().size() ? c->notes().at(0)->headWidth() :
