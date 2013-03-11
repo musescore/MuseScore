@@ -587,11 +587,6 @@ void Note::draw(QPainter* painter) const
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             if (tieBack() && tab->slashStyle())
                   return;
-            qreal mag = magS();
-            qreal imag = 1.0 / mag;
-            painter->scale(mag, mag);
-            painter->setFont(tab->fretFont());
-
             QString s = tab->fretString(_fret, _ghost);
 
             // draw background, if required
@@ -611,6 +606,10 @@ void Note::draw(QPainter* painter) const
                         painter->restore();
                         }
                   }
+            qreal mag = magS();
+            qreal imag = 1.0 / mag;
+            painter->scale(mag, mag);
+            painter->setFont(tab->fretFont());
             painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
             painter->scale(imag, imag);
