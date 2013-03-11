@@ -29,6 +29,7 @@
 #include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
 #include "ui_inspector_barline.h"
+#include "ui_inspector_tuplet.h"
 
 class Element;
 class Note;
@@ -158,6 +159,20 @@ class InspectorKeySig : public InspectorBase {
       };
 
 //---------------------------------------------------------
+//   InspectorTuplet
+//---------------------------------------------------------
+
+class InspectorTuplet : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorTuplet t;
+
+   public:
+      InspectorTuplet(QWidget* parent);
+      };
+
+//---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
 
@@ -172,12 +187,8 @@ class InspectorBarLine : public InspectorBase {
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
       static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
 
-//   public slots:
-//      virtual void apply();
-
    public:
       InspectorBarLine(QWidget* parent);
-//      virtual void setElement();
       };
 
 //---------------------------------------------------------

@@ -176,6 +176,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::KEYSIG:
                               ie = new InspectorKeySig(this);
                               break;
+                        case Element::TUPLET:
+                              ie = new InspectorTuplet(this);
+                              break;
                         case Element::BEAM:
                               ie = new InspectorBeam(this);
                               break;
@@ -382,6 +385,28 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
             { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
             { P_SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
             { P_SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorTuplet
+//---------------------------------------------------------
+
+InspectorTuplet::InspectorTuplet(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      t.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_DIRECTION,    0, 0, t.direction,   t.resetDirection   },
+            { P_NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
+            { P_BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
             };
       mapSignals();
       }

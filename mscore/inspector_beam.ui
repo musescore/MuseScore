@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>211</height>
+    <height>163</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,14 +90,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Direction:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="distribute">
-       <property name="text">
-        <string>Local Relayout</string>
+        <string>Direction</string>
        </property>
       </widget>
      </item>
@@ -276,6 +269,13 @@
          <width>14</width>
          <height>14</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="3">
+      <widget class="QCheckBox" name="distribute">
+       <property name="text">
+        <string>Local Relayout</string>
        </property>
       </widget>
      </item>
