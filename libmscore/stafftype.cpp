@@ -670,23 +670,25 @@ void StaffTypeTablature::setFretFontSize(qreal val)
 QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
       {
       qreal y;
-      qreal delta =                             // displacement for half note stems (if used)
-            // if half notes have not a short stem OR not a half note => 0
-            (minimStyle() != TAB_MINIM_SHORTER || chord->durationType().type() != TDuration::V_HALF) ?
-            0.0 :
-            // if stems are up, displace of half stem length down (positive)
-            // if stems are down, displace of half stem length up (negative)
-            (stemsDown() ?
-                  STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP) * 0.5;
-
-      // if stems are through staff, stem goes from fartest note string
       if (stemThrough())
+            // if stems are through staff, stem goes from fartest note string
             y = (chord->up() ? chord->downString() : chord->upString()) * _lineDistance.val();
-      else
-      // if stems beside staff, position are fixed, but take into account delta
-            y = (stemsDown() ? (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN :
-                  STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP) + delta;
-
+      else {
+            // if stems beside staff, position are fixed, but take into account delta for half notes
+            qreal delta =                             // displacement for half note stems (if used)
+                  // if half notes have not a short stem OR not a half note => 0
+                  (minimStyle() != TAB_MINIM_SHORTER || chord->durationType().type() != TDuration::V_HALF) ?
+                  0.0 :
+                  // if stem is up, displace of half stem length down (positive)
+                  // if stem is down, displace of half stem length up (negative)
+                  (chord->up() ?
+                        -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * 0.5;
+            // if fret marks above lines and chord is up, move half a line distance up
+            if (!onLines() && chord->up())
+                  delta -= _lineDistance.val() *0.5;
+            y = (chord->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+                  + delta;
+            }
       return QPointF(chordStemPosX(chord), y);
       }
 
