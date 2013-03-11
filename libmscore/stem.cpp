@@ -74,14 +74,31 @@ void Stem::layout()
       qreal _up = up() ? -1.0 : 1.0;
       l *= _up;
 
-      qreal y1 = 0.0;
+      qreal y1 = 0.0;                           // vertical displacement to match note attach point
       Staff* st = staff();
-      if (chord() && st && !st->isTabStaff()) {
-            Note* n  = up() ? chord()->downNote() : chord()->upNote();
-            const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
-            if (n->mirror())
-                  _up *= -1;
-            y1 -= sym.attach(n->magS()).y() * _up;
+      if (chord() && st ) {
+            if (st->isTabStaff() ) {            // TAB staves
+                  if ( ((StaffTypeTablature*)st->staffType())->stemThrough()) {
+                        // if stems through staves, gets Y pos. of stem-side note relative to chord other side
+                        qreal lineDist = st->lineDistance() * spatium();
+                        y1 = (chord()->downString() - chord()->upString() ) * _up * lineDist;
+                        // if fret marks above lines, raise stem beginning by 1/2 lise distance
+                        if ( !((StaffTypeTablature*)st->staffType())->onLines() )
+                              y1 -= lineDist * 0.5;
+                        // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' betwen stem and note
+                        lineDist *= 0.7;
+                        y1 += _up * lineDist;
+                        }
+                  // in other TAB types, no correction
+                  }
+            else {                              // non-TAB
+                  // move stem start to note attach point
+              Note* n  = up() ? chord()->downNote() : chord()->upNote();
+              const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
+              if (n->mirror())
+                    _up *= -1;
+              y1 -= sym.attach(n->magS()).y() * _up;
+              }
             }
 
       line.setLine(0.0, y1, 0.0, l);
