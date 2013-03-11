@@ -11,10 +11,10 @@ before_install:
   - "sudo apt-get install -y lame libmp3lame-dev"
 before_script: 
   - "make revision"
-  - "make debug CPUS=1"
+  - "make debug CPUS=16"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
-  - "make"
+  - "make -j 4"
 script:
   - "../../build/run_tests.sh"
 notifications:

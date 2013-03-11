@@ -90,4 +90,5 @@ else (SCRIPT_INTERFACE)
       )
 endif (SCRIPT_INTERFACE)
 
-
+ADD_DEPENDENCIES(libmscore mops1)
+ADD_DEPENDENCIES(libmscore mops2)
