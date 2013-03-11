@@ -4253,7 +4253,7 @@ void ScoreView::harmonyTab(bool meas, bool back)
 
             while (segment) {       // look for a ChordRest in the compatible track range
                   foreach (const Element* e, segment->annotations())
-                        if (e->type() == Element::HARMONY)
+                        if (e->type() == Element::HARMONY && e->track() >= minTrack && e->track() <= maxTrack)
                               goto Found;
                   for (curTrack = minTrack; curTrack <= maxTrack; curTrack++)
                         if (segment->element(curTrack))
