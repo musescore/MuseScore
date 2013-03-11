@@ -45,8 +45,7 @@ QT4_WRAP_UI (ui_headers
       voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       chordedit.ui transposedialog.ui tempoproperties.ui
-      lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui
-      tupletdialog.ui tupletproperties.ui
+      lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui
       dynamicproperties.ui textline.ui slurproperties.ui debugger.ui
       select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
@@ -62,6 +61,7 @@ QT4_WRAP_UI (ui_headers
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
+      inspector_tuplet.ui
       ${SCRIPT_UI}
       )
 
@@ -80,7 +80,7 @@ QT4_WRAP_CPP (mocs
       transposedialog.h chordedit.h tempoproperties.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h voiceselector.h
-      textprop.h dynamicprop.h textproperties.h tupletdialog.h tupletproperties.h
+      textprop.h dynamicprop.h textproperties.h tupletdialog.h
       slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h
       pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
@@ -185,7 +185,7 @@ add_executable ( ${ExecutableName}
       workspace.cpp exportmp3.cpp chordview.cpp
       album.cpp webpage.cpp textstyle.cpp tempoproperties.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
-      tupletdialog.cpp tupletproperties.cpp glissandoproperties.cpp
+      tupletdialog.cpp glissandoproperties.cpp
       articulationprop.cpp textprop.cpp dynamicprop.cpp
       fretproperties.cpp sectionbreakprop.cpp hairpinprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp

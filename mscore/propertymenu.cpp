@@ -23,7 +23,6 @@
 #include "articulationprop.h"
 #include "bendproperties.h"
 #include "boxproperties.h"
-#include "tupletproperties.h"
 #include "voltaproperties.h"
 #include "lineproperties.h"
 #include "tremolobarprop.h"
@@ -50,7 +49,6 @@
 #include "libmscore/box.h"
 #include "libmscore/text.h"
 #include "libmscore/articulation.h"
-#include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/timesig.h"
@@ -189,10 +187,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::TBOX) {
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == Element::TUPLET) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-            }
       else if (e->type() == Element::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Volta Properties..."))->setData("v-props");
@@ -287,12 +281,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::REST) {
             Rest* rest = static_cast<Rest*>(e);
             genPropertyMenu1(e, popup);
-            if (rest->tuplet()) {
-                  popup->addSeparator();
-                  QMenu* menuTuplet = popup->addMenu(tr("Tuplet..."));
-                  menuTuplet->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-                  menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
-                  }
             }
       else if (e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
@@ -314,12 +302,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addSeparator();
 
             popup->addAction(tr("Style..."))->setData("style");
-
-            if (note->chord()->tuplet()) {
-                  QMenu* menuTuplet = popup->addMenu(tr("Tuplet..."));
-                  menuTuplet->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-                  menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
-                  }
             popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
       else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LAYOUT_BREAK_SECTION) {
@@ -452,36 +434,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "picture")
             mscore->addImage(score(), e);
-      else if (cmd == "tuplet-props") {
-            Tuplet* tuplet;
-            QList<Element*> el;
-            if (e->type() == Element::NOTE) {
-                  tuplet = static_cast<Note*>(e)->chord()->tuplet();
-                  el.append(tuplet);
-                  }
-            else if (e->isChordRest()) {
-                  tuplet = static_cast<ChordRest*>(e)->tuplet();
-                  el.append(tuplet);
-                  }
-            else {
-                  tuplet = static_cast<Tuplet*>(e);
-                  el.append(score()->selection().elements());      // apply to all selected tuplets
-                  }
-            TupletProperties vp(tuplet);
-            if (vp.exec()) {
-                  int bracketType = vp.bracketType();
-                  int numberType  = vp.numberType();
-                  foreach(Element* e, el) {
-                        if (e->type() == Element::TUPLET) {
-                              Tuplet* tuplet = static_cast<Tuplet*>(e);
-                              if (bracketType != tuplet->bracketType())
-                                    score()->undoChangeProperty(tuplet, P_BRACKET_TYPE, bracketType);
-                              if (numberType != tuplet->numberType())
-                                    score()->undoChangeProperty(tuplet, P_NUMBER_TYPE, numberType);
-                              }
-                        }
-                  }
-            }
       else if (cmd == "v-props") {
             VoltaSegment* vs = static_cast<VoltaSegment*>(e);
             VoltaProperties vp;
@@ -659,24 +611,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         }
                   }
             }
-      else if (cmd == "tupletDelete") {
-            foreach(Element* e, score()->selection().elements()) {
-                  if (e->type() == Element::REST) {
-                        Rest* r = static_cast<Rest*>(e);
-                        if (r->tuplet())
-                              score()->cmdDeleteTuplet(r->tuplet(), true);
-                        }
-                  }
-            }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
             mscore->editInPianoroll(note->staff());
-
-//            PianorollEditor ce(note->chord());
-//            PianorollEditor ce;
-//            mscore->disableCommands(true);
-//            ce.exec();
-//            mscore->disableCommands(false);
             }
       else if (cmd == "style") {
             EditStyle es(e->score(), 0);
