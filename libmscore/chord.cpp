@@ -1182,7 +1182,7 @@ void Chord::layoutStem()
                         _stem->setLen(tab->chordStemLength(this) * _spatium);
                         // process hook
                         int   hookIdx = durationType().hooks();
-                        if (tab->stemsDown())
+                        if (!up())
                               hookIdx = -hookIdx;
                         if (hookIdx) {
                               _hook->setHookType(hookIdx);
