@@ -55,7 +55,8 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
       setSelected(n->selected());
       setData(0, QVariant::fromValue<void*>(n));
 
-      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + 480, pitch2y(pitch) + keyHeight / 4);
+      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + MAP_OFFSET,
+         pitch2y(pitch) + keyHeight / 4);
       }
 
 //---------------------------------------------------------
@@ -104,7 +105,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       QRectF r1;
       r1.setCoords(-1000000.0, 0.0, 480.0, 1000000.0);
       QRectF r2;
-      r2.setCoords(ticks + 480, 0.0, 1000000.0, 1000000.0);
+      r2.setCoords(ticks + MAP_OFFSET, 0.0, 1000000.0, 1000000.0);
       QColor bg(0x71, 0x8d, 0xbe);
 
       p->fillRect(r, bg);
@@ -235,7 +236,9 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 PianoView::PianoView()
    : QGraphicsView()
       {
-      setFrameShape(QFrame::NoFrame);
+      setFrameStyle(QFrame::NoFrame);
+      setLineWidth(0);
+      setMidLineWidth(0);
       setScene(new QGraphicsScene);
       setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);

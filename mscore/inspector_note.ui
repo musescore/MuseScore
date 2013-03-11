@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -37,9 +46,25 @@
     </widget>
    </item>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QGridLayout" name="gridLayout">
      <property name="sizeConstraint">
       <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
      </property>
      <property name="spacing">
       <number>0</number>
@@ -127,7 +152,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -154,7 +179,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -254,7 +279,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -274,7 +299,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -294,7 +319,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -330,7 +355,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -464,7 +489,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -487,7 +512,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>

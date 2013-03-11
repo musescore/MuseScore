@@ -68,7 +68,8 @@ void SimpleText::draw(QPainter* p) const
       {
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
-      p->setPen(textColor());
+      // p->setPen(textColor());
+      p->setPen(curColor());
       int rows = _layout.size();
       if (_editMode && _cursor.hasSelection()) {
             int r1 = _cursor.selectLine;
