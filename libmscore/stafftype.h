@@ -164,6 +164,7 @@ struct TablatureFretFont {
       QString           family;                 // the family of the physical font to use
       QString           displayName;            // the name to display to the user
       qreal             defPitch;               // the default size of the font
+      qreal             defYOffset;             // the default Y displacement
       QChar             xChar;                  // the char to use for 'x'
       QChar             ghostChar;              // the char to use for ghost notes
       QString           displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
@@ -197,6 +198,7 @@ struct TablatureDurationFont {
       QString           family;                 // the family of the physical font to use
       QString           displayName;            // the name to display to the user
       qreal             defPitch;               // the default size of the font
+      qreal             defYOffset;             // the default Y displacement
       QChar             displayDot;             // the char to use to draw a dot
       QChar             displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
 
@@ -357,7 +359,7 @@ class StaffTypeTablature : public StaffType {
       static bool             readConfigFile(const QString& fileName);
       static QList<QString>   fontNames(bool bDuration);
       static bool             fontData(bool bDuration, int nIdx, QString *pFamily,
-                                    QString *pDisplayName, qreal * pSize);
+                                    QString *pDisplayName, qreal * pSize, qreal *pYOff);
 
    protected:
       void  setDurationMetrics();
