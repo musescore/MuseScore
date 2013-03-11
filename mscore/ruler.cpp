@@ -21,6 +21,8 @@
 #include "ruler.h"
 #include "libmscore/score.h"
 
+static const int MAP_OFFSET = 480;
+
 QPixmap* Ruler::markIcon[3];
 
 static const char* rmark_xpm[]={
@@ -167,7 +169,7 @@ void Ruler::setXpos(int val)
 
 Pos Ruler::pix2pos(int x) const
       {
-      int val = lrint((x + _xpos)/_xmag - 480);
+      int val = lrint((x + 5 + _xpos)/_xmag - 480);
       if (val < 0)
             val = 0;
       return Pos(_score->tempomap(), _score->sigmap(), val, _timeType);
@@ -179,7 +181,7 @@ Pos Ruler::pix2pos(int x) const
 
 int Ruler::pos2pix(const Pos& p) const
       {
-      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 1;
+      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 5;
       }
 
 //---------------------------------------------------------
@@ -189,7 +191,7 @@ int Ruler::pos2pix(const Pos& p) const
 void Ruler::paintEvent(QPaintEvent* e)
       {
       QPainter p(this);
-//    p.fillRect(e->rect(), Qt::yellow);  // debug
+// p.fillRect(e->rect(), Qt::yellow);  // debug
 
       const QRect& r = e->rect();
 
@@ -301,7 +303,8 @@ void Ruler::paintEvent(QPaintEvent* e)
             p.setPen(lcColors[i]);
             int xp      = pos2pix(_locator[i]);
             QPixmap* pm = markIcon[i];
-            int pw = (pm->width() + 1) / 2;
+            // int pw = (pm->width() + 1) / 2;
+            int pw = pm->width() / 2;
             int x1 = x - pw;
             int x2 = x + w + pw;
             if (xp >= x1 && xp < x2)

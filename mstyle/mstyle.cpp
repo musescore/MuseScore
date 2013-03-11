@@ -27,7 +27,6 @@
 #include "menubarengine.h"
 #include "widgetstateengine.h"
 #include "transitions.h"
-#include "windowmanager.h"
 #include "mconfig.h"
 
 #define MgStyleConfigData_toolTipTransparent            true
@@ -44,13 +43,13 @@
 //---------------------------------------------------------
 
 MgStyle::MgStyle()
-      : QCommonStyle() {
+   : QCommonStyle()
+      {
       _addLineButtons = DoubleButton;
       _subLineButtons = SingleButton;
       _singleButtonHeight = 14;
       _doubleButtonHeight = 28;
       _mnemonic           = Qt::TextShowMnemonic;
-//      _widgetExplorer     = new WidgetExplorer(this);
       _tabBarData         = new TabBarData(this);
       _frameFocusPrimitive = 0;
       _tabBarTabShapeControl = 0;
@@ -61,7 +60,6 @@ MgStyle::MgStyle()
 
       _animations    = new Animations(this);
       _transitions   = new Transitions(this);
-//      _windowManager = new WindowManager(this);
       _frameShadowFactory = new FrameShadowFactory(this);
       configurationChanged();
       }
@@ -138,7 +136,8 @@ bool MgStyle::drawMenuBarItem(const QStyleOption* option, QPainter* painter,
 //   pixelMetric
 //---------------------------------------------------------
 
-int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget ) const {
+int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget ) const
+      {
       switch (metric) {
                   // rely on QCommonStyle here
             case PM_SmallIconSize:
@@ -152,6 +151,8 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
                   return 22;              //??
 
             case PM_DefaultFrameWidth: {
+                  return 0;
+
                   if ( qobject_cast<const QLineEdit*>(widget) )
                         return LineEdit_FrameWidth;
                   else if ( qobject_cast<const QComboBox*>(widget))
@@ -168,19 +169,21 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             case PM_LayoutTopMargin:
             case PM_LayoutRightMargin:
             case PM_LayoutBottomMargin: {
+                  return 0;
+
                   // use either Child margin or TopLevel margin, depending on
                   // widget type
                   if ((option && (option->state & QStyle::State_Window)) || (widget && widget->isWindow())) {
-                        return pixelMetric( PM_DefaultTopLevelMargin, option, widget );
+                        return pixelMetric(PM_DefaultTopLevelMargin, option, widget);
                         }
                   else {
-                        return pixelMetric( PM_DefaultChildMargin, option, widget );
+                        return 0; // pixelMetric(PM_DefaultChildMargin, option, widget);
                         }
                   }
 
             // push buttons
             case PM_ButtonMargin:
-                  return 5;
+                  return 0; // 5;
 
             case PM_MenuButtonIndicator:
                   if (qstyleoption_cast<const QStyleOptionToolButton*>(option))
@@ -199,11 +202,11 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
                         break;
 
             case PM_DefaultChildMargin:
-                  return 4;
+                  return 0; // 4;
             case PM_DefaultTopLevelMargin:
-                  return 11;
+                  return 0; // 11;
             case PM_DefaultLayoutSpacing:
-                  return 4;
+                  return 0; // 4;
 //            case PM_LayoutHorizontalSpacing: return -1;   // this crashes qt4.8
 //            case PM_LayoutVerticalSpacing: return -1;
             case PM_LayoutHorizontalSpacing:
@@ -341,7 +344,7 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             default:
                   break;
             }
-      return QCommonStyle::pixelMetric(metric, option, widget);
+      return 0; // QCommonStyle::pixelMetric(metric, option, widget);
       }
 
 //---------------------------------------------------------
@@ -349,7 +352,8 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
 //    expand size based on margins
 //---------------------------------------------------------
 
-QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int right, int bottom) const {
+QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int right, int bottom) const
+      {
       return size + QSize(2 * main + left + right, 2 * main + top + bottom);
       }
 

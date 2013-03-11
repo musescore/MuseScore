@@ -107,6 +107,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       ruler = new Ruler;
       ruler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
       ruler->setFixedHeight(rulerHeight);
+
       ruler->setMag(xmag, 1.0);
 
       Piano* piano = new Piano;
@@ -141,7 +142,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
       layout->setColumnMinimumWidth(0, pianoWidth + 5);
-      layout->setSpacing(0);
       layout->addWidget(tb,    0, 0, 1, 2);
       layout->addWidget(ruler, 1, 1);
       layout->addWidget(split, 2, 0, 1, 2);
