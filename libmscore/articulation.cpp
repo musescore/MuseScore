@@ -57,11 +57,11 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             },
       { staccatoSym, staccatoSym,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
-            0., ARTICULATION_SHOW_IN_PITCHED_STAFF
+            0., ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { ustaccatissimoSym,   dstaccatissimoSym,
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "staccatissimo"),
-            0., ARTICULATION_SHOW_IN_PITCHED_STAFF
+            0., ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { tenutoSym, tenutoSym,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),

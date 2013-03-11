@@ -1268,6 +1268,9 @@ void Note::layout()
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
             if (parent() == 0)
                   return;
+            }
+      // if not TAB or TAB with stems through
+      if (!useTablature || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
             int dots = chord()->dots();
             for (int i = 0; i < 3; ++i) {
                   if (i < dots) {
