@@ -36,25 +36,27 @@ add_library(bww STATIC
    )
 
 if (NOT MINGW)
-add_executable(bww2mxml
-   ${INCS}
-   lexer.cpp
-   main.cpp
-   mxmlwriter.cpp
-   parser.cpp
-   symbols.cpp
-   writer.cpp
-   )
-
-set_target_properties (
-      bww2mxml
-      PROPERTIES
-         COMPILE_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+   add_executable(bww2mxml
+      ${INCS}
+      lexer.cpp
+      main.cpp
+      mxmlwriter.cpp
+      parser.cpp
+      symbols.cpp
+      writer.cpp
       )
 
-target_link_libraries(bww2mxml
-   ${QT_LIBRARIES}
-   )
+   set_target_properties (
+         bww2mxml
+         PROPERTIES
+            COMPILE_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         )
+
+   target_link_libraries(bww2mxml
+      ${QT_LIBRARIES}
+      )
+   ADD_DEPENDENCIES(bww2mxml mops1)
+   ADD_DEPENDENCIES(bww2mxml mops2)
 endif (NOT MINGW)
 
 ADD_DEPENDENCIES(bww mops1)
