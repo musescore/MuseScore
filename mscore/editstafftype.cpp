@@ -109,10 +109,10 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(on_tabStemsToggled(bool)));
-      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(on_tabStemThroughToggled(bool)));
+      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
 //    connect(minimNoneRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(on_tabMinimShortToggled(bool)));
       connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
@@ -569,8 +569,8 @@ void EditStaffType::blockTabPreviewSignals(bool block)
 
 void EditStaffType::tabStemsCompatibility(bool checked)
       {
-      stemAboveRadio->setEnabled(checked);
-      stemBelowRadio->setEnabled(checked);
+      stemAboveRadio->setEnabled(checked && !stemThroughRadio->isChecked());
+      stemBelowRadio->setEnabled(checked && !stemThroughRadio->isChecked());
       stemBesideRadio->setEnabled(checked);
       stemThroughRadio->setEnabled(checked && !minimShortRadio->isChecked());
       minimNoneRadio->setEnabled(checked);
@@ -602,6 +602,7 @@ void EditStaffType::tabMinimShortCompatibility(bool checked)
 //
 //    Setting "stems through" is incompatible with "minim short":
 //    if checking and "minim short" is checked, move check to "minim slashed"
+//    It also make "Stems above" and "Stems below" meaningless: disable them
 //---------------------------------------------------------
 
 void EditStaffType::tabStemThroughCompatibility(bool checked)
@@ -612,8 +613,11 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
                   minimSlashedRadio->setChecked(true);
                   }
             }
-      // disable / enable "minim short" according "stems through" is checked / unchecked
-      minimShortRadio->setEnabled(!checked && noteValuesStems->isChecked());
+      // disable / enable "minim short" and "stems above/below" according "stems through" is checked / unchecked
+      bool enab = !checked && noteValuesStems->isChecked();
+      minimShortRadio->setEnabled(enab);
+      stemAboveRadio->setEnabled(enab);
+      stemBelowRadio->setEnabled(enab);
       }
 
 //---------------------------------------------------------
