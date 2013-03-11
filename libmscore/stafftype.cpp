@@ -850,6 +850,8 @@ void TabDurationSymbol::draw(QPainter* painter) const
 
 bool TablatureFretFont::read(XmlReader& e)
       {
+      defPitch = 9.0;
+      defYOffset = 0.0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -861,6 +863,8 @@ bool TablatureFretFont::read(XmlReader& e)
                   displayName = e.readElementText();
             else if (tag == "defaultPitch")
                   defPitch = e.readDouble();
+            else if (tag == "defaultYOffset")
+                  defYOffset = e.readDouble();
             else if (tag == "mark") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());
@@ -902,6 +906,8 @@ bool TablatureDurationFont::read(XmlReader& e)
                   displayName = e.readElementText();
             else if (tag == "defaultPitch")
                   defPitch = e.readDouble();
+            else if (tag == "defaultYOffset")
+                  defYOffset = e.readDouble();
             else if (tag == "duration") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());
@@ -1034,23 +1040,25 @@ QList<QString> StaffTypeTablature::fontNames(bool bDuration)
 //---------------------------------------------------------
 
 bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, QString * pDisplayName,
-            qreal * pSize)
+            qreal * pSize, qreal* pYOff)
       {
-      if(bDuration) {
-            if(nIdx >= 0 && nIdx < _durationFonts.size()) {
+      if (bDuration) {
+            if (nIdx >= 0 && nIdx < _durationFonts.size()) {
                   TablatureDurationFont f = _durationFonts.at(nIdx);
-                  if(pFamily)       *pFamily          = f.family;
-                  if(pDisplayName)  *pDisplayName     = f.displayName;
-                  if(pSize)         *pSize            = f.defPitch;
+                  if (pFamily)      *pFamily          = f.family;
+                  if (pDisplayName) *pDisplayName     = f.displayName;
+                  if (pSize)        *pSize            = f.defPitch;
+                  if (pYOff)        *pYOff            = f.defYOffset;
                   return true;
                   }
             }
       else {
-            if(nIdx >= 0 && nIdx < _fretFonts.size()) {
+            if (nIdx >= 0 && nIdx < _fretFonts.size()) {
                   TablatureFretFont f = _fretFonts.at(nIdx);
-                  if(pFamily)       *pFamily          = f.family;
-                  if(pDisplayName)  *pDisplayName     = f.displayName;
-                  if(pSize)         *pSize            = f.defPitch;
+                  if (pFamily)      *pFamily          = f.family;
+                  if (pDisplayName) *pDisplayName     = f.displayName;
+                  if (pSize)        *pSize            = f.defPitch;
+                  if (pYOff)        *pYOff            = f.defYOffset;
                   return true;
                   }
             }

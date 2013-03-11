@@ -48,10 +48,11 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       ScoreView* tabPreview;
 #endif
       enum {
-            TAB_PRESET_GUITAR = 0,
-            TAB_PRESET_BASS,
+            TAB_PRESET_GUITAR_SIMPLE = 0,
+            TAB_PRESET_GUITAR_FULL,
+            TAB_PRESET_BASS_SIMPLE,
+            TAB_PRESET_BASS_FULL,
             TAB_PRESET_UKULELE,
-            TAB_PRESET_BANDURRIA,
             TAB_PRESET_ITALIAN,
             TAB_PRESET_FRENCH,
             TAB_PRESET_CUSTOM,                  // custom preset has no effect
@@ -72,6 +73,8 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void createNewType();
       void nameEdited(const QString&);
       void presetTablatureChanged(int idx);
+      void on_durFontNameChanged(int idx);
+      void on_fretFontNameChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
       void on_tabStemThroughToggled(bool checked);
