@@ -134,6 +134,12 @@
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item row="0" column="2">
@@ -144,6 +150,12 @@
        <property name="icon">
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -170,6 +182,12 @@
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -180,6 +198,12 @@
        <property name="icon">
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
        </property>
       </widget>
      </item>
