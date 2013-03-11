@@ -151,8 +151,6 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
                   return 22;              //??
 
             case PM_DefaultFrameWidth: {
-                  return 0;
-
                   if ( qobject_cast<const QLineEdit*>(widget) )
                         return LineEdit_FrameWidth;
                   else if ( qobject_cast<const QComboBox*>(widget))
@@ -169,21 +167,20 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             case PM_LayoutTopMargin:
             case PM_LayoutRightMargin:
             case PM_LayoutBottomMargin: {
-                  return 0;
-
                   // use either Child margin or TopLevel margin, depending on
                   // widget type
                   if ((option && (option->state & QStyle::State_Window)) || (widget && widget->isWindow())) {
                         return pixelMetric(PM_DefaultTopLevelMargin, option, widget);
                         }
                   else {
-                        return 0; // pixelMetric(PM_DefaultChildMargin, option, widget);
+                        // return pixelMetric(PM_DefaultChildMargin, option, widget);
+                        return 0;
                         }
                   }
 
             // push buttons
             case PM_ButtonMargin:
-                  return 0; // 5;
+                  return 5;
 
             case PM_MenuButtonIndicator:
                   if (qstyleoption_cast<const QStyleOptionToolButton*>(option))
@@ -202,11 +199,11 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
                         break;
 
             case PM_DefaultChildMargin:
-                  return 0; // 4;
+                  return 4;
             case PM_DefaultTopLevelMargin:
-                  return 0; // 11;
+                  return 11;
             case PM_DefaultLayoutSpacing:
-                  return 0; // 4;
+                  return 4;
 //            case PM_LayoutHorizontalSpacing: return -1;   // this crashes qt4.8
 //            case PM_LayoutVerticalSpacing: return -1;
             case PM_LayoutHorizontalSpacing:
@@ -344,7 +341,7 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             default:
                   break;
             }
-      return 0; // QCommonStyle::pixelMetric(metric, option, widget);
+      return QCommonStyle::pixelMetric(metric, option, widget);
       }
 
 //---------------------------------------------------------
