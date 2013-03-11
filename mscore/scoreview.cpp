@@ -4782,7 +4782,7 @@ void ScoreView::layoutChanged()
       }
 
 //---------------------------------------------------------
-//   ScoreView::figuredEndEdit
+//   ScoreView::figuredBassEndEdit
 //    derived from harmonyEndEdit()
 //    remove the FB if empty
 //---------------------------------------------------------
@@ -4792,14 +4792,14 @@ void ScoreView::figuredBassEndEdit()
       FiguredBass* fb = static_cast<FiguredBass*>(editObject);
 
       if (fb->isEmpty())
-            fb->parent()->remove(fb);
+            _score->undoRemoveElement(fb);
       }
 
 //---------------------------------------------------------
 //   ScoreView::figuredBassTab
-//    derived from chordTab() (for Harmony)
+//    derived from harmonyTab() (for Harmony)
 //    manages [Space] / [Shift][Space] keys, moving editing to FB of next/prev ChordRest
-//    and [Tab] / [Shift][Tab] keys, moving to FB of next/ptrev measure
+//    and [Tab] / [Shift][Tab] keys, moving to FB of next/prev measure
 //---------------------------------------------------------
 
 void ScoreView::figuredBassTab(bool bMeas, bool bBack)
@@ -4809,28 +4809,28 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       Segment* segm     = fb->segment();
       int track         = fb->track();
 
-      if (segm == 0) {
+      if (!segm) {
             qDebug("figuredBassTab: no segment");
             return;
             }
 
       // if moving to next/prev measure
 
-      if(bMeas) {
-            Measure * meas = segm->measure();
-            if(meas) {
-                  if(bBack)
+      if (bMeas) {
+            Measure* meas = segm->measure();
+            if (meas) {
+                  if (bBack)
                         meas = meas->prevMeasure();
                   else
                         meas = meas->nextMeasure();
                   }
-            if(!meas) {
+            if (!meas) {
                   qDebug("figuredBassTab: no prev/next measure");
                   return;
                   }
             // find initial ChordRest segment
             nextSegm = meas->findSegment(Segment::SegChordRest, meas->tick());
-            if (nextSegm == 0) {
+            if (!nextSegm) {
                   qDebug("figuredBassTab: no ChordRest segment at measure");
                   return;
                   }
@@ -4844,14 +4844,18 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             int minTrack = (track / VOICES ) * VOICES;
             int maxTrack = minTrack + (VOICES-1);
             int currTrack;
-            while(nextSegm) {                   // look for a ChordRest in the compatible track range
-                  for(currTrack = minTrack; currTrack <= maxTrack; currTrack++)
-                        if(nextSegm->element(currTrack) )
+
+            while (nextSegm) {                   // look for a ChordRest in the compatible track range
+                  foreach (const Element* e, nextSegm->annotations())
+                        if (e->type() == Element::FIGURED_BASS && e->track() >= minTrack && e->track() <= maxTrack)
+                              goto Found;
+                  for (currTrack = minTrack; currTrack <= maxTrack; currTrack++)
+                        if (nextSegm->element(currTrack) )
                               goto Found;
                   nextSegm = bBack ? nextSegm->prev1(Segment::SegChordRest) : nextSegm->next1(Segment::SegChordRest);
                   }
 Found:
-            if (nextSegm == 0) {
+            if (!nextSegm) {
                   qDebug("figuredBassTab: no prev/next segment");
                   return;
                   }
@@ -4861,9 +4865,9 @@ Found:
 
       _score->startCmd();
       bool bNew;
-      // add a (new) FB element, using chord duration as default suration
+      // add a (new) FB element, using chord duration as default duration
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
-      if(bNew)
+      if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
       startEdit(fbNew, -1);
@@ -4871,7 +4875,7 @@ Found:
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
-//      _score->end2();                         // used by lyricsTab() but not by chordTab(): needed or not?
+//      _score->end2();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
 //      _score->end1();                         //          "           "
       }
 
@@ -4885,19 +4889,30 @@ void ScoreView::figuredBassTicksTab(int ticks)
       FiguredBass* fb   = (FiguredBass*)editObject;
       int track         = fb->track();
       Segment* segm     = fb->segment();
-      if (segm == 0) {
+      if (!segm) {
             qDebug("figuredBassTicksTab: no segment");
             return;
             }
+      Measure* measure = segm->measure();
 
       int nextSegTick   = segm->tick() + ticks;
+
+      // find the measure containing the target tick
+      while (nextSegTick >= measure->tick() + measure->ticks()) {
+            measure = measure->nextMeasure();
+            if (!measure) {
+                  qDebug("figuredBassTicksTab: no next measure");
+                  return;
+                  }
+            }
+
       // look for a segment at this tick; if none, create one
       Segment * nextSegm = segm;
-      while(nextSegm && nextSegm->tick() < nextSegTick)
+      while (nextSegm && nextSegm->tick() < nextSegTick)
             nextSegm = nextSegm->next1(Segment::SegChordRest);
-      if (nextSegm == 0 || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-            nextSegm = new Segment(segm->measure(), Segment::SegChordRest, nextSegTick);
-            if (nextSegm == 0) {
+      if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
+            nextSegm = new Segment(measure, Segment::SegChordRest, nextSegTick);
+            if (!nextSegm) {
                   qDebug("figuredBassTicksTab: no next segment");
                   return;
                   }
@@ -4909,11 +4924,11 @@ void ScoreView::figuredBassTicksTab(int ticks)
       _score->startCmd();
       bool bNew;
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
-      if(bNew)
+      if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
-      mscore->changeState(mscoreState());
       startEdit(fbNew, -1);
+      mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
