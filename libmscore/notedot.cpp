@@ -42,7 +42,7 @@ void NoteDot::layout()
 
 void NoteDot::draw(QPainter* p) const
       {
-      if (!staff()->isTabStaff()) {
+      if (!staff()->isTabStaff() || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
             p->setPen(curColor());
             symbols[score()->symIdx()][dotSym].draw(p, magS());
             }

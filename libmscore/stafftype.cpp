@@ -681,13 +681,13 @@ QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
 
       // if stems are through staff, stem goes from fartest note string
       if (stemThrough())
-            y = (stemsDown() ? chord->upString() : chord->downString()) * _lineDistance.val();
+            y = (chord->up() ? chord->downString() : chord->upString()) * _lineDistance.val();
       else
       // if stems beside staff, position are fixed, but take into account delta
             y = (stemsDown() ? (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN :
                   STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP) + delta;
 
-      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+      return QPointF(chordStemPosX(chord), y);
       }
 
 //---------------------------------------------------------
@@ -699,7 +699,7 @@ QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
       {
       qreal y = ( stemsDown() ? chord->downString() : chord->upString() ) * _lineDistance.val();
 
-      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+      return QPointF(chordStemPosX(chord), y);
       }
 
 //---------------------------------------------------------
