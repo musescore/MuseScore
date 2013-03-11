@@ -65,7 +65,7 @@ void ColorLabel::setPixmap(QPixmap* pm)
 
 QSize ColorLabel::sizeHint() const
       {
-      return QSize(50, 20);
+      return QSize(30, 20);
       }
 
 //---------------------------------------------------------
