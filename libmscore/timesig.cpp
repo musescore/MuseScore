@@ -219,24 +219,22 @@ void TimeSig::layout1()
       {
       qreal _spatium = spatium();
 
-      setbbox(QRectF());                 // prepare for an empty time signature
+      setbbox(QRectF());                  // prepare for an empty time signature
       pz = QPointF();
       pn = QPointF();
 
-      qreal lineDist    = 1.0;            // assume dimensions a standard staff
-      int    numOfLines = 5;
-      TimeSigType st    = timeSigType();
+      qreal lineDist      = 1.0;          // assume dimensions a standard staff
+      int   numOfLines    = 5;
+      TimeSigType sigType = timeSigType();
+      Staff* _staff       = staff();
 
-      if (staff()) {
-            StaffType* staffType = staff()->staffType();
-            numOfLines  = staff()->staffType()->lines();
-            lineDist    = staff()->staffType()->lineDistance().val();
+      if (_staff) {                       // if some staff, update to real staff values
+            numOfLines  = _staff->lines();
+            lineDist    = _staff->lineDistance();
 
             // if tablature, but without time sig, set empty symbol
-            if ((staffType->group() == TAB_STAFF) &&
-               !(static_cast<StaffTypeTablature*>(staffType)->genTimesig())) {
-                  st = TSIG_NORMAL;
-                  }
+            if (_staff->isTabStaff() && !_staff->staffType()->genTimesig() )
+                  sigType = TSIG_NORMAL;
             }
 
       // if some symbol
@@ -247,14 +245,14 @@ void TimeSig::layout1()
       qreal mag  = magS();
 
       // C and Ccut are placed at the middle of the staff: use yoff directly
-      if (st ==  TSIG_FOUR_FOUR) {
+      if (sigType ==  TSIG_FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
             Sym& sym = symbols[score()->symIdx()][fourfourmeterSym];
             setbbox(sym.bbox(mag).translated(pz));
             _numeratorString = sym.toString();
             _denominatorString.clear();
             }
-      else if (st == TSIG_ALLA_BREVE) {
+      else if (sigType == TSIG_ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             Sym& sym = symbols[score()->symIdx()][allabreveSym];
             setbbox(sym.bbox(mag).translated(pz));
@@ -267,27 +265,27 @@ void TimeSig::layout1()
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
             QFontMetricsF fm(fontId2font(symIdx2fontId(score()->symIdx())));
-            QRectF rz = fm.tightBoundingRect(_numeratorString);   // get 'tight' bounding boxes for strings
-            QRectF rn = fm.tightBoundingRect(_denominatorString);
+            QRectF numRect = fm.tightBoundingRect(_numeratorString);          // get 'tight' bounding boxes for strings
+            QRectF denRect = fm.tightBoundingRect(_denominatorString);
 
             // scale bounding boxes to mag
-            qreal spatium2 = _spatium * 2.0;
-            rz = QRectF(rz.x() * mag, -spatium2, rz.width() * mag, spatium2);
-            rn = QRectF(rn.x() * mag, -spatium2, rn.width() * mag, spatium2);
+            qreal spatium2 = _spatium * 2.0;          // num. and den. occupy 2 spaces vertically
+            numRect = QRectF(numRect.x() * mag, -spatium2, numRect.width() * mag, spatium2);
+            denRect = QRectF(denRect.x() * mag, -spatium2, denRect.width() * mag, spatium2);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
-            // number of lines even:   0.5 (strings are moved up/down to leave 1 line dist. between them)
+            // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
-            qreal displ = (numOfLines & 1) ? 0.0 : (0.5 * lineDist * _spatium);
+            qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
             pz = QPointF(0.0, yoff - displ);
             // denom. horiz. posit.: centred around centre of numerator
             // vert. position:       base line is lowered by displ and by the whole height of a digit
-            pn = QPointF((rz.width() - rn.width())*.5, yoff + displ + spatium2);
+            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + spatium2);
 
-            setbbox(rz.translated(pz));   // translate bounding boxes to actual string positions
-            addbbox(rn.translated(pn));
+            setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
+            addbbox(denRect.translated(pn));
             }
       qreal im = (MScore::DPI * SPATIUM20) / _spatium;
 
