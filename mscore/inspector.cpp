@@ -76,6 +76,7 @@ Inspector::Inspector(QWidget* parent)
       setObjectName("inspector");
       setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
       sa = new QScrollArea;
+      sa->setWidgetResizable(true);
       setWidget(sa);
 
       _inspectorEdit = false;
@@ -214,7 +215,8 @@ void Inspector::setElements(const QList<Element*>& l)
                         }
                   }
             sa->setWidget(ie);
-            setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
+            // setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
+            setMinimumWidth(ie->sizeHint().width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             }
       _element = e;
       ie->setElement();

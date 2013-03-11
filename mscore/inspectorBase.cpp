@@ -32,6 +32,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout    = new QVBoxLayout;
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 0, 0, 0);
+      _layout->addStretch(100);
       setLayout(_layout);
       }
 
@@ -343,7 +344,7 @@ void InspectorBase::mapSignals()
 QWidget* InspectorBase::addWidget()
       {
       QWidget* w = new QWidget;
-      _layout->addWidget(w);
-      _layout->addSpacing(20);
+      _layout->insertWidget(_layout->count()-1, w);
+      _layout->insertSpacing(_layout->count()-1, 20);
       return w;
       }
