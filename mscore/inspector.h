@@ -30,6 +30,7 @@
 #include "ui_inspector_volta.h"
 #include "ui_inspector_barline.h"
 #include "ui_inspector_tuplet.h"
+#include "ui_inspector_accidental.h"
 
 class Element;
 class Note;
@@ -170,6 +171,20 @@ class InspectorTuplet : public InspectorBase {
 
    public:
       InspectorTuplet(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorAccidental
+//---------------------------------------------------------
+
+class InspectorAccidental : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorAccidental a;
+
+   public:
+      InspectorAccidental(QWidget* parent);
       };
 
 //---------------------------------------------------------

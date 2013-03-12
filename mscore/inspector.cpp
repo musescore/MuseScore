@@ -164,6 +164,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::NOTE:
                               ie = new InspectorNote(this);
                               break;
+                        case Element::ACCIDENTAL:
+                              ie = new InspectorAccidental(this);
+                              break;
                         case Element::REST:
                               ie = new InspectorRest(this);
                               break;
@@ -407,6 +410,26 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { P_DIRECTION,    0, 0, t.direction,   t.resetDirection   },
             { P_NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
             { P_BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorAccidental
+//---------------------------------------------------------
+
+InspectorAccidental::InspectorAccidental(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      a.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_SMALL,        0, 0, a.small,       a.resetSmall       }
             };
       mapSignals();
       }

@@ -61,7 +61,7 @@ QT4_WRAP_UI (ui_headers
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
-      inspector_tuplet.ui
+      inspector_tuplet.ui inspector_accidental.ui
       ${SCRIPT_UI}
       )
 
