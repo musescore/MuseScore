@@ -33,7 +33,7 @@
 
 #define INSTALL_NAME      "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX        "${CMAKE_INSTALL_PREFIX}"
-#define VERSION           "${Mscore_VERSION_FULL}"
+#define VERSION           "${MUSESCORE_VERSION_FULL}"
 
 #cmakedefine AEOLUS
 #cmakedefine OMR
