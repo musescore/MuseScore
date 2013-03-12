@@ -4,8 +4,8 @@
 
 set (CMAKE_SYSTEM_NAME "Windows")
 
-set (CROSS C:/MinGW)
-set (CROSSQT C:/Qt/4.8.4)
+set (CROSS C:/MinGW4.7.2)
+set (CROSSQT C:/Qt/Qt32-4.8.4)
 
 set (CMAKE_C_COMPILER     ${CROSS}/bin/gcc.exe)
 set (CMAKE_CXX_COMPILER   ${CROSS}/bin/g++.exe)
@@ -26,7 +26,6 @@ set (QT_LIBRARY_DIR           ${CROSSQT}/lib)
 
 set (QT_MOC_EXECUTABLE        "${CROSSQT}/bin/moc.exe")
 set (QT_UIC_EXECUTABLE        "${CROSSQT}/bin/uic.exe")
-## set (QT_UIC_EXECUTABLE        "/usr/bin/uic-qt4")
 set (QT_RCC_EXECUTABLE        "${CROSSQT}/bin/rcc")
 set (QT_QTCORE_LIBRARY        "mops")
 
