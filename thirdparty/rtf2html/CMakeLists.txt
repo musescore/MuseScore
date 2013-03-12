@@ -37,3 +37,5 @@ set_target_properties( rtf2html
    PROPERTIES COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h"
    )
 
+ADD_DEPENDENCIES(rtf2html mops1)
+
