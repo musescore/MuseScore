@@ -23,7 +23,6 @@ struct PropertyData {
       P_ID id;
       bool link;              // change for linked elements
       const char* name;       // xml name of property
-      bool spatium;           // show real as spatium value
       P_TYPE type;
       };
 
@@ -93,15 +92,13 @@ static const PropertyData propertyList[] = {
       { P_SCALE,               false, 0,                 T_SCALE  },
       { P_LOCK_ASPECT_RATIO,   false, "lockAspectRatio", T_BOOL },
       { P_SIZE_IS_SPATIUM,     false, "sizeIsSpatium",   T_BOOL },
-
       { P_TEXT_STYLE,          false, "textStyle",       T_INT  },
       { P_TEXT,                false, 0,               T_STRING },
       { P_HTML_TEXT,           false, 0,               T_STRING },
-
       { P_USER_MODIFIED,       false, 0,               T_BOOL   },
+
       { P_BEAM_POS,            false, 0,               T_POINT  },
       { P_BEAM_MODE,           true, "BeamMode",       T_BEAM_MODE  },
-
       { P_USER_LEN,            false, "",              T_REAL   },
       { P_SPACE,               false, "space",         T_REAL   },
       { P_TEMPO,               false, "tempo",         T_REAL   },
@@ -110,9 +107,9 @@ static const PropertyData propertyList[] = {
       { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
       { P_DENOMINATOR_STRING,  false, "textD",         T_STRING },
       { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
+
       { P_BREAK_HINT,          false, "",              T_BOOL   },
       { P_FBPREFIX,            false, "prefix",        T_INT    },
-
       { P_FBDIGIT,             false, "digit",         T_INT    },
       { P_FBSUFFIX,            false, "suffix",        T_INT    },
       { P_FBCONTINUATIONLINE,  false, "continuationLine", T_INT },
@@ -121,25 +118,23 @@ static const PropertyData propertyList[] = {
       { P_FBPARENTHESIS3,      false, "",              T_INT    },
       { P_FBPARENTHESIS4,      false, "",              T_INT    },
       { P_FBPARENTHESIS5,      false, "",              T_INT    },
+
       { P_VOLTA_TYPE,          false, "",              T_INT    },
       { P_OTTAVA_TYPE,         false, "",              T_INT    },
-
       { P_TRILL_TYPE,          false, "",              T_INT    },
       { P_HAIRPIN_TYPE,        false, "",              T_INT    },
       { P_VELO_CHANGE,         false, "",              T_INT    },
       { P_DYNAMIC_RANGE,       false, "dynType",       T_INT    },
       { P_PLACEMENT,           false, "placement",     T_PLACEMENT    },
       { P_VELOCITY,            false, "velocity",      T_INT    },
-
       { P_JUMP_TO,             false, "jumpTo",        T_STRING },
       { P_PLAY_UNTIL,          false, "playUntil",     T_STRING },
+
       { P_CONTINUE_AT,         false, "continueAt",    T_STRING },
       { P_LABEL,               false, "label",         T_STRING },
       { P_MARKER_TYPE,         false, 0,               T_INT    },
-
       { P_ARP_USER_LEN1,       false, 0,               T_REAL   },
       { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
-
       { P_REPEAT_FLAGS,        false, 0,               T_INT    },
       { P_END_BARLINE_TYPE,    false, 0,               T_INT    },
       { P_END_BARLINE_VISIBLE, false, 0,               T_BOOL   },
