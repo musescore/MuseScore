@@ -1,5 +1,6 @@
 macro( precompiled_header includes header_name )
-    if( ${CMAKE_COMPILER_IS_GNUCXX} AND NOT APPLE )
+    if( ${CMAKE_COMPILER_IS_GNUCXX})
+        message(STATUS "precompiled header generation")
         # Get the compiler flags for this build type
         string( TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" flags_for_build_name )
         set( compile_flags ${${flags_for_build_name}} )
@@ -27,14 +28,6 @@ macro( precompiled_header includes header_name )
 
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )
-
-        add_custom_command(
-            OUTPUT ${PROJECT_BINARY_DIR}/${header_name}.h
-            COMMAND ${CMAKE_COMMAND}
-            ARGS -E copy ${PROJECT_SOURCE_DIR}/${header_name}.h ${PROJECT_BINARY_DIR}/${header_name}.h
-            DEPENDS ${PROJECT_SOURCE_DIR}/${header_name}.h
-            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-            )
 
         add_custom_command(
          OUTPUT ${PROJECT_BINARY_DIR}/${header_name}.h.gch

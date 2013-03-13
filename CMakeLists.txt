@@ -68,7 +68,7 @@ if (APPLE)
       # of MacOSX.
       # set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
 
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)      #min version required
+      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
 
       find_library(AudioToolboxFW        NAMES AudioToolbox)
@@ -90,6 +90,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
                   " >= 4.6 required")
       endif()
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+
+if (APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -stdlib=libc++ -g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -stdlib=libc++ -O2 -DNDEBUG")
+else (APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
+endif(APPLE)
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
@@ -276,12 +284,19 @@ if (NOT MINGW AND NOT APPLE)
     install( FILES build/mscore.desktop DESTINATION share/applications)
 endif (NOT MINGW AND NOT APPLE)
 
-set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
-
 #
 #  create precompiled header file
 #
+
+# all.h is expected in PROJECT_BINARY_DIR by subdirs
+add_custom_command(
+    OUTPUT ${PROJECT_BINARY_DIR}/all.h
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+    DEPENDS ${PROJECT_SOURCE_DIR}/all.h
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    )
+
 set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
 precompiled_header(QT_INCLUDES all)
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
