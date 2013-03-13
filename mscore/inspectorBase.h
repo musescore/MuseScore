@@ -42,6 +42,7 @@ class InspectorBase : public QWidget {
       QSignalMapper* valueMapper;
 
       bool dirty() const;
+      void checkDifferentValues(const InspectorItem&);
 
    protected slots:
       virtual void valueChanged(int idx);
@@ -52,7 +53,7 @@ class InspectorBase : public QWidget {
       QVBoxLayout* _layout;
       Inspector* inspector;
 
-      virtual void setValue(const InspectorItem&, const QVariant&);
+      virtual void setValue(const InspectorItem&, QVariant);
       QVariant getValue(const InspectorItem&) const;
       bool isDefault(const InspectorItem&);
       void mapSignals();

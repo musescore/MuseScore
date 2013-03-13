@@ -462,7 +462,8 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case T_BOOL:
             case T_SUBTYPE:
             case T_INT:
-            case T_SREAL:
+            case T_SPATIUM:
+            case T_SP_REAL:
             case T_REAL:
             case T_SCALE:
             case T_POINT:
@@ -662,7 +663,7 @@ QString Xml::xmlString(const QString& s)
                   case 0x1C:
                   case 0x1D:
                   case 0x1E:
-                  case 0x1F:       
+                  case 0x1F:
                         break;
                   default:
                         escaped += QChar(c);
