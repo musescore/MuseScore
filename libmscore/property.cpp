@@ -23,6 +23,7 @@ struct PropertyData {
       P_ID id;
       bool link;              // change for linked elements
       const char* name;       // xml name of property
+      bool spatium;           // show real as spatium value
       P_TYPE type;
       };
 
@@ -50,8 +51,8 @@ static const PropertyData propertyList[] = {
       { P_STEM_DIRECTION,      true,  "StemDirection", T_DIRECTION },
       { P_NO_STEM,             false, "",              T_INT },
       { P_SLUR_DIRECTION,      false, "",              T_INT },
-      { P_LEADING_SPACE,       false, "",              T_INT },
-      { P_TRAILING_SPACE,      false, "",              T_INT },
+      { P_LEADING_SPACE,       false, "",              T_SPATIUM },
+      { P_TRAILING_SPACE,      false, "",              T_SPATIUM },
 
       { P_DISTRIBUTE,          false, "distribute",    T_BOOL },
       { P_MIRROR_HEAD,         false, "mirror",        T_DIRECTION_H },
@@ -79,8 +80,8 @@ static const PropertyData propertyList[] = {
       { P_GROW_RIGHT,          false, "growRight",     T_REAL  },
       { P_BOX_HEIGHT,          false, "height",        T_REAL  },
       { P_BOX_WIDTH,           false, "width",         T_REAL  },
-      { P_TOP_GAP,             false, "topGap",        T_SREAL },
-      { P_BOTTOM_GAP,          false, "bottomGap",     T_SREAL },
+      { P_TOP_GAP,             false, "topGap",        T_REAL },
+      { P_BOTTOM_GAP,          false, "bottomGap",     T_REAL },
       { P_LEFT_MARGIN,         false, "leftMargin",    T_REAL  },
       { P_RIGHT_MARGIN,        false, "rightMargin",   T_REAL  },
       { P_TOP_MARGIN,          false, "topMargin",     T_REAL  },
@@ -192,7 +193,8 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_INT:
                   return QVariant(e.readInt());
             case T_REAL:
-            case T_SREAL:
+            case T_SPATIUM:
+            case T_SP_REAL:
                   return QVariant(e.readDouble());
             case T_FRACTION:
                   return QVariant::fromValue(e.readFraction());

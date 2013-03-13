@@ -234,7 +234,6 @@ class Inspector : public QDockWidget {
       void setElements(const QList<Element*>&);
       Element* element() const            { return _element;       }
       const QList<Element*>& el() const   { return _el;            }
-      bool inspectorEdit() const          { return _inspectorEdit; }
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 

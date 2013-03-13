@@ -122,11 +122,9 @@ void Inspector::setElement(Element* e)
 
 void Inspector::setElements(const QList<Element*>& l)
       {
-      if (_inspectorEdit) {          // if within an inspector-originated edit
-            _inspectorEdit = false;  // reset flag
-            if (_el == l)            // if element is not changing...
-                  return;            // ...do nothing
-            }
+      if (_inspectorEdit)     // if within an inspector-originated edit
+            return;
+
       Element* e = l.isEmpty() ? 0 : l[0];
       if (e == 0 || _element == 0 || (_el != l)) {
             _el = l;

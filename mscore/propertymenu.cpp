@@ -279,12 +279,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Slur Properties..."))->setData("slur-props");
             }
       else if (e->type() == Element::REST) {
-            Rest* rest = static_cast<Rest*>(e);
             genPropertyMenu1(e, popup);
             }
       else if (e->type() == Element::NOTE) {
-            Note* note = static_cast<Note*>(e);
-
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
