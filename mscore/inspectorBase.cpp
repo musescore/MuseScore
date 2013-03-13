@@ -45,26 +45,31 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
       {
       QWidget* w = ii.w;
 
+      QVariant v;
       if (qobject_cast<QDoubleSpinBox*>(w))
-            return w->property("value");
+            v = w->property("value");
       else if (qobject_cast<QSpinBox*>(w))
-            return w->property("value");
+            v = w->property("value");
       else if (qobject_cast<QComboBox*>(w)) {
             QComboBox* cb = qobject_cast<QComboBox*>(w);
             int val = cb->currentIndex();
             if (cb->itemData(val).isValid())
                   val = cb->itemData(val).toInt();
-            return val;
+            v = val;
             }
       else if (qobject_cast<QCheckBox*>(w))
-            return w->property("checked");
+            v = w->property("checked");
       else if (qobject_cast<QLineEdit*>(w))
-            return w->property("text");
+            v =  w->property("text");
       else if (qobject_cast<Awl::ColorLabel*>(w))
-            return static_cast<Awl::ColorLabel*>(w)->color();
+            v = static_cast<Awl::ColorLabel*>(w)->color();
       else
             qFatal("not supported widget %s", w->metaObject()->className());
-      return QVariant();
+      P_ID id  = ii.t;
+      P_TYPE t = propertyType(id);
+      if (t == T_POINT)
+            v = v.toDouble() * inspector->element()->score()->spatium();
+      return v;
       }
 
 //---------------------------------------------------------
@@ -72,9 +77,14 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
 //    set gui element value
 //---------------------------------------------------------
 
-void InspectorBase::setValue(const InspectorItem& ii, const QVariant& val)
+void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       {
       QWidget* w = ii.w;
+
+      P_ID id  = ii.t;
+      P_TYPE t = propertyType(id);
+      if (t == T_POINT)
+            val = val.toDouble() / inspector->element()->score()->spatium();
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
@@ -181,37 +191,48 @@ void InspectorBase::setElement()
             w->blockSignals(true);
             setValue(ii, val);
             w->blockSignals(false);
-
-            bool valuesAreDifferent = false;
-            if (inspector->el().size() > 1) {
-                  foreach(Element* e, inspector->el()) {
-                        for (int k = 0; k < ii.parent; ++k)
-                              e = e->parent();
-                        if (pt == T_SIZE || pt == T_SCALE) {
-                              QSizeF sz = e->getProperty(id).toSizeF();
-                              if (ii.sv == 0)
-                                    valuesAreDifferent = sz.width() != val.toDouble();
-                              else
-                                    valuesAreDifferent = sz.height() != val.toDouble();
-                              }
-                        else if (pt == T_POINT) {
-                              QPointF sz = e->getProperty(id).toPointF();
-                              if (ii.sv == 0)
-                                    valuesAreDifferent = sz.x() != val.toDouble();
-                              else
-                                    valuesAreDifferent = sz.y() != val.toDouble();
-                              }
-                        else
-                              valuesAreDifferent = e->getProperty(id) != val;
-                        if (valuesAreDifferent)
-                              break;
-                        }
-                  }
-            w->setEnabled(!valuesAreDifferent);
-
-            if (ii.r)
-                  ii.r->setEnabled(!isDefault(ii) || valuesAreDifferent);
+            checkDifferentValues(ii);
             }
+      }
+
+//---------------------------------------------------------
+//   checkDifferentValues
+//---------------------------------------------------------
+
+void InspectorBase::checkDifferentValues(const InspectorItem& ii)
+      {
+      bool valuesAreDifferent = false;
+      if (inspector->el().size() > 1) {
+            P_ID id      = ii.t;
+            P_TYPE pt    = propertyType(id);
+            QVariant val = getValue(ii);
+
+            foreach(Element* e, inspector->el()) {
+                  for (int k = 0; k < ii.parent; ++k)
+                        e = e->parent();
+                  if (pt == T_SIZE || pt == T_SCALE) {
+                        QSizeF sz = e->getProperty(id).toSizeF();
+                        if (ii.sv == 0)
+                              valuesAreDifferent = sz.width() != val.toDouble();
+                        else
+                              valuesAreDifferent = sz.height() != val.toDouble();
+                        }
+                  else if (pt == T_POINT) {
+                        QPointF sz = e->getProperty(id).toPointF();
+                        if (ii.sv == 0)
+                              valuesAreDifferent = sz.x() != val.toDouble();
+                        else
+                              valuesAreDifferent = sz.y() != val.toDouble();
+                        }
+                  else
+                        valuesAreDifferent = e->getProperty(id) != val;
+                  if (valuesAreDifferent)
+                        break;
+                  }
+            }
+      ii.w->setEnabled(!valuesAreDifferent);
+      if (ii.r)
+            ii.r->setEnabled(!isDefault(ii) || valuesAreDifferent);
       }
 
 //---------------------------------------------------------
@@ -221,9 +242,6 @@ void InspectorBase::setElement()
 void InspectorBase::valueChanged(int idx)
       {
       const InspectorItem& ii = iList[idx];
-      if (ii.r)
-            ii.r->setEnabled(!isDefault(ii));
-
       P_ID id       = ii.t;
       P_TYPE pt     = propertyType(id);
       QVariant val2 = getValue(ii);
@@ -264,9 +282,11 @@ void InspectorBase::valueChanged(int idx)
                         score->undoChangeProperty(e, id, val2);
                   }
             }
-      score->setLayoutAll(true);    // ?
+      inspector->setInspectorEdit(true);
+      checkDifferentValues(ii);
       score->endCmd();
       mscore->endCmd();
+      inspector->setInspectorEdit(false);
       }
 
 //---------------------------------------------------------
@@ -283,6 +303,7 @@ void InspectorBase::resetClicked(int i)
       QVariant def = e->propertyDefault(id);
       QWidget* w   = ii.w;
 
+      w->blockSignals(true);
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
       else if (qobject_cast<QSpinBox*>(w))
@@ -293,12 +314,13 @@ void InspectorBase::resetClicked(int i)
             static_cast<QCheckBox*>(w)->setChecked(def.toBool());
       else if (qobject_cast<QLineEdit*>(w))
             static_cast<QLineEdit*>(w)->setText(def.toString());
-      else if (qobject_cast<Awl::ColorLabel*>(w)) {
+      else if (qobject_cast<Awl::ColorLabel*>(w))
             static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
-            valueChanged(i);
-            }
       else
             qFatal("not supported widget %s", w->metaObject()->className());
+      w->blockSignals(false);
+
+      valueChanged(i);
       }
 
 //---------------------------------------------------------
