@@ -62,9 +62,6 @@ class SigEvent {
 //   SigList
 //---------------------------------------------------------
 
-typedef std::map<const int, SigEvent>::iterator iSigEvent;
-typedef std::map<const int, SigEvent>::const_iterator ciSigEvent;
-
 class TimeSigMap : public std::map<int, SigEvent > {
       void normalize();
 

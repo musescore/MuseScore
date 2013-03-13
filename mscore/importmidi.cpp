@@ -751,7 +751,7 @@ void convertMidi(Score* score, MidiFile* mf)
       mf->process1();                    // merge noteOn/noteOff into NoteEvent etc.
       mf->changeDivision(MScore::division);
 
-/*      for (iSigEvent is = mf->siglist().begin(); is != mf->siglist().end(); ++is) {
+/*      for (auto is = mf->siglist().begin(); is != mf->siglist().end(); ++is) {
             qDebug("   sig at %d\n", is->first);
             }
   */
@@ -988,7 +988,7 @@ void convertMidi(Score* score, MidiFile* mf)
                   }
             }
 
-      for (iSigEvent is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
+      for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
             SigEvent se = is->second;
             int tick    = is->first;
             Measure* m  = score->tick2measure(tick);
