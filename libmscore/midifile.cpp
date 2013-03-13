@@ -1087,7 +1087,7 @@ void MidiFile::changeDivision(int newDivision)
             t->changeDivision(newDivision);
 
       TimeSigMap sl;
-      for (iSigEvent is = _siglist.begin(); is != _siglist.end(); ++is) {
+      for (auto is = _siglist.begin(); is != _siglist.end(); ++is) {
             int tick    = (is->first * newDivision + _division/2) / _division;
             SigEvent se = is->second;
             sl.add(tick, se);
