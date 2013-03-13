@@ -93,10 +93,10 @@ void ExportMidi::writeHeader()
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
 
-            iSigEvent bs = sigmap->lower_bound(startTick);
-            iSigEvent es = sigmap->lower_bound(endTick);
+            auto bs = sigmap->lower_bound(startTick);
+            auto es = sigmap->lower_bound(endTick);
 
-            for (iSigEvent is = bs; is != es; ++is) {
+            for (auto is = bs; is != es; ++is) {
                   SigEvent se   = is->second;
                   unsigned char* data = new unsigned char[4];
                   Fraction ts(se.timesig());
