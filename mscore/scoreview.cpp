@@ -4320,8 +4320,8 @@ Found:
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4422,8 +4422,8 @@ void ScoreView::harmonyBeatsTab(bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4494,8 +4494,8 @@ void ScoreView::harmonyTicksTab(int ticks)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------

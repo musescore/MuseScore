@@ -45,6 +45,7 @@
 #include "undo.h"
 #include "layout.h"
 #include "lyrics.h"
+#include "harmony.h"
 
 //---------------------------------------------------------
 //   rebuildBspTree
@@ -2657,6 +2658,19 @@ qreal Score::computeMinWidth(Segment* fs) const
                               }
                         if (lyrics)
                               space.max(Space(llw, rrw));
+
+                        // add spacing for Harmony. Currently just within segment.
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() != Element::HARMONY)
+                                    continue;
+                              Harmony* h = static_cast<Harmony*>(e);
+                              h->layout();
+                              QRectF b(h->bbox().translated(h->pos()));
+                              // allow chord at the beginning of a measure to be dragged left
+                              space.max(Space(s->rtick()?-b.left():0.0,b.right()));
+                              }
+                        //end of spacing for Harmony
+
                         }
                   else {
                         Element* e = s->element(track);
