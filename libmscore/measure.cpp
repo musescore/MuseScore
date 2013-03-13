@@ -2171,19 +2171,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(ks);
                   staff->setKey(tick, ks->keySigEvent());
                   }
-            else if (tag == "Lyrics") {                           // obsolete
-e.skipCurrentElement();
-#if 0
-                  Lyrics* lyrics = new Lyrics(score());
-                  lyrics->setTrack(e.track());
-                  lyrics->read(e);
+            else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
+                  Element* element = Element::name2Element(tag, score());
+                  element->setTrack(e.track());
+                  element->read(e);
                   segment       = getSegment(Segment::SegChordRest, e.tick());
-                  ChordRest* cr = static_cast<ChordRest*>(segment->element(lyrics->track()));
+                  ChordRest* cr = static_cast<ChordRest*>(segment->element(e.track()));
                   if (!cr)
                         qDebug("Internal Error: no Chord/Rest for lyrics");
                   else
-                        cr->add(lyrics);
-#endif
+                        cr->add(element);
                   }
             else if (tag == "Text") {
                   Text* t = new Text(score());
