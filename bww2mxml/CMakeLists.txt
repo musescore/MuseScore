@@ -35,7 +35,7 @@ add_library(bww STATIC
    writer.cpp
    )
 
-if (NOT MINGW)
+if (NOT MINGW AND NOT APPLE)
    add_executable(bww2mxml
       ${INCS}
       lexer.cpp
@@ -57,7 +57,7 @@ if (NOT MINGW)
       )
    ADD_DEPENDENCIES(bww2mxml mops1)
    ADD_DEPENDENCIES(bww2mxml mops2)
-endif (NOT MINGW)
+endif (NOT MINGW AND NOT APPLE)
 
 ADD_DEPENDENCIES(bww mops1)
 ADD_DEPENDENCIES(bww mops2)

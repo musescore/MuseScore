@@ -49,7 +49,7 @@ class InspectorBase : public QWidget {
       void resetClicked(int);
 
    protected:
-      QVector<InspectorItem> iList;
+      std::vector<InspectorItem> iList;
       QVBoxLayout* _layout;
       Inspector* inspector;
 
