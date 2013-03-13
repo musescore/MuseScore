@@ -390,6 +390,7 @@ void Harmony::endEdit()
       Text::endEdit();
       setHarmony(text());
       layout();
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

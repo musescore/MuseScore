@@ -3077,6 +3077,18 @@ void Measure::layoutX(qreal stretch)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
                               }
+
+                        // add spacing for Harmony. Currently just within segment.
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() != Element::HARMONY)
+                                    continue;
+                              Harmony* h = static_cast<Harmony*>(e);
+                              QRectF b(h->bbox().translated(h->pos()));
+                              // allow chord at the beginning of a measure to be dragged left
+                              space.max(Space(s->rtick()?-b.left():0.0,b.right()));
+                              }
+                        //end of spacing for Harmony
+
                         }
                   else {
                         Element* e = s->element(track);
