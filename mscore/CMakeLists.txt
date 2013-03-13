@@ -378,14 +378,21 @@ else (MINGW)
    endif (APPLE)
 
    # gold does not use indirect shared libraries for symbol resolution, Linux only
-   if (NOT MINGW AND NOT APPLE)
+   if (NOT APPLE)
       if(USE_JACK)
          target_link_libraries(mscore dl)
       endif(USE_JACK)
       target_link_libraries(mscore rt)
-   endif (NOT MINGW AND NOT APPLE)
+   endif (NOT APPLE)
 
    if (APPLE)
+      set_target_properties(mscore
+        PROPERTIES
+           LINK_FLAGS "-stdlib=libc++"
+           #XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${PROJECT_BINARY_DIR}/all.h"
+           #XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES"
+        )
+
      install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
