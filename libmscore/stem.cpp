@@ -325,3 +325,18 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+//---------------------------------------------------------
+//   hookPos
+//    in chord coordinates
+//---------------------------------------------------------
+
+QPointF Stem::hookPos() const
+      {
+      QPointF p(pos() + line.p2());
+
+      qreal xoff = lineWidth() * .5;
+      p.rx() += xoff;
+
+      return p;
+      }
+
