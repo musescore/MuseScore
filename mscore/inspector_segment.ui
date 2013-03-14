@@ -64,7 +64,7 @@
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="leadingSpace">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -86,7 +86,7 @@
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="trailingSpace">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -127,7 +127,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>
@@ -147,7 +147,7 @@
        <property name="iconSize">
         <size>
          <width>14</width>
-         <height>14</height>
+         <height>10</height>
         </size>
        </property>
       </widget>

@@ -189,6 +189,7 @@ class Segment : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
