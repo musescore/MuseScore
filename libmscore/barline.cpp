@@ -374,9 +374,9 @@ void BarLine::read(XmlReader& e)
             else if (tag == "customSubtype")
                   _customSubtype = e.readInt();
             else if (tag == "span") {
-                  _span       = e.readInt();
                   _spanFrom   = e.intAttribute("from", _spanFrom);
                   _spanTo     = e.intAttribute("to", _spanTo);
+                  _span       = e.readInt();
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
                   if (staff() && (_span != staff()->barLineSpan()
                      || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
