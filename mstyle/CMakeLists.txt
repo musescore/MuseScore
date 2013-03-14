@@ -64,8 +64,10 @@ add_library (
 set_target_properties (
       mstyle
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(mstyle all)
 
 ADD_DEPENDENCIES(mstyle mops1)
 ADD_DEPENDENCIES(mstyle mops2)

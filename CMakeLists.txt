@@ -297,7 +297,6 @@ add_custom_command(
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 
-set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
 precompiled_header(QT_INCLUDES all)
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
