@@ -42,8 +42,10 @@ add_library (
 set_target_properties (
       msynth
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(msynth all)
 
 ADD_DEPENDENCIES(msynth mops1)
 ADD_DEPENDENCIES(msynth mops2)

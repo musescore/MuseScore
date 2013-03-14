@@ -44,8 +44,10 @@ add_library (fluid STATIC
 set_target_properties (
       fluid
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(fluid all)
 
 ADD_DEPENDENCIES(fluid mops1)
 ADD_DEPENDENCIES(fluid mops2)

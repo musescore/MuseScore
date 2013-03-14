@@ -38,8 +38,10 @@ add_library (aeolus STATIC
 set_target_properties (
       aeolus
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(aeolus all)
 
 ADD_DEPENDENCIES(aeolus mops1)
 ADD_DEPENDENCIES(aeolus mops2)
