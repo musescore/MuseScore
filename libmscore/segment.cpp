@@ -822,6 +822,20 @@ QVariant Segment::getProperty(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Segment::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_LEADING_SPACE:   return 0.0;
+            case P_TRAILING_SPACE:  return 0.0;
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
