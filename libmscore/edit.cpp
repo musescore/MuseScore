@@ -1233,12 +1233,29 @@ void Score::cmdDeleteSelectedMeasures()
       else
             ie = lastMeasure();
       int endIdx        = measureIdx(ie);
+      Measure* mBeforeSel = is->prevMeasure();
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
       if (ie->type() == Element::MEASURE) {
             Measure* iem = static_cast<Measure*>(ie);
             createEndBar = (iem == lastMeasure()) && (iem->endBarLineType() == END_BAR);
+            }
+
+      // get the last deleted timesig in order to restore after deletion
+      TimeSig* lastDeletedSig = 0;
+      for (MeasureBase* mb = ie;; mb = mb->prev()) {
+            if (mb->type() == Element::MEASURE) {
+                  Measure* m = static_cast<Measure*>(mb);
+                  Segment* sts = m->findSegment(Segment::SegTimeSig, m->tick());
+                  if (sts) {
+                        lastDeletedSig = static_cast<TimeSig*>(sts->element(0));
+                        break;
+                        }
+                  }
+
+            if (mb == is)
+                  break;
             }
 
       QList<Score*> scores = scoreList();
@@ -1266,6 +1283,29 @@ void Score::cmdDeleteSelectedMeasures()
                         }
                   }
             }
+
+      // insert correct timesig after deletion
+      Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+      if (mAfterSel && lastDeletedSig) {
+            bool changed = true;
+            if (mBeforeSel) {
+                  if (mBeforeSel->timesig() == mAfterSel->timesig()) {
+                        changed = false;
+                        }
+                  }
+            Segment* s = mAfterSel->findSegment(Segment::SegTimeSig, mAfterSel->tick());
+            if (!s && changed) {
+                  Segment* ns = mAfterSel->undoGetSegment(Segment::SegTimeSig, mAfterSel->tick());
+                  for (int staffIdx = 0; staffIdx < nstaves(); staffIdx++) {
+                        TimeSig* nts = new TimeSig(this);
+                        nts->setTrack(staffIdx * VOICES);
+                        nts->setParent(ns);
+                        nts->setSig(lastDeletedSig->sig(), lastDeletedSig->subtype());
+                        undoAddElement(nts);
+                        }
+                  }
+            }
+
       select(0, SELECT_SINGLE, 0);
       _is.setSegment(0);        // invalidate position
       }
