@@ -105,6 +105,7 @@ Harmony::Harmony(Score* s)
    : Text(s)
       {
       setTextStyle(s->textStyle(TEXT_STYLE_HARMONY));
+      setUnstyled();
 
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
