@@ -37,8 +37,10 @@ add_library (
 set_target_properties (
   qtsingleapp
   PROPERTIES
-  COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+  COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
   )
+
+xcode_pch(qtsingleapp all)
 
 ADD_DEPENDENCIES(qtsingleapp mops1)
 ADD_DEPENDENCIES(qtsingleapp mops2)

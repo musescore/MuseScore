@@ -47,8 +47,10 @@ add_library (
 set_target_properties (
       omr
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(omr all)
 
 ADD_DEPENDENCIES(omr mops1)
 ADD_DEPENDENCIES(omr mops2)

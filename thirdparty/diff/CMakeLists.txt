@@ -36,8 +36,10 @@ add_library(diff_match_patch STATIC
 set_target_properties (
       diff_match_patch
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(diff_match_patch all)
 
 ADD_DEPENDENCIES(diff_match_patch mops1)
 ADD_DEPENDENCIES(diff_match_patch mops2)
