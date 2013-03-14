@@ -51,6 +51,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
 
       _score->select(lyrics, SELECT_SINGLE, 0);
       startEdit(lyrics, -1);
+      mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
       if (end)
             ((Lyrics*)editObject)->moveCursorToEnd();
