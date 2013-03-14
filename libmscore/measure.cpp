@@ -2975,9 +2975,13 @@ void Measure::layoutX(qreal stretch)
       qreal _spatium           = spatium();
       int tracks               = nstaves * VOICES;
       qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
+      qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
+
+      qreal hRest[nstaves];    // fixed space needed from previous harmony
+      memset(hRest, 0, nstaves * sizeof(qreal));
 
       //--------tick table for segments
       int ticksList[segs];
@@ -3019,7 +3023,8 @@ void Measure::layoutX(qreal stretch)
                   pSeg = s;
                   continue;
                   }
-            bool rest2[nstaves+1];
+            bool rest2[nstaves];
+            bool hRest2[nstaves];
             Segment::SegmentType segType = s->segmentType();
             types[segmentIdx]      = segType;
             qreal segmentWidth     = 0.0;
@@ -3031,8 +3036,10 @@ void Measure::layoutX(qreal stretch)
                         continue;
                   qreal minDistance = 0.0;
                   Space space;
+                  Space hSpace;
                   int track  = staffIdx * VOICES;
                   bool found = false;
+                  bool hFound = false;
                   if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
@@ -3078,17 +3085,16 @@ void Measure::layoutX(qreal stretch)
                               space.max(Space(llw, rrw));
                               }
 
-                        // add spacing for Harmony. Currently just within segment.
+                        // add spacing for chord symbols
                         foreach (Element* e, s->annotations()) {
-                              if (e->type() != Element::HARMONY)
+                              if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
+                              hFound = true;
                               QRectF b(h->bbox().translated(h->pos()));
                               // allow chord at the beginning of a measure to be dragged left
-                              space.max(Space(s->rtick()?-b.left():0.0,b.right()));
+                              hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
                               }
-                        //end of spacing for Harmony
-
                         }
                   else {
                         Element* e = s->element(track);
@@ -3112,21 +3118,32 @@ void Measure::layoutX(qreal stretch)
                               }
                         if (e) {
                               found = true;
+                              hFound = true;
                               space.max(e->space());
                               }
                         }
                   space += Space(elsp, etsp);
+
                   if (found) {
                         space.rLw() += clefWidth[staffIdx];
-                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
-                        if (space.lw() > stretchDistance)
-                              sp += (space.lw() - stretchDistance);
+                        qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
                         segmentWidth    = qMax(segmentWidth, sp);
                         }
                   else
                         rest2[staffIdx] = true;
+
+                  // space chord symbols separately from segments
+                  if (hFound) {
+                        qreal sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                        hRest[staffIdx] = hSpace.rw();
+                        hRest2[staffIdx] = false;
+                        segmentWidth = qMax(segmentWidth, sp);
+                        }
+                  else
+                        hRest2[staffIdx] = true;
+
                   clefWidth[staffIdx] = 0.0;
                   }
 
@@ -3143,7 +3160,9 @@ void Measure::layoutX(qreal stretch)
                   if (!score()->staff(staffIdx)->show())
                         continue;
                   if (rest2[staffIdx])
-                        rest[staffIdx] -= segmentWidth;
+                        rest[staffIdx] -= qMin(rest[staffIdx],segmentWidth);
+                  if (hRest2[staffIdx])
+                        hRest[staffIdx] -= qMin(hRest[staffIdx],segmentWidth);
                   }
             if ((s->segmentType() == Segment::SegChordRest)) {
                   const Segment* nseg = s;
@@ -3215,6 +3234,7 @@ void Measure::layoutX(qreal stretch)
             if (!score()->staff(staffIdx)->show())
                   continue;
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            segmentWidth = qMax(segmentWidth, hRest[staffIdx]);
             }
       xpos[segmentIdx]    = x + segmentWidth;
       width[segmentIdx-1] = segmentWidth;
