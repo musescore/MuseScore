@@ -29,6 +29,10 @@ macro( precompiled_header includes header_name )
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )
 
+        set (PCH ${PROJECT_BINARY_DIR}/${header_name}.h.gch)
+        set (PCH_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h")
+        set (PCH_INCLUDE "-include ${PCH_HEADER}")
+
         add_custom_command(
          OUTPUT ${PROJECT_BINARY_DIR}/${header_name}.h.gch
          COMMAND ${CMAKE_CXX_COMPILER}
@@ -37,5 +41,19 @@ macro( precompiled_header includes header_name )
          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
          VERBATIM
          )
+    endif()
+endmacro()
+
+# Xcode PCH support. Has to be called *AFTER* the target is created.  
+# "header_name" - the name of the PCH header, without the extension; "all" or something similar;
+#                  note that the source file compiling the header needs to have the same name 
+macro( xcode_pch target_name header_name )
+    if( APPLE )                   
+        set_target_properties(
+            ${target_name} 
+            PROPERTIES
+            XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h"
+            XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES"
+        )
     endif()
 endmacro()

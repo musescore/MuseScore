@@ -80,15 +80,17 @@ if (SCRIPT_INTERFACE)
    set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch"
       )
 else (SCRIPT_INTERFACE)
    set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "-g ${PCH_INCLUDE} -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
       )
 endif (SCRIPT_INTERFACE)
+
+xcode_pch(libmscore all)
 
 ADD_DEPENDENCIES(libmscore mops1)
 ADD_DEPENDENCIES(libmscore mops2)

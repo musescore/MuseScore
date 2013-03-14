@@ -59,6 +59,8 @@ if (NOT MINGW AND NOT APPLE)
    ADD_DEPENDENCIES(bww2mxml mops2)
 endif (NOT MINGW AND NOT APPLE)
 
+xcode_pch(bww all)
+
 ADD_DEPENDENCIES(bww mops1)
 ADD_DEPENDENCIES(bww mops2)
 
