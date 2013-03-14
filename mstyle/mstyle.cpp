@@ -358,7 +358,9 @@ QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int ri
 //   sizeFromContents
 //---------------------------------------------------------
 
-QSize MgStyle::sizeFromContents(ContentsType element, const QStyleOption* option, const QSize& size, const QWidget* widget) const {
+QSize MgStyle::sizeFromContents(ContentsType element, const QStyleOption* option,
+   const QSize& size, const QWidget* widget) const
+      {
       switch (element) {
             case CT_CheckBox:
                   return checkBoxSizeFromContents(option, size, widget);
@@ -412,7 +414,9 @@ QSize MgStyle::checkBoxSizeFromContents(const QStyleOption*, const QSize& conten
 //   comboBoxSizeFromContents
 //---------------------------------------------------------
 
-QSize MgStyle::comboBoxSizeFromContents( const QStyleOption* option, const QSize& contentsSize, const QWidget*) const {
+QSize MgStyle::comboBoxSizeFromContents( const QStyleOption* option, const QSize& contentsSize,
+   const QWidget*) const
+      {
       QSize size = expandSize( contentsSize,
                                ComboBox_ContentsMargin,
                                ComboBox_ContentsMargin_Left,
@@ -663,7 +667,8 @@ bool MgStyle::isVerticalTab( const QTabBar::Shape& shape ) const {
 //   polish
 //---------------------------------------------------------
 
-void MgStyle::polish(QWidget* widget) {
+void MgStyle::polish(QWidget* widget)
+      {
       if (!widget)
             return;
 
@@ -806,7 +811,7 @@ void MgStyle::polish(QWidget* widget) {
 #ifndef Q_WS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
-            widget->setContentsMargins(3, 3, 3, 3);
+//WS            widget->setContentsMargins(3, 3, 3, 3);
             widget->installEventFilter(this);
             }
       else if ( qobject_cast<QMdiSubWindow*>(widget) ) {
@@ -819,12 +824,12 @@ void MgStyle::polish(QWidget* widget) {
             widget->setContentsMargins(5, 5, 5, 5);
             widget->installEventFilter(this);
             }
-      else if ( widget->parentWidget() && widget->parentWidget()->parentWidget() && qobject_cast<QToolBox*>(widget->parentWidget()->parentWidget()->parentWidget())) {
+      else if (widget->parentWidget() && widget->parentWidget()->parentWidget() && qobject_cast<QToolBox*>(widget->parentWidget()->parentWidget()->parentWidget())) {
             widget->setBackgroundRole(QPalette::NoRole);
             widget->setAutoFillBackground(false);
             widget->parentWidget()->setAutoFillBackground(false);
             }
-      else if ( qobject_cast<QMenu*>(widget) ) {
+      else if (qobject_cast<QMenu*>(widget)) {
 #ifndef Q_WS_MAC
             // does not work on MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
@@ -844,21 +849,6 @@ void MgStyle::polish(QWidget* widget) {
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
             }
-#if 0
-      else if ( widget->inherits( "KWin::GeometryTip" ) ) {
-            // special handling of kwin geometry tip widget
-            widget->installEventFilter(this);
-            widget->setAttribute(Qt::WA_NoSystemBackground);
-            widget->setAttribute(Qt::WA_TranslucentBackground);
-            if ( QLabel* label = qobject_cast<QLabel*>( widget ) ) {
-                  label->setFrameStyle( QFrame::NoFrame );
-                  label->setMargin(5);
-                  }
-#ifdef Q_WS_WIN
-            widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
-#endif
-            }
-#endif
       else if ( qobject_cast<QFrame*>( widget ) && widget->parent() && widget->parent()->inherits( "KTitleWidget" ) ) {
             widget->setAutoFillBackground( false );
             widget->setBackgroundRole( QPalette::Window );
@@ -1163,7 +1153,12 @@ bool MgStyle::drawPanelTipLabelPrimitive(const QStyleOption* option, QPainter* p
       return true;
       }
 
-bool MgStyle::drawFramePrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
+//---------------------------------------------------------
+//   drawFramePrimitive
+//---------------------------------------------------------
+
+bool MgStyle::drawFramePrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
+      {
       const State& flags( option->state );
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
@@ -1227,7 +1222,8 @@ bool MgStyle::drawFrameFocusRectPrimitive( const QStyleOption* option, QPainter*
       if ( !widget ) return true;
 
       // focus indicators are painted only in Q3ListView and QAbstractItemView
-      if ( !( qobject_cast<const QAbstractItemView*>( widget ) || widget->inherits( "Q3ListView" ) ) ) return true;
+      if ( !( qobject_cast<const QAbstractItemView*>( widget ) || widget->inherits( "Q3ListView" ) ) )
+            return true;
 
       const State& flags( option->state );
       const QRect r( option->rect.adjusted( 0, 0, 0, -2 ) );
@@ -3125,7 +3121,6 @@ QColor MgStyle::scrollBarArrowColor( const QStyleOption* option, const SubContro
 
       }
 
-//______________________________________________________________________________
 void MgStyle::renderSliderTickmarks( QPainter* painter, const QStyleOptionSlider* option,  const QWidget* widget ) const {
 
       const int& ticks( option->tickPosition );
@@ -3316,15 +3311,22 @@ void MgStyle::renderDialSlab( QPainter* painter, const QRect& r, const QColor& c
 
       }
 
-void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, StyleOptions options, qreal opacity,
-                               AnimationMode mode,
-                               TileSet::Tiles tiles) const {
-      if ( (r.width() <= 0) || (r.height() <= 0)) return;
+//---------------------------------------------------------
+//   renderButtonSlab
+//---------------------------------------------------------
 
-      r.translate(0, -1);
-      if ( !painter->clipRegion().isEmpty() ) painter->setClipRegion( painter->clipRegion().translated(0, -1) );
+void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, StyleOptions options,
+   qreal opacity, AnimationMode mode, TileSet::Tiles tiles) const
+      {
+      if ( (r.width() <= 0) || (r.height() <= 0))
+            return;
 
-      if ( options & Sunken) r.adjust( -1, 0, 1, 1 );
+//WS      r.translate(0, -1);
+      if ( !painter->clipRegion().isEmpty() )
+            painter->setClipRegion( painter->clipRegion().translated(0, -1) );
+
+      if ( options & Sunken)
+            r.adjust( -1, 0, 1, 1 );
 
       // fill
       if ( !(options & NoFill)) {
@@ -3369,17 +3371,12 @@ void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, 
       TileSet* tile;
       if ( options & Sunken) {
             tile = _helper.slabSunken(color, 0.0);
-
             }
       else {
-
             QColor glow = slabShadowColor( color, options, opacity, mode );
             tile = glow.isValid() ? _helper.slabFocused(color, glow, 0.0) : _helper.slab(color, 0.0);
-
             }
-
       tile->render(r, painter, tiles);
-
       }
 
 //---------------------------------------------------------
@@ -3744,16 +3741,17 @@ bool MgStyle::eventFilter(QObject* object, QEvent* event) {
       return QCommonStyle::eventFilter(object, event);
       }
 
-bool MgStyle::drawComboBoxComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
-
+bool MgStyle::drawComboBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
+      {
       // cast option and check
       const QStyleOptionComboBox* cb( qstyleoption_cast<const QStyleOptionComboBox*>(option) );
-      if ( !cb ) return true;
+      if ( !cb )
+            return true;
 
       const State& flags( option->state );
-      const QRect& r( option->rect );
-      const QPalette& palette( option->palette );
-      const bool enabled( flags & State_Enabled );
+      const QRect& r(option->rect);
+      const QPalette& palette( option->palette);
+      const bool enabled(flags & State_Enabled);
       const bool mouseOver(enabled && (flags & State_MouseOver));
       const bool hasFocus( flags & State_HasFocus );
       const bool& editable( cb->editable );
@@ -3761,19 +3759,19 @@ bool MgStyle::drawComboBoxComplexControl( const QStyleOptionComplex* option, QPa
 
       // frame
       if ( cb->subControls & SC_ComboBoxFrame) {
-
-
             // style options
             StyleOptions opts = 0;
-            if ( mouseOver ) opts |= Hover;
-            if ( hasFocus ) opts |= Focus;
-            if ( (flags & (State_Sunken | State_On)) && !editable ) opts |= Sunken;
+            if (mouseOver)
+                  opts |= Hover;
+            if (hasFocus)
+                  opts |= Focus;
+            if ((flags & (State_Sunken | State_On)) && !editable)
+                  opts |= Sunken;
 
             const QColor inputColor( enabled ? palette.color(QPalette::Base) : palette.color(QPalette::Window) );
             const QRect editField( subControlRect(CC_ComboBox, cb, SC_ComboBoxEditField, widget) );
 
             if (editable) {
-
                   // editable combobox. Make it look like a LineEdit
                   // focus takes precedence over hover
                   animations().lineEditEngine().updateState( widget, AnimationFocus, hasFocus );
@@ -3795,66 +3793,56 @@ bool MgStyle::drawComboBoxComplexControl( const QStyleOptionComplex* option, QPa
 
                         }
                   else {
-
                         _helper.fillHole( *painter, r.adjusted( 0, -1, 0, 0 ) );
                         painter->restore();
 
                         const QColor color( palette.color(QPalette::Window) );
                         if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationFocus ) ) {
 
-                              _helper.renderHole( painter, color, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationFocus ), AnimationFocus, TileSet::Ring);
+                              _helper.renderHole(painter, color, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationFocus ), AnimationFocus, TileSet::Ring);
 
                               }
                         else if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationHover ) ) {
 
-                              _helper.renderHole( painter, color, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationHover ), AnimationHover, TileSet::Ring);
+                              _helper.renderHole(painter, color, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationHover ), AnimationHover, TileSet::Ring);
 
                               }
                         else {
-
-                              _helper.renderHole( painter, color, fr, hasFocus && enabled, mouseOver);
-
+                              _helper.renderHole(painter, color, fr, hasFocus && enabled, mouseOver);
                               }
 
                         }
 
                   }
             else {
-
                   // non editable combobox. Make it look like a PushButton
                   // hover takes precedence over focus
-                  animations().lineEditEngine().updateState( widget, AnimationHover, mouseOver );
-                  animations().lineEditEngine().updateState( widget, AnimationFocus, hasFocus && !mouseOver );
+
+                  animations().lineEditEngine().updateState(widget, AnimationHover, mouseOver );
+                  animations().lineEditEngine().updateState(widget, AnimationFocus, hasFocus && !mouseOver);
 
                   // blend button color to the background
-                  const QColor buttonColor( _helper.backgroundColor( palette.color( QPalette::Button ), widget, r.center() ) );
-                  const QRect slabRect( r.adjusted(-1, 0, 1, 0 ) );
+                  const QColor buttonColor(_helper.backgroundColor(palette.color(QPalette::Button), widget, r.center()));
+                  // const QRect slabRect(r.adjusted(-1, 0, 1, 0 ));
+                  const QRect slabRect(r.adjusted(-1, -1, 1, 1 ));
 
-                  if ( !hasFrame ) {
-
+                  if (!hasFrame) {
                         // do nothing.
-
                         }
                   else if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationHover ) ) {
 
                         const qreal opacity( animations().lineEditEngine().opacity( widget, AnimationHover ) );
-                        renderButtonSlab( painter, slabRect, buttonColor, opts, opacity, AnimationHover, TileSet::Ring );
+                        renderButtonSlab(painter, slabRect, buttonColor, opts, opacity, AnimationHover, TileSet::Ring );
 
                         }
                   else if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationFocus ) ) {
-
                         const qreal opacity( animations().lineEditEngine().opacity( widget, AnimationFocus ) );
-                        renderButtonSlab( painter, slabRect, buttonColor, opts, opacity, AnimationFocus, TileSet::Ring );
-
+                        renderButtonSlab(painter, slabRect, buttonColor, opts, opacity, AnimationFocus, TileSet::Ring );
                         }
                   else {
-
-                        renderButtonSlab( painter, slabRect, buttonColor, opts);
-
+                        renderButtonSlab(painter, slabRect, buttonColor, opts);
                         }
-
                   }
-
             }
 
       if ( cb->subControls & SC_ComboBoxArrow) {
@@ -3937,7 +3925,6 @@ bool MgStyle::drawComboBoxComplexControl( const QStyleOptionComplex* option, QPa
             }
 
       return true;
-
       }
 
 bool MgStyle::drawDialComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
@@ -4056,22 +4043,25 @@ bool MgStyle::drawSliderComplexControl( const QStyleOptionComplex* option, QPain
       return true;
       }
 
-bool MgStyle::drawSpinBoxComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
+bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
+      {
       const QStyleOptionSpinBox* sb = qstyleoption_cast<const QStyleOptionSpinBox*>( option );
-      if ( !sb ) return true;
+      if (!sb)
+            return true;
 
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
 
       const State& flags( option->state );
-      const bool enabled( flags & State_Enabled );
+      const bool enabled(flags & State_Enabled);
       const bool mouseOver(enabled && (flags & State_MouseOver));
       const bool hasFocus( flags & State_HasFocus );
       const QColor inputColor( palette.color( enabled ? QPalette::Base : QPalette::Window ) );
 
       if ( sb->subControls & SC_SpinBoxFrame) {
 
-            QRect fr( r.adjusted(1, 1, -1, -1) );
+            //WS QRect fr( r.adjusted(1, 1, -1, -1) );
+            QRect fr( r.adjusted(1, 0, -1, 0) );
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing);
             painter->setPen(Qt::NoPen);
@@ -4082,33 +4072,22 @@ bool MgStyle::drawSpinBoxComplexControl( const QStyleOptionComplex* option, QPai
                   // frame is adjusted to have the same dimensions as a frameless editor
                   painter->fillRect(r, inputColor);
                   painter->restore();
-
                   }
             else {
-
                   // normal spinbox
-                  _helper.fillHole( *painter, r.adjusted( 0, -1, 0, 0 ) );
+                  _helper.fillHole(*painter, r.adjusted(0, -1, 0, 0));
                   painter->restore();
 
                   QColor local( palette.color(QPalette::Window) );
                   animations().lineEditEngine().updateState( widget, AnimationHover, mouseOver );
                   animations().lineEditEngine().updateState( widget, AnimationFocus, hasFocus );
-                  if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationFocus ) ) {
 
-                        _helper.renderHole( painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationFocus ), AnimationFocus, TileSet::Ring);
-
-                        }
-                  else if ( enabled && animations().lineEditEngine().isAnimated( widget, AnimationHover ) ) {
-
-                        _helper.renderHole( painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity( widget, AnimationHover ), AnimationHover, TileSet::Ring);
-
-                        }
-                  else {
-
-                        _helper.renderHole( painter, local, fr, hasFocus, mouseOver);
-
-                        }
-
+                  if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationFocus))
+                        _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationFocus), AnimationFocus, TileSet::Ring);
+                  else if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationHover))
+                        _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationHover), AnimationHover, TileSet::Ring);
+                  else
+                        _helper.renderHole(painter, local, fr, hasFocus, mouseOver);
                   }
             }
 
@@ -7469,11 +7448,12 @@ QRect MgStyle::scrollBarSubControlRect( const QStyleOptionComplex* option, SubCo
             }
       }
 
-QRect MgStyle::spinBoxSubControlRect( const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
-
-      const QRect& r( option->rect );
+QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget) const
+      {
+      const QRect& r(option->rect);
       const QStyleOptionSpinBox* sb = qstyleoption_cast<const QStyleOptionSpinBox*>(option);
-      if ( !sb ) return r;
+      if (!sb)
+            return r;
 
       int fw = SpinBox_FrameWidth;
       int bw = SpinBox_ButtonWidth;
@@ -7484,7 +7464,7 @@ QRect MgStyle::spinBoxSubControlRect( const QStyleOptionComplex* option, SubCont
       int bmb = bm + SpinBox_ButtonMargin_Bottom;
       int bs = 0 ;
 
-      if ( !sb->frame ) {
+      if (!sb->frame) {
             bw = bw - bmr;
             fw = 0;
 
@@ -7501,28 +7481,21 @@ QRect MgStyle::spinBoxSubControlRect( const QStyleOptionComplex* option, SubCont
       const int heightDown = availableButtonHeight - heightUp;
 
       switch (subControl) {
-
             case SC_SpinBoxUp:
                   return handleRTL(option, QRect(buttonsLeft, r.top() + bmt, buttonsWidth, heightUp) );
-
             case SC_SpinBoxDown:
                   return handleRTL(option, QRect(buttonsLeft, r.bottom() - bmb - heightDown, buttonsWidth, heightDown) );
-
             case SC_SpinBoxEditField: {
                   const QRect labelRect(r.left() + fw, r.top() + fw, r.width() - fw - bw, r.height() - 2 * fw);
                   return handleRTL(option, labelRect );
                   }
-
             case SC_SpinBoxFrame:
                   return sb->frame ? r : QRect();
-
             default:
                   break;
 
             }
-
-      return QCommonStyle::subControlRect( CC_SpinBox, option, subControl, widget);
-
+      return QCommonStyle::subControlRect(CC_SpinBox, option, subControl, widget);
       }
 
 void MgStyle::renderMenuItemBackground( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
@@ -7999,9 +7972,8 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
 
       }
 
-QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const {
-
-
+QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const
+      {
       switch ( element ) {
 
                   // push buttons

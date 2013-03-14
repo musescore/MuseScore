@@ -1900,6 +1900,21 @@ QVariant Chord::getProperty(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Chord::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_NO_STEM:        return false;
+            case P_SMALL:          return false;
+            case P_STEM_DIRECTION: return int(MScore::AUTO);
+            default:
+                  return ChordRest::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
