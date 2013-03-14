@@ -1300,7 +1300,7 @@ void Score::cmdDeleteSelectedMeasures()
                         TimeSig* nts = new TimeSig(this);
                         nts->setTrack(staffIdx * VOICES);
                         nts->setParent(ns);
-                        nts->setSig(lastDeletedSig->sig(), lastDeletedSig->subtype());
+                        nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
                         undoAddElement(nts);
                         }
                   }
