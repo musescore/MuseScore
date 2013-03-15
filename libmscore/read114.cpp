@@ -490,7 +490,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
 
             KeyList* km = s->keymap();
-            for (ciKeyList i = km->begin(); i != km->end(); ++i) {
+            for (auto i = km->begin(); i != km->end(); ++i) {
                   int tick = i->first;
                   if (tick < 0) {
                         qDebug("read114: Key tick %d", tick);

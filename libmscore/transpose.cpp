@@ -407,7 +407,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   continue;
 
             KeyList* km = staff(staffIdx)->keymap();
-            for (iKeyList ke = km->lower_bound(tickStart);
+            for (auto ke = km->lower_bound(tickStart);
                   ke != km->lower_bound(tickEnd); ++ke) {
                   KeySigEvent oKey  = ke->second;
                   int tick  = ke->first;

@@ -1323,7 +1323,7 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
             ks.setAccidentalType(key);
             (*km)[0] = ks;
             }
-      for (ciKeyList i = km->begin(); i != km->end(); ++i) {
+      for (auto i = km->begin(); i != km->end(); ++i) {
             int tick = i->first;
             KeySigEvent key  = i->second;
             KeySig* ks = new KeySig(score);
