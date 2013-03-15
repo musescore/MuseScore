@@ -448,7 +448,16 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       p->setName(name);
       p->setPath("");
       p->setDirty(false);
+      p->setReadOnly(false);
       p->write();
+
+      // all palettes in new workspace are editable
+
+      PaletteBox* paletteBox = mscore->getPaletteBox();
+      QList<Palette*> pl = paletteBox->palettes();
+      foreach (Palette* p, pl)
+            p->setSystemPalette(false);
+
       _workspaces.append(p);
       return p;
       }
