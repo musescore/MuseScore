@@ -143,18 +143,17 @@ void Stem::draw(QPainter* painter) const
       qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
-      if (!useTab)
+      if (!useTab || !chord())
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
       StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st->staffType());
       qreal sp = spatium();
+      bool _up = up();
 
       // slashed half note stem
-      if (chord() && chord()->durationType().type() == TDuration::V_HALF
-         && stt->minimStyle() == TAB_MINIM_SLASHED) {
+      if (chord()->durationType().type() == TDuration::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
             // position slashes onto stem
-            bool _up = stt->stemThrough() ? up() : !stt->stemsDown();
             qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
             // if stems through, try to align slashes within or across lines
             if (stt->stemThrough()) {
@@ -184,11 +183,10 @@ void Stem::draw(QPainter* painter) const
 
       // dots
       // NOT THE BEST PLACE FOR THIS?
-      // with tablatures, dots are not drawn near 'notes', but near stems
+      // with tablatures and stems beside staves, dots are not drawn near 'notes', but near stems
       int nDots = chord()->dots();
       if (nDots > 0 && !stt->stemThrough()) {
-            qreal y = stemLen() - (stt->stemsDown() ?
-                        (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
+            qreal y =  ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
             symbols[score()->symIdx()][dotSym].draw(painter, magS(),
                         QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
             }
