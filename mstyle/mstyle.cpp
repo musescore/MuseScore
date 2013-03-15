@@ -28,6 +28,7 @@
 #include "widgetstateengine.h"
 #include "transitions.h"
 #include "mconfig.h"
+#include "../mscore/paletteBoxButton.h"
 
 #define MgStyleConfigData_toolTipTransparent            true
 #define MgStyleConfigData_toolBarDrawItemSeparator      true
@@ -1754,13 +1755,18 @@ bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPain
 //   drawPanelButtonToolPrimitive
 //---------------------------------------------------------
 
-bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
+bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+      {
       /*
       For toolbutton in TabBars, corresponding to expanding arrows, no frame is drawn
       However one needs to draw the window background, because the button rect might
       overlap with some tab below. (this is a Qt bug)
       */
-      const bool isInTabBar( widget && qobject_cast<const QTabBar*>( widget->parent() ) );
+      bool isInTabBar(widget && qobject_cast<const QTabBar*>( widget->parent()));
+
+      if (qobject_cast<const PaletteBoxButton*>(widget))
+            isInTabBar = true;
+
       if ( isInTabBar ) {
 
             const QPalette& palette( option->palette );
@@ -1828,16 +1834,12 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
 
       // toolbutton engine
       if ( isInToolBar && !toolBarAnimated ) {
-
             animations().widgetStateEngine().updateState( widget, AnimationHover, mouseOver );
-
             }
       else {
-
             // mouseOver has precedence over focus
             animations().widgetStateEngine().updateState( widget, AnimationHover, mouseOver );
             animations().widgetStateEngine().updateState( widget, AnimationFocus, hasFocus && !mouseOver );
-
             }
 
       bool hoverAnimated( animations().widgetStateEngine().isAnimated( widget, AnimationHover ) );
@@ -1850,17 +1852,19 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       QRect slitRect( r );
 
       // non autoraised tool buttons get same slab as regular buttons
-      if ( widget && !autoRaised ) {
-
+      if (widget && !autoRaised) {
             StyleOptions opts = 0;
             slitRect.adjust( -1, 0, 1, 0 );
 
             // "normal" parent, and non "autoraised" (that is: always raised) buttons
-            if ( flags & (State_On | State_Sunken) ) opts |= Sunken;
-            if ( flags & State_HasFocus) opts |= Focus;
-            if ( enabled && (flags & State_MouseOver)) opts |= Hover;
+            if ( flags & (State_On | State_Sunken) )
+                  opts |= Sunken;
+            if ( flags & State_HasFocus)
+                  opts |= Focus;
+            if ( enabled && (flags & State_MouseOver))
+                  opts |= Hover;
 
-            TileSet::Tiles tiles( TileSet::Ring );
+            TileSet::Tiles tiles(TileSet::Ring);
 
             // adjust tiles and rect in case of menubutton
             const QToolButton* t = qobject_cast<const QToolButton*>( widget );
@@ -1897,9 +1901,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
 
             // render slab
             renderButtonSlab( painter, slitRect, buttonColor, opts, opacity, mode, tiles );
-
             return true;
-
             }
 
       //! fine tuning of slitRect geometry
@@ -4173,7 +4175,8 @@ bool MgStyle::drawTitleBarComplexControl( const QStyleOptionComplex* option, QPa
 //   drawToolButtonComplexControl
 //---------------------------------------------------------
 
-bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
+bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
+      {
       // check autoRaise state
       const State flags( option->state );
       const bool isInToolBar( widget && qobject_cast<QToolBar*>(widget->parent()) );
@@ -8607,6 +8610,4 @@ QIcon MgStyle::standardIconImplementation(StandardPixmap standardIcon,
                   return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
             }
       }
-
-
 

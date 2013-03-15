@@ -16,6 +16,7 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "libmscore/xml.h"
+#include "paletteBoxButton.h"
 
 //---------------------------------------------------------
 //   PaletteBox
@@ -225,10 +226,8 @@ void PaletteBox::write(Xml& xml)
       {
       xml.stag("PaletteBox");
       for (int i = 0; i < (vbox->count() - 1); i += 2) {
-            QLayoutItem* item   = vbox->itemAt(i);
-            PaletteBoxButton* b = static_cast<PaletteBoxButton*>(item->widget());
-            Palette* palette    = static_cast<Palette*>(vbox->itemAt(i+1)->widget());
-            palette->write(xml, b->text());
+            Palette* palette = static_cast<Palette*>(vbox->itemAt(i+1)->widget());
+            palette->write(xml);
             }
       xml.etag();
       }

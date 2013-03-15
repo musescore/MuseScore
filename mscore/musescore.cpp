@@ -2348,7 +2348,8 @@ int main(int argc, char* av[])
       if (!converterMode) {
             switch(preferences.globalStyle) {
                   case STYLE_DARK: {
-                        QApplication::setStyle(new MgStyle);
+                        MgStyle* st = new MgStyle;
+                        QApplication::setStyle(st);
                         qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
                         p.setColor(QPalette::Window,        QColor(0x52, 0x52, 0x52));

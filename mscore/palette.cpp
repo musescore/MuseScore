@@ -37,6 +37,7 @@
 #include "libmscore/qzipreader_p.h"
 #include "libmscore/qzipwriter_p.h"
 #include "libmscore/slur.h"
+#include "paletteBoxButton.h"
 
 //---------------------------------------------------------
 //   needsStaff
@@ -515,8 +516,14 @@ void Palette::paintEvent(QPaintEvent* event)
 
       QPainter p(this);
       p.setRenderHint(QPainter::Antialiasing, true);
-      p.fillRect(event->rect(), p.background().color());
 
+      QColor bgColor(0xf6, 0xf0, 0xda);
+#if 1
+      p.setBrush(QColor(0xf6, 0xf0, 0xda));
+      p.drawRoundedRect(0, 0, width()-3, height(), 2, 2);
+#else
+      p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
+#endif
       //
       // draw grid
       //
@@ -542,16 +549,18 @@ void Palette::paintEvent(QPaintEvent* event)
       // draw symbols
       //
 
-      QPen pen(palette().color(QPalette::Normal, QPalette::Text));
+      // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
+      QPen pen(Qt::black);
       pen.setWidthF(MScore::defaultStyle()->valueS(ST_staffLineWidth).val() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < cells.size(); ++idx) {
-            QRect r = idxRect(idx);
+            int yoffset = gscore->spatium() * _yOffset;
+            QRect r = idxRect(idx).translated(0, yoffset);
             p.setPen(pen);
             if (idx == selectedIdx)
-                  p.fillRect(r, palette().color(QPalette::Normal, QPalette::Highlight));
+                  p.fillRect(r, bgColor.light(200));
             else if (idx == currentIdx)
-                  p.fillRect(r, p.background().color().light(118));
+                  p.fillRect(r, bgColor.light(118));
             if (cells.isEmpty() || cells[idx] == 0)
                   continue;
 
@@ -837,9 +846,9 @@ void Palette::dropEvent(QDropEvent* event)
 //   write
 //---------------------------------------------------------
 
-void Palette::write(Xml& xml, const QString& name) const
+void Palette::write(Xml& xml) const
       {
-      xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(name)));
+      xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
       xml.tag("gridWidth", hgrid);
       xml.tag("gridHeight", vgrid);
       if (extraMag != 1.0)
@@ -1060,7 +1069,7 @@ void Palette::write(const QString& p)
       Xml xml(&cbuf);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      write(xml, name());
+      write(xml);
       xml.etag();
       cbuf.close();
       f.addFile("palette.xml", cbuf.data());
@@ -1216,117 +1225,6 @@ void Palette::actionToggled(bool /*val*/)
                   }
             }
       update();
-      }
-
-//---------------------------------------------------------
-//   PaletteBoxButton
-//---------------------------------------------------------
-
-PaletteBoxButton::PaletteBoxButton(Palette* p, QWidget* parent)
-   : QToolButton(parent)
-      {
-      palette = p;
-      setCheckable(true);
-      setFocusPolicy(Qt::NoFocus);
-      connect(this, SIGNAL(clicked(bool)), this, SLOT(showPalette(bool)));
-      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      setText(qApp->translate("Palette", palette->name().toUtf8()));
-      setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-      // setArrowType(Qt::RightArrow);
-      showPalette(false);
-      }
-
-void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
-      {
-      QMenu menu;
-
-      QAction* actionProperties = menu.addAction(tr("Palette Properties..."));
-      QAction* actionInsert     = menu.addAction(tr("Insert New Palette..."));
-      QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
-      QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
-      QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
-      actionEdit->setChecked(!palette->readOnly());
-      bool _systemPalette = palette->systemPalette();
-      actionProperties->setDisabled(_systemPalette);
-      actionInsert->setDisabled(_systemPalette);
-      actionUp->setDisabled(_systemPalette);
-      actionDown->setDisabled(_systemPalette);
-      actionEdit->setDisabled(_systemPalette);
-
-      menu.addSeparator();
-      QAction* actionSave = menu.addAction(tr("Save Palette"));
-      QAction* actionLoad = menu.addAction(tr("Load Palette"));
-      actionLoad->setDisabled(_systemPalette);
-
-      menu.addSeparator();
-      QAction* actionDelete = menu.addAction(tr("Delete Palette"));
-      actionDelete->setDisabled(_systemPalette);
-
-      QAction* action = menu.exec(mapToGlobal(event->pos()));
-      if (action == actionProperties)
-            propertiesTriggered();
-      else if (action == actionInsert)
-            newTriggered();
-      else if (action == actionUp)
-            upTriggered();
-      else if (action == actionDown)
-            downTriggered();
-      else if (action == actionEdit)
-            enableEditing(action->isChecked());
-      else if (action == actionSave)
-            saveTriggered();
-      else if (action == actionLoad)
-            loadTriggered();
-      else if (action == actionDelete)
-            deleteTriggered();
-      }
-
-//---------------------------------------------------------
-//   enableEditing
-//---------------------------------------------------------
-
-void PaletteBoxButton::enableEditing(bool val)
-      {
-      palette->setReadOnly(!val);
-      }
-
-//---------------------------------------------------------
-//   changeEvent
-//---------------------------------------------------------
-
-void PaletteBoxButton::changeEvent(QEvent* ev)
-      {
-      if (ev->type() == QEvent::FontChange)
-            setFixedHeight(QFontMetrics(font()).height() + 2);
-      }
-
-//---------------------------------------------------------
-//   showPalette
-//---------------------------------------------------------
-
-void PaletteBoxButton::showPalette(bool visible)
-      {
-      if (visible && preferences.singlePalette) {
-            // close all palettes
-            emit closeAll();
-            }
-      palette->setVisible(visible);
-      setChecked(visible);
-      setArrowType(visible ? Qt::DownArrow : Qt::RightArrow );
-      }
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
-void PaletteBoxButton::paintEvent(QPaintEvent*)
-      {
-      //remove automatic menu arrow
-      QStylePainter p(this);
-      QStyleOptionToolButton opt;
-      initStyleOption(&opt);
-      opt.features &= (~QStyleOptionToolButton::HasMenu);
-      p.drawComplexControl(QStyle::CC_ToolButton, opt);
       }
 
 //---------------------------------------------------------
