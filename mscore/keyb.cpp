@@ -157,18 +157,18 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             }
       else if (editObject->type() == Element::HARMONY) {
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  harmonyTab(false, modifiers & Qt::ShiftModifier);
+            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
+                  harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
                   ev->accept();
                   return;
                   }
-            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
-                  harmonyTab(true, key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
+            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
+                  harmonyBeatsTab(true, modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
             if (key == Qt::Key_Semicolon || key == Qt::Key_Colon) {
-                  harmonyBeatsTab(key == Qt::Key_Colon);
+                  harmonyBeatsTab(false, key == Qt::Key_Colon);
                   ev->accept();
                   return;
                   }
