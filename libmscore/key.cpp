@@ -174,7 +174,7 @@ KeySigEvent KeyList::key(int tick) const
       {
       if (empty())
             return KeySigEvent();
-      ciKeyList i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return KeySigEvent();
       --i;
@@ -188,7 +188,7 @@ KeySigEvent KeyList::key(int tick) const
 void KeyList::write(Xml& xml, const char* name) const
       {
       xml.stag(name);
-      for (ciKeyList i = begin(); i != end(); ++i) {
+      for (auto i = begin(); i != end(); ++i) {
             if (i->second.custom())
                   xml.tagE("key tick=\"%d\" custom=\"%d\"", i->first, i->second.customType());
             else

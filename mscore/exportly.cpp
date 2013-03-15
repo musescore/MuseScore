@@ -3954,7 +3954,7 @@ void ExportLy::writeVoiceMeasure(MeasureBase* mb, Staff* staff, int staffInd, in
 		 cout << "at tick: " << keytick << "\n";
 		 KeyList* kl = score->staff(staffInd)-> keymap();
 		 KeySigEvent key = kl->key(keytick);
-//		 ciKeyList ci = kl->find(keytick);
+//		 auto ci = kl->find(keytick);
 		 //
 		 //		 if (ci != kl->end())
 		 //     {

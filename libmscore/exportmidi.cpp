@@ -142,11 +142,11 @@ void ExportMidi::writeHeader()
                   int endTick    = startTick + rs->len;
                   int tickOffset = rs->utick - rs->tick;
 
-                  iKeyList sk = keymap->lower_bound(startTick);
-                  iKeyList ek = keymap->lower_bound(endTick);
+                  auto sk = keymap->lower_bound(startTick);
+                  auto ek = keymap->lower_bound(endTick);
 
                   bool keysigFound = false;
-                  for (iKeyList ik = sk; ik != ek; ++ik) {
+                  for (auto ik = sk; ik != ek; ++ik) {
                         keysigFound = true;
                         Event ev(ME_META);
                         ev.setOntime(ik->first + tickOffset);
@@ -185,9 +185,9 @@ void ExportMidi::writeHeader()
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
 
-            iTEvent se = tempomap->lower_bound(startTick);
-            iTEvent ee = tempomap->lower_bound(endTick);
-            for (iTEvent it = se; it != ee; ++it) {
+            auto se = tempomap->lower_bound(startTick);
+            auto ee = tempomap->lower_bound(endTick);
+            for (auto it = se; it != ee; ++it) {
                   Event ev(ME_META);
                   ev.setOntime(it->first + tickOffset);
                   //

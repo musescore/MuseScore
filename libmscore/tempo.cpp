@@ -58,7 +58,7 @@ TempoMap::TempoMap()
 
 void TempoMap::setPause(int tick, qreal pause)
       {
-      iTEvent e = find(tick);
+      auto e = find(tick);
       if (e != end())
             e->second.pause = pause;
       else {
@@ -74,7 +74,7 @@ void TempoMap::setPause(int tick, qreal pause)
 
 void TempoMap::setTempo(int tick, qreal tempo)
       {
-      iTEvent e = find(tick);
+      auto e = find(tick);
       if (e != end()) {
             e->second.tempo = tempo;
             e->second.type = TEMPO_FIX;
@@ -93,7 +93,7 @@ void TempoMap::normalize()
       qreal time  = 0;
       int tick    = 0;
       qreal tempo = 2.0;
-      for (iTEvent e = begin(); e != end(); ++e) {
+      for (auto e = begin(); e != end(); ++e) {
             int delta = e->first - tick;
             time += qreal(delta) / (MScore::division * tempo * _relTempo);
             time += e->second.pause;
@@ -111,7 +111,7 @@ void TempoMap::normalize()
 void TempoMap::dump() const
       {
       qDebug("\nTempoMap:");
-      for (ciTEvent i = begin(); i != end(); ++i)
+      for (auto i = begin(); i != end(); ++i)
             qDebug("%6d tempo: %f time: %f",
                i->first, i->second.tempo, i->second.time);
       }
@@ -134,7 +134,7 @@ qreal TempoMap::tempo(int tick) const
       {
       if (empty())
             return 2.0;
-      ciTEvent i = lower_bound(tick);
+      auto i = lower_bound(tick);
       if (i == end()) {
             --i;
             return i->second.tempo;
@@ -153,7 +153,7 @@ qreal TempoMap::tempo(int tick) const
 
 void TempoMap::del(int tick)
       {
-      iTEvent e = find(tick);
+      auto e = find(tick);
       if (e == end()) {
             qDebug("TempoMap::del event at (%d): not found", tick);
             abort();
@@ -214,9 +214,9 @@ qreal TempoMap::tick2time(int tick, int* sn) const
 
       if (!empty()) {
             int ptick  = 0;
-            ciTEvent e = lower_bound(tick);
+            auto e = lower_bound(tick);
             if (e == end()) {
-                  ciTEvent pe = e;
+                  auto pe = e;
                   --pe;
                   ptick = pe->first;
                   tempo = pe->second.tempo;
@@ -228,7 +228,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
                   time  = e->second.time;
                   }
             else if (e != begin()) {
-                  ciTEvent pe = e;
+                  auto pe = e;
                   --pe;
                   ptick = pe->first;
                   tempo = pe->second.tempo;
@@ -256,7 +256,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
 
       delta = 0.0;
       tempo = 2.0;
-      for (ciTEvent e = begin(); e != end(); ++e) {
+      for (auto e = begin(); e != end(); ++e) {
             if (e->second.time >= time)
                   break;
             delta = e->second.time;
