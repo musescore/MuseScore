@@ -100,9 +100,6 @@ class AccidentalState {
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-typedef std::map<const int, KeySigEvent>::iterator iKeyList;
-typedef std::map<const int, KeySigEvent>::const_iterator ciKeyList;
-
 class KeyList : public std::map<const int, KeySigEvent> {
    public:
       KeyList() {}
