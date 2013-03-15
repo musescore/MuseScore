@@ -1536,21 +1536,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             tab = (StaffTypeTablature*)staff()->staffType();
       if (tab && !tab->stemThrough() ) {
             //
-            // TAB STAVES with stems beside staves
-            qreal y;                // vert. pos. of beam, relative to staff (top line = 0)
-
-            if(tab->stemsDown()) {
-                  _up   = false;
-                  y     = (tab->lines() - 1) * tab->lineDistance().val()
-                              + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN + STAFFTYPE_TAB_DEFAULTSTEMLEN_DN;
-                  }
-            else {
-                  _up   = true;
-                  y     = -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP;
-                  }
+            // TAB STAVES with stems beside staves: beam position is fixed depending on TAB parameters and chordrest up/down
+            // (all the chordrests of a beam have the same up/down, as it depends on TAB parameters if there are no voices
+            // or from the voice the beam belongs to if there are voices; then, it is enough to check only the first chordrest)
+            _up = c1->up();
+            // compute vert. pos. of beam, relative to staff (top line = 0)
+            qreal y = tab->chordRestStemPosY(c1) + (_up ? - STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN);
             y *= _spatium;
-            py1 = y;
-            py2 = y;
+            py1 = py2 = y;          // in this case, beams are always horizontal: py1 = py2
             }
       else {
             //
