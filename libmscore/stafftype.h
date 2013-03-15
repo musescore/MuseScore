@@ -26,24 +26,37 @@
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_DN   3.0
 #define STAFFTYPE_TAB_DEFAULTSTEMDIST_DN  1.0
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN  STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
+#define STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU 3.5
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
+
+// the ratio between the length of a full stem and the lenght of a short stem
+// (used for half note stems, in some TAB styles)
+#define STAFFTYPE_TAB_SHORTSTEMRATIO      0.5
 
 #define STAFFTYPE_TAB_SLASH_WIDTH         1.2   /* X width of half note slash */
 #define STAFFTYPE_TAB_SLASH_SLANTY        0.8   /* the Y coord of the slash slant */
 #define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
-#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next */
+#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
+                                                      includes slash thickness and empty space between slashes*/
 // the total height of a double slash
 #define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL+STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP-STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
+// same for a 4-ple slash
+#define STAFFTYPE_TAB_SLASH_4TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL*3+STAFFTYPE_TAB_SLASH_SLANTY)
+// the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_4STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP-STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
+// the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_4STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
 
 class Chord;
+class ChordRest;
+class QPainter;
 class Staff;
 class Xml;
-class QPainter;
 
 //---------------------------------------------------------
 //   StaffType
@@ -351,6 +364,7 @@ class StaffTypeTablature : public StaffType {
 
       // utility functions for tab specially managed elements
       QPointF     chordStemPos(const Chord * chord) const;
+      qreal       chordRestStemPosY(const ChordRest * chordRest) const;
       qreal       chordStemPosX(const Chord * /*chord*/) const    { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
       QPointF     chordStemPosBeam(const  Chord * chord) const;
       qreal       chordStemLength(const Chord *chord) const;
