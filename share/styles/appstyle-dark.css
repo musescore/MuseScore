@@ -1,11 +1,8 @@
-* {
-      font-size: 10pt; font-family: "freeSans";
-      }
 *:disabled {
       color: gray
       }
 QPushButton {
-      color: white
+      color: white;
       }
 QToolTip {
       color: white;
@@ -52,16 +49,13 @@ AboutBoxDialog QLabel#titleLabel {
       font-size: 28pt
       }
 PaletteBoxButton {
-      font-size: 9pt; font-family: "FreeSans";
       border: 1px solid #787878;
       border-style: outset;
-      border-radius: 4px;
       background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
          stop: 0 #606060, stop: 1 #707070);
       color: white;
       }
 PaletteBoxButton:hover {
-      /* border: 1px solid #8080ff; */
       background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
          stop: 0 #787878, stop: 1 #888888);
       }
@@ -78,7 +72,6 @@ PaletteBox {
 QMenu#PaletteContext  {
       border: 1px solid #787878;
       border-style: outset;
-      border-radius: 4px;
       background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
          stop: 0 #606060, stop: 1 #707070);
       color: white
@@ -97,7 +90,6 @@ VoiceSelector > VoiceButton:checked {
 VoiceSelector {
       border-style: outset;
       border: 1px solid #787878;
-      border-radius: 4px;
       }
 
 QGroupBox::title {
