@@ -54,7 +54,8 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
       if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
             customText = false;
       _timeSigType = st;
-      layout1();
+//      layout1();
+      needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -95,6 +96,7 @@ void TimeSig::setNumeratorString(const QString& a)
       customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
             || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
             || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
+      needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -108,6 +110,7 @@ void TimeSig::setDenominatorString(const QString& a)
       customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
             || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
             || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
+      needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -228,13 +231,23 @@ void TimeSig::layout1()
       TimeSigType sigType = timeSigType();
       Staff* _staff       = staff();
 
-      if (_staff) {                       // if some staff, update to real staff values
+      if (_staff) {
+            // if staff is without time sig, format as if no text at all
+            if (!_staff->staffType()->genTimesig() ) {
+                  // reset position and box sizes to 0
+                  pn.rx() = 0.0;
+                  pz.rx() = 0.0;
+                  setbbox(QRectF());
+                  // leave everything else as it is:
+                  // draw() will anyway skip any drawing if staff type has no time sigs
+//                sigType = TSIG_NORMAL;
+//                _numeratorString.clear();
+//                _denominatorString.clear();
+                  return;
+                  }
+            // update to real staff values
             numOfLines  = _staff->lines();
             lineDist    = _staff->lineDistance();
-
-            // if tablature, but without time sig, set empty symbol
-            if (_staff->isTabStaff() && !_staff->staffType()->genTimesig() )
-                  sigType = TSIG_NORMAL;
             }
 
       // if some symbol
