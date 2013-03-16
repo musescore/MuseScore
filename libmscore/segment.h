@@ -174,6 +174,8 @@ class Segment : public Element {
 
       const QList<Element*>& annotations() const { return _annotations;        }
       void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
+      bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
+
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }
