@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>197</width>
-    <height>47</height>
+    <height>48</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="2">
+     <item row="0" column="3">
       <widget class="QToolButton" name="resetSmall">
        <property name="toolTip">
         <string>reset value</string>
@@ -74,8 +74,15 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
+     <item row="0" column="2">
       <widget class="QCheckBox" name="small">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
         <string>Small</string>
        </property>
