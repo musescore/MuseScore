@@ -965,4 +965,19 @@ bool Segment::removeSpannerFor(Spanner* e)
       return false;
       }
 
+//---------------------------------------------------------
+//   findAnnotationOrElement
+///  return true if an annotation of type type or and element is found in the track range
+//---------------------------------------------------------
+
+bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTrack)
+      {
+      foreach (const Element* e, annotations())
+            if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
+                  return true;
+      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
+            if (element(curTrack))
+                  return true;
+      return false;
+      }
 

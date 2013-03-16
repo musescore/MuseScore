@@ -4350,17 +4350,11 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             if (noterest) {
                   int minTrack = (track / VOICES ) * VOICES;
                   int maxTrack = minTrack + (VOICES-1);
-                  int curTrack;
-
-                  foreach (const Element* e, segment->annotations())
-                        if (e->type() == Element::HARMONY && e->track() >= minTrack && e->track() <= maxTrack)
-                              goto Found;
-                  for (curTrack = minTrack; curTrack <= maxTrack; curTrack++)
-                        if (segment->element(curTrack))
-                              goto Found;
+                  if (segment->findAnnotationOrElement(Element::HARMONY, minTrack, maxTrack))
+                        break;
                   }
             }
-Found:
+
       endEdit();
 
       _score->startCmd();
@@ -5037,18 +5031,13 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             nextSegm = bBack ? segm->prev1(Segment::SegChordRest) : segm->next1(Segment::SegChordRest);
             int minTrack = (track / VOICES ) * VOICES;
             int maxTrack = minTrack + (VOICES-1);
-            int currTrack;
 
             while (nextSegm) {                   // look for a ChordRest in the compatible track range
-                  foreach (const Element* e, nextSegm->annotations())
-                        if (e->type() == Element::FIGURED_BASS && e->track() >= minTrack && e->track() <= maxTrack)
-                              goto Found;
-                  for (currTrack = minTrack; currTrack <= maxTrack; currTrack++)
-                        if (nextSegm->element(currTrack) )
-                              goto Found;
+                  if(nextSegm->findAnnotationOrElement(Element::FIGURED_BASS, minTrack, maxTrack))
+                        break;
                   nextSegm = bBack ? nextSegm->prev1(Segment::SegChordRest) : nextSegm->next1(Segment::SegChordRest);
                   }
-Found:
+
             if (!nextSegm) {
                   qDebug("figuredBassTab: no prev/next segment");
                   return;
