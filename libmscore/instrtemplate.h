@@ -35,6 +35,7 @@ class InstrumentTemplate {
       QString trackName;
       QList<StaffName> longNames;      ///< shown on first system
       QList<StaffName> shortNames;     ///< shown on followup systems
+      QString musicXMLid;
 
       char minPitchA;         // pitch range playable by an amateur
       char maxPitchA;
