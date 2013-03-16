@@ -136,6 +136,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       trackName  = t.trackName;
       longNames  = t.longNames;
       shortNames = t.shortNames;
+      musicXMLid = t.musicXMLid;
       staves     = t.staves;
       extended   = t.extended;
 
@@ -190,6 +191,7 @@ void InstrumentTemplate::write(Xml& xml) const
                   xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
       xml.tag("description", trackName);
+      xml.tag("musicXMLid", musicXMLid);
       if (extended)
             xml.tag("extended", extended);
       if (tablature)
@@ -451,6 +453,9 @@ void InstrumentTemplate::read(XmlReader& e)
                         init(*ttt);
                   else
                         qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                  }
+            else if (tag == "musicXMLid") {
+                  musicXMLid = e.readElementText();
                   }
             else
                   e.unknown();
