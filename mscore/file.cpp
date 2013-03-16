@@ -534,13 +534,11 @@ void MuseScore::newFile()
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   Staff* staff = score->staff(staffIdx);
                   if (tick == 0) {
-                        if (!staff->isTabStaff()) {
-                              TimeSig* ts = new TimeSig(score);
-                              ts->setTrack(staffIdx * VOICES);
-                              ts->setSig(timesig, timesigType);
-                              Segment* s = measure->getSegment(ts, 0);
-                              s->add(ts);
-                              }
+                        TimeSig* ts = new TimeSig(score);
+                        ts->setTrack(staffIdx * VOICES);
+                        ts->setSig(timesig, timesigType);
+                        Segment* s = measure->getSegment(ts, 0);
+                        s->add(ts);
                         Part* part = staff->part();
                         if (!part->instr()->useDrumset()) {
                               //
