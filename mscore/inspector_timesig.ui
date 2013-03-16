@@ -54,7 +54,14 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="2">
+     <item row="0" column="1" colspan="2">
+      <widget class="QCheckBox" name="showCourtesy">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
       <widget class="QToolButton" name="resetShowCourtesy">
        <property name="toolTip">
         <string>reset value</string>
@@ -74,10 +81,10 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="showCourtesy">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>show courtesy</string>
+        <string>Show Courtesy</string>
        </property>
       </widget>
      </item>
