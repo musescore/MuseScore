@@ -3561,7 +3561,11 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                         case PITCHED_STAFF:
                               if (note->tieBack()) {
                                     int line = note->tieBack()->startNote()->line();
-                                    note->setLine(line);
+                                    // only set line if startNote has same pitch
+                                    // this is not the case for undo: undo works
+                                    // from right to left with tied notes
+                                    if (note->tieBack()->startNote()->pitch() == note->pitch())
+                                          note->setLine(line);
                                     if (note->accidental()) {
                                           // TODO: remove accidental only if note is not
                                           // on new system
