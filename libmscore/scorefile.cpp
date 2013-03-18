@@ -484,7 +484,7 @@ bool Score::loadStyle(const QString& fn)
       if (f.open(QIODevice::ReadOnly)) {
             MStyle st = _style;
             if (st.load(&f)) {
-                  _undo->push(new ChangeStyle(this, st));
+                  undo(new ChangeStyle(this, st));
                   return true;
                   }
             }
