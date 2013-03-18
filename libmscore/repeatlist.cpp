@@ -321,7 +321,7 @@ void RepeatList::unwind()
                               continueAt  = _score->searchLabel(s->continueAt());
                               isGoto      = true;
 
-                              if (nm) {
+                              if (nm && endRepeat) {
                                     rs->len = m->tick() + m->ticks() - rs->tick;
                                     append(rs);
                                     rs = new RepeatSegment;
