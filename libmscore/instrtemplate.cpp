@@ -190,7 +190,9 @@ void InstrumentTemplate::write(Xml& xml) const
             else
                   xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-      xml.tag("description", trackName);
+      if(longNames.size() > 1)
+            xml.tag("trackName", trackName);
+      xml.tag("description", description);
       xml.tag("musicXMLid", musicXMLid);
       if (extended)
             xml.tag("extended", extended);
@@ -300,7 +302,9 @@ void InstrumentTemplate::write1(Xml& xml) const
             else
                   xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-      xml.tag("description", trackName);
+      if(longNames.size() > 1)
+            xml.tag("trackName", trackName);
+      xml.tag("description", description);
       xml.etag();
       }
 
@@ -333,8 +337,10 @@ void InstrumentTemplate::read(XmlReader& e)
                         }
                   shortNames.append(StaffName(e.readElementText(), pos));
                   }
-            else if (tag == "description")
+            else if (tag == "trackName")
                   trackName = e.readElementText();
+            else if (tag == "description")
+                  description = e.readElementText();
             else if (tag == "extended")
                   extended = e.readInt();
             else if (tag == "staves") {
@@ -497,6 +503,8 @@ void InstrumentTemplate::read(XmlReader& e)
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
             trackName = longNames[0].name;
+      if (description.isEmpty() && !longNames.isEmpty())
+            description = longNames[0].name;
       if (id.isEmpty())
             id = trackName.toLower().replace(" ", "-");
 
