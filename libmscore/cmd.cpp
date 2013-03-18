@@ -1487,7 +1487,7 @@ void Score::resetUserStretch()
             return;
 
       for (Measure* m = m1; m; m = m->nextMeasure()) {
-            _undo->push(new ChangeStretch(m, 1.0));
+            undo(new ChangeStretch(m, 1.0));
             if (m == m2)
                   break;
             }
