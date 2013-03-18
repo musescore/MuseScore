@@ -61,7 +61,7 @@
 			</Channel>
 		</Instrument>
 		<Instrument id="soprano-flute">
-			<longName>Soprano­ Flute</longName>
+			<longName>Soprano Flute</longName>
 			<shortName>Sop. Fl.</shortName>
 			<description>E♭ Flute minor third above concert flute</description>
 			<musicXMLid>wind.flutes.flute</musicXMLid>
@@ -2241,7 +2241,7 @@
 		<Instrument id="harmonica-c12c">
 			<longName>12 Hole C Chromatic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>12 Hole Chromatic Harmonica in C </description>
+			<description>12 Hole Chromatic Harmonica in C</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2255,7 +2255,7 @@
 		<Instrument id="harmonica-c14c">
 			<longName>14 Hole C Chromatic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>14 Hole Chromatic Harmonica in C </description>
+			<description>14 Hole Chromatic Harmonica in C</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2269,7 +2269,7 @@
 		<Instrument id="harmonica-c12g">
 			<longName>12 Hole G Chromatic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>12 Hole Chromatic Harmonica in G </description>
+			<description>12 Hole Chromatic Harmonica in G</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2283,7 +2283,7 @@
 		<Instrument id="harmonica-c16c">
 			<longName>16 Hole C Chromatic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>16 Hole Chromatic Harmonica in C </description>
+			<description>16 Hole Chromatic Harmonica in C</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2297,7 +2297,7 @@
 		<Instrument id="harmonica-c12tenor-c">
 			<longName>12 Hole Tenor C Chromatic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>12 Hole Chromatic Harmonica in Tenor C </description>
+			<description>12 Hole Chromatic Harmonica in Tenor C</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G8vb</clef>
@@ -2311,7 +2311,7 @@
 		<Instrument id="harmonica-d12high-g">
 			<longName>10 Hole High G Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in High G </description>
+			<description>10 Hole Diatonic Harmonica in High G</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2325,7 +2325,7 @@
 		<Instrument id="harmonica-d12f">
 			<longName>10 Hole F Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in F </description>
+			<description>10 Hole Diatonic Harmonica in F</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2339,7 +2339,7 @@
 		<Instrument id="harmonica-d12d">
 			<longName>10 Hole D Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in D </description>
+			<description>10 Hole Diatonic Harmonica in D</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2353,7 +2353,7 @@
 		<Instrument id="harmonica-d12c">
 			<longName>10 Hole C Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in C </description>
+			<description>10 Hole Diatonic Harmonica in C</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2367,7 +2367,7 @@
 		<Instrument id="harmonica-d12a">
 			<longName>10 Hole A Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in A </description>
+			<description>10 Hole Diatonic Harmonica in A</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2381,7 +2381,7 @@
 		<Instrument id="harmonica-d12-g">
 			<longName>10 Hole G Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in G </description>
+			<description>10 Hole Diatonic Harmonica in G</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
@@ -2395,7 +2395,7 @@
 		<Instrument id="harmonica-d10low-d">
 			<longName>10 Hole Low D Diatonic Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>10 Hole Diatonic Harmonica in Low D </description>
+			<description>10 Hole Diatonic Harmonica in Low D</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G8vb</clef>
@@ -2409,7 +2409,7 @@
 		<Instrument id="harmonica-chordet">
 			<longName>20 Hole Chordet Harmonica</longName>
 			<shortName>Harm.</shortName>
-			<description>20 Hole Huang Chordet Harmonica </description>
+			<description>20 Hole Huang Chordet Harmonica</description>
 			<musicXMLid>wind.reed.harmonica</musicXMLid>
 			<extended>1</extended>
 			<clef>G8vb</clef>
@@ -6727,7 +6727,8 @@
 			<longName pos="5">Ped.</longName>
 			<shortName pos="2">Man.</shortName>
 			<shortName pos="5">Ped.</shortName>
-			<description>Pipe-Organ</description>
+			<trackName>Pipe Organ</trackName>
+			<description>Pipe Organ</description>
 			<staves>3</staves>
 			<clef>G</clef>
 			<bracket>1</bracket>
