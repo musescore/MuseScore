@@ -375,7 +375,9 @@ Score::Score(Score* parent)
       {
       init();
       _parentScore = parent;
+      delete _undo;
       _undo        = 0;
+      delete _repeatList;
       _repeatList  = 0;
 
       _style = *parent->style();
