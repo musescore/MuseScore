@@ -228,7 +228,7 @@ void Preferences::init()
 
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
-      workspace                 = "default";
+      workspace               = "default";
 
       firstStartWeb = true;
       };
