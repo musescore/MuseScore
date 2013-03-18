@@ -429,7 +429,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesy(),
+                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }
