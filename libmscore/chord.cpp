@@ -451,8 +451,13 @@ void Chord::remove(Element* e)
                   Note* note = static_cast<Note*>(e);
                   if (_notes.removeOne(note)) {
                         if (note->tieFor()) {
-                              if (note->tieFor()->endNote())
+                              if (note->tieFor()->endNote()) {
                                     note->tieFor()->endNote()->setTieBack(0);
+                                    // update accidentals for endNote
+                                    Chord* chord = note->tieFor()->endNote()->chord();
+                                    Measure* m = chord->segment()->measure();
+                                    note->score()->updateAccidentals(m,chord->staffIdx());
+                                    }
                               }
                         }
                   else
