@@ -110,19 +110,19 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(on_tabStemsToggled(bool)));
+      connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
       connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(on_tabStemThroughToggled(bool)));
+      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(tabStemThroughToggled(bool)));
       connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
 //    connect(minimNoneRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(on_tabMinimShortToggled(bool)));
+      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
       connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
       connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(on_durFontNameChanged(int)));
+      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(on_fretFontNameChanged(int)));
+      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
       connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
       connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updateTabPreview()));
@@ -485,7 +485,7 @@ void EditStaffType::presetTablatureChanged(int idx)
       }
 
 //---------------------------------------------------------
-//   Tabulature FullCong/QuickConfig clicked
+//   Tabulature FullConfig/QuickConfig clicked
 //---------------------------------------------------------
 
 void EditStaffType::on_pushFullConfig_clicked()
@@ -506,7 +506,7 @@ void EditStaffType::on_pushQuickConfig_clicked()
 //    set depending parameters
 //---------------------------------------------------------
 
-void EditStaffType::on_durFontNameChanged(int idx)
+void EditStaffType::durFontNameChanged(int idx)
       {
       qreal size, yOff;
       if (StaffTypeTablature::fontData(true, idx, 0, 0, &size, &yOff)) {
@@ -516,7 +516,7 @@ void EditStaffType::on_durFontNameChanged(int idx)
       updateTabPreview();
       }
 
-void EditStaffType::on_fretFontNameChanged(int idx)
+void EditStaffType::fretFontNameChanged(int idx)
       {
       qreal size, yOff;
       if (StaffTypeTablature::fontData(false, idx, 0, 0, &size, &yOff)) {
@@ -532,7 +532,7 @@ void EditStaffType::on_fretFontNameChanged(int idx)
 //    enable / disable all controls related to stems
 //---------------------------------------------------------
 
-void EditStaffType::on_tabStemsToggled(bool checked)
+void EditStaffType::tabStemsToggled(bool checked)
       {
       tabStemsCompatibility(checked);
       updateTabPreview();
@@ -544,7 +544,7 @@ void EditStaffType::on_tabStemsToggled(bool checked)
 //    contra-toggle "stems through"
 //---------------------------------------------------------
 
-void EditStaffType::on_tabMinimShortToggled(bool checked)
+void EditStaffType::tabMinimShortToggled(bool checked)
       {
       tabMinimShortCompatibility(checked);
       updateTabPreview();
@@ -554,7 +554,7 @@ void EditStaffType::on_tabMinimShortToggled(bool checked)
 //   Tabulature "stems through" toggled
 //---------------------------------------------------------
 
-void EditStaffType::on_tabStemThroughToggled(bool checked)
+void EditStaffType::tabStemThroughToggled(bool checked)
       {
       tabStemThroughCompatibility(checked);
       updateTabPreview();
