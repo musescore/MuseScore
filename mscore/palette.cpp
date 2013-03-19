@@ -555,7 +555,8 @@ void Palette::paintEvent(QPaintEvent* event)
 
       for (int idx = 0; idx < cells.size(); ++idx) {
             int yoffset = gscore->spatium() * _yOffset;
-            QRect r = idxRect(idx).translated(0, yoffset);
+            QRect r = idxRect(idx);
+            QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             if (idx == selectedIdx)
                   p.fillRect(r, bgColor.light(200));
@@ -569,7 +570,7 @@ void Palette::paintEvent(QPaintEvent* event)
                   QFont f(p.font());
                   f.setPointSize(12);
                   p.setFont(f);
-                  p.drawText(r, Qt::AlignLeft | Qt::AlignTop, cells[idx]->tag);
+                  p.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, cells[idx]->tag);
                   }
 
             p.setPen(pen);
@@ -579,8 +580,8 @@ void Palette::paintEvent(QPaintEvent* event)
                   continue;
             bool drawStaff = cells[idx]->drawStaff;
             if (el->type() == Element::ICON) {
-                  int x      = r.x();
-                  int y      = r.y();
+                  int x      = rShift.x();
+                  int y      = rShift.y();
                   Icon* _icon = static_cast<Icon*>(el);
                   QIcon icon = _icon->icon();
                   static const int border = 2;
