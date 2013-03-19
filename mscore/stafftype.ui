@@ -133,6 +133,9 @@
              <property name="suffix">
               <string>sp</string>
              </property>
+             <property name="singleStep">
+              <double>0.250000000000000</double>
+             </property>
             </widget>
            </item>
           </layout>
