@@ -451,6 +451,9 @@ Element* BarLine::drop(const DropData& data)
                   return 0;
                   }
 
+            //parent is a segment
+            Measure* m = static_cast<Segment*>(parent())->measure();
+
             // check if the new property can apply to this single bar line
             bool oldRepeat = (barLineType() == START_REPEAT || barLineType() == END_REPEAT
                         || barLineType() == END_START_REPEAT);
@@ -470,15 +473,13 @@ Element* BarLine::drop(const DropData& data)
                         }
                   // if drop refer to subtype, update this bar line subtype
                   else {
-                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
-//                        setCustomSubtype(true);
+                        score()->undoChangeBarLine(m, bl->barLineType());
                         }
                   delete e;
                   return 0;
                   }
 
             // drop applies to all bar lines of the measure
-            Measure* m = static_cast<Segment*>(parent())->measure();
             if (st == START_REPEAT) {
                   m = m->nextMeasure();
                   if (m == 0) {
