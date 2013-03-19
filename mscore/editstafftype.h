@@ -73,13 +73,13 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void createNewType();
       void nameEdited(const QString&);
       void presetTablatureChanged(int idx);
-      void on_durFontNameChanged(int idx);
-      void on_fretFontNameChanged(int idx);
+      void durFontNameChanged(int idx);
+      void fretFontNameChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
-      void on_tabStemThroughToggled(bool checked);
-      void on_tabMinimShortToggled(bool checked);
-      void on_tabStemsToggled(bool checked);
+      void tabStemThroughToggled(bool checked);
+      void tabMinimShortToggled(bool checked);
+      void tabStemsToggled(bool checked);
       void updateTabPreview();
 
 public slots:
