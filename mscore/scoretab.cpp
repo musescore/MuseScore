@@ -233,6 +233,7 @@ void ScoreTab::updateExcerpts()
                   tab2->addTab(excerpt->score()->name().replace("&","&&"));
             tab2->blockSignals(false);
             tab2->setVisible(true);
+            setExcerpt(0);
             }
       else {
             tab2->setVisible(false);
