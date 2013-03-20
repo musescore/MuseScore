@@ -190,7 +190,8 @@ void Workspace::initWorkspace()
             }
       if (currentWorkspace == 0) {
             currentWorkspace = new Workspace;
-            currentWorkspace->setName("buildin");
+            currentWorkspace->setName("default");
+            Workspace::workspaces().append(currentWorkspace);
             }
       }
 
@@ -463,10 +464,10 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       }
 
 //---------------------------------------------------------
-//   writeBuildinWorkspace
+//   writeBuiltinWorkspace
 //---------------------------------------------------------
 
-void Workspace::writeBuildinWorkspace()
+void Workspace::writeBuiltinWorkspace()
       {
       PaletteBox* paletteBox = mscore->getPaletteBox();
       paletteBox->clear();
