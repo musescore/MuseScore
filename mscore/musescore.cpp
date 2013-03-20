@@ -2406,7 +2406,7 @@ int main(int argc, char* av[])
       gscore = new Score(MScore::defaultStyle());
 
       if (writeWorkspaceFile) {
-            Workspace::writeBuildinWorkspace();
+            Workspace::writeBuiltinWorkspace();
             return 0;
             }
 
@@ -3603,7 +3603,7 @@ void MuseScore::excerptsChanged(Score* s)
             }
       if (tab1) {
             ScoreView* v = tab1->view();
-            if (v && v->score() == s) {
+            if (v && v->score()->rootScore() == s) {
                   tab1->updateExcerpts();
                   }
             else if (v == 0) {
@@ -4106,10 +4106,10 @@ void MuseScore::endCmd()
                   play(e);
                   cs->setPlayNote(false);
                   }
-            if (cs->excerptsChanged()) {
-                  Q_ASSERT(cs == cs->rootScore());
-                  excerptsChanged(cs);
-                  cs->setExcerptsChanged(false);
+            if (cs->rootScore()->excerptsChanged()) {
+                  //Q_ASSERT(cs == cs->rootScore());
+                  excerptsChanged(cs->rootScore());
+                  cs->rootScore()->setExcerptsChanged(false);
                   }
             if (cs->instrumentsChanged()) {
                   seq->initInstruments();
