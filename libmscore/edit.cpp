@@ -1184,14 +1184,14 @@ void Score::deleteItem(Element* el)
 
                   foreach(Score* score, scoreList()) {
                         Measure* m   = score->tick2measure(tick);
-                        if (m->tick() >= tick)
-                              m = m->prevMeasure();
                         if (segType == Segment::SegStartRepeatBarLine)
                               undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatStart);
                         else if (segType == Segment::SegBarLine)
                               undoRemoveElement(el);
                         else if (segType == Segment::SegEndBarLine) {
                               if (!normalBar) {
+                                    if (m->tick() >= tick)
+                                          m = m->prevMeasure();
                                     undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatEnd);
                                     Measure* nm = m->nextMeasure();
                                     if (nm)
