@@ -873,6 +873,8 @@ void Seq::setRelTempo(double relTempo)
 
 void Seq::setPos(int utick)
       {
+      if (cs == 0)
+            return;
       stopNotes();
 
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
