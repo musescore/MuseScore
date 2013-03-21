@@ -2272,10 +2272,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       clef->setParent(seg);
       undoAddElement(clef);
 
-      int n = p->nstaves();
-      Staff* nstaff = staff(staffIdx + n - 1);
-      undoChangeBarLineSpan(s, n, 0, nstaff->lines() - 1);
-      adjustBracketsIns(staffIdx+1, staffIdx+2);
       undoChangeKeySig(ns, 0, s->key(0));
 
 #if 0       // created on layout
