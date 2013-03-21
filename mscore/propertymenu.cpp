@@ -234,7 +234,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("MIDI Properties..."))->setData("d-dynamics");
             popup->addAction(tr("Text Properties..."))->setData("d-props");
             }
-      else if (e->type() == Element::TEXTLINE_SEGMENT || e->type() == Element::OTTAVA_SEGMENT) {
+      else if (e->type() == Element::TEXTLINE_SEGMENT
+                  || e->type() == Element::OTTAVA_SEGMENT
+                  || e->type() == Element::VOLTA_SEGMENT
+                  || e->type() == Element::PEDAL_SEGMENT) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else

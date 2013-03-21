@@ -1085,6 +1085,7 @@ void Score::deleteItem(Element* el)
             case Element::TEXTLINE_SEGMENT:
             case Element::VOLTA_SEGMENT:
             case Element::SLUR_SEGMENT:
+            case Element::PEDAL_SEGMENT:
                   undoRemoveElement(static_cast<SpannerSegment*>(el)->spanner());
                   break;
 
