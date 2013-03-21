@@ -398,6 +398,8 @@ void InstrumentWizard::createInstruments(Score* cs)
             QTreeWidgetItem* ci = 0;
             int rstaff = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
+                  if(ci->isHidden())
+                        continue;
                   StaffListItem* sli = (StaffListItem*)ci;
                   Staff* staff       = new Staff(cs, part, rstaff);
                   sli->staff         = staff;
