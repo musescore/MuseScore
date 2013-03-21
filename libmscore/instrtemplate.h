@@ -45,10 +45,12 @@ class InstrumentTemplate {
 
       Interval transpose;     // for transposing instruments
 
+      StaffGroup  staffGroup;
+      int         staffTypePreset;
       bool useDrumset;
       Drumset* drumset;
 
-      bool useTablature;
+//      bool useTablature;
       Tablature* tablature;
 
       QList<NamedEventList>   midiActions;
