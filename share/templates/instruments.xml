@@ -77,7 +77,7 @@
 			</Channel>
 		</Instrument>
 		<Instrument id="subcontra-alto-flute">
-			<longName>Subcontra-alto Flute</longName>
+			<longName>Sub Contra-alto Flute</longName>
 			<shortName>Sc-a. Fl.</shortName>
 			<description>Subcontra-alto Flute</description>
 			<musicXMLid>wind.flutes.flute</musicXMLid>
@@ -670,7 +670,7 @@
 			<description>Garklein Recorder</description>
 			<musicXMLid>wind.flutes.recorder.garklein</musicXMLid>
 			<extended>1</extended>
-			<clef>G15va</clef>
+			<clef>G15ma</clef>
 			<barlineSpan>1</barlineSpan>
 			<aPitchRange>84-105</aPitchRange>
 			<pPitchRange>84-108</pPitchRange>
@@ -792,7 +792,7 @@
 		</Instrument>
 		<Instrument id="tin-whistle">
 			<longName>Tin Whistle</longName>
-			<shortName>Tin. Wh..</shortName>
+			<shortName>Tin. Wh.</shortName>
 			<description>same as 6 hole Flageolet but metal construction</description>
 			<musicXMLid>wind.flutes.whistle.tin</musicXMLid>
 			<clef>G8va</clef>
@@ -805,7 +805,7 @@
 		</Instrument>
 		<Instrument id="bflat-tin-whistle">
 			<longName>B♭ Tin Whistle</longName>
-			<shortName>B♭ Tin. Wh..</shortName>
+			<shortName>B♭ Tin. Wh.</shortName>
 			<description>same as 6 hole Flageolet but metal construction</description>
 			<musicXMLid>wind.flutes.whistle.tin.bflat</musicXMLid>
 			<extended>1</extended>
@@ -819,7 +819,7 @@
 		</Instrument>
 		<Instrument id="d-tin-whistle">
 			<longName>Tin Whistle</longName>
-			<shortName>Tin. Wh..</shortName>
+			<shortName>Tin. Wh.</shortName>
 			<description>same as 6 hole Flageolet but metal construction</description>
 			<musicXMLid>wind.flutes.whistle.tin.d</musicXMLid>
 			<extended>1</extended>
@@ -2767,7 +2767,7 @@
 		</Instrument>
 		<Instrument id="posthorn">
 			<longName>Posthorn</longName>
-			<shortName>Psthn..</shortName>
+			<shortName>Psthn.</shortName>
 			<description>Posthorn</description>
 			<musicXMLid>brass.posthorn</musicXMLid>
 			<extended>1</extended>
@@ -3251,7 +3251,7 @@
 		</Instrument>
 		<Instrument id="fiscorn">
 			<longName>Fiscorn</longName>
-			<shortName>Fsc..</shortName>
+			<shortName>Fsc.</shortName>
 			<description>Fiscorn</description>
 			<musicXMLid>brass.fiscorn</musicXMLid>
 			<extended>1</extended>
@@ -3923,7 +3923,7 @@
 			<description>Orff Soprano Glockenspiel</description>
 			<musicXMLid>pitched-percussion.glockenspiel.soprano</musicXMLid>
 			<extended>1</extended>
-			<clef>G15va</clef>
+			<clef>G15ma</clef>
 			<barlineSpan>1</barlineSpan>
 			<aPitchRange>84-105</aPitchRange>
 			<pPitchRange>84-105</pPitchRange>
@@ -3966,7 +3966,7 @@
 			<shortName>Tph.</shortName>
 			<description>Tubaphone</description>
 			<extended>1</extended>
-			<clef>G15va</clef>
+			<clef>G15ma</clef>
 			<barlineSpan>1</barlineSpan>
 			<aPitchRange>84-108</aPitchRange>
 			<pPitchRange>84-108</pPitchRange>
@@ -3981,11 +3981,11 @@
 			<musicXMLid>metal.bells.almglocken</musicXMLid>
 			<staves>2</staves>
 			<extended>1</extended>
-			<clef>G15va</clef>
+			<clef>G15ma</clef>
 			<bracket>1</bracket>
 			<bracketSpan>2</bracketSpan>
 			<barlineSpan>2</barlineSpan>
-			<clef staff="2">F15va</clef>
+			<clef staff="2">F15ma</clef>
 			<aPitchRange>60-105</aPitchRange>
 			<pPitchRange>60-105</pPitchRange>
 			<Channel>
@@ -4452,7 +4452,7 @@
 		</Instrument>
 	</InstrumentGroup>
 	<InstrumentGroup id="unpitched-percussion">
-		<name>UnpitchePercussion</name>
+		<name>Unpitched Percussion</name>
 		<Instrument id="drumset-5-lines">
 			<longName>Drumset</longName>
 			<shortName>Drs.</shortName>
@@ -4914,7 +4914,7 @@
 				<head>1</head>
 				<line>0</line>
 				<voice>0</voice>
-				<name>CloseHi-hat</name>
+				<name>Closed Hi-hat</name>
 				<stem>1</stem>
 				<shortcut>B</shortcut>
 			</Drum>
@@ -6096,7 +6096,7 @@
 		</Instrument>
 	</InstrumentGroup>
 	<InstrumentGroup id="other-fretted-instruments">
-		<name>Other FretteInstruments</name>
+		<name>Other Fretted Instruments</name>
 		<Instrument id="lute">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
@@ -6665,13 +6665,15 @@
 			<shortName>Cel.</shortName>
 			<description>Celesta</description>
 			<staves>2</staves>
-			<clef>G15va</clef>
+			<clef>G</clef>
 			<bracket>1</bracket>
 			<bracketSpan>2</bracketSpan>
 			<barlineSpan>2</barlineSpan>
-			<clef staff="2">F15va</clef>
-			<aPitchRange>60-108</aPitchRange>
-			<pPitchRange>60-108</pPitchRange>
+			<clef staff="2">F</clef>
+			<aPitchRange>48-113</aPitchRange>
+			<pPitchRange>48-113</pPitchRange>
+			<transposeDiatonic>8</transposeDiatonic>
+			<transposeChromatic>12</transposeChromatic>
 			<Channel>
 				<program value="8"/>
 			</Channel>
@@ -7180,7 +7182,7 @@
 		</Instrument>
 	</InstrumentGroup>
 	<InstrumentGroup id="plucked-strings">
-		<name>PluckeStrings</name>
+		<name>Plucked Strings</name>
 		<Instrument id="harp">
 			<longName>Harp</longName>
 			<shortName>Hrp.</shortName>
