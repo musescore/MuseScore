@@ -803,7 +803,7 @@ bool Score::read(XmlReader& e)
                               st  = new StaffTypePitched();
                         }
                   st->read(e);
-                  st->setBuildin(false);
+                  st->setBuiltin(false);
                   addStaffType(idx, st);
                   }
             else if (tag == "siglist")
