@@ -44,7 +44,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       foreach(StaffType** const st, score->staffTypes())
              staffTypes.append((*st)->clone());
       foreach(StaffType* const st, staffTypes)
-             st->setBuildin(false);
+             st->setBuiltin(false);
       int idx = 0;
       QListWidgetItem* ci = 0;
       foreach(StaffType* st, staffTypes) {
@@ -56,16 +56,23 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
             ++idx;
             }
 
-      // init tab presets
-      //                                                                               clef   bars stemless time  durations                      size off genDur frets                            size off thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-      _tabPresets[TAB_PRESET_GUITAR_SIMPLE]= new StaffTypeTablature(QString(), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      _tabPresets[TAB_PRESET_GUITAR_FULL]  = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _tabPresets[TAB_PRESET_BASS_SIMPLE]  = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      _tabPresets[TAB_PRESET_BASS_FULL]    = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _tabPresets[TAB_PRESET_UKULELE]      = new StaffTypeTablature(QString(), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
-//    _tabPresets[TAB_PRESET_BANDURRIA]    = new StaffTypeTablature(QString(), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Modern"),  10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _tabPresets[TAB_PRESET_ITALIAN]      = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
-      _tabPresets[TAB_PRESET_FRENCH]       = new StaffTypeTablature(QString(), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+      // init presets
+      int numOfPreset = StaffType::numOfPresets();
+      for (int i=0; i < numOfPreset; ++i) {
+            const StaffType* st = StaffType::preset(i);
+            switch (st->group()) {
+                  case TAB_STAFF:
+                        presetTablatureCombo->addItem(st->name(), i);
+                        break;
+                  case PERCUSSION_STAFF:
+                        presetPercCombo->addItem(st->name(), i);
+                        break;
+                  default:
+                        break;
+                  }
+            }
+      presetPercCombo->addItem(tr("Custom"), -1);
+      presetTablatureCombo->addItem(tr("Custom"), -1);
 
       // tab page configuration
       tabDetails->hide();                       // start tabulature page in simple mode
@@ -100,15 +107,21 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(newTypePercussion,    SIGNAL(clicked()),            SLOT(createNewType()));
       connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
       connect(presetTablatureCombo, SIGNAL(currentIndexChanged(int)), SLOT(presetTablatureChanged(int)));
+      connect(presetPercCombo,      SIGNAL(currentIndexChanged(int)), SLOT(presetPercChanged(int)));
 
       if (ci)
             staffTypeList->setCurrentItem(ci);
 
-      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updateTabPreview()));
-      connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updatePreviews()));
+      connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updatePreviews()));
+      connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
+      connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
+      connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
+
+      connect(genKeysigPercussion,       SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
+      connect(showLedgerLinesPercussion, SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
+      connect(stemlessPercussion,        SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
+
       connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
       connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
       connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
@@ -137,14 +150,6 @@ EditStaffType::~EditStaffType()
       {
       foreach(StaffType* st, staffTypes)
             delete st;
-      delete _tabPresets[TAB_PRESET_GUITAR_SIMPLE];
-      delete _tabPresets[TAB_PRESET_GUITAR_FULL];
-      delete _tabPresets[TAB_PRESET_BASS_SIMPLE];
-      delete _tabPresets[TAB_PRESET_BASS_FULL];
-      delete _tabPresets[TAB_PRESET_UKULELE];
-//    delete _tabPresets[TAB_PRESET_BANDURRIA];
-      delete _tabPresets[TAB_PRESET_ITALIAN];
-      delete _tabPresets[TAB_PRESET_FRENCH];
       }
 
 //---------------------------------------------------------
@@ -227,20 +232,20 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
 
       if (modif) {
             // save common properties
-            st->setName(o->text());
-            st->setLines(lines->value());
-            st->setLineDistance(Spatium(lineDistance->value()));
-            st->setShowBarlines(showBarlines->isChecked());
-            st->setGenClef(genClef->isChecked());
-            st->setGenTimesig(genTimesig->isChecked());
             // save-group specific properties
             switch(st->group()) {
                   case PITCHED_STAFF:
                         {
-                        StaffTypePitched* sp = static_cast<StaffTypePitched*>(st);
-                        sp->setGenKeysig(genKeysigPitched->isChecked());
-                        sp->setShowLedgerLines(showLedgerLinesPitched->isChecked());
-                        st->setSlashStyle(stemlessPitched->isChecked());
+                        StaffTypePitched* stp = static_cast<StaffTypePitched*>(st);
+                        stp->setName(o->text());
+                        stp->setLines(lines->value());
+                        stp->setLineDistance(Spatium(lineDistance->value()));
+                        stp->setShowBarlines(showBarlines->isChecked());
+                        stp->setGenClef(genClef->isChecked());
+                        stp->setGenTimesig(genTimesig->isChecked());
+                        stp->setGenKeysig(genKeysigPitched->isChecked());
+                        stp->setShowLedgerLines(showLedgerLinesPitched->isChecked());
+                        stp->setSlashStyle(stemlessPitched->isChecked());
                         }
                         break;
                   case TAB_STAFF:
@@ -251,10 +256,8 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
                         break;
                   case PERCUSSION_STAFF:
                         {
-                        StaffTypePercussion* sp = static_cast<StaffTypePercussion*>(st);
-                        sp->setGenKeysig(genKeysigPercussion->isChecked());
-                        sp->setShowLedgerLines(showLedgerLinesPercussion->isChecked());
-                        st->setSlashStyle(stemlessPercussion->isChecked());
+                        StaffTypePercussion* stp = static_cast<StaffTypePercussion*>(st);
+                        setPercFromDlg(stp);
                         }
                         break;
                   }
@@ -276,15 +279,6 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
       int idx = n->data(Qt::UserRole).toInt();
       StaffType* st = staffTypes[idx];
 
-      // set properties common to all groups (some props appears in multiple group pages)
-      blockTabPreviewSignals(true);
-      name->setText(st->name());
-      lines->setValue(st->lines());
-      lineDistance->setValue(st->lineDistance().val());
-      genClef->setChecked(st->genClef());
-      showBarlines->setChecked(st->showBarlines());
-      genTimesig->setChecked(st->genTimesig());
-
       // switch to stack page and set props specific to each staff group
 
       switch(st->group()) {
@@ -292,6 +286,12 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
                   {
                   StaffTypePitched* ps = static_cast<StaffTypePitched*>(st);
                   stack->setCurrentIndex(0);
+                  name->setText(st->name());
+                  lines->setValue(st->lines());
+                  lineDistance->setValue(st->lineDistance().val());
+                  genClef->setChecked(st->genClef());
+                  showBarlines->setChecked(st->showBarlines());
+                  genTimesig->setChecked(st->genTimesig());
                   genKeysigPitched->setChecked(ps->genKeysig());
                   showLedgerLinesPitched->setChecked(ps->showLedgerLines());
                   stemlessPitched->setChecked(st->slashStyle());
@@ -301,23 +301,276 @@ void EditStaffType::typeChanged(QListWidgetItem* n, QListWidgetItem* o)
             case TAB_STAFF:
                   {
                   StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st);
+                  blockTabPreviewSignals(true);
                   setDlgFromTab(stt);
                   name->setText(stt->name());   // setDlgFromTab() does not copy the name and it shouldn't
                   stack->setCurrentIndex(1);
+                  blockTabPreviewSignals(false);
                   }
                   break;
 
             case PERCUSSION_STAFF:
                   {
                   StaffTypePercussion* ps = static_cast<StaffTypePercussion*>(st);
+                  blockPercPreviewSignals(true);
+                  setDlgFromPerc(ps);
+                  name->setText(ps->name());   // setDlgFromPerc() does not copy the name and it shouldn't
                   stack->setCurrentIndex(2);
-                  genKeysigPercussion->setChecked(ps->genKeysig());
-                  showLedgerLinesPercussion->setChecked(ps->showLedgerLines());
-                  stemlessPercussion->setChecked(st->slashStyle());
+                  blockPercPreviewSignals(false);
                   }
                   break;
             }
-      blockTabPreviewSignals(false);
+      }
+
+//---------------------------------------------------------
+//   createNewType
+//---------------------------------------------------------
+
+void EditStaffType::createNewType()
+      {
+      //
+      // initialize new StaffType with current selected one
+      //
+      int idx       = staffTypeList->currentItem()->data(Qt::UserRole).toInt();
+      StaffType* ns = staffTypes[idx]->clone();
+
+      //
+      // create unique new name for StaffType
+      //
+      for (int i = 1;;++i) {
+            QString name = QString("type-%1").arg(i);
+            int n = staffTypes.size();
+            int k;
+            for (k = 0; k < n; ++k) {
+                  if (staffTypes[k]->name() == name)
+                        break;
+                  }
+            if (k == n) {
+                  ns->setName(name);
+                  break;
+                  }
+            }
+      staffTypes.append(ns);
+      QListWidgetItem* item = new QListWidgetItem(ns->name());
+      item->setData(Qt::UserRole, staffTypes.size() - 1);
+      staffTypeList->addItem(item);
+      staffTypeList->setCurrentItem(item);
+      modified = true;
+      }
+
+//---------------------------------------------------------
+//   nameEdited
+//---------------------------------------------------------
+
+void EditStaffType::nameEdited(const QString& s)
+      {
+      staffTypeList->currentItem()->setText(s);
+      }
+
+//---------------------------------------------------------
+//   updatePreviews
+//---------------------------------------------------------
+
+void EditStaffType::updatePreviews()
+      {
+      updatePercPreview();
+      updateTabPreview();
+      }
+
+//=========================================================
+//   PERCUSSION PAGE METHODS
+//=========================================================
+
+//---------------------------------------------------------
+//   Precussion preset clicked
+//---------------------------------------------------------
+
+void EditStaffType::presetPercChanged(int idx)
+      {
+      int presetIdx = presetPercCombo->itemData(idx).toInt();
+      if(presetIdx >= 0) {                      // ignore setting to "Custom"
+            blockPercPreviewSignals(true);       // do not redraw preview for every value we change!
+            const StaffTypePercussion* st = static_cast<const StaffTypePercussion*>(StaffType::preset(presetIdx));
+            setDlgFromPerc(st);
+            blockPercPreviewSignals(false);
+            }
+      }
+
+//---------------------------------------------------------
+//   setDlgFromPerc
+//
+//    initializes dlg controls from a StaffTypePercussion
+//---------------------------------------------------------
+
+void EditStaffType::setDlgFromPerc(const StaffTypePercussion * st)
+      {
+//      name->setText(st->name());             // keep existing name: presets should not overwrite type name
+      lines->setValue(st->lines());
+      lineDistance->setValue(st->lineDistance().val());
+      genClef->setChecked(st->genClef());
+      showBarlines->setChecked(st->showBarlines());
+      genTimesig->setChecked(st->genTimesig());
+      genKeysigPercussion->setChecked(st->genKeysig());
+      showLedgerLinesPercussion->setChecked(st->showLedgerLines());
+      stemlessPercussion->setChecked(st->slashStyle());
+      updatePercPreview();
+      }
+
+//---------------------------------------------------------
+//   setPercFromDlg
+//
+//    initializes a StaffTypePercussion from dlg controls
+//---------------------------------------------------------
+
+void EditStaffType::setPercFromDlg(StaffTypePercussion * st)
+{
+      st->setName(name->text());
+      st->setLines(lines->value());
+      st->setLineDistance(Spatium(lineDistance->value()));
+      st->setGenClef(genClef->isChecked());
+      st->setShowBarlines(showBarlines->isChecked());
+      st->setGenTimesig(genTimesig->isChecked());
+      st->setGenKeysig(genKeysigPercussion->isChecked());
+      st->setShowLedgerLines(showLedgerLinesPercussion->isChecked());
+      st->setSlashStyle(stemlessPercussion->isChecked());
+}
+
+//---------------------------------------------------------
+//   Update percussion preview
+///   update percussion-related fields
+//---------------------------------------------------------
+
+void EditStaffType::updatePercPreview()
+      {
+      // if current type is not a PERC type, do nothing
+      if(staffTypes[staffTypeList->currentItem()->data(Qt::UserRole).toInt()]->group() != PERCUSSION_STAFF)
+            return;
+      // create a new staff type from dlg settings
+      StaffTypePercussion* st = new StaffTypePercussion();
+      setPercFromDlg(st);
+      // set preset combo: check stt has the same structure as one of the presets
+      // if none matches, set as custom
+      int idx;
+      int numOfPresets = presetPercCombo->count()-1;  // do not count the final "Custom" item
+      for(idx=0; idx < numOfPresets; idx++) {
+            int presetIdx = presetPercCombo->itemData(idx).toInt();
+            if(st->isSameStructure(*StaffType::preset(presetIdx)) )
+                  break;
+            }
+      presetPercCombo->blockSignals(true);
+      presetPercCombo->setCurrentIndex(idx);
+      presetPercCombo->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   Block percussion preview signals
+//---------------------------------------------------------
+
+void EditStaffType::blockPercPreviewSignals(bool block)
+      {
+      lines->blockSignals(block);
+      lineDistance->blockSignals(block);
+      genClef->blockSignals(block);
+      genTimesig->blockSignals(block);
+      showBarlines->blockSignals(block);
+      showLedgerLinesPercussion->blockSignals(block);
+      genKeysigPercussion->blockSignals(block);
+      stemlessPercussion->blockSignals(block);
+      }
+
+//=========================================================
+//   TABULATURE PAGE METHODS
+//=========================================================
+
+//---------------------------------------------------------
+//   Tabulature FullConfig/QuickConfig clicked
+//---------------------------------------------------------
+
+void EditStaffType::on_pushFullConfig_clicked()
+      {
+      tabPresets->hide();
+      tabDetails->show();
+      }
+
+void EditStaffType::on_pushQuickConfig_clicked()
+      {
+      tabDetails->hide();
+      tabPresets->show();
+      }
+
+//---------------------------------------------------------
+//   Tabulature preset clicked
+//---------------------------------------------------------
+
+void EditStaffType::presetTablatureChanged(int idx)
+      {
+      int presetIdx = presetTablatureCombo->itemData(idx).toInt();
+      if(presetIdx >= 0) {                      // ignore setting to "Custom"
+            blockTabPreviewSignals(true);       // do not redraw preview for every value we change!
+            const StaffTypeTablature* st = static_cast<const StaffTypeTablature*>(StaffType::preset(presetIdx));
+            setDlgFromTab(st);
+            blockTabPreviewSignals(false);
+            }
+      }
+
+//---------------------------------------------------------
+//   Tabulature duration / fret font name changed
+//
+//    set depending parameters
+//---------------------------------------------------------
+
+void EditStaffType::durFontNameChanged(int idx)
+      {
+      qreal size, yOff;
+      if (StaffTypeTablature::fontData(true, idx, 0, 0, &size, &yOff)) {
+            durFontSize->setValue(size);
+            durY->setValue(yOff);
+            }
+      updateTabPreview();
+      }
+
+void EditStaffType::fretFontNameChanged(int idx)
+      {
+      qreal size, yOff;
+      if (StaffTypeTablature::fontData(false, idx, 0, 0, &size, &yOff)) {
+            fretFontSize->setValue(size);
+            fretY->setValue(yOff);
+            }
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature note stems toggled
+//
+//    enable / disable all controls related to stems
+//---------------------------------------------------------
+
+void EditStaffType::tabStemsToggled(bool checked)
+      {
+      tabStemsCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature "minim short" toggled
+//
+//    contra-toggle "stems through"
+//---------------------------------------------------------
+
+void EditStaffType::tabMinimShortToggled(bool checked)
+      {
+      tabMinimShortCompatibility(checked);
+      updateTabPreview();
+      }
+
+//---------------------------------------------------------
+//   Tabulature "stems through" toggled
+//---------------------------------------------------------
+
+void EditStaffType::tabStemThroughToggled(bool checked)
+      {
+      tabStemThroughCompatibility(checked);
+      updateTabPreview();
       }
 
 //---------------------------------------------------------
@@ -427,145 +680,12 @@ void EditStaffType::setTabFromDlg(StaffTypeTablature * stt)
 }
 
 //---------------------------------------------------------
-//   createNewType
-//---------------------------------------------------------
-
-void EditStaffType::createNewType()
-      {
-      //
-      // initialize new StaffType with current selected one
-      //
-      int idx       = staffTypeList->currentItem()->data(Qt::UserRole).toInt();
-      StaffType* ns = staffTypes[idx]->clone();
-
-      //
-      // create unique new name for StaffType
-      //
-      for (int i = 1;;++i) {
-            QString name = QString("type-%1").arg(i);
-            int n = staffTypes.size();
-            int k;
-            for (k = 0; k < n; ++k) {
-                  if (staffTypes[k]->name() == name)
-                        break;
-                  }
-            if (k == n) {
-                  ns->setName(name);
-                  break;
-                  }
-            }
-      staffTypes.append(ns);
-      QListWidgetItem* item = new QListWidgetItem(ns->name());
-      item->setData(Qt::UserRole, staffTypes.size() - 1);
-      staffTypeList->addItem(item);
-      staffTypeList->setCurrentItem(item);
-      modified = true;
-      }
-
-//---------------------------------------------------------
-//   nameEdited
-//---------------------------------------------------------
-
-void EditStaffType::nameEdited(const QString& s)
-      {
-      staffTypeList->currentItem()->setText(s);
-      }
-
-//---------------------------------------------------------
-//   Tabulature preset clicked
-//---------------------------------------------------------
-
-void EditStaffType::presetTablatureChanged(int idx)
-      {
-      if(idx < TAB_PRESETS) {
-            blockTabPreviewSignals(true);             // do not redraw preview for every value we change!
-            setDlgFromTab(_tabPresets[idx]);
-            blockTabPreviewSignals(false);
-            }
-      }
-
-//---------------------------------------------------------
-//   Tabulature FullConfig/QuickConfig clicked
-//---------------------------------------------------------
-
-void EditStaffType::on_pushFullConfig_clicked()
-      {
-      tabPresets->hide();
-      tabDetails->show();
-      }
-
-void EditStaffType::on_pushQuickConfig_clicked()
-      {
-      tabDetails->hide();
-      tabPresets->show();
-      }
-
-//---------------------------------------------------------
-//   Tabulature duration / fret font name changed
-//
-//    set depending parameters
-//---------------------------------------------------------
-
-void EditStaffType::durFontNameChanged(int idx)
-      {
-      qreal size, yOff;
-      if (StaffTypeTablature::fontData(true, idx, 0, 0, &size, &yOff)) {
-            durFontSize->setValue(size);
-            durY->setValue(yOff);
-            }
-      updateTabPreview();
-      }
-
-void EditStaffType::fretFontNameChanged(int idx)
-      {
-      qreal size, yOff;
-      if (StaffTypeTablature::fontData(false, idx, 0, 0, &size, &yOff)) {
-            fretFontSize->setValue(size);
-            fretY->setValue(yOff);
-            }
-      updateTabPreview();
-      }
-
-//---------------------------------------------------------
-//   Tabulature note stems toggled
-//
-//    enable / disable all controls related to stems
-//---------------------------------------------------------
-
-void EditStaffType::tabStemsToggled(bool checked)
-      {
-      tabStemsCompatibility(checked);
-      updateTabPreview();
-      }
-
-//---------------------------------------------------------
-//   Tabulature "minim short" toggled
-//
-//    contra-toggle "stems through"
-//---------------------------------------------------------
-
-void EditStaffType::tabMinimShortToggled(bool checked)
-      {
-      tabMinimShortCompatibility(checked);
-      updateTabPreview();
-      }
-
-//---------------------------------------------------------
-//   Tabulature "stems through" toggled
-//---------------------------------------------------------
-
-void EditStaffType::tabStemThroughToggled(bool checked)
-      {
-      tabStemThroughCompatibility(checked);
-      updateTabPreview();
-      }
-
-//---------------------------------------------------------
 //   Block tabulature preview signals
 //---------------------------------------------------------
 
 void EditStaffType::blockTabPreviewSignals(bool block)
       {
+      lines->blockSignals(block);
       lineDistance->blockSignals(block);
       showBarlines->blockSignals(block);
       genClef->blockSignals(block);
@@ -674,9 +794,12 @@ void EditStaffType::updateTabPreview()
       // set preset combo: check stt has the same structure as one of the presets
       // if none matches, set as custom
       int idx;
-      for(idx=0; idx < TAB_PRESETS; idx++)
-            if(stt->isSameStructure(*_tabPresets[idx]))
+      int numOfPresets = presetTablatureCombo->count();
+      for(idx=0; idx < numOfPresets; idx++) {
+            int presetIdx = presetTablatureCombo->itemData(idx).toInt();
+            if(stt->isSameStructure(*StaffType::preset(presetIdx)) )
                   break;
+            }
       presetTablatureCombo->blockSignals(true);
       presetTablatureCombo->setCurrentIndex(idx);
       presetTablatureCombo->blockSignals(false);
