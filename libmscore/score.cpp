@@ -2320,6 +2320,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Note* nnote = new Note(*note);
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
+                        nnote->updateLine();
                         removeNotes.append(note);
                         }
                   foreach(Note* note, removeNotes) {
