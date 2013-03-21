@@ -464,15 +464,18 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
 
             // move clef to last segment of prev measure?
             //    TODO: section break?
+            Segment* segment = seg;
+            int tick = seg->tick();
             if (firstSeg
                && measure->prevMeasure()
                && !(measure->prevMeasure()->repeatFlags() & RepeatEnd)
                ) {
                   measure = measure->prevMeasure();
+                  segment = measure->findSegment(seg->segmentType(), tick);
+                  if(!segment && (seg->segmentType() != Segment::SegClef))
+                        segment = measure->findSegment(Segment::SegClef, tick);
                   }
 
-            int tick = seg->tick();
-            Segment* segment = measure->findSegment(seg->segmentType(), seg->tick());
             if (segment) {
                   if (segment->segmentType() != Segment::SegClef) {
                         if (segment->prev() && segment->prev()->segmentType() == Segment::SegClef) {
