@@ -46,7 +46,6 @@
       <Staff id="1">
         <type>0</type>
         <bracket type="-1" span="0"/>
-        <barLineSpan from="0" to="4">2</barLineSpan>
         </Staff>
       <Staff id="2">
         <type>0</type>
@@ -128,7 +127,7 @@
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="3">
@@ -138,7 +137,7 @@
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="4">
@@ -148,7 +147,7 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -182,18 +181,30 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       </Staff>
     </Score>
