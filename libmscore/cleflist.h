@@ -31,8 +31,5 @@ class ClefList : public QMultiMap<int, ClefTypeList> {
       void read(XmlReader&, Score*);
       };
 
-typedef QMultiMap<int, ClefTypeList>::iterator iClefEvent;
-typedef QMultiMap<int, ClefTypeList>::const_iterator ciClefEvent;
-
 #endif
 

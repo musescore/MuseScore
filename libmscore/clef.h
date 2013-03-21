@@ -113,7 +113,7 @@ class Clef : public Element {
 
       int tick() const;
 
-      bool showCourtesy() const        { return _showCourtesy; };
+      bool showCourtesy() const        { return _showCourtesy; }
       void setShowCourtesy(bool v)     { _showCourtesy = v; }
       void undoSetShowCourtesy(bool v);
 

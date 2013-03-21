@@ -470,7 +470,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
 
             ClefList* cl = e.clefListList().at(idx);
-            for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
+            for (auto i = cl->constBegin(); i != cl->constEnd(); ++i) {
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
                   Measure* m = tick2measure(tick);

@@ -65,8 +65,8 @@ Clef::Clef(Score* s)
 
       _showCourtesy               = true;
       _small                      = false;
-      _clefTypes._concertClef     = CLEF_G;
-      _clefTypes._transposingClef = CLEF_G;
+      _clefTypes._concertClef     = CLEF_INVALID;
+      _clefTypes._transposingClef = CLEF_INVALID;
       curClefType                 = CLEF_G;
       curLines                    = -1;
       curLineDist                 = 1.0;
