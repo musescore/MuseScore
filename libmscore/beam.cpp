@@ -1515,11 +1515,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       qreal beamMinLen = point(score()->styleS(ST_beamMinLen));
       qreal graceMag   = score()->styleD(ST_graceNoteMag);
 
-      // style values ST_beamDistance and ST_beamWidth not used
       if (beamLevels == 4)
-            _beamDist = (2.5 / 3.0) * _spatium;
+            _beamDist = score()->styleP(ST_beamWidth) * (1 + score()->styleD(ST_beamDistance)*4/3);
       else
-            _beamDist = 0.75 * _spatium;
+            _beamDist = score()->styleP(ST_beamWidth) * (1 + score()->styleD(ST_beamDistance));
 
       if (isGrace) {
             _beamDist *= graceMag;
