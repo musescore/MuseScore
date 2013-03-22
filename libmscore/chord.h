@@ -154,8 +154,8 @@ class Chord : public ChordRest {
       const QList<Note*>& notes() const      { return _notes; }
 
       // Chord has at least one Note
-      Note* upNote() const                   { return _notes.back(); }
-      Note* downNote() const                 { return _notes.front(); }
+      Note* upNote() const;
+      Note* downNote() const;
       virtual int upLine() const;
       virtual int downLine() const;
       virtual int upString() const;
