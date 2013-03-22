@@ -103,18 +103,51 @@ void StemSlash::layout()
       setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
       }
 
+
+//---------------------------------------------------------
+//   upNote / downNote
+//---------------------------------------------------------
+
+Note* Chord::upNote() const
+      {
+      Note* result = _notes.back();
+      if (staff() && staff()->isDrumStaff()) {
+            foreach(Note*n, _notes) {
+                  if (n->line() < result->line()) {
+                        result = n;
+                        }
+                  }
+            }
+
+      return result;
+      }
+
+Note* Chord::downNote() const
+      {
+      Note* result = _notes.front();
+      if (staff() && staff()->isDrumStaff()) {
+            foreach(Note*n, _notes) {
+                  if (n->line() > result->line()) {
+                        result = n;
+                        }
+                  }
+            }
+
+      return result;
+      }
+
 //---------------------------------------------------------
 //   upLine / downLine
 //---------------------------------------------------------
 
 int Chord::upLine() const
       {
-      return staff()->isTabStaff() ? upString()*2 : upNote()->line();
+      return (staff() && staff()->isTabStaff()) ? upString()*2 : upNote()->line();
       }
 
 int Chord::downLine() const
       {
-      return staff()->isTabStaff() ? downString()*2 : downNote()->line();
+      return (staff() && staff()->isTabStaff()) ? downString()*2 : downNote()->line();
       }
 
 //---------------------------------------------------------
@@ -1251,7 +1284,7 @@ void Chord::layoutStem()
                   }
             else {
                   // normal note (not grace)
-                  qreal staffHeight = staff()->lines()- 1;
+                  qreal staffHeight = staff() ? (staff()->lines()- 1) : 4;
                   qreal staffHlfHgt = staffHeight * 0.5;
                   if (up()) {                   // stem up
                         qreal dy  = dl * .5;                      // note-side vert. pos.
@@ -1307,10 +1340,11 @@ void Chord::layoutStem()
                   stemLen += n * .5;
                   }
             // scale stemLen according to staff line spacing
-            stemLen *= staff()->staffType()->lineDistance().val();
+            if(staff())
+                  stemLen *= staff()->staffType()->lineDistance().val();
             _stem->setLen(stemLen * _spatium);
             if (_hook) {
-                  _hook->setPos(_stem->hookPos());
+                  _hook->setPos(_stem ->hookPos());
                   _hook->adjustReadPos();
                   }
             if (_stemSlash)
@@ -1542,7 +1576,7 @@ void Chord::layout()
             adjustReadPos();
 
             qreal stemWidth5;
-            qreal noteWidth = _notes.size() ? _notes.at(0)->headWidth() :
+            qreal noteWidth = _notes.size() ? downNote()->headWidth() :
                         symbols[score()->symIdx()][quartheadSym].width(magS());
             qreal stemX = _up ? noteWidth : 0.0;
             if (stem()) {
@@ -1586,7 +1620,7 @@ void Chord::layout()
                   }
             lll = -lx;
             if (stem())
-                  stem()->rypos() = (_up ? _notes.front() : _notes.back())->rypos();
+                  stem()->rypos() = (_up ? downNote() : upNote())->rypos();
 
             addLedgerLines(stemX, staffMove());
 
