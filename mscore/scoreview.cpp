@@ -4675,10 +4675,10 @@ void ScoreView::cmdAddText(int type)
                         measure = _score->insertMeasure(Element::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT_TITLE:    s->setTextStyle(_score->textStyle(TEXT_STYLE_TITLE));    break;
-                        case TEXT_SUBTITLE: s->setTextStyle(_score->textStyle(TEXT_STYLE_SUBTITLE)); break;
-                        case TEXT_COMPOSER: s->setTextStyle(_score->textStyle(TEXT_STYLE_COMPOSER)); break;
-                        case TEXT_POET:     s->setTextStyle(_score->textStyle(TEXT_STYLE_POET));     break;
+                        case TEXT_TITLE:    s->setTextStyleType(TEXT_STYLE_TITLE);    break;
+                        case TEXT_SUBTITLE: s->setTextStyleType(TEXT_STYLE_SUBTITLE); break;
+                        case TEXT_COMPOSER: s->setTextStyleType(TEXT_STYLE_COMPOSER); break;
+                        case TEXT_POET:     s->setTextStyleType(TEXT_STYLE_POET);     break;
                         }
                   s->setParent(measure);
                   }
