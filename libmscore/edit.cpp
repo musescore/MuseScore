@@ -1190,7 +1190,12 @@ void Score::deleteItem(Element* el)
                         else if (segType == Segment::SegBarLine)
                               undoRemoveElement(el);
                         else if (segType == Segment::SegEndBarLine) {
-                              if (!normalBar) {
+                              // if bar line has custom barLineType, change to barLineType of the whole measure
+                              if (bl->customSubtype()) {
+                                    undoChangeProperty(bl, P_SUBTYPE, seg->measure()->endBarLineType());
+                                    }
+                              // otherwise, if whole measure has special end bar line, change to normal
+                              else if (!normalBar) {
                                     if (m->tick() >= tick)
                                           m = m->prevMeasure();
                                     undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatEnd);

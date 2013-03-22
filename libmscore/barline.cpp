@@ -473,8 +473,8 @@ Element* BarLine::drop(const DropData& data)
                         }
                   // if drop refer to subtype, update this bar line subtype
                   else {
-                        score()->undoChangeBarLine(m, bl->barLineType());
-//                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
+//                        score()->undoChangeBarLine(m, bl->barLineType());
+                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
                         }
                   delete e;
                   return 0;
