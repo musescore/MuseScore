@@ -406,8 +406,10 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
-      xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
+      if(_clefTypes._concertClef != CLEF_INVALID)
+            xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
+      if(_clefTypes._transposingClef != CLEF_INVALID)
+            xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);
