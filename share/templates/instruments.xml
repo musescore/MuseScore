@@ -2888,9 +2888,9 @@
 			</Channel>
 		</Instrument>
 		<Instrument id="d-trumpet">
-			<longName>Trumpet</longName>
-			<shortName>Tpt.</shortName>
-			<description>Trumpet</description>
+			<longName>D Trumpet</longName>
+			<shortName>D Tpt.</shortName>
+			<description>D Trumpet</description>
 			<musicXMLid>brass.trumpet.d</musicXMLid>
 			<extended>1</extended>
 			<clef>G</clef>
