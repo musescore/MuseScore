@@ -1241,8 +1241,8 @@ void Score::undoRemoveElement(Element* element)
       QList<Segment*> segments;
       foreach (Element* e, element->linkList()) {
             undo(new RemoveElement(e));
-            if (e->type() == Element::KEYSIG)                  // TODO: should be done in undo()/redo()
-                  e->score()->cmdUpdateNotes();
+            //if (e->type() == Element::KEYSIG)                  // TODO: should be done in undo()/redo()
+            //      e->score()->cmdUpdateNotes();
             if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
@@ -1327,13 +1327,22 @@ void AddElement::undo()
             if(tie->endNote())
                   m2 = tie->endNote()->chord()->measure();
 
-            if (m1 != m2)
-                  tie->score()->cmdUpdateNotes();
+            if (m1 != m2) {
+                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  if (m2) 
+                        tie->score()->updateAccidentals(m2, tie->staffIdx());
+                  // tie->score()->cmdUpdateNotes();
+                  }
             else
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
             }
       else if (element->isChordRest()) {
             undoRemoveTuplet(static_cast<ChordRest*>(element));
+            }
+      else if (element->type() == Element::KEYSIG) {
+            KeySig* ks = static_cast<KeySig*>(element);
+            if (!ks->generated())
+                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1349,13 +1358,22 @@ void AddElement::redo()
             Measure* m1 = tie->startNote()->chord()->measure();
             Measure* m2 = tie->endNote() ? tie->endNote()->chord()->measure() : 0;
 
-            if (m2 && (m1 != m2))
-                  tie->score()->cmdUpdateNotes();
+            if (m2 && (m1 != m2)) {
+                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  if (m2) 
+                        tie->score()->updateAccidentals(m2, tie->staffIdx());
+                  // tie->score()->cmdUpdateNotes();
+                  }
             else
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
             }
       else if (element->isChordRest()) {
             undoAddTuplet(static_cast<ChordRest*>(element));
+            }
+      else if (element->type() == Element::KEYSIG) {
+            KeySig* ks = static_cast<KeySig*>(element);
+            if (!ks->generated())
+                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1420,6 +1438,11 @@ void RemoveElement::undo()
             }
       if (element->type() == Element::MEASURE)
             element->score()->setLayoutAll(true);    //DEBUG
+      if (element->type() == Element::KEYSIG) {
+            KeySig* ks = static_cast<KeySig*>(element);
+            if (!ks->generated())
+                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+            }
       }
 
 //---------------------------------------------------------
@@ -1433,6 +1456,11 @@ void RemoveElement::redo()
             undoRemoveTuplet(static_cast<ChordRest*>(element));
       if (element->type() == Element::MEASURE)
             element->score()->setLayoutAll(true);    //DEBUG
+      if (element->type() == Element::KEYSIG) {
+            KeySig* ks = static_cast<KeySig*>(element);
+            if (!ks->generated())
+                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+            }
       }
 
 //---------------------------------------------------------
@@ -1729,7 +1757,7 @@ void ChangeElement::flip()
       qSwap(oldElement, newElement);
 
       if (newElement->type() == Element::KEYSIG)
-            newElement->staff()->setUpdateKeymap(true);
+            newElement->staff()->setUpdateKeymap(true); //JE-TODO: updateAccid
       else if (newElement->type() == Element::DYNAMIC)
             newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
       else if (newElement->type() == Element::TEMPO_TEXT) {
@@ -1821,7 +1849,9 @@ void ChangeKeySig::flip()
       ks           = oe;
 
       keysig->score()->setLayoutAll(true);
-      keysig->score()->cmdUpdateNotes();
+      //keysig->score()->cmdUpdateNotes();
+      if (!keysig->generated())
+            keysig->score()->cmdUpdateAccidentals(keysig->measure(), keysig->staffIdx());
       }
 
 //---------------------------------------------------------
