@@ -944,6 +944,8 @@ void Note::read(XmlReader& e)
 
 QRectF Note::drag(const EditData& data)
       {
+      if (staff()->isDrumStaff())
+            return QRect();
       dragMode = true;
       QRectF bb(chord()->bbox());
 
