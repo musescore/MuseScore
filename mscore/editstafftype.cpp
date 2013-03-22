@@ -794,7 +794,7 @@ void EditStaffType::updateTabPreview()
       // set preset combo: check stt has the same structure as one of the presets
       // if none matches, set as custom
       int idx;
-      int numOfPresets = presetTablatureCombo->count();
+      int numOfPresets = presetTablatureCombo->count() - 1; // do not count last "Custom" item
       for(idx=0; idx < numOfPresets; idx++) {
             int presetIdx = presetTablatureCombo->itemData(idx).toInt();
             if(stt->isSameStructure(*StaffType::preset(presetIdx)) )

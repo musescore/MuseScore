@@ -1155,23 +1155,23 @@ const StaffType* StaffType::getDefaultPreset(StaffGroup grp, int *idx)
 void initStaffTypes()
       {
       // init staff type presets
-      //                                                   human readable name    lin dst clef  bars stmless time  key  ledger
-      StaffTypePitched*    st00 = new StaffTypePitched   (QString("normal"),        5, 1, true, true, false, true, true, true);
-      StaffTypePercussion* st01 = new StaffTypePercussion(QString("Perc. 1 lines"), 1, 1, true, true, false, true, true, true);
-      StaffTypePercussion* st02 = new StaffTypePercussion(QString("Perc. 3 lines"), 3, 1, true, true, false, true, true, true);
-      StaffTypePercussion* st03 = new StaffTypePercussion(QString("Perc. 5 lines"), 5, 1, true, true, false, true, true, true);
-      //                                                 human-readable name        lin dist  clef   bars stemless time  duration font                  size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-      StaffTypeTablature* st04 = new StaffTypeTablature(QString("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      StaffTypeTablature* st05 = new StaffTypeTablature(QString("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
-      StaffTypeTablature* st06 = new StaffTypeTablature(QString("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      StaffTypeTablature* st07 = new StaffTypeTablature(QString("Tab. 4-str simple"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      StaffTypeTablature* st08 = new StaffTypeTablature(QString("Tab. 4-str common"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
-      StaffTypeTablature* st09 = new StaffTypeTablature(QString("Tab. 4-str full"),   4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      StaffTypeTablature* st10 = new StaffTypeTablature(QString("Tab. ukulele"),      4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
-      StaffTypeTablature* st11 = new StaffTypeTablature(QString("Tab. balalajka"),    3, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
-      //                                               (QString("Tab. bandurria"),    6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),   10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      StaffTypeTablature* st12 = new StaffTypeTablature(QString("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
-      StaffTypeTablature* st13 = new StaffTypeTablature(QString("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+      //                                                       human readable name    lin dst clef  bars stmless time  key  ledger
+      StaffTypePitched*    st00 = new StaffTypePitched   (QObject::tr("normal"),        5, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st01 = new StaffTypePercussion(QObject::tr("Perc. 1 lines"), 1, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st02 = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st03 = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, true, true);
+      //                                                     human-readable name        lin dist  clef   bars stemless time  duration font                  size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
+      StaffTypeTablature* st04 = new StaffTypeTablature(QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      StaffTypeTablature* st05 = new StaffTypeTablature(QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      StaffTypeTablature* st06 = new StaffTypeTablature(QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st07 = new StaffTypeTablature(QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      StaffTypeTablature* st08 = new StaffTypeTablature(QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      StaffTypeTablature* st09 = new StaffTypeTablature(QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st10 = new StaffTypeTablature(QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      StaffTypeTablature* st11 = new StaffTypeTablature(QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      //                                               (QObject::tr("Tab. bandurria"),    6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),   10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st12 = new StaffTypeTablature(QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
+      StaffTypeTablature* st13 = new StaffTypeTablature(QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
       _presets[0].xmlName  = QString("stdNormal");          _presets[0].staffType  = st00;
       _presets[1].xmlName  = QString("perc1Line");          _presets[1].staffType  = st01;
       _presets[2].xmlName  = QString("perc3Line");          _presets[2].staffType  = st02;
@@ -1192,9 +1192,9 @@ void initStaffTypes()
       StaffTypePitched*    st0 = static_cast<StaffTypePitched*>(_presets[_defaultPreset[PITCHED_STAFF]].staffType)->clone();
       StaffTypeTablature*  st1 = static_cast<StaffTypeTablature*>(_presets[_defaultPreset[TAB_STAFF]].staffType)->clone();
       StaffTypePercussion* st2 = static_cast<StaffTypePercussion*>(_presets[_defaultPreset[PERCUSSION_STAFF]].staffType)->clone();
-      st0->setName("Standard (built-in)");
-      st1->setName("Tablature (built-in)");
-      st2->setName("Percussion (built-in)");
+      st0->setName(QObject::tr("Standard (built-in)"));
+      st1->setName(QObject::tr("Tablature (built-in)"));
+      st2->setName(QObject::tr("Percussion (built-in)"));
       st0->setBuiltin(true);
       st1->setBuiltin(true);
       st2->setBuiltin(true);
