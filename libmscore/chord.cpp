@@ -1461,7 +1461,7 @@ void Chord::layout()
                   // centre fret string on stem
                   qreal x = stemX - fretWidth*0.5;
                   note->setPos(x, _spatium * tab->physStringToVisual(note->string()) * lineDist);
-                  note->layout2();              // needed? it is repeated later right before computing bbox
+//                  note->layout2();              // needed? it is repeated later right before computing bbox
 
                   }
             // horiz. spacing: leave half width at each side of the (potential) stem
