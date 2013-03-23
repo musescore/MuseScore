@@ -903,38 +903,11 @@ void StaffLines::draw(QPainter* painter) const
 
 qreal StaffLines::y1() const
       {
-     System* system = measure()->system();
-     if (system == 0)
-           return 0.0;
-
-      qreal y = system->staff(staffIdx())->y() + ipos().y();
-
-      switch (lines) {
-            case 1:
-                  return y - spatium();
-            default:
-                  return y;
-            }
-      }
-
-//---------------------------------------------------------
-//   y2
-//---------------------------------------------------------
-
-qreal StaffLines::y2() const
-      {
       System* system = measure()->system();
       if (system == 0)
             return 0.0;
 
-      qreal y = system->staff(staffIdx())->y() + ipos().y();
-
-      switch (lines) {
-            case 1:
-                  return y + spatium();
-            default:
-                  return y + (lines - 1) * dist;
-            }
+      return system->staff(staffIdx())->y() + ipos().y();
       }
 
 //---------------------------------------------------------
