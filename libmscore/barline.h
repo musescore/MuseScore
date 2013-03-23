@@ -59,6 +59,7 @@ class BarLine : public Element {
       ElementList _el;        ///< fermata or other articulations
 
       void drawDots(QPainter* painter, qreal x) const;
+      void updateCustomSpan();
 
    public:
       BarLine(Score*);
@@ -81,9 +82,9 @@ class BarLine : public Element {
       virtual Element* drop(const DropData&);
       void setCustomSpan(bool val)    { _customSpan = val;    }
       void setCustomSubtype(bool val) { _customSubtype = val; }
-      void setSpan(int val)           { _span = val;          }
-      void setSpanFrom(int val)       { _spanFrom = val;      }
-      void setSpanTo(int val)         { _spanTo = val;        }
+      void setSpan(int val)           { _span = val;        updateCustomSpan();     }
+      void setSpanFrom(int val)       { _spanFrom = val;    updateCustomSpan();     }
+      void setSpanTo(int val)         { _spanTo = val;      updateCustomSpan();     }
       bool customSpan() const         { return _customSpan;   }
       bool customSubtype() const      { return _customSubtype;}
       int span() const                { return _span;         }
