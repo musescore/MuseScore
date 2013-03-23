@@ -571,7 +571,6 @@ class StaffLines : public Element {
       virtual void draw(QPainter*) const;
       virtual QPointF pagePos() const;   ///< position in page coordinates
       qreal y1() const;
-      qreal y2() const;
       };
 
 //---------------------------------------------------------
