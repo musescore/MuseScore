@@ -1301,23 +1301,40 @@ void Note::layout2()
 
       int dots = chord()->dots();
       if (dots) {
-            qreal _spatium = spatium();
             qreal d  = point(score()->styleS(ST_dotNoteDistance));
             qreal dd = point(score()->styleS(ST_dotDotDistance));
             qreal y  = 0.0;
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+            bool onLine = false;
 
-            // do not draw dots on staff line
-            if ((_line & 1) == 0) {
-                  qreal up;
-                  if (_dotPosition == MScore::AUTO)
-                        up = (voice() == 0 || voice() == 2) ? -1.0 : 1.0;
-                  else if (_dotPosition == MScore::UP)
-                        up = -1.0;
-                  else
-                        up = 1.0;
-                  y += .5 * _spatium * up;
+            // do not draw dots on staff line:
+
+            // if TAB and stems through staff
+            if (staff()->isTabStaff()) {
+                  if(static_cast<StaffTypeTablature*>( staff()->staffType())->stemThrough() ) {
+                        // if fret mark on lines, use standard processing
+                        if (static_cast<StaffTypeTablature*>(staff()->staffType())->onLines())
+                              onLine = true;
+                        else
+                        // if fret marks above lines, raise the dots by half line distance
+                              y = -staff()->lineDistance() * 0.5;
+                        }
+                  // if stems beside staff, do nothing
                   }
+            // if not TAB, look at note line
+            else onLine = (_line & 1) == 0;
+            // if on line, displace dots by half spatium up or down according to voice
+            if (onLine) {
+                  if (_dotPosition == MScore::AUTO)
+                        y = (voice() & 1) == 0 ? -0.5 : 0.5;
+                  else if (_dotPosition == MScore::UP)
+                        y = -0.5;
+                  else
+                        y = 0.5;
+                  }
+            y *= spatium();
+
+            // apply to dots
             for (int i = 0; i < dots; ++i) {
                   NoteDot* dot = _dots[i];
                   if (dot) {
@@ -1328,6 +1345,7 @@ void Note::layout2()
                   }
             }
 
+      // layout elements attached to note
       int n = _el.size();
       for (int i = 0; i < n; ++i) {
             Element* e = _el.at(i);
