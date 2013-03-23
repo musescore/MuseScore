@@ -473,7 +473,8 @@ Element* BarLine::drop(const DropData& data)
                         }
                   // if drop refer to subtype, update this bar line subtype
                   else {
-                        score()->undoChangeBarLine(m, bl->barLineType());
+//                        score()->undoChangeBarLine(m, bl->barLineType());
+                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
                         }
                   delete e;
                   return 0;
@@ -911,6 +912,22 @@ void BarLine::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   updateCustomSpan
+//---------------------------------------------------------
+
+void BarLine::updateCustomSpan()
+      {
+      // if barline belongs to a staff and any of the staff span params is different from barline's...
+      if (staff())
+            if (staff()->barLineSpan() != _span || staff()->barLineFrom() != _spanFrom || staff()->barLineTo() != _spanTo) {
+                  _customSpan = true;           // ...span is custom
+                  return;
+                  }
+      // if no staff or same span params as staff, span is not custom
+      _customSpan = false;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -966,17 +983,30 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_SUBTYPE:
-                  return false;
+                  // default subtype is the subtype of the measure, if any
+                  if (parent() && parent()->type() == Element::SEGMENT && static_cast<Segment*>(parent())->measure() )
+                      return static_cast<Segment*>(parent())->measure()->endBarLineType();
+                  return NORMAL_BAR;
             case P_BARLINE_SPAN:
+                  // if there is a staff, default span is staff span
+                  if (staff())
+                        return staff()->barLineSpan();
+                  // if no staff, default span is 1
                   return 1;
             case P_BARLINE_SPAN_FROM:
+                  // if there is a staff, default From span is staff From span
+                  if (staff())
+                        return staff()->barLineFrom();
+                  // if no staff, default From is from top
                   return 0;
             case P_BARLINE_SPAN_TO:
+                  // if there is a staff, default To span is staff To span
+                  if (staff())
+                        return staff()->barLineTo();
+                  // if no staff, assume a standard 5-line setup
                   return DEFAULT_BARLINE_TO;
             default:
                   break;
             }
       return Element::propertyDefault(propertyId);
       }
-
-
