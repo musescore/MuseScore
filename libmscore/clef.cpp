@@ -116,17 +116,19 @@ void Clef::setSelected(bool f)
 void Clef::layout()
       {
       // determine current number of lines and line distance
-      int lines      = 5;                             // assume a resonable default
+      int lines      = 5;                       // assume a resonable default
       qreal lineDist = 1.0;
 
       StaffType* staffType;
       if (staff() && staff()->staffType()) {
             staffType = staff()->staffType();
+            if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
+                  setbbox(QRectF());
+                  return;
+                  }
 
             // tablatures:
             if (staffType->group() == TAB_STAFF) {
-                  if (!staffType->genClef())          // if no clef, do nothing
-                        return;
                   // if current clef type not compatible with tablature,
                   // set tab clef according to score style
                   if (clefTable[clefType()].staffGroup != TAB_STAFF)
@@ -321,7 +323,7 @@ void Clef::layout1()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff() && !staff()->staffType()->genClef())
+      if (staff() && /*staff()->isTabStaff() &&*/ !staff()->staffType()->genClef())
 	      return;
       QColor color(curColor());
       foreach(Element* e, elements) {
