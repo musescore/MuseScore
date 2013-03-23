@@ -1342,7 +1342,7 @@ void AddElement::undo()
       else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
-                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1373,7 +1373,7 @@ void AddElement::redo()
       else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
-                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1441,7 +1441,7 @@ void RemoveElement::undo()
       if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
-                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1459,7 +1459,7 @@ void RemoveElement::redo()
       if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
-                  element->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1754,10 +1754,14 @@ void ChangeElement::flip()
             oldElement->parent()->change(oldElement, newElement);
             }
 
-      qSwap(oldElement, newElement);
-
-      if (newElement->type() == Element::KEYSIG)
-            newElement->staff()->setUpdateKeymap(true); //JE-TODO: updateAccid
+      if (newElement->type() == Element::KEYSIG) {
+            KeySig* ks = static_cast<KeySig*>(newElement);
+            if (!ks->generated()) {
+                  ks->staff()->setKey(ks->tick(),ks->keySigEvent());
+                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
+                  // newElement->staff()->setUpdateKeymap(true);
+                  }
+            }
       else if (newElement->type() == Element::DYNAMIC)
             newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
       else if (newElement->type() == Element::TEMPO_TEXT) {
@@ -1772,6 +1776,7 @@ void ChangeElement::flip()
             if (ns->system())
                   ns->system()->add(ns);
             }
+      qSwap(oldElement, newElement);
       score->setLayoutAll(true);
       }
 
