@@ -732,18 +732,6 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // determine staff type and set number of lines accordingly
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
       StaffType* st;
-/*      if (t->useTablature && t->tablature) {
-            setStaffType(score()->staffType(TAB_STAFF_TYPE));
-            setLines(t->tablature->strings());        // use number of lines from tablature definition:
-            }
-      else {
-            if (t->useDrumset)
-                  st = score()->staffType(PERCUSSION_STAFF_TYPE);
-            else
-                  st = score()->staffType(PITCHED_STAFF_TYPE);
-            setStaffType(st);
-            setLines(t->staffLines[cidx]);            // use number of lines from instr. template
-            } */
       // get staff type according to instrument staff type preset (if none, get default for staff group)
       const StaffType* presetStaffType = StaffType::preset(t->staffTypePreset);
       if (!presetStaffType)

@@ -4471,7 +4471,6 @@
 			<description>Drumset 3 lines</description>
 			<clef>PERC2</clef>
 			<stafftype staffTypePreset="perc3Line">percussion</stafftype>
-			<stafflines>3</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Channel>
@@ -4485,7 +4484,6 @@
 			<description>Snare Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4515,7 +4513,6 @@
 			<description>Bass Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="35">
@@ -4537,7 +4534,6 @@
 			<description>Piccolo Snare Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4567,7 +4563,6 @@
 			<description>Military Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4597,7 +4592,6 @@
 			<description>High Tom</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="48">
@@ -4627,7 +4621,6 @@
 			<description>MiTom</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="45">
@@ -4657,7 +4650,6 @@
 			<description>Low Tom</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="43">
@@ -4679,7 +4671,6 @@
 			<description>Pedal Hi-hat</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="0">
@@ -4709,7 +4700,6 @@
 			<description>Chinese Tom-toms</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="61">
@@ -4731,7 +4721,6 @@
 			<description>Bongos</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="60">
@@ -4761,7 +4750,6 @@
 			<description>Congas</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="62">
@@ -4791,7 +4779,6 @@
 			<description>Timbales</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="65">
@@ -4821,7 +4808,6 @@
 			<description>Frame Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="45">
@@ -4843,7 +4829,6 @@
 			<description>Tablas</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="62">
@@ -4873,7 +4858,6 @@
 			<description>Cuica</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="78">
@@ -4903,7 +4887,6 @@
 			<description>Finger Cymbals</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="81">
@@ -4925,7 +4908,6 @@
 			<description>Hi-hat</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="42">
@@ -4955,7 +4937,6 @@
 			<description>Tam-tam</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -4977,7 +4958,6 @@
 			<description>Bells</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="53">
@@ -4999,7 +4979,6 @@
 			<description>Sleigh Bells</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5021,7 +5000,6 @@
 			<description>Bell Plate</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="58">
@@ -5043,7 +5021,6 @@
 			<description>Bowl Gongs</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -5065,7 +5042,6 @@
 			<description>Tubo</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="81">
@@ -5087,7 +5063,6 @@
 			<description>Metal Castanets</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="67">
@@ -5109,7 +5084,6 @@
 			<description>Automobile Brake Drums</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="68">
@@ -5131,7 +5105,6 @@
 			<description>Iron Pipes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="68">
@@ -5153,7 +5126,6 @@
 			<description>Chains</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5175,7 +5147,6 @@
 			<description>Anvil</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="53">
@@ -5197,7 +5168,6 @@
 			<description>WooBlocks</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5227,7 +5197,6 @@
 			<description>Temple Blocks</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5257,7 +5226,6 @@
 			<description>Triangle</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="80">
@@ -5287,7 +5255,6 @@
 			<description>Cymbal</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="57">
@@ -5310,7 +5277,6 @@
 			<description>Ride Cymbal</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="51">
@@ -5340,7 +5306,6 @@
 			<description>Chinese Cymbal</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -5362,7 +5327,6 @@
 			<description>Crash Cymbal</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="49">
@@ -5384,7 +5348,6 @@
 			<description>Splash Cymbal</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="55">
@@ -5406,7 +5369,6 @@
 			<description>Cowbell</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="56">
@@ -5428,7 +5390,6 @@
 			<description>Claves</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="75">
@@ -5450,7 +5411,6 @@
 			<description>Castanets</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5472,7 +5432,6 @@
 			<description>Guiro</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="73">
@@ -5494,7 +5453,6 @@
 			<description>Maracas</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="70">
@@ -5516,7 +5474,6 @@
 			<description>Cabasa</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5538,7 +5495,6 @@
 			<description>Quijada</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5560,7 +5516,6 @@
 			<description>Vibra Slap</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="58">
@@ -5582,7 +5537,6 @@
 			<description>Slit Drum</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="77">
@@ -5604,7 +5558,6 @@
 			<description>Whip</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5626,7 +5579,6 @@
 			<description>Ratchet</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="73">
@@ -5648,7 +5600,6 @@
 			<description>Thundersheet</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="49">
@@ -5670,7 +5621,6 @@
 			<description>Sandpaper Blocks</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="70">
@@ -5692,7 +5642,6 @@
 			<description>Wooden WinChimes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5714,7 +5663,6 @@
 			<description>Bamboo WinChimes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5736,7 +5684,6 @@
 			<description>Metal WinChimes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5758,7 +5705,6 @@
 			<description>Glass WinChimes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5780,7 +5726,6 @@
 			<description>Shell WinChimes</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5802,7 +5747,6 @@
 			<description>Stones</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="67">
@@ -5824,7 +5768,6 @@
 			<description>Finger Snap</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="75">
@@ -5846,7 +5789,6 @@
 			<description>HanClap</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="39">
@@ -5868,7 +5810,6 @@
 			<description>Slap</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="41">
@@ -5890,7 +5831,6 @@
 			<description>Stamp</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="35">
@@ -5912,7 +5852,6 @@
 			<description>Percussion Synthesizer</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="40">
@@ -5934,7 +5873,6 @@
 			<description>Tambourine</description>
 			<clef>PERC</clef>
 			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
-			<stafflines>1</stafflines>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="54">
