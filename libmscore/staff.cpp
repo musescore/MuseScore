@@ -732,18 +732,30 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // determine staff type and set number of lines accordingly
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
       StaffType* st;
-      if (t->useTablature && t->tablature) {
-            setStaffType(score()->staffType(TAB_STAFF_TYPE));
-            setLines(t->tablature->strings());        // use number of lines from tablature definition:
+      // get staff type according to instrument staff type preset (if none, get default for staff group)
+      const StaffType* presetStaffType = StaffType::preset(t->staffTypePreset);
+      if (!presetStaffType)
+            presetStaffType = StaffType::getDefaultPreset(t->staffGroup, 0);
+
+      // look for a staff type with same structure among staff types already defined in the score
+      bool found = false;
+      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
+            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
+                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                  found = true;
+                  break;
+                  }
             }
-      else {
-            if (t->useDrumset)
-                  st = score()->staffType(PERCUSSION_STAFF_TYPE);
-            else
-                  st = score()->staffType(PITCHED_STAFF_TYPE);
-            setStaffType(st);
-            setLines(t->staffLines[cidx]);            // use number of lines from instr. template
+      // if staff type not found in score, use from preset (for staff and adding to score staff types)
+      if (!found) {
+            st = presetStaffType->clone();
+            score()->addStaffType(st);
             }
+
+      // use selected staff type
+      setStaffType(st);
+      if (t->staffGroup != TAB_STAFF)           // if not TAB (where num of staff lines is determined by TAB style)
+            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
 
 //---------------------------------------------------------

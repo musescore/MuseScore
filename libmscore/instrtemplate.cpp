@@ -12,13 +12,14 @@
 //=============================================================================
 
 #include "instrtemplate.h"
-#include "xml.h"
+#include "bracket.h"
+#include "drumset.h"
+#include "stafftype.h"
 #include "style.h"
 #include "sym.h"
-#include "drumset.h"
-#include "bracket.h"
-#include "utils.h"
 #include "tablature.h"
+#include "utils.h"
+#include "xml.h"
 
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
@@ -103,11 +104,13 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchA          = 127;
       minPitchP          = 0;
       maxPitchP          = 127;
+      staffGroup        = PITCHED_STAFF;
+      staffTypePreset   = 0;
       useDrumset         = false;
       drumset            = 0;
       extended           = false;
       tablature          = 0;
-      useTablature       = false;
+//      useTablature       = false;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
             clefTypes[i]._concertClef = CLEF_G;
@@ -153,6 +156,8 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       minPitchP  = t.minPitchP;
       maxPitchP  = t.maxPitchP;
       transpose  = t.transpose;
+      staffGroup = t.staffGroup;
+      staffTypePreset   = t.staffTypePreset;
       useDrumset = t.useDrumset;
       if (t.drumset)
             drumset = new Drumset(*t.drumset);
@@ -391,10 +396,6 @@ void InstrumentTemplate::read(XmlReader& e)
                   int idx = readStaffIdx(e);
                   barlineSpan[idx] = e.readInt();
                   }
-            else if (tag == "Tablature") {
-                  tablature = new Tablature;
-                  tablature->read(e);
-                  }
             else if (tag == "aPitchRange")
                   setPitchRange(e.readElementText(), &minPitchA, &maxPitchA);
             else if (tag == "pPitchRange")
@@ -408,6 +409,10 @@ void InstrumentTemplate::read(XmlReader& e)
                   transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
                   transpose.diatonic = e.readInt();
+            else if (tag == "Tablature") {
+                  tablature = new Tablature;
+                  tablature->read(e);
+                  }
             else if (tag == "drumset")
                   useDrumset = e.readInt();
             else if (tag == "Drum") {
@@ -444,13 +449,24 @@ void InstrumentTemplate::read(XmlReader& e)
                         articulation.append(a);
                   }
             else if (tag == "stafftype") {
-                  QString val(e.readElementText());
-                  if (val == "tablature")
-                        useTablature = true;
-                  else {
-                        qDebug("unknown stafftype <%s>\n", qPrintable(val));
-                        e.unknown();
-                        }
+                  int staffIdx = readStaffIdx(e);
+                  QString xmlPresetName = e.attribute("staffTypePreset", "");
+                  QString stfGroup = e.readElementText();
+                  if (stfGroup == "percussion")
+                        staffGroup = PERCUSSION_STAFF;
+                  else if (stfGroup == "tablature")
+                        staffGroup = TAB_STAFF;
+                  else
+                        staffGroup = PITCHED_STAFF;
+                  int staffTypeIdx;
+                  const StaffType* stfType = 0;
+                  if (!xmlPresetName.isEmpty())
+                        stfType = StaffType::presetFromXmlName(xmlPresetName, &staffTypeIdx);
+                  if (!stfType || stfType->group() != staffGroup)
+                        stfType = StaffType::getDefaultPreset(staffGroup, &staffTypeIdx);
+                  if (stfType)
+                        staffLines[staffIdx] = stfType->lines();
+                  staffTypePreset = staffTypeIdx;
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());
