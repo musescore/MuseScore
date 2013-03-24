@@ -448,16 +448,8 @@ void InstrumentTemplate::read(XmlReader& e)
                   if (i == n)
                         articulation.append(a);
                   }
-/*            else if (tag == "stafftype") {
-                  QString val(e.readElementText());
-                  if (val == "tablature")
-                        useTablature = true;
-                  else {
-                        qDebug("unknown stafftype <%s>\n", qPrintable(val));
-                        e.unknown();
-                        }
-                  } */
             else if (tag == "stafftype") {
+                  int staffIdx = readStaffIdx(e);
                   QString xmlPresetName = e.attribute("staffTypePreset", "");
                   QString stfGroup = e.readElementText();
                   if (stfGroup == "percussion")
@@ -466,13 +458,15 @@ void InstrumentTemplate::read(XmlReader& e)
                         staffGroup = TAB_STAFF;
                   else
                         staffGroup = PITCHED_STAFF;
-                  int idx;
+                  int staffTypeIdx;
                   const StaffType* stfType = 0;
                   if (!xmlPresetName.isEmpty())
-                        stfType = StaffType::presetFromXmlName(xmlPresetName, &idx);
+                        stfType = StaffType::presetFromXmlName(xmlPresetName, &staffTypeIdx);
                   if (!stfType || stfType->group() != staffGroup)
-                        StaffType::getDefaultPreset(staffGroup, &idx);
-                  staffTypePreset = idx;
+                        stfType = StaffType::getDefaultPreset(staffGroup, &staffTypeIdx);
+                  if (stfType)
+                        staffLines[staffIdx] = stfType->lines();
+                  staffTypePreset = staffTypeIdx;
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());
