@@ -2099,6 +2099,38 @@ void Score::cmdUpdateNotes()
       }
 
 //---------------------------------------------------------
+//   cmdUpdateAccidentals
+///   update accidentals upto next keySig change
+//---------------------------------------------------------
+
+void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
+      {
+      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
+            beginMeasure->no(), staffIdx);
+      Staff* st = staff(staffIdx);
+      for (Measure* m = beginMeasure; m; m = m->nextMeasure()) {
+            AccidentalState as;
+            as.init(st->keymap()->key(m->tick()));
+
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if ((m != beginMeasure) &&
+                        (s->segmentType() & (Segment::SegKeySig))) {
+                        KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
+                        if (ks && (!ks->generated())) {
+                              // found new key signature
+                              qDebug("leaving cmdUpdateAccidentals at m=%d",
+                                    m->no());
+                              return;
+                              }
+                        }
+                  if (s->segmentType() & (Segment::SegChordRestGrace))
+                        m->updateAccidentals(s, staffIdx, &as);
+                  }
+            }
+      qDebug("leaving cmdUpdateAccidentals at end of score");
+      }
+
+//---------------------------------------------------------
 //   updateAccidentals
 //---------------------------------------------------------
 
