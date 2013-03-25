@@ -620,6 +620,6 @@ void FBox::add(Element* e)
             qDebug("FBox::add: element not allowed\n");
             return;
             }
-      _el.append(e);
+      _el.push_back(e);
       }
 

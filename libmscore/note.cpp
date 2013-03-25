@@ -210,9 +210,9 @@ Note::Note(const Note& n)
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
 
-      int nn = n._el.size();
-      for (int i = 0; i < nn; ++i)
-            add(n._el.at(i)->clone());
+      for (const Element* e : n._el)
+            add(e->clone());
+
       _playEvents = n._playEvents;
 
       if (n._tieFor) {
@@ -468,7 +468,7 @@ void Note::add(Element* e)
             case FINGERING:
             case TEXT:
             case BEND:
-                  _el.append(e);
+                  _el.push_back(e);
                   break;
             case TIE:
                   {
@@ -1346,9 +1346,7 @@ void Note::layout2()
             }
 
       // layout elements attached to note
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el) {
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
@@ -1494,9 +1492,7 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       // tie segments are collected from System
       //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el) {
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
@@ -1523,11 +1519,8 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el)
             e->setTrack(val);
-            }
       if (_accidental)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
@@ -1559,11 +1552,8 @@ void Note::setMag(qreal val)
       Element::setMag(val);
       if (_accidental)
             _accidental->setMag(val);
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el)
             e->setMag(val);
-            }
       }
 
 //---------------------------------------------------------
@@ -1660,7 +1650,7 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (_accidental && 
+      if (_accidental &&
             _accidental->accidentalType() > Accidental::ACC_NATURAL) {
             // calculate the real note line depending on clef
 

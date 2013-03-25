@@ -882,7 +882,7 @@ void BarLine::add(Element* e)
 	e->setParent(this);
       switch(e->type()) {
             case ARTICULATION:
-                  _el.append(e);
+                  _el.push_back(e);
                   setGenerated(false);
                   if (parent() && parent()->parent())
                         static_cast<Measure*>(parent()->parent())->setEndBarLineGenerated(false);

@@ -978,13 +978,13 @@ void Measure::add(Element* el)
 
             case JUMP:
                   _repeatFlags |= RepeatJump;
-                  _el.append(el);
+                  _el.push_back(el);
                   break;
 
             case HBOX:
                   if (el->staff())
                         el->setMag(el->staff()->mag());     // ?!
-                  _el.append(el);
+                  _el.push_back(el);
                   break;
 
             case VOLTA:
@@ -2581,7 +2581,7 @@ bool Measure::createEndBarLines()
                         bl = new BarLine(score());
                         bl->setVisible(_endBarLineVisible);
                         bl->setColor(_endBarLineColor);
-                        bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
+                        bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                         bl->setBarLineType(et);
                         bl->setParent(seg);
                         bl->setTrack(track);
@@ -2593,7 +2593,7 @@ bool Measure::createEndBarLines()
                         // adjust subtype, if not fitting
                         if (bl->barLineType() != et && !bl->customSubtype()) {
                               score()->undoChangeProperty(bl, P_SUBTYPE, et);
-                              bl->setGenerated(bl->el()->isEmpty() && _endBarLineGenerated);
+                              bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
                         // or clear custom subtype flag if same type as measure
