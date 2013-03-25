@@ -14,6 +14,8 @@
 #ifndef __FIFO_H__
 #define __FIFO_H__
 
+#include <atomic>
+
 //---------------------------------------------------------
 //   FifoBase
 //    - works only for one reader/writer
@@ -27,9 +29,9 @@
 class FifoBase {
 
    protected:
-      int ridx;               // read index
-      int widx;               // write index
-      volatile int counter;   // objects in fifo
+      int ridx;                 // read index
+      int widx;                 // write index
+      std::atomic<int> counter; // objects in fifo
       int maxCount;
 
       void push();
