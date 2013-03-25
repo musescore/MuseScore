@@ -170,10 +170,11 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 
 void BarLine::draw(QPainter* painter) const
       {
+/*    use condition in BarLine::scanElements() instead:
       // if no width (because staff is set to hide bar lines), draw nothing
       if (width() == 0.0)
             return;
-
+*/
       qreal lw = point(score()->styleS(ST_barWidth));
       qreal y1, y2;
       getY(&y1, &y2);
@@ -760,9 +761,8 @@ void BarLine::layout()
       getY(&y1, &y2);
 
       // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
-      if (parent() && parent()->type() != Element::SYSTEM && staff() && !staff()->staffType()->showBarlines()) {
+      if (parent() && parent()->type() != Element::SYSTEM && staff() && !staff()->staffType()->showBarlines())
             setbbox(QRectF());
-            }
 
       // bar lines not hidden
       else {
@@ -877,6 +877,9 @@ void BarLine::setBarLineType(const QString& s)
 
 void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
+      // if no width (staff has bar lines turned off) and not all requested, do nothing
+      if (width() == 0.0 && !all)
+            return;
       func(data, this);
       foreach(Element* e, _el)
             e->scanElements(data, func, all);
