@@ -21,7 +21,7 @@
 void StemSlash::draw(QPainter* painter) const
       {
       qreal lw = point(score()->styleS(ST_stemWidth));
-      painter->setPen(QPen(curColor(), lw));
+      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->drawLine(line);
       }
 
@@ -33,7 +33,7 @@ void StemSlash::setLine(const QLineF& l)
       {
       line = l;
       qreal w = point(score()->styleS(ST_stemWidth)) * .5;
-      setbbox(QRectF(line.p1(), line.p2()).normalized().adjusted(-w, w, 2.0*w, 2.0*w));
+      setbbox(QRectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0*w, 2.0*w));
       }
 
 //---------------------------------------------------------
