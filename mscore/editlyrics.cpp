@@ -71,7 +71,6 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       {
       Lyrics* lyrics   = (Lyrics*)editObject;
       int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
 
@@ -101,7 +100,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Lyrics* oldLyrics = 0;
       if (!back) {
             while (segment) {
-                  const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
+                  const QList<Lyrics*>* nll = segment->lyricsList(track);
                   if (nll) {
                         oldLyrics = nll->value(verse);
                         if (oldLyrics)
@@ -111,7 +110,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   }
             }
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
+      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
       if (ll == 0) {
             qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
             return;
@@ -182,7 +181,6 @@ void ScoreView::lyricsMinus()
       {
       Lyrics* lyrics   = (Lyrics*)editObject;
       int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
 
@@ -202,7 +200,7 @@ void ScoreView::lyricsMinus()
       // search previous lyric
       Lyrics* oldLyrics = 0;
       while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
+            const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (!nll) {
                   segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
                   continue;
@@ -215,7 +213,7 @@ void ScoreView::lyricsMinus()
 
       _score->startCmd();
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
+      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
       lyrics         = ll->value(verse);
       bool newLyrics = (lyrics == 0);
       if (!lyrics) {
@@ -270,7 +268,6 @@ void ScoreView::lyricsUnderscore()
       {
       Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
       int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
       int endTick      = segment->tick();
@@ -288,7 +285,7 @@ void ScoreView::lyricsUnderscore()
       // search previous lyric
       Lyrics* oldLyrics = 0;
       while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
+            const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (nll) {
                   oldLyrics = nll->value(verse);
                   if (oldLyrics)
@@ -314,7 +311,7 @@ void ScoreView::lyricsUnderscore()
             }
       _score->startCmd();
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
+      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
       lyrics         = ll->value(verse);
       bool newLyrics = (lyrics == 0);
       if (!lyrics) {
@@ -394,13 +391,13 @@ void ScoreView::lyricsEndEdit()
 
       // search previous lyric:
       int verse    = lyrics->no();
-      int staffIdx = lyrics->staffIdx();
+      int track = lyrics->track();
 
       // search previous lyric
       Lyrics* oldLyrics = 0;
       Segment* segment  = lyrics->segment();
       while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
+            const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (nll) {
                   oldLyrics = nll->value(verse);
                   if (oldLyrics)

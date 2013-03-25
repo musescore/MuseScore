@@ -738,20 +738,18 @@ void Segment::setTick(int t)
 //   segLyricsList
 //---------------------------------------------------------
 
-const QList<Lyrics*>* Segment::lyricsList(int staffIdx) const
+const QList<Lyrics*>* Segment::lyricsList(int track) const
       {
       if (!(segmentType() & (SegChordRestGrace))) {
             if (MScore::debugMode)
                   qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;
             }
-      int strack = staffIdx * VOICES;
-      int etrack = strack + VOICES;
-      for (int track = strack; track < etrack; ++track) {
-            ChordRest* cr = static_cast<ChordRest*>(element(track));
-            if (cr)
-                  return &cr->lyricsList();
-            }
+
+      ChordRest* cr = static_cast<ChordRest*>(element(track));
+      if (cr)
+            return &cr->lyricsList();
+
       return 0;
       }
 
