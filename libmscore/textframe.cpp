@@ -86,10 +86,10 @@ void TBox::add(Element* e)
 
 Text* TBox::getText()
       {
-      if (_el.isEmpty())
+      if (_el.empty())
             return 0;
-      if (_el[0]->type() == TEXT)
-            return static_cast<Text*>(_el[0]);
+      if ((*_el.begin())->type() == TEXT)
+            return static_cast<Text*>(*_el.begin());
       return 0;
       }
 

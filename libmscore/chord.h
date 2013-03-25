@@ -18,6 +18,7 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
+#include <functional>
 #include "chordrest.h"
 #include "noteevent.h"
 
@@ -56,6 +57,7 @@ class Chord : public ChordRest {
       Stem*      _stem;
       Hook*      _hook;
       StemSlash* _stemSlash;
+
       MScore::Direction  _stemDirection;
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
@@ -72,6 +74,7 @@ class Chord : public ChordRest {
       virtual qreal centerX() const;
       void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible);
       void addLedgerLines(qreal x, int move);
+      void processSiblings(std::function<void(Element*)> func);
 
    public:
       Chord(Score* s = 0);

@@ -211,28 +211,6 @@ Chord* Chord::linkedClone()
       }
 
 //---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void Chord::setScore(Score* s)
-      {
-      Element::setScore(s);
-      int n = notes().size();
-      for (int i = 0; i < n; ++i)
-            _notes[i]->setScore(s);
-      if (_stem)
-           _stem->setScore(s);
-      if (_hook)
-            _hook->setScore(s);
-      if (_glissando)
-            _glissando->setScore(s);
-      if (_arpeggio)
-            _arpeggio->setScore(s);
-      if (_stemSlash)
-            _stemSlash->setScore(s);
-      }
-
-//---------------------------------------------------------
 //   ~Chord
 //---------------------------------------------------------
 
@@ -385,7 +363,7 @@ void Chord::add(Element* e)
                   _hook = static_cast<Hook*>(e);
                   break;
             case CHORDLINE:
-                  _el.append(e);
+                  _el.push_back(e);
                   break;
             case STEM_SLASH:
                   _stemSlash = static_cast<StemSlash*>(e);
@@ -448,7 +426,7 @@ void Chord::remove(Element* e)
                   _hook = 0;
                   break;
             case CHORDLINE:
-                  _el.removeOne(e);
+                  _el.remove(e);
                   break;
             default:
                   ChordRest::remove(e);
@@ -758,8 +736,8 @@ void Chord::write(Xml& xml) const
       if (_tremolo)
             _tremolo->write(xml);
       n = _el.size();
-      for (int i = 0; i < n; ++i)
-            _el.at(i)->write(xml);
+      for (Element* e : _el)
+            e->write(xml);
       xml.etag();
       }
 
@@ -976,9 +954,35 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       for (int i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
       n = _el.size();
-      for (int i = 0; i < n; ++i)
-            _el.at(i)->scanElements(data, func, all);
+      for (Element* e : _el)
+            e->scanElements(data, func, all);
       ChordRest::scanElements(data, func, all);
+      }
+
+//---------------------------------------------------------
+//   processSiblings
+//---------------------------------------------------------
+
+void Chord::processSiblings(std::function<void(Element*)> func)
+      {
+      if (_hook)
+            func(_hook);
+      if (_stem)
+            func(_stem);
+      if (_stemSlash)
+            func(_stemSlash);
+      if (_arpeggio)
+            func(_arpeggio);
+      if (_tremolo)
+            func(_tremolo);
+      if (_glissando)
+            func(_glissando);
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            func(ll);
+      for (int i = 0; i < _notes.size(); ++i)
+            func(_notes.at(i));
+      for (Element* e : _el)
+            func(e);
       }
 
 //---------------------------------------------------------
@@ -987,26 +991,8 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Chord::setTrack(int val)
       {
-      if (_hook)
-            _hook->setTrack(val);
-      if (_stem)
-            _stem->setTrack(val);
-      if (_stemSlash)
-            _stemSlash->setTrack(val);
-      if (_arpeggio)
-            _arpeggio->setTrack(val);
-      if (_glissando)
-            _glissando->setTrack(val);
-      if (_tremolo)
-            _tremolo->setTrack(val);
-
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            ll->setTrack(val);
-
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i)
-            _notes.at(i)->setTrack(val);
       ChordRest::setTrack(val);
+      processSiblings([val] (Element* e) { e->setTrack(val); } );
       }
 
 //---------------------------------------------------------
@@ -1016,23 +1002,17 @@ void Chord::setTrack(int val)
 void Chord::setMag(qreal val)
       {
       ChordRest::setMag(val);
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            ll->setMag(val);
-      if (_stem)
-            _stem->setMag(val);
-      if (_hook)
-            _hook->setMag(val);
-      if (_stemSlash)
-            _stemSlash->setMag(val);
-      if (_arpeggio)
-            _arpeggio->setMag(val);
-      if (_tremolo)
-            _tremolo->setMag(val);
-      if (_glissando)
-            _glissando->setMag(val);
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i)
-            _notes.at(i)->setMag(val);
+      processSiblings([val] (Element* e) { e->setMag(val); } );
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void Chord::setScore(Score* s)
+      {
+      ChordRest::setScore(s);
+      processSiblings([s] (Element* e) { e->setScore(s); } );
       }
 
 //---------------------------------------------------------
@@ -1594,9 +1574,7 @@ void Chord::layout()
       _space.setLw(lll);
       _space.setRw(rrr + ipos().x());
 
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el) {
             e->layout();
             if (e->type() == CHORDLINE) {
                   int x = bbox().translated(e->pos()).right();
@@ -1606,32 +1584,11 @@ void Chord::layout()
             }
       // bbox();
 
+      for (int i = 0; i < _notes.size(); ++i)
+            _notes.at(i)->layout2();
+
       QRectF bb;
-      n = _notes.size();
-      for (int i = 0; i < n; ++i) {
-            Note* note = _notes.at(i);
-            note->layout2();
-            bb |= note->bbox().translated(note->pos());
-            }
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            bb |= ll->bbox().translated(ll->pos());
-      n = _articulations.size();
-      for (int i = 0; i < n; ++i) {
-            Articulation* a = _articulations.at(i);
-            bb |= a->bbox().translated(a->pos());
-            }
-      if (_hook)
-            bb |= _hook->bbox().translated(_hook->pos());
-      if (_stem)
-            bb |= _stem->bbox().translated(_stem->pos());
-      if (_arpeggio)
-            bb |= _arpeggio->bbox().translated(_arpeggio->pos());
-      if (_glissando)
-            bb |= _glissando->bbox().translated(_glissando->pos());
-      if (_stemSlash)
-            bb |= _stemSlash->bbox().translated(_stemSlash->pos());
-      if (_tremolo)
-            bb |= _tremolo->bbox().translated(_tremolo->pos());
+      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
       if (staff() && staff()->isTabStaff() && _tabDur)
             bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);

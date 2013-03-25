@@ -132,7 +132,7 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             }
-      _el.append(e);
+      _el.push_back(e);
       }
 
 //---------------------------------------------------------

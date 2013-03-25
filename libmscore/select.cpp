@@ -165,7 +165,7 @@ ChordRest* Selection::lastChordRest(int track) const
             return 0;
             }
       ChordRest* cr = 0;
-      for (ciElement i = _el.begin(); i != _el.end(); ++i) {
+      for (auto i = _el.begin(); i != _el.end(); ++i) {
             Element* el = *i;
             if (el->type() == Element::NOTE)
                   el = ((Note*)el)->chord();

@@ -771,18 +771,15 @@ void Element::startEdit(MuseScoreView*, const QPointF&)
 
 //---------------------------------------------------------
 //   remove
+///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------
-
-/**
- Remove \a el from the list. Return true on success.
-*/
 
 bool ElementList::remove(Element* el)
       {
-      int idx = indexOf(el);
-      if (idx == -1)
+      auto i = find(begin(), end(), el);
+      if (i == end())
             return false;
-      removeAt(idx);
+      erase(i);
       return true;
       }
 
@@ -792,12 +789,12 @@ bool ElementList::remove(Element* el)
 
 void ElementList::replace(Element* o, Element* n)
       {
-      int idx = indexOf(o);
-      if (idx == -1) {
+      auto i = find(begin(), end(), o);
+      if (i == end()) {
             qDebug("ElementList::replace: element not found\n");
             return;
             }
-      QList<Element*>::replace(idx, n);
+      *i = n;
       }
 
 //---------------------------------------------------------
@@ -806,8 +803,8 @@ void ElementList::replace(Element* o, Element* n)
 
 void ElementList::write(Xml& xml) const
       {
-      for (ciElement ie = begin(); ie != end(); ++ie)
-            (*ie)->write(xml);
+      for (const Element* e : *this)
+            e->write(xml);
       }
 
 
@@ -1064,7 +1061,7 @@ void Compound::addElement(Element* e, qreal x, qreal y)
 void Compound::layout()
       {
       setbbox(QRectF());
-      for (iElement i = elemente.begin(); i != elemente.end(); ++i) {
+      for (auto i = elemente.begin(); i != elemente.end(); ++i) {
             Element* e = *i;
             e->layout();
             addbbox(e->bbox().translated(e->pos()));
@@ -1078,7 +1075,7 @@ void Compound::layout()
 void Compound::setSelected(bool f)
       {
       Element::setSelected(f);
-      for (ciElement i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elemente.begin(); i != elemente.end(); ++i)
             (*i)->setSelected(f);
       }
 
@@ -1089,7 +1086,7 @@ void Compound::setSelected(bool f)
 void Compound::setVisible(bool f)
       {
       Element::setVisible(f);
-      for (ciElement i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elemente.begin(); i != elemente.end(); ++i)
             (*i)->setVisible(f);
       }
 

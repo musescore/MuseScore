@@ -161,7 +161,7 @@ void Trill::add(Element* e)
       {
       if (e->type() == ACCIDENTAL) {
             e->setParent(this);
-            _el.append(e);
+            _el.push_back(e);
             }
       else
             SLine::add(e);
