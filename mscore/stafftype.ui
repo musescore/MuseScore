@@ -302,51 +302,11 @@
               <item>
                <widget class="QComboBox" name="presetTablatureCombo">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>-1</number>
                 </property>
                 <property name="maxCount">
-                 <number>10</number>
+                 <number>20</number>
                 </property>
-                <item>
-                 <property name="text">
-                  <string comment="tablatture type">6 strings (simple)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>6 string (full)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string comment="tablature type">4 strings (simple)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4strings (full)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>ukulele</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string comment="tablature type">Italian (historic)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string comment="tablature type">French (historic)</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Custom</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item>
@@ -1125,6 +1085,43 @@
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_19">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="presetPercLabel">
+               <property name="text">
+                <string>Preset:</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="presetPercCombo">
+               <property name="maxCount">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_15">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QCheckBox" name="showLedgerLinesPercussion">

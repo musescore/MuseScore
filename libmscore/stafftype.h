@@ -63,7 +63,7 @@ class Xml;
 //---------------------------------------------------------
 
 class StaffType {
-      bool _buildin;          // used for memory management: do not delete if true
+      bool _builtin;          // used for memory management: do not delete if true
 
    protected:
       QString _name;
@@ -78,6 +78,14 @@ class StaffType {
 
    public:
       StaffType();
+      StaffType(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig) :
+            _name(name), _lineDistance(Spatium(lineDist)), _genClef(genClef),_showBarlines(showBarLines),
+            _slashStyle(stemless), _genTimesig(genTimeSig)
+            {
+            _builtin = false;
+            setLines(lines);
+            }
       virtual ~StaffType() {}
 
       QString name() const                     { return _name;            }
@@ -107,11 +115,20 @@ class StaffType {
       void setGenTimesig(bool val)             { _genTimesig = val;       }
       qreal doty1() const;
       qreal doty2() const;
-      bool buildin()            { return _buildin; }
-      void setBuildin(bool val) { _buildin = val; }
+      bool builtin()            { return _builtin; }
+      void setBuiltin(bool val) { _builtin = val; }
+
+      // static function to deal with presets
+      static const StaffType* getDefaultPreset(StaffGroup grp, int* idx);
+      static size_t numOfPresets();
+      static const StaffType* preset(int idx);
+      static const StaffType* presetFromName(QString& name, int* idx);
+      static const StaffType* presetFromXmlName(QString& xmlName, int* idx);
+      static const QString& presetXmlName(int idx);
+      static const QString& presetName(int idx);
       };
 
-// first three staff types in staffTypes[] are build in:
+// first three staff types in staffTypes[] are built-in:
 
 enum {
       PITCHED_STAFF_TYPE, TAB_STAFF_TYPE, PERCUSSION_STAFF_TYPE,
@@ -128,10 +145,17 @@ class StaffTypePitched : public StaffType {
 
    public:
       StaffTypePitched();
+      StaffTypePitched(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
+            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
+            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
+            {
+            }
       virtual StaffGroup group() const        { return PITCHED_STAFF; }
       virtual StaffTypePitched* clone() const { return new StaffTypePitched(*this); }
       virtual const char* groupName() const   { return "pitched"; }
       virtual bool isEqual(const StaffType&) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
@@ -149,13 +173,20 @@ class StaffTypePitched : public StaffType {
 class StaffTypePercussion : public StaffType {
       bool _genKeysig;        // create key signature at beginning of system
       bool _showLedgerLines;
-      virtual bool isEqual(const StaffType&) const;
 
    public:
       StaffTypePercussion();
+      StaffTypePercussion(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
+            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
+            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
+            {
+            }
       virtual StaffGroup group() const           { return PERCUSSION_STAFF; }
       virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
       virtual const char* groupName() const      { return "percussion"; }
+      virtual bool isEqual(const StaffType&) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
@@ -308,7 +339,7 @@ class StaffTypeTablature : public StaffType {
       virtual void read(XmlReader& e);
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
-      bool        isSameStructure(const StaffTypeTablature& stt) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString     durationString(TDuration::DurationType type, int dots) const;
