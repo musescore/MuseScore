@@ -1685,16 +1685,12 @@ void Chord::layout()
                   score()->undoRemoveElement(_hook);
             else if(tab == 0) {
                   _hook->layout();
-                  if (up())
-                        rrr += _hook->width();
+                  if (up()) {
+                        // hook position is not set yet
+                        qreal x = _hook->bbox().right() + stem()->hookPos().x();
+                        rrr = qMax(rrr, x);
+                        }
                   }
-            }
-
-      if (_noteType != NOTE_NORMAL) {
-            // qreal m = score()->styleD(ST_graceNoteMag);
-            static const qreal m = .9;
-            lll *= m;
-            rrr *= m;
             }
 
       _space.setLw(lll);
