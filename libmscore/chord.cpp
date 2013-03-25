@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chord.cpp 5658 2012-05-21 18:40:58Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -13,7 +12,7 @@
 
 /**
  \file
- Implementation of classes Chord, LedgerLine, NoteList Stem ans StemSlash.
+ Implementation of classes Chord
 */
 
 #include "chord.h"
@@ -45,64 +44,8 @@
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "rendermidi.h"
-
-//---------------------------------------------------------
-//   StemSlash
-//---------------------------------------------------------
-
-StemSlash::StemSlash(Score* s)
-   : Element(s)
-      {
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void StemSlash::draw(QPainter* painter) const
-      {
-      qreal lw = point(score()->styleS(ST_stemWidth));
-      painter->setPen(QPen(curColor(), lw));
-      painter->drawLine(QLineF(line.x1(), line.y1(), line.x2(), line.y2()));
-      }
-
-//---------------------------------------------------------
-//   setLine
-//---------------------------------------------------------
-
-void StemSlash::setLine(const QLineF& l)
-      {
-      line = l;
-      qreal w = point(score()->styleS(ST_stemWidth)) * .5;
-      setbbox(QRectF(line.p1(), line.p2()).normalized().adjusted(-w, w, 2.0*w, 2.0*w));
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StemSlash::layout()
-      {
-      Stem* stem = chord()->stem();
-      qreal h2;
-      qreal _spatium = spatium();
-      qreal l = chord()->up() ? _spatium : -_spatium;
-      QPointF p(stem->hookPos());
-      qreal x = p.x() + _spatium * .1;
-      qreal y = p.y();
-
-      if (chord()->beam()) {
-            y += l * .3;
-            h2 = l * .8;
-            }
-      else {
-            y += l * 1.2;
-            h2 = l * .4;
-            }
-      qreal w  = chord()->upNote()->headWidth() * .7;
-      setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
-      }
-
+#include "stemslash.h"
+#include "ledgerline.h"
 
 //---------------------------------------------------------
 //   upNote / downNote
@@ -1064,51 +1007,6 @@ void Chord::setTrack(int val)
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setTrack(val);
       ChordRest::setTrack(val);
-      }
-
-//---------------------------------------------------------
-//   LedgerLine
-//---------------------------------------------------------
-
-LedgerLine::LedgerLine(Score* s)
-   : Line(s, false)
-      {
-      setZ(NOTE * 100 - 50);
-      setSelectable(false);
-      _next = 0;
-      }
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF LedgerLine::pagePos() const
-      {
-      System* system = chord()->measure()->system();
-      qreal yp = y() + system->staff(staffIdx())->y() + system->y();
-      return QPointF(pageX(), yp);
-      }
-
-//---------------------------------------------------------
-//   measureXPos
-//---------------------------------------------------------
-
-qreal LedgerLine::measureXPos() const
-      {
-      qreal xp = x();                   // chord relative
-      xp += chord()->x();                // segment relative
-      xp += chord()->segment()->x();     // measure relative
-      return xp;
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void LedgerLine::layout()
-      {
-      setLineWidth(score()->styleS(ST_ledgerLineWidth));
-      Line::layout();
       }
 
 //---------------------------------------------------------

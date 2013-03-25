@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chord.h 5563 2012-04-20 13:30:27Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -31,58 +30,10 @@ class Glissando;
 class Stem;
 class QPainter;
 class Chord;
+class StemSlash;
+class LedgerLine;
 
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
-
-//---------------------------------------------------------
-//   @@ StemSlash
-///   used for grace notes of type acciaccatura
-//---------------------------------------------------------
-
-class StemSlash : public Element {
-      Q_OBJECT
-
-      QLineF line;
-
-   public:
-      StemSlash(Score*);
-      StemSlash &operator=(const Stem&);
-
-      void setLine(const QLineF& l);
-
-      virtual StemSlash* clone() const { return new StemSlash(*this); }
-      virtual ElementType type() const { return STEM_SLASH; }
-      virtual void draw(QPainter*) const;
-      virtual void layout();
-      Chord* chord() const { return (Chord*)parent(); }
-      };
-
-//---------------------------------------------------------
-//    @@ LedgerLine
-///   Graphic representation of a ledger line.
-///
-///    parent:     Chord
-///    x-origin:   Chord
-///    y-origin:   SStaff
-//---------------------------------------------------------
-
-class LedgerLine : public Line {
-      Q_OBJECT
-
-      LedgerLine* _next;
-
-   public:
-      LedgerLine(Score*);
-      LedgerLine &operator=(const LedgerLine&);
-      virtual LedgerLine* clone() const { return new LedgerLine(*this); }
-      virtual ElementType type() const  { return LEDGER_LINE; }
-      virtual QPointF pagePos() const;      ///< position in page coordinates
-      Chord* chord() const { return (Chord*)parent(); }
-      virtual void layout();
-      qreal measureXPos() const;
-      LedgerLine* next() const    { return _next; }
-      void setNext(LedgerLine* l) { _next = l;    }
-      };
 
 //---------------------------------------------------------
 //   @@ Chord

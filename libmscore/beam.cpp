@@ -29,6 +29,7 @@
 #include "hook.h"
 #include "mscore.h"
 #include "icon.h"
+#include "stemslash.h"
 
 //---------------------------------------------------------
 //   BeamFragment
