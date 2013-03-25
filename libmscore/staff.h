@@ -117,7 +117,7 @@ class Staff : public QObject {
       Staff(Score* = 0);
       Staff(Score*, Part*, int);
       ~Staff();
-      void init(const InstrumentTemplate*, int);
+      void init(const InstrumentTemplate*, const StaffType *staffType, int);
 
       bool isTop() const             { return _rstaff == 0; }
       QString partName() const;

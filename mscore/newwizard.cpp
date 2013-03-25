@@ -53,9 +53,10 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
 
       instrumentList->setHeaderLabels(QStringList(tr("Instrument List")));
 
-      QStringList header = (QStringList() << tr("Staves") << tr("Visible") << tr("Clef"));
+      QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
       partiturList->setColumnHidden(1, true);  // hide "visible" flag
+      partiturList->resizeColumnToContents(3);  // shrink "linked" column as much as possible
 
       buildTemplateList();
 
@@ -89,6 +90,7 @@ void InstrumentWizard::buildTemplateList()
 void InstrumentWizard::init()
       {
       partiturList->clear();
+      StaffListItem::populateStaffTypes(0);     // no score yet!
       instrumentList->clearSelection();
       addButton->setEnabled(false);
       removeButton->setEnabled(false);
@@ -197,7 +199,11 @@ void InstrumentWizard::on_addButton_clicked()
                   sli->setClef(ClefTypeList(CLEF_G, CLEF_G));
             else
                   sli->setClef(it->clefTypes[i]);
+            sli->setStaffType(it->staffTypePreset);
             }
+//      partiturList->resizeColumnToContents(0);
+//      partiturList->resizeColumnToContents(2);
+//      partiturList->resizeColumnToContents(4);
       partiturList->setItemExpanded(pli, true);
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(pli, true);
@@ -406,7 +412,7 @@ void InstrumentWizard::createInstruments(Score* cs)
                   staff->setRstaff(rstaff);
                   ++rstaff;
 
-                  staff->init(t, cidx);
+                  staff->init(t, sli->staffType(), cidx);
                   staff->setInitialClef(sli->clef());
 
                   if (sli->linked() && !part->staves()->isEmpty()) {
