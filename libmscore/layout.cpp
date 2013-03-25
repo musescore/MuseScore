@@ -369,7 +369,9 @@ void Score::layoutStage2()
                            && nseg->segmentType() == Segment::SegGrace
                            && nseg->element(track)
                            && cr->durationType().hooks()
-                           && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks())
+                           && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks()
+                           && bm != BeamMode::NO
+                           )
                               {
                               Beam* b = cr->beam();
                               if (b == 0 || b->elements().front() != cr) {
