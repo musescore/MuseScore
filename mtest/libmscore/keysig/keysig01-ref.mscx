@@ -145,13 +145,13 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>whole</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
             </Note>
@@ -169,13 +169,13 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>whole</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
             </Note>
@@ -193,13 +193,13 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>whole</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>66</pitch>
             <tpc>20</tpc>
             </Note>
