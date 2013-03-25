@@ -61,6 +61,8 @@
 #include "libmscore/box.h"
 #include "libmscore/fret.h"
 #include "libmscore/harmony.h"
+#include "libmscore/stemslash.h"
+#include "libmscore/ledgerline.h"
 
 extern bool useFactorySettings;
 
