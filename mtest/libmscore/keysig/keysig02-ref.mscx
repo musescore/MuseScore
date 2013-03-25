@@ -160,6 +160,9 @@ p, li { white-space: pre-wrap; }
             <tpc>20</tpc>
             </Note>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -184,6 +187,9 @@ p, li { white-space: pre-wrap; }
             <tpc>20</tpc>
             </Note>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -208,6 +214,9 @@ p, li { white-space: pre-wrap; }
             <tpc>20</tpc>
             </Note>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
