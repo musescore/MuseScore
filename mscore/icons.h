@@ -43,7 +43,7 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
       formatListUnordered_ICON, formatListOrdered_ICON,
       formatIndentMore_ICON, formatIndentLess_ICON, community_ICON,
       metronome_ICON,
-      vframe_ICON, hframe_ICON, tframe_ICON, fframe_ICON, measure_ICON,
+      vframe_ICON, hframe_ICON, tframe_ICON, fframe_ICON, measure_ICON, checkmark_ICON,
       voice1_ICON, voice2_ICON, voice3_ICON, voice4_ICON,
       ICONS
       };

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
-    <height>341</height>
+    <width>650</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -252,11 +252,14 @@
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
+      <property name="indentation">
+       <number>10</number>
+      </property>
       <property name="uniformRowHeights">
        <bool>true</bool>
       </property>
       <property name="columnCount">
-       <number>4</number>
+       <number>5</number>
       </property>
       <column>
        <property name="text">
@@ -279,6 +282,11 @@
        </property>
        <property name="toolTip">
         <string>Staff Linked to Previous</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Staff type</string>
        </property>
       </column>
      </widget>
