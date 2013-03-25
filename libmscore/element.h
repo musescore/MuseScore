@@ -536,7 +536,7 @@ class Element : public QObject {
 //   ElementList
 //---------------------------------------------------------
 
-class ElementList : public QList<Element*> {
+class ElementList : public std::list<Element*> {
    public:
       ElementList() {}
       bool remove(Element*);
@@ -544,9 +544,6 @@ class ElementList : public QList<Element*> {
       void write(Xml&) const;
       void write(Xml&, const char* name) const;
       };
-
-typedef ElementList::iterator iElement;
-typedef ElementList::const_iterator ciElement;
 
 //-------------------------------------------------------------------
 //   @@ StaffLines

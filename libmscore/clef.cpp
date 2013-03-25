@@ -309,7 +309,7 @@ void Clef::layout1()
       symbol->layout();
       addElement(symbol, .0, yoff * _spatium);
       setbbox(QRectF());
-      for (iElement i = elements.begin(); i != elements.end(); ++i) {
+      for (auto i = elements.begin(); i != elements.end(); ++i) {
             Element* e = *i;
             e->setColor(curColor());
             addbbox(e->bbox().translated(e->pos()));

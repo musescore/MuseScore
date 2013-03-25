@@ -1743,7 +1743,7 @@ void ExportLy::printJumpOrMarker(int mnum, bool start)
 
 void ExportLy::findMarkerAtMeasureStart(Measure* m)
 {
-   for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+   for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
      {
        Element* dir = *ci;
        int tp = dir->type();
@@ -1770,7 +1770,7 @@ void ExportLy::jumpAtMeasureStop(Measure* m)
       {
 	// loop over all measure relative elements in this measure
 	// looking for JUMPS and MARKERS
-	for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+	for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
 	  {
 	    Element* dir = *ci;
 	    int tp = dir->type();
@@ -1951,7 +1951,7 @@ void ExportLy::buildInstructionList(Measure* m, int strack, int etrack)
 {
 
   // loop over all measure relative elements in this measure
-  for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+  for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
     {
       bool found=false;
 //      bool rehearsal=false;
