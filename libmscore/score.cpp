@@ -419,7 +419,7 @@ Score::~Score()
       delete _sigmap;
       delete _repeatList;
       foreach(StaffType** st, _staffTypes) {
-            if (!(*st)->buildin())
+            if (!(*st)->builtin())
                   delete *st;
             delete st;
             }
@@ -1945,7 +1945,7 @@ void Score::addStaffType(int idx, StaffType* st)
             // store the updated staff type
             *(_staffTypes[idx]) = st;
             // delete old staff type if not built-in
-            if (!oldStaffType->buildin())
+            if (!oldStaffType->builtin())
                   delete oldStaffType;
             }
       }

@@ -4470,7 +4470,7 @@
 			<shortName>Drs.</shortName>
 			<description>Drumset 3 lines</description>
 			<clef>PERC2</clef>
-			<stafflines>3</stafflines>
+			<stafftype staffTypePreset="perc3Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Channel>
@@ -4483,7 +4483,7 @@
 			<shortName>Sn. Dr.</shortName>
 			<description>Snare Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4512,7 +4512,7 @@
 			<shortName>B. Dr.</shortName>
 			<description>Bass Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="35">
@@ -4533,7 +4533,7 @@
 			<shortName>P. Sn. Dr.</shortName>
 			<description>Piccolo Snare Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4562,7 +4562,7 @@
 			<shortName>Mil. Dr.</shortName>
 			<description>Military Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="37">
@@ -4591,7 +4591,7 @@
 			<shortName>H. To.</shortName>
 			<description>High Tom</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="48">
@@ -4620,7 +4620,7 @@
 			<shortName>M. To.</shortName>
 			<description>MiTom</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="45">
@@ -4649,7 +4649,7 @@
 			<shortName>L. To.</shortName>
 			<description>Low Tom</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="43">
@@ -4670,7 +4670,7 @@
 			<shortName>Ped. Hi-hat</shortName>
 			<description>Pedal Hi-hat</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="0">
@@ -4699,7 +4699,7 @@
 			<shortName>Ch. To.</shortName>
 			<description>Chinese Tom-toms</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="61">
@@ -4720,7 +4720,7 @@
 			<shortName>Bo.</shortName>
 			<description>Bongos</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="60">
@@ -4749,7 +4749,7 @@
 			<shortName>Co.</shortName>
 			<description>Congas</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="62">
@@ -4778,7 +4778,7 @@
 			<shortName>Timb.</shortName>
 			<description>Timbales</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="65">
@@ -4807,7 +4807,7 @@
 			<shortName>Fr. Dr.</shortName>
 			<description>Frame Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="45">
@@ -4828,7 +4828,7 @@
 			<shortName>Tbs.</shortName>
 			<description>Tablas</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="62">
@@ -4857,7 +4857,7 @@
 			<shortName>Cu.</shortName>
 			<description>Cuica</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="78">
@@ -4886,7 +4886,7 @@
 			<shortName>Fi. Cym.</shortName>
 			<description>Finger Cymbals</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="81">
@@ -4907,7 +4907,7 @@
 			<shortName>Hi-hat</shortName>
 			<description>Hi-hat</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="42">
@@ -4936,7 +4936,7 @@
 			<shortName>Tam-tam</shortName>
 			<description>Tam-tam</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -4957,7 +4957,7 @@
 			<shortName>Be.</shortName>
 			<description>Bells</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="53">
@@ -4978,7 +4978,7 @@
 			<shortName>Sle. Be.</shortName>
 			<description>Sleigh Bells</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -4999,7 +4999,7 @@
 			<shortName>Be. Pla.</shortName>
 			<description>Bell Plate</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="58">
@@ -5020,7 +5020,7 @@
 			<shortName>Bw. Go.</shortName>
 			<description>Bowl Gongs</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -5041,7 +5041,7 @@
 			<shortName>Tu.</shortName>
 			<description>Tubo</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="81">
@@ -5062,7 +5062,7 @@
 			<shortName>Met. Cst.</shortName>
 			<description>Metal Castanets</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="67">
@@ -5083,7 +5083,7 @@
 			<shortName>Aut. Brk. Dr.</shortName>
 			<description>Automobile Brake Drums</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="68">
@@ -5104,7 +5104,7 @@
 			<shortName>Ir. Pi.</shortName>
 			<description>Iron Pipes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="68">
@@ -5125,7 +5125,7 @@
 			<shortName>Chn.</shortName>
 			<description>Chains</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5146,7 +5146,7 @@
 			<shortName>Anv.</shortName>
 			<description>Anvil</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="53">
@@ -5167,7 +5167,7 @@
 			<shortName>Wd. Bl.</shortName>
 			<description>WooBlocks</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5196,7 +5196,7 @@
 			<shortName>Tmp. Bl.</shortName>
 			<description>Temple Blocks</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5225,7 +5225,7 @@
 			<shortName>Trgl.</shortName>
 			<description>Triangle</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="80">
@@ -5254,7 +5254,7 @@
 			<shortName>Cym.</shortName>
 			<description>Cymbal</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="57">
@@ -5276,7 +5276,7 @@
 			<shortName>R. Cym.</shortName>
 			<description>Ride Cymbal</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="51">
@@ -5305,7 +5305,7 @@
 			<shortName>Ch. Cym.</shortName>
 			<description>Chinese Cymbal</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="52">
@@ -5326,7 +5326,7 @@
 			<shortName>Cr. Cym.</shortName>
 			<description>Crash Cymbal</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="49">
@@ -5347,7 +5347,7 @@
 			<shortName>Sp. Cym.</shortName>
 			<description>Splash Cymbal</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="55">
@@ -5368,7 +5368,7 @@
 			<shortName>Cwb.</shortName>
 			<description>Cowbell</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="56">
@@ -5389,7 +5389,7 @@
 			<shortName>Clv.</shortName>
 			<description>Claves</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="75">
@@ -5410,7 +5410,7 @@
 			<shortName>Cst.</shortName>
 			<description>Castanets</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5431,7 +5431,7 @@
 			<shortName>Gro.</shortName>
 			<description>Guiro</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="73">
@@ -5452,7 +5452,7 @@
 			<shortName>Mrcs.</shortName>
 			<description>Maracas</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="70">
@@ -5473,7 +5473,7 @@
 			<shortName>Cab.</shortName>
 			<description>Cabasa</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5494,7 +5494,7 @@
 			<shortName>Qui.</shortName>
 			<description>Quijada</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5515,7 +5515,7 @@
 			<shortName>Vib. Slp.</shortName>
 			<description>Vibra Slap</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="58">
@@ -5536,7 +5536,7 @@
 			<shortName>Slt. Dr.</shortName>
 			<description>Slit Drum</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="77">
@@ -5557,7 +5557,7 @@
 			<shortName>Wh.</shortName>
 			<description>Whip</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="76">
@@ -5578,7 +5578,7 @@
 			<shortName>Rat.</shortName>
 			<description>Ratchet</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="73">
@@ -5599,7 +5599,7 @@
 			<shortName>Thu.</shortName>
 			<description>Thundersheet</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="49">
@@ -5620,7 +5620,7 @@
 			<shortName>Sa. Bl.</shortName>
 			<description>Sandpaper Blocks</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="70">
@@ -5641,7 +5641,7 @@
 			<shortName>Wd. Wn. Ch.</shortName>
 			<description>Wooden WinChimes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5662,7 +5662,7 @@
 			<shortName>Bam. Wn. Ch.</shortName>
 			<description>Bamboo WinChimes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5683,7 +5683,7 @@
 			<shortName>Met. Wn Ch.</shortName>
 			<description>Metal WinChimes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5704,7 +5704,7 @@
 			<shortName>Gl. Wn Ch.</shortName>
 			<description>Glass WinChimes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5725,7 +5725,7 @@
 			<shortName>Sh. Wn Ch.</shortName>
 			<description>Shell WinChimes</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="69">
@@ -5746,7 +5746,7 @@
 			<shortName>Sto.</shortName>
 			<description>Stones</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="67">
@@ -5767,7 +5767,7 @@
 			<shortName>Fi. Sna.</shortName>
 			<description>Finger Snap</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="75">
@@ -5788,7 +5788,7 @@
 			<shortName>Hd. Clp.</shortName>
 			<description>HanClap</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="39">
@@ -5809,7 +5809,7 @@
 			<shortName>Sla.</shortName>
 			<description>Slap</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="41">
@@ -5830,7 +5830,7 @@
 			<shortName>Sta.</shortName>
 			<description>Stamp</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="35">
@@ -5851,7 +5851,7 @@
 			<shortName>Perc. Syn.</shortName>
 			<description>Percussion Synthesizer</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="40">
@@ -5872,7 +5872,7 @@
 			<shortName>Tamb.</shortName>
 			<description>Tambourine</description>
 			<clef>PERC</clef>
-			<stafflines>1</stafflines>
+			<stafftype staffTypePreset="perc1Line">percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Drum pitch="54">
@@ -5940,7 +5940,7 @@
 		<Instrument id="guitar-(tablature)">
 			<init>guitar</init>
 			<description>Guitar (Tablature)</description>
-			<stafftype>tablature</stafftype>
+			<stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
 		<Instrument id="11-string-alto-guitar">
@@ -6041,7 +6041,7 @@
 		<Instrument id="electric-bass-(4-str.-tab)">
 			<init>electric-bass</init>
 			<description>Electric Bass (4-str. TAB)</description>
-			<stafftype>tablature</stafftype>
+			<stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
 		<Instrument id="fretless-electric-bass">
@@ -6078,7 +6078,7 @@
 		<Instrument id="ukulele-(4-str.-tab)">
 			<init>ukulele</init>
 			<description>Ukulele (4-str. TAB)</description>
-			<stafftype>tablature</stafftype>
+			<stafftype staffTypePreset="tabUkulele">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
 		<Instrument id="baritone-ukulele">
@@ -6121,7 +6121,7 @@
 		<Instrument id="lute-(tablature)">
 			<init>lute</init>
 			<description>Lute (Tablature)</description>
-			<stafftype>tablature</stafftype>
+			<stafftype staffTypePreset="tab6StrItalian">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
 		<Instrument id="ren.-tenor-lute-(5-course)">
@@ -7511,7 +7511,7 @@
 		<Instrument id="viola-da-gamba-(tablature)">
 			<init>viola-da-gamba</init>
 			<description>Viola da gamba (Tablature)</description>
-			<stafftype>tablature</stafftype>
+			<stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
 		<Instrument id="viola-da-gamba-(6-strings)">
