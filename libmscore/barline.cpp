@@ -170,6 +170,11 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 
 void BarLine::draw(QPainter* painter) const
       {
+/*    use condition in BarLine::scanElements() instead:
+      // if no width (because staff is set to hide bar lines), draw nothing
+      if (width() == 0.0)
+            return;
+*/
       qreal lw = point(score()->styleS(ST_barWidth));
       qreal y1, y2;
       getY(&y1, &y2);
@@ -754,50 +759,59 @@ void BarLine::layout()
       {
       qreal y1, y2;
       getY(&y1, &y2);
-      qreal _spatium = spatium();
 
-      qreal dw = layoutWidth(score(), barLineType(), magS());
-      QRectF r(0.0, y1, dw, y2-y1);
+      // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
+      if (parent() && parent()->type() != Element::SYSTEM && staff() && !staff()->staffType()->showBarlines())
+            setbbox(QRectF());
 
-      if (score()->styleB(ST_repeatBarTips)) {
-            qreal mags = magS();
-            int si = score()->symIdx();
-            switch (barLineType()) {
-                  case START_REPEAT:
-                        r |= symbols[si][brackettipsRightUp].bbox(mags).translated(0, y1);
-                        r |= symbols[si][brackettipsRightDown].bbox(mags).translated(0, y2);
-                        break;
-                  case END_REPEAT:
-                        r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(0, y1);
-                        r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(0, y2);
-                        break;
+      // bar lines not hidden
+      else {
+            qreal dw = layoutWidth(score(), barLineType(), magS());
+            QRectF r(0.0, y1, dw, y2-y1);
 
-                  case END_START_REPEAT:
-                        {
-                        qreal lw   = point(score()->styleS(ST_barWidth));
-                        qreal lw2  = point(score()->styleS(ST_endBarWidth));
-                        qreal d1   = point(score()->styleS(ST_endBarDistance));
-                        const Sym& dotsym = symbols[score()->symIdx()][dotSym];
-                        qreal dotw = dotsym.width(mags);
-                        qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
+            if (score()->styleB(ST_repeatBarTips)) {
+                  qreal mags = magS();
+                  int si = score()->symIdx();
+                  switch (barLineType()) {
+                        case START_REPEAT:
+                              r |= symbols[si][brackettipsRightUp].bbox(mags).translated(0, y1);
+                              r |= symbols[si][brackettipsRightDown].bbox(mags).translated(0, y2);
+                              break;
+                        case END_REPEAT:
+                              r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(0, y1);
+                              r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(0, y2);
+                              break;
 
-                        r |= symbols[si][brackettipsRightUp].bbox(mags).translated(x, y1);
-                        r |= symbols[si][brackettipsRightDown].bbox(mags).translated(x, y2);
-                        r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(x, y1);
-                        r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(x, y2);
+                        case END_START_REPEAT:
+                              {
+                              qreal lw   = point(score()->styleS(ST_barWidth));
+                              qreal lw2  = point(score()->styleS(ST_endBarWidth));
+                              qreal d1   = point(score()->styleS(ST_endBarDistance));
+                              const Sym& dotsym = symbols[score()->symIdx()][dotSym];
+                              qreal dotw = dotsym.width(mags);
+                              qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
+
+                              r |= symbols[si][brackettipsRightUp].bbox(mags).translated(x, y1);
+                              r |= symbols[si][brackettipsRightDown].bbox(mags).translated(x, y2);
+                              r |= symbols[si][brackettipsLeftUp].bbox(mags).translated(x, y1);
+                              r |= symbols[si][brackettipsLeftDown].bbox(mags).translated(x, y2);
+                              }
+                              break;
+
+                        default:
+                              break;
                         }
-                        break;
-
-                  default:
-                        break;
                   }
+            setbbox(r);
             }
+
+      // in any case, lay out attached elements
       foreach(Element* e, _el) {
             e->layout();
             if (e->type() == ARTICULATION) {
                   Articulation* a       = static_cast<Articulation*>(e);
                   MScore::Direction dir = a->direction();
-                  qreal distance        = 0.5 * _spatium;
+                  qreal distance        = 0.5 * spatium();
                   qreal x               = width() * .5;
                   if (dir == MScore::DOWN) {
                         qreal botY = y2 + distance;
@@ -809,7 +823,6 @@ void BarLine::layout()
                         }
                   }
             }
-      setbbox(r);
       }
 
 //---------------------------------------------------------
@@ -864,6 +877,9 @@ void BarLine::setBarLineType(const QString& s)
 
 void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
+      // if no width (staff has bar lines turned off) and not all requested, do nothing
+      if (width() == 0.0 && !all)
+            return;
       func(data, this);
       foreach(Element* e, _el)
             e->scanElements(data, func, all);
