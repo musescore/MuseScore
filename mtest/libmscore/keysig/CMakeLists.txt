@@ -11,11 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      hairpin note compat link measure beam split join splitstaff
-      timesig layout element midi dynamic plugins copypaste tuplet
-      repeat concertpitch keysig
-      )
+set(TARGET tst_keysig)
 
-# midi - does not work
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
