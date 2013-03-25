@@ -23,7 +23,7 @@ if (SCRIPT_INTERFACE)
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
-      jump.h
+      jump.h stemslash.h ledgerline.h
       )
 endif (SCRIPT_INTERFACE)
 
@@ -74,7 +74,7 @@ add_library (
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
       exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
-      bsymbol.cpp marker.cpp jump.cpp
+      bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (
