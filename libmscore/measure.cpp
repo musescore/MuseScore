@@ -2959,7 +2959,6 @@ qreal Measure::minWidth2() const
 
 void computeStretch(int minTick, qreal minimum, qreal stretch, int first, int last, int ticksList[], qreal xpos[], qreal width[])
       {
-      qDebug("%s: minTick=%d, stretch=%g, first=%d, last=%d", __FUNCTION__, minTick, stretch, first, last);
       SpringMap springs;
       for (int i = first; i < last; ++i) {
             qreal str = 1.0;
@@ -2987,8 +2986,6 @@ void computeStretch(int minTick, qreal minimum, qreal stretch, int first, int la
 
       qreal force = sff(stretch, minimum, springs);
 
-      qDebug("stretch=%9.2f, minimum=%9.2f => force=%g", stretch, minimum, force);
-
       for (iSpring i = springs.begin(); i != springs.end(); ++i) {
             qreal stretch = force * i->second.stretch;
             if (stretch < i->second.fix)
@@ -3000,15 +2997,6 @@ void computeStretch(int minTick, qreal minimum, qreal stretch, int first, int la
             x += width[i];
             xpos[i+1] = x;
             }
-      }
-
-static void showValues(const char *prefix, int mnum, int first, int last, int ticksList[], qreal xpos[], qreal width[])
-      {
-      int i;
-      for (i=first; i < last; i++) {
-            qDebug("%s: seg %2d:%2d: t=%5d, x=%9.2f, w=%9.2f", prefix, mnum, i, ticksList[i], xpos[i], width[i]);
-            }
-      qDebug("%s: seg %2d:xx:          x=%9.2f", prefix, mnum, xpos[i]);
       }
 
 //-----------------------------------------------------------------------------
@@ -3066,7 +3054,7 @@ void Measure::layoutX(qreal stretch)
       qreal clefWidth[nstaves];
       memset(clefWidth, 0, nstaves * sizeof(qreal));
 
-      QRectF hLastBbox[nstaves];
+      QRectF hLastBbox[nstaves];    // bbox of previous harmony to test vertical separation
 
       const Segment* s = first();
       const Segment* pSeg = 0;
@@ -3191,7 +3179,7 @@ void Measure::layoutX(qreal stretch)
                               }
                         if (e) {
                               eFound = true;
-                              gotHarmony = true;      // XXX to avoid closing barline
+                              gotHarmony = true;      // to avoid closing barline
                               space.max(e->space());
                               }
                         }
@@ -3212,11 +3200,9 @@ void Measure::layoutX(qreal stretch)
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        /*if (hFound)*/ {
-                              if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
-                                    sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-                              hLastBbox[staffIdx] = hBbox;
-                              }
+                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                              sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                        hLastBbox[staffIdx] = hBbox;
 
                         hRest[staffIdx] = hSpace.rw();
                         hRest2[staffIdx] = false;
@@ -3228,7 +3214,7 @@ void Measure::layoutX(qreal stretch)
                   clefWidth[staffIdx] = 0.0;
                   }
 
-            // set previous seg width before adding in harmony
+            // set previous seg width before adding in harmony, to allow stretching
             if (segmentIdx) {
                   width[segmentIdx-1] = segmentWidth;
                   if (pSeg)
@@ -3276,13 +3262,11 @@ void Measure::layoutX(qreal stretch)
             else
                   ticksList[segmentIdx] = 0;
 
-            // XXX if we are on a chord symbol, stretch the notes below it if necessary
+            // if we are on a chord symbol, stretch the notes below it if necessary
             if (gotHarmony) {
-                  if (hLastIdx >= 0) {
-                        showValues("   Pre", no(), hLastIdx, segmentIdx, ticksList, xpos, width);
+                  if (hLastIdx >= 0)
                         computeStretch(hMinTick, 0.0, x-lastx, hLastIdx, segmentIdx, ticksList, xpos, width);
-                        showValues("  Post", no(), hLastIdx, segmentIdx, ticksList, xpos, width);
-                        }
+
                   hMinTick = 10000;
                   lastx = x;
                   hLastIdx = segmentIdx;
@@ -3342,64 +3326,10 @@ void Measure::layoutX(qreal stretch)
       xpos[segmentIdx]    = x + segmentWidth;
 
       //---------------------------------------------------
-      // Debug output
-      //---------------------------------------------------
-
-      showValues("Before", no(), 0, segs, ticksList, xpos, width);
-
-      //---------------------------------------------------
-      // compute stretches
+      // compute stretches for whole measure
       //---------------------------------------------------
 
       computeStretch(minTick, xpos[0], stretch, 0, segs, ticksList, xpos, width);
-#if 0
-      SpringMap springs;
-      qreal minimum = xpos[0];
-      for (int i = 0; i < segs; ++i) {
-            qreal str = 1.0;
-            qreal d;
-            qreal w = width[i];
-
-            int t = ticksList[i];
-            if (t) {
-                  if (minTick > 0)
-                        // str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
-                        str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
-                  d = w / str;
-                  }
-            else {
-                  str = 0.0;              // dont stretch timeSig and key
-                  d   = 100000000.0;      // CHECK
-                  }
-            springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
-            minimum += w;
-            }
-
-      //---------------------------------------------------
-      //    distribute stretch to segments
-      //---------------------------------------------------
-
-      qreal force = sff(stretch, minimum, springs);
-
-      qDebug("stretch=%9.2f, minimum=%9.2f => force=%g", stretch, minimum, force);
-
-      for (iSpring i = springs.begin(); i != springs.end(); ++i) {
-            qreal stretch = force * i->second.stretch;
-            if (stretch < i->second.fix)
-                  stretch = i->second.fix;
-            width[i->second.seg] = stretch;
-            }
-      x = xpos[0];
-      for (int i = 1; i <= segs; ++i) {
-            x += width[i-1];
-            xpos[i] = x;
-            }
-#endif
-      //---------------------------------------------------
-      // Debug output
-      //---------------------------------------------------
-
-      showValues(" After", no(), 0, segs, ticksList, xpos, width);
 
       //---------------------------------------------------
       //    layout individual elements
