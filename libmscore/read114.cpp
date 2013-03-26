@@ -77,7 +77,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_barNoteDistance,Spatium(.6)),
       StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
-      StyleVal(ST_measureSpacing,1.2),
+      StyleVal(ST_measureSpacing, qreal(1.2)),
 
       StyleVal(ST_staffLineWidth,Spatium(0.08)),
       StyleVal(ST_ledgerLineWidth,Spatium(0.12)),
@@ -85,11 +85,11 @@ static const StyleVal style114[] = {
       StyleVal(ST_accidentalDistance,Spatium(0.22)),
       StyleVal(ST_accidentalNoteDistance,Spatium(0.22)),
       StyleVal(ST_beamWidth,Spatium(0.48)),
-      StyleVal(ST_beamDistance,0.5),
+      StyleVal(ST_beamDistance,qreal(0.5)),
       StyleVal(ST_beamMinLen,Spatium(1.25)),
-      StyleVal(ST_beamMinSlope,0.05),
+      StyleVal(ST_beamMinSlope, qreal(0.05)),
 
-      StyleVal(ST_beamMaxSlope,0.2),
+      StyleVal(ST_beamMaxSlope, qreal(0.2)),
       StyleVal(ST_maxBeamTicks, MScore::division),
       StyleVal(ST_dotNoteDistance,Spatium(0.35)),
       StyleVal(ST_dotRestDistance,Spatium(0.25)),
@@ -98,7 +98,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_propertyDistanceStem,Spatium(0.5)),
       StyleVal(ST_propertyDistance,Spatium(1.0)),
 //      StyleVal(ST_pageFillLimit,0.7),
-      StyleVal(ST_lastSystemFillLimit,0.3),
+      StyleVal(ST_lastSystemFillLimit, qreal(0.3)),
 
       StyleVal(ST_hairpinHeight,Spatium(1.2)),
       StyleVal(ST_hairpinContHeight,Spatium(0.5)),
@@ -112,10 +112,10 @@ static const StyleVal style114[] = {
       StyleVal(ST_measureNumberSystem,true),
 
       StyleVal(ST_measureNumberAllStaffs,false),
-      StyleVal(ST_smallNoteMag,0.7),
-      StyleVal(ST_graceNoteMag,0.7),
-      StyleVal(ST_smallStaffMag,0.7),
-      StyleVal(ST_smallClefMag,0.8),
+      StyleVal(ST_smallNoteMag, qreal(0.7)),
+      StyleVal(ST_graceNoteMag, qreal(0.7)),
+      StyleVal(ST_smallStaffMag, qreal(0.7)),
+      StyleVal(ST_smallClefMag, qreal(0.8)),
       StyleVal(ST_genClef,true),
       StyleVal(ST_genKeysig,true),
       StyleVal(ST_genTimesig,true),
@@ -623,7 +623,7 @@ Score::FileError Score::read114(XmlReader& e)
                                     case BeamMode::AUTO:
                                     case BeamMode::BEGIN:
                                     case BeamMode::END:
-                                    case BeamMode::NO:
+                                    case BeamMode::NONE:
                                           break;
                                     case BeamMode::MID:
                                     case BeamMode::BEGIN32:
@@ -634,7 +634,7 @@ Score::FileError Score::read114(XmlReader& e)
                                           if (cr->type() == Element::CHORD)
                                                 cr->setBeamMode(BeamMode::AUTO);
                                           else
-                                                cr->setBeamMode(BeamMode::NO);
+                                                cr->setBeamMode(BeamMode::NONE);
                                           break;
                                     }
                               break;

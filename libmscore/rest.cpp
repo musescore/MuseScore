@@ -39,7 +39,7 @@ Rest::Rest(Score* s)
   : ChordRest(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _beamMode  = BeamMode::NO;
+      _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = rest4Sym;
       }
@@ -48,7 +48,7 @@ Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _beamMode  = BeamMode::NO;
+      _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = rest4Sym;
       setDurationType(d);
@@ -520,7 +520,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NO));
+      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
       ChordRest::reset();
       }
 

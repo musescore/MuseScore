@@ -1522,7 +1522,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 		}
 
 		// beam
-		BeamMode bm = container->getIsRest() ? BeamMode::NO : BeamMode::AUTO;
+		BeamMode bm = container->getIsRest() ? BeamMode::NONE : BeamMode::AUTO;
 		if(container->getInBeam()){
 			OVE::MeasurePos pos = container->start()->shiftMeasure(0);
 			OVE::MusicData* data = getCrossMeasureElementByPos(part, staff, pos, container->getVoice(), OVE::MusicData_Beam);
