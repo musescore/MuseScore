@@ -19,27 +19,28 @@
 //=============================================================================
 
 #include "config.h"
-#include "musescore.h"
-#include "instrdialog.h"
-#include "libmscore/instrtemplate.h"
-#include "scoreview.h"
-#include "libmscore/score.h"
-#include "libmscore/system.h"
-#include "libmscore/clef.h"
-#include "libmscore/undo.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/segment.h"
-#include "libmscore/style.h"
 #include "editinstrument.h"
-#include "libmscore/drumset.h"
-#include "libmscore/slur.h"
+#include "icons.h"
+#include "instrdialog.h"
+#include "musescore.h"
+#include "scoreview.h"
 #include "seq.h"
-#include "libmscore/measure.h"
-#include "libmscore/line.h"
 #include "libmscore/beam.h"
+#include "libmscore/clef.h"
+#include "libmscore/drumset.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/line.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/slur.h"
+#include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/style.h"
+#include "libmscore/system.h"
+#include "libmscore/undo.h"
 
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
@@ -57,6 +58,8 @@ StaffListItem::StaffListItem(PartListItem* li)
       setLinked(false);
       setClef(ClefTypeList(CLEF_G, CLEF_G));
 //      setFlags(flags() | Qt::ItemIsUserCheckable);
+      _staffTypeCombo = 0;
+      initStaffTypeCombo();
       }
 
 StaffListItem::StaffListItem()
@@ -68,6 +71,20 @@ StaffListItem::StaffListItem()
       staffIdx = 0;
       setClef(ClefTypeList(CLEF_G, CLEF_G));
       setLinked(false);
+      _staffTypeCombo = 0;
+//      initStaffTypeCombo();                   // no! can't set widgets into this, until this is inserted in the tree hierarchy
+      }
+
+void StaffListItem::initStaffTypeCombo()
+      {
+      if (_staffTypeCombo)                      // do not init more than once
+            return;
+      _staffTypeCombo = new QComboBox();
+      _staffTypeCombo->setAutoFillBackground(true);
+      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
+            _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
+      treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
+      connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
 
 //---------------------------------------------------------
@@ -97,7 +114,109 @@ void StaffListItem::setClef(const ClefTypeList& val)
 void StaffListItem::setLinked(bool val)
       {
       _linked = val;
-      setText(3, _linked ? InstrumentsDialog::tr("linked") : "");
+//      setText(3, _linked ? InstrumentsDialog::tr("linked") : "");
+      setIcon(3, _linked ? *icons[checkmark_ICON] : QIcon() );
+      }
+
+//---------------------------------------------------------
+//   setStaffType
+//---------------------------------------------------------
+
+void StaffListItem::setStaffType(int staffTypeIdx)
+      {
+      int itemIdx = _staffTypeCombo->findData(staffTypeIdx);
+      _staffTypeCombo->setCurrentIndex(itemIdx >= 0 ? itemIdx : 0);
+      }
+
+//---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+const StaffType* StaffListItem::staffType() const
+      {
+      int staffTypeIdx = _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
+      const StaffType* stfType = getListedStaffType(staffTypeIdx);
+      return (stfType ? stfType : StaffType::preset(0));
+      }
+
+//---------------------------------------------------------
+//   staffTypeIdx
+//---------------------------------------------------------
+
+int StaffListItem::staffTypeIdx() const
+      {
+      return _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
+      }
+
+//---------------------------------------------------------
+//   staffTypeChanged
+//---------------------------------------------------------
+
+void StaffListItem::staffTypeChanged(int idx)
+      {
+      // check current clef matches new staff type
+      int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
+      const StaffType* stfType = getListedStaffType(staffTypeIdx);
+      if (stfType->group() != clefTable[_clef._transposingClef].staffGroup) {
+            ClefType clefType;
+            switch (stfType->group()) {
+                  case PITCHED_STAFF:
+                        clefType = CLEF_G2;
+                        break;
+                  case TAB_STAFF:
+                        clefType = CLEF_TAB2;
+                        break;
+                  case PERCUSSION_STAFF:
+                        clefType = CLEF_PERC;
+                        break;
+                  }
+            setClef(ClefTypeList(clefType, clefType));
+            }
+      if (_score && staff && staff->staffType() != stfType)
+            if (op != ITEM_DELETE && op != ITEM_ADD)
+                  op = ITEM_UPDATE;
+      }
+
+//---------------------------------------------------------
+//   static members
+//---------------------------------------------------------
+
+std::vector<StaffListItem::STAFF_LIST_STAFF_TYPE> StaffListItem::staffTypeList;
+Score * StaffListItem::_score = 0;
+
+void StaffListItem::populateStaffTypes(Score *score)
+      {
+      STAFF_LIST_STAFF_TYPE staffTypeData;
+      int idx;
+
+      staffTypeList.clear();
+      _score = score;
+      if (score) {
+            idx = -1;
+            foreach(StaffType** staffType, score->staffTypes() ) {
+                  staffTypeData.idx             = idx;
+                  staffTypeData.displayName     = (*staffType)->name();
+                  staffTypeData.staffType       = *staffType;
+                  staffTypeList.push_back(staffTypeData);
+                  idx--;
+                  }
+            }
+      int numOfPresets = StaffType::numOfPresets();
+      for (idx = 0; idx < numOfPresets; idx++) {
+            staffTypeData.idx             = idx;
+            staffTypeData.staffType       = StaffType::preset(idx);
+            staffTypeData.displayName     = staffTypeData.staffType->name();
+            staffTypeList.push_back(staffTypeData);
+            }
+      }
+
+const StaffType* StaffListItem::getListedStaffType(int idx)
+      {
+      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList) {
+            if (staffTypeData.idx == idx)
+                  return staffTypeData.staffType;
+            }
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -190,7 +309,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       setupUi(this);
       splitter->setStretchFactor(0, 10);
       splitter->setStretchFactor(1, 0);
-      splitter->setStretchFactor(2, 100);
+      splitter->setStretchFactor(2, 15);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = 0;
 
@@ -200,6 +319,10 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
 
       instrumentList->setSelectionMode(QAbstractItemView::SingleSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
+      QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
+      partiturList->setHeaderLabels(header);
+      partiturList->resizeColumnToContents(1);  // shrink "visible "and "linked" columns as much as possible
+      partiturList->resizeColumnToContents(3);
 
       buildTemplateList();
 
@@ -253,6 +376,7 @@ void InstrumentsDialog::buildTemplateList()
 void InstrumentsDialog::genPartList()
       {
       partiturList->clear();
+      StaffListItem::populateStaffTypes(cs);
 
       foreach(Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
@@ -270,9 +394,13 @@ void InstrumentsDialog::genPartList()
                         sli->setClef(s->clefTypeList(0));
                   const LinkedStaves* ls = s->linkedStaves();
                   sli->setLinked(ls && !ls->isEmpty());
+                  int staffTypeIdx = cs->staffTypeIdx(s->staffType());
+                  sli->setStaffType(staffTypeIdx != -1 ? -staffTypeIdx - 1 : -1);
                   }
             partiturList->setItemExpanded(pli, true);
             }
+      partiturList->resizeColumnToContents(2);  // adjust width of "Clef " and "Staff type" columns
+      partiturList->resizeColumnToContents(4);
       }
 
 //---------------------------------------------------------
@@ -370,7 +498,11 @@ void InstrumentsDialog::on_addButton_clicked()
             sli->setPartIdx(i);
             sli->staffIdx = -1;
             sli->setClef(it->clefTypes[i]);
+            sli->setStaffType(it->staffTypePreset);
             }
+//      partiturList->resizeColumnToContents(0);
+//      partiturList->resizeColumnToContents(2);
+//      partiturList->resizeColumnToContents(4);
       partiturList->setItemExpanded(pli, true);
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(pli, true);
@@ -556,13 +688,15 @@ void InstrumentsDialog::on_belowButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -582,7 +716,7 @@ void InstrumentsDialog::on_linkedButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
@@ -590,6 +724,8 @@ void InstrumentsDialog::on_linkedButton_clicked()
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -674,7 +810,7 @@ void MuseScore::editInstrList()
                         sli->staff         = staff;
                         staff->setRstaff(rstaff);
 
-                        staff->init(t, cidx);
+                        staff->init(t, sli->staffType(), cidx);
                         staff->setInitialClef(sli->clef());
 
                         cs->undoInsertStaff(staff, staffIdx + rstaff);
@@ -743,6 +879,38 @@ void MuseScore::editInstrList()
                                           }
                                     }
                               ++staffIdx;
+                              }
+                        else if (sli->op == ITEM_UPDATE) {
+                              // check changes in staff type
+                              Staff* staff = sli->staff;
+                              const StaffType* stfType = sli->staffType();
+                              // before changing staff type, check if notes need to be updated
+                              // (true if changing into or away from TAB)
+                              StaffGroup ng = stfType->group();         // new staff group
+                              StaffGroup og = staff->staffGroup();      // old staff group
+                              bool updateNeeded = (ng == TAB_STAFF) != (og == TAB_STAFF);
+
+                              // look for a staff type with same structure among staff types already defined in the score
+                              StaffType* st;
+                              bool found = false;
+                              foreach (StaffType** scoreStaffType, cs->staffTypes()) {
+                                    if ( (*scoreStaffType)->isSameStructure(*stfType) ) {
+                                          st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                                          found = true;
+                                          break;
+                                          }
+                                    }
+                              // if staff type not found in score, use from preset (for staff and for adding to score staff types)
+                              if (!found) {
+                                    st = stfType->clone();
+                                    cs->addStaffType(st);
+                                    }
+
+                              // use selected staff type
+                              if (st != staff->staffType())
+                                    cs->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), st));
+                              if (updateNeeded)
+                                    cs->cmdUpdateNotes();
                               }
                         else {
                               ++staffIdx;

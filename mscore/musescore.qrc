@@ -175,6 +175,7 @@
       <file>data/icons-dark/tframe.svg</file>
       <file>data/icons-dark/fframe.svg</file>
       <file>data/icons-dark/measure.svg</file>
+      <file>data/icons-dark/checkmark.svg</file>
 
       <file>schema/license.html</file>
       <file>schema/musicxml.xsd</file>
