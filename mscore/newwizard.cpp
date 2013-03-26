@@ -337,7 +337,7 @@ void InstrumentWizard::on_linkedButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
@@ -346,6 +346,8 @@ void InstrumentWizard::on_linkedButton_clicked()
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -365,13 +367,15 @@ void InstrumentWizard::on_belowButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
