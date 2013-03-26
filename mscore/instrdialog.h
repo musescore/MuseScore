@@ -26,14 +26,15 @@
 #include "libmscore/mscore.h"
 #include "libmscore/clef.h"
 
+class EditInstrument;
 class InstrumentTemplate;
 class Instrument;
 class Part;
 class Staff;
+class StaffType;
 class Score;
-class EditInstrument;
 
-enum { ITEM_KEEP, ITEM_DELETE, ITEM_ADD };
+enum { ITEM_KEEP, ITEM_DELETE, ITEM_ADD, ITEM_UPDATE };
 enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 
 //---------------------------------------------------------
@@ -57,10 +58,23 @@ class PartListItem : public QTreeWidgetItem {
 //   StaffListItem
 //---------------------------------------------------------
 
-class StaffListItem : public QTreeWidgetItem {
+class StaffListItem : public QObject, public QTreeWidgetItem {
+      Q_OBJECT
       ClefTypeList _clef;
       int _partIdx;
       bool _linked;
+      QComboBox* _staffTypeCombo;
+
+      struct STAFF_LIST_STAFF_TYPE {
+            int               idx;              // idx identifying the staff type
+            QString           displayName;
+            const StaffType*  staffType;
+      };
+
+      // static members to mamage staff type / preset list
+      static Score* _score;
+      static std::vector<STAFF_LIST_STAFF_TYPE> staffTypeList;
+      static const StaffType* getListedStaffType(int idx);
 
    public:
       StaffListItem();
@@ -76,6 +90,15 @@ class StaffListItem : public QTreeWidgetItem {
       const ClefTypeList& clef() const { return _clef;    }
       void setLinked(bool val);
       bool linked() const              { return _linked;  }
+      void setStaffType(int staffTypeIdx);
+      const StaffType* staffType() const;
+      int staffTypeIdx() const;
+      void initStaffTypeCombo();
+
+      static void populateStaffTypes(Score * score);
+
+   private slots:
+      void staffTypeChanged(int);
       };
 
 //---------------------------------------------------------

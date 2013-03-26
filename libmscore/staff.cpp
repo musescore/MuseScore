@@ -714,7 +714,7 @@ void Staff::setStaffType(StaffType* st)
 //   init
 //---------------------------------------------------------
 
-void Staff::init(const InstrumentTemplate* t, int cidx)
+void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
       {
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
@@ -732,8 +732,9 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // determine staff type and set number of lines accordingly
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
       StaffType* st;
-      // get staff type according to instrument staff type preset (if none, get default for staff group)
-      const StaffType* presetStaffType = StaffType::preset(t->staffTypePreset);
+      // get staff type if given or from instrument staff type, if not given
+      // (if none, get default for staff group)
+      const StaffType* presetStaffType = (staffType ? staffType : StaffType::preset(t->staffTypePreset) );
       if (!presetStaffType)
             presetStaffType = StaffType::getDefaultPreset(t->staffGroup, 0);
 
