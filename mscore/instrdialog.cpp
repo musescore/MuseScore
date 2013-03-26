@@ -58,11 +58,8 @@ StaffListItem::StaffListItem(PartListItem* li)
       setLinked(false);
       setClef(ClefTypeList(CLEF_G, CLEF_G));
 //      setFlags(flags() | Qt::ItemIsUserCheckable);
-      _staffTypeCombo = new QComboBox();
-      _staffTypeCombo->setAutoFillBackground(true);
-      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
-            _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
-      treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
+      _staffTypeCombo = 0;
+      initStaffTypeCombo();
       }
 
 StaffListItem::StaffListItem()
@@ -74,6 +71,20 @@ StaffListItem::StaffListItem()
       staffIdx = 0;
       setClef(ClefTypeList(CLEF_G, CLEF_G));
       setLinked(false);
+      _staffTypeCombo = 0;
+//      initStaffTypeCombo();                   // no! can't set widgets into this, until this is inserted in the tree hierarchy
+      }
+
+void StaffListItem::initStaffTypeCombo()
+      {
+      if (_staffTypeCombo)                      // do not init more than once
+            return;
+      _staffTypeCombo = new QComboBox();
+      _staffTypeCombo->setAutoFillBackground(true);
+      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
+            _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
+      treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
+      connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
 
 //---------------------------------------------------------
@@ -113,7 +124,38 @@ void StaffListItem::setLinked(bool val)
 
 void StaffListItem::setStaffType(int staffTypeIdx)
       {
+      int itemIdx = _staffTypeCombo->findData(staffTypeIdx);
+      _staffTypeCombo->setCurrentIndex(itemIdx >= 0 ? itemIdx : 0);
+      }
+
+//---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+const StaffType* StaffListItem::staffType() const
+      {
+      int staffTypeIdx = _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
+      const StaffType* stfType = getListedStaffType(staffTypeIdx);
+      return (stfType ? stfType : StaffType::preset(0));
+      }
+
+//---------------------------------------------------------
+//   staffTypeIdx
+//---------------------------------------------------------
+
+int StaffListItem::staffTypeIdx() const
+      {
+      return _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
+      }
+
+//---------------------------------------------------------
+//   staffTypeChanged
+//---------------------------------------------------------
+
+void StaffListItem::staffTypeChanged(int idx)
+      {
       // check current clef matches new staff type
+      int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
       const StaffType* stfType = getListedStaffType(staffTypeIdx);
       if (stfType->group() != clefTable[_clef._transposingClef].staffGroup) {
             ClefType clefType;
@@ -130,19 +172,6 @@ void StaffListItem::setStaffType(int staffTypeIdx)
                   }
             setClef(ClefTypeList(clefType, clefType));
             }
-      int itemIdx = _staffTypeCombo->findData(staffTypeIdx);
-      _staffTypeCombo->setCurrentIndex(itemIdx >= 0 ? itemIdx : 0);
-      }
-
-//---------------------------------------------------------
-//   staffType
-//---------------------------------------------------------
-
-const StaffType* StaffListItem::staffType() const
-      {
-      int staffTypeIdx = _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
-      const StaffType* stfType = getListedStaffType(staffTypeIdx);
-      return (stfType ? stfType : StaffType::preset(0));
       }
 
 //---------------------------------------------------------
@@ -656,13 +685,15 @@ void InstrumentsDialog::on_belowButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -682,7 +713,7 @@ void InstrumentsDialog::on_linkedButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
@@ -690,6 +721,8 @@ void InstrumentsDialog::on_linkedButton_clicked()
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }

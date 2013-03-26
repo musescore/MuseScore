@@ -58,7 +58,8 @@ class PartListItem : public QTreeWidgetItem {
 //   StaffListItem
 //---------------------------------------------------------
 
-class StaffListItem : public QTreeWidgetItem {
+class StaffListItem : public QObject, public QTreeWidgetItem {
+      Q_OBJECT
       ClefTypeList _clef;
       int _partIdx;
       bool _linked;
@@ -91,8 +92,13 @@ class StaffListItem : public QTreeWidgetItem {
       bool linked() const              { return _linked;  }
       void setStaffType(int staffTypeIdx);
       const StaffType* staffType() const;
+      int staffTypeIdx() const;
+      void initStaffTypeCombo();
 
       static void populateStaffTypes(Score * score);
+
+   private slots:
+      void staffTypeChanged(int);
       };
 
 //---------------------------------------------------------
