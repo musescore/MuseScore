@@ -26,7 +26,6 @@ target_link_libraries(
       ${QT_QTTEST_LIBRARY}
       testutils
       libmscore
-      msynth
       ${QT_LIBRARIES}
       )
 
