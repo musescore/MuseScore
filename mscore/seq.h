@@ -36,7 +36,7 @@ class Driver;
 class Part;
 struct Channel;
 class ScoreView;
-class MasterSynth;
+class MasterSynthesizer;
 class Segment;
 
 //---------------------------------------------------------
@@ -207,8 +207,6 @@ class Seq : public QObject, public Sequencer {
       };
 
 extern Seq* seq;
-extern MasterSynth* synti;
-
 extern void initSequencer();
 extern bool initMidi();
 #endif

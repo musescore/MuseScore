@@ -56,7 +56,6 @@ class BSymbol;
 class KeySig;
 class KeySigEvent;
 class Volta;
-class MidiEvent;
 class Excerpt;
 class EventMap;
 class Harmony;

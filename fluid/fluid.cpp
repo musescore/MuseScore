@@ -26,6 +26,7 @@
 #include "chorus.h"
 #include "voice.h"
 #include "libmscore/sparm_p.h"
+#include "libmscore/msynthesizer.h"
 
 namespace FluidS {
 
@@ -83,6 +84,7 @@ static SyntiParameter params[] = {
 //---------------------------------------------------------
 
 Fluid::Fluid()
+   : Synthesizer()
       {
       left_buf  = new float[FLUID_MAX_BUFSIZE];
       right_buf = new float[FLUID_MAX_BUFSIZE];
@@ -95,27 +97,18 @@ Fluid::Fluid()
 
 //---------------------------------------------------------
 //   init
-//    static initialization
+//    instance initialization
 //---------------------------------------------------------
 
 void Fluid::init()
       {
-      initialized = true;
-      fluid_conversion_config();
-      Voice::dsp_float_config();
-      }
+      if (!initialized) {     // initialize all the conversion tables and other stuff
+            initialized = true;
+            fluid_conversion_config();
+            Voice::dsp_float_config();
+            }
 
-//---------------------------------------------------------
-//   init
-//    instance initialization
-//---------------------------------------------------------
-
-void Fluid::init(int sr)
-      {
-      if (!initialized) // initialize all the conversion tables and other stuff
-            init();
-
-      sample_rate        = double(sr);
+      sample_rate        = double(MasterSynthesizer::sampleRate());
       sfont_id           = 0;
       _gain              = .2;
 

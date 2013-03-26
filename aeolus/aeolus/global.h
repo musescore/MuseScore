@@ -91,7 +91,7 @@ enum // GLOBAL LIMITS
 #define HOLD_MASK 64
 #define ALL_MASK 127
 
-#include "msynth/synti.h"
+#include "synthesizer/synthesizer.h"
 #include "libmscore/midipatch.h"
 
 #endif

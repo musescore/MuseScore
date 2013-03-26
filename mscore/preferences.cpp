@@ -24,7 +24,7 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "prefsdialog.h"
-#include "msynth/synti.h"
+// #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
 #include "playpanel.h"
@@ -212,6 +212,7 @@ void Preferences::init()
       myTemplatesPath         = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("templates_directory", "Templates"))).absolutePath();
       myPluginsPath           = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("plugins_directory", "Plugins"))).absolutePath();
       mySoundFontsPath        = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
+      mySfzFilesPath          = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("sfz_files_directory", "SfzFiles"))).absolutePath();
 
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
       nudgeStep50             = 5.0;      // Alt  + cursor key (default 5.0)
@@ -354,6 +355,7 @@ void Preferences::write()
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
       s.setValue("mySoundFontsPath", mySoundFontsPath);
+      s.setValue("mySfzFilesPath", mySfzFilesPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -515,6 +517,7 @@ void Preferences::read()
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
       mySoundFontsPath = s.value("mySoundFontsPath", mySoundFontsPath).toString();
+      mySfzFilesPath   = s.value("mySfzFilesPath",   mySfzFilesPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -524,6 +527,7 @@ void Preferences::read()
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
       dir.mkpath(mySoundFontsPath);
+      dir.mkpath(mySfzFilesPath);
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
@@ -610,6 +614,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myTemplatesButton->setIcon(*icons[fileOpen_ICON]);
       myPluginsButton->setIcon(*icons[fileOpen_ICON]);
       mySoundFontsButton->setIcon(*icons[fileOpen_ICON]);
+      mySfzFilesButton->setIcon(*icons[fileOpen_ICON]);
       myImagesButton->setIcon(*icons[fileOpen_ICON]);
 
       bgWallpaperSelect->setIcon(*icons[fileOpen_ICON]);
@@ -655,6 +660,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(mySoundFontsButton, SIGNAL(clicked()), SLOT(selectSoundFontsDirectory()));
+      connect(mySfzFilesButton, SIGNAL(clicked()), SLOT(selectSfzFilesDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
@@ -999,6 +1005,7 @@ void PreferenceDialog::updateValues()
       myTemplates->setText(prefs.myTemplatesPath);
       myPlugins->setText(prefs.myPluginsPath);
       mySoundFonts->setText(prefs.mySoundFontsPath);
+      mySfzFiles->setText(prefs.mySfzFilesPath);
 
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -1330,6 +1337,7 @@ void PreferenceDialog::apply()
       prefs.myTemplatesPath    = myTemplates->text();
       prefs.myPluginsPath      = myPlugins->text();
       prefs.mySoundFontsPath   = mySoundFonts->text();
+      prefs.mySfzFilesPath     = mySfzFiles->text();
 
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
@@ -1584,6 +1592,21 @@ void PreferenceDialog::selectSoundFontsDirectory()
          );
       if (!s.isNull())
             mySoundFonts->setText(s);
+      }
+
+//---------------------------------------------------------
+//   selectSfzFilesDirectory
+//---------------------------------------------------------
+
+void PreferenceDialog::selectSfzFilesDirectory()
+      {
+      QString s = QFileDialog::getExistingDirectory(
+         this,
+         tr("Choose Sfz Files Directory"),
+         mySfzFiles->text()
+         );
+      if (!s.isNull())
+            mySfzFiles->setText(s);
       }
 
 //---------------------------------------------------------

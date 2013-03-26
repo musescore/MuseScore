@@ -29,7 +29,7 @@
 #include "pa.h"
 #endif
 
-#include "msynth/synti.h"
+#include "libmscore/msynthesizer.h"
 #include "libmscore/slur.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
@@ -56,6 +56,9 @@
 #ifdef AEOLUS
 #include "aeolus/aeolus/aeolus.h"
 #endif
+#ifdef ZERBERUS
+#include "zerberus/zerberus.h"
+#endif
 
 #include "fluid/fluid.h"
 #include "click.h"
@@ -67,7 +70,7 @@ extern Driver* getPulseAudioDriver(Seq*);
 #endif
 
 Seq* seq;
-MasterSynth* synti;
+extern MasterSynthesizer* synti;
 
 static const int guiRefresh   = 10;       // Hz
 static const int peakHoldTime = 1400;     // msec
@@ -188,7 +191,6 @@ Seq::Seq()
 
 Seq::~Seq()
       {
-      delete synti;
       delete driver;
       }
 
@@ -342,12 +344,37 @@ bool Seq::init()
             return false;
             }
       MScore::sampleRate = driver->sampleRate();
-      synti->init(MScore::sampleRate);
+      synti->setSampleRate(MScore::sampleRate);
+      if (preferences.useJackAudio
+         || preferences.useJackMidi
+         || preferences.useAlsaAudio
+         || preferences.usePortaudioAudio
+         || preferences.usePulseAudio) {
+            synti->registerSynthesizer(new FluidS::Fluid());
+#ifdef AEOLUS
+            synti->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+            synti->registerSynthesizer(new Zerberus());
+#endif
+            }
+      synti->setGain(preferences.masterGain);
+      synti->init();
+      Synthesizer* fluid = synti->synthesizer("Fluid");
+      if (fluid) {
+            fluid->setMasterTuning(preferences.tuning);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 0).val, preferences.reverbRoomSize);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 1).val, preferences.reverbDamp);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 2).val, preferences.reverbWidth);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 3).val, preferences.reverbGain);
+            fluid->setParameter(SParmId(FLUID_ID, 2, 4).val, preferences.chorusGain);
+            }
 
       if (!driver->start()) {
             qDebug("Cannot start I/O");
             return false;
             }
+
       running = true;
       return true;
       }
@@ -1233,7 +1260,7 @@ void Seq::putEvent(const Event& event)
 
 int Seq::synthNameToIndex(const QString& name) const
       {
-      return synti->synthNameToIndex(name);
+      return synti->index(name);
       }
 
 //---------------------------------------------------------
@@ -1242,7 +1269,7 @@ int Seq::synthNameToIndex(const QString& name) const
 
 QString Seq::synthIndexToName(int idx) const
       {
-      return synti->synthIndexToName(idx);
+      return synti->name(idx);
       }
 
 //---------------------------------------------------------

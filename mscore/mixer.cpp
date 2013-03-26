@@ -24,7 +24,6 @@
 #include "mixer.h"
 #include "seq.h"
 #include "libmscore/undo.h"
-#include "msynth/synti.h"
 #include "synthcontrol.h"
 
 //---------------------------------------------------------

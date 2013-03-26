@@ -22,7 +22,7 @@
 #ifndef __FLUID_S_H__
 #define __FLUID_S_H__
 
-#include "msynth/synti.h"
+#include "synthesizer/synthesizer.h"
 #include "libmscore/midipatch.h"
 #include "rev.h"
 
@@ -313,7 +313,7 @@ enum {
 //   Fluid
 //---------------------------------------------------------
 
-class Fluid : public Synth {
+class Fluid : public Synthesizer {
       static const int SILENT_BLOCKS = 32*5;
       int silentBlocks;
 
@@ -326,7 +326,6 @@ class Fluid : public Synth {
       QString _error;                     // last error message
 
       static bool initialized;
-      static void init();
 
       double sample_rate;                 // The sample rate
       float _masterTuning;                // usually 440.0
@@ -363,7 +362,7 @@ class Fluid : public Synth {
    public:
       Fluid();
       ~Fluid();
-      virtual void init(int sampleRate);
+      virtual void init();
 
       virtual const char* name() const { return "Fluid"; }
 
