@@ -50,7 +50,8 @@ struct SParmId {
 
 enum {
       FLUID_ID  = 0,
-      AEOLUS_ID = 1
+      AEOLUS_ID = 1,
+      ZERBERUS_ID = 2,
       };
 
 //---------------------------------------------------------

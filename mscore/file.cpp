@@ -78,7 +78,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
-#include "msynth/synti.h"
+#include "libmscore/msynthesizer.h"
 #include "svggenerator.h"
 
 #ifdef OMR
@@ -105,6 +105,7 @@ extern Score::FileError importOve(Score*, const QString& name);
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
 extern bool savePositions(Score*, const QString& name);
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   paintElements
@@ -943,6 +944,61 @@ QStringList MuseScore::getSoundFont(const QString& d)
 
       if (loadSoundFontDialog->exec()) {
             QStringList result = loadSoundFontDialog->selectedFiles();
+            return result;
+            }
+      return QStringList();
+      }
+
+//---------------------------------------------------------
+//   getSfzFile
+//---------------------------------------------------------
+
+QStringList MuseScore::getSfzFile(const QString& d)
+      {
+      QString filter = tr("Sound Files (*.sfz *.SFZ);;All (*)");
+
+      QFileInfo mySfzFiles(preferences.mySfzFilesPath);
+      if (mySfzFiles.isRelative())
+            mySfzFiles.setFile(QDir::home(), preferences.mySfzFilesPath);
+
+      QString defaultPath = d.isEmpty() ? mySfzFiles.absoluteFilePath() : d;
+
+      if (preferences.nativeDialogs) {
+             QStringList s = QFileDialog::getOpenFileNames(
+               mscore,
+               MuseScore::tr("Choose Synthesizer Sound File"),
+               defaultPath,
+               filter
+               );
+            return s;
+            }
+
+      if (loadSfzFileDialog == 0) {
+            loadSfzFileDialog = new QFileDialog(this);
+            loadSfzFileDialog->setFileMode(QFileDialog::ExistingFiles);
+            loadSfzFileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+            loadSfzFileDialog->setWindowTitle(tr("MuseScore: Choose Synthesizer SoundFont"));
+            loadSfzFileDialog->setNameFilter(filter);
+            loadSfzFileDialog->setDirectory(defaultPath);
+
+            QSettings settings;
+            loadSfzFileDialog->restoreState(settings.value("loadSfzFileDialog").toByteArray());
+            loadSfzFileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+            }
+
+      //
+      // setup side bar urls
+      //
+      QList<QUrl> urls;
+      QString home = QDir::homePath();
+      urls.append(QUrl::fromLocalFile(home));
+      urls.append(QUrl::fromLocalFile(mySfzFiles.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/sound"));
+      loadSfzFileDialog->setSidebarUrls(urls);
+
+      if (loadSfzFileDialog->exec()) {
+            QStringList result = loadSfzFileDialog->selectedFiles();
             return result;
             }
       return QStringList();

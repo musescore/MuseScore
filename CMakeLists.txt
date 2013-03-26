@@ -21,7 +21,7 @@
 project(mscore)
 
 #minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7) 
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
 
 cmake_policy(SET CMP0003 NEW)
 
@@ -41,12 +41,13 @@ set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
-option(AEOLUS        "enable pipe organ synthesizer" ON)       # pipe organ synthesizer
-option(OSC           "enable OSC remote control protocol" ON)  # osc remote control
+option(AEOLUS        "enable pipe organ synthesizer"      ON)
+option(ZERBERUS      "enable experimental sfz sampler"    ON)
+option(OSC           "enable OSC remote control protocol" ON)
 option(OMR           "enable PDF import"  OFF)                 # OMR - optical music recognition
 # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "enable OCR, requires OMR" OFF)           # requires tesseract 3.0, needs work on mac/win
-option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis         
+option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
 option(HAS_AUDIOFILE "enable audio export" ON)               # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 
@@ -84,7 +85,7 @@ endif (APPLE)
 #     Check for gcc compiler >= 4.6
 #
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-      if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4 
+      if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
         OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 6)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
                   " >= 4.6 required")
@@ -305,7 +306,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ## add subdirs
 ##
 subdirs(mscore awl bww2mxml share
-      fluid msynth mstyle libmscore thirdparty/rtf2html thirdparty/diff)
+      fluid  mstyle libmscore thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
@@ -317,6 +318,10 @@ endif (USE_PORTMIDI)
 if (AEOLUS)
       subdirs (aeolus)
 endif (AEOLUS)
+
+if (ZERBERUS)
+      subdirs (zerberus)
+endif (ZERBERUS)
 
 if (OMR)
       subdirs (omr)
@@ -339,7 +344,7 @@ include_directories(
 )
 
 ##
-##  Include packaging 
+##  Include packaging
 ##
 
 include(Packaging)

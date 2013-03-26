@@ -15,7 +15,6 @@
 #define __EVENT_H__
 
 class Note;
-// class MidiFile;
 class Xml;
 
 //---------------------------------------------------------
@@ -113,6 +112,7 @@ enum {
       CTRL_ALL_SOUNDS_OFF     = 0x78, // 120
       CTRL_RESET_ALL_CTRL     = 0x79, // 121
       CTRL_LOCAL_OFF          = 0x7a, // 122
+      CTRL_ALL_NOTES_OFF      = 0x7b,  // 123
 
       // special midi events are mapped to internal
       // controller

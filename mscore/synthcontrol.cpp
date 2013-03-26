@@ -21,7 +21,8 @@
 #include "synthcontrol.h"
 #include "musescore.h"
 #include "seq.h"
-#include "msynth/synti.h"
+#include "libmscore/msynthesizer.h"
+#include "synthesizer/synthesizer.h"
 #include "preferences.h"
 #include "mixer.h"
 #include "aeolus/aeolus/aeolus.h"
@@ -34,6 +35,7 @@
 #include "libmscore/mscore.h"
 
 using namespace FluidS;
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   SynthControl
@@ -120,6 +122,9 @@ SynthControl::SynthControl(QWidget* parent)
       connect(soundFontAdd,    SIGNAL(clicked()),                SLOT(sfAddClicked()));
       connect(soundFonts,      SIGNAL(currentRowChanged(int)),   SLOT(currentSoundFontChanged(int)));
 
+      connect(addZerberus,     SIGNAL(clicked()),                SLOT(addZerberusClicked()));
+      connect(deleteZerberus,  SIGNAL(clicked()),                SLOT(deleteZerberusClicked()));
+
       updateSyntiValues();
       }
 
@@ -168,10 +173,15 @@ void SynthControl::updateSyntiValues()
 void SynthControl::setScore(Score* cs)
       {
       setWindowTitle("MuseScore: Synthesizer");
-      Synth* sy = synti->synth("Fluid");
       soundFonts->clear();
+      Synthesizer* sy = synti->synthesizer("Fluid");
       if (sy)
             soundFonts->addItems(sy->soundFonts());
+      zerberusFiles->clear();
+      sy = synti->synthesizer("Zerberus");
+      if (sy)
+            soundFonts->addItems(sy->soundFonts());
+
       updateSyntiValues();
       updateUpDownButtons();
       }
@@ -253,7 +263,7 @@ void SynthControl::sfDeleteClicked()
       int row = soundFonts->currentRow();
       if (row >= 0) {
             QString s(soundFonts->item(row)->text());
-            Synth* sy = synti->synth("Fluid");
+            Synthesizer* sy = synti->synthesizer("Fluid");
             if (sy)
                   sy->removeSoundFont(s);
             delete soundFonts->takeItem(row);
@@ -285,7 +295,7 @@ void SynthControl::sfAddClicked()
                            QString(tr("Soundfont %1 already loaded")).arg(s));
                         }
                   else {
-                        Synth* sy = synti->synth("Fluid");
+                        Synthesizer* sy = synti->synthesizer("Fluid");
                         if (sy) {
                               bool loaded = sy->addSoundFont(s);
                               if (!loaded) {
@@ -302,6 +312,64 @@ void SynthControl::sfAddClicked()
                   }
             }
       updateUpDownButtons();
+      }
+
+//---------------------------------------------------------
+//   addZerberusClicked
+//---------------------------------------------------------
+
+void SynthControl::addZerberusClicked()
+      {
+      QStringList files = mscore->getSfzFile("");
+      if (!files.isEmpty()) {
+            int n = zerberusFiles->count();
+            QStringList sl;
+            for (int i = 0; i < n; ++i) {
+                  QListWidgetItem* item = zerberusFiles->item(i);
+                  sl.append(item->text());
+                  }
+            QStringList list = files;
+            auto it = list.begin();
+            while (it != list.end()) {
+                  QString s = *it;
+                  if (sl.contains(s)) {
+                        QMessageBox::warning(this,
+                           tr("MuseScore"),
+                           QString(tr("File %1 already loaded")).arg(s));
+                        }
+                  else {
+                        Synthesizer* sy = synti->synthesizer("Zerberus");
+                        if (sy) {
+                              bool loaded = sy->addSoundFont(s);
+                              if (!loaded) {
+                                    QMessageBox::warning(this,
+                                       tr("MuseScore"),
+                                       QString(tr("cannot load sound file %1")).arg(s));
+                                    }
+                              else {
+                                    zerberusFiles->insertItem(0, s);
+                                    }
+                              }
+                        }
+                  ++it;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   deleteZerberusClicked
+//---------------------------------------------------------
+
+void SynthControl::deleteZerberusClicked()
+      {
+      int row = zerberusFiles->currentRow();
+      if (row >= 0) {
+            QString s(zerberusFiles->item(row)->text());
+            Synthesizer* sy = synti->synthesizer("Zerberus");
+            if (sy)
+                  sy->removeSoundFont(s);
+            delete zerberusFiles->takeItem(row);
+            }
       }
 
 //---------------------------------------------------------
@@ -413,7 +481,7 @@ void SynthControl::sfUpClicked()
       int row  = soundFonts->currentRow();
       if (row <= 0)
             return;
-      Synth* sy = synti->synth("Fluid");
+      Synthesizer* sy = synti->synthesizer("Fluid");
       if (sy) {
             QStringList sfonts = sy->soundFonts();
             sfonts.swap(row, row-1);
@@ -436,7 +504,7 @@ void SynthControl::sfDownClicked()
       if (row + 1 >= rows)
             return;
 
-      Synth* sy = synti->synth("Fluid");
+      Synthesizer* sy = synti->synthesizer("Fluid");
       if (sy) {
             QStringList sfonts = sy->soundFonts();
             sfonts.swap(row, row+1);

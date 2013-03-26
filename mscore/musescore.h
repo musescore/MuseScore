@@ -310,6 +310,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* loadChordStyleDialog;
       QFileDialog* saveChordStyleDialog;
       QFileDialog* loadSoundFontDialog;
+      QFileDialog* loadSfzFileDialog;
       QFileDialog* loadBackgroundDialog;
       QFileDialog* loadScanDialog;
       QFileDialog* loadAudioDialog;
@@ -551,6 +552,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getFotoFilename(QString& filter, QString *selectedFilter);
       QString getChordStyleFilename(bool open);
       QStringList getSoundFont(const QString&);
+      QStringList getSfzFile(const QString&);
       QString getScanFile(const QString&);
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);

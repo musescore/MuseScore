@@ -33,7 +33,6 @@
 #include "seq.h"
 #include "alsamidi.h"
 #include "libmscore/utils.h"
-#include "msynth/synti.h"
 
 //---------------------------------------------------------
 //   AlsaDriver

@@ -25,7 +25,7 @@ struct MidiPatch;
 class Event;
 
 #include <stdint.h>
-#include "msynth/synti.h"
+#include "synthesizer/synthesizer.h"
 #include "libmscore/midipatch.h"
 
 #include "asection.h"
@@ -42,7 +42,7 @@ class M_ifc_init;
 //   Synth
 //---------------------------------------------------------
 
-class Aeolus : public Synth {
+class Aeolus : public Synthesizer {
       Model* model;
       QList<MidiPatch*> patchList;
       uint16_t _midimap [16];
@@ -92,7 +92,7 @@ class Aeolus : public Synth {
    public:
       Aeolus();
       virtual ~Aeolus();
-      virtual void init(int sampleRate);
+      virtual void init();
 
       virtual const char* name() const { return "Aeolus"; }
 

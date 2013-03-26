@@ -69,6 +69,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectTemplatesDirectory();
       void selectPluginsDirectory();
       void selectSoundFontsDirectory();
+      void selectSfzFilesDirectory();
       void selectImagesDirectory();
       void printShortcutsClicked();
 

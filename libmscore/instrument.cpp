@@ -375,8 +375,10 @@ void Channel::write(Xml& xml) const
 
             e.write(xml);
             }
-      if (synti)                    // HACK
+      if (synti == 1)                    // HACK
             xml.tag("synti", "Aeolus");
+      else if (synti == 2)
+            xml.tag("synti", "Zerberus");
       if (mute)
             xml.tag("mute", mute);
       if (solo)
@@ -451,8 +453,11 @@ void Channel::read(XmlReader& e)
                   midiActions.append(a);
                   }
             else if (tag == "synti") {
-                  if (e.readElementText() == "Aeolus")
+                  QString s = e.readElementText();
+                  if (s == "Aeolus")
                         synti = 1;
+                  else if (s == "Zerberus")
+                        synti = 2;
                   else
                         synti = 0;
                   }

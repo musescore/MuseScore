@@ -29,12 +29,13 @@ extern QString mscoreGlobalShare;
 #include "libmscore/event.h"
 #include "xml.h"
 #include "libmscore/sparm_p.h"
+#include "libmscore/msynthesizer.h"
 
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
-void Aeolus::init(int samplerate)
+void Aeolus::init()
       {
       setlocale(LC_ALL, "C"); // scanf of floats does not work otherwise
 
@@ -44,6 +45,7 @@ void Aeolus::init(int samplerate)
       strcpy(stopsPath, qPrintable(stops));
 
       QDir dir;
+      int samplerate = MasterSynthesizer::sampleRate();
       QString waves = dataPath + QString("/aeolus/waves%1").arg(samplerate);
       dir.mkpath(waves);
       n = strlen(qPrintable(waves));
@@ -55,7 +57,6 @@ void Aeolus::init(int samplerate)
 
       audio_start();
       model->init();
-//      printGui();
       }
 
 //---------------------------------------------------------

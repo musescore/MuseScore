@@ -86,10 +86,12 @@
 #include "libmscore/lasso.h"
 #include "textpalette.h"
 
-#include "msynth/synti.h"
+#include "synthesizer/synthesizer.h"
+#include "libmscore/msynthesizer.h"
 
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
+MasterSynthesizer* synti;
 
 bool enableExperimental = false;
 bool enableTestMode = false;
@@ -393,6 +395,7 @@ MuseScore::MuseScore()
       saveStyleDialog       = 0;
       saveImageDialog       = 0;
       loadSoundFontDialog   = 0;
+      loadSfzFileDialog     = 0;
       loadBackgroundDialog  = 0;
       loadScanDialog        = 0;
       loadAudioDialog       = 0;
@@ -2372,7 +2375,7 @@ int main(int argc, char* av[])
                         break;
                   }
             }
-      synti = new MasterSynth();
+      synti = new MasterSynthesizer();
       seq   = new Seq();
       MScore::seq = seq;
 
