@@ -2585,6 +2585,8 @@ qreal Score::computeMinWidth(Segment* fs) const
       qreal clefWidth[_nstaves];
       memset(clefWidth, 0, _nstaves * sizeof(qreal));
 
+      QRectF hLastBbox[_nstaves];
+
       int segmentIdx = 0;
       qreal x        = 0.0;
 
@@ -2620,9 +2622,11 @@ qreal Score::computeMinWidth(Segment* fs) const
                   qreal minDistance = 0.0;
                   Space space;
                   Space hSpace;
+                  QRectF hBbox;
                   int track  = staffIdx * VOICES;
                   bool found = false;
                   bool hFound = false;
+                  bool eFound = false;
                   if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
@@ -2671,9 +2675,13 @@ qreal Score::computeMinWidth(Segment* fs) const
                               if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
-                              hFound = true;
                               h->layout();
                               QRectF b(h->bbox().translated(h->pos()));
+                              if (hFound)
+                                    hBbox |= b;
+                              else
+                                    hBbox = b;
+                              hFound = true;
                               // allow chord at the beginning of a measure to be dragged left
                               hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
                               }
@@ -2699,15 +2707,14 @@ qreal Score::computeMinWidth(Segment* fs) const
                                     }
                               }
                         if (e) {
-                              found = true;
-                              hFound = true;
+                              eFound = true;
                               e->layout();
                               space.max(e->space());
                               }
                         }
                   space += Space(elsp, etsp);
 
-                  if (found) {
+                  if (found || eFound) {
                         space.rLw() += clefWidth[staffIdx];
                         qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
@@ -2718,8 +2725,14 @@ qreal Score::computeMinWidth(Segment* fs) const
                         rest2[staffIdx] = true;
 
                   // space chord symbols separately from segments
-                  if (hFound) {
-                        qreal sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                  if (hFound || eFound) {
+                        qreal sp = 0.0;
+
+                        // space chord symbols unless they miss each other vertically
+                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                              sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                        hLastBbox[staffIdx] = hBbox;
+
                         hRest[staffIdx] = hSpace.rw();
                         hRest2[staffIdx] = false;
                         segmentWidth = qMax(segmentWidth, sp);
@@ -2729,6 +2742,7 @@ qreal Score::computeMinWidth(Segment* fs) const
 
                   clefWidth[staffIdx] = 0.0;
                   }
+
             x += segmentWidth;
 
 //            if (segmentIdx && pSeg)
