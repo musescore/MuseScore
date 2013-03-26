@@ -75,6 +75,7 @@ add_library (
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
       exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
+      msynthesizer.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

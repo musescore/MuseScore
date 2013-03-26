@@ -19,7 +19,8 @@
 //=============================================================================
 
 #include "libmscore/score.h"
-#include "fluid/fluid.h"
+//#include "fluid/fluid.h"
+#include "libmscore/msynthesizer.h"
 #include "libmscore/note.h"
 #include "musescore.h"
 #include "libmscore/part.h"
@@ -678,8 +679,9 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
-      MasterSynth* synti = new MasterSynth();
-      synti->init(sampleRate);
+      MasterSynthesizer* synti = new MasterSynthesizer();
+      synti->init();
+      synti->setSampleRate(sampleRate);
       synti->setState(score->syntiState());
 
       EventMap events;

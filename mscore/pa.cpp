@@ -19,7 +19,6 @@
 //=============================================================================
 
 #include "preferences.h"
-#include "msynth/synti.h"
 #include "libmscore/score.h"
 #include "musescore.h"
 #include "seq.h"

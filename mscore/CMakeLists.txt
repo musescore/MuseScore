@@ -253,7 +253,6 @@ if (MINGW)
       awl
       mstyle
       diff_match_patch
-      msynth
       bww
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
@@ -275,6 +274,14 @@ if (MINGW)
    if (AEOLUS)
       target_link_libraries(mscore aeolus)
    endif (AEOLUS)
+
+   if (ZERBERUS)
+      target_link_libraries(mscore zerberus)
+   endif ()
+
+   if (ZERBERUS)
+      target_link_libraries(mscore zerberus)
+   endif ()
 
    if (OMR)
       target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
@@ -326,7 +333,6 @@ else (MINGW)
       diff_match_patch
       awl
       mstyle
-      msynth
       bww
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
@@ -361,6 +367,10 @@ else (MINGW)
    if (AEOLUS)
       target_link_libraries(mscore aeolus)
    endif (AEOLUS)
+
+   if (ZERBERUS)
+      target_link_libraries(mscore zerberus)
+   endif ()
 
    if (OMR)
       target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)

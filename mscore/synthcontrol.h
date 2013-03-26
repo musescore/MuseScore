@@ -23,7 +23,6 @@
 
 #include "ui_synthcontrol.h"
 
-class MasterSynth;
 namespace Awl {
       class AbstractSlider;
       };
@@ -48,6 +47,9 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void sfDownClicked();
       void sfDeleteClicked();
       void sfAddClicked();
+
+      void addZerberusClicked();
+      void deleteZerberusClicked();
 
       void gainChanged(double, int);
       void masterTuningChanged(double);

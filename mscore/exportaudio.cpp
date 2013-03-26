@@ -24,9 +24,8 @@
 
 #include <sndfile.h>
 #include "libmscore/score.h"
-#include "fluid/fluid.h"
-// #include "libmscore/tempo.h"
 #include "libmscore/note.h"
+#include "libmscore/msynthesizer.h"
 #include "musescore.h"
 #include "libmscore/part.h"
 #include "preferences.h"
@@ -50,10 +49,10 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             qDebug("unknown audio file type <%s>\n", qPrintable(ext));
             return false;
             }
+      MasterSynthesizer* synti = new MasterSynthesizer();
       int sampleRate = preferences.exportAudioSampleRate;
-
-      MasterSynth* synti = new MasterSynth();
-      synti->init(sampleRate);
+      synti->setSampleRate(sampleRate);
+      synti->init();
       synti->setState(score->syntiState());
 
       int oldSampleRate = MScore::sampleRate;

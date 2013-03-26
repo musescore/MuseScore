@@ -36,6 +36,7 @@
 #define VERSION           "${MUSESCORE_VERSION_FULL}"
 
 #cmakedefine AEOLUS
+#cmakedefine ZERBERUS
 #cmakedefine OMR
 #cmakedefine OCR
 #cmakedefine OSC
