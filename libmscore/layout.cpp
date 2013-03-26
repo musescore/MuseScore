@@ -2585,7 +2585,7 @@ qreal Score::computeMinWidth(Segment* fs) const
       qreal clefWidth[_nstaves];
       memset(clefWidth, 0, _nstaves * sizeof(qreal));
 
-      QRectF hLastBbox[_nstaves];
+      QRectF hLastBbox[_nstaves];    // bbox of previous harmony to test vertical separation
 
       int segmentIdx = 0;
       qreal x        = 0.0;
