@@ -172,6 +172,9 @@ void StaffListItem::staffTypeChanged(int idx)
                   }
             setClef(ClefTypeList(clefType, clefType));
             }
+      if (_score && staff && staff->staffType() != stfType)
+            if (op != ITEM_DELETE && op != ITEM_ADD)
+                  op = ITEM_UPDATE;
       }
 
 //---------------------------------------------------------
@@ -876,6 +879,38 @@ void MuseScore::editInstrList()
                                           }
                                     }
                               ++staffIdx;
+                              }
+                        else if (sli->op == ITEM_UPDATE) {
+                              // check changes in staff type
+                              Staff* staff = sli->staff;
+                              const StaffType* stfType = sli->staffType();
+                              // before changing staff type, check if notes need to be updated
+                              // (true if changing into or away from TAB)
+                              StaffGroup ng = stfType->group();         // new staff group
+                              StaffGroup og = staff->staffGroup();      // old staff group
+                              bool updateNeeded = (ng == TAB_STAFF) != (og == TAB_STAFF);
+
+                              // look for a staff type with same structure among staff types already defined in the score
+                              StaffType* st;
+                              bool found = false;
+                              foreach (StaffType** scoreStaffType, cs->staffTypes()) {
+                                    if ( (*scoreStaffType)->isSameStructure(*stfType) ) {
+                                          st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                                          found = true;
+                                          break;
+                                          }
+                                    }
+                              // if staff type not found in score, use from preset (for staff and for adding to score staff types)
+                              if (!found) {
+                                    st = stfType->clone();
+                                    cs->addStaffType(st);
+                                    }
+
+                              // use selected staff type
+                              if (st != staff->staffType())
+                                    cs->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), st));
+                              if (updateNeeded)
+                                    cs->cmdUpdateNotes();
                               }
                         else {
                               ++staffIdx;
