@@ -34,7 +34,7 @@ class Staff;
 class StaffType;
 class Score;
 
-enum { ITEM_KEEP, ITEM_DELETE, ITEM_ADD };
+enum { ITEM_KEEP, ITEM_DELETE, ITEM_ADD, ITEM_UPDATE };
 enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 
 //---------------------------------------------------------
