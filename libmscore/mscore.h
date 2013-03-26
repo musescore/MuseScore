@@ -170,7 +170,7 @@ enum class BeamMode {
       BEGIN   = 0x01,
       MID     = 0x02,
       END     = 0x04,
-      NO      = 0x08,
+      NONE    = 0x08,
       BEGIN32 = 0x10,
       BEGIN64 = 0x20,
       INVALID = -1
