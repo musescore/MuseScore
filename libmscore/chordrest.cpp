@@ -154,10 +154,10 @@ void ChordRest::writeProperties(Xml& xml) const
 
       //
       // BeamMode default:
-      //    REST  - BeamMode::NO
+      //    REST  - BeamMode::NONE
       //    CHORD - BeamMode::AUTO
       //
-      if ((type() == REST && _beamMode != BeamMode::NO)
+      if ((type() == REST && _beamMode != BeamMode::NONE)
          || (type() == CHORD && _beamMode != BeamMode::AUTO)) {
             QString s;
             switch(_beamMode) {
@@ -165,7 +165,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   case BeamMode::BEGIN:   s = "begin"; break;
                   case BeamMode::MID:     s = "mid"; break;
                   case BeamMode::END:     s = "end"; break;
-                  case BeamMode::NO:      s = "no"; break;
+                  case BeamMode::NONE:      s = "no"; break;
                   case BeamMode::BEGIN32: s = "begin32"; break;
                   case BeamMode::BEGIN64: s = "begin64"; break;
                   case BeamMode::INVALID: s = "?"; break;
@@ -239,7 +239,7 @@ bool ChordRest::readProperties(XmlReader& e)
             else if (val == "end")
                   bm = BeamMode::END;
             else if (val == "no")
-                  bm = BeamMode::NO;
+                  bm = BeamMode::NONE;
             else if (val == "begin32")
                   bm = BeamMode::BEGIN32;
             else if (val == "begin64")
@@ -870,7 +870,7 @@ Element* ChordRest::drop(const DropData& data)
                               score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::MID));
                               break;
                         case ICON_NBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NO));
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
                               break;
                         case ICON_BEAM32:
                               score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN32));

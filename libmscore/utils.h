@@ -17,17 +17,6 @@
 #include "mscore.h"
 #include "interval.h"
 
-//---------------------------------------------------------
-//   cycles
-//---------------------------------------------------------
-
-static inline unsigned long long cycles()
-      {
-      unsigned long long rv;
-      __asm__ __volatile__("rdtsc" : "=A" (rv));
-      return rv;
-      }
-
 class Measure;
 class Segment;
 class System;

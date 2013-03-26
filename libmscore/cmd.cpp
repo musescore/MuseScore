@@ -1589,8 +1589,8 @@ void Score::cmdResetBeamMode()
                               undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::AUTO));
                         }
                   else if (cr->type() == Element::REST) {
-                        if (cr->beamMode() != BeamMode::NO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::NO));
+                        if (cr->beamMode() != BeamMode::NONE)
+                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::NONE));
                         }
                   }
             }
@@ -2194,7 +2194,7 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-mid")
             cmdSetBeamMode(BeamMode::MID);
       else if (cmd == "no-beam")
-            cmdSetBeamMode(BeamMode::NO);
+            cmdSetBeamMode(BeamMode::NONE);
       else if (cmd == "beam-32")
             cmdSetBeamMode(BeamMode::BEGIN32);
       else if (cmd == "sharp2")

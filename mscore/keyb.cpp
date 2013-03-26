@@ -331,7 +331,7 @@ void MuseScore::updateInputState(Score* score)
 
       getAction("beam-start")->setChecked(is.beamMode == BeamMode::BEGIN);
       getAction("beam-mid")->setChecked(is.beamMode   == BeamMode::MID);
-      getAction("no-beam")->setChecked(is.beamMode    == BeamMode::NO);
+      getAction("no-beam")->setChecked(is.beamMode    == BeamMode::NONE);
       getAction("beam32")->setChecked(is.beamMode     == BeamMode::BEGIN32);
       getAction("auto-beam")->setChecked(is.beamMode  == BeamMode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());

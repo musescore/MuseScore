@@ -407,7 +407,7 @@ MusicXml::MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1)
       doc(d),
       pass1(p1),
       maxLyrics(0),
-      beamMode(BeamMode::NO),
+      beamMode(BeamMode::NONE),
       pageWidth(0),
       pageHeight(0)
       {
@@ -1847,7 +1847,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
 static void removeBeam(Beam*& beam)
       {
       for (int i = 0; i < beam->elements().size(); ++i)
-            beam->elements().at(i)->setBeamMode(BeamMode::NO);
+            beam->elements().at(i)->setBeamMode(BeamMode::NONE);
       delete beam;
       beam = 0;
       }
@@ -1892,7 +1892,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
       // if no beam, set stem direction on chord itself
       if (!beam) {
             static_cast<Chord*>(cr)->setStemDirection(sd);
-            cr->setBeamMode(BeamMode::NO);
+            cr->setBeamMode(BeamMode::NONE);
             }
       // terminate the currect beam and add to the score
       if (beam && bm == BeamMode::END)
@@ -4439,7 +4439,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       bool rest    = false;
       int relStaff = 0;
-      BeamMode bm  = BeamMode::NO;
+      BeamMode bm  = BeamMode::NONE;
       MScore::Direction sd = MScore::AUTO;
       int dots     = 0;
       bool grace   = false;
@@ -4729,7 +4729,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                         removeBeam(beam);
                   }
             else
-                  cr->setBeamMode(BeamMode::NO);
+                  cr->setBeamMode(BeamMode::NONE);
             cr->setTrack(track);
             static_cast<Rest*>(cr)->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
@@ -4854,8 +4854,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             // note->setAccidentalType(accidental);
 
             // remember beam mode last non-grace note
-            // bm == BeamMode::NO means no <beam> was found
-            if (!grace && bm != BeamMode::NO)
+            // bm == BeamMode::NONE means no <beam> was found
+            if (!grace && bm != BeamMode::NONE)
                   beamMode = bm;
 
             // handle beam

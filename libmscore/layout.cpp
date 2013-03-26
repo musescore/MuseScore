@@ -370,7 +370,7 @@ void Score::layoutStage2()
                            && nseg->element(track)
                            && cr->durationType().hooks()
                            && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks()
-                           && bm != BeamMode::NO
+                           && bm != BeamMode::NONE
                            )
                               {
                               Beam* b = cr->beam();
@@ -405,7 +405,7 @@ void Score::layoutStage2()
                               }
                         continue;
                         }
-                  if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NO)) {
+                  if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
                         if (beam) {
                               beam->layout1();
                               beam = 0;
