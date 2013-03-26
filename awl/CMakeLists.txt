@@ -127,8 +127,4 @@ set_target_properties(awlplugin
 # dont install awlplugin on default
 # install( TARGETS awlplugin DESTINATION ${QT_PLUGINS_DIR}/designer/ )
 
-#add_executable(ltest ltest.cpp)
-#target_link_libraries (ltest awlplugin msynth al ${QT_LIBRARIES})
-
-
 endif (NOT MINGW AND NOT APPLE)
