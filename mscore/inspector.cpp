@@ -213,6 +213,12 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::GLISSANDO:
                               ie = new InspectorGlissando(this);
                               break;
+                        case Element::TEMPO_TEXT:
+                              ie = new InspectorTempoText(this);
+                              break;
+                        case Element::DYNAMIC:
+                              ie = new InspectorDynamic(this);
+                              break;
                         default:
                               ie = new InspectorElement(this);
                               break;
@@ -451,6 +457,48 @@ InspectorClef::InspectorClef(QWidget* parent)
             { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
             { P_SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorTempoText
+//---------------------------------------------------------
+
+InspectorTempoText::InspectorTempoText(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      t.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,             0, 0, e.color,      e.resetColor      },
+            { P_VISIBLE,           0, 0, e.visible,    e.resetVisible    },
+            { P_USER_OFF,          0, 0, e.offsetX,    e.resetX          },
+            { P_USER_OFF,          1, 0, e.offsetY,    e.resetY          },
+            { P_TEMPO,             0, 0, t.tempo,      t.resetTempo      },
+            { P_TEMPO_FOLLOW_TEXT, 0, 0, t.followText, t.resetFollowText }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorDynamic
+//---------------------------------------------------------
+
+InspectorDynamic::InspectorDynamic(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      d.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,         0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,       0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,      0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,      1, 0, e.offsetY,  e.resetY        },
+            { P_DYNAMIC_RANGE, 0, 0, d.dynRange, d.resetDynRange },
+            { P_VELOCITY,      0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
       }

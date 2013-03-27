@@ -31,6 +31,8 @@
 #include "ui_inspector_barline.h"
 #include "ui_inspector_tuplet.h"
 #include "ui_inspector_accidental.h"
+#include "ui_inspector_tempotext.h"
+#include "ui_inspector_dynamic.h"
 
 class Element;
 class Note;
@@ -186,6 +188,35 @@ class InspectorAccidental : public InspectorBase {
    public:
       InspectorAccidental(QWidget* parent);
       };
+
+//---------------------------------------------------------
+//   InspectorTempoText
+//---------------------------------------------------------
+
+class InspectorTempoText : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorTempoText t;
+
+   public:
+      InspectorTempoText(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorDynamic
+//---------------------------------------------------------
+
+class InspectorDynamic : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorDynamic d;
+
+   public:
+      InspectorDynamic(QWidget* parent);
+      };
+
 
 //---------------------------------------------------------
 //   InspectorBarLine

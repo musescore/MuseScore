@@ -44,10 +44,10 @@ QT4_WRAP_UI (ui_headers
       slur.ui editdrumset.ui editstaff.ui line.ui linesegment.ui
       voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
-      chordedit.ui transposedialog.ui tempoproperties.ui
+      chordedit.ui transposedialog.ui
       lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui
-      dynamicproperties.ui textline.ui slurproperties.ui debugger.ui
+      textline.ui slurproperties.ui debugger.ui
       select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
       harmonyedit.ui selectinstr.ui tremolo.ui fretdprops.ui stafftype.ui
       sectionbreak.ui hairpinproperties.ui spanner.ui bend.ui tremolobar.ui
@@ -61,7 +61,8 @@ QT4_WRAP_UI (ui_headers
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
-      inspector_tuplet.ui inspector_accidental.ui
+      inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
+      inspector_dynamic.ui
       ${SCRIPT_UI}
       )
 
@@ -77,10 +78,10 @@ QT4_WRAP_CPP (mocs
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
       voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
-      transposedialog.h chordedit.h tempoproperties.h lineproperties.h
+      transposedialog.h chordedit.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h voiceselector.h
-      textprop.h dynamicprop.h textproperties.h tupletdialog.h
+      textprop.h textproperties.h tupletdialog.h
       slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h
       pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
@@ -184,10 +185,10 @@ add_executable ( ${ExecutableName}
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp edittools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp exportmp3.cpp chordview.cpp
-      album.cpp webpage.cpp textstyle.cpp tempoproperties.cpp
+      album.cpp webpage.cpp textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp glissandoproperties.cpp
-      articulationprop.cpp textprop.cpp dynamicprop.cpp
+      articulationprop.cpp textprop.cpp
       fretproperties.cpp sectionbreakprop.cpp hairpinprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp

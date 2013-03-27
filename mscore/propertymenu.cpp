@@ -28,8 +28,6 @@
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "textproperties.h"
-#include "tempoproperties.h"
-#include "dynamicprop.h"
 #include "hairpinprop.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
@@ -231,7 +229,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
-            popup->addAction(tr("MIDI Properties..."))->setData("d-dynamics");
             popup->addAction(tr("Text Properties..."))->setData("d-props");
             }
       else if (e->type() == Element::TEXTLINE_SEGMENT
@@ -256,7 +253,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tempo Properties..."))->setData("tempo-props");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::KEYSIG) {
@@ -514,23 +510,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             StaffTextProperties rp(static_cast<StaffText*>(e));
             rp.exec();
             }
-      else if (cmd == "d-dynamics") {
-            Dynamic* dynamic = static_cast<Dynamic*>(e);
-            int oldVelo    = dynamic->velocity();
-            Element::DynamicRange ot = dynamic->dynRange();
-            DynamicProperties dp(dynamic);
-            int rv = dp.exec();
-            if (rv) {
-                  int newVelo    = dynamic->velocity();
-                  Element::DynamicRange nt = dynamic->dynRange();
-                  dynamic->setVelocity(oldVelo);
-                  dynamic->setDynRange(ot);
-                  if (newVelo != oldVelo)
-                        score()->undoChangeProperty(dynamic, P_VELOCITY, newVelo);
-                  if (nt != ot)
-                        score()->undoChangeProperty(dynamic, P_DYNAMIC_RANGE, nt);
-                  }
-            }
       else if (cmd == "text-props") {
             Text* ot    = static_cast<Text*>(e);
             Text* nText = static_cast<Text*>(ot->clone());
@@ -569,10 +548,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         score()->select(e, SELECT_ADD, 0);
                   }
             delete nText;
-            }
-      else if (cmd == "tempo-props") {
-            TempoProperties rp(static_cast<TempoText*>(e));
-            rp.exec();
             }
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
