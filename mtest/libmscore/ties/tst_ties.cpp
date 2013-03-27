@@ -60,27 +60,29 @@ void TestTies::undoChangePitchTies()
       while (!(s->segmentType() & (Segment::SegChordRest)))
             s = s->next();
       Chord* chord = static_cast<Chord*>(s->element(0));
-      Note*  note = chord->notes().at(0);
-      int origLine = note->line();
+      Note*  note  = chord->notes().at(0);
 
-      // change pitch calling upDown
+      // remember original pitch and line
+      int origLine  = note->line();
+      int origPitch = note->pitch();
+
+      // change pitch via calling upDown()
       score->startCmd();
       score->select(note);
       score->upDown(false, UP_DOWN_CHROMATIC);
       score->endCmd();
 
-      // DEBUG: see if we get the right result from this...
-      QVERIFY(saveCompareScore(score, "debug-dump.mscx", "null");
-
       // undo
       score->undo()->undo();
 
-      // check if lines of all notes are the same
+      // check if pitch and line of all notes are reverted
       for (; s; s = s->next1()) {
             if (s->segmentType() & (Segment::SegChordRest)) {
                   Chord* c = static_cast<Chord*>(s->element(0));
+                  if (c->type() == Chord::REST) continue;
                   Note*  n = c->notes().at(0);
-                  QVERIFY(n->line() == origLine);
+                  QVERIFY(n->pitch() == origPitch);
+                  QVERIFY(n->line()  == origLine);
                   }
             }
 
