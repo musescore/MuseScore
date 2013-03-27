@@ -230,7 +230,7 @@ void Zerberus::process(const MidiEvent& event)
 //    realtime
 //---------------------------------------------------------
 
-void Zerberus::process(int frames, float* p)
+void Zerberus::process(unsigned frames, float* p)
       {
       if (busy)
             return;
@@ -265,15 +265,6 @@ void Zerberus::process(int frames, float* p)
 const char* Zerberus::name() const
       {
       return "Zerberus";
-      }
-
-//---------------------------------------------------------
-//   process
-//---------------------------------------------------------
-
-void Zerberus::process(unsigned n, float* p, float)
-      {
-      process(n, p);
       }
 
 //---------------------------------------------------------

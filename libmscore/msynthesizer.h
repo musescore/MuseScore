@@ -27,11 +27,10 @@ class Synthesizer;
 
 class MasterSynthesizer {
       QList<Synthesizer*> _synthesizer;
-      float _gain;
       static int _sampleRate;
 
    public:
-      MasterSynthesizer();
+      MasterSynthesizer() {}
       ~MasterSynthesizer();
       void registerSynthesizer(Synthesizer*);
       void init();
@@ -41,9 +40,6 @@ class MasterSynthesizer {
 
       void process(unsigned, float*);
       void play(const Event&, int);
-
-      double gain() const     { return _gain; }
-      void setGain(float val) { _gain = val;  }
 
       void setMasterTuning(double) {}
       double masterTuning() const { return 440.0; }

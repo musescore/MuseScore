@@ -31,6 +31,14 @@
 #include "preferences.h"
 #include "seq.h"
 #include "libmscore/mscore.h"
+#ifdef AEOLUS
+#include "aeolus/aeolus/aeolus.h"
+#endif
+#ifdef ZERBERUS
+#include "zerberus/zerberus.h"
+#endif
+
+#include "fluid/fluid.h"
 
 //---------------------------------------------------------
 //   saveAudio
@@ -52,10 +60,18 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       MasterSynthesizer* synti = new MasterSynthesizer();
       int sampleRate = preferences.exportAudioSampleRate;
       synti->setSampleRate(sampleRate);
+
+      synti->registerSynthesizer(new FluidS::Fluid());
+#ifdef AEOLUS
+      synti->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+      synti->registerSynthesizer(new Zerberus());
+#endif
       synti->init();
       synti->setState(score->syntiState());
 
-      int oldSampleRate = MScore::sampleRate;
+      int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
 
       EventMap events;
@@ -106,7 +122,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             static const unsigned FRAMES = 512;
             float buffer[FRAMES * 2];
             int playTime = 0;
-            synti->setGain(gain);
+//            synti->setGain(gain);
 
             for (;;) {
                   unsigned frames = FRAMES;
@@ -122,7 +138,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                               break;
                         int n = f - playTime;
                         synti->process(n, p);
-                        p         += 2 * n;
+                        p += 2 * n;
 
                         playTime  += n;
                         frames    -= n;
@@ -139,14 +155,18 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                         synti->process(frames, p);
                         playTime += frames;
                         }
-                  if (pass == 1)
+                  if (pass == 1) {
+                        for (unsigned i = 0; i < FRAMES * 2; ++i)
+                              buffer[i] *= gain;
                         sf_writef_float(sf, buffer, FRAMES);
+                        }
                   else {
                         for (unsigned i = 0; i < FRAMES * 2; ++i)
                               peak = qMax(peak, qAbs(buffer[i]));
                         }
                   playTime = endTime;
                   pBar->setValue(playTime);
+
                   if (playTime >= et)
                         break;
                   }
