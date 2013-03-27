@@ -60,5 +60,18 @@ void Channel::controller(int ctrl, int val)
                         v->stop();
                   }
             }
+      else if (ctrl == CTRL_PROGRAM) {
+            printf("Zerberus: program %d\n", val);
+            ZInstrument* zi = _msynth->instrument(val);
+            if (zi == 0)
+                  printf("   not found\n");
+            if (zi && zi != _instrument) {
+                  for (Voice* v = _msynth->getActiveVoices(); v; v = v->next())
+                        v->off();
+                  _instrument = zi;
+                  }
+            }
+//      else
+//            qDebug("Zerberus: ctrl 0x%02x 0x%02x", ctrl, val);
       }
 

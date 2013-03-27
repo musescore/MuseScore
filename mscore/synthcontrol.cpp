@@ -173,14 +173,16 @@ void SynthControl::updateSyntiValues()
 void SynthControl::setScore(Score* cs)
       {
       setWindowTitle("MuseScore: Synthesizer");
+
       soundFonts->clear();
       Synthesizer* sy = synti->synthesizer("Fluid");
       if (sy)
             soundFonts->addItems(sy->soundFonts());
+
       zerberusFiles->clear();
       sy = synti->synthesizer("Zerberus");
       if (sy)
-            soundFonts->addItems(sy->soundFonts());
+            zerberusFiles->addItems(sy->soundFonts());
 
       updateSyntiValues();
       updateUpDownButtons();

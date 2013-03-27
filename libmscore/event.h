@@ -117,10 +117,10 @@ enum {
       // special midi events are mapped to internal
       // controller
       //
-      CTRL_PROGRAM   = 0x40001,
-      CTRL_PITCH     = 0x40002,
-      CTRL_PRESS     = 0x40003,
-      CTRL_POLYAFTER = 0x40004,
+      CTRL_PROGRAM   = 0x81,
+      CTRL_PITCH     = 0x82,
+      CTRL_PRESS     = 0x83,
+      CTRL_POLYAFTER = 0x84,
       };
 
 //---------------------------------------------------------

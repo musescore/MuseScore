@@ -142,6 +142,8 @@ class Zerberus : public Synthesizer {
       virtual void allNotesOff(int channel);
       virtual bool addSoundFont(const QString&);
       virtual bool removeSoundFont(const QString&);
+      virtual void setParameter(int, double);
+      virtual void setParameter(int, const QString&);
       };
 
 #endif

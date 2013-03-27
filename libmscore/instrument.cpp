@@ -18,8 +18,10 @@
 #include "utils.h"
 #include "tablature.h"
 #include "instrtemplate.h"
+#include "msynthesizer.h"
 
 Instrument InstrumentList::defaultInstrument;
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   write
@@ -375,10 +377,7 @@ void Channel::write(Xml& xml) const
 
             e.write(xml);
             }
-      if (synti == 1)                    // HACK
-            xml.tag("synti", "Aeolus");
-      else if (synti == 2)
-            xml.tag("synti", "Zerberus");
+      xml.tag("synti", ::synti->name(synti));
       if (mute)
             xml.tag("mute", mute);
       if (solo)
@@ -454,12 +453,7 @@ void Channel::read(XmlReader& e)
                   }
             else if (tag == "synti") {
                   QString s = e.readElementText();
-                  if (s == "Aeolus")
-                        synti = 1;
-                  else if (s == "Zerberus")
-                        synti = 2;
-                  else
-                        synti = 0;
+                  synti = ::synti->index(s);
                   }
             else if (tag == "descr")
                   descr = e.readElementText();
