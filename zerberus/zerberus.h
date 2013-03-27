@@ -23,7 +23,7 @@
 
 class Voice;
 class Channel;
-class Instrument;
+class ZInstrument;
 enum class Trigger;
 enum class MidiEventType : unsigned char;
 
@@ -102,7 +102,7 @@ class Zerberus : public Synthesizer {
 
       std::atomic<bool> busy;
 
-      std::list<Instrument*> instruments;
+      std::list<ZInstrument*> instruments;
       Channel* _channel[MAX_CHANNEL];
 
       int allocatedVoices = 0;
@@ -124,7 +124,7 @@ class Zerberus : public Synthesizer {
       virtual void play(const MidiEvent& event);
       bool loadInstrument(const QString&);
 
-      Instrument* instrument(int program) const;
+      ZInstrument* instrument(int program) const;
       Voice* getActiveVoices() { return activeVoices; }
       Channel* channel(int n)  { return _channel[n]; }
 

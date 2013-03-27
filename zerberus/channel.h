@@ -14,7 +14,7 @@
 #define __MCHANNEL_H__
 
 class Zerberus;
-class Instrument;
+class ZInstrument;
 
 //---------------------------------------------------------
 //   Channel
@@ -22,7 +22,7 @@ class Instrument;
 
 class Channel {
       Zerberus* _msynth;
-      Instrument* _instrument;
+      ZInstrument* _instrument;
       float _gain;
 
       int _idx;               // channel index
@@ -33,8 +33,8 @@ class Channel {
 
       void pitchBend(int);
       void controller(int ctrl, int val);
-      Instrument* instrument() const    { return _instrument; }
-      void setInstrument(Instrument* i) { _instrument = i; }
+      ZInstrument* instrument() const    { return _instrument; }
+      void setInstrument(ZInstrument* i) { _instrument = i; }
       Zerberus* msynth() const          { return _msynth; }
       int sustain() const               { return _sustain; }
       float gain() const                { return _gain;    }
