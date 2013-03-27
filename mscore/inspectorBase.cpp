@@ -69,6 +69,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
       P_TYPE t = propertyType(id);
       if (t == T_POINT || t == T_SP_REAL)
             v = v.toDouble() * inspector->element()->score()->spatium();
+      else if (t == T_TEMPO)
+            v = v.toDouble() / 60.0;
       return v;
       }
 
@@ -85,6 +87,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       P_TYPE t = propertyType(id);
       if (t == T_POINT || t == T_SP_REAL)
             val = val.toDouble() / inspector->element()->score()->spatium();
+      else if (t == T_TEMPO)
+            val = val.toDouble() * 60.0;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());

@@ -101,7 +101,7 @@ static const PropertyData propertyList[] = {
       { P_BEAM_MODE,           true, "BeamMode",       T_BEAM_MODE  },
       { P_USER_LEN,            false, "",              T_REAL   },
       { P_SPACE,               false, "space",         T_REAL   },
-      { P_TEMPO,               false, "tempo",         T_REAL   },
+      { P_TEMPO,               false, "tempo",         T_TEMPO  },
       { P_TEMPO_FOLLOW_TEXT,   false, "followText",    T_BOOL   },
       { P_ACCIDENTAL_BRACKET,  false, "bracket",       T_BOOL   },
       { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
@@ -190,6 +190,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_REAL:
             case T_SPATIUM:
             case T_SP_REAL:
+            case T_TEMPO:
                   return QVariant(e.readDouble());
             case T_FRACTION:
                   return QVariant::fromValue(e.readFraction());
