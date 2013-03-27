@@ -107,6 +107,10 @@ class SLine : public Spanner {
       LineSegment* takeFirstSegment()     { return (LineSegment*)spannerSegments().takeFirst(); }
       LineSegment* takeLastSegment()      { return (LineSegment*)spannerSegments().takeLast(); }
       LineSegment* segmentAt(int n) const { return (LineSegment*)spannerSegments().at(n); }
+
+      virtual QVariant getProperty(P_ID id) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 #endif
