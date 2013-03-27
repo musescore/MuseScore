@@ -296,6 +296,7 @@ void System::layout2()
 
       qreal y = 0.0;
       int lastStaffIdx  = 0;   // last visible staff
+      int firstStaffIdx = -1;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             StyleIdx downDistance;
@@ -346,6 +347,8 @@ void System::layout2()
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
+            if (firstStaffIdx == -1)
+                  firstStaffIdx = staffIdx;
             }
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
@@ -364,7 +367,8 @@ void System::layout2()
             }
 
       if (_barLine) {
-            _barLine->setSpan(lastStaffIdx + 1);
+            _barLine->setTrack(firstStaffIdx * VOICES);
+            _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
             if (score()->staff(0)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
 

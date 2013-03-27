@@ -93,20 +93,22 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   }
             Measure* measure;
             System* system;
+            qreal yp = 0.0;
             if (parent()->type() == SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
                   measure = segment->measure();
-                  system = measure->system();
+                  system  = measure->system();
                   }
             else {
-                  system = static_cast<System*>(parent());
+                  system  = static_cast<System*>(parent());
                   measure = system->firstMeasure();
                   }
             if (measure) {
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
 
-                  qreal yp = system ? system->staff(staffIdx1)->y() : 0.0;
+                  if (system)
+                        yp += system->staff(staffIdx1)->y();
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
                   *y2 = l2->y1() - yp;
