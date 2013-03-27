@@ -760,6 +760,7 @@
     <key>lock</key>
     <seq>Shift+Ctrl+L</seq>
     </SC>
+<!-- TAB specific shortcuts -->
 <!--
   <SC>
     <key>note-longa-TAB</key>
@@ -809,10 +810,6 @@
   <SC>
     <key>pad-note-decrease-TAB</key>
     <seq>Q</seq>
-    </SC>
-  <SC>
-    <key>pad-rest-TAB</key>
-    <seq>Z</seq>
     </SC>
   <SC>
     <key>string-above</key>

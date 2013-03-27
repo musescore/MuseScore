@@ -2212,8 +2212,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "pad-rest-TAB",
          QT_TRANSLATE_NOOP("action","Rest (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note entry: rest (TAB)"),
-          quartrest_ICON
+         QT_TRANSLATE_NOOP("action","Note entry: rest (TAB)")
          ),
       Shortcut(
          STATE_NOTE_ENTRY_TAB,
