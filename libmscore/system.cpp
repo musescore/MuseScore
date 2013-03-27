@@ -350,6 +350,8 @@ void System::layout2()
             if (firstStaffIdx == -1)
                   firstStaffIdx = staffIdx;
             }
+      if (firstStaffIdx == -1)
+            firstStaffIdx = 0;
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       setHeight(systemHeight);

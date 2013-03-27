@@ -1250,6 +1250,10 @@ void Seq::putEvent(const Event& event)
       if (!cs)
             return;
       int channel = event.channel();
+      if (channel >= cs->midiMapping()->size()) {
+            qDebug("bad channel value");
+            return;
+            }
       int syntiIdx= cs->midiMapping(channel)->articulation->synti;
       synti->play(event, syntiIdx);
       }
