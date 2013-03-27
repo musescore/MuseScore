@@ -159,7 +159,8 @@ enum P_TYPE {
       T_LAYOUT_BREAK,
       T_VALUE_TYPE,
       T_BEAM_MODE,
-      T_PLACEMENT
+      T_PLACEMENT,
+      T_TEMPO
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
