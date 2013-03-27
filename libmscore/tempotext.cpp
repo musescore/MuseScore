@@ -158,6 +158,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_TEMPO:
                   _tempo = v.toDouble();
+                  score()->setTempo(segment(), _tempo);
                   break;
             case P_TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
