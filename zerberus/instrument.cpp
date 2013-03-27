@@ -24,8 +24,8 @@
 #include "zone.h"
 #include "sample.h"
 
-QByteArray Instrument::buf;
-int Instrument::idx;
+QByteArray ZInstrument::buf;
+int ZInstrument::idx;
 
 //---------------------------------------------------------
 //   Sample
@@ -42,7 +42,7 @@ Sample::~Sample()
 
 static sf_count_t getFileLen(void*)
       {
-      return Instrument::buf.size();
+      return ZInstrument::buf.size();
       }
 
 //---------------------------------------------------------
@@ -53,16 +53,16 @@ static sf_count_t seek(sf_count_t offset, int whence, void*)
       {
       switch(whence) {
             case SEEK_SET:
-                  Instrument::idx = offset;
+                  ZInstrument::idx = offset;
                   break;
             case SEEK_CUR:
-                  Instrument::idx += offset;
+                  ZInstrument::idx += offset;
                   break;
             case SEEK_END:
-                  Instrument::idx = Instrument::buf.size() + offset;
+                  ZInstrument::idx = ZInstrument::buf.size() + offset;
                   break;
             }
-      return Instrument::idx;
+      return ZInstrument::idx;
       }
 
 //---------------------------------------------------------
@@ -73,9 +73,9 @@ static sf_count_t read(void* ptr, sf_count_t count, void*)
       {
 //      printf("read %ld at %d = %ld %d\n", count, Instrument::idx, count + Instrument::idx,
 //         Instrument::buf.size());
-      count = qMin(count, (sf_count_t)(Instrument::buf.size() - Instrument::idx));
-      memcpy(ptr, Instrument::buf.data() + Instrument::idx, count);
-      Instrument::idx += count;
+      count = qMin(count, (sf_count_t)(ZInstrument::buf.size() - ZInstrument::idx));
+      memcpy(ptr, ZInstrument::buf.data() + ZInstrument::idx, count);
+      ZInstrument::idx += count;
       return count;
       }
 
@@ -91,7 +91,7 @@ static sf_count_t write(const void* /*ptr*/, sf_count_t /*count*/, void*)
 
 static sf_count_t tell(void*)
       {
-      return Instrument::idx;
+      return ZInstrument::idx;
       }
 
 static SF_VIRTUAL_IO sfio = {
@@ -106,7 +106,7 @@ static SF_VIRTUAL_IO sfio = {
 //   readSample
 //---------------------------------------------------------
 
-Sample* Instrument::readSample(const QString& s, QZipReader* uz)
+Sample* ZInstrument::readSample(const QString& s, QZipReader* uz)
       {
       if (uz) {
             QList<QZipReader::FileInfo> fi = uz->fileInfoList();
@@ -155,10 +155,10 @@ Sample* Instrument::readSample(const QString& s, QZipReader* uz)
       }
 
 //---------------------------------------------------------
-//   Instrument
+//   ZInstrument
 //---------------------------------------------------------
 
-Instrument::Instrument(Zerberus* s)
+ZInstrument::ZInstrument(Zerberus* s)
       {
       _msynth  = s;
       _program = -1;
@@ -169,7 +169,7 @@ Instrument::Instrument(Zerberus* s)
 //    return true on success
 //---------------------------------------------------------
 
-bool Instrument::load(const QString& path)
+bool ZInstrument::load(const QString& path)
       {
       instrumentPath = path;
       QFileInfo fi(path);
@@ -185,7 +185,7 @@ bool Instrument::load(const QString& path)
 //   loadFromDir
 //---------------------------------------------------------
 
-bool Instrument::loadFromDir(const QString& s)
+bool ZInstrument::loadFromDir(const QString& s)
       {
       QFile f(s + "/orchestra.xml");
       if (!f.open(QIODevice::ReadOnly)) {
@@ -204,7 +204,7 @@ bool Instrument::loadFromDir(const QString& s)
 //   loadFromFile
 //---------------------------------------------------------
 
-bool Instrument::loadFromFile(const QString& path)
+bool ZInstrument::loadFromFile(const QString& path)
       {
       if (path.endsWith(".sfz"))
             return loadSfz(path);
@@ -230,7 +230,7 @@ bool Instrument::loadFromFile(const QString& path)
 //    read orchestra
 //---------------------------------------------------------
 
-bool Instrument::read(const QByteArray& buf, QZipReader* /*uz*/, const QString& /*path*/)
+bool ZInstrument::read(const QByteArray& buf, QZipReader* /*uz*/, const QString& /*path*/)
       {
       XmlReader e(buf);
       while (e.readNextStartElement()) {
