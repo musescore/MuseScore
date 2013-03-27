@@ -138,6 +138,8 @@ enum P_ID {
       P_GLISS_TEXT,
       P_GLISS_SHOW_TEXT,
 
+      P_DIAGONAL,
+
       P_END
       };
 

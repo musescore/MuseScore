@@ -37,7 +37,7 @@ endif (SCRIPT_INTERFACE)
 
 QT4_WRAP_UI (ui_headers
       insertmeasuresdialog.ui barline.ui chord.ui chordrest.ui editinstrument.ui editstyle.ui
-      edittempo.ui element.ui hairpin.ui instrdialog.ui measure.ui measuresdialog.ui
+      edittempo.ui element.ui instrdialog.ui measure.ui measuresdialog.ui
       note.ui page.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui
       measureproperties.ui segment.ui text.ui textpalette.ui timedialog.ui
       symboldialog.ui dynamic.ui tuplet.ui shortcutcapturedialog.ui slurtie.ui
@@ -50,7 +50,7 @@ QT4_WRAP_UI (ui_headers
       textline.ui slurproperties.ui debugger.ui
       select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
       harmonyedit.ui selectinstr.ui tremolo.ui fretdprops.ui stafftype.ui
-      sectionbreak.ui hairpinproperties.ui spanner.ui bend.ui tremolobar.ui
+      sectionbreak.ui spanner.ui bend.ui tremolobar.ui
       textproperties.ui editpitch.ui editstringdata.ui slursegment.ui
       accidental.ui clef.ui editraster.ui mediadialog.ui textstyle.ui
       album.ui layer.ui articulationbase.ui inspector_element.ui inspector_vbox.ui
@@ -62,7 +62,7 @@ QT4_WRAP_UI (ui_headers
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
       inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
-      inspector_dynamic.ui
+      inspector_dynamic.ui inspector_line.ui
       ${SCRIPT_UI}
       )
 
@@ -86,7 +86,7 @@ QT4_WRAP_CPP (mocs
       piano.h ruler.h file.h
       pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
       harmonycanvas.h updatechecker.h fretproperties.h fretcanvas.h editstafftype.h
-      prefsdialog.h sectionbreakprop.h hairpinprop.h bendproperties.h
+      prefsdialog.h sectionbreakprop.h bendproperties.h
       bendcanvas.h tremolobarprop.h tremolobarcanvas.h
       drumtools.h texteditor.h texttools.h edittools.h pianotools.h editpitch.h
       editstringdata.h editraster.h mediadialog.h chordview.h album.h layer.h
@@ -189,7 +189,7 @@ add_executable ( ${ExecutableName}
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp glissandoproperties.cpp
       articulationprop.cpp textprop.cpp
-      fretproperties.cpp sectionbreakprop.cpp hairpinprop.cpp
+      fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       inspector.cpp dragelement.cpp svggenerator.cpp
