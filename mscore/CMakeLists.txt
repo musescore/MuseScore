@@ -47,7 +47,7 @@ QT4_WRAP_UI (ui_headers
       chordedit.ui transposedialog.ui
       lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui
-      textline.ui slurproperties.ui debugger.ui
+      hairpin.ui textline.ui slurproperties.ui debugger.ui
       select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
       harmonyedit.ui selectinstr.ui tremolo.ui fretdprops.ui stafftype.ui
       sectionbreak.ui spanner.ui bend.ui tremolobar.ui
