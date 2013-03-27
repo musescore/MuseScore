@@ -811,3 +811,47 @@ int SLine::tick2() const
       return static_cast<Segment*>(endElement())->tick();
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant SLine::getProperty(P_ID id) const
+      {
+      switch(id) {
+            case P_DIAGONAL:
+                  return _diagonal;
+            default:
+                  return Spanner::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool SLine::setProperty(P_ID id, const QVariant& v)
+      {
+      switch(id) {
+            case P_DIAGONAL:
+                  _diagonal = v.toBool();
+                  break;
+            default:
+                  return Spanner::setProperty(id, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SLine::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_DIAGONAL: return false;
+            default:         return Spanner::propertyDefault(id);
+            }
+      }
+
+
+

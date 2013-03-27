@@ -145,6 +145,8 @@ static const PropertyData propertyList[] = {
       { P_GLISS_TEXT,          false, 0,               T_STRING },
       { P_GLISS_SHOW_TEXT,     false, 0,               T_BOOL   },
 
+      { P_DIAGONAL,            false, 0,               T_BOOL   },
+
       { P_END,                 false, "",              T_INT    }
       };
 
