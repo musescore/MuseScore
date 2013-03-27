@@ -38,6 +38,7 @@ struct Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;
+class MidiPatch;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -95,7 +96,6 @@ class Seq : public QObject, public Sequencer {
       int state;                          // TRANSPORT_STOP, TRANSPORT_PLAY, TRANSPORT_STARTING=3
 
       bool oggInit;
-
       bool playlistChanged;
 
       SeqMsgFifo toSeq;
@@ -115,7 +115,7 @@ class Seq : public QObject, public Sequencer {
       EventMap::const_iterator guiPos;    // moved in gui thread
       QList<const Note*> markedNotes;     // notes marked as sounding
 
-      uint tackRest;     // metronome state
+      uint tackRest;                      // metronome state
       uint tickRest;
       qreal metronomeVolume;
 

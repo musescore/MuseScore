@@ -108,15 +108,15 @@ enum {
 
 class MidiEvent {
       MidiEventType _type;
-      char _channel;
-      char _dataA;
-      char _dataB;
+      uchar _channel;
+      uchar _dataA;
+      uchar _dataB;
 
    public:
       MidiEvent() {}
-      MidiEvent(MidiEventType t, char c, char a, char b)
+      MidiEvent(MidiEventType t, uchar c, uchar a, uchar b)
          : _type(t), _channel(c), _dataA(a), _dataB(b) {};
-      void set(MidiEventType t, char c, char a, char b) {
+      void set(MidiEventType t, uchar c, uchar a, uchar b) {
             _type    = t;
             _channel = c;
             _dataA   = a;
@@ -125,10 +125,10 @@ class MidiEvent {
 
       MidiEventType type() const    { return _type;    }
       void setType(MidiEventType t) { _type = t;       }
-      char channel() const          { return _channel; }
-      void setChannel(char c)       { _channel = c;    }
-      char dataA() const            { return _dataA;   }
-      char dataB() const            { return _dataB;   }
+      uchar channel() const         { return _channel; }
+      void setChannel(uchar c)      { _channel = c;    }
+      uchar dataA() const           { return _dataA;   }
+      uchar dataB() const           { return _dataB;   }
       };
 
 #include "libmscore/event.h"
