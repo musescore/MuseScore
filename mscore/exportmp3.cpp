@@ -19,7 +19,6 @@
 //=============================================================================
 
 #include "libmscore/score.h"
-//#include "fluid/fluid.h"
 #include "libmscore/msynthesizer.h"
 #include "libmscore/note.h"
 #include "musescore.h"
@@ -27,6 +26,14 @@
 #include "preferences.h"
 #include "seq.h"
 #include "exportmp3.h"
+#ifdef AEOLUS
+#include "aeolus/aeolus/aeolus.h"
+#endif
+#ifdef ZERBERUS
+#include "zerberus/zerberus.h"
+#endif
+
+#include "fluid/fluid.h"
 
 //---------------------------------------------------------
 //   MP3Exporter
@@ -680,8 +687,16 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
       MasterSynthesizer* synti = new MasterSynthesizer();
-      synti->init();
       synti->setSampleRate(sampleRate);
+      synti->registerSynthesizer(new FluidS::Fluid());
+#ifdef AEOLUS
+      synti->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+      synti->registerSynthesizer(new Zerberus());
+#endif
+      synti->init();
+
       synti->setState(score->syntiState());
 
       EventMap events;
@@ -722,7 +737,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   }
 
             double playTime = 0.0;
-            synti->setGain(gain);
 
             for (;;) {
                   unsigned frames = FRAMES;
@@ -773,6 +787,10 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               *r++ = *sp++;
                               }
                         playTime += double(frames)/double(sampleRate);
+                        }
+                  for (int i = 0; i < FRAMES; ++i) {
+                        bufferL[i] *= gain;
+                        bufferR[i] *= gain;
                         }
                   if (pass == 1) {
                         long bytes;

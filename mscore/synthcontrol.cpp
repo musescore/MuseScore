@@ -135,7 +135,7 @@ SynthControl::SynthControl(QWidget* parent)
 void SynthControl::updateSyntiValues()
       {
       masterTuning->setValue(synti->masterTuning());
-      setGain(synti->gain());
+      setGain(seq->gain());
 
       roomSizeBox->setValue(synti->parameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_ROOMSIZE).val).fval());
       dampBox->setValue(synti->parameter    (SParmId(FLUID_ID, REVERB_GROUP, REVERB_DAMP).val).fval());
