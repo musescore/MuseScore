@@ -181,7 +181,7 @@ int SfzRegion::readKey(const QByteArray& s) const
 //   addRegion
 //---------------------------------------------------------
 
-void Instrument::addRegion(SfzRegion& r)
+void ZInstrument::addRegion(SfzRegion& r)
       {
       for (int i = 0; i < 128; ++i) {
             if (r.on_locc[i] != -1 || r.on_hicc[i] != -1) {
@@ -311,7 +311,7 @@ void SfzRegion::readOp(const QByteArray& bb)
 //   loadSfz
 //---------------------------------------------------------
 
-bool Instrument::loadSfz(const QString& s)
+bool ZInstrument::loadSfz(const QString& s)
       {
       printf("load sfz <%s>\n", qPrintable(s));
 

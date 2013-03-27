@@ -63,7 +63,7 @@ void Zerberus::programChange(int /*channel*/, int /*program*/)
 
 void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
       {
-      Instrument* i = channel->instrument();
+      ZInstrument* i = channel->instrument();
 // printf("trigger %d %d type %d\n", key, velo, trigger);
       for (Zone* z : i->zones()) {
             if (z->match(channel, key, velo, trigger)) {
@@ -117,7 +117,7 @@ bool Zerberus::loadInstrument(const QString& path)
       if (path.isEmpty())
             return false;
       busy = true;
-      Instrument* instr = new Instrument(this);
+      ZInstrument* instr = new ZInstrument(this);
       if (instr->load(path)) {
             instruments.push_back(instr);
             if (instruments.size() == 1) {
@@ -136,9 +136,9 @@ bool Zerberus::loadInstrument(const QString& path)
 //   instrument
 //---------------------------------------------------------
 
-Instrument* Zerberus::instrument(int program) const
+ZInstrument* Zerberus::instrument(int program) const
       {
-      for(Instrument* i : instruments) {
+      for (ZInstrument* i : instruments) {
             if (i->program() == program)
                   return i;
             }
@@ -296,7 +296,7 @@ const QList<MidiPatch*>& Zerberus::getPatchInfo() const
       qDeleteAll(pl);
       pl.clear();
       int idx = 0;
-      for (Instrument* i : instruments) {
+      for (ZInstrument* i : instruments) {
             MidiPatch* p = new MidiPatch { false, 2, 0, idx, i->name() };
             pl.append(p);
             ++idx;
@@ -358,7 +358,7 @@ bool Zerberus::loadSoundFonts(const QStringList& sl)
 QStringList Zerberus::soundFonts() const
       {
       QStringList sl;
-      for (Instrument* i : instruments) {
+      for (ZInstrument* i : instruments) {
             printf("  soundFonts <%s>\n", qPrintable(i->path()));
             sl.append(i->path());
             }
@@ -380,7 +380,7 @@ bool Zerberus::addSoundFont(const QString& s)
 
 bool Zerberus::removeSoundFont(const QString& s)
       {
-      for (Instrument* i : instruments) {
+      for (ZInstrument* i : instruments) {
             if (i->path() == s) {
                   auto it = find(instruments.begin(), instruments.end(), i);
                   if (it == instruments.end())
