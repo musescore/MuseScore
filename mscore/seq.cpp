@@ -358,7 +358,7 @@ bool Seq::init()
             synti->registerSynthesizer(new Zerberus());
 #endif
             }
-      synti->setGain(preferences.masterGain);
+      _gain = preferences.masterGain;
       synti->init();
       Synthesizer* fluid = synti->synthesizer("Fluid");
       if (fluid) {
@@ -1228,17 +1228,8 @@ SeqMsg SeqMsgFifo::dequeue()
 
 void Seq::setGain(float gain)
       {
-      synti->setGain(gain);
+      _gain = gain;
       emit gainChanged(gain);
-      }
-
-//---------------------------------------------------------
-//   gain
-//---------------------------------------------------------
-
-float Seq::gain() const
-      {
-      return synti->gain();
       }
 
 //---------------------------------------------------------

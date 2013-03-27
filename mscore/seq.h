@@ -88,6 +88,7 @@ class Seq : public QObject, public Sequencer {
 
       mutable QMutex mutex;
 
+      qreal _gain;
       Score* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
@@ -195,7 +196,7 @@ class Seq : public QObject, public Sequencer {
       Driver* getDriver()  { return driver; }
       int getCurTick();
 
-      float gain() const;
+      float gain() const { return _gain; }
 
       int synthNameToIndex(const QString&) const;
       QString synthIndexToName(int) const;

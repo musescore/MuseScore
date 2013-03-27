@@ -119,7 +119,7 @@ class Zerberus : public Synthesizer {
       Zerberus();
       ~Zerberus();
 
-      virtual void process(int frames, float*);
+      virtual void process(unsigned frames, float*);
       virtual void process(const MidiEvent& event);
       virtual void play(const MidiEvent& event);
       bool loadInstrument(const QString&);
@@ -133,7 +133,6 @@ class Zerberus : public Synthesizer {
       virtual const char* name() const;
       virtual bool loadSoundFonts(const QStringList&);
       virtual QStringList soundFonts() const;
-      virtual void process(unsigned, float*, float);
       virtual void play(const Event&);
       virtual const QList<MidiPatch*>& getPatchInfo() const;
       virtual SyntiState state() const;

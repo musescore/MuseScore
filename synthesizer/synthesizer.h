@@ -44,7 +44,7 @@ class Synthesizer {
 
       virtual QStringList soundFonts() const = 0;
 
-      virtual void process(unsigned, float*, float) = 0;
+      virtual void process(unsigned, float*) = 0;
       virtual void play(const Event&) = 0;
 
       virtual const QList<MidiPatch*>& getPatchInfo() const = 0;

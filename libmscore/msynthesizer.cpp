@@ -25,15 +25,6 @@ int MasterSynthesizer::_sampleRate;
 //   MasterSynthesizer
 //---------------------------------------------------------
 
-MasterSynthesizer::MasterSynthesizer()
-      {
-      _gain = 1.0;
-      }
-
-//---------------------------------------------------------
-//   MasterSynthesizer
-//---------------------------------------------------------
-
 MasterSynthesizer::~MasterSynthesizer()
       {
       foreach(Synthesizer* s, _synthesizer)
@@ -58,7 +49,7 @@ void MasterSynthesizer::process(unsigned n, float* p)
       {
       foreach(Synthesizer* s, _synthesizer) {
             if (s->active())
-                  s->process(n, p, _gain);
+                  s->process(n, p);
             }
       }
 
