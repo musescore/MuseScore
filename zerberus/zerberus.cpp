@@ -52,8 +52,9 @@ Zerberus::~Zerberus()
 //   programChange
 //---------------------------------------------------------
 
-void Zerberus::programChange(int /*channel*/, int /*program*/)
+void Zerberus::programChange(int channel, int program)
       {
+      printf("Zerberus programChange %d %d\n", channel, program);
       }
 
 //---------------------------------------------------------
@@ -116,6 +117,10 @@ bool Zerberus::loadInstrument(const QString& path)
       {
       if (path.isEmpty())
             return false;
+      for (ZInstrument* instr : instruments) {
+            if (instr->path() == path)    // already loaded?
+                  return true;
+            }
       busy = true;
       ZInstrument* instr = new ZInstrument(this);
       if (instr->load(path)) {
@@ -130,20 +135,6 @@ bool Zerberus::loadInstrument(const QString& path)
       busy = false;
       delete instr;
       return false;
-      }
-
-//---------------------------------------------------------
-//   instrument
-//---------------------------------------------------------
-
-ZInstrument* Zerberus::instrument(int program) const
-      {
-      for (ZInstrument* i : instruments) {
-            if (i->program() == program)
-                  return i;
-            }
-      qFatal("instrument for program %d not found", program);
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -349,10 +340,8 @@ bool Zerberus::loadSoundFonts(const QStringList& sl)
 QStringList Zerberus::soundFonts() const
       {
       QStringList sl;
-      for (ZInstrument* i : instruments) {
-            printf("  soundFonts <%s>\n", qPrintable(i->path()));
+      for (ZInstrument* i : instruments)
             sl.append(i->path());
-            }
       return sl;
       }
 
@@ -417,9 +406,35 @@ void Zerberus::setState(SyntiState& sp)
       QStringList sfs;
       for (int i = 0; i < sp.size(); ++i) {
             SyntiParameter* p = &sp[i];
+//            printf("setState %x\n", p->id());
             if (p->id() == -1 && p->name() == "sfz-font")
                   sfs.append(p->sval());
             }
       loadSoundFonts(sfs);
+      }
+
+void Zerberus::setParameter(int id, double val)
+      {
+      printf("Zerberus::setParameter: %x %f\n", id, val);
+      }
+
+void Zerberus::setParameter(int id, const QString& s)
+      {
+      printf("Zerberus::setParameter: %x %s\n", id, qPrintable(s));
+      }
+
+//---------------------------------------------------------
+//   instrument
+//---------------------------------------------------------
+
+ZInstrument* Zerberus::instrument(int n) const
+      {
+      int idx = 0;
+      for (auto i = instruments.begin(); i != instruments.end(); ++i) {
+            if (idx == n)
+                  return *i;
+            ++idx;
+            }
+      return 0;
       }
 

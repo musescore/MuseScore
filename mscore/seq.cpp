@@ -803,13 +803,19 @@ void Seq::process(unsigned n, float* buffer)
             synti->process(frames, p);
             }
       //
-      // metering
+      // metering / master gain
       //
       float lv = 0.0f;
       float rv = 0.0f;
+      p = buffer;
       for (unsigned i = 0; i < n; ++i) {
-            lv = qMax(lv, fabsf(buffer[i * 2]));
-            rv = qMax(rv, fabsf(buffer[i * 2 + 1]));
+            qreal val = *p * _gain;
+            lv = qMax(lv, fabsf(val));
+            *p++ = val;
+
+            val = *p * _gain;
+            rv = qMax(lv, fabsf(val));
+            *p++ = val;
             }
       meterValue[0] = lv;
       meterValue[1] = rv;
@@ -847,7 +853,7 @@ void Seq::initInstruments()
 void Seq::collectEvents()
       {
       //do not collect even while playing
-      if (state == TRANSPORT_PLAY)
+      if (state ==  TRANSPORT_PLAY)
             return;
       events.clear();
 
@@ -1228,8 +1234,10 @@ SeqMsg SeqMsgFifo::dequeue()
 
 void Seq::setGain(float gain)
       {
-      _gain = gain;
-      emit gainChanged(gain);
+      if (gain != _gain) {
+            _gain = gain;
+            emit gainChanged(gain);
+            }
       }
 
 //---------------------------------------------------------
