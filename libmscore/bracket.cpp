@@ -34,7 +34,6 @@ Bracket::Bracket(Score* s)
       _span       = 0;
       _firstStaff = 0;
       _lastStaff  = 0;
-      yoff        = 0.0;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -120,13 +119,15 @@ void Bracket::layout()
 
 void Bracket::draw(QPainter* painter) const
       {
+      if (h2 == 0.0)
+            return;
       if (bracketType() == BRACKET_AKKOLADE) {
             painter->setPen(Qt::NoPen);
             painter->setBrush(QBrush(curColor()));
             painter->drawPath(path);
             }
       else if (bracketType() == BRACKET_NORMAL) {
-            qreal h = 2 * h2 + yoff;
+            qreal h = 2 * h2;
             qreal _spatium = spatium();
             qreal w = score()->styleS(ST_bracketWidth).val() * _spatium;
             QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
@@ -194,7 +195,7 @@ void Bracket::read(XmlReader& e)
 
 void Bracket::startEdit(MuseScoreView*, const QPointF&)
       {
-      yoff = 0.0;
+
       }
 
 //---------------------------------------------------------
@@ -204,7 +205,7 @@ void Bracket::startEdit(MuseScoreView*, const QPointF&)
 void Bracket::updateGrips(int* grips, QRectF* grip) const
       {
       *grips = 1;
-      grip[0].translate(QPointF(0.0, h2 * 2) + QPointF(0.0, yoff) + pagePos());
+      grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
       }
 
 //---------------------------------------------------------
@@ -231,7 +232,7 @@ void Bracket::endEdit()
 
 void Bracket::editDrag(const EditData& ed)
       {
-      yoff += ed.delta.y();
+      h2 += ed.delta.y() * .5;
       layout();
       }
 
@@ -242,9 +243,6 @@ void Bracket::editDrag(const EditData& ed)
 
 void Bracket::endEditDrag()
       {
-      h2 += yoff * .5;
-      yoff = 0.0;
-
       qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;
 
@@ -270,10 +268,11 @@ void Bracket::endEditDrag()
 
       qreal sy = system()->staff(staffIdx1)->y();
       qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
-      h2 = (ey - sy) * .5 + score()->styleS(ST_bracketDistance).val() * spatium();
-
+      h2 = (ey - sy) * .5;
+      layout();
       int span = staffIdx2 - staffIdx1 + 1;
       staff()->setBracketSpan(_column, span);
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
