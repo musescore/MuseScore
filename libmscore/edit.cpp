@@ -687,6 +687,8 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr();
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
+      Tablature* neck = 0;
+      StaffTypeTablature * tab = 0;
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF: {
@@ -705,8 +707,8 @@ void Score::putNote(const Position& p, bool replace)
             case TAB_STAFF: {
                   if (_is.rest)
                         return;
-                  Tablature* neck = instr->tablature();
-                  StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
+                  neck = instr->tablature();
+                  tab = (StaffTypeTablature*)st->staffType();
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
@@ -768,6 +770,13 @@ void Score::putNote(const Position& p, bool replace)
                         // if a note on same string already exists, update to new pitch/fret
                         foreach(Note * note, static_cast<Chord*>(cr)->notes())
                               if(note->string() == nval.string) { // if string is the same
+                                    // if current note fret can receive a new digit,
+                                    // add a digit
+                                    if (neck && note->fret() >= 1 && note->fret() <= 2) {
+                                          nval.fret = note->fret() * 10 + nval.fret;
+                                          nval.pitch = neck->getPitch(nval.string, nval.fret);
+                                    }
+                                    // otherwise, replace with new fret
                                     note->undoChangeProperty(P_PITCH, nval.pitch);
                                     note->undoChangeProperty(P_FRET, nval.fret);
                                     return;

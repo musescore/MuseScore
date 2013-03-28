@@ -2183,6 +2183,80 @@ void Score::cmd(const QAction* a)
             padToggle(PAD_NOTE64);
       else if (cmd == "pad-note-128")
             padToggle(PAD_NOTE128);
+      else if (cmd == "pad-note-increase") {
+            switch (_is.duration().type() ) {
+// cycle back from longest to shortest?
+//                  case TDuration::V_LONG:
+//                        padToggle(PAD_NOTE128);
+//                        break;
+                  case TDuration::V_BREVE:
+                        padToggle(PAD_NOTE00);
+                        break;
+                  case TDuration::V_WHOLE:
+                        padToggle(PAD_NOTE0);
+                        break;
+                  case TDuration::V_HALF:
+                        padToggle(PAD_NOTE1);
+                        break;
+                  case TDuration::V_QUARTER:
+                        padToggle(PAD_NOTE2);
+                        break;
+                  case TDuration::V_EIGHT:
+                        padToggle(PAD_NOTE4);
+                        break;
+                  case TDuration::V_16TH:
+                        padToggle(PAD_NOTE8);
+                        break;
+                  case TDuration::V_32ND:
+                        padToggle(PAD_NOTE16);
+                        break;
+                  case TDuration::V_64TH:
+                        padToggle(PAD_NOTE32);
+                        break;
+                  case TDuration::V_128TH:
+                        padToggle(PAD_NOTE64);
+                        break;
+                  default:
+                        break;
+                  }
+            }
+      else if (cmd == "pad-note-decrease") {
+            switch (_is.duration().type() ) {
+                  case TDuration::V_LONG:
+                        padToggle(PAD_NOTE0);
+                        break;
+                  case TDuration::V_BREVE:
+                        padToggle(PAD_NOTE1);
+                        break;
+                  case TDuration::V_WHOLE:
+                        padToggle(PAD_NOTE2);
+                        break;
+                  case TDuration::V_HALF:
+                        padToggle(PAD_NOTE4);
+                        break;
+                  case TDuration::V_QUARTER:
+                        padToggle(PAD_NOTE8);
+                        break;
+                  case TDuration::V_EIGHT:
+                        padToggle(PAD_NOTE16);
+                        break;
+                  case TDuration::V_16TH:
+                        padToggle(PAD_NOTE32);
+                        break;
+                  case TDuration::V_32ND:
+                        padToggle(PAD_NOTE64);
+                        break;
+                  case TDuration::V_64TH:
+                        padToggle(PAD_NOTE128);
+                        break;
+// cycle back from shortest to longest?
+//                  case TDuration::V_128TH:
+//                        padToggle(PAD_NOTE00);
+//                        break;
+                  default:
+                        break;
+                  }
+            }
       else if (cmd == "pad-rest")
             padToggle(PAD_REST);
       else if (cmd == "pad-dot")
