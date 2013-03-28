@@ -266,7 +266,6 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 void Score::init()
       {
       _linkId         = 0;
-      _testMode       = false;
       _parentScore    = 0;
       _currentLayer   = 0;
       _playMode       = PLAYMODE_SYNTHESIZER;
@@ -3318,16 +3317,6 @@ void Score::linkId(int val)
       Score* s = rootScore();
       if (val >= s->_linkId)
             s->_linkId = val + 1;   // update unused link id
-      }
-
-//---------------------------------------------------------
-//   setTestMode
-//---------------------------------------------------------
-
-void Score::setTestMode(bool val)
-      {
-      foreach(Score* score, scoreList())
-            score->_testMode = val;
       }
 
 //---------------------------------------------------------

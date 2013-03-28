@@ -1889,7 +1889,7 @@ void Beam::write(Xml& xml) const
       // this info is used for regression testing
       // l1/l2 is the beam position of the layout engine
       //
-      if (score()->testMode()) {
+      if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
             foreach(BeamFragment* f, fragments) {
                   xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));

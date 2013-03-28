@@ -78,7 +78,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
       xml.tag("currentLayer", _currentLayer);
 
-      if (!_testMode)
+      if (!MScore::testMode)
             _syntiState.write(xml);
 
       if (pageNumberOffset())
@@ -104,7 +104,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            if (!_testMode  || (i.key() != "platform" && i.key() != "creationDate"))
+            if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
 
@@ -534,13 +534,13 @@ extern bool enableTestMode;
 
 void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      if(!testMode())
-            setTestMode(enableTestMode);
+      if(!MScore::testMode)
+            MScore::testMode = enableTestMode;
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      if (!_testMode) {
+      if (!MScore::testMode) {
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
@@ -1304,7 +1304,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         Beam* beam = cr->beam();
 #ifndef NDEBUG
-                        if (beam && beam->elements().front() == cr && (testMode() || !beam->generated())) {
+                        if (beam && beam->elements().front() == cr && (MScore::testMode || !beam->generated())) {
                               beam->setId(xml.beamId++);
                               beam->write(xml);
                               }

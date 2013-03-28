@@ -201,7 +201,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   qDebug("ChordRest: spannerBack->id == -1");
             }
 #ifndef NDEBUG
-      if (_beam && (score()->testMode() || !_beam->generated()))
+      if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
 #else
       if (!xml.clipboardmode && _beam && !_beam->generated())

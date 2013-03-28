@@ -296,8 +296,6 @@ class Score : public QObject {
       Measure* startLayout;   ///< start a relayout at this measure
       LayoutFlags layoutFlags;
 
-      bool _testMode;               // prepare for regression tests
-
       bool _updateAll;
       bool _layoutAll;        ///< do a complete relayout
 
@@ -903,8 +901,6 @@ class Score : public QObject {
       void transposeSemitone(int semitone);
       MeasureBase* insertMeasure(Element::ElementType type, MeasureBase*,
          bool createEmptyMeasures = false);
-      bool testMode() const        { return _testMode; }
-      void setTestMode(bool val);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }
       PlayMode playMode() const    { return _playMode; }
