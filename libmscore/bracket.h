@@ -38,7 +38,6 @@ class Bracket : public Element {
       int _lastStaff;
 
       QPainterPath path;
-      qreal yoff;
 
    public:
       Bracket(Score*);
