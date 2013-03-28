@@ -31,6 +31,7 @@ qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
 qreal MScore::DPMM;
 bool  MScore::debugMode;
+bool  MScore::testMode = false;
 
 MStyle* MScore::_defaultStyle;
 MStyle* MScore::_baseStyle;
