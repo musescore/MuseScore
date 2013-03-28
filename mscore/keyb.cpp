@@ -157,16 +157,19 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             }
       else if (editObject->type() == Element::HARMONY) {
+/*
             if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
                   harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
                   ev->accept();
                   return;
                   }
+*/
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   harmonyBeatsTab(true, modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
+/*
             if (key == Qt::Key_Semicolon || key == Qt::Key_Colon) {
                   harmonyBeatsTab(false, key == Qt::Key_Colon);
                   ev->accept();
@@ -178,6 +181,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   ev->accept();
                   return;
                   }
+*/
             }
       else if (editObject->type() == Element::FIGURED_BASS) {
             int found = false;
@@ -185,6 +189,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
                   found = true;
                   }
+            /*
             if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
                   figuredBassTab(true, key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier) );
                   found = true;
@@ -194,6 +199,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   figuredBassTicksTab(ticks);
                   found = true;
                   }
+*/
             if (found) {
                   ev->accept();
                   return;

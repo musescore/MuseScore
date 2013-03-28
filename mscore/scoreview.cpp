@@ -2766,6 +2766,83 @@ void ScoreView::cmd(const QAction* a)
             mscore->endCmd();
             }
 
+      // STATE_TEXT_EDIT actions
+
+      else if (cmd == "advance-longa") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 4);
+            }
+      else if (cmd == "advance-breve") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 3);
+            }
+      else if (cmd == "advance-1") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 2);
+            }
+      else if (cmd == "advance-2") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 1);
+            }
+      else if (cmd == "advance-4") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division);
+            }
+      else if (cmd == "advance-8") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 1);
+            }
+      else if (cmd == "advance-16") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 2);
+            }
+      else if (cmd == "advance-32") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 3);
+            }
+      else if (cmd == "advance-64") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 4);
+            }
+      else if (cmd == "prev-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(true);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true, true);
+            }
+      else if (cmd == "next-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(false);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true,false);
+            }
+      else if (cmd == "prev-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false, true);
+            }
+      else if (cmd == "next-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false,false);
+            }
+
       // STATE_NOTE_ENTRY_TAB actions
 
       else if(cmd == "string-above") {
