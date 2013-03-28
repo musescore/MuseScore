@@ -19,6 +19,7 @@
 #include "tablature.h"
 #include "instrtemplate.h"
 #include "msynthesizer.h"
+#include "mscore.h"
 
 Instrument InstrumentList::defaultInstrument;
 extern MasterSynthesizer* synti;
@@ -377,7 +378,8 @@ void Channel::write(Xml& xml) const
 
             e.write(xml);
             }
-      xml.tag("synti", ::synti->name(synti));
+      if (!MScore::testMode)
+            xml.tag("synti", ::synti->name(synti));
       if (mute)
             xml.tag("mute", mute);
       if (solo)

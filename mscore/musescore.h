@@ -82,6 +82,7 @@ class Sym;
 class MasterPalette;
 class PluginCreator;
 class PluginManager;
+class MasterSynthesizer;
 
 struct PluginDescription;
 
@@ -643,6 +644,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
 extern QString dataPath;
+extern MasterSynthesizer* synti;
 
 extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];

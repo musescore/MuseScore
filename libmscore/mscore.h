@@ -405,6 +405,7 @@ class MScore : public QObject {
       static qreal DPI;
       static qreal DPMM;
       static bool debugMode;
+      static bool testMode;
       };
 
 Q_DECLARE_METATYPE(MScore::ValueType)
