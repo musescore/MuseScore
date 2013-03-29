@@ -406,6 +406,8 @@ class Score : public QObject {
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
       void reLayout(Measure*);
 
+      void hideEmptyStaves(System* system, bool isFirstSystem);
+
       void checkSlurs();
       void checkScore();
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
