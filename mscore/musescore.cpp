@@ -4222,8 +4222,9 @@ void MuseScore::endCmd()
 //   enableInputToolbar
 //---------------------------------------------------------
 
-void MuseScore::enableInputToolbar(bool enableInput)
+void MuseScore::enableInputToolbar(bool /*enableInput*/)
       {
+/*
       static const char* actionNames[] = {
             "pad-rest", "pad-dot", "pad-dotdot", "note-longa",
             "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
@@ -4237,6 +4238,7 @@ void MuseScore::enableInputToolbar(bool enableInput)
       for (unsigned i = 0; i < sizeof(actionNames)/sizeof(*actionNames); ++i) {
             getAction(actionNames[i])->setEnabled(enableInput);
             }
+*/
       }
 
 //---------------------------------------------------------
