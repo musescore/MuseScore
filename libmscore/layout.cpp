@@ -1070,7 +1070,15 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
             removeGeneratedElements(firstMeasure, lastMeasure);
 
-      //
+      hideEmptyStaves(system, isFirstSystem);
+
+      return continueFlag && curMeasure;
+      }
+
+
+void Score::hideEmptyStaves(System* system, bool isFirstSystem)
+      {
+       //
       //    hide empty staves
       //
       int staves = _staves.size();
@@ -1138,7 +1146,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   }
             ++staffIdx;
             }
-      return continueFlag && curMeasure;
       }
 
 //---------------------------------------------------------
@@ -1245,74 +1252,8 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             curMeasure = nextMeasure;
             }
 
-      //
-      //    hide empty staves
-      //
-      int staves = _staves.size();
-      int staffIdx = 0;
-      foreach (Staff* staff, _staves) {
-            SysStaff* s  = system->staff(staffIdx);
-            bool oldShow = s->show();
-            if (styleB(ST_hideEmptyStaves)
-               && (staves > 1)
-               && !(isFirstSystem && styleB(ST_dontHideStavesInFirstSystem))
-               ) {
-                  bool hideStaff = true;
-                  foreach(MeasureBase* m, system->measures()) {
-                        if (m->type() != Element::MEASURE)
-                              continue;
-                        Measure* measure = static_cast<Measure*>(m);
-                        if (!measure->isMeasureRest(staffIdx)) {
-                              hideStaff = false;
-                              break;
-                              }
-                        }
-                  // check if notes moved into this staff
-                  Part* part = staff->part();
-                  int n = part->nstaves();
-                  if (hideStaff && (n > 1)) {
-                        int idx = part->staves()->front()->idx();
-                        for (int i = 0; i < part->nstaves(); ++i) {
-                              int st = idx + i;
+      hideEmptyStaves(system,isFirstSystem);
 
-                              foreach(MeasureBase* mb, system->measures()) {
-                                    if (mb->type() != Element::MEASURE)
-                                          continue;
-                                    Measure* m = static_cast<Measure*>(mb);
-                                    for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
-                                          for (int voice = 0; voice < VOICES; ++voice) {
-                                                ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
-                                                if (cr == 0 || cr->type() == Element::REST)
-                                                      continue;
-                                                int staffMove = cr->staffMove();
-                                                if (staffIdx == st + staffMove) {
-                                                      hideStaff = false;
-                                                      break;
-                                                      }
-                                                }
-                                          }
-                                    if (!hideStaff)
-                                          break;
-                                    }
-                              if (!hideStaff)
-                                    break;
-                              }
-                        }
-                  s->setShow(hideStaff ? false : staff->show());
-                  }
-            else {
-                  s->setShow(true);
-                  }
-
-            if (oldShow != s->show()) {
-                  foreach (MeasureBase* mb, system->measures()) {
-                        if (mb->type() != Element::MEASURE)
-                              continue;
-                        static_cast<Measure*>(mb)->createEndBarLines();
-                        }
-                  }
-            ++staffIdx;
-            }
       return continueFlag && curMeasure;
       }
 
