@@ -770,12 +770,17 @@ void Score::putNote(const Position& p, bool replace)
                         // if a note on same string already exists, update to new pitch/fret
                         foreach(Note * note, static_cast<Chord*>(cr)->notes())
                               if(note->string() == nval.string) { // if string is the same
-                                    // if current note fret can receive a new digit,
+                                    // if adding a new digit will keep fret number within fret limit
                                     // add a digit
-                                    if (neck && note->fret() >= 1 && note->fret() <= 2) {
-                                          nval.fret = note->fret() * 10 + nval.fret;
-                                          nval.pitch = neck->getPitch(nval.string, nval.fret);
-                                    }
+                                    if (neck && tab->useNumbers() && note->fret() >= 1) {
+                                          int fret = note->fret() * 10 + nval.fret;
+                                          if (fret <= neck->frets() ) {
+                                                nval.fret = fret;
+                                                nval.pitch = neck->getPitch(nval.string, nval.fret);
+                                                }
+                                          else
+                                                qDebug("can't increase fret to %d", fret);
+                                          }
                                     // otherwise, replace with new fret
                                     note->undoChangeProperty(P_PITCH, nval.pitch);
                                     note->undoChangeProperty(P_FRET, nval.fret);
