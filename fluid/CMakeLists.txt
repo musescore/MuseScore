@@ -20,11 +20,6 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-set(SRC
-  dsp.cpp fluid.cpp voice.cpp chan.cpp sfont.cpp chorus.cpp
-  conv.cpp gen.cpp mod.cpp rev.cpp tuning.cpp
-  )
-
 if (APPLE)
 	file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
@@ -32,13 +27,21 @@ else (APPLE)
 endif (APPLE)
 
 if (SOUNDFONT3)
-      set(SRC ${SRC} sfont3.cpp)
+      set(SF3_SRC sfont3.cpp)
 endif (SOUNDFONT3)
+
+QT4_WRAP_CPP(fluidMocs fluidgui.h)
+QT4_WRAP_UI (fluidUi fluid_gui.ui)
 
 add_library (fluid STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
-      ${SRC}
+      ${fluidMocs}
+      ${fluidUi}
+      fluidgui.cpp
+      dsp.cpp fluid.cpp voice.cpp chan.cpp sfont.cpp
+      conv.cpp gen.cpp mod.cpp tuning.cpp
+      ${SF3_SRC}
       ${INCS}
       )
 set_target_properties (

@@ -26,7 +26,7 @@ class Event;
 
 #include <stdint.h>
 #include "synthesizer/synthesizer.h"
-#include "libmscore/midipatch.h"
+#include "synthesizer/midipatch.h"
 
 #include "asection.h"
 #include "division.h"
@@ -62,7 +62,7 @@ class Aeolus : public Synthesizer {
       Division*       _divisp [NDIVIS];
       Reverb          _reverb;
       unsigned char   _keymap [NNOTES];
-      SyntiParameter  _audiopar[4];
+      float           _audiopar[4];
       float           _revsize;
       float           _revtime;
 
@@ -92,7 +92,7 @@ class Aeolus : public Synthesizer {
    public:
       Aeolus();
       virtual ~Aeolus();
-      virtual void init();
+      virtual void init(float sampleRate);
 
       virtual const char* name() const { return "Aeolus"; }
 
@@ -102,18 +102,14 @@ class Aeolus : public Synthesizer {
       virtual bool loadSoundFonts(const QStringList&) { return true; }
       virtual QStringList soundFonts() const { return QStringList(); }
 
-      virtual void process(unsigned, float*);
+      virtual void process(unsigned, float*, float*, float*);
       virtual void play(const Event&);
 
       virtual const QList<MidiPatch*>& getPatchInfo() const;
 
-      // set/get a single parameter
-      virtual SyntiParameter parameter(int id) const;
-      virtual void setParameter(int id, double val);
-
       // get/set synthesizer state
-      virtual SyntiState state() const;
-      virtual void setState(const SyntiState&);
+      virtual SynthesizerGroup state() const;
+      virtual void setState(const SynthesizerGroup&);
 
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: clef.h 5343 2012-02-18 19:50:35Z miwarre $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

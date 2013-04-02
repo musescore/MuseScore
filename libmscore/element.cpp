@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: element.cpp 5629 2012-05-15 12:38:33Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

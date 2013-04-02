@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: exportmidi.h 4720 2011-08-31 18:10:05Z wschweer $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //
@@ -34,3 +33,4 @@ class ExportMidi {
       };
 
 #endif
+

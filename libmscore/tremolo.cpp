@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tremolo.cpp 5532 2012-04-12 13:27:53Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

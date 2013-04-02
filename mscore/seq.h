@@ -22,7 +22,7 @@
 #define __SEQ_H__
 
 #include "libmscore/sequencer.h"
-#include "libmscore/event.h"
+#include "synthesizer/event.h"
 #include "driver.h"
 #include "libmscore/fifo.h"
 #include "libmscore/tempo.h"
@@ -100,7 +100,8 @@ class Seq : public QObject, public Sequencer {
 
       SeqMsgFifo toSeq;
       SeqMsgFifo fromSeq;
-      Driver* driver;
+      Driver* _driver;
+      MasterSynthesizer* _synti;
 
       double meterValue[2];
       double meterPeakValue[2];
@@ -193,7 +194,12 @@ class Seq : public QObject, public Sequencer {
       void initInstruments();
 
       QList<MidiPatch*> getPatchInfo() const;
-      Driver* getDriver()  { return driver; }
+
+      Driver* driver()                                 { return _driver; }
+      void setDriver(Driver* d)                        { _driver = d;    }
+      MasterSynthesizer* synti() const                 { return _synti;  }
+      void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
+
       int getCurTick();
 
       float gain() const { return _gain; }

@@ -5,25 +5,45 @@
   http://www.dreampoint.co.uk
   This code is public domain
 
-  Translated to C by Peter Hanappe, Mai 2001
-  Further modified by Werner Schweer, 2009
+  modified for MuseScore Werner Schweer, 2009
 */
 
-#include "rev.h"
-#include "fluid.h"
-
-namespace FluidS {
+#include "stdio.h"
+#include "freeverb.h"
 
 #define DC_OFFSET 1e-8
 
-static ReverbPreset revmodel_preset[] = {
-      // name           roomsize       damp      width        level
-      { "Default",         0.5f,      0.5f,       1.0f,       0.2f },
-      { "Test 2",          0.4f,      0.2f,       0.5f,       0.8f },
-      { "Test 3",          0.6f,      0.4f,       0.5f,       0.7f },
-      { "Test 4",          0.8f,      0.7f,       0.5f,       0.6f },
-      { "Test 5",          0.8f,      1.0f,       0.5f,       0.5f },
-      { 0, 0.0f, 0.0f, 0.0f, 0.0f }
+
+static const float scaleroom  = 0.28f;
+static const float offsetroom = 0.7f;
+static const float scalewet   = 3.0f;
+static const float scaledamp  = 0.4f;
+
+static std::vector<ParDescr> freeverbPd = {
+      { 0, "wet",      false, 0.0, 1.0, 0.0 },
+      { 1, "roomsize", false, 0.0, 1.0, 0.0 },
+      { 2, "damp",     false, 0.0, 1.0, 0.0 },
+      { 3, "width",    false, 0.0, 1.0, 0.0 },
+      { 4, "send",     false, 0.0, 1.0, 0.0 }
+      };
+
+//---------------------------------------------------------
+//   ReverbPreset
+//---------------------------------------------------------
+
+struct ReverbPreset {
+      const char* name;
+      float values[ReverbParam::SIZE];
+      };
+
+static ReverbPreset presets[] = {
+      // name        wet  roomsize damp   width  send
+      { "Default", { 0.2,     0.2,  1.0,  0.2,  0.1 }},
+      { "Test 2",  { 0.4,     0.2,  0.5,  0.5,  0.8 }},
+      { "Test 3",  { 0.6,     0.4,  0.5,  0.5,  0.7 }},
+      { "Test 4",  { 0.8,     0.7,  0.5,  0.5,  0.6 }},
+      { "Test 5",  { 0.8,     1.0,  0.5,  0.5,  0.5 }},
+      { 0,         { 0.0,     0.0,  0.0,  0.0,  0.0 }}
       };
 
 //---------------------------------------------------------
@@ -35,17 +55,13 @@ void Allpass::setbuffer(int size)
       buffer  = new float[size];
       bufsize = size;
       bufidx  = 0;
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void Allpass::init()
-      {
       for (int i = 0; i < bufsize; i++)
             buffer[i] = DC_OFFSET;  // this is not 100 % correct.
       }
+
+//---------------------------------------------------------
+//   setbuffer
+//---------------------------------------------------------
 
 void Comb::setbuffer(int size)
       {
@@ -53,13 +69,13 @@ void Comb::setbuffer(int size)
       bufidx      = 0;
       buffer      = new float[size];
       bufsize     = size;
-      }
-
-void Comb::init()
-      {
       for (int i = 0; i < bufsize; i++)
             buffer[i] = DC_OFFSET;  // This is not 100 % correct.
       }
+
+//---------------------------------------------------------
+//   setdamp
+//---------------------------------------------------------
 
 void Comb::setdamp(float val)
       {
@@ -85,63 +101,51 @@ static const int allpasstuning[] = {
       };
 
 //---------------------------------------------------------
-//   Reverb
+//   Freeverb
 //---------------------------------------------------------
 
-Reverb::Reverb()
+Freeverb::Freeverb()
       {
       for (int i = 0; i < numcombs; ++i) {
             combL[i].setbuffer(combtuning[i]);
             combR[i].setbuffer(combtuning[i] + stereospread);
             }
-
       for (int i = 0; i < numallpasses; ++i) {
             allpassL[i].setbuffer(allpasstuning[i]);
             allpassR[i].setbuffer(allpasstuning[i] + stereospread);
             allpassL[i].setfeedback(0.5f);
             allpassR[i].setfeedback(0.5f);
             }
-      gain = 0.30;      // input gain
       setPreset(0);
-      init();           // Clear all buffers
-      parameterChanged = false;
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void Reverb::init()
-      {
-      for (int i = 0; i < numcombs; i++) {
-            combL[i].init();
-            combR[i].init();
-            }
-      for (int i = 0; i < numallpasses; i++) {
-            allpassL[i].init();
-            allpassR[i].init();
-            }
       }
 
 //---------------------------------------------------------
 //   process
 //---------------------------------------------------------
 
-void Reverb::process(int n, float* in, float* l, float* r)
+void Freeverb::process(int n, float* in, float* out)
       {
       if (parameterChanged) {
-            roomsize = newRoomsize;
-            damp     = newDamp;
-            width    = newWidth;
-            gain     = newGain;
+            roomsize  = newRoomsize;
+            damp      = newDamp;
+            width     = newWidth;
+            sendLevel = newSendLevel;
+            wet       = newWet;
             update();
             parameterChanged = false;
             }
+      float* lp = in;
+      float* rp = in+1;
+      float* lo = out;
+      float* ro = out+1;
+
+      float dry = 1.0 - wet;
+
       for (int k = 0; k < n; k++) {
             float outL = 0.0;
             float outR = 0.0;
 
-            float input = ((in[k] * 2.0) * gain) + DC_OFFSET;
+            float input = ((*lp + *rp) * sendLevel) + DC_OFFSET;
 
             for (int i = 0; i < numcombs; i++) {      // Accumulate comb filters in parallel
                   outL += combL[i].process(input);
@@ -152,13 +156,16 @@ void Reverb::process(int n, float* in, float* l, float* r)
                   outR = allpassR[i].process(outR);
                   }
 
-            /* Remove the DC offset */
+            // Remove the DC offset
             outL -= DC_OFFSET;
             outR -= DC_OFFSET;
 
-            /* Calculate output MIXING with anything already there */
-            l[k] += outL * wet1 + outR * wet2;
-            r[k] += outR * wet1 + outL * wet2;
+            *lo = *lp * dry + (outL * wet1 + outR * wet2) * wet;
+            *ro = *rp * dry + (outR * wet1 + outL * wet2) * wet;
+            lp += 2;
+            rp += 2;
+            lo += 2;
+            ro += 2;
             }
       }
 
@@ -167,10 +174,10 @@ void Reverb::process(int n, float* in, float* l, float* r)
 //    Recalculate internal values after parameter change
 //---------------------------------------------------------
 
-void Reverb::update()
+void Freeverb::update()
       {
-      wet1 = wet * (width * .5 + 0.5f);
-      wet2 = wet * ((1.0 - width) * .5);
+      wet1 = width * .5 + .5;
+      wet2 = (1.0 - width) * .5;
 
       for (int i = 0; i < numcombs; i++) {
             combL[i].setfeedback(roomsize);
@@ -186,59 +193,68 @@ void Reverb::update()
 //   setPreset
 //---------------------------------------------------------
 
-bool Reverb::setPreset(int nr)
+bool Freeverb::setPreset(int nr)
       {
-      if ((unsigned)nr >= sizeof(revmodel_preset)/sizeof(*revmodel_preset))
+      if ((unsigned)nr >= sizeof(presets)/sizeof(*presets))
             return false;
-      setroomsize(revmodel_preset[nr].roomsize);
-      setdamp(revmodel_preset[nr].damp);
-      setwidth(revmodel_preset[nr].width);
-      setlevel(revmodel_preset[nr].level);
-      newRoomsize = roomsize;
-      newDamp     = damp;
-      newWidth    = width;
-
-      update();
+      const ReverbPreset& preset = presets[nr];
+      for (int i = 0; i < ReverbParam::SIZE; ++i)
+            setValue(i, preset.values[i]);
+      parameterChanged = true;
       return true;
       }
 
 //---------------------------------------------------------
-//   setParameter
+//   setNValue
 //---------------------------------------------------------
 
-void Reverb::setParameter(int idx, double value)
+void Freeverb::setNValue(int idx, double value)
       {
-// printf("Reverb:setParameter %d: %f\n", idx, value);
       switch (idx) {
-            case REVERB_ROOMSIZE: newRoomsize = value; break;
-            case REVERB_DAMP:     newDamp     = value; break;
-            case REVERB_WIDTH:    newWidth    = value; break;
-            case REVERB_GAIN:     newGain     = value; break;
+            case ReverbParam::ROOMSIZE:
+                  newRoomsize = value;
+                  break;
+            case ReverbParam::DAMP:
+                  newDamp = value;
+                  break;
+            case ReverbParam::WIDTH:
+                  newWidth = value;
+                  break;
+            case ReverbParam::SEND:
+                  newSendLevel = value;
+                  break;
+            case ReverbParam::WET:
+                  newWet = value;
+                  break;
             default:
-                  printf("Reverb:setParameter: %x invalid\n", idx);
                   break;
             }
       parameterChanged = true;
       }
 
 //---------------------------------------------------------
-//   parameter
+//   value
 //---------------------------------------------------------
 
-double Reverb::parameter(int idx) const
+double Freeverb::nvalue(int idx) const
       {
-      double val = 0.0;
+      float val = 0.0;
       switch (idx) {
-            case REVERB_ROOMSIZE: val = newRoomsize; break;
-            case REVERB_DAMP:     val = newDamp; break;
-            case REVERB_WIDTH:    val = newWidth; break;
-            case REVERB_GAIN:     val = newGain; break;
-            default:
-                  break;
+            case ReverbParam::ROOMSIZE: val = newRoomsize;  break;
+            case ReverbParam::DAMP:     val = newDamp;      break;
+            case ReverbParam::WIDTH:    val = newWidth;     break;
+            case ReverbParam::SEND:     val = newSendLevel; break;
+            case ReverbParam::WET:      val = newWet;       break;
             }
-// printf("Reverb:parameter %d: %f\n", idx, val);
-      return val;
+      return val; // (val - parameters[idx].offset) / parameters[idx].scale;
       }
 
+//---------------------------------------------------------
+//   parDescr
+//---------------------------------------------------------
 
-}
+const std::vector<ParDescr>& Freeverb::parDescr() const
+      {
+      return freeverbPd;
+      }
+

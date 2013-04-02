@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tablature.h 5566 2012-04-22 08:26:29Z lvinken $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

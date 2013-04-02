@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: pitchspelling.cpp 5163 2011-12-30 09:57:08Z wschweer $
 //
 //  Copyright (C) 2007-2011 Werner Schweer
 //
@@ -15,7 +14,7 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
-#include "event.h"
+#include "synthesizer/event.h"
 #include "note.h"
 #include "key.h"
 #include "pitchspelling.h"

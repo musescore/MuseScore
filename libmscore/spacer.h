@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: spacer.h 5656 2012-05-21 15:36:47Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //

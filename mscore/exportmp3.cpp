@@ -19,21 +19,12 @@
 //=============================================================================
 
 #include "libmscore/score.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "libmscore/note.h"
 #include "musescore.h"
 #include "libmscore/part.h"
 #include "preferences.h"
-#include "seq.h"
 #include "exportmp3.h"
-#ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
-#endif
-#ifdef ZERBERUS
-#include "zerberus/zerberus.h"
-#endif
-
-#include "fluid/fluid.h"
 
 //---------------------------------------------------------
 //   MP3Exporter
@@ -686,18 +677,9 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
-      MasterSynthesizer* synti = new MasterSynthesizer();
+      MasterSynthesizer* synti = synthesizerFactory();
       synti->setSampleRate(sampleRate);
-      synti->registerSynthesizer(new FluidS::Fluid());
-#ifdef AEOLUS
-      synti->registerSynthesizer(new Aeolus());
-#endif
-#ifdef ZERBERUS
-      synti->registerSynthesizer(new Zerberus());
-#endif
-      synti->init();
-
-      synti->setState(score->syntiState());
+      synti->setState(score->synthesizerState());
 
       EventMap events;
       score->renderMidi(&events);

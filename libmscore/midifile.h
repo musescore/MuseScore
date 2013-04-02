@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: midifile.h 4720 2011-08-31 18:10:05Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -15,7 +14,7 @@
 #define __MIDIFILE_H__
 
 #include "sig.h"
-#include "event.h"
+#include "synthesizer/event.h"
 
 const int MIDI_CHANNEL = 16;
 

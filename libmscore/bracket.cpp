@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: bracket.cpp 5269 2012-02-01 11:04:35Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

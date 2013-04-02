@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: volta.cpp 5610 2012-05-08 09:56:00Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

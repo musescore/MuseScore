@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: midifile.cpp 5221 2012-01-16 15:09:25Z wschweer $
 //
 //  Copyright (C) 2007-2011 Werner Schweer
 //
