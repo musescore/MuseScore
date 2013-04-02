@@ -755,7 +755,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
       // use selected staff type
       setStaffType(st);
-      if (t->staffGroup != TAB_STAFF)           // if not TAB (where num of staff lines is determined by TAB style)
+      if (st->group() != TAB_STAFF)             // if not TAB (where num of staff lines is determined by TAB style)
             setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
 
