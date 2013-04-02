@@ -232,6 +232,7 @@ void PlayPanel::updatePosLabel(int utick)
 
 void PlayPanel::updateRanges()
       {
+          // TODO
           fromSegment->hide();
           toSegment->hide();
 
@@ -253,4 +254,14 @@ void PlayPanel::updateRanges()
             }
             fromMeasure->setCurrentIndex(0);
             toMeasure->setCurrentIndex(toMeasure->count() - 1);
+      }
+
+int PlayPanel::getFromMeasure()
+      {
+         return fromMeasure->currentText().toInt() - 1;
+      }
+
+int PlayPanel::getToMeasure()
+      {
+         return toMeasure->currentText().toInt() - 1;
       }

@@ -449,7 +449,13 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      seek(cs->playPos());
+      if (!mscore->loop())
+            seek(cs->playPos());
+      else {
+            int fm = mscore->getPlayPanel()->getFromMeasure();
+            MeasureBase* m = cs->measure(fm);
+            seek(m->tick());
+            }
       driver->startTransport();
       }
 
@@ -1358,5 +1364,13 @@ void Seq::heartBeat()
       if (pre && pre->isVisible())
             pre->heartBeat(this);
       cs->update();
+
+      if (mscore->loop()) {
+                  int tm = mscore->getPlayPanel()->getToMeasure();
+                  qDebug() << tm;
+                  MeasureBase* m = cs->measure(tm);
+                  if (tick == m->tick() + m->ticks())
+                        stop();
+            }
       }
 
