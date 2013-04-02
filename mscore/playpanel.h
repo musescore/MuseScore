@@ -50,6 +50,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    public slots:
       void setGain(float);
       void setPos(int);
+      void updateRanges();
 
    public:
       PlayPanel(QWidget* parent = 0);

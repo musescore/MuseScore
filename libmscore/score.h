@@ -920,6 +920,9 @@ class Score : public QObject {
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
+
+   signals:
+      void measuresUpdated();
       };
 
 extern Score* gscore;

@@ -461,6 +461,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
       {
       m->setNext(pos);
       _measures.add(m);
+      emit measuresUpdated();
       addLayoutFlags(LAYOUT_FIX_TICKS);
       }
 

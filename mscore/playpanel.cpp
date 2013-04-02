@@ -91,6 +91,8 @@ void PlayPanel::setScore(Score* s)
             setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
             heartBeat(tick, tick);
+            connect(cs, SIGNAL(measuresUpdated()), SLOT(updateRanges()));
+            updateRanges();
             }
       else {
             setTempo(120.0);
@@ -222,4 +224,33 @@ void PlayPanel::updatePosLabel(int utick)
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
+      }
+
+//---------------------------------------------------------
+//   updateRanges
+//---------------------------------------------------------
+
+void PlayPanel::updateRanges()
+      {
+          fromSegment->hide();
+          toSegment->hide();
+
+          fromMeasure->clear();
+          toMeasure->clear();
+          int measureNumber = 1;
+          for (Measure* measure = cs->firstMeasure(); measure; measure = measure->nextMeasure()) {
+//            int segmentNumber = 1;
+//            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+//                QString segmentNumberString = QString::number(segmentNumber);
+//                fromSegment->addItem(segmentNumberString);
+//                toSegment->addItem(measureNumberString);
+//                segmentNumber++;
+//            }
+            QString measureNumberString = QString::number(measureNumber);
+            fromMeasure->addItem(measureNumberString);
+            toMeasure->addItem(measureNumberString);
+            measureNumber++;
+            }
+            fromMeasure->setCurrentIndex(0);
+            toMeasure->setCurrentIndex(toMeasure->count() - 1);
       }
