@@ -476,6 +476,16 @@
     <key>pad-note-64</key>
     <seq>1</seq>
     </SC>
+<!--
+  <SC>
+    <key>pad-note-increase</key>
+    <seq></seq>
+    </SC>
+  <SC>
+    <key>pad-note-decrease</key>
+    <seq></seq>
+    </SC>
+-->
   <SC>
     <key>pad-dot</key>
     <seq>.</seq>
@@ -745,6 +755,10 @@
     <seq>V</seq>
     </SC>
   <SC>
+    <key>lock</key>
+    <seq>Shift+Ctrl+L</seq>
+    </SC>
+  <SC>
     <key>string-above</key>
     <seq>Alt+Up</seq>
     </SC>
@@ -803,8 +817,56 @@
     <seq>Alt+K</seq>
     </SC>
   <SC>
-    <key>lock</key>
-    <seq>Shift+Ctrl+L</seq>
+    <key>advance-longa</key>
+    <seq>Ctrl+9</seq>
+    </SC>
+  <SC>
+    <key>advance-breve</key>
+    <seq>Ctrl+8</seq>
+    </SC>
+  <SC>
+    <key>advance-1</key>
+    <seq>Ctrl+7</seq>
+    </SC>
+  <SC>
+    <key>advance-2</key>
+    <seq>Ctrl+6</seq>
+    </SC>
+  <SC>
+    <key>advance-4</key>
+    <seq>Ctrl+5</seq>
+    </SC>
+  <SC>
+    <key>advance-8</key>
+    <seq>Ctrl+4</seq>
+    </SC>
+  <SC>
+    <key>advance-16</key>
+    <seq>Ctrl+3</seq>
+    </SC>
+  <SC>
+    <key>advance-32</key>
+    <seq>Ctrl+2</seq>
+    </SC>
+  <SC>
+    <key>advance-64</key>
+    <seq>Ctrl+1</seq>
+    </SC>
+  <SC>
+    <key>prev-measure-TEXT</key>
+    <seq>Shift+Tab</seq>
+    </SC>
+  <SC>
+    <key>next-measure-TEXT</key>
+    <seq>Tab</seq>
+    </SC>
+  <SC>
+    <key>prev-beat-TEXT</key>
+    <seq>:</seq>
+    </SC>
+  <SC>
+    <key>next-beat-TEXT</key>
+    <seq>;</seq>
     </SC>
   </Shortcuts>
 
