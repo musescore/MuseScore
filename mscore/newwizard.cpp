@@ -269,7 +269,20 @@ void InstrumentWizard::on_upButton_clicked()
             if (idx) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx-1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -279,8 +292,14 @@ void InstrumentWizard::on_upButton_clicked()
             int idx = parent->indexOfChild(item);
             if (idx) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx-1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             }
@@ -304,7 +323,20 @@ void InstrumentWizard::on_downButton_clicked()
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx+1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -315,8 +347,14 @@ void InstrumentWizard::on_downButton_clicked()
             int n = parent->childCount();
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx+1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             }

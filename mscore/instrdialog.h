@@ -93,7 +93,7 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       void setStaffType(int staffTypeIdx);
       const StaffType* staffType() const;
       int staffTypeIdx() const;
-      void initStaffTypeCombo();
+      void initStaffTypeCombo(bool forceRecreate = false);
 
       static void populateStaffTypes(Score * score);
 
