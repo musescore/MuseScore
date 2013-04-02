@@ -205,14 +205,15 @@ void Preferences::init()
       styleName               = "dark";   // ??
       globalStyle             = STYLE_DARK;
 
-      QString workingDirectory = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
-      myScoresPath            = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("scores_directory", "Scores"))).absolutePath();
-      myStylesPath            = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("styles_directory", "Styles"))).absolutePath();
-      myImagesPath            = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("images_directory", "Images"))).absolutePath();
-      myTemplatesPath         = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("templates_directory", "Templates"))).absolutePath();
-      myPluginsPath           = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("plugins_directory", "Plugins"))).absolutePath();
-      mySoundFontsPath        = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
-      mySfzFilesPath          = QDir(QString("%1/%2").arg(workingDirectory).arg(QCoreApplication::translate("sfz_files_directory", "SfzFiles"))).absolutePath();
+      QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
+
+      myScoresPath    = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory",     "Scores"))).absolutePath();
+      myStylesPath    = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory",     "Styles"))).absolutePath();
+      myImagesPath    = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absolutePath();
+      myTemplatesPath = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absolutePath();
+      myPluginsPath   = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absolutePath();
+      sfPath          = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
+      sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
 
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
       nudgeStep50             = 5.0;      // Alt  + cursor key (default 5.0)
@@ -261,7 +262,8 @@ void Preferences::write()
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
 
-      s.setValue("soundFont",          MScore::soundFont);
+      s.setValue("defaultSf",          defaultSf);
+      s.setValue("defaultSfz",         defaultSfz);
       s.setValue("lPort",              lPort);
       s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
@@ -354,8 +356,8 @@ void Preferences::write()
       s.setValue("myImagesPath", myImagesPath);
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
-      s.setValue("mySoundFontsPath", mySoundFontsPath);
-      s.setValue("mySfzFilesPath", mySfzFilesPath);
+      s.setValue("sfPath",  sfPath);
+      s.setValue("sfzPath", sfzPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -422,11 +424,8 @@ void Preferences::read()
       lPort                   = s.value("lPort", lPort).toString();
       rPort                   = s.value("rPort", rPort).toString();
 
-      MScore::soundFont = s.value("soundFont", MScore::soundFont).toString();
-      if (MScore::soundFont == ":/data/piano1.sf2") {
-            // silently change to new default sound font
-            MScore::soundFont = MScore::globalShare() + "sound/fluid.sf3";
-            }
+      defaultSf       = s.value("defaultSf",     defaultSf).toString();
+      defaultSfz      = s.value("defaultSfz",    defaultSfz).toString();
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
       showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
@@ -516,8 +515,8 @@ void Preferences::read()
       myImagesPath     = s.value("myImagesPath",     myImagesPath).toString();
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
-      mySoundFontsPath = s.value("mySoundFontsPath", mySoundFontsPath).toString();
-      mySfzFilesPath   = s.value("mySfzFilesPath",   mySfzFilesPath).toString();
+      sfPath           = s.value("sfPath",  sfPath).toString();
+      sfzPath          = s.value("sfzPath", sfzPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -526,8 +525,8 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-      dir.mkpath(mySoundFontsPath);
-      dir.mkpath(mySfzFilesPath);
+//      dir.mkpath(mySoundFontsPath);
+//      dir.mkpath(mySfzFilesPath);
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
@@ -613,13 +612,10 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myStylesButton->setIcon(*icons[fileOpen_ICON]);
       myTemplatesButton->setIcon(*icons[fileOpen_ICON]);
       myPluginsButton->setIcon(*icons[fileOpen_ICON]);
-      mySoundFontsButton->setIcon(*icons[fileOpen_ICON]);
-      mySfzFilesButton->setIcon(*icons[fileOpen_ICON]);
       myImagesButton->setIcon(*icons[fileOpen_ICON]);
 
       bgWallpaperSelect->setIcon(*icons[fileOpen_ICON]);
       fgWallpaperSelect->setIcon(*icons[fileOpen_ICON]);
-      sfOpenButton->setIcon(*icons[fileOpen_ICON]);
       styleFileButton->setIcon(*icons[fileOpen_ICON]);
       shortcutsChanged        = false;
 
@@ -659,8 +655,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(mySoundFontsButton, SIGNAL(clicked()), SLOT(selectSoundFontsDirectory()));
-      connect(mySfzFilesButton, SIGNAL(clicked()), SLOT(selectSfzFilesDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
@@ -703,7 +697,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
-      connect(sfOpenButton,           SIGNAL(clicked()), SLOT(selectSoundFont()));
       updateRemote();
       }
 
@@ -848,7 +841,8 @@ void PreferenceDialog::updateValues()
             jackLPort->setEnabled(false);
             }
 
-      soundFont->setText(MScore::soundFont);
+      defaultSf->setText(prefs.defaultSf);
+      defaultSfz->setText(prefs.defaultSfz);
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
@@ -918,7 +912,7 @@ void PreferenceDialog::updateValues()
       //
 #ifdef USE_PORTAUDIO
       if (usePortaudio) {
-            Portaudio* audio = static_cast<Portaudio*>(seq->getDriver());
+            Portaudio* audio = static_cast<Portaudio*>(seq->driver());
             if (audio) {
                   QStringList apis = audio->apiList();
                   portaudioApi->addItems(apis);
@@ -1004,8 +998,8 @@ void PreferenceDialog::updateValues()
       myImages->setText(prefs.myImagesPath);
       myTemplates->setText(prefs.myTemplatesPath);
       myPlugins->setText(prefs.myPluginsPath);
-      mySoundFonts->setText(prefs.mySoundFontsPath);
-      mySfzFiles->setText(prefs.mySfzFilesPath);
+      sfPath->setText(prefs.sfPath);
+      sfzPath->setText(prefs.sfzPath);
 
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -1027,7 +1021,7 @@ void PreferenceDialog::updateValues()
 #ifdef USE_PORTAUDIO
 void PreferenceDialog::portaudioApiActivated(int idx)
       {
-      Portaudio* audio = static_cast<Portaudio*>(seq->getDriver());
+      Portaudio* audio = static_cast<Portaudio*>(seq->driver());
       QStringList devices = audio->deviceList(idx);
       portaudioDevice->clear();
       portaudioDevice->addItems(devices);
@@ -1280,7 +1274,8 @@ void PreferenceDialog::apply()
             prefs.lPort = jackLPort->currentText();
             prefs.rPort = jackRPort->currentText();
             }
-      MScore::soundFont              = soundFont->text();
+      prefs.defaultSf          = defaultSf->text();
+      prefs.defaultSfz         = defaultSfz->text();
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
@@ -1313,7 +1308,7 @@ void PreferenceDialog::apply()
             }
 
 #ifdef USE_PORTAUDIO
-      Portaudio* audio = static_cast<Portaudio*>(seq->getDriver());
+      Portaudio* audio = static_cast<Portaudio*>(seq->driver());
       prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
          portaudioDevice->currentIndex());
 #endif
@@ -1336,8 +1331,8 @@ void PreferenceDialog::apply()
       prefs.myImagesPath       = myImages->text();
       prefs.myTemplatesPath    = myTemplates->text();
       prefs.myPluginsPath      = myPlugins->text();
-      prefs.mySoundFontsPath   = mySoundFonts->text();
-      prefs.mySfzFilesPath     = mySfzFiles->text();
+      prefs.sfPath             = sfPath->text();
+      prefs.sfzPath            = sfzPath->text();
 
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
@@ -1509,17 +1504,6 @@ void PreferenceDialog::midiRemoteControlClearClicked()
       }
 
 //---------------------------------------------------------
-//   selectSoundFont
-//---------------------------------------------------------
-
-void PreferenceDialog::selectSoundFont()
-      {
-      QStringList s = mscore->getSoundFont(soundFont->text());
-      if(s.size() > 0)
-            soundFont->setText(s.front());
-      }
-
-//---------------------------------------------------------
 //   selectScoresDirectory
 //---------------------------------------------------------
 
@@ -1577,36 +1561,6 @@ void PreferenceDialog::selectPluginsDirectory()
          );
       if (!s.isNull())
             myPlugins->setText(s);
-      }
-
-//---------------------------------------------------------
-//   selectSoundFontsDirectory
-//---------------------------------------------------------
-
-void PreferenceDialog::selectSoundFontsDirectory()
-      {
-      QString s = QFileDialog::getExistingDirectory(
-         this,
-         tr("Choose SoundFonts Directory"),
-         mySoundFonts->text()
-         );
-      if (!s.isNull())
-            mySoundFonts->setText(s);
-      }
-
-//---------------------------------------------------------
-//   selectSfzFilesDirectory
-//---------------------------------------------------------
-
-void PreferenceDialog::selectSfzFilesDirectory()
-      {
-      QString s = QFileDialog::getExistingDirectory(
-         this,
-         tr("Choose Sfz Files Directory"),
-         mySfzFiles->text()
-         );
-      if (!s.isNull())
-            mySfzFiles->setText(s);
       }
 
 //---------------------------------------------------------

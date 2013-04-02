@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: fifo.h 4414 2011-06-22 19:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

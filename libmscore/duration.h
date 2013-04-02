@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: duration.h 5151 2011-12-29 09:10:31Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //

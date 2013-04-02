@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2012 Werner Schweer and others
 //
@@ -79,7 +78,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       xml.tag("currentLayer", _currentLayer);
 
       if (!MScore::testMode)
-            _syntiState.write(xml);
+            _synthesizerState.write(xml);
 
       if (pageNumberOffset())
             xml.tag("page-offset", pageNumberOffset());
@@ -845,10 +844,10 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "currentLayer")
                   _currentLayer = e.readInt();
-            else if (tag == "SyntiSettings") {
-                  _syntiState.clear();
-                  _syntiState.read(e);
-                  }
+            else if (tag == "SyntiSettings")    // obsolete
+                  _synthesizerState.read(e);
+            else if (tag == "Synthesizer")
+                  _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
@@ -1042,14 +1041,14 @@ bool Score::read(XmlReader& e)
             // 1-line staves have special bar line spans
             int maxBarLineTo        = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines()*2;
             int defaultBarLineTo    = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines() - 1) * 2;
-            if(st->barLineTo() == UNKNOWN_BARLINE_TO)
+            if (st->barLineTo() == UNKNOWN_BARLINE_TO)
                   st->setBarLineTo(defaultBarLineTo);
-            if(st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
+            if (st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
                   st->setBarLineTo(MIN_BARLINE_SPAN_FROMTO);
-            if(st->barLineTo() > maxBarLineTo)
+            if (st->barLineTo() > maxBarLineTo)
                   st->setBarLineTo(maxBarLineTo);
             // on single staff span, check spanFrom and spanTo are distant enough
-            if(st->barLineSpan() == 1) {
+            if (st->barLineSpan() == 1) {
                   if(st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
                         st->setBarLineFrom(0);
                         st->setBarLineTo(defaultBarLineTo);
@@ -1060,27 +1059,11 @@ bool Score::read(XmlReader& e)
       if (_omr == 0)
             _showOmr = false;
 
-      //
-      // check for soundfont,
-      // add default soundfont if none found
-      // (for compatibility with old scores)
-      //
-      bool hasSoundfont = false;
-      foreach(const SyntiParameter& sp, _syntiState) {
-            if (sp.name() == "soundfont") {
-                  QFileInfo fi(sp.sval());
-                  if(fi.exists())
-                        hasSoundfont = true;
-                  }
-            }
-      if (!hasSoundfont)
-            _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
-
       fixTicks();
       renumberMeasures();
       rebuildMidiMapping();
       updateChannel();
-      updateNotes();    // only for parts needed?
+      updateNotes();          // only for parts needed?
       createPlayEvents();
       return true;
       }

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -339,10 +338,8 @@ Score::FileError Score::read114(XmlReader& e)
                   e.skipCurrentElement();       // obsolete
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
-            else if (tag == "SyntiSettings") {
-                  _syntiState.clear();
-                  _syntiState.read(e);
-                  }
+            else if (tag == "SyntiSettings")
+                  _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM);
             else if (tag == "page-offset")
@@ -688,22 +685,6 @@ Score::FileError Score::read114(XmlReader& e)
                   excerpt->setScore(nscore);
                   }
             }
-
-      //
-      // check for soundfont,
-      // add default soundfont if none found
-      // (for compatibility with old scores)
-      //
-      bool hasSoundfont = false;
-      foreach(const SyntiParameter& sp, _syntiState) {
-            if (sp.name() == "soundfont") {
-                  QFileInfo fi(sp.sval());
-                  if (fi.exists())
-                        hasSoundfont = true;
-                  }
-            }
-      if (!hasSoundfont)
-            _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
 
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();

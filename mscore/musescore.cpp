@@ -85,9 +85,35 @@
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
 #include "textpalette.h"
+#include "driver.h"
 
+#include "effects/freeverb/freeverb.h"
+#include "effects/zita1/zita.h"
+#include "effects/noeffect/noeffect.h"
 #include "synthesizer/synthesizer.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
+#include "fluid/fluid.h"
+#ifdef AEOLUS
+#include "aeolus/aeolus/aeolus.h"
+#endif
+#ifdef ZERBERUS
+#include "zerberus/zerberus.h"
+#endif
+
+#ifdef USE_JACK
+#include "jackaudio.h"
+#endif
+
+#ifdef USE_PULSEAUDIO
+extern Driver* getPulseAudioDriver(Seq*);
+#endif
+
+#ifdef USE_ALSA
+#include "alsa.h"
+#endif
+#ifdef USE_PORTAUDIO
+#include "pa.h"
+#endif
 
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
@@ -201,8 +227,6 @@ static const int RECENT_LIST_SIZE = 10;
 
 void MuseScore::closeEvent(QCloseEvent* ev)
       {
-      if (cs)
-            cs->setSyntiState(synti->state());
       unloadPlugins();
       QList<Score*> removeList;
       foreach(Score* score, scoreList) {
@@ -258,8 +282,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (playPanel)
             preferences.playPanelPos = playPanel->pos();
 
-      if (synthControl)
+      if (synthControl) {
             synthControl->updatePreferences();
+            synthControl->writeSettings();
+            }
 
       writeSettings();
       if (debugger)
@@ -1387,12 +1413,6 @@ void MuseScore::setCurrentView(int tabIdx, int idx)
 
 void MuseScore::setCurrentScoreView(ScoreView* view)
       {
-      //
-      // save current synthesizer setting to score
-      //
-      if (cs)
-            cs->setSyntiState(synti->state());
-
       cv = view;
       if (cv) {
             if (cv->score() && (cs != cv->score()))
@@ -2142,6 +2162,123 @@ static void mscoreMessageHandler(QtMsgType type, const char *msg)
 #endif
 
 //---------------------------------------------------------
+//   synthesizerFactory
+//    create and initialize the master synthesizer
+//---------------------------------------------------------
+
+MasterSynthesizer* synthesizerFactory()
+      {
+      MasterSynthesizer* ms = new MasterSynthesizer();
+      ms->setMasterTuning(preferences.tuning);
+
+      ms->registerSynthesizer(new FluidS::Fluid());
+#ifdef AEOLUS
+      ms->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+      ms->registerSynthesizer(new Zerberus());
+#endif
+      ms->registerEffect(0, new NoEffect);
+      ms->registerEffect(0, new ZitaReverb);
+      ms->registerEffect(0, new Freeverb);
+      ms->registerEffect(1, new NoEffect);
+      ms->registerEffect(1, new ZitaReverb);
+      ms->registerEffect(1, new Freeverb);
+      ms->setEffect(0, 0);
+      ms->setEffect(1, 0);
+#if 0
+      Synthesizer* fluid = ms->synthesizer("Fluid");
+      if (fluid) {
+            fluid->setMasterTuning(preferences.tuning);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 0).val, preferences.reverbRoomSize);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 1).val, preferences.reverbDamp);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 2).val, preferences.reverbWidth);
+            fluid->setParameter(SParmId(FLUID_ID, 1, 3).val, preferences.reverbGain);
+            fluid->setParameter(SParmId(FLUID_ID, 2, 4).val, preferences.chorusGain);
+            }
+#endif
+      return ms;
+      }
+
+//---------------------------------------------------------
+//   driverFactory
+//---------------------------------------------------------
+
+Driver* driverFactory(Seq* seq)
+      {
+      Driver* driver = 0;
+
+#define useJackFlag       (preferences.useJackAudio || preferences.useJackMidi)
+#define useAlsaFlag       preferences.useAlsaAudio
+#define usePortaudioFlag  preferences.usePortaudioAudio
+#define usePulseAudioFlag preferences.usePulseAudio
+
+#ifdef USE_PULSEAUDIO
+      if (MScore::debugMode)
+            qDebug("usePulseAudioFlag %d\n", usePulseAudioFlag);
+      if (usePulseAudioFlag) {
+            driver = getPulseAudioDriver(seq);
+            if (!driver->init()) {
+                  qDebug("init PulseAudio failed");
+                  delete driver;
+                  driver = 0;
+                  }
+            else
+                  usePortaudio = true;
+            }
+#endif
+#ifdef USE_PORTAUDIO
+      if (MScore::debugMode)
+            qDebug("usePortaudioFlag %d\n", usePortaudioFlag);
+      if (usePortaudioFlag) {
+            driver = new Portaudio(seq);
+            if (!driver->init()) {
+                  qDebug("init PortAudio failed");
+                  delete driver;
+                  driver = 0;
+                  }
+            else
+                  usePortaudio = true;
+            }
+#endif
+#ifdef USE_ALSA
+      if (MScore::debugMode)
+            qDebug("useAlsaFlag %d\n", useAlsaFlag);
+      if (driver == 0 && useAlsaFlag) {
+            driver = new AlsaAudio(seq);
+            if (!driver->init()) {
+                  qDebug("init ALSA driver failed\n");
+                  delete driver;
+                  driver = 0;
+                  }
+            else {
+                  useALSA = true;
+                  }
+            }
+#endif
+#ifdef USE_JACK
+      if (MScore::debugMode)
+            qDebug("useJackFlag %d\n", useJackFlag);
+      if (useJackFlag) {
+            useAlsaFlag      = false;
+            usePortaudioFlag = false;
+            driver = new JackAudio(seq);
+            if (!driver->init()) {
+                  qDebug("no JACK server found\n");
+                  delete driver;
+                  driver = 0;
+                  }
+            else
+                  useJACK = true;
+            }
+#endif
+      if (driver == 0)
+            qDebug("no audio driver found");
+
+      return driver;
+      }
+
+//---------------------------------------------------------
 //   main
 //---------------------------------------------------------
 
@@ -2165,6 +2302,7 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      Q_INIT_RESOURCE(zita);
 
 #ifndef Q_WS_MAC
       // Save the preferences in QSettings::NativeFormat
@@ -2375,9 +2513,17 @@ int main(int argc, char* av[])
                         break;
                   }
             }
-      synti = new MasterSynthesizer();
-      seq   = new Seq();
-      MScore::seq = seq;
+
+      seq                = new Seq();
+      MScore::seq        = MScore::seq;
+      Driver* driver     = driverFactory(seq);
+      synti              = synthesizerFactory();
+      MScore::sampleRate = driver->sampleRate();
+      synti->setSampleRate(MScore::sampleRate);
+
+      seq->setDriver(driver);
+      seq->setMasterSynthesizer(synti);
+      seq->setGain(preferences.masterGain);
 
       //
       // avoid font problems by overriding the environment
@@ -2653,7 +2799,7 @@ void MuseScore::changeState(ScoreState val)
             else if (strcmp(s->key(), "copy") == 0)
                   a->setEnabled(cs && cs->selection().state());
             else if (strcmp(s->key(), "synth-control") == 0) {
-                  Driver* driver = seq ? seq->getDriver() : 0;
+                  Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
                   if (MScore::debugMode)
                         qDebug("disable synth control");
@@ -4213,18 +4359,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             exportParts();
       else if (cmd == "file-close")
             closeScore(cs);
-      else if (cmd == "file-save-as") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-as")
             saveAs(cs, false);
-            }
-      else if (cmd == "file-save-selection") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-selection")
             saveSelection(cs);
-            }
-      else if (cmd == "file-save-a-copy") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-a-copy")
             saveAs(cs, true);
-            }
       else if (cmd == "file-new")
             newFile();
       else if (cmd == "quit") {

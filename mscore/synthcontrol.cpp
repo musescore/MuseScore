@@ -21,21 +21,23 @@
 #include "synthcontrol.h"
 #include "musescore.h"
 #include "seq.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "synthesizer/synthesizer.h"
+#include "synthesizer/synthesizergui.h"
+#include "aeolus/aeolus/aeolus.h"
 #include "preferences.h"
 #include "mixer.h"
-#include "aeolus/aeolus/aeolus.h"
-#include "libmscore/score.h"
 #include "file.h"
-#include "libmscore/sparm_p.h"
-#include "fluid/rev.h"
-#include "fluid/fluid.h"
 #include "icons.h"
+#include "libmscore/score.h"
 #include "libmscore/mscore.h"
+#include "libmscore/undo.h"
+#include "effects/effectgui.h"
 
-using namespace FluidS;
 extern MasterSynthesizer* synti;
+extern bool useFactorySettings;
+
+static std::vector<const char*> effectNames = { "None", "Freeverb", "Zita1" };
 
 //---------------------------------------------------------
 //   SynthControl
@@ -45,147 +47,45 @@ SynthControl::SynthControl(QWidget* parent)
    : QWidget(parent, Qt::Dialog)
       {
       setupUi(this);
+      _score = 0;
+
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      saveReverbPreset->setIcon(*icons[fileSave_ICON]);
-      saveChorusPreset->setIcon(*icons[fileSave_ICON]);
+      Synthesizer* zerberus = synti->synthesizer("Zerberus");
+      Synthesizer* fluid    = synti->synthesizer("Fluid");
 
-      reverbRoomSize->setId(REVERB_ROOMSIZE);
-      reverbDamp->setId(REVERB_DAMP);
-      reverbWidth->setId(REVERB_WIDTH);
-      reverb->setId(REVERB_GAIN);
+      tabWidget->insertTab(0, fluid->gui(),    tr(fluid->name()));
+      tabWidget->insertTab(0, zerberus->gui(), tr(zerberus->name()));
 
-      position->setId(AEOLUS_STPOSIT);
+      // effectA        combo box
+      // effectStackA   widget stack
 
-      chorus->setId(CHORUS_GAIN);
-      chorusSpeed->setId(CHORUS_SPEED);
-      chorusDepth->setId(CHORUS_DEPTH);
-
-      connect(position, SIGNAL(valueChanged(double, int)), SLOT(setAeolusValue(double, int)));
-
-      aeolusSection[0][0] = aeolusAzimuth3;
-      aeolusSection[0][1] = aeolusWidth3;
-      aeolusSection[0][2] = aeolusDirect3;
-      aeolusSection[0][3] = aeolusReflect3;
-      aeolusSection[0][4] = aeolusReverb3;
-
-      aeolusSection[1][0] = aeolusAzimuth2;
-      aeolusSection[1][1] = aeolusWidth2;
-      aeolusSection[1][2] = aeolusDirect2;
-      aeolusSection[1][3] = aeolusReflect2;
-      aeolusSection[1][4] = aeolusReverb2;
-
-      aeolusSection[2][0] = aeolusAzimuth1;
-      aeolusSection[2][1] = aeolusWidth1;
-      aeolusSection[2][2] = aeolusDirect1;
-      aeolusSection[2][3] = aeolusReflect1;
-      aeolusSection[2][4] = aeolusReverb1;
-
-      aeolusSection[3][0] = aeolusAzimuthP;
-      aeolusSection[3][1] = aeolusWidthP;
-      aeolusSection[3][2] = aeolusDirectP;
-      aeolusSection[3][3] = aeolusReflectP;
-      aeolusSection[3][4] = aeolusReverbP;
-
-      for (int i = 0; i < 4; ++i) {
-            for (int k = 0; k < 5; ++k) {
-                  aeolusSection[i][k]->init(synti->parameter(SParmId(AEOLUS_ID, i+1, k).val));
-                  aeolusSection[i][k]->setId(((i+1) << 8) + k);
-                  connect(aeolusSection[i][k], SIGNAL(valueChanged(double, int)), SLOT(setAeolusValue(double, int)));
-                  }
+      effectA->clear();
+      for (Effect* e : synti->effectList(0)) {
+            effectA->addItem(tr(e->name()));
+            effectStackA->addWidget(e->gui());
             }
 
-      soundFontUp->setEnabled(false);
-      soundFontDown->setEnabled(false);
-      soundFontDelete->setEnabled(false);
-      soundFontAdd->setEnabled(true);
+      effectB->clear();
+      for (Effect* e : synti->effectList(1)) {
+            effectB->addItem(tr(e->name()));
+            effectStackB->addWidget(e->gui());
+            }
 
-      connect(gain,            SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
-      connect(masterTuning,    SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("SynthControl");
+            resize(settings.value("size", QSize(600, 268)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
 
-      connect(reverb,          SIGNAL(valueChanged(double,int)), SLOT(reverbValueChanged(double,int)));
-      connect(reverbRoomSize,  SIGNAL(valueChanged(double,int)), SLOT(reverbValueChanged(double,int)));
-      connect(reverbDamp,      SIGNAL(valueChanged(double,int)), SLOT(reverbValueChanged(double,int)));
-      connect(reverbWidth,     SIGNAL(valueChanged(double,int)), SLOT(reverbValueChanged(double,int)));
-
-      connect(chorus,          SIGNAL(valueChanged(double,int)), SLOT(chorusValueChanged(double,int)));
-      connect(chorusSpeed,     SIGNAL(valueChanged(double,int)), SLOT(chorusValueChanged(double,int)));
-      connect(chorusDepth,     SIGNAL(valueChanged(double,int)), SLOT(chorusValueChanged(double,int)));
-      connect(chorusSpeedBox,  SIGNAL(valueChanged(double)),     SLOT(chorusSpeedChanged(double)));
-      connect(chorusDepthBox,  SIGNAL(valueChanged(double)),     SLOT(chorusDepthChanged(double)));
-      connect(chorusNumber,    SIGNAL(valueChanged(int)),        SLOT(chorusNumberChanged(int)));
-      connect(chorusType,      SIGNAL(currentIndexChanged(int)), SLOT(chorusTypeChanged(int)));
-
-      connect(soundFontUp,     SIGNAL(clicked()),                SLOT(sfUpClicked()));
-      connect(soundFontDown,   SIGNAL(clicked()),                SLOT(sfDownClicked()));
-      connect(soundFontDelete, SIGNAL(clicked()),                SLOT(sfDeleteClicked()));
-      connect(soundFontAdd,    SIGNAL(clicked()),                SLOT(sfAddClicked()));
-      connect(soundFonts,      SIGNAL(currentRowChanged(int)),   SLOT(currentSoundFontChanged(int)));
-
-      connect(addZerberus,     SIGNAL(clicked()),                SLOT(addZerberusClicked()));
-      connect(deleteZerberus,  SIGNAL(clicked()),                SLOT(deleteZerberusClicked()));
-
-      updateSyntiValues();
-      }
-
-//---------------------------------------------------------
-//   updateSyntiValues
-//---------------------------------------------------------
-
-void SynthControl::updateSyntiValues()
-      {
-      masterTuning->setValue(synti->masterTuning());
-      setGain(seq->gain());
-
-      roomSizeBox->setValue(synti->parameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_ROOMSIZE).val).fval());
-      dampBox->setValue(synti->parameter    (SParmId(FLUID_ID, REVERB_GROUP, REVERB_DAMP).val).fval());
-      widthBox->setValue(synti->parameter   (SParmId(FLUID_ID, REVERB_GROUP, REVERB_WIDTH).val).fval());
-      reverb->setValue(synti->parameter     (SParmId(FLUID_ID, REVERB_GROUP, REVERB_GAIN).val).fval());
-
-      chorus->setValue(synti->parameter     (SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_GAIN).val).fval());
-
-      float val = synti->parameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_SPEED).val).fval();
-      chorusSpeed->setValue(val);
-      chorusSpeedBox->setValue(val * 5);
-
-      val = synti->parameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_DEPTH).val).fval();
-      chorusDepth->setValue(val);
-      chorusDepthBox->setValue(val * 10);
-
-      chorusNumber->setValue(synti->parameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_BLOCKS).val).fval() * 100.0);
-      chorusType->setCurrentIndex(int(synti->parameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_TYPE).val).fval()));
-
-      reverbDelay->init(synti->parameter(SParmId(AEOLUS_ID, 0, AEOLUS_REVSIZE).val));
-      reverbDelay->setId(AEOLUS_REVSIZE);
-      connect(reverbDelay, SIGNAL(valueChanged(double, int)), SLOT(setAeolusValue(double, int)));
-
-      reverbTime->init(synti->parameter(SParmId(AEOLUS_ID, 0, AEOLUS_REVTIME).val));
-      reverbTime->setId(AEOLUS_REVTIME);
-      connect(reverbTime, SIGNAL(valueChanged(double, int)), SLOT(setAeolusValue(double, int)));
-
-      position->init(synti->parameter(SParmId(AEOLUS_ID, 0, AEOLUS_STPOSIT).val));
-      }
-
-//---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void SynthControl::setScore(Score* cs)
-      {
-      setWindowTitle("MuseScore: Synthesizer");
-
-      soundFonts->clear();
-      Synthesizer* sy = synti->synthesizer("Fluid");
-      if (sy)
-            soundFonts->addItems(sy->soundFonts());
-
-      zerberusFiles->clear();
-      sy = synti->synthesizer("Zerberus");
-      if (sy)
-            zerberusFiles->addItems(sy->soundFonts());
-
-      updateSyntiValues();
-      updateUpDownButtons();
+      connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
+      connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
+      connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
+      connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
+      connect(loadButton, SIGNAL(clicked()), SLOT(loadButtonClicked()));
+      connect(saveButton, SIGNAL(clicked()), SLOT(saveButtonClicked()));
       }
 
 //---------------------------------------------------------
@@ -238,140 +138,24 @@ void SynthControl::updatePreferences()
       {
       if ((preferences.tuning != masterTuning->value())
          || (preferences.masterGain != gain->value())
-         || (preferences.reverbRoomSize != reverbRoomSize->value())
-         || (preferences.reverbDamp != reverbDamp->value())
-         || (preferences.reverbWidth != reverbWidth->value())
-         || (preferences.reverbGain != reverb->value())
-         || (preferences.chorusGain != chorus->value())
          ) {
             preferences.dirty  = true;
             }
       preferences.tuning     = masterTuning->value();
       preferences.masterGain = gain->value();
-
-      preferences.reverbRoomSize = reverbRoomSize->value();
-      preferences.reverbDamp     = reverbDamp->value();
-      preferences.reverbWidth    = reverbWidth->value();
-      preferences.reverbGain     = reverb->value();
-      preferences.chorusGain     = chorus->value();
       }
 
 //---------------------------------------------------------
-//   sfDeleteClicked
+//   writeSettings
 //---------------------------------------------------------
 
-void SynthControl::sfDeleteClicked()
+void SynthControl::writeSettings() const
       {
-      int row = soundFonts->currentRow();
-      if (row >= 0) {
-            QString s(soundFonts->item(row)->text());
-            Synthesizer* sy = synti->synthesizer("Fluid");
-            if (sy)
-                  sy->removeSoundFont(s);
-            delete soundFonts->takeItem(row);
-            }
-      updateUpDownButtons();
-      }
-
-//---------------------------------------------------------
-//   sfAddClicked
-//---------------------------------------------------------
-
-void SynthControl::sfAddClicked()
-      {
-      QStringList files = mscore->getSoundFont("");
-      if (!files.isEmpty()) {
-            int n = soundFonts->count();
-            QStringList sl;
-            for (int i = 0; i < n; ++i) {
-                  QListWidgetItem* item = soundFonts->item(i);
-                  sl.append(item->text());
-                  }
-            QStringList list = files;
-            QStringList::Iterator it = list.begin();
-            while(it != list.end()) {
-                  QString s = *it;
-                  if (sl.contains(s)) {
-                        QMessageBox::warning(this,
-                           tr("MuseScore"),
-                           QString(tr("Soundfont %1 already loaded")).arg(s));
-                        }
-                  else {
-                        Synthesizer* sy = synti->synthesizer("Fluid");
-                        if (sy) {
-                              bool loaded = sy->addSoundFont(s);
-                              if (!loaded) {
-                                    QMessageBox::warning(this,
-                                       tr("MuseScore"),
-                                       QString(tr("cannot load soundfont %1")).arg(s));
-                                    }
-                              else {
-                                    soundFonts->insertItem(0, s);
-                                    }
-                              }
-                        }
-                  ++it;
-                  }
-            }
-      updateUpDownButtons();
-      }
-
-//---------------------------------------------------------
-//   addZerberusClicked
-//---------------------------------------------------------
-
-void SynthControl::addZerberusClicked()
-      {
-      QStringList files = mscore->getSfzFile("");
-      if (!files.isEmpty()) {
-            int n = zerberusFiles->count();
-            QStringList sl;
-            for (int i = 0; i < n; ++i) {
-                  QListWidgetItem* item = zerberusFiles->item(i);
-                  sl.append(item->text());
-                  }
-            QStringList list = files;
-            auto it = list.begin();
-            while (it != list.end()) {
-                  QString s = *it;
-                  if (sl.contains(s)) {
-                        QMessageBox::warning(this,
-                           tr("MuseScore"),
-                           QString(tr("File %1 already loaded")).arg(s));
-                        }
-                  else {
-                        Synthesizer* sy = synti->synthesizer("Zerberus");
-                        if (sy) {
-                              bool loaded = sy->addSoundFont(s);
-                              if (!loaded) {
-                                    QMessageBox::warning(this,
-                                       tr("MuseScore"),
-                                       QString(tr("cannot load sound file %1")).arg(s));
-                                    }
-                              else {
-                                    zerberusFiles->insertItem(0, s);
-                                    }
-                              }
-                        }
-                  ++it;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   deleteZerberusClicked
-//---------------------------------------------------------
-
-void SynthControl::deleteZerberusClicked()
-      {
-      int row = zerberusFiles->currentRow();
-      if (row >= 0) {
-            QString s(zerberusFiles->item(row)->text());
-            Synthesizer* sy = synti->synthesizer("Zerberus");
-            if (sy)
-                  sy->removeSoundFont(s);
-            delete zerberusFiles->takeItem(row);
-            }
+      QSettings settings;
+      settings.beginGroup("SynthControl");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
       }
 
 //---------------------------------------------------------
@@ -413,139 +197,68 @@ void SynthControl::stop()
       }
 
 //---------------------------------------------------------
-//   reverbValueChanged
+//   effectAChanged
 //---------------------------------------------------------
 
-void SynthControl::reverbValueChanged(double val, int idx)
+void SynthControl::effectAChanged(int idx)
       {
-      synti->setParameter(SParmId(FLUID_ID, REVERB_GROUP, idx).val, val);
+      synti->setEffect(0, idx);
+      effectStackA->setCurrentIndex(idx);
       }
 
 //---------------------------------------------------------
-//   chorusValueChanged
+//   effectBChanged
 //---------------------------------------------------------
 
-void SynthControl::chorusValueChanged(double val, int idx)
+void SynthControl::effectBChanged(int idx)
       {
-      if (idx == CHORUS_SPEED)
-            chorusSpeedBox->setValue(val * 5.0);
-      else if (idx == CHORUS_DEPTH)
-            chorusDepthBox->setValue(val * 10.0);
-      synti->setParameter(SParmId(FLUID_ID, CHORUS_GROUP, idx).val, val);
+      synti->setEffect(1, idx);
+      effectStackB->setCurrentIndex(idx);
       }
 
 //---------------------------------------------------------
-//   chorusSpeedChanged
+//   loadButtonClicked
+//    load synthesizer settings from score
 //---------------------------------------------------------
 
-void SynthControl::chorusSpeedChanged(double val)
+void SynthControl::loadButtonClicked()
       {
-      val /= 5.0;
-      chorusSpeed->setValue(val);
-      synti->setParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_SPEED).val, val);
+      synti->setState(_score->synthesizerState());
+      updateSyntiValues();
       }
 
 //---------------------------------------------------------
-//   chorusDepthChanged
+//   saveButtonClicked
+//    save synthesizer settings to score
 //---------------------------------------------------------
 
-void SynthControl::chorusDepthChanged(double val)
+void SynthControl::saveButtonClicked()
       {
-      val /= 10.0;
-      chorusDepth->setValue(val);
-      synti->setParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_DEPTH).val, val);
-      }
-
-//---------------------------------------------------------
-//   setAeolusValue
-//---------------------------------------------------------
-
-void SynthControl::setAeolusValue(double val, int idx)
-      {
-      synti->setParameter(SParmId(AEOLUS_ID, idx >> 8, idx & 0xff).val, val);
-      }
-
-//---------------------------------------------------------
-//   currentSoundFontChanged
-//---------------------------------------------------------
-
-void SynthControl::currentSoundFontChanged(int /*row*/)
-      {
-      updateUpDownButtons();
-      }
-
-//---------------------------------------------------------
-//   sfUpClicked
-//---------------------------------------------------------
-
-void SynthControl::sfUpClicked()
-      {
-      int row  = soundFonts->currentRow();
-      if (row <= 0)
-            return;
-      Synthesizer* sy = synti->synthesizer("Fluid");
-      if (sy) {
-            QStringList sfonts = sy->soundFonts();
-            sfonts.swap(row, row-1);
-            sy->loadSoundFonts(sfonts);
-            sfonts = sy->soundFonts();
-            soundFonts->clear();
-            soundFonts->addItems(sfonts);
-            soundFonts->setCurrentRow(row-1);
+      if (_score && synti) {
+            _score->startCmd();
+            _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
+            _score->endCmd();
+            mscore->endCmd();
             }
       }
 
 //---------------------------------------------------------
-//   sfDownClicked
+//   updateSyntiValues
 //---------------------------------------------------------
 
-void SynthControl::sfDownClicked()
+void SynthControl::updateSyntiValues()
       {
-      int rows = soundFonts->count();
-      int row  = soundFonts->currentRow();
-      if (row + 1 >= rows)
-            return;
+      masterTuning->setValue(synti->masterTuning());
+      setGain(seq->gain());
 
-      Synthesizer* sy = synti->synthesizer("Fluid");
-      if (sy) {
-            QStringList sfonts = sy->soundFonts();
-            sfonts.swap(row, row+1);
-            sy->loadSoundFonts(sfonts);
-sfonts = sy->soundFonts();
-            soundFonts->clear();
-            soundFonts->addItems(sfonts);
-            soundFonts->setCurrentRow(row+1);
-            }
-      }
+      int idx = synti->indexOfEffect(0);
+      effectA->setCurrentIndex(idx);
+      effectStackA->setCurrentIndex(idx);
+      synti->effect(0)->gui()->updateValues();
+      synti->effect(1)->gui()->updateValues();
 
-//---------------------------------------------------------
-//   updateUpDownButtons
-//---------------------------------------------------------
-
-void SynthControl::updateUpDownButtons()
-      {
-      int rows = soundFonts->count();
-      int row = soundFonts->currentRow();
-      soundFontUp->setEnabled(row > 0);
-      soundFontDown->setEnabled((row != -1) && (row < (rows-1)));
-      soundFontDelete->setEnabled(row != -1);
-      }
-
-//---------------------------------------------------------
-//   chorusNumberChanged
-//---------------------------------------------------------
-
-void SynthControl::chorusNumberChanged(int val)
-      {
-      synti->setParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_BLOCKS).val, double(val)/100.0);
-      }
-
-//---------------------------------------------------------
-//   chorusTypeChanged
-//---------------------------------------------------------
-
-void SynthControl::chorusTypeChanged(int val)
-      {
-      synti->setParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_TYPE).val, double(val));
+      idx = synti->indexOfEffect(1);
+      effectB->setCurrentIndex(idx);
+      effectStackB->setCurrentIndex(idx);
       }
 

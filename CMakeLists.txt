@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2011 by Werner Schweer and others
 #
@@ -306,7 +305,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ## add subdirs
 ##
 subdirs(mscore awl bww2mxml share
-      fluid  mstyle libmscore thirdparty/rtf2html thirdparty/diff)
+      fluid mstyle libmscore synthesizer effects thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 add_subdirectory(manual)

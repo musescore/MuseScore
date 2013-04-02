@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: figuredbass.h 5526 2012-04-09 10:17:11Z lvinken $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

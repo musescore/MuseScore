@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>845</width>
-    <height>557</height>
+    <height>591</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -75,7 +75,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="accessibleName">
@@ -552,7 +552,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>SoundFonts Directory:</string>
+             <string>SoundFonts Path:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -563,14 +563,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="mySoundFonts"/>
-          </item>
-          <item row="4" column="2">
-           <widget class="QToolButton" name="mySoundFontsButton">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
+           <widget class="QLineEdit" name="sfPath"/>
           </item>
           <item row="6" column="1">
            <widget class="QLineEdit" name="myImages"/>
@@ -590,19 +583,12 @@
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="mySfzFiles"/>
-          </item>
-          <item row="5" column="2">
-           <widget class="QToolButton" name="mySfzFilesButton">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
+           <widget class="QLineEdit" name="sfzPath"/>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Sfz Files Directory:</string>
+             <string>Sfz Files Path:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2094,14 +2080,24 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <item>
-           <widget class="QLineEdit" name="soundFont"/>
-          </item>
-          <item>
-           <widget class="QToolButton" name="sfOpenButton">
+           <widget class="QLabel" name="label_23">
             <property name="text">
-             <string>...</string>
+             <string>sf2:</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="defaultSf"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>sfz:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="defaultSfz"/>
           </item>
          </layout>
         </widget>

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: trill.h 5226 2012-01-18 10:52:02Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

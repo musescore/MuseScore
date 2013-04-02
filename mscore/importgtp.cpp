@@ -2744,7 +2744,6 @@ Score::FileError importGTP(Score* score, const QString& name)
       //
       foreach(Part* part, score->parts()) {
             Score* pscore = new Score(score);
-            pscore->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
             pscore->style()->set(ST_createMultiMeasureRests, true);
 
             QList<int> stavesMap;

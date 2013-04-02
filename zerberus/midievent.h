@@ -131,7 +131,7 @@ class MidiEvent {
       uchar dataB() const           { return _dataB;   }
       };
 
-#include "libmscore/event.h"
+#include "synthesizer/event.h"
 
 #endif
 

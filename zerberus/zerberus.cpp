@@ -11,9 +11,10 @@
 //=============================================================================
 
 #include "midievent.h"
-#include "libmscore/midipatch.h"
+#include "synthesizer/midipatch.h"
 
 #include "zerberus.h"
+#include "zerberusgui.h"
 #include "voice.h"
 #include "channel.h"
 #include "instrument.h"
@@ -35,7 +36,7 @@ Zerberus::Zerberus()
             Voice::init();
             }
       for (int i = 0; i < MAX_VOICES; ++i)
-            freeVoices.push(new Voice);
+            freeVoices.push(new Voice(this));
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
       }
@@ -221,7 +222,7 @@ void Zerberus::process(const MidiEvent& event)
 //    realtime
 //---------------------------------------------------------
 
-void Zerberus::process(unsigned frames, float* p)
+void Zerberus::process(unsigned frames, float* p, float*, float*)
       {
       if (busy)
             return;
@@ -284,14 +285,6 @@ const QList<MidiPatch*>& Zerberus::getPatchInfo() const
             ++idx;
             }
       return pl;
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void Zerberus::init()
-      {
       }
 
 //---------------------------------------------------------
@@ -387,29 +380,26 @@ bool Zerberus::removeSoundFont(const QString& s)
 //   state
 //---------------------------------------------------------
 
-SyntiState Zerberus::state() const
+SynthesizerGroup Zerberus::state() const
       {
-      SyntiState sp;
+      SynthesizerGroup g;
+      g.setName(name());
 
       QStringList sfl = soundFonts();
       foreach(QString sf, sfl)
-            sp.append(SyntiParameter(SParmId(ZERBERUS_ID, 0, 0).val, "sfz-font", sf));
-      return sp;
+            g.push_back(IdValue(0, sf));
+      return g;
       }
 
 //---------------------------------------------------------
 //   setState
 //---------------------------------------------------------
 
-void Zerberus::setState(SyntiState& sp)
+void Zerberus::setState(const SynthesizerGroup& sp)
       {
       QStringList sfs;
-      for (int i = 0; i < sp.size(); ++i) {
-            SyntiParameter* p = &sp[i];
-//            printf("setState %x\n", p->id());
-            if (p->id() == -1 && p->name() == "sfz-font")
-                  sfs.append(p->sval());
-            }
+      for (const IdValue& v : sp)
+            sfs.append(v.data);
       loadSoundFonts(sfs);
       }
 
@@ -436,5 +426,14 @@ ZInstrument* Zerberus::instrument(int n) const
             ++idx;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   gui
+//---------------------------------------------------------
+
+SynthesizerGui* Zerberus::gui()
+      {
+      return new ZerberusGui();
       }
 

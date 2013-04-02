@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: layoutbreak.h 5499 2012-03-28 12:23:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

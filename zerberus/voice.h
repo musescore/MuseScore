@@ -13,13 +13,14 @@
 #ifndef __MVOICE_H__
 #define __MVOICE_H__
 
-// #include <QtGlobal>
 #include <cstdint>
 #include <math.h>
 
 class Channel;
 class Zone;
 class Sample;
+class Zerberus;
+
 enum class LoopMode;
 enum class OffMode;
 
@@ -48,7 +49,7 @@ struct Envelope {
             else
                   return true;
             }
-      void setTime(float ms);
+      void setTime(float ms, int sampleRate);
       };
 
 //-----------------------------------------------------------------------------
@@ -87,16 +88,14 @@ enum class VoiceState {
       STOP
       };
 
-static const char* voiceStateNames[] = {
-      "OFF", "ATTACK", "PLAYING", "SUSTAINED", "STOP"
-      };
-
 //---------------------------------------------------------
 //   Voice
 //---------------------------------------------------------
 
 class Voice {
       Voice* _next;
+      Zerberus* _zerberus;
+
       VoiceState _state = VoiceState::OFF;
       Channel* _channel;
       int _key;
@@ -150,7 +149,7 @@ class Voice {
       void updateFilter(float fres);
 
    public:
-      Voice() : attackEnv(Envelope::egLin), stopEnv(Envelope::egPow) {}
+      Voice(Zerberus*);
       Voice* next() const         { return _next; }
       void setNext(Voice* v)      { _next = v; }
 
@@ -166,10 +165,10 @@ class Voice {
       bool isOff() const          { return _state == VoiceState::OFF; }
       bool isStopped() const      { return _state == VoiceState::STOP; }
       void stop()                 { _state = VoiceState::STOP;      }
-      void stop(float time)       { _state = VoiceState::STOP; stopEnv.setTime(time); }
+      void stop(float time);
       void sustained()            { _state = VoiceState::SUSTAINED; }
       void off()                  { _state = VoiceState::OFF;       }
-      const char* state()         { return voiceStateNames[int(_state)]; }
+      const char* state() const;
       LoopMode loopMode() const   { return _loopMode; }
 
       OffMode offMode() const     { return _offMode;  }

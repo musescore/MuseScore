@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -392,7 +391,6 @@ class MScore : public QObject {
       static qreal nudgeStep;
       static int defaultPlayDuration;
       static QString partStyle;
-      static QString soundFont;
       static QString lastError;
       static bool layoutDebug;
 

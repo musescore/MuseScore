@@ -18,21 +18,44 @@
 #include "zerberus.h"
 #include "zone.h"
 #include "sample.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 
 float Voice::interpCoeff[INTERP_MAX][4];
 float Envelope::egPow[EG_SIZE];
 float Envelope::egLin[EG_SIZE];
 
+static const char* voiceStateNames[] = {
+      "OFF", "ATTACK", "PLAYING", "SUSTAINED", "STOP"
+      };
+
 //---------------------------------------------------------
 //   setTime
 //---------------------------------------------------------
 
-void Envelope::setTime(float ms)
+void Envelope::setTime(float ms, int sampleRate)
       {
       val   = 1.0;
-      steps = int(ms * MasterSynthesizer::sampleRate() / 1000);
+      steps = int(ms * sampleRate / 1000);
       count = steps;
+      }
+
+//---------------------------------------------------------
+//   Voice
+//---------------------------------------------------------
+
+Voice::Voice(Zerberus* z)
+   : _zerberus(z), attackEnv(Envelope::egLin), stopEnv(Envelope::egPow)
+      {
+      }
+
+//---------------------------------------------------------
+//   stop
+//---------------------------------------------------------
+
+void Voice::stop(float time)
+      {
+      _state = VoiceState::STOP;
+      stopEnv.setTime(time, _zerberus->sampleRate());
       }
 
 //---------------------------------------------------------
@@ -111,8 +134,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
       modenv_val = 0.0;
       modlfo_val = 0.0;
 
-      attackEnv.setTime(1);        // 1 ms attack
-      stopEnv.setTime(z->ampegRelease);
+      attackEnv.setTime(1, _zerberus->sampleRate());        // 1 ms attack
+      stopEnv.setTime(z->ampegRelease, _zerberus->sampleRate());
       }
 
 //---------------------------------------------------------
@@ -136,7 +159,7 @@ void Voice::updateFilter(float _fres)
       // into account for both significant frequency relocation and for
       // bandwidth readjustment'.
 
-      float sr          = MasterSynthesizer::sampleRate();
+      float sr          = _zerberus->sampleRate();
       float omega       = (float) 2.0f * M_PI * (_fres / sr);
       float sin_coeff   = sin(omega);
       float cos_coeff   = cos(omega);
@@ -198,7 +221,7 @@ void Voice::process(int frames, float* p)
               + modlfo_val * modlfo_to_fc
               + modenv_val * modenv_to_fc);
 
-      int sr = MasterSynthesizer::sampleRate();
+      int sr = _zerberus->sampleRate();
       if (_fres > 0.45f * sr)
             _fres = 0.45f * sr;
       else if (_fres < 5.f)
@@ -315,5 +338,14 @@ void Voice::process(int frames, float* p)
                   phase += phaseIncr;
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   state
+//---------------------------------------------------------
+
+const char* Voice::state() const
+      {
+      return voiceStateNames[int(_state)];
       }
 

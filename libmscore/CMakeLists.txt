@@ -51,7 +51,7 @@ add_library (
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp
       chordlist.cpp chordrest.cpp clef.cpp cleflist.cpp
       drumset.cpp durationtype.cpp dynamic.cpp edit.cpp
-      element.cpp elementlayout.cpp event.cpp excerpt.cpp
+      element.cpp elementlayout.cpp excerpt.cpp
       fifo.cpp fret.cpp glissando.cpp hairpin.cpp
       harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
       instrtemplate.cpp instrument.cpp interval.cpp
@@ -73,9 +73,9 @@ add_library (
       figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
-      exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
+      exportmidi.cpp cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
-      msynthesizer.cpp
+      synthesizerstate.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

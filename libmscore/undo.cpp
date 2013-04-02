@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: undo.cpp 5649 2012-05-19 15:14:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -1329,7 +1328,7 @@ void AddElement::undo()
 
             if (m1 != m2) {
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
-                  if (m2) 
+                  if (m2)
                         tie->score()->updateAccidentals(m2, tie->staffIdx());
                   // tie->score()->cmdUpdateNotes();
                   }
@@ -1360,7 +1359,7 @@ void AddElement::redo()
 
             if (m2 && (m1 != m2)) {
                   tie->score()->updateAccidentals(m1, tie->staffIdx());
-                  if (m2) 
+                  if (m2)
                         tie->score()->updateAccidentals(m2, tie->staffIdx());
                   // tie->score()->cmdUpdateNotes();
                   }
@@ -3191,5 +3190,14 @@ void ChangeEventList::flip()
       bool um = chord->userPlayEvents();
       chord->setUserPlayEvents(userModified);
       userModified = um;
+      }
+
+//---------------------------------------------------------
+//   ChangeSynthesizerState::flip
+//---------------------------------------------------------
+
+void ChangeSynthesizerState::flip()
+      {
+      std::swap(state, score->_synthesizerState);
       }
 

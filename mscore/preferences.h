@@ -165,8 +165,11 @@ struct Preferences {
       QString myImagesPath;
       QString myTemplatesPath;
       QString myPluginsPath;
-      QString mySoundFontsPath;
-      QString mySfzFilesPath;
+
+      QString sfPath;
+      QString sfzPath;
+      QString defaultSf;
+      QString defaultSfz;
 
       double nudgeStep10;     // Ctrl + cursor key (default 1.0)
       double nudgeStep50;     // Alt  + cursor key (default 5.0)
