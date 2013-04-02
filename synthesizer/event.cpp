@@ -12,9 +12,9 @@
 //=============================================================================
 
 // #include "midifile.h"
-#include "xml.h"
-#include "score.h"
-#include "part.h"
+#include "libmscore/xml.h"
+// #include "score.h"
+// #include "part.h"
 #include "event.h"
 #include "event_p.h"
 

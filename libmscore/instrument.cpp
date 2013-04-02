@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: instrument.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -18,7 +17,7 @@
 #include "utils.h"
 #include "tablature.h"
 #include "instrtemplate.h"
-#include "msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "mscore.h"
 
 Instrument InstrumentList::defaultInstrument;

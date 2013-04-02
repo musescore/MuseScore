@@ -25,20 +25,11 @@
 #include <sndfile.h>
 #include "libmscore/score.h"
 #include "libmscore/note.h"
-#include "libmscore/msynthesizer.h"
-#include "musescore.h"
 #include "libmscore/part.h"
-#include "preferences.h"
-#include "seq.h"
 #include "libmscore/mscore.h"
-#ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
-#endif
-#ifdef ZERBERUS
-#include "zerberus/zerberus.h"
-#endif
-
-#include "fluid/fluid.h"
+#include "synthesizer/msynthesizer.h"
+#include "musescore.h"
+#include "preferences.h"
 
 //---------------------------------------------------------
 //   saveAudio
@@ -57,19 +48,10 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             qDebug("unknown audio file type <%s>\n", qPrintable(ext));
             return false;
             }
-      MasterSynthesizer* synti = new MasterSynthesizer();
+      MasterSynthesizer* synti = synthesizerFactory();
       int sampleRate = preferences.exportAudioSampleRate;
       synti->setSampleRate(sampleRate);
-
-      synti->registerSynthesizer(new FluidS::Fluid());
-#ifdef AEOLUS
-      synti->registerSynthesizer(new Aeolus());
-#endif
-#ifdef ZERBERUS
-      synti->registerSynthesizer(new Zerberus());
-#endif
-      synti->init();
-      synti->setState(score->syntiState());
+      synti->setState(score->synthesizerState());
 
       int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
@@ -122,7 +104,6 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             static const unsigned FRAMES = 512;
             float buffer[FRAMES * 2];
             int playTime = 0;
-//            synti->setGain(gain);
 
             for (;;) {
                   unsigned frames = FRAMES;

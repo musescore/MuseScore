@@ -63,7 +63,7 @@ class Divis
       int         _nrank;
       int         _asect;
       int         _keybd;
-      SyntiParameter _param [NPARAM];
+      float       _param [NPARAM];
       Rank        _ranks [NRANK];
       };
 

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: articulation.cpp 5604 2012-05-04 15:29:13Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

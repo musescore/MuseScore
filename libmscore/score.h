@@ -25,7 +25,7 @@
 #include "select.h"
 #include "fraction.h"
 #include "interval.h"
-#include "sparm.h"
+#include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
 #include "accidental.h"
@@ -351,7 +351,6 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
-      SyntiState _syntiState;
 
       //------------------
 
@@ -421,6 +420,9 @@ class Score : public QObject {
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
+
+   protected:
+      SynthesizerState _synthesizerState;
 
    public:
       void setDirty(bool val);
@@ -814,8 +816,8 @@ class Score : public QObject {
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
-      SyntiState& syntiState()                           { return _syntiState;         }
-      void setSyntiState(const SyntiState& s);
+      SynthesizerState& synthesizerState()     { return _synthesizerState; }
+      void setSynthesizerState(const SynthesizerState& s);
 
       const QList<StaffType**>& staffTypes() const { return _staffTypes; }
       void replaceStaffTypes(const QList<StaffType*>&);
@@ -919,6 +921,8 @@ class Score : public QObject {
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
+
+      friend class ChangeSynthesizerState;
       };
 
 extern Score* gscore;

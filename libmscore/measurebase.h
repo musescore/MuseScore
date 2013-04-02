@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: measurebase.h 5632 2012-05-15 16:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: score.cpp 5632 2012-05-15 16:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -42,7 +41,7 @@
 #include "pitchspelling.h"
 #include "line.h"
 #include "volta.h"
-#include "event.h"
+// #include "event.h"
 #include "repeat.h"
 #include "ottava.h"
 #include "barline.h"
@@ -385,7 +384,7 @@ Score::Score(Score* parent)
             if (f.open(QIODevice::ReadOnly))
                   _style.load(&f);
             }
-      _syntiState = parent->_syntiState;
+      _synthesizerState = parent->_synthesizerState;
       }
 
 //---------------------------------------------------------
@@ -2206,15 +2205,14 @@ Score* Score::clone()
       }
 
 //---------------------------------------------------------
-//   setSyntiSettings
+//   setSynthesizerState
 //---------------------------------------------------------
 
-void Score::setSyntiState(const SyntiState& s)
+void Score::setSynthesizerState(const SynthesizerState& s)
       {
-      if (!(_syntiState == s)) {
-            // _dirty = true;       // DEBUG: conflicts with setting of default sound font
-            _syntiState = s;
-            }
+      // TODO: make undoable
+      _dirty = true;
+      _synthesizerState = s;
       }
 
 //---------------------------------------------------------

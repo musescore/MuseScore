@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: slur.cpp 5326 2012-02-14 15:48:37Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

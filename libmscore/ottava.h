@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: ottava.h 5161 2011-12-29 17:26:34Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

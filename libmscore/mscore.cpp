@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -51,7 +50,6 @@ bool    MScore::panPlayback;
 qreal   MScore::nudgeStep;
 int     MScore::defaultPlayDuration;
 QString MScore::partStyle;
-QString MScore::soundFont;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
 int     MScore::division    = 480;
@@ -129,7 +127,6 @@ void MScore::init()
       lastError           = "";
 
       layoutBreakColor    = Qt::green;
-      soundFont           = _globalShare + "sound/fluid.sf3";
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();

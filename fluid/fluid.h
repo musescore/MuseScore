@@ -23,8 +23,7 @@
 #define __FLUID_S_H__
 
 #include "synthesizer/synthesizer.h"
-#include "libmscore/midipatch.h"
-#include "rev.h"
+#include "synthesizer/midipatch.h"
 
 namespace FluidS {
 
@@ -34,11 +33,8 @@ class Preset;
 class Sample;
 class Channel;
 struct Mod;
-class Reverb;
-class Chorus;
 class Fluid;
 
-#define FLUID_MAX_BUFSIZE       4096
 #define FLUID_NUM_PROGRAMS      129
 
 enum fluid_loop {
@@ -290,23 +286,6 @@ class Channel {
 // subsystems:
 enum {
       FLUID_GROUP  = 0,
-      REVERB_GROUP = 1,
-      CHORUS_GROUP = 2
-      };
-
-enum {
-      REVERB_ROOMSIZE = 0,
-      REVERB_DAMP,
-      REVERB_WIDTH,
-      REVERB_GAIN
-      };
-
-enum {
-      CHORUS_TYPE = 0,
-      CHORUS_SPEED,
-      CHORUS_DEPTH,
-      CHORUS_BLOCKS,
-      CHORUS_GAIN
       };
 
 //---------------------------------------------------------
@@ -314,9 +293,6 @@ enum {
 //---------------------------------------------------------
 
 class Fluid : public Synthesizer {
-      static const int SILENT_BLOCKS = 32*5;
-      int silentBlocks;
-
       QList<SFont*> sfonts;               // the loaded soundfonts
       QList<BankOffset*> bank_offsets;    // the offsets of the soundfont banks
       QList<MidiPatch*> patches;
@@ -344,13 +320,6 @@ class Fluid : public Synthesizer {
 
       unsigned int noteid;                // the id is incremented for every new note. it's used for noteoff's
 
-      float* left_buf;
-      float* right_buf;
-      float* fx_buf[2];
-
-      Reverb* reverb;
-      Chorus* chorus;
-
       SFont* get_sfont_by_name(const QString& name);
       SFont* get_sfont_by_id(int id);
       SFont* get_sfont(int idx) const     { return sfonts[idx];   }
@@ -362,20 +331,17 @@ class Fluid : public Synthesizer {
    public:
       Fluid();
       ~Fluid();
-      virtual void init();
+      virtual void init(float sampleRate);
 
       virtual const char* name() const { return "Fluid"; }
 
       virtual void play(const Event&);
       virtual const QList<MidiPatch*>& getPatchInfo() const { return patches; }
 
-      // set/get a single parameter
-      virtual SyntiParameter parameter(int id) const;
-      virtual void setParameter(int id, double val);
-
       // get/set synthesizer state (parameter set)
-      virtual SyntiState state() const;
-      virtual void setState(SyntiState&);
+      virtual SynthesizerGroup state() const;
+      virtual void setState(SynthesizerGroup&);
+
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
 
@@ -420,7 +386,7 @@ class Fluid : public Synthesizer {
       Voice* alloc_voice(unsigned id, Sample* sample, int chan, int key, int vel, double vt);
       void free_voice_by_kill();
 
-      virtual void process(unsigned len, float* out);
+      virtual void process(unsigned len, float* out, float* effect1, float* effect2);
 
       void program_reset();
 
@@ -440,13 +406,15 @@ class Fluid : public Synthesizer {
       double getPitch(int k) const   { return _tuning[k]; }
       float ct2hz_real(float cents)  { return powf(2.0f, (cents - 6900.0f) / 1200.0f) * _masterTuning; }
 
-      float act2hz(float c)     { return 8.176 * pow(2.0, (double) c / 1200.0); }
-      float ct2hz(float cents)  { return act2hz(qBound(1500.0f, cents, 13500.0f)); }
+      float act2hz(float c)          { return 8.176 * pow(2.0, (double) c / 1200.0); }
+      float ct2hz(float cents)       { return act2hz(qBound(1500.0f, cents, 13500.0f)); }
 
       virtual double masterTuning() const     { return _masterTuning; }
       virtual void setMasterTuning(double f)  { _masterTuning = f;    }
 
       QString error() const { return _error; }
+
+      virtual SynthesizerGui* gui();
 
       friend class Voice;
       friend class Preset;

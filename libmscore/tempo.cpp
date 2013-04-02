@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tempo.cpp 4874 2011-10-21 12:18:42Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

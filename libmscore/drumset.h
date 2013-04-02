@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: drumset.h 5384 2012-02-27 12:21:49Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

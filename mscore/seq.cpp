@@ -22,14 +22,7 @@
 #include "seq.h"
 #include "musescore.h"
 
-#ifdef USE_ALSA
-#include "alsa.h"
-#endif
-#ifdef USE_PORTAUDIO
-#include "pa.h"
-#endif
-
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "libmscore/slur.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
@@ -49,28 +42,11 @@
 #include "synthcontrol.h"
 #include "pianoroll.h"
 
-#ifdef USE_JACK
-#include "jackaudio.h"
-#endif
-
-#ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
-#endif
-#ifdef ZERBERUS
-#include "zerberus/zerberus.h"
-#endif
-
-#include "fluid/fluid.h"
 #include "click.h"
 
 #include <vorbis/vorbisfile.h>
 
-#ifdef USE_PULSEAUDIO
-extern Driver* getPulseAudioDriver(Seq*);
-#endif
-
 Seq* seq;
-extern MasterSynthesizer* synti;
 
 static const int guiRefresh   = 10;       // Hz
 static const int peakHoldTime = 1400;     // msec
@@ -161,7 +137,7 @@ Seq::Seq()
       endTick  = 0;
       state    = TRANSPORT_STOP;
       oggInit  = false;
-      driver   = 0;
+      _driver  = 0;
       playPos  = events.constBegin();
 
       playTime  = 0;
@@ -191,7 +167,7 @@ Seq::Seq()
 
 Seq::~Seq()
       {
-      delete driver;
+      delete _driver;
       }
 
 //---------------------------------------------------------
@@ -220,7 +196,6 @@ void Seq::setScoreView(ScoreView* v)
             oggInit = false;
             }
       if (cv !=v && cs) {
-            cs->setSyntiState(synti->state());
             unmarkNotes();
             stopWait();
             }
@@ -231,9 +206,9 @@ void Seq::setScoreView(ScoreView* v)
             heartBeatTimer->start(20);    // msec
 
       playlistChanged = true;
-      synti->reset();
+      _synti->reset();
       if (cs) {
-            synti->setState(cs->syntiState());
+            // _synti->setState(cs->synthesizerState());
             initInstruments();
             seek(cs->playPos());
             }
@@ -247,7 +222,7 @@ void Seq::setScoreView(ScoreView* v)
 
 void Seq::selectionChanged(int mode)
       {
-      if (cs == 0 || driver == 0)
+      if (cs == 0 || _driver == 0)
             return;
 
       int tick = cs->pos();
@@ -267,114 +242,10 @@ void Seq::selectionChanged(int mode)
 
 bool Seq::init()
       {
-      driver = 0;
-
-#define useJackFlag       (preferences.useJackAudio || preferences.useJackMidi)
-#define useAlsaFlag       preferences.useAlsaAudio
-#define usePortaudioFlag  preferences.usePortaudioAudio
-#define usePulseAudioFlag preferences.usePulseAudio
-
-#ifdef USE_PULSEAUDIO
-      if (MScore::debugMode)
-            qDebug("usePulseAudioFlag %d\n", usePulseAudioFlag);
-      if (usePulseAudioFlag) {
-            driver = getPulseAudioDriver(this);
-            if (!driver->init()) {
-                  qDebug("init PulseAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_PORTAUDIO
-      if (MScore::debugMode)
-            qDebug("usePortaudioFlag %d\n", usePortaudioFlag);
-      if (usePortaudioFlag) {
-            driver = new Portaudio(this);
-            if (!driver->init()) {
-                  qDebug("init PortAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_ALSA
-      if (MScore::debugMode)
-            qDebug("useAlsaFlag %d\n", useAlsaFlag);
-      if (driver == 0 && useAlsaFlag) {
-            driver = new AlsaAudio(this);
-            if (!driver->init()) {
-                  qDebug("init ALSA driver failed\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else {
-                  useALSA = true;
-                  }
-            }
-#endif
-#ifdef USE_JACK
-      if (MScore::debugMode)
-            qDebug("useJackFlag %d\n", useJackFlag);
-      if (useJackFlag) {
-            useAlsaFlag      = false;
-            usePortaudioFlag = false;
-            driver = new JackAudio(this);
-            if (!driver->init()) {
-                  qDebug("no JACK server found\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  useJACK = true;
-            }
-#endif
-
-      if (driver == 0) {
-#if 0
-            QString s = tr("Init audio driver failed.\n"
-                                "Sequencer will be disabled.");
-            QMessageBox::critical(0, "MuseScore: Init Audio Driver", s);
-#endif
-            qDebug("init audio driver failed");
-            return false;
-            }
-      MScore::sampleRate = driver->sampleRate();
-      synti->setSampleRate(MScore::sampleRate);
-      if (preferences.useJackAudio
-         || preferences.useJackMidi
-         || preferences.useAlsaAudio
-         || preferences.usePortaudioAudio
-         || preferences.usePulseAudio) {
-            synti->registerSynthesizer(new FluidS::Fluid());
-#ifdef AEOLUS
-            synti->registerSynthesizer(new Aeolus());
-#endif
-#ifdef ZERBERUS
-            synti->registerSynthesizer(new Zerberus());
-#endif
-            }
-      _gain = preferences.masterGain;
-      synti->init();
-      Synthesizer* fluid = synti->synthesizer("Fluid");
-      if (fluid) {
-            fluid->setMasterTuning(preferences.tuning);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 0).val, preferences.reverbRoomSize);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 1).val, preferences.reverbDamp);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 2).val, preferences.reverbWidth);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 3).val, preferences.reverbGain);
-            fluid->setParameter(SParmId(FLUID_ID, 2, 4).val, preferences.chorusGain);
-            }
-
-      if (!driver->start()) {
+      if (!_driver->start()) {
             qDebug("Cannot start I/O");
             return false;
             }
-
       running = true;
       return true;
       }
@@ -385,12 +256,12 @@ bool Seq::init()
 
 void Seq::exit()
       {
-      if (driver) {
+      if (_driver) {
             if (MScore::debugMode)
                   qDebug("Stop I/O\n");
             stopWait();
-            delete driver;
-            driver = 0;
+            delete _driver;
+            _driver = 0;
             }
       }
 
@@ -400,8 +271,8 @@ void Seq::exit()
 
 QList<QString> Seq::inputPorts()
       {
-      if (driver)
-            return driver->inputPorts();
+      if (_driver)
+            return _driver->inputPorts();
       QList<QString> a;
       return a;
       }
@@ -422,7 +293,7 @@ void Seq::rewindStart()
 
 bool Seq::canStart()
       {
-      if (!driver)
+      if (!_driver)
             return false;
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
@@ -450,7 +321,7 @@ void Seq::start()
                   }
             }
       seek(cs->playPos());
-      driver->startTransport();
+      _driver->startTransport();
       }
 
 //---------------------------------------------------------
@@ -466,9 +337,9 @@ void Seq::stop()
             ov_clear(&vf);
             oggInit = false;
             }
-      if (!driver)
+      if (!_driver)
             return;
-      driver->stopTransport();
+      _driver->stopTransport();
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
@@ -544,7 +415,7 @@ void Seq::seqMessage(int msg)
             case '0':         // STOP
                   guiStop();
 //                  heartBeatTimer->stop();
-                  if (driver && mscore->getSynthControl()) {
+                  if (_driver && mscore->getSynthControl()) {
                         meterValue[0]     = .0f;
                         meterValue[1]     = .0f;
                         meterPeakValue[0] = .0f;
@@ -701,7 +572,7 @@ void Seq::metronome(unsigned n, float* p)
 void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
-      int driverState = driver->getState();
+      int driverState = _driver->getState();
 
       if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY)
@@ -735,7 +606,7 @@ void Seq::process(unsigned n, float* buffer)
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
                               metronome(n, p);
-                              synti->process(n, p);
+                              _synti->process(n, p);
                               p += n * 2;
                               playTime  += n;
                               frames    -= n;
@@ -772,7 +643,7 @@ void Seq::process(unsigned n, float* buffer)
             if (frames) {
                   if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
                         metronome(frames, p);
-                        synti->process(frames, p);
+                        _synti->process(frames, p);
                         playTime += frames;
                         }
                   else {
@@ -795,12 +666,12 @@ void Seq::process(unsigned n, float* buffer)
                         }
                   }
             if (playPos == events.constEnd()) {
-                  driver->stopTransport();
+                  _driver->stopTransport();
                   rewindStart();
                   }
             }
       else {
-            synti->process(frames, p);
+            _synti->process(frames, p);
             }
       //
       // metering / master gain
@@ -1021,7 +892,7 @@ void Seq::stopNoteTimer()
 
 void Seq::stopNotes(int channel)
       {
-      synti->allNotesOff(channel);
+      _synti->allNotesOff(channel);
       }
 
 //---------------------------------------------------------
@@ -1149,7 +1020,7 @@ void Seq::seekEnd()
 
 void Seq::guiToSeq(const SeqMsg& msg)
       {
-      if (!driver || !running)
+      if (!_driver || !running)
             return;
       toSeq.enqueue(msg);
       }
@@ -1169,7 +1040,7 @@ void Seq::eventToGui(Event e)
 
 QList<MidiPatch*> Seq::getPatchInfo() const
       {
-      return synti->getPatchInfo();
+      return _synti->getPatchInfo();
       }
 
 //---------------------------------------------------------
@@ -1178,8 +1049,8 @@ QList<MidiPatch*> Seq::getPatchInfo() const
 
 void Seq::midiInputReady()
       {
-      if (driver)
-            driver->midiRead();
+      if (_driver)
+            _driver->midiRead();
       }
 
 //---------------------------------------------------------
@@ -1254,7 +1125,7 @@ void Seq::putEvent(const Event& event)
             return;
             }
       int syntiIdx= cs->midiMapping(channel)->articulation->synti;
-      synti->play(event, syntiIdx);
+      _synti->play(event, syntiIdx);
       }
 
 //---------------------------------------------------------
@@ -1263,7 +1134,7 @@ void Seq::putEvent(const Event& event)
 
 int Seq::synthNameToIndex(const QString& name) const
       {
-      return synti->index(name);
+      return _synti->index(name);
       }
 
 //---------------------------------------------------------
@@ -1272,7 +1143,7 @@ int Seq::synthNameToIndex(const QString& name) const
 
 QString Seq::synthIndexToName(int idx) const
       {
-      return synti->name(idx);
+      return _synti->name(idx);
       }
 
 //---------------------------------------------------------
@@ -1283,7 +1154,7 @@ QString Seq::synthIndexToName(int idx) const
 void Seq::heartBeat()
       {
       SynthControl* sc = mscore->getSynthControl();
-      if (sc && driver) {
+      if (sc && _driver) {
             if (++peakTimer[0] >= peakHold)
                   meterPeakValue[0] *= .7f;
             if (++peakTimer[1] >= peakHold)

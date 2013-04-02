@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: lyrics.cpp 5655 2012-05-21 12:33:32Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

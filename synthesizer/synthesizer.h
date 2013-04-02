@@ -17,7 +17,9 @@ struct MidiPatch;
 class Event;
 class Synth;
 
-#include "libmscore/sparm.h"
+#include "libmscore/synthesizerstate.h"
+
+class SynthesizerGui;
 
 //---------------------------------------------------------
 //   Synthesizer
@@ -27,11 +29,13 @@ class Synthesizer {
       bool _active;
 
    protected:
+      float _sampleRate;
 
    public:
       Synthesizer() : _active(false) {}
       virtual ~Synthesizer() {}
-      virtual void init()      {}
+      virtual void init(float sr)    { _sampleRate = sr; }
+      float sampleRate() const       { return _sampleRate; }
 
       virtual const char* name() const = 0;
 
@@ -44,25 +48,23 @@ class Synthesizer {
 
       virtual QStringList soundFonts() const = 0;
 
-      virtual void process(unsigned, float*) = 0;
+      virtual void process(unsigned, float*, float*, float*) = 0;
       virtual void play(const Event&) = 0;
 
       virtual const QList<MidiPatch*>& getPatchInfo() const = 0;
 
-      // set/get a single parameter
-      virtual SyntiParameter parameter(int /*id*/) const { return SyntiParameter(); }
-      virtual void setParameter(int /*id*/, double /*val*/) {}
-      virtual void setParameter(int /*id*/, const QString&) {}
-
       // get/set synthesizer state
-      virtual SyntiState state() const = 0;
-      virtual void setState(SyntiState&) {}
-      void reset() { _active = false; }
+      virtual SynthesizerGroup state() const = 0;
+      virtual void setState(const SynthesizerGroup&) {}
+
+      void reset()                    { _active = false; }
       bool active() const             { return _active; }
       void setActive(bool val = true) { _active = val;  }
 
       virtual void allSoundsOff(int /*channel*/) {}
       virtual void allNotesOff(int /*channel*/) {}
+
+      virtual SynthesizerGui* gui() { return 0; }
       };
 
 #endif
