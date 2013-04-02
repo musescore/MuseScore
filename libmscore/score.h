@@ -377,6 +377,7 @@ class Score : public QObject {
 
       void addTempo();
       void addMetronome();
+      void addLoop();
 
       void cmdResetBeamMode();
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>205</height>
+    <height>233</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1239,6 +1239,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="loopButton">
+         <property name="text">
+          <string notr="true">L</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="metronomeButton">
          <property name="text">
           <string notr="true">M</string>
@@ -1280,7 +1287,7 @@
       <number>6</number>
      </property>
      <item row="0" column="1">
-      <widget class="Awl::VolSlider" name="volumeSlider">
+      <widget class="Awl::VolSlider" name="volumeSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -1303,7 +1310,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="Awl::Slider" name="tempoSlider">
+      <widget class="Awl::Slider" name="tempoSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -1313,22 +1320,22 @@
        <property name="toolTip">
         <string>relative tempo</string>
        </property>
-       <property name="value">
+       <property name="value" stdset="0">
         <double>100.000000000000000</double>
        </property>
-       <property name="scaleWidth">
+       <property name="scaleWidth" stdset="0">
         <number>7</number>
        </property>
-       <property name="minValue">
+       <property name="minValue" stdset="0">
         <double>10.000000000000000</double>
        </property>
-       <property name="maxValue">
+       <property name="maxValue" stdset="0">
         <double>150.000000000000000</double>
        </property>
-       <property name="lineStep">
+       <property name="lineStep" stdset="0">
         <double>5.000000000000000</double>
        </property>
-       <property name="pageStep">
+       <property name="pageStep" stdset="0">
         <double>20.000000000000000</double>
        </property>
       </widget>
@@ -1359,8 +1366,6 @@
    <header>awl/volslider.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

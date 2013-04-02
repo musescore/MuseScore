@@ -460,6 +460,11 @@ void Seq::start()
 
 void Seq::stop()
       {
+      if (mscore->loop()) {
+          QAction* a = getAction("play");
+          a->trigger();
+          return;
+      }
       if (state == TRANSPORT_STOP)
             return;
       if (oggInit) {
