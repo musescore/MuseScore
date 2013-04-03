@@ -151,11 +151,11 @@ void Mixer::patchListChanged()
       QString s;
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
+      const QList<MidiPatch*> pl = seq->getPatchInfo();
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe    = (PartEdit*)(wi->widget());
             bool drum       = m.part->instr()->useDrumset();
-            const QList<MidiPatch*> pl = seq->getPatchInfo();
             pe->patch->clear();
             foreach(const MidiPatch* p, pl) {
                   if (p->drum == drum)

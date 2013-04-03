@@ -2158,21 +2158,28 @@ MasterSynthesizer* synthesizerFactory()
       ms->setMasterTuning(preferences.tuning);
       ms->setGain(preferences.masterGain);
 
-#ifdef ZERBERUS
-      ms->registerSynthesizer(new Zerberus());
-#endif
-#ifdef AEOLUS
-      ms->registerSynthesizer(new Aeolus());
-#endif
       FluidS::Fluid* fluid = new FluidS::Fluid();
       ms->registerSynthesizer(fluid);
-printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
       if (!preferences.defaultSf.isEmpty()) {
             QStringList sfl;
             sfl.append(preferences.defaultSf);
             fluid->loadSoundFonts(sfl);
             fluid->gui()->synthesizerChanged();
             }
+
+#ifdef AEOLUS
+      ms->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+      Zerberus* zerberus = new Zerberus();
+      ms->registerSynthesizer(zerberus);
+      if (!preferences.defaultSfz.isEmpty()) {
+            QStringList sfz;
+            sfz.append(preferences.defaultSfz);
+            zerberus->loadSoundFonts(sfz);
+            zerberus->gui()->synthesizerChanged();
+            }
+#endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);
       ms->registerEffect(0, new Freeverb);
@@ -2181,17 +2188,6 @@ printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
       ms->registerEffect(1, new Freeverb);
       ms->setEffect(0, 1);
       ms->setEffect(1, 0);
-#if 0
-      Synthesizer* fluid = ms->synthesizer("Fluid");
-      if (fluid) {
-            fluid->setMasterTuning(preferences.tuning);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 0).val, preferences.reverbRoomSize);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 1).val, preferences.reverbDamp);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 2).val, preferences.reverbWidth);
-            fluid->setParameter(SParmId(FLUID_ID, 1, 3).val, preferences.reverbGain);
-            fluid->setParameter(SParmId(FLUID_ID, 2, 4).val, preferences.chorusGain);
-            }
-#endif
       return ms;
       }
 
