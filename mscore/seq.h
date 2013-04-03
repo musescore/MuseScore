@@ -89,7 +89,6 @@ class Seq : public QObject, public Sequencer {
 
       mutable QMutex mutex;
 
-      qreal _gain;
       Score* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
@@ -142,7 +141,6 @@ class Seq : public QObject, public Sequencer {
 
    public slots:
       void setRelTempo(double);
-      void setGain(float);
       void seek(int);
       void stopNotes(int channel = -1);
       void start();
@@ -152,7 +150,6 @@ class Seq : public QObject, public Sequencer {
       void started();
       void stopped();
       int toGui(int);
-      void gainChanged(float);
 
    public:
       // this are also the jack audio transport states:
@@ -201,8 +198,6 @@ class Seq : public QObject, public Sequencer {
       void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
 
       int getCurTick();
-
-      float gain() const { return _gain; }
 
       int synthNameToIndex(const QString&) const;
       QString synthIndexToName(int) const;
