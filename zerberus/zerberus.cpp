@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "midievent.h"
+#include "mscore/preferences.h"
 #include "synthesizer/midipatch.h"
 
 #include "zerberus.h"
@@ -114,13 +115,22 @@ void Zerberus::play(const MidiEvent& event)
 //    return true on success
 //---------------------------------------------------------
 
-bool Zerberus::loadInstrument(const QString& path)
+bool Zerberus::loadInstrument(const QString& s)
       {
-      if (path.isEmpty())
+printf("Zerberus::loadInstrument <%s>\n", qPrintable(s));
+      if (s.isEmpty())
             return false;
       for (ZInstrument* instr : instruments) {
-            if (instr->path() == path)    // already loaded?
+            if (instr->path() == s)    // already loaded?
                   return true;
+            }
+      QFileInfoList l = sfzFiles();
+      QString path;
+      foreach (const QFileInfo& fi, l) {
+            if (fi.fileName() == s) {
+                  path = fi.absoluteFilePath();
+                  break;
+                  }
             }
       busy = true;
       ZInstrument* instr = new ZInstrument(this);
@@ -133,6 +143,7 @@ bool Zerberus::loadInstrument(const QString& path)
             busy = false;
             return true;
             }
+      qDebug("Zerberus::loadInstrument failed");
       busy = false;
       delete instr;
       return false;
@@ -434,6 +445,10 @@ ZInstrument* Zerberus::instrument(int n) const
 
 SynthesizerGui* Zerberus::gui()
       {
-      return new ZerberusGui();
+      if (_gui == 0) {
+            _gui = new ZerberusGui();
+            _gui->init(this, sampleRate());
+            }
+      return _gui;
       }
 

@@ -38,4 +38,9 @@ const std::vector<ParDescr>& NoEffect::parDescr() const
       return noeffectPd;
       }
 
+void NoEffect::process(int n, float* src, float* dst)
+      {
+      memcpy(dst, src, n * 2 * sizeof(float));
+      }
+
 

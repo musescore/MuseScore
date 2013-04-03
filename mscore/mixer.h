@@ -59,10 +59,10 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       };
 
 //---------------------------------------------------------
-//   InstrumentListEditor
+//   Mixer
 //---------------------------------------------------------
 
-class InstrumentListEditor : public QScrollArea
+class Mixer : public QScrollArea
       {
       Q_OBJECT
       Score*       cs;
@@ -80,7 +80,7 @@ class InstrumentListEditor : public QScrollArea
    signals:
 
    public:
-      InstrumentListEditor(QWidget* parent);
+      Mixer(QWidget* parent);
       void updateAll(Score*);
       PartEdit* partEdit(int index);
       };
