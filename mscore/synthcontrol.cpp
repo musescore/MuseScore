@@ -51,8 +51,9 @@ SynthControl::SynthControl(QWidget* parent)
 
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      int idx = 0;
       for (Synthesizer* s : synti->synthesizer())
-            tabWidget->insertTab(0, s->gui(), tr(s->name()));
+            tabWidget->insertTab(idx++, s->gui(), tr(s->name()));
 
       // effectA        combo box
       // effectStackA   widget stack

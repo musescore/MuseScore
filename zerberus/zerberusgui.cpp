@@ -182,3 +182,15 @@ void ZerberusGui::removeClicked()
             }
       }
 
+//---------------------------------------------------------
+//   synthesizerChanged
+//---------------------------------------------------------
+
+void ZerberusGui::synthesizerChanged()
+      {
+      QStringList sfonts = zerberus()->soundFonts();
+      files->clear();
+      files->addItems(sfonts);
+      }
+
+

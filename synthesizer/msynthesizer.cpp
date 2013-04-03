@@ -101,7 +101,9 @@ QList<MidiPatch*> MasterSynthesizer::getPatchInfo() const
       {
       QList<MidiPatch*> pl;
       int idx = 0;
+      printf("getPatchInfo\n");
       for(Synthesizer* s : _synthesizer) {
+            printf("  <%s>\n", qPrintable(s->name()));
             QList<MidiPatch*> ip = s->getPatchInfo();
             foreach(MidiPatch* mp, ip)
                   mp->synti = idx;
