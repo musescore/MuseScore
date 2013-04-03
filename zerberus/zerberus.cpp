@@ -439,16 +439,3 @@ ZInstrument* Zerberus::instrument(int n) const
       return 0;
       }
 
-//---------------------------------------------------------
-//   gui
-//---------------------------------------------------------
-
-SynthesizerGui* Zerberus::gui()
-      {
-      if (_gui == 0) {
-            _gui = new ZerberusGui();
-            _gui->init(this, sampleRate());
-            }
-      return _gui;
-      }
-

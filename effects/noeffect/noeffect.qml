@@ -16,11 +16,9 @@ Rectangle {
         }
 
     Text {
-        anchors.fill: parent
+        anchors.centerIn: parent
         text: "no effect"
         color: "white"
-        horizontalAlignment: Text.AlignCenter
-        verticalAlignment: Text.AlignCenter
         }
     }
 

@@ -83,6 +83,7 @@ class MasterSynthesizer : public QObject {
 
       Synthesizer* synthesizer(const QString& name);
       const std::vector<Effect*>& effectList(int ab) const { return _effectList[ab]; }
+      const std::vector<Synthesizer*> synthesizer() const { return _synthesizer; }
       void registerEffect(int ab, Effect*);
 
       void reset();

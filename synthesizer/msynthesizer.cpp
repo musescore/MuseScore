@@ -25,6 +25,8 @@
 MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
+      lock1 = false;
+      lock2 = false;
       _synthesizer.reserve(4);
       _gain = 1.0;
       for (int i = 0; i < MAX_EFFECTS; ++i)
@@ -149,9 +151,7 @@ Synthesizer* MasterSynthesizer::synthesizer(const QString& name)
 
 void MasterSynthesizer::registerSynthesizer(Synthesizer* s)
       {
-      s->init(float(_sampleRate));
       _synthesizer.push_back(s);
-      connect(s->gui(), SIGNAL(sfChanged()), SLOT(sfChanged()));
       }
 
 //---------------------------------------------------------
@@ -178,7 +178,6 @@ void MasterSynthesizer::setEffect(int ab, int idx)
             sleep(1);
       _effect[ab] = _effectList[ab][idx];
       lock2 = false;
-printf("setEffect %d %s\n", ab, qPrintable(_effect[ab]->name()));
       }
 
 //---------------------------------------------------------
@@ -197,8 +196,10 @@ Effect* MasterSynthesizer::effect(int idx)
 void MasterSynthesizer::setSampleRate(int val)
       {
       _sampleRate = val;
-      for (Synthesizer* s : _synthesizer)
+      for (Synthesizer* s : _synthesizer) {
             s->init(_sampleRate);
+            connect(s->gui(), SIGNAL(sfChanged()), SLOT(sfChanged()));
+            }
       }
 
 //---------------------------------------------------------
@@ -228,10 +229,8 @@ void MasterSynthesizer::process(unsigned n, float* p)
             }
       else if (_effect[0] || _effect[1]) {
             memcpy(effect1Buffer, p, n * sizeof(float) * 2);
-            if (_effect[0]) {
-printf("effect A\n");
+            if (_effect[0])
                   _effect[0]->process(n, effect1Buffer, p);
-                  }
             else
                   _effect[1]->process(n, effect1Buffer, p);
             }

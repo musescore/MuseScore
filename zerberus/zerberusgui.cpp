@@ -61,11 +61,22 @@ QString SfzListDialog::path()
       }
 
 //---------------------------------------------------------
+//   gui
+//---------------------------------------------------------
+
+SynthesizerGui* Zerberus::gui()
+      {
+      if (_gui == 0)
+            _gui = new ZerberusGui(this);
+      return _gui;
+      }
+
+//---------------------------------------------------------
 //   Zerberusgui
 //---------------------------------------------------------
 
-ZerberusGui::ZerberusGui()
-   : SynthesizerGui()
+ZerberusGui::ZerberusGui(Synthesizer* s)
+   : SynthesizerGui(s)
       {
       setupUi(this);
       connect(add, SIGNAL(clicked()), SLOT(addClicked()));

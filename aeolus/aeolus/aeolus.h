@@ -114,6 +114,8 @@ class Aeolus : public Synthesizer {
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
 
+      virtual SynthesizerGui* gui();
+
       friend class Model;
       };
 
