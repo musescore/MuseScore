@@ -193,8 +193,10 @@ void PartEdit::patchChanged(int n)
       if (part == 0)
             return;
       const MidiPatch* p = (MidiPatch*)patch->itemData(n, Qt::UserRole).value<void*>();
-      if (p == 0)
+      if (p == 0) {
+            qDebug("PartEdit::patchChanged: no patch\n");
             return;
+            }
       Score* score = part->score();
       if (score) {
             score->startCmd();

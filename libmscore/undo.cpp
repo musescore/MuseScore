@@ -2253,8 +2253,10 @@ void ChangePatch::flip()
       channel->synti   = patch.synti;
       patch            = op;
 
-      if (MScore::seq == 0)
+      if (MScore::seq == 0) {
+            qDebug("ChangePatch: no seq");
             return;
+            }
 
       Event event(ME_CONTROLLER);
       event.setChannel(channel->channel);
