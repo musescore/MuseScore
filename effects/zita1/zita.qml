@@ -2,9 +2,9 @@ import QtQuick 1.1
 
 Rectangle {
     id: screen
-    width: 640
-    height: 75
-    border.width: 2
+    width: 642
+    height: 77
+    border.width: 1
     border.color: "white"
     radius: 5
     smooth: true
@@ -25,6 +25,8 @@ Rectangle {
         }
 
     Row {
+        x: 1
+        y: 1
           Image {
               source: "qrc:/zita1/revsect.png"
               fillMode: Image.PreserveAspectCrop
