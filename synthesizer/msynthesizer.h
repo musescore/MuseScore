@@ -44,7 +44,7 @@ class MasterSynthesizer : public QObject {
       std::vector<Effect*> _effectList[2];
       Effect* _effect[2];
 
-      int _sampleRate;
+      float _sampleRate;
 
       float effect1Buffer[MAX_BUFFERSIZE];
       float effect2Buffer[MAX_BUFFERSIZE];
@@ -64,8 +64,8 @@ class MasterSynthesizer : public QObject {
       ~MasterSynthesizer();
       void registerSynthesizer(Synthesizer*);
 
-      int sampleRate()            { return _sampleRate; }
-      void setSampleRate(int val);
+      float sampleRate()            { return _sampleRate; }
+      void setSampleRate(float val);
 
       void process(unsigned, float*);
       void play(const Event&, unsigned);

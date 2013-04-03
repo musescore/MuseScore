@@ -77,6 +77,8 @@ SynthControl::SynthControl(QWidget* parent)
             settings.endGroup();
             }
 
+      updateSyntiValues();
+
       tabWidget->setCurrentIndex(0);
 
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
