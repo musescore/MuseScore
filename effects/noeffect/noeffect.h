@@ -29,7 +29,7 @@ class NoEffect : public Effect
       NoEffect() {}
 
       virtual void init(float) {}
-      virtual void process(int, float*, float*) {}
+      virtual void process(int, float*, float*);
 
       virtual void setValue(int, double) {}
       virtual void setNValue(int, double) {}

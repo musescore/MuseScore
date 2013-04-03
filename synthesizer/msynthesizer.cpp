@@ -14,6 +14,7 @@
 #include "event.h"
 #include "synthesizer.h"
 #include "msynthesizer.h"
+#include "synthesizergui.h"
 #include "libmscore/xml.h"
 #include "midipatch.h"
 #include "mscore/seq.h"
@@ -25,6 +26,7 @@ extern Seq* seq;
 //---------------------------------------------------------
 
 MasterSynthesizer::MasterSynthesizer()
+   : QObject(0)
       {
       _synthesizer.reserve(4);
       for (int i = 0; i < MAX_EFFECTS; ++i)
@@ -149,7 +151,9 @@ Synthesizer* MasterSynthesizer::synthesizer(const QString& name)
 
 void MasterSynthesizer::registerSynthesizer(Synthesizer* s)
       {
+      s->init(float(_sampleRate));
       _synthesizer.push_back(s);
+      connect(s->gui(), SIGNAL(sfChanged()), SLOT(sfChanged()));
       }
 
 //---------------------------------------------------------
@@ -176,6 +180,7 @@ void MasterSynthesizer::setEffect(int ab, int idx)
             sleep(1);
       _effect[ab] = _effectList[ab][idx];
       lock2 = false;
+printf("setEffect %d %s\n", ab, qPrintable(_effect[ab]->name()));
       }
 
 //---------------------------------------------------------
@@ -225,8 +230,10 @@ void MasterSynthesizer::process(unsigned n, float* p)
             }
       else if (_effect[0] || _effect[1]) {
             memcpy(effect1Buffer, p, n * sizeof(float) * 2);
-            if (_effect[0])
+            if (_effect[0]) {
+printf("effect A\n");
                   _effect[0]->process(n, effect1Buffer, p);
+                  }
             else
                   _effect[1]->process(n, effect1Buffer, p);
             }
@@ -245,6 +252,7 @@ int MasterSynthesizer::indexOfEffect(int ab, const QString& name)
                   return idx;
             ++idx;
             }
+      qDebug("indexOfEffect %d %s not found", ab, qPrintable(name));
       return -1;
       }
 

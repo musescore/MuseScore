@@ -20,6 +20,7 @@ endif (APPLE)
 
 QT4_WRAP_CPP(synthesizerMocs
       synthesizergui.h
+      msynthesizer.h
       )
 
 add_library (synthesizer STATIC

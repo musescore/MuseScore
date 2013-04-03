@@ -415,6 +415,7 @@ class Fluid : public Synthesizer {
       QString error() const { return _error; }
 
       virtual SynthesizerGui* gui();
+      QFileInfoList sfFiles();
 
       friend class Voice;
       friend class Preset;

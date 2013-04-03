@@ -145,6 +145,7 @@ class Zerberus : public Synthesizer {
       virtual void setParameter(int, const QString&);
 
       virtual SynthesizerGui* gui();
+      QFileInfoList sfzFiles();
       };
 
 #endif
