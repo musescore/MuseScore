@@ -427,6 +427,8 @@ void Shortcut::load()
                                           sc->_standardKey = QKeySequence::StandardKey(e.readInt());
                                     else if (tag == "seq")
                                           sc->_keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
+                                    else if (tag == "code")
+                                          sc->_keys.append(QKeySequence(e.readInt()));
                                     else
                                           e.unknown();
                                     }
