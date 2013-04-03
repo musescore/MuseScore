@@ -26,7 +26,7 @@ Rectangle {
 
     Row {
           Image {
-              source: "qrc:/effects/zita1/revsect.png"
+              source: "qrc:/zita1/revsect.png"
               fillMode: Image.PreserveAspectCrop
               Rotary { id: delay; pid: "delay"; x:  30; y: 32 }
               Rotary { id: xover; pid: "xover"; x:  92; y: 17 }
@@ -35,24 +35,24 @@ Rectangle {
               Rotary { id: fdamp; pid: "fdamp"; x: 267; y: 17 }
               }
           Image {
-              source: "qrc:/effects/zita1/eq1sect.png"
+              source: "qrc:/zita1/eq1sect.png"
               fillMode: Image.PreserveAspectCrop
               Rotary { id: eq1fr; pid: "eq1fr"; x: 19; y: 32 }
               Rotary { id: eq1gn; pid: "eq1gn"; x: 68; y: 17 }
               }
           Image {
-              source: "qrc:/effects/zita1/eq2sect.png"
+              source: "qrc:/zita1/eq2sect.png"
               fillMode: Image.PreserveAspectCrop
               Rotary { id: eq2fr; pid: "eq2fr"; x: 19; y: 32 }
               Rotary { id: eq2gn; pid: "eq2gn"; x: 68; y: 17 }
               }
           Image {
-              source: "qrc:/effects/zita1/mixsect.png"
+              source: "qrc:/zita1/mixsect.png"
               fillMode: Image.PreserveAspectCrop
               Rotary { id: opmix; pid: "opmix"; x: 23; y: 32 }
               }
           Image {
-              source: "qrc:/effects/zita1/redzita.png"
+              source: "qrc:/zita1/redzita.png"
               fillMode: Image.PreserveAspectCrop
               }
           }

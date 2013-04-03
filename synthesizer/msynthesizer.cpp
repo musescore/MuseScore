@@ -236,7 +236,7 @@ printf("effect A\n");
                   _effect[1]->process(n, effect1Buffer, p);
             }
       for (unsigned i = 0; i < n * 2; ++i)
-            *p *= _gain;
+            *p++ *= _gain;
       lock1 = false;
       }
 

@@ -2314,6 +2314,8 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       Q_INIT_RESOURCE(zita);
+      Q_INIT_RESOURCE(noeffect);
+      Q_INIT_RESOURCE(freeverb);
 
 #ifndef Q_WS_MAC
       // Save the preferences in QSettings::NativeFormat

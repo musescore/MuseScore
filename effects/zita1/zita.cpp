@@ -27,19 +27,19 @@ enum {
       };
 
 static const std::vector<ParDescr> pd = {
-      { R_DELAY, "delay", false,  0.02,       0.100,       0.04  },
-      { R_XOVER, "xover", true,   log(50.0),  log(1000.0), 200.0 },
-      { R_RTLOW, "rtlow", true,   log(1.0),   log(8.0),    3.0   },
-      { R_RTMID, "rtmid", true,   log(1.0),   log(8.0),    2.0   },
-      { R_FDAMP, "fdamp", true,   log(1.5e3), log(24.0e3), 6.0e3 },
+      { R_DELAY, "delay", false,  0.02,        0.100,          0.04  },
+      { R_XOVER, "xover", true,   logf(50.0),  logf(1000.0), 200.0 },
+      { R_RTLOW, "rtlow", true,   logf(1.0),   logf(8.0),    3.0   },
+      { R_RTMID, "rtmid", true,   logf(1.0),   logf(8.0),    2.0   },
+      { R_FDAMP, "fdamp", true,   logf(1.5e3), logf(24.0e3), 6.0e3 },
 
-      { R_EQ1FR, "eq1fr", true,   log(40.0),  log(2.5e3),  160.0 },
-      { R_EQ1GN, "eq1gn", false, -15.0,       15.0,        0.0   },
+      { R_EQ1FR, "eq1fr", true,   logf(40.0),  logf(2.5e3), 160.0 },
+      { R_EQ1GN, "eq1gn", false, -15.0,        15.0,        0.0   },
 
-      { R_EQ2FR, "eg2fr", true,   log(160.0), log(10e3),   2.5e3 },
-      { R_EQ2GN, "eg2gn", false, -15.0,       15.0,        0.0   },
+      { R_EQ2FR, "eg2fr", true,   logf(160.0), logf(10e3),  2.5e3 },
+      { R_EQ2GN, "eg2gn", false, -15.0,        15.0,        0.0   },
 
-      { R_OPMIX, "opmix", false,  0.0,        1.0,         0.5   }
+      { R_OPMIX, "opmix", false,  0.0,         1.0,         0.5   }
       };
 
 //---------------------------------------------------------
