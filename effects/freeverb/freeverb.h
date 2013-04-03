@@ -15,19 +15,6 @@
 
 #include "effects/effect.h"
 
-//---------------------------------------------------------
-//   ReverbParam
-//---------------------------------------------------------
-
-enum ReverbParam {
-      WET = 0,
-      ROOMSIZE,
-      DAMP,
-      WIDTH,
-      SEND,
-      SIZE
-      };
-
 static const int numcombs = 8;
 static const int numallpasses = 4;
 

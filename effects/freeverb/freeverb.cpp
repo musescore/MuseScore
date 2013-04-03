@@ -19,12 +19,30 @@ static const float offsetroom = 0.7f;
 static const float scalewet   = 3.0f;
 static const float scaledamp  = 0.4f;
 
+//---------------------------------------------------------
+//   ReverbParam
+//---------------------------------------------------------
+
+enum {
+      WET = 0,
+      ROOMSIZE,
+      DAMP,
+      WIDTH,
+      SEND
+      };
+
+static const int SIZE = 5;
+
+//---------------------------------------------------------
+//   freeverbPd
+//---------------------------------------------------------
+
 static std::vector<ParDescr> freeverbPd = {
-      { 0, "wet",      false, 0.0, 1.0, 0.0 },
-      { 1, "roomsize", false, 0.0, 1.0, 0.0 },
-      { 2, "damp",     false, 0.0, 1.0, 0.0 },
-      { 3, "width",    false, 0.0, 1.0, 0.0 },
-      { 4, "send",     false, 0.0, 1.0, 0.0 }
+      { WET,      "wet",      false, 0.0, 1.0, 0.0 },
+      { ROOMSIZE, "roomsize", false, 0.0, 1.0, 0.0 },
+      { DAMP,     "damp",     false, 0.0, 1.0, 0.0 },
+      { WIDTH,    "width",    false, 0.0, 1.0, 0.0 },
+      { SEND,     "send",     false, 0.0, 1.0, 0.0 }
       };
 
 //---------------------------------------------------------
@@ -33,7 +51,7 @@ static std::vector<ParDescr> freeverbPd = {
 
 struct ReverbPreset {
       const char* name;
-      float values[ReverbParam::SIZE];
+      float values[SIZE];
       };
 
 static ReverbPreset presets[] = {
@@ -198,7 +216,7 @@ bool Freeverb::setPreset(int nr)
       if ((unsigned)nr >= sizeof(presets)/sizeof(*presets))
             return false;
       const ReverbPreset& preset = presets[nr];
-      for (int i = 0; i < ReverbParam::SIZE; ++i)
+      for (int i = 0; i < SIZE; ++i)
             setValue(i, preset.values[i]);
       parameterChanged = true;
       return true;
@@ -211,22 +229,20 @@ bool Freeverb::setPreset(int nr)
 void Freeverb::setNValue(int idx, double value)
       {
       switch (idx) {
-            case ReverbParam::ROOMSIZE:
+            case ROOMSIZE:
                   newRoomsize = value;
                   break;
-            case ReverbParam::DAMP:
+            case DAMP:
                   newDamp = value;
                   break;
-            case ReverbParam::WIDTH:
+            case WIDTH:
                   newWidth = value;
                   break;
-            case ReverbParam::SEND:
+            case SEND:
                   newSendLevel = value;
                   break;
-            case ReverbParam::WET:
+            case WET:
                   newWet = value;
-                  break;
-            default:
                   break;
             }
       parameterChanged = true;
@@ -240,11 +256,11 @@ double Freeverb::nvalue(int idx) const
       {
       float val = 0.0;
       switch (idx) {
-            case ReverbParam::ROOMSIZE: val = newRoomsize;  break;
-            case ReverbParam::DAMP:     val = newDamp;      break;
-            case ReverbParam::WIDTH:    val = newWidth;     break;
-            case ReverbParam::SEND:     val = newSendLevel; break;
-            case ReverbParam::WET:      val = newWet;       break;
+            case ROOMSIZE: val = newRoomsize;  break;
+            case DAMP:     val = newDamp;      break;
+            case WIDTH:    val = newWidth;     break;
+            case SEND:     val = newSendLevel; break;
+            case WET:      val = newWet;       break;
             }
       return val; // (val - parameters[idx].offset) / parameters[idx].scale;
       }

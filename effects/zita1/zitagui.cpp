@@ -24,7 +24,7 @@ EffectGui* ZitaReverb::gui()
       _gui = new EffectGui;
       _gui->setGeometry(0, 0, 644, 79);
       _gui->setEffect(this);
-      QUrl url("qrc:/effects/zita1/zita.qml");
+      QUrl url("qrc:/zita1/zita.qml");
       _gui->init(url, 44100);
       return _gui;
       }

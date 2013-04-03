@@ -24,7 +24,7 @@ EffectGui* NoEffect::gui()
       {
       EffectGui* eg = new EffectGui;
       eg->setEffect(this);
-      QUrl url;
+      QUrl url("qrc:/noeffect/noeffect.qml");
       eg->init(url, 44100.0);
       return eg;
       }

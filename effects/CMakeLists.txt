@@ -18,7 +18,11 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-QT4_ADD_RESOURCES (qrc_effects_files zita1/zita.qrc)
+QT4_ADD_RESOURCES (qrc_effects_files
+      zita1/zita.qrc
+      freeverb/freeverb.qrc
+      noeffect/noeffect.qrc
+      )
 
 QT4_WRAP_CPP(effectMocs
       effectgui.h
