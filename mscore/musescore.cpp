@@ -2434,7 +2434,7 @@ int main(int argc, char* av[])
             }
 
       seq                = new Seq();
-      MScore::seq        = MScore::seq;
+      MScore::seq        = seq;
       Driver* driver     = driverFactory(seq);
       synti              = synthesizerFactory();
       MScore::sampleRate = driver->sampleRate();
