@@ -51,11 +51,8 @@ SynthControl::SynthControl(QWidget* parent)
 
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      Synthesizer* zerberus = synti->synthesizer("Zerberus");
-      Synthesizer* fluid    = synti->synthesizer("Fluid");
-
-      tabWidget->insertTab(0, zerberus->gui(), tr(zerberus->name()));
-      tabWidget->insertTab(0, fluid->gui(),    tr(fluid->name()));
+      for (Synthesizer* s : synti->synthesizer())
+            tabWidget->insertTab(0, s->gui(), tr(s->name()));
 
       // effectA        combo box
       // effectStackA   widget stack

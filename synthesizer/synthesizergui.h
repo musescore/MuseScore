@@ -30,8 +30,7 @@ class SynthesizerGui : public QWidget {
       virtual void synthesizerChanged() {}
 
    public:
-      SynthesizerGui();
-      void init(Synthesizer* e, double sr);
+      SynthesizerGui(Synthesizer*);
       Synthesizer* synthesizer() { return _synthesizer; }
       };
 

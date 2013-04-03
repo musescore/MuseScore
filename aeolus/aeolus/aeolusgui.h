@@ -1,6 +1,6 @@
 //=============================================================================
-//  MuseSynth
-//  Music Software Synthesizer
+//  MuseScore
+//  Music Composition & Notation
 //
 //  Copyright (C) 2013 Werner Schweer
 //
@@ -10,16 +10,30 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "synthesizergui.h"
-#include "synthesizer.h"
+#ifndef __AEOLUSGUI_H__
+#define __AEOLUSGUI_H__
+
+#include "synthesizer/synthesizergui.h"
+#include "ui_aeolus_gui.h"
+#include "aeolus.h"
 
 //---------------------------------------------------------
-//   SynthesizerGui
+//   AeolusGui
 //---------------------------------------------------------
 
-SynthesizerGui::SynthesizerGui(Synthesizer* s)
-   : QWidget(0)
-      {
-      _synthesizer = s;
-      }
+class AeolusGui : public SynthesizerGui, Ui::AeolusGui {
+      Q_OBJECT
+
+      Aeolus* aeolus() { return static_cast<Aeolus*>(synthesizer()); }
+
+   private slots:
+
+   public slots:
+      virtual void synthesizerChanged();
+
+   public:
+      AeolusGui(Synthesizer*);
+      };
+
+#endif
 

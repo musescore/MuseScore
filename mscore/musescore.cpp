@@ -2164,12 +2164,11 @@ printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
       if (!preferences.defaultSf.isEmpty()) {
             QStringList sfl;
             sfl.append(preferences.defaultSf);
-            printf("   load <%s>\n", qPrintable(sfl[0]));
             fluid->loadSoundFonts(sfl);
             fluid->gui()->synthesizerChanged();
             }
 #ifdef AEOLUS
-      // ms->registerSynthesizer(new Aeolus());
+      ms->registerSynthesizer(new Aeolus());
 #endif
 #ifdef ZERBERUS
       ms->registerSynthesizer(new Zerberus());

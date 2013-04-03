@@ -56,7 +56,7 @@ class FluidGui : public SynthesizerGui, Ui::FluidGui {
       virtual void synthesizerChanged();
 
    public:
-      FluidGui();
+      FluidGui(Synthesizer*);
       };
 
 #endif

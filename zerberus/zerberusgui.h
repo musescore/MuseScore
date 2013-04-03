@@ -48,7 +48,7 @@ class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
       void removeClicked();
 
    public:
-      ZerberusGui();
+      ZerberusGui(Synthesizer*);
       Zerberus* zerberus() { return (Zerberus*)synthesizer(); }
       };
 

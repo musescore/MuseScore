@@ -65,7 +65,7 @@ class Synthesizer {
       virtual void allSoundsOff(int /*channel*/) {}
       virtual void allNotesOff(int /*channel*/) {}
 
-      virtual SynthesizerGui* gui() { return _gui; }
+      virtual SynthesizerGui* gui()  { return _gui; }
       };
 
 #endif

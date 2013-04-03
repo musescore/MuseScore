@@ -62,10 +62,8 @@ QString ListDialog::path()
 
 SynthesizerGui* FluidS::Fluid::gui()
       {
-      if (_gui == 0) {
-            _gui = new FluidGui;
-            _gui->init(this, sampleRate());
-            }
+      if (_gui == 0)
+            _gui = new FluidGui(this);
       return _gui;
       }
 
@@ -73,8 +71,8 @@ SynthesizerGui* FluidS::Fluid::gui()
 //   FluidGui
 //---------------------------------------------------------
 
-FluidGui::FluidGui()
-   : SynthesizerGui()
+FluidGui::FluidGui(Synthesizer* s)
+   : SynthesizerGui(s)
       {
       setupUi(this);
       connect(soundFontUp,     SIGNAL(clicked()), SLOT(soundFontUpClicked()));
