@@ -3146,7 +3146,7 @@ void Measure::layoutX(qreal stretch)
                               if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
-                              QRectF b(h->bbox().translated(h->pos()));
+                              QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;
                               else
