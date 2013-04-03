@@ -345,7 +345,7 @@ QStringList Zerberus::soundFonts() const
       {
       QStringList sl;
       for (ZInstrument* i : instruments)
-            sl.append(i->path());
+            sl.append(QFileInfo(i->path()).fileName());
       return sl;
       }
 
