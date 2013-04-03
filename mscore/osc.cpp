@@ -32,13 +32,16 @@
 #include "mixer.h"
 #include "scoreview.h"
 #include "playpanel.h"
-#include "seq.h"
 #include "preferences.h"
+#include "seq.h"
+#include "synthesizer/msynthesizer.h"
 
 #ifdef OSC
 #include "ofqf/qoscserver.h"
 static int oscPort = 5282;
 #endif
+
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   initOsc
@@ -276,8 +279,7 @@ void MuseScore::oscColorNote(QVariantList list)
 void MuseScore::oscVolume(int val)
       {
       double v = val / 128.0;
-      if (seq)
-            seq->setGain(v);
+      synti->setGain(v);
       }
 
 //---------------------------------------------------------

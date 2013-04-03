@@ -20,7 +20,7 @@
 #include "testutils.h"
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 

@@ -138,7 +138,7 @@ void TestMxmlIO::initTestCase()
 
 static void fixupScore(Score* score)
       {
-      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
+//      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
       score->rebuildMidiMapping();
       score->setCreated(false);

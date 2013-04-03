@@ -31,6 +31,8 @@ class Xml;
 class MasterSynthesizer : public QObject {
       Q_OBJECT
 
+      float _gain;
+
    public:
       static const int MAX_BUFFERSIZE = 4096;
       static const int MAX_EFFECTS = 2;
@@ -51,9 +53,11 @@ class MasterSynthesizer : public QObject {
 
    public slots:
       void sfChanged() { emit soundFontChanged(); }
+      void setGain(float f);
 
    signals:
       void soundFontChanged();
+      void gainChanged(float);
 
    public:
       MasterSynthesizer();
@@ -88,6 +92,8 @@ class MasterSynthesizer : public QObject {
       void setEffect(int ab, int idx);
       Effect* effect(int ab);
       int indexOfEffect(int ab);
+
+      float gain() const    { return _gain; }
       };
 
 #endif
