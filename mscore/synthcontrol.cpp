@@ -121,8 +121,8 @@ void MuseScore::showSynthControl()
             synthControl = new SynthControl(this);
             synthControl->setScore(cs);
             connect(synthControl, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-            connect(seq, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
-            connect(synthControl, SIGNAL(gainChanged(float)), seq, SLOT(setGain(float)));
+            connect(synti, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
+            connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));
 
             if (mixer) {
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer,
@@ -251,7 +251,7 @@ void SynthControl::saveButtonClicked()
 void SynthControl::updateSyntiValues()
       {
       masterTuning->setValue(synti->masterTuning());
-      setGain(seq->gain());
+      setGain(synti->gain());
 
       int idx = synti->indexOfEffect(0);
       effectA->setCurrentIndex(idx);

@@ -17,9 +17,6 @@
 #include "synthesizergui.h"
 #include "libmscore/xml.h"
 #include "midipatch.h"
-#include "mscore/seq.h"
-
-extern Seq* seq;
 
 //---------------------------------------------------------
 //   MasterSynthesizer
@@ -29,6 +26,7 @@ MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
       _synthesizer.reserve(4);
+      _gain = 1.0;
       for (int i = 0; i < MAX_EFFECTS; ++i)
             _effect[i] = 0;
       }
@@ -237,6 +235,8 @@ printf("effect A\n");
             else
                   _effect[1]->process(n, effect1Buffer, p);
             }
+      for (unsigned i = 0; i < n * 2; ++i)
+            *p *= _gain;
       lock1 = false;
       }
 
@@ -279,7 +279,7 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                                     break;
                               case 2: {
                                     float f = v.data.toDouble();
-                                    seq->setGain(f);
+                                    setGain(f);
                                     }
                                     break;
                               }
@@ -311,7 +311,7 @@ SynthesizerState MasterSynthesizer::state() const
       g.setName("master");
       g.push_back(IdValue(0, QString("%1").arg(_effect[0] ? _effect[0]->name() : "none")));
       g.push_back(IdValue(1, QString("%1").arg(_effect[1] ? _effect[1]->name() : "none")));
-      g.push_back(IdValue(2, QString("%1").arg(seq->gain())));
+      g.push_back(IdValue(2, QString("%1").arg(gain())));
       ss.push_back(g);
       for (Synthesizer* s : _synthesizer)
             ss.push_back(s->state());
@@ -322,4 +322,15 @@ SynthesizerState MasterSynthesizer::state() const
       return ss;
       }
 
+//---------------------------------------------------------
+//   setGain
+//---------------------------------------------------------
+
+void MasterSynthesizer::setGain(float f)
+      {
+      if (_gain != f) {
+            _gain = f;
+            emit gainChanged(_gain);
+            }
+      }
 

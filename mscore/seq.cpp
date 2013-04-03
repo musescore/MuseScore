@@ -680,11 +680,11 @@ void Seq::process(unsigned n, float* buffer)
       float rv = 0.0f;
       p = buffer;
       for (unsigned i = 0; i < n; ++i) {
-            qreal val = *p * _gain;
+            qreal val = *p;
             lv = qMax(lv, fabsf(val));
             *p++ = val;
 
-            val = *p * _gain;
+            val = *p;
             rv = qMax(lv, fabsf(val));
             *p++ = val;
             }
@@ -1097,18 +1097,6 @@ SeqMsg SeqMsgFifo::dequeue()
       SeqMsg msg = messages[ridx];
       pop();
       return msg;
-      }
-
-//---------------------------------------------------------
-//   setGain
-//---------------------------------------------------------
-
-void Seq::setGain(float gain)
-      {
-      if (gain != _gain) {
-            _gain = gain;
-            emit gainChanged(gain);
-            }
       }
 
 //---------------------------------------------------------

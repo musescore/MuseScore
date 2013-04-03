@@ -1604,13 +1604,13 @@ void MuseScore::showPlayPanel(bool visible)
             if (!visible)
                   return;
             playPanel = new PlayPanel(this);
-            connect(playPanel, SIGNAL(gainChange(float)),    seq, SLOT(setGain(float)));
+            connect(playPanel, SIGNAL(gainChange(float)),     synti, SLOT(setGain(float)));
             connect(playPanel, SIGNAL(relTempoChanged(double)),seq, SLOT(setRelTempo(double)));
             connect(playPanel, SIGNAL(posChange(int)),         seq, SLOT(seek(int)));
             connect(playPanel, SIGNAL(closed()),                 SLOT(closePlayPanel()));
-            connect(seq,       SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
+            connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
 
-            playPanel->setGain(seq->gain());
+            playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
             playPanel->move(preferences.playPanelPos);
             }
@@ -2171,6 +2171,7 @@ MasterSynthesizer* synthesizerFactory()
       {
       MasterSynthesizer* ms = new MasterSynthesizer();
       ms->setMasterTuning(preferences.tuning);
+      ms->setGain(preferences.masterGain);
 
       FluidS::Fluid* fluid = new FluidS::Fluid();
       ms->registerSynthesizer(fluid);
@@ -2533,7 +2534,6 @@ int main(int argc, char* av[])
 
       seq->setDriver(driver);
       seq->setMasterSynthesizer(synti);
-      seq->setGain(preferences.masterGain);
 
       //
       // avoid font problems by overriding the environment
