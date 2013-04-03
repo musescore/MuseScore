@@ -201,6 +201,8 @@ add_executable ( ${ExecutableName}
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
+      driver.cpp
+
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

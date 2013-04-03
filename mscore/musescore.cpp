@@ -101,21 +101,6 @@
 #include "zerberus/zerberus.h"
 #endif
 
-#ifdef USE_JACK
-#include "jackaudio.h"
-#endif
-
-#ifdef USE_PULSEAUDIO
-extern Driver* getPulseAudioDriver(Seq*);
-#endif
-
-#ifdef USE_ALSA
-#include "alsa.h"
-#endif
-#ifdef USE_PORTAUDIO
-#include "pa.h"
-#endif
-
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
@@ -2209,84 +2194,6 @@ printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
             }
 #endif
       return ms;
-      }
-
-//---------------------------------------------------------
-//   driverFactory
-//---------------------------------------------------------
-
-Driver* driverFactory(Seq* seq)
-      {
-      Driver* driver = 0;
-
-#define useJackFlag       (preferences.useJackAudio || preferences.useJackMidi)
-#define useAlsaFlag       preferences.useAlsaAudio
-#define usePortaudioFlag  preferences.usePortaudioAudio
-#define usePulseAudioFlag preferences.usePulseAudio
-
-#ifdef USE_PULSEAUDIO
-      if (MScore::debugMode)
-            qDebug("usePulseAudioFlag %d\n", usePulseAudioFlag);
-      if (usePulseAudioFlag) {
-            driver = getPulseAudioDriver(seq);
-            if (!driver->init()) {
-                  qDebug("init PulseAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_PORTAUDIO
-      if (MScore::debugMode)
-            qDebug("usePortaudioFlag %d\n", usePortaudioFlag);
-      if (usePortaudioFlag) {
-            driver = new Portaudio(seq);
-            if (!driver->init()) {
-                  qDebug("init PortAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_ALSA
-      if (MScore::debugMode)
-            qDebug("useAlsaFlag %d\n", useAlsaFlag);
-      if (driver == 0 && useAlsaFlag) {
-            driver = new AlsaAudio(seq);
-            if (!driver->init()) {
-                  qDebug("init ALSA driver failed\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else {
-                  useALSA = true;
-                  }
-            }
-#endif
-#ifdef USE_JACK
-      if (MScore::debugMode)
-            qDebug("useJackFlag %d\n", useJackFlag);
-      if (useJackFlag) {
-            useAlsaFlag      = false;
-            usePortaudioFlag = false;
-            driver = new JackAudio(seq);
-            if (!driver->init()) {
-                  qDebug("no JACK server found\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  useJACK = true;
-            }
-#endif
-      if (driver == 0)
-            qDebug("no audio driver found");
-
-      return driver;
       }
 
 //---------------------------------------------------------

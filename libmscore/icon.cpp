@@ -10,7 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <string.h>
 #include "xml.h"
 #include "icon.h"
 
