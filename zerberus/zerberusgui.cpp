@@ -21,6 +21,8 @@
 SfzListDialog::SfzListDialog()
    : QDialog(0)
       {
+      setWindowTitle(tr("SFZ files"));
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       list = new QListWidget;
       QVBoxLayout* layout = new QVBoxLayout;
       layout->addWidget(list);
@@ -114,7 +116,7 @@ QFileInfoList Zerberus::sfzFiles()
       QFileInfoList l;
 
       QString path = preferences.sfzPath;
-      QStringList pl = path.split(":");
+      QStringList pl = path.split(";");
       foreach (const QString& s, pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
@@ -154,7 +156,7 @@ void ZerberusGui::addClicked()
             QString(tr("Soundfont %1 already loaded")).arg(sfPath));
             }
       else {
-            bool loaded = zerberus()->addSoundFont(sfPath);
+            bool loaded = zerberus()->addSoundFont(sfName);
             if (!loaded) {
                   QMessageBox::warning(this,
                   tr("MuseScore"),

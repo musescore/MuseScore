@@ -215,6 +215,9 @@ void Preferences::init()
       sfPath          = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
       sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
 
+      defaultSf = mscoreGlobalShare + "sound/fluid.sf3";
+      defaultSfz = "";
+
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
       nudgeStep50             = 5.0;      // Alt  + cursor key (default 5.0)
 

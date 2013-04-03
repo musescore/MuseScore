@@ -666,10 +666,15 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
                   continue;
 
             QString path;
-            foreach (const QFileInfo& fi, l) {
-                  if (fi.fileName() == s) {
-                        path = fi.absoluteFilePath();
-                        break;
+            QFileInfo qfi(s);
+            if (qfi.exists())
+                  path = s;
+            if (path.isEmpty()) {
+                  foreach (const QFileInfo& fi, l) {
+                        if (fi.fileName() == s) {
+                              path = fi.absoluteFilePath();
+                              break;
+                              }
                         }
                   }
 
@@ -1016,7 +1021,7 @@ QFileInfoList Fluid::sfFiles()
       QFileInfoList l;
 
       QString path = preferences.sfPath;
-      QStringList pl = path.split(":");
+      QStringList pl = path.split(";");
       foreach (const QString& s, pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
