@@ -26,7 +26,7 @@ MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
       lock1 = false;
-      lock2 = false;
+      lock2 = true;
       _synthesizer.reserve(4);
       _gain = 1.0;
       for (int i = 0; i < MAX_EFFECTS; ++i)
@@ -169,6 +169,7 @@ void MasterSynthesizer::registerEffect(int ab, Effect* e)
 
 void MasterSynthesizer::setEffect(int ab, int idx)
       {
+printf("MasterSynthesizer::setEffect: %d %d\n", ab, idx);
       if (idx < 0 || idx >= int(_effectList[ab].size())) {
             qDebug("MasterSynthesizer::setEffect: bad idx %d %d", ab, idx);
             return;
@@ -193,13 +194,20 @@ Effect* MasterSynthesizer::effect(int idx)
 //   setSampleRate
 //---------------------------------------------------------
 
-void MasterSynthesizer::setSampleRate(int val)
+void MasterSynthesizer::setSampleRate(float val)
       {
       _sampleRate = val;
       for (Synthesizer* s : _synthesizer) {
             s->init(_sampleRate);
             connect(s->gui(), SIGNAL(sfChanged()), SLOT(sfChanged()));
             }
+      for (Effect* e : _effectList[0])
+            e->init(_sampleRate);
+      for (Effect* e : _effectList[1])
+            e->init(_sampleRate);
+      lock2 = false;
+      lock1 = false;
+printf("start master synthesizer\n");
       }
 
 //---------------------------------------------------------
@@ -211,16 +219,19 @@ void MasterSynthesizer::process(unsigned n, float* p)
 //      memset(effect1Buffer, 0, n * sizeof(float) * 2);
 //      memset(effect2Buffer, 0, n * sizeof(float) * 2);
 
-      if (lock2)
+      if (lock2) {
+            printf("lock2\n");
             return;
+            }
       lock1 = true;
       if (lock2) {
             lock1 = false;
             return;
             }
       for (Synthesizer* s : _synthesizer) {
-            if (s->active())
+            if (s->active()) {
                   s->process(n, p, effect1Buffer, effect2Buffer);
+                  }
             }
       if (_effect[0] && _effect[1]) {
             memset(effect1Buffer, 0, n * sizeof(float) * 2);

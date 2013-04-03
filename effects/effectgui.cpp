@@ -18,9 +18,10 @@
 //   EffectGui
 //---------------------------------------------------------
 
-EffectGui::EffectGui()
+EffectGui::EffectGui(Effect* e)
    : QDeclarativeView(0)
       {
+      _effect = e;
       setResizeMode(QDeclarativeView::SizeViewToRootObject);
       setFocusPolicy(Qt::StrongFocus);
       }
@@ -29,10 +30,9 @@ EffectGui::EffectGui()
 //   init
 //---------------------------------------------------------
 
-void EffectGui::init(QUrl& url, double sr)
+void EffectGui::init(QUrl& url)
       {
       if (_effect) {
-            _effect->init(sr);
             rootContext()->setContextProperty("myEffect", _effect);
             setSource(url);
 
