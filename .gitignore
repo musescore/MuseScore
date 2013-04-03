@@ -1,5 +1,6 @@
 .*,
 .qped
+.directory
 build.release
 build.debug
 win32build

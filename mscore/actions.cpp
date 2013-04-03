@@ -1330,8 +1330,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "mag",
-         QT_TRANSLATE_NOOP("action","Zoom canvas"),
-          viewmag_ICON
+         QT_TRANSLATE_NOOP("action","Zoom canvas")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,

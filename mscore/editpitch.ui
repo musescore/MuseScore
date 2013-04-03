@@ -605,7 +605,7 @@
       </property>
       <property name="icon">
        <iconset resource="musescore.qrc">
-        <normaloff>:/data/icons/clef.svg</normaloff>:/data/icons/clef.svg</iconset>
+        <normaloff>:/data/icons-dark/clef.svg</normaloff>:/data/icons-dark/clef.svg</iconset>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
