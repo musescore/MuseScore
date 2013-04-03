@@ -30,9 +30,10 @@ class Synthesizer {
 
    protected:
       float _sampleRate;
+      SynthesizerGui* _gui;
 
    public:
-      Synthesizer() : _active(false) {}
+      Synthesizer() : _active(false) { _gui = 0; }
       virtual ~Synthesizer() {}
       virtual void init(float sr)    { _sampleRate = sr; }
       float sampleRate() const       { return _sampleRate; }
@@ -64,7 +65,7 @@ class Synthesizer {
       virtual void allSoundsOff(int /*channel*/) {}
       virtual void allNotesOff(int /*channel*/) {}
 
-      virtual SynthesizerGui* gui() { return 0; }
+      virtual SynthesizerGui* gui() { return _gui; }
       };
 
 #endif

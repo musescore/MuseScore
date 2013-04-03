@@ -54,8 +54,8 @@ SynthControl::SynthControl(QWidget* parent)
       Synthesizer* zerberus = synti->synthesizer("Zerberus");
       Synthesizer* fluid    = synti->synthesizer("Fluid");
 
-      tabWidget->insertTab(0, fluid->gui(),    tr(fluid->name()));
       tabWidget->insertTab(0, zerberus->gui(), tr(zerberus->name()));
+      tabWidget->insertTab(0, fluid->gui(),    tr(fluid->name()));
 
       // effectA        combo box
       // effectStackA   widget stack
@@ -80,12 +80,14 @@ SynthControl::SynthControl(QWidget* parent)
             settings.endGroup();
             }
 
+      tabWidget->setCurrentIndex(0);
+
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
       connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
-      connect(loadButton, SIGNAL(clicked()), SLOT(loadButtonClicked()));
-      connect(saveButton, SIGNAL(clicked()), SLOT(saveButtonClicked()));
+      connect(loadButton,   SIGNAL(clicked()),                SLOT(loadButtonClicked()));
+      connect(saveButton,   SIGNAL(clicked()),                SLOT(saveButtonClicked()));
       }
 
 //---------------------------------------------------------
@@ -122,8 +124,8 @@ void MuseScore::showSynthControl()
             connect(seq, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(gainChanged(float)), seq, SLOT(setGain(float)));
 
-            if (iledit) {
-                  connect(synthControl, SIGNAL(soundFontChanged()), iledit,
+            if (mixer) {
+                  connect(synthControl, SIGNAL(soundFontChanged()), mixer,
                      SLOT(patchListChanged()));
                   }
             }

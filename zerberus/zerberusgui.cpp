@@ -68,6 +68,49 @@ ZerberusGui::ZerberusGui()
    : SynthesizerGui()
       {
       setupUi(this);
+      connect(add, SIGNAL(clicked()), SLOT(addClicked()));
+      connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
+      }
+
+//---------------------------------------------------------
+//   collectFiles
+//---------------------------------------------------------
+
+static void collectFiles(QFileInfoList* l, const QString& path)
+      {
+      // printf("collect files <%s>\n", qPrintable(path));
+
+      QDir dir(path);
+      foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+            if (path == s.absoluteFilePath())
+                  return;
+
+            if (s.isDir())
+                  collectFiles(l, s.absoluteFilePath());
+            else {
+                  if (s.suffix().toLower() == "sfz")
+                        l->append(s);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   sfzFiles
+//---------------------------------------------------------
+
+QFileInfoList Zerberus::sfzFiles()
+      {
+      QFileInfoList l;
+
+      QString path = preferences.sfzPath;
+      QStringList pl = path.split(":");
+      foreach (const QString& s, pl) {
+            QString ss(s);
+            if (!s.isEmpty() && s[0] == '~')
+                  ss = QDir::homePath() + s.mid(1);
+            collectFiles(&l, ss);
+            }
+      return l;
       }
 
 //---------------------------------------------------------
@@ -76,21 +119,14 @@ ZerberusGui::ZerberusGui()
 
 void ZerberusGui::addClicked()
       {
-      QString path = preferences.sfPath;
-      QStringList pl = path.split(":");
-      QStringList nameFilters { "*.sfz", "*.SFZ"  };
+      QFileInfoList l = zerberus()->sfzFiles();
 
       SfzListDialog ld;
-      foreach(const QString& s, pl) {
-            QString ss(s);
-            if (!s.isEmpty() && s[0] == '~')
-                  ss = QDir::homePath() + s.mid(1);
-            QDir dir(ss);
-            foreach(const QString& s, dir.entryList(nameFilters, QDir::Files)) {
-                  ld.add(s, dir.absolutePath() + "/" + s);
-                  }
-            }
-      ld.exec();
+      foreach (const QFileInfo& fi, l)
+            ld.add(fi.fileName(), fi.absoluteFilePath());
+      if (!ld.exec())
+            return;
+
       QString sfName = ld.name();
       QString sfPath = ld.path();
 

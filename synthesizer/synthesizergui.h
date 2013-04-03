@@ -23,6 +23,12 @@ class SynthesizerGui : public QWidget {
       Q_OBJECT
       Synthesizer* _synthesizer;
 
+   signals:
+      void sfChanged();
+
+   public slots:
+      virtual void synthesizerChanged() {}
+
    public:
       SynthesizerGui();
       void init(Synthesizer* e, double sr);

@@ -52,6 +52,9 @@ class FluidGui : public SynthesizerGui, Ui::FluidGui {
       void soundFontAddClicked();
       void soundFontDeleteClicked();
 
+   public slots:
+      virtual void synthesizerChanged();
+
    public:
       FluidGui();
       };

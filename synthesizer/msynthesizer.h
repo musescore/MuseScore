@@ -28,7 +28,9 @@ class Xml;
 //    hosts several synthesizers
 //---------------------------------------------------------
 
-class MasterSynthesizer {
+class MasterSynthesizer : public QObject {
+      Q_OBJECT
+
    public:
       static const int MAX_BUFFERSIZE = 4096;
       static const int MAX_EFFECTS = 2;
@@ -46,6 +48,12 @@ class MasterSynthesizer {
       float effect2Buffer[MAX_BUFFERSIZE];
       void init();
       int indexOfEffect(int ab, const QString& name);
+
+   public slots:
+      void sfChanged() { emit soundFontChanged(); }
+
+   signals:
+      void soundFontChanged();
 
    public:
       MasterSynthesizer();

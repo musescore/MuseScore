@@ -632,7 +632,7 @@ QStringList Fluid::soundFonts() const
       {
       QStringList sf;
       foreach (SFont* f, sfonts)
-            sf.append(f->get_name());
+            sf.append(QFileInfo(f->get_name()).fileName());
       return sf;
       }
 
@@ -657,24 +657,26 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             sfunload(sf->id(), true);
       bool ok = true;
 
-      QString path = preferences.sfPath;
-      QStringList pl = path.split(":");
+
+      QFileInfoList l = sfFiles();
 
       for (int i = sl.size() - 1; i >= 0; --i) {
             QString s = sl[i];
             if (s.isEmpty())
                   continue;
-            if (s[0] != '/') {
-                  foreach(const QString& path, pl) {
-                        QFile f(path + "/" + s);
-                        if (f.exists()) {
-                              s = path + "/" + s;
-                              break;
-                              }
+
+            QString path;
+            foreach (const QFileInfo& fi, l) {
+                  if (fi.fileName() == s) {
+                        path = fi.absoluteFilePath();
+                        break;
                         }
                   }
-            if (sfload(s, true) == -1)
+
+            if (sfload(path, true) == -1) {
+                  qDebug("loading sf failed: <%s>", qPrintable(path));
                   ok = false;
+                  }
             }
       mutex.unlock();
       return ok;
@@ -980,5 +982,47 @@ void Fluid::setState(SynthesizerGroup& sp)
                   sfl.append(v.data);
             }
       loadSoundFonts(sfl);
+      }
+
+//---------------------------------------------------------
+//   collectFiles
+//---------------------------------------------------------
+
+static void collectFiles(QFileInfoList* l, const QString& path)
+      {
+      // printf("collect files <%s>\n", qPrintable(path));
+
+      QDir dir(path);
+      foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+            if (path == s.absoluteFilePath())
+                  return;
+
+            if (s.isDir())
+                  collectFiles(l, s.absoluteFilePath());
+            else {
+                  QString suffix = s.suffix().toLower();
+                  if (suffix == "sf" || suffix == "sf2" || suffix == "sf3")
+                        l->append(s);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   sfFiles
+//---------------------------------------------------------
+
+QFileInfoList Fluid::sfFiles()
+      {
+      QFileInfoList l;
+
+      QString path = preferences.sfPath;
+      QStringList pl = path.split(":");
+      foreach (const QString& s, pl) {
+            QString ss(s);
+            if (!s.isEmpty() && s[0] == '~')
+                  ss = QDir::homePath() + s.mid(1);
+            collectFiles(&l, ss);
+            }
+      return l;
       }
 }

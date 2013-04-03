@@ -91,6 +91,7 @@
 #include "effects/zita1/zita.h"
 #include "effects/noeffect/noeffect.h"
 #include "synthesizer/synthesizer.h"
+#include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
 #ifdef AEOLUS
@@ -386,7 +387,7 @@ MuseScore::MuseScore()
       measuresDialog        = 0;
       insertMeasuresDialog  = 0;
       masterPalette         = 0;
-      iledit                = 0;
+      mixer                 = 0;
       synthControl          = 0;
       debugger              = 0;
       measureListEdit       = 0;
@@ -1431,8 +1432,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             playPanel->setScore(cs);
       if (synthControl)
             synthControl->setScore(cs);
-      if (iledit)
-            iledit->updateAll(cs);
+      if (mixer)
+            mixer->updateAll(cs);
 #ifdef OMR
       if (omrPanel) {
             if (cv && cv->omrView())
@@ -2171,9 +2172,18 @@ MasterSynthesizer* synthesizerFactory()
       MasterSynthesizer* ms = new MasterSynthesizer();
       ms->setMasterTuning(preferences.tuning);
 
-      ms->registerSynthesizer(new FluidS::Fluid());
+      FluidS::Fluid* fluid = new FluidS::Fluid();
+      ms->registerSynthesizer(fluid);
+printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
+      if (!preferences.defaultSf.isEmpty()) {
+            QStringList sfl;
+            sfl.append(preferences.defaultSf);
+            printf("   load <%s>\n", qPrintable(sfl[0]));
+            fluid->loadSoundFonts(sfl);
+            fluid->gui()->synthesizerChanged();
+            }
 #ifdef AEOLUS
-      ms->registerSynthesizer(new Aeolus());
+      // ms->registerSynthesizer(new Aeolus());
 #endif
 #ifdef ZERBERUS
       ms->registerSynthesizer(new Zerberus());
@@ -4327,8 +4337,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       {
       if (cmd == "instruments") {
             editInstrList();
-            if (iledit)
-                  iledit->updateAll(cs);
+            if (mixer)
+                  mixer->updateAll(cs);
             }
       else if (cmd == "rewind") {
             seq->rewindStart();
@@ -4741,8 +4751,8 @@ void MuseScore::noteTooShortForTupletDialog()
 
 void MuseScore::instrumentChanged()
       {
-      if (iledit)
-            iledit->updateAll(cs);
+      if (mixer)
+            mixer->updateAll(cs);
       }
 
 //---------------------------------------------------------

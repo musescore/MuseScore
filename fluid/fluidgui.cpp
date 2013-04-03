@@ -62,9 +62,11 @@ QString ListDialog::path()
 
 SynthesizerGui* FluidS::Fluid::gui()
       {
-      FluidGui* gui = new FluidGui;
-      gui->init(this, 44100);
-      return gui;
+      if (_gui == 0) {
+            _gui = new FluidGui;
+            _gui->init(this, sampleRate());
+            }
+      return _gui;
       }
 
 //---------------------------------------------------------
@@ -79,6 +81,17 @@ FluidGui::FluidGui()
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd,    SIGNAL(clicked()), SLOT(soundFontAddClicked()));
       connect(soundFontDelete, SIGNAL(clicked()), SLOT(soundFontDeleteClicked()));
+      }
+
+//---------------------------------------------------------
+//   synthesizerChanged
+//---------------------------------------------------------
+
+void FluidGui::synthesizerChanged()
+      {
+      QStringList sfonts = fluid()->soundFonts();
+      soundFonts->clear();
+      soundFonts->addItems(sfonts);
       }
 
 //---------------------------------------------------------
@@ -153,21 +166,14 @@ void FluidGui::updateUpDownButtons()
 
 void FluidGui::soundFontAddClicked()
       {
-      QString path = preferences.sfPath;
-      QStringList pl = path.split(":");
-      QStringList nameFilters { "*.sf", "*.SF", "*.sf2", "*.SF2", "*.sf3", "*.SF3" };
+      QFileInfoList l = fluid()->sfFiles();
 
       ListDialog ld;
-      foreach(const QString& s, pl) {
-            QString ss(s);
-            if (!s.isEmpty() && s[0] == '~')
-                  ss = QDir::homePath() + s.mid(1);
-            QDir dir(ss);
-            foreach(const QString& s, dir.entryList(nameFilters, QDir::Files)) {
-                  ld.add(s, dir.absolutePath() + "/" + s);
-                  }
-            }
-      ld.exec();
+      foreach (const QFileInfo& fi, l)
+            ld.add(fi.fileName(), fi.absoluteFilePath());
+      if (!ld.exec())
+            return;
+
       QString sfName = ld.name();
       QString sfPath = ld.path();
 
@@ -192,6 +198,7 @@ void FluidGui::soundFontAddClicked()
                   }
             else {
                   soundFonts->insertItem(0, sfName);
+                  emit sfChanged();
                   }
             }
       updateUpDownButtons();

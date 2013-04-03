@@ -41,7 +41,7 @@ class Instrument;
 class MidiFile;
 class TextStyleDialog;
 class PlayPanel;
-class InstrumentListEditor;
+class Mixer;
 class Debugger;
 class MeasureListEditor;
 class Score;
@@ -256,7 +256,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* searchCombo;
 
       PlayPanel* playPanel;
-      InstrumentListEditor* iledit;
+      Mixer* mixer;
       SynthControl* synthControl;
       Debugger* debugger;
       MeasureListEditor* measureListEdit;
