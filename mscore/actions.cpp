@@ -532,13 +532,6 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Pitch up")
          ),
       Shortcut(
-      STATE_NOTE_ENTRY_TAB,
-         A_CMD,
-         "pitch-up-TAB",
-         QT_TRANSLATE_NOOP("action","Up (TAB)"),
-         QT_TRANSLATE_NOOP("action","Pitch up (TAB only)")
-         ),
-      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "pitch-up-diatonic",
@@ -579,13 +572,6 @@ Shortcut Shortcut::sc[] = {
          "pitch-down",
          QT_TRANSLATE_NOOP("action","Down"),
          QT_TRANSLATE_NOOP("action","Pitch down")
-         ),
-      Shortcut(
-      STATE_NOTE_ENTRY_TAB,
-         A_CMD,
-         "pitch-down-TAB",
-         QT_TRANSLATE_NOOP("action","Down (TAB)"),
-         QT_TRANSLATE_NOOP("action","Pitch down (TAB only)")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
