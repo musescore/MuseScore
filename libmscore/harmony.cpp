@@ -343,7 +343,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       s = s.toLower();
       foreach(const ChordDescription* cd, *score()->style()->chordList()) {
             foreach(QString ss, cd->names) {
-                  if (s == ss) {
+                  if (s == ss.toLower()) {
                         _id = cd->id;
                         return true;
                         }
@@ -527,10 +527,13 @@ void Harmony::layout()
             Text::layout1();
       else {
             // textStyle().layout(this);
-            QRectF bb;
-            foreach(const TextSegment* ts, textList)
+            QRectF bb, tbb;
+            foreach(const TextSegment* ts, textList) {
                   bb |= ts->boundingRect().translated(ts->x, ts->y);
+                  tbb |= ts->tightBoundingRect().translated(ts->x, ts->y);
+                  }
             setbbox(bb);
+            setbboxtight(tbb);
             }
       if (!parent()) {          // for use in palette
             setPos(QPointF());
@@ -624,6 +627,16 @@ QRectF TextSegment::boundingRect() const
       {
       QFontMetricsF fm(font);
       return fm.boundingRect(text);
+      }
+
+//---------------------------------------------------------
+//   tightBoundingRect
+//---------------------------------------------------------
+
+QRectF TextSegment::tightBoundingRect() const
+      {
+      QFontMetricsF fm(font);
+      return fm.tightBoundingRect(text);
       }
 
 //---------------------------------------------------------

@@ -2676,7 +2676,7 @@ qreal Score::computeMinWidth(Segment* fs) const
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
                               h->layout();
-                              QRectF b(h->bbox().translated(h->pos()));
+                              QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;
                               else
