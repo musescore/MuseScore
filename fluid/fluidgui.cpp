@@ -17,6 +17,8 @@
 ListDialog::ListDialog()
    : QDialog(0)
       {
+      setWindowTitle(tr("Soundfont files"));
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       list = new QListWidget;
       QVBoxLayout* layout = new QVBoxLayout;
       layout->addWidget(list);
