@@ -19,10 +19,9 @@
 
 EffectGui* Freeverb::gui()
       {
-      EffectGui* eg = new EffectGui;
-      eg->setEffect(this);
+      EffectGui* eg = new EffectGui(this);
       QUrl url("qrc:/freeverb/freeverb.qml");
-      eg->init(url, 44100.0);
+      eg->init(url);
       return eg;
       }
 

@@ -27,10 +27,9 @@ class EffectGui : public QDeclarativeView {
       void valueChanged(const QString& name, qreal);
 
    public:
-      EffectGui();
-      void init(QUrl& url, double sr);
+      EffectGui(Effect*);
+      void init(QUrl& url);
       Effect* effect() const    { return _effect; }
-      void setEffect(Effect* e) { _effect = e; }
       virtual void updateValues();
       };
 

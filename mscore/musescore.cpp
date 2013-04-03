@@ -2158,6 +2158,12 @@ MasterSynthesizer* synthesizerFactory()
       ms->setMasterTuning(preferences.tuning);
       ms->setGain(preferences.masterGain);
 
+#ifdef ZERBERUS
+      ms->registerSynthesizer(new Zerberus());
+#endif
+#ifdef AEOLUS
+      ms->registerSynthesizer(new Aeolus());
+#endif
       FluidS::Fluid* fluid = new FluidS::Fluid();
       ms->registerSynthesizer(fluid);
 printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
@@ -2167,19 +2173,13 @@ printf("sound font <%s>\n", qPrintable(preferences.defaultSf));
             fluid->loadSoundFonts(sfl);
             fluid->gui()->synthesizerChanged();
             }
-#ifdef AEOLUS
-      ms->registerSynthesizer(new Aeolus());
-#endif
-#ifdef ZERBERUS
-      ms->registerSynthesizer(new Zerberus());
-#endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);
       ms->registerEffect(0, new Freeverb);
       ms->registerEffect(1, new NoEffect);
       ms->registerEffect(1, new ZitaReverb);
       ms->registerEffect(1, new Freeverb);
-      ms->setEffect(0, 0);
+      ms->setEffect(0, 1);
       ms->setEffect(1, 0);
 #if 0
       Synthesizer* fluid = ms->synthesizer("Fluid");
