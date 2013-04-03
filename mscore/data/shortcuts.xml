@@ -244,12 +244,6 @@
     <key>pitch-up</key>
     <seq>Up</seq>
     </SC>
-<!--
-  <SC>
-    <key>pitch-up-TAB</key>
-    <seq></seq>
-    </SC>
--->
   <SC>
     <key>pitch-up-diatonic</key>
     <seq>Shift+Up</seq>
@@ -274,12 +268,6 @@
     <key>pitch-down</key>
     <seq>Down</seq>
     </SC>
-<!--
-  <SC>
-    <key>pitch-down-TAB</key>
-    <seq></seq>
-    </SC>
--->
   <SC>
     <key>pitch-down-diatonic</key>
     <seq>Shift+Down</seq>
@@ -761,48 +749,56 @@
     <seq>Shift+Ctrl+L</seq>
     </SC>
 <!-- TAB specific shortcuts -->
-<!--
   <SC>
     <key>note-longa-TAB</key>
-    <seq></seq>
+    <seq>Shift+9</seq>
+    <code>536870969</code>
     </SC>
   <SC>
     <key>note-breve-TAB</key>
-    <seq></seq>
+    <seq>Shift+8</seq>
+    <code>536870968</code>
     </SC>
   <SC>
     <key>pad-note-1-TAB</key>
-    <seq></seq>
+    <seq>Shift+7</seq>
+    <code>536870967</code>
     </SC>
   <SC>
     <key>pad-note-2-TAB</key>
-    <seq></seq>
+    <seq>Shift+6</seq>
+    <code>536870966</code>
     </SC>
   <SC>
     <key>pad-note-4-TAB</key>
-    <seq></seq>
+    <seq>Shift+5</seq>
+    <code>536870965</code>
     </SC>
   <SC>
     <key>pad-note-8-TAB</key>
-    <seq></seq>
+    <seq>Shift+4</seq>
+    <code>536870964</code>
     </SC>
   <SC>
     <key>pad-note-16-TAB</key>
-    <seq></seq>
+    <seq>Shift+3</seq>
+    <code>536870963</code>
     </SC>
   <SC>
     <key>pad-note-32-TAB</key>
-    <seq></seq>
+    <seq>Shift+2</seq>
+    <code>536870962</code>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
-    <seq></seq>
+    <seq>Shift+1</seq>
+    <code>536870961</code>
     </SC>
   <SC>
     <key>pad-note-128-TAB</key>
-    <seq></seq>
+    <seq>Shift+0</seq>
+    <code>536870960</code>
     </SC>
--->
   <SC>
     <key>pad-note-increase-TAB</key>
     <seq>W</seq>

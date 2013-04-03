@@ -1134,7 +1134,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     }
                                     break;
 
-                              case UP_DOWN_CHROMATIC:       // increase / decrease the pitch,
+                              case UP_DOWN_DIATONIC:        // increase / decrease the pitch,
                                                             // letting the algorithm to choose fret & string
                                     if (up) {
                                           if (pitch < 127) {
@@ -1157,7 +1157,7 @@ void Score::upDown(bool up, UpDownMode mode)
 
                                     break;
 
-                              case UP_DOWN_DIATONIC:        // increase / decrease the fret
+                              case UP_DOWN_CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
                                     fret += (up ? 1 : -1);
                                     if (fret < 0)
@@ -2043,7 +2043,7 @@ void Score::cmd(const QAction* a)
       // Hack for moving articulations while selected
       //
       Element* el = selection().element();
-      if (cmd == "pitch-up" || cmd == "pitch-up-TAB") {
+      if (cmd == "pitch-up") {
             if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
@@ -2053,7 +2053,7 @@ void Score::cmd(const QAction* a)
             else
                   upDown(true, UP_DOWN_CHROMATIC);
             }
-      else if (cmd == "pitch-down" || cmd == "pitch-down-TAB") {
+      else if (cmd == "pitch-down") {
             if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
@@ -2166,21 +2166,21 @@ void Score::cmd(const QAction* a)
             padToggle(PAD_NOTE00);
       else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
             padToggle(PAD_NOTE0);
-      else if (cmd == "pad-note-1"   || cmd == "note-1-TAB")
+      else if (cmd == "pad-note-1"   || cmd == "pad-note-1-TAB")
             padToggle(PAD_NOTE1);
-      else if (cmd == "pad-note-2"   || cmd == "note-2-TAB")
+      else if (cmd == "pad-note-2"   || cmd == "pad-note-2-TAB")
             padToggle(PAD_NOTE2);
-      else if (cmd == "pad-note-4"   || cmd == "note-4-TAB")
+      else if (cmd == "pad-note-4"   || cmd == "pad-note-4-TAB")
             padToggle(PAD_NOTE4);
-      else if (cmd == "pad-note-8"   || cmd == "note-8-TAB")
+      else if (cmd == "pad-note-8"   || cmd == "pad-note-8-TAB")
             padToggle(PAD_NOTE8);
-      else if (cmd == "pad-note-16"  || cmd == "note-16-TAB")
+      else if (cmd == "pad-note-16"  || cmd == "pad-note-16-TAB")
             padToggle(PAD_NOTE16);
-      else if (cmd == "pad-note-32"  || cmd == "note-32-TAB")
+      else if (cmd == "pad-note-32"  || cmd == "pad-note-32-TAB")
             padToggle(PAD_NOTE32);
-      else if (cmd == "pad-note-64"  || cmd == "note-64-TAB")
+      else if (cmd == "pad-note-64"  || cmd == "pad-note-64-TAB")
             padToggle(PAD_NOTE64);
-      else if (cmd == "pad-note-128" || cmd == "note-128-TAB")
+      else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
             padToggle(PAD_NOTE128);
       else if (cmd == "pad-note-increase-TAB") {
             switch (_is.duration().type() ) {
