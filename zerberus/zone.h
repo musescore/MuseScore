@@ -76,6 +76,7 @@ struct Zone {
       int hicc[128];
 
       Zone();
+      ~Zone();
       bool match(Channel*, int key, int velo, Trigger);
       };
 

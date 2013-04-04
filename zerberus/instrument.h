@@ -44,6 +44,8 @@ class ZInstrument {
 
    public:
       ZInstrument(Zerberus*);
+      ~ZInstrument();
+
       bool load(const QString&);
       int program() const                   { return _program; }
       QString name() const                  { return _name;   }
