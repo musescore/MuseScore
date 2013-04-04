@@ -266,8 +266,8 @@ void Voice::process(int frames, float* p)
                               }
                         v *= stopEnv.val;
                         }
-                  *p++  += v;
-                  *p++  += v;
+                  *p++  += v * _channel->panLeftGain();
+                  *p++  += v * _channel->panRightGain();
                   phase += phaseIncr;
                   }
             }
@@ -290,13 +290,13 @@ void Voice::process(int frames, float* p)
                       + coeffs[1] * data[idx]
                       + coeffs[2] * data[idx+2]
                       + coeffs[3] * data[idx+4])
-                      * gain;
+                      * gain * _channel->panLeftGain();
 
                   f2 = (coeffs[0] * data[idx-1]
                       + coeffs[1] * data[idx+1]
                       + coeffs[2] * data[idx+3]
                       + coeffs[3] * data[idx+5])
-                      * gain;
+                      * gain * _channel->panRightGain();
 
                   if (_state == VoiceState::ATTACK) {
                         if (attackEnv.step())

@@ -24,6 +24,10 @@ class Channel {
       Zerberus* _msynth;
       ZInstrument* _instrument;
       float _gain;
+      float _panLeftGain;
+      float _panRightGain;
+      float _midiVolume;
+      char ctrl[128];
 
       int _idx;               // channel index
       int _sustain;
@@ -36,9 +40,11 @@ class Channel {
       ZInstrument* instrument() const    { return _instrument; }
       void setInstrument(ZInstrument* i) { _instrument = i; }
       Zerberus* msynth() const          { return _msynth; }
-      int sustain() const               { return _sustain; }
-      float gain() const                { return _gain;    }
-      void setGain(float val)           { _gain = val;     }
+      int sustain() const;
+      float gain() const                { return _gain * _midiVolume;  }
+//      void setGain(float val)           { _gain = val;     }
+      float panLeftGain() const  { return _panLeftGain; }
+      float panRightGain() const { return _panRightGain; }
       };
 
 
