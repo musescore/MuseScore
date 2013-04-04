@@ -242,17 +242,13 @@ void Zerberus::process(unsigned frames, float* p, float*, float*)
 
       Voice* v = activeVoices;
       Voice* pv = 0;
-      int n = 0;
-      int nn = 0;
       while (v) {
-            ++nn;
             v->process(frames, p);
             if (v->isOff()) {
                   if (pv)
                         pv->setNext(v->next());
                   else
                         activeVoices = v->next();
-                  ++n;
                   freeVoices.push(v);
                   }
             else
@@ -291,7 +287,7 @@ const QList<MidiPatch*>& Zerberus::getPatchInfo() const
       pl.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            MidiPatch* p = new MidiPatch { false, 2, 0, idx, i->name() };
+            MidiPatch* p = new MidiPatch { false, name(), 0, idx, i->name() };
             pl.append(p);
             ++idx;
             }
@@ -412,16 +408,6 @@ void Zerberus::setState(const SynthesizerGroup& sp)
       for (const IdValue& v : sp)
             sfs.append(v.data);
       loadSoundFonts(sfs);
-      }
-
-void Zerberus::setParameter(int id, double val)
-      {
-      printf("Zerberus::setParameter: %x %f\n", id, val);
-      }
-
-void Zerberus::setParameter(int id, const QString& s)
-      {
-      printf("Zerberus::setParameter: %x %s\n", id, qPrintable(s));
       }
 
 //---------------------------------------------------------

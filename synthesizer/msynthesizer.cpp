@@ -101,9 +101,7 @@ QList<MidiPatch*> MasterSynthesizer::getPatchInfo() const
       {
       QList<MidiPatch*> pl;
       int idx = 0;
-      printf("getPatchInfo\n");
       for(Synthesizer* s : _synthesizer) {
-            printf("  <%s>\n", qPrintable(s->name()));
             QList<MidiPatch*> ip = s->getPatchInfo();
             foreach(MidiPatch* mp, ip)
                   mp->synti = idx;
@@ -171,7 +169,6 @@ void MasterSynthesizer::registerEffect(int ab, Effect* e)
 
 void MasterSynthesizer::setEffect(int ab, int idx)
       {
-printf("MasterSynthesizer::setEffect: %d %d\n", ab, idx);
       if (idx < 0 || idx >= int(_effectList[ab].size())) {
             qDebug("MasterSynthesizer::setEffect: bad idx %d %d", ab, idx);
             return;
@@ -209,7 +206,6 @@ void MasterSynthesizer::setSampleRate(float val)
             e->init(_sampleRate);
       lock2 = false;
       lock1 = false;
-printf("start master synthesizer\n");
       }
 
 //---------------------------------------------------------
@@ -231,9 +227,8 @@ void MasterSynthesizer::process(unsigned n, float* p)
             return;
             }
       for (Synthesizer* s : _synthesizer) {
-            if (s->active()) {
+            if (s->active())
                   s->process(n, p, effect1Buffer, effect2Buffer);
-                  }
             }
       if (_effect[0] && _effect[1]) {
             memset(effect1Buffer, 0, n * sizeof(float) * 2);
