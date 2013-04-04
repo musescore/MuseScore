@@ -79,7 +79,8 @@ int MasterSynthesizer::index(const QString& name) const
                   return idx;
             ++idx;
             }
-      return -1;
+      qDebug("MasterSynthesizer::index for <%s> not found", qPrintable(name));
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -88,8 +89,10 @@ int MasterSynthesizer::index(const QString& name) const
 
 QString MasterSynthesizer::name(unsigned idx) const
       {
-      if (idx >= _synthesizer.size())
+      if (idx >= _synthesizer.size()) {
+            qDebug("MasterSynthesizer::name() bad index %d", idx);
             return QString();
+            }
       return QString(_synthesizer[idx]->name());
       }
 
@@ -100,14 +103,8 @@ QString MasterSynthesizer::name(unsigned idx) const
 QList<MidiPatch*> MasterSynthesizer::getPatchInfo() const
       {
       QList<MidiPatch*> pl;
-      int idx = 0;
-      for(Synthesizer* s : _synthesizer) {
-            QList<MidiPatch*> ip = s->getPatchInfo();
-            foreach(MidiPatch* mp, ip)
-                  mp->synti = idx;
-            pl += ip;
-            ++idx;
-            }
+      for (Synthesizer* s : _synthesizer)
+            pl += s->getPatchInfo();
       return pl;
       }
 

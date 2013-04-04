@@ -199,8 +199,6 @@ class Seq : public QObject, public Sequencer {
 
       int getCurTick();
 
-      int synthNameToIndex(const QString&) const;
-      QString synthIndexToName(int) const;
       void putEvent(const Event&);
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
