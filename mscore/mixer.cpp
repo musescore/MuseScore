@@ -151,7 +151,7 @@ void Mixer::patchListChanged()
       QString s;
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
-      const QList<MidiPatch*> pl = seq->getPatchInfo();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe    = (PartEdit*)(wi->widget());
@@ -314,7 +314,7 @@ void PartEdit::drumsetToggled(bool val)
       {
       part->instr()->setUseDrumset(val);
       patch->clear();
-      const QList<MidiPatch*> pl = seq->getPatchInfo();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
       foreach(MidiPatch* p, pl) {
             if (val == p->drum)
                   patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
