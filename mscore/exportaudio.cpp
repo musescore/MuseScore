@@ -59,6 +59,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       EventMap events;
       score->renderMidi(&events);
 
+printf("%d events\n", events.size());
+
       SF_INFO info;
       memset(&info, 0, sizeof(info));
       info.channels   = 2;
@@ -75,7 +77,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       QProgressBar* pBar = showProgressBar();
       pBar->reset();
 
-      float peak = 0.0;
+      float peak  = 0.0;
       double gain = 1.0;
       EventMap::const_iterator endPos = events.constEnd();
       --endPos;
@@ -95,7 +97,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                               if (e.type() == ME_INVALID)
                                     continue;
                               e.setChannel(a.channel);
-                              int syntiIdx= score->midiMapping(a.channel)->articulation->synti;
+                              int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
                               synti->play(e, syntiIdx);
                               }
                         }
@@ -118,8 +120,10 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                         if (f >= endTime)
                               break;
                         int n = f - playTime;
-                        synti->process(n, p);
-                        p += 2 * n;
+                        if (n) {
+                              synti->process(n, p);
+                              p += 2 * n;
+                              }
 
                         playTime  += n;
                         frames    -= n;
@@ -128,7 +132,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                               int channelIdx = e.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
-                                    synti->play(e, c->synti);
+                                    synti->play(e, synti->index(c->synti));
                                     }
                               }
                         }
@@ -150,6 +154,10 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
 
                   if (playTime >= et)
                         break;
+                  }
+            if (pass == 0 && peak == 0.0) {
+                  qDebug("song is empty");
+                  break;
                   }
             gain = 0.99 / peak;
             }
