@@ -83,6 +83,9 @@ ZerberusGui::ZerberusGui(Synthesizer* s)
       setupUi(this);
       connect(add, SIGNAL(clicked()), SLOT(addClicked()));
       connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
+      connect(&_futureWatcher, SIGNAL(finished()), this, SLOT(onSoundFontLoaded()));
+      _progressDialog = new QProgressDialog("Loading...", "", 0, 0, 0, Qt::FramelessWindowHint);
+      _progressDialog->setCancelButton(0);
       }
 
 //---------------------------------------------------------
@@ -156,15 +159,25 @@ void ZerberusGui::addClicked()
             QString(tr("Soundfont %1 already loaded")).arg(sfPath));
             }
       else {
-            bool loaded = zerberus()->addSoundFont(sfName);
-            if (!loaded) {
-                  QMessageBox::warning(this,
-                  tr("MuseScore"),
-                  QString(tr("cannot load soundfont %1")).arg(sfPath));
-                  }
-            else {
-                  files->insertItem(0, sfName);
-                  }
+            _loadedSfName = sfName;
+            _loadedSfPath = sfPath;
+            QFuture<bool> future = QtConcurrent::run(zerberus(), &Zerberus::addSoundFont, sfName);
+            _futureWatcher.setFuture(future);
+            _progressDialog->exec();
+            }
+      }
+
+void ZerberusGui::onSoundFontLoaded()
+      {
+      bool loaded = _futureWatcher.result();
+      _progressDialog->reset();
+      if (!loaded) {
+            QMessageBox::warning(this,
+            tr("MuseScore"),
+            QString(tr("cannot load soundfont %1")).arg(_loadedSfPath));
+            }
+      else {
+            files->insertItem(0, _loadedSfName);
             }
       }
 
