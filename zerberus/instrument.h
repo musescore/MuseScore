@@ -55,6 +55,7 @@ class ZInstrument {
       Sample* readSample(const QString& s, QZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
+      Zerberus* msynth()                    { return _msynth;}
 
       static QByteArray buf;  // used during read of Sample
       static int idx;
