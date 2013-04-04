@@ -38,7 +38,6 @@ struct Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;
-class MidiPatch;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -189,8 +188,6 @@ class Seq : public QObject, public Sequencer {
       Score* score() const   { return cs; }
       ScoreView* viewer() const { return cv; }
       void initInstruments();
-
-      QList<MidiPatch*> getPatchInfo() const;
 
       Driver* driver()                                 { return _driver; }
       void setDriver(Driver* d)                        { _driver = d;    }
