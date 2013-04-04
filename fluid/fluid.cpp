@@ -615,10 +615,11 @@ void Fluid::updatePatchList()
             int bankOffset = bo ? bo->offset : 0;
             foreach (Preset* p, sf->getPresets()) {
                   MidiPatch* patch = new MidiPatch;
-                  patch->name = p->get_name();
+                  patch->drum = (p->get_banknum() == 128);
+                  patch->synti = name();
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
-                  patch->drum = (p->get_banknum() == 128);
+                  patch->name = p->get_name();
                   patches.append(patch);
                   }
             }

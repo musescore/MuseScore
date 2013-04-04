@@ -70,7 +70,7 @@ Aeolus::Aeolus()
       patch->drum = false;
       patch->bank = 0;
       patch->prog = 0;
-      patch->name = "Aeolus";
+      patch->name = name();
       patchList.append(patch);
       _sc_cmode = 0;
       _sc_group = 0;
