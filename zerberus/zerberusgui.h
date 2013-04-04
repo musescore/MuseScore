@@ -43,9 +43,15 @@ class SfzListDialog : public QDialog {
 class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
       Q_OBJECT
 
+      QFutureWatcher<bool> _futureWatcher;
+      QString _loadedSfPath;
+      QString _loadedSfName;
+      QProgressDialog* _progressDialog;
+
    private slots:
       void addClicked();
       void removeClicked();
+      void onSoundFontLoaded();
 
    public slots:
       virtual void synthesizerChanged();
