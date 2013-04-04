@@ -107,6 +107,7 @@ class Zerberus : public Synthesizer {
       VoiceFifo freeVoices;
       Voice* activeVoices = 0;
       MidiEventFifo midiEvents;
+      int _loadProgress = 0;
 
       void programChange(int channel, int program);
       void trigger(Channel*, int key, int velo, Trigger);
@@ -126,6 +127,9 @@ class Zerberus : public Synthesizer {
       ZInstrument* instrument(int program) const;
       Voice* getActiveVoices() { return activeVoices; }
       Channel* channel(int n)  { return _channel[n]; }
+
+      int loadProgress() { return _loadProgress; }
+      void setLoadProgress(int loadProgress) { _loadProgress = loadProgress; }
 
       static double ct2hz(float c) { return 8.176 * pow(2.0, (double)c / 1200.0); }
 
