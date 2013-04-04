@@ -84,8 +84,10 @@ ZerberusGui::ZerberusGui(Synthesizer* s)
       connect(add, SIGNAL(clicked()), SLOT(addClicked()));
       connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
       connect(&_futureWatcher, SIGNAL(finished()), this, SLOT(onSoundFontLoaded()));
-      _progressDialog = new QProgressDialog("Loading...", "", 0, 0, 0, Qt::FramelessWindowHint);
+      _progressDialog = new QProgressDialog("Loading...", "", 0, 100, 0, Qt::FramelessWindowHint);
       _progressDialog->setCancelButton(0);
+      _progressTimer = new QTimer(this);
+      connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       }
 
 //---------------------------------------------------------
@@ -163,13 +165,20 @@ void ZerberusGui::addClicked()
             _loadedSfPath = sfPath;
             QFuture<bool> future = QtConcurrent::run(zerberus(), &Zerberus::addSoundFont, sfName);
             _futureWatcher.setFuture(future);
+            _progressTimer->start(1000);
             _progressDialog->exec();
             }
+      }
+
+void ZerberusGui::updateProgress()
+      {
+      _progressDialog->setValue(zerberus()->loadProgress());
       }
 
 void ZerberusGui::onSoundFontLoaded()
       {
       bool loaded = _futureWatcher.result();
+      _progressTimer->stop();
       _progressDialog->reset();
       if (!loaded) {
             QMessageBox::warning(this,

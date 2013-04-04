@@ -47,11 +47,13 @@ class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
       QString _loadedSfPath;
       QString _loadedSfName;
       QProgressDialog* _progressDialog;
+      QTimer * _progressTimer;
 
    private slots:
       void addClicked();
       void removeClicked();
       void onSoundFontLoaded();
+      void updateProgress();
 
    public slots:
       virtual void synthesizerChanged();
