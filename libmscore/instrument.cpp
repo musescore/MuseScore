@@ -330,7 +330,7 @@ Channel::Channel()
       {
       for(int i = 0; i < A_INIT_COUNT; ++i)
             init.append(0);
-      synti    = 0;     // -1;
+      // synti    = 0;     // -1;
       channel  = -1;
       program  = -1;
       bank     = 0;
@@ -378,7 +378,8 @@ void Channel::write(Xml& xml) const
             e.write(xml);
             }
       if (!MScore::testMode)
-            xml.tag("synti", ::synti->name(synti));
+            // xml.tag("synti", ::synti->name(synti));
+            xml.tag("synti", synti);
       if (mute)
             xml.tag("mute", mute);
       if (solo)
@@ -396,7 +397,7 @@ void Channel::write(Xml& xml) const
 
 void Channel::read(XmlReader& e)
       {
-      synti = 0;
+      // synti = 0;
       name = e.attribute("name");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -454,7 +455,8 @@ void Channel::read(XmlReader& e)
                   }
             else if (tag == "synti") {
                   QString s = e.readElementText();
-                  synti = ::synti->index(s);
+                  // synti = ::synti->index(s);
+                  synti = s;
                   }
             else if (tag == "descr")
                   descr = e.readElementText();

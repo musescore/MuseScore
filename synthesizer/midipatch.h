@@ -27,7 +27,7 @@
 
 struct MidiPatch {
       bool drum;
-      int synti;
+      QString synti;
       int bank, prog;
       QString name;
       };

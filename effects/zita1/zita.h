@@ -229,6 +229,7 @@ class ZitaReverb : public Effect
       static float _tdiff1 [8];
       static float _tdelay [8];
 
+      void prepare(int n);
 
    public:
       ZitaReverb() : Effect() {}
@@ -237,7 +238,6 @@ class ZitaReverb : public Effect
       virtual void init(float fsamp);
       void fini();
 
-      void prepare(int n);
       virtual void process(int n, float* inp, float* out);
 
       void set_delay(float v) { _ipdel = v; _cntA1++; }

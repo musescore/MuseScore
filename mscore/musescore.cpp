@@ -2427,17 +2427,18 @@ int main(int argc, char* av[])
                   case STYLE_NATIVE:
                         break;
                   }
+            seq                = new Seq();
+            MScore::seq        = seq;
+            Driver* driver     = driverFactory(seq);
+            synti              = synthesizerFactory();
+            MScore::sampleRate = driver->sampleRate();
+            synti->setSampleRate(MScore::sampleRate);
+
+            seq->setDriver(driver);
+            seq->setMasterSynthesizer(synti);
             }
-
-      seq                = new Seq();
-      MScore::seq        = seq;
-      Driver* driver     = driverFactory(seq);
-      synti              = synthesizerFactory();
-      MScore::sampleRate = driver->sampleRate();
-      synti->setSampleRate(MScore::sampleRate);
-
-      seq->setDriver(driver);
-      seq->setMasterSynthesizer(synti);
+      else
+            noSeq = true;
 
       //
       // avoid font problems by overriding the environment

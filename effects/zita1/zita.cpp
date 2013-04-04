@@ -418,7 +418,7 @@ void ZitaReverb::prepare (int nfram)
 
 void ZitaReverb::process (int nfram, float* inp, float* out)
       {
-      prepare(1024);
+      prepare(2048);
 
       float t, g, x0, x1, x2, x3, x4, x5, x6, x7;
       g = sqrtf (0.125f);
@@ -457,6 +457,7 @@ void ZitaReverb::process (int nfram, float* inp, float* out)
             t = x3 - x7; x3 += x7;  x7 = t;
 
             _g1 += _d1;
+
             q0 [i] = _g1 * (x1 + x2);
             q1 [i] = _g1 * (x1 - x2);
 

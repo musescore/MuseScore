@@ -1112,7 +1112,7 @@ void Seq::putEvent(const Event& event)
             qDebug("bad channel value");
             return;
             }
-      int syntiIdx= cs->midiMapping(channel)->articulation->synti;
+      int syntiIdx= synthNameToIndex(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
       }
 

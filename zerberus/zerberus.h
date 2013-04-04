@@ -98,8 +98,6 @@ class MidiEventFifo {
 class Zerberus : public Synthesizer {
       static bool initialized;
 
-      int silentBlocks = 0;
-
       std::atomic<bool> busy;
 
       std::list<ZInstrument*> instruments;
@@ -122,6 +120,7 @@ class Zerberus : public Synthesizer {
       virtual void process(unsigned frames, float*, float*, float*);
       virtual void process(const MidiEvent& event);
       virtual void play(const MidiEvent& event);
+
       bool loadInstrument(const QString&);
 
       ZInstrument* instrument(int program) const;
@@ -131,18 +130,19 @@ class Zerberus : public Synthesizer {
       static double ct2hz(float c) { return 8.176 * pow(2.0, (double)c / 1200.0); }
 
       virtual const char* name() const;
-      virtual bool loadSoundFonts(const QStringList&);
-      virtual QStringList soundFonts() const;
       virtual void play(const Event&);
       virtual const QList<MidiPatch*>& getPatchInfo() const;
+
       virtual SynthesizerGroup state() const;
       virtual void setState(const SynthesizerGroup&);
+
       virtual void allSoundsOff(int channel);
       virtual void allNotesOff(int channel);
+
       virtual bool addSoundFont(const QString&);
       virtual bool removeSoundFont(const QString&);
-      virtual void setParameter(int, double);
-      virtual void setParameter(int, const QString&);
+      virtual bool loadSoundFonts(const QStringList&);
+      virtual QStringList soundFonts() const;
 
       virtual SynthesizerGui* gui();
       QFileInfoList sfzFiles();
