@@ -42,6 +42,11 @@ Driver* driverFactory(Seq* seq)
 #define usePortaudioFlag  preferences.usePortaudioAudio
 #define usePulseAudioFlag preferences.usePulseAudio
 
+      useALSA = false;
+      useJACK = false;
+      usePortaudio = false;
+      usePulseAudio = false;
+
 #ifdef USE_PULSEAUDIO
       if (usePulseAudioFlag) {
             driver = getPulseAudioDriver(seq);
@@ -51,7 +56,7 @@ Driver* driverFactory(Seq* seq)
                   driver = 0;
                   }
             else
-                  usePortaudio = true;
+                  usePulseAudio = true;
             }
 #endif
 #ifdef USE_PORTAUDIO

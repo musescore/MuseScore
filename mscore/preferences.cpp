@@ -41,7 +41,7 @@
 #include "shortcut.h"
 #include "plugins.h"
 
-bool useALSA = false, useJACK = false, usePortaudio = false;
+bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
 extern bool useFactorySettings;
 extern bool externalStyle;
@@ -700,6 +700,10 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
+      connect(portaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
+      connect(pulseaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
+      connect(alsaDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
+      connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       updateRemote();
       }
 
@@ -1305,15 +1309,20 @@ void PreferenceDialog::apply()
             prefs.alsaSampleRate     = alsaSampleRate->currentText().toInt();
             prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
             prefs.alsaFragments      = alsaFragments->value();
+            preferences = prefs;
+            Driver* driver = driverFactory(seq);
+            seq->setDriver(driver);
             if (!seq->init()) {
                   qDebug("sequencer init failed\n");
                   }
             }
 
 #ifdef USE_PORTAUDIO
-      Portaudio* audio = static_cast<Portaudio*>(seq->driver());
-      prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
-         portaudioDevice->currentIndex());
+      if(usePortaudio) {
+            Portaudio* audio = static_cast<Portaudio*>(seq->driver());
+            prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
+               portaudioDevice->currentIndex());
+            }
 #endif
 
 #ifdef USE_PORTMIDI
@@ -1438,7 +1447,7 @@ void PreferenceDialog::apply()
       qApp->setStyleSheet(appStyleSheet());
       genIcons();
 
-      mscore->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
+      mscore->setIconSize(QSize(prefs.iconWidth, prefs.iconHeight));
 
       preferences = prefs;
       emit preferencesChanged();
@@ -1504,6 +1513,24 @@ void PreferenceDialog::midiRemoteControlClearClicked()
       for (int i = 0; i < MIDI_REMOTES; ++i)
             preferences.midiRemote[i].type = MIDI_REMOTE_TYPE_INACTIVE;
       updateRemote();
+      }
+
+//---------------------------------------------------------
+//   exclusiveAudioDriver
+//---------------------------------------------------------
+
+void PreferenceDialog::exclusiveAudioDriver(bool on)
+      {
+      if(on) {
+            if(portaudioDriver != QObject::sender())
+                  portaudioDriver->setChecked(false);
+            if(pulseaudioDriver != QObject::sender())
+                  pulseaudioDriver->setChecked(false);
+            if(alsaDriver != QObject::sender())
+                  alsaDriver->setChecked(false);
+            if(jackDriver != QObject::sender())
+                  jackDriver->setChecked(false);
+            }
       }
 
 //---------------------------------------------------------
