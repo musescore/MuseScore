@@ -759,6 +759,35 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       }
 
 //---------------------------------------------------------
+//   initFromStaffType
+//---------------------------------------------------------
+
+void Staff::initFromStaffType(const StaffType* staffType)
+      {
+      // get staff type if given (if none, get default preset for default staff group)
+      const StaffType* presetStaffType = staffType;
+      if (!presetStaffType)
+            presetStaffType = StaffType::getDefaultPreset(PITCHED_STAFF, 0);
+
+      // look for a staff type with same structure among staff types already defined in the score
+      StaffType* st = 0;
+      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
+            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
+                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                  break;
+                  }
+            }
+      // if staff type not found in score, use from preset (for staff and adding to score staff types)
+      if (!st) {
+            st = presetStaffType->clone();
+            score()->addStaffType(st);
+            }
+
+      // use selected staff type
+      setStaffType(st);
+      }
+
+//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
