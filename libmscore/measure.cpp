@@ -2486,8 +2486,11 @@ bool Measure::setStartRepeatBarLine(bool val)
                   score()->undoRemoveElement(bl);
                   changed = true;
                   }
-            if (bl && val && span)
+            if (bl && val && span) {
                   bl->setSpan(span);
+                  bl->setSpanFrom(staff->barLineFrom());
+                  bl->setSpanTo(staff->barLineTo());
+                  }
 
             ++staffIdx;
             //
