@@ -625,6 +625,9 @@ void InstrumentsDialog::on_upButton_clicked()
                         PartListItem* pli = static_cast<PartListItem*>(prevParent);
                         int idx = pli->part->nstaves();
                         cs->undo(new MoveStaff(sli->staff, pli->part, idx));
+                        //
+                        // TODO : if staff was linked to a staff of the old parent part, unlink it!
+                        //
                         }
                   }
             }
@@ -700,6 +703,9 @@ void InstrumentsDialog::on_downButton_clicked()
                         partiturList->setItemSelected(sli, true);
                         PartListItem* pli = static_cast<PartListItem*>(nextParent);
                         cs->undo(new MoveStaff(sli->staff, pli->part, 0));
+                        //
+                        // TODO : if staff was linked to a staff of the old parent part, unlink it!
+                        //
                         }
                   }
             }
@@ -914,7 +920,6 @@ void MuseScore::editInstrList()
                               Staff* staff = new Staff(cs, part, rstaff);
                               sli->staff   = staff;
                               staff->setRstaff(rstaff);
-                              ++rstaff;
 
                               cs->undoInsertStaff(staff, staffIdx);
 
@@ -924,19 +929,19 @@ void MuseScore::editInstrList()
                                     }
 
                               cs->adjustBracketsIns(staffIdx, staffIdx+1);
-
+                              staff->initFromStaffType(sli->staffType());
+                              staff->setInitialClef(sli->clef());
                               KeySigEvent nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
-                              if (sli->linked()) {
-                                    int idx = cs->staffIdx(staff);
-                                    if (idx > 0) {
-                                          Staff* ostaff = cs->staff(idx - 1);
-                                          staff->setStaffType(ostaff->staffType());
-                                          cloneStaff(ostaff, staff);
-                                          }
+                              if (sli->linked() && rstaff > 0) {
+                                    // link to top staff of same part
+                                    Staff* linkedStaff = part->staves()->front();
+                                    linkedStaff->linkTo(staff);
+                                    cloneStaff(linkedStaff, staff);
                                     }
                               ++staffIdx;
+                              ++rstaff;
                               }
                         else if (sli->op == ITEM_UPDATE) {
                               // check changes in staff type
