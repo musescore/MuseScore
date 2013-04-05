@@ -2766,7 +2766,7 @@ void ScoreView::cmd(const QAction* a)
             mscore->endCmd();
             }
 
-      // STATE_TEXT_EDIT actions
+      // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
             if (editObject->type() == Element::HARMONY)
@@ -3740,6 +3740,9 @@ ScoreState ScoreView::mscoreState() const
       if (sm->configuration().contains(states[EDIT])) {
             if (editObject && (editObject->type() == Element::LYRICS))
                   return STATE_LYRICS_EDIT;
+            else if (editObject &&
+                  ( (editObject->type() == Element::HARMONY) || editObject->type() == Element::FIGURED_BASS) )
+                  return STATE_HARMONY_FIGBASS_EDIT;
             else if (editObject && editObject->isText())
                   return STATE_TEXT_EDIT;
             return STATE_EDIT;
