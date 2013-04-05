@@ -758,7 +758,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
-            | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+            | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
          0,
          "escape",
          QT_TRANSLATE_NOOP("action","Escape")
@@ -1671,7 +1671,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show Page Margins")
          ),
       Shortcut(
-         STATE_TEXT_EDIT | STATE_LYRICS_EDIT,
+         STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
          0,
          "show-keys",
          QT_TRANSLATE_NOOP("action","Insert Special Characters..."),
@@ -2174,91 +2174,91 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Add fret 9 of current string (TAB only)")
          ),
 
-      // TEXT-specific actions (Harmony and/or FiguredBass)
+      // HARMONY / FIGURED BASS specific actions
 
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-longa",
          QT_TRANSLATE_NOOP("action","Longa advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a longa (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-breve",
          QT_TRANSLATE_NOOP("action","Breve advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a double whole note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-1",
          QT_TRANSLATE_NOOP("action","Whole note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a whole note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-2",
          QT_TRANSLATE_NOOP("action","Half note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a half note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-4",
          QT_TRANSLATE_NOOP("action","Quarter note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a quarter note (F.B./Harm. only)")
         ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-8",
          QT_TRANSLATE_NOOP("action","1/8 note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a 1/8 note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-16",
          QT_TRANSLATE_NOOP("action","1/16 note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a 1/16 note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-32",
          QT_TRANSLATE_NOOP("action","1/32 note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a 1/32 note (F.B./Harm. only)")
          ),
       Shortcut(
-         STATE_TEXT_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-64",
          QT_TRANSLATE_NOOP("action","1/64 note advance (F.B./Harm.)"),
          QT_TRANSLATE_NOOP("action","Advance of a 1/64 note (F.B./Harm. only)")
          ),
       Shortcut(
-      STATE_TEXT_EDIT,
+      STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Previous measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_TEXT_EDIT,
+      STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Next measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_TEXT_EDIT,
+      STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Previous beat (Harmony)")
          ),
       Shortcut(
-      STATE_TEXT_EDIT,
+      STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Next beat (Harmony)")
