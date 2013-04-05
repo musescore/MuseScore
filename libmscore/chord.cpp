@@ -270,7 +270,7 @@ qreal Chord::stemPosX() const
             x += stemX;
             }
       else if (_up)
-            x += symbols[score()->symIdx()][quartheadSym].width(magS());
+            x += upNote()->headWidth();
       return x;
       }
 
