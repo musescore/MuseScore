@@ -54,6 +54,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void updateToMeasure();
       void updateFromSegment();
       void updateToSegment();
+      void changeLoopingPanelVisibility(bool);
 
    public:
       PlayPanel(QWidget* parent = 0);

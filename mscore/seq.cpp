@@ -1377,10 +1377,25 @@ void Seq::heartBeat()
       cs->update();
 
       if (mscore->loop()) {
-                  int tm = mscore->getPlayPanel()->getToMeasure();
-                  qDebug() << tm;
-                  MeasureBase* m = cs->measure(tm);
-                  if (tick == m->tick() + m->ticks())
+                  int tm = pp->getToMeasure();
+                  int ts = pp->getToSegment();
+                  MeasureBase* mb = cs->measure(tm);
+                  Measure* m = static_cast<Measure*>(mb);
+                  int lastTick;
+                  {
+                        int sn = 0;
+                        for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest), sn++) {
+                            if (ts == sn) {
+                                Segment* next = s->next(Segment::SegChordRest);
+                                if (next) {
+                                    lastTick = next->tick();
+                                } else
+                                    lastTick = m->tick() + m->ticks();
+                            }
+                        }
+
+                  }
+                  if (tick == lastTick)
                         stop();
             }
       }

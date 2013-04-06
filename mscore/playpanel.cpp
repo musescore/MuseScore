@@ -41,6 +41,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       cs                 = 0;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      changeLoopingPanelVisibility(false);
 
       setScore(0);
       playButton->setDefaultAction(getAction("play"));
@@ -51,6 +52,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(loopButton,   SIGNAL(toggled(bool)),            SLOT(changeLoopingPanelVisibility(bool)));
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
       connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
@@ -365,4 +367,29 @@ int PlayPanel::getFromSegment()
 int PlayPanel::getToSegment()
       {
          return toSegment->currentText().toInt() - 1;
+      }
+
+//---------------------------------------------------------
+//   changeLoopingPanelVisibility
+//---------------------------------------------------------
+
+void PlayPanel::changeLoopingPanelVisibility(bool toggled)
+      {
+      if (toggled) {
+            rangeLabel->show();
+            fromLabel->show();
+            fromMeasure->show();
+            fromSegment->show();
+            toLabel->show();
+            toMeasure->show();
+            toSegment->show();
+      } else {
+            rangeLabel->hide();
+            fromLabel->hide();
+            fromMeasure->hide();
+            fromSegment->hide();
+            toLabel->hide();
+            toMeasure->hide();
+            toSegment->hide();
+            }
       }
