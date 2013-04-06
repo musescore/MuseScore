@@ -14,7 +14,6 @@
       <file>data/reload.png</file>
       <file>data/home.png</file>
       <file>data/help.png</file>
-      <file>data/tab_remove.png</file>
       <file>data/table.svg</file>
 
       <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
@@ -42,7 +41,6 @@
 
       <file>data/webview.css</file>
 
-      <file>data/icons-dark/minus.svg</file>
       <file>data/icons-dark/flip.svg</file>
       <file>data/icons-dark/undo.svg</file>
       <file>data/icons-dark/redo.svg</file>
@@ -63,7 +61,6 @@
       <file>data/icons-dark/filesave.svg</file>
       <file>data/icons-dark/filesaveas.svg</file>
       <file>data/icons-dark/exit.svg</file>
-      <file>data/icons-dark/viewmag.svg</file>
       <file>data/icons-dark/repeat.svg</file>
       <file>data/icons-dark/pan.svg</file>
       <file>data/icons-dark/noteentry.svg</file>
@@ -77,23 +74,11 @@
       <file>data/icons-dark/appoggiatura.svg</file>
       <file>data/icons-dark/brevis.svg</file>
       <file>data/icons-dark/clef.svg</file>
-      <file>data/icons-dark/dfermata.svg</file>
-      <file>data/icons-dark/dlongfermata.svg</file>
-      <file>data/icons-dark/dmarcato.svg</file>
       <file>data/icons-dark/dotdot.svg</file>
       <file>data/icons-dark/dot.svg</file>
-      <file>data/icons-dark/downbow.svg</file>
-      <file>data/icons-dark/downmordent.svg</file>
-      <file>data/icons-dark/downprall.svg</file>
-      <file>data/icons-dark/dportato.svg</file>
-      <file>data/icons-dark/dshortfermata.svg</file>
-      <file>data/icons-dark/dstaccatissimo.svg</file>
-      <file>data/icons-dark/dverylongfermata.svg</file>
-      <file>data/icons-dark/espressivo.svg</file>
       <file>data/icons-dark/flatflat.svg</file>
       <file>data/icons-dark/flat.svg</file>
       <file>data/icons-dark/longaUp.svg</file>
-      <file>data/icons-dark/mordent.svg</file>
       <file>data/icons-dark/natural.svg</file>
       <file>data/icons-dark/note16.svg</file>
       <file>data/icons-dark/note2.svg</file>
@@ -103,37 +88,9 @@
       <file>data/icons-dark/note128.svg</file>
       <file>data/icons-dark/note8.svg</file>
       <file>data/icons-dark/note.svg</file>
-      <file>data/icons-dark/ouvert.svg</file>
-      <file>data/icons-dark/plus.svg</file>
-      <file>data/icons-dark/plusstop.svg</file>
-      <file>data/icons-dark/popping.svg</file>
-      <file>data/icons-dark/prallmordent.svg</file>
-      <file>data/icons-dark/prall.svg</file>
-      <file>data/icons-dark/prallprall.svg</file>
       <file>data/icons-dark/quartrest.svg</file>
-      <file>data/icons-dark/reverseturn.svg</file>
-      <file>data/icons-dark/sforzatoaccent.svg</file>
-      <file>data/icons-dark/sforzato.svg</file>
       <file>data/icons-dark/sharp.svg</file>
       <file>data/icons-dark/sharpsharp.svg</file>
-      <file>data/icons-dark/slapping.svg</file>
-      <file>data/icons-dark/snappizzicato.svg</file>
-      <file>data/icons-dark/staccato.svg</file>
-      <file>data/icons-dark/tapping.svg</file>
-      <file>data/icons-dark/tenuto.svg</file>
-      <file>data/icons-dark/thumb.svg</file>
-      <file>data/icons-dark/trill.svg</file>
-      <file>data/icons-dark/turn.svg</file>
-      <file>data/icons-dark/ufermata.svg</file>
-      <file>data/icons-dark/ulongfermata.svg</file>
-      <file>data/icons-dark/umarcato.svg</file>
-      <file>data/icons-dark/upbow.svg</file>
-      <file>data/icons-dark/upmordent.svg</file>
-      <file>data/icons-dark/uportato.svg</file>
-      <file>data/icons-dark/upprall.svg</file>
-      <file>data/icons-dark/ushortfermata.svg</file>
-      <file>data/icons-dark/ustaccatissimo.svg</file>
-      <file>data/icons-dark/uverylongfermata.svg</file>
       <file>data/icons-dark/editcut.svg</file>
       <file>data/icons-dark/editcopy.svg</file>
       <file>data/icons-dark/editpaste.svg</file>
