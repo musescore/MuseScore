@@ -280,6 +280,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
 
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
          && viewer->mscoreState() != STATE_TEXT_EDIT) { // Already in startCmd in this case
             score->startCmd();
             }
@@ -319,6 +320,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             qDebug("unknown selection state\n");
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
          && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
             }
