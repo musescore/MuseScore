@@ -53,9 +53,9 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(loopButton,   SIGNAL(toggled(bool)),            SLOT(changeLoopingPanelVisibility(bool)));
-      // to >= from
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
       connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
+      connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
       }
 
 //---------------------------------------------------------
@@ -100,6 +100,10 @@ void PlayPanel::setScore(Score* s)
             connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromMeasure()));
             connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromSegment()));
             updateFromMeasure();
+            fromMeasure->setCurrentIndex(0);
+            fromSegment->setCurrentIndex(0);
+            toMeasure->setCurrentIndex(toMeasure->count() - 1);
+            toSegment->setCurrentIndex(toSegment->count() - 1);
             }
       else {
             setTempo(120.0);
@@ -239,6 +243,7 @@ void PlayPanel::updatePosLabel(int utick)
 
 void PlayPanel::updateFromMeasure()
       {
+    qDebug() <<"updateFromMeasure";
       QString cachedCurrentMeasure = fromMeasure->currentText();
       int measureCount = cs->measures()->size();
       fromMeasure->clear();
@@ -284,16 +289,17 @@ void PlayPanel::updateToMeasure()
 
 void PlayPanel::updateFromSegment()
       {
+    qDebug() <<"updateFromSegment";
             QString cachedCurrentMeasure = fromSegment->currentText();
             MeasureBase* mb = cs->measure(getFromMeasure());
+            qDebug() << "fromMeasure" << getFromMeasure();
             Measure* m = static_cast<Measure*>(mb);
             fromSegment->clear();
-            {
-                  int sn = 0;
-                  for (Segment* seg = m->first(Segment::SegChordRestGrace); seg; seg = seg->next(Segment::SegChordRestGrace), sn++) {
-                        fromSegment->addItem(QString::number(sn + 1));
-                        }
-            }
+            int sn = 0;
+            static const Segment::SegmentType st = Segment::SegChordRestGrace;
+            for (Segment* seg = m->first(st); seg; seg = seg->next(st), sn++) {
+                  fromSegment->addItem(QString::number(sn + 1));
+                  }
             int currentMeasureIndex = fromSegment->findText(cachedCurrentMeasure);
             if (currentMeasureIndex != -1) {
                   fromSegment->setCurrentIndex(currentMeasureIndex);
@@ -309,19 +315,19 @@ void PlayPanel::updateFromSegment()
 
 void PlayPanel::updateToSegment()
       {
+      bool differentMeasure = getFromMeasure() != getToMeasure();
       QString currentMeasure = toSegment->currentText();
       int fromSegmentNumber = getFromSegment();
       MeasureBase* mb = cs->measure(getToMeasure());
       Measure* m = static_cast<Measure*>(mb);
       toSegment->clear();
-      {
-            int sn = 0;
-            for (Segment* seg = m->first(Segment::SegChordRestGrace); seg; seg = seg->next(Segment::SegChordRestGrace), sn++) {
-                  if (sn >= fromSegmentNumber) {
-                        toSegment->addItem(QString::number(sn + 1));
-                        }
+      int sn = 0;
+      static const Segment::SegmentType st = Segment::SegChordRestGrace;
+      for (Segment* seg = m->first(st); seg; seg = seg->next(st), sn++) {
+            if (differentMeasure || (!differentMeasure && sn >= fromSegmentNumber)) {
+                  toSegment->addItem(QString::number(sn + 1));
                   }
-      }
+            }
       int currentMeasureIndex = toSegment->findText(currentMeasure);
       if (currentMeasureIndex != -1) {
             toSegment->setCurrentIndex(currentMeasureIndex);
@@ -382,6 +388,8 @@ void PlayPanel::changeLoopingPanelVisibility(bool toggled)
             toMeasure->show();
             toSegment->show();
       } else {
+            QAction* a = getAction("play");
+            a->trigger();
             rangeLabel->hide();
             fromLabel->hide();
             fromMeasure->hide();
