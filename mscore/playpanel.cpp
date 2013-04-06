@@ -53,8 +53,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(loopButton,   SIGNAL(toggled(bool)),            SLOT(changeLoopingPanelVisibility(bool)));
+      // to >= from
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
       connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
+      // segments
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
       connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
       }
@@ -97,6 +99,7 @@ void PlayPanel::setScore(Score* s)
             setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
             heartBeat(tick, tick);
+            // measure changes
             connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromMeasure()));
             updateFromMeasure();
             updateFromSegment();
@@ -239,10 +242,15 @@ void PlayPanel::updatePosLabel(int utick)
 
 void PlayPanel::updateFromMeasure()
       {
+    mutex.lock();
+    qDebug() << "updateFromMeasure";
       QString cachedCurrentMeasure = fromMeasure->currentText();
       int cachedCurrentMeasureIndex = fromMeasure->currentIndex();
-      fromMeasure->clear();
       int measureCount = cs->measures()->size();
+      fromMeasure->clear();
+      qDebug() << "fromMeasure->currentIndex()=" << fromMeasure->currentIndex();
+      fromMeasure->setCurrentIndex(0);
+      qDebug() << "fromMeasure->currentIndex()=" << fromMeasure->currentIndex();
       for (int measureNumber = 0; measureNumber < measureCount; measureNumber++) {
             fromMeasure->addItem(QString::number(measureNumber + 1));
             }
@@ -253,6 +261,7 @@ void PlayPanel::updateFromMeasure()
       else {
             fromMeasure->setCurrentIndex(0);
             }
+      mutex.unlock();
       }
 
 //---------------------------------------------------------
@@ -263,9 +272,9 @@ void PlayPanel::updateToMeasure()
       {
       QString currentMeasure = toMeasure->currentText();
       int cachedCurrentMeasureIndex = toMeasure->currentIndex();
-      toMeasure->clear();
       int measureCount = cs->measures()->size();
       int fromMeasureNumber = getFromMeasure();
+      toMeasure->clear();
       for (int measureNumber = fromMeasureNumber; measureNumber < measureCount; measureNumber++) {
             toMeasure->addItem(QString::number(measureNumber + 1));
             }
@@ -284,24 +293,35 @@ void PlayPanel::updateToMeasure()
 
 void PlayPanel::updateFromSegment()
       {
+    mutex.lock();
+     qDebug() << "updateFromSegment";
             QString cachedCurrentMeasure = fromSegment->currentText();
             int cachedCurrentMeasureIndex = fromSegment->currentIndex();
-            fromSegment->clear();
-            MeasureBase* mb = cs->measure(getFromMeasure());
+            qDebug() << cachedCurrentMeasure << " " << cachedCurrentMeasure << " " << getFromMeasure();
+            int fromMeasureNumber = getFromMeasure();
+            if (fromMeasureNumber == -1)
+                return;
+            MeasureBase* mb = cs->measure(fromMeasureNumber);
             Measure* m = static_cast<Measure*>(mb);
+            fromSegment->clear();
             {
                   int sn = 0;
-                  for (Segment* seg = m->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest), sn++) {
+                  for (Segment* seg = m->first(Segment::SegChordRestGrace); seg; seg = seg->next(Segment::SegChordRestGrace), sn++) {
+                      qDebug() << QString::number(sn + 1);
                         fromSegment->addItem(QString::number(sn + 1));
                         }
+                  if (sn == 0)
+                      qDebug() << "empty";
             }
             int currentMeasureIndex = fromSegment->findText(cachedCurrentMeasure);
+            qDebug() << "currentMeasureIndex=" << currentMeasureIndex;
             if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
                   fromSegment->setCurrentIndex(currentMeasureIndex);
                   }
             else {
                   fromSegment->setCurrentIndex(0);
                   }
+            mutex.unlock();
       }
 
 //---------------------------------------------------------
@@ -312,13 +332,13 @@ void PlayPanel::updateToSegment()
       {
       QString currentMeasure = toSegment->currentText();
       int cachedCurrentMeasureIndex = toSegment->currentIndex();
-      toSegment->clear();
       int fromSegmentNumber = getFromSegment();
       MeasureBase* mb = cs->measure(getToMeasure());
       Measure* m = static_cast<Measure*>(mb);
+      toSegment->clear();
       {
             int sn = 0;
-            for (Segment* seg = m->first(Segment::SegChordRest); seg; seg = seg->next(Segment::SegChordRest), sn++) {
+            for (Segment* seg = m->first(Segment::SegChordRestGrace); seg; seg = seg->next(Segment::SegChordRestGrace), sn++) {
                   if (sn >= fromSegmentNumber) {
                         toSegment->addItem(QString::number(sn + 1));
                         }

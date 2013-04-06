@@ -460,7 +460,7 @@ void Seq::start()
             Segment* s;
             {
                   int sn = 0;
-                  for (s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest), sn++) {
+                  for (s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
                       if (sn == fs)
                           break;
                   }
@@ -1384,9 +1384,9 @@ void Seq::heartBeat()
                   int lastTick;
                   {
                         int sn = 0;
-                        for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest), sn++) {
+                        for (Segment* s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
                             if (ts == sn) {
-                                Segment* next = s->next(Segment::SegChordRest);
+                                Segment* next = s->next(Segment::SegChordRestGrace);
                                 if (next) {
                                     lastTick = next->tick();
                                 } else
