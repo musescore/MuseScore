@@ -50,7 +50,10 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    public slots:
       void setGain(float);
       void setPos(int);
-      void updateRanges();
+      void updateFromMeasure();
+      void updateToMeasure();
+      void updateFromSegment();
+      void updateToSegment();
 
    public:
       PlayPanel(QWidget* parent = 0);
@@ -65,6 +68,8 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       int getFromMeasure();
       int getToMeasure();
+      int getFromSegment();
+      int getToSegment();
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);

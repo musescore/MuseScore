@@ -452,9 +452,20 @@ void Seq::start()
       if (!mscore->loop())
             seek(cs->playPos());
       else {
-            int fm = mscore->getPlayPanel()->getFromMeasure();
-            MeasureBase* m = cs->measure(fm);
-            seek(m->tick());
+            PlayPanel* pp = mscore->getPlayPanel();
+            int fm = pp->getFromMeasure();
+            int fs = pp->getFromSegment();
+            MeasureBase* mb = cs->measure(fm);
+            Measure* m = static_cast<Measure*>(mb);
+            Segment* s;
+            {
+                  int sn = 0;
+                  for (s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest), sn++) {
+                      if (sn == fs)
+                          break;
+                  }
+            }
+            seek(s->tick());
             }
       driver->startTransport();
       }
