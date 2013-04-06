@@ -242,15 +242,10 @@ void PlayPanel::updatePosLabel(int utick)
 
 void PlayPanel::updateFromMeasure()
       {
-    mutex.lock();
-    qDebug() << "updateFromMeasure";
       QString cachedCurrentMeasure = fromMeasure->currentText();
       int cachedCurrentMeasureIndex = fromMeasure->currentIndex();
       int measureCount = cs->measures()->size();
       fromMeasure->clear();
-      qDebug() << "fromMeasure->currentIndex()=" << fromMeasure->currentIndex();
-      fromMeasure->setCurrentIndex(0);
-      qDebug() << "fromMeasure->currentIndex()=" << fromMeasure->currentIndex();
       for (int measureNumber = 0; measureNumber < measureCount; measureNumber++) {
             fromMeasure->addItem(QString::number(measureNumber + 1));
             }
@@ -261,7 +256,6 @@ void PlayPanel::updateFromMeasure()
       else {
             fromMeasure->setCurrentIndex(0);
             }
-      mutex.unlock();
       }
 
 //---------------------------------------------------------
@@ -293,35 +287,24 @@ void PlayPanel::updateToMeasure()
 
 void PlayPanel::updateFromSegment()
       {
-    mutex.lock();
-     qDebug() << "updateFromSegment";
             QString cachedCurrentMeasure = fromSegment->currentText();
             int cachedCurrentMeasureIndex = fromSegment->currentIndex();
-            qDebug() << cachedCurrentMeasure << " " << cachedCurrentMeasure << " " << getFromMeasure();
-            int fromMeasureNumber = getFromMeasure();
-            if (fromMeasureNumber == -1)
-                return;
-            MeasureBase* mb = cs->measure(fromMeasureNumber);
+            MeasureBase* mb = cs->measure(getFromMeasure());
             Measure* m = static_cast<Measure*>(mb);
             fromSegment->clear();
             {
                   int sn = 0;
                   for (Segment* seg = m->first(Segment::SegChordRestGrace); seg; seg = seg->next(Segment::SegChordRestGrace), sn++) {
-                      qDebug() << QString::number(sn + 1);
                         fromSegment->addItem(QString::number(sn + 1));
                         }
-                  if (sn == 0)
-                      qDebug() << "empty";
             }
             int currentMeasureIndex = fromSegment->findText(cachedCurrentMeasure);
-            qDebug() << "currentMeasureIndex=" << currentMeasureIndex;
             if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
                   fromSegment->setCurrentIndex(currentMeasureIndex);
                   }
             else {
                   fromSegment->setCurrentIndex(0);
                   }
-            mutex.unlock();
       }
 
 //---------------------------------------------------------
