@@ -56,9 +56,6 @@ PlayPanel::PlayPanel(QWidget* parent)
       // to >= from
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
       connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
-      // segments
-      connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
-      connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
       }
 
 //---------------------------------------------------------
@@ -101,8 +98,8 @@ void PlayPanel::setScore(Score* s)
             heartBeat(tick, tick);
             // measure changes
             connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromMeasure()));
+            connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromSegment()));
             updateFromMeasure();
-            updateFromSegment();
             }
       else {
             setTempo(120.0);
@@ -243,19 +240,19 @@ void PlayPanel::updatePosLabel(int utick)
 void PlayPanel::updateFromMeasure()
       {
       QString cachedCurrentMeasure = fromMeasure->currentText();
-      int cachedCurrentMeasureIndex = fromMeasure->currentIndex();
       int measureCount = cs->measures()->size();
       fromMeasure->clear();
       for (int measureNumber = 0; measureNumber < measureCount; measureNumber++) {
             fromMeasure->addItem(QString::number(measureNumber + 1));
             }
       int currentMeasureIndex = fromMeasure->findText(cachedCurrentMeasure);
-      if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
+      if (currentMeasureIndex != -1) {
             fromMeasure->setCurrentIndex(currentMeasureIndex);
             }
       else {
             fromMeasure->setCurrentIndex(0);
             }
+      updateFromSegment();
       }
 
 //---------------------------------------------------------
@@ -265,7 +262,6 @@ void PlayPanel::updateFromMeasure()
 void PlayPanel::updateToMeasure()
       {
       QString currentMeasure = toMeasure->currentText();
-      int cachedCurrentMeasureIndex = toMeasure->currentIndex();
       int measureCount = cs->measures()->size();
       int fromMeasureNumber = getFromMeasure();
       toMeasure->clear();
@@ -273,12 +269,13 @@ void PlayPanel::updateToMeasure()
             toMeasure->addItem(QString::number(measureNumber + 1));
             }
       int currentMeasureIndex = toMeasure->findText(currentMeasure);
-      if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
+      if (currentMeasureIndex != -1) {
             toMeasure->setCurrentIndex(currentMeasureIndex);
             }
       else {
             toMeasure->setCurrentIndex(toMeasure->count() - 1);
             }
+      updateToSegment();
       }
 
 //---------------------------------------------------------
@@ -288,7 +285,6 @@ void PlayPanel::updateToMeasure()
 void PlayPanel::updateFromSegment()
       {
             QString cachedCurrentMeasure = fromSegment->currentText();
-            int cachedCurrentMeasureIndex = fromSegment->currentIndex();
             MeasureBase* mb = cs->measure(getFromMeasure());
             Measure* m = static_cast<Measure*>(mb);
             fromSegment->clear();
@@ -299,7 +295,7 @@ void PlayPanel::updateFromSegment()
                         }
             }
             int currentMeasureIndex = fromSegment->findText(cachedCurrentMeasure);
-            if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
+            if (currentMeasureIndex != -1) {
                   fromSegment->setCurrentIndex(currentMeasureIndex);
                   }
             else {
@@ -314,7 +310,6 @@ void PlayPanel::updateFromSegment()
 void PlayPanel::updateToSegment()
       {
       QString currentMeasure = toSegment->currentText();
-      int cachedCurrentMeasureIndex = toSegment->currentIndex();
       int fromSegmentNumber = getFromSegment();
       MeasureBase* mb = cs->measure(getToMeasure());
       Measure* m = static_cast<Measure*>(mb);
@@ -328,7 +323,7 @@ void PlayPanel::updateToSegment()
                   }
       }
       int currentMeasureIndex = toSegment->findText(currentMeasure);
-      if (currentMeasureIndex != -1 && cachedCurrentMeasureIndex != currentMeasureIndex) {
+      if (currentMeasureIndex != -1) {
             toSegment->setCurrentIndex(currentMeasureIndex);
             }
       else {
