@@ -266,6 +266,7 @@ void PlayPanel::updateFromMeasure()
 
 void PlayPanel::updateToMeasure()
       {
+    qDebug() <<"updateToMeasure";
       QString currentMeasure = toMeasure->currentText();
       int measureCount = cs->measures()->size();
       int fromMeasureNumber = getFromMeasure();
@@ -315,6 +316,7 @@ void PlayPanel::updateFromSegment()
 
 void PlayPanel::updateToSegment()
       {
+    qDebug() <<"updateToSegment";
       bool differentMeasure = getFromMeasure() != getToMeasure();
       QString currentMeasure = toSegment->currentText();
       int fromSegmentNumber = getFromSegment();
@@ -388,8 +390,6 @@ void PlayPanel::changeLoopingPanelVisibility(bool toggled)
             toMeasure->show();
             toSegment->show();
       } else {
-            QAction* a = getAction("play");
-            a->trigger();
             rangeLabel->hide();
             fromLabel->hide();
             fromMeasure->hide();
