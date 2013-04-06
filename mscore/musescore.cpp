@@ -2790,6 +2790,9 @@ void MuseScore::changeState(ScoreState val)
             case STATE_LYRICS_EDIT:
                   showModeText(tr("lyrics edit mode"));
                   break;
+            case STATE_HARMONY_FIGBASS_EDIT:
+                  showModeText(tr("chords/fig.bass edit mode"));
+                  break;
             case STATE_PLAY:
                   showModeText(tr("play"));
                   break;
@@ -2844,7 +2847,7 @@ void MuseScore::changeState(ScoreState val)
       _sstate = val;
 
       Element* e = 0;
-      if (_sstate == STATE_LYRICS_EDIT || _sstate == STATE_TEXT_EDIT
+      if (_sstate == STATE_LYRICS_EDIT || _sstate == STATE_TEXT_EDIT || _sstate == STATE_HARMONY_FIGBASS_EDIT
          || _sstate == STATE_EDIT) {
             if (cv)
                   e = cv->getEditObject();
@@ -3177,6 +3180,7 @@ void MuseScore::undo()
       {
       if (_sstate == STATE_EDIT
          || _sstate == STATE_LYRICS_EDIT
+         || _sstate == STATE_HARMONY_FIGBASS_EDIT
          || _sstate == STATE_TEXT_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
@@ -3210,6 +3214,7 @@ void MuseScore::redo()
       {
       if (_sstate == STATE_EDIT
          || _sstate == STATE_TEXT_EDIT
+         || _sstate == STATE_HARMONY_FIGBASS_EDIT
          || _sstate == STATE_LYRICS_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
@@ -3646,6 +3651,7 @@ const char* stateName(ScoreState s)
             case STATE_EDIT:               return "STATE_EDIT";
             case STATE_TEXT_EDIT:          return "STATE_TEXT_EDIT";
             case STATE_LYRICS_EDIT:        return "STATE_LYRICS_EDIT";
+            case STATE_HARMONY_FIGBASS_EDIT: return "STATE_HARMONY_FIGBASS_EDIT";
             case STATE_PLAY:               return "STATE_PLAY";
             case STATE_SEARCH:             return "STATE_SEARCH";
             case STATE_FOTO:               return "STATE_FOTO";
