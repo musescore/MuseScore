@@ -81,13 +81,13 @@ if (APPLE)
 endif (APPLE)
 
 #
-#     Check for gcc compiler >= 4.6
+#     Check for gcc compiler >= 4.7
 #
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
       if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
-        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 6)))
+        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 7)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.6 required")
+                  " >= 4.7 required")
       endif()
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
