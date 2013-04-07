@@ -922,7 +922,7 @@ class Score : public QObject {
       Sym& sym(int id) { return symbols[symIdx()][id]; }
 
    signals:
-      void measuresUpdated();
+      void scoreUpdated();
       };
 
 extern Score* gscore;

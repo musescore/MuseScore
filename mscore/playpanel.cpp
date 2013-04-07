@@ -53,9 +53,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(loopButton,   SIGNAL(toggled(bool)),            SLOT(changeLoopingPanelVisibility(bool)));
-      connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
-      connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
-      connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
+      connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromMeasure()));
+      connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
+      connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
+      connect(toSegment,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
       }
 
 //---------------------------------------------------------
@@ -77,6 +78,13 @@ void PlayPanel::closeEvent(QCloseEvent* ev)
       QWidget::closeEvent(ev);
       }
 
+void PlayPanel::setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex)
+{
+      bool oldState = comboBox->blockSignals(true);
+      comboBox->setCurrentIndex(currentIndex);
+      comboBox->blockSignals(oldState);
+}
+
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
@@ -97,13 +105,18 @@ void PlayPanel::setScore(Score* s)
             int tick = cs->playPos();
             heartBeat(tick, tick);
             // measure changes
-            connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromMeasure()));
-            connect(cs, SIGNAL(measuresUpdated()), SLOT(updateFromSegment()));
+            connect(cs, SIGNAL(measuresUpdated()), SLOT(updateLoopingInterface()));
+            initialization = true;
             updateFromMeasure();
-            fromMeasure->setCurrentIndex(0);
-            fromSegment->setCurrentIndex(0);
-            toMeasure->setCurrentIndex(toMeasure->count() - 1);
-            toSegment->setCurrentIndex(toSegment->count() - 1);
+            initialization = false;
+//            setCurrentIndexWithBlockSignals(fromMeasure, 0);
+//            setCurrentIndexWithBlockSignals(fromSegment, 0);
+//            setCurrentIndexWithBlockSignals(toMeasure, toMeasure->count() - 1);
+//            setCurrentIndexWithBlockSignals(toSegment, toSegment->count() - 1);
+//            fromMeasure->setCurrentIndex(0);
+//            fromSegment->setCurrentIndex(0);
+//            toMeasure->setCurrentIndex(toMeasure->count() - 1);
+//            toSegment->setCurrentIndex(toSegment->count() - 1);
             }
       else {
             setTempo(120.0);
@@ -237,107 +250,135 @@ void PlayPanel::updatePosLabel(int utick)
       posLabel->setText(QString(buffer));
       }
 
+void debugComboBox(QComboBox* comboBox)
+{
+      QString out = "";
+      for (int i = 0; i < comboBox->count(); i++)
+           out += comboBox->itemText(i) + ", ";
+      qDebug() << out;
+}
+
+void PlayPanel::updateLoopingInterface()
+{
+      updateFromMeasure(true);
+      updateToMeasure(true);
+      updateFromSegment(true);
+      updateToSegment(true);
+}
+
+//---------------------------------------------------------
+//   updateComboBox
+//---------------------------------------------------------
+
+void PlayPanel::updateComboBox(QComboBox* comboBox)
+      {
+      int scoreCount;
+      bool isTo = false;
+      int from = -1;
+      if (comboBox == fromMeasure || comboBox == toMeasure) {
+            scoreCount = cs->measures()->size();
+            }
+      else if (comboBox == fromSegment || comboBox == toSegment) {
+            int measureNumber;
+            if (comboBox == fromSegment)
+                  measureNumber = getFromMeasure();
+            else
+                  measureNumber = getToMeasure();
+            scoreCount = getSegmentCount(measureNumber);
+            }
+      else {
+            throw(QString("Wrong comboBox"));
+            }
+      if (comboBox == toMeasure || comboBox == toSegment) {
+            isTo = true;
+            if (comboBox == toMeasure)
+                  from = getFromMeasure();
+            else
+                  from = getFromSegment();
+            }
+      int cachedCount = comboBox->count();
+      int max = cachedCount > scoreCount ? cachedCount : scoreCount;
+      for (int number = 0; number < max; number++) {
+            QString numberString = QString::number(number + 1);
+            int index = comboBox->findText(numberString);
+            if (number < scoreCount) {
+                  bool missing = index == -1;
+                  if (missing && ((!isTo) || (isTo && number >= from))) {
+                        int newIndex = comboBox->findText(QString::number(number)) + 1;
+                        comboBox->insertItem(newIndex, numberString);
+                        }
+                  if (!missing && isTo && number < from)
+                        comboBox->removeItem(index);
+                  }
+            else {
+                  comboBox->removeItem(index);
+                  }
+//            debugComboBox(comboBox);
+            }
+      if (initialization)
+            setCurrentIndexWithBlockSignals(comboBox, !isTo ? 0 : comboBox->count() - 1);
+      }
+
 //---------------------------------------------------------
 //   updateFromMeasure
 //---------------------------------------------------------
 
-void PlayPanel::updateFromMeasure()
+void PlayPanel::updateFromMeasure(bool skipUpdates)
       {
-    qDebug() <<"updateFromMeasure";
-      QString cachedCurrentMeasure = fromMeasure->currentText();
-      int measureCount = cs->measures()->size();
-      fromMeasure->clear();
-      for (int measureNumber = 0; measureNumber < measureCount; measureNumber++) {
-            fromMeasure->addItem(QString::number(measureNumber + 1));
+      qDebug() <<"updateFromMeasure";
+      updateComboBox(fromMeasure);
+      if (!skipUpdates) {
+            updateToMeasure(true);
+            updateFromSegment();
             }
-      int currentMeasureIndex = fromMeasure->findText(cachedCurrentMeasure);
-      if (currentMeasureIndex != -1) {
-            fromMeasure->setCurrentIndex(currentMeasureIndex);
-            }
-      else {
-            fromMeasure->setCurrentIndex(0);
-            }
-      updateFromSegment();
       }
 
 //---------------------------------------------------------
 //   updateToMeasure
 //---------------------------------------------------------
 
-void PlayPanel::updateToMeasure()
+void PlayPanel::updateToMeasure(bool skipUpdates)
       {
-    qDebug() <<"updateToMeasure";
-      QString currentMeasure = toMeasure->currentText();
-      int measureCount = cs->measures()->size();
-      int fromMeasureNumber = getFromMeasure();
-      toMeasure->clear();
-      for (int measureNumber = fromMeasureNumber; measureNumber < measureCount; measureNumber++) {
-            toMeasure->addItem(QString::number(measureNumber + 1));
-            }
-      int currentMeasureIndex = toMeasure->findText(currentMeasure);
-      if (currentMeasureIndex != -1) {
-            toMeasure->setCurrentIndex(currentMeasureIndex);
-            }
-      else {
-            toMeasure->setCurrentIndex(toMeasure->count() - 1);
-            }
-      updateToSegment();
+      qDebug() <<"updateToMeasure";
+      updateComboBox(toMeasure);
+      if (!skipUpdates)
+            updateToSegment();
       }
 
 //---------------------------------------------------------
 //   updateFromSegment
 //---------------------------------------------------------
 
-void PlayPanel::updateFromSegment()
+void PlayPanel::updateFromSegment(bool skipUpdates)
       {
-    qDebug() <<"updateFromSegment";
-            QString cachedCurrentMeasure = fromSegment->currentText();
-            MeasureBase* mb = cs->measure(getFromMeasure());
-            qDebug() << "fromMeasure" << getFromMeasure();
-            Measure* m = static_cast<Measure*>(mb);
-            fromSegment->clear();
-            int sn = 0;
-            static const Segment::SegmentType st = Segment::SegChordRestGrace;
-            for (Segment* seg = m->first(st); seg; seg = seg->next(st), sn++) {
-                  fromSegment->addItem(QString::number(sn + 1));
-                  }
-            int currentMeasureIndex = fromSegment->findText(cachedCurrentMeasure);
-            if (currentMeasureIndex != -1) {
-                  fromSegment->setCurrentIndex(currentMeasureIndex);
-                  }
-            else {
-                  fromSegment->setCurrentIndex(0);
-                  }
+      qDebug() <<"updateFromSegment";
+      updateComboBox(fromSegment);
+      if (!skipUpdates)
+            updateToSegment();
       }
 
 //---------------------------------------------------------
 //   updateToSegment
 //---------------------------------------------------------
 
-void PlayPanel::updateToSegment()
+void PlayPanel::updateToSegment(bool skipUpdates)
       {
-    qDebug() <<"updateToSegment";
-      bool differentMeasure = getFromMeasure() != getToMeasure();
-      QString currentMeasure = toSegment->currentText();
-      int fromSegmentNumber = getFromSegment();
-      MeasureBase* mb = cs->measure(getToMeasure());
-      Measure* m = static_cast<Measure*>(mb);
-      toSegment->clear();
-      int sn = 0;
-      static const Segment::SegmentType st = Segment::SegChordRestGrace;
-      for (Segment* seg = m->first(st); seg; seg = seg->next(st), sn++) {
-            if (differentMeasure || (!differentMeasure && sn >= fromSegmentNumber)) {
-                  toSegment->addItem(QString::number(sn + 1));
-                  }
-            }
-      int currentMeasureIndex = toSegment->findText(currentMeasure);
-      if (currentMeasureIndex != -1) {
-            toSegment->setCurrentIndex(currentMeasureIndex);
-            }
-      else {
-            toSegment->setCurrentIndex(toSegment->count() - 1);
-            }
+      qDebug() <<"updateToSegment";
+      updateComboBox(toSegment);
       }
+
+//---------------------------------------------------------
+//   getSegmentCount
+//---------------------------------------------------------
+
+int PlayPanel::getSegmentCount(int measureNumber) {
+      MeasureBase* mb = cs->measure(measureNumber);
+      Measure* m = static_cast<Measure*>(mb);
+      int segmentCount = 0;
+      static const Segment::SegmentType st = Segment::SegChordRestGrace;
+      for (Segment* s = m->first(st); s; s = s->next(st), segmentCount++);
+      return segmentCount;
+}
 
 //---------------------------------------------------------
 //   getFromMeasure

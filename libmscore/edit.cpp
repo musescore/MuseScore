@@ -1829,6 +1829,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                         }
                   }
             }
+      emit scoreUpdated();
       return omb;
       }
 

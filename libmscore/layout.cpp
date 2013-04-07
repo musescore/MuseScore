@@ -1380,8 +1380,6 @@ void Score::add(Element* el)
             case Element::TBOX:
             case Element::FBOX:
                   measures()->add((MeasureBase*)el);
-                  qDebug() << "Score::add";
-                  emit measuresUpdated();
                   break;
             case Element::BEAM:
                   {
@@ -1415,7 +1413,7 @@ void Score::remove(Element* el)
             case Element::FBOX:
                   measures()->remove(static_cast<MeasureBase*>(el));
                   qDebug() << "Score::remove";
-                  emit measuresUpdated();
+                  emit scoreUpdated();
                   break;
             case Element::BEAM:
                   {

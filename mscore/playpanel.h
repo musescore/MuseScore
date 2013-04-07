@@ -50,11 +50,12 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    public slots:
       void setGain(float);
       void setPos(int);
-      void updateFromMeasure();
-      void updateToMeasure();
-      void updateFromSegment();
-      void updateToSegment();
+      void updateFromMeasure(bool skipUpdates = false);
+      void updateToMeasure(bool skipUpdates = false);
+      void updateFromSegment(bool skipUpdates = false);
+      void updateToSegment(bool skipUpdates = false);
       void changeLoopingPanelVisibility(bool);
+      void updateLoopingInterface();
 
    public:
       PlayPanel(QWidget* parent = 0);
@@ -74,6 +75,10 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
+      void updateComboBox(QComboBox* comboBox);
+      int getSegmentCount(int measureNumber);
+      void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
+      bool initialization;
       };
 
 #endif
