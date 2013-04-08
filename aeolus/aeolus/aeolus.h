@@ -22,7 +22,7 @@
 #define __AEOLUS_H__
 
 struct MidiPatch;
-class Event;
+class PlayEvent;
 
 #include <stdint.h>
 #include "synthesizer/synthesizer.h"
@@ -103,7 +103,7 @@ class Aeolus : public Synthesizer {
       virtual QStringList soundFonts() const { return QStringList(); }
 
       virtual void process(unsigned, float*, float*, float*);
-      virtual void play(const Event&);
+      virtual void play(const PlayEvent&);
 
       virtual const QList<MidiPatch*>& getPatchInfo() const;
 

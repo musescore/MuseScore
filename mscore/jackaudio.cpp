@@ -562,7 +562,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   break;
             case ME_SYSEX:
                   {
-                  const unsigned char* data = e.data();
+                  const unsigned char* data = e.edata();
                   int len = e.len();
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, len+2);
                   if (p == 0) {

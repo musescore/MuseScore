@@ -118,7 +118,7 @@ double Aeolus::masterTuning() const
 //   play
 //---------------------------------------------------------
 
-void Aeolus::play(const Event& event)
+void Aeolus::play(const PlayEvent& event)
       {
       int ch   = event.channel();
       int type = event.type();

@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "midievent.h"
 #include "mscore/preferences.h"
+#include "synthesizer/event.h"
 #include "synthesizer/midipatch.h"
 
 #include "zerberus.h"
@@ -102,22 +102,12 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
       }
 
 //---------------------------------------------------------
-//   play
-//---------------------------------------------------------
-
-void Zerberus::play(const MidiEvent& event)
-      {
-      midiEvents.push(event);
-      }
-
-//---------------------------------------------------------
 //   loadInstrument
 //    return true on success
 //---------------------------------------------------------
 
 bool Zerberus::loadInstrument(const QString& s)
       {
-printf("Zerberus::loadInstrument <%s>\n", qPrintable(s));
       if (s.isEmpty())
             return false;
       for (ZInstrument* instr : instruments) {
@@ -196,21 +186,22 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
 //   process
 //---------------------------------------------------------
 
-void Zerberus::process(const MidiEvent& event)
+void Zerberus::play(const PlayEvent& event)
       {
       if (busy)
             return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {
-//            printf("Zerberus::process(): no instrument for channel %d\n", event.channel());
+//            printf("Zerberus::play(): no instrument for channel %d\n", event.channel());
             return;
             }
 
       switch(event.type()) {
-            case MidiEventType::NOTEOFF:
+            case ME_NOTEOFF:
                   processNoteOff(cp, event.dataA());
                   break;
-            case MidiEventType::NOTEON: {
+
+            case ME_NOTEON: {
                   int key = event.dataA();
                   int vel = event.dataB();
                   if (vel)
@@ -219,9 +210,11 @@ void Zerberus::process(const MidiEvent& event)
                         processNoteOff(cp, key);
                   }
                   break;
-            case MidiEventType::CONTROLLER:
+
+            case ME_CONTROLLER:
                   cp->controller(event.dataA(), event.dataB());
                   break;
+
             default:
                   printf("event type 0x%02x\n", event.type());
                   break;
@@ -237,9 +230,6 @@ void Zerberus::process(unsigned frames, float* p, float*, float*)
       {
       if (busy)
             return;
-      while (!midiEvents.empty())
-            process(midiEvents.pop());
-
       Voice* v = activeVoices;
       Voice* pv = 0;
       while (v) {
@@ -264,16 +254,6 @@ void Zerberus::process(unsigned frames, float* p, float*, float*)
 const char* Zerberus::name() const
       {
       return "Zerberus";
-      }
-
-//---------------------------------------------------------
-//   play
-//---------------------------------------------------------
-
-void Zerberus::play(const Event& e)
-      {
-      MidiEvent me(MidiEventType(e.type()), e.channel(), e.dataA(), e.dataB());
-      midiEvents.push(me);
       }
 
 //---------------------------------------------------------
@@ -309,15 +289,12 @@ void Zerberus::allSoundsOff(int channel)
 
 void Zerberus::allNotesOff(int channel)
       {
-      MidiEvent me(MidiEventType::CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0);
-      if (channel == -1) {
-            for (int i = 0; i < MAX_CHANNEL; ++i) {
-                  me.setChannel(i);
-                  midiEvents.push(me);
-                  }
+      busy = true;
+      for (Voice* v = activeVoices; v; v = v->next()) {
+            if (channel == -1 || (v->channel()->idx() == channel))
+                  v->stop();
             }
-      else
-            midiEvents.push(me);
+      busy = false;
       }
 
 //---------------------------------------------------------
@@ -326,7 +303,7 @@ void Zerberus::allNotesOff(int channel)
 
 bool Zerberus::loadSoundFonts(const QStringList& sl)
       {
-      foreach(const QString& s, sl) {
+      foreach (const QString& s, sl) {
             if (!loadInstrument(s))
                   return false;
             }
