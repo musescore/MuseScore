@@ -138,7 +138,7 @@ Seq::Seq()
       state    = TRANSPORT_STOP;
       oggInit  = false;
       _driver  = 0;
-      playPos  = events.constBegin();
+      playPos  = events.cbegin();
 
       playTime  = 0;
       metronomeVolume = 0.3;
@@ -594,13 +594,13 @@ void Seq::process(unsigned n, float* buffer)
             //
             unsigned framePos = 0;
             int endTime = playTime + frames;
-            for (; playPos != events.constEnd();) {
-                  int f = cs->utick2utime(playPos.key()) * MScore::sampleRate;
+            for (; playPos != events.cend();) {
+                  int f = cs->utick2utime(playPos->first) * MScore::sampleRate;
                   if (f >= endTime)
                         break;
                   int n = f - playTime;
                   if (n < 0) {
-                        qDebug("%d:  %d - %d\n", playPos.key(), f, playTime);
+                        qDebug("%d:  %d - %d\n", playPos->first, f, playTime);
       			n = 0;
                         }
                   if (n) {
@@ -630,7 +630,7 @@ void Seq::process(unsigned n, float* buffer)
                                     }
                               }
                         }
-                  const Event& event = playPos.value();
+                  const Event& event = playPos->second;
                   playEvent(event);
                   if (event.type() == ME_TICK1)
                         tickRest = tickLength;
@@ -665,7 +665,7 @@ void Seq::process(unsigned n, float* buffer)
                               }
                         }
                   }
-            if (playPos == events.constEnd()) {
+            if (playPos == events.cend()) {
                   _driver->stopTransport();
                   rewindStart();
                   }
@@ -731,9 +731,9 @@ void Seq::collectEvents()
       cs->renderMidi(&events);
       endTick = 0;
       if (!events.empty()) {
-            auto e = events.constEnd();
+            auto e = events.cend();
             --e;
-            endTick = e.key();
+            endTick = e->first;
             }
 
       PlayPanel* pp = mscore->getPlayPanel();
@@ -763,7 +763,7 @@ void Seq::setRelTempo(double relTempo)
 
       PlayPanel* pp = mscore->getPlayPanel();
       if (pp) {
-            double t = cs->tempomap()->tempo(playPos.key()) * relTempo;
+            double t = cs->tempomap()->tempo(playPos->first) * relTempo;
             pp->setTempo(t);
             pp->setRelTempo(relTempo);
             }
@@ -783,7 +783,7 @@ void Seq::setPos(int utick)
 
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
       mutex.lock();
-      playPos   = events.lowerBound(utick);
+      playPos   = events.lower_bound(utick);
       mutex.unlock();
       }
 
@@ -809,7 +809,7 @@ void Seq::seek(int utick)
             ov_pcm_seek(&vf, sp);
             }
       guiToSeq(SeqMsg(SEQ_SEEK, utick));
-      guiPos = events.upperBound(utick);
+      guiPos = events.upper_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
       cs->update();
@@ -833,7 +833,7 @@ void Seq::seek(int utick, Segment* seg)
             }
 
       guiToSeq(SeqMsg(SEQ_SEEK, utick));
-      guiPos = events.upperBound(utick);
+      guiPos = events.upper_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
       cs->update();
@@ -925,7 +925,7 @@ void Seq::sendEvent(const Event& ev)
 
 void Seq::nextMeasure()
       {
-      Measure* m = cs->tick2measure(guiPos.key());
+      Measure* m = cs->tick2measure(guiPos->first);
       if (m) {
             if (m->nextMeasure())
                   m = m->nextMeasure();
@@ -939,10 +939,10 @@ void Seq::nextMeasure()
 
 void Seq::nextChord()
       {
-      int tick = guiPos.key();
-      for (auto i = guiPos; i != events.constEnd(); ++i) {
-            if (i.value().type() == ME_NOTEON && i.key() > tick && i.value().velo()) {
-                  seek(i.key());
+      int tick = guiPos->first;
+      for (auto i = guiPos; i != events.cend(); ++i) {
+            if (i->second.type() == ME_NOTEON && i->first > tick && i->second.velo()) {
+                  seek(i->first);
                   break;
                   }
             }
@@ -958,9 +958,9 @@ void Seq::prevMeasure()
       if (i == events.begin())
             return;
       --i;
-      Measure* m = cs->tick2measure(i.key());
+      Measure* m = cs->tick2measure(i->first);
       if (m) {
-            if ((i.key() == m->tick()) && m->prevMeasure())
+            if ((i->first == m->tick()) && m->prevMeasure())
                   m = m->prevMeasure();
             seek(m->tick());
             }
@@ -972,33 +972,33 @@ void Seq::prevMeasure()
 
 void Seq::prevChord()
       {
-      int tick  = playPos.key();
+      int tick  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = events.upperBound(cs->playPos());
+      EventMap::const_iterator i = events.upper_bound(cs->playPos());
       for (;;) {
-            if (i.value().type() == ME_NOTEON) {
-                  const Event& n = i.value();
-                  if (i.key() < tick && n.velo()) {
-                        tick = i.key();
+            if (i->second.type() == ME_NOTEON) {
+                  const Event& n = i->second;
+                  if (i->first < tick && n.velo()) {
+                        tick = i->first;
                         break;
                         }
                   }
-            if (i == events.constBegin())
+            if (i == events.cbegin())
                   break;
             --i;
             }
       //go the previous chord
-      if (i != events.constBegin()) {
+      if (i != events.cbegin()) {
             i = playPos;
             for (;;) {
-                  if (i.value().type() == ME_NOTEON) {
-                        const Event& n = i.value();
-                        if (i.key() < tick && n.velo()) {
-                              seek(i.key());
+                  if (i->second.type() == ME_NOTEON) {
+                        const Event& n = i->second;
+                        if (i->first < tick && n.velo()) {
+                              seek(i->first);
                               break;
                               }
                         }
-                  if (i == events.constBegin())
+                  if (i == events.cbegin())
                         break;
                   --i;
                   }
@@ -1145,14 +1145,14 @@ void Seq::heartBeat()
 
       mutex.lock();
       auto ppos = playPos;
-      if (ppos != events.constBegin())
+      if (ppos != events.cbegin())
             --ppos;
       mutex.unlock();
 
-      for (;guiPos != events.constEnd(); ++guiPos) {
-            if (guiPos.key() > ppos.key())
+      for (;guiPos != events.cend(); ++guiPos) {
+            if (guiPos->first > ppos->first)
                   break;
-            const Event& n = guiPos.value();
+            const Event& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
                   const Note* note1 = n.note();
                   if (n.velo()) {
@@ -1174,7 +1174,7 @@ void Seq::heartBeat()
                         }
                   }
             }
-      int utick = ppos.key();
+      int utick = ppos->first;
       int tick = cs->repeatList()->utick2tick(utick);
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);

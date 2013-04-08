@@ -335,7 +335,7 @@ class Fluid : public Synthesizer {
 
       virtual const char* name() const { return "Fluid"; }
 
-      virtual void play(const Event&);
+      virtual void play(const PlayEvent&);
       virtual const QList<MidiPatch*>& getPatchInfo() const { return patches; }
 
       // get/set synthesizer state (parameter set)

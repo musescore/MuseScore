@@ -115,9 +115,9 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       ev.setVelo(velo);
       ev.setTuning(note->tuning());
       ev.setNote(note);
-      events->insertMulti(onTime, ev);
+      events->insert(std::pair<int, Event>(onTime, ev));
       ev.setVelo(0);
-      events->insertMulti(offTime, ev);
+      events->insert(std::pair<int, Event>(offTime, ev));
       }
 
 //---------------------------------------------------------
@@ -269,7 +269,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                     Event event(nel->events[i]);
                                     event.setOntime(tick);
                                     event.setChannel(channel);
-                                    events->insertMulti(tick, event);
+                                    events->insert(std::pair<int, Event>(tick, event));
                                     }
                               }
                         }
@@ -287,7 +287,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                           event.setValue(k);
                                           event.setOntime(tick);
                                           event.setChannel(channel);
-                                          events->insertMulti(tick, event);
+                                          events->insert(std::pair<int,Event>(tick, event));
                                           }
                                     }
                               Event event(ME_CONTROLLER);
@@ -295,10 +295,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                               event.setValue(96 + i);
                               event.setOntime(tick);
                               event.setChannel(channel);
-                              events->insertMulti(tick, event);
+                              events->insert(std::pair<int,Event>(tick, event));
 
                               event.setValue(64 + i);
-                              events->insertMulti(tick, event);
+                              events->insert(std::pair<int,Event>(tick, event));
                               }
                         }
                   }
@@ -322,10 +322,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         event.setController(CTRL_SUSTAIN);
 
                         event.setValue(127);
-                        events->insertMulti(s1->tick() + tickOffset, event);
+                        events->insert(std::pair<int,Event>(s1->tick() + tickOffset, event));
 
                         event.setValue(0);
-                        events->insertMulti(s2->tick() + tickOffset - 1, event);
+                        events->insert(std::pair<int,Event>(s2->tick() + tickOffset - 1, event));
                         }
                   }
             }
@@ -866,7 +866,7 @@ void Score::renderMidi(EventMap* events)
                         int tick = m->tick() + i * tw + tickOffset;
                         Event event;
                         event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insertMulti(tick, event);
+                        events->insert(std::pair<int,Event>(tick, event));
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;

@@ -215,7 +215,7 @@ static void fill_segments()
                   if (ontime >= start && ontime < end && offtime <= end) {
                         // note begins and ends in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(n.duration());
                         segment[s].snote.append(sn);
@@ -223,7 +223,7 @@ static void fill_segments()
                   if (ontime >= start && ontime < end && offtime > end) {
                         // note begins, doesn't end in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(end - ontime);
                         segment[s].snote.append(sn);
@@ -231,7 +231,7 @@ static void fill_segments()
                   if (ontime < start && offtime > start && offtime <= end) {
                         // note ends, doesn't begin in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(offtime - start);
                         segment[s].snote.append(sn);
@@ -239,7 +239,7 @@ static void fill_segments()
                   if (ontime < start && offtime > end) {
                         // note doesn't begin or end in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(end - start);
                         segment[s].snote.append(sn);

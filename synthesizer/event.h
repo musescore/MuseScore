@@ -17,6 +17,8 @@
 class Note;
 class Xml;
 
+#include <map>
+
 //---------------------------------------------------------
 //   Midi Events
 //---------------------------------------------------------
@@ -40,10 +42,10 @@ enum {
       ME_STOP       = 0xfc,
       ME_SENSE      = 0xfe,   // active sense (used by yamaha)
 
-      ME_NOTE       = 0x100,
-      ME_CHORD      = 0x101,
-      ME_TICK1      = 0x102,  // metronome tick akzent
-      ME_TICK2      = 0x103,  // metronome tick
+      ME_NOTE       = 0x1,
+      ME_CHORD      = 0x2,
+      ME_TICK1      = 0x3,  // metronome tick akzent
+      ME_TICK2      = 0x4,  // metronome tick
       };
 
 //---------------------------------------------------------
@@ -124,20 +126,79 @@ enum {
       };
 
 //---------------------------------------------------------
+//   PlayEvent
+//---------------------------------------------------------
+
+class PlayEvent {
+   protected:
+      uchar _type;
+      uchar _channel;
+      uchar _a;
+      uchar _b;
+      float _tuning = .0f;
+
+   public:
+      PlayEvent() {}
+      PlayEvent(uchar t, uchar c, uchar a, uchar b)
+         : _type(t), _channel(c), _a(a), _b(b) {};
+
+      void set(uchar t, uchar c, uchar a, uchar b) {
+            _type    = t;
+            _channel = c;
+            _a       = a;
+            _b       = b;
+            }
+
+      uchar type() const             { return _type;    }
+      void  setType(uchar t)         { _type = t;       }
+      uchar channel() const          { return _channel; }
+      void  setChannel(uchar c)      { _channel = c;    }
+
+      int dataA() const              { return _a; }
+      int pitch() const              { return _a; }
+      int controller() const         { return _a; }
+
+      void setDataA(int v)           { _a = v; }
+      void setPitch(int v)           { _a = v; }
+      void setController(int v)      { _a = v; }
+
+      int dataB() const              { return _b; }
+      int velo() const               { return _b; }
+      int value() const              { return _b; }
+
+      void setDataB(int v)           { _b = v; }
+      void setVelo(int v)            { _b = v; }
+      void setValue(int v)           { _b = v; }
+
+      void setData(int a, int b)        { _a = a; _b = b; }
+      void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
+
+      float tuning() const           { return _tuning;  }
+      void setTuning(float v)        { _tuning = v;     }
+      };
+
+//---------------------------------------------------------
 //   Event
 //---------------------------------------------------------
 
-class EventData;
-
-class Event {
-      QSharedDataPointer<EventData> d;
+class Event : public PlayEvent {
+      int _ontime;
+      int _noquantOntime;
+      int _noquantDuration;
+      int _duration;
+      int _tpc;               // tonal pitch class
+      int _voice;
+      QList<Event> _notes;
+      uchar* _edata;           // always zero terminated (_data[_len] == 0; )
+      int _len;
+      int _metaType;
+      const Note* _note;
 
    public:
       Event();
       Event(const Event&);
       Event(int t);
       ~Event();
-      Event& operator=(const Event&);
       bool operator==(const Event&) const;
 
       void write(Xml&) const;
@@ -145,47 +206,30 @@ class Event {
 
       bool isChannelEvent() const;
 
-      int noquantOntime() const;
-      void setNoquantOntime(int v);
-      int noquantDuration() const;
-      void setNoquantDuration(int v);
+      int noquantOntime() const      { return _noquantOntime;   }
+      void setNoquantOntime(int v)   { _noquantOntime = v;      }
+      int noquantDuration() const    { return _noquantDuration; }
+      void setNoquantDuration(int v) { _noquantDuration = v;    }
 
-      int type() const;
-      void setType(int v);
-      int ontime() const;
-      void setOntime(int v);
-      int channel() const;
-      void setChannel(int c);
-      int dataA() const;
-      int dataB() const;
-      void setDataA(int v);
-      void setDataB(int v);
-      int pitch() const;
-      void setPitch(int v);
-      int velo() const;
-      void setVelo(int v);
-      int controller() const;
-      void setController(int val);
-      int value() const;
-      void setValue(int v);
-      int duration() const;
-      void setDuration(int v);
-      int voice() const;
-      void setVoice(int val);
-      int offtime() const;
-      QList<Event>& notes();
-      const uchar* data() const;
-      void setData(uchar* d);
-      int len() const;
-      void setLen(int l);
-      int metaType() const;
-      void setMetaType(int v);
-      int tpc() const;
-      void setTpc(int v);
-      const Note* note() const;
-      void setNote(const Note* v);
-      qreal tuning() const;
-      void setTuning(qreal v);
+      int ontime() const             { return _ontime; }
+      void setOntime(int v)          { _ontime = v; }
+
+      int duration() const           { return _duration; }
+      void setDuration(int v)        { _duration = v; }
+      int voice() const              { return _voice; }
+      void setVoice(int val)         { _voice = val; }
+      int offtime() const            { return _ontime + _duration; }
+      QList<Event>& notes()          { return _notes; }
+      const uchar* edata() const     { return _edata; }
+      void setEData(uchar* d)        { _edata = d; }
+      int len() const                { return _len; }
+      void setLen(int l)             { _len = l; }
+      int metaType() const           { return _metaType; }
+      void setMetaType(int v)        { _metaType = v; }
+      int tpc() const                { return _tpc; }
+      void setTpc(int v)             { _tpc = v; }
+      const Note* note() const       { return _note; }
+      void setNote(const Note* v)    { _note = v; }
       };
 
 //---------------------------------------------------------
@@ -199,13 +243,12 @@ class EventList : public QList<Event> {
       void insertNote(int channel, Note*);
       };
 
-class EventMap : public QMap<int, Event> {};
+class EventMap : public std::multimap<int, Event> {};
 
 typedef EventList::iterator iEvent;
 typedef EventList::const_iterator ciEvent;
 
 extern QString midiMetaName(int meta);
-
 
 #endif
 
