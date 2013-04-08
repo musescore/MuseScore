@@ -29,6 +29,7 @@ struct TextSegment {
 
       qreal width() const;
       QRectF boundingRect() const;
+      QRectF tightBoundingRect() const;
 
       TextSegment()                { select = false; x = y = 0.0; }
       TextSegment(const QFont& f, qreal _x, qreal _y) : font(f), x(_x), y(_y), select(false) {}
@@ -75,6 +76,8 @@ class Harmony : public Text {
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
 
+      mutable QRectF _tbbox;
+
       virtual void draw(QPainter*) const;
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
 
@@ -91,6 +94,10 @@ class Harmony : public Text {
       const ChordDescription* descr() const;
 
       virtual void layout();
+
+      const QRectF& bboxtight() const          { return _tbbox;        }
+      QRectF& bboxtight()                      { return _tbbox;        }
+      void setbboxtight(const QRectF& r) const { _tbbox = r;           }
 
       virtual bool isEditable() const { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&);
