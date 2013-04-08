@@ -4458,6 +4458,7 @@
 			<shortName>Drs.</shortName>
 			<description>Drumset 5 lines</description>
 			<clef>PERC2</clef>
+			<stafftype>percussion</stafftype>
 			<barlineSpan>1</barlineSpan>
 			<drumset>1</drumset>
 			<Channel>
