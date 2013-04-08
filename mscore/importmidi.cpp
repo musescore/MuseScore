@@ -643,7 +643,7 @@ void MidiFile::processMeta(Score* cs, MidiTrack* track, const Event& mm)
       {
       int tick          = mm.ontime();
       Staff* staff      = track->staff();
-      const uchar* data = (uchar*)mm.data();
+      const uchar* data = (uchar*)mm.edata();
       int staffIdx      = track->staffIdx();
 
       switch (mm.metaType()) {
@@ -712,7 +712,7 @@ void MidiFile::processMeta(Score* cs, MidiTrack* track, const Event& mm)
                               break;
                         }
 
-                  text->setText((const char*)(mm.data()));
+                  text->setText((const char*)(mm.edata()));
 
                   MeasureBase* measure = cs->first();
                   if (measure->type() != Element::VBOX) {
@@ -726,7 +726,7 @@ void MidiFile::processMeta(Score* cs, MidiTrack* track, const Event& mm)
                   break;
 
             case META_COPYRIGHT:
-                  cs->setMetaTag("Copyright", QString((const char*)(mm.data())));
+                  cs->setMetaTag("Copyright", QString((const char*)(mm.edata())));
                   break;
 
             case META_TIME_SIGNATURE:
@@ -853,7 +853,7 @@ void convertMidi(Score* score, MidiFile* mf)
                   continue;
             const EventList el = midiTrack->events();
             if (!el.empty()) {
-                  ciEvent i = el.end();
+                  auto i = el.end();
                   --i;
                   if (i->ontime() >lastTick)
                         lastTick = i->ontime();
@@ -907,7 +907,7 @@ void convertMidi(Score* score, MidiFile* mf)
                   continue;
             ++xx;
             const EventList el = midiTrack->events();
-            for (ciEvent ie = el.begin(); ie != el.end(); ++ie) {
+            for (auto ie = el.begin(); ie != el.end(); ++ie) {
                   if (ie->type() != ME_NOTE)
                         continue;
                   int tick = ie->ontime() + ie->duration();
@@ -1040,7 +1040,7 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
       for (int voice = 0; voice < voices; ++voice) {
             QList<MNote*> notes;
             int ctick = 0;
-            for (ciEvent i = el.begin(); i != el.end();) {
+            for (auto i = el.begin(); i != el.end();) {
                   Event e = *i;
                   if (e.type() != ME_CHORD || e.voice() != voice) {
                         ++i;
@@ -1082,20 +1082,19 @@ void MidiFile::convertTrack(Score* score, MidiTrack* midiTrack)
                               for (int i = 0; i < nl.size(); ++i) {
                                     Event mn = nl[i];
                         		Note* note = new Note(score);
-                                    NoteEvent ne;
+
                                     // TODO - does this need to be key-aware?
                                     note->setPitch(mn.pitch(), pitch2tpc(mn.pitch(), KEY_C, PREFER_NEAREST));
                                     chord->add(note);
-                                    int ontime  = (mn.noquantOntime() - tick) * 1000 / actualTicks;
-                                    int offtime = mn.noquantOntime() + mn.noquantDuration() - tick;
-                                    offtime = offtime * 1000 / actualTicks;
-                                    ne.setOntime(ontime);
-                                    ne.setLen(offtime - ontime);
                                     note->setVeloType(MScore::USER_VAL);
                                     note->setVeloOffset(mn.velo());
 
                                     NoteEventList el;
-                                    el.append(ne);
+                                    el.append(NoteEvent(
+                                      0,
+                                      (mn.noquantOntime() - tick) * 1000 / actualTicks,
+                                      mn.noquantDuration() * 1000 / actualTicks
+                                      ));
                                     note->setPlayEvents(el);
 
                                     if (useDrumset) {
@@ -1255,23 +1254,18 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               note->setVeloType(MScore::USER_VAL);
                               note->setVeloOffset(mn.velo());
 
-                              NoteEvent ne;
-                              int ontime  = (mn.noquantOntime() - tick) * 1000 / actualTicks;
-                              int offtime = mn.noquantOntime() + mn.noquantDuration() - tick;
-                              offtime = offtime * 1000 / actualTicks;
-                              ne.setOntime(ontime);
-                              ne.setLen(offtime - ontime);
-
                               NoteEventList el;
-                              el.append(ne);
+                              el.append(NoteEvent(
+                                 0,
+                                 (mn.noquantOntime() - tick) * 1000 / actualTicks,
+                                 mn.noquantDuration() * 1000 / actualTicks
+                                 ));
                               note->setPlayEvents(el);
 
                               if (n->ties[i]) {
                                     n->ties[i]->setEndNote(note);
                                     n->ties[i]->setTrack(note->track());
                                     note->setTieBack(n->ties[i]);
-                                    // note->setOnTimeOffset(0);
-                                    // note->setOnTimeUserOffset(0);
                                     }
                               }
                         if (n->mc.duration() <= len) {
@@ -1287,8 +1281,6 @@ qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               n->ties[i] = new Tie(score);
                               n->ties[i]->setStartNote(note);
                               note->setTieFor(n->ties[i]);
-                              // note->setOffTimeOffset(0);
-                              // note->setOffTimeUserOffset(0);
                               }
                         }
                   }

@@ -48,15 +48,15 @@ void NamedEventList::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "program") {
                   Event ev(ME_CONTROLLER);
-                  ev.setController(CTRL_PROGRAM);
-                  ev.setValue(e.intAttribute("value", 0));
+                  ev.setDataA(CTRL_PROGRAM);
+                  ev.setDataB(e.intAttribute("value", 0));
                   events.append(ev);
                   e.skipCurrentElement();
                   }
             else if (tag == "controller") {
                   Event ev(ME_CONTROLLER);
-                  ev.setController(e.intAttribute("ctrl", 0));
-                  ev.setValue(e.intAttribute("value", 0));
+                  ev.setDataA(e.intAttribute("ctrl", 0));
+                  ev.setDataB(e.intAttribute("value", 0));
                   events.append(ev);
                   e.skipCurrentElement();
                   }
@@ -361,17 +361,17 @@ void Channel::write(Xml& xml) const
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
-                  if (e.controller() == CTRL_HBANK && e.value() == 0)
+                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_LBANK && e.value() == 0)
+                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_VOLUME && e.value() == 100)
+                  if (e.dataA() == CTRL_VOLUME && e.dataB() == 100)
                         continue;
-                  if (e.controller() == CTRL_PANPOT && e.value() == 64)
+                  if (e.dataA() == CTRL_PANPOT && e.dataB() == 64)
                         continue;
-                  if (e.controller() == CTRL_REVERB_SEND && e.value() == 0)
+                  if (e.dataA() == CTRL_REVERB_SEND && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_CHORUS_SEND && e.value() == 0)
+                  if (e.dataA() == CTRL_CHORUS_SEND && e.dataB() == 0)
                         continue;
                   }
 
@@ -435,8 +435,8 @@ void Channel::read(XmlReader& e)
                               Event e(ME_CONTROLLER);
                               e.setOntime(-1);
                               e.setChannel(0);
-                              e.setController(ctrl);
-                              e.setValue(value);
+                              e.setDataA(ctrl);
+                              e.setDataB(value);
                               init.append(e);
                               }
                               break;
@@ -455,7 +455,6 @@ void Channel::read(XmlReader& e)
                   }
             else if (tag == "synti") {
                   QString s = e.readElementText();
-                  // synti = ::synti->index(s);
                   synti = s;
                   }
             else if (tag == "descr")
@@ -483,39 +482,27 @@ void Channel::updateInitList() const
       Event e;
       if (program != -1) {
             e.setType(ME_CONTROLLER);
-            e.setController(CTRL_PROGRAM);
-            e.setValue(program);
+            e.setDataA(CTRL_PROGRAM);
+            e.setDataB(program);
             init[A_PROGRAM] = e;
             }
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_HBANK);
-      e.setValue((bank >> 7) & 0x7f);
+      e.setData(ME_CONTROLLER, CTRL_HBANK, (bank >> 7) & 0x7f);
       init[A_HBANK] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_LBANK);
-      e.setValue(bank & 0x7f);
+      e.setData(ME_CONTROLLER, CTRL_LBANK, bank & 0x7f);
       init[A_LBANK] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_VOLUME);
-      e.setValue(volume);
+      e.setData(ME_CONTROLLER, CTRL_VOLUME, volume);
       init[A_VOLUME] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_PANPOT);
-      e.setValue(pan);
+      e.setData(ME_CONTROLLER, CTRL_PANPOT, pan);
       init[A_PAN] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_CHORUS_SEND);
-      e.setValue(chorus);
+      e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus);
       init[A_CHORUS] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_REVERB_SEND);
-      e.setValue(reverb);
+      e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
       init[A_REVERB] = e;
       }
 

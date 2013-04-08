@@ -14,7 +14,7 @@
 #define __SYNTHESIZER_H__
 
 struct MidiPatch;
-class Event;
+class PlayEvent;
 class Synth;
 
 #include "libmscore/synthesizerstate.h"
@@ -50,7 +50,7 @@ class Synthesizer {
       virtual QStringList soundFonts() const = 0;
 
       virtual void process(unsigned, float*, float*, float*) = 0;
-      virtual void play(const Event&) = 0;
+      virtual void play(const PlayEvent&) = 0;
 
       virtual const QList<MidiPatch*>& getPatchInfo() const = 0;
 

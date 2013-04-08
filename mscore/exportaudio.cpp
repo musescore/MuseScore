@@ -59,8 +59,6 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       EventMap events;
       score->renderMidi(&events);
 
-printf("%d events\n", events.size());
-
       SF_INFO info;
       memset(&info, 0, sizeof(info));
       info.channels   = 2;
@@ -79,12 +77,12 @@ printf("%d events\n", events.size());
 
       float peak  = 0.0;
       double gain = 1.0;
-      EventMap::const_iterator endPos = events.constEnd();
+      EventMap::const_iterator endPos = events.cend();
       --endPos;
-      const int et = (score->utick2utime(endPos.key()) + 1) * MScore::sampleRate;
+      const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
-            playPos = events.constBegin();
+            playPos = events.cbegin();
             pBar->setRange(0, et);
 
             //
@@ -115,8 +113,8 @@ printf("%d events\n", events.size());
                   memset(buffer, 0, sizeof(float) * FRAMES * 2);
                   int endTime = playTime + frames;
                   float* p = buffer;
-                  for (; playPos != events.constEnd(); ++playPos) {
-                        int f = score->utick2utime(playPos.key()) * MScore::sampleRate;
+                  for (; playPos != events.cend(); ++playPos) {
+                        int f = score->utick2utime(playPos->first) * MScore::sampleRate;
                         if (f >= endTime)
                               break;
                         int n = f - playTime;
@@ -127,7 +125,7 @@ printf("%d events\n", events.size());
 
                         playTime  += n;
                         frames    -= n;
-                        const Event& e = playPos.value();
+                        const Event& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;

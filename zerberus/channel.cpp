@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "midievent.h"
+#include "synthesizer/event.h"
 #include "zerberus.h"
 #include "channel.h"
 #include "voice.h"

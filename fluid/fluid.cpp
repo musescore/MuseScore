@@ -132,7 +132,7 @@ void Fluid::freeVoice(Voice* v)
 //   play
 //---------------------------------------------------------
 
-void Fluid::play(const Event& event)
+void Fluid::play(const PlayEvent& event)
       {
       bool err = false;
       int ch   = event.channel();
@@ -180,17 +180,17 @@ void Fluid::play(const Event& event)
                   }
             }
       else if (type == ME_CONTROLLER)  {
-            switch(event.controller()) {
+            switch(event.dataA()) {
                   case CTRL_PROGRAM:
-                        program_change(ch, event.value());
+                        program_change(ch, event.dataB());
                         break;
                   case CTRL_PITCH:
-                        cp->pitchBend(event.value());
+                        cp->pitchBend(event.dataB());
                         break;
                   case CTRL_PRESS:
                         break;
                   default:
-                        cp->setcc(event.controller(), event.value());
+                        cp->setcc(event.dataA(), event.dataB());
                         break;
                   }
             }
