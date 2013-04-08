@@ -680,7 +680,7 @@ class Score : public QObject {
 
       void pasteStaff(XmlReader&, ChordRest* dst);
       void renderMidi(EventMap* events);
-      void renderPart(EventMap* events, Part*);
+      void renderStaff(EventMap* events, Staff*);
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
 

@@ -861,7 +861,6 @@ void MidiTrack::extractTimeSig(TimeSigMap* sigmap)
                   int n  = 1;
                   for (int i = 0; i < nn; ++i)
                         n *= 2;
-qDebug("add timesig at %d\n", e.ontime());
                   sigmap->add(e.ontime(), Fraction(z, n));
                   }
             else
