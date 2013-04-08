@@ -308,6 +308,7 @@ subdirs(mscore awl bww2mxml share
       fluid mstyle libmscore synthesizer effects thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
+add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 
 if (USE_PORTMIDI)
