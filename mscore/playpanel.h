@@ -59,7 +59,8 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void updateToSegment(bool skipUpdates = false);
       void changeLoopingPanelVisibility(bool);
       void updateLoopingInterface();
-      void loopingSetup(bool);
+      void loopingSetup(bool start = true);
+      void updateTempoIncrementBy();
 
    public:
       PlayPanel(QWidget* parent = 0);

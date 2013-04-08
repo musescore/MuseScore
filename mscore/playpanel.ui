@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>438</width>
-    <height>357</height>
+    <height>365</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1370,30 +1370,30 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="fromLabel">
+          <widget class="QLabel" name="rangeFromLabel">
            <property name="text">
             <string>From:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="fromMeasure"/>
+          <widget class="QComboBox" name="rangeFromMeasure"/>
          </item>
          <item>
-          <widget class="QComboBox" name="fromSegment"/>
+          <widget class="QComboBox" name="rangeFromSegment"/>
          </item>
          <item>
-          <widget class="QLabel" name="toLabel">
+          <widget class="QLabel" name="rangeToLabel">
            <property name="text">
             <string>To:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="toMeasure"/>
+          <widget class="QComboBox" name="rangeToMeasure"/>
          </item>
          <item>
-          <widget class="QComboBox" name="toSegment"/>
+          <widget class="QComboBox" name="rangeToSegment"/>
          </item>
         </layout>
        </item>
@@ -1477,8 +1477,86 @@
            <property name="decimals">
             <number>0</number>
            </property>
+           <property name="minimum">
+            <double>-150.000000000000000</double>
+           </property>
            <property name="maximum">
             <double>150.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QLabel" name="transposeLabel">
+         <property name="text">
+          <string>Transpose</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="transposeFromLabel">
+           <property name="text">
+            <string>From:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="transposeFrom">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>-12.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>12.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="transposeToLabel">
+           <property name="text">
+            <string>To:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="transposeTo">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>-12.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>12.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="transposeIncrementByLabel">
+           <property name="text">
+            <string>Increment by:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="transposeIncrementBy">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>-12.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>12.000000000000000</double>
            </property>
           </widget>
          </item>
