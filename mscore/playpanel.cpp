@@ -429,7 +429,7 @@ int PlayPanel::getToSegment()
 //   changeLoopingPanelVisibility
 //---------------------------------------------------------
 
-// TODO different window size
+// TODO change this method for better one
 void PlayPanel::changeLoopingPanelVisibility(bool toggled)
       {
       QWidget* widgets[] = { rangeLabel, rangeFromLabel, rangeFromMeasure, rangeFromSegment,
@@ -495,14 +495,14 @@ void PlayPanel::updateTempoIncrementBy()
       qreal to = tempoTo->value();
       qreal increment = tempoIncrementBy->value();
       if (from < to) {
+            tempoIncrementBy->setRange(1, to - from);
             if (increment < 0)
                   tempoIncrementBy->setValue(increment * -1);
-            tempoIncrementBy->setRange(1, to - from);
       }
       else if (from > to) {
+            tempoIncrementBy->setRange(to - from, -1);
             if (increment > 0)
                   tempoIncrementBy->setValue(increment * -1);
-            tempoIncrementBy->setRange(to - from, -1);
             }
       else {
             tempoIncrementBy->setRange(0, 0);
