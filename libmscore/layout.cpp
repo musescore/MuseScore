@@ -44,6 +44,7 @@
 #include "undo.h"
 #include "layout.h"
 #include "lyrics.h"
+#include "harmony.h"
 
 //---------------------------------------------------------
 //   rebuildBspTree
@@ -2515,12 +2516,18 @@ qreal Score::computeMinWidth(Segment* fs) const
       qreal _spatium           = spatium();
       qreal clefKeyRightMargin = styleS(ST_clefKeyRightMargin).val() * _spatium;
       qreal minNoteDistance    = styleS(ST_minNoteDistance).val()    * _spatium;
+      qreal minHarmonyDistance = styleS(ST_minHarmonyDistance).val() * _spatium;
 
       qreal rest[_nstaves];    // fixed space needed from previous segment
       memset(rest, 0, _nstaves * sizeof(qreal));
 
+      qreal hRest[_nstaves];    // fixed space needed from previous harmony
+      memset(hRest, 0, _nstaves * sizeof(qreal));
+
       qreal clefWidth[_nstaves];
       memset(clefWidth, 0, _nstaves * sizeof(qreal));
+
+      QRectF hLastBbox[_nstaves];    // bbox of previous harmony to test vertical separation
 
       int segmentIdx = 0;
       qreal x        = 0.0;
@@ -2544,7 +2551,8 @@ qreal Score::computeMinWidth(Segment* fs) const
                         }
                   continue;
                   }
-            bool rest2[_nstaves+1];
+            bool rest2[_nstaves];
+            bool hRest2[_nstaves];
             Segment::SegmentType segType = s->segmentType();
             qreal segmentWidth     = 0.0;
             qreal stretchDistance  = 0.0;
@@ -2555,8 +2563,12 @@ qreal Score::computeMinWidth(Segment* fs) const
                         continue;
                   qreal minDistance = 0.0;
                   Space space;
+                  Space hSpace;
+                  QRectF hBbox;
                   int track  = staffIdx * VOICES;
                   bool found = false;
+                  bool hFound = false;
+                  bool eFound = false;
                   if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
@@ -2599,6 +2611,22 @@ qreal Score::computeMinWidth(Segment* fs) const
                               }
                         if (lyrics)
                               space.max(Space(llw, rrw));
+
+                        // add spacing for chord symbols
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
+                                    continue;
+                              Harmony* h = static_cast<Harmony*>(e);
+                              h->layout();
+                              QRectF b(h->bboxtight().translated(h->pos()));
+                              if (hFound)
+                                    hBbox |= b;
+                              else
+                                    hBbox = b;
+                              hFound = true;
+                              // allow chord at the beginning of a measure to be dragged left
+                              hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
+                              }
                         }
                   else {
                         Element* e = s->element(track);
@@ -2621,25 +2649,42 @@ qreal Score::computeMinWidth(Segment* fs) const
                                     }
                               }
                         if (e) {
-                              found = true;
+                              eFound = true;
                               e->layout();
                               space.max(e->space());
                               }
                         }
                   space += Space(elsp, etsp);
-                  if (found) {
+
+                  if (found || eFound) {
                         space.rLw() += clefWidth[staffIdx];
-                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
-                        if (space.lw() > stretchDistance)
-                              sp += (space.lw() - stretchDistance);
+                        qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
                         segmentWidth    = qMax(segmentWidth, sp);
                         }
                   else
                         rest2[staffIdx] = true;
+
+                  // space chord symbols separately from segments
+                  if (hFound || eFound) {
+                        qreal sp = 0.0;
+
+                        // space chord symbols unless they miss each other vertically
+                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                              sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                        hLastBbox[staffIdx] = hBbox;
+
+                        hRest[staffIdx] = hSpace.rw();
+                        hRest2[staffIdx] = false;
+                        segmentWidth = qMax(segmentWidth, sp);
+                        }
+                  else
+                        hRest2[staffIdx] = true;
+
                   clefWidth[staffIdx] = 0.0;
                   }
+
             x += segmentWidth;
 
 //            if (segmentIdx && pSeg)
@@ -2649,7 +2694,9 @@ qreal Score::computeMinWidth(Segment* fs) const
                   if (!staff(staffIdx)->show())
                         continue;
                   if (rest2[staffIdx])
-                        rest[staffIdx] -= segmentWidth;
+                        rest[staffIdx] -= qMin(rest[staffIdx],segmentWidth);
+                  if (hRest2[staffIdx])
+                        hRest[staffIdx] -= qMin(hRest[staffIdx],segmentWidth);
                   }
             //
             // set pSeg only to used segments
@@ -2671,6 +2718,7 @@ qreal Score::computeMinWidth(Segment* fs) const
             if (!staff(staffIdx)->show())
                   continue;
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            segmentWidth = qMax(segmentWidth, hRest[staffIdx]);
             }
       x += segmentWidth;
       return x;
