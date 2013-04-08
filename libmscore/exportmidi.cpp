@@ -226,6 +226,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
       cs->updateRepeatList(midiExpandRepeats);
       writeHeader();
 
+printf("=========tracks %d\n", tracks->size());
+
       foreach (MidiTrack* track, *tracks) {
             Staff* staff = track->staff();
             Part* part   = staff->part();
@@ -258,7 +260,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
 
             EventMap events;
-            cs->renderPart(&events, part);
+            cs->renderStaff(&events, staff);
 
             for (auto i = events.begin(); i != events.end(); ++i) {
                   Event event(i->second);
