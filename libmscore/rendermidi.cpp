@@ -212,10 +212,10 @@ struct OttavaShiftSegment {
 //   collectMeasureEvents
 //---------------------------------------------------------
 
-static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int tickOffset)
+static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset)
       {
-      int firstStaffIdx = m->score()->staffIdx(part);
-      int nextStaffIdx  = firstStaffIdx + part->nstaves();
+      int firstStaffIdx = staff->idx();
+      int nextStaffIdx  = firstStaffIdx + 1;
 
       Segment::SegmentTypes st = Segment::SegChordRestGrace;
       int strack = firstStaffIdx * VOICES;
@@ -509,10 +509,10 @@ void Score::updateVelo()
       }
 
 //---------------------------------------------------------
-//   renderPart
+//   renderStaff
 //---------------------------------------------------------
 
-void Score::renderPart(EventMap* events, Part* part)
+void Score::renderStaff(EventMap* events, Staff* staff)
       {
       Measure* lastMeasure = 0;
       foreach (const RepeatSegment* rs, *repeatList()) {
@@ -520,13 +520,13 @@ void Score::renderPart(EventMap* events, Part* part)
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure(part)) {
+                  if (lastMeasure && m->isRepeatMeasure(staff->part())) {
                         int offset = m->tick() - lastMeasure->tick();
-                        collectMeasureEvents(events, lastMeasure, part, tickOffset + offset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
                         }
                   else {
                         lastMeasure = m;
-                        collectMeasureEvents(events, m, part, tickOffset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset);
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
@@ -850,8 +850,8 @@ void Score::renderMidi(EventMap* events)
       updateChannel();
       updateVelo();
 
-      foreach (Part* part, _parts)
-            renderPart(events, part);
+      foreach (Staff* part, _staves)
+            renderStaff(events, part);
 
       // add metronome ticks
       foreach (const RepeatSegment* rs, *repeatList()) {
