@@ -806,5 +806,9 @@
     <key>lock</key>
     <seq>Shift+Ctrl+L</seq>
     </SC>
+  <SC>
+    <key>loop</key>
+    <seq>L</seq>
+    </SC>
   </Shortcuts>
 

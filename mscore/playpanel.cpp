@@ -49,14 +49,15 @@ PlayPanel::PlayPanel(QWidget* parent)
       metronomeButton->setDefaultAction(getAction("metronome"));
       loopButton->setDefaultAction(getAction("loop"));
 
-      connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
-      connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
-      connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
-      connect(loopButton,   SIGNAL(toggled(bool)),            SLOT(changeLoopingPanelVisibility(bool)));
+      connect(volumeSlider, SIGNAL(valueChanged(double,int)),     SLOT(volumeChanged(double,int)));
+      connect(posSlider,    SIGNAL(sliderMoved(int)),             SLOT(setPos(int)));
+      connect(tempoSlider,  SIGNAL(valueChanged(double,int)),     SLOT(relTempoChanged(double,int)));
+      connect(loopButton,   SIGNAL(toggled(bool)),                SLOT(changeLoopingPanelVisibility(bool)));
       connect(fromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromMeasure()));
       connect(toMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
       connect(fromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
       connect(toSegment,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
+      connect(loopButton,   SIGNAL(toggled(bool)),                SLOT(loopingSetup(bool)));
       }
 
 //---------------------------------------------------------
@@ -77,6 +78,10 @@ void PlayPanel::closeEvent(QCloseEvent* ev)
       emit closed();
       QWidget::closeEvent(ev);
       }
+
+//---------------------------------------------------------
+//   setCurrentIndexWithBlockSignals
+//---------------------------------------------------------
 
 void PlayPanel::setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex)
 {
@@ -104,19 +109,11 @@ void PlayPanel::setScore(Score* s)
             setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
             heartBeat(tick, tick);
-            // measure changes
+            // score changes
             connect(cs, SIGNAL(measuresUpdated()), SLOT(updateLoopingInterface()));
             initialization = true;
             updateFromMeasure();
             initialization = false;
-//            setCurrentIndexWithBlockSignals(fromMeasure, 0);
-//            setCurrentIndexWithBlockSignals(fromSegment, 0);
-//            setCurrentIndexWithBlockSignals(toMeasure, toMeasure->count() - 1);
-//            setCurrentIndexWithBlockSignals(toSegment, toSegment->count() - 1);
-//            fromMeasure->setCurrentIndex(0);
-//            fromSegment->setCurrentIndex(0);
-//            toMeasure->setCurrentIndex(toMeasure->count() - 1);
-//            toSegment->setCurrentIndex(toSegment->count() - 1);
             }
       else {
             setTempo(120.0);
@@ -250,13 +247,9 @@ void PlayPanel::updatePosLabel(int utick)
       posLabel->setText(QString(buffer));
       }
 
-void debugComboBox(QComboBox* comboBox)
-{
-      QString out = "";
-      for (int i = 0; i < comboBox->count(); i++)
-           out += comboBox->itemText(i) + ", ";
-      qDebug() << out;
-}
+//---------------------------------------------------------
+//   updateLoopingInterface
+//---------------------------------------------------------
 
 void PlayPanel::updateLoopingInterface()
 {
@@ -313,7 +306,6 @@ void PlayPanel::updateComboBox(QComboBox* comboBox)
             else {
                   comboBox->removeItem(index);
                   }
-//            debugComboBox(comboBox);
             }
       if (initialization)
             setCurrentIndexWithBlockSignals(comboBox, !isTo ? 0 : comboBox->count() - 1);
@@ -325,7 +317,7 @@ void PlayPanel::updateComboBox(QComboBox* comboBox)
 
 void PlayPanel::updateFromMeasure(bool skipUpdates)
       {
-      qDebug() <<"updateFromMeasure";
+//      qDebug() <<"updateFromMeasure";
       updateComboBox(fromMeasure);
       if (!skipUpdates) {
             updateToMeasure(true);
@@ -339,7 +331,7 @@ void PlayPanel::updateFromMeasure(bool skipUpdates)
 
 void PlayPanel::updateToMeasure(bool skipUpdates)
       {
-      qDebug() <<"updateToMeasure";
+//      qDebug() <<"updateToMeasure";
       updateComboBox(toMeasure);
       if (!skipUpdates)
             updateToSegment();
@@ -351,7 +343,7 @@ void PlayPanel::updateToMeasure(bool skipUpdates)
 
 void PlayPanel::updateFromSegment(bool skipUpdates)
       {
-      qDebug() <<"updateFromSegment";
+//      qDebug() <<"updateFromSegment";
       updateComboBox(fromSegment);
       if (!skipUpdates)
             updateToSegment();
@@ -363,7 +355,7 @@ void PlayPanel::updateFromSegment(bool skipUpdates)
 
 void PlayPanel::updateToSegment(bool skipUpdates)
       {
-      qDebug() <<"updateToSegment";
+//      qDebug() <<"updateToSegment";
       updateComboBox(toSegment);
       }
 
@@ -371,13 +363,25 @@ void PlayPanel::updateToSegment(bool skipUpdates)
 //   getSegmentCount
 //---------------------------------------------------------
 
-int PlayPanel::getSegmentCount(int measureNumber) {
+int PlayPanel::getSegmentCount(int measureNumber)
+{
       MeasureBase* mb = cs->measure(measureNumber);
       Measure* m = static_cast<Measure*>(mb);
       int segmentCount = 0;
       static const Segment::SegmentType st = Segment::SegChordRestGrace;
       for (Segment* s = m->first(st); s; s = s->next(st), segmentCount++);
       return segmentCount;
+}
+
+int PlayPanel::getSegmentTick(int measureNumber, int relativeSegmentNumber)
+{
+      Measure* m = static_cast<Measure*>(cs->measure(measureNumber));
+      int sn = 0;
+      for (Segment* s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
+            if (relativeSegmentNumber == sn)
+                  return s->tick();
+            }
+      return -1;
 }
 
 //---------------------------------------------------------
@@ -420,23 +424,50 @@ int PlayPanel::getToSegment()
 //   changeLoopingPanelVisibility
 //---------------------------------------------------------
 
+// TODO different window size
 void PlayPanel::changeLoopingPanelVisibility(bool toggled)
       {
-      if (toggled) {
-            rangeLabel->show();
-            fromLabel->show();
-            fromMeasure->show();
-            fromSegment->show();
-            toLabel->show();
-            toMeasure->show();
-            toSegment->show();
-      } else {
-            rangeLabel->hide();
-            fromLabel->hide();
-            fromMeasure->hide();
-            fromSegment->hide();
-            toLabel->hide();
-            toMeasure->hide();
-            toSegment->hide();
-            }
+      QWidget* widgets[] = { rangeLabel, fromLabel, fromMeasure, fromSegment,
+                             toLabel, toMeasure, toSegment, tempoLabel_2,
+                             tempoFromLabel, tempoFrom, tempoToLabel, tempoTo,
+                             tempoIncrementByLabel, tempoIncrementBy
+            };
+      int widgetCount = sizeof(widgets) / sizeof(widgets[0]);
+      for (int w = 0; w < widgetCount; w++) {
+           QWidget* widget = widgets[w];
+           if (toggled)
+                 widget->show();
+           else
+                 widget->hide();
+           }
       }
+
+//---------------------------------------------------------
+//   setNextTempo
+//---------------------------------------------------------
+
+void PlayPanel::setNextTempo()
+{
+      qreal from = tempoFrom->value() * .01;
+      qreal to = tempoTo->value() * .01;
+      qreal inc = tempoIncrementBy->value() * .01;
+      qreal next = from + currentTempoIteration * inc;
+      qreal tempo = next > to ? to : next;
+      emit relTempoChanged(tempo);
+      currentTempoIteration++;
+}
+
+//---------------------------------------------------------
+//   loopingSetup
+//---------------------------------------------------------
+
+void PlayPanel::loopingSetup(bool checked)
+{
+      if (checked) {
+            currentTempoIteration = 0;
+            }
+      else {
+            if (playButton->isChecked())
+                  getAction("play")->trigger();
+            }
+}

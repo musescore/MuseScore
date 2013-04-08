@@ -22,6 +22,7 @@
 #define __PLAYPANEL_H__
 
 #include "ui_playpanel.h"
+#include "libmscore/measure.h"
 
 class Score;
 
@@ -33,6 +34,8 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
+      int currentTempoIteration;
+      bool initialization;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -56,6 +59,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void updateToSegment(bool skipUpdates = false);
       void changeLoopingPanelVisibility(bool);
       void updateLoopingInterface();
+      void loopingSetup(bool);
 
    public:
       PlayPanel(QWidget* parent = 0);
@@ -72,13 +76,14 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       int getToMeasure();
       int getFromSegment();
       int getToSegment();
+      void setNextTempo();
+      int getSegmentTick(int measureNumber, int relativeSegmentNumber);
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
       void updateComboBox(QComboBox* comboBox);
       int getSegmentCount(int measureNumber);
       void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
-      bool initialization;
       };
 
 #endif

@@ -449,24 +449,9 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if (!mscore->loop())
-            seek(cs->playPos());
-      else {
-            PlayPanel* pp = mscore->getPlayPanel();
-            int fm = pp->getFromMeasure();
-            int fs = pp->getFromSegment();
-            MeasureBase* mb = cs->measure(fm);
-            Measure* m = static_cast<Measure*>(mb);
-            Segment* s;
-            {
-                  int sn = 0;
-                  for (s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
-                      if (sn == fs)
-                          break;
-                  }
-            }
-            seek(s->tick());
-            }
+      if (mscore->loop())
+            mscore->getPlayPanel()->setNextTempo();
+      seek(cs->playPos());
       driver->startTransport();
       }
 
@@ -477,11 +462,6 @@ void Seq::start()
 
 void Seq::stop()
       {
-      if (mscore->loop()) {
-          QAction* a = getAction("play");
-          a->trigger();
-          return;
-      }
       if (state == TRANSPORT_STOP)
             return;
       if (oggInit) {
@@ -1379,24 +1359,16 @@ void Seq::heartBeat()
       if (mscore->loop()) {
                   int tm = pp->getToMeasure();
                   int ts = pp->getToSegment();
-                  MeasureBase* mb = cs->measure(tm);
-                  Measure* m = static_cast<Measure*>(mb);
-                  int lastTick;
-                  {
-                        int sn = 0;
-                        for (Segment* s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
-                            if (ts == sn) {
-                                Segment* next = s->next(Segment::SegChordRestGrace);
-                                if (next) {
-                                    lastTick = next->tick();
-                                } else
-                                    lastTick = m->tick() + m->ticks();
-                            }
+                  int lastTick = pp->getSegmentTick(tm, ts + 1);
+                  if (lastTick == -1) {
+                        Measure* m = static_cast<Measure*>(cs->measure(tm));
+                        lastTick = m->tick() + m->ticks();
                         }
-
-                  }
-                  if (tick == lastTick)
-                        stop();
+                  if (tick == lastTick) {
+                        int fm = pp->getFromMeasure();
+                        int fs = pp->getFromSegment();
+                        pp->setNextTempo();
+                        seek(pp->getSegmentTick(fm, fs));
+                        }
             }
       }
-
