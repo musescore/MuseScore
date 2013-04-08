@@ -3056,7 +3056,7 @@ void Measure::layoutX(qreal stretch)
       qreal clefWidth[nstaves];
       memset(clefWidth, 0, nstaves * sizeof(qreal));
 
-      QRectF hLastBbox[nstaves];    // bbox of previous harmony to test vertical separation
+      std::vector<QRectF> hLastBbox(nstaves);    // bbox of previous harmony to test vertical separation
 
       const Segment* s = first();
       const Segment* pSeg = 0;
