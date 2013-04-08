@@ -2955,6 +2955,53 @@ qreal Measure::minWidth2() const
       }
 
 //-----------------------------------------------------------------------------
+//    computeStretch
+///   \brief distribute stretch across a range of segments
+//-----------------------------------------------------------------------------
+
+void computeStretch(int minTick, qreal minimum, qreal stretch, int first, int last, int ticksList[], qreal xpos[], qreal width[])
+      {
+      SpringMap springs;
+      for (int i = first; i < last; ++i) {
+            qreal str = 1.0;
+            qreal d;
+            qreal w = width[i];
+
+            int t = ticksList[i];
+            if (t) {
+                  if (minTick > 0)
+                        // str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
+                        str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
+                  d = w / str;
+                  }
+            else {
+                  str = 0.0;              // dont stretch timeSig and key
+                  d   = 100000000.0;      // CHECK
+                  }
+            springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
+            minimum += w;
+            }
+
+      //---------------------------------------------------
+      //    distribute stretch to segments
+      //---------------------------------------------------
+
+      qreal force = sff(stretch, minimum, springs);
+
+      for (iSpring i = springs.begin(); i != springs.end(); ++i) {
+            qreal stretch = force * i->second.stretch;
+            if (stretch < i->second.fix)
+                  stretch = i->second.fix;
+            width[i->second.seg] = stretch;
+            }
+      qreal x = xpos[first];
+      for (int i = first; i < last; ++i) {
+            x += width[i];
+            xpos[i+1] = x;
+            }
+      }
+
+//-----------------------------------------------------------------------------
 //    layoutX
 ///   \brief main layout routine for note spacing
 ///   Return width of measure (in MeasureWidth), taking into account \a stretch.
@@ -2977,9 +3024,13 @@ void Measure::layoutX(qreal stretch)
       qreal _spatium           = spatium();
       int tracks               = nstaves * VOICES;
       qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
+      qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
+
+      qreal hRest[nstaves];    // fixed space needed from previous harmony
+      memset(hRest, 0, nstaves * sizeof(qreal));
 
       //--------tick table for segments
       int ticksList[segs];
@@ -2991,7 +3042,10 @@ void Measure::layoutX(qreal stretch)
 
       int segmentIdx = 0;
       qreal x        = 0.0;
+      qreal lastx    = 0.0;
       int minTick    = 100000;
+      int hMinTick   = 100000;
+      int hLastIdx   = -1;
       int ntick      = tick() + ticks();   // position of next measure
 
       if (system()->firstMeasure() == this && system()->barLine())
@@ -3001,6 +3055,8 @@ void Measure::layoutX(qreal stretch)
 
       qreal clefWidth[nstaves];
       memset(clefWidth, 0, nstaves * sizeof(qreal));
+
+      QRectF hLastBbox[nstaves];    // bbox of previous harmony to test vertical separation
 
       const Segment* s = first();
       const Segment* pSeg = 0;
@@ -3021,10 +3077,13 @@ void Measure::layoutX(qreal stretch)
                   pSeg = s;
                   continue;
                   }
-            bool rest2[nstaves+1];
+            bool gotHarmony = false;
+            bool rest2[nstaves];
+            bool hRest2[nstaves];
             Segment::SegmentType segType = s->segmentType();
             types[segmentIdx]      = segType;
             qreal segmentWidth     = 0.0;
+            qreal harmonyWidth     = 0.0;
             qreal stretchDistance  = 0.0;
             int pt                 = pSeg ? pSeg->segmentType() : Segment::SegBarLine;
 
@@ -3033,8 +3092,12 @@ void Measure::layoutX(qreal stretch)
                         continue;
                   qreal minDistance = 0.0;
                   Space space;
+                  Space hSpace;
+                  QRectF hBbox;
                   int track  = staffIdx * VOICES;
                   bool found = false;
+                  bool hFound = false;
+                  bool eFound = false;
                   if (segType & (Segment::SegChordRestGrace)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
@@ -3079,6 +3142,22 @@ void Measure::layoutX(qreal stretch)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
                               }
+
+                        // add spacing for chord symbols
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
+                                    continue;
+                              Harmony* h = static_cast<Harmony*>(e);
+                              QRectF b(h->bboxtight().translated(h->pos()));
+                              if (hFound)
+                                    hBbox |= b;
+                              else
+                                    hBbox = b;
+                              hFound = true;
+                              gotHarmony = true;
+                              // allow chord at the beginning of a measure to be dragged left
+                              hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
+                              }
                         }
                   else {
                         Element* e = s->element(track);
@@ -3101,39 +3180,62 @@ void Measure::layoutX(qreal stretch)
                                     }
                               }
                         if (e) {
-                              found = true;
+                              eFound = true;
+                              gotHarmony = true;      // to avoid closing barline
                               space.max(e->space());
                               }
                         }
                   space += Space(elsp, etsp);
-                  if (found) {
+
+                  if (found || eFound) {
                         space.rLw() += clefWidth[staffIdx];
-                        qreal sp     = minDistance + rest[staffIdx] + stretchDistance;
-                        if (space.lw() > stretchDistance)
-                              sp += (space.lw() - stretchDistance);
+                        qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
                         segmentWidth    = qMax(segmentWidth, sp);
                         }
                   else
                         rest2[staffIdx] = true;
+
+                  // space chord symbols separately from segments
+                  if (hFound || eFound) {
+                        qreal sp = 0.0;
+
+                        // space chord symbols unless they miss each other vertically
+                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                              sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
+                        hLastBbox[staffIdx] = hBbox;
+
+                        hRest[staffIdx] = hSpace.rw();
+                        hRest2[staffIdx] = false;
+                        harmonyWidth = qMax(harmonyWidth, sp);
+                        }
+                  else
+                        hRest2[staffIdx] = true;
+
                   clefWidth[staffIdx] = 0.0;
                   }
 
-            x += segmentWidth;
-            xpos[segmentIdx]  = x;
-
+            // set previous seg width before adding in harmony, to allow stretching
             if (segmentIdx) {
                   width[segmentIdx-1] = segmentWidth;
                   if (pSeg)
                         pSeg->setbbox(QRectF(0.0, 0.0, segmentWidth, _spatium * 5));  //??
                   }
 
+            // make room for harmony if needed
+            segmentWidth = qMax(segmentWidth,harmonyWidth);
+
+            x += segmentWidth;
+            xpos[segmentIdx]  = x;
+
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                   if (!score()->staff(staffIdx)->show())
                         continue;
                   if (rest2[staffIdx])
-                        rest[staffIdx] -= segmentWidth;
+                        rest[staffIdx] -= qMin(rest[staffIdx],segmentWidth);
+                  if (hRest2[staffIdx])
+                        hRest[staffIdx] -= qMin(hRest[staffIdx],segmentWidth);
                   }
             if ((s->segmentType() == Segment::SegChordRest)) {
                   const Segment* nseg = s;
@@ -3154,11 +3256,24 @@ void Measure::layoutX(qreal stretch)
                   else {
                         if (nticks < minTick)
                               minTick = nticks;
+                        if (nticks < hMinTick)
+                              hMinTick = nticks;
                         }
                   ticksList[segmentIdx] = nticks;
                   }
             else
                   ticksList[segmentIdx] = 0;
+
+            // if we are on a chord symbol, stretch the notes below it if necessary
+            if (gotHarmony) {
+                  if (hLastIdx >= 0)
+                        computeStretch(hMinTick, 0.0, x-lastx, hLastIdx, segmentIdx, ticksList, xpos, width);
+
+                  hMinTick = 10000;
+                  lastx = x;
+                  hLastIdx = segmentIdx;
+                  }
+
             //
             // set pSeg only to used segments
             //
@@ -3200,58 +3315,23 @@ void Measure::layoutX(qreal stretch)
                      staves[staffIdx]->distanceDown = distBelow;
                   }
             }
+
       qreal segmentWidth = 0.0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             if (!score()->staff(staffIdx)->show())
                   continue;
             segmentWidth = qMax(segmentWidth, rest[staffIdx]);
+            segmentWidth = qMax(segmentWidth, hRest[staffIdx]);
             }
+      if (segmentIdx)
+            width[segmentIdx-1] = segmentWidth;
       xpos[segmentIdx]    = x + segmentWidth;
-      width[segmentIdx-1] = segmentWidth;
 
       //---------------------------------------------------
-      // compute stretches
+      // compute stretches for whole measure
       //---------------------------------------------------
 
-      SpringMap springs;
-      qreal minimum = xpos[0];
-      for (int i = 0; i < segs; ++i) {
-            qreal str = 1.0;
-            qreal d;
-            qreal w = width[i];
-
-            int t = ticksList[i];
-            if (t) {
-                  if (minTick > 0)
-                        // str += .6 * log(qreal(t) / qreal(minTick)) / log(2.0);
-                        str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
-                  d = w / str;
-                  }
-            else {
-                  str = 0.0;              // dont stretch timeSig and key
-                  d   = 100000000.0;      // CHECK
-                  }
-            springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
-            minimum += w;
-            }
-
-      //---------------------------------------------------
-      //    distribute stretch to segments
-      //---------------------------------------------------
-
-      qreal force = sff(stretch, minimum, springs);
-
-      for (iSpring i = springs.begin(); i != springs.end(); ++i) {
-            qreal stretch = force * i->second.stretch;
-            if (stretch < i->second.fix)
-                  stretch = i->second.fix;
-            width[i->second.seg] = stretch;
-            }
-      x = xpos[0];
-      for (int i = 1; i <= segs; ++i) {
-            x += width[i-1];
-            xpos[i] = x;
-            }
+      computeStretch(minTick, xpos[0], stretch, 0, segs, ticksList, xpos, width);
 
       //---------------------------------------------------
       //    layout individual elements
