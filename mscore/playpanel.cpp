@@ -372,6 +372,10 @@ int PlayPanel::getSegmentCount(int measureNumber)
       return segmentCount;
       }
 
+//---------------------------------------------------------
+//   getSegmentTick
+//---------------------------------------------------------
+
 int PlayPanel::getSegmentTick(int measureNumber, int relativeSegmentNumber)
       {
       Measure* m = static_cast<Measure*>(cs->measure(measureNumber));
@@ -384,12 +388,21 @@ int PlayPanel::getSegmentTick(int measureNumber, int relativeSegmentNumber)
       }
 
 //---------------------------------------------------------
+//   getValueFromComboBox
+//---------------------------------------------------------
+
+int PlayPanel::getValueFromComboBox(QComboBox* comboBox)
+      {
+      return comboBox->currentText().toInt() - 1;
+      }
+
+//---------------------------------------------------------
 //   getFromMeasure
 //---------------------------------------------------------
 
 int PlayPanel::getFromMeasure()
       {
-         return rangeFromMeasure->currentText().toInt() - 1;
+      return getValueFromComboBox(rangeFromMeasure);
       }
 
 //---------------------------------------------------------
@@ -398,7 +411,7 @@ int PlayPanel::getFromMeasure()
 
 int PlayPanel::getToMeasure()
       {
-         return rangeToMeasure->currentText().toInt() - 1;
+      return getValueFromComboBox(rangeToMeasure);
       }
 
 //---------------------------------------------------------
@@ -407,7 +420,7 @@ int PlayPanel::getToMeasure()
 
 int PlayPanel::getFromSegment()
       {
-         return rangeFromSegment->currentText().toInt() - 1;
+      return getValueFromComboBox(rangeFromSegment);
       }
 
 //---------------------------------------------------------
@@ -416,7 +429,7 @@ int PlayPanel::getFromSegment()
 
 int PlayPanel::getToSegment()
       {
-         return rangeToSegment->currentText().toInt() - 1;
+      return getValueFromComboBox(rangeToSegment);
       }
 
 //---------------------------------------------------------
@@ -454,6 +467,10 @@ void PlayPanel::changeLoopingPanelVisibility(bool toggled)
            }
       }
 
+//---------------------------------------------------------
+//   nextValue
+//---------------------------------------------------------
+
 double PlayPanel::nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox)
       {
       qreal from = fromBox->value();
@@ -468,21 +485,18 @@ double PlayPanel::nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDou
             return to;
       }
 
-int PlayPanel::getTransposeDirection()
+//---------------------------------------------------------
+//   getTransposeDirection
+//---------------------------------------------------------
+
+TransposeDirection PlayPanel::getTransposeDirection(bool flip)
       {
       int from = transposeFrom->value();
       int to = transposeTo->value();
-      return from < to ? 1 : from > to ? -1 : 0;
-      }
-
-//---------------------------------------------------------
-//   transposeBack
-//---------------------------------------------------------
-
-void PlayPanel::transposeBack()
-      {
-      for (int i = 0; i < currentTransposition; i++)
-            cs->transposeSemitone(getTransposeDirection() * -1);
+      if (!flip)
+            return from < to ? TRANSPOSE_UP : TRANSPOSE_DOWN;
+      else
+            return to < from ? TRANSPOSE_UP : TRANSPOSE_DOWN;
       }
 
 //---------------------------------------------------------
@@ -496,8 +510,7 @@ void PlayPanel::nextIteration()
 
       int transpose = nextValue(transposeFrom, transposeTo, transposeIncrementBy);
       int times = transpose != currentTransposition ? transposeIncrementBy->value() : 0;
-      for (int i = 0; i < times; i++)
-            cs->transposeSemitone(getTransposeDirection());
+      transposeBySemitone(times);
       currentTransposition = transpose;
       currentIteration++;
       }
@@ -515,8 +528,24 @@ void PlayPanel::loopingSetup(bool start)
       else {
             if (playButton->isChecked()) {
                   getAction("play")->trigger();
-                  transposeBack();
+                  transposeBySemitone(currentTransposition, true);
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   transposeBySemitone
+//---------------------------------------------------------
+
+void PlayPanel::transposeBySemitone(int times, bool flip)
+      {
+      for (int i = 0; i < times; i++) {
+            cs->cmdSelectAll();
+            cs->startCmd();
+            cs->transpose(TRANSPOSE_BY_INTERVAL, getTransposeDirection(flip), 0, 3, false, true, false);
+            cs->deselectAll();
+            cs->setLayoutAll(true);
+            cs->endCmd();
             }
       }
 

@@ -23,6 +23,7 @@
 
 #include "ui_playpanel.h"
 #include "libmscore/measure.h"
+#include "libmscore/undo.h"
 
 class Score;
 
@@ -34,9 +35,10 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
-      bool initialization;
+
       int currentIteration;
       int currentTransposition;
+      bool initialization;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -54,15 +56,16 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    public slots:
       void setGain(float);
       void setPos(int);
-      void updateFromMeasure(bool skipUpdates = false);
-      void updateToMeasure(bool skipUpdates = false);
-      void updateFromSegment(bool skipUpdates = false);
-      void updateToSegment(bool skipUpdates = false);
+
       void changeLoopingPanelVisibility(bool);
-      void updateLoopingInterface();
       void loopingSetup(bool start = true);
+      void updateFromMeasure(bool skipUpdates = false);
+      void updateFromSegment(bool skipUpdates = false);
       void updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void updateLoopingInterface();
       void updateTempoIncrementBy();
+      void updateToMeasure(bool skipUpdates = false);
+      void updateToSegment(bool skipUpdates = false);
       void updateTransposeIncrementBy();
 
    public:
@@ -77,20 +80,22 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void setScore(Score* s);
 
       int getFromMeasure();
-      int getToMeasure();
       int getFromSegment();
+      int getSegmentTick(int measureNumber, int relativeSegmentNumber);
+      int getToMeasure();
       int getToSegment();
       void nextIteration();
-      int getSegmentTick(int measureNumber, int relativeSegmentNumber);
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
       void updateComboBox(QComboBox* comboBox);
+
       int getSegmentCount(int measureNumber);
-      void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
+      TransposeDirection getTransposeDirection(bool flip = false);
+      int getValueFromComboBox(QComboBox* comboBox);
       double nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
-      void transposeBack();
-      int getTransposeDirection();
+      void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
+      void transposeBySemitone(int times, bool flip = false);
       };
 
 #endif
