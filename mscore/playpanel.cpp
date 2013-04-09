@@ -49,20 +49,25 @@ PlayPanel::PlayPanel(QWidget* parent)
       metronomeButton->setDefaultAction(getAction("metronome"));
       loopButton->setDefaultAction(getAction("loop"));
 
-      connect(volumeSlider,      SIGNAL(valueChanged(double,int)),     SLOT(volumeChanged(double,int)));
-      connect(posSlider,         SIGNAL(sliderMoved(int)),             SLOT(setPos(int)));
-      connect(tempoSlider,       SIGNAL(valueChanged(double,int)),     SLOT(relTempoChanged(double,int)));
-      connect(loopButton,        SIGNAL(toggled(bool)),                SLOT(changeLoopingPanelVisibility(bool)));
-      connect(rangeFromMeasure,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromMeasure()));
-      connect(rangeToMeasure,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
-      connect(rangeFromSegment,  SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
-      connect(rangeToSegment,    SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
-      connect(loopButton,        SIGNAL(toggled(bool)),                SLOT(loopingSetup(bool)));
-      connect(tempoFrom,         SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
-      connect(tempoTo,           SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
-      connect(tempoFrom,         SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
-      connect(tempoTo,           SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
-      connect(tempoIncrementBy,  SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
+      connect(volumeSlider,         SIGNAL(valueChanged(double,int)),     SLOT(volumeChanged(double,int)));
+      connect(posSlider,            SIGNAL(sliderMoved(int)),             SLOT(setPos(int)));
+      connect(tempoSlider,          SIGNAL(valueChanged(double,int)),     SLOT(relTempoChanged(double,int)));
+      connect(loopButton,           SIGNAL(toggled(bool)),                SLOT(changeLoopingPanelVisibility(bool)));
+      connect(rangeFromMeasure,     SIGNAL(currentIndexChanged(QString)), SLOT(updateFromMeasure()));
+      connect(rangeToMeasure,       SIGNAL(currentIndexChanged(QString)), SLOT(updateToMeasure()));
+      connect(rangeFromSegment,     SIGNAL(currentIndexChanged(QString)), SLOT(updateFromSegment()));
+      connect(rangeToSegment,       SIGNAL(currentIndexChanged(QString)), SLOT(updateToSegment()));
+      connect(loopButton,           SIGNAL(toggled(bool)),                SLOT(loopingSetup(bool)));
+      connect(tempoFrom,            SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
+      connect(tempoTo,              SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
+      connect(tempoFrom,            SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
+      connect(tempoTo,              SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
+      connect(tempoIncrementBy,     SIGNAL(valueChanged(double)),         SLOT(updateTempoIncrementBy()));
+      connect(transposeFrom,        SIGNAL(valueChanged(double)),         SLOT(updateTransposeIncrementBy()));
+      connect(transposeTo,          SIGNAL(valueChanged(double)),         SLOT(updateTransposeIncrementBy()));
+      connect(transposeFrom,        SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
+      connect(transposeTo,          SIGNAL(valueChanged(double)),         SLOT(loopingSetup()));
+      connect(transposeIncrementBy, SIGNAL(valueChanged(double)),         SLOT(updateTransposeIncrementBy()));
       }
 
 //---------------------------------------------------------
@@ -83,17 +88,6 @@ void PlayPanel::closeEvent(QCloseEvent* ev)
       emit closed();
       QWidget::closeEvent(ev);
       }
-
-//---------------------------------------------------------
-//   setCurrentIndexWithBlockSignals
-//---------------------------------------------------------
-
-void PlayPanel::setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex)
-{
-      bool oldState = comboBox->blockSignals(true);
-      comboBox->setCurrentIndex(currentIndex);
-      comboBox->blockSignals(oldState);
-}
 
 //---------------------------------------------------------
 //   setScore
@@ -257,12 +251,12 @@ void PlayPanel::updatePosLabel(int utick)
 //---------------------------------------------------------
 
 void PlayPanel::updateLoopingInterface()
-{
+      {
       updateFromMeasure(true);
       updateToMeasure(true);
       updateFromSegment(true);
       updateToSegment(true);
-}
+      }
 
 //---------------------------------------------------------
 //   updateComboBox
@@ -369,17 +363,17 @@ void PlayPanel::updateToSegment(bool skipUpdates)
 //---------------------------------------------------------
 
 int PlayPanel::getSegmentCount(int measureNumber)
-{
+      {
       MeasureBase* mb = cs->measure(measureNumber);
       Measure* m = static_cast<Measure*>(mb);
       int segmentCount = 0;
       static const Segment::SegmentType st = Segment::SegChordRestGrace;
       for (Segment* s = m->first(st); s; s = s->next(st), segmentCount++);
       return segmentCount;
-}
+      }
 
 int PlayPanel::getSegmentTick(int measureNumber, int relativeSegmentNumber)
-{
+      {
       Measure* m = static_cast<Measure*>(cs->measure(measureNumber));
       int sn = 0;
       for (Segment* s = m->first(Segment::SegChordRestGrace); s; s = s->next(Segment::SegChordRestGrace), sn++) {
@@ -387,7 +381,7 @@ int PlayPanel::getSegmentTick(int measureNumber, int relativeSegmentNumber)
                   return s->tick();
             }
       return -1;
-}
+      }
 
 //---------------------------------------------------------
 //   getFromMeasure
@@ -426,6 +420,17 @@ int PlayPanel::getToSegment()
       }
 
 //---------------------------------------------------------
+//   setCurrentIndexWithBlockSignals
+//---------------------------------------------------------
+
+void PlayPanel::setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex)
+      {
+      bool oldState = comboBox->blockSignals(true);
+      comboBox->setCurrentIndex(currentIndex);
+      comboBox->blockSignals(oldState);
+      }
+
+//---------------------------------------------------------
 //   changeLoopingPanelVisibility
 //---------------------------------------------------------
 
@@ -449,63 +454,111 @@ void PlayPanel::changeLoopingPanelVisibility(bool toggled)
            }
       }
 
+double PlayPanel::nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox)
+      {
+      qreal from = fromBox->value();
+      qreal to = toBox->value();
+      qreal inc = incrementByBox->value();
+      qreal next = from + currentIteration * inc;
+      if (from < to)
+            return next > to ? to : next;
+      else if (from > to)
+            return next < to ? to : next;
+      else
+            return to;
+      }
+
+int PlayPanel::getTransposeDirection()
+      {
+      int from = transposeFrom->value();
+      int to = transposeTo->value();
+      return from < to ? 1 : from > to ? -1 : 0;
+      }
+
+//---------------------------------------------------------
+//   transposeBack
+//---------------------------------------------------------
+
+void PlayPanel::transposeBack()
+      {
+      for (int i = 0; i < currentTransposition; i++)
+            cs->transposeSemitone(getTransposeDirection() * -1);
+      }
+
 //---------------------------------------------------------
 //   setNextTempo
 //---------------------------------------------------------
 
-void PlayPanel::setNextTempo()
-{
-      qreal from = tempoFrom->value();
-      qreal to = tempoTo->value();
-      qreal inc = tempoIncrementBy->value();
-      qreal next = from + currentTempoIteration * inc;
-      qreal tempo;
-      if (from < to)
-            tempo = next > to ? to : next;
-      else if (from > to)
-            tempo = next < to ? to : next;
-      else
-            tempo = to;
+void PlayPanel::nextIteration()
+      {
+      double tempo = nextValue(tempoFrom, tempoTo, tempoIncrementBy);
       emit relTempoChanged(tempo * .01);
-      currentTempoIteration++;
-}
+
+      int transpose = nextValue(transposeFrom, transposeTo, transposeIncrementBy);
+      int times = transpose != currentTransposition ? transposeIncrementBy->value() : 0;
+      for (int i = 0; i < times; i++)
+            cs->transposeSemitone(getTransposeDirection());
+      currentTransposition = transpose;
+      currentIteration++;
+      }
 
 //---------------------------------------------------------
 //   loopingSetup
 //---------------------------------------------------------
 
 void PlayPanel::loopingSetup(bool start)
-{
+      {
       if (start) {
-            currentTempoIteration = 0;
+            currentIteration = 0;
+            currentTransposition = 0;
             }
       else {
-            if (playButton->isChecked())
+            if (playButton->isChecked()) {
                   getAction("play")->trigger();
+                  transposeBack();
+                  }
             }
-}
+      }
+
+//---------------------------------------------------------
+//   updateIncrementBy
+//---------------------------------------------------------
+
+void PlayPanel::updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox)
+      {
+      qreal from = fromBox->value();
+      qreal to = toBox->value();
+      qreal incrementBy = incrementByBox->value();
+      if (from < to) {
+            incrementByBox->setRange(1, to - from);
+            if (incrementBy < 0)
+                  incrementByBox->setValue(incrementBy * -1);
+      }
+      else if (from > to) {
+            incrementByBox->setRange(to - from, -1);
+            if (incrementBy > 0)
+                  incrementByBox->setValue(incrementBy * -1);
+            }
+      else {
+            incrementByBox->setRange(0, 0);
+            incrementByBox->setValue(0);
+            }
+      }
 
 //---------------------------------------------------------
 //   updateTempoIncrementBy
 //---------------------------------------------------------
 
 void PlayPanel::updateTempoIncrementBy()
-{
-      qreal from = tempoFrom->value();
-      qreal to = tempoTo->value();
-      qreal increment = tempoIncrementBy->value();
-      if (from < to) {
-            tempoIncrementBy->setRange(1, to - from);
-            if (increment < 0)
-                  tempoIncrementBy->setValue(increment * -1);
+      {
+      updateIncrementBy(tempoFrom, tempoTo, tempoIncrementBy);
       }
-      else if (from > to) {
-            tempoIncrementBy->setRange(to - from, -1);
-            if (increment > 0)
-                  tempoIncrementBy->setValue(increment * -1);
-            }
-      else {
-            tempoIncrementBy->setRange(0, 0);
-            tempoIncrementBy->setValue(0);
-            }
-}
+
+//---------------------------------------------------------
+//   updateTransposeIncrementBy
+//---------------------------------------------------------
+
+void PlayPanel::updateTransposeIncrementBy()
+      {
+      updateIncrementBy(transposeFrom, transposeTo, transposeIncrementBy);
+      }

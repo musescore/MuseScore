@@ -34,8 +34,9 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
-      int currentTempoIteration;
       bool initialization;
+      int currentIteration;
+      int currentTransposition;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -60,7 +61,9 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void changeLoopingPanelVisibility(bool);
       void updateLoopingInterface();
       void loopingSetup(bool start = true);
+      void updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
       void updateTempoIncrementBy();
+      void updateTransposeIncrementBy();
 
    public:
       PlayPanel(QWidget* parent = 0);
@@ -77,7 +80,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       int getToMeasure();
       int getFromSegment();
       int getToSegment();
-      void setNextTempo();
+      void nextIteration();
       int getSegmentTick(int measureNumber, int relativeSegmentNumber);
    private:
       void updateTimeLabel(int sec);
@@ -85,6 +88,9 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void updateComboBox(QComboBox* comboBox);
       int getSegmentCount(int measureNumber);
       void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
+      double nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void transposeBack();
+      int getTransposeDirection();
       };
 
 #endif
