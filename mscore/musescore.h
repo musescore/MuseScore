@@ -35,14 +35,13 @@
 class Shortcut;
 class ScoreView;
 class Element;
-class ToolButton;
 class PreferenceDialog;
 class InstrumentsDialog;
 class Instrument;
 class MidiFile;
 class TextStyleDialog;
 class PlayPanel;
-class InstrumentListEditor;
+class Mixer;
 class Debugger;
 class MeasureListEditor;
 class Score;
@@ -83,6 +82,8 @@ class MasterPalette;
 class PluginCreator;
 class PluginManager;
 class MasterSynthesizer;
+class Driver;
+class Seq;
 
 struct PluginDescription;
 
@@ -255,7 +256,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* searchCombo;
 
       PlayPanel* playPanel;
-      InstrumentListEditor* iledit;
+      Mixer* mixer;
       SynthControl* synthControl;
       Debugger* debugger;
       MeasureListEditor* measureListEdit;
@@ -553,8 +554,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getStyleFilename(bool open, const QString& title = QString());
       QString getFotoFilename(QString& filter, QString *selectedFilter);
       QString getChordStyleFilename(bool open);
-      QStringList getSoundFont(const QString&);
-      QStringList getSfzFile(const QString&);
       QString getScanFile(const QString&);
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);
@@ -648,6 +647,8 @@ extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
 extern QString dataPath;
 extern MasterSynthesizer* synti;
+MasterSynthesizer* synthesizerFactory();
+Driver* driverFactory(Seq*);
 
 extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];

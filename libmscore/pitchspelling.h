@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: pitchspelling.h 5163 2011-12-30 09:57:08Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

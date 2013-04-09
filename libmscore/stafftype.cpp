@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: stafftype.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -732,11 +731,14 @@ qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
 //    construct the text string for a given fret / duration
 //---------------------------------------------------------
 
+static const QString unknownFret = QString("?");
+
 QString StaffTypeTablature::fretString(int fret, bool ghost) const
       {
       QString s = ghost ? _fretFonts[_fretFontIdx].ghostChar :
-            ( _useNumbers ?   _fretFonts[_fretFontIdx].displayDigit[fret] :
-                              _fretFonts[_fretFontIdx]. displayLetter[fret]
+            ( _useNumbers ?
+                  (fret >= NUM_OF_DIGITFRETS  ? unknownFret : _fretFonts[_fretFontIdx].displayDigit[fret]) :
+                  (fret >= NUM_OF_LETTERFRETS ? unknownFret : _fretFonts[_fretFontIdx].displayLetter[fret])
             );
       return s;
       }

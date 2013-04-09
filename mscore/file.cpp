@@ -78,7 +78,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 
 #ifdef OMR
@@ -324,19 +324,16 @@ Score* MuseScore::readScore(const QString& name)
 
 //---------------------------------------------------------
 //   saveFile
+///   Save the current score.
+///   Handles the GUI's file-save action.
+//
 //    return true on success
 //---------------------------------------------------------
-
-/**
- Save the current score.
- Handles the GUI's file-save action.
- */
 
 void MuseScore::saveFile()
       {
       if (cs == 0)
             return;
-      cs->setSyntiState(synti->state());
       if (cs->created()) {
             QString selectedFilter;
             QString fn = cs->fileInfo()->fileName();
@@ -670,8 +667,6 @@ void MuseScore::newFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
-      score->syntiState().prepend(SyntiParameter("soundfont", MScore::soundFont));
-
       score->rebuildMidiMapping();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
@@ -892,116 +887,6 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
             return result.front();
             }
       return QString();
-      }
-
-//---------------------------------------------------------
-//   getSoundFont
-//---------------------------------------------------------
-
-QStringList MuseScore::getSoundFont(const QString& d)
-      {
-      QString filter = tr("SoundFont Files (*.sf2 *.SF2 *.sf3);;All (*)");
-
-      QFileInfo mySoundFonts(preferences.mySoundFontsPath);
-      if (mySoundFonts.isRelative())
-            mySoundFonts.setFile(QDir::home(), preferences.mySoundFontsPath);
-
-      QString defaultPath = d.isEmpty() ? mySoundFonts.absoluteFilePath() : d;
-
-      if (preferences.nativeDialogs) {
-             QStringList s = QFileDialog::getOpenFileNames(
-               mscore,
-               MuseScore::tr("Choose Synthesizer SoundFont"),
-               defaultPath,
-               filter
-               );
-            return s;
-            }
-
-      if (loadSoundFontDialog == 0) {
-            loadSoundFontDialog = new QFileDialog(this);
-            loadSoundFontDialog->setFileMode(QFileDialog::ExistingFiles);
-            loadSoundFontDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadSoundFontDialog->setWindowTitle(tr("MuseScore: Choose Synthesizer SoundFont"));
-            loadSoundFontDialog->setNameFilter(filter);
-            loadSoundFontDialog->setDirectory(defaultPath);
-
-            QSettings settings;
-            loadSoundFontDialog->restoreState(settings.value("loadSoundFontDialog").toByteArray());
-            loadSoundFontDialog->setAcceptMode(QFileDialog::AcceptOpen);
-            }
-
-      //
-      // setup side bar urls
-      //
-      QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(mySoundFonts.absoluteFilePath()));
-      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/sound"));
-      loadSoundFontDialog->setSidebarUrls(urls);
-
-      if (loadSoundFontDialog->exec()) {
-            QStringList result = loadSoundFontDialog->selectedFiles();
-            return result;
-            }
-      return QStringList();
-      }
-
-//---------------------------------------------------------
-//   getSfzFile
-//---------------------------------------------------------
-
-QStringList MuseScore::getSfzFile(const QString& d)
-      {
-      QString filter = tr("Sound Files (*.sfz *.SFZ);;All (*)");
-
-      QFileInfo mySfzFiles(preferences.mySfzFilesPath);
-      if (mySfzFiles.isRelative())
-            mySfzFiles.setFile(QDir::home(), preferences.mySfzFilesPath);
-
-      QString defaultPath = d.isEmpty() ? mySfzFiles.absoluteFilePath() : d;
-
-      if (preferences.nativeDialogs) {
-             QStringList s = QFileDialog::getOpenFileNames(
-               mscore,
-               MuseScore::tr("Choose Synthesizer Sound File"),
-               defaultPath,
-               filter
-               );
-            return s;
-            }
-
-      if (loadSfzFileDialog == 0) {
-            loadSfzFileDialog = new QFileDialog(this);
-            loadSfzFileDialog->setFileMode(QFileDialog::ExistingFiles);
-            loadSfzFileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadSfzFileDialog->setWindowTitle(tr("MuseScore: Choose Synthesizer SoundFont"));
-            loadSfzFileDialog->setNameFilter(filter);
-            loadSfzFileDialog->setDirectory(defaultPath);
-
-            QSettings settings;
-            loadSfzFileDialog->restoreState(settings.value("loadSfzFileDialog").toByteArray());
-            loadSfzFileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-            }
-
-      //
-      // setup side bar urls
-      //
-      QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(mySfzFiles.absoluteFilePath()));
-      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/sound"));
-      loadSfzFileDialog->setSidebarUrls(urls);
-
-      if (loadSfzFileDialog->exec()) {
-            QStringList result = loadSfzFileDialog->selectedFiles();
-            return result;
-            }
-      return QStringList();
       }
 
 //---------------------------------------------------------
@@ -1702,8 +1587,6 @@ bool MuseScore::exportParts()
 
 bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QString& ext)
       {
-      cs->setSyntiState(synti->state());
-
       bool rv = false;
       QString suffix = "." + ext;
       QString fn(path);
@@ -1923,7 +1806,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   qDebug("unknown file suffix <%s>, name <%s>\n", qPrintable(cs), qPrintable(name));
                   return Score::FILE_UNKNOWN_TYPE;
                   }
-            score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
             score->connectTies();
             }
       score->rebuildMidiMapping();

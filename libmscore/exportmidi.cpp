@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: exportmidi.cpp 5350 2012-02-20 22:01:29Z lasconic $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-20011 Werner Schweer and others
+//  Copyright (C) 2002-2011 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "exportmidi.h"
@@ -24,7 +16,7 @@
 #include "part.h"
 #include "staff.h"
 #include "tempo.h"
-#include "event.h"
+#include "synthesizer/event.h"
 #include "sig.h"
 #include "key.h"
 #include "text.h"
@@ -121,7 +113,7 @@ void ExportMidi::writeHeader()
 
                   Event ev(ME_META);
                   ev.setMetaType(META_TIME_SIGNATURE);
-                  ev.setData(data);
+                  ev.setEData(data);
                   ev.setLen(4);
                   ev.setOntime(is->first + tickOffset);
                   track->insert(ev);
@@ -156,7 +148,7 @@ void ExportMidi::writeHeader()
                         unsigned char* data = new unsigned char[2];
                         data[0]   = key;
                         data[1]   = 0;  // major
-                        ev.setData(data);
+                        ev.setEData(data);
                         track->insert(ev);
                         }
                   if (!keysigFound) {
@@ -168,7 +160,7 @@ void ExportMidi::writeHeader()
                         unsigned char* data = new unsigned char[2];
                         data[0]   = key;
                         data[1]   = 0;  // major
-                        ev.setData(data);
+                        ev.setEData(data);
                         track->insert(ev);
                         }
                   }
@@ -201,7 +193,7 @@ void ExportMidi::writeHeader()
                   data[0]   = tempo >> 16;
                   data[1]   = tempo >> 8;
                   data[2]   = tempo;
-                  ev.setData(data);
+                  ev.setEData(data);
                   track->insert(ev);
                   }
             }
@@ -233,6 +225,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
       cs->updateRepeatList(midiExpandRepeats);
       writeHeader();
+
+printf("=========tracks %d\n", tracks->size());
 
       foreach (MidiTrack* track, *tracks) {
             Staff* staff = track->staff();
@@ -266,22 +260,22 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
 
             EventMap events;
-            cs->renderPart(&events, part);
+            cs->renderStaff(&events, staff);
 
             for (auto i = events.begin(); i != events.end(); ++i) {
-                  Event event = i.value();
+                  Event event(i->second);
                   if (event.channel() != channel)
                         continue;
                   if (event.type() == ME_NOTEON) {
                         Event ne(ME_NOTEON);
-                        ne.setOntime(i.key());
+                        ne.setOntime(i->first);
                         ne.setChannel(event.channel());
                         ne.setPitch(event.pitch());
                         ne.setVelo(event.velo());
                         track->insert(ne);
                         }
                   else if (event.type() == ME_CONTROLLER) {
-                        track->addCtrl(i.key(), event.channel(), event.controller(), event.value());
+                        track->addCtrl(i->first, event.channel(), event.controller(), event.value());
                         }
                   else {
                         qDebug("writeMidi: unknown midi event 0x%02x\n", event.type());

@@ -23,6 +23,7 @@
 #include "instrument.h"
 #include "zone.h"
 #include "sample.h"
+#include "zerberus.h"
 
 //---------------------------------------------------------
 //   SfzRegion
@@ -323,6 +324,7 @@ bool ZInstrument::loadSfz(const QString& s)
             }
       QFileInfo fi(f);
       QString path = fi.absolutePath();
+      qint64 total = fi.size();
 
       QString sample;
 
@@ -332,8 +334,13 @@ bool ZInstrument::loadSfz(const QString& s)
       g.init(path);
 
       bool groupMode = false;
+      msynth()->setLoadProgress(0);
+      qint64 progress = 0;
       while (!f.atEnd()) {
-            QByteArray ba = f.readLine().simplified();
+            QByteArray ba = f.readLine();
+            progress += ba.size();
+            msynth()->setLoadProgress( ((qreal)progress*100) / total);
+            ba = ba.simplified();
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
             QList<QByteArray> bal = ba.split(' ');

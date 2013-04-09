@@ -92,7 +92,7 @@ enum // GLOBAL LIMITS
 #define ALL_MASK 127
 
 #include "synthesizer/synthesizer.h"
-#include "libmscore/midipatch.h"
+#include "synthesizer/midipatch.h"
 
 #endif
 

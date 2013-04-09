@@ -22,7 +22,7 @@
 #define __SEQ_H__
 
 #include "libmscore/sequencer.h"
-#include "libmscore/event.h"
+#include "synthesizer/event.h"
 #include "driver.h"
 #include "libmscore/fifo.h"
 #include "libmscore/tempo.h"
@@ -38,7 +38,6 @@ struct Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;
-class MidiPatch;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -89,7 +88,6 @@ class Seq : public QObject, public Sequencer {
 
       mutable QMutex mutex;
 
-      qreal _gain;
       Score* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
@@ -100,7 +98,8 @@ class Seq : public QObject, public Sequencer {
 
       SeqMsgFifo toSeq;
       SeqMsgFifo fromSeq;
-      Driver* driver;
+      Driver* _driver;
+      MasterSynthesizer* _synti;
 
       double meterValue[2];
       double meterPeakValue[2];
@@ -141,7 +140,6 @@ class Seq : public QObject, public Sequencer {
 
    public slots:
       void setRelTempo(double);
-      void setGain(float);
       void seek(int);
       void stopNotes(int channel = -1);
       void start();
@@ -151,7 +149,6 @@ class Seq : public QObject, public Sequencer {
       void started();
       void stopped();
       int toGui(int);
-      void gainChanged(float);
 
    public:
       // this are also the jack audio transport states:
@@ -192,14 +189,13 @@ class Seq : public QObject, public Sequencer {
       ScoreView* viewer() const { return cv; }
       void initInstruments();
 
-      QList<MidiPatch*> getPatchInfo() const;
-      Driver* getDriver()  { return driver; }
+      Driver* driver()                                 { return _driver; }
+      void setDriver(Driver* d)                        { _driver = d;    }
+      MasterSynthesizer* synti() const                 { return _synti;  }
+      void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
+
       int getCurTick();
 
-      float gain() const { return _gain; }
-
-      int synthNameToIndex(const QString&) const;
-      QString synthIndexToName(int) const;
       void putEvent(const Event&);
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);

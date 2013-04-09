@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: staff.cpp 5333 2012-02-17 10:39:33Z miwarre $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -755,8 +754,37 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
       // use selected staff type
       setStaffType(st);
-      if (t->staffGroup != TAB_STAFF)           // if not TAB (where num of staff lines is determined by TAB style)
+      if (st->group() != TAB_STAFF)             // if not TAB (where num of staff lines is determined by TAB style)
             setLines(t->staffLines[cidx]);      // use number of lines from instr. template
+      }
+
+//---------------------------------------------------------
+//   initFromStaffType
+//---------------------------------------------------------
+
+void Staff::initFromStaffType(const StaffType* staffType)
+      {
+      // get staff type if given (if none, get default preset for default staff group)
+      const StaffType* presetStaffType = staffType;
+      if (!presetStaffType)
+            presetStaffType = StaffType::getDefaultPreset(PITCHED_STAFF, 0);
+
+      // look for a staff type with same structure among staff types already defined in the score
+      StaffType* st = 0;
+      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
+            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
+                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                  break;
+                  }
+            }
+      // if staff type not found in score, use from preset (for staff and adding to score staff types)
+      if (!st) {
+            st = presetStaffType->clone();
+            score()->addStaffType(st);
+            }
+
+      // use selected staff type
+      setStaffType(st);
       }
 
 //---------------------------------------------------------

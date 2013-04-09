@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: breath.h 5504 2012-03-29 11:01:37Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

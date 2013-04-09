@@ -1,5 +1,6 @@
 .*,
 .qped
+.directory
 build.release
 build.debug
 win32build
@@ -16,3 +17,4 @@ build.qt5
 *.sfd~
 /.project
 mscore/revision.h
+.DS_Store

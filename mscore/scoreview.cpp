@@ -2766,6 +2766,83 @@ void ScoreView::cmd(const QAction* a)
             mscore->endCmd();
             }
 
+      // STATE_HARMONY_FIGBASS_EDIT actions
+
+      else if (cmd == "advance-longa") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 4);
+            }
+      else if (cmd == "advance-breve") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 3);
+            }
+      else if (cmd == "advance-1") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 2);
+            }
+      else if (cmd == "advance-2") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 1);
+            }
+      else if (cmd == "advance-4") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division);
+            }
+      else if (cmd == "advance-8") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 1);
+            }
+      else if (cmd == "advance-16") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 2);
+            }
+      else if (cmd == "advance-32") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 3);
+            }
+      else if (cmd == "advance-64") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 4);
+            }
+      else if (cmd == "prev-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(true);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true, true);
+            }
+      else if (cmd == "next-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(false);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true,false);
+            }
+      else if (cmd == "prev-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false, true);
+            }
+      else if (cmd == "next-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false,false);
+            }
+
       // STATE_NOTE_ENTRY_TAB actions
 
       else if(cmd == "string-above") {
@@ -3663,6 +3740,9 @@ ScoreState ScoreView::mscoreState() const
       if (sm->configuration().contains(states[EDIT])) {
             if (editObject && (editObject->type() == Element::LYRICS))
                   return STATE_LYRICS_EDIT;
+            else if (editObject &&
+                  ( (editObject->type() == Element::HARMONY) || editObject->type() == Element::FIGURED_BASS) )
+                  return STATE_HARMONY_FIGBASS_EDIT;
             else if (editObject && editObject->isText())
                   return STATE_TEXT_EDIT;
             return STATE_EDIT;
@@ -4285,8 +4365,8 @@ void ScoreView::harmonyTab(bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4384,8 +4464,8 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4456,8 +4536,8 @@ void ScoreView::harmonyTicksTab(int ticks)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      //_score->end2();
-      //_score->end1();
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------

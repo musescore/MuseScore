@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2011 by Werner Schweer and others
 #
@@ -82,13 +81,13 @@ if (APPLE)
 endif (APPLE)
 
 #
-#     Check for gcc compiler >= 4.6
+#     Check for gcc compiler >= 4.7
 #
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
       if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
-        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 6)))
+        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 7)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.6 required")
+                  " >= 4.7 required")
       endif()
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
@@ -306,9 +305,10 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ## add subdirs
 ##
 subdirs(mscore awl bww2mxml share
-      fluid  mstyle libmscore thirdparty/rtf2html thirdparty/diff)
+      fluid mstyle libmscore synthesizer effects thirdparty/rtf2html thirdparty/diff)
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
+add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 
 if (USE_PORTMIDI)

@@ -75,10 +75,18 @@ StaffListItem::StaffListItem()
 //      initStaffTypeCombo();                   // no! can't set widgets into this, until this is inserted in the tree hierarchy
       }
 
-void StaffListItem::initStaffTypeCombo()
+void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       {
-      if (_staffTypeCombo)                      // do not init more than once
+      if (_staffTypeCombo && !forceRecreate)    // do not init more than once
             return;
+
+      // NOTE: DO NOT DELETE the old _staffTypeCombo if already created:
+      // a bug in Qt looses track of (and presumably deletes) the combo set into the item
+      // if the item is repositioned in the tree; in this case, the pointer to the combo
+      // is no longer valid and cannot be used to delete it
+      // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
+      // or a memory leak may result
+
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
@@ -563,10 +571,24 @@ void InstrumentsDialog::on_upButton_clicked()
       if (item->type() == PART_LIST_ITEM) {
             bool isExpanded = partiturList->isItemExpanded(item);
             int idx = partiturList->indexOfTopLevelItem(item);
+            // if part item not first, move one slot up
             if (idx) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx-1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -574,24 +596,38 @@ void InstrumentsDialog::on_upButton_clicked()
       else {
             QTreeWidgetItem* parent = item->parent();
             int idx = parent->indexOfChild(item);
+            // if staff item not first of its part, move one slot up
             if (idx) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx-1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             else {
+                  // if staff item first of its part...
                   int parentIdx = partiturList->indexOfTopLevelItem(parent);
+                  // ...and there is a previous part, move staff item to previous part
                   if (parentIdx) {
                         partiturList->selectionModel()->clear();
-                        QTreeWidgetItem* item = parent->takeChild(idx);
                         QTreeWidgetItem* prevParent = partiturList->topLevelItem(parentIdx - 1);
-                        prevParent->addChild(item);
-                        partiturList->setItemSelected(item, true);
+                        StaffListItem* sli = static_cast<StaffListItem*>(parent->takeChild(idx));
+                        int staffTypeIdx = sli->staffTypeIdx();
+                        prevParent->addChild(sli);
+                        sli->initStaffTypeCombo(true);
+                        sli->setStaffType(staffTypeIdx);
+                        partiturList->setItemSelected(sli, true);
                         PartListItem* pli = static_cast<PartListItem*>(prevParent);
-                        StaffListItem* sli = static_cast<StaffListItem*>(item);
                         int idx = pli->part->nstaves();
                         cs->undo(new MoveStaff(sli->staff, pli->part, idx));
+                        //
+                        // TODO : if staff was linked to a staff of the old parent part, unlink it!
+                        //
                         }
                   }
             }
@@ -612,10 +648,24 @@ void InstrumentsDialog::on_downButton_clicked()
             bool isExpanded = partiturList->isItemExpanded(item);
             int idx = partiturList->indexOfTopLevelItem(item);
             int n = partiturList->topLevelItemCount();
+            // if part not last, move one slot down
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx+1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -624,24 +674,38 @@ void InstrumentsDialog::on_downButton_clicked()
             QTreeWidgetItem* parent = item->parent();
             int idx = parent->indexOfChild(item);
             int n = parent->childCount();
+            // if staff item is not last of its part, move one slot down in part
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx+1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             else {
+                  // if staff item is last of its part...
                   int parentIdx = partiturList->indexOfTopLevelItem(parent);
                   int n = partiturList->topLevelItemCount();
+                  //..and there is a next part, move to next part
                   if (parentIdx < (n-1)) {
                         partiturList->selectionModel()->clear();
-                        QTreeWidgetItem* item = parent->takeChild(idx);
+                        StaffListItem* sli = static_cast<StaffListItem*>(parent->takeChild(idx));
                         QTreeWidgetItem* nextParent = partiturList->topLevelItem(parentIdx - 1);
-                        nextParent->addChild(item);
-                        partiturList->setItemSelected(item, true);
+                        int staffTypeIdx = sli->staffTypeIdx();
+                        nextParent->addChild(sli);
+                        sli->initStaffTypeCombo(true);
+                        sli->setStaffType(staffTypeIdx);
+                        partiturList->setItemSelected(sli, true);
                         PartListItem* pli = static_cast<PartListItem*>(nextParent);
-                        StaffListItem* sli = static_cast<StaffListItem*>(item);
                         cs->undo(new MoveStaff(sli->staff, pli->part, 0));
+                        //
+                        // TODO : if staff was linked to a staff of the old parent part, unlink it!
+                        //
                         }
                   }
             }
@@ -856,7 +920,6 @@ void MuseScore::editInstrList()
                               Staff* staff = new Staff(cs, part, rstaff);
                               sli->staff   = staff;
                               staff->setRstaff(rstaff);
-                              ++rstaff;
 
                               cs->undoInsertStaff(staff, staffIdx);
 
@@ -866,19 +929,19 @@ void MuseScore::editInstrList()
                                     }
 
                               cs->adjustBracketsIns(staffIdx, staffIdx+1);
-
+                              staff->initFromStaffType(sli->staffType());
+                              staff->setInitialClef(sli->clef());
                               KeySigEvent nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
-                              if (sli->linked()) {
-                                    int idx = cs->staffIdx(staff);
-                                    if (idx > 0) {
-                                          Staff* ostaff = cs->staff(idx - 1);
-                                          staff->setStaffType(ostaff->staffType());
-                                          cloneStaff(ostaff, staff);
-                                          }
+                              if (sli->linked() && rstaff > 0) {
+                                    // link to top staff of same part
+                                    Staff* linkedStaff = part->staves()->front();
+                                    linkedStaff->linkTo(staff);
+                                    cloneStaff(linkedStaff, staff);
                                     }
                               ++staffIdx;
+                              ++rstaff;
                               }
                         else if (sli->op == ITEM_UPDATE) {
                               // check changes in staff type

@@ -44,6 +44,8 @@ class ZInstrument {
 
    public:
       ZInstrument(Zerberus*);
+      ~ZInstrument();
+
       bool load(const QString&);
       int program() const                   { return _program; }
       QString name() const                  { return _name;   }
@@ -53,6 +55,7 @@ class ZInstrument {
       Sample* readSample(const QString& s, QZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
+      Zerberus* msynth()                    { return _msynth;}
 
       static QByteArray buf;  // used during read of Sample
       static int idx;

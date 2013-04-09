@@ -79,9 +79,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (int i = 0; i < ARTICULATIONS; ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
-//            QIcon icon(iconPath + iconGroup + ai->name + ".svg");
-//            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->name)));
-            QTableWidgetItem* item = new QTableWidgetItem(qApp->translate("articulation", qPrintable(ai->name)));
+            QPixmap ct = sym2pixmap(&symbols[0][ai->upSym], 3.0);
+            QIcon icon(ct);
+            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->name)));
+
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             articulationTable->setItem(i, 0, item);
 
@@ -379,6 +380,7 @@ void EditStyle::getValues()
       lstyle.set(ST_trillY,                  Spatium(trillY->value()));
       lstyle.set(ST_harmonyY,                Spatium(harmonyY->value()));
       lstyle.set(ST_harmonyFretDist,         Spatium(harmonyFretDist->value()));
+      lstyle.set(ST_minHarmonyDistance,      Spatium(minHarmonyDistance->value()));
 
       lstyle.set(ST_tabClef, clefTab1->isChecked() ? CLEF_TAB : CLEF_TAB2);
       }
@@ -595,6 +597,7 @@ void EditStyle::setValues()
       trillY->setValue(lstyle.valueS(ST_trillY).val());
       harmonyY->setValue(lstyle.valueS(ST_harmonyY).val());
       harmonyFretDist->setValue(lstyle.valueS(ST_harmonyFretDist).val());
+      minHarmonyDistance->setValue(lstyle.valueS(ST_minHarmonyDistance).val());
       pedalY->setValue(lstyle.valueS(ST_pedalY).val());
 
       clefTab1->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB);

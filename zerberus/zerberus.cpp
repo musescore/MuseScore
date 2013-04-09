@@ -10,10 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "midievent.h"
-#include "libmscore/midipatch.h"
+#include "mscore/preferences.h"
+#include "synthesizer/event.h"
+#include "synthesizer/midipatch.h"
 
 #include "zerberus.h"
+#include "zerberusgui.h"
 #include "voice.h"
 #include "channel.h"
 #include "instrument.h"
@@ -35,7 +37,7 @@ Zerberus::Zerberus()
             Voice::init();
             }
       for (int i = 0; i < MAX_VOICES; ++i)
-            freeVoices.push(new Voice);
+            freeVoices.push(new Voice(this));
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
       }
@@ -100,26 +102,25 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
       }
 
 //---------------------------------------------------------
-//   play
-//---------------------------------------------------------
-
-void Zerberus::play(const MidiEvent& event)
-      {
-      midiEvents.push(event);
-      }
-
-//---------------------------------------------------------
 //   loadInstrument
 //    return true on success
 //---------------------------------------------------------
 
-bool Zerberus::loadInstrument(const QString& path)
+bool Zerberus::loadInstrument(const QString& s)
       {
-      if (path.isEmpty())
+      if (s.isEmpty())
             return false;
       for (ZInstrument* instr : instruments) {
-            if (instr->path() == path)    // already loaded?
+            if (instr->path() == s)    // already loaded?
                   return true;
+            }
+      QFileInfoList l = sfzFiles();
+      QString path;
+      foreach (const QFileInfo& fi, l) {
+            if (fi.fileName() == s) {
+                  path = fi.absoluteFilePath();
+                  break;
+                  }
             }
       busy = true;
       ZInstrument* instr = new ZInstrument(this);
@@ -132,6 +133,7 @@ bool Zerberus::loadInstrument(const QString& path)
             busy = false;
             return true;
             }
+      qDebug("Zerberus::loadInstrument failed");
       busy = false;
       delete instr;
       return false;
@@ -184,21 +186,22 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
 //   process
 //---------------------------------------------------------
 
-void Zerberus::process(const MidiEvent& event)
+void Zerberus::play(const PlayEvent& event)
       {
       if (busy)
             return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {
-//            printf("Zerberus::process(): no instrument for channel %d\n", event.channel());
+//            printf("Zerberus::play(): no instrument for channel %d\n", event.channel());
             return;
             }
 
       switch(event.type()) {
-            case MidiEventType::NOTEOFF:
+            case ME_NOTEOFF:
                   processNoteOff(cp, event.dataA());
                   break;
-            case MidiEventType::NOTEON: {
+
+            case ME_NOTEON: {
                   int key = event.dataA();
                   int vel = event.dataB();
                   if (vel)
@@ -207,9 +210,11 @@ void Zerberus::process(const MidiEvent& event)
                         processNoteOff(cp, key);
                   }
                   break;
-            case MidiEventType::CONTROLLER:
+
+            case ME_CONTROLLER:
                   cp->controller(event.dataA(), event.dataB());
                   break;
+
             default:
                   printf("event type 0x%02x\n", event.type());
                   break;
@@ -221,26 +226,19 @@ void Zerberus::process(const MidiEvent& event)
 //    realtime
 //---------------------------------------------------------
 
-void Zerberus::process(unsigned frames, float* p)
+void Zerberus::process(unsigned frames, float* p, float*, float*)
       {
       if (busy)
             return;
-      while (!midiEvents.empty())
-            process(midiEvents.pop());
-
       Voice* v = activeVoices;
       Voice* pv = 0;
-      int n = 0;
-      int nn = 0;
       while (v) {
-            ++nn;
             v->process(frames, p);
             if (v->isOff()) {
                   if (pv)
                         pv->setNext(v->next());
                   else
                         activeVoices = v->next();
-                  ++n;
                   freeVoices.push(v);
                   }
             else
@@ -259,16 +257,6 @@ const char* Zerberus::name() const
       }
 
 //---------------------------------------------------------
-//   play
-//---------------------------------------------------------
-
-void Zerberus::play(const Event& e)
-      {
-      MidiEvent me(MidiEventType(e.type()), e.channel(), e.dataA(), e.dataB());
-      midiEvents.push(me);
-      }
-
-//---------------------------------------------------------
 //   getPatchInfo
 //---------------------------------------------------------
 
@@ -279,19 +267,11 @@ const QList<MidiPatch*>& Zerberus::getPatchInfo() const
       pl.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            MidiPatch* p = new MidiPatch { false, 2, 0, idx, i->name() };
+            MidiPatch* p = new MidiPatch { false, name(), 0, idx, i->name() };
             pl.append(p);
             ++idx;
             }
       return pl;
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void Zerberus::init()
-      {
       }
 
 //---------------------------------------------------------
@@ -309,15 +289,12 @@ void Zerberus::allSoundsOff(int channel)
 
 void Zerberus::allNotesOff(int channel)
       {
-      MidiEvent me(MidiEventType::CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0);
-      if (channel == -1) {
-            for (int i = 0; i < MAX_CHANNEL; ++i) {
-                  me.setChannel(i);
-                  midiEvents.push(me);
-                  }
+      busy = true;
+      for (Voice* v = activeVoices; v; v = v->next()) {
+            if (channel == -1 || (v->channel()->idx() == channel))
+                  v->stop();
             }
-      else
-            midiEvents.push(me);
+      busy = false;
       }
 
 //---------------------------------------------------------
@@ -326,7 +303,7 @@ void Zerberus::allNotesOff(int channel)
 
 bool Zerberus::loadSoundFonts(const QStringList& sl)
       {
-      foreach(const QString& s, sl) {
+      foreach (const QString& s, sl) {
             if (!loadInstrument(s))
                   return false;
             }
@@ -341,7 +318,7 @@ QStringList Zerberus::soundFonts() const
       {
       QStringList sl;
       for (ZInstrument* i : instruments)
-            sl.append(i->path());
+            sl.append(QFileInfo(i->path()).fileName());
       return sl;
       }
 
@@ -387,40 +364,27 @@ bool Zerberus::removeSoundFont(const QString& s)
 //   state
 //---------------------------------------------------------
 
-SyntiState Zerberus::state() const
+SynthesizerGroup Zerberus::state() const
       {
-      SyntiState sp;
+      SynthesizerGroup g;
+      g.setName(name());
 
       QStringList sfl = soundFonts();
       foreach(QString sf, sfl)
-            sp.append(SyntiParameter(SParmId(ZERBERUS_ID, 0, 0).val, "sfz-font", sf));
-      return sp;
+            g.push_back(IdValue(0, sf));
+      return g;
       }
 
 //---------------------------------------------------------
 //   setState
 //---------------------------------------------------------
 
-void Zerberus::setState(SyntiState& sp)
+void Zerberus::setState(const SynthesizerGroup& sp)
       {
       QStringList sfs;
-      for (int i = 0; i < sp.size(); ++i) {
-            SyntiParameter* p = &sp[i];
-//            printf("setState %x\n", p->id());
-            if (p->id() == -1 && p->name() == "sfz-font")
-                  sfs.append(p->sval());
-            }
+      for (const IdValue& v : sp)
+            sfs.append(v.data);
       loadSoundFonts(sfs);
-      }
-
-void Zerberus::setParameter(int id, double val)
-      {
-      printf("Zerberus::setParameter: %x %f\n", id, val);
-      }
-
-void Zerberus::setParameter(int id, const QString& s)
-      {
-      printf("Zerberus::setParameter: %x %s\n", id, qPrintable(s));
       }
 
 //---------------------------------------------------------

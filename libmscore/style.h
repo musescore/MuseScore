@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: style.h 5637 2012-05-16 14:23:09Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -232,6 +231,7 @@ enum StyleIdx {
       ST_trillY,
       ST_harmonyY,
       ST_harmonyFretDist,
+      ST_minHarmonyDistance,
 
       ST_showPageNumber,
       ST_showPageNumberOne,

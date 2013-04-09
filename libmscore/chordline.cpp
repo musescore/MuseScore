@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chordline.cpp 5491 2012-03-22 20:19:22Z lvinken $
 //
 //  Copyright (C) 2010-2012 Werner Schweer
 //

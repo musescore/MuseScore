@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: staff.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -118,6 +117,7 @@ class Staff : public QObject {
       Staff(Score*, Part*, int);
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
+      void initFromStaffType(const StaffType* staffType);
 
       bool isTop() const             { return _rstaff == 0; }
       QString partName() const;

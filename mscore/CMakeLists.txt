@@ -201,12 +201,38 @@ add_executable ( ${ExecutableName}
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
+      driver.cpp
+
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
       musescoreCore.h
       driver.h
       )
+
+target_link_libraries(mscore
+      libmscore
+      awl
+      mstyle
+      diff_match_patch
+      bww
+      rtf2html
+      ${QTSINGLEAPPLICATION_LIBRARIES}
+      synthesizer
+      fluid
+      effects
+      vorbisfile
+      )
+if (ZERBERUS)
+      target_link_libraries(mscore zerberus synthesizer)
+endif ()
+if (AEOLUS)
+      target_link_libraries(mscore aeolus)
+endif ()
+if (SOUNDFONT3)
+      target_link_libraries(mscore vorbis ogg)
+endif ()
+
 
 if (APPLE)
       set_target_properties (mscore
@@ -250,39 +276,14 @@ if (MINGW)
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
    target_link_libraries(mscore
-      libmscore
-      awl
-      mstyle
-      diff_match_patch
-      bww
-      rtf2html
-      ${QTSINGLEAPPLICATION_LIBRARIES}
-      fluid
       portaudio
       portmidi
       winmm
-      vorbisfile
       )
 
    if (HAS_AUDIOFILE)
       target_link_libraries(mscore sndfile-1)
    endif (HAS_AUDIOFILE)
-
-   if (SOUNDFONT3)
-      target_link_libraries(mscore vorbis ogg)
-   endif (SOUNDFONT3)
-
-   if (AEOLUS)
-      target_link_libraries(mscore aeolus)
-   endif (AEOLUS)
-
-   if (ZERBERUS)
-      target_link_libraries(mscore zerberus)
-   endif ()
-
-   if (ZERBERUS)
-      target_link_libraries(mscore zerberus)
-   endif ()
 
    if (OMR)
       target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
@@ -328,20 +329,11 @@ if (MINGW)
 
 else (MINGW)
    target_link_libraries(mscore
-      libmscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
-      diff_match_patch
-      awl
-      mstyle
-      bww
-      rtf2html
-      ${QTSINGLEAPPLICATION_LIBRARIES}
-      fluid
       z
       dl
       pthread
-      vorbisfile
       )
     if (USE_PORTAUDIO)
       target_link_libraries(mscore ${PORTAUDIO_LIB})
@@ -360,18 +352,6 @@ else (MINGW)
    if (HAS_AUDIOFILE)
        target_link_libraries(mscore sndfile)
    endif (HAS_AUDIOFILE)
-
-   if (SOUNDFONT3)
-      target_link_libraries(mscore vorbis ogg)
-   endif (SOUNDFONT3)
-
-   if (AEOLUS)
-      target_link_libraries(mscore aeolus)
-   endif (AEOLUS)
-
-   if (ZERBERUS)
-      target_link_libraries(mscore zerberus)
-   endif ()
 
    if (OMR)
       target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)

@@ -31,9 +31,12 @@
 Divis::Divis() : _flags(0), _dmask(0), _nrank(0)
       {
       *_label = 0;
-      _param[SWELL].set("swell", SWELL_DEF, SWELL_MIN, SWELL_MAX);
-      _param[TFREQ].set("tfreq", TFREQ_DEF, TFREQ_MIN, TFREQ_MAX);
-      _param[TMODD].set("tmodd", TMODD_DEF, TMODD_MIN, TMODD_MAX);
+//      _param[SWELL].set("swell", SWELL_DEF, SWELL_MIN, SWELL_MAX);
+//      _param[TFREQ].set("tfreq", TFREQ_DEF, TFREQ_MIN, TFREQ_MAX);
+//      _param[TMODD].set("tmodd", TMODD_DEF, TMODD_MIN, TMODD_MAX);
+      _param[SWELL] = SWELL_DEF;
+      _param[TFREQ] = TFREQ_DEF;
+      _param[TMODD] = TMODD_DEF;
       }
 
 Keybd::Keybd() : _flags(0)
@@ -103,251 +106,8 @@ void Model::init()
 
 void Model::proc_mesg (ITC_mesg* /*M*/)
       {
-#if 0
-      // Handle commands from other threads, including
-      // the user interface.
-
-      printf("proc_mesg   ===%ld\n", M->type());
-
-      switch (M->type ()) {
-            case MT_IFC_ELCLR:
-            case MT_IFC_ELSET:
-            case MT_IFC_ELXOR:
-                  {
-                  // Set, reset or toggle a stop.
-                  M_ifc_ifelm *X = (M_ifc_ifelm *) M;
-                  set_ifelm (X->_group, X->_ifelm, X->type () - MT_IFC_ELCLR);
-                  break;
-                  }
-      case MT_IFC_ELATT:
-            send_event(TO_IFACE, M);
-            M = 0;
-            break;
-
-    case MT_IFC_GRCLR:
-    {
-	// Reset a group of stops.
-        M_ifc_ifelm *X = (M_ifc_ifelm *) M;
-        clr_group (X->_group);
-	break;
-    }
-    case MT_IFC_AUPAR:
-    {
-	// Set audio section parameter.
-        M_ifc_aupar *X = (M_ifc_aupar *) M;
-        set_aupar (X->_srcid, X->_asect, X->_parid, X->_value);
-	break;
-    }
-    case MT_IFC_DIPAR:
-    {
-	// Set division parameter.
-        M_ifc_dipar *X = (M_ifc_dipar *) M;
-        set_dipar (X->_srcid, X->_divis, X->_parid, X->_value);
-	break;
-    }
-    case MT_IFC_RETUNE:
-    {
-	// Recalculate all wavetables.
-        M_ifc_retune *X = (M_ifc_retune *) M;
-        retune (X->_freq, X->_temp);
-	break;
-    }
-    case MT_IFC_ANOFF:
-    {
-	// All notes off.
-	M_ifc_anoff *X = (M_ifc_anoff *) M;
-        midi_off (X->_bits);
-	break;
-    }
-    case MT_IFC_MCSET:
-    {
-	// Store midi routing preset.
-        int index;
-	M_ifc_chconf *X = (M_ifc_chconf *) M;
-        index = X->_index;
-        if (index >= 0)
-	{
-	    if (index >= 8) break;
-            memcpy (_chconf [X->_index]._bits, X->_bits, 16 * sizeof (uint16_t));
-	}
-        set_mconf (X->_index, X->_bits);
-    }
-    case MT_IFC_MCGET:
-    {
-	// Recall midi routing preset.
-        int index;
-	M_ifc_chconf *X = (M_ifc_chconf *) M;
-        index = X->_index;
-        if (index >= 0)
-	{
-	    if (index >= 8) break;
-            set_mconf (X->_index, _chconf [X->_index]._bits);
-	}
-	break;
-    }
-    case MT_IFC_PRRCL:
-    {
-	// Load a preset.
-	M_ifc_preset *X = (M_ifc_preset *) M;
-        if (X->_bank < 0) X->_bank = _bank;
-        set_state (X->_bank, X->_pres);
-        break;
-    }
-    case MT_IFC_PRDEC:
-    {
-	// Decrement preset and load.
-	if (_pres > 0) set_state (_bank, --_pres);
-        break;
-    }
-    case MT_IFC_PRINC:
-    {
-	// Increment preset and load.
-	if (_pres < NPRES - 1) set_state (_bank, ++_pres);
-        break;
-    }
-    case MT_IFC_PRSTO:
-    {
-	// Store a preset.
-	M_ifc_preset  *X = (M_ifc_preset *) M;
-        uint32_t       d [NGROUP];
-        get_state (d);
-        set_preset (X->_bank, X->_pres, d);
-        break;
-    }
-    case MT_IFC_PRINS:
-    {
-	// Insert a preset.
-	M_ifc_preset *X = (M_ifc_preset *) M;
-        uint32_t     d [NGROUP];
-        get_state (d);
-        ins_preset (X->_bank, X->_pres, d);
-        break;
-    }
-    case MT_IFC_PRDEL:
-    {
-	// Delete a preset.
-	M_ifc_preset *X = (M_ifc_preset *) M;
-        del_preset (X->_bank, X->_pres);
-        break;
-    }
-    case MT_IFC_PRGET:
-    {
-	// Read a preset.
-	M_ifc_preset *X = (M_ifc_preset *) M;
-        X->_stat = get_preset (X->_bank, X->_pres, X->_bits);
-        send_event (TO_IFACE, M);
-        M = 0;
-        break;
-    }
-    case MT_IFC_EDIT:
-    {
-	// Start editing a stop.
-	M_ifc_edit *X = (M_ifc_edit *) M;
-        Rank       *R = find_rank (X->_group, X->_ifelm);
-        if (_ready && R)
-	{
-            X->_synth = R->_sdef;
-            send_event (TO_IFACE, M);
-            M = 0;
-	}
-	break;
-    }
-    case MT_IFC_APPLY:
-    {
-	// Apply edited stop.
-	M_ifc_edit *X = (M_ifc_edit *) M;
-        if (_ready) recalc (X->_group, X->_ifelm);
-	break;
-    }
-    case MT_IFC_SAVE:
-	// Save presets, midi presets, and wavetables.
-	save ();
-        break;
-
-            case MT_LOAD_RANK:
-            case MT_CALC_RANK:
-                  {
-                  // Load a rank into a division.
-                  M_def_rank *X = (M_def_rank *) M;
-                  _divis [X->_divis]._ranks [X->_rank]._wave = X->_wave;
-                  break;
-                  }
-
-    case MT_AUDIO_SYNC:
-	// Wavetable calculation done.
-        send_event (TO_IFACE, new ITC_mesg (MT_IFC_READY));
-        _ready = true;
-	break;
-
-    default:
-        fprintf (stderr, "Model: unexpected message, type = %ld\n", M->type ());
-    }
-    if (M) M->recover ();
-#endif
-}
-
-
-#if 0
-void Model::proc_qmidi()
-      {
-      int c, d, p, t, v;
-
-    // Handle commands from the qmidi queue. These are coming
-    // from either the midi thread (ALSA), or the audio thread
-    // (JACK). They are encoded as raw MIDI, except that all
-    // messages are 3 bytes. All command have already been
-    // checked at the sending side.
-
-      while (_qmidi->read_avail () >= 3) {
-            t = _qmidi->read (0);
-            p = _qmidi->read (1);
-            v = _qmidi->read (2);
-            _qmidi->read_commit (3);
-printf("Midi %x %x %x\n", t, p, v);
-            c = t & 0x0F;
-            d = (_midimap [c] >>  8) & 7;
-
-            switch (t & 0xF0) {
-                  case 0x90:
-                        // Program change from notes 24..33.
-                        set_state (_bank, p - 24);
-                        break;
-
-                  case 0xB0:
-                        // Controllers.
-                        switch (p) {
-                              case MIDICTL_SWELL:
-                     		      // Swell pedal
-                                    set_dipar (SRC_MIDI_PAR, d, 0, SWELL_MIN + v * (SWELL_MAX - SWELL_MIN) / 127.0f);
-                                    break;
-
-                              case MIDICTL_TFREQ:
-                                    // Tremulant frequency
-                                    set_dipar (SRC_MIDI_PAR, d, 1, TFREQ_MIN + v * (TFREQ_MAX - TFREQ_MIN) / 127.0f);
-                                    break;
-
-                              case MIDICTL_TMODD:
-                                    // Tremulant amplitude
-                                    set_dipar (SRC_MIDI_PAR, d, 2, TMODD_MIN + v * (TMODD_MAX - TMODD_MIN) / 127.0f);
-                                    break;
-
-                              case MIDICTL_BANK:
-                                    // Preset bank.
-                                    if (v < NBANK)
-                                          _bank = v;
-                                    break;
-                              }
-                        break;
-
-                  case 0xC0:
-	                  // Program change.
-	                  if (p < NPRES)
-                              set_state (_bank, p);
-                        break;
-                  }
-            }
       }
-#endif
+
 
 void Model::init_audio()
       {
@@ -359,9 +119,9 @@ void Model::init_audio()
             M->_flags = D->_flags;
             M->_dmask = D->_dmask;
             M->_asect = D->_asect;
-            M->_swell = D->_param [Divis::SWELL].fval();
-            M->_tfreq = D->_param [Divis::TFREQ].fval();
-            M->_tmodd = D->_param [Divis::TMODD].fval();
+            M->_swell = D->_param [Divis::SWELL];
+            M->_tfreq = D->_param [Divis::TFREQ];
+            M->_tmodd = D->_param [Divis::TMODD];
             _aeolus->newDivis(M);
             }
       }
@@ -562,8 +322,9 @@ void Model::set_state(int bank, int pres)
       }
 
 
-void Model::set_aupar (int /*s*/, int a, int p, float v)
+void Model::set_aupar (int /*s*/, int /*a*/, int /*p*/, float /*v*/)
       {
+#if 0
       SyntiParameter* P = ((a < 0) ? _aeolus->_audio->_instrpar : _aeolus->_audio->_asectpar [a]) + p;
       if (v < P->min())
             v = P->min();
@@ -571,11 +332,13 @@ void Model::set_aupar (int /*s*/, int a, int p, float v)
             v = P->max();
       P->set(v);
 //WS    send_event (TO_IFACE, new M_ifc_aupar (s, a, p, v));
+#endif
       }
 
 
-void Model::set_dipar (int /*s*/, int d, int p, float v)
+void Model::set_dipar (int /*s*/, int /*d*/, int /*p*/, float /*v*/)
 {
+#if 0
     SyntiParameter  *P;
 //    union { uint32_t i; float f; } u;
 
@@ -585,6 +348,7 @@ void Model::set_dipar (int /*s*/, int d, int p, float v)
     if (v > P->max())
             v = P->max();
     P->set(v);
+#endif
 printf("Model::set_dipar\n");
 #if 0
     if (_qcomm->write_avail () >= 2)
@@ -874,10 +638,10 @@ int Model::read_instr ()
 		if (sscanf (q, "%f%f%n", &val1, &val2, &n) != 2)
                stat = ARGS;
             else {
-                D->_param[Divis::TFREQ].set(val1);
-                D->_param[Divis::TMODD].set(val2);
+//WS                D->_param[Divis::TFREQ].set(val1);
+//WS                D->_param[Divis::TMODD].set(val2);
 		    q += n;
-		    D->_flags |= Divis::HAS_TREM;
+//WS		    D->_flags |= Divis::HAS_TREM;
 		}
 	    }
 	    else if (G)
@@ -1031,6 +795,7 @@ int Model::read_instr ()
 
 int Model::write_instr()
       {
+#if 0
       FILE          *F;
       int           d, g, i, k, r;
       char          buff [1024];
@@ -1074,8 +839,10 @@ int Model::write_instr()
 	    A = R->_sdef;
             fprintf (F, "/rank         %c %3d  %s\n", A->_pan, A->_del, A->_filename);
 	}
-        if (D->_flags & Divis::HAS_SWELL) fprintf (F, "/swell\n");
-        if (D->_flags & Divis::HAS_TREM) fprintf (F, "/tremul       %3.1f  %3.1f\n",
+        if (D->_flags & Divis::HAS_SWELL)
+                        fprintf (F, "/swell\n");
+        if (D->_flags & Divis::HAS_TREM)
+                        fprintf (F, "/tremul       %3.1f  %3.1f\n",
                                                   D->_param [Divis::TFREQ].fval(), D->_param [Divis::TMODD].fval());
         fprintf (F, "/divis/end\n\n");
     }
@@ -1116,7 +883,7 @@ int Model::write_instr()
 
     fprintf (F, "\n/instr/end\n");
     fclose (F);
-
+#endif
     return 0;
 }
 

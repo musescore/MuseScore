@@ -19,21 +19,12 @@
 //=============================================================================
 
 #include "libmscore/score.h"
-#include "libmscore/msynthesizer.h"
+#include "synthesizer/msynthesizer.h"
 #include "libmscore/note.h"
 #include "musescore.h"
 #include "libmscore/part.h"
 #include "preferences.h"
-#include "seq.h"
 #include "exportmp3.h"
-#ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
-#endif
-#ifdef ZERBERUS
-#include "zerberus/zerberus.h"
-#endif
-
-#include "fluid/fluid.h"
 
 //---------------------------------------------------------
 //   MP3Exporter
@@ -686,18 +677,9 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
-      MasterSynthesizer* synti = new MasterSynthesizer();
+      MasterSynthesizer* synti = synthesizerFactory();
       synti->setSampleRate(sampleRate);
-      synti->registerSynthesizer(new FluidS::Fluid());
-#ifdef AEOLUS
-      synti->registerSynthesizer(new Aeolus());
-#endif
-#ifdef ZERBERUS
-      synti->registerSynthesizer(new Zerberus());
-#endif
-      synti->init();
-
-      synti->setState(score->syntiState());
+      synti->setState(score->synthesizerState());
 
       EventMap events;
       score->renderMidi(&events);
@@ -713,10 +695,10 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       double gain = 1.0;
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
-            playPos = events.constBegin();
-            EventMap::const_iterator endPos = events.constEnd();
+            playPos = events.cbegin();
+            EventMap::const_iterator endPos = events.cend();
             --endPos;
-            double et = score->utick2utime(endPos.key());
+            double et = score->utick2utime(endPos->first);
             et += 1.0;   // add trailer (sec)
             pBar->setRange(0, int(et));
 
@@ -730,7 +712,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               if (e.type() == ME_INVALID)
                                     continue;
                               e.setChannel(a.channel);
-                              int syntiIdx= score->midiMapping(a.channel)->articulation->synti;
+                              int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
                               synti->play(e, syntiIdx);
                               }
                         }
@@ -750,8 +732,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   float* l = bufferL;
                   float* r = bufferR;
 
-                  for (; playPos != events.constEnd(); ++playPos) {
-                        double f = score->utick2utime(playPos.key());
+                  for (; playPos != events.cend(); ++playPos) {
+                        double f = score->utick2utime(playPos->first);
                         if (f >= endTime)
                               break;
                         int n = lrint((f - playTime) * sampleRate);
@@ -768,12 +750,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               playTime += double(n)/double(sampleRate);
                               frames    -= n;
                               }
-                        const Event& e = playPos.value();
+                        const Event& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
-                                    synti->play(e, c->synti);
+                                    synti->play(e, synti->index(c->synti));
                                     }
                               }
                         }

@@ -104,8 +104,8 @@ public:
     float           _fsamp;
     int             _fsize;
     int             _nasect;
-    SyntiParameter  *_instrpar;
-    SyntiParameter  *_asectpar [NASECT];
+//    SyntiParameter  *_instrpar;
+//    SyntiParameter  *_asectpar [NASECT];
 };
 
 
