@@ -92,12 +92,12 @@ void TempoText::textChanged()
       QString s = text();
 
       static const TempoPattern tp[] = {
-            TempoPattern("\\xd834\\xdd5f = (\\d+)", 1.0/60.0),      // 1/4
-            TempoPattern("\\xd834\\xdd5e = (\\d+)", 1.0/30.0),      // 1/2
-            TempoPattern("\\xd834\\xdd60 = (\\d+)", 1.0/120.0),     // 1/8
-            TempoPattern("\\xd834\\xdd5f\\xd834\\xdd6d = (\\d+)", 1.5/60.0),   // dotted 1/4
-            TempoPattern("\\xd834\\xdd5e\\xd834\\xdd6d = (\\d+)", 1.5/30.0),   // dotted 1/2
-            TempoPattern("\\xd834\\xdd60\\xd834\\xdd6d = (\\d+)", 1.5/120.0),  // dotted 1/8
+            TempoPattern("\\xd834\\xdd5f\\s*=\\s*(\\d+)", 1.0/60.0),      // 1/4
+            TempoPattern("\\xd834\\xdd5e\\s*=\\s*(\\d+)", 1.0/30.0),      // 1/2
+            TempoPattern("\\xd834\\xdd60\\s*=\\s*(\\d+)", 1.0/120.0),     // 1/8
+            TempoPattern("\\xd834\\xdd5f\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/60.0),   // dotted 1/4
+            TempoPattern("\\xd834\\xdd5e\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/30.0),   // dotted 1/2
+            TempoPattern("\\xd834\\xdd60\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/120.0),  // dotted 1/8
             };
 
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
