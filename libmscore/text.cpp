@@ -118,6 +118,7 @@ void Text::setText(const QString& s)
             SimpleText::setText(s);
       else
             setUnstyledText(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -147,6 +148,7 @@ void Text::setUnstyledText(const QString& s)
       tf.setFont(textStyle().font(spatium()));
       c.setBlockCharFormat(tf);
       c.insertText(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -167,6 +169,7 @@ void Text::setHtml(const QString& s)
       setUnstyled();
       _doc->clear();
       _doc->setHtml(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -1382,6 +1385,7 @@ void Text::endEdit()
                         }
                   }
             }
+      textChanged();
       }
 
 //---------------------------------------------------------
