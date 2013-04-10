@@ -480,6 +480,12 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
             { P_TEMPO_FOLLOW_TEXT, 0, 0, t.followText, t.resetFollowText }
             };
       mapSignals();
+      connect(t.followText, SIGNAL(toggled(bool)), t.tempo, SLOT(setDisabled(bool)));
+      }
+
+void InspectorTempoText::postInit()
+      {
+      t.tempo->setDisabled(t.followText->isChecked());
       }
 
 //---------------------------------------------------------

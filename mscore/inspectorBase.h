@@ -61,6 +61,7 @@ class InspectorBase : public QWidget {
    public:
       InspectorBase(QWidget* parent);
       virtual void setElement();
+      virtual void postInit() {} // called in setElement and valueChanged
       QWidget* addWidget();
       };
 

@@ -201,6 +201,7 @@ class InspectorTempoText : public InspectorBase {
 
    public:
       InspectorTempoText(QWidget* parent);
+      virtual void postInit();
       };
 
 //---------------------------------------------------------
