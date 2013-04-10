@@ -858,7 +858,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
 
       tempoGroup = new QGroupBox;
       tempoGroup->setCheckable(true);
-      tempoGroup->setChecked(true);
+      tempoGroup->setChecked(false);
       tempoGroup->setTitle(tr("Tempo"));
       QLabel* bpm = new QLabel;
       bpm->setText(tr("BPM:"));
