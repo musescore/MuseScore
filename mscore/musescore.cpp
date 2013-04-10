@@ -458,6 +458,10 @@ MuseScore::MuseScore()
       metronomeAction->setCheckable(true);
       metronomeAction->setChecked(false);
 
+      loopAction = getAction("loop");
+      loopAction->setCheckable(true);
+      loopAction->setChecked(false);
+
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
@@ -607,6 +611,7 @@ MuseScore::MuseScore()
       transportTools->addAction(a);
 
       transportTools->addAction(metronomeAction);
+      transportTools->addAction(loopAction);
 
       mag = new MagBox;
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
@@ -4470,6 +4475,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "metronome")  // no action
+            ;
+      else if (cmd == "loop")  // no action
             ;
       else if (cmd == "viewmode") {
             if (cs) {

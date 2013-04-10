@@ -366,6 +366,8 @@ void Score::expandVoice()
       Segment* s = _is.segment();
       int track  = _is.track();
       expandVoice(s, track);
+      qDebug() << "Score::expandVoice";
+      emit scoreUpdated();
       }
 
 //---------------------------------------------------------
@@ -957,8 +959,11 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
 qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
       dstF.numerator(), dstF.denominator());
 
-      if (srcF == dstF)
+      if (srcF == dstF) {
+            qDebug() << "Score::changeCRlen1";
+            emit scoreUpdated();
             return;
+            }
       int track = cr->track();
       Tuplet* tuplet = cr->tuplet();
       if (srcF > dstF) {
@@ -978,6 +983,8 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
             undoChangeChordRestLen(cr, TDuration(dstF));
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
             select(cr, SELECT_SINGLE, 0);
+            qDebug() << "Score::changeCRlen2";
+            emit scoreUpdated();
             return;
             }
 
@@ -986,8 +993,11 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
       //
       // split required len into Measures
       QList<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
-      if (flist.isEmpty())
+      if (flist.isEmpty()) {
+            qDebug() << "Score::changeCRlen3";
+            emit scoreUpdated();
             return;
+            }
 
 qDebug("ChangeCRLen::List:");
       foreach (Fraction f, flist)
@@ -1071,6 +1081,8 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
             cr1 = static_cast<ChordRest*>(s->element(track));
             }
       connectTies();
+      qDebug() << "Score::changeCRlen4";
+      emit scoreUpdated();
       }
 
 //---------------------------------------------------------

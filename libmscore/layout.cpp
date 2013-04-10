@@ -1412,6 +1412,8 @@ void Score::remove(Element* el)
             case Element::TBOX:
             case Element::FBOX:
                   measures()->remove(static_cast<MeasureBase*>(el));
+                  qDebug() << "Score::remove";
+                  emit scoreUpdated();
                   break;
             case Element::BEAM:
                   {

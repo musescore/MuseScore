@@ -376,6 +376,7 @@ class Score : public QObject {
 
       void addTempo();
       void addMetronome();
+      void addLoop();
 
       void cmdResetBeamMode();
 
@@ -921,6 +922,9 @@ class Score : public QObject {
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
+
+   signals:
+      void scoreUpdated();
 
       friend class ChangeSynthesizerState;
       };

@@ -340,6 +340,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       EditTempo* editTempo;
 
       QAction* metronomeAction;
+      QAction* loopAction;
       QAction* panAction;
 
       QLabel* cornerLabel;
@@ -600,6 +601,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void addTempo();
       void addMetronome();
+      void addLoop();
 
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
@@ -607,6 +609,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateLayer();
       void updatePlayMode();
       bool metronome() const         { return metronomeAction->isChecked(); }
+      bool loop() const              { return loopAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void enableInputToolbar(bool enableInput);

@@ -331,6 +331,10 @@ void Seq::start()
 
 void Seq::stop()
       {
+      if (mscore->loop()) {
+            getAction("play")->trigger();
+            return;
+            }
       if (state == TRANSPORT_STOP)
             return;
       if (oggInit) {
@@ -1176,8 +1180,20 @@ void Seq::heartBeat()
             }
       int utick = ppos->first;
       int tick = cs->repeatList()->utick2tick(utick);
+      int lastTick = 0;
+      if (mscore->loop()) {
+            int tm = pp->getToMeasure();
+            int ts = pp->getToSegment();
+            lastTick = pp->getSegmentTick(tm, ts + 1);
+            if (lastTick == -1) {
+                  Measure* m = static_cast<Measure*>(cs->measure(tm));
+                  lastTick = m->tick() + m->ticks();
+                  }
+      }
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);
+      if (tick == lastTick)
+            start();
       if (pp)
             pp->heartBeat(tick, utick);
 

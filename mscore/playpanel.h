@@ -22,6 +22,8 @@
 #define __PLAYPANEL_H__
 
 #include "ui_playpanel.h"
+#include "libmscore/measure.h"
+#include "libmscore/undo.h"
 
 class Score;
 
@@ -33,6 +35,10 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
+
+      int currentIteration;
+      int currentTransposition;
+      bool initialization;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -51,6 +57,17 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void setGain(float);
       void setPos(int);
 
+      void changeLoopingPanelVisibility(bool);
+      void loopingSetup(bool start = true);
+      void updateFromMeasure(bool skipUpdates = false);
+      void updateFromSegment(bool skipUpdates = false);
+      void updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void updateLoopingInterface();
+      void updateTempoIncrementBy();
+      void updateToMeasure(bool skipUpdates = false);
+      void updateToSegment(bool skipUpdates = false);
+      void updateTransposeIncrementBy();
+
    public:
       PlayPanel(QWidget* parent = 0);
       void heartBeat(int rpos, int apos);
@@ -61,9 +78,24 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
+
+      int getFromMeasure();
+      int getFromSegment();
+      int getSegmentTick(int measureNumber, int relativeSegmentNumber);
+      int getToMeasure();
+      int getToSegment();
+      void nextIteration();
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
+      void updateComboBox(QComboBox* comboBox);
+
+      int getSegmentCount(int measureNumber);
+      TransposeDirection getTransposeDirection(bool flip = false);
+      int getValueFromComboBox(QComboBox* comboBox);
+      double nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void setCurrentIndexWithBlockSignals(QComboBox* comboBox, int currentIndex);
+      void transposeBySemitone(int times, bool flip = false);
       };
 
 #endif

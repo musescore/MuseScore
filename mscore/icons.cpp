@@ -35,7 +35,7 @@ QIcon* icons[ICONS];
 //---------------------------------------------------------
 
 static const char* iconNames[] = {
-      "longaUp.svg",
+      "longaUpm",
       "brevis.svg",
       "note.svg",
       "note2.svg",
@@ -111,6 +111,7 @@ static const char* iconNames[] = {
       "format_indent_less.svgz",
       "community.svg",
       "metronome.svg",
+      "loop.svg",
       "vframe.svg",
       "hframe.svg",
       "tframe.svg",
