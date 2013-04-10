@@ -159,6 +159,8 @@ class Text : public SimpleText {
 
       virtual bool systemFlag() const;
 
+      virtual void textChanged()          {}
+
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
       };
