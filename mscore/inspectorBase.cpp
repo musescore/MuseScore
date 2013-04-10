@@ -197,6 +197,7 @@ void InspectorBase::setElement()
             w->blockSignals(false);
             checkDifferentValues(ii);
             }
+      postInit();
       }
 
 //---------------------------------------------------------
@@ -291,6 +292,7 @@ void InspectorBase::valueChanged(int idx)
       score->endCmd();
       mscore->endCmd();
       inspector->setInspectorEdit(false);
+      postInit();
       }
 
 //---------------------------------------------------------
