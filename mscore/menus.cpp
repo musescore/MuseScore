@@ -878,7 +878,7 @@ Palette* MuseScore::newTextPalette()
             }
 
       Harmony* harmony = new Harmony(gscore);
-      harmony->setText("c7");
+      harmony->setText("C7");
       sp->append(harmony, tr("Chord Name"));
       return sp;
       }
