@@ -4783,7 +4783,7 @@ void ScoreView::cmdAddText(int type)
                   s = new StaffText(_score);
                   if (type == TEXT_SYSTEM) {
                         s->setTrack(0);
-                        s->setTextStyle(_score->textStyle(TEXT_STYLE_SYSTEM));
+                        s->setTextStyleType(TEXT_STYLE_SYSTEM);
                         }
                   else {
                         s->setTrack(cr->track());

@@ -795,7 +795,7 @@ Element* ChordRest::drop(const DropData& data)
                   tt->setParent(segment());
                   int st = tt->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        tt->setTextStyle(score()->textStyle(st));
+                        tt->setTextStyleType(st);
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -833,7 +833,7 @@ Element* ChordRest::drop(const DropData& data)
                   Text* f = static_cast<Text*>(e);
                   int st = f->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        f->setTextStyle(score()->textStyle(st));
+                        f->setTextStyleType(st);
                   }
                   score()->undoAddElement(e);
                   return e;
