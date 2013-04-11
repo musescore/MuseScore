@@ -111,6 +111,7 @@ static const char* iconNames[] = {
       "format_indent_less.svgz",
       "community.svg",
       "metronome.svg",
+      "loop.svg",
       "vframe.svg",
       "hframe.svg",
       "tframe.svg",
