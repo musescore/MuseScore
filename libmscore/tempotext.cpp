@@ -26,7 +26,7 @@ TempoText::TempoText(Score* s)
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       setPlacement(ABOVE);
-      setTextStyle(s->textStyle(TEXT_STYLE_TEMPO));
+      setTextStyleType(TEXT_STYLE_TEMPO);
       }
 
 //---------------------------------------------------------

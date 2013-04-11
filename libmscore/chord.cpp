@@ -787,7 +787,7 @@ void Chord::readNote(XmlReader& e)
                   }
             else if (tag == "Text") {
                   Text* f = new Text(score());
-                  f->setTextStyle(score()->textStyle(TEXT_STYLE_FINGERING));
+                  f->setTextStyleType(TEXT_STYLE_FINGERING);
                   f->read(e);
                   f->setParent(this);
                   note->add(f);

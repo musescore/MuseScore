@@ -766,7 +766,7 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
-                  f->setTextStyle(score()->textStyle(TEXT_STYLE_FINGERING));
+                  f->setTextStyleType(TEXT_STYLE_FINGERING);
                   f->read(e);
                   add(f);
                   }
@@ -1084,7 +1084,7 @@ Element* Note::drop(const DropData& data)
                   Fingering* f = static_cast<Fingering*>(e);
                   int st = f->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        f->setTextStyle(score()->textStyle(st));
+                        f->setTextStyleType(st);
                   }
                   return e;
 
