@@ -4722,16 +4722,18 @@ void ScoreView::cmdAddChordName()
       if (!cr)
             return;
       _score->startCmd();
-      Harmony* s = new Harmony(_score);
-      s->setTrack(cr->track());
-      s->setParent(cr->segment());
-      _score->undoAddElement(s);
+      Harmony* harmony = new Harmony(_score);
+      harmony->setTrack(cr->track());
+      harmony->setParent(cr->segment());
+      _score->undoAddElement(harmony);
+
+      _score->select(harmony, SELECT_SINGLE, 0);
+      // adjustCanvasPosition(s, false);
+      startEdit(harmony);
 
       _score->setLayoutAll(true);
-
-      _score->select(s, SELECT_SINGLE, 0);
-      // adjustCanvasPosition(s, false);
-      startEdit(s);
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
