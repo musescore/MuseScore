@@ -103,9 +103,7 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_HARMONY));
-      setUnstyled();
-
+      setTextStyleType(TEXT_STYLE_HARMONY);
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;

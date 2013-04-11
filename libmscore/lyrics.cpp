@@ -190,8 +190,6 @@ void Lyrics::draw(QPainter* painter) const
 
 void Lyrics::layout()
       {
-//      if (styled())
-//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;
