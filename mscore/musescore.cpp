@@ -2430,12 +2430,20 @@ int main(int argc, char* av[])
             seq                = new Seq();
             MScore::seq        = seq;
             Driver* driver     = driverFactory(seq);
-            synti              = synthesizerFactory();
-            MScore::sampleRate = driver->sampleRate();
-            synti->setSampleRate(MScore::sampleRate);
+            if(driver) {
+                  synti              = synthesizerFactory();
+                  MScore::sampleRate = driver->sampleRate();
+                  synti->setSampleRate(MScore::sampleRate);
 
-            seq->setDriver(driver);
-            seq->setMasterSynthesizer(synti);
+                  seq->setDriver(driver);
+                  seq->setMasterSynthesizer(synti);
+                  }
+            else {
+                  MScore::seq = 0;
+                  seq = 0;
+                  delete seq;
+                  noSeq = true;
+                  }
             }
       else
             noSeq = true;
