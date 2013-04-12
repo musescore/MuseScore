@@ -104,6 +104,7 @@ Harmony::Harmony(Score* s)
    : Text(s)
       {
       setTextStyleType(TEXT_STYLE_HARMONY);
+      //setUnstyled();
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
@@ -370,6 +371,8 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 
 bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mod, const QString& s)
       {
+      if (key == Qt::Key_Return)
+            return true;	// Harmony only single line
       bool rv = Text::edit(view, grip, key, mod, s);
       QString str = text();
       int root, base;
