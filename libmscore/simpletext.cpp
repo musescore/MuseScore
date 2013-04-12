@@ -220,7 +220,7 @@ void SimpleText::layout()
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
 
-      if (!_editMode) {
+      if (!_editMode || _layout.isEmpty()) {
             QStringList sl = _text.split('\n');
             _layout.clear();
             if (parent() && layoutToParentWidth()) {
@@ -377,6 +377,7 @@ void SimpleText::endEdit()
                   _text += "\n";
             _text += tl.text;
             }
+      _layout.clear();
       if (links()) {
             foreach(Element* e, *links()) {
                   if (e == this)
