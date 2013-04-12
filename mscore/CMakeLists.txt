@@ -3,7 +3,7 @@
 #  Linux Music Score Editor
 #  $Id:$
 #
-#  Copyright (C) 2002-2010 by Werner Schweer and others
+#  Copyright (C) 2002-2013 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -176,7 +176,7 @@ add_executable ( ${ExecutableName}
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
-      voiceselector.cpp capella.cpp exportaudio.cpp palettebox.cpp
+      voiceselector.cpp capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       textproperties.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
