@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: capella.h 3833 2011-01-04 13:55:40Z wschweer $
 //
-//  Copyright (C) 2009 Werner Schweer and others
+//  Copyright (C) 2009-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,6 +22,7 @@
 #define __CAPELLA_H__
 
 #include "globals.h"
+#include "libmscore/xml.h"
 
 enum TIMESTEP { D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE };
 
@@ -86,6 +87,7 @@ class CapClef : public NoteObj, public CapellaObj {
    public:
       CapClef(Capella* c) : NoteObj(T_CLEF), CapellaObj(c) {}
       void read();
+      void readCapx(XmlReader& e);
       const char* name() {
             static const char* formName[] = { "G", "C", "F", "=", " ", "*" };
             return formName[form];
@@ -106,6 +108,7 @@ class CapKey : public NoteObj, public CapellaObj {
    public:
       CapKey(Capella* c) : NoteObj(T_KEY), CapellaObj(c) {}
       void read();
+      void readCapx(XmlReader& e);
       int signature;    // -7 - +7
       };
 
@@ -121,6 +124,7 @@ class CapMeter : public NoteObj, public CapellaObj {
 
       CapMeter(Capella* c) : NoteObj(T_METER), CapellaObj(c) {}
       void read();
+      void readCapx(XmlReader& e);
       };
 
 //---------------------------------------------------------
@@ -134,6 +138,7 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
    public:
       CapExplicitBarline(Capella* c) : NoteObj(T_EXPL_BARLINE), CapellaObj(c) {}
       void read();
+      void readCapx(XmlReader& e);
       int type() const    { return _type; }
       int barMode() const { return _barMode; }
 
@@ -512,6 +517,7 @@ class BasicDurationalObj : public CapellaObj {
    public:
       BasicDurationalObj(Capella* c) : CapellaObj(c) {}
       void read();
+      void readCapx(XmlReader& e, unsigned int& fullm);
       int ticks() const;
       bool invisible;
       QList<BasicDrawObj*> objects;
@@ -557,6 +563,8 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
       ChordObj(Capella*);
       void read();
+      void readCapx(XmlReader& e);
+      void readCapxNotes(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
       char stemDir;           // -1 down, 0 auto, 1 up, 3 no stem
@@ -573,6 +581,7 @@ class RestObj : public BasicDurationalObj, public NoteObj {
    public:
       RestObj(Capella*);
       void read();
+      void readCapx(XmlReader& e);
       unsigned fullMeasures;  // >0, multi measure rest (counting measures)
       };
 
@@ -683,6 +692,18 @@ class Capella {
       double smallLineDist;            // spatium unit in metric mm
       double normalLineDist;
       int topDist;
+// capx support
+   private:
+      void readCapxVoice(XmlReader& e, CapStaff*, int);
+      void readCapxStaff(XmlReader& e, CapSystem*, int);
+      void readCapxSystem(XmlReader& e);
+      void capxSystems(XmlReader& e);
+      void readCapxStaveLayout(XmlReader& e, CapStaffLayout*, int);
+      void capxLayoutStaves(XmlReader& e);
+      void capxLayout(XmlReader& e);
+      void initCapxLayout();
+   public:
+      void readCapx(XmlReader& e);
       };
 
 #endif
