@@ -282,8 +282,11 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             pluginCreator->writeSettings();
 #endif
 
-      seq->stopWait();
-      seq->exit();
+      if(seq) {
+            seq->stopWait();
+            seq->exit();
+            }
+
       ev->accept();
       if (preferences.dirty)
             preferences.write();
