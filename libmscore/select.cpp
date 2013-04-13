@@ -183,6 +183,21 @@ ChordRest* Selection::lastChordRest(int track) const
       }
 
 //---------------------------------------------------------
+//   findMeasure
+//---------------------------------------------------------
+
+
+Measure* Selection::findMeasure() const
+      {
+      Measure *m = 0;
+      if (_el.size() >= 1) {
+            Element* el = _el[0];
+            m = static_cast<Measure*>(el->findMeasure());
+            }
+      return m;
+      }
+
+//---------------------------------------------------------
 //   deselectAll
 //---------------------------------------------------------
 
