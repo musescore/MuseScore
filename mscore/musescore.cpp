@@ -143,10 +143,16 @@ extern void qt_mac_set_menubar_icons(bool b);
 
 void MuseScore::cmdInsertMeasures()
       {
-	if (cs) {
-		insertMeasuresDialog = new InsertMeasuresDialog;
-		insertMeasuresDialog->show();
+    if (cs) {
+        if (cs->selection().state() == SEL_NONE && !cs->selection().findMeasure()) {
+            QMessageBox::warning(0, "MuseScore",
+                 tr("No measure selected:\n" "Please select a measure and try again"));
             }
+        else {
+            insertMeasuresDialog = new InsertMeasuresDialog;
+            insertMeasuresDialog->show();
+            }
+        }
       }
 
 //---------------------------------------------------------
