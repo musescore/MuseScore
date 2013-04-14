@@ -2043,7 +2043,7 @@ void Score::cmd(const QAction* a)
       // Hack for moving articulations while selected
       //
       Element* el = selection().element();
-      if (cmd == "pitch-up") {
+      if (cmd == "pitch-up" || cmd == "pitch-up-TAB") {
             if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
@@ -2053,7 +2053,7 @@ void Score::cmd(const QAction* a)
             else
                   upDown(true, UP_DOWN_CHROMATIC);
             }
-      else if (cmd == "pitch-down") {
+      else if (cmd == "pitch-down" || cmd == "pitch-down-TAB") {
             if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
@@ -2162,27 +2162,27 @@ void Score::cmd(const QAction* a)
                   }
             setLayoutAll(false);
             }
-      else if (cmd == "note-longa")
+      else if (cmd == "note-longa"   || cmd == "note-longa-TAB")
             padToggle(PAD_NOTE00);
-      else if (cmd == "note-breve")
+      else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
             padToggle(PAD_NOTE0);
-      else if (cmd == "pad-note-1")
+      else if (cmd == "pad-note-1"   || cmd == "note-1-TAB")
             padToggle(PAD_NOTE1);
-      else if (cmd == "pad-note-2")
+      else if (cmd == "pad-note-2"   || cmd == "note-2-TAB")
             padToggle(PAD_NOTE2);
-      else if (cmd == "pad-note-4")
+      else if (cmd == "pad-note-4"   || cmd == "note-4-TAB")
             padToggle(PAD_NOTE4);
-      else if (cmd == "pad-note-8")
+      else if (cmd == "pad-note-8"   || cmd == "note-8-TAB")
             padToggle(PAD_NOTE8);
-      else if (cmd == "pad-note-16")
+      else if (cmd == "pad-note-16"  || cmd == "note-16-TAB")
             padToggle(PAD_NOTE16);
-      else if (cmd == "pad-note-32")
+      else if (cmd == "pad-note-32"  || cmd == "note-32-TAB")
             padToggle(PAD_NOTE32);
-      else if (cmd == "pad-note-64")
+      else if (cmd == "pad-note-64"  || cmd == "note-64-TAB")
             padToggle(PAD_NOTE64);
-      else if (cmd == "pad-note-128")
+      else if (cmd == "pad-note-128" || cmd == "note-128-TAB")
             padToggle(PAD_NOTE128);
-      else if (cmd == "pad-note-increase") {
+      else if (cmd == "pad-note-increase-TAB") {
             switch (_is.duration().type() ) {
 // cycle back from longest to shortest?
 //                  case TDuration::V_LONG:
@@ -2219,7 +2219,7 @@ void Score::cmd(const QAction* a)
                         break;
                   }
             }
-      else if (cmd == "pad-note-decrease") {
+      else if (cmd == "pad-note-decrease-TAB") {
             switch (_is.duration().type() ) {
                   case TDuration::V_LONG:
                         padToggle(PAD_NOTE0);
