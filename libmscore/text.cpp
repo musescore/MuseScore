@@ -266,9 +266,8 @@ void Text::layout1()
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
 
-            bbox().setRect(0.0, 0.0, size.width(), size.height());
+            bbox().setRect(o.x(), o.y(), size.width(), size.height());
             _doc->setModified(false);
-            setPos(o);
             }
       if (parent()) {
             Element* e = parent();
@@ -358,7 +357,9 @@ void Text::draw(QPainter* painter) const
             return;
       c.palette.setColor(QPalette::Text, textColor());
 
+      painter->translate(bbox().topLeft());
       _doc->documentLayout()->draw(painter, c);
+      painter->translate(-bbox().topLeft());
       }
 
 //---------------------------------------------------------
