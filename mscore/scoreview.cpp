@@ -1714,6 +1714,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   e = e->parent();
             Text* text = static_cast<Text*>(editObject);
             QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
+            qreal w = 2.0 / matrix().m11();	// give the frame some padding, like in 1.3
+            r.adjust(-w,-w,w,w);
             p.setPen(QPen(QBrush(Qt::lightGray), 2.0 / matrix().m11()));  // 2 pixel pen size
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
