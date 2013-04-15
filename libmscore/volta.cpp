@@ -22,6 +22,7 @@
 
 void VoltaSegment::layout()
       {
+      rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
             rypos() += score()->styleS(ST_voltaY).val() * spatium();

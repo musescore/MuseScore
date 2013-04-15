@@ -106,20 +106,10 @@ bool LineSegment::isEdited(SpannerSegment* ss) const
 void LineSegment::updateGrips(int* grips, QRectF* grip) const
       {
       *grips = 3;
-/*      if (line()->anchor() == Spanner::ANCHOR_NOTE) {
-            grip[0].translate(pos());
-            grip[1].translate(pos2());
-            grip[2].translate(pos2() * .5);
-            return;
-            }
-      */
       QPointF pp(pagePos());
-      QPointF pp1(pp);
-      QPointF pp2(pos2() + pp);
-      QPointF pp3(pos2() * .5 + pp);
-      grip[2].translate(pp3);
-      grip[1].translate(pp2);
-      grip[0].translate(pp1);
+      grip[GRIP_LINE_START].translate(pp);
+      grip[GRIP_LINE_END].translate(pos2() + pp);
+      grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------
@@ -130,13 +120,19 @@ void LineSegment::setGrip(int grip, const QPointF& p)
       {
       QPointF pt(p * spatium());
 
-      if (grip == GRIP_LINE_START) {
-            QPointF delta = pt - (pagePos() - gripAnchor(grip));
-            setUserOff(userOff() + delta);
-            _userOff2 -= delta;
-            }
-      else {
-            setUserOff2(pt - pagePos() - _p2 + gripAnchor(grip));
+      switch (grip) {
+            case GRIP_LINE_START: {
+                  QPointF delta(pt - userOff());
+                  setUserOff(pt);
+                  setUserOff2(userOff2() - delta);
+                  }
+                  break;
+            case GRIP_LINE_END:
+                  setUserOff2(pt);
+                  break;
+            case GRIP_LINE_MIDDLE:
+                  setUserOff(pt);
+                  break;
             }
       layout();
       }
@@ -147,19 +143,20 @@ void LineSegment::setGrip(int grip, const QPointF& p)
 
 QPointF LineSegment::getGrip(int grip) const
       {
-      QPointF pt;
+      QPointF p;
       switch(grip) {
             case GRIP_LINE_START:
-                  pt = pagePos() - gripAnchor(grip);
+                  p = userOff();
                   break;
             case GRIP_LINE_END:
-                  pt = _p2 + _userOff2 + pagePos() - gripAnchor(grip);
+                  p = userOff2();
                   break;
             case GRIP_LINE_MIDDLE:
-                  pt = (_p2 + _userOff2) * .5 + pagePos() - gripAnchor(grip);
+                  p = userOff();
                   break;
             }
-      return pt / spatium();
+      p /= spatium();
+      return p;
       }
 
 //---------------------------------------------------------
@@ -373,7 +370,7 @@ void LineSegment::editDrag(const EditData& ed)
       // Only for moving, no y limitaion
       QPointF deltaMove(ed.delta.x(), ed.delta.y());
 
-      switch(ed.curGrip) {
+      switch (ed.curGrip) {
             case GRIP_LINE_START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
                   _userOff2 -= deltaResize;

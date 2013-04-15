@@ -131,12 +131,12 @@ void EditTools::editYChanged(double val)
 void EditTools::setEditPos(const QPointF& pt)
       {
       // if change originates from within this EditTools and data are the same, do nothing
-      if(_localEdit) {
+      if (_localEdit) {
             _localEdit = false;           // any change is no longer local
             // check current values and do nothing if no change
-            if(qAbs(pt.x() - _editX->value()) < 0.001 && qAbs(pt.y() - _editY->value()) < 0.001)
+            if (qAbs(pt.x() - _editX->value()) < 0.001 && qAbs(pt.y() - _editY->value()) < 0.001)
                   return;
-      }
+            }
       _editX->blockSignals(true);
       _editY->blockSignals(true);
       _editX->setValue(pt.x());
