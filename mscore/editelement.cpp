@@ -78,6 +78,7 @@ void ScoreView::startEdit()
 
             editObject->startEdit(this, startMove);
             _score->undoChangeElement(spanner, clone);
+            _score->rebuildBspTree();
             }
       else
             editObject->startEdit(this, startMove);
@@ -242,7 +243,8 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             updateGrips();
             startMove = p;
             }
-      _score->addRefresh(editObject->canvasBoundingRect());
+      QRectF r(editObject->canvasBoundingRect());
+      _score->addRefresh(r);
       _score->update();
       }
 
