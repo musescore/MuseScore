@@ -53,9 +53,11 @@ enum ScoreState {
       STATE_FOTO               = 1 << 11,
       STATE_LOCK               = 1 << 12,
 
-      STATE_NOTE_ENTRY      = STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
-      STATE_ALLTEXTUAL_EDIT = STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
-      STATE_ALL             = -1
+      STATE_NEVER              = 1 << 31,
+
+      STATE_NOTE_ENTRY 		= STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
+      STATE_ALLTEXTUAL_EDIT	= STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
+      STATE_ALL        		= -1
       };
 
 //---------------------------------------------------------
