@@ -2243,7 +2243,7 @@ int main(int argc, char* av[])
                   ++i;
                   continue;
                   }
-            switch(s[1].toLatin1()) {
+            switch (s[1].toLatin1()) {
                   case 'v':
                         printVersion("MuseScore");
                         return 0;
