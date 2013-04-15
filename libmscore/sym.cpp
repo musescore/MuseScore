@@ -302,6 +302,8 @@ QFont fontId2font(int fontId)
       QFont* f = fonts[fontId];
       if (f == 0) {
             f = fonts[fontId] = new QFont();
+            f->setWeight(QFont::Normal);  // if not set we get system default
+            f->setItalic(false);
 #ifdef USE_GLYPHS
             qreal size = 20.0;
 #else
