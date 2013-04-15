@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: event.h 4876 2011-10-22 13:03:58Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -20,7 +19,7 @@ class Xml;
 #include <map>
 
 //---------------------------------------------------------
-//   Midi Events
+//   Event types
 //---------------------------------------------------------
 
 enum {
@@ -126,20 +125,19 @@ enum {
       };
 
 //---------------------------------------------------------
-//   PlayEvent
+//   MidiCoreEvent
 //---------------------------------------------------------
 
-class PlayEvent {
+class MidiCoreEvent {
    protected:
       uchar _type;
       uchar _channel;
       uchar _a;
       uchar _b;
-      float _tuning = .0f;
 
    public:
-      PlayEvent() {}
-      PlayEvent(uchar t, uchar c, uchar a, uchar b)
+      MidiCoreEvent() {}
+      MidiCoreEvent(uchar t, uchar c, uchar a, uchar b)
          : _type(t), _channel(c), _a(a), _b(b) {};
 
       void set(uchar t, uchar c, uchar a, uchar b) {
@@ -173,6 +171,43 @@ class PlayEvent {
       void setData(int a, int b)        { _a = a; _b = b; }
       void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
 
+      bool isChannelEvent() const;
+      };
+
+//---------------------------------------------------------
+//   MidiEvent
+//---------------------------------------------------------
+
+class MidiEvent : public MidiCoreEvent {
+
+   protected:
+      uchar* _edata;           // always zero terminated (_data[_len] == 0; )
+      int _len;
+      int _metaType;
+
+   public:
+      MidiEvent() {}
+      MidiEvent(uchar t, uchar c, uchar a, uchar b)
+         : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {};
+
+      const uchar* edata() const     { return _edata; }
+      void setEData(uchar* d)        { _edata = d; }
+      int len() const                { return _len; }
+      void setLen(int l)             { _len = l; }
+      int metaType() const           { return _metaType; }
+      void setMetaType(int v)        { _metaType = v; }
+      };
+
+//---------------------------------------------------------
+//   PlayEvent
+//---------------------------------------------------------
+
+class PlayEvent : public MidiCoreEvent {
+
+   protected:
+      float _tuning = .0f;
+
+   public:
       float tuning() const           { return _tuning;  }
       void setTuning(float v)        { _tuning = v;     }
       };
@@ -204,7 +239,6 @@ class Event : public PlayEvent {
       void write(Xml&) const;
       void dump() const;
 
-      bool isChannelEvent() const;
 
       int noquantOntime() const      { return _noquantOntime;   }
       void setNoquantOntime(int v)   { _noquantOntime = v;      }

@@ -14,12 +14,13 @@
 #ifndef _BB_H__
 #define __BB_H__
 
-#include "libmscore/midifile.h"
+#include "midi/midifile.h"
 
 const int MAX_BARS = 255;
 
 class BBFile;
 struct MNote;
+class Score;
 
 //---------------------------------------------------------
 //   BBTrack

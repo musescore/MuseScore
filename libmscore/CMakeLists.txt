@@ -72,8 +72,8 @@ add_library (
       tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
       figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
-      qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
-      exportmidi.cpp cursor.cpp read114.cpp paste.cpp
+      qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp
+      cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp
       )
