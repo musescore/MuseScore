@@ -645,7 +645,7 @@ extern MuseScoreCore* mscoreCore;
 extern QString dataPath;
 extern MasterSynthesizer* synti;
 MasterSynthesizer* synthesizerFactory();
-Driver* driverFactory(Seq*);
+Driver* driverFactory(Seq*, QString driver);
 
 extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];
