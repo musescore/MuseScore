@@ -201,7 +201,7 @@ add_executable ( ${ExecutableName}
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
-      driver.cpp
+      driver.cpp exportmidi.cpp
 
       ${OMR_FILES}
       ${AUDIO}
@@ -219,6 +219,7 @@ target_link_libraries(mscore
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
       synthesizer
+      midi
       fluid
       effects
       vorbisfile

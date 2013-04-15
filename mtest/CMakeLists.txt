@@ -34,6 +34,7 @@ add_library(
       mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
@@ -69,10 +70,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs(
-      libmscore
-      musicxml
-      )
+subdirs (libmscore musicxml importmidi)
 
 if (OMR)
 subdirs(omr)

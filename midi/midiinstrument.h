@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2012 Werner Schweer
+//  Copyright (C) 2002-2011 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,27 +10,23 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __EXPORTMIDI_H__
-#define __EXPORTMIDI_H__
-
-#include "midifile.h"
+#ifndef __MIDIINSTRUMENT_H__
+#define __MIDIINSTRUMENT_H__
 
 //---------------------------------------------------------
-//   ExportMidi
+//   MidiInstrument
 //---------------------------------------------------------
 
-class ExportMidi {
-      QFile f;
-      Score* cs;
+struct MidiInstrument {
+      int type;
+      int hbank, lbank, patch;
+      int split;
+      const char* name;
 
-      void writeHeader();
-
-   public:
-      MidiFile mf;
-
-      ExportMidi(Score* s) { cs = s; }
-      bool write(const QString& name, bool midiExpandRepeats);
+      static QString instrName(int type, int hbank, int lbank, int program);
       };
+
+extern MidiInstrument minstr[];
 
 #endif
 
