@@ -22,6 +22,7 @@
 
 void PedalSegment::layout()
       {
+      rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
             rypos() += score()->styleS(ST_pedalY).val() * spatium();

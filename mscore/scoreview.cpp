@@ -1171,9 +1171,10 @@ void ScoreView::updateGrips()
       if (curGrip == -1)
             curGrip = grips-1;
 
-      QPointF pt(editObject->getGrip(curGrip));
-      if (!editObject->isText())
+      if (!editObject->isText()) {
+            QPointF pt(editObject->getGrip(curGrip));
             mscore->editTools()->setEditPos(pt);
+            }
 
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())
@@ -1544,6 +1545,8 @@ void ScoreView::paintEvent(QPaintEvent* ev)
                   vp.setBrush(((i == curGrip) && hasFocus()) ? QBrush(Qt::blue) : Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
+            if (editObject)      // if object is moved, it may not be covered by bsp
+                  paintElement(&vp, editObject);
             }
       }
 
