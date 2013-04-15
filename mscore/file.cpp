@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: file.cpp 5645 2012-05-18 13:34:03Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer et al.
+//  Copyright (C) 2002-2013 Werner Schweer et al.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -100,6 +100,7 @@ extern Score::FileError importMuseData(Score*, const QString& name);
 extern Score::FileError importLilypond(Score*, const QString& name);
 extern Score::FileError importBB(Score*, const QString& name);
 extern Score::FileError importCapella(Score*, const QString& name);
+extern Score::FileError importCapXml(Score*, const QString& name);
 extern Score::FileError importOve(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
@@ -250,15 +251,16 @@ void MuseScore::loadFiles()
       QStringList files = getOpenScoreNames(
          lastOpenPath,
 #ifdef OMR
-         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
+         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
 #else
-         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
+         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
 #endif
          tr("MuseScore Files (*.mscz *.mscx);;")+
          tr("MusicXML Files (*.xml *.mxl);;")+
          tr("MIDI Files (*.mid *.midi *.kar);;")+
          tr("Muse Data Files (*.md);;")+
          tr("Capella Files (*.cap);;")+
+         tr("CapXML Files <experimental> (*.capx);;")+
          tr("BB Files <experimental> (*.mgu *.MGU *.sgu *.SGU);;")+
 #ifdef OMR
          tr("PDF Files <experimental omr> (*.pdf);;")+
@@ -1772,6 +1774,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   { "mgu",  &importBB                 },
                   { "sgu",  &importBB                 },
                   { "cap",  &importCapella            },
+                  { "capx", &importCapXml             },
                   { "ove",  &importOve                },
                   { "scw",  &importOve                },
 #ifdef OMR
