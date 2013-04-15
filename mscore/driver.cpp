@@ -31,20 +31,37 @@ extern Driver* getPulseAudioDriver(Seq*);
 
 //---------------------------------------------------------
 //   driverFactory
+//    driver can be: jack alsa pulse portaudio
 //---------------------------------------------------------
 
-Driver* driverFactory(Seq* seq)
+Driver* driverFactory(Seq* seq, QString driverName)
       {
       Driver* driver = 0;
 
-#define useJackFlag       (preferences.useJackAudio || preferences.useJackMidi)
-#define useAlsaFlag       preferences.useAlsaAudio
-#define usePortaudioFlag  preferences.usePortaudioAudio
-#define usePulseAudioFlag preferences.usePulseAudio
+      bool useJackFlag       = (preferences.useJackAudio || preferences.useJackMidi);
+      bool useAlsaFlag       = preferences.useAlsaAudio;
+      bool usePortaudioFlag  = preferences.usePortaudioAudio;
+      bool usePulseAudioFlag = preferences.usePulseAudio;
 
-      useALSA = false;
-      useJACK = false;
-      usePortaudio = false;
+      if (!driverName.isEmpty()) {
+            driverName        = driverName.toLower();
+            useJackFlag       = false;
+            useAlsaFlag       = false;
+            usePortaudioFlag  = false;
+            usePulseAudioFlag = false;
+            if (driverName == "jack")
+                  useJackFlag = true;
+            else if (driverName == "alsa")
+                  useAlsaFlag = true;
+            else if (driverName == "pulse")
+                  usePulseAudioFlag = true;
+            else if (driverName == "portaudio")
+                  usePortaudioFlag = true;
+            }
+
+      useALSA       = false;
+      useJACK       = false;
+      usePortaudio  = false;
       usePulseAudio = false;
 
 #ifdef USE_PULSEAUDIO
