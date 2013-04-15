@@ -1310,7 +1310,7 @@ void PreferenceDialog::apply()
             prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
             prefs.alsaFragments      = alsaFragments->value();
             preferences = prefs;
-            Driver* driver = driverFactory(seq);
+            Driver* driver = driverFactory(seq, "");
             seq->setDriver(driver);
             if (!seq->init()) {
                   qDebug("sequencer init failed\n");
