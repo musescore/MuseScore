@@ -820,7 +820,7 @@ SFont* Fluid::get_sfont_by_id(int id)
 SFont* Fluid::get_sfont_by_name(const QString& name)
       {
       foreach(SFont* sf, sfonts) {
-            if (sf->get_name() == name)
+            if (QFileInfo(sf->get_name()).fileName() == name)
                   return sf;
             }
       return 0;
