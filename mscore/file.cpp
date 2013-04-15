@@ -26,7 +26,7 @@
 #include "globals.h"
 #include "musescore.h"
 #include "scoreview.h"
-#include "libmscore/exportmidi.h"
+#include "exportmidi.h"
 #include "libmscore/xml.h"
 #include "libmscore/element.h"
 #include "libmscore/note.h"

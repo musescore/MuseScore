@@ -13,7 +13,7 @@
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
-#include "sig.h"
+#include "libmscore/sig.h"
 #include "synthesizer/event.h"
 
 const int MIDI_CHANNEL = 16;
@@ -28,8 +28,6 @@ enum MidiType {
 
 class MidiFile;
 class Xml;
-class Staff;
-class Score;
 
 //---------------------------------------------------------
 //   MidiTrack
@@ -37,65 +35,31 @@ class Score;
 
 class MidiTrack {
       MidiFile* mf;
-      EventList _events;
+      std::multimap<int, MidiEvent> _events;
       int _outChannel;
       int _outPort;
-      QString _name;
-      QString _comment;
       bool _drumTrack;
-      bool _hasKey;
-      int _staffIdx;
-      Staff* _staff;
-      int _program;
 
    protected:
       void readXml(XmlReader&);
 
    public:
-      int maxPitch;
-      int minPitch;
-      int medPitch;
-
       MidiTrack(MidiFile*);
       ~MidiTrack();
 
       bool empty() const;
-      const EventList& events() const   { return _events;     }
-      EventList& events()               { return _events;     }
+      const std::multimap<int, MidiEvent>& events() const { return _events; }
+      std::multimap<int, MidiEvent>&       events()       { return _events; }
+
       int outChannel() const            { return _outChannel; }
       void setOutChannel(int n);
       int outPort() const               { return _outPort;    }
       void setOutPort(int n)            { _outPort = n;       }
-      QString name() const              { return _name;       }
-      void setName(const QString& s)    { _name = s;          }
-      QString comment() const           { return _comment;    }
-      void setComment(const QString& s) { _comment = s;       }
-      void insert(const Event& e)       { _events.insert(e);  }
-      void append(const Event& e)       { _events.append(e);  }
 
-      void addCtrl(int tick, int channel, int type, int value);
+      bool drumTrack() const            { return _drumTrack; }
 
+      void insert(int tick, const MidiEvent&);
       void mergeNoteOnOff();
-      void cleanup();
-      inline int division() const;
-      void changeDivision(int newDivision);
-      void move(int ticks);
-      bool isDrumTrack() const;
-      void extractTimeSig(TimeSigMap* sig);
-      void quantize(int startTick, int endTick, EventList* dst);
-      int getInitProgram();
-      void findChords();
-      int separateVoices(int);
-      void setHasKey(bool val) { _hasKey = val;    }
-      bool hasKey() const      { return _hasKey;   }
-      int staffIdx() const     { return _staffIdx; }
-      void setStaffIdx(int v)  { _staffIdx = v;    }
-      Staff* staff() const     { return _staff;    }
-      void setStaff(Staff* st) { _staff = st;      }
-      int program() const      { return _program;  }
-      void setProgram(int v)   { _program = v;     }
-
-      friend class MidiFile;
       };
 
 //---------------------------------------------------------
@@ -103,7 +67,6 @@ class MidiTrack {
 //---------------------------------------------------------
 
 class MidiFile {
-      TimeSigMap _siglist;
       QIODevice* fp;
       QList<MidiTrack*> _tracks;
       int _division;
@@ -116,9 +79,8 @@ class MidiFile {
       int sstatus;               ///< running status (not reset after meta or sysex events)
       int click;                 ///< current tick position in file
       qint64 curPos;             ///< current file byte position
-      int _shortestNote;
 
-      void writeEvent(const Event& event);
+      void writeEvent(const MidiEvent& event);
 
    protected:
       // write
@@ -135,7 +97,7 @@ class MidiFile {
       int getvl();
       int readShort();
       int readLong();
-      bool readEvent(Event*);
+      bool readEvent(MidiEvent*);
       bool readTrack();
       void skip(qint64);
 
@@ -147,31 +109,19 @@ class MidiFile {
       bool write(QIODevice*);
       void readXml(XmlReader&);
 
-      QList<MidiTrack*>* tracks()   { return &_tracks;  }
+      QList<MidiTrack*>& tracks()             { return _tracks;  }
+      const QList<MidiTrack*>& tracks() const { return _tracks;  }
+
       MidiType midiType() const     { return _midiType; }
       void setMidiType(MidiType mt) { _midiType = mt;   }
+
       int format() const            { return _format;   }
       void setFormat(int fmt)       { _format = fmt;    }
+
       int division() const          { return _division; }
       void setDivision(int val)     { _division = val;  }
-      void changeDivision(int val);
-      void process1();
-      void sortTracks();
       void separateChannel();
-      void move(int ticks);
-      TimeSigMap siglist() const     { return _siglist;         }
-      int noRunningStatus() const     { return _noRunningStatus; }
-      void setNoRunningStatus(bool v) { _noRunningStatus = v;    }
-      void processMeta(Score*, MidiTrack* track, const Event& e);
-      void setShortestNote(int v)     { _shortestNote = v;    }
-      int shortestNote() const        { return _shortestNote; }
-      void convertTrack(Score* score, MidiTrack* midiTrack);
-
-      friend class EventData;
-      friend class MidiTrack;
       };
-
-int MidiTrack::division() const { return mf->division(); }
 
 #endif
 

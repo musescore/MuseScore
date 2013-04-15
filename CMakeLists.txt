@@ -304,8 +304,10 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ##
 ## add subdirs
 ##
-subdirs(mscore awl bww2mxml share
-      fluid mstyle libmscore synthesizer effects thirdparty/rtf2html thirdparty/diff)
+subdirs(
+      mscore  awl bww2mxml share midi fluid mstyle libmscore synthesizer
+      effects thirdparty/rtf2html thirdparty/diff
+      )
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)

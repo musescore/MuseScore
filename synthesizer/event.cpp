@@ -108,7 +108,7 @@ void Event::dump() const
 //   isChannelEvent
 //---------------------------------------------------------
 
-bool Event::isChannelEvent() const
+bool MidiCoreEvent::isChannelEvent() const
       {
       switch(_type) {
             case ME_NOTEOFF:
@@ -277,3 +277,20 @@ QString midiMetaName(int meta)
       return QString(s);
       }
 
+//---------------------------------------------------------
+// insert
+//---------------------------------------------------------
+
+void EventList::insert(const Event& e)
+      {
+      int ontime = e.ontime();
+      if (!isEmpty() && last().ontime() > ontime) {
+            for (auto i = begin(); i != end(); ++i) {
+                  if (i->ontime() > ontime) {
+                        QList<Event>::insert(i, e);
+                        return;
+                        }
+                  }
+            }
+      append(e);
+      }
