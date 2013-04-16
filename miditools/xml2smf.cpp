@@ -164,6 +164,10 @@ int main(int argc, char* argv[])
                                     }
                               mf.tracks().push_back(track);
                               }
+                        else if (tag == "division")
+                              mf.setDivision(e.readInt());
+                        else if (tag == "format")
+                              mf.setFormat(e.readInt());
                         else
                               e.unknown();
                         }

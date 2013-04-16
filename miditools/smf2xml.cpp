@@ -110,6 +110,8 @@ int main(int argc, char* argv[])
       XmlWriter xml(out);
       xml.header();
       xml.stag("SMF");
+      xml.tag("division", mf.division());
+      xml.tag("format", mf.format());
 
       for (MidiTrack* t : mf.tracks()) {
             xml.stag("Track");
