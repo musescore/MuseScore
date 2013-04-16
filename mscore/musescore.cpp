@@ -2719,6 +2719,31 @@ void MuseScore::changeState(ScoreState val)
 
 //      if (_sstate == val)
 //            return;
+      static const char* stdNames[] = {
+            "note-longa", "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
+            "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-rest"};
+      static const char* tabNames[] = {
+            "note-longa-TAB", "note-breve-TAB", "pad-note-1-TAB", "pad-note-2-TAB", "pad-note-4-TAB",
+            "pad-note-8-TAB", "pad-note-16-TAB", "pad-note-32-TAB", "pad-note-64-TAB", "pad-note-128-TAB", "pad-rest-TAB"};
+      bool intoTAB = (_sstate != STATE_NOTE_ENTRY_TAB) && (val == STATE_NOTE_ENTRY_TAB);
+      bool fromTAB = (_sstate == STATE_NOTE_ENTRY_TAB) && (val != STATE_NOTE_ENTRY_TAB);
+      // if activating TAB note entry, swap "pad-note-...-TAB" shorctuts into "pad-note-..." actions
+      if (intoTAB) {
+            for (unsigned i = 0; i < sizeof(stdNames)/sizeof(char*); ++i) {
+                  QAction* act = getAction(stdNames[i]);
+                  Shortcut* srt = Shortcut::getShortcut(tabNames[i]);
+                  act->setShortcuts(srt->keys());
+                  }
+            }
+      // if de-ativating TAB note entry, restore shortcuts for "pad-note-..." actions
+      else if (fromTAB) {
+            for (unsigned i = 0; i < sizeof(stdNames)/sizeof(char*); ++i) {
+                  QAction* act = getAction(stdNames[i]);
+                  Shortcut* srt = Shortcut::getShortcut(stdNames[i]);
+                  act->setShortcuts(srt->keys());
+                  }
+            }
+
       foreach (const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
             if (!a)
@@ -4229,8 +4254,9 @@ void MuseScore::endCmd()
 //   enableInputToolbar
 //---------------------------------------------------------
 
-void MuseScore::enableInputToolbar(bool enableInput)
+void MuseScore::enableInputToolbar(bool /*enableInput*/)
       {
+/*
       static const char* actionNames[] = {
             "pad-rest", "pad-dot", "pad-dotdot", "note-longa",
             "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
@@ -4244,6 +4270,7 @@ void MuseScore::enableInputToolbar(bool enableInput)
       for (unsigned i = 0; i < sizeof(actionNames)/sizeof(*actionNames); ++i) {
             getAction(actionNames[i])->setEnabled(enableInput);
             }
+*/
       }
 
 //---------------------------------------------------------
