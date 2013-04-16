@@ -1475,6 +1475,8 @@ void HarmonyView::setElement(Element* e)
       hb.userName->setText(harmony->hUserName());
 
       // need to set header row
+      hb.degreeTab->setColumnWidth(0,hb.degreeTab->width()/3);
+      hb.degreeTab->setColumnWidth(1,hb.degreeTab->width()/3);
       hb.degreeTab->setRowCount(harmony->numberOfDegrees());
       for (int i = 0, n = harmony->numberOfDegrees(); i < n; ++i) {
             const HDegree& d = harmony->degree(i);
