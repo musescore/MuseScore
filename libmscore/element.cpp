@@ -1574,7 +1574,7 @@ Element* Element::parentChordRest()
       }
 
 //---------------------------------------------------------
-//   parentChordRest
+//   findMeasure
 //---------------------------------------------------------
 
 Element* Element::findMeasure()
