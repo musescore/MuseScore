@@ -659,20 +659,21 @@ void convertMidi(Score* score, MidiFile* mf)
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         int pitch = e.pitch();
+                        int len = (e.len() * MScore::division + mf->division()/2) / mf->division();
                         track.maxPitch = qMax(pitch, track.maxPitch);
                         track.minPitch = qMin(pitch, track.minPitch);
                         track.medPitch += pitch;
-                        lastTick = qMax(lastTick, tick + e.len());
+                        lastTick = qMax(lastTick, tick + len);
 
                         MidiNote  n;
                         n.pitch    = pitch;
                         n.velo     = e.velo();
                         n.onTime   = tick;
-                        n.len      = e.len();
+                        n.len      = len;
 
                         MidiChord c;
                         c.onTime = tick;
-                        c.duration = e.len();
+                        c.duration = len;
                         c.notes.push_back(n);
 
                         track.chords.insert(std::pair<int,MidiChord>(tick, c));
