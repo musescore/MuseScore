@@ -423,7 +423,7 @@ void AlbumManager::addClicked()
                   album->append(item);
                   QFileInfo fi(fn);
 
-                  QListWidgetItem* li = new QListWidgetItem(fi.baseName(), scoreList);
+                  QListWidgetItem* li = new QListWidgetItem(fi.completeBaseName(), scoreList);
                   li->setToolTip(fn);
                   li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
                   }
