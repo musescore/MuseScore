@@ -458,7 +458,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Insert note G")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "rest",
          QT_TRANSLATE_NOOP("action","Rest"),
@@ -525,7 +525,7 @@ Shortcut Shortcut::sc[] = {
           flip_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+      STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "pitch-up",
          QT_TRANSLATE_NOOP("action","Up"),
@@ -567,7 +567,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Move up")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+      STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "pitch-down",
          QT_TRANSLATE_NOOP("action","Down"),
@@ -914,7 +914,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Other tuplets")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "note-longa",
          QT_TRANSLATE_NOOP("action","Longa"),
@@ -923,7 +923,7 @@ Shortcut Shortcut::sc[] = {
           longaUp_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "note-breve",
          QT_TRANSLATE_NOOP("action","Double whole note"),
@@ -932,7 +932,7 @@ Shortcut Shortcut::sc[] = {
           brevis_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-1",
          QT_TRANSLATE_NOOP("action","Whole note"),
@@ -941,7 +941,7 @@ Shortcut Shortcut::sc[] = {
           note_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-2",
          QT_TRANSLATE_NOOP("action","Half note"),
@@ -950,7 +950,7 @@ Shortcut Shortcut::sc[] = {
           note2_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-4",
          QT_TRANSLATE_NOOP("action","Quarter note"),
@@ -959,7 +959,7 @@ Shortcut Shortcut::sc[] = {
           note4_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-8",
          QT_TRANSLATE_NOOP("action","8th note"),
@@ -968,7 +968,7 @@ Shortcut Shortcut::sc[] = {
           note8_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-16",
          QT_TRANSLATE_NOOP("action","16th note"),
@@ -977,7 +977,7 @@ Shortcut Shortcut::sc[] = {
           note16_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-32",
          QT_TRANSLATE_NOOP("action","32nd note"),
@@ -986,7 +986,7 @@ Shortcut Shortcut::sc[] = {
           note32_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-64",
          QT_TRANSLATE_NOOP("action","64th note"),
@@ -995,7 +995,7 @@ Shortcut Shortcut::sc[] = {
           note64_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          A_CMD,
          "pad-note-128",
          QT_TRANSLATE_NOOP("action","128th note"),
@@ -1045,7 +1045,7 @@ Shortcut Shortcut::sc[] = {
          tie_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "pad-rest",
          QT_TRANSLATE_NOOP("action","Rest"),
@@ -1782,13 +1782,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY,
+         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "double-duration",
          QT_TRANSLATE_NOOP("action","Double duration")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY,
+         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "half-duration",
          QT_TRANSLATE_NOOP("action","Half duration")
@@ -1828,13 +1828,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Manage parts")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "enh-up",
          QT_TRANSLATE_NOOP("action","Enharmonic up")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          0,
          "enh-down",
          QT_TRANSLATE_NOOP("action","Enharmonic down")
@@ -2090,6 +2090,117 @@ Shortcut Shortcut::sc[] = {
       // TAB-specific actions
 
       Shortcut(
+         STATE_NEVER,                     // use a STATE value which is never used: shortcut is never active
+         A_CMD,
+         "note-longa-TAB",
+         QT_TRANSLATE_NOOP("action","Longa (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: longa (TAB)"),
+         QT_TRANSLATE_NOOP("action","Longa"),
+          longaUp_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "note-breve-TAB",
+         QT_TRANSLATE_NOOP("action","Double whole note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: double whole (TAB)"),
+         QT_TRANSLATE_NOOP("action","Double whole note"),
+          brevis_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-1-TAB",
+         QT_TRANSLATE_NOOP("action","Whole note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: whole (TAB)"),
+         QT_TRANSLATE_NOOP("action","Whole note"),
+          note_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-2-TAB",
+         QT_TRANSLATE_NOOP("action","Half note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: half (TAB)"),
+         QT_TRANSLATE_NOOP("action","Half note"),
+          note2_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-4-TAB",
+         QT_TRANSLATE_NOOP("action","Quarter note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: quarter (TAB)"),
+         QT_TRANSLATE_NOOP("action","Quarter note"),
+          note4_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-8-TAB",
+         QT_TRANSLATE_NOOP("action","8th note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 8th (TAB)"),
+         QT_TRANSLATE_NOOP("action","8th note"),
+          note8_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-16-TAB",
+         QT_TRANSLATE_NOOP("action","16th note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 16th (TAB)"),
+         QT_TRANSLATE_NOOP("action","16th note"),
+          note16_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-32-TAB",
+         QT_TRANSLATE_NOOP("action","32nd note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 32nd (TAB)"),
+         QT_TRANSLATE_NOOP("action","32nd note"),
+          note32_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-64-TAB",
+         QT_TRANSLATE_NOOP("action","64th note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 64th (TAB)"),
+         QT_TRANSLATE_NOOP("action","64th note"),
+          note64_ICON
+         ),
+      Shortcut(
+         STATE_NEVER,
+         A_CMD,
+         "pad-note-128-TAB",
+         QT_TRANSLATE_NOOP("action","128th note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 128th (TAB)"),
+         QT_TRANSLATE_NOOP("action","128th note"),
+          note128_ICON
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "pad-note-increase-TAB",
+         QT_TRANSLATE_NOOP("action","Increase active duration (TAB)"),
+         QT_TRANSLATE_NOOP("action","Increase active duration (TAB)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "pad-note-decrease-TAB",
+         QT_TRANSLATE_NOOP("action","Decrease active duration (TAB)"),
+         QT_TRANSLATE_NOOP("action","Decrease active duration (TAB)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "pad-rest-TAB",
+         QT_TRANSLATE_NOOP("action","Rest (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note entry: rest (TAB)")
+         ),
+      Shortcut(
          STATE_NOTE_ENTRY_TAB,
          0,
          "string-above",
@@ -2266,4 +2377,3 @@ Shortcut Shortcut::sc[] = {
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
-
