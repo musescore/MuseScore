@@ -62,7 +62,7 @@ QT4_WRAP_UI (ui_headers
       box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
       inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
-      inspector_dynamic.ui inspector_line.ui
+      inspector_dynamic.ui inspector_line.ui harmony.ui
       ${SCRIPT_UI}
       )
 
