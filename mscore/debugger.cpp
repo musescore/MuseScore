@@ -63,6 +63,8 @@
 #include "libmscore/harmony.h"
 #include "libmscore/stemslash.h"
 #include "libmscore/ledgerline.h"
+#include "libmscore/pitchspelling.h"
+#include "libmscore/chordlist.h"
 
 extern bool useFactorySettings;
 
@@ -587,6 +589,9 @@ void Debugger::updateElement(Element* el)
                   case Element::STAFF_TEXT:
                   case Element::HARMONY:
                         ew = new TextView;
+                        break;
+                  case Element::HARMONY:
+                        ew = new HarmonyView;
                         break;
                   case Element::TRILL_SEGMENT:
                   case Element::HAIRPIN_SEGMENT:
@@ -1407,6 +1412,83 @@ void TextView::setElement(Element* e)
       tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
+      }
+
+//---------------------------------------------------------
+//   HarmonyView
+//---------------------------------------------------------
+
+HarmonyView::HarmonyView()
+   : ShowElementBase()
+      {
+      QWidget* tw = new QWidget;
+      tb.setupUi(tw);
+      layout->addWidget(tw);
+
+      QWidget* hw = new QWidget;
+      hb.setupUi(hw);
+      layout->addWidget(hw);
+
+      layout->addStretch(10);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void HarmonyView::setElement(Element* e)
+      {
+      Harmony* harmony = (Harmony*)e;
+      bool germanNames = e->score()->styleB(ST_useGermanNoteNames);
+
+      tb.textStyle->clear();
+      for (int i = 0; i < TEXT_STYLES; ++i)
+            tb.textStyle->addItem(e->score()->textStyle(i).name());
+
+      ShowElementBase::setElement(e);
+      tb.text->setPlainText(harmony->text());
+      tb.xoffset->setValue(harmony->xoff());
+      tb.yoffset->setValue(harmony->yoff());
+      tb.rxoffset->setValue(harmony->reloff().x());
+      tb.ryoffset->setValue(harmony->reloff().y());
+      tb.offsetType->setCurrentIndex(int(harmony->offsetType()));
+      tb.textStyle->setCurrentIndex(harmony->textStyleType());
+      tb.styled->setChecked(harmony->styled());
+      tb.layoutToParentWidth->setChecked(harmony->layoutToParentWidth());
+
+      hb.tbboxx->setValue(harmony->bboxtight().x());
+      hb.tbboxy->setValue(harmony->bboxtight().y());
+      hb.tbboxw->setValue(harmony->bboxtight().width());
+      hb.tbboxh->setValue(harmony->bboxtight().height());
+      hb.rootTpc->setValue(harmony->rootTpc());
+      if (harmony->rootTpc() == INVALID_TPC)
+            hb.rootName->setText("");
+      else
+            hb.rootName->setText(tpc2name(harmony->rootTpc(),germanNames));
+      hb.bassTpc->setValue(harmony->baseTpc());
+      if (harmony->baseTpc() == INVALID_TPC)
+            hb.bassName->setText("");
+      else
+            hb.bassName->setText(tpc2name(harmony->baseTpc(),germanNames));
+      hb.chordId->setValue(harmony->id());
+      hb.chordName->setText(harmony->extensionName());
+      hb.userName->setText(harmony->hUserName());
+
+      // need to set header row
+      hb.degreeTab->setRowCount(harmony->numberOfDegrees());
+      for (int i = 0, n = harmony->numberOfDegrees(); i < n; ++i) {
+            const HDegree& d = harmony->degree(i);
+            QString s;
+            switch (d.type()) {
+                  case ADD:      s = "add";      break;
+                  case ALTER:    s = "alter";    break;
+                  case SUBTRACT: s = "subtract"; break;
+                  default:       s = "";         break;
+                  }
+            hb.degreeTab->setItem(i, 0, new QTableWidgetItem(s));
+            hb.degreeTab->setItem(i, 1, new QTableWidgetItem(QVariant(d.value()).toString()));
+            hb.degreeTab->setItem(i, 2, new QTableWidgetItem(QVariant(d.alter()).toString()));
+            }
       }
 
 //---------------------------------------------------------
