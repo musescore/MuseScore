@@ -585,6 +585,7 @@ void Debugger::updateElement(Element* el)
                   case Element::JUMP:
                   case Element::TEXT:
                   case Element::STAFF_TEXT:
+                  case Element::HARMONY:
                         ew = new TextView;
                         break;
                   case Element::TRILL_SEGMENT:
