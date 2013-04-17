@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>845</width>
-    <height>591</height>
+    <height>624</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -552,7 +552,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>SoundFonts Path:</string>
+             <string>SoundFonts Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -588,7 +588,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Sfz Files Path:</string>
+             <string>Sfz Files Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2082,22 +2082,36 @@
           <item>
            <widget class="QLabel" name="label_23">
             <property name="text">
-             <string>sf2:</string>
+             <string>Soundfont:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="defaultSf"/>
+           <widget class="QComboBox" name="defaultSf">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_29">
             <property name="text">
-             <string>sfz:</string>
+             <string>SFZ:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="defaultSfz"/>
+           <widget class="QComboBox" name="defaultSfz">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -2790,8 +2804,6 @@
    <header>recordbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
