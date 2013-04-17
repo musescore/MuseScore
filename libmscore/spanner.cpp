@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -24,7 +23,7 @@ SpannerSegment::SpannerSegment(Score* s)
    : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_SEGMENT);
-      setSubtype(SEGMENT_SINGLE);
+      setSpannerSegmentType(SEGMENT_SINGLE);
       _spanner = 0;
       }
 
@@ -32,7 +31,7 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
    : Element(s)
       {
       _spanner = s._spanner;
-      _subtype = s._subtype;
+      _spannerSegmentType = s._spannerSegmentType;
       }
 
 //---------------------------------------------------------

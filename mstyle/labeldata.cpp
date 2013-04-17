@@ -26,124 +26,119 @@
 
 #include "labeldata.h"
 
-    // use 300 milliseconds for animation lock
-    const int LabelData::lockTime_ = 300;
+// use 300 milliseconds for animation lock
+const int LabelData::lockTime_ = 300;
 
-    //______________________________________________________
-    LabelData::LabelData( QObject* parent, QLabel* target, int duration ):
-        TransitionData( parent, target, duration ),
-        target_( target )
-    {
-        target_.data()->installEventFilter( this );
-        bool hasProxy( target_.data()->graphicsProxyWidget() );
-        transition().data()->setFlags( hasProxy ? TransitionWidget::Transparent : TransitionWidget::GrabFromWindow );
+//______________________________________________________
+LabelData::LabelData( QObject* parent, QLabel* target, int duration ):
+      TransitionData( parent, target, duration ),
+      target_( target ) {
+      target_.data()->installEventFilter( this );
+      bool hasProxy( target_.data()->graphicsProxyWidget() );
+      transition().data()->setFlags( hasProxy ? TransitionWidget::Transparent : TransitionWidget::GrabFromWindow );
 
-        connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
+      connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool LabelData::eventFilter( QObject* object, QEvent* event )
-    {
+//___________________________________________________________________
+bool LabelData::eventFilter( QObject* object, QEvent* event ) {
 
-        if( object != target_.data() ) return TransitionData::eventFilter( object, event );
-        switch( event->type() )
-        {
+      if ( object != target_.data() ) return TransitionData::eventFilter( object, event );
+      switch ( event->type() ) {
 
             case QEvent::Show:
-            /*
-            at show event, on set the old text to current
-            to avoid animate the "first" paint event.
-            text mnemonic is always removed to avoid triggering the animation when only the
-            latter is changed
-            */
-            text_ = target_.data()->text().remove( '&' );
-            break;
+                  /*
+                  at show event, on set the old text to current
+                  to avoid animate the "first" paint event.
+                  text mnemonic is always removed to avoid triggering the animation when only the
+                  latter is changed
+                  */
+                  text_ = target_.data()->text().remove( '&' );
+                  break;
 
-            case QEvent::Paint:
-            {
+            case QEvent::Paint: {
 
-                if( enabled() && target_  )
-                {
+                  if ( enabled() && target_  ) {
 
-                    // remove showMnemonic from text before comparing
-                    QString text( target_.data()->text().remove( '&' ) );
-                    if( text == text_ )
-                    {
-                        if( transition().data()->isAnimated() && TransitionWidget::paintEnabled() ) return true;
-                        else break;
-                    }
+                        // remove showMnemonic from text before comparing
+                        QString text( target_.data()->text().remove( '&' ) );
+                        if ( text == text_ ) {
+                              if ( transition().data()->isAnimated() && TransitionWidget::paintEnabled() ) return true;
+                              else break;
+                              }
 
-                    // update text and pixmap
-                    text_ = text;
+                        // update text and pixmap
+                        text_ = text;
 
-                    if( !(transition() && target_.data()->isVisible() ) ) break;
+                        if ( !(transition() && target_.data()->isVisible() ) ) break;
 
-                    if( transition().data()->isAnimated() )
-                    { transition().data()->endAnimation(); }
+                        if ( transition().data()->isAnimated() ) {
+                              transition().data()->endAnimation();
+                              }
 
-                    // check whether animations are locked
-                    if( isLocked() )
-                    {
+                        // check whether animations are locked
+                        if ( isLocked() ) {
 
-                        // hide transition widget
-                        transition().data()->hide();
+                              // hide transition widget
+                              transition().data()->hide();
+
+                              // restart the lock timer
+                              // and abort transition
+                              lockAnimations();
+                              break;
+                              }
 
                         // restart the lock timer
-                        // and abort transition
+                        // and prepare transition
                         lockAnimations();
-                        break;
-                    }
+                        initializeAnimation();
+                        timer_.start( 0, this );
 
-                    // restart the lock timer
-                    // and prepare transition
-                    lockAnimations();
-                    initializeAnimation();
-                    timer_.start( 0, this );
+                        if ( !transition().data()->startPixmap().isNull() && TransitionWidget::paintEnabled() ) {
 
-                    if( !transition().data()->startPixmap().isNull() && TransitionWidget::paintEnabled() )
-                    {
+                              // show the transition widget
+                              // and disable this event painting
+                              transition().data()->show();
+                              transition().data()->raise();
+                              return true;
 
-                        // show the transition widget
-                        // and disable this event painting
-                        transition().data()->show();
-                        transition().data()->raise();
+                              }
+                        else {
+
+                              // hide transition widget and abort transition
+                              transition().data()->hide();
+                              break;
+
+                              }
+
+                        }
+                  else if ( transition().data()->isAnimated() && TransitionWidget::paintEnabled() ) {
+
+                        // disable painting when transition is running
+                        // since label is obscured by transition widget
                         return true;
 
-                    } else {
+                        }
+                  else break;
+                  }
 
-                        // hide transition widget and abort transition
-                        transition().data()->hide();
-                        break;
-
-                    }
-
-                } else if( transition().data()->isAnimated() && TransitionWidget::paintEnabled() ) {
-
-                    // disable painting when transition is running
-                    // since label is obscured by transition widget
-                    return true;
-
-                } else break;
+            default:
+                  break;
             }
 
-            default: break;
-        }
+      return TransitionData::eventFilter( object, event );
 
-        return TransitionData::eventFilter( object, event );
+      }
 
-    }
-
-    //___________________________________________________________________
-    void LabelData::timerEvent( QTimerEvent* event )
-    {
-        if( event->timerId() == timer_.timerId() )
-        {
+//___________________________________________________________________
+void LabelData::timerEvent( QTimerEvent* event ) {
+      if ( event->timerId() == timer_.timerId() ) {
 
             timer_.stop();
 
             // check transition and widget validity
-            if( !( enabled() && target_ && transition() ) ) return;
+            if ( !( enabled() && target_ && transition() ) ) return;
 
             // assign end pixmap
             transition().data()->setEndPixmap( transition().data()->grab( target_.data() ) );
@@ -151,56 +146,54 @@
             // start animation
             animate();
 
-        } else if( event->timerId() == animationLockTimer_.timerId() ) {
+            }
+      else if ( event->timerId() == animationLockTimer_.timerId() ) {
 
             unlockAnimations();
 
             // check transition and widget validity
-            if( !( enabled() && target_ && transition() ) ) return;
+            if ( !( enabled() && target_ && transition() ) ) return;
 
             // reassign end pixmap for the next transition to be properly initialized
             transition().data()->setEndPixmap( transition().data()->grab( target_.data() ) );
 
-        } else return TransitionData::timerEvent( event );
+            }
+      else return TransitionData::timerEvent( event );
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool LabelData::initializeAnimation( void )
-    {
+//___________________________________________________________________
+bool LabelData::initializeAnimation( void ) {
 
-        transition().data()->setOpacity(0);
-        QRect current( target_.data()->geometry() );
-        if( widgetRect_.isValid() && widgetRect_ != current )
-        {
+      transition().data()->setOpacity(0);
+      QRect current( target_.data()->geometry() );
+      if ( widgetRect_.isValid() && widgetRect_ != current ) {
 
             widgetRect_ = current;
             transition().data()->resetStartPixmap();
             transition().data()->resetEndPixmap();
             return false;
 
-        }
+            }
 
-        transition().data()->setStartPixmap( transition().data()->currentPixmap() );
-        transition().data()->setGeometry( target_.data()->rect() );
-        widgetRect_ = current;
-        return true;
-    }
+      transition().data()->setStartPixmap( transition().data()->currentPixmap() );
+      transition().data()->setGeometry( target_.data()->rect() );
+      widgetRect_ = current;
+      return true;
+      }
 
-    //___________________________________________________________________
-    bool LabelData::animate( void )
-    {
+//___________________________________________________________________
+bool LabelData::animate( void ) {
 
-        if( transition().data()->startPixmap().isNull() ) return false;
+      if ( transition().data()->startPixmap().isNull() ) return false;
 
-        transition().data()->animate();
-        return true;
+      transition().data()->animate();
+      return true;
 
-    }
+      }
 
-    //___________________________________________________________________
-    void LabelData::targetDestroyed( void )
-    {
-        setEnabled( false );
-        target_.clear();
-    }
+//___________________________________________________________________
+void LabelData::targetDestroyed( void ) {
+      setEnabled( false );
+      target_.clear();
+      }

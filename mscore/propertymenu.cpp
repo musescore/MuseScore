@@ -23,25 +23,19 @@
 #include "articulationprop.h"
 #include "bendproperties.h"
 #include "boxproperties.h"
-#include "tupletproperties.h"
 #include "voltaproperties.h"
 #include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "textproperties.h"
-#include "tempoproperties.h"
-#include "dynamicprop.h"
-#include "hairpinprop.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
 #include "slurproperties.h"
 #include "glissandoproperties.h"
 #include "fretproperties.h"
-#include "markerproperties.h"
-#include "jumpproperties.h"
 #include "selinstrument.h"
 #include "chordedit.h"
-#include "chordeditor.h"
+#include "pianoroll.h"
 #include "editstyle.h"
 #include "editstaff.h"
 #include "measureproperties.h"
@@ -52,7 +46,6 @@
 #include "libmscore/box.h"
 #include "libmscore/text.h"
 #include "libmscore/articulation.h"
-#include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/timesig.h"
@@ -74,7 +67,8 @@
 #include "libmscore/fret.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/slur.h"
-#include "libmscore/repeat.h"
+#include "libmscore/jump.h"
+#include "libmscore/marker.h"
 
 //---------------------------------------------------------
 //   genPropertyMenu1
@@ -190,10 +184,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::TBOX) {
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == Element::TUPLET) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-            }
       else if (e->type() == Element::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Volta Properties..."))->setData("v-props");
@@ -238,10 +228,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
-            popup->addAction(tr("MIDI Properties..."))->setData("d-dynamics");
             popup->addAction(tr("Text Properties..."))->setData("d-props");
             }
-      else if (e->type() == Element::TEXTLINE_SEGMENT || e->type() == Element::OTTAVA_SEGMENT) {
+      else if (e->type() == Element::TEXTLINE_SEGMENT
+                  || e->type() == Element::OTTAVA_SEGMENT
+                  || e->type() == Element::VOLTA_SEGMENT
+                  || e->type() == Element::PEDAL_SEGMENT) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
@@ -252,12 +244,14 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenuText(e, popup);
             popup->addAction(tr("Staff Text Properties..."))->setData("st-props");
             }
-      else if (e->type() == Element::TEXT || e->type() == Element::FINGERING || e->type() == Element::LYRICS) {
+      else if (e->type() == Element::TEXT
+               || e->type() == Element::FINGERING
+               || e->type() == Element::LYRICS
+               || e->type() == Element::FIGURED_BASS) {
             genPropertyMenuText(e, popup);
             }
       else if (e->type() == Element::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tempo Properties..."))->setData("tempo-props");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::KEYSIG) {
@@ -274,7 +268,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-naturals");
                   }
             }
-      else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->subtype() == STAFF_STATE_INSTRUMENT) {
+      else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == Element::SLUR_SEGMENT) {
@@ -283,18 +277,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Slur Properties..."))->setData("slur-props");
             }
       else if (e->type() == Element::REST) {
-            Rest* rest = static_cast<Rest*>(e);
             genPropertyMenu1(e, popup);
-            if (rest->tuplet()) {
-                  popup->addSeparator();
-                  QMenu* menuTuplet = popup->addMenu(tr("Tuplet..."));
-                  menuTuplet->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-                  menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
-                  }
             }
       else if (e->type() == Element::NOTE) {
-            Note* note = static_cast<Note*>(e);
-
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
@@ -312,23 +297,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addSeparator();
 
             popup->addAction(tr("Style..."))->setData("style");
-
-            if (note->chord()->tuplet()) {
-                  QMenu* menuTuplet = popup->addMenu(tr("Tuplet..."));
-                  menuTuplet->addAction(tr("Tuplet Properties..."))->setData("tuplet-props");
-                  menuTuplet->addAction(tr("Delete Tuplet"))->setData("tupletDelete");
-                  }
             popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
-      else if (e->type() == Element::MARKER) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Marker Properties..."))->setData("marker-props");
-            }
-      else if (e->type() == Element::JUMP) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Jump Properties..."))->setData("jump-props");
-            }
-      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() == LAYOUT_BREAK_SECTION) {
+      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LAYOUT_BREAK_SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
             }
       else if (e->type() == Element::INSTRUMENT_CHANGE) {
@@ -346,16 +317,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::GLISSANDO) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
-            }
-      else if (e->type() == Element::HAIRPIN_SEGMENT) {
-            QAction* a = popup->addSeparator();
-            a->setText(tr("Dynamics"));
-            if (e->visible())
-                  a = popup->addAction(tr("Set Invisible"));
-            else
-                  a = popup->addAction(tr("Set Visible"));
-            a->setData("invisible");
-            popup->addAction(tr("Hairpin Properties..."))->setData("hp-props");
             }
       else if (e->type() == Element::HARMONY) {
             genPropertyMenu1(e, popup);
@@ -458,36 +419,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "picture")
             mscore->addImage(score(), e);
-      else if (cmd == "tuplet-props") {
-            Tuplet* tuplet;
-            QList<Element*> el;
-            if (e->type() == Element::NOTE) {
-                  tuplet = static_cast<Note*>(e)->chord()->tuplet();
-                  el.append(tuplet);
-                  }
-            else if (e->isChordRest()) {
-                  tuplet = static_cast<ChordRest*>(e)->tuplet();
-                  el.append(tuplet);
-                  }
-            else {
-                  tuplet = static_cast<Tuplet*>(e);
-                  el.append(score()->selection().elements());      // apply to all selected tuplets
-                  }
-            TupletProperties vp(tuplet);
-            if (vp.exec()) {
-                  int bracketType = vp.bracketType();
-                  int numberType  = vp.numberType();
-                  foreach(Element* e, el) {
-                        if (e->type() == Element::TUPLET) {
-                              Tuplet* tuplet = static_cast<Tuplet*>(e);
-                              if (bracketType != tuplet->bracketType())
-                                    score()->undoChangeProperty(tuplet, P_BRACKET_TYPE, bracketType);
-                              if (numberType != tuplet->numberType())
-                                    score()->undoChangeProperty(tuplet, P_NUMBER_TYPE, numberType);
-                              }
-                        }
-                  }
-            }
       else if (cmd == "v-props") {
             VoltaSegment* vs = static_cast<VoltaSegment*>(e);
             VoltaProperties vp;
@@ -525,7 +456,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e), !ts->showCourtesySig(), ts->sig(),
-                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->subtype()));
+                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -538,9 +469,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                      || r.denominatorString() != ts->denominatorString()
                      || r.sig() != ts->sig()
                      || stretchChanged
-                     || r.subtype() != ts->subtype()) {
+                     || r.timeSigType() != ts->timeSigType()) {
                         score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
-                           r.numeratorString(), r.denominatorString(), r.subtype()));
+                           r.numeratorString(), r.denominatorString(), r.timeSigType()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
                         }
@@ -567,23 +498,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
             rp.exec();
-            }
-      else if (cmd == "d-dynamics") {
-            Dynamic* dynamic = static_cast<Dynamic*>(e);
-            int oldVelo    = dynamic->velocity();
-            Element::DynamicRange ot = dynamic->dynRange();
-            DynamicProperties dp(dynamic);
-            int rv = dp.exec();
-            if (rv) {
-                  int newVelo    = dynamic->velocity();
-                  Element::DynamicRange nt = dynamic->dynRange();
-                  dynamic->setVelocity(oldVelo);
-                  dynamic->setDynRange(ot);
-                  if (newVelo != oldVelo)
-                        score()->undoChangeProperty(dynamic, P_VELOCITY, newVelo);
-                  if (nt != ot)
-                        score()->undoChangeProperty(dynamic, P_DYNAMIC_RANGE, nt);
-                  }
             }
       else if (cmd == "text-props") {
             Text* ot    = static_cast<Text*>(e);
@@ -624,10 +538,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             delete nText;
             }
-      else if (cmd == "tempo-props") {
-            TempoProperties rp(static_cast<TempoText*>(e));
-            rp.exec();
-            }
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
             score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy(), ks->showNaturals()));
@@ -665,34 +575,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         }
                   }
             }
-      else if (cmd == "tupletDelete") {
-            foreach(Element* e, score()->selection().elements()) {
-                  if (e->type() == Element::REST) {
-                        Rest* r = static_cast<Rest*>(e);
-                        if (r->tuplet())
-                              score()->cmdDeleteTuplet(r->tuplet(), true);
-                        }
-                  }
-            }
       else if (cmd == "articulation") {
             Note* note = static_cast<Note*>(e);
-            ChordEditor ce(note->chord());
-            mscore->disableCommands(true);
-            ce.exec();
-            mscore->disableCommands(false);
+            mscore->editInPianoroll(note->staff());
             }
       else if (cmd == "style") {
             EditStyle es(e->score(), 0);
             es.setPage(EditStyle::PAGE_NOTE);
             es.exec();
-            }
-      else if (cmd == "marker-props") {
-            MarkerProperties rp(static_cast<Marker*>(e));
-            rp.exec();
-            }
-      else if (cmd == "jump-props") {
-            JumpProperties rp(static_cast<Jump*>(e));
-            rp.exec();
             }
       else if (cmd == "break-props") {
             LayoutBreak* lb = static_cast<LayoutBreak*>(e);
@@ -739,21 +629,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             GlissandoProperties vp(static_cast<Glissando*>(e));
             vp.exec();
             }
-      else if (cmd == "hp-props") {
-            HairpinSegment* hps = static_cast<HairpinSegment*>(e);
-            Hairpin* hp = hps->hairpin();
-            HairpinProperties dp(hp);
-            int rv = dp.exec();
-
-            int vo = dp.changeVelo();
-            Element::DynamicRange dt = dp.dynamicRange();
-            if (rv && ((vo != hp->veloChange())
-               || (dt != hp->dynRange())
-               || (dp.allowDiagonal() != hp->diagonal())
-               )) {
-                  score()->undo(new ChangeHairpin(hp, vo, dt, dp.allowDiagonal()));
-                  }
-              }
        else if (cmd == "ha-props") {
             Harmony* ha = static_cast<Harmony*>(e);
             ChordEdit ce(ha->score());

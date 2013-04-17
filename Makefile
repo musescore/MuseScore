@@ -28,7 +28,7 @@ VERSION   = "2.0b-${REVISION}"
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = $(HOME)/Qt5.0.1/5.0.1/gcc_64/bin:${PATH};        \
+BINPATH      = ${HOME}/Qt5.0.2/5.0.2/gcc_64/bin:${PATH}
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \
@@ -43,7 +43,7 @@ release:
 debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
-      export PATH=${BINPATH}                                \
+      export PATH=${BINPATH};                               \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;              \
       make lrelease;                                        \

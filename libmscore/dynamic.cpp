@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: dynamic.cpp 5433 2012-03-08 13:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -79,13 +78,13 @@ Dynamic::Dynamic(Score* s)
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
-      _subtype  = DYNAMIC_OTHER;
+      _dynamicType  = DYNAMIC_OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
    : Text(d)
       {
-      _subtype   = d._subtype;
+      _dynamicType   = d._dynamicType;
       _velocity  = d._velocity;
       _dynRange  = d._dynRange;
       }
@@ -105,7 +104,7 @@ void Dynamic::setVelocity(int v)
 
 int Dynamic::velocity() const
       {
-      return _velocity <= 0 ? dynList[subtype()].velocity : _velocity;
+      return _velocity <= 0 ? dynList[dynamicType()].velocity : _velocity;
       }
 
 //---------------------------------------------------------
@@ -115,10 +114,10 @@ int Dynamic::velocity() const
 void Dynamic::write(Xml& xml) const
       {
       xml.stag("Dynamic");
-      xml.tag("subtype", subtypeName());
+      xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_VELOCITY);
       writeProperty(xml, P_DYNAMIC_RANGE);
-      Text::writeProperties(xml, subtype() == 0);
+      Text::writeProperties(xml, dynamicType() == 0);
       xml.etag();
       }
 
@@ -131,7 +130,7 @@ void Dynamic::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
             if (tag == "subtype") {
-                  setSubtype(e.readElementText());
+                  setDynamicType(e.readElementText());
                   }
             else if (tag == "velocity")
                   _velocity = e.readInt();
@@ -161,30 +160,30 @@ void Dynamic::layout()
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setDynamicType
 //---------------------------------------------------------
 
-void Dynamic::setSubtype(const QString& tag)
+void Dynamic::setDynamicType(const QString& tag)
       {
       int n = sizeof(dynList)/sizeof(*dynList);
       for (int i = 0; i < n; ++i) {
             if (dynList[i].tag == tag) {
-                  setSubtype(DynamicType(i));
+                  setDynamicType(DynamicType(i));
                   setText(QString::fromUtf8(dynList[i].text));
                   return;
                   }
             }
-      setSubtype(DYNAMIC_OTHER);
+      setDynamicType(DYNAMIC_OTHER);
       setText(tag);
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   dynamicTypeName
 //---------------------------------------------------------
 
-QString Dynamic::subtypeName() const
+QString Dynamic::dynamicTypeName() const
       {
-      return dynList[subtype()].tag;
+      return dynList[dynamicType()].tag;
       }
 
 //---------------------------------------------------------
@@ -202,7 +201,7 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
 
 void Dynamic::reset()
       {
-//      setSubtype(getText());
+//      setDynamicType(getText());
       Text::reset();
       }
 
@@ -238,7 +237,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_DYNAMIC_RANGE:     return int(_dynRange);
             case P_VELOCITY:          return _velocity;
-            case P_SUBTYPE:           return _subtype;
+            case P_SUBTYPE:           return _dynamicType;
             default:
                   return Text::getProperty(propertyId);
             }
@@ -258,7 +257,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
                   _velocity = v.toInt();
                   break;
             case P_SUBTYPE:
-                  _subtype = DynamicType(v.toInt());
+                  _dynamicType = DynamicType(v.toInt());
                   break;
             default:
                   if (!Text::setProperty(propertyId, v))

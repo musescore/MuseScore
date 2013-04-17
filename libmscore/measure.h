@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: measure.h 5628 2012-05-15 07:46:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -49,6 +48,7 @@ class Part;
 struct MStaff {
       qreal distanceUp;
       qreal distanceDown;
+      Text* _noText;          ///< Measure number text object
       StaffLines*  lines;
       Spacer* _vspacerUp;
       Spacer* _vspacerDown;
@@ -59,12 +59,16 @@ struct MStaff {
 
       MStaff();
       ~MStaff();
+      MStaff(const MStaff&);
+
       bool visible() const         { return _visible;    }
       void setVisible(bool val)    { _visible = val;     }
       bool slashStyle() const      { return _slashStyle; }
       void setSlashStyle(bool val) { _slashStyle = val;  }
       void setScore(Score*);
       void setTrack(int);
+      Text* noText() const         { return _noText;     }
+      void setNoText(Text* t)      { _noText = t;        }
       };
 
 enum {
@@ -72,6 +76,16 @@ enum {
       RepeatStart       = 2,
       RepeatMeasureFlag = 4,
       RepeatJump        = 8
+      };
+
+//---------------------------------------------------------
+//   MeasureNumberMode
+//---------------------------------------------------------
+
+enum class MeasureNumberMode : char {
+      AUTO,       // show measure number depending on style
+      SHOW,       // always show measure number
+      HIDE        // dont show measure number
       };
 
 //---------------------------------------------------------
@@ -97,7 +111,7 @@ class Measure : public MeasureBase {
 
       int    _no;             ///< Measure number, counting from zero
       int    _noOffset;       ///< Offset to measure number
-      Text* _noText;          ///< Measure number text object
+      MeasureNumberMode _noMode;
 
       qreal _userStretch;
 
@@ -108,9 +122,10 @@ class Measure : public MeasureBase {
       bool _breakMultiMeasureRest;  ///< set by user
       bool _breakMMRest;            ///< set by layout
 
-      bool _endBarLineGenerated;
-      bool _endBarLineVisible;
       BarLineType _endBarLineType;
+      bool        _endBarLineGenerated;
+      bool        _endBarLineVisible;
+      QColor      _endBarLineColor;
 
       BarLineType _mmEndBarLineType;       ///< bar line type if this measure is presented
                                    ///< as multi measure rest
@@ -123,7 +138,6 @@ class Measure : public MeasureBase {
       int _playbackCount;     // temp. value used in RepeatList
                               // counts how many times this measure was already played
 
-      QColor _endBarLineColor;
 
       void push_back(Segment* e);
       void push_front(Segment* e);
@@ -160,7 +174,11 @@ class Measure : public MeasureBase {
       bool irregular() const               { return _irregular;   }
       void setIrregular(bool val)          { _irregular = val;    }
       int noOffset() const                 { return _noOffset;    }
-      Text* noText() const                 { return _noText;      }
+//      Text* noText() const                 { return _noText;      }
+
+      MeasureNumberMode measureNumberMode() const     { return _noMode;      }
+      void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
+
       void setNo(int n)                    { _no = n;             }
       void setNoOffset(int n)              { _noOffset = n;       }
       virtual qreal distanceUp(int i) const;
@@ -231,8 +249,10 @@ class Measure : public MeasureBase {
       Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();
+
       void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = Qt::black);
       BarLineType endBarLineType() const        { return _endBarLineType; }
+
       void setMmEndBarLineType(BarLineType v)   { _mmEndBarLineType = v;    }
       bool setStartRepeatBarLine(bool);
       bool endBarLineGenerated() const          { return _endBarLineGenerated; }
@@ -245,7 +265,7 @@ class Measure : public MeasureBase {
       void createVoice(int track);
       void adjustToLen(Fraction);
       int repeatFlags() const                   { return _repeatFlags; }
-      void setRepeatFlags(int val);
+      void setRepeatFlags(int val)              { _repeatFlags = val;  }
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
       void exchangeVoice(int, int, int, int);

@@ -12,6 +12,7 @@
 
 #include <fenv.h>
 
+#include "config.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
@@ -74,6 +75,8 @@
 #include "helpBrowser.h"
 #include "drumtools.h"
 #include "editstafftype.h"
+#include "texttools.h"
+#include "edittools.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -81,11 +84,26 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
+#include "textpalette.h"
+#include "driver.h"
 
-#include "msynth/synti.h"
+#include "effects/freeverb/freeverb.h"
+#include "effects/zita1/zita.h"
+#include "effects/noeffect/noeffect.h"
+#include "synthesizer/synthesizer.h"
+#include "synthesizer/synthesizergui.h"
+#include "synthesizer/msynthesizer.h"
+#include "fluid/fluid.h"
+#ifdef AEOLUS
+#include "aeolus/aeolus/aeolus.h"
+#endif
+#ifdef ZERBERUS
+#include "zerberus/zerberus.h"
+#endif
 
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
+MasterSynthesizer* synti;
 
 bool enableExperimental = false;
 bool enableTestMode = false;
@@ -103,6 +121,7 @@ double converterDpi = 0;
 QString mscoreGlobalShare;
 static QStringList recentScores;
 static QString outFileName;
+static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
 QString localeName;
@@ -112,6 +131,7 @@ QString revision;
 
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
+extern TextPalette* textPalette;
 
 // Mac-Applications don't have menubar icons:
 #ifdef Q_WS_MAC
@@ -124,10 +144,16 @@ extern void qt_mac_set_menubar_icons(bool b);
 
 void MuseScore::cmdInsertMeasures()
       {
-	if (cs) {
-		insertMeasuresDialog = new InsertMeasuresDialog;
-		insertMeasuresDialog->show();
+    if (cs) {
+        if (cs->selection().state() == SEL_NONE && !cs->selection().findMeasure()) {
+            QMessageBox::warning(0, "MuseScore",
+                 tr("No measure selected:\n" "Please select a measure and try again"));
             }
+        else {
+            insertMeasuresDialog = new InsertMeasuresDialog;
+            insertMeasuresDialog->show();
+            }
+        }
       }
 
 //---------------------------------------------------------
@@ -194,8 +220,6 @@ static const int RECENT_LIST_SIZE = 10;
 
 void MuseScore::closeEvent(QCloseEvent* ev)
       {
-      if (cs)
-            cs->setSyntiState(synti->state());
       unloadPlugins();
       QList<Score*> removeList;
       foreach(Score* score, scoreList) {
@@ -251,8 +275,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (playPanel)
             preferences.playPanelPos = playPanel->pos();
 
-      if (synthControl)
+      if (synthControl) {
             synthControl->updatePreferences();
+            synthControl->writeSettings();
+            }
 
       writeSettings();
       if (debugger)
@@ -263,8 +289,11 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             pluginCreator->writeSettings();
 #endif
 
-      seq->stopWait();
-      seq->exit();
+      if(seq) {
+            seq->stopWait();
+            seq->exit();
+            }
+
       ev->accept();
       if (preferences.dirty)
             preferences.write();
@@ -353,7 +382,7 @@ MuseScore::MuseScore()
       measuresDialog        = 0;
       insertMeasuresDialog  = 0;
       masterPalette         = 0;
-      iledit                = 0;
+      mixer                 = 0;
       synthControl          = 0;
       debugger              = 0;
       measureListEdit       = 0;
@@ -388,6 +417,7 @@ MuseScore::MuseScore()
       saveStyleDialog       = 0;
       saveImageDialog       = 0;
       loadSoundFontDialog   = 0;
+      loadSfzFileDialog     = 0;
       loadBackgroundDialog  = 0;
       loadScanDialog        = 0;
       loadAudioDialog       = 0;
@@ -1216,27 +1246,11 @@ void MuseScore::updateInspector()
             else if (state() == STATE_FOTO)
                   inspector->setElement(cv->fotoLasso());
             else {
-                  if (cs->selection().isSingle())
-                        inspector->setElement(cs->selection().element());
-                  else if (cs->selection().state() == SEL_NONE)
-                        inspector->setElement(0);
-                  else
-                        inspector->setElementList(cs->selection().elements());
+                  inspector->setElements(cs->selection().elements());
                   }
             }
       else
             inspector->setElement(0);
-      }
-
-//---------------------------------------------------------
-//   setEditState
-//---------------------------------------------------------
-
-void MuseScore::setEditState(Element* e)
-      {
-      if (inspector)
-            inspector->setElement(e);
-      changeState(STATE_EDIT);
       }
 
 //---------------------------------------------------------
@@ -1315,6 +1329,7 @@ static void usage()
         "   -L        layout debug\n"
         "   -s        no internal synthesizer\n"
         "   -m        no midi\n"
+        "   -a driver use audio driver: jack alsa pulse portaudio\n"
         "   -n        start with new score\n"
         "   -I        dump midi input\n"
         "   -O        dump midi output\n"
@@ -1327,6 +1342,7 @@ static void usage()
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings directory\n"
         "   -t        set testMode flag for all files\n"
+        "   -w        write buildin workspace\n"
         );
       exit(-1);
       }
@@ -1380,12 +1396,11 @@ void MuseScore::setCurrentScoreView(int idx)
 void MuseScore::setCurrentView(int tabIdx, int idx)
       {
       if (idx == -1)
-            setCurrentScoreView((ScoreView*)0);
+            setCurrentScoreView(nullptr);
       else {
             ScoreTab* tab = tabIdx ? tab2 : tab1;
-            if (tab) {
+            if (tab)
                   tab->setCurrentIndex(idx);
-                  }
             }
       }
 
@@ -1395,12 +1410,6 @@ void MuseScore::setCurrentView(int tabIdx, int idx)
 
 void MuseScore::setCurrentScoreView(ScoreView* view)
       {
-      //
-      // save current synthesizer setting to score
-      //
-      if (cs)
-            cs->setSyntiState(synti->state());
-
       cv = view;
       if (cv) {
             if (cv->score() && (cs != cv->score()))
@@ -1419,8 +1428,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             playPanel->setScore(cs);
       if (synthControl)
             synthControl->setScore(cs);
-      if (iledit)
-            iledit->updateAll(cs);
+      if (mixer)
+            mixer->updateAll(cs);
 #ifdef OMR
       if (omrPanel) {
             if (cv && cv->omrView())
@@ -1437,6 +1446,17 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             if (inspector)
                   inspector->setElement(0);
             viewModeCombo->setEnabled(false);
+            if (_textTools) {
+                  _textTools->hide();
+                  if (textPalette)
+                        textPalette->hide();
+                  }
+            if (_editTools)
+                  _editTools->hide();
+            if (_pianoTools)
+                  _pianoTools->hide();
+            if (_drumTools)
+                  _drumTools->hide();
             return;
             }
       viewModeCombo->setEnabled(true);
@@ -1446,6 +1466,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             viewModeCombo->setCurrentIndex(1);
 
       selectionChanged(cs->selection().state());
+
+// printf("setCurrentScoreView\n");
+      _sstate = STATE_DISABLED; // defeat optimization
       changeState(view->mscoreState());
 
       view->setFocus(Qt::OtherFocusReason);
@@ -1577,13 +1600,13 @@ void MuseScore::showPlayPanel(bool visible)
             if (!visible)
                   return;
             playPanel = new PlayPanel(this);
-            connect(playPanel, SIGNAL(gainChange(float)),    seq, SLOT(setGain(float)));
+            connect(playPanel, SIGNAL(gainChange(float)),     synti, SLOT(setGain(float)));
             connect(playPanel, SIGNAL(relTempoChanged(double)),seq, SLOT(setRelTempo(double)));
             connect(playPanel, SIGNAL(posChange(int)),         seq, SLOT(seek(int)));
             connect(playPanel, SIGNAL(closed()),                 SLOT(closePlayPanel()));
-            connect(seq,       SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
+            connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
 
-            playPanel->setGain(seq->gain());
+            playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
             playPanel->move(preferences.playPanelPos);
             }
@@ -1848,12 +1871,10 @@ void MuseScore::removeTab(int i)
       cs = 0;
       cv = 0;
       int n = scoreList.size();
-      if (n == 0) {
-            setCurrentScoreView((ScoreView*)0);
-            }
-      else {
+      if (n == 0)
+            setCurrentScoreView(nullptr);
+      else
             setCurrentScoreView((firstTab ? tab1 : tab2)->view());
-            }
       writeSessionFile(false);
       if (!tmpName.isEmpty()) {
             QFile f(tmpName);
@@ -2138,6 +2159,50 @@ static void mscoreMessageHandler(QtMsgType type, const char *msg)
 #endif
 
 //---------------------------------------------------------
+//   synthesizerFactory
+//    create and initialize the master synthesizer
+//---------------------------------------------------------
+
+MasterSynthesizer* synthesizerFactory()
+      {
+      MasterSynthesizer* ms = new MasterSynthesizer();
+      ms->setMasterTuning(preferences.tuning);
+      ms->setGain(preferences.masterGain);
+
+      FluidS::Fluid* fluid = new FluidS::Fluid();
+      ms->registerSynthesizer(fluid);
+      if (!preferences.defaultSf.isEmpty()) {
+            QStringList sfl;
+            sfl.append(preferences.defaultSf);
+            fluid->loadSoundFonts(sfl);
+            fluid->gui()->synthesizerChanged();
+            }
+
+#ifdef AEOLUS
+      ms->registerSynthesizer(new Aeolus());
+#endif
+#ifdef ZERBERUS
+      Zerberus* zerberus = new Zerberus();
+      ms->registerSynthesizer(zerberus);
+      if (!preferences.defaultSfz.isEmpty()) {
+            QStringList sfz;
+            sfz.append(preferences.defaultSfz);
+            zerberus->loadSoundFonts(sfz);
+            zerberus->gui()->synthesizerChanged();
+            }
+#endif
+      ms->registerEffect(0, new NoEffect);
+      ms->registerEffect(0, new ZitaReverb);
+      ms->registerEffect(0, new Freeverb);
+      ms->registerEffect(1, new NoEffect);
+      ms->registerEffect(1, new ZitaReverb);
+      ms->registerEffect(1, new Freeverb);
+      ms->setEffect(0, 1);
+      ms->setEffect(1, 0);
+      return ms;
+      }
+
+//---------------------------------------------------------
 //   main
 //---------------------------------------------------------
 
@@ -2161,6 +2226,16 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      Q_INIT_RESOURCE(zita);
+      Q_INIT_RESOURCE(noeffect);
+      Q_INIT_RESOURCE(freeverb);
+//      Q_INIT_RESOURCE(musescore);
+
+/*      QDir dd(":/");
+      QStringList ddl = dd.entryList();
+      foreach(const QString& s, ddl)
+            printf("   --<%s>\n", qPrintable(s));
+      */
 
 #ifndef Q_WS_MAC
       // Save the preferences in QSettings::NativeFormat
@@ -2175,17 +2250,19 @@ int main(int argc, char* av[])
       QStringList argv =  QCoreApplication::arguments();
       argv.removeFirst();
 
+      bool writeWorkspaceFile = false;
+
       for (int i = 0; i < argv.size();) {
             QString s = argv[i];
             if (s[0] != '-') {
                   ++i;
                   continue;
                   }
-            switch(s[1].toLatin1()) {
+            switch (s[1].toLatin1()) {
                   case 'v':
                         printVersion("MuseScore");
                         return 0;
-                   case 'd':
+                  case 'd':
                         MScore::debugMode = true;
                         break;
                   case 'L':
@@ -2196,6 +2273,11 @@ int main(int argc, char* av[])
                         break;
                   case 'm':
                         noMidi = true;
+                        break;
+                  case 'a':
+                        if (argv.size() - i < 2)
+                              usage();
+                        audioDriver = argv.takeAt(i + 1);
                         break;
                   case 'n':
                         startWithNewScore = true;
@@ -2232,6 +2314,10 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         styleFile = argv.takeAt(i + 1);
+                        break;
+                  case 'w':
+                        writeWorkspaceFile = true;
+                        converterMode = true;
                         break;
                   case 'F':
                         useFactorySettings = true;
@@ -2318,7 +2404,7 @@ int main(int argc, char* av[])
       MScore::init();                          // initialize libmscore
 
       if (MScore::debugMode)
-            printf("DPI %f\n", MScore::DPI);
+            qDebug("DPI %f", MScore::DPI);
 
       preferences.readDefaultStyle();
 
@@ -2340,7 +2426,8 @@ int main(int argc, char* av[])
       if (!converterMode) {
             switch(preferences.globalStyle) {
                   case STYLE_DARK: {
-                        QApplication::setStyle(new MgStyle);
+                        MgStyle* st = new MgStyle;
+                        QApplication::setStyle(st);
                         qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
                         p.setColor(QPalette::Window,        QColor(0x52, 0x52, 0x52));
@@ -2352,15 +2439,36 @@ int main(int argc, char* av[])
                         p.setColor(QPalette::ButtonText,    Qt::white);
                         p.setColor(QPalette::BrightText,    Qt::black);
                         QApplication::setPalette(p);
+
+                        QPalette palette = QToolTip::palette();
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(Qt::darkGray));
+                        QToolTip::setPalette(palette);
+
                         break;
                         }
                   case STYLE_NATIVE:
                         break;
                   }
+            seq            = new Seq();
+            MScore::seq    = seq;
+            Driver* driver = driverFactory(seq, audioDriver);
+            if (driver) {
+                  synti              = synthesizerFactory();
+                  MScore::sampleRate = driver->sampleRate();
+                  synti->setSampleRate(MScore::sampleRate);
+
+                  seq->setDriver(driver);
+                  seq->setMasterSynthesizer(synti);
+                  }
+            else {
+                  delete seq;
+                  MScore::seq = 0;
+                  seq         = 0;
+                  noSeq       = true;
+                  }
             }
-      synti = new MasterSynth();
-      seq   = new Seq();
-      MScore::seq = seq;
+      else
+            noSeq = true;
 
       //
       // avoid font problems by overriding the environment
@@ -2390,6 +2498,11 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
+
+      if (writeWorkspaceFile) {
+            Workspace::writeBuiltinWorkspace();
+            return 0;
+            }
 
       if (!noSeq) {
             if (!seq->init()) {
@@ -2597,17 +2710,52 @@ void MuseScore::clipboardChanged()
       }
 
 //---------------------------------------------------------
+//   showModeText
+//---------------------------------------------------------
+
+void MuseScore::showModeText(const QString& s)
+      {
+      _modeText->setText(s);
+      _modeText->show();
+      }
+
+//---------------------------------------------------------
 //   changeState
 //---------------------------------------------------------
 
 void MuseScore::changeState(ScoreState val)
       {
-//      printf("MuseScore::changeState: %s\n", stateName(val));
+// printf("MuseScore::changeState: %s\n", stateName(val));
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
 
-      if (_sstate == val)
-            return;
+//      if (_sstate == val)
+//            return;
+      static const char* stdNames[] = {
+            "note-longa", "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
+            "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-rest"};
+      static const char* tabNames[] = {
+            "note-longa-TAB", "note-breve-TAB", "pad-note-1-TAB", "pad-note-2-TAB", "pad-note-4-TAB",
+            "pad-note-8-TAB", "pad-note-16-TAB", "pad-note-32-TAB", "pad-note-64-TAB", "pad-note-128-TAB", "pad-rest-TAB"};
+      bool intoTAB = (_sstate != STATE_NOTE_ENTRY_TAB) && (val == STATE_NOTE_ENTRY_TAB);
+      bool fromTAB = (_sstate == STATE_NOTE_ENTRY_TAB) && (val != STATE_NOTE_ENTRY_TAB);
+      // if activating TAB note entry, swap "pad-note-...-TAB" shorctuts into "pad-note-..." actions
+      if (intoTAB) {
+            for (unsigned i = 0; i < sizeof(stdNames)/sizeof(char*); ++i) {
+                  QAction* act = getAction(stdNames[i]);
+                  Shortcut* srt = Shortcut::getShortcut(tabNames[i]);
+                  act->setShortcuts(srt->keys());
+                  }
+            }
+      // if de-ativating TAB note entry, restore shortcuts for "pad-note-..." actions
+      else if (fromTAB) {
+            for (unsigned i = 0; i < sizeof(stdNames)/sizeof(char*); ++i) {
+                  QAction* act = getAction(stdNames[i]);
+                  Shortcut* srt = Shortcut::getShortcut(stdNames[i]);
+                  act->setShortcuts(srt->keys());
+                  }
+            }
+
       foreach (const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
             if (!a)
@@ -2621,7 +2769,7 @@ void MuseScore::changeState(ScoreState val)
             else if (strcmp(s->key(), "copy") == 0)
                   a->setEnabled(cs && cs->selection().state());
             else if (strcmp(s->key(), "synth-control") == 0) {
-                  Driver* driver = seq ? seq->getDriver() : 0;
+                  Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
                   if (MScore::debugMode)
                         qDebug("disable synth control");
@@ -2635,7 +2783,7 @@ void MuseScore::changeState(ScoreState val)
       if (val != STATE_SEARCH && searchDialog)
             searchDialog->hide();
 
-      bool enable = val != STATE_DISABLED;
+      bool enable = (val != STATE_DISABLED) && (val != STATE_LOCK);
 
       // disabling top level menu entries does not
       // work for MAC
@@ -2665,8 +2813,7 @@ void MuseScore::changeState(ScoreState val)
 
       switch(val) {
             case STATE_DISABLED:
-                  _modeText->setText(tr("no score"));
-                  _modeText->show();
+                  showModeText(tr("no score"));
                   if (debugger)
                         debugger->hide();
                   showPianoKeyboard(false);
@@ -2677,34 +2824,39 @@ void MuseScore::changeState(ScoreState val)
                         searchDialog->hide();
                   break;
             case STATE_NOTE_ENTRY_PITCHED:
-                  _modeText->setText(tr("NOTE entry mode"));
-                  _modeText->show();
+                  showModeText(tr("NOTE entry mode"));
                   break;
             case STATE_NOTE_ENTRY_DRUM:
                   {
-                  _modeText->setText(tr("DRUM entry mode"));
-                  _modeText->show();
+                  showModeText(tr("DRUM entry mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
                   }
                   break;
             case STATE_NOTE_ENTRY_TAB:
-                  _modeText->setText(tr("TAB entry mode"));
-                  _modeText->show();
+                  showModeText(tr("TAB entry mode"));
                   break;
             case STATE_EDIT:
+                  showModeText(tr("edit mode"));
+                  break;
+            case STATE_TEXT_EDIT:
+                  showModeText(tr("text edit mode"));
+                  break;
             case STATE_LYRICS_EDIT:
-                  _modeText->setText(tr("edit mode"));
-                  _modeText->show();
+                  showModeText(tr("lyrics edit mode"));
+                  break;
+            case STATE_HARMONY_FIGBASS_EDIT:
+                  showModeText(tr("chords/fig.bass edit mode"));
                   break;
             case STATE_PLAY:
-                  _modeText->setText(tr("play"));
-                  _modeText->show();
+                  showModeText(tr("play"));
                   break;
             case STATE_FOTO:
-                  _modeText->setText(tr("foto mode"));
-                  _modeText->show();
+                  showModeText(tr("foto mode"));
                   updateInspector();
+                  break;
+            case STATE_LOCK:
+                  showModeText(tr("Score Locked"));
                   break;
             case STATE_SEARCH:
                   if (searchDialog == 0) {
@@ -2736,8 +2888,7 @@ void MuseScore::changeState(ScoreState val)
                   searchCombo->clearEditText();
                   searchCombo->setFocus();
                   searchDialog->show();
-                  _modeText->setText(tr("Find"));
-                  _modeText->show();
+                  showModeText(tr("Find"));
                   break;
             default:
                   qFatal("MuseScore::changeState: illegal state %d", val);
@@ -2749,6 +2900,33 @@ void MuseScore::changeState(ScoreState val)
       bool noteEntry = val == STATE_NOTE_ENTRY_PITCHED || val == STATE_NOTE_ENTRY_TAB || val == STATE_NOTE_ENTRY_DRUM;
       a->setChecked(noteEntry);
       _sstate = val;
+
+      Element* e = 0;
+      if (_sstate == STATE_LYRICS_EDIT || _sstate == STATE_TEXT_EDIT || _sstate == STATE_HARMONY_FIGBASS_EDIT
+         || _sstate == STATE_EDIT) {
+            if (cv)
+                  e = cv->getEditObject();
+            }
+      if (!e) {
+            editTools()->hide();
+            textTools()->hide();
+            if (textPalette)
+                  textPalette->hide();
+            }
+      else {
+            if (e->isText()) {
+                  textTools()->setText(static_cast<Text*>(e));
+                  textTools()->updateTools();
+                  textTools()->show();
+                  }
+            else {
+                  editTools()->setElement(e);
+                  editTools()->updateTools();
+                  editTools()->show();
+                  }
+            if (inspector)
+                  inspector->setElement(e);
+            }
       }
 
 //---------------------------------------------------------
@@ -3055,7 +3233,10 @@ void MuseScore::setPos(int t)
 
 void MuseScore::undo()
       {
-      if (_sstate == STATE_EDIT || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate == STATE_EDIT
+         || _sstate == STATE_LYRICS_EDIT
+         || _sstate == STATE_HARMONY_FIGBASS_EDIT
+         || _sstate == STATE_TEXT_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
@@ -3086,7 +3267,10 @@ void MuseScore::undo()
 
 void MuseScore::redo()
       {
-      if (_sstate == STATE_EDIT || _sstate == STATE_LYRICS_EDIT) {
+      if (_sstate == STATE_EDIT
+         || _sstate == STATE_TEXT_EDIT
+         || _sstate == STATE_HARMONY_FIGBASS_EDIT
+         || _sstate == STATE_LYRICS_EDIT) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
@@ -3520,7 +3704,9 @@ const char* stateName(ScoreState s)
             case STATE_NOTE_ENTRY_TAB:     return "STATE_NOTE_ENTRY_TAB";
             case STATE_NOTE_ENTRY:         return "STATE_NOTE_ENTRY";
             case STATE_EDIT:               return "STATE_EDIT";
+            case STATE_TEXT_EDIT:          return "STATE_TEXT_EDIT";
             case STATE_LYRICS_EDIT:        return "STATE_LYRICS_EDIT";
+            case STATE_HARMONY_FIGBASS_EDIT: return "STATE_HARMONY_FIGBASS_EDIT";
             case STATE_PLAY:               return "STATE_PLAY";
             case STATE_SEARCH:             return "STATE_SEARCH";
             case STATE_FOTO:               return "STATE_FOTO";
@@ -3542,7 +3728,7 @@ void MuseScore::excerptsChanged(Score* s)
             }
       if (tab1) {
             ScoreView* v = tab1->view();
-            if (v && v->score() == s) {
+            if (v && v->score()->rootScore() == s) {
                   tab1->updateExcerpts();
                   }
             else if (v == 0) {
@@ -3732,13 +3918,9 @@ void MuseScore::networkFinished(QNetworkReply* reply)
             QUrl url = reply->url();
             QString path = url.path();
             qDebug("Path <%s>", qPrintable(path));
-            if(path.endsWith(".pdf") || path.endsWith(".mscz"))
-                  name = path.section('/',-1);
-        	  else
-                  name = "unknown.mscz";
+            QFileInfo fi(path);
+            name = fi.fileName();
             }
-
-      // attachment; filename="Bilder_einer_Ausstellung.mscz"
 
       qDebug("header <%s>", qPrintable(s));
       qDebug("name <%s>", qPrintable(name));
@@ -3890,7 +4072,7 @@ RecordButton::RecordButton(QWidget* parent)
       {
       setCheckable(true);
       defaultAction()->setCheckable(true);
-      setToolTip(tr("record"));
+      setToolTip(qApp->translate("RecordButton", "record"));
       }
 
 //---------------------------------------------------------
@@ -3901,7 +4083,7 @@ GreendotButton::GreendotButton(QWidget* parent)
    : SimpleButton(":/data/greendot.svg", ":/data/darkgreendot.svg", parent)
       {
       setCheckable(true);
-      setToolTip(tr("record"));
+      setToolTip(qApp->translate("GreendotButton", "record"));
       }
 
 //---------------------------------------------------------
@@ -4049,10 +4231,10 @@ void MuseScore::endCmd()
                   play(e);
                   cs->setPlayNote(false);
                   }
-            if (cs->excerptsChanged()) {
-                  Q_ASSERT(cs == cs->rootScore());
-                  excerptsChanged(cs);
-                  cs->setExcerptsChanged(false);
+            if (cs->rootScore()->excerptsChanged()) {
+                  //Q_ASSERT(cs == cs->rootScore());
+                  excerptsChanged(cs->rootScore());
+                  cs->rootScore()->setExcerptsChanged(false);
                   }
             if (cs->instrumentsChanged()) {
                   seq->initInstruments();
@@ -4084,8 +4266,9 @@ void MuseScore::endCmd()
 //   enableInputToolbar
 //---------------------------------------------------------
 
-void MuseScore::enableInputToolbar(bool enableInput)
+void MuseScore::enableInputToolbar(bool /*enableInput*/)
       {
+/*
       static const char* actionNames[] = {
             "pad-rest", "pad-dot", "pad-dotdot", "note-longa",
             "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
@@ -4099,6 +4282,7 @@ void MuseScore::enableInputToolbar(bool enableInput)
       for (unsigned i = 0; i < sizeof(actionNames)/sizeof(*actionNames); ++i) {
             getAction(actionNames[i])->setEnabled(enableInput);
             }
+*/
       }
 
 //---------------------------------------------------------
@@ -4121,8 +4305,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       {
       if (cmd == "instruments") {
             editInstrList();
-            if (iledit)
-                  iledit->updateAll(cs);
+            if (mixer)
+                  mixer->updateAll(cs);
             }
       else if (cmd == "rewind") {
             seq->rewindStart();
@@ -4153,18 +4337,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             exportParts();
       else if (cmd == "file-close")
             closeScore(cs);
-      else if (cmd == "file-save-as") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-as")
             saveAs(cs, false);
-            }
-      else if (cmd == "file-save-selection") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-selection")
             saveSelection(cs);
-            }
-      else if (cmd == "file-save-a-copy") {
-            cs->setSyntiState(synti->state());
+      else if (cmd == "file-save-a-copy")
             saveAs(cs, true);
-            }
       else if (cmd == "file-new")
             newFile();
       else if (cmd == "quit") {
@@ -4377,6 +4555,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
             delete est;
             }
+      else if (cmd == "lock") {
+            if (_sstate == STATE_LOCK)
+                  changeState(STATE_NORMAL);
+            else
+                  changeState(STATE_LOCK);
+            }
       else {
             if (cv) {
                   cv->setFocus();
@@ -4535,8 +4719,8 @@ void MuseScore::noteTooShortForTupletDialog()
 
 void MuseScore::instrumentChanged()
       {
-      if (iledit)
-            iledit->updateAll(cs);
+      if (mixer)
+            mixer->updateAll(cs);
       }
 
 //---------------------------------------------------------

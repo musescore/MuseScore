@@ -32,69 +32,73 @@
 #include "lineeditengine.h"
 #include "stackedwidgetengine.h"
 
-    //! stores engines
-    class Transitions: public QObject
-    {
+//! stores engines
+class Transitions: public QObject {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        explicit Transitions( QObject* );
+            //! constructor
+            explicit Transitions( QObject* );
 
-        //! destructor
-        virtual ~Transitions( void )
-        {}
+            //! destructor
+            virtual ~Transitions( void )
+                  {}
 
-        //! register animations corresponding to given widget, depending on its type.
-        void registerWidget( QWidget* widget ) const;
+            //! register animations corresponding to given widget, depending on its type.
+            void registerWidget( QWidget* widget ) const;
 
-        /*! unregister all animations associated to a widget */
-        void unregisterWidget( QWidget* widget ) const;
+            /*! unregister all animations associated to a widget */
+            void unregisterWidget( QWidget* widget ) const;
 
-        //! qlabel engine
-        ComboBoxEngine& comboBoxEngine( void ) const
-        { return *comboBoxEngine_; }
+            //! qlabel engine
+            ComboBoxEngine& comboBoxEngine( void ) const {
+                  return *comboBoxEngine_;
+                  }
 
-        //! qlabel engine
-        LabelEngine& labelEngine( void ) const
-        { return *labelEngine_; }
+            //! qlabel engine
+            LabelEngine& labelEngine( void ) const {
+                  return *labelEngine_;
+                  }
 
-        //! qlineedit engine
-        LineEditEngine& lineEditEngine( void ) const
-        { return *lineEditEngine_; }
+            //! qlineedit engine
+            LineEditEngine& lineEditEngine( void ) const {
+                  return *lineEditEngine_;
+                  }
 
-        //! stacked widget engine
-        StackedWidgetEngine& stackedWidgetEngine( void ) const
-        { return *stackedWidgetEngine_; }
+            //! stacked widget engine
+            StackedWidgetEngine& stackedWidgetEngine( void ) const {
+                  return *stackedWidgetEngine_;
+                  }
 
-        public slots:
+      public slots:
 
-        //! setup engines
-        void setupEngines( void );
+            //! setup engines
+            void setupEngines( void );
 
-        private:
+      private:
 
-        //! register new engine
-        void registerEngine( BaseEngine* engine )
-        { engines_.push_back( engine ); }
+            //! register new engine
+            void registerEngine( BaseEngine* engine ) {
+                  engines_.push_back( engine );
+                  }
 
-        //! qcombobox engine
-        ComboBoxEngine* comboBoxEngine_;
+            //! qcombobox engine
+            ComboBoxEngine* comboBoxEngine_;
 
-        //! qlabel engine
-        LabelEngine* labelEngine_;
+            //! qlabel engine
+            LabelEngine* labelEngine_;
 
-        //! qlineedit engine
-        LineEditEngine* lineEditEngine_;
+            //! qlineedit engine
+            LineEditEngine* lineEditEngine_;
 
-        //! stacked widget engine
-        StackedWidgetEngine* stackedWidgetEngine_;
+            //! stacked widget engine
+            StackedWidgetEngine* stackedWidgetEngine_;
 
-        //! keep list of existing engines
-        QList< BaseEngine::Pointer > engines_;
+            //! keep list of existing engines
+            QList< BaseEngine::Pointer > engines_;
 
-    };
+      };
 
 #endif

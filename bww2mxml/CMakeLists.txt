@@ -35,27 +35,31 @@ add_library(bww STATIC
    writer.cpp
    )
 
-if (NOT MINGW)
-add_executable(bww2mxml
-   ${INCS}
-   lexer.cpp
-   main.cpp
-   mxmlwriter.cpp
-   parser.cpp
-   symbols.cpp
-   writer.cpp
-   )
-
-set_target_properties (
-      bww2mxml
-      PROPERTIES
-         COMPILE_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+if (NOT MINGW AND NOT APPLE)
+   add_executable(bww2mxml
+      ${INCS}
+      lexer.cpp
+      main.cpp
+      mxmlwriter.cpp
+      parser.cpp
+      symbols.cpp
+      writer.cpp
       )
 
-target_link_libraries(bww2mxml
-   ${QT_LIBRARIES}
-   )
-endif (NOT MINGW)
+   set_target_properties (
+         bww2mxml
+         PROPERTIES
+            COMPILE_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         )
+
+   target_link_libraries(bww2mxml
+      ${QT_LIBRARIES}
+      )
+   ADD_DEPENDENCIES(bww2mxml mops1)
+   ADD_DEPENDENCIES(bww2mxml mops2)
+endif (NOT MINGW AND NOT APPLE)
+
+xcode_pch(bww all)
 
 ADD_DEPENDENCIES(bww mops1)
 ADD_DEPENDENCIES(bww mops2)

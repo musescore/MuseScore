@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: pitchspelling.cpp 5163 2011-12-30 09:57:08Z wschweer $
 //
 //  Copyright (C) 2007-2011 Werner Schweer
 //
@@ -15,7 +14,7 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
-#include "event.h"
+#include "synthesizer/event.h"
 #include "note.h"
 #include "key.h"
 #include "pitchspelling.h"
@@ -55,11 +54,6 @@ int step2tpc(int step, AccidentalVal alter)
       int i = step*5 + alter+2;
       Q_ASSERT(i >= 0 && (i < int(sizeof(spellings)/sizeof(*spellings))));
       return spellings[i];
-      }
-
-int step2tpc(int step)
-      {
-      return step2tpc(step);
       }
 
 static const int tpcByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
@@ -479,7 +473,7 @@ static int computeWindow(const QList<Event>& notes, int start, int end, int keyI
       int i = start;
       int k = 0;
       while (i < end)
-            pitch[k++] = notes[i++].pitch() % 12;
+            pitch[k++] = notes[i++].dataA() % 12;
 
       for (; k < 10; ++k)
             pitch[k] = pitch[k-1];
@@ -645,16 +639,16 @@ void spell(QList<Event>& notes, int key)
                   tab = tab1;
 
             if (start == 0) {
-                  notes[0].setTpc(tab[(notes[0].pitch() % 12) * 2 + (opt & 1)]);
+                  notes[0].setTpc(tab[(notes[0].dataA() % 12) * 2 + (opt & 1)]);
                   if (n > 1)
-                        notes[1].setTpc(tab[(notes[1].pitch() % 12) * 2 + ((opt & 2)>>1)]);
+                        notes[1].setTpc(tab[(notes[1].dataA() % 12) * 2 + ((opt & 2)>>1)]);
                   if (n > 2)
-                        notes[2].setTpc(tab[(notes[2].pitch() % 12) * 2 + ((opt & 4)>>2)]);
+                        notes[2].setTpc(tab[(notes[2].dataA() % 12) * 2 + ((opt & 4)>>2)]);
                   }
             if ((end - start) >= 6) {
-                  notes[start+3].setTpc(tab[(notes[start+3].pitch() % 12) * 2 + ((opt &  8) >> 3)]);
-                  notes[start+4].setTpc(tab[(notes[start+4].pitch() % 12) * 2 + ((opt & 16) >> 4)]);
-                  notes[start+5].setTpc(tab[(notes[start+5].pitch() % 12) * 2 + ((opt & 32) >> 5)]);
+                  notes[start+3].setTpc(tab[(notes[start+3].dataA() % 12) * 2 + ((opt &  8) >> 3)]);
+                  notes[start+4].setTpc(tab[(notes[start+4].dataA() % 12) * 2 + ((opt & 16) >> 4)]);
+                  notes[start+5].setTpc(tab[(notes[start+5].dataA() % 12) * 2 + ((opt & 32) >> 5)]);
                   }
             if (end == n) {
                   int n = end - start;
@@ -662,13 +656,13 @@ void spell(QList<Event>& notes, int key)
                   switch(n - 6) {
                         case 3:
                               k = end - start - 3;
-                              notes[end-3].setTpc(tab[(notes[end-3].pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              notes[end-3].setTpc(tab[(notes[end-3].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         case 2:
                               k = end - start - 2;
-                              notes[end-2].setTpc(tab[(notes[end-2].pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              notes[end-2].setTpc(tab[(notes[end-2].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         case 1:
                               k = end - start - 1;
-                              notes[end-1].setTpc(tab[(notes[end-1].pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              notes[end-1].setTpc(tab[(notes[end-1].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         }
                   break;
                   }
@@ -736,53 +730,34 @@ void Score::spellNotelist(QList<Note*>& notes)
 //   pitch2tpc2
 //---------------------------------------------------------
 
-int pitch2tpc2(int pitch, bool preferSharp)
-      {
-      int step = pitch % 12;
-
-      static int ptab[15][12] = {
-//              c  c#   d  d#   e   f  f#   g  g#   a  a#   b
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },    // sharp
-//              c  db  d  eb   e   f  gb   g  ab   a  bb   b
-            {  14, 9, 16, 11, 18, 13, 8 , 15, 10, 17, 12, 19 },     // flat
-            };
-      return ptab[preferSharp ? 0 : 1][step];
-      }
+// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, KEY_C, PREFER_FLATS)
+// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, KEY_C, PREFER_SHARPS)
 
 //---------------------------------------------------------
 //   pitch2tpc
 //    preferred pitch spelling depending on key
-//    key -7 - +7
+//    key -7 to +7
+//
+// The value of prefer sets the preferred mix of flats and sharps
+// for pitches that are non-diatonic in the key specified, by
+// positioning the window along the tpc sequence.
+//
+// Scale tones are the range shown in [ ].
+// A value of 8 (PREFER_FLATS) specifies 5b 2b 6b 3b 7b [4 1 5 2 6 3 7]
+// A value of 11 (PREFER_NEAREST) specifies 3b 7b [4 1 5 2 6 3 7] 4# 1# 5#
+// A value of 13 (PREFER_SHARPS) specifies [4 1 5 2 6 3 7] 4# 1# 5# 2# 6#
+//
+// Examples for PREFER_NEAREST (n indicates explicit natural):
+// C major will use Eb Bb [F C G D A E B] F# C# G#.
+// E major will use Gn Dn [A E B F# C# G# D#] A# E# B#.
+// F# major will use An En [B F# C# G# D# A# E#] B# Fx Cx.
+// Eb major will use Gb Db [Ab Eb Bb F C G D] An En Bn.
+// Gb major will use Bbb Fb [Cb Gb Db Ab Eb Bb F] Cn Gn Dn.
 //---------------------------------------------------------
 
-int pitch2tpc(int pitch, int key)
+int pitch2tpc(int pitch, int key, int prefer)
       {
-      int step = pitch % 12;
-
-      // ======TODO: fill table with reasonable values ===========
-
-      static int ptab[15][12] = {
-//              c  c#   d  d#   e   f  f#   g  g#   a  a#   b
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Ces
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Ges
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Des
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // As
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // Es
-            {  14,  9, 16, 11,  6, 13,  8, 15, 10, 17, 12,  7 },     // B
-            {  14,  9, 16, 11, 18, 13,  8, 15, 10, 17, 12,  7 },     // F
-
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // C
-
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // G
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // D
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // A
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // E
-            {  14, 21, 16, 23, 18, 13, 20, 15, 22, 17, 24, 19 },     // H
-            {  14, 21, 16, 23, 18, 25, 20, 15, 22, 17, 24, 19 },     // Fis
-            {  26, 21, 16, 23, 18, 25, 20, 15, 22, 17, 24, 19 },     // Cis
-            };
-// qDebug("pitch2tpc %d(%d) %d = %d\n", pitch, step, key, ptab[key+7][step]);
-      return ptab[key+7][step];
+      return (pitch * 7 + 26 - (prefer + key)) % 12 + (prefer + key);
       }
 
 //---------------------------------------------------------

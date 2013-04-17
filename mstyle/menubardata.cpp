@@ -26,176 +26,163 @@
 
 #include "menubardata.h"
 
-    //______________________________________________
-    MenuBarDataV1::MenuBarDataV1( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target )
-    {
+//______________________________________________
+MenuBarDataV1::MenuBarDataV1( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ) {
 
-        target->installEventFilter( this );
+      target->installEventFilter( this );
 
-        // setup timeLine
-        current_.animation_ = new Animation( duration, this );
-        setupAnimation( currentAnimation(), "currentOpacity" );
-        currentAnimation().data()->setDirection( Animation::Forward );
+      // setup timeLine
+      current_.animation_ = new Animation( duration, this );
+      setupAnimation( currentAnimation(), "currentOpacity" );
+      currentAnimation().data()->setDirection( Animation::Forward );
 
-        previous_.animation_ = new Animation( duration, this );
-        setupAnimation( previousAnimation(), "previousOpacity" );
-        previousAnimation().data()->setDirection( Animation::Backward );
+      previous_.animation_ = new Animation( duration, this );
+      setupAnimation( previousAnimation(), "previousOpacity" );
+      previousAnimation().data()->setDirection( Animation::Backward );
 
-    }
+      }
 
-    //______________________________________________
-    bool MenuBarDataV1::eventFilter( QObject* object, QEvent* event )
-    {
+//______________________________________________
+bool MenuBarDataV1::eventFilter( QObject* object, QEvent* event ) {
 
-        if( !( enabled() && object == target().data() ) )
-        { return AnimationData::eventFilter( object, event ); }
-
-        // check event type
-        switch( event->type() )
-        {
-
-            case QEvent::Enter:
-            {
-                // first need to call proper event processing
-                // then implement transition
-                object->event( event );
-                enterEvent( object );
-                return true;
+      if ( !( enabled() && object == target().data() ) ) {
+            return AnimationData::eventFilter( object, event );
             }
 
-            case QEvent::Leave:
-            {
-                // first need to call proper event processing
-                // then implement transition
-                object->event( event );
-                leaveEvent( object );
-                return true;
+      // check event type
+      switch ( event->type() ) {
+
+            case QEvent::Enter: {
+                  // first need to call proper event processing
+                  // then implement transition
+                  object->event( event );
+                  enterEvent( object );
+                  return true;
+                  }
+
+            case QEvent::Leave: {
+                  // first need to call proper event processing
+                  // then implement transition
+                  object->event( event );
+                  leaveEvent( object );
+                  return true;
+                  }
+
+            case QEvent::MouseMove: {
+                  // first need to call proper event processing
+                  // then implement transition
+                  object->event( event );
+                  mouseMoveEvent( object );
+                  return true;
+                  }
+
+            case QEvent::MouseButtonPress: {
+                  // first need to call proper event processing
+                  // then implement transition
+                  mousePressEvent( object );
+                  break;
+                  }
+
+            default:
+                  break;
+
             }
 
-            case QEvent::MouseMove:
-            {
-                // first need to call proper event processing
-                // then implement transition
-                object->event( event );
-                mouseMoveEvent( object );
-                return true;
-            }
+      // always forward event
+      return AnimationData::eventFilter( object, event );
 
-            case QEvent::MouseButtonPress:
-            {
-                // first need to call proper event processing
-                // then implement transition
-                mousePressEvent( object );
-                break;
-            }
+      }
 
-            default: break;
+//______________________________________________
+MenuBarDataV2::MenuBarDataV2( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ),
+      opacity_(0),
+      progress_(0) {
 
-        }
+      target->installEventFilter( this );
 
-        // always forward event
-        return AnimationData::eventFilter( object, event );
+      animation_ = new Animation( duration, this );
+      animation().data()->setDirection( Animation::Forward );
+      animation().data()->setStartValue( 0.0 );
+      animation().data()->setEndValue( 1.0 );
+      animation().data()->setTargetObject( this );
+      animation().data()->setPropertyName( "opacity" );
 
-    }
+      progressAnimation_ = new Animation( duration, this );
+      progressAnimation().data()->setDirection( Animation::Forward );
+      progressAnimation().data()->setStartValue( 0 );
+      progressAnimation().data()->setEndValue( 1 );
+      progressAnimation().data()->setTargetObject( this );
+      progressAnimation().data()->setPropertyName( "progress" );
+      progressAnimation().data()->setEasingCurve( QEasingCurve::Linear );
 
-    //______________________________________________
-    MenuBarDataV2::MenuBarDataV2( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target ),
-        opacity_(0),
-        progress_(0)
-    {
+      }
 
-        target->installEventFilter( this );
+//______________________________________________
+bool MenuBarDataV2::eventFilter( QObject* object, QEvent* event ) {
 
-        animation_ = new Animation( duration, this );
-        animation().data()->setDirection( Animation::Forward );
-        animation().data()->setStartValue( 0.0 );
-        animation().data()->setEndValue( 1.0 );
-        animation().data()->setTargetObject( this );
-        animation().data()->setPropertyName( "opacity" );
+      if ( !enabled() ) return false;
 
-        progressAnimation_ = new Animation( duration, this );
-        progressAnimation().data()->setDirection( Animation::Forward );
-        progressAnimation().data()->setStartValue( 0 );
-        progressAnimation().data()->setEndValue( 1 );
-        progressAnimation().data()->setTargetObject( this );
-        progressAnimation().data()->setPropertyName( "progress" );
-        progressAnimation().data()->setEasingCurve( QEasingCurve::Linear );
+      // check event type
+      switch ( event->type() ) {
 
-    }
-
-    //______________________________________________
-    bool MenuBarDataV2::eventFilter( QObject* object, QEvent* event )
-    {
-
-        if( !enabled() ) return false;
-
-        // check event type
-        switch( event->type() )
-        {
-
-            case QEvent::Enter:
-            {
-                object->event( event );
-                enterEvent( object );
-                return true;
-            }
+            case QEvent::Enter: {
+                  object->event( event );
+                  enterEvent( object );
+                  return true;
+                  }
 
             case QEvent::Hide:
-            case QEvent::Leave:
-            {
-                object->event( event );
-                if( timer_.isActive() ) timer_.stop();
-                timer_.start( 100, this );
-                return true;
+            case QEvent::Leave: {
+                  object->event( event );
+                  if ( timer_.isActive() ) timer_.stop();
+                  timer_.start( 100, this );
+                  return true;
+                  }
+
+            case QEvent::MouseMove: {
+                  object->event( event );
+                  mouseMoveEvent( object );
+                  return true;
+                  }
+
+            default:
+                  break;
+
             }
 
-            case QEvent::MouseMove:
-            {
-                object->event( event );
-                mouseMoveEvent( object );
-                return true;
-            }
+      // always forward event
+      return false;
 
-            default: break;
+      }
 
-        }
+//____________________________________________________________
+void MenuBarDataV2::updateAnimatedRect( void ) {
 
-        // always forward event
-        return false;
-
-    }
-
-    //____________________________________________________________
-    void MenuBarDataV2::updateAnimatedRect( void )
-    {
-
-        // check rect validity
-        if( !( currentRect().isValid() && previousRect().isValid() ) )
-        {
+      // check rect validity
+      if ( !( currentRect().isValid() && previousRect().isValid() ) ) {
             animatedRect_ = QRect();
             return;
-        }
+            }
 
-        // compute rect located 'between' previous and current
-        animatedRect_.setLeft( previousRect().left() + progress()*(currentRect().left() - previousRect().left()) );
-        animatedRect_.setRight( previousRect().right() + progress()*(currentRect().right() - previousRect().right()) );
-        animatedRect_.setTop( previousRect().top() + progress()*(currentRect().top() - previousRect().top()) );
-        animatedRect_.setBottom( previousRect().bottom() + progress()*(currentRect().bottom() - previousRect().bottom()) );
+      // compute rect located 'between' previous and current
+      animatedRect_.setLeft( previousRect().left() + progress() * (currentRect().left() - previousRect().left()) );
+      animatedRect_.setRight( previousRect().right() + progress() * (currentRect().right() - previousRect().right()) );
+      animatedRect_.setTop( previousRect().top() + progress() * (currentRect().top() - previousRect().top()) );
+      animatedRect_.setBottom( previousRect().bottom() + progress() * (currentRect().bottom() - previousRect().bottom()) );
 
-        // trigger update
-        setDirty();
+      // trigger update
+      setDirty();
 
-        return;
+      return;
 
-    }
+      }
 
-    //___________________________________________________________
-    void MenuBarDataV2::timerEvent( QTimerEvent *event )
-    {
+//___________________________________________________________
+void MenuBarDataV2::timerEvent( QTimerEvent* event ) {
 
-        if( event->timerId() != timer_.timerId() ) return AnimationData::timerEvent( event );
-        timer_.stop();
-        leaveEvent( target().data() );
-    }
+      if ( event->timerId() != timer_.timerId() ) return AnimationData::timerEvent( event );
+      timer_.stop();
+      leaveEvent( target().data() );
+      }

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: key.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -99,9 +98,6 @@ class AccidentalState {
 //    this list is instantiated for every staff
 //    to keep track of key signature changes
 //---------------------------------------------------------
-
-typedef std::map<const int, KeySigEvent>::iterator iKeyList;
-typedef std::map<const int, KeySigEvent>::const_iterator ciKeyList;
 
 class KeyList : public std::map<const int, KeySigEvent> {
    public:

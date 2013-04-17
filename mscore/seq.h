@@ -22,7 +22,7 @@
 #define __SEQ_H__
 
 #include "libmscore/sequencer.h"
-#include "libmscore/event.h"
+#include "synthesizer/event.h"
 #include "driver.h"
 #include "libmscore/fifo.h"
 #include "libmscore/tempo.h"
@@ -36,7 +36,8 @@ class Driver;
 class Part;
 struct Channel;
 class ScoreView;
-class MasterSynth;
+class MasterSynthesizer;
+class Segment;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -52,15 +53,20 @@ struct SeqMsg {
       union {
             int intVal;
             qreal realVal;
-            } data;
+            };
       Event event;
+
+      SeqMsg() {}
+      SeqMsg(int _id, int val) : id(_id), intVal(val) {}
+      SeqMsg(int _id, qreal val) : id(_id), realVal(val) {}
+      SeqMsg(int _id, const Event& e) : id(_id), event(e) {}
       };
 
 //---------------------------------------------------------
 //   SeqMsgFifo
 //---------------------------------------------------------
 
-static const int SEQ_MSG_FIFO_SIZE = 512;
+static const int SEQ_MSG_FIFO_SIZE = 1024*8;
 
 class SeqMsgFifo : public FifoBase {
       SeqMsg messages[SEQ_MSG_FIFO_SIZE];
@@ -80,18 +86,20 @@ class SeqMsgFifo : public FifoBase {
 class Seq : public QObject, public Sequencer {
       Q_OBJECT
 
+      mutable QMutex mutex;
+
       Score* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
       int state;                          // TRANSPORT_STOP, TRANSPORT_PLAY, TRANSPORT_STARTING=3
 
       bool oggInit;
-
       bool playlistChanged;
 
       SeqMsgFifo toSeq;
       SeqMsgFifo fromSeq;
-      Driver* driver;
+      Driver* _driver;
+      MasterSynthesizer* _synti;
 
       double meterValue[2];
       double meterPeakValue[2];
@@ -106,7 +114,7 @@ class Seq : public QObject, public Sequencer {
       EventMap::const_iterator guiPos;    // moved in gui thread
       QList<const Note*> markedNotes;     // notes marked as sounding
 
-      uint tackRest;     // metronome state
+      uint tackRest;                      // metronome state
       uint tickRest;
       qreal metronomeVolume;
 
@@ -121,6 +129,8 @@ class Seq : public QObject, public Sequencer {
       void playEvent(const Event&);
       void guiToSeq(const SeqMsg& msg);
       void metronome(unsigned n, float* l);
+      void seek(int utick, Segment* seg);
+      void unmarkNotes();
 
    private slots:
       void seqMessage(int msg);
@@ -130,7 +140,6 @@ class Seq : public QObject, public Sequencer {
 
    public slots:
       void setRelTempo(double);
-      void setGain(float);
       void seek(int);
       void stopNotes(int channel = -1);
       void start();
@@ -140,7 +149,6 @@ class Seq : public QObject, public Sequencer {
       void started();
       void stopped();
       int toGui(int);
-      void gainChanged(float);
 
    public:
       // this are also the jack audio transport states:
@@ -181,25 +189,21 @@ class Seq : public QObject, public Sequencer {
       ScoreView* viewer() const { return cv; }
       void initInstruments();
 
-      QList<MidiPatch*> getPatchInfo() const;
-      Driver* getDriver()  { return driver; }
+      Driver* driver()                                 { return _driver; }
+      void setDriver(Driver* d)                        { _driver = d;    }
+      MasterSynthesizer* synti() const                 { return _synti;  }
+      void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
+
       int getCurTick();
 
-      float gain() const;
-
-      int synthNameToIndex(const QString&) const;
-      QString synthIndexToName(int) const;
       void putEvent(const Event&);
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
       void eventToGui(Event);
-      void processToGuiMessages();
       void stopNoteTimer();
       };
 
 extern Seq* seq;
-extern MasterSynth* synti;
-
 extern void initSequencer();
 extern bool initMidi();
 #endif

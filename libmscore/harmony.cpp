@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: harmony.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -104,8 +103,8 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_HARMONY));
-
+      setTextStyleType(TEXT_STYLE_HARMONY);
+      setUnstyled();
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
@@ -342,7 +341,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       s = s.toLower();
       foreach(const ChordDescription* cd, *score()->style()->chordList()) {
             foreach(QString ss, cd->names) {
-                  if (s == ss) {
+                  if (s == ss.toLower()) {
                         _id = cd->id;
                         return true;
                         }
@@ -372,19 +371,13 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 
 bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mod, const QString& s)
       {
+      if (key == Qt::Key_Return)
+            return true;	// Harmony only single line
       bool rv = Text::edit(view, grip, key, mod, s);
-      QString str = getText();
+      QString str = text();
       int root, base;
-      QTextCharFormat tf;
-      if (!str.isEmpty() && !parseHarmony(str, &root, &base)) {
-            // if text cannot be recognized, then underline with
-            // red squiggle
-            tf.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-            tf.setUnderlineColor(Qt::red);
-            }
-      QTextCursor c(doc());
-      c.select(QTextCursor::Document);
-      c.setCharFormat(tf);
+      bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base);
+      spellCheckUnderline(badSpell);
       return rv;
       }
 
@@ -395,8 +388,9 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(getText());
+      setHarmony(text());
       layout();
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
@@ -533,10 +527,13 @@ void Harmony::layout()
             Text::layout1();
       else {
             // textStyle().layout(this);
-            QRectF bb;
-            foreach(const TextSegment* ts, textList)
+            QRectF bb, tbb;
+            foreach(const TextSegment* ts, textList) {
                   bb |= ts->boundingRect().translated(ts->x, ts->y);
+                  tbb |= ts->tightBoundingRect().translated(ts->x, ts->y);
+                  }
             setbbox(bb);
+            setbboxtight(tbb);
             }
       if (!parent()) {          // for use in palette
             setPos(QPointF());
@@ -630,6 +627,16 @@ QRectF TextSegment::boundingRect() const
       {
       QFontMetricsF fm(font);
       return fm.boundingRect(text);
+      }
+
+//---------------------------------------------------------
+//   tightBoundingRect
+//---------------------------------------------------------
+
+QRectF TextSegment::tightBoundingRect() const
+      {
+      QFontMetricsF fm(font);
+      return fm.tightBoundingRect(text);
       }
 
 //---------------------------------------------------------

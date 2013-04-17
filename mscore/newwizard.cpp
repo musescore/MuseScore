@@ -53,9 +53,10 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
 
       instrumentList->setHeaderLabels(QStringList(tr("Instrument List")));
 
-      QStringList header = (QStringList() << tr("Staves") << tr("Visible") << tr("Clef"));
+      QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
       partiturList->setColumnHidden(1, true);  // hide "visible" flag
+      partiturList->resizeColumnToContents(3);  // shrink "linked" column as much as possible
 
       buildTemplateList();
 
@@ -89,6 +90,7 @@ void InstrumentWizard::buildTemplateList()
 void InstrumentWizard::init()
       {
       partiturList->clear();
+      StaffListItem::populateStaffTypes(0);     // no score yet!
       instrumentList->clearSelection();
       addButton->setEnabled(false);
       removeButton->setEnabled(false);
@@ -194,10 +196,14 @@ void InstrumentWizard::on_addButton_clicked()
             sli->setPartIdx(i);
             sli->staffIdx = -1;
             if (i > MAX_STAVES)
-                  sli->setClef(CLEF_G);
+                  sli->setClef(ClefTypeList(CLEF_G, CLEF_G));
             else
-                  sli->setClef(it->clefIdx[i]);
+                  sli->setClef(it->clefTypes[i]);
+            sli->setStaffType(it->staffTypePreset);
             }
+//      partiturList->resizeColumnToContents(0);
+//      partiturList->resizeColumnToContents(2);
+//      partiturList->resizeColumnToContents(4);
       partiturList->setItemExpanded(pli, true);
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(pli, true);
@@ -263,7 +269,20 @@ void InstrumentWizard::on_upButton_clicked()
             if (idx) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx-1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -273,8 +292,14 @@ void InstrumentWizard::on_upButton_clicked()
             int idx = parent->indexOfChild(item);
             if (idx) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx-1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             }
@@ -298,7 +323,20 @@ void InstrumentWizard::on_downButton_clicked()
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item = partiturList->takeTopLevelItem(idx);
+                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
+                  // get the currently selected staff type of each combo and re-insert
+                  int numOfStaffListItems = item->childCount();
+                  int staffIdx[numOfStaffListItems];
+                  int itemIdx;
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx+1, item);
+                  // after-re-insertion, recreate each combo and set its index
+                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                        StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
+                        staffItem->initStaffTypeCombo(true);
+                        staffItem->setStaffType(staffIdx[itemIdx]);
+                        }
                   partiturList->setItemExpanded(item, isExpanded);
                   partiturList->setItemSelected(item, true);
                   }
@@ -309,8 +347,14 @@ void InstrumentWizard::on_downButton_clicked()
             int n = parent->childCount();
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item = parent->takeChild(idx);
+                  StaffListItem* item = static_cast<StaffListItem*>(parent->takeChild(idx));
+                  // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
+                  // get currently selected staff type and re-insert
+                  int staffTypeIdx = item->staffTypeIdx();
                   parent->insertChild(idx+1, item);
+                  // after item has been inserted into the tree, create a new QComboBox and set its index
+                  item->initStaffTypeCombo(true);
+                  item->setStaffType(staffTypeIdx);
                   partiturList->setItemSelected(item, true);
                   }
             }
@@ -331,7 +375,7 @@ void InstrumentWizard::on_linkedButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
@@ -340,6 +384,8 @@ void InstrumentWizard::on_linkedButton_clicked()
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -359,13 +405,15 @@ void InstrumentWizard::on_belowButton_clicked()
 
       StaffListItem* sli  = (StaffListItem*)item;
       Staff* staff        = sli->staff;
-      PartListItem* pli   = (PartListItem*)sli->parent();
+      PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
       nsli->setClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
+      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
@@ -398,13 +446,15 @@ void InstrumentWizard::createInstruments(Score* cs)
             QTreeWidgetItem* ci = 0;
             int rstaff = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
+                  if(ci->isHidden())
+                        continue;
                   StaffListItem* sli = (StaffListItem*)ci;
                   Staff* staff       = new Staff(cs, part, rstaff);
                   sli->staff         = staff;
                   staff->setRstaff(rstaff);
                   ++rstaff;
 
-                  staff->init(t, cidx);
+                  staff->init(t, sli->staffType(), cidx);
                   staff->setInitialClef(sli->clef());
 
                   if (sli->linked() && !part->staves()->isEmpty()) {
@@ -808,7 +858,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
 
       tempoGroup = new QGroupBox;
       tempoGroup->setCheckable(true);
-      tempoGroup->setChecked(true);
+      tempoGroup->setChecked(false);
       tempoGroup->setTitle(tr("Tempo"));
       QLabel* bpm = new QLabel;
       bpm->setText(tr("BPM:"));

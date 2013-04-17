@@ -20,12 +20,14 @@
 #include "testutils.h"
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
+#include "synthesizer/msynthesizer.h"
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 
 #ifdef OMR
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
+
 extern Score::FileError importCompressedMusicXml(Score*, const QString&);
 extern Score::FileError importMusicXml(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
@@ -36,6 +38,7 @@ bool enableTestMode;
 
 Score* score;
 MuseScoreCore* mscoreCore;
+MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
 Shortcut Shortcut::sc[1] = { Shortcut() };
@@ -107,7 +110,7 @@ Score* MTest::readCreatedScore(const QString& name)
       {
       Score* score = new Score(mscore->baseStyle());
       score->setName(name);
-      score->setTestMode(true);
+      MScore::testMode = true;
       QString csl  = score->fileInfo()->suffix().toLower();
 
       Score::FileError rv;
@@ -139,7 +142,7 @@ Score* MTest::readCreatedScore(const QString& name)
 bool MTest::saveScore(Score* score, const QString& name)
       {
       QFileInfo fi(name);
-      score->setTestMode(true);
+      MScore::testMode = true;
       return score->saveFile(fi);
       }
 
@@ -253,6 +256,7 @@ void MTest::initMTest()
       MScore::PDPI = 120;
       MScore::DPMM = MScore::DPI / INCH;
 
+      synti  = new MasterSynthesizer();
       mscore = new MScore;
       mscore->init();
 

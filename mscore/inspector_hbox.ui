@@ -14,6 +14,12 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="elementName">
      <property name="font">
@@ -45,6 +51,12 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="horizontalSpacing">
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>-1</number>
+     </property>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="rightGap">
        <property name="sizePolicy">
@@ -141,6 +153,12 @@
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>14</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -154,6 +172,12 @@
        <property name="icon">
         <iconset resource="musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>14</height>
+        </size>
        </property>
       </widget>
      </item>

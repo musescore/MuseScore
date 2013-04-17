@@ -38,7 +38,18 @@ PluginManager::PluginManager(QWidget* parent)
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
-      updateValues();
+
+      prefs.updatePluginList();
+      int n = prefs.pluginList.size();
+      for (int i = 0; i < n; ++i) {
+            const PluginDescription& d = prefs.pluginList[i];
+            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
+            item->setData(Qt::UserRole, i);
+            }
+      if (n) {
+            pluginList->setCurrentRow(0);
+            pluginListItemChanged(pluginList->item(0), 0);
+            }
       }
 
 //---------------------------------------------------------
@@ -47,7 +58,6 @@ PluginManager::PluginManager(QWidget* parent)
 
 void PluginManager::accept()
       {
-printf("pluginManager::apply()\n");
       if (shortcutsChanged) {
             shortcutsChanged = false;
             foreach(const Shortcut* s, localShortcuts) {
@@ -59,33 +69,9 @@ printf("pluginManager::apply()\n");
                   }
             Shortcut::dirty = true;
             }
-      QDialog::accept();
-      }
-
-//---------------------------------------------------------
-//   updateValues
-//---------------------------------------------------------
-
-void PluginManager::updateValues()
-      {
-      //
-      //  update plugin manager
-      //
-      prefs.updatePluginList();
-      pluginList->clear();
-
-      int n = prefs.pluginList.size();
-      for (int i = 0; i < n; ++i) {
-            const PluginDescription& d = prefs.pluginList[i];
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
-            item->setData(Qt::UserRole, i);
-            }
-      if (n) {
-            pluginList->setCurrentRow(0);
-            pluginListItemChanged(pluginList->item(0), 0);
-            }
       preferences = prefs;
       preferences.write();
+      QDialog::accept();
       }
 
 //---------------------------------------------------------

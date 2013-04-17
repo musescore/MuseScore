@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: part.cpp 5335 2012-02-17 13:51:54Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tempotext.cpp 5427 2012-03-07 12:41:34Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -27,7 +26,7 @@ TempoText::TempoText(Score* s)
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       setPlacement(ABOVE);
-      setTextStyle(s->textStyle(TEXT_STYLE_TEMPO));
+      setTextStyleType(TEXT_STYLE_TEMPO);
       }
 
 //---------------------------------------------------------
@@ -90,15 +89,15 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = getText();
+      QString s = text();
 
       static const TempoPattern tp[] = {
-            TempoPattern("\\xd834\\xdd5f = (\\d+)", 1.0/60.0),      // 1/4
-            TempoPattern("\\xd834\\xdd5e = (\\d+)", 1.0/30.0),      // 1/2
-            TempoPattern("\\xd834\\xdd60 = (\\d+)", 1.0/120.0),     // 1/8
-            TempoPattern("\\xd834\\xdd5f\\xd834\\xdd6d = (\\d+)", 1.5/60.0),   // dotted 1/4
-            TempoPattern("\\xd834\\xdd5e\\xd834\\xdd6d = (\\d+)", 1.5/30.0),   // dotted 1/2
-            TempoPattern("\\xd834\\xdd60\\xd834\\xdd6d = (\\d+)", 1.5/120.0),  // dotted 1/8
+            TempoPattern("\\xd834\\xdd5f\\s*=\\s*(\\d+)", 1.0/60.0),      // 1/4
+            TempoPattern("\\xd834\\xdd5e\\s*=\\s*(\\d+)", 1.0/30.0),      // 1/2
+            TempoPattern("\\xd834\\xdd60\\s*=\\s*(\\d+)", 1.0/120.0),     // 1/8
+            TempoPattern("\\xd834\\xdd5f\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/60.0),   // dotted 1/4
+            TempoPattern("\\xd834\\xdd5e\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/30.0),   // dotted 1/2
+            TempoPattern("\\xd834\\xdd60\\xd834\\xdd6d\\s*=\\s*(\\d+)", 1.5/120.0),  // dotted 1/8
             };
 
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
@@ -158,6 +157,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_TEMPO:
                   _tempo = v.toDouble();
+                  score()->setTempo(segment(), _tempo);
                   break;
             case P_TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();

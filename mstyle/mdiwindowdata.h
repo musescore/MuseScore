@@ -29,127 +29,124 @@
 
 #include "animationdata.h"
 
-    //! handles mdiwindow arrows hover
-    class MdiWindowData: public AnimationData
-    {
+//! handles mdiwindow arrows hover
+class MdiWindowData: public AnimationData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        //! declare opacity property
-        Q_PROPERTY( qreal currentOpacity READ currentOpacity WRITE setCurrentOpacity )
-        Q_PROPERTY( qreal previousOpacity READ previousOpacity WRITE setPreviousOpacity )
+            //! declare opacity property
+            Q_PROPERTY( qreal currentOpacity READ currentOpacity WRITE setCurrentOpacity )
+            Q_PROPERTY( qreal previousOpacity READ previousOpacity WRITE setPreviousOpacity )
 
-        public:
+      public:
 
-        //! constructor
-        MdiWindowData( QObject*, QWidget*, int );
+            //! constructor
+            MdiWindowData( QObject*, QWidget*, int );
 
-        //! destructor
-        virtual ~MdiWindowData( void )
-        {}
+            //! destructor
+            virtual ~MdiWindowData( void )
+                  {}
 
-        //! animation state
-        virtual bool updateState( int primitive, bool value );
+            //! animation state
+            virtual bool updateState( int primitive, bool value );
 
-        //! animation state
-        virtual bool isAnimated( int primitive ) const
-        {
-            return(
-                ( primitive == currentData_.primitive_ && currentAnimation().data()->isRunning() ) ||
-                ( primitive == previousData_.primitive_ && previousAnimation().data()->isRunning() ) );
-        }
-
-        //! opacity
-        virtual qreal opacity( int primitive ) const
-        {
-            if( primitive == currentData_.primitive_ ) return currentOpacity();
-            else if( primitive == previousData_.primitive_ ) return previousOpacity();
-            else return OpacityInvalid;
-        }
-
-        //! duration
-        virtual void setDuration( int duration )
-        {
-            currentAnimation().data()->setDuration( duration );
-            previousAnimation().data()->setDuration( duration );
-        }
-
-        //!@name current animation
-        //@{
-
-        //! opacity
-        qreal currentOpacity( void ) const
-        { return currentData_.opacity_; }
-
-        //! opacity
-        void setCurrentOpacity( qreal value )
-        {
-            if( currentData_.opacity_ == value ) return;
-            currentData_.opacity_ = value;
-            setDirty();
-        }
-
-        //! animation
-        Animation::Pointer currentAnimation( void ) const
-        { return currentData_.animation_; }
-
-        //@}
-        //!@name previous animation
-        //@{
-
-        //! opacity
-        qreal previousOpacity( void ) const
-        { return previousData_.opacity_; }
-
-        //! opacity
-        void setPreviousOpacity( qreal value )
-        {
-            if( previousData_.opacity_ == value ) return;
-            previousData_.opacity_ = value;
-            setDirty();
-        }
-
-        //! animation
-        Animation::Pointer previousAnimation( void ) const
-        { return previousData_.animation_; }
-
-        //@}
-
-        private:
-
-        //! container for needed animation data
-        class Data
-        {
-
-            public:
-
-            //! default constructor
-            Data( void ):
-                primitive_( 0 ),
-                opacity_(0)
-                {}
-
-            //! subcontrol
-            bool updateSubControl( int );
-
-            //! subcontrol
-            int primitive_;
-
-            //! animation
-            Animation::Pointer animation_;
+            //! animation state
+            virtual bool isAnimated( int primitive ) const {
+                  return(
+                              ( primitive == currentData_.primitive_ && currentAnimation().data()->isRunning() ) ||
+                              ( primitive == previousData_.primitive_ && previousAnimation().data()->isRunning() ) );
+                  }
 
             //! opacity
-            qreal opacity_;
+            virtual qreal opacity( int primitive ) const {
+                  if ( primitive == currentData_.primitive_ ) return currentOpacity();
+                  else if ( primitive == previousData_.primitive_ ) return previousOpacity();
+                  else return OpacityInvalid;
+                  }
 
-        };
+            //! duration
+            virtual void setDuration( int duration ) {
+                  currentAnimation().data()->setDuration( duration );
+                  previousAnimation().data()->setDuration( duration );
+                  }
 
-        //! current data
-        Data currentData_;
+            //!@name current animation
+            //@{
 
-        //! previous data
-        Data previousData_;
+            //! opacity
+            qreal currentOpacity( void ) const {
+                  return currentData_.opacity_;
+                  }
 
-    };
+            //! opacity
+            void setCurrentOpacity( qreal value ) {
+                  if ( currentData_.opacity_ == value ) return;
+                  currentData_.opacity_ = value;
+                  setDirty();
+                  }
+
+            //! animation
+            Animation::Pointer currentAnimation( void ) const {
+                  return currentData_.animation_;
+                  }
+
+            //@}
+            //!@name previous animation
+            //@{
+
+            //! opacity
+            qreal previousOpacity( void ) const {
+                  return previousData_.opacity_;
+                  }
+
+            //! opacity
+            void setPreviousOpacity( qreal value ) {
+                  if ( previousData_.opacity_ == value ) return;
+                  previousData_.opacity_ = value;
+                  setDirty();
+                  }
+
+            //! animation
+            Animation::Pointer previousAnimation( void ) const {
+                  return previousData_.animation_;
+                  }
+
+            //@}
+
+      private:
+
+            //! container for needed animation data
+            class Data {
+
+                  public:
+
+                        //! default constructor
+                        Data( void ):
+                              primitive_( 0 ),
+                              opacity_(0)
+                              {}
+
+                        //! subcontrol
+                        bool updateSubControl( int );
+
+                        //! subcontrol
+                        int primitive_;
+
+                        //! animation
+                        Animation::Pointer animation_;
+
+                        //! opacity
+                        qreal opacity_;
+
+                  };
+
+            //! current data
+            Data currentData_;
+
+            //! previous data
+            Data previousData_;
+
+      };
 
 
 #endif

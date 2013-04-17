@@ -29,56 +29,56 @@
 
 #include "transitiondata.h"
 
-    //! generic data
-    class ComboBoxData: public TransitionData
-    {
+//! generic data
+class ComboBoxData: public TransitionData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ComboBoxData( QObject*, QComboBox*, int );
+            //! constructor
+            ComboBoxData( QObject*, QComboBox*, int );
 
-        //! destructor
-        virtual ~ComboBoxData( void )
-        {}
+            //! destructor
+            virtual ~ComboBoxData( void )
+                  {}
 
-        //! event filter
-        virtual bool eventFilter( QObject*, QEvent* );
+            //! event filter
+            virtual bool eventFilter( QObject*, QEvent* );
 
-        protected:
+      protected:
 
-        //! timer event
-        virtual void timerEvent( QTimerEvent* );
+            //! timer event
+            virtual void timerEvent( QTimerEvent* );
 
-        //! target rect
-        /*! return rect corresponding to the area to be updated when animating */
-        QRect targetRect( void ) const
-        { return target_ ? target_.data()->rect().adjusted( 5, 5, -5, -5 ):QRect(); }
+            //! target rect
+            /*! return rect corresponding to the area to be updated when animating */
+            QRect targetRect( void ) const {
+                  return target_ ? target_.data()->rect().adjusted( 5, 5, -5, -5 ) : QRect();
+                  }
 
-        protected slots:
+      protected slots:
 
-        //! triggered when item is activated in combobox
-        virtual void  indexChanged( void );
+            //! triggered when item is activated in combobox
+            virtual void  indexChanged( void );
 
-        //! initialize animation
-        virtual bool initializeAnimation( void );
+            //! initialize animation
+            virtual bool initializeAnimation( void );
 
-        //! animate
-        virtual bool animate( void );
+            //! animate
+            virtual bool animate( void );
 
-        //! called when target is destroyed
-        virtual void targetDestroyed( void );
+            //! called when target is destroyed
+            virtual void targetDestroyed( void );
 
-        private:
+      private:
 
-        //! needed to start animations out of parent paintEvent
-        QBasicTimer timer_;
+            //! needed to start animations out of parent paintEvent
+            QBasicTimer timer_;
 
-        //! target
-        QWeakPointer<QComboBox> target_;
+            //! target
+            QWeakPointer<QComboBox> target_;
 
-    };
+      };
 
 #endif

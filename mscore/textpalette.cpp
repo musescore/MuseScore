@@ -25,8 +25,6 @@
 #include "libmscore/style.h"
 #include "musescore.h"
 
-extern TextPalette* textPalette;
-
 //---------------------------------------------------------
 //   codeIcon
 //---------------------------------------------------------

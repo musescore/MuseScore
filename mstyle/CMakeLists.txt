@@ -32,7 +32,6 @@ QT4_WRAP_CPP (mocs
       dockseparatorengine.h dockseparatordata.h animationdata.h
       comboboxdata.h comboboxengine.h labeldata.h labelengine.h lineeditdata.h lineeditengine.h
       stackedwidgetdata.h stackedwidgetengine.h transitiondata.h transitions.h transitionwidget.h
-      windowmanager.h
       )
 
 if (APPLE)
@@ -58,14 +57,17 @@ add_library (
       toolboxengine.cpp widgetstatedata.cpp widgetstateengine.cpp mconfig.cpp
       comboboxdata.cpp comboboxengine.cpp labeldata.cpp labelengine.cpp lineeditdata.cpp
       lineeditengine.cpp stackedwidgetdata.cpp stackedwidgetengine.cpp transitiondata.cpp
-      transitions.cpp transitionwidget.cpp windowmanager.cpp
+      transitions.cpp transitionwidget.cpp
       )
+#      windowmanager.cpp
 
 set_target_properties (
       mstyle
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(mstyle all)
 
 ADD_DEPENDENCIES(mstyle mops1)
 ADD_DEPENDENCIES(mstyle mops2)

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: articulation.cpp 5604 2012-05-04 15:29:13Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -57,11 +56,11 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             },
       { staccatoSym, staccatoSym,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
-            0., ARTICULATION_SHOW_IN_PITCHED_STAFF
+            0., ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { ustaccatissimoSym,   dstaccatissimoSym,
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "staccatissimo"),
-            0., ARTICULATION_SHOW_IN_PITCHED_STAFF
+            0., ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { tenutoSym, tenutoSym,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),
@@ -179,16 +178,16 @@ Articulation::Articulation(Score* s)
       _direction = MScore::AUTO;
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      setSubtype(Articulation_Fermata);
+      setArticulationType(Articulation_Fermata);
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setArticulationType
 //---------------------------------------------------------
 
-void Articulation::setSubtype(ArticulationType idx)
+void Articulation::setArticulationType(ArticulationType idx)
       {
-      _subtype = idx;
+      _articulationType = idx;
       _anchor = score()->style()->articulationAnchor(idx);
       }
 
@@ -198,7 +197,7 @@ void Articulation::setSubtype(ArticulationType idx)
 
 void Articulation::read(XmlReader& e)
       {
-      setSubtype(Articulation_Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
+      setArticulationType(Articulation_Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
@@ -248,7 +247,7 @@ void Articulation::write(Xml& xml) const
             }
       xml.tag("subtype", subtypeName());
       Element::writeProperties(xml);
-      if (_anchor != score()->style()->articulationAnchor(subtype()))
+      if (_anchor != score()->style()->articulationAnchor(articulationType()))
             xml.tag("anchor", int(_anchor));
       xml.etag();
       }
@@ -259,7 +258,7 @@ void Articulation::write(Xml& xml) const
 
 QString Articulation::subtypeName() const
       {
-      return articulationList[subtype()].name;
+      return articulationList[articulationType()].name;
       }
 
 //---------------------------------------------------------
@@ -268,7 +267,7 @@ QString Articulation::subtypeName() const
 
 qreal Articulation::timeStretch() const
       {
-      return articulationList[subtype()].timeStretch;
+      return articulationList[articulationType()].timeStretch;
       }
 
 //---------------------------------------------------------
@@ -278,7 +277,7 @@ qreal Articulation::timeStretch() const
 void Articulation::setSubtype(const QString& s)
       {
       if (s[0].isDigit()) {         // for backward compatibility
-            setSubtype(ArticulationType(s.toInt()));
+            setArticulationType(ArticulationType(s.toInt()));
             return;
             }
       int st;
@@ -324,7 +323,7 @@ void Articulation::setSubtype(const QString& s)
                   qDebug("Articulation: unknown <%s>\n", qPrintable(s));
                   }
             }
-      setSubtype(ArticulationType(st));
+      setArticulationType(ArticulationType(st));
       }
 
 //---------------------------------------------------------
@@ -364,8 +363,8 @@ QPointF Articulation::canvasPos() const
 
 void Articulation::draw(QPainter* painter) const
       {
-      SymId sym = _up ? articulationList[subtype()].upSym : articulationList[subtype()].downSym;
-      int flags = articulationList[subtype()].flags;
+      SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
+      int flags = articulationList[articulationType()].flags;
       if (staff()) {
             if (staff()->staffGroup() == TAB_STAFF) {
                   if (!(flags & ARTICULATION_SHOW_IN_TABLATURE))
@@ -392,21 +391,12 @@ ChordRest* Articulation::chordRest() const
       }
 
 //---------------------------------------------------------
-//   articulationType
-//---------------------------------------------------------
-
-ArticulationType Articulation::articulationType() const
-      {
-      return ArticulationType(subtype());
-      }
-
-//---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------
 
 QString Articulation::subtypeUserName() const
       {
-      return articulationList[subtype()].description;
+      return articulationList[articulationType()].description;
       }
 
 //---------------------------------------------------------
@@ -417,7 +407,7 @@ QString Articulation::subtypeUserName() const
 
 void Articulation::layout()
       {
-      SymId sym = _up ? articulationList[subtype()].upSym : articulationList[subtype()].downSym;
+      SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
       setbbox(score()->sym(sym).bbox(magS()));
       }
 
@@ -441,7 +431,7 @@ void Articulation::reset()
       {
       if (_direction != MScore::AUTO)
             score()->undoChangeProperty(this, P_DIRECTION, int(MScore::AUTO));
-      ArticulationAnchor a = score()->style()->articulationAnchor(subtype());
+      ArticulationAnchor a = score()->style()->articulationAnchor(articulationType());
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ARTICULATION_ANCHOR, int(a));
       Element::reset();

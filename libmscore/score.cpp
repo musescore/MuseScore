@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: score.cpp 5632 2012-05-15 16:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -42,7 +41,7 @@
 #include "pitchspelling.h"
 #include "line.h"
 #include "volta.h"
-#include "event.h"
+// #include "event.h"
 #include "repeat.h"
 #include "ottava.h"
 #include "barline.h"
@@ -266,7 +265,6 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 void Score::init()
       {
       _linkId         = 0;
-      _testMode       = false;
       _parentScore    = 0;
       _currentLayer   = 0;
       _playMode       = PLAYMODE_SYNTHESIZER;
@@ -375,7 +373,9 @@ Score::Score(Score* parent)
       {
       init();
       _parentScore = parent;
+      delete _undo;
       _undo        = 0;
+      delete _repeatList;
       _repeatList  = 0;
 
       _style = *parent->style();
@@ -384,7 +384,7 @@ Score::Score(Score* parent)
             if (f.open(QIODevice::ReadOnly))
                   _style.load(&f);
             }
-      _syntiState = parent->_syntiState;
+      _synthesizerState = parent->_synthesizerState;
       }
 
 //---------------------------------------------------------
@@ -417,7 +417,7 @@ Score::~Score()
       delete _sigmap;
       delete _repeatList;
       foreach(StaffType** st, _staffTypes) {
-            if (!(*st)->buildin())
+            if (!(*st)->builtin())
                   delete *st;
             delete st;
             }
@@ -520,7 +520,7 @@ void Score::fixTicks()
                   Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegBreath;
 
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        if (s->subtype() == Segment::SegBreath) {
+                        if (s->segmentType() == Segment::SegBreath) {
                               setPause(s->tick(), .1);
                               }
                         else {
@@ -814,7 +814,7 @@ Note* prevNote(Note* n)
       int startTrack = staff * VOICES + n->voice() - 1;
       int endTrack   = 0;
       while (seg) {
-            if (seg->subtype() == Segment::SegChordRest) {
+            if (seg->segmentType() == Segment::SegChordRest) {
                   for (int track = startTrack; track >= endTrack; --track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == Element::CHORD)
@@ -844,7 +844,7 @@ Note* nextNote(Note* n)
       int startTrack = staff * VOICES + n->voice() + 1;
       int endTrack   = staff * VOICES + VOICES;
       while (seg) {
-            if (seg->subtype() == Segment::SegChordRest) {
+            if (seg->segmentType() == Segment::SegChordRest) {
                   for (int track = startTrack; track < endTrack; ++track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == Element::CHORD) {
@@ -1093,7 +1093,7 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
       {
       if (s == 0)
             return 0;
-      assert(s->subtype() == Segment::SegChordRest);
+      assert(s->segmentType() == Segment::SegChordRest);
       // Segment* s1 = s;
       ChordRest* cr1;
       for (Segment* s1 = s; s1; s1 = s1->prev(Segment::SegChordRest)) {
@@ -1442,7 +1442,8 @@ void Score::addElement(Element* element)
             case Element::CLEF:
                   {
                   Clef* clef = static_cast<Clef*>(element);
-                  updateNoteLines(clef->segment(), clef->track());
+                  if (!clef->generated())
+                        updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
             case Element::KEYSIG:
@@ -1600,7 +1601,8 @@ void Score::removeElement(Element* element)
             case Element::CLEF:
                   {
                   Clef* clef = static_cast<Clef*>(element);
-                  updateNoteLines(clef->segment(), clef->track());
+                  if (!clef->generated())
+                        updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
             case Element::KEYSIG:
@@ -1828,6 +1830,7 @@ void Score::setSelection(const Selection& s)
       {
       deselectAll();
       _selection = s;
+
       foreach(Element* e, _selection.elements())
             e->setSelected(true);
       }
@@ -1943,7 +1946,7 @@ void Score::addStaffType(int idx, StaffType* st)
             // store the updated staff type
             *(_staffTypes[idx]) = st;
             // delete old staff type if not built-in
-            if (!oldStaffType->buildin())
+            if (!oldStaffType->builtin())
                   delete oldStaffType;
             }
       }
@@ -2075,7 +2078,7 @@ void Score::updateNotes()
                   tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
 
                   for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->subtype() & (Segment::SegChordRestGrace)))
+                        if (!(segment->segmentType() & (Segment::SegChordRestGrace)))
                               continue;
                         m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
                         }
@@ -2097,6 +2100,38 @@ void Score::cmdUpdateNotes()
       }
 
 //---------------------------------------------------------
+//   cmdUpdateAccidentals
+///   update accidentals upto next keySig change
+//---------------------------------------------------------
+
+void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
+      {
+      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
+            beginMeasure->no(), staffIdx);
+      Staff* st = staff(staffIdx);
+      for (Measure* m = beginMeasure; m; m = m->nextMeasure()) {
+            AccidentalState as;
+            as.init(st->keymap()->key(m->tick()));
+
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if ((m != beginMeasure) &&
+                        (s->segmentType() & (Segment::SegKeySig))) {
+                        KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
+                        if (ks && (!ks->generated())) {
+                              // found new key signature
+                              qDebug("leaving cmdUpdateAccidentals at m=%d",
+                                    m->no());
+                              return;
+                              }
+                        }
+                  if (s->segmentType() & (Segment::SegChordRestGrace))
+                        m->updateAccidentals(s, staffIdx, &as);
+                  }
+            }
+      qDebug("leaving cmdUpdateAccidentals at end of score");
+      }
+
+//---------------------------------------------------------
 //   updateAccidentals
 //---------------------------------------------------------
 
@@ -2108,7 +2143,7 @@ void Score::updateAccidentals(Measure* m, int staffIdx)
       as.init(st->keymap()->key(m->tick()));
 
       for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->subtype() & (Segment::SegChordRestGrace))
+            if (segment->segmentType() & (Segment::SegChordRestGrace))
                   m->updateAccidentals(segment, staffIdx, &as);
             }
       }
@@ -2149,7 +2184,7 @@ Score* Score::clone()
                         Element* e = s->element(track);
                         if (e->generated())
                               continue;
-                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
@@ -2171,15 +2206,14 @@ Score* Score::clone()
       }
 
 //---------------------------------------------------------
-//   setSyntiSettings
+//   setSynthesizerState
 //---------------------------------------------------------
 
-void Score::setSyntiState(const SyntiState& s)
+void Score::setSynthesizerState(const SynthesizerState& s)
       {
-      if (!(_syntiState == s)) {
-            // _dirty = true;       // DEBUG: conflicts with setting of default sound font
-            _syntiState = s;
-            }
+      // TODO: make undoable
+      _dirty = true;
+      _synthesizerState = s;
       }
 
 //---------------------------------------------------------
@@ -2270,10 +2304,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       clef->setParent(seg);
       undoAddElement(clef);
 
-      int n = p->nstaves();
-      Staff* nstaff = staff(staffIdx + n - 1);
-      undoChangeBarLineSpan(s, n, 0, nstaff->lines() - 1);
-      adjustBracketsIns(staffIdx+1, staffIdx+2);
       undoChangeKeySig(ns, 0, s->key(0));
 
 #if 0       // created on layout
@@ -2322,6 +2352,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Note* nnote = new Note(*note);
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
+                        nnote->updateLine();
                         removeNotes.append(note);
                         }
                   foreach(Note* note, removeNotes) {
@@ -2690,8 +2721,8 @@ void Score::padToggle(int n)
             //
             // handle appoggiatura and acciaccatura
             //
-            _undo->push(new ChangeDurationType(cr, _is.duration()));
-            _undo->push(new ChangeDuration(cr, _is.duration().fraction()));
+            undo(new ChangeDurationType(cr, _is.duration()));
+            undo(new ChangeDuration(cr, _is.duration().fraction()));
             }
       else
             changeCRlen(cr, _is.duration());
@@ -2814,7 +2845,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int etick = tick + m->ticks();
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStartSegment(m->tick2segment(tick, true));
-                        _selection.setEndSegment(tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         }
                   else {
                         select(0, SELECT_SINGLE, 0);
@@ -2853,10 +2884,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
-                        //_selection.setStartSegment(m->tick2segment(tick, true));
-                        _selection.setStartSegment(m->first());
-                        // _selection.setEndSegment(tick2segment(etick, true));
-                        _selection.setEndSegment(m->last());
+                        _selection.setStartSegment(m->tick2segment(tick, true));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                         }
                   else if (_selection.state() == SEL_RANGE) {
                         if (staffIdx < _selection.staffStart())
@@ -2868,14 +2897,14 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               activeIsFirst = true;
                               }
                         else if (etick >= _selection.tickEnd())
-                              _selection.setEndSegment(tick2segment(etick, true));
+                              _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                         else {
                               if (_selection.activeSegment() == _selection.startSegment()) {
                                     _selection.setStartSegment(m->tick2segment(tick, true));
                                     activeIsFirst = true;
                                     }
                               else
-                                    _selection.setEndSegment(tick2segment(etick, true));
+                                    _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick, true));
                               }
                         }
                   else if (_selection.isSingle()) {
@@ -3066,6 +3095,7 @@ void Score::lassoSelectEnd()
 
       if (_selection.elements().isEmpty()) {
             _selection.setState(SEL_NONE);
+            _updateAll = true;
             return;
             }
       _selection.setState(SEL_LIST);
@@ -3286,16 +3316,6 @@ void Score::linkId(int val)
       Score* s = rootScore();
       if (val >= s->_linkId)
             s->_linkId = val + 1;   // update unused link id
-      }
-
-//---------------------------------------------------------
-//   setTestMode
-//---------------------------------------------------------
-
-void Score::setTestMode(bool val)
-      {
-      foreach(Score* score, scoreList())
-            score->_testMode = val;
       }
 
 //---------------------------------------------------------

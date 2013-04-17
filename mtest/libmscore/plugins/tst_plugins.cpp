@@ -90,7 +90,7 @@ void TestPlugins::plugins02()
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             }
       else {
-            qreal width = object->property("width").toDouble();
+            qreal width  = object->property("width").toDouble();
             qreal height = object->property("height").toDouble();
             QCOMPARE(width, 150.0);
             QCOMPARE(height, 75.0);

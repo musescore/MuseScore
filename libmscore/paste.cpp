@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: cmd.cpp 5644 2012-05-17 10:53:29Z lasconic $
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -312,9 +311,10 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "Text"
                            || tag == "StaffText"
                            || tag == "TempoText"
+                           || tag == "FiguredBass"
                            ) {
                               Element* el = Element::name2Element(tag, this);
-                              el->setTrack(dstStaffIdx * VOICES);
+                              el->setTrack(dstStaffIdx * VOICES);             // a valid track might be necessary for el->read() to work
 
                               int tick = e.tick() - tickStart + dstTick;
                               Measure* m = tick2measure(tick);
@@ -322,6 +322,9 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               el->setParent(seg);
                               el->read(e);
 
+                              // be sure to paste the element in the destination track;
+                              // setting track needs to be repeated, as it might have been overwritten by el->read()
+                              el->setTrack(dstStaffIdx * VOICES);
                               undoAddElement(el);
                               }
                         else if (tag == "Clef") {

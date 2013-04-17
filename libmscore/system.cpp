@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: system.cpp 5656 2012-05-21 15:36:47Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -187,7 +186,7 @@ void System::layout(qreal xo1)
                               b->setParent(this);
                               b->setTrack(track);
                               b->setLevel(i);
-                              b->setSubtype(s->bracket(i));
+                              b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
                               score()->undoAddElement(b);
                               }
@@ -296,6 +295,7 @@ void System::layout2()
 
       qreal y = 0.0;
       int lastStaffIdx  = 0;   // last visible staff
+      int firstStaffIdx = -1;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             StyleIdx downDistance;
@@ -346,7 +346,11 @@ void System::layout2()
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
+            if (firstStaffIdx == -1)
+                  firstStaffIdx = staffIdx;
             }
+      if (firstStaffIdx == -1)
+            firstStaffIdx = 0;
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       setHeight(systemHeight);
@@ -364,7 +368,8 @@ void System::layout2()
             }
 
       if (_barLine) {
-            _barLine->setSpan(lastStaffIdx + 1);
+            _barLine->setTrack(firstStaffIdx * VOICES);
+            _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
             if (score()->staff(0)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
 
@@ -460,13 +465,18 @@ void System::clear()
 
 void System::setInstrumentNames(bool longName)
       {
+      //
+      // remark: add/remove instrument names is not undo/redoable
+      //         as add/remove of systems is not undoable
+      //
       if (isVbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()) {
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        score()->undoRemoveElement(t);
+                        //score()->undoRemoveElement(t);
+                        score()->removeElement(t);
                   }
             return;
             }
@@ -476,7 +486,8 @@ void System::setInstrumentNames(bool longName)
             Staff* s        = score()->staff(staffIdx);
             if (!s->isTop()) {
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        score()->undoRemoveElement(t);
+                        //score()->undoRemoveElement(t);
+                        score()->removeElement(t);
                   continue;
                   }
 
@@ -492,15 +503,17 @@ void System::setInstrumentNames(bool longName)
                         iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        iname->setSubtype(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
-                        score()->undoAddElement(iname);
+                        iname->setInstrumentNameType(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
+                        // score()->undoAddElement(iname);
+                        score()->addElement(iname);
                         }
                   iname->setText(sn.name);
                   iname->setLayoutPos(sn.pos);
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)
-                  score()->undoRemoveElement(staff->instrumentNames[idx]);
+                  // score()->undoRemoveElement(staff->instrumentNames[idx]);
+                  score()->removeElement(staff->instrumentNames[idx]);
             }
       }
 
@@ -544,8 +557,10 @@ void System::add(Element* el)
       el->setParent(this);
       switch(el->type()) {
             case INSTRUMENT_NAME:
+// qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
                   _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
                   break;
+
             case BEAM:
                   score()->add(el);
                   break;
@@ -564,7 +579,7 @@ void System::add(Element* el)
                         b->setLevel(level);
                         b->setSpan(1);
                         }
-                  b->staff()->setBracket(level,     b->subtype());
+                  b->staff()->setBracket(level,     b->bracketType());
                   b->staff()->setBracketSpan(level, b->span());
                   _brackets.append(b);
                   }
@@ -950,7 +965,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
             else
                   staffIdx = ss->spanner()->staffIdx();
             if (staffIdx == -1) {
-                  printf("System::scanElements: staffIDx == -1: %s %p\n", ss->spanner()->name(), ss->spanner());
+                  qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
                   staffIdx = 0;
                   }
             if (all || score()->staff(staffIdx)->show())

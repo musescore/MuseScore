@@ -26,6 +26,23 @@
 
 class MuseScore;
 
+//---------------------------------------------------------
+//   MyNetworkAccessManager
+//---------------------------------------------------------
+
+class MyNetworkAccessManager: public QNetworkAccessManager
+      {
+      Q_OBJECT
+
+   public:
+      MyNetworkAccessManager(QObject *parent) : QNetworkAccessManager(parent) {}
+
+   protected:
+      QNetworkReply * createRequest(Operation op,
+                                          const QNetworkRequest & req,
+                                          QIODevice * outgoingData = 0);
+      };
+
 // Derive from QWebPage, because a WebPage handles
 // plugin creation
 
@@ -43,7 +60,6 @@ class MyWebPage: public QWebPage
          const QUrl &url,
          const QStringList &paramNames,
          const QStringList & paramValues);
-      QString userAgentForUrl(const QUrl &url) const;
 
    public:
       MyWebPage(QObject *parent = 0);
@@ -80,7 +96,6 @@ class MyWebView: public QWebView
       ~MyWebView();
       MyWebPage* webPage() { return &m_page;}
       virtual QSize sizeHint () const;
-      void load (const QNetworkRequest& request, QNetworkAccessManager::Operation operation = QNetworkAccessManager::GetOperation, const QByteArray& body = QByteArray());
       };
 
 //---------------------------------------------------------
@@ -95,18 +110,13 @@ class WebPageDockWidget : public QDockWidget
 
    public slots:
       void addToJavascript();
-#if QT_VERSION >= 0x040800
       void saveOnlineFinished();
-#endif
 
    public:
       WebPageDockWidget(MuseScore* mscore, QWidget* parent = 0);
       Q_INVOKABLE void load();
-#if QT_VERSION >= 0x040800
       Q_INVOKABLE bool saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName);
-#endif
       Q_INVOKABLE bool setCurrentScoreSource(QString source);
-      
       Q_INVOKABLE QObject* currentScore();
       
       QUrl webUrl();

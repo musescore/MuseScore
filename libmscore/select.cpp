@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: select.cpp 5582 2012-04-27 19:16:19Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -165,11 +164,11 @@ ChordRest* Selection::lastChordRest(int track) const
             return 0;
             }
       ChordRest* cr = 0;
-      for (ciElement i = _el.begin(); i != _el.end(); ++i) {
+      for (auto i = _el.begin(); i != _el.end(); ++i) {
             Element* el = *i;
             if (el->type() == Element::NOTE)
                   el = ((Note*)el)->chord();
-            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->subtype() == Segment::SegChordRest) {
+            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == Segment::SegChordRest) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
@@ -181,6 +180,21 @@ ChordRest* Selection::lastChordRest(int track) const
                   }
             }
       return cr;
+      }
+
+//---------------------------------------------------------
+//   findMeasure
+//---------------------------------------------------------
+
+
+Measure* Selection::findMeasure() const
+      {
+      Measure *m = 0;
+      if (_el.size() > 0) {
+            Element* el = _el[0];
+            m = static_cast<Measure*>(el->findMeasure());
+            }
+      return m;
       }
 
 //---------------------------------------------------------
@@ -260,7 +274,7 @@ void Selection::updateSelectedElements()
 
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1()) {
-                  if (s->subtype() == Segment::SegEndBarLine)  // do not select end bar line
+                  if (s->segmentType() == Segment::SegEndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
                   if (!e)
@@ -517,7 +531,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->subtype() & (Segment::SegChordRestGrace)))
+                        if (!(seg->segmentType() & (Segment::SegChordRestGrace)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);

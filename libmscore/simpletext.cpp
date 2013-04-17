@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -46,17 +45,89 @@ SimpleText::SimpleText(const SimpleText& st)
       }
 
 //---------------------------------------------------------
+//   drawSelection
+//---------------------------------------------------------
+
+void SimpleText::drawSelection(QPainter* p, const QRectF& r) const
+      {
+      QBrush bg(QColor("steelblue"));
+      p->setCompositionMode(QPainter::CompositionMode_HardLight);
+      p->setBrush(bg);
+      p->setPen(Qt::NoPen);
+      p->drawRect(r);
+      p->setCompositionMode(QPainter::CompositionMode_SourceOver);
+      p->setPen(textColor());
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void SimpleText::draw(QPainter* p) const
       {
-      drawFrame(p);
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
-      p->setPen(textColor());
-      foreach(const TLine& t, _layout)
-            p->drawText(t.pos, t.text);
+      // p->setPen(textColor());
+      p->setPen(curColor());
+      int rows = _layout.size();
+      if (_editMode && _cursor.hasSelection()) {
+            int r1 = _cursor.selectLine;
+            int r2 = _cursor.line;
+            int c1 = _cursor.selectColumn;
+            int c2 = _cursor.column;
+
+            if (r1 > r2) {
+                  qSwap(r1, r2);
+                  qSwap(c1, c2);
+                  }
+            else if (r1 == r2) {
+                  if (c1 > c2)
+                        qSwap(c1, c2);
+                  }
+            for (int row = 0; row < rows; ++row) {
+                  const TLine& t = _layout.at(row);
+                  p->drawText(t.pos, t.text);
+                  if (row >= r1 && row <= r2) {
+                        QBrush bg(QColor("steelblue"));
+                        QFontMetricsF fm(_textStyle.fontPx(spatium()));
+                        QRectF br;
+                        if (row == r1 && r1 == r2) {
+                              QString left  = t.text.left(c1);
+                              QString mid   = t.text.mid(c1, c2 - c1);
+                              QString right = t.text.mid(c2);
+
+                              QPointF r (fm.width(left), 0.0);
+                              br = fm.boundingRect(mid).translated(t.pos + r);
+                              br.setWidth(fm.width(mid));
+                              }
+                        else if (row == r1) {
+                              QString left  = t.text.left(c1);
+                              QString right = t.text.mid(c1);
+
+                              QPointF r (fm.width(left), 0.0);
+                              br = fm.boundingRect(right).translated(t.pos + r);
+                              br.setWidth(fm.width(right));
+                              }
+                        else if (row == r2) {
+                              QString left  = t.text.left(c2);
+
+                              br = fm.boundingRect(left).translated(t.pos);
+                              br.setWidth(fm.width(left));
+                              }
+                        else  {
+                              br = fm.boundingRect(t.text).translated(t.pos);
+                              br.setWidth(fm.width(t.text));
+                              }
+                        drawSelection(p, br);
+                        }
+                  }
+            }
+      else {
+            for (int row = 0; row < rows; ++row) {
+                  const TLine& t = _layout.at(row);
+                  p->drawText(t.pos, t.text);
+                  }
+            }
 
       if (_editMode) {
             p->setBrush(QColor("steelblue"));
@@ -72,7 +143,6 @@ QRectF SimpleText::cursorRect() const
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       int line   = _cursor.line;
-//      qreal lh   = lineHeight();
       QPointF pt = _layout[line].pos;
       qreal xo   = fm.width(_layout[line].text.left(_cursor.column));
 
@@ -186,22 +256,18 @@ void SimpleText::layout()
                         }
                   }
             else {
-                  foreach(QString s, sl)
+                  foreach (QString s, sl)
                         _layout.append(TLine(s));
                   }
             }
-      int n = _layout.size();
-      if (!n) {
-            setPos(QPointF());
-            setbbox(QRectF());
-            return;
-            }
-
+      if (_layout.isEmpty())
+            _layout.append(TLine());
       QPointF o(_textStyle.offset(spatium()));
 
       QRectF bb;
       qreal lh = lineHeight();
       qreal ly = .0;
+      int n = _layout.size();
       for (int i = 0; i < n; ++i) {
             TLine* t = &_layout[i];
 
@@ -284,24 +350,6 @@ qreal SimpleText::baseLine() const
       }
 
 //---------------------------------------------------------
-//   setText
-//---------------------------------------------------------
-
-void SimpleText::setText(const QString& s)
-      {
-      _text = s;
-      }
-
-//---------------------------------------------------------
-//   getText
-//---------------------------------------------------------
-
-QString SimpleText::getText() const
-      {
-      return _text;
-      }
-
-//---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
@@ -309,7 +357,10 @@ void SimpleText::startEdit(MuseScoreView*, const QPointF& pt)
       {
       _cursor.line   = 0;
       _cursor.column = 0;
+      if (_layout.isEmpty())
+            layout();
       setCursor(pt);
+      undoPushProperty(P_TEXT);
       }
 
 //---------------------------------------------------------
@@ -325,6 +376,13 @@ void SimpleText::endEdit()
             if (!_text.isEmpty())
                   _text += "\n";
             _text += tl.text;
+            }
+      if (links()) {
+            foreach(Element* e, *links()) {
+                  if (e == this)
+                        continue;
+                  e->undoChangeProperty(P_TEXT, _text);
+                  }
             }
       }
 
@@ -415,15 +473,39 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
                   s = "-";
                   break;
 
+            case Qt::Key_F:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d191");
+                  break;
+            case Qt::Key_M:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d190");
+                  break;
+            case Qt::Key_P:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18f");
+                  break;
+            case Qt::Key_Z:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18e");
+                  break;
+            case Qt::Key_S:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18d");
+                  break;
+            case Qt::Key_R:
+                  if (modifiers & Qt::ControlModifier)
+                        s = QString::fromUtf8(u8"\U0001d18c");
+                  break;
             default:
                   break;
             }
-
       if (!s.isEmpty()) {
-            curLine().insert(_cursor.column, s);
-            ++_cursor.column;
+            if (!s[0].isPrint())
+                  s = "";
+            else
+                  insertText(s);
             }
-
       layout();
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
@@ -439,6 +521,19 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             score()->addRefresh(refresh.adjusted(-w, -w, w, w));
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   insertText
+//---------------------------------------------------------
+
+void SimpleText::insertText(const QString& s)
+      {
+      if (!s.isEmpty()) {
+            curLine().insert(_cursor.column, s);
+            _cursor.column += s.size();
+            _cursor.selectColumn = _cursor.column;
+            }
       }
 
 //---------------------------------------------------------
@@ -465,6 +560,8 @@ bool SimpleText::deletePreviousChar()
             curLine().remove(_cursor.column-1, 1);
             --_cursor.column;
             }
+      _cursor.selectLine   = _cursor.line;
+      _cursor.selectColumn = _cursor.column;
       return true;
       }
 
@@ -479,6 +576,8 @@ bool SimpleText::deleteChar()
       if (curLine().at(_cursor.column-1).isHighSurrogate())
             curLine().remove(_cursor.column, 1);
       curLine().remove(_cursor.column, 1);
+      _cursor.selectLine   = _cursor.line;
+      _cursor.selectColumn = _cursor.column;
       return true;
       }
 
@@ -548,26 +647,11 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
                   qDebug("SimpleText::movePosition: not implemented");
                   return false;
             }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   addChar
-//---------------------------------------------------------
-
-void SimpleText::addChar(int code)
-      {
-      QString ss;
-      if (code & 0xffff0000) {
-            ss = QChar(QChar::highSurrogate(code));
-            ss += QChar(QChar::lowSurrogate(code));
+      if (mode == QTextCursor::MoveAnchor) {
+            _cursor.selectLine   = _cursor.line;
+            _cursor.selectColumn = _cursor.column;
             }
-      else
-            ss = QChar(code);
-      curLine().insert(_cursor.column, ss);
-      _cursor.column += ss.size();
-      score()->setLayoutAll(true);
-      score()->end();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -583,7 +667,7 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       for (int row = 0; row < _layout.size(); ++row) {
             const TLine& l = _layout.at(row);
             if (l.pos.y() > pt.y()) {
-                  _cursor.line = row == 0 ? 0 : row-1;
+                  _cursor.line = row;
                   break;
                   }
             }
@@ -591,12 +675,59 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       const QString& s(curLine());
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       for (int col = 0; col < s.size(); ++col) {
+            if (s.at(col).isLowSurrogate())
+                  continue;
             if (x + fm.width(s.left(col))  > pt.x()) {
                   _cursor.column = col;
                   break;
                   }
             }
       score()->setUpdateAll(true);
+      if (mode == QTextCursor::MoveAnchor) {
+            _cursor.selectLine = _cursor.line;
+            _cursor.selectColumn = _cursor.column;
+            }
+      if (_cursor.hasSelection())
+            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
       return true;
+      }
+
+//---------------------------------------------------------
+//   selectedText
+//    return current selection
+//---------------------------------------------------------
+
+QString SimpleText::selectedText() const
+      {
+      QString s;
+      int r1 = _cursor.selectLine;
+      int r2 = _cursor.line;
+      int c1 = _cursor.selectColumn;
+      int c2 = _cursor.column;
+
+      if (r1 > r2) {
+            qSwap(r1, r2);
+            qSwap(c1, c2);
+            }
+      else if (r1 == r2) {
+            if (c1 > c2)
+                  qSwap(c1, c2);
+            }
+      int rows = _layout.size();
+      for (int row = 0; row < rows; ++row) {
+            const TLine& t = _layout.at(row);
+            if (row >= r1 && row <= r2) {
+                  if (row == r1 && r1 == r2)
+                        s += t.text.mid(c1, c2 - c1);
+                  else if (row == r1)
+                        s += t.text.mid(c1);
+                  else if (row == r2)
+                        s += t.text.left(c2);
+                  else
+                        s += t.text;
+                  }
+            s += "\n";
+            }
+      return s;
       }
 

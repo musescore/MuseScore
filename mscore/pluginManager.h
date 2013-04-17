@@ -31,7 +31,6 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       Preferences prefs;
 
       virtual void closeEvent(QCloseEvent*);
-      void updateValues();
       virtual void accept();
 
    private slots:

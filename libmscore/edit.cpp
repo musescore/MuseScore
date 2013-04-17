@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: edit.cpp 5585 2012-04-28 09:11:33Z wschweer $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //
@@ -52,6 +51,7 @@
 #include "pitchspelling.h"
 #include "tempotext.h"
 #include "dynamic.h"
+#include "repeat.h"
 
 //---------------------------------------------------------
 //   getSelectedNote
@@ -361,6 +361,7 @@ Note* Score::addNote(Chord* chord, int pitch)
       note->setPitch(pitch);
       note->setTpcFromPitch();
       undoAddElement(note);
+      _playNote = true;
       select(note, SELECT_SINGLE, 0);
       return note;
       }
@@ -378,6 +379,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       if (note->tpc() == INVALID_TPC)
             note->setTpcFromPitch();
       undoAddElement(note);
+      _playNote = true;
       select(note, SELECT_SINGLE, 0);
       return note;
       }
@@ -491,8 +493,11 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
                         }
                   if (!m || m->type() == Element::MEASURE)
                         break;
-                  while (m->type() != Element::MEASURE)
+                  while (m->type() != Element::MEASURE) {
                         m = m->next();
+                        if (!m)
+                              break;
+                        }
                   fm1 = static_cast<Measure*>(m);
                   if (fm1 == 0)
                         break;
@@ -532,7 +537,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //  ignore if there is already a timesig
             //  with same values
             //
-            if ((ots->subtype() == ts->subtype())
+            if ((ots->timeSigType() == ts->timeSigType())
                && (ots->sig().identical(ts->sig()))
                && (ots->stretch() == ts->stretch())) {
                   delete ts;
@@ -549,52 +554,54 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-
-      Measure* nfm = fm;
-      if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
-            //
-            // Set time signature of all measures up to next
-            // time signature. Do not touch measure contents.
-            //
-            for (Measure* m = fm; m; m = m->nextMeasure()) {
-                  if ((m != fm) && m->first(Segment::SegTimeSig))
-                        break;
-                  bool changeActual = m->len() == m->timesig();
-                  undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                  if (changeActual)
-                        undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
-                  }
-            }
-      else {
-            //
-            // rewrite all measures up to the next time signature
-            //
-            if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
-                  // handle upbeat
-                  undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                  rewriteMeasures(fm->nextMeasure(), ns);
+      foreach(Score* score, scoreList()) {
+            Measure* fm = score->tick2measure(tick);
+            Measure* nfm = fm;
+            if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
+                  //
+                  // Set time signature of all measures up to next
+                  // time signature. Do not touch measure contents.
+                  //
+                  for (Measure* m = fm; m; m = m->nextMeasure()) {
+                        if ((m != fm) && m->first(Segment::SegTimeSig))
+                              break;
+                        bool changeActual = m->len() == m->timesig();
+                        undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        if (changeActual)
+                              undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
+                        }
                   }
             else {
-                  rewriteMeasures(fm, ns);
-                  nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                  //
+                  // rewrite all measures up to the next time signature
+                  //
+                  if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
+                        // handle upbeat
+                        undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        score->rewriteMeasures(fm->nextMeasure(), ns);
+                        }
+                  else {
+                        score->rewriteMeasures(fm, ns);
+                        nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                        }
                   }
-            }
 
-      seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
-      int n = _staves.size();
-      for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-            TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
-            if (nsig == 0) {
-                  nsig = new TimeSig(this);
-                  nsig->setTrack(staffIdx * VOICES);
-                  nsig->setParent(seg);
-                  nsig->setSig(ts->sig(), ts->subtype());
-                  undoAddElement(nsig);
-                  }
-            else {
-                  undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
-                        ts->numeratorString(), ts->denominatorString(), ts->subtype()));
-                  nsig->setDropTarget(0);       // DEBUG
+            seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
+            int n = score->nstaves();
+            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                  TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
+                  if (nsig == 0) {
+                        nsig = new TimeSig(this);
+                        nsig->setTrack(staffIdx * VOICES);
+                        nsig->setParent(seg);
+                        nsig->setSig(ts->sig(), ts->timeSigType());
+                        undoAddElement(nsig);
+                        }
+                  else {
+                        undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
+                              ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+                        nsig->setDropTarget(0);       // DEBUG
+                        }
                   }
             }
       delete ts;
@@ -679,6 +686,8 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr();
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
+      Tablature* neck = 0;
+      StaffTypeTablature * tab = 0;
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF: {
@@ -697,8 +706,8 @@ void Score::putNote(const Position& p, bool replace)
             case TAB_STAFF: {
                   if (_is.rest)
                         return;
-                  Tablature* neck = instr->tablature();
-                  StaffTypeTablature * tab = (StaffTypeTablature*)st->staffType();
+                  neck = instr->tablature();
+                  tab = (StaffTypeTablature*)st->staffType();
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= neck->strings())
                       return;
@@ -760,6 +769,18 @@ void Score::putNote(const Position& p, bool replace)
                         // if a note on same string already exists, update to new pitch/fret
                         foreach(Note * note, static_cast<Chord*>(cr)->notes())
                               if(note->string() == nval.string) { // if string is the same
+                                    // if adding a new digit will keep fret number within fret limit
+                                    // add a digit
+                                    if (neck && tab->useNumbers() && note->fret() >= 1) {
+                                          int fret = note->fret() * 10 + nval.fret;
+                                          if (fret <= neck->frets() ) {
+                                                nval.fret = fret;
+                                                nval.pitch = neck->getPitch(nval.string, nval.fret);
+                                                }
+                                          else
+                                                qDebug("can't increase fret to %d", fret);
+                                          }
+                                    // otherwise, replace with new fret
                                     note->undoChangeProperty(P_PITCH, nval.pitch);
                                     note->undoChangeProperty(P_FRET, nval.fret);
                                     return;
@@ -902,7 +923,7 @@ void Score::cmdAddHairpin(bool decrescendo)
             return;
 
       Hairpin* pin = new Hairpin(this);
-      pin->setSubtype(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
+      pin->setHairpinType(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
       pin->setTrack(cr1->track());
       pin->setStartElement(cr1->segment());
       pin->setEndElement(cr2->segment());
@@ -916,12 +937,12 @@ void Score::cmdAddHairpin(bool decrescendo)
 //   cmdSetBeamMode
 //---------------------------------------------------------
 
-void Score::cmdSetBeamMode(int mode)
+void Score::cmdSetBeamMode(BeamMode mode)
       {
       ChordRest* cr = getSelectedChordRest();
       if (cr == 0)
             return;
-      cr->setBeamMode(BeamMode(mode));
+      cr->setBeamMode(mode);
       _layoutAll = true;
       }
 
@@ -964,14 +985,14 @@ void Score::cmdFlip()
                   undoChangeProperty(slur, P_SLUR_DIRECTION, dir);
                   }
             else if (e->type() == Element::HAIRPIN_SEGMENT) {
-                  int st = static_cast<Hairpin*>(e)->subtype() == 0 ? 1 : 0;
+                  int st = static_cast<Hairpin*>(e)->hairpinType() == 0 ? 1 : 0;
                   e->score()->undoChangeProperty(e, P_SUBTYPE, st);
                   }
             else if (e->type() == Element::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (a->subtype() == Articulation_Staccato
-                     || a->subtype() == Articulation_Tenuto
-                     || a->subtype() == Articulation_Sforzatoaccent) {
+                  if (a->articulationType() == Articulation_Staccato
+                     || a->articulationType() == Articulation_Tenuto
+                     || a->articulationType() == Articulation_Sforzatoaccent) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == A_TOP_CHORD)
                               aa = A_BOTTOM_CHORD;
@@ -1060,9 +1081,9 @@ void Score::deleteItem(Element* el)
             case Element::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
                   InstrumentName* in = static_cast<InstrumentName*>(el);
-                  if (in->subtype() == INSTRUMENT_NAME_LONG)
+                  if (in->instrumentNameType() == INSTRUMENT_NAME_LONG)
                         undo(new ChangeInstrumentLong(0, part, QList<StaffNameDoc>()));
-                  else if (in->subtype() == INSTRUMENT_NAME_SHORT)
+                  else if (in->instrumentNameType() == INSTRUMENT_NAME_SHORT)
                         undo(new ChangeInstrumentShort(0, part, QList<StaffNameDoc>()));
                   }
                   break;
@@ -1077,6 +1098,7 @@ void Score::deleteItem(Element* el)
             case Element::TEXTLINE_SEGMENT:
             case Element::VOLTA_SEGMENT:
             case Element::SLUR_SEGMENT:
+            case Element::PEDAL_SEGMENT:
                   undoRemoveElement(static_cast<SpannerSegment*>(el)->spanner());
                   break;
 
@@ -1116,7 +1138,6 @@ void Score::deleteItem(Element* el)
                               rest->setDurationType(chord->durationType());
                               }
                         select(rest, SELECT_SINGLE, 0);
-//                        segment->measure()->setDirty();
                         }
                   else  {
                         // remove segment if empty
@@ -1126,6 +1147,19 @@ void Score::deleteItem(Element* el)
                         }
                   }
                   break;
+
+            case Element::REPEAT_MEASURE:
+                  {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(el);
+                  removeChordRest(rm, false);
+                  Rest* rest = new Rest(this);
+                  rest->setDurationType(TDuration::V_MEASURE);
+                  rest->setDuration(rm->measure()->len());
+                  rest->setTrack(rm->track());
+                  rest->setParent(rm->parent());
+                  Segment* segment = rm->segment();
+                  undoAddCR(rest, segment->measure(), segment->tick());
+                  }
 
             case Element::REST:
                   //
@@ -1157,20 +1191,33 @@ void Score::deleteItem(Element* el)
                   BarLine* bl  = static_cast<BarLine*>(el);
                   if (bl->parent()->type() != Element::SEGMENT)
                         break;
-                  Segment* seg = static_cast<Segment*>(bl->parent());
-                  Measure* m   = seg->measure();
-                  if (seg->subtype() == Segment::SegStartRepeatBarLine)
-                        undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatStart);
-                  else if (seg->subtype() == Segment::SegBarLine)
-                        undoRemoveElement(el);
-                  else if (seg->subtype() == Segment::SegEndBarLine) {
-                        if (m->endBarLineType() != NORMAL_BAR) {
-                              undoChangeRepeatFlags(m, m->repeatFlags() & ~RepeatEnd);
-                              Measure* nm = m->nextMeasure();
-                              if (nm)
-                                    undoChangeRepeatFlags(nm, nm->repeatFlags() & ~RepeatStart);
-                              undoChangeEndBarLineType(m, NORMAL_BAR);
-                              m->setEndBarLineGenerated(true);
+                  Segment* seg   = static_cast<Segment*>(bl->parent());
+                  bool normalBar = seg->measure()->endBarLineType() == NORMAL_BAR;
+                  int tick       = seg->tick();
+                  Segment::SegmentType segType = seg->segmentType();
+
+                  foreach(Score* score, scoreList()) {
+                        Measure* m   = score->tick2measure(tick);
+                        if (segType == Segment::SegStartRepeatBarLine)
+                              undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatStart);
+                        else if (segType == Segment::SegBarLine)
+                              undoRemoveElement(el);
+                        else if (segType == Segment::SegEndBarLine) {
+                              // if bar line has custom barLineType, change to barLineType of the whole measure
+                              if (bl->customSubtype()) {
+                                    undoChangeProperty(bl, P_SUBTYPE, seg->measure()->endBarLineType());
+                                    }
+                              // otherwise, if whole measure has special end bar line, change to normal
+                              else if (!normalBar) {
+                                    if (m->tick() >= tick)
+                                          m = m->prevMeasure();
+                                    undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatEnd);
+                                    Measure* nm = m->nextMeasure();
+                                    if (nm)
+                                          undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
+                                    undoChangeEndBarLineType(m, NORMAL_BAR);
+                                    m->setEndBarLineGenerated(true);
+                                    }
                               }
                         }
                   }
@@ -1197,14 +1244,37 @@ void Score::cmdDeleteSelectedMeasures()
       MeasureBase* is   = selection().startSegment()->measure();
       int startIdx      = measureIdx(is);
       Segment* seg      = selection().endSegment();
-      MeasureBase* ie   = seg ? seg->measure() : lastMeasure();
+      MeasureBase* ie;
+      // choose the correct last measure based on the end segment
+      // this depends on whether a whole measure is selected or only a few notes within it
+      if (seg)
+            ie = !seg->prev() ? seg->measure()->prev() : seg->measure();
+      else
+            ie = lastMeasure();
       int endIdx        = measureIdx(ie);
+      Measure* mBeforeSel = is->prevMeasure();
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
       if (ie->type() == Element::MEASURE) {
             Measure* iem = static_cast<Measure*>(ie);
             createEndBar = (iem == lastMeasure()) && (iem->endBarLineType() == END_BAR);
+            }
+
+      // get the last deleted timesig in order to restore after deletion
+      TimeSig* lastDeletedSig = 0;
+      for (MeasureBase* mb = ie;; mb = mb->prev()) {
+            if (mb->type() == Element::MEASURE) {
+                  Measure* m = static_cast<Measure*>(mb);
+                  Segment* sts = m->findSegment(Segment::SegTimeSig, m->tick());
+                  if (sts) {
+                        lastDeletedSig = static_cast<TimeSig*>(sts->element(0));
+                        break;
+                        }
+                  }
+
+            if (mb == is)
+                  break;
             }
 
       QList<Score*> scores = scoreList();
@@ -1232,6 +1302,29 @@ void Score::cmdDeleteSelectedMeasures()
                         }
                   }
             }
+
+      // insert correct timesig after deletion
+      Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+      if (mAfterSel && lastDeletedSig) {
+            bool changed = true;
+            if (mBeforeSel) {
+                  if (mBeforeSel->timesig() == mAfterSel->timesig()) {
+                        changed = false;
+                        }
+                  }
+            Segment* s = mAfterSel->findSegment(Segment::SegTimeSig, mAfterSel->tick());
+            if (!s && changed) {
+                  Segment* ns = mAfterSel->undoGetSegment(Segment::SegTimeSig, mAfterSel->tick());
+                  for (int staffIdx = 0; staffIdx < nstaves(); staffIdx++) {
+                        TimeSig* nts = new TimeSig(this);
+                        nts->setTrack(staffIdx * VOICES);
+                        nts->setParent(ns);
+                        nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
+                        undoAddElement(nts);
+                        }
+                  }
+            }
+
       select(0, SELECT_SINGLE, 0);
       _is.setSegment(0);        // invalidate position
       }
@@ -1247,10 +1340,10 @@ void Score::cmdDeleteSelection()
             Segment* s2 = selection().endSegment();
 
             Segment* ss1 = s1;
-            if (ss1->subtype() != Segment::SegChordRest)
+            if (ss1->segmentType() != Segment::SegChordRest)
                   ss1 = ss1->next1(Segment::SegChordRest);
             bool fullMeasure = ss1 && (ss1->measure()->first(Segment::SegChordRest) == ss1)
-                  && (s2 == 0 || (s2->subtype() == Segment::SegEndBarLine));
+                  && (s2 == 0 || (s2->segmentType() == Segment::SegEndBarLine));
 
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
@@ -1261,12 +1354,12 @@ void Score::cmdDeleteSelection()
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s != s2; s = s->next1()) {
                         if (s->element(track) &&
-                           ((s->subtype() == Segment::SegBreath)
-                           || (s->subtype() == Segment::SegGrace))) {
+                           ((s->segmentType() == Segment::SegBreath)
+                           || (s->segmentType() == Segment::SegGrace))) {
                               deleteItem(s->element(track));
                               continue;
                               }
-                        if (s->subtype() != Segment::SegChordRest || !s->element(track))
+                        if (s->segmentType() != Segment::SegChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (tick == -1) {
@@ -1461,10 +1554,10 @@ void Score::colorItem(Element* element)
                   refresh |= e->abbox();
                   if (e->type() == Element::BAR_LINE) {
                         Element* ep = e->parent();
-                        if (ep->type() == Element::SEGMENT && static_cast<Segment*>(ep)->subtype() == Segment::SegEndBarLine) {
+                        if (ep->type() == Element::SEGMENT && static_cast<Segment*>(ep)->segmentType() == Segment::SegEndBarLine) {
                               Measure* m = static_cast<Segment*>(ep)->measure();
                               BarLine* bl = static_cast<BarLine*>(e);
-                              m->setEndBarLineType(bl->subtype(), false, e->visible(), e->color());
+                              m->setEndBarLineType(bl->barLineType(), false, e->visible(), e->color());
                               }
                         }
                   }
@@ -1725,6 +1818,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                         if (lm)
                               lm->setEndBarLineType(END_BAR, endBarGenerated);
                         }
+                  score->fixTicks();
                   }
             else {
                   undo(new InsertMeasure(mb, im));
@@ -1736,26 +1830,16 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             //
             Score*      root = rootScore();
             Measure*    m = static_cast<Measure*>(omb);
-            int         n = root->nstaves();
-            bool        staffDone[n];
-            int         stIdx;
-            for (stIdx = 0; stIdx < n; ++stIdx) // no staff done yet
-                  staffDone[stIdx] = false;
-            for (stIdx = 0; stIdx < n; ++stIdx) {
-                  if(staffDone[stIdx])          // if rest already added to this staff, skip it
-                        continue;
-                  // add rest to this staff and to all the staves linked to it
-                  Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
-                  rest->setDuration(m->len());
-                  rest->setTrack(stIdx * VOICES);
-                  undoAddCR(rest, m, m->tick());
-                  // mark this staff and all staves linked to it as done
-                  staffDone[stIdx] = true;
-                  Staff* staff = root->staff(stIdx);
-                  LinkedStaves* linkStaves = staff->linkedStaves();
-                  if (linkStaves)
-                        foreach(Staff* linkedStaff, linkStaves->staves())
-                              staffDone[root->staffIdx(linkedStaff)] = true;
+            for (int staffIdx = 0; staffIdx < root->nstaves(); ++staffIdx) {
+                  int track = staffIdx * VOICES;
+                  Segment* s = m->findSegment(Segment::SegChordRest, m->tick());
+                  if (s == 0 || s->element(track) == 0) {
+                        // add rest to this staff and to all the staves linked to it
+                        Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
+                        rest->setDuration(m->len());
+                        rest->setTrack(track);
+                        undoAddCR(rest, m, m->tick());
+                        }
                   }
             }
       return omb;

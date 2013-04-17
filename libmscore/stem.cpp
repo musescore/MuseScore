@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -74,14 +73,31 @@ void Stem::layout()
       qreal _up = up() ? -1.0 : 1.0;
       l *= _up;
 
-      qreal y1 = 0.0;
+      qreal y1 = 0.0;                           // vertical displacement to match note attach point
       Staff* st = staff();
-      if (chord() && st && !st->isTabStaff()) {
-            Note* n  = up() ? chord()->downNote() : chord()->upNote();
-            const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
-            if (n->mirror())
-                  _up *= -1;
-            y1 -= sym.attach(n->magS()).y() * _up;
+      if (chord() && st ) {
+            if (st->isTabStaff() ) {            // TAB staves
+                  if ( ((StaffTypeTablature*)st->staffType())->stemThrough()) {
+                        // if stems through staves, gets Y pos. of stem-side note relative to chord other side
+                        qreal lineDist = st->lineDistance() * spatium();
+                        y1 = (chord()->downString() - chord()->upString() ) * _up * lineDist;
+                        // if fret marks above lines, raise stem beginning by 1/2 line distance
+                        if ( !((StaffTypeTablature*)st->staffType())->onLines() )
+                              y1 -= lineDist * 0.5;
+                        // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' betwen stem and note
+                        lineDist *= 0.7 * mag();
+                        y1 += _up * lineDist;
+                        }
+                  // in other TAB types, no correction
+                  }
+            else {                              // non-TAB
+                  // move stem start to note attach point
+              Note* n  = up() ? chord()->downNote() : chord()->upNote();
+              const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
+              if (n->mirror())
+                    _up *= -1;
+              y1 -= sym.attach(n->magS()).y() * _up;
+              }
             }
 
       line.setLine(0.0, y1, 0.0, l);
@@ -126,30 +142,35 @@ void Stem::draw(QPainter* painter) const
       qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
-      if (!useTab)
+      if (!useTab || !chord())
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
       StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(st->staffType());
       qreal sp = spatium();
+      bool _up = up();
 
       // slashed half note stem
-      if (chord() && chord()->durationType().type() == TDuration::V_HALF
-         && stt->minimStyle() == TAB_MINIM_SLASHED) {
-            qreal wdt   = sp * STAFFTYPE_TAB_SLASH_WIDTH;
+      if (chord()->durationType().type() == TDuration::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
+            // position slashes onto stem
+            qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
+            // if stems through, try to align slashes within or across lines
+            if (stt->stemThrough()) {
+                  qreal halfLineDist = stt->lineDistance().val() * sp * 0.5;
+                  qreal halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+                  y = lrint( (y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
+                  }
+            // draw slashes
+            qreal hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
             qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
             qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
             qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
             QPainterPath path;
-
-            qreal y = stt->stemsDown() ?
-                         _len - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp :
-                        -_len + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp;
             for (int i = 0; i < 2; ++i) {
-                  path.moveTo( wdt*0.5-lw, y);        // top-right corner
-                  path.lineTo( wdt*0.5-lw, y+thk);    // bottom-right corner
-                  path.lineTo(-wdt*0.5,    y+thk+sln);// bottom-left corner
-                  path.lineTo(-wdt*0.5,    y+sln);    // top-left corner
+                  path.moveTo( hlfWdt, y);            // top-right corner
+                  path.lineTo( hlfWdt, y+thk);        // bottom-right corner
+                  path.lineTo(-hlfWdt, y+thk+sln);    // bottom-left corner
+                  path.lineTo(-hlfWdt, y+sln);        // top-left corner
                   path.closeSubpath();
                   y += displ;
                   }
@@ -161,11 +182,10 @@ void Stem::draw(QPainter* painter) const
 
       // dots
       // NOT THE BEST PLACE FOR THIS?
-      // with tablatures, dots are not drawn near 'notes', but near stems
+      // with tablatures and stems beside staves, dots are not drawn near 'notes', but near stems
       int nDots = chord()->dots();
-      if (nDots > 0) {
-            qreal y = stemLen() - (stt->stemsDown() ?
-                        (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN - 0.75) * sp : 0.0 );
+      if (nDots > 0 && !stt->stemThrough()) {
+            qreal y =  ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
             symbols[score()->symIdx()][dotSym].draw(painter, magS(),
                         QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
             }
@@ -243,7 +263,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if ((e->type() == TREMOLO) && (static_cast<Tremolo*>(e)->subtype() <= TREMOLO_R64)) {
+      if ((e->type() == TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
             return true;
             }
       return false;
@@ -300,5 +320,20 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       score()->setLayoutAll(false);       //DEBUG
       return true;
+      }
+
+//---------------------------------------------------------
+//   hookPos
+//    in chord coordinates
+//---------------------------------------------------------
+
+QPointF Stem::hookPos() const
+      {
+      QPointF p(pos() + line.p2());
+
+      qreal xoff = lineWidth() * .5;
+      p.rx() += xoff;
+
+      return p;
       }
 

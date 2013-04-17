@@ -22,14 +22,7 @@
 #include "seq.h"
 #include "musescore.h"
 
-#ifdef USE_ALSA
-#include "alsa.h"
-#endif
-#ifdef USE_PORTAUDIO
-#include "pa.h"
-#endif
-
-#include "msynth/synti.h"
+#include "synthesizer/msynthesizer.h"
 #include "libmscore/slur.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
@@ -49,25 +42,11 @@
 #include "synthcontrol.h"
 #include "pianoroll.h"
 
-#ifdef USE_JACK
-#include "jackaudio.h"
-#endif
-
-#ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
-#endif
-
-#include "fluid/fluid.h"
 #include "click.h"
 
 #include <vorbis/vorbisfile.h>
 
-#ifdef USE_PULSEAUDIO
-extern Driver* getPulseAudioDriver(Seq*);
-#endif
-
 Seq* seq;
-MasterSynth* synti;
 
 static const int guiRefresh   = 10;       // Hz
 static const int peakHoldTime = 1400;     // msec
@@ -75,41 +54,6 @@ static const int peakHold     = (peakHoldTime * guiRefresh) / 1000;
 static OggVorbis_File vf;
 
 static const int AUDIO_BUFFER_SIZE = 1024 * 512;  // 2 MB
-
-//---------------------------------------------------------
-//   RenderAudio
-//    the prerendering audio thread
-//---------------------------------------------------------
-
-class RenderAudio : public QThread
-      {
-      float fifo[AUDIO_BUFFER_SIZE];
-      int ridx;               // read index
-      int widx;               // write index
-      volatile int counter;   // objects in fifo
-
-      void clear() {
-	      ridx    = 0;
-            widx    = 0;
-            counter = 0;
-            }
-
-      void push() {
-//            widx = (widx + 1) % maxCount;
-//            ++counter;
-            }
-
-      void pop() {
-//            ridx = (ridx + 1) % maxCount;
-//            --counter;
-            }
-
-   public:
-      RenderAudio() : QThread() {
-            }
-      void run() {
-            }
-      };
 
 //---------------------------------------------------------
 //   VorbisData
@@ -193,8 +137,8 @@ Seq::Seq()
       endTick  = 0;
       state    = TRANSPORT_STOP;
       oggInit  = false;
-      driver   = 0;
-      playPos  = events.constBegin();
+      _driver  = 0;
+      playPos  = events.cbegin();
 
       playTime  = 0;
       metronomeVolume = 0.3;
@@ -223,8 +167,7 @@ Seq::Seq()
 
 Seq::~Seq()
       {
-      delete synti;
-      delete driver;
+      delete _driver;
       }
 
 //---------------------------------------------------------
@@ -234,7 +177,6 @@ Seq::~Seq()
 void Seq::stopWait()
       {
       stop();
-      QMutex mutex;
       QWaitCondition sleep;
       while (state != TRANSPORT_STOP) {
             mutex.lock();
@@ -254,8 +196,7 @@ void Seq::setScoreView(ScoreView* v)
             oggInit = false;
             }
       if (cv !=v && cs) {
-            cs->setSyntiState(synti->state());
-            markedNotes.clear();
+            unmarkNotes();
             stopWait();
             }
       cv = v;
@@ -265,9 +206,9 @@ void Seq::setScoreView(ScoreView* v)
             heartBeatTimer->start(20);    // msec
 
       playlistChanged = true;
-      synti->reset();
+      _synti->reset();
       if (cs) {
-            synti->setState(cs->syntiState());
+            // _synti->setState(cs->synthesizerState());
             initInstruments();
             seek(cs->playPos());
             }
@@ -281,7 +222,7 @@ void Seq::setScoreView(ScoreView* v)
 
 void Seq::selectionChanged(int mode)
       {
-      if (cs == 0 || driver == 0)
+      if (cs == 0 || _driver == 0)
             return;
 
       int tick = cs->pos();
@@ -290,9 +231,8 @@ void Seq::selectionChanged(int mode)
 
       if ((mode != SEL_LIST) || (state == TRANSPORT_STOP))
             cs->setPlayPos(tick);
-      else {
+      else
             seek(tick);
-            }
       }
 
 //---------------------------------------------------------
@@ -302,93 +242,7 @@ void Seq::selectionChanged(int mode)
 
 bool Seq::init()
       {
-      driver = 0;
-
-      bool useJackFlag      = preferences.useJackAudio || preferences.useJackMidi;
-      bool useAlsaFlag      = preferences.useAlsaAudio;
-#ifdef USE_PORTAUDIO
-      bool usePortaudioFlag = preferences.usePortaudioAudio;
-#endif
-#ifdef USE_PULSEAUDIO
-      bool usePulseAudioFlag = preferences.usePulseAudio;
-#endif
-
-#ifdef USE_PULSEAUDIO
-      if (MScore::debugMode)
-            qDebug("usePulseAudioFlag %d\n", usePulseAudioFlag);
-      if (usePulseAudioFlag) {
-            driver = getPulseAudioDriver(this);
-            if (!driver->init()) {
-                  qDebug("init PulseAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_PORTAUDIO
-      if (MScore::debugMode)
-            qDebug("usePortaudioFlag %d\n", usePortaudioFlag);
-      if (usePortaudioFlag) {
-            driver = new Portaudio(this);
-            if (!driver->init()) {
-                  qDebug("init PortAudio failed");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  usePortaudio = true;
-            }
-#endif
-#ifdef USE_ALSA
-      if (MScore::debugMode)
-            qDebug("useAlsaFlag %d\n", useAlsaFlag);
-      if (driver == 0 && useAlsaFlag) {
-            driver = new AlsaAudio(this);
-            if (!driver->init()) {
-                  qDebug("init ALSA driver failed\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else {
-                  useALSA = true;
-                  }
-            }
-#endif
-
-#ifdef USE_JACK
-      if (MScore::debugMode)
-            qDebug("useJackFlag %d\n", useJackFlag);
-      if (useJackFlag) {
-            useAlsaFlag      = false;
-#ifdef USE_PORTAUDIO
-            usePortaudioFlag = false;
-#endif
-            driver = new JackAudio(this);
-            if (!driver->init()) {
-                  qDebug("no JACK server found\n");
-                  delete driver;
-                  driver = 0;
-                  }
-            else
-                  useJACK = true;
-            }
-#endif
-
-      if (driver == 0) {
-#if 0
-            QString s = tr("Init audio driver failed.\n"
-                                "Sequencer will be disabled.");
-            QMessageBox::critical(0, "MuseScore: Init Audio Driver", s);
-#endif
-            qDebug("init audio driver failed");
-            return false;
-            }
-      MScore::sampleRate = driver->sampleRate();
-      synti->init(MScore::sampleRate);
-
-      if (!driver->start()) {
+      if (!_driver->start()) {
             qDebug("Cannot start I/O");
             return false;
             }
@@ -402,12 +256,12 @@ bool Seq::init()
 
 void Seq::exit()
       {
-      if (driver) {
+      if (_driver) {
             if (MScore::debugMode)
                   qDebug("Stop I/O\n");
             stopWait();
-            delete driver;
-            driver = 0;
+            delete _driver;
+            _driver = 0;
             }
       }
 
@@ -417,8 +271,8 @@ void Seq::exit()
 
 QList<QString> Seq::inputPorts()
       {
-      if (driver)
-            return driver->inputPorts();
+      if (_driver)
+            return _driver->inputPorts();
       QList<QString> a;
       return a;
       }
@@ -439,7 +293,7 @@ void Seq::rewindStart()
 
 bool Seq::canStart()
       {
-      if (!driver)
+      if (!_driver)
             return false;
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
@@ -467,7 +321,7 @@ void Seq::start()
                   }
             }
       seek(cs->playPos());
-      driver->startTransport();
+      _driver->startTransport();
       }
 
 //---------------------------------------------------------
@@ -483,13 +337,12 @@ void Seq::stop()
             ov_clear(&vf);
             oggInit = false;
             }
-      if (!driver)
+      if (!_driver)
             return;
-      driver->stopTransport();
+      _driver->stopTransport();
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
-            cs->setPlayPos(playPos.key());
             cs->setLayoutAll(false);
             cs->setUpdateAll();
             cs->end();
@@ -502,9 +355,9 @@ void Seq::stop()
 
 void MuseScore::seqStarted()
       {
-      if(cv)
+      if (cv)
             cv->setCursorOn(true);
-      if(cs)
+      if (cs)
             cs->end();
       }
 
@@ -520,6 +373,19 @@ void MuseScore::seqStopped()
       }
 
 //---------------------------------------------------------
+//   unmarkNotes
+//---------------------------------------------------------
+
+void Seq::unmarkNotes()
+      {
+      foreach(const Note* n, markedNotes) {
+            n->setMark(false);
+            cs->addRefresh(n->canvasBoundingRect());
+            }
+      markedNotes.clear();
+      }
+
+//---------------------------------------------------------
 //   guiStop
 //---------------------------------------------------------
 
@@ -528,20 +394,11 @@ void Seq::guiStop()
       QAction* a = getAction("play");
       a->setChecked(false);
 
-      if (!cs) {
-            markedNotes.clear();
+      unmarkNotes();
+      if (!cs)
             return;
-            }
 
-      //
-      // deselect all selected notes
-      //
-      foreach(const Note* n, markedNotes) {
-            ((Note*)n)->setSelected(false);     //HACK
-            cs->addRefresh(n->canvasBoundingRect());
-            }
-      markedNotes.clear();
-      cs->setPlayPos(cs->utime2utick(playTime) * MScore::sampleRate);
+      cs->setPlayPos(cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate)));
       cs->end();
       emit stopped();
       }
@@ -558,7 +415,7 @@ void Seq::seqMessage(int msg)
             case '0':         // STOP
                   guiStop();
 //                  heartBeatTimer->stop();
-                  if (driver && mscore->getSynthControl()) {
+                  if (_driver && mscore->getSynthControl()) {
                         meterValue[0]     = .0f;
                         meterValue[1]     = .0f;
                         meterPeakValue[0] = .0f;
@@ -655,19 +512,19 @@ void Seq::processMessages()
                         {
                         if (playTime != 0) {
                               int tick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
-                              cs->tempomap()->setRelTempo(msg.data.realVal);
+                              cs->tempomap()->setRelTempo(msg.realVal);
                               cs->repeatList()->update();
                               playTime = cs->utick2utime(tick) * MScore::sampleRate;
                               }
                         else
-                              cs->tempomap()->setRelTempo(msg.data.realVal);
+                              cs->tempomap()->setRelTempo(msg.realVal);
                         }
                         break;
                   case SEQ_PLAY:
                         putEvent(msg.event);
                         break;
                   case SEQ_SEEK:
-                        setPos(msg.data.intVal);
+                        setPos(msg.intVal);
                         break;
                   }
             }
@@ -715,7 +572,7 @@ void Seq::metronome(unsigned n, float* p)
 void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
-      int driverState = driver->getState();
+      int driverState = _driver->getState();
 
       if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY)
@@ -737,19 +594,19 @@ void Seq::process(unsigned n, float* buffer)
             //
             unsigned framePos = 0;
             int endTime = playTime + frames;
-            for (; playPos != events.constEnd(); ++playPos) {
-                  int f = cs->utick2utime(playPos.key()) * MScore::sampleRate;
+            for (; playPos != events.cend();) {
+                  int f = cs->utick2utime(playPos->first) * MScore::sampleRate;
                   if (f >= endTime)
                         break;
                   int n = f - playTime;
                   if (n < 0) {
-                        qDebug("%d:  %d - %d\n", playPos.key(), f, playTime);
+                        qDebug("%d:  %d - %d\n", playPos->first, f, playTime);
       			n = 0;
                         }
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
                               metronome(n, p);
-                              synti->process(n, p);
+                              _synti->process(n, p);
                               p += n * 2;
                               playTime  += n;
                               frames    -= n;
@@ -773,17 +630,20 @@ void Seq::process(unsigned n, float* buffer)
                                     }
                               }
                         }
-                  const Event& event = playPos.value();
+                  const Event& event = playPos->second;
                   playEvent(event);
                   if (event.type() == ME_TICK1)
                         tickRest = tickLength;
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
+                  mutex.lock();
+                  ++playPos;
+                  mutex.unlock();
                   }
             if (frames) {
                   if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
                         metronome(frames, p);
-                        synti->process(frames, p);
+                        _synti->process(frames, p);
                         playTime += frames;
                         }
                   else {
@@ -805,22 +665,28 @@ void Seq::process(unsigned n, float* buffer)
                               }
                         }
                   }
-            if (playPos == events.constEnd()) {
-                  driver->stopTransport();
+            if (playPos == events.cend()) {
+                  _driver->stopTransport();
                   rewindStart();
                   }
             }
       else {
-            synti->process(frames, p);
+            _synti->process(frames, p);
             }
       //
-      // metering
+      // metering / master gain
       //
       float lv = 0.0f;
       float rv = 0.0f;
+      p = buffer;
       for (unsigned i = 0; i < n; ++i) {
-            lv = qMax(lv, fabsf(buffer[i * 2]));
-            rv = qMax(rv, fabsf(buffer[i * 2 + 1]));
+            qreal val = *p;
+            lv = qMax(lv, fabsf(val));
+            *p++ = val;
+
+            val = *p;
+            rv = qMax(lv, fabsf(val));
+            *p++ = val;
             }
       meterValue[0] = lv;
       meterValue[1] = rv;
@@ -858,16 +724,16 @@ void Seq::initInstruments()
 void Seq::collectEvents()
       {
       //do not collect even while playing
-      if (state == TRANSPORT_PLAY)
+      if (state ==  TRANSPORT_PLAY)
             return;
       events.clear();
 
       cs->renderMidi(&events);
       endTick = 0;
       if (!events.empty()) {
-            EventMap::const_iterator e = events.constEnd();
+            auto e = events.cend();
             --e;
-            endTick = e.key();
+            endTick = e->first;
             }
 
       PlayPanel* pp = mscore->getPlayPanel();
@@ -887,45 +753,17 @@ int Seq::getCurTick()
       }
 
 //---------------------------------------------------------
-//   processToGuiMessages
-//    process messages from sequencer to gui
-//    in gui context
-//---------------------------------------------------------
-
-void Seq::processToGuiMessages()
-      {
-      for (;;) {
-            if (fromSeq.isEmpty())
-                  break;
-            SeqMsg msg = fromSeq.dequeue();
-            if (msg.id == SEQ_MIDI_INPUT_EVENT) {
-                  int type = msg.event.type();
-                  if (type == ME_NOTEON)
-                        mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), msg.event.velo());
-                  else if (type == ME_NOTEOFF)
-                        mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), 0);
-                  else if (type == ME_CONTROLLER)
-                        mscore->midiCtrlReceived(msg.event.controller(), msg.event.value());
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   setRelTempo
 //    relTempo = 1.0 = normal tempo
 //---------------------------------------------------------
 
 void Seq::setRelTempo(double relTempo)
       {
-      SeqMsg msg;
-      msg.data.realVal = relTempo;
-      msg.id    = SEQ_TEMPO_CHANGE;
-      guiToSeq(msg);
-
-      double t = cs->tempomap()->tempo(playPos.key()) * relTempo;
+      guiToSeq(SeqMsg(SEQ_TEMPO_CHANGE, relTempo));
 
       PlayPanel* pp = mscore->getPlayPanel();
       if (pp) {
+            double t = cs->tempomap()->tempo(playPos->first) * relTempo;
             pp->setTempo(t);
             pp->setRelTempo(relTempo);
             }
@@ -939,11 +777,14 @@ void Seq::setRelTempo(double relTempo)
 
 void Seq::setPos(int utick)
       {
+      if (cs == 0)
+            return;
       stopNotes();
 
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
-      playPos   = events.lowerBound(utick);
-      guiPos    = playPos;
+      mutex.lock();
+      playPos   = events.lower_bound(utick);
+      mutex.unlock();
       }
 
 //---------------------------------------------------------
@@ -953,13 +794,35 @@ void Seq::setPos(int utick)
 
 void Seq::seek(int utick)
       {
-      int tick = cs->repeatList()->utick2tick(utick);
       if (cs == 0)
             return;
+      int tick = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);
-      if (seg) {
+      if (seg)
             mscore->currentScoreView()->moveCursor(seg, -1);
+      cs->setPlayPos(utick);
+      cs->setLayoutAll(false);
+      cs->end();
+
+      if (cs->playMode() == PLAYMODE_AUDIO) {
+            ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
+            ov_pcm_seek(&vf, sp);
             }
+      guiToSeq(SeqMsg(SEQ_SEEK, utick));
+      guiPos = events.upper_bound(utick);
+      mscore->setPos(utick);
+      unmarkNotes();
+      cs->update();
+      }
+
+//---------------------------------------------------------
+//   seek
+//    send seek message to sequencer
+//---------------------------------------------------------
+
+void Seq::seek(int utick, Segment* seg)
+      {
+      mscore->currentScoreView()->moveCursor(seg, -1);
       cs->setPlayPos(utick);
       cs->setLayoutAll(false);
       cs->end();
@@ -969,15 +832,11 @@ void Seq::seek(int utick)
             ov_pcm_seek(&vf, sp);
             }
 
-      SeqMsg msg;
-      msg.data.intVal = utick;
-      msg.id   = SEQ_SEEK;
-      guiToSeq(msg);
+      guiToSeq(SeqMsg(SEQ_SEEK, utick));
+      guiPos = events.upper_bound(utick);
       mscore->setPos(utick);
-      foreach(const Note* n, markedNotes) {
-            ((Note*)n)->setSelected(false);     // HACK
-            cs->addRefresh(n->canvasBoundingRect());
-            }
+      unmarkNotes();
+      cs->update();
       }
 
 //---------------------------------------------------------
@@ -1033,7 +892,7 @@ void Seq::stopNoteTimer()
 
 void Seq::stopNotes(int channel)
       {
-      synti->allNotesOff(channel);
+      _synti->allNotesOff(channel);
       }
 
 //---------------------------------------------------------
@@ -1057,10 +916,7 @@ void Seq::setController(int channel, int ctrl, int data)
 
 void Seq::sendEvent(const Event& ev)
       {
-      SeqMsg msg;
-      msg.id    = SEQ_PLAY;
-      msg.event = ev;
-      guiToSeq(msg);
+      guiToSeq(SeqMsg(SEQ_PLAY, ev));
       }
 
 //---------------------------------------------------------
@@ -1069,25 +925,11 @@ void Seq::sendEvent(const Event& ev)
 
 void Seq::nextMeasure()
       {
-      EventMap::const_iterator i = playPos;
-      const Note* note = 0;
-      for (;;) {
-            if (i.value().type() == ME_NOTEON) {
-                  const Event& n = i.value();
-                  note = n.note();
-                  break;
-                  }
-            if (i == events.begin())
-                  break;
-            --i;
-            }
-      if (!note)
-            return;
-      Measure* m = note->chord()->measure();
-      m = m->nextMeasure();
+      Measure* m = cs->tick2measure(guiPos->first);
       if (m) {
-            int rtick = m->tick() - note->chord()->tick();
-            seek(playPos.key() + rtick);
+            if (m->nextMeasure())
+                  m = m->nextMeasure();
+            seek(m->tick());
             }
       }
 
@@ -1097,13 +939,10 @@ void Seq::nextMeasure()
 
 void Seq::nextChord()
       {
-      int tick = playPos.key();
-      for (EventMap::const_iterator i = playPos; i != events.constEnd(); ++i) {
-            if (i.value().type() != ME_NOTEON)
-                  continue;
-            const Event& n = i.value();
-            if (i.key() > tick && n.velo()) {
-                  seek(i.key());
+      int tick = guiPos->first;
+      for (auto i = guiPos; i != events.cend(); ++i) {
+            if (i->second.type() == ME_NOTEON && i->first > tick && i->second.velo()) {
+                  seek(i->first);
                   break;
                   }
             }
@@ -1115,28 +954,16 @@ void Seq::nextChord()
 
 void Seq::prevMeasure()
       {
-      EventMap::const_iterator i = playPos;
-      const Note* note = 0;
-      for (;;) {
-            if (i.value().type() == ME_NOTEON) {
-                  note = i.value().note();
-                  break;
-                  }
-            if (i == events.begin())
-                  break;
-            --i;
-            }
-      if (!note)
+      auto i = guiPos;
+      if (i == events.begin())
             return;
-      Measure* m = note->chord()->measure();
-      m = m->prevMeasure();
-
+      --i;
+      Measure* m = cs->tick2measure(i->first);
       if (m) {
-            int rtick = note->chord()->tick() - m->tick();
-            seek(playPos.key() - rtick);
+            if ((i->first == m->tick()) && m->prevMeasure())
+                  m = m->prevMeasure();
+            seek(m->tick());
             }
-      else
-            seek(0);
       }
 
 //---------------------------------------------------------
@@ -1145,33 +972,33 @@ void Seq::prevMeasure()
 
 void Seq::prevChord()
       {
-      int tick  = playPos.key();
+      int tick  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = playPos;
+      EventMap::const_iterator i = events.upper_bound(cs->playPos());
       for (;;) {
-            if (i.value().type() == ME_NOTEON) {
-                  const Event& n = i.value();
-                  if (i.key() < tick && n.velo()) {
-                        tick = i.key();
+            if (i->second.type() == ME_NOTEON) {
+                  const Event& n = i->second;
+                  if (i->first < tick && n.velo()) {
+                        tick = i->first;
                         break;
                         }
                   }
-            if (i == events.constBegin())
+            if (i == events.cbegin())
                   break;
             --i;
             }
       //go the previous chord
-      if (i != events.constBegin()) {
+      if (i != events.cbegin()) {
             i = playPos;
             for (;;) {
-                  if (i.value().type() == ME_NOTEON) {
-                        const Event& n = i.value();
-                        if (i.key() < tick && n.velo()) {
-                              seek(i.key());
+                  if (i->second.type() == ME_NOTEON) {
+                        const Event& n = i->second;
+                        if (i->first < tick && n.velo()) {
+                              seek(i->first);
                               break;
                               }
                         }
-                  if (i == events.constBegin())
+                  if (i == events.cbegin())
                         break;
                   --i;
                   }
@@ -1193,7 +1020,7 @@ void Seq::seekEnd()
 
 void Seq::guiToSeq(const SeqMsg& msg)
       {
-      if (!driver || !running)
+      if (!_driver || !running)
             return;
       toSeq.enqueue(msg);
       }
@@ -1204,19 +1031,7 @@ void Seq::guiToSeq(const SeqMsg& msg)
 
 void Seq::eventToGui(Event e)
       {
-      SeqMsg msg;
-      msg.event = e;
-      msg.id    = SEQ_MIDI_INPUT_EVENT;
-      fromSeq.enqueue(msg);
-      }
-
-//---------------------------------------------------------
-//   getPatchInfo
-//---------------------------------------------------------
-
-QList<MidiPatch*> Seq::getPatchInfo() const
-      {
-      return synti->getPatchInfo();
+      fromSeq.enqueue(SeqMsg(SEQ_MIDI_INPUT_EVENT, e));
       }
 
 //---------------------------------------------------------
@@ -1225,8 +1040,8 @@ QList<MidiPatch*> Seq::getPatchInfo() const
 
 void Seq::midiInputReady()
       {
-      if (driver)
-            driver->midiRead();
+      if (_driver)
+            _driver->midiRead();
       }
 
 //---------------------------------------------------------
@@ -1277,25 +1092,6 @@ SeqMsg SeqMsgFifo::dequeue()
       }
 
 //---------------------------------------------------------
-//   setGain
-//---------------------------------------------------------
-
-void Seq::setGain(float gain)
-      {
-      synti->setGain(gain);
-      emit gainChanged(gain);
-      }
-
-//---------------------------------------------------------
-//   gain
-//---------------------------------------------------------
-
-float Seq::gain() const
-      {
-      return synti->gain();
-      }
-
-//---------------------------------------------------------
 //   putEvent
 //---------------------------------------------------------
 
@@ -1304,26 +1100,12 @@ void Seq::putEvent(const Event& event)
       if (!cs)
             return;
       int channel = event.channel();
-      int syntiIdx= cs->midiMapping(channel)->articulation->synti;
-      synti->play(event, syntiIdx);
-      }
-
-//---------------------------------------------------------
-//   synthNameToIndex
-//---------------------------------------------------------
-
-int Seq::synthNameToIndex(const QString& name) const
-      {
-      return synti->synthNameToIndex(name);
-      }
-
-//---------------------------------------------------------
-//   synthIndexToName
-//---------------------------------------------------------
-
-QString Seq::synthIndexToName(int idx) const
-      {
-      return synti->synthIndexToName(idx);
+      if (channel >= cs->midiMapping()->size()) {
+            qDebug("bad channel value");
+            return;
+            }
+      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
+      _synti->play(event, syntiIdx);
       }
 
 //---------------------------------------------------------
@@ -1334,14 +1116,27 @@ QString Seq::synthIndexToName(int idx) const
 void Seq::heartBeat()
       {
       SynthControl* sc = mscore->getSynthControl();
-      if (sc && driver) {
+      if (sc && _driver) {
             if (++peakTimer[0] >= peakHold)
                   meterPeakValue[0] *= .7f;
             if (++peakTimer[1] >= peakHold)
                   meterPeakValue[1] *= .7f;
             sc->setMeter(meterValue[0], meterValue[1], meterPeakValue[0], meterPeakValue[1]);
             }
-      processToGuiMessages();
+
+      while (!fromSeq.isEmpty()) {
+            SeqMsg msg = fromSeq.dequeue();
+            if (msg.id == SEQ_MIDI_INPUT_EVENT) {
+                  int type = msg.event.type();
+                  if (type == ME_NOTEON)
+                        mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), msg.event.velo());
+                  else if (type == ME_NOTEOFF)
+                        mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), 0);
+                  else if (type == ME_CONTROLLER)
+                        mscore->midiCtrlReceived(msg.event.controller(), msg.event.value());
+                  }
+            }
+
       if (state != TRANSPORT_PLAY)
             return;
       PlayPanel* pp = mscore->getPlayPanel();
@@ -1349,17 +1144,21 @@ void Seq::heartBeat()
       if (pp)
             pp->heartBeat2(endTime);
 
-      for (;;) {
-            EventMap::const_iterator p = guiPos + 1;
-            if ((p == events.constEnd()) || (p.key() >= playPos.key()))
+      mutex.lock();
+      auto ppos = playPos;
+      if (ppos != events.cbegin())
+            --ppos;
+      mutex.unlock();
+
+      for (;guiPos != events.cend(); ++guiPos) {
+            if (guiPos->first > ppos->first)
                   break;
-            guiPos = p;
-            if (guiPos.value().type() == ME_NOTEON) {
-                  Event n = guiPos.value();
+            const Event& n = guiPos->second;
+            if (n.type() == ME_NOTEON) {
                   const Note* note1 = n.note();
                   if (n.velo()) {
                         while (note1) {
-                              ((Note*)note1)->setSelected(true);  // HACK
+                              note1->setMark(true);
                               markedNotes.append(note1);
                               cs->addRefresh(note1->canvasBoundingRect());
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
@@ -1368,7 +1167,7 @@ void Seq::heartBeat()
                         }
                   else {
                         while (note1) {
-                              ((Note*)note1)->setSelected(false);       // HACK
+                              note1->setMark(false);
                               cs->addRefresh(note1->canvasBoundingRect());
                               markedNotes.removeOne(note1);
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
@@ -1376,8 +1175,7 @@ void Seq::heartBeat()
                         }
                   }
             }
-
-      int utick = guiPos.key();
+      int utick = ppos->first;
       int tick = cs->repeatList()->utick2tick(utick);
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);
@@ -1387,6 +1185,6 @@ void Seq::heartBeat()
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
             pre->heartBeat(this);
-      cs->end();
+      cs->update();
       }
 

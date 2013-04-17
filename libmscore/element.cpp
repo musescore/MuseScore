@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: element.cpp 5629 2012-05-15 12:38:33Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -79,6 +78,8 @@
 #include "notedot.h"
 #include "textframe.h"
 #include "image.h"
+#include "marker.h"
+#include "jump.h"
 
 // extern bool showInvisible;
 
@@ -452,11 +453,8 @@ QColor Element::curColor() const
 
 //---------------------------------------------------------
 //   drag
+///   Return update Rect relative to canvas.
 //---------------------------------------------------------
-
-/**
- Return update Rect relative to canvas.
-*/
 
 QRectF Element::drag(const EditData& data)
       {
@@ -477,6 +475,7 @@ QRectF Element::drag(const EditData& data)
             y = vRaster * n;
             }
       setUserOff(QPointF(x, y));
+      setGenerated(false);
       return canvasBoundingRect() | r;
       }
 
@@ -492,8 +491,13 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ELEMENT_ON_STAFF) {
-            Q_ASSERT(parent()->type() == SEGMENT);
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+            System* system;
+            if (parent()->type() == SEGMENT)
+                  system = static_cast<Segment*>(parent())->measure()->system();
+            else if (parent()->type() == MEASURE)     // used in measure number
+                  system = static_cast<Measure*>(parent())->system();
+            else
+                  abort();
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
@@ -519,8 +523,13 @@ QPointF Element::canvasPos() const
       if (parent() == 0)
             return p;
       if (_flags & ELEMENT_ON_STAFF) {
-            Q_ASSERT(parent()->type() == SEGMENT);
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+            System* system;
+            if (parent()->type() == SEGMENT)
+                  system = static_cast<Segment*>(parent())->measure()->system();
+            else if (parent()->type() == MEASURE)     // used in measure number
+                  system = static_cast<Measure*>(parent())->system();
+            else
+                  abort();
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
@@ -751,19 +760,25 @@ void Element::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   remove
+//   startEdit
 //---------------------------------------------------------
 
-/**
- Remove \a el from the list. Return true on success.
-*/
+void Element::startEdit(MuseScoreView*, const QPointF&)
+      {
+      undoPushProperty(P_USER_OFF);
+      }
+
+//---------------------------------------------------------
+//   remove
+///   Remove \a el from the list. Return true on success.
+//---------------------------------------------------------
 
 bool ElementList::remove(Element* el)
       {
-      int idx = indexOf(el);
-      if (idx == -1)
+      auto i = find(begin(), end(), el);
+      if (i == end())
             return false;
-      removeAt(idx);
+      erase(i);
       return true;
       }
 
@@ -773,12 +788,12 @@ bool ElementList::remove(Element* el)
 
 void ElementList::replace(Element* o, Element* n)
       {
-      int idx = indexOf(o);
-      if (idx == -1) {
+      auto i = find(begin(), end(), o);
+      if (i == end()) {
             qDebug("ElementList::replace: element not found\n");
             return;
             }
-      QList<Element*>::replace(idx, n);
+      *i = n;
       }
 
 //---------------------------------------------------------
@@ -787,8 +802,8 @@ void ElementList::replace(Element* o, Element* n)
 
 void ElementList::write(Xml& xml) const
       {
-      for (ciElement ie = begin(); ie != end(); ++ie)
-            (*ie)->write(xml);
+      for (const Element* e : *this)
+            e->write(xml);
       }
 
 
@@ -884,38 +899,11 @@ void StaffLines::draw(QPainter* painter) const
 
 qreal StaffLines::y1() const
       {
-     System* system = measure()->system();
-     if (system == 0)
-           return 0.0;
-
-      qreal y = system->staff(staffIdx())->y() + ipos().y();
-
-      switch (lines) {
-            case 1:
-                  return y - spatium();
-            default:
-                  return y;
-            }
-      }
-
-//---------------------------------------------------------
-//   y2
-//---------------------------------------------------------
-
-qreal StaffLines::y2() const
-      {
       System* system = measure()->system();
       if (system == 0)
             return 0.0;
 
-      qreal y = system->staff(staffIdx())->y() + ipos().y();
-
-      switch (lines) {
-            case 1:
-                  return y + spatium();
-            default:
-                  return y + (lines - 1) * dist;
-            }
+      return system->staff(staffIdx())->y() + ipos().y();
       }
 
 //---------------------------------------------------------
@@ -1072,7 +1060,7 @@ void Compound::addElement(Element* e, qreal x, qreal y)
 void Compound::layout()
       {
       setbbox(QRectF());
-      for (iElement i = elemente.begin(); i != elemente.end(); ++i) {
+      for (auto i = elemente.begin(); i != elemente.end(); ++i) {
             Element* e = *i;
             e->layout();
             addbbox(e->bbox().translated(e->pos()));
@@ -1086,7 +1074,7 @@ void Compound::layout()
 void Compound::setSelected(bool f)
       {
       Element::setSelected(f);
-      for (ciElement i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elemente.begin(); i != elemente.end(); ++i)
             (*i)->setSelected(f);
       }
 
@@ -1097,7 +1085,7 @@ void Compound::setSelected(bool f)
 void Compound::setVisible(bool f)
       {
       Element::setVisible(f);
-      for (ciElement i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elemente.begin(); i != elemente.end(); ++i)
             (*i)->setVisible(f);
       }
 
@@ -1439,7 +1427,7 @@ void Element::undoSetPlacement(Placement v)
 
 QVariant Element::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_COLOR:     return _color;
             case P_VISIBLE:   return _visible;
             case P_SELECTED:  return _selected;
@@ -1488,7 +1476,16 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Element::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_PLACEMENT:     return BELOW;
+            case P_VISIBLE:
+                  return true;
+            case P_COLOR:
+                  return MScore::defaultColor;
+            case P_PLACEMENT:
+                  return BELOW;
+            case P_SELECTED:
+                  return false;
+            case P_USER_OFF:
+                  return QPointF();
             default:    // not all properties have a default
                   break;
             }
@@ -1505,12 +1502,22 @@ void Element::undoChangeProperty(P_ID id, const QVariant& val)
       }
 
 //---------------------------------------------------------
+//   undoPushProperty
+//---------------------------------------------------------
+
+void Element::undoPushProperty(P_ID id)
+      {
+      QVariant val = getProperty(id);
+      score()->undo()->push1(new ChangeProperty(this, id, val));
+      }
+
+//---------------------------------------------------------
 //   isChordRest
 //---------------------------------------------------------
 
 bool Element::isChordRest() const
       {
-      return type() == REST || type() == CHORD;
+      return type() == REST || type() == CHORD || type() == REPEAT_MEASURE;
       }
 
 //---------------------------------------------------------
@@ -1550,6 +1557,36 @@ bool Element::isText() const
          || type() == INSTRUMENT_CHANGE
          || type() == FIGURED_BASS
          || type() == TEMPO_TEXT;
+      }
+
+//---------------------------------------------------------
+//   parentChordRest
+//---------------------------------------------------------
+
+#if 0
+Element* Element::parentChordRest()
+      {
+      if (isChordRest())
+            return this;
+      else if (_parent)
+            return _parent->parentChordRest();
+      else
+            return 0;
+      }
+#endif
+
+//---------------------------------------------------------
+//   findMeasure
+//---------------------------------------------------------
+
+Element* Element::findMeasure()
+      {
+      if (type() == MEASURE)
+            return this;
+      else if (_parent)
+            return _parent->findMeasure();
+      else
+            return 0;
       }
 
 //---------------------------------------------------------

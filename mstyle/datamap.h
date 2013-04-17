@@ -27,139 +27,133 @@
 #ifndef __DATAMAP_H__
 #define __DATAMAP_H__
 
-    //! data map
-    /*! it maps templatized data object to associated object */
-    template< typename K, typename T > class BaseDataMap: public QMap< const K*, QWeakPointer<T> >
-    {
+//! data map
+/*! it maps templatized data object to associated object */
+template< typename K, typename T > class BaseDataMap: public QMap< const K*, QWeakPointer<T> > {
 
-        public:
+      public:
 
-        typedef const K* Key;
-        typedef QWeakPointer<T> Value;
+            typedef const K* Key;
+            typedef QWeakPointer<T> Value;
 
-        //! constructor
-        BaseDataMap( void ):
-            QMap<Key, Value>(),
-            enabled_( true ),
-            lastKey_( NULL )
-        {}
+            //! constructor
+            BaseDataMap( void ):
+                  QMap<Key, Value>(),
+                  enabled_( true ),
+                  lastKey_( NULL )
+                  {}
 
-        //! destructor
-        virtual ~BaseDataMap( void )
-        {}
+            //! destructor
+            virtual ~BaseDataMap( void )
+                  {}
 
-        //! insertion
-        virtual typename QMap< Key, Value >::iterator insert( const Key& key, const Value& value, bool enabled = true )
-        {
-            if( value ) value.data()->setEnabled( enabled );
-            return QMap< Key, Value >::insert( key, value );
-        }
+            //! insertion
+            virtual typename QMap< Key, Value >::iterator insert( const Key& key, const Value& value, bool enabled = true ) {
+                  if ( value ) value.data()->setEnabled( enabled );
+                  return QMap< Key, Value >::insert( key, value );
+                  }
 
-        //! find value
-        Value find( Key key )
-        {
-            if( !( enabled() && key ) ) return Value();
-            if( key == lastKey_ ) return lastValue_;
-            else {
-                Value out;
-                typename QMap<Key, Value>::iterator iter( QMap<Key, Value>::find( key ) );
-                if( iter != QMap<Key, Value>::end() ) out = iter.value();
-                lastKey_ = key;
-                lastValue_ = out;
-                return out;
-            }
-        }
+            //! find value
+            Value find( Key key ) {
+                  if ( !( enabled() && key ) ) return Value();
+                  if ( key == lastKey_ ) return lastValue_;
+                  else {
+                        Value out;
+                        typename QMap<Key, Value>::iterator iter( QMap<Key, Value>::find( key ) );
+                        if ( iter != QMap<Key, Value>::end() ) out = iter.value();
+                        lastKey_ = key;
+                        lastValue_ = out;
+                        return out;
+                        }
+                  }
 
-        //! unregister widget
-        bool unregisterWidget( Key key )
-        {
+            //! unregister widget
+            bool unregisterWidget( Key key ) {
 
-            // check key
-            if( !key ) return false;
+                  // check key
+                  if ( !key ) return false;
 
-            // clear last value if needed
-            if( key == lastKey_ )
-            {
+                  // clear last value if needed
+                  if ( key == lastKey_ ) {
 
-                if( lastValue_ ) lastValue_.clear();
-                lastKey_ = NULL;
+                        if ( lastValue_ ) lastValue_.clear();
+                        lastKey_ = NULL;
 
-            }
+                        }
 
-            // find key in map
-            typename QMap<Key, Value>::iterator iter( QMap<Key, Value>::find( key ) );
-            if( iter == QMap<Key, Value>::end() ) return false;
+                  // find key in map
+                  typename QMap<Key, Value>::iterator iter( QMap<Key, Value>::find( key ) );
+                  if ( iter == QMap<Key, Value>::end() ) return false;
 
-            // delete value from map if found
-            if( iter.value() ) iter.value().data()->deleteLater();
-            QMap<Key, Value>::erase( iter );
+                  // delete value from map if found
+                  if ( iter.value() ) iter.value().data()->deleteLater();
+                  QMap<Key, Value>::erase( iter );
 
-            return true;
+                  return true;
 
-        }
+                  }
 
-        //! maxFrame
-        void setEnabled( bool enabled )
-        {
-            enabled_ = enabled;
-            foreach( const Value& value, *this )
-            { if( value ) value.data()->setEnabled( enabled ); }
-        }
+            //! maxFrame
+            void setEnabled( bool enabled ) {
+                  enabled_ = enabled;
+                  foreach( const Value & value, *this ) {
+                        if ( value ) value.data()->setEnabled( enabled );
+                        }
+                  }
 
-        //! enability
-        bool enabled( void ) const
-        { return enabled_; }
+            //! enability
+            bool enabled( void ) const {
+                  return enabled_;
+                  }
 
-        //! duration
-        void setDuration( int duration ) const
-        {
-            foreach( const Value& value, *this )
-            { if( value ) value.data()->setDuration( duration ); }
-        }
+            //! duration
+            void setDuration( int duration ) const {
+                  foreach( const Value & value, *this ) {
+                        if ( value ) value.data()->setDuration( duration );
+                        }
+                  }
 
-        private:
+      private:
 
-        //! enability
-        bool enabled_;
+            //! enability
+            bool enabled_;
 
-        //! last key
-        Key lastKey_;
+            //! last key
+            Key lastKey_;
 
-        //! last value
-        Value lastValue_;
+            //! last value
+            Value lastValue_;
 
-    };
+      };
 
-    //! standard data map, using QObject as a key
-    template< typename T > class DataMap: public BaseDataMap< QObject, T >
-    {
+//! standard data map, using QObject as a key
+template< typename T > class DataMap: public BaseDataMap< QObject, T > {
 
-        public:
+      public:
 
-        //! constructor
-        DataMap( void )
-        {}
+            //! constructor
+            DataMap( void )
+                  {}
 
-        //! destructor
-        virtual ~DataMap( void )
-        {}
+            //! destructor
+            virtual ~DataMap( void )
+                  {}
 
-    };
+      };
 
-    //! QPaintDevice based dataMap
-    template< typename T > class PaintDeviceDataMap: public BaseDataMap< QPaintDevice, T >
-    {
+//! QPaintDevice based dataMap
+template< typename T > class PaintDeviceDataMap: public BaseDataMap< QPaintDevice, T > {
 
-        public:
+      public:
 
-        //! constructor
-        PaintDeviceDataMap( void )
-        {}
+            //! constructor
+            PaintDeviceDataMap( void )
+                  {}
 
-        //! destructor
-        virtual ~PaintDeviceDataMap( void )
-        {}
+            //! destructor
+            virtual ~PaintDeviceDataMap( void )
+                  {}
 
-    };
+      };
 
 #endif

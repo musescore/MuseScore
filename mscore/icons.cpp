@@ -50,13 +50,9 @@ static const char* iconNames[] = {
       "sharpsharp.svg",
       "flat.svg",
       "flatflat.svg",
-      "staccato.svg",
       "quartrest.svg",
       "dot.svg",
       "dotdot.svg",
-      "sforzatoaccent.svg",
-      "tenuto.svg",
-      "plus.svg",
       "flip.svg",
       "undo.svg",
       "redo.svg",
@@ -84,7 +80,6 @@ static const char* iconNames[] = {
       "filesave.svg",
       "filesaveas.svg",
       "exit.svg",
-      "viewmag.svg",
       "mscore.png",
       "acciaccatura.svg",
       "appoggiatura.svg",
@@ -121,6 +116,7 @@ static const char* iconNames[] = {
       "tframe.svg",
       "fframe.svg",
       "measure.svg",
+      "checkmark.svg"
       };
 
 void genIcons()

@@ -26,19 +26,18 @@
 
 #include "transitiondata.h"
 
-    //_________________________________________________________________
-    TransitionData::TransitionData( QObject* parent, QWidget* target, int duration ):
-        QObject( parent ),
-        enabled_( true ),
-        recursiveCheck_( false ),
-        maxRenderTime_( 200 ),
-        transition_( new TransitionWidget( target, duration ) )
-    {
-        transition().data()->hide();
-        connect( transition().data(), SIGNAL( finished( void ) ), SLOT( finishAnimation( void ) ) );
-    }
+//_________________________________________________________________
+TransitionData::TransitionData( QObject* parent, QWidget* target, int duration ):
+      QObject( parent ),
+      enabled_( true ),
+      recursiveCheck_( false ),
+      maxRenderTime_( 200 ),
+      transition_( new TransitionWidget( target, duration ) ) {
+      transition().data()->hide();
+      connect( transition().data(), SIGNAL( finished( void ) ), SLOT( finishAnimation( void ) ) );
+      }
 
-    //_________________________________________________________________
-    TransitionData::~TransitionData( void )
-    {}
+//_________________________________________________________________
+TransitionData::~TransitionData( void )
+      {}
 

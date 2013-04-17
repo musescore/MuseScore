@@ -24,8 +24,8 @@
 #include "mixer.h"
 #include "seq.h"
 #include "libmscore/undo.h"
-#include "msynth/synti.h"
 #include "synthcontrol.h"
+#include "synthesizer/msynthesizer.h"
 
 //---------------------------------------------------------
 //   PartEdit
@@ -74,10 +74,10 @@ void PartEdit::setPart(Part* p, Channel* a)
       }
 
 //---------------------------------------------------------
-//   InstrumentListEditor
+//   Mixer
 //---------------------------------------------------------
 
-InstrumentListEditor::InstrumentListEditor(QWidget* parent)
+Mixer::Mixer(QWidget* parent)
    : QScrollArea(parent)
       {
       setWindowTitle(tr("MuseScore: Mixer"));
@@ -96,7 +96,7 @@ InstrumentListEditor::InstrumentListEditor(QWidget* parent)
 //   closeEvent
 //---------------------------------------------------------
 
-void InstrumentListEditor::closeEvent(QCloseEvent* ev)
+void Mixer::closeEvent(QCloseEvent* ev)
       {
       QAction* a = getAction("toggle-mixer");
       a->setChecked(false);
@@ -107,7 +107,7 @@ void InstrumentListEditor::closeEvent(QCloseEvent* ev)
 //   updateAll
 //---------------------------------------------------------
 
-void InstrumentListEditor::updateAll(Score* score)
+void Mixer::updateAll(Score* score)
       {
       cs = score;
       int n = -vb->count();
@@ -131,7 +131,7 @@ void InstrumentListEditor::updateAll(Score* score)
       patchListChanged();
       }
 
-PartEdit* InstrumentListEditor::partEdit(int index)
+PartEdit* Mixer::partEdit(int index)
       {
       if(index < vb->count()) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(index));
@@ -144,18 +144,18 @@ PartEdit* InstrumentListEditor::partEdit(int index)
 //   patchListChanged
 //---------------------------------------------------------
 
-void InstrumentListEditor::patchListChanged()
+void Mixer::patchListChanged()
       {
       if (!cs)
             return;
       QString s;
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe    = (PartEdit*)(wi->widget());
             bool drum       = m.part->instr()->useDrumset();
-            const QList<MidiPatch*> pl = seq->getPatchInfo();
             pe->patch->clear();
             foreach(const MidiPatch* p, pl) {
                   if (p->drum == drum)
@@ -172,15 +172,16 @@ void InstrumentListEditor::patchListChanged()
 
 void MuseScore::showMixer(bool val)
       {
-      if (iledit == 0) {
-            iledit = new InstrumentListEditor(this);
+      if (mixer == 0) {
+            mixer = new Mixer(this);
             if (synthControl) {
-                  connect(synthControl, SIGNAL(soundFontChanged()), iledit,
+                  connect(synthControl, SIGNAL(soundFontChanged()), mixer,
                      SLOT(patchListChanged()));
                   }
+            connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             }
-      iledit->updateAll(cs);
-      iledit->setVisible(val);
+      mixer->updateAll(cs);
+      mixer->setVisible(val);
       }
 
 //---------------------------------------------------------
@@ -192,8 +193,10 @@ void PartEdit::patchChanged(int n)
       if (part == 0)
             return;
       const MidiPatch* p = (MidiPatch*)patch->itemData(n, Qt::UserRole).value<void*>();
-      if (p == 0)
+      if (p == 0) {
+            qDebug("PartEdit::patchChanged: no patch\n");
             return;
+            }
       Score* score = part->score();
       if (score) {
             score->startCmd();
@@ -311,7 +314,7 @@ void PartEdit::drumsetToggled(bool val)
       {
       part->instr()->setUseDrumset(val);
       patch->clear();
-      const QList<MidiPatch*> pl = seq->getPatchInfo();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
       foreach(MidiPatch* p, pl) {
             if (val == p->drum)
                   patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
@@ -323,7 +326,7 @@ void PartEdit::drumsetToggled(bool val)
 //   updateSolo
 //---------------------------------------------------------
 
-void InstrumentListEditor::updateSolo(bool val)
+void Mixer::updateSolo(bool val)
       {
       for(int i = 0; i <vb->count(); i++ ){
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(i));

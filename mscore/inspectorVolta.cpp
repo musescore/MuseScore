@@ -23,47 +23,16 @@
 InspectorVolta::InspectorVolta(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
-      QWidget* w = new QWidget;
-      iVolta.setupUi(w);
-      layout->addWidget(w);
-      connect(iVolta.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
+      e.setupUi(addWidget());
+      v.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,       0, 0, e.color,      e.resetColor      },
+            { P_VISIBLE,     0, 0, e.visible,    e.resetVisible    },
+            { P_USER_OFF,    0, 0, e.offsetX,    e.resetX          },
+            { P_USER_OFF,    1, 0, e.offsetY,    e.resetY          },
+            { P_VOLTA_TYPE,  0, 0, v.voltaType,  v.resetVoltaType  }
+            };
+
+      mapSignals();
       }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorVolta::setElement(Element* e)
-      {
-      VoltaSegment* voltaSegment = static_cast<VoltaSegment*>(e);
-      iElement->setElement(voltaSegment);
-      Volta* volta = voltaSegment->volta();
-
-      iVolta.subtype->blockSignals(true);
-      iVolta.subtype->setCurrentIndex(int(volta->subtype()));
-      iVolta.subtype->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorVolta::apply()
-      {
-      VoltaSegment* voltaSegment = static_cast<VoltaSegment*>(inspector->element());
-
-      Volta* volta = voltaSegment->volta();
-      Volta::VoltaType vt = volta->subtype();
-      Volta::VoltaType nt = Volta::VoltaType(iVolta.subtype->currentIndex());
-      if (vt != nt) {
-            Score* score = volta->score();
-            score->startCmd();
-            score->undoChangeProperty(volta, P_VOLTA_TYPE, nt);
-            score->endCmd();
-            mscore->endCmd();
-            }
-      }
-
-

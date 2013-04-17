@@ -31,106 +31,106 @@
 #include "progressbardata.h"
 #include "datamap.h"
 
-    //! handles progress bar animations
-    class ProgressBarEngine: public BaseEngine
-    {
+//! handles progress bar animations
+class ProgressBarEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ProgressBarEngine( QObject* object ):
-        BaseEngine( object ),
-        busyIndicatorEnabled_( true ),
-        busyStepDuration_( 50 )
-        {}
+            //! constructor
+            ProgressBarEngine( QObject* object ):
+                  BaseEngine( object ),
+                  busyIndicatorEnabled_( true ),
+                  busyStepDuration_( 50 )
+                  {}
 
-        //! destructor
-        virtual ~ProgressBarEngine( void )
-        {}
+            //! destructor
+            virtual ~ProgressBarEngine( void )
+                  {}
 
-        //! register menubar
-        virtual bool registerWidget( QWidget* );
+            //! register menubar
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object );
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object );
 
-        //! animation opacity
-        virtual int value( const QObject* object )
-        { return isAnimated( object ) ? data( object ).data()->value():0 ; }
+            //! animation opacity
+            virtual int value( const QObject* object ) {
+                  return isAnimated( object ) ? data( object ).data()->value() : 0 ;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        //! busy indicator enability
-        virtual void setBusyIndicatorEnabled( bool value )
-        { busyIndicatorEnabled_ = value; }
+            //! busy indicator enability
+            virtual void setBusyIndicatorEnabled( bool value ) {
+                  busyIndicatorEnabled_ = value;
+                  }
 
-        virtual bool busyIndicatorEnabled( void ) const
-        { return busyIndicatorEnabled_; }
+            virtual bool busyIndicatorEnabled( void ) const {
+                  return busyIndicatorEnabled_;
+                  }
 
-        //! busy indicator step duration
-        virtual void setBusyStepDuration( int value );
+            //! busy indicator step duration
+            virtual void setBusyStepDuration( int value );
 
-        //! busy indicator step duration
-        virtual int busyStepDuration( void ) const
-        { return busyStepDuration_; }
+            //! busy indicator step duration
+            virtual int busyStepDuration( void ) const {
+                  return busyStepDuration_;
+                  }
 
-        //! start busy timer
-        virtual void startBusyTimer( void )
-        {
-            if( !timer_.isActive() )
-            { timer_.start( busyStepDuration(), this ); }
-        }
+            //! start busy timer
+            virtual void startBusyTimer( void ) {
+                  if ( !timer_.isActive() ) {
+                        timer_.start( busyStepDuration(), this );
+                        }
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        {
-            if( !object ) return false;
-            dataSet_.remove( object );
-            return data_.unregisterWidget( object );
-        }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  if ( !object ) return false;
+                  dataSet_.remove( object );
+                  return data_.unregisterWidget( object );
+                  }
 
-        protected:
+      protected:
 
-        //! timer event
-        virtual void timerEvent( QTimerEvent* );
+            //! timer event
+            virtual void timerEvent( QTimerEvent* );
 
-        //! returns data associated to widget
-        DataMap<ProgressBarData>::Value data( const QObject* );
+            //! returns data associated to widget
+            DataMap<ProgressBarData>::Value data( const QObject* );
 
-        private:
+      private:
 
-        //! map widgets to progressbar data
-        DataMap<ProgressBarData> data_;
+            //! map widgets to progressbar data
+            DataMap<ProgressBarData> data_;
 
-        //! store set of of progress bars
-        typedef QSet<QObject*> ProgressBarSet;
-        ProgressBarSet dataSet_;
+            //! store set of of progress bars
+            typedef QSet<QObject*> ProgressBarSet;
+            ProgressBarSet dataSet_;
 
-        //! busy indicator enabled
-        bool busyIndicatorEnabled_;
+            //! busy indicator enabled
+            bool busyIndicatorEnabled_;
 
-        //! busy indicator step duration
-        int busyStepDuration_;
+            //! busy indicator step duration
+            int busyStepDuration_;
 
-        //! timer
-        QBasicTimer timer_;
+            //! timer
+            QBasicTimer timer_;
 
-    };
+      };
 
 #endif

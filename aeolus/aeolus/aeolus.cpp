@@ -16,22 +16,28 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifdef Q_WS_MAC
+#include <locale.h>
+#endif
+
 #include "aeolus.h"
 #include "model.h"
 
 extern QString dataPath;
 extern QString mscoreGlobalShare;
 
-#include "libmscore/event.h"
-#include "xml.h"
-#include "libmscore/sparm_p.h"
+#include "synthesizer/event.h"
+#include "libmscore/xml.h"
+#include "synthesizer/msynthesizer.h"
 
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
-void Aeolus::init(int samplerate)
+void Aeolus::init(float samplerate)
       {
+      Synthesizer::init(samplerate);
+
       setlocale(LC_ALL, "C"); // scanf of floats does not work otherwise
 
       QString stops = mscoreGlobalShare + "/sound/aeolus/stops";
@@ -51,7 +57,6 @@ void Aeolus::init(int samplerate)
 
       audio_start();
       model->init();
-//      printGui();
       }
 
 //---------------------------------------------------------
@@ -65,7 +70,7 @@ Aeolus::Aeolus()
       patch->drum = false;
       patch->bank = 0;
       patch->prog = 0;
-      patch->name = "Aeolus";
+      patch->name = name();
       patchList.append(patch);
       _sc_cmode = 0;
       _sc_group = 0;
@@ -113,7 +118,7 @@ double Aeolus::masterTuning() const
 //   play
 //---------------------------------------------------------
 
-void Aeolus::play(const Event& event)
+void Aeolus::play(const PlayEvent& event)
       {
       int ch   = event.channel();
       int type = event.type();
@@ -180,6 +185,7 @@ const QList<MidiPatch*>& Aeolus::getPatchInfo() const
 //   effectParameter
 //---------------------------------------------------------
 
+#if 0
 SyntiParameter Aeolus::parameter(int id) const
       {
       SParmId spid(id);
@@ -203,17 +209,15 @@ SyntiParameter Aeolus::parameter(int id) const
             }
       return SyntiParameter();
       }
+#endif
 
 //---------------------------------------------------------
 //   setParameter
 //---------------------------------------------------------
 
+#if 0
 void Aeolus::setParameter(int id, double value)
       {
-      SParmId spid(id);
-      if (spid.syntiId != AEOLUS_ID)
-            return;
-
       SyntiParameter* p = 0;
 
       switch(spid.subsystemId) {
@@ -240,6 +244,7 @@ void Aeolus::setParameter(int id, double value)
 // printf("aeolus set %d %d %f\n", effect, parameter, value);
       p->set(value);
       }
+#endif
 
 //---------------------------------------------------------
 //   rewrite_label
@@ -278,12 +283,12 @@ void Aeolus::printGui()
             }
       }
 
-SyntiState Aeolus::state() const
+SynthesizerGroup Aeolus::state() const
       {
-      return SyntiState();
+      return SynthesizerGroup();
       }
 
-void Aeolus::setState(const SyntiState&)
+void Aeolus::setState(const SynthesizerGroup&)
       {
       }
 

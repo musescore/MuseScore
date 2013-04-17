@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: cmd.cpp 5644 2012-05-17 10:53:29Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -471,7 +470,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int clef   = estaff->clef(tick);
                   int key    = estaff->key(tick).accidentalType();
                   npitch = line2pitch(line, clef, key);
-                  ntpc   = pitch2tpc(npitch, key);
+                  ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
                   }
             else { //special case for octave
                   Interval interval(7, 12);
@@ -533,17 +532,20 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
    MScore::Direction stemDirection)
       {
-      if (segment->subtype() == Segment::SegGrace) {
+      if (segment->segmentType() == Segment::SegGrace) {
             Chord* chord = static_cast<Chord*>(segment->element(track));
             if (chord->notes().size() == 1) {
                   Note* note = chord->upNote();
-                  int tpc = pitch2tpc2(nval.pitch, true);
+                  int key = chord->staff()->key(chord->tick()).accidentalType();
+
+                  // always prefer sharpened scale tone for non-diatonic grace note?
+                  int tpc = pitch2tpc(nval.pitch, key, PREFER_SHARPS);
                   int line = note->line();
                   undoChangePitch(note, nval.pitch, tpc, line);
                   }
             return segment;
             }
-      assert(segment->subtype() == Segment::SegChordRest);
+      assert(segment->segmentType() == Segment::SegChordRest);
 
       int tick      = segment->tick();
       Element* nr   = 0;
@@ -673,7 +675,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
       int nextTick = segment->tick();
 
       for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRestGrace)) {
-            if (seg->subtype() == Segment::SegGrace) {
+            if (seg->segmentType() == Segment::SegGrace) {
                   if (seg->element(track)) {
                         undoRemoveElement(seg->element(track));
                         if (seg->isEmpty() && seg != firstSegment)
@@ -825,7 +827,7 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       int track = staffIdx * VOICES;
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
-            if (seg->subtype() & Segment::SegGrace) {
+            if (seg->segmentType() & Segment::SegGrace) {
                   seg = seg->next1(Segment::SegChordRest);
                   if (!seg || !seg->element(track)) {
                         qDebug("makeGap1: no chord/rest at %d staff %d", tick, staffIdx);
@@ -1096,9 +1098,11 @@ void Score::upDown(bool up, UpDownMode mode)
 
       foreach(Note* oNote, el) {
             Part* part  = oNote->staff()->part();
+            int key = oNote->staff()->key(tick).accidentalType();
+            int tpc     = oNote->tpc();
             int pitch   = oNote->pitch();
-            int newTpc = 0;
-            int newPitch = 0;
+            int newTpc  = tpc;      // default to unchanged
+            int newPitch = pitch;   // default to unchanged
             int string = oNote->string();
             int fret   = oNote->fret();
             Tablature* tab;
@@ -1126,22 +1130,34 @@ void Score::upDown(bool up, UpDownMode mode)
                                     fret = tab->fret(pitch, string);
                                     if(fret == -1)          // can't have that note on that string
                                           return;
-                                    newPitch = pitch;       // these didn't change
-                                    newTpc   = oNote->tpc();
+                                    // newPitch and newTpc remain unchanged
                                     }
                                     break;
 
-                              case UP_DOWN_CHROMATIC:       // increase / decrease the pitch,
+                              case UP_DOWN_DIATONIC:        // increase / decrease the pitch,
                                                             // letting the algorithm to choose fret & string
-                                    newPitch = up ? pitch+1 : pitch-1;
-                                    if (newPitch < 0)
-                                          newPitch = 0;
-                                    else if (newPitch > 127)
-                                          newPitch = 127;
-                                    newTpc = pitch2tpc2(newPitch, up);
+                                    if (up) {
+                                          if (pitch < 127) {
+                                                newPitch = pitch + 1;
+                                                if (tpc > TPC_A + key)
+                                                      newTpc = tpc - 5;   // up semitone diatonic
+                                                else
+                                                      newTpc = tpc + 7;   // up semitone chromatic
+                                                }
+                                          }
+                                    else {
+                                          if (pitch > 0) {
+                                                newPitch = pitch - 1;
+                                                if (tpc > TPC_C + key)
+                                                      newTpc = tpc - 7;   // down semitone chromatic
+                                                else
+                                                      newTpc = tpc + 5;   // down semitone diatonic
+                                                }
+                                          }
+
                                     break;
 
-                              case UP_DOWN_DIATONIC:        // increase / decrease the fret
+                              case UP_DOWN_CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
                                     fret += (up ? 1 : -1);
                                     if (fret < 0)
@@ -1149,7 +1165,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     else if (fret >= tab->frets())
                                           fret = tab->frets() - 1;
                                     newPitch    = tab->getPitch(string, fret);
-                                    newTpc      = pitch2tpc2(newPitch, up);
+                                    newTpc      = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_FRET, fret);
@@ -1162,44 +1178,82 @@ void Score::upDown(bool up, UpDownMode mode)
                   case PITCHED_STAFF:
                         switch(mode) {
                               case UP_DOWN_OCTAVE:
-                                    newPitch = pitch + (up ? 12 : -12);
-                                    if (newPitch < 0)
-                                          newPitch = 0;
-                                    else if (newPitch > 127)
-                                          newPitch = 127;
-                                    newTpc = oNote->tpc();
+                                    if (up) {
+                                          if (pitch < 116)
+                                                newPitch = pitch + 12;
+                                          }
+                                    else {
+                                          if (pitch > 11)
+                                                newPitch = pitch - 12;
+                                          }
+                                    // newTpc remains unchanged
                                     break;
 
                               case UP_DOWN_CHROMATIC:
-                                    newPitch = up ? pitch+1 : pitch-1;
-                                    if (newPitch < 0)
-                                          newPitch = 0;
-                                    else if (newPitch > 127)
-                                          newPitch = 127;
-                                    newTpc = pitch2tpc2(newPitch, up);
+                                    if (up) {
+                                          if (pitch < 127) {
+                                                newPitch = pitch + 1;
+                                                if (tpc > TPC_A + key)
+                                                      newTpc = tpc - 5;   // up semitone diatonic
+                                                else
+                                                      newTpc = tpc + 7;   // up semitone chromatic
+                                                }
+                                          }
+                                    else {
+                                          if (pitch > 0) {
+                                                newPitch = pitch - 1;
+                                                if (tpc > TPC_C + key)
+                                                      newTpc = tpc - 7;   // down semitone chromatic
+                                                else
+                                                      newTpc = tpc + 5;   // down semitone diatonic
+                                                }
+                                          }
+
                                     break;
 
                               case UP_DOWN_DIATONIC:
-                                    {
-                                    Chord* chord  = oNote->chord();
-                                    Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
-                                    int clef      = estaff->clef(chord->tick());
-                                    int line      = oNote->line() + (up ? -1 : 1);
-                                    newPitch      = line2pitch(line, clef, 0);
-                                    int step      = clefTable[clef].pitchOffset - line;
-                                    while (step < 0)
-                                          step += 7;
-                                    step %= 7;
-                                    newTpc = step2tpc(step, NATURAL);
-                                    }
+                                    if (up) {
+                                          if (tpc > TPC_A + key) {
+                                                if (pitch < 127) {
+                                                      newPitch = pitch + 1;
+                                                      newTpc = tpc - 5;   // up semitone diatonic
+                                                      }
+                                                }
+                                          else {
+                                                if (pitch < 126) {
+                                                      newPitch = pitch + 2;
+                                                      newTpc = tpc + 2;   // up tone
+                                                      }
+                                                }
+                                          }
+                                    else {
+                                          if (tpc > TPC_C + key) {
+                                                if (pitch > 1) {
+                                                      newPitch = pitch - 2;
+                                                      newTpc = tpc - 2;   // down tone
+                                                      }
+                                                }
+                                          else {
+                                                if (pitch > 0) {
+                                                      newPitch = pitch - 1;
+                                                      newTpc = tpc + 5;   // down semitone diatonic
+                                                      }
+                                                }
+                                          }
+
                                     break;
                               }
                         break;
                   }
             _is.pitch = newPitch;
 
-            if ( (oNote->pitch() != newPitch) || (oNote->tpc() != newTpc) )
-                  undoChangePitch(oNote, newPitch, newTpc, oNote->line()/*, fret, string*/);
+            if ((oNote->pitch() != newPitch) || (oNote->tpc() != newTpc)) {
+                  // remove accidental if present to make sure
+                  // user added accidentals are removed here.
+                  if (oNote->accidental())
+                        undoRemoveElement(oNote->accidental());
+                  undoChangePitch(oNote, newPitch, newTpc, oNote->line());
+                  }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
             else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
@@ -1213,12 +1267,15 @@ void Score::upDown(bool up, UpDownMode mode)
                         refret = true;
                         }
                   if (refret)
-                        tab->fretChord(oNote->chord());
+                        tab->fretChords(oNote->chord());
                   }
 
             // play new note with velocity 80 for 0.3 sec:
             _playNote = true;
             }
+      _selection.clear();
+      foreach(Note* note, el)
+            _selection.add(note);
       _selection.updateState();     // accidentals may have changed
       }
 
@@ -1234,8 +1291,9 @@ void Score::addArticulation(ArticulationType attr)
       foreach(Element* el, selection().elements()) {
             if (el->type() == Element::NOTE || el->type() == Element::CHORD) {
                   Articulation* na = new Articulation(this);
-                  na->setSubtype(attr);
-                  addArticulation(el, na);
+                  na->setArticulationType(attr);
+                  if (!addArticulation(el, na))
+                        delete na;
                   }
             }
       }
@@ -1312,7 +1370,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
 
                   Accidental* a = new Accidental(this);
                   a->setParent(note);
-                  a->setSubtype(accidental);
+                  a->setAccidentalType(accidental);
                   a->setRole(Accidental::ACC_USER);
                   undoAddElement(a);
                   }
@@ -1333,7 +1391,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   }
             else {
                   m   = score->tick2measure(measure->tick());
-                  s   = m->findSegment(segment->subtype(), segment->tick());
+                  s   = m->findSegment(segment->segmentType(), segment->tick());
                   }
             int staffIdx  = score->staffIdx(st);
             Chord* chord  = static_cast<Chord*>(s->element(staffIdx * VOICES + voice));
@@ -1382,28 +1440,25 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
 //   addArticulation
 //---------------------------------------------------------
 
-void Score::addArticulation(Element* el, Articulation* atr)
+bool Score::addArticulation(Element* el, Articulation* a)
       {
       ChordRest* cr;
       if (el->type() == Element::NOTE)
-            cr = static_cast<ChordRest*>(((Note*)el)->chord());
-      else if (el->type() == Element::REST)
+            cr = static_cast<ChordRest*>(static_cast<Note*>(el)->chord());
+      else if (el->type() == Element::REST
+         || el->type() == Element::CHORD
+         || el->type() == Element::REPEAT_MEASURE)
             cr = static_cast<ChordRest*>(el);
-      else if (el->type() == Element::CHORD)
-            cr = static_cast<ChordRest*>(el);
-      else {
-            delete atr;
-            return;
-            }
-      atr->setParent(cr);
-      Articulation* oa = cr->hasArticulation(atr);
-      if (oa) {
-            delete atr;
-            atr = 0;
-            undoRemoveElement(oa);
-            }
       else
-            undoAddElement(atr);
+            return false;
+      Articulation* oa = cr->hasArticulation(a);
+      if (oa) {
+            undoRemoveElement(oa);
+            return false;
+            }
+      a->setParent(cr);
+      undoAddElement(a);
+      return true;
       }
 
 //---------------------------------------------------------
@@ -1431,7 +1486,7 @@ void Score::resetUserStretch()
             return;
 
       for (Measure* m = m1; m; m = m->nextMeasure()) {
-            _undo->push(new ChangeStretch(m, 1.0));
+            undo(new ChangeStretch(m, 1.0));
             if (m == m2)
                   break;
             }
@@ -1529,12 +1584,12 @@ void Score::cmdResetBeamMode()
                   if (cr == 0)
                         continue;
                   if (cr->type() == Element::CHORD) {
-                        if (cr->beamMode() != BEAM_AUTO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BEAM_AUTO));
+                        if (cr->beamMode() != BeamMode::AUTO)
+                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::AUTO));
                         }
                   else if (cr->type() == Element::REST) {
-                        if (cr->beamMode() != BEAM_NO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BEAM_NO));
+                        if (cr->beamMode() != BeamMode::NONE)
+                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::NONE));
                         }
                   }
             }
@@ -1743,7 +1798,7 @@ Element* Score::move(const QString& cmd)
                   // if _is._segment is first chord/rest segment in measure
                   // make sure "m" points to previous measure
                   //
-                  while (s && s->subtype() != Segment::SegChordRest)
+                  while (s && s->segmentType() != Segment::SegChordRest)
                         s = s->prev1();
                   if (s == 0)
                         return 0;
@@ -1751,7 +1806,7 @@ Element* Score::move(const QString& cmd)
 
                   int track  = _is.track();
                   for (; s; s = s->prev1()) {
-                        if (s->subtype() != Segment::SegChordRest)
+                        if (s->segmentType() != Segment::SegChordRest)
                               continue;
                         if (s->element(track) || s->measure() != m)
                               break;
@@ -2107,26 +2162,100 @@ void Score::cmd(const QAction* a)
                   }
             setLayoutAll(false);
             }
-      else if (cmd == "note-longa")
+      else if (cmd == "note-longa"   || cmd == "note-longa-TAB")
             padToggle(PAD_NOTE00);
-      else if (cmd == "note-breve")
+      else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
             padToggle(PAD_NOTE0);
-      else if (cmd == "pad-note-1")
+      else if (cmd == "pad-note-1"   || cmd == "pad-note-1-TAB")
             padToggle(PAD_NOTE1);
-      else if (cmd == "pad-note-2")
+      else if (cmd == "pad-note-2"   || cmd == "pad-note-2-TAB")
             padToggle(PAD_NOTE2);
-      else if (cmd == "pad-note-4")
+      else if (cmd == "pad-note-4"   || cmd == "pad-note-4-TAB")
             padToggle(PAD_NOTE4);
-      else if (cmd == "pad-note-8")
+      else if (cmd == "pad-note-8"   || cmd == "pad-note-8-TAB")
             padToggle(PAD_NOTE8);
-      else if (cmd == "pad-note-16")
+      else if (cmd == "pad-note-16"  || cmd == "pad-note-16-TAB")
             padToggle(PAD_NOTE16);
-      else if (cmd == "pad-note-32")
+      else if (cmd == "pad-note-32"  || cmd == "pad-note-32-TAB")
             padToggle(PAD_NOTE32);
-      else if (cmd == "pad-note-64")
+      else if (cmd == "pad-note-64"  || cmd == "pad-note-64-TAB")
             padToggle(PAD_NOTE64);
-      else if (cmd == "pad-note-128")
+      else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
             padToggle(PAD_NOTE128);
+      else if (cmd == "pad-note-increase-TAB") {
+            switch (_is.duration().type() ) {
+// cycle back from longest to shortest?
+//                  case TDuration::V_LONG:
+//                        padToggle(PAD_NOTE128);
+//                        break;
+                  case TDuration::V_BREVE:
+                        padToggle(PAD_NOTE00);
+                        break;
+                  case TDuration::V_WHOLE:
+                        padToggle(PAD_NOTE0);
+                        break;
+                  case TDuration::V_HALF:
+                        padToggle(PAD_NOTE1);
+                        break;
+                  case TDuration::V_QUARTER:
+                        padToggle(PAD_NOTE2);
+                        break;
+                  case TDuration::V_EIGHT:
+                        padToggle(PAD_NOTE4);
+                        break;
+                  case TDuration::V_16TH:
+                        padToggle(PAD_NOTE8);
+                        break;
+                  case TDuration::V_32ND:
+                        padToggle(PAD_NOTE16);
+                        break;
+                  case TDuration::V_64TH:
+                        padToggle(PAD_NOTE32);
+                        break;
+                  case TDuration::V_128TH:
+                        padToggle(PAD_NOTE64);
+                        break;
+                  default:
+                        break;
+                  }
+            }
+      else if (cmd == "pad-note-decrease-TAB") {
+            switch (_is.duration().type() ) {
+                  case TDuration::V_LONG:
+                        padToggle(PAD_NOTE0);
+                        break;
+                  case TDuration::V_BREVE:
+                        padToggle(PAD_NOTE1);
+                        break;
+                  case TDuration::V_WHOLE:
+                        padToggle(PAD_NOTE2);
+                        break;
+                  case TDuration::V_HALF:
+                        padToggle(PAD_NOTE4);
+                        break;
+                  case TDuration::V_QUARTER:
+                        padToggle(PAD_NOTE8);
+                        break;
+                  case TDuration::V_EIGHT:
+                        padToggle(PAD_NOTE16);
+                        break;
+                  case TDuration::V_16TH:
+                        padToggle(PAD_NOTE32);
+                        break;
+                  case TDuration::V_32ND:
+                        padToggle(PAD_NOTE64);
+                        break;
+                  case TDuration::V_64TH:
+                        padToggle(PAD_NOTE128);
+                        break;
+// cycle back from shortest to longest?
+//                  case TDuration::V_128TH:
+//                        padToggle(PAD_NOTE00);
+//                        break;
+                  default:
+                        break;
+                  }
+            }
       else if (cmd == "pad-rest")
             padToggle(PAD_REST);
       else if (cmd == "pad-dot")
@@ -2134,13 +2263,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "pad-dotdot")
             padToggle(PAD_DOTDOT);
       else if (cmd == "beam-start")
-            cmdSetBeamMode(BEAM_BEGIN);
+            cmdSetBeamMode(BeamMode::BEGIN);
       else if (cmd == "beam-mid")
-            cmdSetBeamMode(BEAM_MID);
+            cmdSetBeamMode(BeamMode::MID);
       else if (cmd == "no-beam")
-            cmdSetBeamMode(BEAM_NO);
+            cmdSetBeamMode(BeamMode::NONE);
       else if (cmd == "beam-32")
-            cmdSetBeamMode(BEAM_BEGIN32);
+            cmdSetBeamMode(BeamMode::BEGIN32);
       else if (cmd == "sharp2")
             changeAccidental(Accidental::ACC_SHARP2);
       else if (cmd == "sharp")
@@ -2201,7 +2330,7 @@ void Score::cmd(const QAction* a)
                   Measure* measure = static_cast<Measure*>(e->parent()->parent());
                   if (!measure->lineBreak()) {
                         LayoutBreak* lb = new LayoutBreak(this);
-                        lb->setSubtype(type);
+                        lb->setLayoutBreakType(type);
                         lb->setTrack(-1);       // this are system elements
                         lb->setParent(measure);
                         undoAddElement(lb);
@@ -2209,7 +2338,7 @@ void Score::cmd(const QAction* a)
                   else {
                         // remove line break
                         foreach(Element* e, *measure->el()) {
-                              if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() ==type) {
+                              if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                                     undoRemoveElement(e);
                                     break;
                                     }

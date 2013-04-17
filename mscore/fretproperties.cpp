@@ -167,7 +167,10 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             p.drawEllipse(QRectF(x, y, dotd, dotd));
             }
       if (fretOffset > 0) {
-          p.setPen(pen);
+            p.setPen(pen);
+            p.drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
+               Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
+               QString("%1").arg(fretOffset+1));
             }
       QFrame::paintEvent(ev);
       }

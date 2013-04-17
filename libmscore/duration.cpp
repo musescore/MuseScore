@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: duration.h 4426 2011-06-25 08:52:44Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -68,20 +67,6 @@ int DurationElement::actualTicks() const
       {
       return Fraction(staff()->timeStretch(tick()) * globalDuration()).ticks();
       }
-
-#if 0
-//---------------------------------------------------------
-//   properties
-//---------------------------------------------------------
-
-QList<Prop> DurationElement::properties(Xml& xml, bool /*clipboardmode*/) const
-      {
-      QList<Prop> pl = Element::properties(xml);
-      if (tuplet())
-            pl.append(Prop("Tuplet", tuplet()->id()));
-      return pl;
-      }
-#endif
 
 //---------------------------------------------------------
 //   readProperties

@@ -46,221 +46,220 @@ enum ShadowArea {
 //   FrameShadowFactory
 //---------------------------------------------------------
 
-class FrameShadowFactory: public QObject
-      {
-      Q_OBJECT
+class FrameShadowFactory: public QObject {
+            Q_OBJECT
 
-   public:
+      public:
 
-      //! constructor
-      FrameShadowFactory( QObject* parent ) : QObject(parent) {}
+            //! constructor
+            FrameShadowFactory( QObject* parent ) : QObject(parent) {}
 
-        //! destructor
-        virtual ~FrameShadowFactory() {}
+            //! destructor
+            virtual ~FrameShadowFactory() {}
 
-        //! register widget
-        bool registerWidget( QWidget*, StyleHelper& );
+            //! register widget
+            bool registerWidget( QWidget*, StyleHelper& );
 
-        //! unregister
-        void unregisterWidget( QWidget* );
+            //! unregister
+            void unregisterWidget( QWidget* );
 
-        //! true if widget is registered
-        bool isRegistered( const QWidget* widget ) const
-        { return _registeredWidgets.contains( widget ); }
+            //! true if widget is registered
+            bool isRegistered( const QWidget* widget ) const {
+                  return _registeredWidgets.contains( widget );
+                  }
 
-        //! event filter
-        virtual bool eventFilter( QObject*, QEvent*);
+            //! event filter
+            virtual bool eventFilter( QObject*, QEvent*);
 
-        //! update state
-        void updateState( const QWidget* widget, bool focus, bool hover, qreal opacity, AnimationMode ) const;
+            //! update state
+            void updateState( const QWidget* widget, bool focus, bool hover, qreal opacity, AnimationMode ) const;
 
-        protected:
+      protected:
 
-        //! install shadows on given widget
-        virtual void installShadows( QWidget*, StyleHelper&, bool flat = false );
+            //! install shadows on given widget
+            virtual void installShadows( QWidget*, StyleHelper&, bool flat = false );
 
-        //! remove shadows from widget
-        virtual void removeShadows( QWidget* );
+            //! remove shadows from widget
+            virtual void removeShadows( QWidget* );
 
-        //! update shadows geometry
-        virtual void updateShadowsGeometry( QObject* ) const;
+            //! update shadows geometry
+            virtual void updateShadowsGeometry( QObject* ) const;
 
-        //! raise shadows
-        virtual void raiseShadows( QObject* ) const;
+            //! raise shadows
+            virtual void raiseShadows( QObject* ) const;
 
-        //! update shadows
-        virtual void update( QObject* ) const;
+            //! update shadows
+            virtual void update( QObject* ) const;
 
-        //! install shadow on given side
-        virtual void installShadow( QWidget*, StyleHelper&, ShadowArea, bool flat = false ) const;
+            //! install shadow on given side
+            virtual void installShadow( QWidget*, StyleHelper&, ShadowArea, bool flat = false ) const;
 
-        protected slots:
+      protected slots:
 
-        //! triggered by object destruction
-        void widgetDestroyed( QObject* );
+            //! triggered by object destruction
+            void widgetDestroyed( QObject* );
 
-        private:
+      private:
 
-        //! set of registered widgets
-        QSet<const QObject*> _registeredWidgets;
+            //! set of registered widgets
+            QSet<const QObject*> _registeredWidgets;
 
-    };
+      };
 
-    //! frame shadow
-    /*! this allows the shadow to be painted over the widgets viewport */
-    class FrameShadowBase: public QWidget
-    {
+//! frame shadow
+/*! this allows the shadow to be painted over the widgets viewport */
+class FrameShadowBase: public QWidget {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        explicit FrameShadowBase( ShadowArea area ):
-            _area( area )
-        {}
+            //! constructor
+            explicit FrameShadowBase( ShadowArea area ):
+                  _area( area )
+                  {}
 
-        //! destructor
-        virtual ~FrameShadowBase( void )
-        {}
+            //! destructor
+            virtual ~FrameShadowBase( void )
+                  {}
 
-        //! shadow area
-        void setShadowArea(ShadowArea area)
-        { _area = area; }
+            //! shadow area
+            void setShadowArea(ShadowArea area) {
+                  _area = area;
+                  }
 
-        //! shadow area
-        const ShadowArea& shadowArea() const
-        { return _area; }
+            //! shadow area
+            const ShadowArea& shadowArea() const {
+                  return _area;
+                  }
 
-        //! update geometry
-        virtual void updateGeometry( void ) = 0;
+            //! update geometry
+            virtual void updateGeometry( void ) = 0;
 
-        //! update state
-        virtual void updateState( bool, bool, qreal, AnimationMode )
-        {}
+            //! update state
+            virtual void updateState( bool, bool, qreal, AnimationMode )
+                  {}
 
-        protected:
+      protected:
 
-        //! event handler
-        virtual bool event(QEvent *e);
+            //! event handler
+            virtual bool event(QEvent* e);
 
-        //! initialization
-        virtual void init();
+            //! initialization
+            virtual void init();
 
-        //! return viewport associated to parent widget
-        virtual QWidget* viewport( void ) const;
+            //! return viewport associated to parent widget
+            virtual QWidget* viewport( void ) const;
 
-        private:
+      private:
 
-        //! shadow area
-        ShadowArea _area;
+            //! shadow area
+            ShadowArea _area;
 
-    };
+      };
 
-    //! frame shadow
-    /*! this allows the shadow to be painted over the widgets viewport */
-    class SunkenFrameShadow : public FrameShadowBase
-    {
-        Q_OBJECT
+//! frame shadow
+/*! this allows the shadow to be painted over the widgets viewport */
+class SunkenFrameShadow : public FrameShadowBase {
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        SunkenFrameShadow( ShadowArea area, StyleHelper& helper ):
-            FrameShadowBase( area ),
-            _helper( helper ),
-            _viewFocusBrush( helper.viewFocusBrush() ),
-            _viewHoverBrush( helper.viewHoverBrush() ),
-            _focus( false ),
-            _hover( false ),
-            _opacity( -1 ),
-            _mode( AnimationNone )
-        { init(); }
+            //! constructor
+            SunkenFrameShadow( ShadowArea area, StyleHelper& helper ):
+                  FrameShadowBase( area ),
+                  _helper( helper ),
+                  _viewFocusBrush( helper.viewFocusBrush() ),
+                  _viewHoverBrush( helper.viewHoverBrush() ),
+                  _focus( false ),
+                  _hover( false ),
+                  _opacity( -1 ),
+                  _mode( AnimationNone ) {
+                  init();
+                  }
 
 
-        //! destructor
-        virtual ~SunkenFrameShadow()
-        {}
+            //! destructor
+            virtual ~SunkenFrameShadow()
+                  {}
 
-        //! update geometry
-        virtual void updateGeometry( void );
+            //! update geometry
+            virtual void updateGeometry( void );
 
-        //! update state
-        void updateState( bool focus, bool hover, qreal opacity, AnimationMode mode );
+            //! update state
+            void updateState( bool focus, bool hover, qreal opacity, AnimationMode mode );
 
-        protected:
+      protected:
 
-        //! painting
-        virtual void paintEvent(QPaintEvent *);
+            //! painting
+            virtual void paintEvent(QPaintEvent*);
 
-        private:
+      private:
 
-        //! shadow sizes
-        enum
-        {
-            SHADOW_SIZE_TOP = 3,
-            SHADOW_SIZE_BOTTOM = 3,
-            SHADOW_SIZE_LEFT = 3,
-            SHADOW_SIZE_RIGHT = 3
-        };
+            //! shadow sizes
+            enum {
+                  SHADOW_SIZE_TOP = 3,
+                  SHADOW_SIZE_BOTTOM = 3,
+                  SHADOW_SIZE_LEFT = 3,
+                  SHADOW_SIZE_RIGHT = 3
+                  };
 
-        //! helper
-        StyleHelper& _helper;
+            //! helper
+            StyleHelper& _helper;
 
-        StatefulBrush _viewFocusBrush;
-        StatefulBrush _viewHoverBrush;
+            StatefulBrush _viewFocusBrush;
+            StatefulBrush _viewHoverBrush;
 
-        //!@name widget state
-        //@{
-        bool _focus;
-        bool _hover;
-        qreal _opacity;
-        AnimationMode _mode;
+            //!@name widget state
+            //@{
+            bool _focus;
+            bool _hover;
+            qreal _opacity;
+            AnimationMode _mode;
 
-    };
+      };
 
 
-    //! frame shadow
-    /*! this allows the shadow to be painted over the widgets viewport */
-    class FlatFrameShadow : public FrameShadowBase
-    {
-        Q_OBJECT
+//! frame shadow
+/*! this allows the shadow to be painted over the widgets viewport */
+class FlatFrameShadow : public FrameShadowBase {
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        FlatFrameShadow( ShadowArea area, StyleHelper& helper ):
-            FrameShadowBase( area ),
-            _helper( helper )
-        { init(); }
+            //! constructor
+            FlatFrameShadow( ShadowArea area, StyleHelper& helper ):
+                  FrameShadowBase( area ),
+                  _helper( helper ) {
+                  init();
+                  }
 
 
-        //! destructor
-        virtual ~FlatFrameShadow()
-        {}
+            //! destructor
+            virtual ~FlatFrameShadow()
+                  {}
 
-        //! update geometry
-        virtual void updateGeometry( void );
+            //! update geometry
+            virtual void updateGeometry( void );
 
-        protected:
+      protected:
 
-        //! painting
-        virtual void paintEvent(QPaintEvent *);
+            //! painting
+            virtual void paintEvent(QPaintEvent*);
 
-        private:
+      private:
 
-        //! shadow sizes
-        enum
-        {
-            SHADOW_SIZE_TOP = 5,
-            SHADOW_SIZE_BOTTOM = 5,
-            SHADOW_SIZE_LEFT = 5,
-            SHADOW_SIZE_RIGHT = 5
-        };
+            //! shadow sizes
+            enum {
+                  SHADOW_SIZE_TOP = 5,
+                  SHADOW_SIZE_BOTTOM = 5,
+                  SHADOW_SIZE_LEFT = 5,
+                  SHADOW_SIZE_RIGHT = 5
+                  };
 
-        //! helper
-        StyleHelper& _helper;
+            //! helper
+            StyleHelper& _helper;
 
-    };
+      };
 
 #endif

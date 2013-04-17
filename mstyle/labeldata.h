@@ -29,73 +29,75 @@
 
 #include "transitiondata.h"
 
-    //! generic data
-    class LabelData: public TransitionData
-    {
+//! generic data
+class LabelData: public TransitionData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        LabelData( QObject*, QLabel*, int );
+            //! constructor
+            LabelData( QObject*, QLabel*, int );
 
-        //! destructor
-        virtual ~LabelData( void )
-        {}
+            //! destructor
+            virtual ~LabelData( void )
+                  {}
 
-        //! event filter
-        virtual bool eventFilter( QObject*, QEvent* );
+            //! event filter
+            virtual bool eventFilter( QObject*, QEvent* );
 
-        //! returns true if animations are locked
-        bool isLocked( void ) const
-        { return animationLockTimer_.isActive(); }
+            //! returns true if animations are locked
+            bool isLocked( void ) const {
+                  return animationLockTimer_.isActive();
+                  }
 
-        //! start lock animation timer
-        void lockAnimations( void )
-        { animationLockTimer_.start( lockTime_, this ); }
+            //! start lock animation timer
+            void lockAnimations( void ) {
+                  animationLockTimer_.start( lockTime_, this );
+                  }
 
-        //! start lock animation timer
-        void unlockAnimations( void )
-        { animationLockTimer_.stop(); }
+            //! start lock animation timer
+            void unlockAnimations( void ) {
+                  animationLockTimer_.stop();
+                  }
 
-        protected slots:
+      protected slots:
 
-        //! initialize animation
-        virtual bool initializeAnimation( void );
+            //! initialize animation
+            virtual bool initializeAnimation( void );
 
-        //! animate
-        virtual bool animate( void );
+            //! animate
+            virtual bool animate( void );
 
-        //! called when target is destroyed
-        virtual void targetDestroyed( void );
+            //! called when target is destroyed
+            virtual void targetDestroyed( void );
 
-        protected:
+      protected:
 
-        //! timer event
-        virtual void timerEvent( QTimerEvent* );
+            //! timer event
+            virtual void timerEvent( QTimerEvent* );
 
-        private:
+      private:
 
-        //! lock time (milliseconds
-        static const int lockTime_;
+            //! lock time (milliseconds
+            static const int lockTime_;
 
-        //! timer used to disable animations when triggered too early
-        QBasicTimer animationLockTimer_;
+            //! timer used to disable animations when triggered too early
+            QBasicTimer animationLockTimer_;
 
-        //! needed to start animations out of parent paintEvent
-        QBasicTimer timer_;
+            //! needed to start animations out of parent paintEvent
+            QBasicTimer timer_;
 
-        //! target
-        QWeakPointer<QLabel> target_;
+            //! target
+            QWeakPointer<QLabel> target_;
 
-        //! old text
-        QString text_;
+            //! old text
+            QString text_;
 
-        //! widget rect
-        /*! needed to properly handle QLabel geometry changes */
-        QRect widgetRect_;
+            //! widget rect
+            /*! needed to properly handle QLabel geometry changes */
+            QRect widgetRect_;
 
-    };
+      };
 
 #endif

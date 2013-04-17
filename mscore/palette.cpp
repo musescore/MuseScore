@@ -37,6 +37,7 @@
 #include "libmscore/qzipreader_p.h"
 #include "libmscore/qzipwriter_p.h"
 #include "libmscore/slur.h"
+#include "paletteBoxButton.h"
 
 //---------------------------------------------------------
 //   needsStaff
@@ -277,8 +278,12 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       ScoreView* viewer = mscore->currentScoreView();
 
 
-      if (viewer->mscoreState() != STATE_EDIT && viewer->mscoreState() != STATE_LYRICS_EDIT) // Already in startCmd in this case
-          score->startCmd();
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
+         && viewer->mscoreState() != STATE_TEXT_EDIT) { // Already in startCmd in this case
+            score->startCmd();
+            }
       if (sel.state() == SEL_LIST) {
             foreach(Element* e, sel.elements())
                   applyDrop(score, viewer, e, element);
@@ -313,8 +318,12 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             }
       else
             qDebug("unknown selection state\n");
-      if (viewer->mscoreState() != STATE_EDIT && viewer->mscoreState() != STATE_LYRICS_EDIT) //Already in startCmd mode in this case
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
+         && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
+            }
       mscore->endCmd();
       }
 
@@ -509,8 +518,14 @@ void Palette::paintEvent(QPaintEvent* event)
 
       QPainter p(this);
       p.setRenderHint(QPainter::Antialiasing, true);
-      p.fillRect(event->rect(), p.background().color());
 
+      QColor bgColor(0xf6, 0xf0, 0xda);
+#if 1
+      p.setBrush(QColor(0xf6, 0xf0, 0xda));
+      p.drawRoundedRect(0, 0, width()-3, height(), 2, 2);
+#else
+      p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
+#endif
       //
       // draw grid
       //
@@ -536,16 +551,19 @@ void Palette::paintEvent(QPaintEvent* event)
       // draw symbols
       //
 
-      QPen pen(palette().color(QPalette::Normal, QPalette::Text));
+      // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
+      QPen pen(Qt::black);
       pen.setWidthF(MScore::defaultStyle()->valueS(ST_staffLineWidth).val() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < cells.size(); ++idx) {
+            int yoffset = gscore->spatium() * _yOffset;
             QRect r = idxRect(idx);
+            QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             if (idx == selectedIdx)
-                  p.fillRect(r, palette().color(QPalette::Normal, QPalette::Highlight));
+                  p.fillRect(r, bgColor.light(200));
             else if (idx == currentIdx)
-                  p.fillRect(r, p.background().color().light(118));
+                  p.fillRect(r, bgColor.light(118));
             if (cells.isEmpty() || cells[idx] == 0)
                   continue;
 
@@ -554,7 +572,7 @@ void Palette::paintEvent(QPaintEvent* event)
                   QFont f(p.font());
                   f.setPointSize(12);
                   p.setFont(f);
-                  p.drawText(r, Qt::AlignLeft | Qt::AlignTop, cells[idx]->tag);
+                  p.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, cells[idx]->tag);
                   }
 
             p.setPen(pen);
@@ -564,8 +582,8 @@ void Palette::paintEvent(QPaintEvent* event)
                   continue;
             bool drawStaff = cells[idx]->drawStaff;
             if (el->type() == Element::ICON) {
-                  int x      = r.x();
-                  int y      = r.y();
+                  int x      = rShift.x();
+                  int y      = rShift.y();
                   Icon* _icon = static_cast<Icon*>(el);
                   QIcon icon = _icon->icon();
                   static const int border = 2;
@@ -659,7 +677,8 @@ bool Palette::event(QEvent* ev)
                   return false;
             if (cells[idx] == 0)
                   return false;
-            QToolTip::showText(he->globalPos(), cells[idx]->name, this);
+            QToolTip::showText(he->globalPos(),
+               qApp->translate("Palette", cells[idx]->name.toUtf8()), this);
             return false;
             }
       return QWidget::event(ev);
@@ -830,9 +849,9 @@ void Palette::dropEvent(QDropEvent* event)
 //   write
 //---------------------------------------------------------
 
-void Palette::write(Xml& xml, const QString& name) const
+void Palette::write(Xml& xml) const
       {
-      xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(name)));
+      xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
       xml.tag("gridWidth", hgrid);
       xml.tag("gridHeight", vgrid);
       if (extraMag != 1.0)
@@ -986,8 +1005,9 @@ void Palette::read(const QString& p)
 
 static void writeFailed(const QString& path)
       {
-      QString s = mscore->tr("Open Palette File\n") + path + mscore->tr("\nfailed: ");
-      QMessageBox::critical(mscore, mscore->tr("MuseScore: Writing Palette file"), s);
+      QString s = qApp->translate("Palette", "Open Palette File\n") + path
+         + qApp->translate("Palette", "\nfailed: ");
+      QMessageBox::critical(mscore, qApp->translate("Palette", "MuseScore: Writing Palette file"), s);
       }
 
 //---------------------------------------------------------
@@ -1052,7 +1072,7 @@ void Palette::write(const QString& p)
       Xml xml(&cbuf);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      write(xml, name());
+      write(xml);
       xml.etag();
       cbuf.close();
       f.addFile("palette.xml", cbuf.data());
@@ -1208,117 +1228,6 @@ void Palette::actionToggled(bool /*val*/)
                   }
             }
       update();
-      }
-
-//---------------------------------------------------------
-//   PaletteBoxButton
-//---------------------------------------------------------
-
-PaletteBoxButton::PaletteBoxButton(Palette* p, QWidget* parent)
-   : QToolButton(parent)
-      {
-      palette = p;
-      setCheckable(true);
-      setFocusPolicy(Qt::NoFocus);
-      connect(this, SIGNAL(clicked(bool)), this, SLOT(showPalette(bool)));
-      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      setText(palette->name());
-      setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-      // setArrowType(Qt::RightArrow);
-      showPalette(false);
-      }
-
-void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
-      {
-      QMenu menu;
-
-      QAction* actionProperties = menu.addAction(tr("Palette Properties..."));
-      QAction* actionInsert     = menu.addAction(tr("Insert New Palette..."));
-      QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
-      QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
-      QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
-      actionEdit->setChecked(!palette->readOnly());
-      bool _systemPalette = palette->systemPalette();
-      actionProperties->setDisabled(_systemPalette);
-      actionInsert->setDisabled(_systemPalette);
-      actionUp->setDisabled(_systemPalette);
-      actionDown->setDisabled(_systemPalette);
-      actionEdit->setDisabled(_systemPalette);
-
-      menu.addSeparator();
-      QAction* actionSave = menu.addAction(tr("Save Palette"));
-      QAction* actionLoad = menu.addAction(tr("Load Palette"));
-      actionLoad->setDisabled(_systemPalette);
-
-      menu.addSeparator();
-      QAction* actionDelete = menu.addAction(tr("Delete Palette"));
-      actionDelete->setDisabled(_systemPalette);
-
-      QAction* action = menu.exec(mapToGlobal(event->pos()));
-      if (action == actionProperties)
-            propertiesTriggered();
-      else if (action == actionInsert)
-            newTriggered();
-      else if (action == actionUp)
-            upTriggered();
-      else if (action == actionDown)
-            downTriggered();
-      else if (action == actionEdit)
-            enableEditing(action->isChecked());
-      else if (action == actionSave)
-            saveTriggered();
-      else if (action == actionLoad)
-            loadTriggered();
-      else if (action == actionDelete)
-            deleteTriggered();
-      }
-
-//---------------------------------------------------------
-//   enableEditing
-//---------------------------------------------------------
-
-void PaletteBoxButton::enableEditing(bool val)
-      {
-      palette->setReadOnly(!val);
-      }
-
-//---------------------------------------------------------
-//   changeEvent
-//---------------------------------------------------------
-
-void PaletteBoxButton::changeEvent(QEvent* ev)
-      {
-      if (ev->type() == QEvent::FontChange)
-            setFixedHeight(QFontMetrics(font()).height() + 2);
-      }
-
-//---------------------------------------------------------
-//   showPalette
-//---------------------------------------------------------
-
-void PaletteBoxButton::showPalette(bool visible)
-      {
-      if (visible && preferences.singlePalette) {
-            // close all palettes
-            emit closeAll();
-            }
-      palette->setVisible(visible);
-      setChecked(visible);
-      setArrowType(visible ? Qt::DownArrow : Qt::RightArrow );
-      }
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
-void PaletteBoxButton::paintEvent(QPaintEvent*)
-      {
-      //remove automatic menu arrow
-      QStylePainter p(this);
-      QStyleOptionToolButton opt;
-      initStyleOption(&opt);
-      opt.features &= (~QStyleOptionToolButton::HasMenu);
-      p.drawComplexControl(QStyle::CC_ToolButton, opt);
       }
 
 //---------------------------------------------------------

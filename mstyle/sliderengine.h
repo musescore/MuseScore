@@ -31,80 +31,77 @@
 #include "datamap.h"
 #include "sliderdata.h"
 
-    //! stores slider hovered action and timeLine
-    class SliderEngine: public BaseEngine
-    {
+//! stores slider hovered action and timeLine
+class SliderEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        SliderEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            SliderEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~SliderEngine( void )
-        {}
+            //! destructor
+            virtual ~SliderEngine( void )
+                  {}
 
-        //! register slider
-        virtual bool registerWidget( QWidget* );
+            //! register slider
+            virtual bool registerWidget( QWidget* );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object )
-        {
-            if( DataMap<SliderData>::Value data = data_.find( object ) )
-            {
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object ) {
+                  if ( DataMap<SliderData>::Value data = data_.find( object ) ) {
 
-                return data.data()->animation().data()->isRunning();
+                        return data.data()->animation().data()->isRunning();
 
-            } else return false;
+                        }
+                  else return false;
 
-        }
+                  }
 
-        //! update state
-        virtual bool updateState( const QObject* object, bool state )
-        {
+            //! update state
+            virtual bool updateState( const QObject* object, bool state ) {
 
-            if( DataMap<SliderData>::Value data = data_.find( object ) )
-            {
+                  if ( DataMap<SliderData>::Value data = data_.find( object ) ) {
 
-                return data.data()->updateState( state );
+                        return data.data()->updateState( state );
 
-            } else return false;
+                        }
+                  else return false;
 
-        }
+                  }
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object )
-        { return isAnimated( object ) ? data_.find( object ).data()->opacity() : AnimationData::OpacityInvalid; }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object ) {
+                  return isAnimated( object ) ? data_.find( object ).data()->opacity() : AnimationData::OpacityInvalid;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<SliderData> data_;
+            //! data map
+            DataMap<SliderData> data_;
 
-    };
+      };
 
 #endif

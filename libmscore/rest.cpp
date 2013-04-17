@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: rest.cpp 5655 2012-05-21 12:33:32Z lasconic $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //
@@ -39,7 +38,7 @@ Rest::Rest(Score* s)
   : ChordRest(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _beamMode  = BEAM_NO;
+      _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = rest4Sym;
       }
@@ -48,7 +47,7 @@ Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      _beamMode  = BEAM_NO;
+      _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = rest4Sym;
       setDurationType(d);
@@ -166,13 +165,13 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
       if (
-         (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_AUTOBEAM)
-         || (type == ARTICULATION && static_cast<Articulation*>(e)->subtype() == Articulation_Fermata)
+         (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
          || (type == CLEF)
          || (type == STAFF_TEXT)
          || (type == BAR_LINE)
@@ -202,12 +201,14 @@ Element* Rest::drop(const DropData& data)
       Element* e = data.element;
       switch (e->type()) {
             case ARTICULATION:
-                  if (static_cast<Articulation*>(e)->subtype() == Articulation_Fermata)
-                        score()->addArticulation(this, static_cast<Articulation*>(e));
-                  else {
+                  {
+                  Articulation* a = static_cast<Articulation*>(e);
+                  if (a->articulationType() != Articulation_Fermata
+                     || !score()->addArticulation(this, a)) {
                         delete e;
                         e = 0;
                         }
+                  }
                   return e;
 
             case CHORD:
@@ -518,7 +519,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_NO);
+      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
       ChordRest::reset();
       }
 

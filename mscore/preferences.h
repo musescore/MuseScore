@@ -165,7 +165,11 @@ struct Preferences {
       QString myImagesPath;
       QString myTemplatesPath;
       QString myPluginsPath;
-      QString mySoundFontsPath;
+
+      QString sfPath;
+      QString sfzPath;
+      QString defaultSf;
+      QString defaultSfz;
 
       double nudgeStep10;     // Ctrl + cursor key (default 1.0)
       double nudgeStep50;     // Alt  + cursor key (default 5.0)
@@ -207,5 +211,5 @@ class ShortcutItem : public QTreeWidgetItem {
 
 extern Preferences preferences;
 extern QString appStyleSheet();
-extern bool useALSA, useJACK, usePortaudio;
+extern bool useALSA, useJACK, usePortaudio, usePulseAudio;
 #endif

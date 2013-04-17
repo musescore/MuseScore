@@ -43,167 +43,184 @@
 
 #include "baseengine.h"
 
-class Animations: public QObject
-    {
+class Animations: public QObject {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        explicit Animations( QObject* );
+            //! constructor
+            explicit Animations( QObject* );
 
-        //! destructor
-        virtual ~Animations( void )
-        {}
+            //! destructor
+            virtual ~Animations( void )
+                  {}
 
-        //! register animations corresponding to given widget, depending on its type.
-        void registerWidget( QWidget* widget ) const;
+            //! register animations corresponding to given widget, depending on its type.
+            void registerWidget( QWidget* widget ) const;
 
-        /*! unregister all animations associated to a widget */
-        void unregisterWidget( QWidget* widget ) const;
+            /*! unregister all animations associated to a widget */
+            void unregisterWidget( QWidget* widget ) const;
 
-        //! enability engine
-        WidgetStateEngine& widgetEnabilityEngine( void ) const
-        { return *widgetEnabilityEngine_; }
+            //! enability engine
+            WidgetStateEngine& widgetEnabilityEngine( void ) const {
+                  return *widgetEnabilityEngine_;
+                  }
 
-        //! abstractButton engine
-        WidgetStateEngine& widgetStateEngine( void ) const
-        { return *widgetStateEngine_; }
+            //! abstractButton engine
+            WidgetStateEngine& widgetStateEngine( void ) const {
+                  return *widgetStateEngine_;
+                  }
 
-        //! editable combobox arrow hover engine
-        WidgetStateEngine& comboBoxEngine( void ) const
-        { return *comboBoxEngine_; }
+            //! editable combobox arrow hover engine
+            WidgetStateEngine& comboBoxEngine( void ) const {
+                  return *comboBoxEngine_;
+                  }
 
-        //! Tool buttons arrow hover engine
-        WidgetStateEngine& toolButtonEngine( void ) const
-        { return *toolButtonEngine_; }
+            //! Tool buttons arrow hover engine
+            WidgetStateEngine& toolButtonEngine( void ) const {
+                  return *toolButtonEngine_;
+                  }
 
-        //! lineEdit engine
-        WidgetStateEngine& lineEditEngine( void ) const
-        { return *lineEditEngine_; }
+            //! lineEdit engine
+            WidgetStateEngine& lineEditEngine( void ) const {
+                  return *lineEditEngine_;
+                  }
 
-        //! splitter engine
-        SplitterEngine& splitterEngine( void ) const
-        { return *splitterEngine_; }
+            //! splitter engine
+            SplitterEngine& splitterEngine( void ) const {
+                  return *splitterEngine_;
+                  }
 
-        //! dock separators engine
-        DockSeparatorEngine& dockSeparatorEngine( void ) const
-        { return *dockSeparatorEngine_; }
+            //! dock separators engine
+            DockSeparatorEngine& dockSeparatorEngine( void ) const {
+                  return *dockSeparatorEngine_;
+                  }
 
-        //! header view engine
-        HeaderViewEngine& headerViewEngine( void ) const
-        { return *headerViewEngine_; }
+            //! header view engine
+            HeaderViewEngine& headerViewEngine( void ) const {
+                  return *headerViewEngine_;
+                  }
 
-        //! progressbar engine
-        ProgressBarEngine& progressBarEngine( void ) const
-        { return *progressBarEngine_; }
+            //! progressbar engine
+            ProgressBarEngine& progressBarEngine( void ) const {
+                  return *progressBarEngine_;
+                  }
 
-        //! menubar engine
-        MenuBarBaseEngine& menuBarEngine( void ) const
-        { return *menuBarEngine_; }
+            //! menubar engine
+            MenuBarBaseEngine& menuBarEngine( void ) const {
+                  return *menuBarEngine_;
+                  }
 
-        //! menu engine
-        MenuBaseEngine& menuEngine( void ) const
-        { return *menuEngine_; }
+            //! menu engine
+            MenuBaseEngine& menuEngine( void ) const {
+                  return *menuEngine_;
+                  }
 
-        //! scrollbar engine
-        ScrollBarEngine& scrollBarEngine( void ) const
-        { return *scrollBarEngine_; }
+            //! scrollbar engine
+            ScrollBarEngine& scrollBarEngine( void ) const {
+                  return *scrollBarEngine_;
+                  }
 
-        //! slider engine
-        SliderEngine& sliderEngine( void ) const
-        { return *sliderEngine_; }
+            //! slider engine
+            SliderEngine& sliderEngine( void ) const {
+                  return *sliderEngine_;
+                  }
 
-        //! spinbox engine
-        SpinBoxEngine& spinBoxEngine( void ) const
-        { return *spinBoxEngine_; }
+            //! spinbox engine
+            SpinBoxEngine& spinBoxEngine( void ) const {
+                  return *spinBoxEngine_;
+                  }
 
-        //! tabbar
-        TabBarEngine& tabBarEngine( void ) const
-        { return *tabBarEngine_; }
+            //! tabbar
+            TabBarEngine& tabBarEngine( void ) const {
+                  return *tabBarEngine_;
+                  }
 
-        //! toolbar
-        ToolBarEngine& toolBarEngine( void ) const
-        { return *toolBarEngine_; }
+            //! toolbar
+            ToolBarEngine& toolBarEngine( void ) const {
+                  return *toolBarEngine_;
+                  }
 
-        //! toolbox
-        ToolBoxEngine& toolBoxEngine( void ) const
-        { return *toolBoxEngine_; }
+            //! toolbox
+            ToolBoxEngine& toolBoxEngine( void ) const {
+                  return *toolBoxEngine_;
+                  }
 
-        //! mdi windows
-        MdiWindowEngine& mdiWindowEngine( void ) const
-        { return *mdiWindowEngine_; }
+            //! mdi windows
+            MdiWindowEngine& mdiWindowEngine( void ) const {
+                  return *mdiWindowEngine_;
+                  }
 
-        //! setup engines
-        void setupEngines( void );
+            //! setup engines
+            void setupEngines( void );
 
-        protected slots:
+      protected slots:
 
-        //! enregister engine
-        void unregisterEngine( QObject* );
-        private:
+            //! enregister engine
+            void unregisterEngine( QObject* );
+      private:
 
-        //! register new engine
-        void registerEngine( BaseEngine* engine );
+            //! register new engine
+            void registerEngine( BaseEngine* engine );
 
-        //! dock separator handle hover effect
-        DockSeparatorEngine* dockSeparatorEngine_;
+            //! dock separator handle hover effect
+            DockSeparatorEngine* dockSeparatorEngine_;
 
-        //! headerview hover effect
-        HeaderViewEngine* headerViewEngine_;
+            //! headerview hover effect
+            HeaderViewEngine* headerViewEngine_;
 
-        //! widget enability engine
-        WidgetStateEngine* widgetEnabilityEngine_;
+            //! widget enability engine
+            WidgetStateEngine* widgetEnabilityEngine_;
 
-        //! abstract button engine
-        WidgetStateEngine* widgetStateEngine_;
+            //! abstract button engine
+            WidgetStateEngine* widgetStateEngine_;
 
-        //! editable combobox arrow hover effect
-        WidgetStateEngine* comboBoxEngine_;
+            //! editable combobox arrow hover effect
+            WidgetStateEngine* comboBoxEngine_;
 
-        //! mennu toolbutton arrow hover effect
-        WidgetStateEngine* toolButtonEngine_;
+            //! mennu toolbutton arrow hover effect
+            WidgetStateEngine* toolButtonEngine_;
 
-        //! line editor engine
-        WidgetStateEngine* lineEditEngine_;
+            //! line editor engine
+            WidgetStateEngine* lineEditEngine_;
 
-        //! QSplitter engine
-        SplitterEngine* splitterEngine_;
+            //! QSplitter engine
+            SplitterEngine* splitterEngine_;
 
-        //! progressbar engine
-        ProgressBarEngine* progressBarEngine_;
+            //! progressbar engine
+            ProgressBarEngine* progressBarEngine_;
 
-        //! menubar engine
-        MenuBarBaseEngine* menuBarEngine_;
+            //! menubar engine
+            MenuBarBaseEngine* menuBarEngine_;
 
-        //! menu engine
-        MenuBaseEngine* menuEngine_;
+            //! menu engine
+            MenuBaseEngine* menuEngine_;
 
-        //! scrollbar engine
-        ScrollBarEngine* scrollBarEngine_;
+            //! scrollbar engine
+            ScrollBarEngine* scrollBarEngine_;
 
-        //! slider engine
-        SliderEngine* sliderEngine_;
+            //! slider engine
+            SliderEngine* sliderEngine_;
 
-        //! spinbox engine
-        SpinBoxEngine* spinBoxEngine_;
+            //! spinbox engine
+            SpinBoxEngine* spinBoxEngine_;
 
-        //! tabbar engine
-        TabBarEngine* tabBarEngine_;
+            //! tabbar engine
+            TabBarEngine* tabBarEngine_;
 
-        //! toolbar engine
-        ToolBarEngine* toolBarEngine_;
+            //! toolbar engine
+            ToolBarEngine* toolBarEngine_;
 
-        //! toolbar engine
-        ToolBoxEngine* toolBoxEngine_;
+            //! toolbar engine
+            ToolBoxEngine* toolBoxEngine_;
 
-        //! mdi window
-        MdiWindowEngine* mdiWindowEngine_;
+            //! mdi window
+            MdiWindowEngine* mdiWindowEngine_;
 
-        //! keep list of existing engines
-        QList<BaseEngine::Pointer> engines_;
+            //! keep list of existing engines
+            QList<BaseEngine::Pointer> engines_;
 
-    };
+      };
 
 #endif

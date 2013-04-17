@@ -26,36 +26,33 @@
 
 #include "scrollbarengine.h"
 
-    //____________________________________________________________
-    bool ScrollBarEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool ScrollBarEngine::registerWidget( QWidget* widget ) {
 
-        // check widget
-        /*
-        note: widget is registered even if animation is disabled because OxygenScrollBarData
-        is also used in non-animated mode to store arrow rect for hover highlight
-        */
-        if( !widget ) return false;
+      // check widget
+      /*
+      note: widget is registered even if animation is disabled because OxygenScrollBarData
+      is also used in non-animated mode to store arrow rect for hover highlight
+      */
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) ) data_.insert( widget, new ScrollBarData( this, widget, duration() ), enabled() );
+      // create new data class
+      if ( !data_.contains( widget ) ) data_.insert( widget, new ScrollBarData( this, widget, duration() ), enabled() );
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
-    }
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
+      }
 
 
-   //____________________________________________________________
-    bool ScrollBarEngine::isAnimated( const QObject* object, QStyle::SubControl control )
-    {
+//____________________________________________________________
+bool ScrollBarEngine::isAnimated( const QObject* object, QStyle::SubControl control ) {
 
-        if( DataMap<ScrollBarData>::Value data = data_.find( object ) )
-        {
-            if( Animation::Pointer animation = data.data()->animation( control ) ) return animation.data()->isRunning();
+      if ( DataMap<ScrollBarData>::Value data = data_.find( object ) ) {
+            if ( Animation::Pointer animation = data.data()->animation( control ) ) return animation.data()->isRunning();
 
-        }
+            }
 
-        return false;
+      return false;
 
-    }
+      }

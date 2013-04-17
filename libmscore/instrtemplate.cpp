@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: instrtemplate.cpp 5175 2012-01-02 08:30:52Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -12,15 +11,14 @@
 //=============================================================================
 
 #include "instrtemplate.h"
-#include "xml.h"
+#include "bracket.h"
+#include "drumset.h"
+#include "stafftype.h"
 #include "style.h"
 #include "sym.h"
-#include "drumset.h"
-#include "clef.h"
-#include "bracket.h"
-#include "utils.h"
 #include "tablature.h"
-#include "mscore.h"
+#include "utils.h"
+#include "xml.h"
 
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
@@ -105,15 +103,18 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchA          = 127;
       minPitchP          = 0;
       maxPitchP          = 127;
+      staffGroup        = PITCHED_STAFF;
+      staffTypePreset   = 0;
       useDrumset         = false;
       drumset            = 0;
       extended           = false;
       tablature          = 0;
-      useTablature       = false;
+//      useTablature       = false;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
-            clefIdx[i]     = CLEF_G;      // CLEF_INVALID;
-            staffLines[i]  = 5;           // -1;
+            clefTypes[i]._concertClef = CLEF_G;
+            clefTypes[i]._transposingClef = CLEF_G;
+            staffLines[i]  = 5;
             smallStaff[i]  = false;
             bracket[i]     = NO_BRACKET;
             bracketSpan[i] = 0;
@@ -137,11 +138,12 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       trackName  = t.trackName;
       longNames  = t.longNames;
       shortNames = t.shortNames;
+      musicXMLid = t.musicXMLid;
       staves     = t.staves;
       extended   = t.extended;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
-            clefIdx[i]     = t.clefIdx[i];
+            clefTypes[i]   = t.clefTypes[i];
             staffLines[i]  = t.staffLines[i];
             smallStaff[i]  = t.smallStaff[i];
             bracket[i]     = t.bracket[i];
@@ -153,6 +155,8 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       minPitchP  = t.minPitchP;
       maxPitchP  = t.maxPitchP;
       transpose  = t.transpose;
+      staffGroup = t.staffGroup;
+      staffTypePreset   = t.staffTypePreset;
       useDrumset = t.useDrumset;
       if (t.drumset)
             drumset = new Drumset(*t.drumset);
@@ -190,7 +194,10 @@ void InstrumentTemplate::write(Xml& xml) const
             else
                   xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-      xml.tag("description", trackName);
+      if(longNames.size() > 1)
+            xml.tag("trackName", trackName);
+      xml.tag("description", description);
+      xml.tag("musicXMLid", musicXMLid);
       if (extended)
             xml.tag("extended", extended);
       if (tablature)
@@ -198,10 +205,25 @@ void InstrumentTemplate::write(Xml& xml) const
       if (staves > 1)
             xml.tag("staves", staves);
       for (int i = 0; i < staves; ++i) {
-            if (i)
-                  xml.tag(QString("clef staff=\"%1\"").arg(i+1), clefTable[clefIdx[i]].tag);
-            else
-                  xml.tag("clef", clefTable[clefIdx[i]].tag);
+            if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
+                  QString tag = clefTable[clefTypes[i]._concertClef].tag;
+                  if (i)
+                        xml.tag(QString("clef staff=\"%1\"").arg(i+1), tag);
+                  else
+                        xml.tag("clef", tag);
+                  }
+            else {
+                  QString tag1 = clefTable[clefTypes[i]._concertClef].tag;
+                  QString tag2 = clefTable[clefTypes[i]._transposingClef].tag;
+                  if (i) {
+                        xml.tag(QString("concertClef staff=\"%1\"").arg(i+1), tag1);
+                        xml.tag(QString("transposingClef staff=\"%1\"").arg(i+1), tag2);
+                        }
+                  else {
+                        xml.tag("concertClef", tag1);
+                        xml.tag("transposingClef", tag2);
+                        }
+                  }
             if (staffLines[i] != 5) {
                   if (i)
                         xml.tag(QString("stafflines staff=\"%1\"").arg(i+1), staffLines[i]);
@@ -284,7 +306,9 @@ void InstrumentTemplate::write1(Xml& xml) const
             else
                   xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
             }
-      xml.tag("description", trackName);
+      if(longNames.size() > 1)
+            xml.tag("trackName", trackName);
+      xml.tag("description", description);
       xml.etag();
       }
 
@@ -317,8 +341,10 @@ void InstrumentTemplate::read(XmlReader& e)
                         }
                   shortNames.append(StaffName(e.readElementText(), pos));
                   }
-            else if (tag == "description")
+            else if (tag == "trackName")
                   trackName = e.readElementText();
+            else if (tag == "description")
+                  description = e.readElementText();
             else if (tag == "extended")
                   extended = e.readInt();
             else if (tag == "staves") {
@@ -326,17 +352,28 @@ void InstrumentTemplate::read(XmlReader& e)
                   bracketSpan[0] = staves;
                   barlineSpan[0] = staves;
                   }
-            else if (tag == "clef") {
+            else if (tag == "clef") {           // sets both transposing and concert clef
                   int idx = readStaffIdx(e);
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
-                  if (!ok) {
-                        ClefType ct = Clef::clefType(val);
-                        clefIdx[idx] = ct;
-                        }
-                  else
-                        clefIdx[idx] = ClefType(i);
+                  ClefType ct = ok ? ClefType(i) : Clef::clefType(val);
+                  clefTypes[idx]._concertClef = ct;
+                  clefTypes[idx]._transposingClef = ct;
+                  }
+            else if (tag == "concertClef") {
+                  int idx = readStaffIdx(e);
+                  QString val(e.readElementText());
+                  bool ok;
+                  int i = val.toInt(&ok);
+                  clefTypes[idx]._concertClef = ok ? ClefType(i) : Clef::clefType(val);
+                  }
+            else if (tag == "transposingClef") {
+                  int idx = readStaffIdx(e);
+                  QString val(e.readElementText());
+                  bool ok;
+                  int i = val.toInt(&ok);
+                  clefTypes[idx]._transposingClef = ok ? ClefType(i) : Clef::clefType(val);
                   }
             else if (tag == "stafflines") {
                   int idx = readStaffIdx(e);
@@ -358,10 +395,6 @@ void InstrumentTemplate::read(XmlReader& e)
                   int idx = readStaffIdx(e);
                   barlineSpan[idx] = e.readInt();
                   }
-            else if (tag == "Tablature") {
-                  tablature = new Tablature;
-                  tablature->read(e);
-                  }
             else if (tag == "aPitchRange")
                   setPitchRange(e.readElementText(), &minPitchA, &maxPitchA);
             else if (tag == "pPitchRange")
@@ -375,6 +408,10 @@ void InstrumentTemplate::read(XmlReader& e)
                   transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
                   transpose.diatonic = e.readInt();
+            else if (tag == "Tablature") {
+                  tablature = new Tablature;
+                  tablature->read(e);
+                  }
             else if (tag == "drumset")
                   useDrumset = e.readInt();
             else if (tag == "Drum") {
@@ -411,13 +448,24 @@ void InstrumentTemplate::read(XmlReader& e)
                         articulation.append(a);
                   }
             else if (tag == "stafftype") {
-                  QString val(e.readElementText());
-                  if (val == "tablature")
-                        useTablature = true;
-                  else {
-                        qDebug("unknown stafftype <%s>\n", qPrintable(val));
-                        e.unknown();
-                        }
+                  int staffIdx = readStaffIdx(e);
+                  QString xmlPresetName = e.attribute("staffTypePreset", "");
+                  QString stfGroup = e.readElementText();
+                  if (stfGroup == "percussion")
+                        staffGroup = PERCUSSION_STAFF;
+                  else if (stfGroup == "tablature")
+                        staffGroup = TAB_STAFF;
+                  else
+                        staffGroup = PITCHED_STAFF;
+                  int staffTypeIdx;
+                  const StaffType* stfType = 0;
+                  if (!xmlPresetName.isEmpty())
+                        stfType = StaffType::presetFromXmlName(xmlPresetName, &staffTypeIdx);
+                  if (!stfType || stfType->group() != staffGroup)
+                        stfType = StaffType::getDefaultPreset(staffGroup, &staffTypeIdx);
+                  if (stfType)
+                        staffLines[staffIdx] = stfType->lines();
+                  staffTypePreset = staffTypeIdx;
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());
@@ -426,6 +474,9 @@ void InstrumentTemplate::read(XmlReader& e)
                         init(*ttt);
                   else
                         qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                  }
+            else if (tag == "musicXMLid") {
+                  musicXMLid = e.readElementText();
                   }
             else
                   e.unknown();
@@ -449,12 +500,6 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             --barLine;
             }
-      for (int i = 0; i < MAX_STAVES; ++i) {
-            if (clefIdx[i] == CLEF_INVALID)
-                  clefIdx[i] = CLEF_G;
-            if (staffLines[i] == -1)
-                  staffLines[i] = 5;
-            }
       if (channel.isEmpty()) {
             Channel a;
             a.chorus       = 0;
@@ -473,11 +518,13 @@ void InstrumentTemplate::read(XmlReader& e)
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
             trackName = longNames[0].name;
+      if (description.isEmpty() && !longNames.isEmpty())
+            description = longNames[0].name;
       if (id.isEmpty())
             id = trackName.toLower().replace(" ", "-");
 
       if (staves == 0)
-            printf(" 2Instrument: staves == 0 <%s>\n", qPrintable(id));
+            qDebug(" 2Instrument: staves == 0 <%s>", qPrintable(id));
       }
 
 

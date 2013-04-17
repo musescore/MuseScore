@@ -157,11 +157,31 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             }
       else if (editObject->type() == Element::HARMONY) {
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  chordTab(modifiers & Qt::ShiftModifier);
+/*
+            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
+                  harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
                   ev->accept();
                   return;
                   }
+*/
+            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
+                  harmonyBeatsTab(true, modifiers & Qt::ShiftModifier);
+                  ev->accept();
+                  return;
+                  }
+/*
+            if (key == Qt::Key_Semicolon || key == Qt::Key_Colon) {
+                  harmonyBeatsTab(false, key == Qt::Key_Colon);
+                  ev->accept();
+                  return;
+                  }
+            if (key >= Qt::Key_1 && key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
+                  int ticks = (MScore::division >> 4) << (key - Qt::Key_1);
+                  harmonyTicksTab(ticks);
+                  ev->accept();
+                  return;
+                  }
+*/
             }
       else if (editObject->type() == Element::FIGURED_BASS) {
             int found = false;
@@ -169,6 +189,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
                   found = true;
                   }
+            /*
             if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
                   figuredBassTab(true, key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier) );
                   found = true;
@@ -178,6 +199,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   figuredBassTicksTab(ticks);
                   found = true;
                   }
+*/
             if (found) {
                   ev->accept();
                   return;
@@ -313,11 +335,11 @@ void MuseScore::updateInputState(Score* score)
       getAction("grace16")->setChecked(is.noteType == NOTE_GRACE16);
       getAction("grace32")->setChecked(is.noteType == NOTE_GRACE32);
 
-      getAction("beam-start")->setChecked(is.beamMode == BEAM_BEGIN);
-      getAction("beam-mid")->setChecked(is.beamMode   == BEAM_MID);
-      getAction("no-beam")->setChecked(is.beamMode    == BEAM_NO);
-      getAction("beam32")->setChecked(is.beamMode     == BEAM_BEGIN32);
-      getAction("auto-beam")->setChecked(is.beamMode  == BEAM_AUTO);
+      getAction("beam-start")->setChecked(is.beamMode == BeamMode::BEGIN);
+      getAction("beam-mid")->setChecked(is.beamMode   == BeamMode::MID);
+      getAction("no-beam")->setChecked(is.beamMode    == BeamMode::NONE);
+      getAction("beam32")->setChecked(is.beamMode     == BeamMode::BEGIN32);
+      getAction("auto-beam")->setChecked(is.beamMode  == BeamMode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
 

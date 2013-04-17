@@ -49,7 +49,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = e->type();
-      p->subtype = 0; // TODO e->subtype();
+      p->subtype = e->subType();
       p->staff   = sameStaff->isChecked() ? e->staffIdx() : -1;
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();

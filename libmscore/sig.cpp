@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: sig.cpp 5224 2012-01-16 20:45:53Z wschweer $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2007 Werner Schweer and others
+//  Copyright (C) 2002-2007 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "sig.h"
@@ -102,7 +94,7 @@ void TimeSigMap::normalize()
       int bar  = 0;
       int tm   = ticks_measure(Fraction(z, n));
 
-      for (iSigEvent i = begin(); i != end(); ++i) {
+      for (auto i = begin(); i != end(); ++i) {
             SigEvent& e  = i->second;
             e.setBar(bar + (i->first - tick) / tm);
             bar  = e.bar();
@@ -120,7 +112,7 @@ const SigEvent& TimeSigMap::timesig(int tick) const
       static const SigEvent ev(Fraction(4, 4));
       if (empty())
             return ev;
-      ciSigEvent i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i != begin())
             --i;
       return i->second;
@@ -138,7 +130,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
             *tick = 0;
             return;
             }
-      ciSigEvent e = upper_bound(t);
+      auto e = upper_bound(t);
       if (empty() || e == begin()) {
             qDebug("tickValue(0x%x) not found", t);
             abort();
@@ -183,9 +175,9 @@ const char* TimeSigMap::pos(int t) const
 
 int TimeSigMap::bar2tick(int bar, int beat) const
       {
-      ciSigEvent e;
+      auto e = begin();
 
-      for (e = begin(); e != end(); ++e) {
+      for (; e != end(); ++e) {
             if (bar < e->second.bar())
                   break;
             }
@@ -208,7 +200,7 @@ int TimeSigMap::bar2tick(int bar, int beat) const
 void TimeSigMap::write(Xml& xml) const
       {
       xml.stag("siglist");
-      for (ciSigEvent i = begin(); i != end(); ++i)
+      for (auto i = begin(); i != end(); ++i)
             i->second.write(xml, i->first);
       xml.etag();
       }
@@ -299,7 +291,7 @@ unsigned TimeSigMap::raster(unsigned t, int raster) const
       {
       if (raster == 1)
             return t;
-      ciSigEvent e = upper_bound(t);
+      auto e = upper_bound(t);
       if (e == end()) {
             qDebug("TimeSigMap::raster(%x,)", t);
             return t;
@@ -322,7 +314,7 @@ unsigned TimeSigMap::raster1(unsigned t, int raster) const
       {
       if (raster == 1)
             return t;
-      ciSigEvent e = upper_bound(t);
+      auto e = upper_bound(t);
 
       int delta  = t - e->first;
       int ticksM = ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
@@ -342,7 +334,7 @@ unsigned TimeSigMap::raster2(unsigned t, int raster) const
       {
       if (raster == 1)
             return t;
-      ciSigEvent e = upper_bound(t);
+      auto e = upper_bound(t);
 
       int delta  = t - e->first;
       int ticksM = ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
@@ -360,7 +352,7 @@ unsigned TimeSigMap::raster2(unsigned t, int raster) const
 int TimeSigMap::rasterStep(unsigned t, int raster) const
       {
       if (raster == 0) {
-            ciSigEvent e = upper_bound(t);
+            auto e = upper_bound(t);
             return ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
             }
       return raster;
@@ -373,7 +365,7 @@ int TimeSigMap::rasterStep(unsigned t, int raster) const
 void TimeSigMap::dump() const
       {
       qDebug("TimeSigMap:");
-      for (ciSigEvent i = begin(); i != end(); ++i)
+      for (auto i = begin(); i != end(); ++i)
             qDebug("%6d timesig: %s measure: %d",
                i->first, qPrintable(i->second.timesig().print()), i->second.bar());
       }

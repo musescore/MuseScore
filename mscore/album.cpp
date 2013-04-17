@@ -111,7 +111,8 @@ void Album::print()
                         }
                   }
             pageOffset += pages;
-            printer.newPage();
+            if(item != _scores.last())
+                  printer.newPage();
             score->setPrinting(false);
             score->setPageNumberOffset(oldPageOffset);
             }
@@ -407,24 +408,26 @@ void AlbumManager::addClicked()
       QString home = preferences.myScoresPath;
       QStringList files = mscore->getOpenScoreNames(
          home,
-         tr("MuseScore Files (*.mscz *.mscx *.msc);;")+
+         tr("MuseScore Files (*.mscz *.mscx);;")+
          tr("All Files (*)"),
          tr("MuseScore: Add Score")
          );
       if (files.isEmpty())
             return;
-      QString fn = files.front();
-      if (fn.isEmpty())
-            return;
+      foreach(QString fn, files) {
+            if (fn.isEmpty())
+                  continue;
+            if(fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
+                  AlbumItem* item = new AlbumItem;
+                  item->path = fn;
+                  album->append(item);
+                  QFileInfo fi(fn);
 
-      AlbumItem* item = new AlbumItem;
-      item->path = fn;
-      album->append(item);
-      QFileInfo fi(fn);
-
-      QListWidgetItem* li = new QListWidgetItem(fi.baseName(), scoreList);
-      li->setToolTip(fn);
-      li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
+                  QListWidgetItem* li = new QListWidgetItem(fi.completeBaseName(), scoreList);
+                  li->setToolTip(fn);
+                  li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
+                  }
+            }
       }
 
 //---------------------------------------------------------

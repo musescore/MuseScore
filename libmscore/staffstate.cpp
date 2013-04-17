@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -26,7 +25,7 @@
 StaffState::StaffState(Score* score)
    : Element(score)
       {
-      _subtype = STAFF_STATE_INSTRUMENT;
+      _staffStateType = STAFF_STATE_INSTRUMENT;
       }
 
 //---------------------------------------------------------
@@ -36,8 +35,8 @@ StaffState::StaffState(Score* score)
 void StaffState::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _subtype);
-      if (subtype() == STAFF_STATE_INSTRUMENT)
+      xml.tag("subtype", _staffStateType);
+      if (staffStateType() == STAFF_STATE_INSTRUMENT)
             _instrument.write(xml);
       Element::writeProperties(xml);
       xml.etag();
@@ -52,7 +51,7 @@ void StaffState::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = StaffStateType(e.readInt());
+                  _staffStateType = StaffStateType(e.readInt());
             else if (tag == "Instrument")
                   _instrument.read(e);
             else if (!Element::readProperties(e))
@@ -88,7 +87,7 @@ void StaffState::layout()
       qreal w  = _spatium * 2.5;
 //      qreal w1 = w * .6;
 
-      switch(subtype()) {
+      switch(staffStateType()) {
             case STAFF_STATE_INSTRUMENT:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
@@ -132,28 +131,28 @@ void StaffState::layout()
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setStaffStateType
 //---------------------------------------------------------
 
-void StaffState::setSubtype(const QString& s)
+void StaffState::setStaffStateType(const QString& s)
       {
       if (s == "instrument")
-            setSubtype(STAFF_STATE_INSTRUMENT);
+            setStaffStateType(STAFF_STATE_INSTRUMENT);
       else if (s == "type")
-            setSubtype(STAFF_STATE_TYPE);
+            setStaffStateType(STAFF_STATE_TYPE);
       else if (s == "visible")
-            setSubtype(STAFF_STATE_VISIBLE);
+            setStaffStateType(STAFF_STATE_VISIBLE);
       else if (s == "invisible")
-            setSubtype(STAFF_STATE_INVISIBLE);
+            setStaffStateType(STAFF_STATE_INVISIBLE);
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   staffStateTypeName
 //---------------------------------------------------------
 
-QString StaffState::subtypeName() const
+QString StaffState::staffStateTypeName() const
       {
-      switch(subtype()) {
+      switch(staffStateType()) {
             case STAFF_STATE_INSTRUMENT:
                   return "instrument";
             case STAFF_STATE_TYPE:

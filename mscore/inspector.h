@@ -23,7 +23,16 @@
 #include "ui_inspector_segment.h"
 #include "ui_inspector_note.h"
 #include "ui_inspector_chord.h"
+#include "ui_inspector_rest.h"
+#include "ui_inspector_clef.h"
+#include "ui_inspector_timesig.h"
+#include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
+#include "ui_inspector_barline.h"
+#include "ui_inspector_tuplet.h"
+#include "ui_inspector_accidental.h"
+#include "ui_inspector_tempotext.h"
+#include "ui_inspector_dynamic.h"
 
 class Element;
 class Note;
@@ -32,149 +41,15 @@ class Segment;
 class Chord;
 
 //---------------------------------------------------------
-//   InspectorSegment
-//---------------------------------------------------------
-
-class InspectorSegment : public QWidget, Ui::InspectorSegment {
-      Q_OBJECT
-      Segment* segment;
-
-   private slots:
-      void resetLeadingSpaceClicked();
-      void resetTrailingSpaceClicked();
-
-      void leadingSpaceChanged(double);
-      void trailingSpaceChanged(double);
-
-   signals:
-      void inspectorVisible(bool);
-      void enableApply();
-
-   public:
-      InspectorSegment(QWidget* parent = 0);
-      void setElement(Segment*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
-//   InspectorChord
-//---------------------------------------------------------
-
-class InspectorChord : public QWidget, Ui::InspectorChord {
-      Q_OBJECT
-      Chord* chord;
-
-      void block(bool);
-
-   private slots:
-      void smallChanged(bool val);
-      void stemlessChanged(bool val);
-      void stemDirectionChanged(int idx);
-      void offsetXChanged(double);
-      void offsetYChanged(double);
-
-      void resetSmallClicked();
-      void resetStemlessClicked();
-      void resetStemDirectionClicked();
-      void resetXClicked();
-      void resetYClicked();
-
-   signals:
-      void inspectorVisible(bool);
-      void enableApply();
-
-   public:
-      InspectorChord(QWidget* parent = 0);
-      void setElement(Chord*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
-//   InspectorNote
-//---------------------------------------------------------
-
-class InspectorNoteBase : public QWidget, Ui::InspectorNote {
-      Q_OBJECT
-      Note* note;
-      int _userVelocity;
-      int _veloOffset;
-
-      void block(bool);
-
-   private slots:
-      void resetSmallClicked();
-      void resetMirrorClicked();
-      void resetDotPositionClicked();
-      void resetOntimeOffsetClicked();
-      void resetOfftimeOffsetClicked();
-      void resetNoteHeadGroupClicked();
-      void resetNoteHeadTypeClicked();
-      void resetTuningClicked();
-      void resetVelocityTypeClicked();
-
-      void smallChanged(int);
-      void mirrorHeadChanged(int);
-      void dotPositionChanged(int);
-      void ontimeOffsetChanged(int);
-      void offtimeOffsetChanged(int);
-
-      void noteHeadGroupChanged(int);
-      void noteHeadTypeChanged(int);
-      void tuningChanged(double);
-      void velocityTypeChanged(int);
-      void velocityChanged(int);
-
-   signals:
-      void enableApply();
-
-   public:
-      InspectorNoteBase(QWidget* parent = 0);
-      void setElement(Note*);
-      void apply();
-      bool dirty() const;
-      };
-
-//---------------------------------------------------------
-//   InspectorElementElement
-//---------------------------------------------------------
-
-class InspectorElementElement : public QWidget, Ui::InspectorElement {
-      Q_OBJECT
-
-      Element* e;
-
-   private slots:
-      void resetColorClicked();
-      void resetXClicked();
-      void resetYClicked();
-      void colorChanged(QColor);
-      void offsetXChanged(double);
-      void offsetYChanged(double);
-      void resetVisibleClicked();
-      void apply();
-
-   signals:
-      void enableApply();
-
-   public:
-      InspectorElementElement(QWidget* parent = 0);
-      void setElement(Element*);
-      };
-
-//---------------------------------------------------------
 //   InspectorElement
 //---------------------------------------------------------
 
 class InspectorElement : public InspectorBase {
       Q_OBJECT
-
-      InspectorElementElement* ie;
+      Ui::InspectorElement b;
 
    public:
       InspectorElement(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -183,15 +58,7 @@ class InspectorElement : public InspectorBase {
 
 class InspectorVBox : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorVBox vb;
-
-      static const int _inspectorItems = 7;
-      InspectorItem iList[_inspectorItems];
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
 
    public:
       InspectorVBox(QWidget* parent);
@@ -203,15 +70,7 @@ class InspectorVBox : public InspectorBase {
 
 class InspectorHBox : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorHBox hb;
-
-      static const int _inspectorItems = 3;
-      InspectorItem iList[_inspectorItems];
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
 
    public:
       InspectorHBox(QWidget* parent);
@@ -223,15 +82,11 @@ class InspectorHBox : public InspectorBase {
 
 class InspectorArticulation : public InspectorBase {
       Q_OBJECT
-
+      Ui::InspectorElement e;
       Ui::InspectorArticulation ar;
-
-   public slots:
-      virtual void apply();
 
    public:
       InspectorArticulation(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -240,50 +95,10 @@ class InspectorArticulation : public InspectorBase {
 
 class InspectorSpacer : public InspectorBase {
       Q_OBJECT
-
       Ui::InspectorSpacer sp;
-
-   public slots:
-      virtual void apply();
 
    public:
       InspectorSpacer(QWidget* parent);
-      virtual void setElement(Element*);
-      };
-
-//---------------------------------------------------------
-//   InspectorNote
-//---------------------------------------------------------
-
-class InspectorNote : public InspectorBase {
-      Q_OBJECT
-
-      InspectorElementElement* iElement;
-      InspectorNoteBase* iNote;
-      InspectorChord*   iChord;
-      InspectorSegment* iSegment;
-
-      QToolButton* dot1;
-      QToolButton* dot2;
-      QToolButton* dot3;
-      QToolButton* hook;
-      QToolButton* stem;
-      QToolButton* beam;
-
-      void block(bool);
-      bool dirty() const;
-
-   private slots:
-      void dot1Clicked();
-      void dot2Clicked();
-      void dot3Clicked();
-      void hookClicked();
-      void stemClicked();
-      void beamClicked();
-
-   public:
-      InspectorNote(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -293,17 +108,12 @@ class InspectorNote : public InspectorBase {
 class InspectorRest : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* small;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorRest    r;
 
    public:
       InspectorRest(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -313,17 +123,12 @@ class InspectorRest : public InspectorBase {
 class InspectorClef : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorClef    c;
 
    public:
       InspectorClef(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -333,17 +138,12 @@ class InspectorClef : public InspectorBase {
 class InspectorTimeSig : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorTimeSig t;
 
    public:
       InspectorTimeSig(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 //---------------------------------------------------------
@@ -353,19 +153,71 @@ class InspectorTimeSig : public InspectorBase {
 class InspectorKeySig : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      InspectorSegment* iSegment;
-      QCheckBox* showCourtesy;
-      QCheckBox* showNaturals;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorSegment s;
+      Ui::InspectorKeySig k;
 
    public:
       InspectorKeySig(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
+
+//---------------------------------------------------------
+//   InspectorTuplet
+//---------------------------------------------------------
+
+class InspectorTuplet : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorTuplet t;
+
+   public:
+      InspectorTuplet(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorAccidental
+//---------------------------------------------------------
+
+class InspectorAccidental : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorAccidental a;
+
+   public:
+      InspectorAccidental(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorTempoText
+//---------------------------------------------------------
+
+class InspectorTempoText : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorTempoText t;
+
+   public:
+      InspectorTempoText(QWidget* parent);
+      virtual void postInit();
+      };
+
+//---------------------------------------------------------
+//   InspectorDynamic
+//---------------------------------------------------------
+
+class InspectorDynamic : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorElement e;
+      Ui::InspectorDynamic d;
+
+   public:
+      InspectorDynamic(QWidget* parent);
+      };
+
 
 //---------------------------------------------------------
 //   InspectorBarLine
@@ -376,20 +228,14 @@ class InspectorKeySig : public InspectorBase {
 class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      QComboBox*  type;
-      QComboBox*  span;
-      int         measureBarLineType;
+      Ui::InspectorElement e;
+      Ui::InspectorBarLine b;
 
-      static QString    builtinSpanNames[BARLINE_BUILTIN_SPANS];
-      static int        builtinSpans[BARLINE_BUILTIN_SPANS][3];
-
-   public slots:
-      virtual void apply();
+      static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
+      static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
 
    public:
       InspectorBarLine(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 //---------------------------------------------------------
@@ -399,11 +245,12 @@ class InspectorBarLine : public InspectorBase {
 class Inspector : public QDockWidget {
       Q_OBJECT
 
-      QVBoxLayout* layout;
+      QScrollArea* sa;
       InspectorBase* ie;
-      Element* _element;
       QList<Element*> _el;
-      bool _inspectorEdit;                // set to true when an edit originates from within the inspector itself
+      Element* _element;      // currently displayed element
+      bool _inspectorEdit;    // set to true when an edit originates from
+                              // within the inspector itself
 
       virtual void closeEvent(QCloseEvent*);
 
@@ -416,11 +263,10 @@ class Inspector : public QDockWidget {
    public:
       Inspector(QWidget* parent = 0);
       void setElement(Element*);
-      void setElementList(const QList<Element*>&);
-      Element* element() const            { return _element; }
-      const QList<Element*>& el() const   { return _el; }
-      bool inspectorEdit() const          { return _inspectorEdit; }
-      void setInspectorEdit(bool val)     { _inspectorEdit = val; }
+      void setElements(const QList<Element*>&);
+      Element* element() const            { return _element;       }
+      const QList<Element*>& el() const   { return _el;            }
+      void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 
 #endif

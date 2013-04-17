@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: dynamic.h 5500 2012-03-28 16:28:26Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -65,7 +64,7 @@ class Dynamic : public Text {
             };
 
    private:
-      DynamicType _subtype;
+      DynamicType _dynamicType;
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
@@ -79,10 +78,10 @@ class Dynamic : public Text {
       Segment* segment() const         { return (Segment*)parent(); }
       Measure* measure() const         { return (Measure*)parent()->parent(); }
 
-      void setSubtype(DynamicType val) { _subtype = val; }
-      void setSubtype(const QString&);
-      QString subtypeName() const;
-      DynamicType subtype() const      { return _subtype; }
+      void setDynamicType(DynamicType val) { _dynamicType = val; }
+      void setDynamicType(const QString&);
+      QString dynamicTypeName() const;
+      DynamicType dynamicType() const      { return _dynamicType; }
 
       virtual void layout();
       virtual void write(Xml& xml) const;

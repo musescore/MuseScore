@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -23,11 +22,11 @@
 class RehearsalMark : public Text  {
       Q_OBJECT
 
-
    public:
       RehearsalMark(Score* score);
       virtual RehearsalMark* clone() const { return new RehearsalMark(*this); }
       virtual ElementType type() const { return REHEARSAL_MARK; }
+      Segment* segment() const { return (Segment*)parent(); }
       };
 
 #endif

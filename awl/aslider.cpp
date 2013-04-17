@@ -28,7 +28,7 @@ namespace Awl {
 //---------------------------------------------------------
 
 AbstractSlider::AbstractSlider(QWidget* parent)
-   : QWidget(parent), _scaleColor(Qt::black), _scaleValueColor(Qt::blue)
+   : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(Qt::blue)
       {
       _id         = 0;
       _value      = 0.5;
@@ -232,6 +232,7 @@ void AbstractSlider::setMaxLogValue(double val)
             _maxValue = val;
       }
 
+#if 0
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
@@ -244,5 +245,5 @@ void AbstractSlider::init(const SyntiParameter& f)
       _lineStep   = (_maxValue - _minValue) * 0.1;
       _pageStep   = _lineStep * 2.0;
       }
-
+#endif
 }

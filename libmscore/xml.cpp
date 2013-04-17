@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: xml.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -462,7 +461,8 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case T_BOOL:
             case T_SUBTYPE:
             case T_INT:
-            case T_SREAL:
+            case T_SPATIUM:
+            case T_SP_REAL:
             case T_REAL:
             case T_SCALE:
             case T_POINT:
@@ -633,6 +633,36 @@ QString Xml::xmlString(const QString& s)
                         break;
                   case '\"':
                         escaped.append(QLatin1String("&quot;"));
+                        break;
+                  case 0x00:
+                  case 0x01:
+                  case 0x02:
+                  case 0x03:
+                  case 0x04:
+                  case 0x05:
+                  case 0x06:
+                  case 0x07:
+                  case 0x08:
+                  case 0x0B:
+                  case 0x0C:
+                  case 0x0E:
+                  case 0x0F:
+                  case 0x10:
+                  case 0x11:
+                  case 0x12:
+                  case 0x13:
+                  case 0x14:
+                  case 0x15:
+                  case 0x16:
+                  case 0x17:
+                  case 0x18:
+                  case 0x19:
+                  case 0x1A:
+                  case 0x1B:
+                  case 0x1C:
+                  case 0x1D:
+                  case 0x1E:
+                  case 0x1F:
                         break;
                   default:
                         escaped += QChar(c);

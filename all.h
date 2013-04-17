@@ -117,6 +117,7 @@
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QProgressBar>
+#include <QProgressDialog>
 #include <QRadioButton>
 #include <QSplashScreen>
 #include <QFontComboBox>
@@ -139,6 +140,7 @@
 #include <QMdiSubWindow>
 #include <QSpacerItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QtConcurrent>
 
 #include <QSvgRenderer>
 #include <QSvgGenerator>

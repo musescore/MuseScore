@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tuplet.cpp 5499 2012-03-28 12:23:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -112,7 +111,7 @@ void Tuplet::layout()
       if (_numberType != NO_TEXT) {
             if (_number == 0) {
                   _number = new Text(score());
-                  _number->setTextStyle(score()->textStyle(TEXT_STYLE_TUPLET));
+                  _number->setTextStyleType(TEXT_STYLE_TUPLET);
                   _number->setParent(this);
                   _number->setVisible(visible());
                   }

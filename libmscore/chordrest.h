@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chordrest.h 5585 2012-04-28 09:11:33Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -33,11 +32,13 @@ class Spanner;
 ///    Virtual base class. Chords and rests can be part of a beam
 //
 //   @P durationType int
+//   @P beamMode     BeamMode
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
       Q_OBJECT
-      Q_PROPERTY(int durationType READ durationTypeTicks WRITE setDurationType);
+      Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
+      Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -65,7 +66,7 @@ class ChordRest : public DurationElement {
       virtual Element* drop(const DropData&);
 
       Segment* segment() const                   { return (Segment*)parent(); }
-      virtual Measure* measure() const           { return (Measure*)(parent()->parent()); }
+      virtual Measure* measure() const           { return parent() ? (Measure*)(parent()->parent()) : 0; }
 
       virtual void read(XmlReader&) = 0;
       void writeProperties(Xml& xml) const;
@@ -73,6 +74,7 @@ class ChordRest : public DurationElement {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       void setBeamMode(BeamMode m)              { _beamMode = m;    }
+      void undoSetBeamMode(BeamMode m);
       BeamMode beamMode() const                 { return _beamMode; }
 
       void setBeam(Beam* b);

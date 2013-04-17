@@ -16,6 +16,7 @@
 
 #include "inspector.h"
 #include "ui_inspector_beam.h"
+#include "ui_inspector_element.h"
 #include "libmscore/property.h"
 
 //---------------------------------------------------------
@@ -25,18 +26,14 @@
 class InspectorBeam : public InspectorBase {
       Q_OBJECT
 
+      Ui::InspectorElement e;
       Ui::InspectorBeam b;
-
-      static const int _inspectorItems = 7;
-      InspectorItem iList[_inspectorItems];
 
    protected slots:
       virtual void valueChanged(int idx);
 
    protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
-      virtual void setValue(int idx, const QVariant& val);
+      virtual void setValue(const InspectorItem&, const QVariant& val);
 
    public:
       InspectorBeam(QWidget* parent);

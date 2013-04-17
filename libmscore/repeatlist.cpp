@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: repeatlist.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2009-2011 Werner Schweer
 //
@@ -14,10 +13,11 @@
 #include "repeatlist.h"
 #include "score.h"
 #include "measure.h"
-#include "repeat.h"
 #include "tempo.h"
 #include "volta.h"
 #include "segment.h"
+#include "marker.h"
+#include "jump.h"
 
 //---------------------------------------------------------
 //   searchVolta
@@ -320,7 +320,7 @@ void RepeatList::unwind()
                               continueAt  = _score->searchLabel(s->continueAt());
                               isGoto      = true;
 
-                              if (nm) {
+                              if (nm && endRepeat) {
                                     rs->len = m->tick() + m->ticks() - rs->tick;
                                     append(rs);
                                     rs = new RepeatSegment;

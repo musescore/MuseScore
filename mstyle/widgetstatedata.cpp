@@ -27,17 +27,16 @@
 #include "widgetstatedata.h"
 
 
-    //______________________________________________
-    bool WidgetStateData::updateState( bool value )
-    {
-        if( state_ == value ) return false;
-        else {
+//______________________________________________
+bool WidgetStateData::updateState( bool value ) {
+      if ( state_ == value ) return false;
+      else {
 
             state_ = value;
             animation().data()->setDirection( state_ ? Animation::Forward : Animation::Backward );
-            if( !animation().data()->isRunning() ) animation().data()->start();
+            if ( !animation().data()->isRunning() ) animation().data()->start();
             return true;
 
-        }
+            }
 
-    }
+      }
