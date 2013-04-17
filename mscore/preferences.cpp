@@ -42,6 +42,7 @@
 #include "plugins.h"
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
+#include "pathlistdialog.h"
 
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
@@ -661,6 +662,11 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+
+      connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+      connect(mySfzButton, SIGNAL(clicked()), SLOT(changeSfzPaths()));
+
+
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
@@ -1616,6 +1622,32 @@ void PreferenceDialog::selectImagesDirectory()
          );
       if (!s.isNull())
             myImages->setText(s);
+      }
+
+//---------------------------------------------------------
+//   changeSoundfontPaths
+//---------------------------------------------------------
+
+void PreferenceDialog::changeSoundfontPaths()
+      {
+      PathListDialog pld(this);
+      pld.setWindowTitle(tr("Soundfont folders"));
+      pld.setPath(sfPath->text());
+      if(pld.exec())
+            sfPath->setText(pld.path());
+      }
+
+//---------------------------------------------------------
+//   changeSfzPaths
+//---------------------------------------------------------
+
+void PreferenceDialog::changeSfzPaths()
+      {
+      PathListDialog pld(this);
+      pld.setWindowTitle(tr("SFZ folders"));
+      pld.setPath(sfzPath->text());
+      if(pld.exec())
+            sfzPath->setText(pld.path());
       }
 
 //---------------------------------------------------------
