@@ -40,6 +40,8 @@
 #include "libmscore/mscore.h"
 #include "shortcut.h"
 #include "plugins.h"
+#include "zerberus/zerberus.h"
+#include "fluid/fluid.h"
 
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
@@ -212,10 +214,10 @@ void Preferences::init()
       myImagesPath    = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absolutePath();
       myTemplatesPath = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absolutePath();
       myPluginsPath   = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absolutePath();
-      sfPath          = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
+      sfPath          = QDir(QString("%1%2;%3/%4").arg(mscoreGlobalShare).arg("sound").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
       sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
 
-      defaultSf = mscoreGlobalShare + "sound/fluid.sf3";
+      defaultSf = "fluid.sf3";
       defaultSfz = "";
 
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
@@ -848,8 +850,16 @@ void PreferenceDialog::updateValues()
             jackLPort->setEnabled(false);
             }
 
-      defaultSf->setText(prefs.defaultSf);
-      defaultSfz->setText(prefs.defaultSfz);
+      QFileInfoList l = FluidS::Fluid::sfFiles();
+      foreach (const QFileInfo& fi, l)
+            defaultSf->addItem(fi.fileName(), fi.fileName());
+      defaultSf->setCurrentIndex(defaultSf->findData(prefs.defaultSf));
+
+      l = Zerberus::sfzFiles();
+      foreach (const QFileInfo& fi, l)
+            defaultSfz->addItem(fi.fileName(), fi.fileName());
+      defaultSfz->setCurrentIndex(defaultSfz->findData(prefs.defaultSfz));
+
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
@@ -1281,8 +1291,8 @@ void PreferenceDialog::apply()
             prefs.lPort = jackLPort->currentText();
             prefs.rPort = jackRPort->currentText();
             }
-      prefs.defaultSf          = defaultSf->text();
-      prefs.defaultSfz         = defaultSfz->text();
+      prefs.defaultSf          = defaultSf->itemData(defaultSf->currentIndex()).toString();
+      prefs.defaultSfz         = defaultSfz->itemData(defaultSfz->currentIndex()).toString();
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();

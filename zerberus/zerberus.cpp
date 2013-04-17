@@ -114,7 +114,7 @@ bool Zerberus::loadInstrument(const QString& s)
             if (instr->path() == s)    // already loaded?
                   return true;
             }
-      QFileInfoList l = sfzFiles();
+      QFileInfoList l = Zerberus::sfzFiles();
       QString path;
       foreach (const QFileInfo& fi, l) {
             if (fi.fileName() == s) {

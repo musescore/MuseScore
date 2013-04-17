@@ -665,20 +665,13 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             QString s = sl[i];
             if (s.isEmpty())
                   continue;
-
             QString path;
-            QFileInfo qfi(s);
-            if (qfi.exists())
-                  path = s;
-            if (path.isEmpty()) {
-                  foreach (const QFileInfo& fi, l) {
-                        if (fi.fileName() == s) {
-                              path = fi.absoluteFilePath();
-                              break;
-                              }
+            foreach (const QFileInfo& fi, l) {
+                  if (fi.fileName() == s) {
+                        path = fi.absoluteFilePath();
+                        break;
                         }
                   }
-
             if (sfload(path, true) == -1) {
                   qDebug("loading sf failed: <%s>", qPrintable(path));
                   ok = false;
