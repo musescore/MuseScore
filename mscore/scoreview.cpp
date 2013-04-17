@@ -4861,17 +4861,23 @@ void ScoreView::appendMeasures(int n, Element::ElementType type)
 
 MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
       {
-    if (_score->selection().state() == SEL_RANGE) {
-          MeasureBase* mb = _score->selection().startSegment()->measure();
+      MeasureBase* mb = 0;
+      if (_score->selection().state() == SEL_RANGE) {
+            mb = _score->selection().startSegment()->measure();
             return mb;
             }
+
+      mb = _score->selection().findMeasure();
+      if (mb)
+            return mb;
+
       Element* e = _score->selection().element();
       if (e) {
             if (e->type() == Element::VBOX || e->type() == Element::TBOX)
                   return static_cast<MeasureBase*>(e);
             }
-    QMessageBox::warning(0, "MuseScore",
-         tr("No Measure selected:\n" "please select a measure and try again"));
+      QMessageBox::warning(0, "MuseScore",
+            tr("No measure selected:\n" "Please select a measure and try again"));
       return 0;
       }
 
@@ -4885,9 +4891,10 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
       if (!mb)
             return;
       _score->startCmd();
-    for (int i = 0; i < n; ++i)
+      for (int i = 0; i < n; ++i)
             mb = _score->insertMeasure(type, mb);
-      _score->select(0, SELECT_SINGLE, 0);
+      if (mb)
+           _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 
@@ -4910,7 +4917,8 @@ void ScoreView::cmdInsertMeasure(Element::ElementType type)
             startEdit(s);
             return;
             }
-      _score->select(0, SELECT_SINGLE, 0);
+      if (mb)
+           _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 

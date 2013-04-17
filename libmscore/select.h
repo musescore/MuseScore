@@ -86,6 +86,7 @@ class Selection {
       Element* element() const;
       ChordRest* firstChordRest(int track = -1) const;
       ChordRest* lastChordRest(int track = -1) const;
+      Measure* findMeasure() const;
       void update();
       void updateState();
       void dump();
