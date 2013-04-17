@@ -72,7 +72,8 @@ QPixmap TransitionWidget::grab( QWidget* widget, QRect rect ) {
 
             rect = rect.translated( widget->mapTo( widget->window(), widget->rect().topLeft() ) );
             widget = widget->window();
-            out = QPixmap::grabWidget( widget, rect );
+            out = widget->grab(rect);
+            // out = QPixmap::grabWidget( widget, rect );
 
             }
       else {
