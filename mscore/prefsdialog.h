@@ -71,6 +71,9 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectImagesDirectory();
       void printShortcutsClicked();
 
+      void changeSoundfontPaths();
+      void changeSfzPaths();
+
    signals:
       void preferencesChanged();
 
