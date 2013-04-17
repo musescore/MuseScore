@@ -1563,6 +1563,7 @@ bool Element::isText() const
 //   parentChordRest
 //---------------------------------------------------------
 
+#if 0
 Element* Element::parentChordRest()
       {
       if (isChordRest())
@@ -1572,6 +1573,7 @@ Element* Element::parentChordRest()
       else
             return 0;
       }
+#endif
 
 //---------------------------------------------------------
 //   findMeasure
