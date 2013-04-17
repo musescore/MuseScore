@@ -183,6 +183,8 @@ QString rtf2html(const QString& iString)
                         case rtf_keyword::rkw_blue:
                            clr.b=kw.parameter();
                            break;
+                        default:
+                           break;
                         }
                         break;
                      }
@@ -243,6 +245,8 @@ QString rtf2html(const QString& iString)
                               break;
                            case rtf_keyword::rkw_fdecor:
                               fnt.family=font::ff_fantasy;
+                              break;
+                           default:
                               break;
                            }
                         break;
@@ -494,6 +498,8 @@ QString rtf2html(const QString& iString)
                   break;
                case rtf_keyword::rkw_margl:
                   iMarginLeft=kw.parameter();
+                  break;
+               default:
                   break;
                }
             }
