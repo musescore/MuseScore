@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: stafftype.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -16,47 +15,10 @@
 #include "xml.h"
 #include "mscore.h"
 #include "chord.h"
+#include <array>
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
-
-QList<StaffType*> staffTypes;
-
-//---------------------------------------------------------
-//   initStaffTypes
-//---------------------------------------------------------
-
-void initStaffTypes()
-      {
-      StaffTypePitched* st = new StaffTypePitched();
-      st->setName("Pitched 5 lines");
-      st->setBuildin(true);
-      st->setLines(5);
-      st->setLineDistance(Spatium(1.0));
-      st->setGenClef(true);
-      st->setGenKeysig(true);
-      st->setSlashStyle(false);
-      st->setShowBarlines(true);
-      st->setShowLedgerLines(true);
-      staffTypes.append(st);
-
-      StaffTypeTablature* stab = new StaffTypeTablature();
-      stab->setName("Tab");
-      stab->setBuildin(true);
-      staffTypes.append(stab);
-
-      StaffTypePercussion* sp = new StaffTypePercussion();
-      sp->setName("Percussion 5 lines");
-      sp->setBuildin(true);
-      sp->setLines(5);
-      sp->setLineDistance(Spatium(1.0));
-      sp->setGenClef(true);
-      sp->setGenKeysig(false);
-      sp->setSlashStyle(false);
-      sp->setShowBarlines(true);
-      sp->setShowLedgerLines(true);
-      staffTypes.append(sp);
-      }
 
 //---------------------------------------------------------
 //   StaffType
@@ -64,7 +26,7 @@ void initStaffTypes()
 
 StaffType::StaffType()
       {
-      _buildin         = false;
+      _builtin         = false;
       _lines           = 5;
       _stepOffset      = 0;
       _lineDistance    = Spatium(1);
@@ -88,7 +50,7 @@ bool StaffType::isEqual(const StaffType& st) const
 //---------------------------------------------------------
 //   isSameStructure
 //
-//    same as isEqual, but ignores name
+//    same as isEqual(), but ignores name
 //---------------------------------------------------------
 
 bool StaffType::isSameStructure(const StaffType& st) const
@@ -269,6 +231,18 @@ bool StaffTypePitched::isEqual(const StaffType& st) const
       }
 
 //---------------------------------------------------------
+//   isSameStructure
+//
+//    same as isEqual(), but ignores name
+//---------------------------------------------------------
+
+bool StaffTypePitched::isSameStructure(const StaffType& st) const
+{    return StaffType::isSameStructure(st)
+        && static_cast<const StaffTypePitched&>(st)._genKeysig       == _genKeysig
+        && static_cast<const StaffTypePitched&>(st)._showLedgerLines == _showLedgerLines;
+}
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -325,6 +299,18 @@ bool StaffTypePercussion::isEqual(const StaffType& st) const
          && static_cast<const StaffTypePercussion&>(st)._showLedgerLines == _showLedgerLines
          ;
       }
+
+//---------------------------------------------------------
+//   isSameStructure
+//
+//    same as isEqual(), but ignores name
+//---------------------------------------------------------
+
+bool StaffTypePercussion::isSameStructure(const StaffType& st) const
+{    return StaffType::isSameStructure(st)
+        && static_cast<const StaffTypePercussion&>(st)._genKeysig       == _genKeysig
+        && static_cast<const StaffTypePercussion&>(st)._showLedgerLines == _showLedgerLines;
+}
 
 //---------------------------------------------------------
 //   write
@@ -424,22 +410,21 @@ bool StaffTypeTablature::isEqual(const StaffType& st) const
 //---------------------------------------------------------
 //   isSameStructure
 //
-//    same as isEqual, but ignores name and font data
+//    same as isEqual(), but ignores name and font data
 //---------------------------------------------------------
 
-bool StaffTypeTablature::isSameStructure(const StaffTypeTablature& stt) const
+bool StaffTypeTablature::isSameStructure(const StaffType &st) const
       {
-      return StaffType::isSameStructure(static_cast<const StaffType&>(stt))
-         && stt._genDurations == _genDurations
-         && stt._linesThrough == _linesThrough
-         && stt._minimStyle   == _minimStyle
-         && stt._onLines      == _onLines
-         && stt._showRests    == _showRests
-         && stt._stemsDown    == _stemsDown
-         && stt._stemsThrough == _stemsThrough
-         && stt._upsideDown   == _upsideDown
-         && stt._useNumbers   == _useNumbers
-         ;
+      return StaffType::isSameStructure(st)
+         && static_cast<const StaffTypeTablature&>(st)._genDurations == _genDurations
+         && static_cast<const StaffTypeTablature&>(st)._linesThrough == _linesThrough
+         && static_cast<const StaffTypeTablature&>(st)._minimStyle   == _minimStyle
+         && static_cast<const StaffTypeTablature&>(st)._onLines      == _onLines
+         && static_cast<const StaffTypeTablature&>(st)._showRests    == _showRests
+         && static_cast<const StaffTypeTablature&>(st)._stemsDown    == _stemsDown
+         && static_cast<const StaffTypeTablature&>(st)._stemsThrough == _stemsThrough
+         && static_cast<const StaffTypeTablature&>(st)._upsideDown   == _upsideDown
+         && static_cast<const StaffTypeTablature&>(st)._useNumbers   == _useNumbers;
       }
 
 //---------------------------------------------------------
@@ -658,11 +643,38 @@ void StaffTypeTablature::setFretFontSize(qreal val)
       }
 
 //---------------------------------------------------------
-//   chordStemPos / chordStemPosBeam / chordStemLength
+//   chordRestStemPosY / chordStemPos / chordStemPosBeam / chordStemLength
 //
 //    computes the stem data for the given chord, according to TAB settings
 //    NOTE: unit: spatium, position: relative to chord (DIFFERENT from Chord own functions)
 //
+//   chordRestStemPosY
+//          returns the vertical position of stem start point
+//---------------------------------------------------------
+
+qreal StaffTypeTablature::chordRestStemPosY(const ChordRest *chordRest) const
+      {
+      if (stemThrough())            // does not make sense for "stems through staves" setting; just return top line vert. position
+            return 0.0;
+
+      // if stems beside staff, position are fixed, but take into account delta for half notes
+      qreal delta =                             // displacement for half note stems (if used)
+            // if half notes have not a short stem OR not a half note => 0
+            (minimStyle() != TAB_MINIM_SHORTER || chordRest->durationType().type() != TDuration::V_HALF) ?
+                  0.0 :
+                  // if stem is up, displace of half stem length down (positive)
+                  // if stem is down, displace of half stem length up (negative)
+                  (chordRest->up() ?
+                        -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * 0.5;
+      // if fret marks above lines and chordRest is up, move half a line distance up
+      if (!onLines() && chordRest->up())
+            delta -= _lineDistance.val() *0.5;
+      qreal y = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+            + delta;
+      return y;
+      }
+
+//---------------------------------------------------------
 //   chordStemPos
 //          return position of note at other side of beam
 //---------------------------------------------------------
@@ -670,24 +682,14 @@ void StaffTypeTablature::setFretFontSize(qreal val)
 QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
       {
       qreal y;
-      qreal delta =                             // displacement for half note stems (if used)
-            // if half notes have not a short stem OR not a half note => 0
-            (minimStyle() != TAB_MINIM_SHORTER || chord->durationType().type() != TDuration::V_HALF) ?
-            0.0 :
-            // if stems are up, displace of half stem length down (positive)
-            // if stems are down, displace of half stem length up (negative)
-            (stemsDown() ?
-                  STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP) * 0.5;
-
-      // if stems are through staff, stem goes from fartest note string
       if (stemThrough())
-            y = (stemsDown() ? chord->upString() : chord->downString()) * _lineDistance.val();
+            // if stems are through staff, stem goes from fartest note string
+            y = (chord->up() ? chord->downString() : chord->upString()) * _lineDistance.val();
       else
-      // if stems beside staff, position are fixed, but take into account delta
-            y = (stemsDown() ? (_lines-1)*_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN :
-                  STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP) + delta;
-
-      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+            // if stems are beside staff, stem start point has a fixed vertical position,
+            // according to TAB parameters and stem up/down
+            y = chordRestStemPosY(chord);
+      return QPointF(chordStemPosX(chord), y);
       }
 
 //---------------------------------------------------------
@@ -699,7 +701,7 @@ QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
       {
       qreal y = ( stemsDown() ? chord->downString() : chord->upString() ) * _lineDistance.val();
 
-      return QPointF(STAFFTYPE_TAB_DEFAULTSTEMPOSX, y);
+      return QPointF(chordStemPosX(chord), y);
       }
 
 //---------------------------------------------------------
@@ -710,19 +712,16 @@ QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
 qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
       {
       qreal    stemLen;
-      // if stems are through staff, length is from fartest note to a fixed point aboe/below staff
+      // if stems are through staff, length should be computed by relevant chord algorithm;
+      // here, just return default length (= 1 'octave' = 3.5 line spaces)
       if (stemThrough())
-            stemLen = stemsDown() ?
-                  STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
-                        + (_lines-1 - chord->upString()) * _lineDistance.val() :
-                  STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
-                        + chord->downString() * _lineDistance.val();
+            return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * _lineDistance.val();
       // if stems beside staff, length is fixed, but take into account shorter half note stems
       else {
             bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::V_HALF);
             stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                        * (shrt ? 0.5 : 1.0);
-      }
+                        * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
+            }
       return stemLen;
       }
 
@@ -732,11 +731,14 @@ qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
 //    construct the text string for a given fret / duration
 //---------------------------------------------------------
 
+static const QString unknownFret = QString("?");
+
 QString StaffTypeTablature::fretString(int fret, bool ghost) const
       {
       QString s = ghost ? _fretFonts[_fretFontIdx].ghostChar :
-            ( _useNumbers ?   _fretFonts[_fretFontIdx].displayDigit[fret] :
-                              _fretFonts[_fretFontIdx]. displayLetter[fret]
+            ( _useNumbers ?
+                  (fret >= NUM_OF_DIGITFRETS  ? unknownFret : _fretFonts[_fretFontIdx].displayDigit[fret]) :
+                  (fret >= NUM_OF_LETTERFRETS ? unknownFret : _fretFonts[_fretFontIdx].displayLetter[fret])
             );
       return s;
       }
@@ -850,6 +852,8 @@ void TabDurationSymbol::draw(QPainter* painter) const
 
 bool TablatureFretFont::read(XmlReader& e)
       {
+      defPitch = 9.0;
+      defYOffset = 0.0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -861,6 +865,8 @@ bool TablatureFretFont::read(XmlReader& e)
                   displayName = e.readElementText();
             else if (tag == "defaultPitch")
                   defPitch = e.readDouble();
+            else if (tag == "defaultYOffset")
+                  defYOffset = e.readDouble();
             else if (tag == "mark") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());
@@ -902,6 +908,8 @@ bool TablatureDurationFont::read(XmlReader& e)
                   displayName = e.readElementText();
             else if (tag == "defaultPitch")
                   defPitch = e.readDouble();
+            else if (tag == "defaultYOffset")
+                  defYOffset = e.readDouble();
             else if (tag == "duration") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());
@@ -1034,26 +1042,166 @@ QList<QString> StaffTypeTablature::fontNames(bool bDuration)
 //---------------------------------------------------------
 
 bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, QString * pDisplayName,
-            qreal * pSize)
+            qreal * pSize, qreal* pYOff)
       {
-      if(bDuration) {
-            if(nIdx >= 0 && nIdx < _durationFonts.size()) {
+      if (bDuration) {
+            if (nIdx >= 0 && nIdx < _durationFonts.size()) {
                   TablatureDurationFont f = _durationFonts.at(nIdx);
-                  if(pFamily)       *pFamily          = f.family;
-                  if(pDisplayName)  *pDisplayName     = f.displayName;
-                  if(pSize)         *pSize            = f.defPitch;
+                  if (pFamily)      *pFamily          = f.family;
+                  if (pDisplayName) *pDisplayName     = f.displayName;
+                  if (pSize)        *pSize            = f.defPitch;
+                  if (pYOff)        *pYOff            = f.defYOffset;
                   return true;
                   }
             }
       else {
-            if(nIdx >= 0 && nIdx < _fretFonts.size()) {
+            if (nIdx >= 0 && nIdx < _fretFonts.size()) {
                   TablatureFretFont f = _fretFonts.at(nIdx);
-                  if(pFamily)       *pFamily          = f.family;
-                  if(pDisplayName)  *pDisplayName     = f.displayName;
-                  if(pSize)         *pSize            = f.defPitch;
+                  if (pFamily)      *pFamily          = f.family;
+                  if (pDisplayName) *pDisplayName     = f.displayName;
+                  if (pSize)        *pSize            = f.defPitch;
+                  if (pYOff)        *pYOff            = f.defYOffset;
                   return true;
                   }
             }
       return false;
+      }
+
+//=========================================================
+//
+//   BUILT-IN STAFF TYPES and STAFF TYPE PRESETS
+//
+//=========================================================
+
+QList<StaffType*> staffTypes;
+
+struct StaffTypePreset {
+      QString     xmlName;                      // the name used to reference this preset in intruments.xml
+      StaffType * staffType;                    // the actual StaffType settings
+};
+
+std::array<StaffTypePreset, 14> _presets;
+
+static const int _defaultPreset[STAFF_GROUP_MAX] =
+      { 0,              // default pitched preset is "stdNormal"
+        3,              // default percussion preset is "perc5lines"
+        5               // default tab preset is "tab6StrCommon"
+      };
+
+static const QString _emptyString = QString();
+
+//---------------------------------------------------------
+//   Static functions for StaffType presets
+//---------------------------------------------------------
+
+size_t StaffType::numOfPresets()
+      {
+      return _presets.size();
+      }
+
+const StaffType* StaffType::preset(int idx)
+      {
+      if (idx < 0 || idx >= (int)_presets.size())
+            return 0;
+      return _presets[idx].staffType;
+      }
+
+const StaffType* StaffType::presetFromXmlName(QString& xmlName, int* idx)
+{
+      for (int i = 0; i < (int)_presets.size(); ++i)
+            if (_presets[i].xmlName == xmlName) {
+                  if (idx)
+                        *idx = i;
+                  return _presets[i].staffType;
+                  }
+      return 0;
+}
+
+const StaffType* StaffType::presetFromName(QString& name, int* idx)
+{
+      for (int i = 0; i < (int)_presets.size(); ++i)
+            if (_presets[i].staffType->name() == name) {
+                  if (idx)
+                        *idx = i;
+                  return _presets[i].staffType;
+                  }
+      return 0;
+}
+
+const QString& StaffType::presetXmlName(int idx)
+      {
+      if (idx < 0 || idx >= (int)_presets.size())
+            return _emptyString;
+      return _presets[idx].xmlName;
+      }
+
+const QString& StaffType::presetName(int idx)
+      {
+      if (idx < 0 || idx >= (int)_presets.size())
+            return _emptyString;
+      return _presets[idx].staffType->_name;
+      }
+
+const StaffType* StaffType::getDefaultPreset(StaffGroup grp, int *idx)
+      {
+      int _idx = _defaultPreset[(int)grp];
+      if (idx)
+            *idx = _idx;
+      return _presets[_idx].staffType;
+      }
+
+//---------------------------------------------------------
+//   initStaffTypes
+//---------------------------------------------------------
+
+void initStaffTypes()
+      {
+      // init staff type presets
+      //                                                       human readable name    lin dst clef  bars stmless time  key  ledger
+      StaffTypePitched*    st00 = new StaffTypePitched   (QObject::tr("normal"),        5, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st01 = new StaffTypePercussion(QObject::tr("Perc. 1 lines"), 1, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st02 = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, true, true);
+      StaffTypePercussion* st03 = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, true, true);
+      //                                                     human-readable name        lin dist  clef   bars stemless time  duration font                  size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
+      StaffTypeTablature* st04 = new StaffTypeTablature(QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      StaffTypeTablature* st05 = new StaffTypeTablature(QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      StaffTypeTablature* st06 = new StaffTypeTablature(QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st07 = new StaffTypeTablature(QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      StaffTypeTablature* st08 = new StaffTypeTablature(QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      StaffTypeTablature* st09 = new StaffTypeTablature(QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st10 = new StaffTypeTablature(QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      StaffTypeTablature* st11 = new StaffTypeTablature(QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      //                                               (QObject::tr("Tab. bandurria"),    6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),   10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      StaffTypeTablature* st12 = new StaffTypeTablature(QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
+      StaffTypeTablature* st13 = new StaffTypeTablature(QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+      _presets[0].xmlName  = QString("stdNormal");          _presets[0].staffType  = st00;
+      _presets[1].xmlName  = QString("perc1Line");          _presets[1].staffType  = st01;
+      _presets[2].xmlName  = QString("perc3Line");          _presets[2].staffType  = st02;
+      _presets[3].xmlName  = QString("perc5Line");          _presets[3].staffType  = st03;
+      _presets[4].xmlName  = QString("tab6StrSimple");      _presets[4].staffType  = st04;
+      _presets[5].xmlName  = QString("tab6StrCommon");      _presets[5].staffType  = st05;
+      _presets[6].xmlName  = QString("tab6StrFull");        _presets[6].staffType  = st06;
+      _presets[7].xmlName  = QString("tab4StrSimple");      _presets[7].staffType  = st07;
+      _presets[8].xmlName  = QString("tab4StrCommon");      _presets[8].staffType  = st08;
+      _presets[9].xmlName  = QString("tab4StrFull");        _presets[9].staffType  = st09;
+      _presets[10].xmlName = QString("tabUkulele");         _presets[10].staffType = st10;
+      _presets[11].xmlName = QString("tabBalajka");         _presets[11].staffType = st11;
+      _presets[12].xmlName = QString("tab6StrItalian");     _presets[12].staffType = st12;
+      _presets[13].xmlName = QString("tab6StrFrench");      _presets[13].staffType = st13;
+
+      // init built-in staff types
+
+      StaffTypePitched*    st0 = static_cast<StaffTypePitched*>(_presets[_defaultPreset[PITCHED_STAFF]].staffType)->clone();
+      StaffTypeTablature*  st1 = static_cast<StaffTypeTablature*>(_presets[_defaultPreset[TAB_STAFF]].staffType)->clone();
+      StaffTypePercussion* st2 = static_cast<StaffTypePercussion*>(_presets[_defaultPreset[PERCUSSION_STAFF]].staffType)->clone();
+      st0->setName(QObject::tr("Standard (built-in)"));
+      st1->setName(QObject::tr("Tablature (built-in)"));
+      st2->setName(QObject::tr("Percussion (built-in)"));
+      st0->setBuiltin(true);
+      st1->setBuiltin(true);
+      st2->setBuiltin(true);
+      staffTypes.append(st0);
+      staffTypes.append(st1);
+      staffTypes.append(st2);
       }
 

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -77,7 +76,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_barNoteDistance,Spatium(.6)),
       StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
-      StyleVal(ST_measureSpacing,1.2),
+      StyleVal(ST_measureSpacing, qreal(1.2)),
 
       StyleVal(ST_staffLineWidth,Spatium(0.08)),
       StyleVal(ST_ledgerLineWidth,Spatium(0.12)),
@@ -85,11 +84,11 @@ static const StyleVal style114[] = {
       StyleVal(ST_accidentalDistance,Spatium(0.22)),
       StyleVal(ST_accidentalNoteDistance,Spatium(0.22)),
       StyleVal(ST_beamWidth,Spatium(0.48)),
-      StyleVal(ST_beamDistance,0.5),
+      StyleVal(ST_beamDistance,qreal(0.5)),
       StyleVal(ST_beamMinLen,Spatium(1.25)),
-      StyleVal(ST_beamMinSlope,0.05),
+      StyleVal(ST_beamMinSlope, qreal(0.05)),
 
-      StyleVal(ST_beamMaxSlope,0.2),
+      StyleVal(ST_beamMaxSlope, qreal(0.2)),
       StyleVal(ST_maxBeamTicks, MScore::division),
       StyleVal(ST_dotNoteDistance,Spatium(0.35)),
       StyleVal(ST_dotRestDistance,Spatium(0.25)),
@@ -98,7 +97,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_propertyDistanceStem,Spatium(0.5)),
       StyleVal(ST_propertyDistance,Spatium(1.0)),
 //      StyleVal(ST_pageFillLimit,0.7),
-      StyleVal(ST_lastSystemFillLimit,0.3),
+      StyleVal(ST_lastSystemFillLimit, qreal(0.3)),
 
       StyleVal(ST_hairpinHeight,Spatium(1.2)),
       StyleVal(ST_hairpinContHeight,Spatium(0.5)),
@@ -112,10 +111,10 @@ static const StyleVal style114[] = {
       StyleVal(ST_measureNumberSystem,true),
 
       StyleVal(ST_measureNumberAllStaffs,false),
-      StyleVal(ST_smallNoteMag,0.7),
-      StyleVal(ST_graceNoteMag,0.7),
-      StyleVal(ST_smallStaffMag,0.7),
-      StyleVal(ST_smallClefMag,0.8),
+      StyleVal(ST_smallNoteMag, qreal(0.7)),
+      StyleVal(ST_graceNoteMag, qreal(0.7)),
+      StyleVal(ST_smallStaffMag, qreal(0.7)),
+      StyleVal(ST_smallClefMag, qreal(0.8)),
       StyleVal(ST_genClef,true),
       StyleVal(ST_genKeysig,true),
       StyleVal(ST_genTimesig,true),
@@ -339,10 +338,8 @@ Score::FileError Score::read114(XmlReader& e)
                   e.skipCurrentElement();       // obsolete
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
-            else if (tag == "SyntiSettings") {
-                  _syntiState.clear();
-                  _syntiState.read(e);
-                  }
+            else if (tag == "SyntiSettings")
+                  _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM);
             else if (tag == "page-offset")
@@ -387,7 +384,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
                   text->read(e);
-                  setMetaTag("copyright", text->getText());
+                  setMetaTag("copyright", text->text());
                   delete text;
                   }
             else if (tag == "movement-number")
@@ -470,7 +467,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
 
             ClefList* cl = e.clefListList().at(idx);
-            for (ciClefEvent i = cl->constBegin(); i != cl->constEnd(); ++i) {
+            for (auto i = cl->constBegin(); i != cl->constEnd(); ++i) {
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
                   Measure* m = tick2measure(tick);
@@ -490,7 +487,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
 
             KeyList* km = s->keymap();
-            for (ciKeyList i = km->begin(); i != km->end(); ++i) {
+            for (auto i = km->begin(); i != km->end(); ++i) {
                   int tick = i->first;
                   if (tick < 0) {
                         qDebug("read114: Key tick %d", tick);
@@ -615,26 +612,26 @@ Score::FileError Score::read114(XmlReader& e)
             int tracks = nstaves() * VOICES;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->subtype() != Segment::SegChordRest)
+                        if (s->segmentType() != Segment::SegChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
                               switch(cr->beamMode()) {
-                                    case BEAM_AUTO:
-                                    case BEAM_BEGIN:
-                                    case BEAM_END:
-                                    case BEAM_NO:
+                                    case BeamMode::AUTO:
+                                    case BeamMode::BEGIN:
+                                    case BeamMode::END:
+                                    case BeamMode::NONE:
                                           break;
-                                    case BEAM_MID:
-                                    case BEAM_BEGIN32:
-                                    case BEAM_BEGIN64:
-                                          cr->setBeamMode(BEAM_BEGIN);
+                                    case BeamMode::MID:
+                                    case BeamMode::BEGIN32:
+                                    case BeamMode::BEGIN64:
+                                          cr->setBeamMode(BeamMode::BEGIN);
                                           break;
-                                    case BEAM_INVALID:
+                                    case BeamMode::INVALID:
                                           if (cr->type() == Element::CHORD)
-                                                cr->setBeamMode(BEAM_AUTO);
+                                                cr->setBeamMode(BeamMode::AUTO);
                                           else
-                                                cr->setBeamMode(BEAM_NO);
+                                                cr->setBeamMode(BeamMode::NONE);
                                           break;
                                     }
                               break;
@@ -688,22 +685,6 @@ Score::FileError Score::read114(XmlReader& e)
                   excerpt->setScore(nscore);
                   }
             }
-
-      //
-      // check for soundfont,
-      // add default soundfont if none found
-      // (for compatibility with old scores)
-      //
-      bool hasSoundfont = false;
-      foreach(const SyntiParameter& sp, _syntiState) {
-            if (sp.name() == "soundfont") {
-                  QFileInfo fi(sp.sval());
-                  if (fi.exists())
-                        hasSoundfont = true;
-                  }
-            }
-      if (!hasSoundfont)
-            _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
 
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();

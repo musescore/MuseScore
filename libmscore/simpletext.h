@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -27,8 +26,13 @@ struct SymCode;
 
 class TCursor {
    public:
+      int selectLine;         // start of selection
+      int selectColumn;
+
       int line;
       int column;
+
+      bool hasSelection() const { return (selectLine != line) || (selectColumn != column); }
       };
 
 //---------------------------------------------------------
@@ -56,9 +60,12 @@ class SimpleText : public Element {
 
       bool _layoutToParentWidth;
       bool _editMode;
-      static TCursor _cursor;
+
+      static TCursor _cursor;       // used during editing
+
       QRectF cursorRect() const;
       QString& curLine();
+      void drawSelection(QPainter*, const QRectF&) const;
 
    protected:
       TextStyle _textStyle;
@@ -79,8 +86,8 @@ class SimpleText : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setText(const QString& s);
-      QString getText() const;
+      void setText(const QString& s)      { _text = s;    }
+      QString text() const                { return _text; }
 
       bool editMode() const               { return _editMode; }
       void setEditMode(bool val)          { _editMode = val;  }
@@ -109,7 +116,6 @@ class SimpleText : public Element {
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
-      void addChar(int code);
       bool deletePreviousChar();
       bool deleteChar();
       bool movePosition(QTextCursor::MoveOperation op,
@@ -118,6 +124,10 @@ class SimpleText : public Element {
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       void moveCursorToEnd()   { movePosition(QTextCursor::Start); };
       void moveCursorToStart() { movePosition(QTextCursor::End); };
+
+      QString selectedText() const;
+
+      void insertText(const QString&);
       };
 
 #endif

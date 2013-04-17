@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: keyfinder.h 4515 2011-07-13 09:56:53Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: layoutbreak.cpp 5632 2012-05-15 16:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -22,7 +21,7 @@
 LayoutBreak::LayoutBreak(Score* score)
    : Element(score)
       {
-      _subtype             = LayoutBreakType(propertyDefault(P_LAYOUT_BREAK).toInt());
+      _layoutBreakType     = LayoutBreakType(propertyDefault(P_LAYOUT_BREAK).toInt());
       _pause               = score->styleD(ST_SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
@@ -97,7 +96,7 @@ void LayoutBreak::layout0()
       qreal w  = _spatium * 2.5;
       qreal w1 = w * .6;
 
-      switch(subtype()) {
+      switch(layoutBreakType()) {
             case LAYOUT_BREAK_LINE:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
@@ -142,12 +141,12 @@ void LayoutBreak::layout0()
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setLayoutBreakType
 //---------------------------------------------------------
 
-void LayoutBreak::setSubtype(LayoutBreakType val)
+void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
       {
-      _subtype = val;
+      _layoutBreakType = val;
       layout0();
       }
 
@@ -167,7 +166,7 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 
 bool LayoutBreak::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->subtype() != subtype();
+      return e->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() != layoutBreakType();
       }
 
 //---------------------------------------------------------
@@ -189,7 +188,7 @@ QVariant LayoutBreak::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_LAYOUT_BREAK:
-                  return _subtype;
+                  return _layoutBreakType;
             case P_PAUSE:
                   return _pause;
             default:
@@ -205,7 +204,7 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_LAYOUT_BREAK:
-                  setSubtype(LayoutBreakType(v.toInt()));
+                  setLayoutBreakType(LayoutBreakType(v.toInt()));
                   break;
             case P_PAUSE:
                   setPause(v.toDouble());

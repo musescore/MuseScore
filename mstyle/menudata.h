@@ -29,81 +29,86 @@
 
 #include "menubardata.h"
 
-    //! menubar data
-    /*!
-    most members are identical to menubar data. The one that are not are
-    using templatized versions, because QMenuBar and QMenu API are very similar
-    */
-    class MenuDataV1: public MenuBarDataV1
-    {
+//! menubar data
+/*!
+most members are identical to menubar data. The one that are not are
+using templatized versions, because QMenuBar and QMenu API are very similar
+*/
+class MenuDataV1: public MenuBarDataV1 {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        MenuDataV1( QObject* parent, QWidget* target, int duration ):
-        MenuBarDataV1( parent, target, duration )
-        {}
+            //! constructor
+            MenuDataV1( QObject* parent, QWidget* target, int duration ):
+                  MenuBarDataV1( parent, target, duration )
+                  {}
 
-        //! destructor
-        virtual ~MenuDataV1( void )
-        {}
+            //! destructor
+            virtual ~MenuDataV1( void )
+                  {}
 
-        protected:
+      protected:
 
-        //! menubar enterEvent
-        virtual void enterEvent( const QObject* object )
-        { MenuBarDataV1::enterEvent<QMenu>( object ); }
+            //! menubar enterEvent
+            virtual void enterEvent( const QObject* object ) {
+                  MenuBarDataV1::enterEvent<QMenu>( object );
+                  }
 
-        //! menubar enterEvent
-        virtual void leaveEvent( const QObject* object )
-        { MenuBarDataV1::leaveEvent<QMenu>( object ); }
+            //! menubar enterEvent
+            virtual void leaveEvent( const QObject* object ) {
+                  MenuBarDataV1::leaveEvent<QMenu>( object );
+                  }
 
-        //! menubar mouseMoveEvent
-        virtual void mouseMoveEvent( const QObject* object )
-        { MenuBarDataV1::mouseMoveEvent<QMenu>( object ); }
+            //! menubar mouseMoveEvent
+            virtual void mouseMoveEvent( const QObject* object ) {
+                  MenuBarDataV1::mouseMoveEvent<QMenu>( object );
+                  }
 
-        //! menubar mousePressEvent
-        virtual void mousePressEvent( const QObject* object )
-        { MenuBarDataV1::mousePressEvent<QMenu>( object ); }
+            //! menubar mousePressEvent
+            virtual void mousePressEvent( const QObject* object ) {
+                  MenuBarDataV1::mousePressEvent<QMenu>( object );
+                  }
 
-    };
+      };
 
-    //! menubar data
-    /*!
-    most members are identical to menubar data. The one that are not are
-    using templatized versions, because QMenuBar and QMenu API are very similar
-    */
-    class MenuDataV2: public MenuBarDataV2
-    {
+//! menubar data
+/*!
+most members are identical to menubar data. The one that are not are
+using templatized versions, because QMenuBar and QMenu API are very similar
+*/
+class MenuDataV2: public MenuBarDataV2 {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
-        //! constructor
-        MenuDataV2( QObject* parent, QWidget* target, int duration ):
-        MenuBarDataV2( parent, target, duration )
-        {}
+      public:
+            //! constructor
+            MenuDataV2( QObject* parent, QWidget* target, int duration ):
+                  MenuBarDataV2( parent, target, duration )
+                  {}
 
-        //! destructor
-        virtual ~MenuDataV2( void )
-        {}
+            //! destructor
+            virtual ~MenuDataV2( void )
+                  {}
 
-        protected:
+      protected:
 
-        //! menubar enterEvent
-        virtual void enterEvent( const QObject* object )
-        { MenuBarDataV2::enterEvent<QMenu>( object ); }
+            //! menubar enterEvent
+            virtual void enterEvent( const QObject* object ) {
+                  MenuBarDataV2::enterEvent<QMenu>( object );
+                  }
 
-        //! menubar enterEvent
-        virtual void leaveEvent( const QObject* object )
-        { MenuBarDataV2::leaveEvent<QMenu>( object ); }
+            //! menubar enterEvent
+            virtual void leaveEvent( const QObject* object ) {
+                  MenuBarDataV2::leaveEvent<QMenu>( object );
+                  }
 
-        //! menubar mouseMoveEvent
-        virtual void mouseMoveEvent( const QObject* object )
-        { MenuBarDataV2::mouseMoveEvent<QMenu>( object ); }
+            //! menubar mouseMoveEvent
+            virtual void mouseMoveEvent( const QObject* object ) {
+                  MenuBarDataV2::mouseMoveEvent<QMenu>( object );
+                  }
 
-    };
+      };
 
 #endif

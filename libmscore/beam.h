@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: beam.h 5563 2012-04-20 13:30:27Z wschweer $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //

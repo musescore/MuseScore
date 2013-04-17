@@ -179,7 +179,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //---------------------------------------------------
 
       int mw = _meterWidth / _channel;
-      int x  = 20;
+      int x  = 18;
       int y1 = kh / 2;
       int y3 = h - y1;
 
@@ -207,6 +207,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
 
             x += mw;
             }
+      x += 4;
 
       // optimize common case:
       if (ev->rect() == QRect(20, kh/2, _meterWidth-1, mh))

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: clef.cpp 5343 2012-02-18 19:50:35Z miwarre $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -65,8 +64,8 @@ Clef::Clef(Score* s)
 
       _showCourtesy               = true;
       _small                      = false;
-      _clefTypes._concertClef     = CLEF_G;
-      _clefTypes._transposingClef = CLEF_G;
+      _clefTypes._concertClef     = CLEF_INVALID;
+      _clefTypes._transposingClef = CLEF_INVALID;
       curClefType                 = CLEF_G;
       curLines                    = -1;
       curLineDist                 = 1.0;
@@ -116,17 +115,19 @@ void Clef::setSelected(bool f)
 void Clef::layout()
       {
       // determine current number of lines and line distance
-      int lines      = 5;                             // assume a resonable default
+      int lines      = 5;                       // assume a resonable default
       qreal lineDist = 1.0;
 
       StaffType* staffType;
       if (staff() && staff()->staffType()) {
             staffType = staff()->staffType();
+            if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
+                  setbbox(QRectF());
+                  return;
+                  }
 
             // tablatures:
             if (staffType->group() == TAB_STAFF) {
-                  if (!staffType->genClef())          // if no clef, do nothing
-                        return;
                   // if current clef type not compatible with tablature,
                   // set tab clef according to score style
                   if (clefTable[clefType()].staffGroup != TAB_STAFF)
@@ -212,7 +213,7 @@ void Clef::layout1()
             Symbol* number = new Symbol(score());
             symbol->setMag(smag);
             number->setSym(clefEightSym);
-            addElement(number, .0, 4.5 * msp + yoff * _spatium);
+            addElement(number, .5* msp, 4.5 * msp + yoff * _spatium);
             }
             break;
       case CLEF_F15:                            // F clef 15ma bassa on penultimate line
@@ -222,10 +223,10 @@ void Clef::layout1()
             Symbol* number = new Symbol(score());
             symbol->setMag(smag);
             number->setSym(clefOneSym);
-            addElement(number, .0, 4.5 * msp + yoff * _spatium);
+            addElement(number, .3* msp, 4.5 * msp + yoff * _spatium);
             number = new Symbol(score());
             number->setSym(clefFiveSym);
-            addElement(number, .8 * msp, 4.5 * msp + yoff * _spatium);
+            addElement(number, 1.1 * msp, 4.5 * msp + yoff * _spatium);
             }
             break;
       case CLEF_F_B:                            // baritone clef
@@ -292,10 +293,10 @@ void Clef::layout1()
             Symbol* number = new Symbol(score());
             symbol->setMag(smag);
             number->setSym(clefOneSym);
-            addElement(number, .0 * msp, -1.5 * msp + yoff * _spatium);
+            addElement(number, .3* msp, -1.5 * msp + yoff * _spatium);
             number = new Symbol(score());
             number->setSym(clefFiveSym);
-            addElement(number, .8 * msp, -1.5 * msp + yoff * _spatium);
+            addElement(number, 1.1 * msp, -1.5 * msp + yoff * _spatium);
             }
             break;
       case CLEF_INVALID:
@@ -307,7 +308,7 @@ void Clef::layout1()
       symbol->layout();
       addElement(symbol, .0, yoff * _spatium);
       setbbox(QRectF());
-      for (iElement i = elements.begin(); i != elements.end(); ++i) {
+      for (auto i = elements.begin(); i != elements.end(); ++i) {
             Element* e = *i;
             e->setColor(curColor());
             addbbox(e->bbox().translated(e->pos()));
@@ -321,7 +322,7 @@ void Clef::layout1()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff() && !staff()->staffType()->genClef())
+      if (staff() && /*staff()->isTabStaff() &&*/ !staff()->staffType()->genClef())
 	      return;
       QColor color(curColor());
       foreach(Element* e, elements) {
@@ -406,8 +407,10 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
-      xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
+      if(_clefTypes._concertClef != CLEF_INVALID)
+            xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
+      if(_clefTypes._transposingClef != CLEF_INVALID)
+            xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);

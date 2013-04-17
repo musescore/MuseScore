@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: measurebase.cpp 5632 2012-05-15 16:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -113,13 +112,13 @@ void MeasureBase::add(Element* e)
       if (e->type() == LAYOUT_BREAK) {
             LayoutBreak* b = static_cast<LayoutBreak*>(e);
             foreach (Element* ee, _el) {
-                  if (ee->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->subtype() == b->subtype()) {
+                  if (ee->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
                               qDebug("warning: layout break already set\n");
                         return;
                         }
                   }
-            switch (b->subtype()) {
+            switch (b->layoutBreakType()) {
                   case LAYOUT_BREAK_PAGE:
                         _pageBreak = true;
                         break;
@@ -132,7 +131,7 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             }
-      _el.append(e);
+      _el.push_back(e);
       }
 
 //---------------------------------------------------------
@@ -147,7 +146,7 @@ void MeasureBase::remove(Element* el)
       {
       if (el->type() == LAYOUT_BREAK) {
             LayoutBreak* lb = static_cast<LayoutBreak*>(el);
-            switch (lb->subtype()) {
+            switch (lb->layoutBreakType()) {
                   case LAYOUT_BREAK_PAGE:
                         _pageBreak = false;
                         break;
@@ -218,7 +217,7 @@ void MeasureBase::layout0()
             if (!score()->tagIsValid(element->tag()) || (element->type() != LAYOUT_BREAK))
                   continue;
             LayoutBreak* e = static_cast<LayoutBreak*>(element);
-            switch (e->subtype()) {
+            switch (e->layoutBreakType()) {
                   case LAYOUT_BREAK_PAGE:
                         _pageBreak = true;
                         break;

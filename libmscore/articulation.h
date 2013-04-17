@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: articulation.h 5500 2012-03-28 16:28:26Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -54,7 +53,7 @@ struct ArticulationInfo {
 class Articulation : public Element {
       Q_OBJECT
 
-      ArticulationType _subtype;
+      ArticulationType _articulationType;
       MScore::Direction _direction;
       QString _channelName;
       ArticulationAnchor _anchor;
@@ -69,8 +68,8 @@ class Articulation : public Element {
       virtual Articulation* clone() const   { return new Articulation(*this); }
       virtual ElementType type() const      { return ARTICULATION; }
 
-      void setSubtype(ArticulationType);
-      ArticulationType subtype() const      { return _subtype; }
+      void setArticulationType(ArticulationType);
+      ArticulationType articulationType() const { return _articulationType; }
       void setSubtype(const QString& s);
       QString subtypeName() const;
 
@@ -85,7 +84,6 @@ class Articulation : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
 
-      ArticulationType articulationType() const;
       QString subtypeUserName() const;
 
       virtual QPointF pagePos() const;      ///< position in page coordinates

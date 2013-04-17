@@ -29,26 +29,26 @@
 
 #include "widgetstatedata.h"
 
-    //! Enable data
-    class EnableData: public WidgetStateData
-    {
+//! Enable data
+class EnableData: public WidgetStateData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        EnableData( QObject* parent, QWidget* target, int duration, bool state = true ):
-        WidgetStateData( parent, target, duration, state )
-        { target->installEventFilter( this ); }
+            //! constructor
+            EnableData( QObject* parent, QWidget* target, int duration, bool state = true ):
+                  WidgetStateData( parent, target, duration, state ) {
+                  target->installEventFilter( this );
+                  }
 
-        //! destructor
-        virtual ~EnableData( void )
-        {}
+            //! destructor
+            virtual ~EnableData( void )
+                  {}
 
-        //! event filter
-        virtual bool eventFilter( QObject*, QEvent* );
+            //! event filter
+            virtual bool eventFilter( QObject*, QEvent* );
 
-    };
+      };
 
 #endif

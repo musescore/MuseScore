@@ -32,8 +32,7 @@ qreal AnimationData::OpacityInvalid = -1;
 //   setupAnimation
 //---------------------------------------------------------
 
-void AnimationData::setupAnimation(const Animation::Pointer& animation, const QByteArray& property)
-      {
+void AnimationData::setupAnimation(const Animation::Pointer& animation, const QByteArray& property) {
       // setup animation
       animation.data()->setStartValue(0.0);
       animation.data()->setEndValue(1.0);

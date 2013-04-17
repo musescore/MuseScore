@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: key.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -174,7 +173,7 @@ KeySigEvent KeyList::key(int tick) const
       {
       if (empty())
             return KeySigEvent();
-      ciKeyList i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return KeySigEvent();
       --i;
@@ -188,7 +187,7 @@ KeySigEvent KeyList::key(int tick) const
 void KeyList::write(Xml& xml, const char* name) const
       {
       xml.stag(name);
-      for (ciKeyList i = begin(); i != end(); ++i) {
+      for (auto i = begin(); i != end(); ++i) {
             if (i->second.custom())
                   xml.tagE("key tick=\"%d\" custom=\"%d\"", i->first, i->second.customType());
             else

@@ -27,18 +27,11 @@ class InspectorImage : public InspectorBase {
 
       Ui::InspectorImage b;
 
-      static const int _inspectorItems = 7;
-      InspectorItem iList[_inspectorItems];
-
       void updateScaleFromSize(const QSizeF&);
       void updateSizeFromScale(const QSizeF&);
 
    protected slots:
       virtual void valueChanged(int idx);
-
-   protected:
-      virtual const InspectorItem& item(int idx) const { return iList[idx]; }
-      virtual int inspectorItems() const { return _inspectorItems; }
 
    public:
       InspectorImage(QWidget* parent);

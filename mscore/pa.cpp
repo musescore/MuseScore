@@ -19,7 +19,6 @@
 //=============================================================================
 
 #include "preferences.h"
-#include "msynth/synti.h"
 #include "libmscore/score.h"
 #include "musescore.h"
 #include "seq.h"
@@ -70,7 +69,7 @@ Portaudio::~Portaudio()
       if (initialized) {
             PaError err = Pa_CloseStream(stream);
             if (err != paNoError)
-                  qDebug("Portaudio close stream failed: %s\n", Pa_GetErrorText(err));
+                  qDebug("Portaudio close stream failed: %s", Pa_GetErrorText(err));
             Pa_Terminate();
             }
       }
@@ -84,12 +83,12 @@ bool Portaudio::init()
       {
       PaError err = Pa_Initialize();
       if (err != paNoError) {
-            qDebug("Portaudio initialize failed: %s\n", Pa_GetErrorText(err));
+            qDebug("Portaudio initialize failed: %s", Pa_GetErrorText(err));
             return false;
             }
       initialized = true;
       if (MScore::debugMode)
-            qDebug("using PortAudio Version: %s\n", Pa_GetVersionText());
+            qDebug("using PortAudio Version: %s", Pa_GetVersionText());
 
       PaDeviceIndex idx = preferences.portaudioDevice;
 
@@ -112,7 +111,7 @@ bool Portaudio::init()
             out.device = Pa_GetDefaultOutputDevice();
             err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
             if (err != paNoError) {
-                  qDebug("Portaudio open stream %d failed: %s\n", idx, Pa_GetErrorText(err));
+                  qDebug("Portaudio open stream %d failed: %s", idx, Pa_GetErrorText(err));
                   return false;
                   }
             }
@@ -123,7 +122,7 @@ bool Portaudio::init()
       midiDriver = new PortMidiDriver(seq);
 #endif
       if (midiDriver && !midiDriver->init()) {
-            qDebug("Init midi driver failed\n");
+            qDebug("Init midi driver failed");
             delete midiDriver;
             midiDriver = 0;
 #ifdef USE_PORTMIDI
@@ -230,7 +229,7 @@ bool Portaudio::start()
       {
       PaError err = Pa_StartStream(stream);
       if (err != paNoError) {
-            qDebug("Portaudio: start stream failed: %s\n", Pa_GetErrorText(err));
+            qDebug("Portaudio: start stream failed: %s", Pa_GetErrorText(err));
             return false;
             }
       return true;
@@ -244,7 +243,7 @@ bool Portaudio::stop()
       {
       PaError err = Pa_StopStream(stream);      // sometimes the program hangs here on exit
       if (err != paNoError) {
-            qDebug("Portaudio: stop failed: %s\n", Pa_GetErrorText(err));
+            qDebug("Portaudio: stop failed: %s", Pa_GetErrorText(err));
             return false;
             }
       return true;
@@ -316,7 +315,7 @@ int Portaudio::currentApi() const
                         }
                   }
             }
-      qDebug("Portaudio: no current api found for device %d\n", idx);
+      qDebug("Portaudio: no current api found for device %d", idx);
       return -1;
       }
 
@@ -340,7 +339,7 @@ int Portaudio::currentDevice() const
                         }
                   }
             }
-      qDebug("Portaudio: no current ApiDevice found for device %d\n", idx);
+      qDebug("Portaudio: no current ApiDevice found for device %d", idx);
       return -1;
       }
 

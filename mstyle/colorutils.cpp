@@ -25,8 +25,7 @@
 //   ColorUtils
 //---------------------------------------------------------
 
-static inline qreal wrap(qreal a, qreal d = 1.0)
-      {
+static inline qreal wrap(qreal a, qreal d = 1.0) {
       qreal r = fmod(a, d);
       return (r < 0.0 ? d + r : (r > 0.0 ? r : 0.0));
       }
@@ -35,16 +34,14 @@ static inline qreal wrap(qreal a, qreal d = 1.0)
 //   KHCY
 //---------------------------------------------------------
 
-KHCY::KHCY(qreal h_, qreal c_, qreal y_, qreal a_)
-      {
+KHCY::KHCY(qreal h_, qreal c_, qreal y_, qreal a_) {
       h = h_;
       c = c_;
       y = y_;
       a = a_;
       }
 
-KHCY::KHCY(const QColor& color)
-      {
+KHCY::KHCY(const QColor& color) {
       qreal r = gamma(color.redF());
       qreal g = gamma(color.greenF());
       qreal b = gamma(color.blueF());
@@ -77,8 +74,7 @@ KHCY::KHCY(const QColor& color)
 //   qColor
 //---------------------------------------------------------
 
-QColor KHCY::qColor() const
-      {
+QColor KHCY::qColor() const {
       // start with sane component values
       qreal _h = wrap(h);
       qreal _c = normalize(c);
@@ -143,8 +139,7 @@ QColor KHCY::qColor() const
 //   luma
 //---------------------------------------------------------
 
-qreal KHCY::luma(const QColor& color)
-      {
+qreal KHCY::luma(const QColor& color) {
       return lumag(gamma(color.redF()), gamma(color.greenF()), gamma(color.blueF()));
       }
 
@@ -152,8 +147,7 @@ qreal KHCY::luma(const QColor& color)
 //   mixQreal
 //---------------------------------------------------------
 
-static inline qreal mixQreal(qreal a, qreal b, qreal bias)
-      {
+static inline qreal mixQreal(qreal a, qreal b, qreal bias) {
       return a + (b - a) * bias;
       }
 
@@ -161,8 +155,7 @@ static inline qreal mixQreal(qreal a, qreal b, qreal bias)
 //   tintHelper
 //---------------------------------------------------------
 
-QColor ColorUtils::tintHelper(const QColor &base, const QColor &color, qreal amount)
-      {
+QColor ColorUtils::tintHelper(const QColor& base, const QColor& color, qreal amount) {
       KHCY result(ColorUtils::mix(base, color, pow(amount, 0.3)));
       result.y = mixQreal(ColorUtils::luma(base), result.y, amount);
       return result.qColor();
@@ -172,8 +165,7 @@ QColor ColorUtils::tintHelper(const QColor &base, const QColor &color, qreal amo
 //   contrastRatio
 //---------------------------------------------------------
 
-qreal ColorUtils::contrastRatio(const QColor &c1, const QColor &c2)
-      {
+qreal ColorUtils::contrastRatio(const QColor& c1, const QColor& c2) {
       qreal y1 = luma(c1), y2 = luma(c2);
       if (y1 > y2)
             return (y1 + 0.05) / (y2 + 0.05);
@@ -185,13 +177,16 @@ qreal ColorUtils::contrastRatio(const QColor &c1, const QColor &c2)
 //   tint
 //---------------------------------------------------------
 
-QColor ColorUtils::tint(const QColor &base, const QColor &color, qreal amount)
-      {
+QColor ColorUtils::tint(const QColor& base, const QColor& color, qreal amount) {
       if (amount <= 0.0)
             return base;
       if (amount >= 1.0)
             return color;
+#ifdef Q_WS_MAC
+      if (isnan(amount))
+#else      
       if (std::isnan(amount))
+#endif
             return base;
 
       double ri = contrastRatio(base, color);
@@ -199,7 +194,7 @@ QColor ColorUtils::tint(const QColor &base, const QColor &color, qreal amount)
       double u = 1.0, l = 0.0;
       QColor result;
       for (int i = 12 ; i ; --i) {
-            double a = 0.5 * (l+u);
+            double a = 0.5 * (l + u);
             result = tintHelper(base, color, a);
             double ra = contrastRatio(base, result);
             if (ra > rg)
@@ -214,13 +209,16 @@ QColor ColorUtils::tint(const QColor &base, const QColor &color, qreal amount)
 //   mix
 //---------------------------------------------------------
 
-QColor ColorUtils::mix(const QColor &c1, const QColor &c2, qreal bias)
-      {
+QColor ColorUtils::mix(const QColor& c1, const QColor& c2, qreal bias) {
       if (bias <= 0.0)
             return c1;
       if (bias >= 1.0)
             return c2;
+#ifdef Q_WS_MAC
+      if (isnan(bias))
+#else      
       if (std::isnan(bias))
+#endif
             return c1;
 
       qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
@@ -235,8 +233,7 @@ QColor ColorUtils::mix(const QColor &c1, const QColor &c2, qreal bias)
 //   lighten
 //---------------------------------------------------------
 
-QColor ColorUtils::lighten(const QColor &color, qreal ky, qreal kc)
-      {
+QColor ColorUtils::lighten(const QColor& color, qreal ky, qreal kc) {
       KHCY c(color);
       c.y = 1.0 - normalize((1.0 - c.y) * (1.0 - ky));
       c.c = 1.0 - normalize((1.0 - c.c) * kc);
@@ -247,8 +244,7 @@ QColor ColorUtils::lighten(const QColor &color, qreal ky, qreal kc)
 //   darken
 //---------------------------------------------------------
 
-QColor ColorUtils::darken(const QColor &color, qreal ky, qreal kc)
-      {
+QColor ColorUtils::darken(const QColor& color, qreal ky, qreal kc) {
       KHCY c(color);
       c.y = normalize(c.y * (1.0 - ky));
       c.c = normalize(c.c * kc);
@@ -259,8 +255,7 @@ QColor ColorUtils::darken(const QColor &color, qreal ky, qreal kc)
 //   shade
 //---------------------------------------------------------
 
-QColor ColorUtils::shade(const QColor &color, qreal ky, qreal kc)
-      {
+QColor ColorUtils::shade(const QColor& color, qreal ky, qreal kc) {
       KHCY c(color);
       c.y = normalize(c.y + ky);
       c.c = normalize(c.c + kc);

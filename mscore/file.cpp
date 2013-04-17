@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: file.cpp 5645 2012-05-18 13:34:03Z wschweer $
 //
-//  Copyright (C) 2002-2011 Werner Schweer et al.
+//  Copyright (C) 2002-2013 Werner Schweer et al.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -26,7 +26,7 @@
 #include "globals.h"
 #include "musescore.h"
 #include "scoreview.h"
-#include "libmscore/exportmidi.h"
+#include "exportmidi.h"
 #include "libmscore/xml.h"
 #include "libmscore/element.h"
 #include "libmscore/note.h"
@@ -78,7 +78,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
-#include "msynth/synti.h"
+#include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 
 #ifdef OMR
@@ -100,11 +100,13 @@ extern Score::FileError importMuseData(Score*, const QString& name);
 extern Score::FileError importLilypond(Score*, const QString& name);
 extern Score::FileError importBB(Score*, const QString& name);
 extern Score::FileError importCapella(Score*, const QString& name);
+extern Score::FileError importCapXml(Score*, const QString& name);
 extern Score::FileError importOve(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
 extern bool savePositions(Score*, const QString& name);
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   paintElements
@@ -249,15 +251,16 @@ void MuseScore::loadFiles()
       QStringList files = getOpenScoreNames(
          lastOpenPath,
 #ifdef OMR
-         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
+         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
 #else
-         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
+         tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5);;")+
 #endif
          tr("MuseScore Files (*.mscz *.mscx);;")+
          tr("MusicXML Files (*.xml *.mxl);;")+
          tr("MIDI Files (*.mid *.midi *.kar);;")+
          tr("Muse Data Files (*.md);;")+
          tr("Capella Files (*.cap);;")+
+         tr("CapXML Files <experimental> (*.capx);;")+
          tr("BB Files <experimental> (*.mgu *.MGU *.sgu *.SGU);;")+
 #ifdef OMR
          tr("PDF Files <experimental omr> (*.pdf);;")+
@@ -323,25 +326,22 @@ Score* MuseScore::readScore(const QString& name)
 
 //---------------------------------------------------------
 //   saveFile
+///   Save the current score.
+///   Handles the GUI's file-save action.
+//
 //    return true on success
 //---------------------------------------------------------
-
-/**
- Save the current score.
- Handles the GUI's file-save action.
- */
 
 void MuseScore::saveFile()
       {
       if (cs == 0)
             return;
-      cs->setSyntiState(synti->state());
       if (cs->created()) {
             QString selectedFilter;
             QString fn = cs->fileInfo()->fileName();
             Text* t = cs->getText(TEXT_STYLE_TITLE);
             if (t)
-                  fn = t->getText();
+                  fn = t->text();
             QString name = createDefaultFileName(fn);
             QString f1 = tr("Compressed MuseScore File (*.mscz)");
             QString f2 = tr("MuseScore File (*.mscx)");
@@ -468,7 +468,7 @@ void MuseScore::newFile()
             score->deselectAll();
             for (Segment* s = score->firstMeasure()->first(); s;) {
                   Segment* ns = s->next1();
-                  if (s->subtype() == Segment::SegChordRest && s->tick() == 0) {
+                  if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
                         int tracks = s->elist().size();
                         for (int track = 0; track < tracks; ++track) {
                               delete s->element(track);
@@ -476,11 +476,11 @@ void MuseScore::newFile()
                               }
                         }
                   else if (
-                     (s->subtype() == Segment::SegChordRest)
+                     (s->segmentType() == Segment::SegChordRest)
 //                     || (s->subtype() == Segment::SegClef)
-                     || (s->subtype() == Segment::SegKeySig)
-                     || (s->subtype() == Segment::SegGrace)
-                     || (s->subtype() == Segment::SegBreath)
+                     || (s->segmentType() == Segment::SegKeySig)
+                     || (s->segmentType() == Segment::SegGrace)
+                     || (s->segmentType() == Segment::SegBreath)
                      ) {
                         s->measure()->remove(s);
                         delete s;
@@ -534,13 +534,11 @@ void MuseScore::newFile()
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   Staff* staff = score->staff(staffIdx);
                   if (tick == 0) {
-                        if (!staff->isTabStaff()) {
-                              TimeSig* ts = new TimeSig(score);
-                              ts->setTrack(staffIdx * VOICES);
-                              ts->setSig(timesig, timesigType);
-                              Segment* s = measure->getSegment(ts, 0);
-                              s->add(ts);
-                              }
+                        TimeSig* ts = new TimeSig(score);
+                        ts->setTrack(staffIdx * VOICES);
+                        ts->setSig(timesig, timesigType);
+                        Segment* s = measure->getSegment(ts, 0);
+                        s->add(ts);
                         Part* part = staff->part();
                         if (!part->instr()->useDrumset()) {
                               //
@@ -603,7 +601,7 @@ void MuseScore::newFile()
       //
       Measure* m = score->firstMeasure();
       for (Segment* s = m->first(); s; s = s->next()) {
-            if (s->subtype() == Segment::SegChordRest) {
+            if (s->segmentType() == Segment::SegChordRest) {
                   if (s->element(0)) {
                         score->select(s->element(0), SELECT_SINGLE, 0);
                         break;
@@ -670,8 +668,6 @@ void MuseScore::newFile()
             }
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
-
-      score->syntiState().prepend(SyntiParameter("soundfont", MScore::soundFont));
 
       score->rebuildMidiMapping();
       score->doLayout();
@@ -896,61 +892,6 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
       }
 
 //---------------------------------------------------------
-//   getSoundFont
-//---------------------------------------------------------
-
-QStringList MuseScore::getSoundFont(const QString& d)
-      {
-      QString filter = tr("SoundFont Files (*.sf2 *.SF2 *.sf3);;All (*)");
-
-      QFileInfo mySoundFonts(preferences.mySoundFontsPath);
-      if (mySoundFonts.isRelative())
-            mySoundFonts.setFile(QDir::home(), preferences.mySoundFontsPath);
-
-      QString defaultPath = d.isEmpty() ? mySoundFonts.absoluteFilePath() : d;
-
-      if (preferences.nativeDialogs) {
-             QStringList s = QFileDialog::getOpenFileNames(
-               mscore,
-               MuseScore::tr("Choose Synthesizer SoundFont"),
-               defaultPath,
-               filter
-               );
-            return s;
-            }
-
-      if (loadSoundFontDialog == 0) {
-            loadSoundFontDialog = new QFileDialog(this);
-            loadSoundFontDialog->setFileMode(QFileDialog::ExistingFiles);
-            loadSoundFontDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadSoundFontDialog->setWindowTitle(tr("MuseScore: Choose Synthesizer SoundFont"));
-            loadSoundFontDialog->setNameFilter(filter);
-            loadSoundFontDialog->setDirectory(defaultPath);
-
-            QSettings settings;
-            loadSoundFontDialog->restoreState(settings.value("loadSoundFontDialog").toByteArray());
-            loadSoundFontDialog->setAcceptMode(QFileDialog::AcceptOpen);
-            }
-
-      //
-      // setup side bar urls
-      //
-      QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(mySoundFonts.absoluteFilePath()));
-      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/sound"));
-      loadSoundFontDialog->setSidebarUrls(urls);
-
-      if (loadSoundFontDialog->exec()) {
-            QStringList result = loadSoundFontDialog->selectedFiles();
-            return result;
-            }
-      return QStringList();
-      }
-
-//---------------------------------------------------------
 //   getChordStyleFilename
 //---------------------------------------------------------
 
@@ -1131,14 +1072,8 @@ QString MuseScore::getAudioFile(const QString& d)
 //   getFotoFilename
 //---------------------------------------------------------
 
-QString MuseScore::getFotoFilename()
+QString MuseScore::getFotoFilename(QString& filter, QString* selectedFilter)
       {
-      QString filter =
-         tr("PNG Bitmap Graphic (*.png);;")+
-         tr("PDF File (*.pdf);;")+
-         tr("Encapsulated PostScript File (*.eps);;")+
-         tr("Scalable Vector Graphic (*.svg);;");
-
       QString title       = tr("MuseScore: Save Image");
 
       QFileInfo myImages(preferences.myImagesPath);
@@ -1152,7 +1087,8 @@ QString MuseScore::getFotoFilename()
                this,
                title,
                defaultPath,
-               filter
+               filter,
+               selectedFilter
                );
             return fn;
             }
@@ -1183,6 +1119,7 @@ QString MuseScore::getFotoFilename()
 
       if (saveImageDialog->exec()) {
             QStringList result = saveImageDialog->selectedFiles();
+            *selectedFilter = saveImageDialog->selectedNameFilter();
             return result.front();
             }
       return QString();
@@ -1652,8 +1589,6 @@ bool MuseScore::exportParts()
 
 bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QString& ext)
       {
-      cs->setSyntiState(synti->state());
-
       bool rv = false;
       QString suffix = "." + ext;
       QString fn(path);
@@ -1839,6 +1774,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   { "mgu",  &importBB                 },
                   { "sgu",  &importBB                 },
                   { "cap",  &importCapella            },
+                  { "capx", &importCapXml             },
                   { "ove",  &importOve                },
                   { "scw",  &importOve                },
 #ifdef OMR
@@ -1873,7 +1809,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   qDebug("unknown file suffix <%s>, name <%s>\n", qPrintable(cs), qPrintable(name));
                   return Score::FILE_UNKNOWN_TYPE;
                   }
-            score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
             score->connectTies();
             }
       score->rebuildMidiMapping();
@@ -1897,7 +1832,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         //      Clef* clef = static_cast<Clef*>(e);
                         //      st->setClef(s->tick(), clef->clefTypeList());
                         //      }
-                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);

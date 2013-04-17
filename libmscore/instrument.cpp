@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: instrument.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -18,8 +17,11 @@
 #include "utils.h"
 #include "tablature.h"
 #include "instrtemplate.h"
+#include "synthesizer/msynthesizer.h"
+#include "mscore.h"
 
 Instrument InstrumentList::defaultInstrument;
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   write
@@ -46,15 +48,15 @@ void NamedEventList::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "program") {
                   Event ev(ME_CONTROLLER);
-                  ev.setController(CTRL_PROGRAM);
-                  ev.setValue(e.intAttribute("value", 0));
+                  ev.setDataA(CTRL_PROGRAM);
+                  ev.setDataB(e.intAttribute("value", 0));
                   events.append(ev);
                   e.skipCurrentElement();
                   }
             else if (tag == "controller") {
                   Event ev(ME_CONTROLLER);
-                  ev.setController(e.intAttribute("ctrl", 0));
-                  ev.setValue(e.intAttribute("value", 0));
+                  ev.setDataA(e.intAttribute("ctrl", 0));
+                  ev.setDataB(e.intAttribute("value", 0));
                   events.append(ev);
                   e.skipCurrentElement();
                   }
@@ -328,7 +330,7 @@ Channel::Channel()
       {
       for(int i = 0; i < A_INIT_COUNT; ++i)
             init.append(0);
-      synti    = 0;     // -1;
+      synti    = "Fluid";     // default synthesizer
       channel  = -1;
       program  = -1;
       bank     = 0;
@@ -359,24 +361,25 @@ void Channel::write(Xml& xml) const
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
-                  if (e.controller() == CTRL_HBANK && e.value() == 0)
+                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_LBANK && e.value() == 0)
+                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_VOLUME && e.value() == 100)
+                  if (e.dataA() == CTRL_VOLUME && e.dataB() == 100)
                         continue;
-                  if (e.controller() == CTRL_PANPOT && e.value() == 64)
+                  if (e.dataA() == CTRL_PANPOT && e.dataB() == 64)
                         continue;
-                  if (e.controller() == CTRL_REVERB_SEND && e.value() == 0)
+                  if (e.dataA() == CTRL_REVERB_SEND && e.dataB() == 0)
                         continue;
-                  if (e.controller() == CTRL_CHORUS_SEND && e.value() == 0)
+                  if (e.dataA() == CTRL_CHORUS_SEND && e.dataB() == 0)
                         continue;
                   }
 
             e.write(xml);
             }
-      if (synti)                    // HACK
-            xml.tag("synti", "Aeolus");
+      if (!MScore::testMode)
+            // xml.tag("synti", ::synti->name(synti));
+            xml.tag("synti", synti);
       if (mute)
             xml.tag("mute", mute);
       if (solo)
@@ -394,7 +397,7 @@ void Channel::write(Xml& xml) const
 
 void Channel::read(XmlReader& e)
       {
-      synti = 0;
+      // synti = 0;
       name = e.attribute("name");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -432,8 +435,8 @@ void Channel::read(XmlReader& e)
                               Event e(ME_CONTROLLER);
                               e.setOntime(-1);
                               e.setChannel(0);
-                              e.setController(ctrl);
-                              e.setValue(value);
+                              e.setDataA(ctrl);
+                              e.setDataB(value);
                               init.append(e);
                               }
                               break;
@@ -451,10 +454,8 @@ void Channel::read(XmlReader& e)
                   midiActions.append(a);
                   }
             else if (tag == "synti") {
-                  if (e.readElementText() == "Aeolus")
-                        synti = 1;
-                  else
-                        synti = 0;
+                  QString s = e.readElementText();
+                  synti = s;
                   }
             else if (tag == "descr")
                   descr = e.readElementText();
@@ -481,39 +482,27 @@ void Channel::updateInitList() const
       Event e;
       if (program != -1) {
             e.setType(ME_CONTROLLER);
-            e.setController(CTRL_PROGRAM);
-            e.setValue(program);
+            e.setDataA(CTRL_PROGRAM);
+            e.setDataB(program);
             init[A_PROGRAM] = e;
             }
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_HBANK);
-      e.setValue((bank >> 7) & 0x7f);
+      e.setData(ME_CONTROLLER, CTRL_HBANK, (bank >> 7) & 0x7f);
       init[A_HBANK] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_LBANK);
-      e.setValue(bank & 0x7f);
+      e.setData(ME_CONTROLLER, CTRL_LBANK, bank & 0x7f);
       init[A_LBANK] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_VOLUME);
-      e.setValue(volume);
+      e.setData(ME_CONTROLLER, CTRL_VOLUME, volume);
       init[A_VOLUME] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_PANPOT);
-      e.setValue(pan);
+      e.setData(ME_CONTROLLER, CTRL_PANPOT, pan);
       init[A_PAN] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_CHORUS_SEND);
-      e.setValue(chorus);
+      e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus);
       init[A_CHORUS] = e;
 
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_REVERB_SEND);
-      e.setValue(reverb);
+      e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
       init[A_REVERB] = e;
       }
 

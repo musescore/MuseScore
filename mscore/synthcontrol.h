@@ -23,11 +23,6 @@
 
 #include "ui_synthcontrol.h"
 
-class MasterSynth;
-namespace Awl {
-      class AbstractSlider;
-      };
-
 class Score;
 
 //---------------------------------------------------------
@@ -37,28 +32,18 @@ class Score;
 class SynthControl : public QWidget, Ui::SynthControl {
       Q_OBJECT
 
-      Awl::AbstractSlider* aeolusSection[4][5];
-
+      Score* _score;
       virtual void closeEvent(QCloseEvent*);
       void updateSyntiValues();
       void updateUpDownButtons();
 
    private slots:
-      void sfUpClicked();
-      void sfDownClicked();
-      void sfDeleteClicked();
-      void sfAddClicked();
-
       void gainChanged(double, int);
       void masterTuningChanged(double);
-      void reverbValueChanged(double val, int idx);
-      void chorusValueChanged(double val, int idx);
-      void chorusSpeedChanged(double val);
-      void chorusDepthChanged(double val);
-      void setAeolusValue(double, int);
-      void currentSoundFontChanged(int row);
-      void chorusNumberChanged(int val);
-      void chorusTypeChanged(int val);
+      void effectAChanged(int);
+      void effectBChanged(int);
+      void loadButtonClicked();
+      void saveButtonClicked();
 
    signals:
       void closed(bool);
@@ -73,7 +58,8 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void updatePreferences();
       void setMeter(float, float, float, float);
       void stop();
-      void setScore(Score*);
+      void setScore(Score* s) { _score = s; }
+      void writeSettings() const;
       };
 
 #endif

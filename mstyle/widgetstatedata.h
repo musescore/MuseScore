@@ -30,34 +30,33 @@
 #include "genericdata.h"
 
 
-    //! handle widget state (hover/focus/enable) changes
-    class WidgetStateData: public GenericData
-    {
+//! handle widget state (hover/focus/enable) changes
+class WidgetStateData: public GenericData {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        WidgetStateData( QObject* parent, QWidget* target, int duration, bool state = false ):
-            GenericData( parent, target, duration ),
-            state_( state )
-        {}
+            //! constructor
+            WidgetStateData( QObject* parent, QWidget* target, int duration, bool state = false ):
+                  GenericData( parent, target, duration ),
+                  state_( state )
+                  {}
 
-        //! destructor
-        virtual ~WidgetStateData( void )
-        {}
+            //! destructor
+            virtual ~WidgetStateData( void )
+                  {}
 
-        /*!
-        returns true if hover has Changed
-        and starts timer accordingly
-        */
-        virtual bool updateState( bool value );
+            /*!
+            returns true if hover has Changed
+            and starts timer accordingly
+            */
+            virtual bool updateState( bool value );
 
-        private:
+      private:
 
-        bool state_;
+            bool state_;
 
-    };
+      };
 
 #endif

@@ -33,9 +33,10 @@
 
 #define INSTALL_NAME      "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX        "${CMAKE_INSTALL_PREFIX}"
-#define VERSION           "${Mscore_VERSION_FULL}"
+#define VERSION           "${MUSESCORE_VERSION_FULL}"
 
 #cmakedefine AEOLUS
+#cmakedefine ZERBERUS
 #cmakedefine OMR
 #cmakedefine OCR
 #cmakedefine OSC
@@ -45,5 +46,7 @@
 #cmakedefine Q_WS_UIKIT
 
 #define USE_BSP     true
-#define USE_GLYPHS  true
+
+// does not work on windows/mac:
+//#define USE_GLYPHS  true
 

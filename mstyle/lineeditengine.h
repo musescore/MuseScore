@@ -31,51 +31,49 @@
 #include "datamap.h"
 #include "lineeditdata.h"
 
-    //! used for simple widgets
-    class LineEditEngine: public BaseEngine
-    {
+//! used for simple widgets
+class LineEditEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        LineEditEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            LineEditEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~LineEditEngine( void )
-        {}
+            //! destructor
+            virtual ~LineEditEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QLineEdit* );
+            //! register widget
+            virtual bool registerWidget( QLineEdit* );
 
-        //! duration
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! duration
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! maps
-        DataMap<LineEditData> data_;
+            //! maps
+            DataMap<LineEditData> data_;
 
-    };
+      };
 
 #endif

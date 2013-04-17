@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -46,12 +45,14 @@ enum P_ID {
       P_LEADING_SPACE,
       P_TRAILING_SPACE,
 
-      P_DISTRIBUTE,
+/*20*/P_DISTRIBUTE,
       P_MIRROR_HEAD,
       P_DOT_POSITION,
       P_TUNING,
       P_PAUSE,
       P_BARLINE_SPAN,
+      P_BARLINE_SPAN_FROM,
+      P_BARLINE_SPAN_TO,
       P_USER_OFF,
       P_FRET,
 
@@ -84,10 +85,12 @@ enum P_ID {
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
       P_TEXT_STYLE,
+      P_TEXT,
+      P_HTML_TEXT,
       P_USER_MODIFIED,
+
       P_BEAM_POS,
       P_BEAM_MODE,
-
       P_USER_LEN,       // used for stems
       P_SPACE,          // used for spacer
       P_TEMPO,
@@ -96,9 +99,9 @@ enum P_ID {
       P_NUMERATOR_STRING,
       P_DENOMINATOR_STRING,
       P_SHOW_NATURALS,
+
       P_BREAK_HINT,
       P_FBPREFIX,             // used for FiguredBassItem
-
       P_FBDIGIT,              //    "           "
       P_FBSUFFIX,             //    "           "
       P_FBCONTINUATIONLINE,   //    "           "
@@ -107,15 +110,34 @@ enum P_ID {
       P_FBPARENTHESIS3,       //    "           "
       P_FBPARENTHESIS4,       //    "           "
       P_FBPARENTHESIS5,       //    "           "
+
       P_VOLTA_TYPE,
       P_OTTAVA_TYPE,
-
       P_TRILL_TYPE,
       P_HAIRPIN_TYPE,
       P_VELO_CHANGE,
       P_DYNAMIC_RANGE,
       P_PLACEMENT,
       P_VELOCITY,
+      P_JUMP_TO,
+      P_PLAY_UNTIL,
+
+      P_CONTINUE_AT,
+      P_LABEL,
+      P_MARKER_TYPE,
+      P_ARP_USER_LEN1,
+      P_ARP_USER_LEN2,
+      P_REPEAT_FLAGS,
+      P_END_BARLINE_TYPE,
+      P_END_BARLINE_VISIBLE,
+      P_END_BARLINE_COLOR,
+      P_MEASURE_NUMBER_MODE,
+
+      P_GLISS_TYPE,
+      P_GLISS_TEXT,
+      P_GLISS_SHOW_TEXT,
+
+      P_DIAGONAL,
 
       P_END
       };
@@ -125,7 +147,8 @@ enum P_TYPE {
       T_BOOL,
       T_INT,
       T_REAL,
-      T_SREAL,
+      T_SPATIUM,
+      T_SP_REAL,
       T_FRACTION,
       T_POINT,
       T_SIZE,
@@ -137,12 +160,14 @@ enum P_TYPE {
       T_LAYOUT_BREAK,
       T_VALUE_TYPE,
       T_BEAM_MODE,
-      T_PLACEMENT
+      T_PLACEMENT,
+      T_TEMPO
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
+extern bool propertyLink(P_ID id);
 
 #endif
 

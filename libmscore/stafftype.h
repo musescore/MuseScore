@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: stafftype.h 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -26,31 +25,44 @@
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_DN   3.0
 #define STAFFTYPE_TAB_DEFAULTSTEMDIST_DN  1.0
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN  STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
+#define STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU 3.5
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
+
+// the ratio between the length of a full stem and the lenght of a short stem
+// (used for half note stems, in some TAB styles)
+#define STAFFTYPE_TAB_SHORTSTEMRATIO      0.5
 
 #define STAFFTYPE_TAB_SLASH_WIDTH         1.2   /* X width of half note slash */
 #define STAFFTYPE_TAB_SLASH_SLANTY        0.8   /* the Y coord of the slash slant */
 #define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
-#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next */
+#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
+                                                      includes slash thickness and empty space between slashes*/
 // the total height of a double slash
 #define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL+STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP-STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_2TOTHEIGHT)*0.5)
+// same for a 4-ple slash
+#define STAFFTYPE_TAB_SLASH_4TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL*3+STAFFTYPE_TAB_SLASH_SLANTY)
+// the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_4STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP-STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
+// the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
+#define STAFFTYPE_TAB_SLASH_4STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
 
 class Chord;
+class ChordRest;
+class QPainter;
 class Staff;
 class Xml;
-class QPainter;
 
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
 
 class StaffType {
-      bool _buildin;          // used for memory management: do not delete if true
+      bool _builtin;          // used for memory management: do not delete if true
 
    protected:
       QString _name;
@@ -65,6 +77,14 @@ class StaffType {
 
    public:
       StaffType();
+      StaffType(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig) :
+            _name(name), _lineDistance(Spatium(lineDist)), _genClef(genClef),_showBarlines(showBarLines),
+            _slashStyle(stemless), _genTimesig(genTimeSig)
+            {
+            _builtin = false;
+            setLines(lines);
+            }
       virtual ~StaffType() {}
 
       QString name() const                     { return _name;            }
@@ -94,11 +114,20 @@ class StaffType {
       void setGenTimesig(bool val)             { _genTimesig = val;       }
       qreal doty1() const;
       qreal doty2() const;
-      bool buildin()            { return _buildin; }
-      void setBuildin(bool val) { _buildin = val; }
+      bool builtin()            { return _builtin; }
+      void setBuiltin(bool val) { _builtin = val; }
+
+      // static function to deal with presets
+      static const StaffType* getDefaultPreset(StaffGroup grp, int* idx);
+      static size_t numOfPresets();
+      static const StaffType* preset(int idx);
+      static const StaffType* presetFromName(QString& name, int* idx);
+      static const StaffType* presetFromXmlName(QString& xmlName, int* idx);
+      static const QString& presetXmlName(int idx);
+      static const QString& presetName(int idx);
       };
 
-// first three staff types in staffTypes[] are build in:
+// first three staff types in staffTypes[] are built-in:
 
 enum {
       PITCHED_STAFF_TYPE, TAB_STAFF_TYPE, PERCUSSION_STAFF_TYPE,
@@ -115,10 +144,17 @@ class StaffTypePitched : public StaffType {
 
    public:
       StaffTypePitched();
+      StaffTypePitched(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
+            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
+            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
+            {
+            }
       virtual StaffGroup group() const        { return PITCHED_STAFF; }
       virtual StaffTypePitched* clone() const { return new StaffTypePitched(*this); }
       virtual const char* groupName() const   { return "pitched"; }
       virtual bool isEqual(const StaffType&) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
@@ -136,13 +172,20 @@ class StaffTypePitched : public StaffType {
 class StaffTypePercussion : public StaffType {
       bool _genKeysig;        // create key signature at beginning of system
       bool _showLedgerLines;
-      virtual bool isEqual(const StaffType&) const;
 
    public:
       StaffTypePercussion();
+      StaffTypePercussion(const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
+            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
+            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
+            {
+            }
       virtual StaffGroup group() const           { return PERCUSSION_STAFF; }
       virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
       virtual const char* groupName() const      { return "percussion"; }
+      virtual bool isEqual(const StaffType&) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml, int) const;
@@ -164,6 +207,7 @@ struct TablatureFretFont {
       QString           family;                 // the family of the physical font to use
       QString           displayName;            // the name to display to the user
       qreal             defPitch;               // the default size of the font
+      qreal             defYOffset;             // the default Y displacement
       QChar             xChar;                  // the char to use for 'x'
       QChar             ghostChar;              // the char to use for ghost notes
       QString           displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
@@ -197,6 +241,7 @@ struct TablatureDurationFont {
       QString           family;                 // the family of the physical font to use
       QString           displayName;            // the name to display to the user
       qreal             defPitch;               // the default size of the font
+      qreal             defYOffset;             // the default Y displacement
       QChar             displayDot;             // the char to use to draw a dot
       QChar             displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
 
@@ -293,7 +338,7 @@ class StaffTypeTablature : public StaffType {
       virtual void read(XmlReader& e);
       virtual void write(Xml& xml, int) const;
       virtual bool isEqual(const StaffType&) const;
-      bool        isSameStructure(const StaffTypeTablature& stt) const;
+      virtual bool isSameStructure(const StaffType& st) const;
 
       QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString     durationString(TDuration::DurationType type, int dots) const;
@@ -349,6 +394,7 @@ class StaffTypeTablature : public StaffType {
 
       // utility functions for tab specially managed elements
       QPointF     chordStemPos(const Chord * chord) const;
+      qreal       chordRestStemPosY(const ChordRest * chordRest) const;
       qreal       chordStemPosX(const Chord * /*chord*/) const    { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
       QPointF     chordStemPosBeam(const  Chord * chord) const;
       qreal       chordStemLength(const Chord *chord) const;
@@ -357,7 +403,7 @@ class StaffTypeTablature : public StaffType {
       static bool             readConfigFile(const QString& fileName);
       static QList<QString>   fontNames(bool bDuration);
       static bool             fontData(bool bDuration, int nIdx, QString *pFamily,
-                                    QString *pDisplayName, qreal * pSize);
+                                    QString *pDisplayName, qreal * pSize, qreal *pYOff);
 
    protected:
       void  setDurationMetrics();

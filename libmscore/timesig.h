@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: timesig.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -51,7 +50,7 @@ class TimeSig : public Element {
       Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
 
-      TimeSigType _subtype;
+      TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
       QPointF pz, pn;
@@ -72,7 +71,7 @@ class TimeSig : public Element {
       TimeSig* clone() const             { return new TimeSig(*this); }
       ElementType type() const           { return TIMESIG; }
 
-      TimeSigType subtype() const        { return _subtype; }
+      TimeSigType timeSigType() const    { return _timeSigType; }
 
       void draw(QPainter*) const;
       void write(Xml& xml) const;

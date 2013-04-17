@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: staff.cpp 5333 2012-02-17 10:39:33Z miwarre $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -218,7 +217,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
       for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
             if (s->tick() > tick)
                   break;
-            if (s->subtype() != Segment::SegClef)
+            if (s->segmentType() != Segment::SegClef)
                   continue;
             if (s->element(track) && !s->element(track)->generated())
                   ctl = static_cast<Clef*>(s->element(track))->clefTypeList();
@@ -238,12 +237,14 @@ ClefType Staff::clef(int tick) const
                   break;
             clef = c;
             }
-      return clef == 0 ? _initialClef._concertClef : clef->clefType();
+      if (clef == 0)
+            return score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
+      return clef->clefType();
       }
 
 ClefType Staff::clef(Segment* segment) const
       {
-      ClefType ct = _initialClef._concertClef;
+      ClefType ct = score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
       int track = idx() * VOICES;
       for (;;) {
             segment = segment->prev1(Segment::SegClef);
@@ -300,7 +301,7 @@ void Staff::addClef(Clef* clef)
       {
       if (clef->generated()) {
             if (clef->segment()->tick() == 0)
-                  _initialClef._concertClef = clef->clefType();
+                  _initialClef = clef->clefTypeList();
             return;
             }
       if (clef->segment()->measure() == 0)
@@ -712,16 +713,16 @@ void Staff::setStaffType(StaffType* st)
 //   init
 //---------------------------------------------------------
 
-void Staff::init(const InstrumentTemplate* t, int cidx)
+void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
       {
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
             setSmall(false);
-            setInitialClef(t->clefIdx[0]);
+            setInitialClef(t->clefTypes[0]);
             }
       else {
             setSmall(t->smallStaff[cidx]);
-            setInitialClef(t->clefIdx[cidx]);         // initial clef will be fixed to staff-type clef by setStaffType()
+            setInitialClef(t->clefTypes[cidx]);         // initial clef will be fixed to staff-type clef by setStaffType()
             setBracket(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -730,18 +731,60 @@ void Staff::init(const InstrumentTemplate* t, int cidx)
       // determine staff type and set number of lines accordingly
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
       StaffType* st;
-      if (t->useTablature && t->tablature) {
-            setStaffType(score()->staffType(TAB_STAFF_TYPE));
-            setLines(t->tablature->strings());        // use number of lines from tablature definition:
+      // get staff type if given or from instrument staff type, if not given
+      // (if none, get default for staff group)
+      const StaffType* presetStaffType = (staffType ? staffType : StaffType::preset(t->staffTypePreset) );
+      if (!presetStaffType)
+            presetStaffType = StaffType::getDefaultPreset(t->staffGroup, 0);
+
+      // look for a staff type with same structure among staff types already defined in the score
+      bool found = false;
+      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
+            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
+                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                  found = true;
+                  break;
+                  }
             }
-      else {
-            if (t->useDrumset)
-                  st = score()->staffType(PERCUSSION_STAFF_TYPE);
-            else
-                  st = score()->staffType(PITCHED_STAFF_TYPE);
-            setStaffType(st);
-            setLines(t->staffLines[cidx]);            // use number of lines from instr. template
+      // if staff type not found in score, use from preset (for staff and adding to score staff types)
+      if (!found) {
+            st = presetStaffType->clone();
+            score()->addStaffType(st);
             }
+
+      // use selected staff type
+      setStaffType(st);
+      if (st->group() != TAB_STAFF)             // if not TAB (where num of staff lines is determined by TAB style)
+            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
+      }
+
+//---------------------------------------------------------
+//   initFromStaffType
+//---------------------------------------------------------
+
+void Staff::initFromStaffType(const StaffType* staffType)
+      {
+      // get staff type if given (if none, get default preset for default staff group)
+      const StaffType* presetStaffType = staffType;
+      if (!presetStaffType)
+            presetStaffType = StaffType::getDefaultPreset(PITCHED_STAFF, 0);
+
+      // look for a staff type with same structure among staff types already defined in the score
+      StaffType* st = 0;
+      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
+            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
+                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
+                  break;
+                  }
+            }
+      // if staff type not found in score, use from preset (for staff and adding to score staff types)
+      if (!st) {
+            st = presetStaffType->clone();
+            score()->addStaffType(st);
+            }
+
+      // use selected staff type
+      setStaffType(st);
       }
 
 //---------------------------------------------------------
@@ -760,5 +803,19 @@ void Staff::spatiumChanged(qreal oldValue, qreal newValue)
 bool Staff::show() const
       {
       return _part->show();
+      }
+
+//---------------------------------------------------------
+//   setInitialClef
+//---------------------------------------------------------
+
+void Staff::setInitialClef(const ClefTypeList& cl)
+      {
+      _initialClef = cl;
+      }
+
+void Staff::setInitialClef(ClefType ct)
+      {
+      _initialClef = ClefTypeList(ct, ct);
       }
 

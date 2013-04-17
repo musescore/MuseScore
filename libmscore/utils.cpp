@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: utils.cpp 5622 2012-05-13 07:27:37Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -41,14 +40,14 @@ QRectF handleRect(const QPointF& pos)
 
 Measure* Score::tick2measure(int tick) const
       {
+      Measure* lm = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            int st = m->tick();
-            int l  = m->ticks();
-            if (tick >= st && tick < (st+l))
-                  return m;
+            if (tick < m->tick())
+                  return lm;
+            lm = m;
             }
-      if (firstMeasure() && (tick == lastMeasure()->tick() + lastMeasure()->ticks()))
-            return lastMeasure();
+      if (lm && (tick >= lm->tick()) && (tick <= (lm->tick() + lm->ticks())))
+            return lm;
       qDebug("-tick2measure %d not found", tick);
       return 0;
       }
@@ -629,7 +628,8 @@ int absStep(int tpc, int pitch)
 
 int absStep(int pitch)
       {
-      int tpc = pitch2tpc(pitch);
+      // TODO - does this need to be key-aware?
+      int tpc = pitch2tpc(pitch, KEY_C, PREFER_NEAREST);
       return absStep(tpc, pitch);
       }
 

@@ -52,6 +52,7 @@ private slots:
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
+      void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void dalSegno() { mxmlIoTest("testDalSegno"); }
@@ -137,7 +138,7 @@ void TestMxmlIO::initTestCase()
 
 static void fixupScore(Score* score)
       {
-      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
+//      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
       score->rebuildMidiMapping();
       score->setCreated(false);
@@ -160,7 +161,7 @@ static void fixupScore(Score* score)
                         //      Clef* clef = static_cast<Clef*>(e);
                         //      st->setClef(s->tick(), clef->clefTypeList());
                         //      }
-                        if ((s->subtype() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);

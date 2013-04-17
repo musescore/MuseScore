@@ -23,18 +23,13 @@ MuseScore {
             console.log(qsTr("measure"))
             var segment = m.first()
             while (segment) {
-                console.log(qsTr("  segment"));
-                console.log(segment.type)
-                if (segment.type == Element.SEGMENT)
-                    console.log(qsTr(" ---hello segment"))
-                else
-                    console.log(Element.SEGMENT)
-
                 var element
                 element = segment.element(0)
-                if (element) {
+                if (element && element.type == Element.CHORD) {
                     console.log(qsTr("    element"))
-                    console.log(element.type)
+                    console.log(element.beamMode)
+                    if (element.beamMode == BeamMode.NO)
+                        console.log("  beam no")
                     }
                 segment = segment.next()
                 }

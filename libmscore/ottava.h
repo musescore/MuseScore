@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: ottava.h 5161 2011-12-29 17:26:34Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -47,7 +46,7 @@ class OttavaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Ottava
-//   @P subtype   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB
+//   @P ottavaType   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
@@ -63,8 +62,8 @@ class Ottava : public TextLine {
             };
 
    private:
-      Q_PROPERTY(OttavaType subtype READ subtype WRITE undoSetSubtype)
-      OttavaType _subtype;
+      Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
+      OttavaType _ottavaType;
 
    protected:
       QString text;
@@ -78,9 +77,9 @@ class Ottava : public TextLine {
       virtual Ottava* clone() const    { return new Ottava(*this); }
       virtual ElementType type() const { return OTTAVA; }
 
-      void setSubtype(OttavaType val);
-      OttavaType subtype() const { return _subtype; }
-      void undoSetSubtype(OttavaType val);
+      void setOttavaType(OttavaType val);
+      OttavaType ottavaType() const { return _ottavaType; }
+      void undoSetOttavaType(OttavaType val);
 
       virtual LineSegment* createLineSegment();
       virtual void layout();

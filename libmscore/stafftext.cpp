@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: stafftext.cpp 5427 2012-03-07 12:41:34Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -23,7 +22,7 @@
 StaffText::StaffText(Score* s)
    : Text(s)
       {
-      setTextStyle(s->textStyle(TEXT_STYLE_STAFF));
+      setTextStyleType(TEXT_STYLE_STAFF);
       _setAeolusStops = false;
       clearAeolusStops();
       }

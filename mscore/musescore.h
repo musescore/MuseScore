@@ -35,14 +35,13 @@
 class Shortcut;
 class ScoreView;
 class Element;
-class ToolButton;
 class PreferenceDialog;
 class InstrumentsDialog;
 class Instrument;
 class MidiFile;
 class TextStyleDialog;
 class PlayPanel;
-class InstrumentListEditor;
+class Mixer;
 class Debugger;
 class MeasureListEditor;
 class Score;
@@ -82,6 +81,9 @@ class Sym;
 class MasterPalette;
 class PluginCreator;
 class PluginManager;
+class MasterSynthesizer;
+class Driver;
+class Seq;
 
 struct PluginDescription;
 
@@ -254,7 +256,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* searchCombo;
 
       PlayPanel* playPanel;
-      InstrumentListEditor* iledit;
+      Mixer* mixer;
       SynthControl* synthControl;
       Debugger* debugger;
       MeasureListEditor* measureListEdit;
@@ -310,6 +312,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* loadChordStyleDialog;
       QFileDialog* saveChordStyleDialog;
       QFileDialog* loadSoundFontDialog;
+      QFileDialog* loadSfzFileDialog;
       QFileDialog* loadBackgroundDialog;
       QFileDialog* loadScanDialog;
       QFileDialog* loadAudioDialog;
@@ -388,6 +391,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
       void updateInspector();
+      void showModeText(const QString&);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -453,7 +457,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
       void setNormalState()    { changeState(STATE_NORMAL); }
-      void setEditState(Element*);
       void setPlayState()      { changeState(STATE_PLAY); }
       void setSearchState()    { changeState(STATE_SEARCH); }
       void checkForUpdate();
@@ -517,11 +520,15 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
+
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
+      void updateInputState(Score*);
+
       bool readLanguages(const QString& path);
-      void setRevision(QString& r){rev = r;}
-      QString revision() {return rev;}
+      void setRevision(QString& r)  {rev = r;}
+      Q_INVOKABLE QString revision()            {return rev;}
+      Q_INVOKABLE QString version()            {return VERSION;}
       Q_INVOKABLE void newFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
@@ -544,9 +551,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getSaveScoreName(const QString& title,
          QString& name, const QString& filter, QString* selectedFilter, bool selectFolder);
       QString getStyleFilename(bool open, const QString& title = QString());
-      QString getFotoFilename();
+      QString getFotoFilename(QString& filter, QString *selectedFilter);
       QString getChordStyleFilename(bool open);
-      QStringList getSoundFont(const QString&);
       QString getScanFile(const QString&);
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);
@@ -559,8 +565,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
-
-      void updateInputState(Score*);
 
       void tupletDialog();
       void selectSimilar(Element*, bool);
@@ -578,7 +582,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
       bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
 
-//      Score::FileError readScore(Score*, QString name, bool ignoreVersionError);
       Score* readScore(const QString& name);
 
       bool saveAs(Score*, bool saveCopy = false);
@@ -640,6 +643,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
 extern QString dataPath;
+extern MasterSynthesizer* synti;
+MasterSynthesizer* synthesizerFactory();
+Driver* driverFactory(Seq*, QString driver);
 
 extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];

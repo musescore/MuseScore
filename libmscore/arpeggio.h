@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: arpeggio.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -19,8 +18,8 @@
 class Chord;
 class QPainter;
 
-enum ArpeggioType {
-      ARP_NORMAL, ARP_UP, ARP_DOWN, ARP_BRACKET, ARP_UP_STRAIGHT, ARP_DOWN_STRAIGHT
+enum class ArpeggioType {
+      NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
       };
 
 //---------------------------------------------------------
@@ -30,23 +29,25 @@ enum ArpeggioType {
 class Arpeggio : public Element {
       Q_OBJECT
 
-      ArpeggioType _subtype;
-      Spatium _userLen1;
-      Spatium _userLen2;
+      ArpeggioType _arpeggioType;
+      qreal _userLen1;
+      qreal _userLen2;
       qreal _height;
       int _span;              // spanning staves
 
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       virtual QLineF dragAnchor() const;
       virtual QPointF gripAnchor(int) const;
+      virtual void startEdit(MuseScoreView*, const QPointF&);
 
    public:
       Arpeggio(Score* s);
-      virtual Arpeggio* clone() const  { return new Arpeggio(*this); }
-      virtual ElementType type() const { return ARPEGGIO; }
-      ArpeggioType subtype() const     { return _subtype; }
-      void setSubtype(ArpeggioType v)  { _subtype = v;    }
+      virtual Arpeggio* clone() const      { return new Arpeggio(*this); }
+      virtual ElementType type() const     { return ARPEGGIO; }
+      ArpeggioType arpeggioType() const    { return _arpeggioType; }
+      void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 
-      Chord* chord() const             { return (Chord*)parent(); }
+      Chord* chord() const                 { return (Chord*)parent(); }
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
@@ -58,8 +59,15 @@ class Arpeggio : public Element {
       void write(Xml& xml) const;
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }
-
       void setHeight(qreal);
+
+      qreal userLen1() const    { return _userLen1; }
+      qreal userLen2() const    { return _userLen2; }
+      void setUserLen1(qreal v) { _userLen1 = v; }
+      void setUserLen2(qreal v) { _userLen2 = v; }
+
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
 #endif

@@ -24,14 +24,12 @@
 
 #include <sndfile.h>
 #include "libmscore/score.h"
-#include "fluid/fluid.h"
-// #include "libmscore/tempo.h"
 #include "libmscore/note.h"
-#include "musescore.h"
 #include "libmscore/part.h"
-#include "preferences.h"
-#include "seq.h"
 #include "libmscore/mscore.h"
+#include "synthesizer/msynthesizer.h"
+#include "musescore.h"
+#include "preferences.h"
 
 //---------------------------------------------------------
 //   saveAudio
@@ -50,13 +48,12 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             qDebug("unknown audio file type <%s>\n", qPrintable(ext));
             return false;
             }
+      MasterSynthesizer* synti = synthesizerFactory();
       int sampleRate = preferences.exportAudioSampleRate;
+      synti->setSampleRate(sampleRate);
+      synti->setState(score->synthesizerState());
 
-      MasterSynth* synti = new MasterSynth();
-      synti->init(sampleRate);
-      synti->setState(score->syntiState());
-
-      int oldSampleRate = MScore::sampleRate;
+      int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
 
       EventMap events;
@@ -78,14 +75,14 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       QProgressBar* pBar = showProgressBar();
       pBar->reset();
 
-      float peak = 0.0;
+      float peak  = 0.0;
       double gain = 1.0;
-      EventMap::const_iterator endPos = events.constEnd();
+      EventMap::const_iterator endPos = events.cend();
       --endPos;
-      const int et = (score->utick2utime(endPos.key()) + 1) * MScore::sampleRate;
+      const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
-            playPos = events.constBegin();
+            playPos = events.cbegin();
             pBar->setRange(0, et);
 
             //
@@ -98,7 +95,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                               if (e.type() == ME_INVALID)
                                     continue;
                               e.setChannel(a.channel);
-                              int syntiIdx= score->midiMapping(a.channel)->articulation->synti;
+                              int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
                               synti->play(e, syntiIdx);
                               }
                         }
@@ -107,7 +104,6 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             static const unsigned FRAMES = 512;
             float buffer[FRAMES * 2];
             int playTime = 0;
-            synti->setGain(gain);
 
             for (;;) {
                   unsigned frames = FRAMES;
@@ -117,22 +113,24 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                   memset(buffer, 0, sizeof(float) * FRAMES * 2);
                   int endTime = playTime + frames;
                   float* p = buffer;
-                  for (; playPos != events.constEnd(); ++playPos) {
-                        int f = score->utick2utime(playPos.key()) * MScore::sampleRate;
+                  for (; playPos != events.cend(); ++playPos) {
+                        int f = score->utick2utime(playPos->first) * MScore::sampleRate;
                         if (f >= endTime)
                               break;
                         int n = f - playTime;
-                        synti->process(n, p);
-                        p         += 2 * n;
+                        if (n) {
+                              synti->process(n, p);
+                              p += 2 * n;
+                              }
 
                         playTime  += n;
                         frames    -= n;
-                        const Event& e = playPos.value();
+                        const Event& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
-                                    synti->play(e, c->synti);
+                                    synti->play(e, synti->index(c->synti));
                                     }
                               }
                         }
@@ -140,16 +138,24 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                         synti->process(frames, p);
                         playTime += frames;
                         }
-                  if (pass == 1)
+                  if (pass == 1) {
+                        for (unsigned i = 0; i < FRAMES * 2; ++i)
+                              buffer[i] *= gain;
                         sf_writef_float(sf, buffer, FRAMES);
+                        }
                   else {
                         for (unsigned i = 0; i < FRAMES * 2; ++i)
                               peak = qMax(peak, qAbs(buffer[i]));
                         }
                   playTime = endTime;
                   pBar->setValue(playTime);
+
                   if (playTime >= et)
                         break;
+                  }
+            if (pass == 0 && peak == 0.0) {
+                  qDebug("song is empty");
+                  break;
                   }
             gain = 0.99 / peak;
             }

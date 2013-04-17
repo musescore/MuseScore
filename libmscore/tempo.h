@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tempo.h 5574 2012-04-23 18:54:54Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -37,11 +36,6 @@ struct TEvent {
 //---------------------------------------------------------
 //   Tempomap
 //---------------------------------------------------------
-
-typedef std::map<int, TEvent>::iterator iTEvent;
-typedef std::map<int, TEvent>::const_iterator ciTEvent;
-typedef std::map<int, TEvent>::reverse_iterator riTEvent;
-typedef std::map<int, TEvent>::const_reverse_iterator criTEvent;
 
 class TempoMap : public std::map<int, TEvent> {
       int _tempoSN;           // serial no to track tempo changes

@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2011 by Werner Schweer and others
 #
@@ -19,43 +18,44 @@
 #=============================================================================
 
 project(mscore)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+
+#minimum tested, report if it works with older
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
 
 include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
 cmake_policy(SET CMP0003 NEW)
 
+#include modules
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
+include (UsePkgConfig1)
+include (TargetDoc)
+include (FindPulseAudio)
+include (GetCompilerVersion)
+include (CreatePrecompiledHeader)
+
 # for debugging the make system uncomment next line:
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 
-set(GCC_VISIBILITY TRUE)            # requires gcc 4.x?
-set(HAS_AUDIOFILE TRUE)             # requires libsndfile
-
 set(USE_SSE           TRUE)
-set(SOUNDFONT3        TRUE)         # enable ogg vorbis compressed fonts, require ogg & vorbis
-set(AEOLUS            TRUE)         # pipe organ synthesizer
 set(SCRIPT_INTERFACE  TRUE)
 
-option (OSC "enable OSC remote control protocol" ON)        # osc remote control
-option (OMR "enable PDF import"  OFF)                        # OMR - optical music recognition
+option(AEOLUS        "enable pipe organ synthesizer"      ON)
+option(ZERBERUS      "enable experimental sfz sampler"    ON)
+option(OSC           "enable OSC remote control protocol" ON)
+option(OMR           "enable PDF import"  OFF)                 # OMR - optical music recognition
+# for installation see: http://ubuntuforums.org/showthread.php?t=1647350
+option(OCR           "enable OCR, requires OMR" OFF)           # requires tesseract 3.0, needs work on mac/win
+option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
+option(HAS_AUDIOFILE "enable audio export" ON)               # requires libsndfile
+option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 
-if (APPLE OR MINGW)
-      set(GCC_VISIBILITY FALSE)     # warnings if not, with gcc4.4 from qt
-      set(AEOLUS TRUE)
-      set(OMR FALSE)                # needs work to get rid of fontconfig dependency
-endif (APPLE OR MINGW)
-
-if (OMR)
-      message("OMR enabled")
-      set(OCR    FALSE)  # requires tesseract 3.0
-                        # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
-else (OMR)
-      message("OMR disabled")
-      set(OCR FALSE)
-endif (OMR)
+SET(JACK_LONGNAME "jack (jack audio connection kit)")
+SET(JACK_MIN_VERSION "0.98.0")
+option(BUILD_JACK    "Build with support for ${JACK_LONGNAME}. jack >= ${JACK_MIN_VERSION} will be needed." ON)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -71,7 +71,7 @@ if (APPLE)
       # of MacOSX.
       # set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
 
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)      #min version required
+      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
 
       find_library(AudioToolboxFW        NAMES AudioToolbox)
@@ -84,39 +84,37 @@ if (APPLE)
 endif (APPLE)
 
 #
-#     Check for gcc compiler >= 4.6
+#     Check for gcc compiler >= 4.7
 #
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-      message("gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION})
-      string(REGEX MATCH "([0-9]*)\\.([0-9]*)\\.([0-9]*)" major ${CMAKE_CXX_COMPILER_VERSION})
-
-      set(major ${CMAKE_MATCH_1})
-      set(minor ${CMAKE_MATCH_2})
-      set(patch ${CMAKE_MATCH_3})
-
-      if (${major} LESS 4 OR ((${major} EQUAL 4) AND (${minor} LESS 6)))
+      if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
+        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 7)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.6 required")
+                  " >= 4.7 required")
       endif()
-
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
-option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
+if (APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -fpie -stdlib=libc++ -g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -fpie -stdlib=libc++ -O2 -DNDEBUG")
+else (APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fpie -g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fpie -O2 -DNDEBUG")
+endif(APPLE)
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
 # The Mscore version number.
-SET(Mscore_VERSION_MAJOR  "2")
-SET(Mscore_VERSION_MINOR  "0")
-SET(Mscore_VERSION_PATCH  "0")
-
-SET(Mscore_VERSION       "${Mscore_VERSION_MAJOR}.${Mscore_VERSION_MINOR}")
+SET(MUSESCORE_VERSION_MAJOR  "2")
+SET(MUSESCORE_VERSION_MINOR  "0")
+SET(MUSESCORE_VERSION_PATCH  "0")
+SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 #
 # version schema x.x.x is hardcoded in source
 #
-SET(Mscore_VERSION_FULL  "${Mscore_VERSION}.${Mscore_VERSION_PATCH}")
+SET(MUSESCORE_VERSION_FULL  "${MUSESCORE_VERSION}.${MUSESCORE_VERSION_PATCH}")
 
 if (MINGW OR APPLE)
   if(MINGW)
@@ -127,32 +125,25 @@ if (MINGW OR APPLE)
       SET(Mscore_SHARE_NAME    "mscore.app/")
   endif(MINGW)
 else (MINGW OR APPLE)
-      SET(Mscore_INSTALL_NAME  "mscore-${Mscore_VERSION}/")
+      SET(Mscore_INSTALL_NAME  "mscore-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
 endif (MINGW OR APPLE)
-
-if (SOUNDFONT3)
-      set(OGGVORBIS TRUE)
-endif (SOUNDFONT3)
-
-include ( ${PROJECT_SOURCE_DIR}/build/UsePkgConfig1.cmake )
-include ( ${PROJECT_SOURCE_DIR}/build/TargetDoc.cmake)
-include ( ${PROJECT_SOURCE_DIR}/build/FindPulseAudio.cmake)
 
 ##
 ##  look for Qt4
 ##
-set(QT_MIN_VERSION    "4.8.0")
-set(QT_USE_QTXML         TRUE)
-set(QT_USE_QTSVG         TRUE)
-set(QT_USE_QTNETWORK     TRUE)
-set(QT_USE_QTDESIGNER    TRUE)
-set(QT_USE_QTWEBKIT      TRUE)
-set(QT_USE_QTXMLPATTERNS TRUE)
-set(QT_USE_QTDECLARATIVE TRUE)
+SET(QT_MIN_VERSION    "4.8.0")
+SET(QT_USE_QTXML         TRUE)
+SET(QT_USE_QTSVG         TRUE)
+SET(QT_USE_QTNETWORK     TRUE)
+SET(QT_USE_QTDESIGNER    TRUE)
+SET(QT_USE_QTWEBKIT      TRUE)
+SET(QT_USE_QTXMLPATTERNS TRUE)
+SET(QT_USE_QTDECLARATIVE TRUE)
 
 # find_package(Qt4 "4.8" REQUIRED QtCore QtGui QtXml QtSvg QtNetwork QtWebkit QtDeclarative)
 # include(${QT_USE_FILE})
+
 
 ##
 ## alsa >= 1.0.0
@@ -194,10 +185,6 @@ endif (APPLE OR MINGW)
 ## find jack >= JACK_MIN_VERSION
 ##
 
-SET(JACK_LONGNAME "jack (jack audio connection kit)")
-SET(JACK_MIN_VERSION "0.98.0")
-
-SET(BUILD_JACK AUTO CACHE STRING "Build with support for ${JACK_LONGNAME}. jack >= ${JACK_MIN_VERSION} will be needed. [ON/OFF/AUTO]")
 IF(BUILD_JACK)
      IF(MINGW)
            set (USE_JACK 1)
@@ -243,31 +230,36 @@ ENDIF(BUILD_JACK)
 ##
 
 if (MINGW)
-      set ( USE_PORTAUDIO 1 )
-      set ( USE_PORTMIDI  1 )
+    set ( USE_PORTAUDIO 1 )
+    set ( USE_PORTMIDI  1 )
 else (MINGW)
-   if (APPLE)
+    PKGCONFIG (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
+    if (PORTAUDIO_INCDIR)
+        message("portaudio detected ${PORTAUDIO_INCDIR} ${PORTAUDIO_LIBDIR} ${PORTAUDIO_LIB}")
+          set ( USE_PORTAUDIO 1 )
+    else (PORTAUDIO_INCDIR)
+          message("optional package portaudio-2.0 Version 19 not found (package portaudio19-dev)\n")
+          set ( USE_PORTAUDIO 0 )
+    endif (PORTAUDIO_INCDIR)
+    if (APPLE)
       set (USE_PORTMIDI   1)
-      PKGCONFIG (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
-      if (PORTAUDIO_INCDIR)
-   	      message("portaudio detected ${PORTAUDIO_INCDIR} ${PORTAUDIO_LIBDIR} ${PORTAUDIO_LIB}")
-            set ( USE_PORTAUDIO 1 )
-      else (PORTAUDIO_INCDIR)
-            message("optional package portaudio-2.0 Version 19 not found (package portaudio19-dev)\n")
-            set ( USE_PORTAUDIO 0 )
-      endif (PORTAUDIO_INCDIR)
-   else (APPLE)
+    else (APPLE)
       set (USE_PORTMIDI   0)
-      PKGCONFIG (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
-      if (PORTAUDIO_INCDIR)
-   	      message("portaudio detected ${PORTAUDIO_INCDIR} ${PORTAUDIO_LIBDIR} ${PORTAUDIO_LIB}")
-            set ( USE_PORTAUDIO 1 )
-      else (PORTAUDIO_INCDIR)
-            message("optional package portaudio-2.0 Version 19 not found (package portaudio19-dev)\n")
-            set ( USE_PORTAUDIO 0 )
-      endif (PORTAUDIO_INCDIR)
-   endif (APPLE)
+    endif (APPLE)
 endif (MINGW)
+
+##
+## QtSingleApplication
+##
+
+if (USE_SYSTEM_QTSINGLEAPPLICATION)
+      find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
+      find_library(QTSINGLEAPPLICATION_LIBRARIES QtSolutions_SingleApplication-2.6)
+else(USE_SYSTEM_QTSINGLEAPPLICATION)
+      subdirs (thirdparty/singleapp)
+      set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/singleapp/src)
+      set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
+endif(USE_SYSTEM_QTSINGLEAPPLICATION)
 
 ##
 ## produce config.h file
@@ -284,71 +276,57 @@ configure_file (
       ${PROJECT_SOURCE_DIR}/build/Doxyfile-LibMscore.in
       ${PROJECT_BINARY_DIR}/Doxyfile-LibMscore
       )
-if (NOT MINGW AND NOT APPLE)
-      install( FILES build/mscore.desktop DESTINATION share/applications)
-endif (NOT MINGW AND NOT APPLE)
-
 
 if (NOT MINGW AND NOT APPLE)
-#
-#     set library search path for runtime linker to load the same
-#     qt libraries as we used at compile time
-#
-set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
+    #
+    #     set library search path for runtime linker to load the same
+    #     qt libraries as we used at compile time
+    #
+    set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
+    # install desktop file
+    install( FILES build/mscore.desktop DESTINATION share/applications)
 endif (NOT MINGW AND NOT APPLE)
 
 #
 #  create precompiled header file
 #
+
+# all.h is expected in PROJECT_BINARY_DIR by subdirs
 add_custom_command(
-   OUTPUT ${PROJECT_BINARY_DIR}/all.h
-   COMMAND ${CMAKE_COMMAND}
-   ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-   DEPENDS ${PROJECT_SOURCE_DIR}/all.h
-   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-   )
+    OUTPUT ${PROJECT_BINARY_DIR}/all.h
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+    DEPENDS ${PROJECT_SOURCE_DIR}/all.h
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    )
 
-set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
-
-string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
-
-add_custom_command(
- OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch
- COMMAND ${CMAKE_CXX_COMPILER}
-   -x c++-header -std=gnu++0x -g  -fPIE -DQT_DISABLE_DEPRECATED_BEFORE=0 -I ${INC} -o all.h.gch all.h
- DEPENDS ${PROJECT_BINARY_DIR}/all.h
- WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
- VERBATIM
- )
-set (PCH ${PROJECT_BINARY_DIR}/all.h.gch)
-
+precompiled_header(QT_INCLUDES all)
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 
-subdirs(mscore awl bww2mxml share
-      fluid msynth libmscore mstyle thirdparty/rtf2html thirdparty/diff)
+##
+## add subdirs
+##
+subdirs(
+      mscore  awl bww2mxml share midi fluid mstyle libmscore synthesizer
+      effects thirdparty/rtf2html thirdparty/diff
+      )
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
+add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 
-if (USE_SYSTEM_QTSINGLEAPPLICATION)
-      find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
-      find_library(QTSINGLEAPPLICATION_LIBRARIES QtSolutions_SingleApplication-2.6)
-else(USE_SYSTEM_QTSINGLEAPPLICATION)
-      subdirs (thirdparty/singleapp)
-      set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/singleapp/src)
-      set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
-endif(USE_SYSTEM_QTSINGLEAPPLICATION)
-
-if (MINGW OR APPLE)
+if (USE_PORTMIDI)
       subdirs (thirdparty/portmidi)
-endif (MINGW OR APPLE)
+endif (USE_PORTMIDI)
 
 if (AEOLUS)
       subdirs (aeolus)
 endif (AEOLUS)
+
+if (ZERBERUS)
+      subdirs (zerberus)
+endif (ZERBERUS)
 
 if (OMR)
       subdirs (omr)
@@ -358,6 +336,10 @@ if (OSC)
       subdirs (thirdparty/ofqf)
 endif (OSC)
 
+
+##
+## includes
+##
 include_directories(
    ${PROJECT_SOURCE_DIR}
    ${PROJECT_BINARY_DIR}
@@ -367,86 +349,14 @@ include_directories(
 )
 
 ##
-## create package target
+##  Include packaging
 ##
 
-include (InstallRequiredSystemLibraries)
+include(Packaging)
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
-  SET(CPACK_PACKAGE_VENDOR "Werner Schweer and Others")
-  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
-  SET(CPACK_RESOURCE_FILE_LICENSE    "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
-
-  SET(CPACK_PACKAGE_VERSION_MAJOR "${Mscore_VERSION_MAJOR}")
-  SET(CPACK_PACKAGE_VERSION_MINOR "${Mscore_VERSION_MINOR}")
-  SET(CPACK_PACKAGE_VERSION_PATCH "${Mscore_VERSION_PATCH}")
-  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${Mscore_VERSION_MAJOR}.${Mscore_VERSION_MINOR}")
-
-  SET(CPACK_NSIS_COMPRESSOR "/FINAL /SOLID lzma")
-
-  IF(MINGW)
-      SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore")
-      # There is a bug in NSI that does not handle full unix paths properly. Make
-      # sure there is at least one set of four (4) backlasshes.
-      SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data\\\\installerhead.bmp")
-      SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\mscore.exe,0")
-      SET(CPACK_NSIS_DISPLAY_NAME "MuseScore ${Mscore_VERSION_FULL}")
-      SET(CPACK_NSIS_HELP_LINK "http://www.musescore.org/")
-      SET(CPACK_NSIS_URL_INFO_ABOUT "http://www.musescore.org/")
-      SET(CPACK_NSIS_CONTACT "ws@wschweer.de")
-      SET(CPACK_NSIS_MODIFY_PATH OFF)
-      SET(CPACK_STRIP_FILES "mscore.exe")
-
-      # File types association:
-      SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build\\\\FileAssociation.nsh")
-
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-          Push \\\"ATENDATA\\\"
-          Push \\\"$INSTDIR\\\\share\\\\aten\\\"
-          Call WriteEnvStr
-      ")
-
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-          \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
-          \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
-      ")
-      SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-          \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-          \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
-      ")
-  ELSE(MINGW)
-      SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
-      SET(CPACK_STRIP_FILES "mscore")
-      SET(CPACK_SOURCE_STRIP_FILES "")
-  ENDIF(MINGW)
-
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
-  SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${Mscore_VERSION_FULL}")
-  SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
-
-  set(CPACK_DEBIAN_PACKAGE_NAME         "mscore")
-  set(CPACK_DEBIAN_PACKAGE_VERSION      "${Mscore_VERSION_FULL}-0ubuntu0.1")
-  set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-  set(CPACK_DEBIAN_PACKAGE_DEPENDS    "libqt4-core (>= 4.4), libqt4-gui (>= 4.4)")
-  set(CPACK_DEBIAN_PACKAGE_MAINTAINER   "tsmithe@ubuntu.com")
-  set(CPACK_DEBIAN_PACKAGE_SECTION      "devel")
-  set(CPACK_DEBIAN_PACKAGE_PRIORITY     "optional")
-  set(CPACK_DEBIAN_PACKAGE_RECOMMENDS   "")
-  set(CPACK_DEBIAN_PACKAGE_SUGGESTS     "")
-
-  set(CPACK_PACKAGE_CONTACT       "ws@schweer.de")
-
-if (MINGW)
-  set(CPACK_GENERATOR             "NSIS")
-  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
-else (MINGW)
-  if (NOT APPLE)
-    set(CPACK_GENERATOR             "DEB;TBZ2")
-    set(CPACK_DEB "on")
-  endif (NOT APPLE)
-endif (MINGW)
-
-include (CPack)
+##
+##  custom target for translation generation
+##
 
 add_custom_target(lupdate
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
@@ -460,6 +370,11 @@ add_custom_target(lrelease
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
+
+##
+##  create and install the plugin framework manual
+##
+
 add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
    DEPENDS genManual
@@ -470,8 +385,8 @@ add_custom_target(install_plugins_manual
    )
 
 if (MINGW)
-  install(CODE "execute_process(COMMAND cmd /c \"mingw32-make install_plugins_manual\")")
+   install(CODE "execute_process(COMMAND cmd /c \"mingw32-make install_plugins_manual\")")
 else (MINGW)
-  install(CODE "execute_process(COMMAND make install_plugins_manual)")
+   install(CODE "execute_process(COMMAND make install_plugins_manual)")
 endif (MINGW)
 

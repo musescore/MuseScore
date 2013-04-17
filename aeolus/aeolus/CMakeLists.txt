@@ -26,10 +26,17 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
+
+QT4_WRAP_CPP(aeolusMocs aeolusgui.h)
+QT4_WRAP_UI (aeolusUi aeolus_gui.ui)
+
 add_library (aeolus STATIC
+      ${aeolusMocs}
+      ${aeolusUi}
       aeolus.cpp audio.cpp model.cpp addsynth.cpp scales.cpp
 	reverb.cpp asection.cpp division.cpp rankwave.cpp
       rngen.cpp exp2ap.cpp
+      aeolusgui.cpp
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${INCS}
@@ -38,8 +45,10 @@ add_library (aeolus STATIC
 set_target_properties (
       aeolus
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(aeolus all)
 
 ADD_DEPENDENCIES(aeolus mops1)
 ADD_DEPENDENCIES(aeolus mops2)

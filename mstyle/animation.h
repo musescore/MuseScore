@@ -27,37 +27,37 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-class Animation: public QPropertyAnimation
-    {
+class Animation: public QPropertyAnimation {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! TimeLine shared pointer
-        typedef QWeakPointer<Animation> Pointer;
+            //! TimeLine shared pointer
+            typedef QWeakPointer<Animation> Pointer;
 
-        //! constructor
-        Animation( int duration, QObject* parent ):
-            QPropertyAnimation( parent )
-        { setDuration( duration ); }
+            //! constructor
+            Animation( int duration, QObject* parent ):
+                  QPropertyAnimation( parent ) {
+                  setDuration( duration );
+                  }
 
-        //! destructor
-        virtual ~Animation( void )
-        {}
+            //! destructor
+            virtual ~Animation( void )
+                  {}
 
-        //! true if running
-        bool isRunning( void ) const
-        { return state() == Animation::Running; }
+            //! true if running
+            bool isRunning( void ) const {
+                  return state() == Animation::Running;
+                  }
 
-        //! restart
-        void restart( void )
-        {
-            if( isRunning() ) stop();
-            start();
-        }
+            //! restart
+            void restart( void ) {
+                  if ( isRunning() ) stop();
+                  start();
+                  }
 
-    };
+      };
 
 
 #endif

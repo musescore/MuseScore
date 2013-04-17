@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: utils.cpp 5121 2011-12-19 10:24:49Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -407,7 +406,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   continue;
 
             KeyList* km = staff(staffIdx)->keymap();
-            for (iKeyList ke = km->lower_bound(tickStart);
+            for (auto ke = km->lower_bound(tickStart);
                   ke != km->lower_bound(tickEnd); ++ke) {
                   KeySigEvent oKey  = ke->second;
                   int tick  = ke->first;
@@ -418,7 +417,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
                   }
             for (Segment* s = firstSegment(); s; s = s->next1()) {
-                  if (s->subtype() != Segment::SegKeySig)
+                  if (s->segmentType() != Segment::SegKeySig)
                         continue;
                   if (s->tick() < tickStart)
                         continue;
@@ -429,7 +428,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        _undo->push(new ChangeKeySig(ks, key, ks->showCourtesy(),
+                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(),
                            ks->showNaturals()));
                         }
                   }

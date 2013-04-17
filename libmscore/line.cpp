@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: line.cpp 5629 2012-05-15 12:38:33Z wschweer $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //
@@ -48,7 +47,7 @@ bool LineSegment::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "subtype")
-            setSubtype(SpannerSegmentType(e.readInt()));
+            setSpannerSegmentType(SpannerSegmentType(e.readInt()));
       else if (tag == "off1")       // obsolete
             setUserOff(e.readPoint() * spatium());
       else if (tag == "off2")
@@ -107,20 +106,10 @@ bool LineSegment::isEdited(SpannerSegment* ss) const
 void LineSegment::updateGrips(int* grips, QRectF* grip) const
       {
       *grips = 3;
-/*      if (line()->anchor() == Spanner::ANCHOR_NOTE) {
-            grip[0].translate(pos());
-            grip[1].translate(pos2());
-            grip[2].translate(pos2() * .5);
-            return;
-            }
-      */
       QPointF pp(pagePos());
-      QPointF pp1(pp);
-      QPointF pp2(pos2() + pp);
-      QPointF pp3(pos2() * .5 + pp);
-      grip[2].translate(pp3);
-      grip[1].translate(pp2);
-      grip[0].translate(pp1);
+      grip[GRIP_LINE_START].translate(pp);
+      grip[GRIP_LINE_END].translate(pos2() + pp);
+      grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------
@@ -131,13 +120,19 @@ void LineSegment::setGrip(int grip, const QPointF& p)
       {
       QPointF pt(p * spatium());
 
-      if (grip == GRIP_LINE_START) {
-            QPointF delta = pt - (pagePos() - gripAnchor(grip));
-            setUserOff(userOff() + delta);
-            _userOff2 -= delta;
-            }
-      else {
-            setUserOff2(pt - pagePos() - _p2 + gripAnchor(grip));
+      switch (grip) {
+            case GRIP_LINE_START: {
+                  QPointF delta(pt - userOff());
+                  setUserOff(pt);
+                  setUserOff2(userOff2() - delta);
+                  }
+                  break;
+            case GRIP_LINE_END:
+                  setUserOff2(pt);
+                  break;
+            case GRIP_LINE_MIDDLE:
+                  setUserOff(pt);
+                  break;
             }
       layout();
       }
@@ -148,19 +143,20 @@ void LineSegment::setGrip(int grip, const QPointF& p)
 
 QPointF LineSegment::getGrip(int grip) const
       {
-      QPointF pt;
+      QPointF p;
       switch(grip) {
             case GRIP_LINE_START:
-                  pt = pagePos() - gripAnchor(grip);
+                  p = userOff();
                   break;
             case GRIP_LINE_END:
-                  pt = _p2 + _userOff2 + pagePos() - gripAnchor(grip);
+                  p = userOff2();
                   break;
             case GRIP_LINE_MIDDLE:
-                  pt = (_p2 + _userOff2) * .5 + pagePos() - gripAnchor(grip);
+                  p = userOff();
                   break;
             }
-      return pt / spatium();
+      p /= spatium();
+      return p;
       }
 
 //---------------------------------------------------------
@@ -182,7 +178,7 @@ QPointF LineSegment::pagePos() const
 
 QPointF LineSegment::gripAnchor(int grip) const
       {
-      if (subtype() == SEGMENT_MIDDLE) {
+      if (spannerSegmentType() == SEGMENT_MIDDLE) {
             qreal y = system()->staffY(staffIdx());
             qreal x;
             switch(grip) {
@@ -219,15 +215,15 @@ QPointF LineSegment::gripAnchor(int grip) const
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
       if (!((modifiers & Qt::ShiftModifier)
-         && ((subtype() == SEGMENT_SINGLE)
-              || (subtype() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
-              || (subtype() == SEGMENT_END && curGrip == GRIP_LINE_END))))
+         && ((spannerSegmentType() == SEGMENT_SINGLE)
+              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
+              || (spannerSegmentType() == SEGMENT_END && curGrip == GRIP_LINE_END))))
             return false;
 
       LineSegment* ls = 0;
       SLine* l        = line();
       bool bspDirty   = false;
-      SpannerSegmentType st = subtype();
+      SpannerSegmentType st = spannerSegmentType();
       int track   = l->track();
 
       if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
@@ -374,7 +370,7 @@ void LineSegment::editDrag(const EditData& ed)
       // Only for moving, no y limitaion
       QPointF deltaMove(ed.delta.x(), ed.delta.y());
 
-      switch(ed.curGrip) {
+      switch (ed.curGrip) {
             case GRIP_LINE_START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
                   _userOff2 -= deltaResize;
@@ -497,10 +493,10 @@ QPointF SLine::linePos(int grip, System** sys)
                         x = m->pos().x() + m->bbox().right();
                         if (type() == VOLTA) {
                               Segment* seg = m->last();
-                              if (seg->subtype() == Segment::SegEndBarLine) {
+                              if (seg->segmentType() == Segment::SegEndBarLine) {
                                     Element* e = seg->element(0);
                                     if (e && e->type() == BAR_LINE) {
-                                          if (static_cast<BarLine*>(e)->subtype() == START_REPEAT)
+                                          if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
                                                 x -= e->width() - _spatium * .5;
                                           else
                                                 x -= _spatium * .5;
@@ -623,26 +619,26 @@ void SLine::layout()
 
             if (sysIdx1 == sysIdx2) {
                   // single segment
-                  seg->setSubtype(SEGMENT_SINGLE);
+                  seg->setSpannerSegmentType(SEGMENT_SINGLE);
                   seg->setPos(p1);
                   // seg->setPos2(QPointF(p2.x() - p1.x(), 0.0));
                   seg->setPos2(p2 - p1);
                   }
             else if (i == sysIdx1) {
                   // start segment
-                  seg->setSubtype(SEGMENT_BEGIN);
+                  seg->setSpannerSegmentType(SEGMENT_BEGIN);
                   seg->setPos(p1);
                   seg->setPos2(QPointF(x2 - p1.x(), 0.0));
                   }
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
-                  seg->setSubtype(SEGMENT_MIDDLE);
+                  seg->setSpannerSegmentType(SEGMENT_MIDDLE);
                   seg->setPos(QPointF(x1, y));
                   seg->setPos2(QPointF(x2 - x1, 0.0));
                   }
             else if (i == sysIdx2) {
                   // end segment
-                  seg->setSubtype(SEGMENT_END);
+                  seg->setSpannerSegmentType(SEGMENT_END);
                   seg->setPos(QPointF(x1, y));
                   seg->setPos2(QPointF(p2.x() - x1, 0.0));
                   }
@@ -696,7 +692,7 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
       for (int i = 0; i < n; ++i) {
             const LineSegment* seg = segmentAt(i);
             xml.stag("Segment");
-            xml.tag("subtype", seg->subtype());
+            xml.tag("subtype", seg->spannerSegmentType());
             xml.tag("off2", seg->userOff2() / _spatium);
             seg->Element::writeProperties(xml);
             xml.etag();
@@ -810,4 +806,48 @@ int SLine::tick2() const
             return -1;
       return static_cast<Segment*>(endElement())->tick();
       }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant SLine::getProperty(P_ID id) const
+      {
+      switch(id) {
+            case P_DIAGONAL:
+                  return _diagonal;
+            default:
+                  return Spanner::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool SLine::setProperty(P_ID id, const QVariant& v)
+      {
+      switch(id) {
+            case P_DIAGONAL:
+                  _diagonal = v.toBool();
+                  break;
+            default:
+                  return Spanner::setProperty(id, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SLine::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_DIAGONAL: return false;
+            default:         return Spanner::propertyDefault(id);
+            }
+      }
+
+
 

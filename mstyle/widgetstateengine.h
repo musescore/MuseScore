@@ -33,85 +33,82 @@
 #include "animationmodes.h"
 
 
-    //! used for simple widgets
-    class WidgetStateEngine: public BaseEngine
-    {
+//! used for simple widgets
+class WidgetStateEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        WidgetStateEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            WidgetStateEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~WidgetStateEngine( void )
-        {}
+            //! destructor
+            virtual ~WidgetStateEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QWidget*, AnimationModes );
+            //! register widget
+            virtual bool registerWidget( QWidget*, AnimationModes );
 
-        //! returns registered widgets
-        virtual WidgetList registeredWidgets( AnimationModes ) const;
+            //! returns registered widgets
+            virtual WidgetList registeredWidgets( AnimationModes ) const;
 
-        using BaseEngine::registeredWidgets;
+            using BaseEngine::registeredWidgets;
 
-        //! true if widget hover state is changed
-        virtual bool updateState( const QObject*, AnimationMode, bool );
+            //! true if widget hover state is changed
+            virtual bool updateState( const QObject*, AnimationMode, bool );
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject*, AnimationMode );
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject*, AnimationMode );
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, AnimationMode mode )
-        { return isAnimated( object, mode ) ? data( object, mode ).data()->opacity(): AnimationData::OpacityInvalid; }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, AnimationMode mode ) {
+                  return isAnimated( object, mode ) ? data( object, mode ).data()->opacity() : AnimationData::OpacityInvalid;
+                  }
 
-        //! duration
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            hoverData_.setEnabled( value );
-            focusData_.setEnabled( value );
-            enableData_.setEnabled( value );
-        }
+            //! duration
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  hoverData_.setEnabled( value );
+                  focusData_.setEnabled( value );
+                  enableData_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            hoverData_.setDuration( value );
-            focusData_.setDuration( value );
-            enableData_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  hoverData_.setDuration( value );
+                  focusData_.setDuration( value );
+                  enableData_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        {
-            if( !object ) return false;
-            bool found = false;
-            if( hoverData_.unregisterWidget( object ) ) found = true;
-            if( focusData_.unregisterWidget( object ) ) found = true;
-            if( enableData_.unregisterWidget( object ) ) found = true;
-            return found;
-        }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  if ( !object ) return false;
+                  bool found = false;
+                  if ( hoverData_.unregisterWidget( object ) ) found = true;
+                  if ( focusData_.unregisterWidget( object ) ) found = true;
+                  if ( enableData_.unregisterWidget( object ) ) found = true;
+                  return found;
+                  }
 
-        protected:
+      protected:
 
-        //! returns data associated to widget
-        DataMap<WidgetStateData>::Value data( const QObject*, AnimationMode );
+            //! returns data associated to widget
+            DataMap<WidgetStateData>::Value data( const QObject*, AnimationMode );
 
-        private:
+      private:
 
-        //! maps
-        DataMap<WidgetStateData> hoverData_;
-        DataMap<WidgetStateData> focusData_;
-        DataMap<WidgetStateData> enableData_;
+            //! maps
+            DataMap<WidgetStateData> hoverData_;
+            DataMap<WidgetStateData> focusData_;
+            DataMap<WidgetStateData> enableData_;
 
-    };
+      };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AnimationModes)
 

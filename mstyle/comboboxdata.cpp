@@ -28,121 +28,116 @@
 
 #include "comboboxdata.h"
 
-    //______________________________________________________
-    ComboBoxData::ComboBoxData( QObject* parent, QComboBox* target, int duration ):
-        TransitionData( parent, target, duration ),
-        target_( target )
-    {
-        target_.data()->installEventFilter( this );
-        connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
-        connect( target_.data(), SIGNAL( currentIndexChanged( int ) ), SLOT( indexChanged() ) );
-    }
+//______________________________________________________
+ComboBoxData::ComboBoxData( QObject* parent, QComboBox* target, int duration ):
+      TransitionData( parent, target, duration ),
+      target_( target ) {
+      target_.data()->installEventFilter( this );
+      connect( target_.data(), SIGNAL( destroyed() ), SLOT( targetDestroyed() ) );
+      connect( target_.data(), SIGNAL( currentIndexChanged( int ) ), SLOT( indexChanged() ) );
+      }
 
-    //___________________________________________________________________
-    void ComboBoxData::indexChanged( void )
-    {
+//___________________________________________________________________
+void ComboBoxData::indexChanged( void ) {
 
-        if( recursiveCheck() ) return;
+      if ( recursiveCheck() ) return;
 
-        if( transition().data()->isAnimated() )
-        { transition().data()->endAnimation(); }
+      if ( transition().data()->isAnimated() ) {
+            transition().data()->endAnimation();
+            }
 
-        if( initializeAnimation() ) animate();
-        else transition().data()->hide();
+      if ( initializeAnimation() ) animate();
+      else transition().data()->hide();
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool ComboBoxData::eventFilter( QObject* object, QEvent* event )
-    {
+//___________________________________________________________________
+bool ComboBoxData::eventFilter( QObject* object, QEvent* event ) {
 
-        // make sure engine is enabled
-        if( !( enabled() && object == target_.data() ) )
-        { return TransitionData::eventFilter( object, event ); }
+      // make sure engine is enabled
+      if ( !( enabled() && object == target_.data() ) ) {
+            return TransitionData::eventFilter( object, event );
+            }
 
-        // make sure that target is not editable
-        if( target_.data()->isEditable() )
-        { return TransitionData::eventFilter( object, event ); }
+      // make sure that target is not editable
+      if ( target_.data()->isEditable() ) {
+            return TransitionData::eventFilter( object, event );
+            }
 
-        switch( event->type() )
-        {
+      switch ( event->type() ) {
 
             case QEvent::Show:
             case QEvent::Resize:
             case QEvent::Move:
-            if( !recursiveCheck() && target_.data()->isVisible() )
-            { timer_.start( 0, this ); }
-            break;
+                  if ( !recursiveCheck() && target_.data()->isVisible() ) {
+                        timer_.start( 0, this );
+                        }
+                  break;
 
-            default: break;
-        }
-
-        return TransitionData::eventFilter( object, event );
-
-    }
-
-    //___________________________________________________________________
-    void ComboBoxData::timerEvent( QTimerEvent* event )
-    {
-        if( event->timerId() == timer_.timerId() )
-        {
-
-            timer_.stop();
-            if( enabled() && transition() && target_ && !target_.data()->isVisible() )
-            {
-                setRecursiveCheck( true );
-                transition().data()->setEndPixmap( transition().data()->grab( target_.data(), targetRect() ) );
-                setRecursiveCheck( false );
+            default:
+                  break;
             }
 
-        } else return TransitionData::timerEvent( event );
+      return TransitionData::eventFilter( object, event );
 
-    }
+      }
 
-    //___________________________________________________________________
-    bool ComboBoxData::initializeAnimation( void )
-    {
-        if( !( enabled() && target_ && target_.data()->isVisible() ) ) return false;
-        if( target_.data()->isEditable() )
-        {
+//___________________________________________________________________
+void ComboBoxData::timerEvent( QTimerEvent* event ) {
+      if ( event->timerId() == timer_.timerId() ) {
+
+            timer_.stop();
+            if ( enabled() && transition() && target_ && !target_.data()->isVisible() ) {
+                  setRecursiveCheck( true );
+                  transition().data()->setEndPixmap( transition().data()->grab( target_.data(), targetRect() ) );
+                  setRecursiveCheck( false );
+                  }
+
+            }
+      else return TransitionData::timerEvent( event );
+
+      }
+
+//___________________________________________________________________
+bool ComboBoxData::initializeAnimation( void ) {
+      if ( !( enabled() && target_ && target_.data()->isVisible() ) ) return false;
+      if ( target_.data()->isEditable() ) {
             /*
             do nothing for editable comboboxes because
             lineEditor animations are handled directly
             */
             return false;
-        }
+            }
 
-        transition().data()->setOpacity(0);
-        transition().data()->setGeometry( targetRect() );
-        transition().data()->setStartPixmap( transition().data()->currentPixmap() );
-        transition().data()->show();
-        transition().data()->raise();
-        return true;
-    }
+      transition().data()->setOpacity(0);
+      transition().data()->setGeometry( targetRect() );
+      transition().data()->setStartPixmap( transition().data()->currentPixmap() );
+      transition().data()->show();
+      transition().data()->raise();
+      return true;
+      }
 
-    //___________________________________________________________________
-    bool ComboBoxData::animate( void )
-    {
+//___________________________________________________________________
+bool ComboBoxData::animate( void ) {
 
-        // check enability
-        if( !enabled() ) return false;
+      // check enability
+      if ( !enabled() ) return false;
 
-        // grab
-        setRecursiveCheck( true );
-        transition().data()->setEndPixmap( transition().data()->grab( target_.data(), targetRect() ) );
-        setRecursiveCheck( false );
+      // grab
+      setRecursiveCheck( true );
+      transition().data()->setEndPixmap( transition().data()->grab( target_.data(), targetRect() ) );
+      setRecursiveCheck( false );
 
-        // start animation
-        transition().data()->animate();
+      // start animation
+      transition().data()->animate();
 
-        return true;
+      return true;
 
-    }
+      }
 
-    //___________________________________________________________________
-    void ComboBoxData::targetDestroyed( void )
-    {
-        setEnabled( false );
-        target_.clear();
-    }
+//___________________________________________________________________
+void ComboBoxData::targetDestroyed( void ) {
+      setEnabled( false );
+      target_.clear();
+      }
 

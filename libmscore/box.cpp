@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: box.cpp 5627 2012-05-14 20:18:41Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -84,6 +83,10 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(MuseScoreView*, const QPointF&)
       {
       editMode = true;
+      if (type() == HBOX)
+            undoPushProperty(P_BOX_WIDTH);
+      else
+            undoPushProperty(P_BOX_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -421,7 +424,7 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             case STAFF_TEXT:
                   return true;
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                         case ICON_TFRAME:
                         case ICON_FFRAME:
@@ -446,9 +449,9 @@ Element* Box::drop(const DropData& data)
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (_pageBreak || _lineBreak) {
                         if (
-                           (lb->subtype() == LAYOUT_BREAK_PAGE && _pageBreak)
-                           || (lb->subtype() == LAYOUT_BREAK_LINE && _lineBreak)
-                           || (lb->subtype() == LAYOUT_BREAK_SECTION && _sectionBreak)
+                           (lb->layoutBreakType() == LAYOUT_BREAK_PAGE && _pageBreak)
+                           || (lb->layoutBreakType() == LAYOUT_BREAK_LINE && _lineBreak)
+                           || (lb->layoutBreakType() == LAYOUT_BREAK_SECTION && _sectionBreak)
                            ) {
                               //
                               // if break already set
@@ -472,16 +475,16 @@ Element* Box::drop(const DropData& data)
             case STAFF_TEXT:
                   {
                   Text* text = new Text(score());
-                  text->setTextStyle(score()->textStyle(TEXT_STYLE_FRAME));
+                  text->setTextStyleType(TEXT_STYLE_FRAME);
                   text->setParent(this);
-                  text->setHtml(static_cast<StaffText*>(e)->getHtml());
+                  text->setText(static_cast<StaffText*>(e)->text());
                   score()->undoAddElement(text);
                   delete e;
                   return text;
                   }
 
             case ICON:
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                               score()->insertMeasure(VBOX, this);
                               break;
@@ -616,6 +619,6 @@ void FBox::add(Element* e)
             qDebug("FBox::add: element not allowed\n");
             return;
             }
-      _el.append(e);
+      _el.push_back(e);
       }
 

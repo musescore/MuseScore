@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: duration.h 5151 2011-12-29 09:10:31Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -52,7 +51,7 @@ class DurationElement : public Element {
       virtual int tick() const = 0;
       int actualTicks() const;
 
-      Fraction duration() const           { return _duration; }
+      virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;
       void setDuration(const Fraction& f) { _duration = f;    }
       void setDuration(int ticks)         { _duration = Fraction::fromTicks(ticks); }

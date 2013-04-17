@@ -205,7 +205,7 @@ float Voice::gen_get(int g)
 // dsp parameters). The dsp routine is #included in several places (fluid_dsp_core.c).
 //-----------------------------------------------------------------------------
 
-void Voice::write(unsigned n, float* left, float* right, float* reverb, float* chorus)
+void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       {
       /* make sure we're playing and that we have sample data */
       if (!PLAYING())
@@ -542,7 +542,7 @@ void Voice::write(unsigned n, float* left, float* right, float* reverb, float* c
             }
 
       if (count > 0)
-            effects(count, left, right, reverb, chorus);
+            effects(count, out, reverb, chorus);
 
       /* turn off voice if short count (sample ended and not looping) */
       if (count < n)
@@ -1679,7 +1679,7 @@ void Sample::optimize()
  * - dsp_hist2: same
  *
  */
-void Voice::effects(int count, float* left, float* right, float* reverb, float* chorus)
+void Voice::effects(int count, float* out, float* reverb, float* chorus)
       {
       /* filter (implement the voice filter according to SoundFont standard) */
 
@@ -1718,37 +1718,19 @@ void Voice::effects(int count, float* left, float* right, float* reverb, float* 
                   }
             }
 
-      /* pan (Copy the signal to the left and right output buffer) The voice
-       * panning generator has a range of -500 .. 500.  If it is centered,
-       * it's close to 0.  amp_left and amp_right are then the
-       * same, and we can save one multiplication per voice and sample.
-       */
-      if ((-0.5 < pan) && (pan < 0.5)) {
-            /* The voice is centered. Use amp_left twice. */
-            for (int i = 0; i < count; i++) {
-                  float v = amp_left * dsp_buf[i];
-                  left[i]  += v;
-                  right[i] += v;
-                  }
-            }
-      else {     /* The voice is not centered. Stereo samples have one side zero. */
-            if (amp_left != 0.0) {
-                  for (int i = 0; i < count; i++)
-                        left[i] += amp_left * dsp_buf[i];
-                  }
-
-            if (amp_right != 0.0) {
-                  for (int i = 0; i < count; i++)
-                        right[i] += amp_right * dsp_buf[i];
-                  }
-            }
-
       for (int i = 0; i < count; i++) {
-            float v = dsp_buf[i];
-            reverb[i] += amp_reverb * v;
-            chorus[i] += amp_chorus * v;
+            float v    = dsp_buf[i];
+
+            float vv   = v  * amp_left;
+            *out++    += vv;
+            *reverb++ += vv * amp_reverb;
+            *chorus++ += vv * amp_chorus;
+
+            vv         = v  * amp_right;
+            *out++    += vv;
+            *reverb++ += vv * amp_reverb;
+            *chorus++ += vv * amp_chorus;
             }
       }
-
 }
 

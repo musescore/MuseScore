@@ -21,7 +21,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
-#include "libmscore/exportmidi.h"
+#include "mscore/exportmidi.h"
 
 #include "mtest/mcursor.h"
 #include "mtest/testutils.h"
@@ -128,7 +128,7 @@ bool compareScores(Score* score1, Score* score2)
       {
       int staves = score1->nstaves();
       if (score2->nstaves() != staves) {
-            printf("   stave count different\n");
+            printf("   stave count different %d %d\n", staves, score2->nstaves());
             return false;
             }
       Segment* s1 = score1->firstMeasure()->first();

@@ -70,7 +70,7 @@ class Voice
       Fluid* _fluid;
       double _noteTuning;             // +/- in midicent
 
-      void effects(int count, float* left, float* right, float* reverb, float* chorus);
+      void effects(int count, float* out, float* effect1, float* effect2);
 
    public:
 	unsigned int id;                // the id is incremented for every new noteon.
@@ -227,7 +227,7 @@ class Voice
       bool ON() const          { return (status == FLUID_VOICE_ON) && (volenv_section < FLUID_VOICE_ENVRELEASE); }
       int SAMPLEMODE() const   { return ((int)gen[GEN_SAMPLEMODE].val); }
 
-      void write(unsigned n, float* l, float* r, float* reverb_buf, float* chorus_buf);
+      void write(unsigned n, float* out, float* reverb, float* chorus);
       void add_mod(const Mod* mod, int mode);
 
       static void dsp_float_config();

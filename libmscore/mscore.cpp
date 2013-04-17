@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -23,11 +22,15 @@
 #include "volta.h"
 #include "ottava.h"
 #include "trill.h"
+#include "repeat.h"
+#include "jump.h"
+#include "marker.h"
 
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
 qreal MScore::DPMM;
 bool  MScore::debugMode;
+bool  MScore::testMode = false;
 
 MStyle* MScore::_defaultStyle;
 MStyle* MScore::_baseStyle;
@@ -47,7 +50,6 @@ bool    MScore::panPlayback;
 qreal   MScore::nudgeStep;
 int     MScore::defaultPlayDuration;
 QString MScore::partStyle;
-QString MScore::soundFont;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
 int     MScore::division    = 480;
@@ -82,10 +84,13 @@ void MScore::init()
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
-      qRegisterMetaType<Volta::VoltaType>("VoltaType");
+      qRegisterMetaType<VoltaType>("VoltaType");
       qRegisterMetaType<Ottava::OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
       qRegisterMetaType<Element::DynamicRange>("DynamicRange");
+      qRegisterMetaType<JumpType>("JumpType");
+      qRegisterMetaType<MarkerType>("MarkerType");
+      qRegisterMetaType<BeamMode>("BeamMode");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -122,7 +127,6 @@ void MScore::init()
       lastError           = "";
 
       layoutBreakColor    = Qt::green;
-      soundFont           = _globalShare + "sound/fluid.sf3";
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();
@@ -151,7 +155,7 @@ void MScore::init()
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
             QString s = QString(":/fonts/%1").arg(fonts[i]);
             if (-1 == QFontDatabase::addApplicationFont(s)) {
-                  qDebug("Mscore: fatal error: cannot load internal font <%s>\n", fonts[i]);
+                  qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
                   if (!MScore::debugMode)
                         exit(-1);
                   }

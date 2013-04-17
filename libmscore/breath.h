@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: breath.h 5504 2012-03-29 11:01:37Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -20,13 +19,13 @@ class QPainter;
 
 //---------------------------------------------------------
 //   @@ Breath
-///    subtype() is index in symList
+///    brathT() is index in symList
 //---------------------------------------------------------
 
 class Breath : public Element {
       Q_OBJECT
 
-      int _subtype;
+      int _breathType;
       static const int breathSymbols = 4;
       static int symList[breathSymbols];
 
@@ -35,8 +34,8 @@ class Breath : public Element {
       virtual Breath* clone() const { return new Breath(*this); }
 
       virtual ElementType type() const { return BREATH; }
-      int subtype() const { return _subtype; }
-      void setSubtype(int v) { _subtype = v; }
+      int breathType() const    { return _breathType; }
+      void setBreathType(int v) { _breathType = v; }
 
       Segment* segment() const         { return (Segment*)parent(); }
       virtual Space space() const;

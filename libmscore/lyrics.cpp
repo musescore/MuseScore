@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: lyrics.cpp 5655 2012-05-21 12:33:32Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -191,8 +190,6 @@ void Lyrics::draw(QPainter* painter) const
 
 void Lyrics::layout()
       {
-//      if (styled())
-//            setTextStyle(score()->textStyle((_no % 2) ? TEXT_STYLE_LYRIC2 : TEXT_STYLE_LYRIC1));
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;
@@ -243,7 +240,7 @@ void Lyrics::paste()
       if (sl.isEmpty())
             return;
 
-      cursor()->insertText(sl[0]);
+      insertText(sl[0]);
       layout();
       score()->setLayoutAll(true);
       score()->end();

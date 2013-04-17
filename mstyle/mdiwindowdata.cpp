@@ -26,60 +26,56 @@
 
 #include "mdiwindowdata.h"
 
-    //________________________________________________
-    MdiWindowData::MdiWindowData( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target )
-    {
-        currentData_.animation_ = new Animation( duration, this );
-        previousData_.animation_ = new Animation( duration, this );
-        setupAnimation( currentAnimation(), "currentOpacity" );
-        setupAnimation( previousAnimation(), "previousOpacity" );
+//________________________________________________
+MdiWindowData::MdiWindowData( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ) {
+      currentData_.animation_ = new Animation( duration, this );
+      previousData_.animation_ = new Animation( duration, this );
+      setupAnimation( currentAnimation(), "currentOpacity" );
+      setupAnimation( previousAnimation(), "previousOpacity" );
 
-        currentAnimation().data()->setDirection( Animation::Forward );
-        previousAnimation().data()->setDirection( Animation::Backward );
-    }
+      currentAnimation().data()->setDirection( Animation::Forward );
+      previousAnimation().data()->setDirection( Animation::Backward );
+      }
 
-    //______________________________________________
-    bool MdiWindowData::updateState( int primitive, bool state )
-    {
+//______________________________________________
+bool MdiWindowData::updateState( int primitive, bool state ) {
 
-        if( state )
-        {
+      if ( state ) {
 
-            if( primitive != currentData_.primitive_ )
-            {
+            if ( primitive != currentData_.primitive_ ) {
 
-                previousData_.updateSubControl( currentData_.primitive_ );
-                currentData_.updateSubControl( primitive );
-                return true;
+                  previousData_.updateSubControl( currentData_.primitive_ );
+                  currentData_.updateSubControl( primitive );
+                  return true;
 
-            } else return false;
+                  }
+            else return false;
 
-        } else {
+            }
+      else {
 
             bool changed( false );
-            if( primitive == currentData_.primitive_ )
-            {
-                changed |= currentData_.updateSubControl( 0 );
-                changed |= previousData_.updateSubControl( primitive );
-            }
+            if ( primitive == currentData_.primitive_ ) {
+                  changed |= currentData_.updateSubControl( 0 );
+                  changed |= previousData_.updateSubControl( primitive );
+                  }
 
             return changed;
 
-        }
+            }
 
-    }
+      }
 
-    //______________________________________________
-    bool MdiWindowData::Data::updateSubControl( int value )
-    {
-        if( primitive_ == value ) return false;
-        else {
+//______________________________________________
+bool MdiWindowData::Data::updateSubControl( int value ) {
+      if ( primitive_ == value ) return false;
+      else {
 
             primitive_ = value;
-            if( animation_.data()->isRunning() ) animation_.data()->stop();
-            if( primitive_ != 0 ) animation_.data()->start();
+            if ( animation_.data()->isRunning() ) animation_.data()->stop();
+            if ( primitive_ != 0 ) animation_.data()->start();
             return true;
 
-        }
-    }
+            }
+      }

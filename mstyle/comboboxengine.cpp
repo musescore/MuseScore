@@ -28,17 +28,18 @@
 
 #include "comboboxengine.h"
 
-    //____________________________________________________________
-    bool ComboBoxEngine::registerWidget( QComboBox* widget )
-    {
+//____________________________________________________________
+bool ComboBoxEngine::registerWidget( QComboBox* widget ) {
 
-        if( !widget ) return false;
-        if( !data_.contains( widget ) ) { data_.insert( widget, new ComboBoxData( this, widget, duration() ), enabled() ); }
+      if ( !widget ) return false;
+      if ( !data_.contains( widget ) ) {
+            data_.insert( widget, new ComboBoxData( this, widget, duration() ), enabled() );
+            }
 
-        // connect destruction signal
-        disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      // connect destruction signal
+      disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
 
-        return true;
+      return true;
 
-    }
+      }

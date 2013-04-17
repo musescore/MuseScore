@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: spatium.h 5115 2011-12-16 16:53:23Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -35,7 +34,7 @@ InputState::InputState() :
    rest(false),
    pitch(72),
    noteType(NOTE_NORMAL),
-   beamMode(BEAM_AUTO),
+   beamMode(BeamMode::AUTO),
    noteEntryMode(false),
    slur(0)
       {

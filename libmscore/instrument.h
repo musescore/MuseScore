@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: instrument.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -15,7 +14,7 @@
 #define __INSTRUMENT_H__
 
 #include "mscore.h"
-#include "event.h"
+#include "synthesizer/event.h"
 #include "interval.h"
 
 class InstrumentTemplate;
@@ -96,7 +95,7 @@ struct Channel {
       int channel;      // mscore channel number, mapped to midi port/channel
       mutable EventList init;
 
-      int synti;
+      QString synti;
       int program;     // current values as shown in mixer
       int bank;        // initialized from "init"
       char volume;

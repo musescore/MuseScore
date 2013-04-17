@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: slur.cpp 5326 2012-02-14 15:48:37Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -145,9 +144,9 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             return false;
 
       if (!((modifiers & Qt::ShiftModifier)
-         && ((subtype() == SEGMENT_SINGLE)
-              || (subtype() == SEGMENT_BEGIN && curGrip == 0)
-              || (subtype() == SEGMENT_END && curGrip == 3)
+         && ((spannerSegmentType() == SEGMENT_SINGLE)
+              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == 0)
+              || (spannerSegmentType() == SEGMENT_END && curGrip == 3)
             )))
             return false;
 
@@ -208,7 +207,7 @@ QPointF SlurSegment::gripAnchor(int grip) const
       QPointF sp(system()->pagePos());
       QPointF p1(spos.p1 + spos.system1->pagePos());
       QPointF p2(spos.p2 + spos.system2->pagePos());
-      switch (subtype()) {
+      switch (spannerSegmentType()) {
             case SEGMENT_SINGLE:
                   if (grip == GRIP_START)
                         return p1;
@@ -290,8 +289,8 @@ void SlurSegment::editDrag(const EditData& ed)
             Element* e = ed.view->elementNear(ed.pos);
             if ((slur->type() == SLUR)
                && (
-                  (ed.curGrip == GRIP_START && (subtype() == SEGMENT_SINGLE || subtype() == SEGMENT_BEGIN))
-                  || (ed.curGrip == GRIP_END && (subtype() == SEGMENT_SINGLE || subtype() == SEGMENT_END))
+                  (ed.curGrip == GRIP_START && (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN))
+                  || (ed.curGrip == GRIP_END && (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END))
                   )
                ) {
                   if (e && e->type() == NOTE) {
@@ -652,12 +651,12 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       const QList<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
-            if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
+            if (a->articulationType() == Articulation_Tenuto || a->articulationType() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
-            if (a->subtype() == Articulation_Tenuto || a->subtype() == Articulation_Staccato)
+            if (a->articulationType() == Articulation_Tenuto || a->articulationType() == Articulation_Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       return yo;
@@ -1136,7 +1135,7 @@ void Slur::layout()
             else {
                   s = frontSegment();
                   }
-            s->setSubtype(SEGMENT_SINGLE);
+            s->setSpannerSegmentType(SEGMENT_SINGLE);
 //            _len = _spatium * 6;
             s->layout(QPointF(0, 0), QPointF(_spatium * 6, 0));
             setbbox(frontSegment()->bbox());
@@ -1234,18 +1233,18 @@ void Slur::layout()
 
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
-                  segment->setSubtype(SEGMENT_SINGLE);
+                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
                   segment->layout(sPos.p1, sPos.p2);
                   }
             // case 2: start segment
             else if (i == 0) {
-                  segment->setSubtype(SEGMENT_BEGIN);
+                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
                   qreal x = system->bbox().width();
                   segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
                   }
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
-                  segment->setSubtype(SEGMENT_MIDDLE);
+                  segment->setSpannerSegmentType(SEGMENT_MIDDLE);
                   qreal x1 = firstNoteRestSegmentX(system) - _spatium;
                   qreal x2 = system->bbox().width();
                   qreal y  = system->staff(startElement()->staffIdx())->y();
@@ -1253,7 +1252,7 @@ void Slur::layout()
                   }
             // case 4: end segment
             else {
-                  segment->setSubtype(SEGMENT_END);
+                  segment->setSpannerSegmentType(SEGMENT_END);
                   qreal x = firstNoteRestSegmentX(system) - _spatium;
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
@@ -1274,7 +1273,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
             if (mb->type() == MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                        if (seg->subtype() == Segment::SegChordRest) {
+                        if (seg->segmentType() == Segment::SegChordRest) {
                               return seg->pos().x() + seg->measure()->pos().x();
                               }
                         }
@@ -1401,7 +1400,7 @@ void Tie::layout()
                   _up = _slurDirection == MScore::UP ? true : false;
             fixupSegments(1);
             SlurSegment* segment = segmentAt(0);
-            segment->setSubtype(SEGMENT_SINGLE);
+            segment->setSpannerSegmentType(SEGMENT_SINGLE);
             segment->setSystem(startNote()->chord()->segment()->measure()->system());
             SlurPos sPos;
             slurPos(&sPos);
@@ -1510,20 +1509,20 @@ void Tie::layout()
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
                   segment->layout(sPos.p1, sPos.p2);
-                  segment->setSubtype(SEGMENT_SINGLE);
+                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
                   }
             // case 2: start segment
             else if (i == 0) {
                   qreal x = system->bbox().width();
                   segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
-                  segment->setSubtype(SEGMENT_BEGIN);
+                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
                   }
             // case 4: end segment
             else {
                   qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
 
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
-                  segment->setSubtype(SEGMENT_END);
+                  segment->setSpannerSegmentType(SEGMENT_END);
                   }
             ++i;
             }

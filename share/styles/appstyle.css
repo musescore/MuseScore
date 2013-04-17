@@ -38,27 +38,6 @@ QGroupBox#changeStops QPushButton#stop_p_15:checked { border: none; background: 
 AboutBoxDialog QLabel#titleLabel {
       font-size: 28pt
       }
-PaletteBoxButton {
-      font-size: 9pt; font-family: "FreeSans";
-      border: 1px solid #787878;
-      border-style: outset;
-      border-radius: 4px;
-      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-         stop: 0 #606060, stop: 1 #707070);
-      color: white;
-      }
-PaletteBoxButton:hover {
-      /* border: 1px solid #8080ff; */
-      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-         stop: 0 #787878, stop: 1 #888888);
-      }
-PaletteBoxButton:checked {
-      border-style: inset;
-      }
-PaletteBoxButton:disabled {
-      border-style: inset;
-      color: #909090;
-      }
 Palette {
       color: black;
       background-color: #c0c0c0;

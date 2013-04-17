@@ -45,6 +45,15 @@ case $1 in
 
             ;;
 
+      allclean)
+            rm `find . -name cmake_install.cmake`
+            rm `find . -name CTestTestfile.cmake`
+            rm `find mtest thirdparty zerberus share aeolus awl bww2mxml fluid libmscore manual mscore mstyle msynth -name Makefile`
+            rm -rf `find . -name CMakeFiles`
+            rm -rf `find . -name __`
+
+            ;;
+
       *)
             echo "gitpush      -- push libmscore upstream"
             echo "gitpull      -- pull libmscore from upstream"

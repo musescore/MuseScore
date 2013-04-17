@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2009-2011 Werner Schweer
+//  Copyright (C) 2009-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -107,6 +107,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       ruler = new Ruler;
       ruler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
       ruler->setFixedHeight(rulerHeight);
+
       ruler->setMag(xmag, 1.0);
 
       Piano* piano = new Piano;
@@ -141,7 +142,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
       layout->setColumnMinimumWidth(0, pianoWidth + 5);
-      layout->setSpacing(0);
       layout->addWidget(tb,    0, 0, 1, 2);
       layout->addWidget(ruler, 1, 1);
       layout->addWidget(split, 2, 0, 1, 2);
@@ -284,7 +284,6 @@ void PianorollEditor::updateSelection()
 void PianorollEditor::selectionChanged()
       {
       updateSelection();
-//      _score->blockSignals(true);
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
             QGraphicsItem* item = items[0];
@@ -296,7 +295,7 @@ void PianorollEditor::selectionChanged()
             _score->select(0, SELECT_SINGLE, 0);
             }
       else {
-            _score->select(0, SELECT_SINGLE, 0);
+            _score->deselectAll();
             foreach(QGraphicsItem* item, items) {
                   Note* note = static_cast<Note*>(item->data(0).value<void*>());
                   if (note)
@@ -305,7 +304,6 @@ void PianorollEditor::selectionChanged()
             }
       _score->setUpdateAll();
       _score->end();
-//      _score->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -314,7 +312,7 @@ void PianorollEditor::selectionChanged()
 
 void PianorollEditor::changeSelection(int)
       {
-//      gv->scene()->blockSignals(true);
+      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
       foreach(QGraphicsItem* item, il) {
@@ -322,7 +320,7 @@ void PianorollEditor::changeSelection(int)
             if (note)
                   item->setSelected(note->selected());
             }
-//      gv->scene()->blockSignals(false);
+      gv->scene()->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -617,7 +615,7 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
-      // printf("PianorollEditor::updateAll()\n");
+      gv->update();
       }
 
 //---------------------------------------------------------

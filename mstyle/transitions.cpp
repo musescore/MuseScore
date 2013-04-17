@@ -30,79 +30,79 @@
 #include "mconfig.h"
 
 
-    //________________________________________________________--
-    Transitions::Transitions( QObject* parent ):
-        QObject( parent )
-    {
+//________________________________________________________--
+Transitions::Transitions( QObject* parent ):
+      QObject( parent ) {
 
-        registerEngine( comboBoxEngine_ = new ComboBoxEngine( this ) );
-        registerEngine( labelEngine_ = new LabelEngine( this ) );
-        registerEngine( lineEditEngine_ = new LineEditEngine( this ) );
-        registerEngine( stackedWidgetEngine_ = new StackedWidgetEngine( this ) );
+      registerEngine( comboBoxEngine_ = new ComboBoxEngine( this ) );
+      registerEngine( labelEngine_ = new LabelEngine( this ) );
+      registerEngine( lineEditEngine_ = new LineEditEngine( this ) );
+      registerEngine( stackedWidgetEngine_ = new StackedWidgetEngine( this ) );
 
-    }
+      }
 
-    //________________________________________________________--
-    void Transitions::setupEngines( void )
-    {
+//________________________________________________________--
+void Transitions::setupEngines( void ) {
 
-        // default enability, duration and maxFrame
-        bool animationsEnabled( MgStyleConfigData::animationsEnabled );
+      // default enability, duration and maxFrame
+      bool animationsEnabled( MgStyleConfigData::animationsEnabled );
 
-        // enability
-        comboBoxEngine().setEnabled( animationsEnabled && MgStyleConfigData::comboBoxTransitionsEnabled );
-        labelEngine().setEnabled( animationsEnabled && MgStyleConfigData::labelTransitionsEnabled );
-        lineEditEngine().setEnabled( animationsEnabled && MgStyleConfigData::lineEditTransitionsEnabled );
-        stackedWidgetEngine().setEnabled( animationsEnabled && MgStyleConfigData::stackedWidgetTransitionsEnabled );
+      // enability
+      comboBoxEngine().setEnabled( animationsEnabled && MgStyleConfigData::comboBoxTransitionsEnabled );
+      labelEngine().setEnabled( animationsEnabled && MgStyleConfigData::labelTransitionsEnabled );
+      lineEditEngine().setEnabled( animationsEnabled && MgStyleConfigData::lineEditTransitionsEnabled );
+      stackedWidgetEngine().setEnabled( animationsEnabled && MgStyleConfigData::stackedWidgetTransitionsEnabled );
 
-        // durations
-        comboBoxEngine().setDuration( MgStyleConfigData::comboBoxTransitionsDuration );
-        labelEngine().setDuration( MgStyleConfigData::labelTransitionsDuration );
-        lineEditEngine().setDuration( MgStyleConfigData::lineEditTransitionsDuration );
-        stackedWidgetEngine().setDuration( MgStyleConfigData::stackedWidgetTransitionsDuration );
+      // durations
+      comboBoxEngine().setDuration( MgStyleConfigData::comboBoxTransitionsDuration );
+      labelEngine().setDuration( MgStyleConfigData::labelTransitionsDuration );
+      lineEditEngine().setDuration( MgStyleConfigData::lineEditTransitionsDuration );
+      stackedWidgetEngine().setDuration( MgStyleConfigData::stackedWidgetTransitionsDuration );
 
-    }
+      }
 
-    //____________________________________________________________
-    void Transitions::registerWidget( QWidget* widget ) const
-    {
+//____________________________________________________________
+void Transitions::registerWidget( QWidget* widget ) const {
 
-        if( !widget ) return;
+      if ( !widget ) return;
 
-        if( QLabel* label = qobject_cast<QLabel*>( widget ) ) {
+      if ( QLabel* label = qobject_cast<QLabel*>( widget ) ) {
 
             // do not animate labels from tooltips
-            if( widget->window() && widget->window()->windowFlags().testFlag( Qt::ToolTip ) ) return;
-            else if( widget->window() && widget->window()->inherits( "KWin::GeometryTip" ) ) return;
+            if ( widget->window() && widget->window()->windowFlags().testFlag( Qt::ToolTip ) ) return;
+            else if ( widget->window() && widget->window()->inherits( "KWin::GeometryTip" ) ) return;
             else labelEngine().registerWidget( label );
 
-        } else if( QComboBox* comboBox = qobject_cast<QComboBox*>( widget ) ) {
+            }
+      else if ( QComboBox* comboBox = qobject_cast<QComboBox*>( widget ) ) {
 
             comboBoxEngine().registerWidget( comboBox );
 
-        } else if( QLineEdit* lineEdit = qobject_cast<QLineEdit*>( widget ) ) {
+            }
+      else if ( QLineEdit* lineEdit = qobject_cast<QLineEdit*>( widget ) ) {
 
             lineEditEngine().registerWidget( lineEdit );
 
-        } else if( QStackedWidget* stack = qobject_cast<QStackedWidget*>( widget ) ) {
+            }
+      else if ( QStackedWidget* stack = qobject_cast<QStackedWidget*>( widget ) ) {
 
             stackedWidgetEngine().registerWidget( stack );
 
-        }
+            }
 
-    }
+      }
 
-    //____________________________________________________________
-    void Transitions::unregisterWidget( QWidget* widget ) const
-    {
+//____________________________________________________________
+void Transitions::unregisterWidget( QWidget* widget ) const {
 
-        if( !widget ) return;
+      if ( !widget ) return;
 
-        // the following allows some optimization of widget unregistration
-        // it assumes that a widget can be registered atmost in one of the
-        // engines stored in the list.
-        foreach( const BaseEngine::Pointer& engine, engines_ )
-        { if( engine && engine.data()->unregisterWidget( widget ) ) break; }
+      // the following allows some optimization of widget unregistration
+      // it assumes that a widget can be registered atmost in one of the
+      // engines stored in the list.
+      foreach( const BaseEngine::Pointer & engine, engines_ ) {
+            if ( engine && engine.data()->unregisterWidget( widget ) ) break;
+            }
 
-    }
+      }
 

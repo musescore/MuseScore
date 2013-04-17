@@ -66,7 +66,7 @@ class TextCursor {
       int _tick;
 
    public:
-      TextCursor()                       { _visible = false; }
+      TextCursor()                   { _visible = false; }
       QRectF rect() const            { return _rect;     }
       void setRect(const QRectF& r)  { _rect = r;        }
       bool visible() const           { return _visible;  }
@@ -175,9 +175,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       int curGrip;
       QRectF grip[MAX_GRIPS];       // edit "grips"
       int grips;                    // number of used grips
-      Element* origEditObject;
-      Element* editObject;         ///< Valid in edit mode
-      Text* _editText;
+      Element* editObject;          ///< Valid in edit mode
 
       //--input state:
       TextCursor* _cursor;
@@ -233,13 +231,14 @@ class ScoreView : public QWidget, public MuseScoreView {
       void lyricsMinus();
       void lyricsUnderscore();
       void harmonyEndEdit();
-      void chordTab(bool back);
+      void harmonyTab(bool back);
+      void harmonyBeatsTab(bool noterest, bool back);
+      void harmonyTicksTab(int ticks);
       void figuredBassTab(bool meas, bool back);
       void figuredBassTicksTab(int ticks);
       void figuredBassEndEdit();
       void cmdInsertNote(int note);
       void cmdAddPitch(int note, bool addFlag);
-//      void cmdAddPitch1(int, bool, int step);
       void cmdAddFret(int fret);
       void cmdAddChordName();
       void cmdAddText(int style);
@@ -340,8 +339,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void zoom(int step, const QPoint& pos);
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QMouseEvent* ev);
-      void setOrigEditObject(Element* e) { origEditObject = e; }
-      Element* getOrigEditObject()       { return origEditObject; }
       void editKey(QKeyEvent*);
       bool editKeyLyrics(QKeyEvent*);
       void dragScoreView(QMouseEvent* ev);
@@ -361,6 +358,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddSlur();
       void cmdAddNoteLine();
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
+
       bool noteEntryMode() const;
       bool editMode() const;
       bool fotoMode() const;
@@ -428,8 +426,9 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       OmrView* omrView() const    { return _omrView; }
       void setOmrView(OmrView* v) { _omrView = v;    }
-      Element* getEditObject()    { return editObject; }
       Lasso* fotoLasso() const    { return _foto;    }
+      Element* getEditObject()    { return editObject; }
+      void setEditObject(Element* e) { editObject = e; }
       };
 
 //---------------------------------------------------------

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: text.h 5500 2012-03-28 16:28:26Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -16,6 +15,7 @@
 
 #include "elementlayout.h"
 #include "simpletext.h"
+#include "mscore.h"
 
 class MuseScoreView;
 class TextProp;
@@ -29,10 +29,11 @@ struct SymCode;
 
 class Text : public SimpleText {
       Q_OBJECT
-      Q_PROPERTY(QString text READ getText WRITE setText)
+      Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QTextDocument* _doc;
-      int _styleIndex;        // set to -1 if not styled
+      int _styleIndex;        // set to TEXT_STYLE_UNSTYLED if not styled
+      static QTextCursor* _cursor;
 
       void createDoc();
       void setUnstyledText(const QString& s);
@@ -40,7 +41,6 @@ class Text : public SimpleText {
       bool isSimpleText() const;
 
    protected:
-      static QTextCursor* _cursor;
       bool setCursor(const QPointF& p, QTextCursor::MoveMode mm = QTextCursor::MoveAnchor);
 
    public:
@@ -54,11 +54,12 @@ class Text : public SimpleText {
       virtual Text* clone() const         { return new Text(*this); }
       virtual ElementType type() const    { return TEXT; }
 
-      void setText(const QString& s);
+      void setText(const QString&);
+      void undoSetText(const QString&);
       void setText(const QTextDocumentFragment&);
       void setHtml(const QString& s);
 
-      QString getText() const;
+      QString text() const;
       QString getHtml() const;
       QTextDocumentFragment getFragment() const;
 
@@ -118,7 +119,7 @@ class Text : public SimpleText {
 
       void dragTo(const QPointF&p);
 
-      bool styled() const                 { return _styleIndex != -1; }
+      bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
       int textStyleType() const           { return _styleIndex; }
       void setTextStyleType(int);
       void setUnstyled();
@@ -131,13 +132,38 @@ class Text : public SimpleText {
       virtual void setScore(Score* s);
       friend class TextProperties;
 
-      QTextCursor* cursor()               { return _cursor; }
-      QTextDocument* doc() const          { return _doc;    }
+      void spellCheckUnderline(bool);
+      void insertText(const QString& s);
+      void undo();
+      void redo();
+      QString selection() const;
+      QFont curFont() const;
+      bool curItalic() const;
+      bool curBold() const;
+      bool curUnderline() const;
+      bool curSubscript() const;
+      bool curSuperscript() const;
+
+      void setCurFontPointSize(double value);
+      void setCurFontFamily(const QString& s);
+      void setCurUnderline(bool val);
+      void setCurItalic(bool val);
+      void setCurBold(bool val);
+      void setCurSuperscript(bool val);
+      void setCurSubscript(bool val);
+      void setCurHalign(int val);
+      void orderedList();
+      void unorderedList();
+      void indentLess();
+      void indentMore();
 
       virtual bool systemFlag() const;
+
+      virtual void textChanged()          {}
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
       };
 
 #endif
+

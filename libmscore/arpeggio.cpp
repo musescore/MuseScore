@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: arpeggio.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -19,6 +18,7 @@
 #include "staff.h"
 #include "part.h"
 #include "segment.h"
+#include "property.h"
 
 //---------------------------------------------------------
 //   Arpeggio
@@ -28,9 +28,11 @@ Arpeggio::Arpeggio(Score* s)
   : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
-      _subtype = ARP_NORMAL;
+      _arpeggioType = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span = 1;
+      _userLen1 = 0.0;
+      _userLen2 = 0.0;
       }
 
 //---------------------------------------------------------
@@ -50,11 +52,11 @@ void Arpeggio::write(Xml& xml) const
       {
       xml.stag("Arpeggio");
       Element::writeProperties(xml);
-      xml.tag("subtype", _subtype);
-      if (_userLen1.val() != 0.0)
-            xml.sTag("userLen1", _userLen1);
-      if (_userLen2.val() != 0.0)
-            xml.sTag("userLen2", _userLen2);
+      xml.tag("subtype", int(_arpeggioType));
+      if (_userLen1 != 0.0)
+            xml.tag("userLen1", _userLen1 / spatium());
+      if (_userLen2 != 0.0)
+            xml.tag("userLen2", _userLen2 / spatium());
       if (_span != 1)
             xml.tag("span", _span);
       xml.etag();
@@ -69,11 +71,11 @@ void Arpeggio::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = ArpeggioType(e.readInt());
+                  _arpeggioType = ArpeggioType(e.readInt());
             else if (tag == "userLen1")
-                  _userLen1 = Spatium(e.readDouble());
+                  _userLen1 = e.readDouble() * spatium();
             else if (tag == "userLen2")
-                  _userLen2 = Spatium(e.readDouble());
+                  _userLen2 = e.readDouble() * spatium();
             else if (tag == "span")
                   _span = e.readInt();
             else if (!Element::readProperties(e))
@@ -87,22 +89,22 @@ void Arpeggio::read(XmlReader& e)
 
 void Arpeggio::layout()
       {
-      qreal _spatium = spatium();
-      qreal y1 = -_userLen1.val() * _spatium;
-      qreal y2 = _height + _userLen2.val() * _spatium;
-      switch (subtype()) {
-            case ARP_NORMAL:
-            case ARP_UP:
-            case ARP_DOWN:
+      qreal y1 = - _userLen1;
+      qreal y2 = _height + _userLen2;
+      switch (arpeggioType()) {
+            case ArpeggioType::NORMAL:
+            case ArpeggioType::UP:
+            case ArpeggioType::DOWN:
             default:
                   bbox().setRect(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1);
                   return;
-            case ARP_UP_STRAIGHT:
-            case ARP_DOWN_STRAIGHT:
+            case ArpeggioType::UP_STRAIGHT:
+            case ArpeggioType::DOWN_STRAIGHT:
                   bbox().setRect(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1);
                   return;
-            case ARP_BRACKET:
+            case ArpeggioType::BRACKET:
                   {
+                  qreal _spatium = spatium();
                   qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
                   qreal w = score()->styleS(ST_ArpeggioHookLen).val() * _spatium;
                   bbox().setRect(-lw * .5, y1 - lw * .5, w + lw, y2 - y1 + lw);
@@ -120,21 +122,23 @@ void Arpeggio::draw(QPainter* p) const
       qreal _spatium = spatium();
 
       p->setPen(curColor());
-      qreal y1 = _spatium - _userLen1.val() * _spatium;
-      qreal y2 = _height + (_userLen2.val() + .5) * _spatium;
+      qreal y1 = _spatium - _userLen1;
+      qreal y2 = _height  + _userLen2;
       qreal x1;
       qreal m = magS();
-      switch (subtype()) {
-            case ARP_NORMAL:
+      switch (arpeggioType()) {
+            case ArpeggioType::NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
                         symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
-            case ARP_UP:
+
+            case ArpeggioType::UP:
                   symbols[score()->symIdx()][arpeggioarrowupSym].draw(p, m, QPointF(0.0, y1));
                   for (qreal y = y1 + _spatium; y < y2; y += _spatium)
                         symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
                   break;
-            case ARP_DOWN:
+
+            case ArpeggioType::DOWN:
                   {
                   qreal y = y1;
                   for (; y < y2 - _spatium; y += _spatium)
@@ -142,7 +146,8 @@ void Arpeggio::draw(QPainter* p) const
                   symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, m, QPointF(0.0, y));
                   }
                   break;
-            case ARP_UP_STRAIGHT:
+
+            case ArpeggioType::UP_STRAIGHT:
                   y1-= _spatium * .5;
                   x1 = _spatium * .5;
                   symbols[score()->symIdx()][close11arrowHeadSym].draw(p, m, QPointF(x1, y1 - (_spatium * .5)));
@@ -153,7 +158,8 @@ void Arpeggio::draw(QPainter* p) const
                   p->drawLine(QLineF(x1, y1, x1, y2));
                   p->restore();
                   break;
-            case ARP_DOWN_STRAIGHT:
+
+            case ArpeggioType::DOWN_STRAIGHT:
                   y1-= _spatium;
                   y2-= _spatium * .5;
                   x1 = _spatium * .5;
@@ -165,10 +171,11 @@ void Arpeggio::draw(QPainter* p) const
                   p->drawLine(QLineF(x1, y1, x1, y2));
                   p->restore();
                   break;
-            case ARP_BRACKET:
+
+            case ArpeggioType::BRACKET:
                   {
-                  y1 = - _userLen1.val() * _spatium;
-                  y2 = _height + _userLen2.val() * _spatium;
+                  y1 = - _userLen1;
+                  y2 = _height + _userLen2;
                   p->save();
 
                   p->setPen(QPen(curColor(),
@@ -191,10 +198,9 @@ void Arpeggio::draw(QPainter* p) const
 
 void Arpeggio::updateGrips(int* grips, QRectF* grip) const
       {
-      qreal _spatium = spatium();
       *grips   = 2;
-      QPointF p1(0.0, -_userLen1.val() * _spatium);
-      QPointF p2(0.0, _height + _userLen2.val() * _spatium);
+      QPointF p1(0.0, -_userLen1);
+      QPointF p2(0.0, _height + _userLen2);
       grip[0].translate(pagePos() + p1);
       grip[1].translate(pagePos() + p2);
       }
@@ -205,7 +211,7 @@ void Arpeggio::updateGrips(int* grips, QRectF* grip) const
 
 void Arpeggio::editDrag(const EditData& ed)
       {
-      Spatium d(ed.delta.y() / spatium());
+      qreal d = ed.delta.y();
       if (ed.curGrip == 0)
             _userLen1 -= d;
       else if (ed.curGrip == 1)
@@ -247,6 +253,16 @@ QPointF Arpeggio::gripAnchor(int n) const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
+      {
+      undoPushProperty(P_ARP_USER_LEN1);
+      undoPushProperty(P_ARP_USER_LEN2);
+      }
+
+//---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
 
@@ -277,3 +293,54 @@ bool Arpeggio::edit(MuseScoreView*, int curGrip, int key, Qt::KeyboardModifiers 
       c->layoutArpeggio2();
       return true;
       }
+
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      _userLen1 *= (newValue / oldValue);
+      _userLen2 *= (newValue / oldValue);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Arpeggio::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ARP_USER_LEN1:
+                  return userLen1();
+            case P_ARP_USER_LEN2:
+                  return userLen2();
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case P_ARP_USER_LEN1:
+                  setUserLen1(val.toDouble());
+                  break;
+            case P_ARP_USER_LEN2:
+                  setUserLen2(val.toDouble());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, val))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: text.cpp 5627 2012-05-14 20:18:41Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -119,6 +118,7 @@ void Text::setText(const QString& s)
             SimpleText::setText(s);
       else
             setUnstyledText(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -148,6 +148,7 @@ void Text::setUnstyledText(const QString& s)
       tf.setFont(textStyle().font(spatium()));
       c.setBlockCharFormat(tf);
       c.insertText(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -168,15 +169,16 @@ void Text::setHtml(const QString& s)
       setUnstyled();
       _doc->clear();
       _doc->setHtml(s);
+      textChanged();
       }
 
 //---------------------------------------------------------
-//   getText
+//   text
 //---------------------------------------------------------
 
-QString Text::getText() const
+QString Text::text() const
       {
-      return styled() ? SimpleText::getText() : _doc->toPlainText();
+      return styled() ? SimpleText::text() : _doc->toPlainText();
       }
 
 //---------------------------------------------------------
@@ -264,9 +266,8 @@ void Text::layout1()
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
 
-            bbox().setRect(0.0, 0.0, size.width(), size.height());
+            bbox().setRect(o.x(), o.y(), size.width(), size.height());
             _doc->setModified(false);
-            setPos(o);
             }
       if (parent()) {
             Element* e = parent();
@@ -356,7 +357,9 @@ void Text::draw(QPainter* painter) const
             return;
       c.palette.setColor(QPalette::Text, textColor());
 
+      painter->translate(bbox().topLeft());
       _doc->documentLayout()->draw(painter, c);
+      painter->translate(-bbox().topLeft());
       }
 
 //---------------------------------------------------------
@@ -395,7 +398,7 @@ void Text::writeProperties(Xml& xml, bool writeText) const
             _textStyle.writeProperties(xml);
       if (writeText) {
             if (styled())
-                  xml.tag("text", getText());
+                  xml.tag("text", text());
             else {
                   xml.stag("html-data");
                   xml.writeHtml(_doc->toHtml("utf-8"));
@@ -604,6 +607,7 @@ void Text::startEdit(MuseScoreView* view, const QPointF& p)
             SimpleText::startEdit(view, p);
             return;
             }
+      undoPushProperty(P_HTML_TEXT);
       _cursor = new QTextCursor(_doc);
       _cursor->setVisualNavigation(true);
       setCursor(p);
@@ -740,8 +744,7 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
                   break;
 
             default:
-                  if (!s.isEmpty())
-                        _cursor->insertText(s);
+                  insertText(s);
                   break;
             }
       if (key == Qt::Key_Return || key == Qt::Key_Space || key == Qt::Key_Tab) {
@@ -749,6 +752,21 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
             }
       layoutEdit();
       return true;
+      }
+
+//---------------------------------------------------------
+//   insertText
+//---------------------------------------------------------
+
+void Text::insertText(const QString& s)
+      {
+      if (styled()) {
+            SimpleText::insertText(s);
+            }
+      else {
+            if (!s.isEmpty())
+                  _cursor->insertText(s);
+            }
       }
 
 //---------------------------------------------------------
@@ -898,10 +916,6 @@ qreal Text::lineHeight() const
 
 void Text::addChar(int code)
       {
-      if (styled()) {
-            SimpleText::addChar(code);
-            return;
-            }
       QString ss;
       if (code & 0xffff0000) {
             ss = QChar(QChar::highSurrogate(code));
@@ -909,6 +923,10 @@ void Text::addChar(int code)
             }
       else
             ss = QChar(code);
+      if (styled()) {
+            SimpleText::insertText(ss);
+            return;
+            }
       _cursor->insertText(ss);
       score()->setLayoutAll(true);
       score()->end();
@@ -973,7 +991,10 @@ void Text::paste()
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
             qDebug("Text::paste() <%s>\n", qPrintable(txt));
-      _cursor->insertText(txt);
+      if (styled())
+            SimpleText::insertText(txt);
+      else
+            _cursor->insertText(txt);
       layoutEdit();
       bool lo = type() == INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
@@ -993,7 +1014,7 @@ QLineF Text::dragAnchor() const
             Measure* m     = static_cast<Measure*>(parent());
             System* system = m->system();
             qreal yp       = system->staff(staffIdx())->y() + system->y() + system->page()->pos().x();
-            qreal xp       = m->canvasPos().x(); // m->tick2pos(tick()) + m->canvasPos().x();
+            qreal xp       = m->canvasPos().x();
             p1 = QPointF(xp, yp);
             }
       else {
@@ -1253,7 +1274,7 @@ void Text::styleChanged()
       if (styled()) {
             if (_styleIndex != TEXT_STYLE_UNKNOWN)
                   setTextStyle(score()->textStyle(_styleIndex));
-            setText(getText());     // destroy formatting
+            setText(text());     // destroy formatting
             score()->setLayoutAll(true);
             }
       }
@@ -1321,7 +1342,7 @@ void Text::setUnstyled()
       _styleIndex = TEXT_STYLE_UNSTYLED;
       createDoc();
       if (!SimpleText::isEmpty())
-            setUnstyledText(SimpleText::getText());
+            setUnstyledText(SimpleText::text());
       if (editMode())
             _cursor = new QTextCursor(_doc);
       }
@@ -1356,7 +1377,16 @@ void Text::endEdit()
       else {
             endCursorEdit();
             layoutEdit();
+
+            if (links()) {
+                  foreach(Element* e, *links()) {
+                        if (e == this)
+                              continue;
+                        e->undoChangeProperty(P_HTML_TEXT, getHtml());
+                        }
+                  }
             }
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -1375,7 +1405,7 @@ void Text::endCursorEdit()
 
 bool Text::isEmpty() const
       {
-      return styled() ? SimpleText::getText().isEmpty() : _doc->isEmpty();
+      return styled() ? SimpleText::text().isEmpty() : _doc->isEmpty();
       }
 
 //---------------------------------------------------------
@@ -1395,9 +1425,18 @@ void Text::setModified(bool v)
 QTextDocumentFragment Text::getFragment() const
       {
       if (styled())
-            return QTextDocumentFragment::fromPlainText(getText());
+            return QTextDocumentFragment::fromPlainText(text());
       else
             return QTextDocumentFragment(_doc);
+      }
+
+//---------------------------------------------------------
+//   undoSetText
+//---------------------------------------------------------
+
+void Text::undoSetText(const QString& s)
+      {
+      score()->undoChangeProperty(this, P_TEXT, s);
       }
 
 //---------------------------------------------------------
@@ -1409,6 +1448,11 @@ QVariant Text::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_TEXT_STYLE:
                   return QVariant(_styleIndex);
+            case P_HTML_TEXT:
+                  return getHtml();
+            case P_TEXT:
+                  return text();
+
             default:
                   return Element::getProperty(propertyId);
             }
@@ -1427,11 +1471,359 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   _styleIndex = v.toInt();
                   setGenerated(false);
                   break;
+            case P_TEXT:
+                  setText(v.toString());
+                  break;
+            case P_HTML_TEXT:
+                  setHtml(v.toString());
+                  break;
             default:
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
       score()->setLayoutAll(true);
       return rv;
+      }
+
+//---------------------------------------------------------
+//   spellCheckUnderline
+//---------------------------------------------------------
+
+void Text::spellCheckUnderline(bool on)
+      {
+      printf("spellCheckUnderline %d\n", on);
+      if (styled()) {
+            }
+      else {
+            QTextCharFormat tf;
+            if (on) {
+                  // underline with red squiggle
+                  tf.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
+                  tf.setUnderlineColor(Qt::red);
+                  }
+            QTextCursor c(_doc);
+            c.select(QTextCursor::Document);
+            c.setCharFormat(tf);
+            }
+      }
+
+//---------------------------------------------------------
+//   undo
+//---------------------------------------------------------
+
+void Text::undo()
+      {
+      if (styled())
+            ;
+      else
+            _doc->undo();
+      }
+
+//---------------------------------------------------------
+//   redo
+//---------------------------------------------------------
+
+void Text::redo()
+      {
+      if (styled())
+            ;
+      else
+            _doc->undo();
+      }
+
+//---------------------------------------------------------
+//   selection
+//---------------------------------------------------------
+
+QString Text::selection() const
+      {
+      QString s;
+      if (!styled()) {
+            if (_cursor && _cursor->hasSelection())
+                  s = _cursor->selectedText();
+            }
+      else
+            return SimpleText::selectedText();
+      return s;
+      }
+
+//---------------------------------------------------------
+//   curFont
+//---------------------------------------------------------
+
+QFont Text::curFont() const
+      {
+      if (styled())
+            return font();
+      else
+            return _cursor->charFormat().font();
+      }
+
+//---------------------------------------------------------
+//   curItalic
+//---------------------------------------------------------
+
+bool Text::curItalic() const
+      {
+      if (styled())
+            return false;
+      else
+            return _cursor->charFormat().fontItalic();
+      }
+
+//---------------------------------------------------------
+//   curBold
+//---------------------------------------------------------
+
+bool Text::curBold() const
+      {
+      if (styled())
+            return false;
+      else
+            return _cursor->charFormat().fontWeight() == QFont::Bold;
+      }
+
+//---------------------------------------------------------
+//   curUnderline
+//---------------------------------------------------------
+
+bool Text::curUnderline() const
+      {
+      if (styled())
+            return false;
+      else
+            return _cursor->charFormat().fontUnderline();
+      }
+
+//---------------------------------------------------------
+//   curSubscript
+//---------------------------------------------------------
+
+bool Text::curSubscript() const
+      {
+      if (styled())
+            return false;
+      else
+            return _cursor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript;
+      }
+
+//---------------------------------------------------------
+//   curSuperScript
+//---------------------------------------------------------
+
+bool Text::curSuperscript() const
+      {
+      if (styled())
+            return false;
+      else
+            return _cursor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript;
+      }
+
+//---------------------------------------------------------
+//   setCurFontPointSize
+//---------------------------------------------------------
+
+void Text::setCurFontPointSize(double value)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setFontPointSize(value);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurFontFamily
+//---------------------------------------------------------
+
+void Text::setCurFontFamily(const QString& s)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setFontFamily(s);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurBold
+//---------------------------------------------------------
+
+void Text::setCurBold(bool val)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setFontWeight(val ? QFont::Bold : QFont::Normal);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurUnderline
+//---------------------------------------------------------
+
+void Text::setCurUnderline(bool val)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setFontUnderline(val);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurItalic
+//---------------------------------------------------------
+
+void Text::setCurItalic(bool val)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setFontItalic(val);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurSuperscript
+//---------------------------------------------------------
+
+void Text::setCurSuperscript(bool val)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setVerticalAlignment(val ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurSubscript
+//---------------------------------------------------------
+
+void Text::setCurSubscript(bool val)
+      {
+      if (!styled()) {
+            QTextCharFormat format;
+            format.setVerticalAlignment(val ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
+            _cursor->mergeCharFormat(format);
+            }
+      }
+
+//---------------------------------------------------------
+//   setCurHalign
+//---------------------------------------------------------
+
+void Text::setCurHalign(int val)
+      {
+      if (styled())
+            return;
+
+      QTextBlockFormat bformat;
+
+      Qt::Alignment qa = bformat.alignment() & ~Qt::AlignHorizontal_Mask;
+      switch(val) {
+            case ALIGN_HCENTER:
+                  qa  |= Qt::AlignHCenter;
+                  break;
+            case ALIGN_RIGHT:
+                  qa |= Qt::AlignRight;
+                  break;
+            case ALIGN_LEFT:
+                  qa |= Qt::AlignLeft;
+                  break;
+            }
+
+      bformat.setAlignment(qa);
+      _cursor->mergeBlockFormat(bformat);
+      setAlign((align() & ~ ALIGN_HMASK) | Align(val));
+      }
+
+//---------------------------------------------------------
+//   indentLess
+//---------------------------------------------------------
+
+void Text::indentLess()
+      {
+      if (styled())
+            return;
+
+      QTextList* list = _cursor->currentList();
+      if (list == 0) {
+            QTextBlockFormat format = _cursor->blockFormat();
+            int indent = format.indent();
+            if (indent) {
+                  indent--;
+                  format.setIndent(indent);
+                  _cursor->insertBlock(format);
+                  }
+            return;
+            }
+      QTextCharFormat format = _cursor->blockCharFormat();
+      QTextListFormat listFormat = list->format();
+      QTextBlock block = _cursor->block();
+      if (block.next().isValid())
+            block = block.next();
+      else {
+            block = QTextBlock();
+            }
+      _cursor->insertBlock(block.blockFormat());
+      _cursor->setCharFormat(block.charFormat());
+      }
+
+//---------------------------------------------------------
+//   indentMore
+//---------------------------------------------------------
+
+void Text::indentMore()
+      {
+      QTextList* list = _cursor->currentList();
+      if (list == 0) {
+            QTextBlockFormat format = _cursor->blockFormat();
+            format.setIndent(format.indent() + 1);
+            _cursor->insertBlock(format);
+            return;
+            }
+      unorderedList();
+      }
+
+//---------------------------------------------------------
+//   unorderedList
+//---------------------------------------------------------
+
+void Text::unorderedList()
+      {
+      if (styled())
+            return;
+      QTextCharFormat format = _cursor->charFormat();
+      QTextListFormat listFormat;
+      QTextList* list = _cursor->currentList();
+      if (list) {
+            listFormat = list->format();
+            int indent = listFormat.indent();
+            listFormat.setIndent(indent + 1);
+            }
+      listFormat.setStyle(QTextListFormat::ListDisc);
+      _cursor->insertList(listFormat);
+      _cursor->setCharFormat(format);
+      }
+
+//---------------------------------------------------------
+//   orderedList
+//---------------------------------------------------------
+
+void Text::orderedList()
+      {
+      QTextCharFormat format = _cursor->charFormat();
+      QTextListFormat listFormat;
+      QTextList* list = _cursor->currentList();
+      if (list) {
+            listFormat = list->format();
+            int indent = listFormat.indent();
+            listFormat.setIndent(indent + 1);
+            }
+      listFormat.setStyle(QTextListFormat::ListDecimal);
+      _cursor->insertList(listFormat);
+      _cursor->setCharFormat(format);
       }
 

@@ -18,6 +18,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
@@ -26,6 +27,7 @@ endif (APPLE)
 
 add_library (
   rtf2html STATIC
+  ${PROJECT_BINARY_DIR}/all.h
   ${INCS}
   fmt_opts.cpp
   rtf2html.cpp
@@ -34,6 +36,10 @@ add_library (
   )
 
 set_target_properties( rtf2html
-   PROPERTIES COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h"
+   PROPERTIES
+      COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
    )
+
+ADD_DEPENDENCIES(rtf2html mops1)
+ADD_DEPENDENCIES(rtf2html mops2)
 

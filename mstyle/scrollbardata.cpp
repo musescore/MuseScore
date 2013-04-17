@@ -28,177 +28,164 @@
 
 Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar*);
 
-    //______________________________________________
-    ScrollBarData::ScrollBarData( QObject* parent, QWidget* target, int duration ):
-        SliderData( parent, target, duration )
-    {
+//______________________________________________
+ScrollBarData::ScrollBarData( QObject* parent, QWidget* target, int duration ):
+      SliderData( parent, target, duration ) {
 
-        target->installEventFilter( this );
+      target->installEventFilter( this );
 
-        addLineData_.animation_ = new Animation( duration, this );
-        subLineData_.animation_ = new Animation( duration, this );
+      addLineData_.animation_ = new Animation( duration, this );
+      subLineData_.animation_ = new Animation( duration, this );
 
-        connect( addLineAnimation().data(), SIGNAL( finished( void ) ), SLOT( clearAddLineRect( void ) ) );
-        connect( subLineAnimation().data(), SIGNAL( finished( void ) ), SLOT( clearSubLineRect( void ) ) );
+      connect( addLineAnimation().data(), SIGNAL( finished( void ) ), SLOT( clearAddLineRect( void ) ) );
+      connect( subLineAnimation().data(), SIGNAL( finished( void ) ), SLOT( clearSubLineRect( void ) ) );
 
-        // setup animation
-        setupAnimation( addLineAnimation(), "addLineOpacity" );
-        setupAnimation( subLineAnimation(), "subLineOpacity" );
+      // setup animation
+      setupAnimation( addLineAnimation(), "addLineOpacity" );
+      setupAnimation( subLineAnimation(), "subLineOpacity" );
 
-    }
+      }
 
-    //______________________________________________
-    bool ScrollBarData::eventFilter( QObject* object, QEvent* event )
-    {
+//______________________________________________
+bool ScrollBarData::eventFilter( QObject* object, QEvent* event ) {
 
-        if( object != target().data() )
-        { return SliderData::eventFilter( object, event ); }
+      if ( object != target().data() ) {
+            return SliderData::eventFilter( object, event );
+            }
 
-        // check event type
-        switch( event->type() )
-        {
+      // check event type
+      switch ( event->type() ) {
 
             case QEvent::HoverEnter:
             case QEvent::HoverMove:
-            hoverMoveEvent( object, event );
-            break;
+                  hoverMoveEvent( object, event );
+                  break;
 
             case QEvent::HoverLeave:
-            hoverLeaveEvent( object, event );
-            break;
+                  hoverLeaveEvent( object, event );
+                  break;
 
-            default: break;
+            default:
+                  break;
 
-        }
+            }
 
-        return SliderData::eventFilter( object, event );
+      return SliderData::eventFilter( object, event );
 
-    }
+      }
 
-    //______________________________________________
-    const Animation::Pointer& ScrollBarData::animation( QStyle::SubControl subcontrol ) const
-    {
-        switch( subcontrol )
-        {
+//______________________________________________
+const Animation::Pointer& ScrollBarData::animation( QStyle::SubControl subcontrol ) const {
+      switch ( subcontrol ) {
             default:
             case QStyle::SC_ScrollBarSlider:
-            return animation();
+                  return animation();
 
             case QStyle::SC_ScrollBarAddLine:
-            return addLineAnimation();
+                  return addLineAnimation();
 
             case QStyle::SC_ScrollBarSubLine:
-            return subLineAnimation();
-        }
+                  return subLineAnimation();
+            }
 
-    }
+      }
 
-    //______________________________________________
-    qreal ScrollBarData::opacity( QStyle::SubControl subcontrol ) const
-    {
-        switch( subcontrol )
-        {
+//______________________________________________
+qreal ScrollBarData::opacity( QStyle::SubControl subcontrol ) const {
+      switch ( subcontrol ) {
             default:
             case QStyle::SC_ScrollBarSlider:
-            return opacity();
+                  return opacity();
 
             case QStyle::SC_ScrollBarAddLine:
-            return addLineOpacity();
+                  return addLineOpacity();
 
             case QStyle::SC_ScrollBarSubLine:
-            return subLineOpacity();
-        }
-
-    }
-
-    //______________________________________________
-    void ScrollBarData::hoverMoveEvent(  QObject* object, QEvent* event )
-    {
-
-        // try cast object to scrollbar
-        QScrollBar* scrollBar( qobject_cast<QScrollBar*>( object ) );
-        if( !scrollBar || scrollBar->isSliderDown() ) return;
-
-        // retrieve scrollbar option
-        QStyleOptionSlider opt( qt_qscrollbarStyleOption( qobject_cast<QScrollBar*>( object ) ) );
-
-        // cast event
-        QHoverEvent *he = static_cast<QHoverEvent*>(event);
-        QStyle::SubControl hoverControl = scrollBar->style()->hitTestComplexControl(QStyle::CC_ScrollBar, &opt, he->pos(), scrollBar);
-        updateAddLineArrow( hoverControl );
-        updateSubLineArrow( hoverControl );
-
-    }
-
-
-    //______________________________________________
-    void ScrollBarData::hoverLeaveEvent(  QObject* object, QEvent* event )
-    {
-        Q_UNUSED( object );
-        Q_UNUSED( event );
-        updateSubLineArrow( QStyle::SC_None );
-        updateAddLineArrow( QStyle::SC_None );
-    }
-
-    //_____________________________________________________________________
-    void ScrollBarData::updateSubLineArrow( QStyle::SubControl hoverControl )
-    {
-        if( hoverControl == QStyle::SC_ScrollBarSubLine )
-        {
-
-            if( !subLineArrowHovered() )
-            {
-                setSubLineArrowHovered( true );
-                if( enabled() )
-                {
-                    subLineAnimation().data()->setDirection( Animation::Forward );
-                    if( !subLineAnimation().data()->isRunning() ) subLineAnimation().data()->start();
-                } else setDirty();
-             }
-
-        } else {
-
-            if( subLineArrowHovered() )
-            {
-                setSubLineArrowHovered( false );
-                if( enabled() )
-                {
-                    subLineAnimation().data()->setDirection( Animation::Backward );
-                    if( !subLineAnimation().data()->isRunning() ) subLineAnimation().data()->start();
-                } else setDirty();
+                  return subLineOpacity();
             }
 
-        }
-    }
+      }
 
-    //_____________________________________________________________________
-    void ScrollBarData::updateAddLineArrow( QStyle::SubControl hoverControl )
-    {
-        if( hoverControl == QStyle::SC_ScrollBarAddLine )
-        {
+//______________________________________________
+void ScrollBarData::hoverMoveEvent(  QObject* object, QEvent* event ) {
 
-            if( !addLineArrowHovered() )
-            {
-                setAddLineArrowHovered( true );
-                if( enabled() )
-                {
-                    addLineAnimation().data()->setDirection( Animation::Forward );
-                    if( !addLineAnimation().data()->isRunning() ) addLineAnimation().data()->start();
-                } else setDirty();
+      // try cast object to scrollbar
+      QScrollBar* scrollBar( qobject_cast<QScrollBar*>( object ) );
+      if ( !scrollBar || scrollBar->isSliderDown() ) return;
+
+      // retrieve scrollbar option
+      QStyleOptionSlider opt( qt_qscrollbarStyleOption( qobject_cast<QScrollBar*>( object ) ) );
+
+      // cast event
+      QHoverEvent* he = static_cast<QHoverEvent*>(event);
+      QStyle::SubControl hoverControl = scrollBar->style()->hitTestComplexControl(QStyle::CC_ScrollBar, &opt, he->pos(), scrollBar);
+      updateAddLineArrow( hoverControl );
+      updateSubLineArrow( hoverControl );
+
+      }
+
+
+//______________________________________________
+void ScrollBarData::hoverLeaveEvent(  QObject* object, QEvent* event ) {
+      Q_UNUSED( object );
+      Q_UNUSED( event );
+      updateSubLineArrow( QStyle::SC_None );
+      updateAddLineArrow( QStyle::SC_None );
+      }
+
+//_____________________________________________________________________
+void ScrollBarData::updateSubLineArrow( QStyle::SubControl hoverControl ) {
+      if ( hoverControl == QStyle::SC_ScrollBarSubLine ) {
+
+            if ( !subLineArrowHovered() ) {
+                  setSubLineArrowHovered( true );
+                  if ( enabled() ) {
+                        subLineAnimation().data()->setDirection( Animation::Forward );
+                        if ( !subLineAnimation().data()->isRunning() ) subLineAnimation().data()->start();
+                        }
+                  else setDirty();
+                  }
+
             }
+      else {
 
-        } else {
+            if ( subLineArrowHovered() ) {
+                  setSubLineArrowHovered( false );
+                  if ( enabled() ) {
+                        subLineAnimation().data()->setDirection( Animation::Backward );
+                        if ( !subLineAnimation().data()->isRunning() ) subLineAnimation().data()->start();
+                        }
+                  else setDirty();
+                  }
 
-            if( addLineArrowHovered() )
-            {
-                setAddLineArrowHovered( false );
-                if( enabled() )
-                {
-                    addLineAnimation().data()->setDirection( Animation::Backward );
-                    if( !addLineAnimation().data()->isRunning() ) addLineAnimation().data()->start();
-                } else setDirty();
             }
+      }
 
-        }
-    }
+//_____________________________________________________________________
+void ScrollBarData::updateAddLineArrow( QStyle::SubControl hoverControl ) {
+      if ( hoverControl == QStyle::SC_ScrollBarAddLine ) {
+
+            if ( !addLineArrowHovered() ) {
+                  setAddLineArrowHovered( true );
+                  if ( enabled() ) {
+                        addLineAnimation().data()->setDirection( Animation::Forward );
+                        if ( !addLineAnimation().data()->isRunning() ) addLineAnimation().data()->start();
+                        }
+                  else setDirty();
+                  }
+
+            }
+      else {
+
+            if ( addLineArrowHovered() ) {
+                  setAddLineArrowHovered( false );
+                  if ( enabled() ) {
+                        addLineAnimation().data()->setDirection( Animation::Backward );
+                        if ( !addLineAnimation().data()->isRunning() ) addLineAnimation().data()->start();
+                        }
+                  else setDirty();
+                  }
+
+            }
+      }
 

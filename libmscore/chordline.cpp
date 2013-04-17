@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chordline.cpp 5491 2012-03-22 20:19:22Z lvinken $
 //
 //  Copyright (C) 2010-2012 Werner Schweer
 //
@@ -27,7 +26,7 @@ ChordLine::ChordLine(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       modified = false;
-      _subtype = CHORDLINE_NOTYPE;
+      _chordLineType = CHORDLINE_NOTYPE;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -35,14 +34,14 @@ ChordLine::ChordLine(const ChordLine& cl)
       {
       path     = cl.path;
       modified = cl.modified;
-      _subtype = cl._subtype;
+      _chordLineType = cl._chordLineType;
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setChordLineType
 //---------------------------------------------------------
 
-void ChordLine::setSubtype(ChordLineType st)
+void ChordLine::setChordLineType(ChordLineType st)
       {
       qreal x2 = 0;
       qreal y2 = 0;
@@ -76,7 +75,7 @@ void ChordLine::setSubtype(ChordLineType st)
             if (st == CHORDLINE_PLOP || st == CHORDLINE_SCOOP)
                   path.cubicTo(0.0, y2/2, x2/2, y2, x2, y2);
             }
-      _subtype = st;
+      _chordLineType = st;
       }
 
 //---------------------------------------------------------
@@ -90,12 +89,12 @@ void ChordLine::layout()
             Note* note = chord()->upNote();
             QPointF p(note->pos());
             // chordlines to the right of the note
-            if (_subtype == CHORDLINE_FALL || _subtype == CHORDLINE_DOIT)
+            if (_chordLineType == CHORDLINE_FALL || _chordLineType == CHORDLINE_DOIT)
                   setPos(p.x() + note->headWidth() + _spatium * .2, p.y());
             // chordlines to the left of the note
-            if (_subtype == CHORDLINE_PLOP)
+            if (_chordLineType == CHORDLINE_PLOP)
                   setPos(p.x() + note->headWidth() * .25, p.y() - note->headHeight() * .75);
-            if (_subtype == CHORDLINE_SCOOP)
+            if (_chordLineType == CHORDLINE_SCOOP)
                   setPos(p.x() + note->headWidth() * .25, p.y() + note->headHeight() * .75);
             }
       else
@@ -153,10 +152,10 @@ void ChordLine::read(XmlReader& e)
                               e.unknown();
                         }
                   modified = true;
-                  setSubtype(ChordLineType(0));
+                  setChordLineType(ChordLineType(0));
                   }
             else if (tag == "subtype")
-                  setSubtype(ChordLineType(e.readInt()));
+                  setChordLineType(ChordLineType(e.readInt()));
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -169,7 +168,7 @@ void ChordLine::read(XmlReader& e)
 void ChordLine::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _chordLineType);
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();
@@ -248,7 +247,7 @@ void ChordLine::editDrag(const EditData& ed)
             }
       path = p;
       modified = true;
-      setSubtype(ChordLineType(0));
+      setChordLineType(ChordLineType(0));
       }
 
 //---------------------------------------------------------

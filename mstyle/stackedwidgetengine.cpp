@@ -27,17 +27,18 @@
 #include "stackedwidgetengine.h"
 
 
-    //____________________________________________________________
-    bool StackedWidgetEngine::registerWidget( QStackedWidget* widget )
-    {
+//____________________________________________________________
+bool StackedWidgetEngine::registerWidget( QStackedWidget* widget ) {
 
-        if( !widget ) return false;
-        if( !data_.contains( widget ) ) { data_.insert( widget, new StackedWidgetData( this, widget, duration() ), enabled() ); }
+      if ( !widget ) return false;
+      if ( !data_.contains( widget ) ) {
+            data_.insert( widget, new StackedWidgetData( this, widget, duration() ), enabled() );
+            }
 
-        // connect destruction signal
-        disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      // connect destruction signal
+      disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
 
-        return true;
+      return true;
 
-    }
+      }

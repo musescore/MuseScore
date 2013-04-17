@@ -28,80 +28,84 @@
 #include "widgetstateengine.h"
 #include "enabledata.h"
 
-    //____________________________________________________________
-    bool WidgetStateEngine::registerWidget( QWidget* widget, AnimationModes mode )
-    {
+//____________________________________________________________
+bool WidgetStateEngine::registerWidget( QWidget* widget, AnimationModes mode ) {
 
-        if( !widget ) return false;
-        if( mode&AnimationHover && !hoverData_.contains( widget ) ) { hoverData_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() ); }
-        if( mode&AnimationFocus && !focusData_.contains( widget ) ) { focusData_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() ); }
-        if( mode&AnimationEnable && !enableData_.contains( widget ) ) { enableData_.insert( widget, new EnableData( this, widget, duration() ), enabled() ); }
+      if ( !widget ) return false;
+      if ( mode & AnimationHover && !hoverData_.contains( widget ) ) {
+            hoverData_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() );
+            }
+      if ( mode & AnimationFocus && !focusData_.contains( widget ) ) {
+            focusData_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() );
+            }
+      if ( mode & AnimationEnable && !enableData_.contains( widget ) ) {
+            enableData_.insert( widget, new EnableData( this, widget, duration() ), enabled() );
+            }
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
 
-        return true;
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    BaseEngine::WidgetList WidgetStateEngine::registeredWidgets( AnimationModes mode ) const
-    {
+//____________________________________________________________
+BaseEngine::WidgetList WidgetStateEngine::registeredWidgets( AnimationModes mode ) const {
 
-        WidgetList out;
+      WidgetList out;
 
-        // the typedef is needed to make Krazy happy
-        typedef DataMap<WidgetStateData>::Value Value;
+      // the typedef is needed to make Krazy happy
+      typedef DataMap<WidgetStateData>::Value Value;
 
-        if( mode&AnimationHover )
-        {
-            foreach( const Value& value, hoverData_ )
-            { if( value ) out.insert( value.data()->target().data() ); }
-        }
+      if ( mode & AnimationHover ) {
+            foreach( const Value & value, hoverData_ ) {
+                  if ( value ) out.insert( value.data()->target().data() );
+                  }
+            }
 
-        if( mode&AnimationFocus )
-        {
-            foreach( const Value& value, focusData_ )
-            { if( value ) out.insert( value.data()->target().data() ); }
-        }
+      if ( mode & AnimationFocus ) {
+            foreach( const Value & value, focusData_ ) {
+                  if ( value ) out.insert( value.data()->target().data() );
+                  }
+            }
 
-        if( mode&AnimationEnable )
-        {
-            foreach( const Value& value, enableData_ )
-            { if( value ) out.insert( value.data()->target().data() ); }
-        }
+      if ( mode & AnimationEnable ) {
+            foreach( const Value & value, enableData_ ) {
+                  if ( value ) out.insert( value.data()->target().data() );
+                  }
+            }
 
-        return out;
+      return out;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool WidgetStateEngine::updateState( const QObject* object, AnimationMode mode, bool value )
-    {
-        DataMap<WidgetStateData>::Value data( WidgetStateEngine::data( object, mode ) );
-        return ( data && data.data()->updateState( value ) );
-    }
+//____________________________________________________________
+bool WidgetStateEngine::updateState( const QObject* object, AnimationMode mode, bool value ) {
+      DataMap<WidgetStateData>::Value data( WidgetStateEngine::data( object, mode ) );
+      return ( data && data.data()->updateState( value ) );
+      }
 
-    //____________________________________________________________
-    bool WidgetStateEngine::isAnimated( const QObject* object, AnimationMode mode )
-    {
+//____________________________________________________________
+bool WidgetStateEngine::isAnimated( const QObject* object, AnimationMode mode ) {
 
-        DataMap<WidgetStateData>::Value data( WidgetStateEngine::data( object, mode ) );
-        return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
+      DataMap<WidgetStateData>::Value data( WidgetStateEngine::data( object, mode ) );
+      return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
 
-    }
+      }
 
-    //____________________________________________________________
-    DataMap<WidgetStateData>::Value WidgetStateEngine::data( const QObject* object, AnimationMode mode )
-    {
+//____________________________________________________________
+DataMap<WidgetStateData>::Value WidgetStateEngine::data( const QObject* object, AnimationMode mode ) {
 
-        switch( mode )
-        {
-            case AnimationHover: return hoverData_.find( object ).data();
-            case AnimationFocus: return focusData_.find( object ).data();
-            case AnimationEnable: return enableData_.find( object ).data();
-            default: return DataMap<WidgetStateData>::Value();
-        }
+      switch ( mode ) {
+            case AnimationHover:
+                  return hoverData_.find( object ).data();
+            case AnimationFocus:
+                  return focusData_.find( object ).data();
+            case AnimationEnable:
+                  return enableData_.find( object ).data();
+            default:
+                  return DataMap<WidgetStateData>::Value();
+            }
 
-    }
+      }
 

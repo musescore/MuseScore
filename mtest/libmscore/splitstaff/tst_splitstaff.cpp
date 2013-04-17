@@ -32,7 +32,8 @@ class TestSplitStaff : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void splitstaff01() { splitstaff(1); }
+      void splitstaff01() { splitstaff(1); } //single notes
+      void splitstaff02() { splitstaff(2); } //chord
       };
 
 //---------------------------------------------------------

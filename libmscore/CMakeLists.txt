@@ -22,7 +22,8 @@ if (SCRIPT_INTERFACE)
       rest.h segment.h shadownote.h simpletext.h slur.h spacer.h spanner.h
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
-      score.h cursor.h page.h part.h staff.h mscore.h staffstate.h
+      score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
+      jump.h stemslash.h ledgerline.h
       )
 endif (SCRIPT_INTERFACE)
 
@@ -50,7 +51,7 @@ add_library (
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp
       chordlist.cpp chordrest.cpp clef.cpp cleflist.cpp
       drumset.cpp durationtype.cpp dynamic.cpp edit.cpp
-      element.cpp elementlayout.cpp event.cpp excerpt.cpp
+      element.cpp elementlayout.cpp excerpt.cpp
       fifo.cpp fret.cpp glissando.cpp hairpin.cpp
       harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
       instrtemplate.cpp instrument.cpp interval.cpp
@@ -68,25 +69,29 @@ add_library (
       utils.cpp velo.cpp volta.cpp xml.cpp mscore.cpp
       undo.cpp cmd.cpp scorefile.cpp revisions.cpp
       check.cpp input.cpp icon.cpp ossia.cpp
-      dsp.cpp tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
+      tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
       figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
-      qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp midifile.cpp
-      exportmidi.cpp cursor.cpp read114.cpp sparm.cpp paste.cpp
-      bsymbol.cpp
+      qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp
+      cursor.cpp read114.cpp paste.cpp
+      bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
+      synthesizerstate.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch"
       )
 else (SCRIPT_INTERFACE)
    set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-g -include ${PROJECT_BINARY_DIR}/all.h -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "-g ${PCH_INCLUDE} -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
       )
 endif (SCRIPT_INTERFACE)
 
+xcode_pch(libmscore all)
 
+ADD_DEPENDENCIES(libmscore mops1)
+ADD_DEPENDENCIES(libmscore mops2)
