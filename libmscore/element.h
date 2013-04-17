@@ -314,7 +314,7 @@ class Element : public QObject {
       virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
-      Element* parentChordRest();
+//      Element* parentChordRest();
       Element* findMeasure();
 
       qreal spatium() const;
