@@ -44,6 +44,7 @@ class TestImportMidi : public QObject, public MTest
       void im2() { mf("m2"); }     // tie across bar line
       void im3() { mf("m3"); }     // voices, typeA, resolve with tie
       void im4() { mf("m4"); }     // voices, typeB, resolve with tie
+      void im5() { mf("m5"); }     // same as m1 with division 240
       };
 
 //---------------------------------------------------------
