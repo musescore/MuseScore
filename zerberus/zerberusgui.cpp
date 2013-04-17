@@ -137,7 +137,7 @@ QFileInfoList Zerberus::sfzFiles()
 
 void ZerberusGui::addClicked()
       {
-      QFileInfoList l = zerberus()->sfzFiles();
+      QFileInfoList l = Zerberus::sfzFiles();
 
       SfzListDialog ld;
       foreach (const QFileInfo& fi, l)

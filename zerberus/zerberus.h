@@ -115,7 +115,7 @@ class Zerberus : public Synthesizer {
       virtual QStringList soundFonts() const;
 
       virtual SynthesizerGui* gui();
-      QFileInfoList sfzFiles();
+      static QFileInfoList sfzFiles();
       };
 
 #endif
